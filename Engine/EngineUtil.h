@@ -52,11 +52,3 @@
 //----------------------------------------------------------------------------------
 
 #define SafeDelete(x) { delete x; x = nullptr; }
-
-
-class EngineUtil {
-	public:
-	EngineUtil();
-	~EngineUtil();
-};
-

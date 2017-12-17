@@ -44,9 +44,6 @@
     <ClCompile Include="System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EngineUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Direct3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

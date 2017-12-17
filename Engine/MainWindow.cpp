@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "MainWindow.h"
 
+#include <Windows.h>
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	//Send message to handler in System class
@@ -19,11 +21,11 @@ MainWindow::~MainWindow() {
 
 
 bool MainWindow::Init() {
-	system = new System(WINDOW_WIDTH, WINDOW_HEIGHT);
-
 	if (!InitWindow()) {
 		return false;
 	}
+
+	system = new System(m_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	if (!system->Init()) {
 		return false;
@@ -59,23 +61,29 @@ bool MainWindow::InitWindow() {
 
 	// Register window class
 	if (!RegisterClassEx(&wc)) {
-		OutputDebugString(L"Failed to create window clas\n");
+		OutputDebugString(L"Failed to create window class\n");
 		return false;
 	}
 
 	// Create window and store window handle
 	m_hWnd = CreateWindowEx(WS_EX_APPWINDOW, appName, appName, WS_OVERLAPPEDWINDOW,
 							xPos, yPos, WINDOW_WIDTH, WINDOW_HEIGHT, NULL, NULL, m_hInstance, NULL);
+	if (!m_hWnd) {
+		OutputDebugString(L"Failed to create main window\n");
+		return false;
+	}
 
 	// Show window and set focus
 	ShowWindow(m_hWnd, SW_SHOW);
 	SetForegroundWindow(m_hWnd);
 	SetFocus(m_hWnd);
+
+	return true;
 }
 
 
 int MainWindow::Run() {
-	MSG  msg  = { 0 };
+	MSG   msg = { 0 };
 	bool done = false;
 
 	// Main loop

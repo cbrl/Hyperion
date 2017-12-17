@@ -2,20 +2,22 @@
 #include "System.h"
 
 
-System::System(int width, int height) {
-	m_D3DApp = nullptr;
-
-	m_Width  = width;
-	m_Height = height;
+System::System(HWND hWnd, int windowWidth, int windowHeight)
+:	m_hWnd(hWnd),
+	m_WindowWidth(windowWidth),
+	m_WindowHeight(windowHeight),
+	m_D3DApp(nullptr)
+{
 }
 
 
 System::~System() {
+	SafeDelete(m_D3DApp);
 }
 
 
 bool System::Init() {
-	m_D3DApp = new Direct3D(m_Width, m_Height);
+	m_D3DApp = new Direct3D(m_hWnd, m_WindowWidth, m_WindowHeight, false, false, false);
 
 	if (!m_D3DApp->Init()) {
 		return false;
@@ -26,7 +28,8 @@ bool System::Init() {
 
 
 bool System::Tick() {
-	m_D3DApp->Frame();
+	
+	return true;
 }
 
 

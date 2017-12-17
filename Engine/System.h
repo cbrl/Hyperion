@@ -4,14 +4,17 @@
 
 class System {
 	public:
-		System(int width, int height);
+		System(HWND hWnd, int windowWidth, int windowHeight);
 		~System();
 
 		bool Init();
 		bool Tick();
 
+
 	private:
 		Direct3D *m_D3DApp;
-		int       m_Width;
-		int       m_Height;
+
+		HWND      m_hWnd;
+		int       m_WindowWidth;
+		int       m_WindowHeight;
 };
