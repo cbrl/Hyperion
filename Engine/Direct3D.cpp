@@ -1,8 +1,16 @@
 #include "stdafx.h"
 #include "Direct3D.h"
+#include "EngineUtil.h"
+
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "d3dcompiler.lib")
+
+#include <d3d11.h>
+#include <dxgi.h>
 
 
-Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool MSAA, bool vSync, bool fullscreen) 
+Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool MSAA, bool vSync, bool fullscreen)
 :	m_hWnd(hWnd),
 	m_WindowWidth(windowWidth),
 	m_WindowHeight(windowHeight),
@@ -10,8 +18,6 @@ Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool MSAA, bool
 	m_EnableVSync(vSync),
 	m_EnableFullscreen(fullscreen),
 	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),
-	m_Device(nullptr),
-	m_DeviceContext(nullptr),
 	m_4xMSAAQuality(0)
 {
 	ZeroMemory(&m_WindowViewport, sizeof(D3D11_VIEWPORT));
@@ -19,18 +25,10 @@ Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool MSAA, bool
 
 
 Direct3D::~Direct3D() {
-	ReleaseCOM(m_RenderTargetView);
-	ReleaseCOM(m_DepthStencilView);
-	ReleaseCOM(m_SwapChain);
-	ReleaseCOM(m_DepthStencilBuffer);
-
 	// Restore all default settings
 	if (m_DeviceContext) {
 		m_DeviceContext->ClearState();
 	}
-
-	ReleaseCOM(m_DeviceContext);
-	ReleaseCOM(m_Device);
 }
 
 
@@ -73,11 +71,11 @@ bool Direct3D::Init() {
 	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
 
 	DXGI_SWAP_CHAIN_DESC sd;
-	sd.BufferDesc.Width = m_WindowWidth;
-	sd.BufferDesc.Height = m_WindowHeight;
-	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.Width            = m_WindowWidth;
+	sd.BufferDesc.Height           = m_WindowHeight;
+	sd.BufferDesc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	sd.BufferDesc.Scaling          = DXGI_MODE_SCALING_UNSPECIFIED;
 
 	// 4X MSAA
 	if (m_Enable4xMSAA) {
@@ -108,33 +106,29 @@ bool Direct3D::Init() {
 		sd.Windowed = true;
 	}
 
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.BufferCount = 1;
+	sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.BufferCount  = 1;
 	sd.OutputWindow = m_hWnd;
-	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	sd.Flags = 0;
+	sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
+	sd.Flags        = 0;
 
 	// To correctly create the swap chain, we must use the IDXGIFactory that was
 	// used to create the device.  If we tried to use a different IDXGIFactory instance
 	// (by calling CreateDXGIFactory), we get an error: "IDXGIFactory::CreateSwapChain: 
 	// This function is being called with a device from a different IDXGIFactory."
 
-	IDXGIDevice *dxgiDevice = nullptr;
+	ComPtr<IDXGIDevice> dxgiDevice = nullptr;
 	HR(m_Device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice));
 
-	IDXGIAdapter *dxgiAdapter = nullptr;
+	ComPtr<IDXGIAdapter> dxgiAdapter = nullptr;
 	HR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter));
 
-	IDXGIFactory *dxgiFactory = nullptr;
+	ComPtr<IDXGIFactory> dxgiFactory = nullptr;
 	HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory));
 
-	HR(dxgiFactory->CreateSwapChain(m_Device, &sd, &m_SwapChain));
+	HR(dxgiFactory->CreateSwapChain(m_Device.Get(), &sd, &m_SwapChain));
 
-	ReleaseCOM(dxgiDevice);
-	ReleaseCOM(dxgiAdapter);
-	ReleaseCOM(dxgiFactory);
-
-	OnResize();
+	OnResize(m_WindowWidth, m_WindowHeight);
 
 	return true;
 }
@@ -142,11 +136,10 @@ bool Direct3D::Init() {
 
 void Direct3D::GetRefreshRate() {
 	// Create graphics interface factory
-	IDXGIFactory   *factory;
-	IDXGIAdapter   *adapter;
-	IDXGIOutput    *adapterOut;
-	DXGI_MODE_DESC *displayModeList;
-	UINT            modes;
+	ComPtr<IDXGIFactory>   factory;
+	ComPtr<IDXGIAdapter>   adapter;
+	ComPtr<IDXGIOutput>    adapterOut;
+	UINT modes;
 
 	HR(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory));
 
@@ -154,8 +147,10 @@ void Direct3D::GetRefreshRate() {
 	factory->EnumAdapters(0, &adapter);
 	adapter->EnumOutputs(0, &adapterOut);
 	adapterOut->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, NULL);
-	displayModeList = new DXGI_MODE_DESC[modes];
-	adapterOut->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, displayModeList);
+
+	std::vector<DXGI_MODE_DESC>  displayModeList(modes);
+	adapterOut->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, displayModeList.data());
+
 	for (UINT i = 0; i < modes; i++) {
 		if (displayModeList[i].Width == GetSystemMetrics(SM_CXSCREEN)) {
 			if (displayModeList[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
@@ -164,25 +159,20 @@ void Direct3D::GetRefreshRate() {
 			}
 		}
 	}
-
-	ReleaseCOM(factory);
-	ReleaseCOM(adapter);
-	ReleaseCOM(adapterOut);
 }
 
 
-void Direct3D::OnResize() {
+void Direct3D::OnResize(int windowWidth, int windowHeight) {
 	assert(m_DeviceContext);
 	assert(m_Device);
 	assert(m_SwapChain);
 
-	// Release the old views, as they hold references to the buffers we
-	// will be destroying.  Also release the old depth/stencil buffer.
+	m_WindowWidth  = windowWidth;
+	m_WindowHeight = windowHeight;
 
-	ReleaseCOM(m_RenderTargetView);
-	ReleaseCOM(m_DepthStencilView);
-	ReleaseCOM(m_DepthStencilBuffer);
-
+	m_RenderTargetView.Reset();
+	m_DepthStencilView.Reset();
+	m_DepthStencilBuffer.Reset();
 
 	// Resize the swap chain and recreate the render target view.
 
@@ -219,12 +209,12 @@ void Direct3D::OnResize() {
 	depthStencilDesc.MiscFlags = 0;
 
 	HR(m_Device->CreateTexture2D(&depthStencilDesc, 0, &m_DepthStencilBuffer));
-	HR(m_Device->CreateDepthStencilView(m_DepthStencilBuffer, 0, &m_DepthStencilView));
+	HR(m_Device->CreateDepthStencilView(m_DepthStencilBuffer.Get(), 0, &m_DepthStencilView));
 
 
 	// Bind the render target view and depth/stencil view to the pipeline
 
-	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
+	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView.Get());
 
 
 	// Set the viewport transform

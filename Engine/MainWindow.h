@@ -19,11 +19,14 @@ class MainWindow {
 	private:
 		bool InitWindow();
 
+
 	private:
+		System *m_System;
+
 		HINSTANCE m_hInstance;
 		HWND      m_hWnd;
 
-		System    *system;
+		bool m_Resizing;
 };
 
 static MainWindow *handle = nullptr;

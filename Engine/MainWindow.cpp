@@ -10,9 +10,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-MainWindow::MainWindow() {
-	handle   = this;
-	system   = nullptr;
+MainWindow::MainWindow() : m_System(nullptr) {
+	handle = this;
 }
 
 
@@ -25,9 +24,9 @@ bool MainWindow::Init() {
 		return false;
 	}
 
-	system = new System(m_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT);
+	m_System = new System(m_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	if (!system->Init()) {
+	if (!m_System->Init()) {
 		return false;
 	}
 }
@@ -99,7 +98,7 @@ int MainWindow::Run() {
 		}
 		else {
 			// Process frame
-			if (!system->Tick()) {
+			if (!m_System->Tick()) {
 				MessageBox(m_hWnd, L"Frame processing failed", L"Error", MB_OK);
 				return 1;
 			}
@@ -110,7 +109,6 @@ int MainWindow::Run() {
 }
 
 
-
 LRESULT MainWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 		case WM_DESTROY:
@@ -119,6 +117,25 @@ LRESULT MainWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		case WM_CLOSE:
 			PostQuitMessage(0);
+			return 0;
+
+		case WM_SIZE:
+			if (m_Resizing) {
+				// Do nothing. Constantly calling the resize function would be slow.
+			}
+			else {
+				int windowWidth = LOWORD(lParam);
+				int windowHeight = HIWORD(lParam);
+				m_System->OnResize(windowWidth, windowHeight);
+			}
+			return 0;
+
+		case WM_ENTERSIZEMOVE:
+			m_Resizing = true;
+			return 0;
+
+		case WM_EXITSIZEMOVE:
+			m_Resizing = false;
 			return 0;
 
 		// Send other messages to default message handler

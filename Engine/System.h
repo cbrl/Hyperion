@@ -9,6 +9,7 @@ class System {
 
 		bool Init();
 		bool Tick();
+		void OnResize(int windowWidth, int windowHeight);
 
 
 	private:

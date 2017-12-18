@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "System.h"
+#include "EngineUtil.h"
 
 
 System::System(HWND hWnd, int windowWidth, int windowHeight)
@@ -17,7 +18,7 @@ System::~System() {
 
 
 bool System::Init() {
-	m_D3DApp = new Direct3D(m_hWnd, m_WindowWidth, m_WindowHeight, false, false, false);
+	m_D3DApp = new Direct3D(m_hWnd, m_WindowWidth, m_WindowHeight, false, true, false);
 
 	if (!m_D3DApp->Init()) {
 		return false;
@@ -32,4 +33,11 @@ bool System::Tick() {
 	return true;
 }
 
+
+void System::OnResize(int windowWidth, int windowHeight) {
+	if (!this) return;
+	if (m_D3DApp) {
+		m_D3DApp->OnResize(windowWidth, windowHeight);
+	}
+}
 
