@@ -1,8 +1,15 @@
 #pragma once
 
-#include <wrl\client.h>
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "dxgi.lib")
+#pragma comment(lib, "d3dcompiler.lib")
 
-using namespace Microsoft::WRL;
+#include "EngineUtil.h"
+#include <wrl\client.h>
+#include <d3d11.h>
+#include <dxgi.h>
+
+using Microsoft::WRL::ComPtr;
 
 class Direct3D {
 	public:
@@ -11,6 +18,8 @@ class Direct3D {
 
 		bool Init();
 		void OnResize(int windowWidth, int windowHeight);
+		ComPtr<ID3D11Device> GetDevice();
+		ComPtr<ID3D11DeviceContext> GetDeviceContext();
 
 
 	private:

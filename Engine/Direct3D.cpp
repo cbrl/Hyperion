@@ -1,17 +1,9 @@
 #include "stdafx.h"
 #include "Direct3D.h"
-#include "EngineUtil.h"
-
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "dxgi.lib")
-#pragma comment(lib, "d3dcompiler.lib")
-
-#include <d3d11.h>
-#include <dxgi.h>
 
 
-Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool MSAA, bool vSync, bool fullscreen)
-:	m_hWnd(hWnd),
+Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool MSAA, bool vSync, bool fullscreen):
+	m_hWnd(hWnd),
 	m_WindowWidth(windowWidth),
 	m_WindowHeight(windowHeight),
 	m_Enable4xMSAA(MSAA),
@@ -68,8 +60,9 @@ bool Direct3D::Init() {
 	   DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m_4xMSAAQuality));
 	assert(m_4xMSAAQuality > 0);
 
+	//----------------------------------------------------------------------------------
 	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
-
+	//----------------------------------------------------------------------------------
 	DXGI_SWAP_CHAIN_DESC sd;
 	sd.BufferDesc.Width            = m_WindowWidth;
 	sd.BufferDesc.Height           = m_WindowHeight;
@@ -148,7 +141,7 @@ void Direct3D::GetRefreshRate() {
 	adapter->EnumOutputs(0, &adapterOut);
 	adapterOut->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, NULL);
 
-	std::vector<DXGI_MODE_DESC>  displayModeList(modes);
+	std::vector<DXGI_MODE_DESC> displayModeList(modes);
 	adapterOut->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, displayModeList.data());
 
 	for (UINT i = 0; i < modes; i++) {
@@ -159,6 +152,16 @@ void Direct3D::GetRefreshRate() {
 			}
 		}
 	}
+}
+
+
+ComPtr<ID3D11Device> Direct3D::GetDevice() {
+	return m_Device;
+}
+
+
+ComPtr<ID3D11DeviceContext> Direct3D::GetDeviceContext() {
+	return m_DeviceContext;
 }
 
 

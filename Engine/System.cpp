@@ -1,10 +1,12 @@
 #include "stdafx.h"
-#include "System.h"
 #include "EngineUtil.h"
+#include "System.h"
+#include "TextureMgr.h"
+#include "Model.h"
 
 
-System::System(HWND hWnd, int windowWidth, int windowHeight)
-:	m_hWnd(hWnd),
+System::System(HWND hWnd, int windowWidth, int windowHeight):
+	m_hWnd(hWnd),
 	m_WindowWidth(windowWidth),
 	m_WindowHeight(windowHeight),
 	m_D3DApp(nullptr)
@@ -13,16 +15,17 @@ System::System(HWND hWnd, int windowWidth, int windowHeight)
 
 
 System::~System() {
-	SafeDelete(m_D3DApp);
 }
 
 
 bool System::Init() {
-	m_D3DApp = new Direct3D(m_hWnd, m_WindowWidth, m_WindowHeight, false, true, false);
+	m_D3DApp = make_unique<Direct3D>(m_hWnd, m_WindowWidth, m_WindowHeight, false, true, false);
 
 	if (!m_D3DApp->Init()) {
 		return false;
 	}
+	
+	auto textureMgr = make_unique<TextureMgr>(m_D3DApp->GetDevice().Get(), m_D3DApp->GetDeviceContext().Get());
 
 	return true;
 }

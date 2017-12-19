@@ -29,6 +29,8 @@ bool MainWindow::Init() {
 	if (!m_System->Init()) {
 		return false;
 	}
+
+	return true;
 }
 
 
