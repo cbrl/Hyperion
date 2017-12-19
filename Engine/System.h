@@ -1,6 +1,10 @@
 #pragma once
 
+#include "EngineUtil.h"
 #include "Direct3D.h"
+#include "Camera.h"
+#include "TextureMgr.h"
+#include "Model.h"
 #include <d3d11.h>
 #include <wrl\client.h>
 
@@ -19,7 +23,10 @@ class System {
 
 
 	private:
-		unique_ptr<Direct3D> m_D3DApp;
+		unique_ptr<Direct3D>   m_D3DApp;
+		unique_ptr<Camera>     m_Camera;
+		unique_ptr<TextureMgr> m_TextureMgr;
+		unique_ptr<Model>      m_Model;
 
 		HWND      m_hWnd;
 		int       m_WindowWidth;
@@ -27,4 +34,5 @@ class System {
 
 		ComPtr<ID3D11Device>        m_Device;
 		ComPtr<ID3D11DeviceContext> m_DeviceContext;
+
 };

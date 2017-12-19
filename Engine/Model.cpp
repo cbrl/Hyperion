@@ -2,7 +2,7 @@
 #include "Model.h"
 
 
-Model::Model() {
+Model::Model() : m_VertexBuffer(nullptr){
 
 }
 
@@ -11,7 +11,7 @@ Model::~Model() {
 }
 
 
-bool Model::Init(ComPtr<ID3D11Device> &device, char *modelFilename, ComPtr<ID3D11ShaderResourceView> texture) {
+bool Model::Init(ComPtr<ID3D11Device> &device, const char *modelFilename, ComPtr<ID3D11ShaderResourceView> texture) {
 	bool result;
 
 	result = LoadModel(modelFilename);
@@ -26,7 +26,7 @@ bool Model::Init(ComPtr<ID3D11Device> &device, char *modelFilename, ComPtr<ID3D1
 }
 
 
-bool Model::LoadModel(char *filename) {
+bool Model::LoadModel(const char *filename) {
 	ifstream file;
 	char ch;
 	ModelData temp;
@@ -65,6 +65,8 @@ bool Model::InitBuffers(ComPtr<ID3D11Device> &device) {
 	vector<ULONG>  indices;
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
+
+	
 
 	// Fill vertex and index vector data
 	for (int i = 0; i < m_VertexCount; i++) {

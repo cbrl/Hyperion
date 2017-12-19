@@ -14,6 +14,7 @@ TextureMgr::~TextureMgr() {
 }
 
 ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture(vector<wstring> filenames) {
+	// Return the texture if it was already created, or create it if not
 	if (m_TextureMap.find(filenames) != m_TextureMap.end()) {
 		return m_TextureMap[filenames];
 	}

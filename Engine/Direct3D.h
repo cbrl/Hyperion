@@ -10,6 +10,10 @@
 #include <dxgi.h>
 
 using Microsoft::WRL::ComPtr;
+using namespace DirectX;
+
+static const float zNear = 0.1f;
+static const float zFar  = 1000.0f;
 
 class Direct3D {
 	public:
@@ -17,9 +21,16 @@ class Direct3D {
 		~Direct3D();
 
 		bool Init();
+		void BeginScene(float red, float green, float blue, float alpha);
+		void EndScene();
 		void OnResize(int windowWidth, int windowHeight);
+
 		ComPtr<ID3D11Device> GetDevice();
 		ComPtr<ID3D11DeviceContext> GetDeviceContext();
+
+		XMMATRIX GetWorldMatrix();
+		XMMATRIX GetProjectionMatrix();
+		XMMATRIX GetOrthoMatrix();
 
 
 	private:
@@ -36,15 +47,20 @@ class Direct3D {
 		D3D11_VIEWPORT                 m_WindowViewport;
 		D3D_DRIVER_TYPE                m_DriverType;
 
+		XMMATRIX m_WorldMatrix;
+		XMMATRIX m_ProjectionMatrix;
+		XMMATRIX m_OrthoMatrix;
+
 		HWND m_hWnd;
 		int  m_WindowWidth;
 		int  m_WindowHeight;
 		bool m_EnableVSync;
 		bool m_EnableFullscreen;
+		bool m_Enable4xMSAA;
+		UINT m_4xMSAAQuality;
 		UINT m_Numerator;
 		UINT m_Denominator;
 
-		UINT m_4xMSAAQuality;
-		bool m_Enable4xMSAA;
+		
 };
 

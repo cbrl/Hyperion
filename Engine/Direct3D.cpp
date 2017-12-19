@@ -111,17 +111,32 @@ bool Direct3D::Init() {
 	// This function is being called with a device from a different IDXGIFactory."
 
 	ComPtr<IDXGIDevice> dxgiDevice = nullptr;
-	HR(m_Device->QueryInterface(__uuidof(IDXGIDevice), (void**)&dxgiDevice));
+	HR(m_Device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.ReleaseAndGetAddressOf()));
 
 	ComPtr<IDXGIAdapter> dxgiAdapter = nullptr;
-	HR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)&dxgiAdapter));
+	HR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)dxgiAdapter.ReleaseAndGetAddressOf()));
 
 	ComPtr<IDXGIFactory> dxgiFactory = nullptr;
-	HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)&dxgiFactory));
+	HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)dxgiFactory.ReleaseAndGetAddressOf()));
 
-	HR(dxgiFactory->CreateSwapChain(m_Device.Get(), &sd, &m_SwapChain));
+	HR(dxgiFactory->CreateSwapChain(m_Device.Get(), &sd, m_SwapChain.ReleaseAndGetAddressOf()));
 
 	OnResize(m_WindowWidth, m_WindowHeight);
+
+	
+	// Set FOV and aspect ratio
+	float fov = XM_PI / 4.0f;
+	float aspectRatio = (float)m_WindowWidth / (float)m_WindowHeight;
+
+	// Create projection matrix
+	m_ProjectionMatrix = XMMatrixPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
+
+	// Create world matrix
+	m_WorldMatrix = XMMatrixIdentity();
+
+	// Create ortho matrix for 2D rendering
+	m_OrthoMatrix = XMMatrixOrthographicLH((float)m_WindowWidth, (float)m_WindowHeight, zNear, zFar);
+
 
 	return true;
 }
@@ -165,6 +180,21 @@ ComPtr<ID3D11DeviceContext> Direct3D::GetDeviceContext() {
 }
 
 
+XMMATRIX Direct3D::GetWorldMatrix() {
+	return m_WorldMatrix;
+}
+
+
+XMMATRIX Direct3D::GetProjectionMatrix() {
+	return m_ProjectionMatrix;
+}
+
+
+XMMATRIX Direct3D::GetOrthoMatrix() {
+	return m_OrthoMatrix;
+}
+
+
 void Direct3D::OnResize(int windowWidth, int windowHeight) {
 	assert(m_DeviceContext);
 	assert(m_Device);
@@ -180,10 +210,10 @@ void Direct3D::OnResize(int windowWidth, int windowHeight) {
 	// Resize the swap chain and recreate the render target view.
 
 	HR(m_SwapChain->ResizeBuffers(1, m_WindowWidth, m_WindowHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
-	ID3D11Texture2D* backBuffer;
-	HR(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer)));
-	HR(m_Device->CreateRenderTargetView(backBuffer, 0, &m_RenderTargetView));
-	ReleaseCOM(backBuffer);
+	ComPtr<ID3D11Texture2D> backBuffer;
+	HR(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.ReleaseAndGetAddressOf())));
+	HR(m_Device->CreateRenderTargetView(backBuffer.Get(), 0, m_RenderTargetView.ReleaseAndGetAddressOf()));
+
 
 	// Create the depth/stencil buffer and view.
 
@@ -217,7 +247,7 @@ void Direct3D::OnResize(int windowWidth, int windowHeight) {
 
 	// Bind the render target view and depth/stencil view to the pipeline
 
-	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView.Get());
+	m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
 
 
 	// Set the viewport transform
@@ -230,4 +260,25 @@ void Direct3D::OnResize(int windowWidth, int windowHeight) {
 	m_WindowViewport.MaxDepth = 1.0f;
 
 	m_DeviceContext->RSSetViewports(1, &m_WindowViewport);
+}
+
+
+void Direct3D::BeginScene(float red, float green, float blue, float alpha) {
+	float color[4] = { red, green, blue, alpha };
+
+	// Clear render taget view and depth stencil view
+	m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
+	m_DeviceContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+}
+
+
+void Direct3D::EndScene() {
+	if (m_EnableVSync) {
+		// If VSync is enabled, present with next frame
+		m_SwapChain->Present(1, 0);
+	}
+	else {
+		// If it's disabled, present as soon as possible
+		m_SwapChain->Present(0, 0);
+	}
 }

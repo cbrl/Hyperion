@@ -1,7 +1,5 @@
 #pragma once
 
-#include <d3d11.h>
-#include <DirectXMath.h>
 #include <wrl\client.h>
 #include <vector>
 #include <fstream>
@@ -16,8 +14,8 @@ class Model {
 		Model();
 		~Model();
 		
-		bool Init(ComPtr<ID3D11Device> &device, char *modelFilename, ComPtr<ID3D11ShaderResourceView> texture);
-		bool LoadModel(char *filename);
+		bool Init(ComPtr<ID3D11Device> &device, const char *modelFilename, ComPtr<ID3D11ShaderResourceView> texture);
+		bool LoadModel(const char *filename);
 		bool InitBuffers(ComPtr<ID3D11Device> &device);
 		void RenderBuffers(ComPtr<ID3D11DeviceContext> &deviceContext);
 
@@ -37,7 +35,6 @@ class Model {
 
 
 	private:
-		char    *m_modelFilename;
 		int      m_VertexCount;
 		int      m_IndexCount;
 
