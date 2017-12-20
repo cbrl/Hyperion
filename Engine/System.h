@@ -1,6 +1,5 @@
 #pragma once
 
-#include "EngineUtil.h"
 #include "Direct3D.h"
 #include "Camera.h"
 #include "TextureMgr.h"
@@ -36,3 +35,5 @@ class System {
 		ComPtr<ID3D11DeviceContext> m_DeviceContext;
 
 };
+
+static float rotation = 0.0f;

@@ -5,6 +5,9 @@
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 800
 
+using std::unique_ptr;
+using std::make_unique;
+
 class MainWindow {
 	public:
 		MainWindow();
@@ -21,7 +24,7 @@ class MainWindow {
 
 
 	private:
-		System *m_System;
+		unique_ptr<System> m_System;
 
 		HINSTANCE m_hInstance;
 		HWND      m_hWnd;

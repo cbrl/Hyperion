@@ -26,6 +26,7 @@ bool System::Init() {
 	m_Device = m_D3DApp->GetDevice();
 	m_DeviceContext = m_D3DApp->GetDeviceContext();
 
+
 	// Create camera
 	m_Camera = make_unique<Camera>();
 	m_Camera->SetPosition(XMFLOAT3(0.0f, 0.0f, -5.0f));
@@ -44,9 +45,15 @@ bool System::Init() {
 bool System::Tick() {
 	m_D3DApp->BeginScene(0.39f, 0.58f, 0.93f, 1.0f);
 
-	XMMATRIX world      = m_D3DApp->GetWorldMatrix();
-	XMMATRIX projection = m_D3DApp->GetProjectionMatrix();
-	XMMATRIX view       = m_Camera->GetViewMatrix();
+	//rotation += XM_PI / 250;
+	//if (rotation > (2.0f * XM_PI)) rotation = 0;
+
+	//m_Camera->Render();
+
+	//XMMATRIX world      = m_D3DApp->GetWorldMatrix();
+	//world = XMMatrixRotationRollPitchYaw(rotation, rotation, 0.0f);
+	//XMMATRIX projection = m_D3DApp->GetProjectionMatrix();
+	//XMMATRIX view       = m_Camera->GetViewMatrix();
 
 	//m_Model->RenderBuffers(m_DeviceContext);
 

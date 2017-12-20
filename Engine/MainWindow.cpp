@@ -24,7 +24,7 @@ bool MainWindow::Init() {
 		return false;
 	}
 
-	m_System = new System(m_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT);
+	m_System = make_unique<System>(m_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	if (!m_System->Init()) {
 		return false;

@@ -44,6 +44,14 @@ bool Model::LoadModel(const char *filename) {
 	file >> m_VertexCount;
 	m_IndexCount = m_VertexCount;
 
+	// Read up to vertex data
+	file.get(ch);
+	while (ch != ':') {
+		file.get(ch);
+	}
+	file.get(ch);
+	file.get(ch);
+
 	// Store vertex data
 	for (int i = 0; i < m_VertexCount; i++) {
 		file >> temp.x >> temp.y >> temp.z;
@@ -71,8 +79,9 @@ bool Model::InitBuffers(ComPtr<ID3D11Device> &device) {
 	// Fill vertex and index vector data
 	for (int i = 0; i < m_VertexCount; i++) {
 		temp.position = XMFLOAT3(m_Model[i].x, m_Model[i].y, m_Model[i].z);
-		temp.texture  = XMFLOAT2(m_Model[i].tu, m_Model[i].tv);
-		temp.normal   = XMFLOAT3(m_Model[i].nx, m_Model[i].ny, m_Model[i].nz);
+		//temp.texture  = XMFLOAT2(m_Model[i].tu, m_Model[i].tv);
+		//temp.normal   = XMFLOAT3(m_Model[i].nx, m_Model[i].ny, m_Model[i].nz);
+		temp.color = XMFLOAT4((float)i / m_VertexCount, 1.0f - ((float)i / m_VertexCount), 1.0f, 1.0f);
 
 		vertices.push_back(temp);
 		indices.push_back(i);
@@ -87,7 +96,7 @@ bool Model::InitBuffers(ComPtr<ID3D11Device> &device) {
 	vertexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the vertex data
-	vertexData.pSysMem = vertices.data();
+	vertexData.pSysMem = const_cast<Vertex*>(vertices.data());
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
@@ -104,7 +113,7 @@ bool Model::InitBuffers(ComPtr<ID3D11Device> &device) {
 	indexBufferDesc.StructureByteStride = 0;
 
 	//Give the subresource structure a pointer to the index data
-	indexData.pSysMem = indices.data();
+	indexData.pSysMem = const_cast<ULONG*>(indices.data());
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
@@ -129,4 +138,14 @@ void Model::RenderBuffers(ComPtr<ID3D11DeviceContext> &deviceContext) {
 
 	// Set type of primitive that should be rendered from this vertex buffer, in this case triangles
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
+
+
+int Model::GetIndexCount() {
+	return m_IndexCount;
+}
+
+
+ComPtr<ID3D11ShaderResourceView> Model::GetTexture() {
+	return m_Texture;
 }
