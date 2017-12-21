@@ -2,7 +2,7 @@
 #include "TextureMgr.h"
 
 
-TextureMgr::TextureMgr(ID3D11Device *device, ID3D11DeviceContext *deviceContext) :
+TextureMgr::TextureMgr(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext) :
 	m_Device(device),
 	m_DeviceContext(deviceContext)
 {
@@ -72,7 +72,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 		for (UINT mipLevel = 0; mipLevel < desc.MipLevels; mipLevel++) {
 			D3D11_MAPPED_SUBRESOURCE mappedTex;
 
-			HR(m_DeviceContext->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, 0, &mappedTex));
+			HR(m_DeviceContext->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex));
 
 			m_DeviceContext->UpdateSubresource(texArray.Get(), D3D11CalcSubresource(mipLevel, texElement, desc.MipLevels), nullptr,
 											   mappedTex.pData, mappedTex.RowPitch, mappedTex.DepthPitch);

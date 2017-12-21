@@ -52,3 +52,12 @@
 //----------------------------------------------------------------------------------
 
 #define SafeDelete(x) { delete x; x = nullptr; }
+
+
+
+enum class ShaderTypes {
+	ColorShader    = 0,
+	LightShader    = 1,
+	NormalShader   = 2,
+	SpecularShader = 3
+};

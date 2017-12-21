@@ -16,7 +16,7 @@ using namespace DirectX;
 
 class TextureMgr {
 	public:
-		TextureMgr(ID3D11Device *device, ID3D11DeviceContext *deviceContext);
+		TextureMgr(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext);
 		~TextureMgr();
 
 		ComPtr<ID3D11ShaderResourceView> CreateTexture(vector<wstring> filenames);

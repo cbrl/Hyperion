@@ -30,9 +30,13 @@ bool System::Init() {
 	// Create camera
 	m_Camera = make_unique<Camera>();
 	m_Camera->SetPosition(XMFLOAT3(0.0f, 0.0f, -5.0f));
+
+	// Create shader manager
+	m_ShaderMgr = make_unique<ShaderMgr>(m_D3DApp->GetDevice(), m_D3DApp->GetDeviceContext(), m_hWnd);
+	m_ShaderMgr->CreateShader(ShaderTypes::LightShader, L"LightShader", L"./shaders/light/light.vs", "LightVertexShader", L"./shaders/light/light.ps", "LightPixelShader");
 	
 	// Create texture manager
-	m_TextureMgr = make_unique<TextureMgr>(m_D3DApp->GetDevice().Get(), m_D3DApp->GetDeviceContext().Get());
+	m_TextureMgr = make_unique<TextureMgr>(m_D3DApp->GetDevice(), m_D3DApp->GetDeviceContext());
 
 	// Create model
 	m_Model = make_unique<Model>();

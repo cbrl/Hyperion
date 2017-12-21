@@ -150,8 +150,10 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="EngineUtil.h" />
+    <ClInclude Include="LightShader.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Model.h" />
+    <ClInclude Include="ShaderBase.h" />
     <ClInclude Include="ShaderMgr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="System.h" />
@@ -161,9 +163,11 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Direct3D.cpp" />
+    <ClCompile Include="LightShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ShaderBase.cpp" />
     <ClCompile Include="ShaderMgr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -176,14 +180,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="color_ps.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="color_vs.hlsl">
-      <FileType>Document</FileType>
-    </None>
+    <None Include="shaders\color\color.ps" />
+    <None Include="shaders\color\color.vs" />
+    <None Include="shaders\light\light.ps" />
+    <None Include="shaders\light\light.vs" />
+    <None Include="shaders\texture\texture.ps" />
+    <None Include="shaders\texture\texture.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

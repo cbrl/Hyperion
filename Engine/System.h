@@ -2,6 +2,7 @@
 
 #include "Direct3D.h"
 #include "Camera.h"
+#include "ShaderMgr.h"
 #include "TextureMgr.h"
 #include "Model.h"
 #include <d3d11.h>
@@ -24,6 +25,7 @@ class System {
 	private:
 		unique_ptr<Direct3D>   m_D3DApp;
 		unique_ptr<Camera>     m_Camera;
+		unique_ptr<ShaderMgr>  m_ShaderMgr;
 		unique_ptr<TextureMgr> m_TextureMgr;
 		unique_ptr<Model>      m_Model;
 

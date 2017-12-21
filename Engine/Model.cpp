@@ -79,9 +79,9 @@ bool Model::InitBuffers(ComPtr<ID3D11Device> &device) {
 	// Fill vertex and index vector data
 	for (int i = 0; i < m_VertexCount; i++) {
 		temp.position = XMFLOAT3(m_Model[i].x, m_Model[i].y, m_Model[i].z);
-		//temp.texture  = XMFLOAT2(m_Model[i].tu, m_Model[i].tv);
-		//temp.normal   = XMFLOAT3(m_Model[i].nx, m_Model[i].ny, m_Model[i].nz);
-		temp.color = XMFLOAT4((float)i / m_VertexCount, 1.0f - ((float)i / m_VertexCount), 1.0f, 1.0f);
+		temp.texture  = XMFLOAT2(m_Model[i].tu, m_Model[i].tv);
+		temp.normal   = XMFLOAT3(m_Model[i].nx, m_Model[i].ny, m_Model[i].nz);
+		//temp.color = XMFLOAT4((float)i / m_VertexCount, 1.0f - ((float)i / m_VertexCount), 1.0f, 1.0f);
 
 		vertices.push_back(temp);
 		indices.push_back(i);
@@ -104,7 +104,7 @@ bool Model::InitBuffers(ComPtr<ID3D11Device> &device) {
 	HR(device->CreateBuffer(&vertexBufferDesc, &vertexData, m_VertexBuffer.GetAddressOf()));
 
 
-	//Index buffer description
+	// Index buffer description
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(ULONG) * m_IndexCount;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -112,7 +112,7 @@ bool Model::InitBuffers(ComPtr<ID3D11Device> &device) {
 	indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.StructureByteStride = 0;
 
-	//Give the subresource structure a pointer to the index data
+	// Give the subresource structure a pointer to the index data
 	indexData.pSysMem = const_cast<ULONG*>(indices.data());
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;

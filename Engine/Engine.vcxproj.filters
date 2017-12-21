@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{cd0f1874-c186-4bbb-9a3d-1e503a7555b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Color">
+      <UniqueIdentifier>{8c3bd23e-85df-4dd4-be02-ba436c40fede}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Texture">
+      <UniqueIdentifier>{76832d29-042d-4957-aafb-2344647e9aa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\Light">
+      <UniqueIdentifier>{999f1396-2253-4ac5-9dc4-c72477cf8a31}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -45,6 +57,12 @@
     <ClInclude Include="ShaderMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderBase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -74,14 +92,32 @@
     <ClCompile Include="ShaderMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LightShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="color_vs.hlsl">
-      <Filter>Resource Files</Filter>
+    <None Include="shaders\color\color.vs">
+      <Filter>Resource Files\Shaders\Color</Filter>
     </None>
-    <None Include="color_ps.hlsl">
-      <Filter>Resource Files</Filter>
+    <None Include="shaders\color\color.ps">
+      <Filter>Resource Files\Shaders\Color</Filter>
+    </None>
+    <None Include="shaders\light\light.ps">
+      <Filter>Resource Files\Shaders\Light</Filter>
+    </None>
+    <None Include="shaders\light\light.vs">
+      <Filter>Resource Files\Shaders\Light</Filter>
+    </None>
+    <None Include="shaders\texture\texture.ps">
+      <Filter>Resource Files\Shaders\Texture</Filter>
+    </None>
+    <None Include="shaders\texture\texture.vs">
+      <Filter>Resource Files\Shaders\Texture</Filter>
     </None>
   </ItemGroup>
 </Project>
