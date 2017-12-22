@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "MainWindow.h"
 
-#include <Windows.h>
-
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	//Send message to handler in System class
@@ -10,7 +8,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-MainWindow::MainWindow() : m_System(nullptr) {
+MainWindow::MainWindow() {
 	handle = this;
 }
 
@@ -19,27 +17,16 @@ MainWindow::~MainWindow() {
 }
 
 
-bool MainWindow::Init() {
-	if (!InitWindow()) {
-		return false;
-	}
+bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
+	m_AppName = name;
+	m_WindowHeight = width;
+	m_WindowWidth = height;
 
-	m_System = make_unique<System>(m_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-	if (!m_System->Init()) {
-		return false;
-	}
-
-	return true;
-}
-
-
-bool MainWindow::InitWindow() {
-	int xPos = (GetSystemMetrics(SM_CXSCREEN) - WINDOW_WIDTH) / 2;
-	int	yPos = (GetSystemMetrics(SM_CYSCREEN) - WINDOW_HEIGHT) / 2;
+	int xPos = (GetSystemMetrics(SM_CXSCREEN) - m_WindowWidth) / 2;
+	int	yPos = (GetSystemMetrics(SM_CYSCREEN) - m_WindowHeight) / 2;
 
 	m_hInstance = GetModuleHandle(NULL);
-	LPCWSTR appName = L"Engine";
+
 
 	//----------------------------------------------------------------------------------
 	// Window class definition
@@ -56,7 +43,7 @@ bool MainWindow::InitWindow() {
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wc.lpszMenuName = NULL;
-	wc.lpszClassName = appName;
+	wc.lpszClassName = m_AppName;
 	wc.cbSize = sizeof(WNDCLASSEX);
 
 
@@ -67,8 +54,8 @@ bool MainWindow::InitWindow() {
 	}
 
 	// Create window and store window handle
-	m_hWnd = CreateWindowEx(WS_EX_APPWINDOW, appName, appName, WS_OVERLAPPEDWINDOW,
-							xPos, yPos, WINDOW_WIDTH, WINDOW_HEIGHT, NULL, NULL, m_hInstance, NULL);
+	m_hWnd = CreateWindowEx(WS_EX_APPWINDOW, m_AppName, m_AppName, WS_OVERLAPPEDWINDOW,
+							xPos, yPos, m_WindowWidth, m_WindowHeight, NULL, NULL, m_hInstance, NULL);
 	if (!m_hWnd) {
 		OutputDebugString(L"Failed to create main window\n");
 		return false;
@@ -90,7 +77,7 @@ int MainWindow::Run() {
 	// Main loop
 	while (!done) {
 
-		if (PeekMessage(&msg, 0, 0, 0, PM_REMOVE)) {
+		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)) {
 
 			if (msg.message == WM_QUIT) {
 				done = true;
@@ -100,10 +87,6 @@ int MainWindow::Run() {
 		}
 		else {
 			// Process frame
-			if (!m_System->Tick()) {
-				MessageBox(m_hWnd, L"Frame processing failed", L"Error", MB_OK);
-				return 1;
-			}
 		}
 	}
 
@@ -119,25 +102,6 @@ LRESULT MainWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		case WM_CLOSE:
 			PostQuitMessage(0);
-			return 0;
-
-		case WM_SIZE:
-			if (m_Resizing) {
-				// Do nothing. Constantly calling the resize function would be slow.
-			}
-			else {
-				int windowWidth = LOWORD(lParam);
-				int windowHeight = HIWORD(lParam);
-				m_System->OnResize(windowWidth, windowHeight);
-			}
-			return 0;
-
-		case WM_ENTERSIZEMOVE:
-			m_Resizing = true;
-			return 0;
-
-		case WM_EXITSIZEMOVE:
-			m_Resizing = false;
 			return 0;
 
 		// Send other messages to default message handler

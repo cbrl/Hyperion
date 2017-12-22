@@ -1,35 +1,29 @@
 #pragma once
 
-#include "System.h"
+#include "EngineUtil.h"
+#include <Windows.h>
 
-#define WINDOW_WIDTH  800
-#define WINDOW_HEIGHT 800
-
-using std::unique_ptr;
-using std::make_unique;
+// Forward declaration of parent class.
+// Parent class reference is used to call Tick(), OnResize(), etc...
+class System;
 
 class MainWindow {
 	public:
 		MainWindow();
 		~MainWindow();
 
-		bool Init();
-		int Run();
+		bool InitWindow(LPCWSTR name, int width, int height);
+		virtual int Run();
 
-		LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-
-	private:
-		bool InitWindow();
+		virtual LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-	private:
-		unique_ptr<System> m_System;
-
+	public:
 		HINSTANCE m_hInstance;
 		HWND      m_hWnd;
-
-		bool m_Resizing;
+		LPCWSTR   m_AppName;
+		int       m_WindowWidth;
+		int       m_WindowHeight;
 };
 
 static MainWindow *handle = nullptr;

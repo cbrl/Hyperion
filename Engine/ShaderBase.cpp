@@ -10,10 +10,7 @@ ShaderBase::~ShaderBase() {
 }
 
 
-bool ShaderBase::Init(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const char* vsEntryPoint, const WCHAR* psFilename, const char* psEntryPoint) {
-	m_VSEntrypoint = vsEntryPoint;
-	m_PSEntrypoint = psEntryPoint;
-
+bool ShaderBase::Init(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename) {
 	CreatePolygonLayout();
 
 	if (!InitShader(device, hWnd, vsFilename, psFilename)) {

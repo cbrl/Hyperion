@@ -54,10 +54,14 @@
 #define SafeDelete(x) { delete x; x = nullptr; }
 
 
+//----------------------------------------------------------------------------------
+// Shader Type enum for selecting which shader to use
+//----------------------------------------------------------------------------------
 
 enum class ShaderTypes {
 	ColorShader    = 0,
-	LightShader    = 1,
-	NormalShader   = 2,
-	SpecularShader = 3
+	TextureShader  = 1,
+	LightShader    = 2,
+	NormalShader   = 3,
+	SpecularShader = 4
 };

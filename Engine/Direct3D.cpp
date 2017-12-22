@@ -156,12 +156,12 @@ void Direct3D::GetRefreshRate() {
 }
 
 
-ComPtr<ID3D11Device> Direct3D::GetDevice() {
+ComPtr<ID3D11Device>& Direct3D::GetDevice() {
 	return m_Device;
 }
 
 
-ComPtr<ID3D11DeviceContext> Direct3D::GetDeviceContext() {
+ComPtr<ID3D11DeviceContext>& Direct3D::GetDeviceContext() {
 	return m_DeviceContext;
 }
 

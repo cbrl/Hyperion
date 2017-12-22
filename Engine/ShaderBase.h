@@ -21,7 +21,7 @@ class ShaderBase {
 		ShaderBase();
 		~ShaderBase();
 
-		bool Init(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const char* vsEntryPoint, const WCHAR* psFilename, const char* psEntryPoint);
+		bool Init(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename);
 		bool InitShader(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename);
 		void OutputShaderErrorMessage(ComPtr<ID3D10Blob> errorMessage, HWND hWnd, const WCHAR* shaderFilename);
 
@@ -39,7 +39,7 @@ class ShaderBase {
 		//----------------------------------------------------
 		// Render(deviceContext, indexCount, matrices, etc)
 		// {
-		//     SetShaderParameters(deviceContext, etc);
+		//     SetShaderParameters(deviceContext, matrices, etc);
 		//     RenderShader(deviceContext, indexCount);
 		// }
 		//----------------------------------------------------

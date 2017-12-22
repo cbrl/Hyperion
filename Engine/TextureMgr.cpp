@@ -13,7 +13,7 @@ TextureMgr::~TextureMgr() {
 	m_TextureMap.clear();
 }
 
-ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture(vector<wstring> filenames) {
+ComPtr<ID3D11ShaderResourceView>& TextureMgr::CreateTexture(vector<wstring> filenames) {
 	// Return the texture if it was already created, or create it if not
 	if (m_TextureMap.find(filenames) != m_TextureMap.end()) {
 		return m_TextureMap[filenames];
@@ -33,7 +33,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture(vector<wstring> filen
 ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(vector<wstring> filenames) {
 	ComPtr<ID3D11ShaderResourceView> textureView = nullptr;
 
-	CreateWICTextureFromFile(m_Device.Get(), m_DeviceContext.Get(), filenames[0].c_str(), nullptr, textureView.GetAddressOf());
+	HR(CreateWICTextureFromFile(m_Device.Get(), m_DeviceContext.Get(), filenames[0].c_str(), nullptr, textureView.GetAddressOf()));
 
 	return textureView;
 }

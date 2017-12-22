@@ -16,12 +16,17 @@ ShaderMgr::~ShaderMgr() {
 }
 
 
-void ShaderMgr::CreateShader(ShaderTypes shaderType, wstring shaderName, const WCHAR* vsFilename, const char* vsEntryPoint,
-							 const WCHAR* psFilename, const char* psEntryPoint) {
+void ShaderMgr::CreateShader(ShaderTypes shaderType, wstring shaderName, const WCHAR* vsFilename, const WCHAR* psFilename) {
 	//wstring shaderName = vertexShaderFilename.substr(0, vertexShaderFilename.find('.'));
 	switch (shaderType) {
 		case ShaderTypes::ColorShader:
 			//if (m_ColorShaderMap.find(shaderName) != m_ColorShaderMap.end()) {
+			//	return;
+			//}
+			break;
+
+		case ShaderTypes::TextureShader:
+			//if (m_TextureShaderMap.find(shaderName) != m_TextureShaderMap.end()) {
 			//	return;
 			//}
 			break;
@@ -45,18 +50,44 @@ void ShaderMgr::CreateShader(ShaderTypes shaderType, wstring shaderName, const W
 			break;
 	}
 
-	BuildShader(shaderType, shaderName, vsFilename, vsEntryPoint, psFilename, psEntryPoint);
+	BuildShader(shaderType, shaderName, vsFilename, psFilename);
 }
 
 
-void ShaderMgr::BuildShader(ShaderTypes shaderType, wstring shaderName, const WCHAR* vsFilename, const char* vsEntryPoint,
-							const WCHAR* psFilename, const char* psEntryPoint) {
+void ShaderMgr::BuildShader(ShaderTypes shaderType, wstring shaderName, const WCHAR* vsFilename, const WCHAR* psFilename) {
 	switch (shaderType) {
 		case ShaderTypes::ColorShader:
 			break;
 
+		case ShaderTypes::TextureShader:
+			break;
+
 		case ShaderTypes::LightShader:
-			m_LightShaderMap[shaderName].Init(m_Device, m_hWnd, vsFilename, vsEntryPoint, psFilename, psEntryPoint);
+			m_LightShaderMap[shaderName] = make_shared<LightShader>();
+			m_LightShaderMap[shaderName]->Init(m_Device, m_hWnd, vsFilename, psFilename);
+
+		case ShaderTypes::NormalShader:
+			break;
+
+		case ShaderTypes::SpecularShader:
+			break;
+	}
+}
+
+
+std::variant<shared_ptr<LightShader>> ShaderMgr::GetShader(ShaderTypes shaderType, wstring shaderName) {
+	std::variant<shared_ptr<LightShader>> shader;
+
+	switch (shaderType) {
+		case ShaderTypes::ColorShader:
+			break;
+
+		case ShaderTypes::TextureShader:
+			break;
+
+		case ShaderTypes::LightShader:
+			shader = m_LightShaderMap[shaderName];
+			return shader;
 
 		case ShaderTypes::NormalShader:
 			break;

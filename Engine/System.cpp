@@ -2,12 +2,7 @@
 #include "System.h"
 
 
-System::System(HWND hWnd, int windowWidth, int windowHeight):
-	m_hWnd(hWnd),
-	m_WindowWidth(windowWidth),
-	m_WindowHeight(windowHeight),
-	m_D3DApp(nullptr)
-{
+System::System() {
 }
 
 
@@ -16,63 +11,93 @@ System::~System() {
 
 
 bool System::Init() {
-	// Initialize Direct3D
-	m_D3DApp = make_unique<Direct3D>(m_hWnd, m_WindowWidth, m_WindowHeight, false, true, false);
-	if (!m_D3DApp->Init()) {
+	InitWindow(L"Engine", WINDOW_WIDTH, WINDOW_HEIGHT);
+
+	m_Graphics = make_unique<Graphics>(m_hWnd, WINDOW_WIDTH, WINDOW_HEIGHT);
+	if (!m_Graphics->Init()) {
 		return false;
 	}
-
-	// Get device and device context
-	m_Device = m_D3DApp->GetDevice();
-	m_DeviceContext = m_D3DApp->GetDeviceContext();
-
-
-	// Create camera
-	m_Camera = make_unique<Camera>();
-	m_Camera->SetPosition(XMFLOAT3(0.0f, 0.0f, -5.0f));
-
-	// Create shader manager
-	m_ShaderMgr = make_unique<ShaderMgr>(m_D3DApp->GetDevice(), m_D3DApp->GetDeviceContext(), m_hWnd);
-	m_ShaderMgr->CreateShader(ShaderTypes::LightShader, L"LightShader", L"./shaders/light/light.vs", "LightVertexShader", L"./shaders/light/light.ps", "LightPixelShader");
-	
-	// Create texture manager
-	m_TextureMgr = make_unique<TextureMgr>(m_D3DApp->GetDevice(), m_D3DApp->GetDeviceContext());
-
-	// Create model
-	m_Model = make_unique<Model>();
-	m_Model->Init(m_Device, "./data/cube.txt", m_TextureMgr->CreateTexture(vector<wstring>(1, L"./data/brick.jpg")));
 
 	return true;
 }
 
 
-bool System::Tick() {
-	m_D3DApp->BeginScene(0.39f, 0.58f, 0.93f, 1.0f);
+int System::Run() {
+	MSG   msg = { 0 };
+	bool done = false;
 
-	//rotation += XM_PI / 250;
-	//if (rotation > (2.0f * XM_PI)) rotation = 0;
+	// Main loop
+	while (!done) {
 
-	//m_Camera->Render();
+		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)) {
 
-	//XMMATRIX world      = m_D3DApp->GetWorldMatrix();
-	//world = XMMatrixRotationRollPitchYaw(rotation, rotation, 0.0f);
-	//XMMATRIX projection = m_D3DApp->GetProjectionMatrix();
-	//XMMATRIX view       = m_Camera->GetViewMatrix();
+			if (msg.message == WM_QUIT) {
+				done = true;
+			}
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+		else {
+			// Process frame
+			if (!m_Graphics->Tick()) {
+				MessageBox(m_hWnd, L"Frame processing failed", L"Error", MB_OK);
+				return 1;
+			}
+		}
+	}
 
-	//m_Model->RenderBuffers(m_DeviceContext);
+	return 0;
+}
 
-	// Light shader function here
 
-	m_D3DApp->EndScene();
+LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+	switch (msg) {
+		case WM_DESTROY:
+			PostQuitMessage(0);
+			return 0;
 
-	return true;
+		case WM_CLOSE:
+			PostQuitMessage(0);
+			return 0;
+
+		case WM_SIZE:
+			m_WindowWidth = LOWORD(lParam);
+			m_WindowHeight = HIWORD(lParam);
+
+			if (wParam == SIZE_MAXIMIZED) {
+				OnResize(m_WindowWidth, m_WindowHeight);
+			}
+			else if (wParam == SIZE_RESTORED) {
+				if (m_Resizing) {
+					// Do nothing. Constantly calling the resize function would be slow.
+				}
+				else {
+					OnResize(m_WindowWidth, m_WindowHeight);
+				}
+			}
+			return 0;
+
+		case WM_ENTERSIZEMOVE:
+			m_Resizing = true;
+			return 0;
+
+		case WM_EXITSIZEMOVE:
+			m_Resizing = false;
+			OnResize(m_WindowWidth, m_WindowHeight);
+			return 0;
+
+		case WM_GETMINMAXINFO:
+			((MINMAXINFO*)lParam)->ptMinTrackSize.x = 240;
+			((MINMAXINFO*)lParam)->ptMinTrackSize.y = 240;
+			return 0;
+
+			// Send other messages to default message handler
+		default:
+			return DefWindowProc(hWnd, msg, wParam, lParam);
+	}
 }
 
 
 void System::OnResize(int windowWidth, int windowHeight) {
-	if (!this) return;
-	if (m_D3DApp) {
-		m_D3DApp->OnResize(windowWidth, windowHeight);
-	}
+	m_Graphics->OnResize(windowWidth, windowHeight);
 }
-

@@ -11,7 +11,7 @@ Model::~Model() {
 }
 
 
-bool Model::Init(ComPtr<ID3D11Device> &device, const char *modelFilename, ComPtr<ID3D11ShaderResourceView> texture) {
+bool Model::Init(ComPtr<ID3D11Device>& device, const char *modelFilename, ComPtr<ID3D11ShaderResourceView>& texture) {
 	bool result;
 
 	result = LoadModel(modelFilename);
@@ -26,7 +26,7 @@ bool Model::Init(ComPtr<ID3D11Device> &device, const char *modelFilename, ComPtr
 }
 
 
-bool Model::LoadModel(const char *filename) {
+bool Model::LoadModel(const char* filename) {
 	ifstream file;
 	char ch;
 	ModelData temp;
@@ -67,7 +67,7 @@ bool Model::LoadModel(const char *filename) {
 }
 
 
-bool Model::InitBuffers(ComPtr<ID3D11Device> &device) {
+bool Model::InitBuffers(ComPtr<ID3D11Device>& device) {
 	vector<Vertex> vertices;
 	Vertex         temp;
 	vector<ULONG>  indices;
@@ -124,7 +124,7 @@ bool Model::InitBuffers(ComPtr<ID3D11Device> &device) {
 }
 
 
-void Model::RenderBuffers(ComPtr<ID3D11DeviceContext> &deviceContext) {
+void Model::RenderBuffers(ComPtr<ID3D11DeviceContext>& deviceContext) {
 	UINT stride, offset;
 
 	stride = sizeof(Vertex);
@@ -146,6 +146,6 @@ int Model::GetIndexCount() {
 }
 
 
-ComPtr<ID3D11ShaderResourceView> Model::GetTexture() {
+ComPtr<ID3D11ShaderResourceView>& Model::GetTexture() {
 	return m_Texture;
 }

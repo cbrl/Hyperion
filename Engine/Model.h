@@ -14,15 +14,15 @@ class Model {
 		Model();
 		~Model();
 		
-		bool Init(ComPtr<ID3D11Device> &device, const char *modelFilename, ComPtr<ID3D11ShaderResourceView> texture);
-		void RenderBuffers(ComPtr<ID3D11DeviceContext> &deviceContext);
+		bool Init(ComPtr<ID3D11Device>& device, const char* modelFilename, ComPtr<ID3D11ShaderResourceView>& texture);
+		void RenderBuffers(ComPtr<ID3D11DeviceContext>& deviceContext);
 		int  GetIndexCount();
-		ComPtr<ID3D11ShaderResourceView> GetTexture();
+		ComPtr<ID3D11ShaderResourceView>& GetTexture();
 
 
 	private:
-		bool LoadModel(const char *filename);
-		bool InitBuffers(ComPtr<ID3D11Device> &device);
+		bool LoadModel(const char* filename);
+		bool InitBuffers(ComPtr<ID3D11Device>& device);
 
 
 	private:

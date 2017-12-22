@@ -25,8 +25,8 @@ class Direct3D {
 		void EndScene();
 		void OnResize(int windowWidth, int windowHeight);
 
-		ComPtr<ID3D11Device> GetDevice();
-		ComPtr<ID3D11DeviceContext> GetDeviceContext();
+		ComPtr<ID3D11Device>& GetDevice();
+		ComPtr<ID3D11DeviceContext>& GetDeviceContext();
 
 		XMMATRIX GetWorldMatrix();
 		XMMATRIX GetProjectionMatrix();

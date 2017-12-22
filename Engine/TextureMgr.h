@@ -3,6 +3,7 @@
 #include "EngineUtil.h"
 #include <d3d11.h>
 #include <WICTextureLoader.h>
+#include <DDSTextureLoader.h>
 #include <wrl\client.h>
 #include <string>
 #include <vector>
@@ -19,7 +20,7 @@ class TextureMgr {
 		TextureMgr(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext);
 		~TextureMgr();
 
-		ComPtr<ID3D11ShaderResourceView> CreateTexture(vector<wstring> filenames);
+		ComPtr<ID3D11ShaderResourceView>& CreateTexture(vector<wstring> filenames);
 
 
 	private:

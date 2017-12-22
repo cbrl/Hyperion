@@ -3,6 +3,8 @@
 
 
 LightShader::LightShader() {
+	m_VSEntrypoint = "LightVertexShader";
+	m_PSEntrypoint = "LightPixelShader";
 }
 
 
@@ -79,7 +81,7 @@ bool LightShader::Render(ComPtr<ID3D11DeviceContext>& deviceContext, int indexCo
 	bool result;
 
 	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, cameraPosition, texture, lightDirection,
-						ambientColor, diffuseColor, specularColor, specularPower);
+	                             ambientColor, diffuseColor, specularColor, specularPower);
 	if (!result) return false;
 
 	RenderShader(deviceContext, indexCount);
@@ -98,8 +100,8 @@ bool LightShader::SetShaderParameters(ComPtr<ID3D11DeviceContext>& deviceContext
 	CameraBuffer *cameraPtr;
 
 	// Transpose the matrices to prepare them for the shader
-	worldMatrix = XMMatrixTranspose(worldMatrix);
-	viewMatrix = XMMatrixTranspose(viewMatrix);
+	worldMatrix      = XMMatrixTranspose(worldMatrix);
+	viewMatrix       = XMMatrixTranspose(viewMatrix);
 	projectionMatrix = XMMatrixTranspose(projectionMatrix);
 
 
@@ -111,8 +113,8 @@ bool LightShader::SetShaderParameters(ComPtr<ID3D11DeviceContext>& deviceContext
 	matrixPtr = (MatrixBuffer*)mappedResource.pData;
 
 	// Copy the matrices into the constant buffer
-	matrixPtr->world = worldMatrix;
-	matrixPtr->view = viewMatrix;
+	matrixPtr->world      = worldMatrix;
+	matrixPtr->view       = viewMatrix;
 	matrixPtr->projection = projectionMatrix;
 
 	// Unlock the constant buffer
@@ -125,7 +127,7 @@ bool LightShader::SetShaderParameters(ComPtr<ID3D11DeviceContext>& deviceContext
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, m_MatrixBuffer.GetAddressOf());
 
 	// Set shader texture resource in the pixel shader
-	deviceContext->PSSetShaderResources(0, 1, &texture);
+	deviceContext->PSSetShaderResources(0, 1, texture.GetAddressOf());
 
 	// Lock the light constant buffer so it can be written to
 	HR(deviceContext->Map(m_LightBuffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource));
