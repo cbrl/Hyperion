@@ -16,55 +16,30 @@ ShaderMgr::~ShaderMgr() {
 }
 
 
-void ShaderMgr::CreateShader(ShaderTypes shaderType, wstring shaderName, const WCHAR* vsFilename, const WCHAR* psFilename) {
-	//wstring shaderName = vertexShaderFilename.substr(0, vertexShaderFilename.find('.'));
-	switch (shaderType) {
-		case ShaderTypes::ColorShader:
-			//if (m_ColorShaderMap.find(shaderName) != m_ColorShaderMap.end()) {
-			//	return;
-			//}
-			break;
+bool ShaderMgr::CreateShader(ShaderTypes shaderType, const WCHAR* vsFilename, const WCHAR* psFilename) {
+	bool result;
 
-		case ShaderTypes::TextureShader:
-			//if (m_TextureShaderMap.find(shaderName) != m_TextureShaderMap.end()) {
-			//	return;
-			//}
-			break;
-		
-		case ShaderTypes::LightShader:
-			if (m_LightShaderMap.find(shaderName) != m_LightShaderMap.end()) {
-				return;
-			}
-			break;
-
-		case ShaderTypes::NormalShader:
-			//if (m_NormalShaderMap.find(shaderName) != m_NormalShaderMap.end()) {
-			//	return;
-			//}
-			break;
-
-		case ShaderTypes::SpecularShader:
-			//if (m_SpecularShaderMap.find(shaderName) != m_SpecularShaderMap.end()) {
-			//	return;
-			//}
-			break;
+	if (m_LightShaderMap.find(shaderType) != m_LightShaderMap.end()) {
+		result = true;
+	}
+	else {
+		result = BuildShader(shaderType, vsFilename, psFilename);
 	}
 
-	BuildShader(shaderType, shaderName, vsFilename, psFilename);
+	return result;
 }
 
 
-void ShaderMgr::BuildShader(ShaderTypes shaderType, wstring shaderName, const WCHAR* vsFilename, const WCHAR* psFilename) {
-	switch (shaderType) {
-		case ShaderTypes::ColorShader:
-			break;
+bool ShaderMgr::BuildShader(ShaderTypes shaderType, const WCHAR* vsFilename, const WCHAR* psFilename) {
+	bool result;
 
+	switch (shaderType) {
 		case ShaderTypes::TextureShader:
 			break;
 
 		case ShaderTypes::LightShader:
-			m_LightShaderMap[shaderName] = make_shared<LightShader>();
-			m_LightShaderMap[shaderName]->Init(m_Device, m_hWnd, vsFilename, psFilename);
+			m_LightShaderMap[shaderType] = make_shared<LightShader>();
+			result = m_LightShaderMap[shaderType]->Init(m_Device, m_hWnd, vsFilename, psFilename);
 
 		case ShaderTypes::NormalShader:
 			break;
@@ -72,21 +47,24 @@ void ShaderMgr::BuildShader(ShaderTypes shaderType, wstring shaderName, const WC
 		case ShaderTypes::SpecularShader:
 			break;
 	}
+
+	return result;
 }
 
 
-std::variant<shared_ptr<LightShader>> ShaderMgr::GetShader(ShaderTypes shaderType, wstring shaderName) {
-	std::variant<shared_ptr<LightShader>> shader;
+GETSHADER_VARIANT ShaderMgr::GetShader(ShaderTypes shaderType) {
+	GETSHADER_VARIANT shader;
+
+	if (m_LightShaderMap.find(shaderType) == m_LightShaderMap.end()) {
+		return shader;
+	}
 
 	switch (shaderType) {
-		case ShaderTypes::ColorShader:
-			break;
-
 		case ShaderTypes::TextureShader:
 			break;
 
 		case ShaderTypes::LightShader:
-			shader = m_LightShaderMap[shaderName];
+			shader = m_LightShaderMap[shaderType];
 			return shader;
 
 		case ShaderTypes::NormalShader:

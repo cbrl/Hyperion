@@ -15,8 +15,10 @@ Graphics::~Graphics() {
 
 
 bool Graphics::Init() {
+	bool result;
+
 	// Initialize Direct3D
-	m_D3DApp = make_unique<Direct3D>(m_hWnd, m_WindowWidth, m_WindowHeight, false, true, false);
+	m_D3DApp = make_unique<Direct3D>(m_hWnd, m_WindowWidth, m_WindowHeight, MSAA_STATE, VSYNC_STATE, FULLSCREEN_STATE);
 	if (!m_D3DApp->Init()) {
 		return false;
 	}
@@ -33,7 +35,8 @@ bool Graphics::Init() {
 
 	// Create shader manager
 	m_ShaderMgr = make_unique<ShaderMgr>(m_D3DApp->GetDevice(), m_D3DApp->GetDeviceContext(), m_hWnd);
-	m_ShaderMgr->CreateShader(ShaderTypes::LightShader, L"LightShader", L"./shaders/light/light.vs", L"./shaders/light/light.ps");
+	result = m_ShaderMgr->CreateShader(ShaderTypes::LightShader, L"./shaders/light/light.vs", L"./shaders/light/light.ps");
+	if (!result) return false;
 	
 
 	// Create texture manager
@@ -52,20 +55,21 @@ bool Graphics::Init() {
 
 	// Create model
 	m_Model = make_unique<Model>();
-	m_Model->Init(m_Device, "./data/cube.txt", m_TextureMgr->CreateTexture(vector<wstring>(1, L"./data/brick.jpg")));
+	//result = m_Model->Init(m_Device, "./data/cube.txt", m_TextureMgr->CreateTexture(vector<wstring>(1, L"./data/brick.jpg")));
+	result = m_Model->Init(m_Device, "./data/cube.txt", m_TextureMgr->CreateSimpleTexture(wstring(L"aqua"), XMFLOAT4(Colors::Aqua)));
+	if (!result) return false;
 
 	return true;
 }
 
 
-bool Graphics::Tick() {
+bool Graphics::Tick(float deltaTime) {
 	m_D3DApp->BeginScene(0.39f, 0.58f, 0.93f, 1.0f);
 
-	rotation += XM_PI / 250;
-	if (rotation > (2.0f * XM_PI)) rotation = 0;
+	rotation += (XM_PI * deltaTime) / 2500;
+	if (rotation >= (2.0f * XM_PI)) rotation = 0;
 
 	m_Camera->Render();
-
 	XMMATRIX world      = m_D3DApp->GetWorldMatrix();
 	world = XMMatrixRotationRollPitchYaw(rotation, rotation, 0.0f);
 	XMMATRIX projection = m_D3DApp->GetProjectionMatrix();
@@ -73,7 +77,7 @@ bool Graphics::Tick() {
 
 	m_Model->RenderBuffers(m_DeviceContext);
 
-	m_Shader = m_ShaderMgr->GetShader(ShaderTypes::LightShader, L"LightShader");
+	m_Shader = m_ShaderMgr->GetShader(ShaderTypes::LightShader);
 	get<shared_ptr<LightShader>>(m_Shader)->Render(m_DeviceContext, m_Model->GetIndexCount(), world, view, projection, m_Camera->GetPosition(),
 												   m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor(),
 												   m_Light->GetSpecularColor(), m_Light->GetSpecularPower());

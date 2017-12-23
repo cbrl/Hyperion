@@ -11,7 +11,7 @@ Model::~Model() {
 }
 
 
-bool Model::Init(ComPtr<ID3D11Device>& device, const char *modelFilename, ComPtr<ID3D11ShaderResourceView>& texture) {
+bool Model::Init(const ComPtr<ID3D11Device>& device, const char* modelFilename, const ComPtr<ID3D11ShaderResourceView>& texture) {
 	bool result;
 
 	result = LoadModel(modelFilename);
@@ -67,7 +67,7 @@ bool Model::LoadModel(const char* filename) {
 }
 
 
-bool Model::InitBuffers(ComPtr<ID3D11Device>& device) {
+bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 	vector<Vertex> vertices;
 	Vertex         temp;
 	vector<ULONG>  indices;
@@ -88,16 +88,16 @@ bool Model::InitBuffers(ComPtr<ID3D11Device>& device) {
 	}
 
 	// Vertex buffer description
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * m_VertexCount;
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth      = sizeof(Vertex) * m_VertexCount;
+	vertexBufferDesc.BindFlags      = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
+	vertexBufferDesc.MiscFlags      = 0;
 	vertexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the vertex data
-	vertexData.pSysMem = const_cast<Vertex*>(vertices.data());
-	vertexData.SysMemPitch = 0;
+	vertexData.pSysMem          = const_cast<Vertex*>(vertices.data());
+	vertexData.SysMemPitch      = 0;
 	vertexData.SysMemSlicePitch = 0;
 
 	// Create vertex buffer
@@ -105,11 +105,11 @@ bool Model::InitBuffers(ComPtr<ID3D11Device>& device) {
 
 
 	// Index buffer description
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(ULONG) * m_IndexCount;
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth      = sizeof(ULONG) * m_IndexCount;
+	indexBufferDesc.BindFlags      = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
+	indexBufferDesc.MiscFlags      = 0;
 	indexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the index data
@@ -124,7 +124,7 @@ bool Model::InitBuffers(ComPtr<ID3D11Device>& device) {
 }
 
 
-void Model::RenderBuffers(ComPtr<ID3D11DeviceContext>& deviceContext) {
+void Model::RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext) {
 	UINT stride, offset;
 
 	stride = sizeof(Vertex);
@@ -146,6 +146,6 @@ int Model::GetIndexCount() {
 }
 
 
-ComPtr<ID3D11ShaderResourceView>& Model::GetTexture() {
+const ComPtr<ID3D11ShaderResourceView>& Model::GetTexture() {
 	return m_Texture;
 }

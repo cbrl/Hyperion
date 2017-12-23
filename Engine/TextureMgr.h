@@ -21,11 +21,13 @@ class TextureMgr {
 		~TextureMgr();
 
 		ComPtr<ID3D11ShaderResourceView>& CreateTexture(vector<wstring> filenames);
+		ComPtr<ID3D11ShaderResourceView>& CreateSimpleTexture(wstring name, XMFLOAT4 color);
 
 
 	private:
-		ComPtr<ID3D11ShaderResourceView> CreateSingleTexture(vector<wstring> filenames);
-		ComPtr<ID3D11ShaderResourceView> CreateTexture2DArray(vector<wstring> filenames);
+		ComPtr<ID3D11ShaderResourceView> SingleTexture(vector<wstring> filenames);
+		ComPtr<ID3D11ShaderResourceView> Texture2DArray(vector<wstring> filenames);
+		ComPtr<ID3D11ShaderResourceView> SimpleTexture(XMFLOAT4 color);
 
 	private:
 		ComPtr<ID3D11Device>        m_Device;

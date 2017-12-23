@@ -13,56 +13,56 @@ LightShader::~LightShader() {
 
 
 void LightShader::CreatePolygonLayout() {
-	D3D11_INPUT_ELEMENT_DESC temp;
+	D3D11_INPUT_ELEMENT_DESC temp = {};
 
 	// Create the vertex input layout description.
 	// This setup needs to match the VertexType stucture in the ModelClass and in the shader.
-	temp.SemanticName = "POSITION";
-	temp.SemanticIndex = 0;
-	temp.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	temp.InputSlot = 0;
-	temp.AlignedByteOffset = 0;
-	temp.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	temp.SemanticName         = "POSITION";
+	temp.SemanticIndex        = 0;
+	temp.Format               = DXGI_FORMAT_R32G32B32_FLOAT;
+	temp.InputSlot            = 0;
+	temp.AlignedByteOffset    = 0;
+	temp.InputSlotClass       = D3D11_INPUT_PER_VERTEX_DATA;
 	temp.InstanceDataStepRate = 0;
 	m_PolygonLayout.push_back(temp);
 
-	temp.SemanticName = "TEXCOORD";
-	temp.SemanticIndex = 0;
-	temp.Format = DXGI_FORMAT_R32G32_FLOAT;
-	temp.InputSlot = 0;
-	temp.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	temp.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	temp.SemanticName         = "TEXCOORD";
+	temp.SemanticIndex        = 0;
+	temp.Format               = DXGI_FORMAT_R32G32_FLOAT;
+	temp.InputSlot            = 0;
+	temp.AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
+	temp.InputSlotClass       = D3D11_INPUT_PER_VERTEX_DATA;
 	temp.InstanceDataStepRate = 0;
 	m_PolygonLayout.push_back(temp);
 
-	temp.SemanticName = "NORMAL";
-	temp.SemanticIndex = 0;
-	temp.Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	temp.InputSlot = 0;
-	temp.AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-	temp.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+	temp.SemanticName         = "NORMAL";
+	temp.SemanticIndex        = 0;
+	temp.Format               = DXGI_FORMAT_R32G32B32_FLOAT;
+	temp.InputSlot            = 0;
+	temp.AlignedByteOffset    = D3D11_APPEND_ALIGNED_ELEMENT;
+	temp.InputSlotClass       = D3D11_INPUT_PER_VERTEX_DATA;
 	temp.InstanceDataStepRate = 0;
 	m_PolygonLayout.push_back(temp);
 }
 
 
-bool LightShader::InitBuffers(ComPtr<ID3D11Device>& device) {
+bool LightShader::InitBuffers(const ComPtr<ID3D11Device>& device) {
 	// Setup the description of the camera dynamic constant buffer that is in the vertex shader
-	m_CameraBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	m_CameraBufferDesc.ByteWidth = sizeof(CameraBuffer);
-	m_CameraBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	m_CameraBufferDesc.Usage          = D3D11_USAGE_DYNAMIC;
+	m_CameraBufferDesc.ByteWidth      = sizeof(CameraBuffer);
+	m_CameraBufferDesc.BindFlags      = D3D11_BIND_CONSTANT_BUFFER;
 	m_CameraBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	m_CameraBufferDesc.MiscFlags = 0;
+	m_CameraBufferDesc.MiscFlags      = 0;
 	m_CameraBufferDesc.StructureByteStride = 0;
 
 
 	// Setup the description of the light dynamic constant buffer that is in the pixel shader
 	// Note that ByteWidth always needs to be a multiple of 16 if using D3D11_BIND_CONSTANT_BUFFER or CreateBuffer will fail
-	m_LightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	m_LightBufferDesc.ByteWidth = sizeof(LightBuffer);
-	m_LightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	m_LightBufferDesc.Usage          = D3D11_USAGE_DYNAMIC;
+	m_LightBufferDesc.ByteWidth      = sizeof(LightBuffer);
+	m_LightBufferDesc.BindFlags      = D3D11_BIND_CONSTANT_BUFFER;
 	m_LightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	m_LightBufferDesc.MiscFlags = 0;
+	m_LightBufferDesc.MiscFlags      = 0;
 	m_LightBufferDesc.StructureByteStride = 0;
 
 	// Create the camera constant buffer pointer so we can access the vertex shader constant buffer from within this class.
@@ -75,7 +75,7 @@ bool LightShader::InitBuffers(ComPtr<ID3D11Device>& device) {
 }
 
 
-bool LightShader::Render(ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
+bool LightShader::Render(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
 						 XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor,
 						 XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower) {
 	bool result;
@@ -90,7 +90,7 @@ bool LightShader::Render(ComPtr<ID3D11DeviceContext>& deviceContext, int indexCo
 }
 
 
-bool LightShader::SetShaderParameters(ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
+bool LightShader::SetShaderParameters(const ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
 									  XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor,
 									  XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower) {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -138,11 +138,11 @@ bool LightShader::SetShaderParameters(ComPtr<ID3D11DeviceContext>& deviceContext
 	lightPtr = (LightBuffer*)mappedResource.pData;
 
 	// Copy the lighting variables into the constant buffer
-	lightPtr->ambientColor = ambientColor;
-	lightPtr->diffuseColor = diffuseColor;
+	lightPtr->ambientColor   = ambientColor;
+	lightPtr->diffuseColor   = diffuseColor;
 	lightPtr->lightDirection = lightDirection;
-	lightPtr->specularColor = specularColor;
-	lightPtr->specularPower = specularPower;
+	lightPtr->specularColor  = specularColor;
+	lightPtr->specularPower  = specularPower;
 
 	// Unlock the constant buffer
 	deviceContext->Unmap(m_LightBuffer.Get(), NULL);
@@ -179,7 +179,7 @@ bool LightShader::SetShaderParameters(ComPtr<ID3D11DeviceContext>& deviceContext
 }
 
 
-void LightShader::RenderShader(ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount) {
+void LightShader::RenderShader(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount) {
 	// Set the vertex input layout
 	deviceContext->IASetInputLayout(m_Layout.Get());
 

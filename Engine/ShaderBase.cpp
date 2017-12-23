@@ -10,7 +10,7 @@ ShaderBase::~ShaderBase() {
 }
 
 
-bool ShaderBase::Init(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename) {
+bool ShaderBase::Init(const ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename) {
 	CreatePolygonLayout();
 
 	if (!InitShader(device, hWnd, vsFilename, psFilename)) {
@@ -23,7 +23,7 @@ bool ShaderBase::Init(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFi
 }
 
 
-bool ShaderBase::InitShader(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename) {
+bool ShaderBase::InitShader(const ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename) {
 	HRESULT result;
 	ComPtr<ID3D10Blob> errorMessage;
 	ComPtr<ID3D10Blob> vertexShaderBuffer;
@@ -73,30 +73,30 @@ bool ShaderBase::InitShader(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR
 
 
 	// Create a texture sampler state description
-	m_SamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	m_SamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	m_SamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	m_SamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	m_SamplerDesc.MipLODBias = 0.0f;
-	m_SamplerDesc.MaxAnisotropy = 1;
+	m_SamplerDesc.Filter         = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	m_SamplerDesc.AddressU       = D3D11_TEXTURE_ADDRESS_WRAP;
+	m_SamplerDesc.AddressV       = D3D11_TEXTURE_ADDRESS_WRAP;
+	m_SamplerDesc.AddressW       = D3D11_TEXTURE_ADDRESS_WRAP;
+	m_SamplerDesc.MipLODBias     = 0.0f;
+	m_SamplerDesc.MaxAnisotropy  = 1;
 	m_SamplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 	m_SamplerDesc.BorderColor[0] = 0;
 	m_SamplerDesc.BorderColor[1] = 0;
 	m_SamplerDesc.BorderColor[2] = 0;
 	m_SamplerDesc.BorderColor[3] = 0;
-	m_SamplerDesc.MinLOD = 0;
-	m_SamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	m_SamplerDesc.MinLOD         = 0;
+	m_SamplerDesc.MaxLOD         = D3D11_FLOAT32_MAX;
 
 	// Create the texture sampler state
 	HR(device->CreateSamplerState(&m_SamplerDesc, m_SamplerState.ReleaseAndGetAddressOf()));
 
 
 	// Setup the description of the dynamic matrix constant buffer that is in the vertex shader
-	m_MatrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	m_MatrixBufferDesc.ByteWidth = sizeof(MatrixBuffer);
-	m_MatrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	m_MatrixBufferDesc.Usage          = D3D11_USAGE_DYNAMIC;
+	m_MatrixBufferDesc.ByteWidth      = sizeof(MatrixBuffer);
+	m_MatrixBufferDesc.BindFlags      = D3D11_BIND_CONSTANT_BUFFER;
 	m_MatrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	m_MatrixBufferDesc.MiscFlags = 0;
+	m_MatrixBufferDesc.MiscFlags      = 0;
 	m_MatrixBufferDesc.StructureByteStride = 0;
 
 	// Create the constant buffer pointer so we can access the vertex shader constant buffer from within this class

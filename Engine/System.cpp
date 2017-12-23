@@ -18,6 +18,8 @@ bool System::Init() {
 		return false;
 	}
 
+	m_Timer = make_unique<Timer>();
+
 	return true;
 }
 
@@ -38,8 +40,10 @@ int System::Run() {
 			DispatchMessage(&msg);
 		}
 		else {
+			m_Timer->Tick();
+
 			// Process frame
-			if (!m_Graphics->Tick()) {
+			if (!m_Graphics->Tick(m_Timer->DeltaTime())) {
 				MessageBox(m_hWnd, L"Frame processing failed", L"Error", MB_OK);
 				return 1;
 			}

@@ -1,12 +1,14 @@
 #pragma once
 
+#include "EngineUtil.h"
 #include <wrl\client.h>
 #include <vector>
 #include <fstream>
 
-using Microsoft::WRL::ComPtr;
 using std::vector;
 using std::ifstream;
+using Microsoft::WRL::ComPtr;
+
 using namespace DirectX;
 
 class Model {
@@ -14,15 +16,15 @@ class Model {
 		Model();
 		~Model();
 		
-		bool Init(ComPtr<ID3D11Device>& device, const char* modelFilename, ComPtr<ID3D11ShaderResourceView>& texture);
-		void RenderBuffers(ComPtr<ID3D11DeviceContext>& deviceContext);
+		bool Init(const ComPtr<ID3D11Device>& device, const char* modelFilename, const ComPtr<ID3D11ShaderResourceView>& texture);
+		void RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext);
 		int  GetIndexCount();
-		ComPtr<ID3D11ShaderResourceView>& GetTexture();
+		const ComPtr<ID3D11ShaderResourceView>& GetTexture();
 
 
 	private:
 		bool LoadModel(const char* filename);
-		bool InitBuffers(ComPtr<ID3D11Device>& device);
+		bool InitBuffers(const ComPtr<ID3D11Device>& device);
 
 
 	private:
@@ -30,7 +32,6 @@ class Model {
 			XMFLOAT3 position;
 			XMFLOAT2 texture;
 			XMFLOAT3 normal;
-			//XMFLOAT4 color;
 		};
 
 		struct ModelData {

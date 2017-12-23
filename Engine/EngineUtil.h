@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.h"
+#include <exception>
 
 #if defined(DEBUG) || defined(_DEBUG)
 #define _CRTDBG_MAP_ALLOC
@@ -35,9 +35,16 @@
 	#endif
 #else
 	#ifndef HR
-	#define HR(x) (x)
+	#define HR(x)                   \
+	{                               \
+		HRESULT hr = (x);           \
+		if(FAILED(hr))              \
+		{                           \
+			throw std::exception(); \
+		}                           \
+	}
 	#endif
-#endif 
+#endif
 
 
 //----------------------------------------------------------------------------------
@@ -59,9 +66,8 @@
 //----------------------------------------------------------------------------------
 
 enum class ShaderTypes {
-	ColorShader    = 0,
-	TextureShader  = 1,
-	LightShader    = 2,
-	NormalShader   = 3,
-	SpecularShader = 4
+	TextureShader  = 0,
+	LightShader    = 1,
+	NormalShader   = 2,
+	SpecularShader = 3,
 };

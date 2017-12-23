@@ -14,17 +14,17 @@ class LightShader : public ShaderBase {
 
 		void CreatePolygonLayout();
 
-		bool InitBuffers(ComPtr<ID3D11Device>& device);
+		bool InitBuffers(const ComPtr<ID3D11Device>& device);
 
-		bool Render(ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
+		bool Render(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
 					XMMATRIX projectionMatrix, XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, XMFLOAT3 lightDirection,
 					XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower);
 
-		bool SetShaderParameters(ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
+		bool SetShaderParameters(const ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
 								 XMMATRIX projectionMatrix, XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture,
 								 XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower);
 
-		void RenderShader(ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount);
+		void RenderShader(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount);
 
 
 	private:

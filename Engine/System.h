@@ -3,6 +3,7 @@
 #include "EngineUtil.h"
 #include "MainWindow.h"
 #include "Graphics.h"
+#include "Timer.h"
 #include <Windows.h>
 
 #define WINDOW_WIDTH  800
@@ -25,6 +26,7 @@ class System : public MainWindow {
 	private:
 		unique_ptr<MainWindow> m_MainWindow;
 		unique_ptr<Graphics>   m_Graphics;
+		unique_ptr<Timer>      m_Timer;
 
 		bool m_Resizing;
 };

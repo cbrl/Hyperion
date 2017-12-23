@@ -21,15 +21,15 @@ class ShaderBase {
 		ShaderBase();
 		~ShaderBase();
 
-		bool Init(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename);
-		bool InitShader(ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename);
+		bool Init(const ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename);
+		bool InitShader(const ComPtr<ID3D11Device>& device, HWND hWnd, const WCHAR* vsFilename, const WCHAR* psFilename);
 		void OutputShaderErrorMessage(ComPtr<ID3D10Blob> errorMessage, HWND hWnd, const WCHAR* shaderFilename);
 
 		// Create the polygon layout in CreatePlygonLayout()
 		virtual void CreatePolygonLayout() = 0;
 
 		// Set descriptions for any extra buffers and initialize them in InitBuffers()
-		virtual bool InitBuffers(ComPtr<ID3D11Device>& device) = 0;
+		virtual bool InitBuffers(const ComPtr<ID3D11Device>& device) = 0;
 
 
 		//Need to implement in derived class:

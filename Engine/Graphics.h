@@ -7,14 +7,24 @@
 #include "Light.h"
 #include "Model.h"
 #include <d3d11.h>
+#include <DirectXColors.h>
 #include <wrl\client.h>
 #include <variant>
 
-using Microsoft::WRL::ComPtr;
+#define MSAA_STATE       false
+#define VSYNC_STATE      true
+#define FULLSCREEN_STATE false
+
+#ifndef GETSHADER_VARIANT
+#define GETSHADER_VARIANT variant<monostate, shared_ptr<LightShader>>
+#endif
+
 using std::unique_ptr;
 using std::shared_ptr;
 using std::make_unique;
 using std::get;
+using std::variant;
+using Microsoft::WRL::ComPtr;
 
 class Graphics {
 	public:
@@ -22,7 +32,7 @@ class Graphics {
 		~Graphics();
 
 		bool Init();
-		bool Tick();
+		bool Tick(float deltaTime);
 		void OnResize(int windowWidth, int windowHeight);
 
 
@@ -41,8 +51,7 @@ class Graphics {
 		ComPtr<ID3D11Device>        m_Device;
 		ComPtr<ID3D11DeviceContext> m_DeviceContext;
 
-		std::variant<shared_ptr<LightShader>> m_Shader;
-
+		GETSHADER_VARIANT m_Shader;
 };
 
 static float rotation = 0.0f;
