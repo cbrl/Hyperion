@@ -6,13 +6,15 @@
 #include "TextureMgr.h"
 #include "Light.h"
 #include "Model.h"
+#include "TextMgr.h"
+
 #include <d3d11.h>
 #include <DirectXColors.h>
 #include <wrl\client.h>
 #include <variant>
 
 #define MSAA_STATE       false
-#define VSYNC_STATE      true
+#define VSYNC_STATE      false
 #define FULLSCREEN_STATE false
 
 #ifndef GETSHADER_VARIANT
@@ -32,7 +34,7 @@ class Graphics {
 		~Graphics();
 
 		bool Init();
-		bool Tick(float deltaTime);
+		bool Tick(float deltaTime, int FPS);
 		void OnResize(int windowWidth, int windowHeight);
 
 
@@ -41,6 +43,7 @@ class Graphics {
 		unique_ptr<Camera>     m_Camera;
 		unique_ptr<ShaderMgr>  m_ShaderMgr;
 		unique_ptr<TextureMgr> m_TextureMgr;
+		unique_ptr<TextMgr>    m_TextMgr;
 		unique_ptr<Light>      m_Light;
 		unique_ptr<Model>      m_Model;
 

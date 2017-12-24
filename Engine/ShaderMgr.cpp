@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "ShaderMgr.h"
 
-//create a shader type for selecting shader to create/use
 
-ShaderMgr::ShaderMgr(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext, HWND hWnd) :
+ShaderMgr::ShaderMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11DeviceContext> deviceContext, HWND hWnd) :
 	m_Device(device),
 	m_DeviceContext(deviceContext),
 	m_hWnd(hWnd)

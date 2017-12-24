@@ -2,7 +2,7 @@
 #include "TextureMgr.h"
 
 
-TextureMgr::TextureMgr(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext) :
+TextureMgr::TextureMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11DeviceContext> deviceContext) :
 	m_Device(device),
 	m_DeviceContext(deviceContext)
 {
@@ -14,32 +14,34 @@ TextureMgr::~TextureMgr() {
 }
 
 
-ComPtr<ID3D11ShaderResourceView>& TextureMgr::CreateTexture(vector<wstring> filenames) {
-	// Return the texture if it was already created, or create it if not
-	if (m_TextureMap.find(filenames) != m_TextureMap.end()) {
-		return m_TextureMap[filenames];
-	}
-	else {
+void TextureMgr::CreateTexture(wstring name, vector<wstring> filenames) {
+	// Create the texture if it doesn't exist
+	if (m_TextureMap.find(name) == m_TextureMap.end()) {
 		if (filenames.size() == 1) {
-			m_TextureMap[filenames] = SingleTexture(filenames);
-			return m_TextureMap[filenames];
+			m_TextureMap[name] = SingleTexture(filenames);
 		}
 		else {
-			m_TextureMap[filenames] = Texture2DArray(filenames);
-			return m_TextureMap[filenames];
+			m_TextureMap[name] = Texture2DArray(filenames);
 		}
 	}
 }
 
-ComPtr<ID3D11ShaderResourceView>& TextureMgr::CreateSimpleTexture(wstring name, XMFLOAT4 color) {
+
+void TextureMgr::CreateSimpleTexture(wstring name, XMFLOAT4 color) {
 	vector<wstring> texName(1, name);
 
-	if (m_TextureMap.find(texName) != m_TextureMap.end()) {
-		return m_TextureMap[texName];
+	if (m_TextureMap.find(name) != m_TextureMap.end()) {
 	}
 	else {
-		m_TextureMap[texName] = SimpleTexture(color);
-		return m_TextureMap[texName];
+		m_TextureMap[name] = SimpleTexture(color);
+	}
+}
+
+
+ComPtr<ID3D11ShaderResourceView>& TextureMgr::GetTexture(wstring name) {
+	// Return the texture if it exists
+	if (m_TextureMap.find(name) != m_TextureMap.end()) {
+		return m_TextureMap[name];
 	}
 }
 

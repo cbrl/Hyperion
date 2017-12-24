@@ -3,8 +3,8 @@
 
 
 Camera::Camera() :
-m_Position(XMFLOAT3(0.0f, 0.0f, 0.0f)),
-m_Rotation(XMFLOAT3(0.0f, 0.0f, 0.0f))
+	m_Position(XMFLOAT3(0.0f, 0.0f, 0.0f)),
+	m_Rotation(XMFLOAT3(0.0f, 0.0f, 0.0f))
 {
 }
 

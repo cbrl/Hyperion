@@ -22,11 +22,11 @@ using Microsoft::WRL::ComPtr;
 
 class ShaderMgr {
 	public:
-		ShaderMgr(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext, HWND hWnd);
+		ShaderMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11DeviceContext> deviceContext, HWND hWnd);
 		~ShaderMgr();
 
 		bool CreateShader(ShaderTypes shaderType, const WCHAR* vsFilename, const WCHAR* psFilename);
-		variant<monostate, shared_ptr<LightShader>> GetShader(ShaderTypes shaderType);
+		GETSHADER_VARIANT GetShader(ShaderTypes shaderType);
 
 
 	private:

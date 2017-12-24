@@ -17,11 +17,13 @@ using namespace DirectX;
 
 class TextureMgr {
 	public:
-		TextureMgr(const ComPtr<ID3D11Device>& device, const ComPtr<ID3D11DeviceContext>& deviceContext);
+		TextureMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11DeviceContext> deviceContext);
 		~TextureMgr();
 
-		ComPtr<ID3D11ShaderResourceView>& CreateTexture(vector<wstring> filenames);
-		ComPtr<ID3D11ShaderResourceView>& CreateSimpleTexture(wstring name, XMFLOAT4 color);
+		void CreateTexture(wstring name, vector<wstring> filenames);
+		void CreateSimpleTexture(wstring name, XMFLOAT4 color);
+
+		ComPtr<ID3D11ShaderResourceView>& GetTexture(wstring name);
 
 
 	private:
@@ -30,8 +32,9 @@ class TextureMgr {
 		ComPtr<ID3D11ShaderResourceView> SimpleTexture(XMFLOAT4 color);
 
 	private:
+		map<wstring, ComPtr<ID3D11ShaderResourceView>> m_TextureMap;
+
 		ComPtr<ID3D11Device>        m_Device;
 		ComPtr<ID3D11DeviceContext> m_DeviceContext;
-		map<vector<wstring>, ComPtr<ID3D11ShaderResourceView>> m_TextureMap;
 };
 

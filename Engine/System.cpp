@@ -20,6 +20,8 @@ bool System::Init() {
 
 	m_Timer = make_unique<Timer>();
 
+	m_FPSCounter = make_unique<FPS>();
+
 	return true;
 }
 
@@ -41,9 +43,10 @@ int System::Run() {
 		}
 		else {
 			m_Timer->Tick();
+			m_FPSCounter->Tick();
 
 			// Process frame
-			if (!m_Graphics->Tick(m_Timer->DeltaTime())) {
+			if (!m_Graphics->Tick(m_Timer->DeltaTime(), m_FPSCounter->GetFPS())) {
 				MessageBox(m_hWnd, L"Frame processing failed", L"Error", MB_OK);
 				return 1;
 			}
@@ -56,6 +59,12 @@ int System::Run() {
 
 LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
+		case WM_KEYDOWN:
+			if (wParam == VK_ESCAPE) {
+				PostQuitMessage(0);
+			}
+			return 0;
+
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			return 0;
