@@ -20,19 +20,18 @@ class TextureMgr {
 		TextureMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11DeviceContext> deviceContext);
 		~TextureMgr();
 
-		void CreateTexture(wstring name, vector<wstring> filenames);
-		void CreateSimpleTexture(wstring name, XMFLOAT4 color);
-
-		ComPtr<ID3D11ShaderResourceView>& GetTexture(wstring name);
+		const ComPtr<ID3D11ShaderResourceView>& Texture(vector<wstring> filenames);
+		const ComPtr<ID3D11ShaderResourceView>& SimpleTexture(wstring name, XMFLOAT4 color);
 
 
 	private:
-		ComPtr<ID3D11ShaderResourceView> SingleTexture(vector<wstring> filenames);
-		ComPtr<ID3D11ShaderResourceView> Texture2DArray(vector<wstring> filenames);
-		ComPtr<ID3D11ShaderResourceView> SimpleTexture(XMFLOAT4 color);
+		ComPtr<ID3D11ShaderResourceView> CreateSingleTexture(vector<wstring> filenames);
+		ComPtr<ID3D11ShaderResourceView> CreateTexture2DArray(vector<wstring> filenames);
+		ComPtr<ID3D11ShaderResourceView> CreateSimpleTexture(XMFLOAT4 color);
 
 	private:
-		map<wstring, ComPtr<ID3D11ShaderResourceView>> m_TextureMap;
+		map<vector<wstring>, ComPtr<ID3D11ShaderResourceView>> m_TextureMap;
+		map<wstring, ComPtr<ID3D11ShaderResourceView>> m_SimpleTextureMap;
 
 		ComPtr<ID3D11Device>        m_Device;
 		ComPtr<ID3D11DeviceContext> m_DeviceContext;

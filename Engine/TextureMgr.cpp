@@ -14,39 +14,36 @@ TextureMgr::~TextureMgr() {
 }
 
 
-void TextureMgr::CreateTexture(wstring name, vector<wstring> filenames) {
+const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture(vector<wstring> filenames) {
 	// Create the texture if it doesn't exist
-	if (m_TextureMap.find(name) == m_TextureMap.end()) {
+	if (m_TextureMap.find(filenames) == m_TextureMap.end()) {
 		if (filenames.size() == 1) {
-			m_TextureMap[name] = SingleTexture(filenames);
+			m_TextureMap[filenames] = CreateSingleTexture(filenames);
+			return m_TextureMap.at(filenames);
 		}
 		else {
-			m_TextureMap[name] = Texture2DArray(filenames);
+			m_TextureMap[filenames] = CreateTexture2DArray(filenames);
+			return m_TextureMap.at(filenames);
 		}
 	}
+	else {
+		return m_TextureMap.at(filenames);
+	}
 }
 
 
-void TextureMgr::CreateSimpleTexture(wstring name, XMFLOAT4 color) {
-	vector<wstring> texName(1, name);
-
-	if (m_TextureMap.find(name) != m_TextureMap.end()) {
+const ComPtr<ID3D11ShaderResourceView>& TextureMgr::SimpleTexture(wstring name, XMFLOAT4 color) {
+	if (m_SimpleTextureMap.find(name) == m_SimpleTextureMap.end()) {
+		m_SimpleTextureMap[name] = CreateSimpleTexture(color);
+		return m_SimpleTextureMap.at(name);
 	}
 	else {
-		m_TextureMap[name] = SimpleTexture(color);
+		return m_SimpleTextureMap.at(name);
 	}
 }
 
 
-ComPtr<ID3D11ShaderResourceView>& TextureMgr::GetTexture(wstring name) {
-	// Return the texture if it exists
-	if (m_TextureMap.find(name) != m_TextureMap.end()) {
-		return m_TextureMap[name];
-	}
-}
-
-
-ComPtr<ID3D11ShaderResourceView> TextureMgr::SingleTexture(vector<wstring> filenames) {
+ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(vector<wstring> filenames) {
 	ComPtr<ID3D11ShaderResourceView> textureView;
 
 	HR(CreateWICTextureFromFile(m_Device.Get(), m_DeviceContext.Get(), filenames[0].c_str(), nullptr, textureView.GetAddressOf()));
@@ -55,7 +52,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::SingleTexture(vector<wstring> filen
 }
 
 
-ComPtr<ID3D11ShaderResourceView> TextureMgr::Texture2DArray(vector<wstring> filenames) {
+ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring> filenames) {
 	ComPtr<ID3D11ShaderResourceView> textureSRV;
 
 	size_t size = filenames.size();
@@ -113,7 +110,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::Texture2DArray(vector<wstring> file
 }
 
 
-ComPtr<ID3D11ShaderResourceView> TextureMgr::SimpleTexture(XMFLOAT4 color) {
+ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSimpleTexture(XMFLOAT4 color) {
 	ComPtr<ID3D11ShaderResourceView> textureSRV;
 
 	UINT texColor = (int)(color.x * 0xff) + ((int)(color.y * 0xff) << 8) + ((int)(color.z * 0xff) << 16) + ((int)(color.w * 0xff) << 24);

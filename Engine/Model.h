@@ -16,9 +16,9 @@ class Model {
 		Model();
 		~Model();
 		
-		bool Init(const ComPtr<ID3D11Device>& device, const char* modelFilename, const ComPtr<ID3D11ShaderResourceView>& texture);
-		void RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext);
-		int  GetIndexCount();
+		bool  Init(const ComPtr<ID3D11Device>& device, const char* modelFilename, const ComPtr<ID3D11ShaderResourceView>& texture);
+		void  RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext);
+		int   GetIndexCount();
 		const ComPtr<ID3D11ShaderResourceView>& GetTexture();
 
 
