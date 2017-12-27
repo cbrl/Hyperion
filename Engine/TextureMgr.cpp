@@ -32,13 +32,16 @@ const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture(vector<wstring> file
 }
 
 
-const ComPtr<ID3D11ShaderResourceView>& TextureMgr::SimpleTexture(wstring name, XMFLOAT4 color) {
-	if (m_SimpleTextureMap.find(name) == m_SimpleTextureMap.end()) {
-		m_SimpleTextureMap[name] = CreateSimpleTexture(color);
-		return m_SimpleTextureMap.at(name);
+const ComPtr<ID3D11ShaderResourceView>& TextureMgr::SimpleTexture(XMFLOAT4 color) {
+	// Convert the float4 into a single hex color value, which is also used as the texture data when creating it
+	UINT texColor = (UINT)(color.x * 0xff) + ((UINT)(color.y * 0xff) << 8) + ((UINT)(color.z * 0xff) << 16) + ((UINT)(color.w * 0xff) << 24);
+
+	if (m_SimpleTextureMap.find(texColor) == m_SimpleTextureMap.end()) {
+		m_SimpleTextureMap[texColor] = CreateSimpleTexture(texColor);
+		return m_SimpleTextureMap.at(texColor);
 	}
 	else {
-		return m_SimpleTextureMap.at(name);
+		return m_SimpleTextureMap.at(texColor);
 	}
 }
 
@@ -110,12 +113,13 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 }
 
 
-ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSimpleTexture(XMFLOAT4 color) {
+ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSimpleTexture(UINT color) {
+	ComPtr<ID3D11Texture2D>          texture;
 	ComPtr<ID3D11ShaderResourceView> textureSRV;
 
-	UINT texColor = (int)(color.x * 0xff) + ((int)(color.y * 0xff) << 8) + ((int)(color.z * 0xff) << 16) + ((int)(color.w * 0xff) << 24);
+	//UINT texColor = (UINT)(color.x * 0xff) + ((UINT)(color.y * 0xff) << 8) + ((UINT)(color.z * 0xff) << 16) + ((UINT)(color.w * 0xff) << 24);
 
-	D3D11_SUBRESOURCE_DATA initData = { &texColor, sizeof(UINT), 0 };
+	D3D11_SUBRESOURCE_DATA initData = { &color, sizeof(UINT), 0 };
 
 	D3D11_TEXTURE2D_DESC desc = {};
 	desc.Width = desc.Height = desc.MipLevels = desc.ArraySize = 1;
@@ -124,7 +128,6 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSimpleTexture(XMFLOAT4 color)
 	desc.Usage            = D3D11_USAGE_IMMUTABLE;
 	desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
 
-	ComPtr<ID3D11Texture2D> texture;
 	HR(m_Device->CreateTexture2D(&desc, &initData, texture.GetAddressOf()));
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};

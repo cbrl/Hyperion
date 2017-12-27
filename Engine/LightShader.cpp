@@ -75,33 +75,37 @@ bool LightShader::InitBuffers(const ComPtr<ID3D11Device>& device) {
 }
 
 
-bool LightShader::Render(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
-						 XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor,
-						 XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower) {
-	bool result;
+void LightShader::SetShader(const ComPtr<ID3D11DeviceContext>& deviceContext) {
+	// Set the vertex input layout
+	deviceContext->IASetInputLayout(m_Layout.Get());
 
-	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, cameraPosition, texture, lightDirection,
-	                             ambientColor, diffuseColor, specularColor, specularPower);
-	if (!result) return false;
+	// Set the vertex and pixel shaders that will be used to render this triangle
+	deviceContext->VSSetShader(m_VertexShader.Get(), nullptr, 0);
+	deviceContext->PSSetShader(m_PixelShader.Get(), nullptr, 0);
 
-	RenderShader(deviceContext, indexCount);
-
-	return true;
+	// Set the sampler state in the pixel shader
+	deviceContext->PSSetSamplers(0, 1, m_SamplerState.GetAddressOf());
 }
 
 
-bool LightShader::SetShaderParameters(const ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
-									  XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor,
-									  XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower) {
+void LightShader::SetCBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext) {
+	deviceContext->VSSetConstantBuffers(0, 1, m_MatrixBuffer.GetAddressOf());
+	deviceContext->VSSetConstantBuffers(1, 1, m_CameraBuffer.GetAddressOf());
+
+	deviceContext->PSSetConstantBuffers(0, 1, m_LightBuffer.GetAddressOf());
+}
+
+
+void LightShader::SetParameters(const ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
+								XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, Light& light) {
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	UINT bufferNumber;
 	MatrixBuffer *matrixPtr;
 	LightBuffer  *lightPtr;
 	CameraBuffer *cameraPtr;
 
 	// Transpose the matrices to prepare them for the shader
-	worldMatrix      = XMMatrixTranspose(worldMatrix);
-	viewMatrix       = XMMatrixTranspose(viewMatrix);
+	worldMatrix = XMMatrixTranspose(worldMatrix);
+	viewMatrix = XMMatrixTranspose(viewMatrix);
 	projectionMatrix = XMMatrixTranspose(projectionMatrix);
 
 
@@ -113,46 +117,33 @@ bool LightShader::SetShaderParameters(const ComPtr<ID3D11DeviceContext>& deviceC
 	matrixPtr = (MatrixBuffer*)mappedResource.pData;
 
 	// Copy the matrices into the constant buffer
-	matrixPtr->world      = worldMatrix;
-	matrixPtr->view       = viewMatrix;
+	matrixPtr->world = worldMatrix;
+	matrixPtr->view = viewMatrix;
 	matrixPtr->projection = projectionMatrix;
 
 	// Unlock the constant buffer
 	deviceContext->Unmap(m_MatrixBuffer.Get(), NULL);
 
-	// Set the position of the constant buffer in the vertex shader
-	bufferNumber = 0;
-
-	// Now set the constant buffer in the vertex shader with the updated values
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, m_MatrixBuffer.GetAddressOf());
 
 	// Set shader texture resource in the pixel shader
 	deviceContext->PSSetShaderResources(0, 1, texture.GetAddressOf());
 
+
 	// Lock the light constant buffer so it can be written to
 	HR(deviceContext->Map(m_LightBuffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource));
-
-
 
 	// Get a pointer to the data in the constant buffer
 	lightPtr = (LightBuffer*)mappedResource.pData;
 
 	// Copy the lighting variables into the constant buffer
-	lightPtr->ambientColor   = ambientColor;
-	lightPtr->diffuseColor   = diffuseColor;
-	lightPtr->lightDirection = lightDirection;
-	lightPtr->specularColor  = specularColor;
-	lightPtr->specularPower  = specularPower;
+	lightPtr->ambientColor = light.GetAmbientColor();
+	lightPtr->diffuseColor = light.GetDiffuseColor();
+	lightPtr->lightDirection = light.GetDirection();
+	lightPtr->specularColor = light.GetSpecularColor();
+	lightPtr->specularPower = light.GetSpecularPower();
 
 	// Unlock the constant buffer
 	deviceContext->Unmap(m_LightBuffer.Get(), NULL);
-
-	// Set the position of the light constant buffer in the pixel shader
-	bufferNumber = 0;
-
-	// Finally set the light constant buffer in the pixel shader with the updated values
-	deviceContext->PSSetConstantBuffers(bufferNumber, 1, m_LightBuffer.GetAddressOf());
-
 
 
 	// Lock the camera constant buffer so it can be written to
@@ -167,29 +158,129 @@ bool LightShader::SetShaderParameters(const ComPtr<ID3D11DeviceContext>& deviceC
 
 	// Unlock the camera constant buffer
 	deviceContext->Unmap(m_CameraBuffer.Get(), NULL);
-
-	// Set the position of the camera constant buffer in the vertex shader
-	bufferNumber = 1;
-
-	// Now set the camera constant buffer in the vertex shader with the updated values
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, m_CameraBuffer.GetAddressOf());
-
-
-	return true;
 }
 
 
-void LightShader::RenderShader(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount) {
-	// Set the vertex input layout
-	deviceContext->IASetInputLayout(m_Layout.Get());
-
-	// Set the vertex and pixel shaders that will be used to render this triangle
-	deviceContext->VSSetShader(m_VertexShader.Get(), nullptr, 0);
-	deviceContext->PSSetShader(m_PixelShader.Get(), nullptr, 0);
-
-	// Set the sampler state in the pixel shader
-	deviceContext->PSSetSamplers(0, 1, m_SamplerState.GetAddressOf());
-
-	// Render
+void LightShader::Render(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount) {
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 }
+
+
+//bool LightShader::Render(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
+//						 XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor,
+//						 XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower) {
+//	bool result;
+//
+//	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, cameraPosition, texture, lightDirection,
+//	                             ambientColor, diffuseColor, specularColor, specularPower);
+//	if (!result) return false;
+//
+//	RenderShader(deviceContext, indexCount);
+//
+//	return true;
+//}
+//
+//
+//bool LightShader::SetShaderParameters(const ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix,
+//									  XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, XMFLOAT3 lightDirection, XMFLOAT4 ambientColor,
+//									  XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower) {
+//	D3D11_MAPPED_SUBRESOURCE mappedResource;
+//	UINT bufferNumber;
+//	MatrixBuffer *matrixPtr;
+//	LightBuffer  *lightPtr;
+//	CameraBuffer *cameraPtr;
+//
+//	// Transpose the matrices to prepare them for the shader
+//	worldMatrix      = XMMatrixTranspose(worldMatrix);
+//	viewMatrix       = XMMatrixTranspose(viewMatrix);
+//	projectionMatrix = XMMatrixTranspose(projectionMatrix);
+//
+//
+//
+//	// Lock the constant buffer so it can be written to
+//	HR(deviceContext->Map(m_MatrixBuffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource));
+//
+//	// Get a pointer to the data in the constant buffer
+//	matrixPtr = (MatrixBuffer*)mappedResource.pData;
+//
+//	// Copy the matrices into the constant buffer
+//	matrixPtr->world      = worldMatrix;
+//	matrixPtr->view       = viewMatrix;
+//	matrixPtr->projection = projectionMatrix;
+//
+//	// Unlock the constant buffer
+//	deviceContext->Unmap(m_MatrixBuffer.Get(), NULL);
+//
+//	// Set the position of the constant buffer in the vertex shader
+//	bufferNumber = 0;
+//
+//	// Now set the constant buffer in the vertex shader with the updated values
+//	deviceContext->VSSetConstantBuffers(bufferNumber, 1, m_MatrixBuffer.GetAddressOf());
+//
+//	// Set shader texture resource in the pixel shader
+//	deviceContext->PSSetShaderResources(0, 1, texture.GetAddressOf());
+//
+//	// Lock the light constant buffer so it can be written to
+//	HR(deviceContext->Map(m_LightBuffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource));
+//
+//
+//
+//	// Get a pointer to the data in the constant buffer
+//	lightPtr = (LightBuffer*)mappedResource.pData;
+//
+//	// Copy the lighting variables into the constant buffer
+//	lightPtr->ambientColor   = ambientColor;
+//	lightPtr->diffuseColor   = diffuseColor;
+//	lightPtr->lightDirection = lightDirection;
+//	lightPtr->specularColor  = specularColor;
+//	lightPtr->specularPower  = specularPower;
+//
+//	// Unlock the constant buffer
+//	deviceContext->Unmap(m_LightBuffer.Get(), NULL);
+//
+//	// Set the position of the light constant buffer in the pixel shader
+//	bufferNumber = 0;
+//
+//	// Finally set the light constant buffer in the pixel shader with the updated values
+//	deviceContext->PSSetConstantBuffers(bufferNumber, 1, m_LightBuffer.GetAddressOf());
+//
+//
+//
+//	// Lock the camera constant buffer so it can be written to
+//	HR(deviceContext->Map(m_CameraBuffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedResource));
+//
+//	// Get a pointer to the data in the constant buffer
+//	cameraPtr = (CameraBuffer*)mappedResource.pData;
+//
+//	// Copy the camera position into the constant buffer
+//	cameraPtr->cameraPosition = cameraPosition;
+//	cameraPtr->padding = 0.0f;
+//
+//	// Unlock the camera constant buffer
+//	deviceContext->Unmap(m_CameraBuffer.Get(), NULL);
+//
+//	// Set the position of the camera constant buffer in the vertex shader
+//	bufferNumber = 1;
+//
+//	// Now set the camera constant buffer in the vertex shader with the updated values
+//	deviceContext->VSSetConstantBuffers(bufferNumber, 1, m_CameraBuffer.GetAddressOf());
+//
+//
+//	return true;
+//}
+//
+//
+//void LightShader::RenderShader(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount) {
+//	// Set the vertex input layout
+//	deviceContext->IASetInputLayout(m_Layout.Get());
+//
+//	// Set the vertex and pixel shaders that will be used to render this triangle
+//	deviceContext->VSSetShader(m_VertexShader.Get(), nullptr, 0);
+//	deviceContext->PSSetShader(m_PixelShader.Get(), nullptr, 0);
+//
+//	// Set the sampler state in the pixel shader
+//	deviceContext->PSSetSamplers(0, 1, m_SamplerState.GetAddressOf());
+//
+//	// Render
+//	deviceContext->DrawIndexed(indexCount, 0, 0);
+//}

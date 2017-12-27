@@ -31,17 +31,21 @@ class ShaderBase {
 		// Set descriptions for any extra buffers and initialize them in InitBuffers()
 		virtual bool InitBuffers(const ComPtr<ID3D11Device>& device) = 0;
 
+		// Set shader resources and buffers
+		virtual void SetShader(const ComPtr<ID3D11DeviceContext>& deviceContext) = 0;
+		virtual void SetCBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext) = 0;
 
-		//Need to implement in derived class:
-		//bool Render();
-		//bool SetShaderParameters();
-		//void RenderShader();
-		//----------------------------------------------------
-		// Render(deviceContext, indexCount, matrices, etc)
-		// {
-		//     SetShaderParameters(deviceContext, matrices, etc);
-		//     RenderShader(deviceContext, indexCount);
-		// }
+		// Render shader
+		virtual void Render(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount) = 0;
+
+
+		// Need to implement in derived class:
+		//   void SetParameters(...);
+		//-----------------------Usage------------------------
+		// SetShader();
+		// SetCBuffers();
+		// SetParameters(deviceContext, matrices, lights, etc...);
+		// Render();
 		//----------------------------------------------------
 
 

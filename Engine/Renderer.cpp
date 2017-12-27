@@ -47,12 +47,15 @@ bool Renderer::Tick(Direct3D& direct3D, Scene& scene, float deltaTime) {
 	light->GetSpecularColor(), light->GetSpecularPower());
 	});*/
 
+	get<shared_ptr<LightShader>>(m_Shader)->SetShader(m_DeviceContext);
+	get<shared_ptr<LightShader>>(m_Shader)->SetCBuffers(m_DeviceContext);
+	
 	for (Model& model : scene.m_Models) {
 		model.RenderBuffers(m_DeviceContext);
 
-		get<shared_ptr<LightShader>>(m_Shader)->Render(m_DeviceContext, model.GetIndexCount(), world, view, projection, scene.m_Camera->GetPosition(),
-													   model.GetTexture(), light->GetDirection(), light->GetAmbientColor(), light->GetDiffuseColor(),
-													   light->GetSpecularColor(), light->GetSpecularPower());
+		get<shared_ptr<LightShader>>(m_Shader)->SetParameters(m_DeviceContext, world, view, projection, scene.m_Camera->GetPosition(),
+															  model.GetTexture(), *light);
+		get<shared_ptr<LightShader>>(m_Shader)->Render(m_DeviceContext, model.GetIndexCount());
 	}
 
 

@@ -275,10 +275,10 @@ void Direct3D::BeginScene(float red, float green, float blue, float alpha) {
 void Direct3D::EndScene() {
 	if (m_EnableVSync) {
 		// If VSync is enabled, present with next frame
-		m_SwapChain->Present(1, 0);
+		HR(m_SwapChain->Present(1, 0));
 	}
 	else {
 		// If it's disabled, present as soon as possible
-		m_SwapChain->Present(0, 0);
+		HR(m_SwapChain->Present(0, 0));
 	}
 }

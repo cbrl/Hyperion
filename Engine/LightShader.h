@@ -2,6 +2,7 @@
 
 #include "EngineUtil.h"
 #include "ShaderBase.h"
+#include "Light.h"
 #include <d3d11.h>
 #include <DirectXMath.h>
 
@@ -16,15 +17,20 @@ class LightShader : public ShaderBase {
 
 		bool InitBuffers(const ComPtr<ID3D11Device>& device);
 
-		bool Render(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
-					XMMATRIX projectionMatrix, XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, XMFLOAT3 lightDirection,
-					XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower);
+		void SetShader(const ComPtr<ID3D11DeviceContext>& deviceContext);
+		void SetCBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext);
+		void SetParameters(const ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix, XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, Light & light);
+		void Render(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount);
 
-		bool SetShaderParameters(const ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
-								 XMMATRIX projectionMatrix, XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture,
-								 XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower);
+		//bool Render(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
+		//			XMMATRIX projectionMatrix, XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture, XMFLOAT3 lightDirection,
+		//			XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower);
 
-		void RenderShader(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount);
+		//bool SetShaderParameters(const ComPtr<ID3D11DeviceContext>& deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix,
+		//						 XMMATRIX projectionMatrix, XMFLOAT3 cameraPosition, ComPtr<ID3D11ShaderResourceView> texture,
+		//						 XMFLOAT3 lightDirection, XMFLOAT4 ambientColor, XMFLOAT4 diffuseColor, XMFLOAT4 specularColor, float specularPower);
+
+		//void RenderShader(const ComPtr<ID3D11DeviceContext>& deviceContext, int indexCount);
 
 
 	private:

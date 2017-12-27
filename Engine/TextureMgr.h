@@ -21,17 +21,17 @@ class TextureMgr {
 		~TextureMgr();
 
 		const ComPtr<ID3D11ShaderResourceView>& Texture(vector<wstring> filenames);
-		const ComPtr<ID3D11ShaderResourceView>& SimpleTexture(wstring name, XMFLOAT4 color);
+		const ComPtr<ID3D11ShaderResourceView>& SimpleTexture(XMFLOAT4 color);
 
 
 	private:
 		ComPtr<ID3D11ShaderResourceView> CreateSingleTexture(vector<wstring> filenames);
 		ComPtr<ID3D11ShaderResourceView> CreateTexture2DArray(vector<wstring> filenames);
-		ComPtr<ID3D11ShaderResourceView> CreateSimpleTexture(XMFLOAT4 color);
+		ComPtr<ID3D11ShaderResourceView> CreateSimpleTexture(UINT color);
 
 	private:
 		map<vector<wstring>, ComPtr<ID3D11ShaderResourceView>> m_TextureMap;
-		map<wstring, ComPtr<ID3D11ShaderResourceView>> m_SimpleTextureMap;
+		map<UINT, ComPtr<ID3D11ShaderResourceView>> m_SimpleTextureMap;
 
 		ComPtr<ID3D11Device>        m_Device;
 		ComPtr<ID3D11DeviceContext> m_DeviceContext;
