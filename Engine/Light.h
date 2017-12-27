@@ -1,8 +1,8 @@
 #pragma once
 
-#include "EngineUtil.h"
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include "EngineUtil.h"
 
 using namespace DirectX;
 

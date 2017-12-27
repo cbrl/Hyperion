@@ -1,16 +1,16 @@
 #pragma once
 
+#include <d3d11.h>
+#include <DirectXColors.h>
+#include <wrl\client.h>
+#include <variant>
+
 #include "Direct3D.h"
 #include "Scene.h"
 #include "Camera.h"
 #include "ShaderMgr.h"
 #include "Model.h"
 #include "Light.h"
-
-#include <d3d11.h>
-#include <DirectXColors.h>
-#include <wrl\client.h>
-#include <variant>
 
 #ifndef GETSHADER_VARIANT
 #define GETSHADER_VARIANT variant<monostate, shared_ptr<LightShader>>
@@ -25,19 +25,19 @@ using Microsoft::WRL::ComPtr;
 
 class Renderer {
 	public:
-		Renderer(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
+		Renderer(HWND hWnd, shared_ptr<Direct3D> direct3D);
 		~Renderer();
 
-		bool Tick(Direct3D& m_D3DApp, Scene& scene, float deltaTime);
-
-		ComPtr<ID3D11Device> GetDevice();
-		ComPtr<ID3D11DeviceContext> GetDeviceContext();
+		bool Init();
+		bool Tick(Scene& scene, float deltaTime);
 
 
 	private:
 		HWND                        m_hWnd;
 		ComPtr<ID3D11Device>        m_Device;
 		ComPtr<ID3D11DeviceContext> m_DeviceContext;
+		shared_ptr<Direct3D>        m_Direct3D;
+		unique_ptr<ShaderMgr>       m_ShaderMgr;
 
 		GETSHADER_VARIANT m_Shader;
 };

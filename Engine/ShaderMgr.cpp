@@ -2,7 +2,7 @@
 #include "ShaderMgr.h"
 
 
-ShaderMgr::ShaderMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11DeviceContext> deviceContext, HWND hWnd) :
+ShaderMgr::ShaderMgr(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext, HWND hWnd) :
 	m_Device(device),
 	m_DeviceContext(deviceContext),
 	m_hWnd(hWnd)
@@ -11,65 +11,16 @@ ShaderMgr::ShaderMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11Devic
 
 
 ShaderMgr::~ShaderMgr() {
-	m_LightShaderMap.clear();
 }
 
 
-bool ShaderMgr::CreateShader(ShaderTypes shaderType, const WCHAR* vsFilename, const WCHAR* psFilename) {
+bool ShaderMgr::Init() {
 	bool result;
 
-	if (m_LightShaderMap.find(shaderType) != m_LightShaderMap.end()) {
-		result = true;
-	}
-	else {
-		result = BuildShader(shaderType, vsFilename, psFilename);
-	}
+	m_LightShader = make_unique<LightShader>();
+	result = m_LightShader->Init(m_Device, m_hWnd, L"./shaders/light/light.vs", L"./shaders/light/light.ps");
+
+	// Other shader init stuff here
 
 	return result;
-}
-
-
-bool ShaderMgr::BuildShader(ShaderTypes shaderType, const WCHAR* vsFilename, const WCHAR* psFilename) {
-	bool result;
-
-	switch (shaderType) {
-		case ShaderTypes::TextureShader:
-			break;
-
-		case ShaderTypes::LightShader:
-			m_LightShaderMap[shaderType] = make_shared<LightShader>();
-			result = m_LightShaderMap[shaderType]->Init(m_Device, m_hWnd, vsFilename, psFilename);
-
-		case ShaderTypes::NormalShader:
-			break;
-
-		case ShaderTypes::SpecularShader:
-			break;
-	}
-
-	return result;
-}
-
-
-GETSHADER_VARIANT ShaderMgr::GetShader(ShaderTypes shaderType) {
-	GETSHADER_VARIANT shader;
-
-	if (m_LightShaderMap.find(shaderType) == m_LightShaderMap.end()) {
-		return shader;
-	}
-
-	switch (shaderType) {
-		case ShaderTypes::TextureShader:
-			break;
-
-		case ShaderTypes::LightShader:
-			shader = m_LightShaderMap[shaderType];
-			return shader;
-
-		case ShaderTypes::NormalShader:
-			break;
-
-		case ShaderTypes::SpecularShader:
-			break;
-	}
 }

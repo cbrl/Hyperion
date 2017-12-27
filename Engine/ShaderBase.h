@@ -1,6 +1,5 @@
 #pragma once
 
-#include "EngineUtil.h"
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
@@ -9,6 +8,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "EngineUtil.h"
 
 using std::string;
 using std::vector;

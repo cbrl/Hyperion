@@ -3,7 +3,7 @@
 #pragma comment(lib, "winmm.lib")
 
 #include <Windows.h>
-#include <mmsystem.h>
+#include <timeapi.h>
 
 class FPS {
 	public:

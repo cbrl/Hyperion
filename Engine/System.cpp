@@ -15,17 +15,18 @@ bool System::Init() {
 	InitWindow(L"Engine", WINDOW_WIDTH, WINDOW_HEIGHT);
 
 	// Initialize Direct3D
-	m_Direct3D = make_unique<Direct3D>(m_hWnd, m_WindowWidth, m_WindowHeight, MSAA_STATE, VSYNC_STATE, FULLSCREEN_STATE);
+	m_Direct3D = make_shared<Direct3D>(m_hWnd, m_WindowWidth, m_WindowHeight, MSAA_STATE, VSYNC_STATE, FULLSCREEN_STATE);
 	if (!m_Direct3D->Init()) {
 		return false;
 	}
 
-	// Create scene
+	// Initialize renderer
+	m_Renderer = make_unique<Renderer>(m_hWnd, m_Direct3D);
+	m_Renderer->Init();
+
+	// Initialize scene
 	m_Scene = make_unique<Scene>(m_hWnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
 	m_Scene->Init();
-
-	// Initialize renderer
-	m_Renderer = make_unique<Renderer>(m_hWnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
 
 	m_Timer = make_unique<Timer>();
 
@@ -57,7 +58,7 @@ int System::Run() {
 			m_Scene->UpdateMetrics(m_FPSCounter->GetFPS(), NULL);
 
 			// Process frame
-			if (!m_Renderer->Tick(*m_Direct3D, *m_Scene, m_Timer->DeltaTime())) {
+			if (!m_Renderer->Tick(*m_Scene, m_Timer->DeltaTime())) {
 				MessageBox(m_hWnd, L"Frame processing failed", L"Error", MB_OK);
 				return 1;
 			}

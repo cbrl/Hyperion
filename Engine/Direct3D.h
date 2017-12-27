@@ -4,10 +4,10 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-#include "EngineUtil.h"
 #include <wrl\client.h>
 #include <d3d11.h>
 #include <dxgi.h>
+#include "EngineUtil.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;

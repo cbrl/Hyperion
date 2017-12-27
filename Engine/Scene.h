@@ -1,17 +1,17 @@
 #pragma once
 
+#include <Windows.h>
+#include <map>
+#include <string>
+#include <vector>
+#include <type_traits>
+
 #include "Camera.h"
 #include "Light.h"
 #include "Model.h"
 #include "Text.h"
 #include "TextureMgr.h"
 #include "ShaderMgr.h"
-
-#include <Windows.h>
-#include <map>
-#include <string>
-#include <vector>
-#include <type_traits>
 
 using std::map;
 using std::wstring;
@@ -32,7 +32,6 @@ class Scene {
 		vector<Light>         m_Lights;
 		vector<Model>         m_Models;
 		map<wstring, Text>    m_Texts;
-		unique_ptr<ShaderMgr> m_ShaderMgr;
 
 
 	private:
@@ -58,7 +57,7 @@ class Scene {
 			}
 
 			if constexpr (is_same_v<Light, Element>) {
-				for (auto &e : m_Lights) {
+				for (auto& e : m_Lights) {
 					act(e);
 				}
 			}

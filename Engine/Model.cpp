@@ -11,7 +11,8 @@ Model::~Model() {
 }
 
 
-bool Model::Init(const ComPtr<ID3D11Device>& device, const char* modelFilename, const ComPtr<ID3D11ShaderResourceView>& texture) {
+bool Model::Init(const ComPtr<ID3D11Device>& device, const char* modelFilename,
+				 const ComPtr<ID3D11ShaderResourceView>& texture, ShaderTypes shader) {
 	bool result;
 
 	result = LoadModel(modelFilename);
@@ -21,6 +22,7 @@ bool Model::Init(const ComPtr<ID3D11Device>& device, const char* modelFilename, 
 	if (!result) return false;
 
 	m_Texture = texture;
+	m_Shader  = shader;
 
 	return true;
 }
@@ -58,7 +60,7 @@ bool Model::LoadModel(const char* filename) {
 		file >> temp.tu >> temp.tv;
 		file >> temp.nx >> temp.ny >> temp.nz;
 
-		m_Model.push_back(temp);
+		m_ModelData.push_back(temp);
 	}
 	
 	file.close();
@@ -78,9 +80,9 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 
 	// Fill vertex and index vector data
 	for (int i = 0; i < m_VertexCount; i++) {
-		temp.position = XMFLOAT3(m_Model[i].x, m_Model[i].y, m_Model[i].z);
-		temp.texture  = XMFLOAT2(m_Model[i].tu, m_Model[i].tv);
-		temp.normal   = XMFLOAT3(m_Model[i].nx, m_Model[i].ny, m_Model[i].nz);
+		temp.position = XMFLOAT3(m_ModelData[i].x, m_ModelData[i].y, m_ModelData[i].z);
+		temp.texture  = XMFLOAT2(m_ModelData[i].tu, m_ModelData[i].tv);
+		temp.normal   = XMFLOAT3(m_ModelData[i].nx, m_ModelData[i].ny, m_ModelData[i].nz);
 		//temp.color = XMFLOAT4((float)i / m_VertexCount, 1.0f - ((float)i / m_VertexCount), 1.0f, 1.0f);
 
 		vertices.push_back(temp);
@@ -148,4 +150,9 @@ int Model::GetIndexCount() {
 
 const ComPtr<ID3D11ShaderResourceView>& Model::GetTexture() {
 	return m_Texture;
+}
+
+
+ShaderTypes Model::GetShader() {
+	return m_Shader;
 }

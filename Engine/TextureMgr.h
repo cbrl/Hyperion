@@ -1,6 +1,5 @@
 #pragma once
 
-#include "EngineUtil.h"
 #include <d3d11.h>
 #include <WICTextureLoader.h>
 #include <DDSTextureLoader.h>
@@ -8,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "EngineUtil.h"
 
 using std::map;
 using std::vector;

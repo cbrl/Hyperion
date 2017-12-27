@@ -1,9 +1,9 @@
 #pragma once
 
-#include "EngineUtil.h"
 #include <wrl\client.h>
 #include <vector>
 #include <fstream>
+#include "EngineUtil.h"
 
 using std::vector;
 using std::ifstream;
@@ -16,10 +16,13 @@ class Model {
 		Model();
 		~Model();
 		
-		bool  Init(const ComPtr<ID3D11Device>& device, const char* modelFilename, const ComPtr<ID3D11ShaderResourceView>& texture);
-		void  RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext);
-		int   GetIndexCount();
-		const ComPtr<ID3D11ShaderResourceView>& GetTexture();
+		bool        Init(const ComPtr<ID3D11Device>& device, const char* modelFilename,
+						 const ComPtr<ID3D11ShaderResourceView>& texture, ShaderTypes shader);
+
+		void        RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext);
+		int         GetIndexCount();
+		const       ComPtr<ID3D11ShaderResourceView>& GetTexture();
+		ShaderTypes GetShader();
 
 
 	private:
@@ -42,13 +45,13 @@ class Model {
 
 
 	private:
-		int      m_VertexCount;
-		int      m_IndexCount;
+		int               m_VertexCount;
+		int               m_IndexCount;
+		vector<ModelData> m_ModelData;
 
-		vector<ModelData> m_Model;
-
-		ComPtr<ID3D11Buffer> m_VertexBuffer;
-		ComPtr<ID3D11Buffer> m_IndexBuffer;
+		ComPtr<ID3D11Buffer>             m_VertexBuffer;
+		ComPtr<ID3D11Buffer>             m_IndexBuffer;
 		ComPtr<ID3D11ShaderResourceView> m_Texture;
+		ShaderTypes                      m_Shader;
 };
 

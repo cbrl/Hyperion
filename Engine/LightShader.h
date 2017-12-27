@@ -1,10 +1,10 @@
 #pragma once
 
+#include <d3d11.h>
+#include <DirectXMath.h>
 #include "EngineUtil.h"
 #include "ShaderBase.h"
 #include "Light.h"
-#include <d3d11.h>
-#include <DirectXMath.h>
 
 using std::unique_ptr;
 

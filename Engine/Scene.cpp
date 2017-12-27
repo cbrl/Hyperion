@@ -3,12 +3,13 @@
 
 // TODO:
 // - DONE - Separate shader bind and draw functions to eliminate unnecessary calls to SetShader
-// - Design a method of associating models with shaders, so the following flow of logic can be implemented:
+// - DONE - Design a method of associating models with shaders, so the following flow of logic can be implemented:
 //		for (each shader) :
 //			bind shader;
 //			for (each object using shader) :
 //				render object;
-// - Maybe create a ForEach function in ShaderMgr similar to the one in Scene
+// - Possibly move layout/buffer/sampler creation to a single instance, as only one of each unique one needs to exist
+// - Create a material struct for models (diffuse, ambient, specular, etc values)
 // - Create a simple geometry generator
 
 Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
@@ -31,12 +32,6 @@ bool Scene::Init() {
 	m_Camera->SetPosition(XMFLOAT3(0.0f, 0.0f, -5.0f));
 
 
-	// Create shader manager
-	m_ShaderMgr = make_unique<ShaderMgr>(m_Device, m_DeviceContext, m_hWnd);
-	result = m_ShaderMgr->CreateShader(ShaderTypes::LightShader, L"./shaders/light/light.vs", L"./shaders/light/light.ps");
-	if (!result) return false;
-
-
 	// Create texture manager
 	m_TextureMgr = make_unique<TextureMgr>(m_Device, m_DeviceContext);
 
@@ -52,8 +47,8 @@ bool Scene::Init() {
 
 	// Create models
 	m_Models.push_back(Model());
-	result = m_Models[0].Init(m_Device, "./data/cube.txt", m_TextureMgr->Texture(vector<wstring>(1, L"./data/brick.jpg")));
-	//result = m_Models[0].Init(m_Device, "./data/cube.txt", m_TextureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)));
+	result = m_Models[0].Init(m_Device, "./data/cube.txt", m_TextureMgr->Texture(vector<wstring>(1, L"./data/brick.jpg")), ShaderTypes::LightShader);
+	//result = m_Models[0].Init(m_Device, "./data/cube.txt", m_TextureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
 	if (!result) return false;
 
 

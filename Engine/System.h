@@ -19,6 +19,8 @@
 
 using std::unique_ptr;
 using std::make_unique;
+using std::shared_ptr;
+using std::make_shared;
 
 class System : public MainWindow {
 	public:
@@ -33,7 +35,7 @@ class System : public MainWindow {
 
 	private:
 		unique_ptr<MainWindow> m_MainWindow;
-		unique_ptr<Direct3D>   m_Direct3D;
+		shared_ptr<Direct3D>   m_Direct3D;
 		unique_ptr<Renderer>   m_Renderer;
 		unique_ptr<Scene>      m_Scene;
 		unique_ptr<Timer>      m_Timer;
