@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "EngineUtil.h"
+#include "BufferTypes.h"
 
 using namespace DirectX;
 
@@ -17,18 +18,15 @@ class Light {
 		void SetSpecularColor(XMFLOAT4 color);
 		void SetSpecularPower(float power);
 
-		XMFLOAT3 GetDirection();
-		XMFLOAT4 GetAmbientColor();
-		XMFLOAT4 GetDiffuseColor();
-		XMFLOAT4 GetSpecularColor();
-		float    GetSpecularPower();
+		LightBuffer GetBuffer();
+		XMFLOAT3    GetDirection();
+		XMFLOAT4    GetAmbientColor();
+		XMFLOAT4    GetDiffuseColor();
+		XMFLOAT4    GetSpecularColor();
+		float       GetSpecularPower();
 
 
 	private:
-		XMFLOAT3 m_Direction;
-		XMFLOAT4 m_AmbientColor;
-		XMFLOAT4 m_DiffuseColor;
-		XMFLOAT4 m_SpecularColor;
-		float    m_SpecularPower;
+		LightBuffer m_Buffer;
 };
 

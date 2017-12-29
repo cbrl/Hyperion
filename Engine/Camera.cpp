@@ -14,6 +14,7 @@ Camera::~Camera() {
 
 
 void Camera::SetPosition(XMFLOAT3 position) {
+	m_Buffer.cameraPosition = position;
 	m_Position = position;
 }
 
@@ -52,6 +53,11 @@ void Camera::Render() {
 
 	// Create the view matrix using the new vectors
 	m_ViewMatrix = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
+}
+
+
+CameraBuffer Camera::GetBuffer() {
+	return m_Buffer;
 }
 
 

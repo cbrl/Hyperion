@@ -12,7 +12,7 @@ Model::~Model() {
 
 
 bool Model::Init(const ComPtr<ID3D11Device>& device, const char* modelFilename,
-				 const ComPtr<ID3D11ShaderResourceView>& texture, ShaderTypes shader) {
+				 ComPtr<ID3D11ShaderResourceView> texture, ShaderTypes shader) {
 	bool result;
 
 	result = LoadModel(modelFilename);
@@ -29,8 +29,8 @@ bool Model::Init(const ComPtr<ID3D11Device>& device, const char* modelFilename,
 
 
 bool Model::LoadModel(const char* filename) {
-	ifstream file;
-	char ch;
+	char      ch;
+	ifstream  file;
 	ModelData temp;
 
 	file.open(filename);
@@ -70,19 +70,19 @@ bool Model::LoadModel(const char* filename) {
 
 
 bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
-	vector<Vertex> vertices;
-	Vertex         temp;
-	vector<ULONG>  indices;
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 
-	
+	vector<ULONG>                       indices;
+	vector<VertexPositionNormalTexture> vertices;
+	VertexPositionNormalTexture         temp;
+
 
 	// Fill vertex and index vector data
 	for (int i = 0; i < m_VertexCount; i++) {
-		temp.position = XMFLOAT3(m_ModelData[i].x, m_ModelData[i].y, m_ModelData[i].z);
-		temp.texture  = XMFLOAT2(m_ModelData[i].tu, m_ModelData[i].tv);
-		temp.normal   = XMFLOAT3(m_ModelData[i].nx, m_ModelData[i].ny, m_ModelData[i].nz);
+		temp.position           = XMFLOAT3(m_ModelData[i].x, m_ModelData[i].y, m_ModelData[i].z);
+		temp.textureCoordinate  = XMFLOAT2(m_ModelData[i].tu, m_ModelData[i].tv);
+		temp.normal             = XMFLOAT3(m_ModelData[i].nx, m_ModelData[i].ny, m_ModelData[i].nz);
 		//temp.color = XMFLOAT4((float)i / m_VertexCount, 1.0f - ((float)i / m_VertexCount), 1.0f, 1.0f);
 
 		vertices.push_back(temp);
@@ -91,14 +91,14 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 
 	// Vertex buffer description
 	vertexBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth      = sizeof(Vertex) * m_VertexCount;
+	vertexBufferDesc.ByteWidth      = sizeof(VertexPositionNormalTexture) * m_VertexCount;
 	vertexBufferDesc.BindFlags      = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags      = 0;
 	vertexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the vertex data
-	vertexData.pSysMem          = const_cast<Vertex*>(vertices.data());
+	vertexData.pSysMem          = const_cast<VertexPositionNormalTexture*>(vertices.data());
 	vertexData.SysMemPitch      = 0;
 	vertexData.SysMemSlicePitch = 0;
 
@@ -129,7 +129,7 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 void Model::RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext) {
 	UINT stride, offset;
 
-	stride = sizeof(Vertex);
+	stride = sizeof(VertexPositionNormalTexture);
 	offset = 0;
 
 	// Set vertex buffer to active in the input assembler so it can be rendered

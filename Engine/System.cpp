@@ -12,7 +12,9 @@ System::~System() {
 
 bool System::Init() {
 	// Create main window
-	InitWindow(L"Engine", WINDOW_WIDTH, WINDOW_HEIGHT);
+	if (!InitWindow(L"Engine", WINDOW_WIDTH, WINDOW_HEIGHT)) {
+		return false;
+	}
 
 	// Initialize Direct3D
 	m_Direct3D = make_shared<Direct3D>(m_hWnd, m_WindowWidth, m_WindowHeight, MSAA_STATE, VSYNC_STATE, FULLSCREEN_STATE);
@@ -22,11 +24,15 @@ bool System::Init() {
 
 	// Initialize renderer
 	m_Renderer = make_unique<Renderer>(m_hWnd, m_Direct3D);
-	m_Renderer->Init();
+	if (!m_Renderer->Init()) {
+		return false;
+	}
 
 	// Initialize scene
 	m_Scene = make_unique<Scene>(m_hWnd, m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext());
-	m_Scene->Init();
+	if (!m_Scene->Init()) {
+		return false;
+	}
 
 	m_Timer = make_unique<Timer>();
 

@@ -20,16 +20,16 @@ cbuffer CameraBuffer
 //////////////
 struct VertexInput
 {
-    float4 position : POSITION;
-    float2 tex : TEXCOORD0;
+    float4 position : SV_POSITION;
 	float3 normal : NORMAL;
+    float2 tex : TEXCOORD0;
 };
 
 struct PixelInput
 {
     float4 position : SV_POSITION;
-    float2 tex : TEXCOORD0;
 	float3 normal : NORMAL;
+    float2 tex : TEXCOORD0;
 	float3 viewDirection :  TEXCOORD1;
 };
 
@@ -37,7 +37,7 @@ struct PixelInput
 ////////////////////////////////////////////////////////////////////////////////
 // Vertex Shader
 ////////////////////////////////////////////////////////////////////////////////
-PixelInput LightVertexShader(VertexInput input)
+PixelInput VS(VertexInput input)
 {
     PixelInput output;
 	float4 worldPosition;

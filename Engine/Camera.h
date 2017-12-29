@@ -1,5 +1,9 @@
 #pragma once
 
+#include <d3d11.h>
+#include <DirectXMath.h>
+#include "BufferTypes.h"
+
 using namespace DirectX;
 
 class Camera {
@@ -11,13 +15,15 @@ class Camera {
 		void SetRotation(XMFLOAT3 rotation);
 		void Render();
 
-		XMFLOAT3 GetPosition();
-		XMFLOAT3 GetRotation();
-		XMMATRIX GetViewMatrix();
+		CameraBuffer GetBuffer();
+		XMFLOAT3     GetPosition();
+		XMFLOAT3     GetRotation();
+		XMMATRIX     GetViewMatrix();
 
 	private:
-		XMFLOAT3 m_Position;
-		XMFLOAT3 m_Rotation;
-		XMMATRIX m_ViewMatrix;
+		CameraBuffer m_Buffer;
+		XMFLOAT3     m_Position;
+		XMFLOAT3     m_Rotation;
+		XMMATRIX     m_ViewMatrix;
 };
 

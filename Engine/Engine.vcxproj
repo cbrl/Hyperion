@@ -149,16 +149,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BufferTypes.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="CBuffers.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="EngineUtil.h" />
     <ClInclude Include="FPS.h" />
     <ClInclude Include="Light.h" />
-    <ClInclude Include="LightShader.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="ShaderBase.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderMgr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Renderer.h" />
@@ -173,12 +175,11 @@
     <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="FPS.cpp" />
     <ClCompile Include="Light.cpp" />
-    <ClCompile Include="LightShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="ShaderBase.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderMgr.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

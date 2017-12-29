@@ -11,13 +11,8 @@
 #include "ShaderMgr.h"
 #include "Model.h"
 #include "Light.h"
+#include "BufferTypes.h"
 
-#ifndef GETSHADER_VARIANT
-#define GETSHADER_VARIANT variant<monostate, shared_ptr<LightShader>>
-#endif
-
-using std::get;
-using std::variant;
 using std::unique_ptr;
 using std::shared_ptr;
 using std::make_unique;
@@ -38,8 +33,6 @@ class Renderer {
 		ComPtr<ID3D11DeviceContext> m_DeviceContext;
 		shared_ptr<Direct3D>        m_Direct3D;
 		unique_ptr<ShaderMgr>       m_ShaderMgr;
-
-		GETSHADER_VARIANT m_Shader;
 };
 
 static float rotation = 0.0f;
