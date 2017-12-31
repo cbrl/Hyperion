@@ -66,8 +66,9 @@
 //----------------------------------------------------------------------------------
 
 enum class ShaderTypes {
-	TextureShader  = 0,
-	LightShader    = 1,
-	NormalShader   = 2,
-	SpecularShader = 3,
+	ColorShader    = 0,
+	TextureShader  = 1,
+	LightShader    = 2,
+	NormalShader   = 3,
+	SpecularShader = 4,
 };

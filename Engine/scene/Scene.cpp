@@ -4,6 +4,7 @@
 // TODO:
 // - Create a class for sampler states
 // - Create a material struct for models (diffuse, ambient, specular, etc values)
+// - Create a model loader, and a model class that can take any vertex type
 // - Create a simple geometry generator
 
 Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :

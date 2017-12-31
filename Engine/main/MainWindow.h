@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Windows.h>
-#include "EngineUtil.h"
+#include "util\EngineUtil.h"
 
 // Forward declaration of parent class.
 // Parent class reference is used to call Tick(), OnResize(), etc...

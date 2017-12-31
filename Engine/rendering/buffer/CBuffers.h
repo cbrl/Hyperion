@@ -3,7 +3,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include <wrl\client.h>
-#include "EngineUtil.h"
+#include "util\EngineUtil.h"
 #include "BufferTypes.h"
 #include "ConstantBuffer.h"
 

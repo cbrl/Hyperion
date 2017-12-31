@@ -7,7 +7,7 @@
 #include <wrl\client.h>
 #include <d3d11.h>
 #include <dxgi.h>
-#include "EngineUtil.h"
+#include "util\EngineUtil.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -25,7 +25,7 @@ class Direct3D {
 		void EndScene();
 		void OnResize(int windowWidth, int windowHeight);
 
-		ComPtr<ID3D11Device> GetDevice();
+		ComPtr<ID3D11Device>        GetDevice();
 		ComPtr<ID3D11DeviceContext> GetDeviceContext();
 
 		XMMATRIX GetWorldMatrix();
@@ -60,7 +60,5 @@ class Direct3D {
 		UINT m_4xMSAAQuality;
 		UINT m_Numerator;
 		UINT m_Denominator;
-
-		
 };
 

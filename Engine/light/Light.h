@@ -2,8 +2,8 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include "EngineUtil.h"
-#include "BufferTypes.h"
+#include "util\EngineUtil.h"
+#include "rendering\buffer\BufferTypes.h"
 
 using namespace DirectX;
 

@@ -4,7 +4,7 @@
 #include <wrl\client.h>
 #include <vector>
 #include <fstream>
-#include "EngineUtil.h"
+#include "util\EngineUtil.h"
 
 using std::vector;
 using std::ifstream;

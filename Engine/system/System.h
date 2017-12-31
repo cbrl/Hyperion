@@ -1,12 +1,12 @@
 #pragma once
 
-#include "EngineUtil.h"
-#include "MainWindow.h"
-#include "Direct3D.h"
-#include "Renderer.h"
-#include "Scene.h"
-#include "Timer.h"
-#include "FPS.h"
+#include "util\EngineUtil.h"
+#include "main\MainWindow.h"
+#include "direct3d\Direct3D.h"
+#include "rendering\Renderer.h"
+#include "scene\Scene.h"
+#include "util\timer\Timer.h"
+#include "util\fps\FPS.h"
 
 #include <Windows.h>
 

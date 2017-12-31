@@ -5,13 +5,12 @@
 #include <wrl\client.h>
 #include <variant>
 
-#include "Direct3D.h"
-#include "Scene.h"
-#include "Camera.h"
+#include "direct3d\Direct3D.h"
+#include "scene\Scene.h"
+#include "camera\Camera.h"
 #include "ShaderMgr.h"
-#include "Model.h"
-#include "Light.h"
-#include "BufferTypes.h"
+#include "light\Light.h"
+#include "rendering\buffer\BufferTypes.h"
 
 using std::unique_ptr;
 using std::shared_ptr;

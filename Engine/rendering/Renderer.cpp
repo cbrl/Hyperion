@@ -56,9 +56,9 @@ bool Renderer::Tick(Scene& scene, float deltaTime) {
 
 			model.RenderBuffers(m_DeviceContext);
 
-			m_ShaderMgr->UpdataData(MatrixBuffer(world, view, projection));
-			m_ShaderMgr->UpdataData(scene.m_Camera->GetBuffer());
-			m_ShaderMgr->UpdataData(scene.m_Lights.front().GetBuffer());
+			m_ShaderMgr->UpdateData(MatrixBuffer(world, view, projection));
+			m_ShaderMgr->UpdateData(scene.m_Camera->GetBuffer());
+			m_ShaderMgr->UpdateData(scene.m_Lights.front().GetBuffer());
 
 			m_DeviceContext->PSSetShaderResources(0, 1, model.GetTexture().GetAddressOf());
 			m_DeviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);

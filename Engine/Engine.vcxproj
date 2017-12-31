@@ -75,6 +75,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -149,51 +150,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BufferTypes.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="ConstantBuffer.h" />
-    <ClInclude Include="CBuffers.h" />
-    <ClInclude Include="Direct3D.h" />
-    <ClInclude Include="EngineUtil.h" />
-    <ClInclude Include="FPS.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="MainWindow.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="Shader.h" />
-    <ClInclude Include="ShaderMgr.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="System.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="Text.h" />
-    <ClInclude Include="TextureMgr.h" />
-    <ClInclude Include="Timer.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Direct3D.cpp" />
-    <ClCompile Include="FPS.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MainWindow.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Shader.cpp" />
-    <ClCompile Include="ShaderMgr.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="System.cpp" />
-    <ClCompile Include="Text.cpp" />
-    <ClCompile Include="TextureMgr.cpp" />
-    <ClCompile Include="Timer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <None Include="shaders\color\color.ps" />
     <None Include="shaders\color\color.vs" />
@@ -201,6 +157,48 @@
     <None Include="shaders\light\light.vs" />
     <None Include="shaders\texture\texture.ps" />
     <None Include="shaders\texture\texture.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camera\Camera.h" />
+    <ClInclude Include="direct3d\Direct3D.h" />
+    <ClInclude Include="light\Light.h" />
+    <ClInclude Include="main\MainWindow.h" />
+    <ClInclude Include="model\Model.h" />
+    <ClInclude Include="rendering\buffers\BufferTypes.h" />
+    <ClInclude Include="rendering\buffers\CBuffers.h" />
+    <ClInclude Include="rendering\buffers\ConstantBuffer.h" />
+    <ClInclude Include="rendering\Renderer.h" />
+    <ClInclude Include="rendering\ShaderMgr.h" />
+    <ClInclude Include="scene\Scene.h" />
+    <ClInclude Include="shader\Shader.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="system\System.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="texture\TextureMgr.h" />
+    <ClInclude Include="text\Text.h" />
+    <ClInclude Include="util\EngineUtil.h" />
+    <ClInclude Include="util\fps\FPS.h" />
+    <ClInclude Include="util\timer\Timer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="direct3d\Direct3D.cpp" />
+    <ClCompile Include="light\Light.cpp" />
+    <ClCompile Include="main\main.cpp" />
+    <ClCompile Include="main\MainWindow.cpp" />
+    <ClCompile Include="model\Model.cpp" />
+    <ClCompile Include="rendering\Renderer.cpp" />
+    <ClCompile Include="rendering\ShaderMgr.cpp" />
+    <ClCompile Include="scene\Scene.cpp" />
+    <ClCompile Include="shader\Shader.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="system\System.cpp" />
+    <ClCompile Include="texture\TextureMgr.cpp" />
+    <ClCompile Include="text\Text.cpp" />
+    <ClCompile Include="util\fps\FPS.cpp" />
+    <ClCompile Include="util\timer\Timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

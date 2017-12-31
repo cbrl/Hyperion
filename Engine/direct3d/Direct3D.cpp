@@ -137,7 +137,7 @@ void Direct3D::GetRefreshRate() {
 
 	HR(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory));
 
-	// Get list of display modes, find the one that matches the screen, then store numerator and denominator for refresh rate
+	// Get list of display modes
 	factory->EnumAdapters(0, &adapter);
 	adapter->EnumOutputs(0, &adapterOut);
 	adapterOut->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, NULL);
@@ -145,6 +145,7 @@ void Direct3D::GetRefreshRate() {
 	std::vector<DXGI_MODE_DESC> displayModeList(modes);
 	adapterOut->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, displayModeList.data());
 
+	// Find the mode that matches the screen, then store numerator and denominator for refresh rate
 	for (UINT i = 0; i < modes; i++) {
 		if (displayModeList[i].Width == GetSystemMetrics(SM_CXSCREEN)) {
 			if (displayModeList[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
@@ -201,8 +202,9 @@ void Direct3D::OnResize(int windowWidth, int windowHeight) {
 	HR(m_Device->CreateRenderTargetView(backBuffer.Get(), 0, m_RenderTargetView.ReleaseAndGetAddressOf()));
 
 
+	//----------------------------------------------------------------------------------
 	// Create the depth/stencil buffer and view.
-
+	//----------------------------------------------------------------------------------
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 
 	depthStencilDesc.Width = m_WindowWidth;

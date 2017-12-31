@@ -6,12 +6,11 @@
 #include <vector>
 #include <type_traits>
 
-#include "Camera.h"
-#include "Light.h"
-#include "Model.h"
-#include "Text.h"
-#include "TextureMgr.h"
-#include "ShaderMgr.h"
+#include "camera\Camera.h"
+#include "light\Light.h"
+#include "model\Model.h"
+#include "text\Text.h"
+#include "texture\TextureMgr.h"
 
 using std::map;
 using std::wstring;

@@ -5,10 +5,10 @@
 #include <wrl\client.h>
 #include <type_traits>
 
-#include "EngineUtil.h"
-#include "Shader.h"
-#include "CBuffers.h"
-#include "BufferTypes.h"
+#include "util\EngineUtil.h"
+#include "shader\Shader.h"
+#include "rendering\buffer\CBuffers.h"
+#include "rendering\buffer\BufferTypes.h"
 
 using std::unique_ptr;
 using std::make_unique;
@@ -24,7 +24,7 @@ class ShaderMgr {
 		void BindShader(ShaderTypes shader);
 
 		template<typename DataT>
-		void UpdataData(const DataT& data);
+		void UpdateData(const DataT& data);
 
 	public:
 		unique_ptr<Shader> m_LightShader;
@@ -39,7 +39,7 @@ class ShaderMgr {
 
 
 template<typename DataT>
-void ShaderMgr::UpdataData(const DataT& data) {
+void ShaderMgr::UpdateData(const DataT& data) {
 	if constexpr (is_same_v<DataT, MatrixBuffer>) {
 		m_CBuffers->matrixBuffer->UpdateData(m_DeviceContext, data);
 	}
