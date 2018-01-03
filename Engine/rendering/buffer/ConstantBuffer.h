@@ -19,7 +19,7 @@ class ConstantBuffer {
 
 
 	public:
-		ComPtr<ID3D11Buffer> m_Buffer;
+		ComPtr<ID3D11Buffer> buffer;
 };
 
 
@@ -40,7 +40,7 @@ void ConstantBuffer<DataT>::CreateBuffer(const ComPtr<ID3D11Device>& device) {
 	bufferDesc.MiscFlags           = 0;
 	bufferDesc.StructureByteStride = 0;
 
-	HR(device->CreateBuffer(&bufferDesc, nullptr, m_Buffer.ReleaseAndGetAddressOf()));
+	HR(device->CreateBuffer(&bufferDesc, nullptr, buffer.ReleaseAndGetAddressOf()));
 }
 
 
@@ -48,9 +48,9 @@ template<typename DataT>
 void ConstantBuffer<DataT>::UpdateData(const ComPtr<ID3D11DeviceContext>& deviceContext, const DataT& data) {
 	D3D11_MAPPED_SUBRESOURCE mappedBuffer = { };
 
-	HR(deviceContext->Map(m_Buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedBuffer));
+	HR(deviceContext->Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedBuffer));
 
 	memcpy(mappedBuffer.pData, &data, sizeof(DataT));
 
-	deviceContext->Unmap(m_Buffer.Get(), NULL);
+	deviceContext->Unmap(buffer.Get(), NULL);
 }

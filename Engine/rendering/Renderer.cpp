@@ -17,8 +17,8 @@ Renderer::~Renderer() {
 
 bool Renderer::Init() {
 	// Create shader manager
-	m_ShaderMgr = make_unique<ShaderMgr>(m_hWnd, m_Device, m_DeviceContext);
-	if (!m_ShaderMgr->Init()) {
+	m_RenderingMgr = make_unique<RenderingMgr>(m_hWnd, m_Device, m_DeviceContext);
+	if (!m_RenderingMgr->Init()) {
 		return false;
 	}
 
@@ -49,16 +49,16 @@ bool Renderer::Tick(Scene& scene, float deltaTime) {
 
 
 	// Render light shader
-	m_ShaderMgr->BindShader(ShaderTypes::LightShader);
+	m_RenderingMgr->BindShader(ShaderTypes::LightShader);
 	for (Model& model : scene.m_Models) {
 
 		if (model.GetShader() == ShaderTypes::LightShader) {
 
 			model.RenderBuffers(m_DeviceContext);
 
-			m_ShaderMgr->UpdateData(MatrixBuffer(world, view, projection));
-			m_ShaderMgr->UpdateData(scene.m_Camera->GetBuffer());
-			m_ShaderMgr->UpdateData(scene.m_Lights.front().GetBuffer());
+			m_RenderingMgr->UpdateData(MatrixBuffer(world, view, projection));
+			m_RenderingMgr->UpdateData(scene.m_Camera->GetBuffer());
+			m_RenderingMgr->UpdateData(scene.m_Lights.front().GetBuffer());
 
 			m_DeviceContext->PSSetShaderResources(0, 1, model.GetTexture().GetAddressOf());
 			m_DeviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);

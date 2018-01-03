@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -164,13 +164,15 @@
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="main\MainWindow.h" />
     <ClInclude Include="model\Model.h" />
-    <ClInclude Include="rendering\buffers\BufferTypes.h" />
-    <ClInclude Include="rendering\buffers\CBuffers.h" />
-    <ClInclude Include="rendering\buffers\ConstantBuffer.h" />
+    <ClInclude Include="rendering\buffer\Buffers.h" />
+    <ClInclude Include="rendering\buffer\CBufferMgr.h" />
+    <ClInclude Include="rendering\buffer\ConstantBuffer.h" />
     <ClInclude Include="rendering\Renderer.h" />
-    <ClInclude Include="rendering\ShaderMgr.h" />
+    <ClInclude Include="rendering\RenderingMgr.h" />
+    <ClInclude Include="rendering\Sampler.h" />
     <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="shader\Shader.h" />
+    <ClInclude Include="shader\HlslDefines.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\System.h" />
     <ClInclude Include="targetver.h" />
@@ -187,8 +189,9 @@
     <ClCompile Include="main\main.cpp" />
     <ClCompile Include="main\MainWindow.cpp" />
     <ClCompile Include="model\Model.cpp" />
+    <ClCompile Include="rendering\buffer\CBufferMgr.cpp" />
     <ClCompile Include="rendering\Renderer.cpp" />
-    <ClCompile Include="rendering\ShaderMgr.cpp" />
+    <ClCompile Include="rendering\RenderingMgr.cpp" />
     <ClCompile Include="scene\Scene.cpp" />
     <ClCompile Include="shader\Shader.cpp" />
     <ClCompile Include="stdafx.cpp">

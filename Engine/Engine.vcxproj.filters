@@ -69,19 +69,7 @@
     <ClInclude Include="model\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\buffers\BufferTypes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\buffers\CBuffers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\buffers\ConstantBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="rendering\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\ShaderMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="scene\Scene.h">
@@ -106,6 +94,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util\timer\Timer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\buffer\ConstantBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\RenderingMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\Sampler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\buffer\CBufferMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shader\HlslDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\buffer\Buffers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -134,9 +140,6 @@
     <ClCompile Include="rendering\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rendering\ShaderMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="scene\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -156,6 +159,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="util\timer\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\RenderingMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\buffer\CBufferMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

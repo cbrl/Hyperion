@@ -1,7 +1,9 @@
+#include "shader\HlslDefines.h"
+
 /////////////
 // GLOBALS //
 /////////////
-cbuffer MatrixBuffer
+CONSTANT_BUFFER(MatrixBuffer, 0)
 {
 	matrix worldMatrix;
 	matrix viewMatrix;
@@ -14,7 +16,7 @@ cbuffer MatrixBuffer
 //////////////
 struct VertexInput
 {
-    float4 position : POSITION;
+    float4 position : SV_POSITION;
     float2 tex : TEXCOORD0;
 };
 

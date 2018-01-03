@@ -2,7 +2,7 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include "rendering\buffer\BufferTypes.h"
+#include "rendering\buffer\Buffers.h"
 
 using namespace DirectX;
 
@@ -22,7 +22,6 @@ class Camera {
 
 	private:
 		CameraBuffer m_Buffer;
-		XMFLOAT3     m_Position;
 		XMFLOAT3     m_Rotation;
 		XMMATRIX     m_ViewMatrix;
 };

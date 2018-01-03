@@ -42,7 +42,10 @@ bool Scene::Init() {
 
 	// Create models
 	m_Models.push_back(Model());
-	result = m_Models[0].Init(m_Device, "./data/cube.txt", m_TextureMgr->Texture(vector<wstring>(1, L"./data/brick.jpg")), ShaderTypes::LightShader);
+	vector<wstring> v;
+	v.push_back(L"./data/brick.jpg");
+	v.push_back(L"./data/brick2.jpg");
+	result = m_Models[0].Init(m_Device, "./data/cube.txt", m_TextureMgr->Texture(v), ShaderTypes::LightShader);
 	//result = m_Models[0].Init(m_Device, "./data/cube.txt", m_TextureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
 	if (!result) return false;
 

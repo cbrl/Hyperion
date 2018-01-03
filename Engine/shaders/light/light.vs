@@ -1,14 +1,16 @@
+#include "shader\HlslDefines.h"
+
 /////////////
 // GLOBALS //
 /////////////
-cbuffer MatrixBuffer
+CONSTANT_BUFFER(MatrixBuffer, MATRIX_BUFFER_SLOT)
 {
 	matrix worldMatrix;
 	matrix viewMatrix;
 	matrix projectionMatrix;
 };
 
-cbuffer CameraBuffer
+CONSTANT_BUFFER(CameraBuffer, CAMERA_BUFFER_SLOT)
 {
 	float3 cameraPosition;
 	float padding;

@@ -62,13 +62,24 @@
 
 
 //----------------------------------------------------------------------------------
-// Shader Type enum for selecting which shader to use
+// Shader Type enum
 //----------------------------------------------------------------------------------
 
 enum class ShaderTypes {
-	ColorShader    = 0,
-	TextureShader  = 1,
-	LightShader    = 2,
-	NormalShader   = 3,
-	SpecularShader = 4,
+	ColorShader,
+	TextureShader,
+	LightShader,
+	NormalShader,
+	SpecularShader,
+};
+
+
+//----------------------------------------------------------------------------------
+// Buffer Type enum
+//----------------------------------------------------------------------------------
+
+enum class BufferTypes {
+	MatrixBuffer,
+	CameraBuffer,
+	LightBuffer
 };

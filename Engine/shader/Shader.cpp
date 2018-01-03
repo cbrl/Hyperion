@@ -17,10 +17,9 @@ bool Shader::Init(HWND hWnd, const ComPtr<ID3D11Device>& device, const WCHAR* vs
 	ID3D10Blob* vertexShaderBuffer;
 	ID3D10Blob* pixelShaderBuffer;
 
-
 	// Compile vertex shader
-	result = D3DCompileFromFile(vsFilename, nullptr, nullptr, "VS", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, NULL,
-								&vertexShaderBuffer, &errorMessage);
+	result = D3DCompileFromFile(vsFilename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VS", "vs_5_0",
+								D3D10_SHADER_ENABLE_STRICTNESS, NULL, &vertexShaderBuffer, &errorMessage);
 	if (FAILED(result)) {
 		if (errorMessage) {
 			OutputShaderErrorMessage(hWnd, errorMessage, vsFilename);
@@ -33,8 +32,8 @@ bool Shader::Init(HWND hWnd, const ComPtr<ID3D11Device>& device, const WCHAR* vs
 	}
 
 	// Compile pixel shader
-	result = D3DCompileFromFile(psFilename, nullptr, nullptr, "PS", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, NULL,
-								&pixelShaderBuffer, &errorMessage);
+	result = D3DCompileFromFile(psFilename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PS", "ps_5_0",
+								D3D10_SHADER_ENABLE_STRICTNESS, NULL, &pixelShaderBuffer, &errorMessage);
 	if (FAILED(result)) {
 		if (errorMessage) {
 			OutputShaderErrorMessage(hWnd, errorMessage, psFilename);

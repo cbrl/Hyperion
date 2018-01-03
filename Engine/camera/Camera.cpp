@@ -2,10 +2,7 @@
 #include "Camera.h"
 
 
-Camera::Camera() :
-	m_Position(XMFLOAT3(0.0f, 0.0f, 0.0f)),
-	m_Rotation(XMFLOAT3(0.0f, 0.0f, 0.0f))
-{
+Camera::Camera() : m_Rotation(XMFLOAT3(0.0f, 0.0f, 0.0f)) {
 }
 
 
@@ -15,7 +12,6 @@ Camera::~Camera() {
 
 void Camera::SetPosition(XMFLOAT3 position) {
 	m_Buffer.cameraPosition = position;
-	m_Position = position;
 }
 
 
@@ -36,7 +32,7 @@ void Camera::Render() {
 	XMVECTOR lookAtVector = XMLoadFloat3(&lookAt);
 
 	// Create position vector
-	XMVECTOR positionVector = XMLoadFloat3(&m_Position);
+	XMVECTOR positionVector = XMLoadFloat3(&m_Buffer.cameraPosition);
 	
 	// Create rotation matrix using pitch, yaw, and roll in radians
 	pitch = m_Rotation.x * 0.0174532925f;
@@ -62,7 +58,7 @@ CameraBuffer Camera::GetBuffer() {
 
 
 XMFLOAT3 Camera::GetPosition() {
-	return m_Position;
+	return m_Buffer.cameraPosition;
 }
 
 

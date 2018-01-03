@@ -5,15 +5,6 @@
 
 using namespace DirectX;
 
-
-// Vertex Shader Slots
-#define MATRIX_BUFFER_SLOT 0
-#define CAMERA_BUFFER_SLOT 1
-
-// Pixel Shader Slots
-#define LIGHT_BUFFER_SLOT  0
-
-
 struct MatrixBuffer {
 	MatrixBuffer() = default;
 	MatrixBuffer(XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix) {

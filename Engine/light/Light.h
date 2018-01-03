@@ -3,7 +3,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "util\EngineUtil.h"
-#include "rendering\buffer\BufferTypes.h"
+#include "rendering\buffer\Buffers.h"
 
 using namespace DirectX;
 

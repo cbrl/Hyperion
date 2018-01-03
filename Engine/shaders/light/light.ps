@@ -1,10 +1,12 @@
+#include "shader\HlslDefines.h"
+
 /////////////
 // GLOBALS //
 /////////////
-Texture2D shaderTexture;
-SamplerState SampleType;
+TEXTURE_2D(shaderTexture, 0);
+SAMPLER_STATE(SampleType, 0);
 
-cbuffer LightBuffer
+CONSTANT_BUFFER(LightBuffer, LIGHT_BUFFER_SLOT)
 {
 	float4 ambientColor;
     float4 diffuseColor;

@@ -49,6 +49,7 @@ const ComPtr<ID3D11ShaderResourceView>& TextureMgr::SimpleTexture(XMFLOAT4 color
 ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(vector<wstring> filenames) {
 	ComPtr<ID3D11ShaderResourceView> textureView;
 
+	// Create a shader resource view
 	HR(CreateWICTextureFromFile(m_Device.Get(), m_DeviceContext.Get(), filenames[0].c_str(), nullptr, textureView.GetAddressOf()));
 
 	return textureView;
@@ -61,14 +62,18 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 	size_t size = filenames.size();
 	vector<ComPtr<ID3D11Texture2D>> srcTex(size);
 
+	// Create the vector of texture SRVs
 	for(size_t i = 0; i < size; i++) {
-		HR(CreateWICTextureFromFile(m_Device.Get(), m_DeviceContext.Get(), filenames[i].c_str(),
-		                            (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr));
+		HR(CreateWICTextureFromFileEx(m_Device.Get(), m_DeviceContext.Get(), filenames[i].c_str(),
+									  NULL, D3D11_USAGE_STAGING, NULL,D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
+									  (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr));
 	}
 
+	// Get the texture description
 	D3D11_TEXTURE2D_DESC desc = {};
 	srcTex[0].Get()->GetDesc(&desc);
 
+	// Create texture array description
 	D3D11_TEXTURE2D_DESC arrayDesc = {};
 	arrayDesc.Width              = desc.Width;
 	arrayDesc.Height             = desc.Height;
@@ -77,17 +82,19 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 	arrayDesc.Format             = desc.Format;
 	arrayDesc.SampleDesc.Count   = 1;
 	arrayDesc.SampleDesc.Quality = 0;
-	arrayDesc.Usage              = D3D11_USAGE_STAGING;
+	arrayDesc.Usage              = D3D11_USAGE_DEFAULT;
 	arrayDesc.BindFlags          = D3D11_BIND_SHADER_RESOURCE;
-	arrayDesc.CPUAccessFlags     = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+	arrayDesc.CPUAccessFlags     = 0;
 	arrayDesc.MiscFlags          = 0;
 
-	ComPtr<ID3D11Texture2D> texArray = nullptr;
-	HR(m_Device->CreateTexture2D(&arrayDesc, nullptr, texArray.GetAddressOf()));
+	// Create texture array
+	ComPtr<ID3D11Texture2D> texArray;
+	HR(m_Device->CreateTexture2D(&arrayDesc, NULL, texArray.GetAddressOf()));
 
+	// Update texture array with texture data
 	for (UINT texElement = 0; texElement < size; texElement++) {
 		for (UINT mipLevel = 0; mipLevel < desc.MipLevels; mipLevel++) {
-			D3D11_MAPPED_SUBRESOURCE mappedTex;
+			D3D11_MAPPED_SUBRESOURCE mappedTex = {};
 
 			HR(m_DeviceContext->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex));
 
@@ -98,6 +105,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 		}
 	}
 
+	// Create SRV description
 	D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc = {};
 	viewDesc.Format                         = arrayDesc.Format;
 	viewDesc.ViewDimension                  = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
@@ -106,6 +114,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 	viewDesc.Texture2DArray.FirstArraySlice = 0;
 	viewDesc.Texture2DArray.ArraySize       = size;
 
+	// Create the SRV
 	HR(m_Device->CreateShaderResourceView(texArray.Get(), &viewDesc, textureSRV.GetAddressOf()));
 
 
