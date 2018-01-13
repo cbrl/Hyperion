@@ -3,7 +3,7 @@
 #include <d3d11.h>
 #include <DirectXColors.h>
 #include <wrl\client.h>
-#include <variant>
+#include <memory>
 
 #include "direct3d\Direct3D.h"
 #include "scene\Scene.h"

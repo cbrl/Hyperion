@@ -13,6 +13,7 @@ class Sampler {
 		}
 		~Sampler() = default;
 
+	private:
 		void CreateSampler(const ComPtr<ID3D11Device>& device) {
 			D3D11_SAMPLER_DESC samplerDesc;
 

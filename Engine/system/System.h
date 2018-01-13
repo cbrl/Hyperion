@@ -1,5 +1,8 @@
 #pragma once
 
+#include <Windows.h>
+#include <memory>
+
 #include "util\EngineUtil.h"
 #include "main\MainWindow.h"
 #include "direct3d\Direct3D.h"
@@ -7,8 +10,6 @@
 #include "scene\Scene.h"
 #include "util\timer\Timer.h"
 #include "util\fps\FPS.h"
-
-#include <Windows.h>
 
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 800

@@ -19,11 +19,12 @@ using std::is_same_v;
 
 class Scene {
 	public:
-	Scene(HWND hWnd, ComPtr<ID3D11Device> m_Device, ComPtr<ID3D11DeviceContext> m_DeviceContext);
-	~Scene();
+		Scene(HWND hWnd, ComPtr<ID3D11Device> m_Device, ComPtr<ID3D11DeviceContext> m_DeviceContext);
+		~Scene();
 
-	bool Init();
-	void UpdateMetrics(int FPS, int CPU);
+		bool Init();
+		void UpdateMetrics(int FPS, int CPU);
+		void Tick(float deltaTime);
 
 
 	public:

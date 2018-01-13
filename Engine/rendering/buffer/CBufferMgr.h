@@ -2,11 +2,13 @@
 
 #include <d3d11.h>
 #include <wrl\client.h>
+#include <type_traits>
+#include <memory>
 
 #include "util\EngineUtil.h"
 #include "shader\HlslDefines.h"
-#include "Buffers.h"
-#include "ConstantBuffer.h"
+#include "rendering\buffer\Buffers.h"
+#include "rendering\buffer\ConstantBuffer.h"
 
 using std::unique_ptr;
 using std::make_unique;
@@ -14,10 +16,10 @@ using Microsoft::WRL::ComPtr;
 
 class CBufferMgr {
 	public:
-		CBufferMgr(const ComPtr<ID3D11Device>& device,ComPtr<ID3D11DeviceContext> deviceContext);
+		CBufferMgr(const ComPtr<ID3D11Device>& device, ComPtr<ID3D11DeviceContext> deviceContext);
 		CBufferMgr();
 
-		void SetCBuffer(BufferTypes buffer);
+		void BindCBuffer(BufferTypes buffer);
 
 		template<typename DataT>
 		void UpdateData(const DataT& data);

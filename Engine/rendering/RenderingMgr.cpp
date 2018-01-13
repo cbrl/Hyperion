@@ -15,32 +15,49 @@ RenderingMgr::~RenderingMgr() {
 
 
 bool RenderingMgr::Init() {
-	bool result;
-
 	// Create buffer manager
 	m_CBufferMgr = make_unique<CBufferMgr>(m_Device, m_DeviceContext);
 
 
-	// Create shaders
-	m_LightShader = make_unique<Shader>();
-	result = m_LightShader->Init(m_hWnd, m_Device, L"./shaders/light/light.vs", L"./shaders/light/light.ps",
-								 VertexPositionNormalTexture::InputElements, VertexPositionNormalTexture::InputElementCount);
-	if (!result) return false;
+	// Create sampler state
+	m_Sampler = make_unique<Sampler>(m_Device);
 
-	// Other shader init stuff here
+
+	// Create shader manager
+	m_ShaderMgr = make_unique<ShaderMgr>();
+	if (!m_ShaderMgr->Init(m_hWnd, m_Device)) {
+		return false;
+	}
 
 	return true;
 }
 
 void RenderingMgr::BindShader(ShaderTypes shader) {
 	switch (shader) {
-		case ShaderTypes::LightShader:
-			m_LightShader->BindShader(m_DeviceContext);
-			m_CBufferMgr->SetCBuffer(BufferTypes::MatrixBuffer);
-			m_CBufferMgr->SetCBuffer(BufferTypes::CameraBuffer);
-			m_CBufferMgr->SetCBuffer(BufferTypes::LightBuffer);
+		case ShaderTypes::ColorShader:
+			m_ShaderMgr->BindShader(ShaderTypes::ColorShader, m_DeviceContext);
+			m_CBufferMgr->BindCBuffer(BufferTypes::MatrixBuffer);
 			break;
 
-		// Other cases here
+		case ShaderTypes::TextureShader:
+			//m_ShaderMgr->BindShader(ShaderTypes::TextureShader, m_DeviceContext);
+			m_CBufferMgr->BindCBuffer(BufferTypes::MatrixBuffer);
+			m_CBufferMgr->BindCBuffer(BufferTypes::CameraBuffer);
+			m_DeviceContext->PSSetSamplers(0, 1, &m_Sampler->samplerState);
+			break;
+
+		case ShaderTypes::LightShader:
+			m_ShaderMgr->BindShader(ShaderTypes::LightShader, m_DeviceContext);
+			m_CBufferMgr->BindCBuffer(BufferTypes::MatrixBuffer);
+			m_CBufferMgr->BindCBuffer(BufferTypes::CameraBuffer);
+			m_CBufferMgr->BindCBuffer(BufferTypes::LightBuffer);
+			m_DeviceContext->PSSetSamplers(0, 1, &m_Sampler->samplerState);
+			break;
+
+		case ShaderTypes::NormalShader:
+			break;
+
+		case ShaderTypes::SpecularShader:
+			break;
 	}
 }

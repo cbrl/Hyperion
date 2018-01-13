@@ -34,8 +34,10 @@ bool System::Init() {
 		return false;
 	}
 
+	// Create Timer
 	m_Timer = make_unique<Timer>();
 
+	// Create FPS Counter
 	m_FPSCounter = make_unique<FPS>();
 
 	return true;
@@ -60,11 +62,13 @@ int System::Run() {
 		else {
 			m_Timer->Tick();
 			m_FPSCounter->Tick();
+			float deltaTime = m_Timer->DeltaTime();
 
+			m_Scene->Tick(deltaTime);
 			m_Scene->UpdateMetrics(m_FPSCounter->GetFPS(), NULL);
 
 			// Process frame
-			if (!m_Renderer->Tick(*m_Scene, m_Timer->DeltaTime())) {
+			if (!m_Renderer->Tick(*m_Scene, deltaTime)) {
 				MessageBox(m_hWnd, L"Frame processing failed", L"Error", MB_OK);
 				return 1;
 			}

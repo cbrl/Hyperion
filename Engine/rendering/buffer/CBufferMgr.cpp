@@ -22,7 +22,7 @@ void CBufferMgr::CreateBuffers(const ComPtr<ID3D11Device>& device) {
 }
 
 
-void CBufferMgr::SetCBuffer(BufferTypes buffer) {
+void CBufferMgr::BindCBuffer(BufferTypes buffer) {
 	switch (buffer) {
 		case BufferTypes::MatrixBuffer:
 			break;

@@ -5,6 +5,7 @@
 #include <SpriteFont.h>
 #include <DirectXColors.h>
 #include <string>
+#include <memory>
 #include <Windows.h>
 #include <wrl\client.h>
 

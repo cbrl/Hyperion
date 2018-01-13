@@ -173,6 +173,7 @@
     <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="shader\Shader.h" />
     <ClInclude Include="shader\HlslDefines.h" />
+    <ClInclude Include="shader\ShaderMgr.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="system\System.h" />
     <ClInclude Include="targetver.h" />

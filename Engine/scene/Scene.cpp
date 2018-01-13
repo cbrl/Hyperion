@@ -2,8 +2,12 @@
 #include "Scene.h"
 
 // TODO:
-// - Create a class for sampler states
-// - Create a material struct for models (diffuse, ambient, specular, etc values)
+// - DONE - Create a class for sampler states
+// - PARTIAL - Method for setting sampler state
+// - DONE - Create a material struct for models (diffuse, ambient, specular, etc values)
+// - Implement material data into shaders
+// - Create frustum and implement frustum culling
+// - Create and implement input handler
 // - Create a model loader, and a model class that can take any vertex type
 // - Create a simple geometry generator
 
@@ -44,7 +48,7 @@ bool Scene::Init() {
 	m_Models.push_back(Model());
 	vector<wstring> v;
 	v.push_back(L"./data/brick.jpg");
-	v.push_back(L"./data/brick2.jpg");
+	//v.push_back(L"./data/brick2.jpg");
 	result = m_Models[0].Init(m_Device, "./data/cube.txt", m_TextureMgr->Texture(v), ShaderTypes::LightShader);
 	//result = m_Models[0].Init(m_Device, "./data/cube.txt", m_TextureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
 	if (!result) return false;
@@ -62,4 +66,9 @@ void Scene::UpdateMetrics(int FPS, int CPU) {
 	// FPS, CPU usage, memory usage, mouse position, etc...
 
 	m_Texts.at(L"FPS").SetText(L"FPS: " + std::to_wstring(FPS));
+}
+
+
+void Scene::Tick(float deltaTime) {
+	m_Camera->Render();
 }

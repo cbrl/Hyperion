@@ -11,6 +11,7 @@ TextureMgr::TextureMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11Dev
 
 TextureMgr::~TextureMgr() {
 	m_TextureMap.clear();
+	m_SimpleTextureMap.clear();
 }
 
 
