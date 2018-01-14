@@ -7,7 +7,6 @@
 #include <type_traits>
 
 #include "input\Input.h"
-#include "scene\Position.h"
 #include "camera\Camera.h"
 #include "light\Light.h"
 #include "model\Model.h"

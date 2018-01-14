@@ -89,10 +89,24 @@ void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 
 
 void Scene::Tick(Input& input, float deltaTime) {
-	Position::UpdatePosition(input, deltaTime);
+	XMFLOAT3 rotationRates(0.0f, 0.0f, 0.0f);
+
+	if (input.IsKeyPressed(DIK_W)) {
+		rotationRates.x -= deltaTime * 0.015f;
+	}
+	else if (input.IsKeyPressed(DIK_S)) {
+		rotationRates.x += deltaTime * 0.015f;
+	}
+
+	if (input.IsKeyPressed(DIK_A)) {
+		rotationRates.y -= deltaTime * 0.015f;
+	}
+	else if (input.IsKeyPressed(DIK_D)) {
+		rotationRates.y += deltaTime * 0.015f;
+	}
 
 	// Set camera rotation
-	m_Camera->SetRotation(Position::m_Rotation);
+	m_Camera->Rotate(rotationRates);
 
 	// Update camera 
 	m_Camera->Render();

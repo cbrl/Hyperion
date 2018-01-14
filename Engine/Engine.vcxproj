@@ -172,7 +172,6 @@
     <ClInclude Include="rendering\Renderer.h" />
     <ClInclude Include="rendering\RenderingMgr.h" />
     <ClInclude Include="rendering\Sampler.h" />
-    <ClInclude Include="scene\Position.h" />
     <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="shader\Shader.h" />
     <ClInclude Include="shader\HlslDefines.h" />
@@ -197,7 +196,6 @@
     <ClCompile Include="rendering\buffer\CBufferMgr.cpp" />
     <ClCompile Include="rendering\Renderer.cpp" />
     <ClCompile Include="rendering\RenderingMgr.cpp" />
-    <ClCompile Include="scene\Position.cpp" />
     <ClCompile Include="scene\Scene.cpp" />
     <ClCompile Include="shader\Shader.cpp" />
     <ClCompile Include="stdafx.cpp">
