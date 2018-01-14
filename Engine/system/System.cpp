@@ -22,6 +22,9 @@ bool System::Init() {
 		return false;
 	}
 
+	// Initialize DirectInput
+	m_Input = make_unique<Input>(m_hInstance, m_hWnd, m_WindowWidth, m_WindowHeight);
+
 	// Initialize renderer
 	m_Renderer = make_unique<Renderer>(m_hWnd, m_Direct3D);
 	if (!m_Renderer->Init()) {
@@ -60,17 +63,14 @@ int System::Run() {
 			DispatchMessage(&msg);
 		}
 		else {
-			m_Timer->Tick();
-			m_FPSCounter->Tick();
-			float deltaTime = m_Timer->DeltaTime();
-
-			m_Scene->Tick(deltaTime);
-			m_Scene->UpdateMetrics(m_FPSCounter->GetFPS(), NULL);
-
 			// Process frame
-			if (!m_Renderer->Tick(*m_Scene, deltaTime)) {
+			if (!Tick()) {
 				MessageBox(m_hWnd, L"Frame processing failed", L"Error", MB_OK);
 				return 1;
+			}
+
+			if (m_Input->IsKeyPressed(DIK_ESCAPE)) {
+				done = true;
 			}
 		}
 	}
@@ -79,14 +79,38 @@ int System::Run() {
 }
 
 
+bool System::Tick() {
+	int   mouseX, mouseY;
+	float deltaTime;
+
+	// Update system metrics
+	m_Timer->Tick();
+	m_FPSCounter->Tick();
+	deltaTime = m_Timer->DeltaTime();
+
+	// Process input
+	if (!m_Input->Tick()) {
+		return false;
+	}
+
+	// Get mouse position
+	m_Input->GetMouseLocation(mouseX, mouseY);
+
+	// Update scene
+	m_Scene->Tick(*m_Input, deltaTime);
+	m_Scene->UpdateMetrics(m_FPSCounter->GetFPS(), NULL, mouseX, mouseY);
+
+	// Render scene
+	if (!m_Renderer->Tick(*m_Scene, deltaTime)) {
+		return false;
+	}
+
+	return true;
+}
+
+
 LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
-		case WM_KEYDOWN:
-			if (wParam == VK_ESCAPE) {
-				PostQuitMessage(0);
-			}
-			return 0;
-
 		case WM_DESTROY:
 			PostQuitMessage(0);
 			return 0;

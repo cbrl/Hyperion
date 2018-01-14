@@ -6,6 +6,8 @@
 #include <vector>
 #include <type_traits>
 
+#include "input\Input.h"
+#include "scene\Position.h"
 #include "camera\Camera.h"
 #include "light\Light.h"
 #include "model\Model.h"
@@ -14,6 +16,7 @@
 
 using std::map;
 using std::wstring;
+using std::to_wstring;
 using std::vector;
 using std::is_same_v;
 
@@ -23,8 +26,8 @@ class Scene {
 		~Scene();
 
 		bool Init();
-		void UpdateMetrics(int FPS, int CPU);
-		void Tick(float deltaTime);
+		void UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY);
+		void Tick(Input& input, float deltaTime);
 
 
 	public:
@@ -39,6 +42,8 @@ class Scene {
 		ComPtr<ID3D11Device>        m_Device;
 		ComPtr<ID3D11DeviceContext> m_DeviceContext;
 		unique_ptr<TextureMgr>      m_TextureMgr;
+
+		XMFLOAT3 m_Rotation;
 
 
 	public:

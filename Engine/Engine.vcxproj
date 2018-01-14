@@ -82,6 +82,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="direct3d\Direct3D.h" />
+    <ClInclude Include="input\Input.h" />
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="main\MainWindow.h" />
     <ClInclude Include="model\Model.h" />
@@ -170,6 +172,7 @@
     <ClInclude Include="rendering\Renderer.h" />
     <ClInclude Include="rendering\RenderingMgr.h" />
     <ClInclude Include="rendering\Sampler.h" />
+    <ClInclude Include="scene\Position.h" />
     <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="shader\Shader.h" />
     <ClInclude Include="shader\HlslDefines.h" />
@@ -186,6 +189,7 @@
   <ItemGroup>
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="direct3d\Direct3D.cpp" />
+    <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="light\Light.cpp" />
     <ClCompile Include="main\main.cpp" />
     <ClCompile Include="main\MainWindow.cpp" />
@@ -193,10 +197,12 @@
     <ClCompile Include="rendering\buffer\CBufferMgr.cpp" />
     <ClCompile Include="rendering\Renderer.cpp" />
     <ClCompile Include="rendering\RenderingMgr.cpp" />
+    <ClCompile Include="scene\Position.cpp" />
     <ClCompile Include="scene\Scene.cpp" />
     <ClCompile Include="shader\Shader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="system\System.cpp" />
     <ClCompile Include="texture\TextureMgr.cpp" />

@@ -6,6 +6,7 @@
 #include "util\EngineUtil.h"
 #include "main\MainWindow.h"
 #include "direct3d\Direct3D.h"
+#include "input\input.h"
 #include "rendering\Renderer.h"
 #include "scene\Scene.h"
 #include "util\timer\Timer.h"
@@ -35,8 +36,13 @@ class System : public MainWindow {
 
 
 	private:
+		bool Tick();
+
+
+	private:
 		unique_ptr<MainWindow> m_MainWindow;
 		shared_ptr<Direct3D>   m_Direct3D;
+		unique_ptr<Input>      m_Input;
 		unique_ptr<Renderer>   m_Renderer;
 		unique_ptr<Scene>      m_Scene;
 		unique_ptr<Timer>      m_Timer;

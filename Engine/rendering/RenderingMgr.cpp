@@ -43,7 +43,7 @@ void RenderingMgr::BindShader(ShaderTypes shader) {
 			//m_ShaderMgr->BindShader(ShaderTypes::TextureShader, m_DeviceContext);
 			m_CBufferMgr->BindCBuffer(BufferTypes::MatrixBuffer);
 			m_CBufferMgr->BindCBuffer(BufferTypes::CameraBuffer);
-			m_DeviceContext->PSSetSamplers(0, 1, &m_Sampler->samplerState);
+			m_DeviceContext->PSSetSamplers(0, 1, m_Sampler->samplerState.GetAddressOf());
 			break;
 
 		case ShaderTypes::LightShader:
@@ -51,7 +51,7 @@ void RenderingMgr::BindShader(ShaderTypes shader) {
 			m_CBufferMgr->BindCBuffer(BufferTypes::MatrixBuffer);
 			m_CBufferMgr->BindCBuffer(BufferTypes::CameraBuffer);
 			m_CBufferMgr->BindCBuffer(BufferTypes::LightBuffer);
-			m_DeviceContext->PSSetSamplers(0, 1, &m_Sampler->samplerState);
+			m_DeviceContext->PSSetSamplers(0, 1, m_Sampler->samplerState.GetAddressOf());
 			break;
 
 		case ShaderTypes::NormalShader:
