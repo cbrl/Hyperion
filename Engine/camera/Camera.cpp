@@ -1,11 +1,18 @@
 #include "stdafx.h"
 #include "Camera.h"
 
+// http://www.chadvernon.com/blog/resources/directx9/moving-around-a-3d-world/
+// https://msdn.microsoft.com/en-us/library/windows/desktop/bb281696(v=vs.85).aspx
 
 Camera::Camera() :
 	m_Rotation(0.0f, 0.0f, 0.0f),
 	m_MoveSpeed(0.0f, 0.0f, 0.0f),
-	m_TurnSpeed(0.0f, 0.0f, 0.0f)
+	m_TurnSpeed(0.0f, 0.0f, 0.0f),
+	m_DefaultForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
+	m_DefaultRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+	m_CameraForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
+	m_CameraRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+	m_CameraUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))
 {
 }
 
@@ -15,7 +22,7 @@ Camera::~Camera() {
 
 
 void Camera::SetPosition(XMFLOAT3 position) {
-	m_Buffer.cameraPosition = position;
+	m_Buffer.position = position;
 }
 
 
@@ -24,24 +31,39 @@ void Camera::SetRotation(XMFLOAT3 rotation) {
 }
 
 
-void Camera::Move(XMFLOAT3 rate) {
+void Camera::Move(XMFLOAT3 speeds) {
+	m_MoveSpeed.x += speeds.x;
+	if (speeds.x > 0.0f) {
+		if (m_MoveSpeed.x > (speeds.x * 10)) {
+			m_MoveSpeed.x = speeds.x * 10;
+		}
+	}
+	else if (speeds.x < 0.0f) {
+		if (m_MoveSpeed.x < (speeds.x * 10)) {
+			m_MoveSpeed.x = speeds.x * 10;
+		}
+	}
+	else {
+		m_MoveSpeed.x = 0.0f;
+	}
 
+	m_Buffer.position.x += m_MoveSpeed.x;
 }
 
 
-void Camera::Rotate(XMFLOAT3 rates) {
+void Camera::Rotate(XMFLOAT3 speeds) {
 	//----------------------------------------------------------------------------------
 	// X rotation
 	//----------------------------------------------------------------------------------
-	m_TurnSpeed.x += rates.x;
-	if (rates.x > 0.0f) {
-		if (m_TurnSpeed.x > (rates.x * 10)) {
-			m_TurnSpeed.x = rates.x * 10;
+	m_TurnSpeed.x += speeds.x;
+	if (speeds.x > 0.0f) {
+		if (m_TurnSpeed.x > (speeds.x * 10)) {
+			m_TurnSpeed.x = speeds.x * 10;
 		}
 	}
-	else if (rates.x < 0.0f) {
-		if (m_TurnSpeed.x < (rates.x * 10)) {
-			m_TurnSpeed.x = rates.x * 10;
+	else if (speeds.x < 0.0f) {
+		if (m_TurnSpeed.x < (speeds.x * 10)) {
+			m_TurnSpeed.x = speeds.x * 10;
 		}
 	}
 	else {
@@ -61,15 +83,15 @@ void Camera::Rotate(XMFLOAT3 rates) {
 	//----------------------------------------------------------------------------------
 	// Y rotation
 	//----------------------------------------------------------------------------------
-	m_TurnSpeed.y += rates.y;
-	if (rates.y > 0.0f) {
-		if (m_TurnSpeed.y >(rates.y * 10)) {
-			m_TurnSpeed.y = rates.y * 10;
+	m_TurnSpeed.y += speeds.y;
+	if (speeds.y > 0.0f) {
+		if (m_TurnSpeed.y > (speeds.y * 10)) {
+			m_TurnSpeed.y = speeds.y * 10;
 		}
 	}
-	else if (rates.y < 0.0f) {
-		if (m_TurnSpeed.y < (rates.y * 10)) {
-			m_TurnSpeed.y = rates.y * 10;
+	else if (speeds.y < 0.0f) {
+		if (m_TurnSpeed.y < (speeds.y * 10)) {
+			m_TurnSpeed.y = speeds.y * 10;
 		}
 	}
 	else {
@@ -89,15 +111,15 @@ void Camera::Rotate(XMFLOAT3 rates) {
 	//----------------------------------------------------------------------------------
 	// Z rotation
 	//----------------------------------------------------------------------------------
-	m_TurnSpeed.z += rates.z;
-	if (rates.z > 0.0f) {
-		if (m_TurnSpeed.z >(rates.z * 10)) {
-			m_TurnSpeed.z = rates.z * 10;
+	m_TurnSpeed.z += speeds.z;
+	if (speeds.z > 0.0f) {
+		if (m_TurnSpeed.z > (speeds.z * 10)) {
+			m_TurnSpeed.z = speeds.z * 10;
 		}
 	}
-	else if (rates.z < 0.0f) {
-		if (m_TurnSpeed.z < (rates.z * 10)) {
-			m_TurnSpeed.z = rates.z * 10;
+	else if (speeds.z < 0.0f) {
+		if (m_TurnSpeed.z < (speeds.z * 10)) {
+			m_TurnSpeed.z = speeds.z * 10;
 		}
 	}
 	else {
@@ -117,17 +139,6 @@ void Camera::Rotate(XMFLOAT3 rates) {
 
 void Camera::Render() {
 	float pitch, yaw, roll;
-
-	// Create vector pointing upwards
-	XMFLOAT3 up(0.0f, 1.0f, 0.0f);
-	XMVECTOR upVector = XMLoadFloat3(&up);
-
-	// Set position where camera is looking by default
-	XMFLOAT3 lookAt(0.0f, 0.0f, 1.0f);
-	XMVECTOR lookAtVector = XMLoadFloat3(&lookAt);
-
-	// Create position vector
-	XMVECTOR positionVector = XMLoadFloat3(&m_Buffer.cameraPosition);
 	
 	// Create rotation matrix using pitch, yaw, and roll in radians
 	pitch = m_Rotation.x * 0.0174532925f;
@@ -136,14 +147,22 @@ void Camera::Render() {
 	XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 
 	// Transform lookAt and up vectors so the view is correctly rotated at the origin
-	lookAtVector = XMVector3TransformCoord(lookAtVector, rotationMatrix);
-	upVector     = XMVector3TransformCoord(upVector, rotationMatrix);
+	XMVECTOR forwardVector = XMVector3TransformCoord(m_DefaultForward, rotationMatrix);
+	forwardVector          = XMVector3Normalize(forwardVector);
+
+	XMMATRIX yRotationMatrix = XMMatrixRotationY(yaw);
+	m_CameraForward = XMVector3TransformCoord(m_DefaultForward, yRotationMatrix);
+	m_CameraRight   = XMVector3TransformCoord(m_DefaultRight, yRotationMatrix);
+	m_CameraUp      = XMVector3TransformCoord(m_CameraUp, yRotationMatrix);
+
+	// Create position vector
+	XMVECTOR positionVector = XMLoadFloat3(&m_Buffer.position);
 
 	// Translate rotated camera position to the viewer position
-	lookAtVector = XMVectorAdd(positionVector, lookAtVector);
+	forwardVector = XMVectorAdd(positionVector, forwardVector);
 
 	// Create the view matrix using the new vectors
-	m_ViewMatrix = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
+	m_ViewMatrix = XMMatrixLookAtLH(positionVector, forwardVector, m_CameraUp);
 }
 
 
@@ -153,7 +172,7 @@ CameraBuffer Camera::GetBuffer() {
 
 
 XMFLOAT3 Camera::GetPosition() {
-	return m_Buffer.cameraPosition;
+	return m_Buffer.position;
 }
 
 

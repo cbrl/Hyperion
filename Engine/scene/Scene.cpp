@@ -10,6 +10,8 @@
 // - DONE - Create and implement input handler
 // - Create a model loader, and a model class that can take any vertex type
 // - Create a simple geometry generator
+// - More elegant solution for setting m_WindowWidth/Height in System/MainWindow
+// - Add const to return types that shouldn't be modified (e.g. Camera getters)
 
 Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
 	m_hWnd(hWnd),
@@ -75,6 +77,12 @@ bool Scene::Init() {
 	m_Texts.try_emplace(L"Mouse Y", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
 	m_Texts.at(L"Mouse Y").SetPosition(XMFLOAT2(10, 50));
 
+	m_Texts.try_emplace(L"Position", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
+	m_Texts.at(L"Position").SetPosition(XMFLOAT2(10, 100));
+	
+	m_Texts.try_emplace(L"Rotation", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
+	m_Texts.at(L"Rotation").SetPosition(XMFLOAT2(10, 200));
+
 	return true;
 }
 
@@ -85,28 +93,48 @@ void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 	m_Texts.at(L"FPS").SetText(L"FPS: " + to_wstring(FPS));
 	m_Texts.at(L"Mouse X").SetText(L"Mouse X: " + to_wstring(mouseX));
 	m_Texts.at(L"Mouse Y").SetText(L"Mouse Y: " + to_wstring(mouseY));
+
+	m_Texts.at(L"Position").SetText(L"Position \nX: " + to_wstring(m_Camera->GetPosition().x)
+	                                + L"\nY: " + to_wstring(m_Camera->GetPosition().y)
+	                                + L"\nZ: " + to_wstring(m_Camera->GetPosition().z));
+
+	m_Texts.at(L"Rotation").SetText(L"Rotation \nX: " + to_wstring(m_Camera->GetRotation().x)
+									+ L"\nY: " + to_wstring(m_Camera->GetRotation().y)
+									+ L"\nZ: " + to_wstring(m_Camera->GetRotation().z));
 }
 
 
 void Scene::Tick(Input& input, float deltaTime) {
-	XMFLOAT3 rotationRates(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 rotationSpeeds(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 moveSpeeds(0.0f, 0.0f, 0.0f);
 
-	if (input.IsKeyPressed(DIK_W)) {
-		rotationRates.x -= deltaTime * 0.015f;
+	// Up/Down rotation
+	if (input.IsKeyPressed(Keyboard::W)) {
+		rotationSpeeds.x -= deltaTime * 0.015f;
 	}
-	else if (input.IsKeyPressed(DIK_S)) {
-		rotationRates.x += deltaTime * 0.015f;
-	}
-
-	if (input.IsKeyPressed(DIK_A)) {
-		rotationRates.y -= deltaTime * 0.015f;
-	}
-	else if (input.IsKeyPressed(DIK_D)) {
-		rotationRates.y += deltaTime * 0.015f;
+	else if (input.IsKeyPressed(Keyboard::S)) {
+		rotationSpeeds.x += deltaTime * 0.015f;
 	}
 
-	// Set camera rotation
-	m_Camera->Rotate(rotationRates);
+	// Left/Right rotation
+	if (input.IsKeyPressed(Keyboard::A)) {
+		rotationSpeeds.y -= deltaTime * 0.015f;
+	}
+	else if (input.IsKeyPressed(Keyboard::D)) {
+		rotationSpeeds.y += deltaTime * 0.015f;
+	}
+
+	// Forward/Back movement
+	if (input.IsKeyPressed(Keyboard::Up)) {
+		moveSpeeds.x += deltaTime * 0.001f;
+	}
+	else if (input.IsKeyPressed(Keyboard::Down)) {
+		moveSpeeds.x -= deltaTime * 0.001f;
+	}
+
+	// Update camera rotation and position
+	m_Camera->Rotate(rotationSpeeds);
+	m_Camera->Move(moveSpeeds);
 
 	// Update camera 
 	m_Camera->Render();

@@ -6,7 +6,11 @@
 using namespace DirectX;
 
 struct MatrixBuffer {
-	MatrixBuffer() = default;
+	MatrixBuffer() {
+		ZeroMemory(&world, sizeof(world));
+		ZeroMemory(&view, sizeof(view));
+		ZeroMemory(&projection, sizeof(projection));
+	}
 	MatrixBuffer(XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix) {
 		world      = worldMatrix;
 		view       = viewMatrix;
@@ -19,17 +23,23 @@ struct MatrixBuffer {
 
 
 struct CameraBuffer {
-	CameraBuffer() = default;
-	CameraBuffer(XMFLOAT3 position) {
-		cameraPosition = position;
+	CameraBuffer() : position(0.0f, 0.0f, 0.0f), padding(0.0f) {}
+	CameraBuffer(XMFLOAT3 pos) {
+		position = pos;
 	}
-	XMFLOAT3 cameraPosition;
+	XMFLOAT3 position;
 	float    padding;
 };
 
 
 struct LightBuffer {
-	LightBuffer() = default;
+	LightBuffer() :
+		ambientColor(0.0f, 0.0f, 0.0f, 0.0f),
+		diffuseColor(0.0f, 0.0f, 0.0f, 0.0f),
+		lightDirection(0.0f, 0.0f, 0.0f),
+		specularPower(0.0f),
+		specularColor(0.0f, 0.0f, 0.0f, 0.0f)
+	{}
 	LightBuffer(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT3 direction, float specPower, XMFLOAT4 specColor) {
 		ambientColor   = ambient;
 		diffuseColor   = diffuse;

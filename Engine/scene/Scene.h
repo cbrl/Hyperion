@@ -1,10 +1,12 @@
 #pragma once
 
-#include <Windows.h>
 #include <map>
 #include <string>
 #include <vector>
 #include <type_traits>
+#include <Windows.h>
+#include <Keyboard.h>
+#include <Mouse.h>
 
 #include "input\Input.h"
 #include "camera\Camera.h"

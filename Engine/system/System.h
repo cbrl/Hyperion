@@ -1,7 +1,9 @@
 #pragma once
 
-#include <Windows.h>
 #include <memory>
+#include <Windows.h>
+#include <Keyboard.h>
+#include <Mouse.h>
 
 #include "util\EngineUtil.h"
 #include "main\MainWindow.h"

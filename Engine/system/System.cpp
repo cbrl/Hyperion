@@ -23,7 +23,7 @@ bool System::Init() {
 	}
 
 	// Initialize DirectInput
-	m_Input = make_unique<Input>(m_hInstance, m_hWnd, m_WindowWidth, m_WindowHeight);
+	m_Input = make_unique<Input>(m_hWnd);
 
 	// Initialize renderer
 	m_Renderer = make_unique<Renderer>(m_hWnd, m_Direct3D);
@@ -69,7 +69,7 @@ int System::Run() {
 				return 1;
 			}
 
-			if (m_Input->IsKeyPressed(DIK_ESCAPE)) {
+			if (m_Input->IsKeyPressed(Keyboard::Escape)) {
 				done = true;
 			}
 		}
@@ -89,9 +89,7 @@ bool System::Tick() {
 	deltaTime = m_Timer->DeltaTime();
 
 	// Process input
-	if (!m_Input->Tick()) {
-		return false;
-	}
+	m_Input->Tick();
 
 	// Get mouse position
 	m_Input->GetMouseLocation(mouseX, mouseY);
@@ -112,13 +110,16 @@ bool System::Tick() {
 LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 		case WM_DESTROY:
-			PostQuitMessage(0);
-			return 0;
-
 		case WM_CLOSE:
 			PostQuitMessage(0);
 			return 0;
 
+		case WM_ACTIVATEAPP:
+			Keyboard::ProcessMessage(msg, wParam, lParam);
+			Mouse::ProcessMessage(msg, wParam, lParam);
+			break;
+
+		// Handle window resize
 		case WM_SIZE:
 			m_WindowWidth = LOWORD(lParam);
 			m_WindowHeight = HIWORD(lParam);
@@ -150,7 +151,31 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			((MINMAXINFO*)lParam)->ptMinTrackSize.y = 240;
 			return 0;
 
-			// Send other messages to default message handler
+		// Send keyboard events to keyboard handler
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+			Keyboard::ProcessMessage(msg, wParam, lParam);
+			break;
+
+		// Send mouse events to mouse handler
+		case WM_INPUT:
+		case WM_MOUSEMOVE:
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONDOWN:
+		case WM_MBUTTONUP:
+		case WM_MOUSEWHEEL:
+		case WM_XBUTTONDOWN:
+		case WM_XBUTTONUP:
+		case WM_MOUSEHOVER:
+			Mouse::ProcessMessage(msg, wParam, lParam);
+			break;
+
+		// Send other messages to default message handler
 		default:
 			return DefWindowProc(hWnd, msg, wParam, lParam);
 	}
