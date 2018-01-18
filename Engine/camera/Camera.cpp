@@ -1,13 +1,22 @@
 #include "stdafx.h"
 #include "Camera.h"
 
+// https://www.braynzarsoft.net/viewtutorial/q16390-19-first-person-camera
 // http://www.chadvernon.com/blog/resources/directx9/moving-around-a-3d-world/
 // https://msdn.microsoft.com/en-us/library/windows/desktop/bb281696(v=vs.85).aspx
 
 Camera::Camera() :
-	m_Rotation(0.0f, 0.0f, 0.0f),
 	m_MoveSpeed(0.0f, 0.0f, 0.0f),
+	m_MoveAccel(0.0001f),
+	m_MoveDecel(0.0005f),
+	m_MaxMoveSpeed(0.01f),
+
+	m_Rotation(0.0f, 0.0f, 0.0f),
 	m_TurnSpeed(0.0f, 0.0f, 0.0f),
+	m_TurnAccel(0.001f),
+	m_TurnDecel(0.005f),
+	m_MaxTurnSpeed(0.15f),
+
 	m_DefaultForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
 	m_DefaultRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
 	m_CameraForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
@@ -21,53 +30,98 @@ Camera::~Camera() {
 }
 
 
-void Camera::SetPosition(XMFLOAT3 position) {
-	m_Buffer.position = position;
-}
-
-
-void Camera::SetRotation(XMFLOAT3 rotation) {
-	m_Rotation = rotation;
-}
-
-
-void Camera::Move(XMFLOAT3 speeds) {
-	m_MoveSpeed.x += speeds.x;
-	if (speeds.x > 0.0f) {
-		if (m_MoveSpeed.x > (speeds.x * 10)) {
-			m_MoveSpeed.x = speeds.x * 10;
+void Camera::Move(XMINT3 directions, float deltaTime) {
+	//----------------------------------------------------------------------------------
+	// X movement
+	//----------------------------------------------------------------------------------
+	m_MoveSpeed.x += directions.x * deltaTime * m_MoveAccel;
+	if (directions.x > 0) {
+		if (m_MoveSpeed.x > (deltaTime * m_MaxMoveSpeed)) {
+			m_MoveSpeed.x = deltaTime * m_MaxMoveSpeed;
 		}
 	}
-	else if (speeds.x < 0.0f) {
-		if (m_MoveSpeed.x < (speeds.x * 10)) {
-			m_MoveSpeed.x = speeds.x * 10;
+	else if (directions.x < 0) {
+		if (m_MoveSpeed.x < (deltaTime * m_MaxMoveSpeed)) {
+			m_MoveSpeed.x = -(deltaTime * m_MaxMoveSpeed);
 		}
 	}
 	else {
-		m_MoveSpeed.x = 0.0f;
+		//m_MoveSpeed.x = 0.0f;
+		if (m_MoveSpeed.x != 0.0f) {
+			m_MoveSpeed.x -= copysign(1.0f, m_MoveSpeed.x) * m_MoveDecel;
+			if (abs(m_MoveSpeed.x) <= 0.001f) m_MoveSpeed.x = 0.0f;
+		}
 	}
 
-	m_Buffer.position.x += m_MoveSpeed.x;
+
+	//----------------------------------------------------------------------------------
+	// Y movement
+	//----------------------------------------------------------------------------------
+	m_MoveSpeed.y += directions.y * deltaTime * m_MoveAccel;
+	if (directions.y > 0) {
+		if (m_MoveSpeed.y > (deltaTime * m_MaxMoveSpeed)) {
+			m_MoveSpeed.y = deltaTime * m_MaxMoveSpeed;
+		}
+	}
+	else if (directions.y < 0) {
+		if (m_MoveSpeed.y < (deltaTime * m_MaxMoveSpeed)) {
+			m_MoveSpeed.y = -(deltaTime * m_MaxMoveSpeed);
+		}
+	}
+	else {
+		//m_MoveSpeed.y = 0.0f;
+		if (m_MoveSpeed.y != 0.0f) {
+			m_MoveSpeed.y -= copysign(1.0f, m_MoveSpeed.y) * m_MoveDecel;
+			if (abs(m_MoveSpeed.y) <= 0.001f) m_MoveSpeed.y = 0.0f;
+		}
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Z movement
+	//----------------------------------------------------------------------------------
+	m_MoveSpeed.z += directions.z * deltaTime * m_MoveAccel;
+	if (directions.z > 0) {
+		if (m_MoveSpeed.z > (deltaTime * m_MaxMoveSpeed)) {
+			m_MoveSpeed.z = deltaTime * m_MaxMoveSpeed;
+		}
+	}
+	else if (directions.z < 0) {
+		if (m_MoveSpeed.z < (deltaTime * m_MaxMoveSpeed)) {
+			m_MoveSpeed.z = -(deltaTime * m_MaxMoveSpeed);
+		}
+	}
+	else {
+		//m_MoveSpeed.z = 0.0f;
+		if (m_MoveSpeed.z != 0.0f) {
+			m_MoveSpeed.z -= copysign(1.0f, m_MoveSpeed.z) * m_MoveDecel;
+			if (abs(m_MoveSpeed.z) <= 0.001f) m_MoveSpeed.z = 0.0f;
+		}
+	}
 }
 
 
-void Camera::Rotate(XMFLOAT3 speeds) {
+void Camera::Rotate(XMINT3 directions, float deltaTime) {
 	//----------------------------------------------------------------------------------
 	// X rotation
 	//----------------------------------------------------------------------------------
-	m_TurnSpeed.x += speeds.x;
-	if (speeds.x > 0.0f) {
-		if (m_TurnSpeed.x > (speeds.x * 10)) {
-			m_TurnSpeed.x = speeds.x * 10;
+	m_TurnSpeed.x += directions.x * deltaTime * m_TurnAccel;
+	if (directions.x > 0) {
+		if (m_TurnSpeed.x > (directions.x * m_MaxTurnSpeed)) {
+			m_TurnSpeed.x = directions.x * m_MaxTurnSpeed;
 		}
 	}
-	else if (speeds.x < 0.0f) {
-		if (m_TurnSpeed.x < (speeds.x * 10)) {
-			m_TurnSpeed.x = speeds.x * 10;
+	else if (directions.x < 0) {
+		if (m_TurnSpeed.x < (directions.x * m_MaxTurnSpeed)) {
+			m_TurnSpeed.x = directions.x * m_MaxTurnSpeed;
 		}
 	}
 	else {
-		m_TurnSpeed.x = 0.0f;
+		//m_TurnSpeed.x = 0.0f;
+		if (m_TurnSpeed.x != 0.0f) {
+			m_TurnSpeed.x -= copysign(1.0f, m_TurnSpeed.x) * deltaTime * m_TurnDecel;
+			if (abs(m_TurnSpeed.x) <= 0.01f) m_TurnSpeed.x = 0.0f;
+		}
 	}
 
 	m_Rotation.x += m_TurnSpeed.x;
@@ -83,19 +137,23 @@ void Camera::Rotate(XMFLOAT3 speeds) {
 	//----------------------------------------------------------------------------------
 	// Y rotation
 	//----------------------------------------------------------------------------------
-	m_TurnSpeed.y += speeds.y;
-	if (speeds.y > 0.0f) {
-		if (m_TurnSpeed.y > (speeds.y * 10)) {
-			m_TurnSpeed.y = speeds.y * 10;
+	m_TurnSpeed.y += directions.y * deltaTime * m_TurnAccel;
+	if (directions.y > 0) {
+		if (m_TurnSpeed.y > (directions.y * m_MaxTurnSpeed)) {
+			m_TurnSpeed.y = directions.y * m_MaxTurnSpeed;
 		}
 	}
-	else if (speeds.y < 0.0f) {
-		if (m_TurnSpeed.y < (speeds.y * 10)) {
-			m_TurnSpeed.y = speeds.y * 10;
+	else if (directions.y < 0) {
+		if (m_TurnSpeed.y < (directions.y * m_MaxTurnSpeed)) {
+			m_TurnSpeed.y = directions.y * m_MaxTurnSpeed;
 		}
 	}
 	else {
-		m_TurnSpeed.y = 0.0f;
+		//m_TurnSpeed.y = 0.0f;
+		if (m_TurnSpeed.y != 0.0f) {
+			m_TurnSpeed.y -= copysign(1.0f, m_TurnSpeed.y) * deltaTime * m_TurnDecel;
+			if (abs(m_TurnSpeed.y) <= 0.01f) m_TurnSpeed.y = 0.0f;
+		}
 	}
 
 	m_Rotation.y += m_TurnSpeed.y;
@@ -111,19 +169,23 @@ void Camera::Rotate(XMFLOAT3 speeds) {
 	//----------------------------------------------------------------------------------
 	// Z rotation
 	//----------------------------------------------------------------------------------
-	m_TurnSpeed.z += speeds.z;
-	if (speeds.z > 0.0f) {
-		if (m_TurnSpeed.z > (speeds.z * 10)) {
-			m_TurnSpeed.z = speeds.z * 10;
+	m_TurnSpeed.z += directions.x * deltaTime * m_TurnAccel;
+	if (directions.z > 0) {
+		if (m_TurnSpeed.z > (directions.z * m_MaxTurnSpeed)) {
+			m_TurnSpeed.z = directions.z * m_MaxTurnSpeed;
 		}
 	}
-	else if (speeds.z < 0.0f) {
-		if (m_TurnSpeed.z < (speeds.z * 10)) {
-			m_TurnSpeed.z = speeds.z * 10;
+	else if (directions.z < 0) {
+		if (m_TurnSpeed.z < (directions.z * m_MaxTurnSpeed)) {
+			m_TurnSpeed.z = directions.z * m_MaxTurnSpeed;
 		}
 	}
 	else {
-		m_TurnSpeed.z = 0.0f;
+		//m_TurnSpeed.z = 0.0f;
+		if (m_TurnSpeed.z != 0.0f) {
+			m_TurnSpeed.z -= copysign(1.0f, m_TurnSpeed.z) * deltaTime * m_TurnDecel;
+			if (abs(m_TurnSpeed.z) <= 0.01f) m_TurnSpeed.z = 0.0f;
+		}
 	}
 
 	m_Rotation.z += m_TurnSpeed.z;
@@ -137,7 +199,7 @@ void Camera::Rotate(XMFLOAT3 speeds) {
 }
 
 
-void Camera::Render() {
+void Camera::Update() {
 	float pitch, yaw, roll;
 	
 	// Create rotation matrix using pitch, yaw, and roll in radians
@@ -157,6 +219,12 @@ void Camera::Render() {
 
 	// Create position vector
 	XMVECTOR positionVector = XMLoadFloat3(&m_Buffer.position);
+	positionVector += m_CameraRight * m_MoveSpeed.x;
+	positionVector += m_CameraForward * m_MoveSpeed.z;
+
+	// Update camera buffer
+	m_Buffer.position.x = XMVectorGetX(positionVector);
+	m_Buffer.position.z = XMVectorGetZ(positionVector);
 
 	// Translate rotated camera position to the viewer position
 	forwardVector = XMVectorAdd(positionVector, forwardVector);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include <stdafx.h>
 #include <d3d11.h>
 #include <memory>
@@ -8,7 +10,7 @@
 #include <VertexTypes.h>
 #include "util\EngineUtil.h"
 #include "shader\Shader.h"
-#include <map>
+
 using std::map;
 using std::unique_ptr;
 using std::make_unique;

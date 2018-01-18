@@ -12,13 +12,13 @@ class Camera {
 		Camera();
 		~Camera();
 
-		void SetPosition(XMFLOAT3 position);
-		void SetRotation(XMFLOAT3 rotation);
+		void SetPosition(XMFLOAT3 position) { m_Buffer.position = position; }
+		void SetRotation(XMFLOAT3 rotation) { m_Rotation = rotation; }
 
-		void Move(XMFLOAT3 speeds);
-		void Rotate(XMFLOAT3 speeds);
+		void Move(XMINT3 directions, float deltaTime);
+		void Rotate(XMINT3 directions, float deltaTime);
 
-		void Render();
+		void Update();
 
 		CameraBuffer GetBuffer();
 		XMFLOAT3     GetPosition();
@@ -29,13 +29,21 @@ class Camera {
 		CameraBuffer   m_Buffer;
 		XMFLOAT3       m_Rotation;
 		XMMATRIX       m_ViewMatrix;
+
 		const XMVECTOR m_DefaultForward;
 		const XMVECTOR m_DefaultRight;
 		XMVECTOR       m_CameraForward;
 		XMVECTOR       m_CameraRight;
 		XMVECTOR       m_CameraUp;
 
-		XMFLOAT3 m_MoveSpeed;
-		XMFLOAT3 m_TurnSpeed;
+		XMFLOAT3    m_MoveSpeed;
+		const float m_MoveAccel;
+		const float m_MoveDecel;
+		const float m_MaxMoveSpeed;
+
+		XMFLOAT3    m_TurnSpeed;
+		const float m_TurnAccel;
+		const float m_TurnDecel;
+		const float m_MaxTurnSpeed;
 };
 

@@ -189,7 +189,6 @@
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="direct3d\Direct3D.cpp" />
     <ClCompile Include="input\Input.cpp" />
-    <ClCompile Include="light\Light.cpp" />
     <ClCompile Include="main\main.cpp" />
     <ClCompile Include="main\MainWindow.cpp" />
     <ClCompile Include="model\Model.cpp" />

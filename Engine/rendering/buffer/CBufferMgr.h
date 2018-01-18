@@ -19,7 +19,7 @@ class CBufferMgr {
 		CBufferMgr(const ComPtr<ID3D11Device>& device, ComPtr<ID3D11DeviceContext> deviceContext);
 		CBufferMgr();
 
-		void BindCBuffer(BufferTypes buffer);
+		void BindCBuffer(BufferTypes m_Buffer);
 
 		template<typename DataT>
 		void UpdateData(const DataT& data);

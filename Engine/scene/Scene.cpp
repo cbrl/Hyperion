@@ -105,37 +105,45 @@ void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 
 
 void Scene::Tick(Input& input, float deltaTime) {
-	XMFLOAT3 rotationSpeeds(0.0f, 0.0f, 0.0f);
-	XMFLOAT3 moveSpeeds(0.0f, 0.0f, 0.0f);
+	XMINT3 rotationDirections(0.0f, 0.0f, 0.0f);
+	XMINT3 moveDirections(0.0f, 0.0f, 0.0f);
 
 	// Up/Down rotation
 	if (input.IsKeyPressed(Keyboard::W)) {
-		rotationSpeeds.x -= deltaTime * 0.015f;
+		rotationDirections.x -= 1;
 	}
-	else if (input.IsKeyPressed(Keyboard::S)) {
-		rotationSpeeds.x += deltaTime * 0.015f;
+	if (input.IsKeyPressed(Keyboard::S)) {
+		rotationDirections.x += 1;
 	}
 
 	// Left/Right rotation
 	if (input.IsKeyPressed(Keyboard::A)) {
-		rotationSpeeds.y -= deltaTime * 0.015f;
+		rotationDirections.y -= 1;
 	}
-	else if (input.IsKeyPressed(Keyboard::D)) {
-		rotationSpeeds.y += deltaTime * 0.015f;
+	if (input.IsKeyPressed(Keyboard::D)) {
+		rotationDirections.y += 1;
 	}
 
 	// Forward/Back movement
 	if (input.IsKeyPressed(Keyboard::Up)) {
-		moveSpeeds.x += deltaTime * 0.001f;
+		moveDirections.z += 1;
 	}
-	else if (input.IsKeyPressed(Keyboard::Down)) {
-		moveSpeeds.x -= deltaTime * 0.001f;
+	if (input.IsKeyPressed(Keyboard::Down)) {
+		moveDirections.z -= 1;
+	}
+
+	// Left/Right movement
+	if (input.IsKeyPressed(Keyboard::Left)) {
+		moveDirections.x -= 1;
+	}
+	if (input.IsKeyPressed(Keyboard::Right)) {
+		moveDirections.x += 1;
 	}
 
 	// Update camera rotation and position
-	m_Camera->Rotate(rotationSpeeds);
-	m_Camera->Move(moveSpeeds);
+	m_Camera->Rotate(rotationDirections, deltaTime);
+	m_Camera->Move(moveDirections, deltaTime);
 
 	// Update camera 
-	m_Camera->Render();
+	m_Camera->Update();
 }

@@ -52,7 +52,7 @@ bool Direct3D::Init() {
 		return false;
 	}
 
-	// Check 4X MSAA quality support for our back buffer format.
+	// Check 4X MSAA quality support for our back m_Buffer format.
 	// All Direct3D 11 capable devices support 4X MSAA for all render 
 	// target formats, so we only need to check quality support.
 
@@ -203,7 +203,7 @@ void Direct3D::OnResize(int windowWidth, int windowHeight) {
 
 
 	//----------------------------------------------------------------------------------
-	// Create the depth/stencil buffer and view.
+	// Create the depth/stencil m_Buffer and view.
 	//----------------------------------------------------------------------------------
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 

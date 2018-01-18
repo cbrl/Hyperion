@@ -5,6 +5,7 @@
 #include <wrl\client.h>
 #include <memory>
 
+#include "util\EngineUtil.h"
 #include "direct3d\Direct3D.h"
 #include "scene\Scene.h"
 #include "camera\Camera.h"

@@ -76,7 +76,7 @@ void Shader::OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const
 	ofstream fout;
 
 
-	// Get a pointer to the error message text buffer
+	// Get a pointer to the error message text m_Buffer
 	compileErrors = (char*)(errorMessage->GetBufferPointer());
 
 	// Get the length of the message

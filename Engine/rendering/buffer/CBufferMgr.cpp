@@ -22,8 +22,8 @@ void CBufferMgr::CreateBuffers(const ComPtr<ID3D11Device>& device) {
 }
 
 
-void CBufferMgr::BindCBuffer(BufferTypes buffer) {
-	switch (buffer) {
+void CBufferMgr::BindCBuffer(BufferTypes m_Buffer) {
+	switch (m_Buffer) {
 		case BufferTypes::MatrixBuffer:
 			break;
 
@@ -31,8 +31,8 @@ void CBufferMgr::BindCBuffer(BufferTypes buffer) {
 			break;
 
 		case BufferTypes::LightBuffer:
-			m_DeviceContext->VSSetConstantBuffers(MATRIX_BUFFER_SLOT, 1, m_MatrixBuffer->buffer.GetAddressOf());
-			m_DeviceContext->VSSetConstantBuffers(CAMERA_BUFFER_SLOT, 1, m_CameraBuffer->buffer.GetAddressOf());
-			m_DeviceContext->PSSetConstantBuffers(LIGHT_BUFFER_SLOT, 1, m_LightBuffer->buffer.GetAddressOf());
+			m_DeviceContext->VSSetConstantBuffers(MATRIX_BUFFER_SLOT, 1, m_MatrixBuffer->m_Buffer.GetAddressOf());
+			m_DeviceContext->VSSetConstantBuffers(CAMERA_BUFFER_SLOT, 1, m_CameraBuffer->m_Buffer.GetAddressOf());
+			m_DeviceContext->PSSetConstantBuffers(LIGHT_BUFFER_SLOT, 1, m_LightBuffer->m_Buffer.GetAddressOf());
 	}
 }

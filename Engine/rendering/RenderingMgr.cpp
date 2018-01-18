@@ -15,7 +15,7 @@ RenderingMgr::~RenderingMgr() {
 
 
 bool RenderingMgr::Init() {
-	// Create buffer manager
+	// Create m_Buffer manager
 	m_CBufferMgr = make_unique<CBufferMgr>(m_Device, m_DeviceContext);
 
 

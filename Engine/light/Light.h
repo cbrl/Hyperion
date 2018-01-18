@@ -2,28 +2,27 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include "util\EngineUtil.h"
 #include "rendering\buffer\Buffers.h"
 
 using namespace DirectX;
 
-class Light {
+struct Light {
 	public:
-		Light();
-		~Light();
+		Light()  = default;
+		~Light() = default;
 
-		void SetDirection(XMFLOAT3 direction);
-		void SetAmbientColor(XMFLOAT4 color);
-		void SetDiffuseColor(XMFLOAT4 color);
-		void SetSpecularColor(XMFLOAT4 color);
-		void SetSpecularPower(float power);
+		void SetDirection(XMFLOAT3 direction) { m_Buffer.lightDirection = direction; }
+		void SetAmbientColor(XMFLOAT4 color)  { m_Buffer.ambientColor = color; }
+		void SetDiffuseColor(XMFLOAT4 color)  { m_Buffer.diffuseColor = color; }
+		void SetSpecularColor(XMFLOAT4 color) { m_Buffer.specularColor = color; }
+		void SetSpecularPower(float power)    { m_Buffer.specularPower = power; }
 
-		LightBuffer GetBuffer();
-		XMFLOAT3    GetDirection();
-		XMFLOAT4    GetAmbientColor();
-		XMFLOAT4    GetDiffuseColor();
-		XMFLOAT4    GetSpecularColor();
-		float       GetSpecularPower();
+		LightBuffer GetBuffer()        { return m_Buffer; }
+		XMFLOAT3    GetDirection()     { return m_Buffer.lightDirection; }
+		XMFLOAT4    GetAmbientColor()  { return m_Buffer.ambientColor; }
+		XMFLOAT4    GetDiffuseColor()  { return m_Buffer.diffuseColor; }
+		XMFLOAT4    GetSpecularColor() { return m_Buffer.specularColor; }
+		float       GetSpecularPower() { return m_Buffer.specularPower; }
 
 
 	private:

@@ -131,9 +131,6 @@
     <ClCompile Include="direct3d\Direct3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="light\Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

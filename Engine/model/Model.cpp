@@ -89,7 +89,7 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 		indices.push_back(i);
 	}
 
-	// Vertex buffer description
+	// Vertex m_Buffer description
 	vertexBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth      = sizeof(VertexPositionNormalTexture) * m_VertexCount;
 	vertexBufferDesc.BindFlags      = D3D11_BIND_VERTEX_BUFFER;
@@ -102,11 +102,11 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 	vertexData.SysMemPitch      = 0;
 	vertexData.SysMemSlicePitch = 0;
 
-	// Create vertex buffer
+	// Create vertex m_Buffer
 	HR(device->CreateBuffer(&vertexBufferDesc, &vertexData, m_VertexBuffer.GetAddressOf()));
 
 
-	// Index buffer description
+	// Index m_Buffer description
 	indexBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth      = sizeof(ULONG) * m_IndexCount;
 	indexBufferDesc.BindFlags      = D3D11_BIND_INDEX_BUFFER;
@@ -119,7 +119,7 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
-	// Create index buffer
+	// Create index m_Buffer
 	HR(device->CreateBuffer(&indexBufferDesc, &indexData, m_IndexBuffer.GetAddressOf()));
 
 	return true;
@@ -132,13 +132,13 @@ void Model::RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext) {
 	stride = sizeof(VertexPositionNormalTexture);
 	offset = 0;
 
-	// Set vertex buffer to active in the input assembler so it can be rendered
+	// Set vertex m_Buffer to active in the input assembler so it can be rendered
 	deviceContext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
 
-	// Set index buffer to active in the input assembler so it can be rendered
+	// Set index m_Buffer to active in the input assembler so it can be rendered
 	deviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-	// Set type of primitive that should be rendered from this vertex buffer, in this case triangles
+	// Set type of primitive that should be rendered from this vertex m_Buffer, in this case triangles
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 

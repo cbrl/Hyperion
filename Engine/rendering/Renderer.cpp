@@ -47,7 +47,7 @@ bool Renderer::Tick(Scene& scene, float deltaTime) {
 	view       = XMMatrixTranspose(view);
 	projection = XMMatrixTranspose(projection);
 
-	// Create matrix buffer
+	// Create matrix m_Buffer
 	MatrixBuffer matrixBuffer = MatrixBuffer(world, view, projection);
 
 
