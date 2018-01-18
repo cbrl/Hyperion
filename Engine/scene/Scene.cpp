@@ -124,6 +124,14 @@ void Scene::Tick(Input& input, float deltaTime) {
 		rotationDirections.y += 1;
 	}
 
+	// Roll rotation
+	if (input.IsKeyPressed(Keyboard::Q)) {
+		rotationDirections.z -= 1;
+	}
+	if (input.IsKeyPressed(Keyboard::E)) {
+		rotationDirections.z += 1;
+	}
+
 	// Forward/Back movement
 	if (input.IsKeyPressed(Keyboard::Up)) {
 		moveDirections.z += 1;
