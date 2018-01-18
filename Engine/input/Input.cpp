@@ -16,6 +16,7 @@ void Input::Init(HWND hWnd) {
 	m_Mouse    = make_unique<Mouse>();
 
 	m_Mouse->SetWindow(hWnd);
+	m_Mouse->SetMode(Mouse::MODE_RELATIVE);
 }
 
 
@@ -34,11 +35,9 @@ void Input::Reset() {
 }
 
 
-void Input::GetMouseLocation(int &xPos, int &yPos) {
+void Input::GetMouseState(int &xPos, int &yPos) {
 	xPos = m_MouseState.x;
 	yPos = m_MouseState.y;
-
-	return;
 }
 
 

@@ -18,8 +18,8 @@ class Camera {
 		}
 		void SetRotation(XMFLOAT3 rotation) { m_Rotation = rotation; }
 
-		void Move(XMINT3 directions, float deltaTime);
-		void Rotate(XMINT3 directions, float deltaTime);
+		void Move(XMFLOAT3 units);
+		void Rotate(XMFLOAT3 units);
 
 		void Update();
 
@@ -33,8 +33,6 @@ class Camera {
 		XMFLOAT3       m_Rotation;
 		XMMATRIX       m_ViewMatrix;
 
-		const XMVECTOR m_DefaultForward;
-		const XMVECTOR m_DefaultRight;
 		XMVECTOR       m_CameraForward;
 		XMVECTOR       m_CameraRight;
 		XMVECTOR       m_CameraUp;

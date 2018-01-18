@@ -5,6 +5,7 @@
 // - DONE - Create a class for sampler states
 // - PARTIAL - Method for setting sampler state
 // - DONE - Create a material struct for models (diffuse, ambient, specular, etc values)
+// - Fix rotation text
 // - Implement material data into shaders
 // - Create frustum and implement frustum culling
 // - DONE - Create and implement input handler
@@ -47,7 +48,7 @@ bool Scene::Init() {
 	//----------------------------------------------------------------------------------
 	m_Lights.push_back(Light());
 	m_Lights[0].SetDirection(XMFLOAT3(0.0f, 0.0f, 1.0f));
-	m_Lights[0].SetAmbientColor(XMFLOAT4(0.12f, 0.12f, 0.12f, 1.0f));
+	m_Lights[0].SetAmbientColor(XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f));
 	m_Lights[0].SetDiffuseColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_Lights[0].SetSpecularColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	m_Lights[0].SetSpecularPower(32.0f);
@@ -105,52 +106,52 @@ void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 
 
 void Scene::Tick(Input& input, float deltaTime) {
-	XMINT3 rotationDirections(0.0f, 0.0f, 0.0f);
-	XMINT3 moveDirections(0.0f, 0.0f, 0.0f);
+	int mouseX, mouseY;
+	XMFLOAT3 rotationUnits(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 moveUnits(0.0f, 0.0f, 0.0f);
 
-	// Up/Down rotation
-	if (input.IsKeyPressed(Keyboard::W)) {
-		rotationDirections.x -= 1;
-	}
-	if (input.IsKeyPressed(Keyboard::S)) {
-		rotationDirections.x += 1;
-	}
+	// Get mouse state
+	input.GetMouseState(mouseX, mouseY);
 
-	// Left/Right rotation
-	if (input.IsKeyPressed(Keyboard::A)) {
-		rotationDirections.y -= 1;
-	}
-	if (input.IsKeyPressed(Keyboard::D)) {
-		rotationDirections.y += 1;
-	}
+	// Set x/y rotation with mouse data
+	rotationUnits.x = mouseY;
+	rotationUnits.y = mouseX;
 
 	// Roll rotation
 	if (input.IsKeyPressed(Keyboard::Q)) {
-		rotationDirections.z -= 1;
+		rotationUnits.z -= deltaTime;
 	}
 	if (input.IsKeyPressed(Keyboard::E)) {
-		rotationDirections.z += 1;
+		rotationUnits.z += deltaTime;
 	}
 
 	// Forward/Back movement
-	if (input.IsKeyPressed(Keyboard::Up)) {
-		moveDirections.z += 1;
+	if (input.IsKeyPressed(Keyboard::W)) {
+		moveUnits.z += deltaTime;
 	}
-	if (input.IsKeyPressed(Keyboard::Down)) {
-		moveDirections.z -= 1;
+	if (input.IsKeyPressed(Keyboard::S)) {
+		moveUnits.z -= deltaTime;
 	}
 
 	// Left/Right movement
-	if (input.IsKeyPressed(Keyboard::Left)) {
-		moveDirections.x -= 1;
+	if (input.IsKeyPressed(Keyboard::A)) {
+		moveUnits.x -= deltaTime;
 	}
-	if (input.IsKeyPressed(Keyboard::Right)) {
-		moveDirections.x += 1;
+	if (input.IsKeyPressed(Keyboard::D)) {
+		moveUnits.x += deltaTime;
+	}
+
+	// Up/Down movement
+	if (input.IsKeyPressed(Keyboard::Space)) {
+		moveUnits.y += deltaTime;
+	}
+	if (input.IsKeyPressed(Keyboard::LeftControl)) {
+		moveUnits.y -= deltaTime;
 	}
 
 	// Update camera rotation and position
-	m_Camera->Rotate(rotationDirections, deltaTime);
-	m_Camera->Move(moveDirections, deltaTime);
+	m_Camera->Rotate(rotationUnits);
+	m_Camera->Move(moveUnits);
 
 	// Update camera 
 	m_Camera->Update();

@@ -14,8 +14,6 @@ Camera::Camera() :
 	m_Pitch(0.0f),
 	m_MaxPitch(89.0f),
 
-	m_DefaultForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
-	m_DefaultRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
 	m_CameraForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
 	m_CameraRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
 	m_CameraUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))
@@ -27,35 +25,35 @@ Camera::~Camera() {
 }
 
 
-void Camera::Move(XMINT3 directions, float deltaTime) {
+void Camera::Move(XMFLOAT3 units) {
 
-	if (!(directions.x | directions.y | directions.z)) {
-		return;
-	}
+	//if (!(units.x | units.y | units.z)) {
+	//	return;
+	//}
 
-	XMVECTOR vDirections = XMVectorSet(directions.x, directions.y, directions.z, 0.0f);
+	XMVECTOR vDirections = XMVectorSet(units.x, units.y, units.z, 0.0f);
 
-	m_MoveSpeed += vDirections * deltaTime * m_MoveAccel;
+	m_MoveSpeed += vDirections * m_MoveAccel;
 }
 
 
-void Camera::Rotate(XMINT3 directions, float deltaTime) {
-	if (!(directions.x | directions.y | directions.z)) {
-		return;
-	}
+void Camera::Rotate(XMFLOAT3 units) {
+	//if (!(units.x | units.y | units.z)) {
+	//	return;
+	//}
 
 
 	// Y rotation
-	if (directions.y) {
-		XMMATRIX yRotation = XMMatrixRotationAxis(m_CameraUp, (directions.y * deltaTime * m_TurnAccel));
+	if (units.y) {
+		XMMATRIX yRotation = XMMatrixRotationAxis(m_CameraUp, (units.y * m_TurnAccel));
 		m_CameraRight = XMVector3TransformNormal(m_CameraRight, yRotation);
 		m_CameraForward = XMVector3TransformNormal(m_CameraForward, yRotation);
 	}
 
 
 	// X rotation
-	if (directions.x) {
-		float xUnits = directions.x * deltaTime * m_TurnAccel;
+	if (units.x) {
+		float xUnits = units.x * m_TurnAccel;
 		m_Pitch -= xUnits;
 		if (m_Pitch > m_MaxPitch) {
 			xUnits += m_Pitch - m_MaxPitch;
@@ -70,8 +68,8 @@ void Camera::Rotate(XMINT3 directions, float deltaTime) {
 
 
 	// Z rotation
-	if (directions.z) {
-		XMMATRIX zRotation = XMMatrixRotationAxis(m_CameraForward, (directions.z * deltaTime * m_TurnAccel));
+	if (units.z) {
+		XMMATRIX zRotation = XMMatrixRotationAxis(m_CameraForward, (units.z * m_TurnAccel));
 		m_CameraRight = XMVector3TransformNormal(m_CameraRight, zRotation);
 		m_CameraUp = XMVector3TransformNormal(m_CameraUp, zRotation);
 	}

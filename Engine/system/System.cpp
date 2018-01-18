@@ -92,7 +92,7 @@ bool System::Tick() {
 	m_Input->Tick();
 
 	// Get mouse position
-	m_Input->GetMouseLocation(mouseX, mouseY);
+	m_Input->GetMouseState(mouseX, mouseY);
 
 	// Update scene
 	m_Scene->Tick(*m_Input, deltaTime);

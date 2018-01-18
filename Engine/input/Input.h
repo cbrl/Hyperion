@@ -15,7 +15,7 @@ class Input {
 		
 		void Tick();
 		void Reset();
-		void GetMouseLocation(int &xPos, int &yPos);
+		void GetMouseState(int &xPos, int &yPos);
 		bool IsKeyPressed(Keyboard::Keys key);
 		bool IsKeyPressedTracker(Keyboard::Keys key);
 		bool IsKeyReleasedTracker(Keyboard::Keys key);

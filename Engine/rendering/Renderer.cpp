@@ -39,7 +39,7 @@ bool Renderer::Tick(Scene& scene, float deltaTime) {
 
 	rotation += (XM_PI * deltaTime) / 2500;
 	if (rotation >= (2.0f * XM_PI)) rotation = 0;
-	//world = XMMatrixRotationRollPitchYaw(rotation, rotation, 0.0f);
+	world = XMMatrixRotationRollPitchYaw(rotation, 0.0f, 0.0f);
 	
 
 	// Transpose matrices for shader
