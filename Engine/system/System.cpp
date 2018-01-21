@@ -117,7 +117,7 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		case WM_ACTIVATEAPP:
 			Keyboard::ProcessMessage(msg, wParam, lParam);
 			Mouse::ProcessMessage(msg, wParam, lParam);
-			break;
+			return 0;
 
 		// Handle window resize
 		case WM_SIZE:
@@ -157,7 +157,7 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		case WM_KEYUP:
 		case WM_SYSKEYUP:
 			Keyboard::ProcessMessage(msg, wParam, lParam);
-			break;
+			return 0;
 
 		// Send mouse events to mouse handler
 		case WM_INPUT:
@@ -173,7 +173,7 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		case WM_XBUTTONUP:
 		case WM_MOUSEHOVER:
 			Mouse::ProcessMessage(msg, wParam, lParam);
-			break;
+			return 0;
 
 		// Send other messages to default message handler
 		default:

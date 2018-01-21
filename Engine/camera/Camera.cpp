@@ -3,20 +3,28 @@
 
 
 Camera::Camera() :
+	m_EnableFreeLook(true),
+
+	m_LookAt(XMVectorZero()),
 	m_Position(XMVectorZero()),
-	m_MoveSpeed(XMVectorZero()),
-	m_MoveAccel(0.01f),
-	m_MoveDecel(0.05f),
+	m_MoveSpeed(0.0f, 0.0f, 0.0f),
+	m_MoveAccel(0.0003f),
+	m_MoveDecel(0.003f),
 	m_MaxMoveSpeed(0.015f),
 
 	m_Rotation(0.0f, 0.0f, 0.0f),
-	m_TurnAccel(0.001f),
+	m_TurnFactor(0.002f),
 	m_Pitch(0.0f),
+	m_Yaw(0.0f),
+	m_Roll(0.0f),
 	m_MaxPitch(89.0f),
 
 	m_CameraForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
 	m_CameraRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
-	m_CameraUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))
+	m_CameraUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
+	m_DefaultForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
+	m_DefaultRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+	m_DefaultUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))
 {
 }
 
@@ -25,92 +33,118 @@ Camera::~Camera() {
 }
 
 
-void Camera::Move(XMFLOAT3 units) {
+void Camera::Move(XMINT3 directions, float deltaTime) {
+	//----------------------------------------------------------------------------------
+	// X movement
+	//----------------------------------------------------------------------------------
+	m_MoveSpeed.x += directions.x * m_MoveAccel * deltaTime;
+	if (directions.x == 0) {
+		if (m_MoveSpeed.x != 0.0f) {
+			m_MoveSpeed.x -= copysign(1.0f, m_MoveSpeed.x) * m_MoveDecel * deltaTime;
+			if (abs(m_MoveSpeed.x) <= 0.001f) m_MoveSpeed.x = 0.0f;
+		}
+	}
 
-	//if (!(units.x | units.y | units.z)) {
-	//	return;
-	//}
+	//----------------------------------------------------------------------------------
+	// Y movement
+	//----------------------------------------------------------------------------------
+	m_MoveSpeed.y += directions.y * m_MoveAccel * deltaTime;
+	if (directions.y == 0) {
+		if (m_MoveSpeed.y != 0.0f) {
+			m_MoveSpeed.y -= copysign(1.0f, m_MoveSpeed.y) * m_MoveDecel * deltaTime;
+			if (abs(m_MoveSpeed.y) <= 0.001f) m_MoveSpeed.y = 0.0f;
+		}
+	}
 
-	XMVECTOR vDirections = XMVectorSet(units.x, units.y, units.z, 0.0f);
-
-	m_MoveSpeed += vDirections * m_MoveAccel;
+	//----------------------------------------------------------------------------------
+	// Z movement
+	//----------------------------------------------------------------------------------
+	m_MoveSpeed.z += directions.z * m_MoveAccel * deltaTime;
+	if (directions.z == 0) {
+		if (m_MoveSpeed.z != 0.0f) {
+			m_MoveSpeed.z -= copysign(1.0f, m_MoveSpeed.z) * m_MoveDecel * deltaTime;
+			if (abs(m_MoveSpeed.z) <= 0.001f) m_MoveSpeed.z = 0.0f;
+		}
+	}
 }
 
 
-void Camera::Rotate(XMFLOAT3 units) {
-	//if (!(units.x | units.y | units.z)) {
-	//	return;
-	//}
+void Camera::Rotate(XMINT3 directions, float deltaTime) {
+	// Pitch
+	m_Pitch += directions.x * m_TurnFactor;
 
-
-	// Y rotation
-	if (units.y) {
-		XMMATRIX yRotation = XMMatrixRotationAxis(m_CameraUp, (units.y * m_TurnAccel));
-		m_CameraRight = XMVector3TransformNormal(m_CameraRight, yRotation);
-		m_CameraForward = XMVector3TransformNormal(m_CameraForward, yRotation);
+	if (m_Pitch > XM_PI) {
+		m_Pitch = -XM_PI;
+	}
+	else if (m_Pitch < -XM_PI) {
+		m_Pitch = XM_PI;
 	}
 
 
-	// X rotation
-	if (units.x) {
-		float xUnits = units.x * m_TurnAccel;
-		m_Pitch -= xUnits;
-		if (m_Pitch > m_MaxPitch) {
-			xUnits += m_Pitch - m_MaxPitch;
-		}
-		else if (m_Pitch < -m_MaxPitch) {
-			xUnits += m_Pitch + m_MaxPitch;
-		}
-		XMMATRIX xRotation = XMMatrixRotationAxis(m_CameraRight, (xUnits));
-		m_CameraUp = XMVector3TransformNormal(m_CameraUp, xRotation);
-		m_CameraForward = XMVector3TransformNormal(m_CameraForward, xRotation);
+	// Yaw
+	m_Yaw += directions.y * m_TurnFactor;
+
+	if (m_Yaw > XM_PI) {
+		m_Yaw = -XM_PI;
+	}
+	else if (m_Yaw < -XM_PI) {
+		m_Yaw = XM_PI;
 	}
 
 
-	// Z rotation
-	if (units.z) {
-		XMMATRIX zRotation = XMMatrixRotationAxis(m_CameraForward, (units.z * m_TurnAccel));
-		m_CameraRight = XMVector3TransformNormal(m_CameraRight, zRotation);
-		m_CameraUp = XMVector3TransformNormal(m_CameraUp, zRotation);
+	// Roll
+	if (m_EnableFreeLook) {
+		m_Roll += directions.z * m_TurnFactor;
+
+		if (m_Roll > XM_PI) {
+			m_Roll = -XM_PI;
+		}
+		else if (m_Roll < -XM_PI) {
+			m_Roll = XM_PI;
+		}
 	}
 }
 
 
 void Camera::Update() {
-	// Limit move speed to max velocity
-	if (XMVectorGetX(XMVector3Length(m_MoveSpeed)) > m_MaxMoveSpeed) {
-		m_MoveSpeed = XMVector3Normalize(m_MoveSpeed) * m_MaxMoveSpeed;
+	XMVECTOR velocity = XMLoadFloat3(&m_MoveSpeed);
+
+	// Limit veloctiy to maximum
+	if (XMVectorGetX(XMVector3Length(velocity)) > m_MaxMoveSpeed) {
+		velocity = XMVector3Normalize(velocity) * m_MaxMoveSpeed;
 	}
-	
+
+	// Create rotation matrix and use it transfrom lookAt vector
+	XMMATRIX rotationMatrix = XMMatrixRotationRollPitchYaw(m_Pitch, m_Yaw, m_Roll);
+	m_LookAt = XMVector3TransformCoord(m_DefaultForward, rotationMatrix);
+	m_LookAt = XMVector3Normalize(m_LookAt);
+
+	// Update camera vectors using rotation matrix
+	if (m_EnableFreeLook) {
+		m_CameraRight   = XMVector3TransformCoord(m_DefaultRight, rotationMatrix);
+		m_CameraForward = XMVector3TransformCoord(m_DefaultForward, rotationMatrix);
+		m_CameraUp      = XMVector3TransformCoord(m_DefaultUp, rotationMatrix);
+	}
+	else {
+		XMMATRIX yRotationMatrix = XMMatrixRotationY(m_Yaw);
+		m_CameraRight   = XMVector3TransformCoord(m_DefaultRight, yRotationMatrix);
+		m_CameraForward = XMVector3TransformCoord(m_DefaultForward, yRotationMatrix);
+		m_CameraUp      = XMVector3TransformCoord(m_DefaultUp, yRotationMatrix);
+	}
+
 	// Move camera
-	m_Position = XMLoadFloat3(&m_Buffer.position);
-	m_Position += m_CameraRight * XMVectorGetX(m_MoveSpeed);
-	m_Position += m_CameraUp * XMVectorGetY(m_MoveSpeed);
-	m_Position += m_CameraForward * XMVectorGetZ(m_MoveSpeed);
+	m_Position += m_CameraRight * XMVectorGetX(velocity);
+	m_Position += m_CameraUp * XMVectorGetY(velocity);
+	m_Position += m_CameraForward * XMVectorGetZ(velocity);
 
 	// Update position buffer
 	m_Buffer.position.x = XMVectorGetX(m_Position);
 	m_Buffer.position.y = XMVectorGetY(m_Position);
 	m_Buffer.position.z = XMVectorGetZ(m_Position);
 
-	// Set the lookAt vector
-	m_LookAt = m_Position + m_CameraForward;
+	// Add the position of the camera to the target vector
+	m_LookAt += m_Position;
 
-	// Stop movement
-	m_MoveSpeed = XMVectorZero();
-	//m_MoveSpeed *= (m_MoveDecel * deltaTime);
-	//if (XMVectorGetX(XMVector3Length(m_MoveSpeed)) < 0.01f) {
-	//	m_MoveSpeed = XMVectorZero();
-	//}
-
-	// Calculate new view matrix
+	// Create the new view matrix
 	m_ViewMatrix = XMMatrixLookAtLH(m_Position, m_LookAt, m_CameraUp);
-	
-	//m_CameraRight = XMVectorSet(m_ViewMatrix.r[1].m128_f32[1], m_ViewMatrix.r[2].m128_f32[1], m_ViewMatrix.r[3].m128_f32[1], 0.0f);
-	//m_CameraUp = XMVectorSet(m_ViewMatrix.r[1].m128_f32[2], m_ViewMatrix.r[2].m128_f32[2], m_ViewMatrix.r[3].m128_f32[2], 0.0f);
-	//m_CameraForward = XMVectorSet(m_ViewMatrix.r[1].m128_f32[3], m_ViewMatrix.r[2].m128_f32[3], m_ViewMatrix.r[3].m128_f32[3], 0.0f);
-
-	float lookLengthXZ = sqrtf(powf(XMVectorGetX(m_CameraForward), 2) + powf(XMVectorGetZ(m_CameraForward), 2));
-	m_Pitch = atan2f(XMVectorGetY(m_CameraForward), lookLengthXZ);
-	m_Yaw = atan2f(XMVectorGetX(m_CameraForward), XMVectorGetZ(m_CameraForward));
 }

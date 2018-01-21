@@ -52,55 +52,52 @@ bool Renderer::Tick(Scene& scene, float deltaTime) {
 
 
 	//----------------------------------------------------------------------------------
-	// Render objects with color shader
-	//----------------------------------------------------------------------------------
-
-	// Bind shader
-	m_RenderingMgr->BindShader(ShaderTypes::ColorShader);
-
-	// Update cbuffers
-	m_RenderingMgr->UpdateData(matrixBuffer);
-	m_RenderingMgr->UpdateData(scene.m_Camera->GetBuffer());
-
 	// Render models
-	for (Model& model : scene.m_Models) {
-		if (model.GetShader() == ShaderTypes::ColorShader) {
+	//----------------------------------------------------------------------------------
+	scene.ForEach<Model>([&](Model& model) {
 
+		//----------------------------------------------------------------------------------
+		// Render objects with color shader
+		//----------------------------------------------------------------------------------
+
+		// Bind shader
+		m_RenderingMgr->BindShader(ShaderTypes::ColorShader);
+
+		// Update cbuffers
+		m_RenderingMgr->UpdateData(matrixBuffer);
+		m_RenderingMgr->UpdateData(scene.m_Camera->GetBuffer());
+
+		// Render models
+		if (model.GetShader() == ShaderTypes::ColorShader) {
 			model.RenderBuffers(m_DeviceContext);
 			m_DeviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);
 		}
-	}
 
 
-	//----------------------------------------------------------------------------------
-	// Render objects with light shader
-	//----------------------------------------------------------------------------------
-	
-	// Bind shader
-	m_RenderingMgr->BindShader(ShaderTypes::LightShader);
+		//----------------------------------------------------------------------------------
+		// Render objects with light shader
+		//----------------------------------------------------------------------------------
+		m_RenderingMgr->BindShader(ShaderTypes::LightShader);
 
-	// Update cbuffers
-	m_RenderingMgr->UpdateData(matrixBuffer);
-	m_RenderingMgr->UpdateData(scene.m_Camera->GetBuffer());
-	m_RenderingMgr->UpdateData(scene.m_Lights.front().GetBuffer());
+		m_RenderingMgr->UpdateData(matrixBuffer);
+		m_RenderingMgr->UpdateData(scene.m_Camera->GetBuffer());
+		m_RenderingMgr->UpdateData(scene.m_Lights.front().GetBuffer());
 
-	// Render models
-	for (Model& model : scene.m_Models) {
 		if (model.GetShader() == ShaderTypes::LightShader) {
 
 			model.RenderBuffers(m_DeviceContext);
 			m_DeviceContext->PSSetShaderResources(0, 1, model.GetTexture().GetAddressOf());
 			m_DeviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);
 		}
-	}
+	});
 
 
 	//----------------------------------------------------------------------------------
 	// Render text objects
 	//----------------------------------------------------------------------------------
-	for (auto& kv : scene.m_Texts) {
-		kv.second.Render();
-	}
+	scene.ForEach<Text>([](Text& text) {
+		text.Render();
+	});
 
 
 	// Present the frame

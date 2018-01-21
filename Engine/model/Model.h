@@ -21,9 +21,11 @@ class Model {
 		          ComPtr<ID3D11ShaderResourceView> texture, ShaderTypes shader);
 
 		void RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext);
-		int  GetIndexCount();
-		ShaderTypes GetShader();
-		const ComPtr<ID3D11ShaderResourceView>& GetTexture();
+
+		int         GetIndexCount() { return m_IndexCount; }
+		ShaderTypes GetShader()     { return m_Shader; }
+
+		const ComPtr<ID3D11ShaderResourceView>& GetTexture() { return m_Texture; }
 
 
 	private:

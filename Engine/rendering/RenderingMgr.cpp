@@ -40,7 +40,7 @@ void RenderingMgr::BindShader(ShaderTypes shader) {
 			break;
 
 		case ShaderTypes::TextureShader:
-			//m_ShaderMgr->BindShader(ShaderTypes::TextureShader, m_DeviceContext);
+			m_ShaderMgr->BindShader(ShaderTypes::TextureShader, m_DeviceContext);
 			m_CBufferMgr->BindCBuffer(BufferTypes::MatrixBuffer);
 			m_CBufferMgr->BindCBuffer(BufferTypes::CameraBuffer);
 			m_DeviceContext->PSSetSamplers(0, 1, m_Sampler->samplerState.GetAddressOf());

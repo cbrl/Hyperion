@@ -13,13 +13,14 @@ Model::~Model() {
 
 bool Model::Init(const ComPtr<ID3D11Device>& device, const char* modelFilename,
 				 ComPtr<ID3D11ShaderResourceView> texture, ShaderTypes shader) {
-	bool result;
 
-	result = LoadModel(modelFilename);
-	if (!result) return false;
+	if (!LoadModel(modelFilename)) {
+		return false;
+	}
 
-	result = InitBuffers(device);
-	if (!result) return false;
+	if (!InitBuffers(device)) {
+		return false;
+	}
 
 	m_Texture = texture;
 	m_Shader  = shader;
@@ -140,19 +141,4 @@ void Model::RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext) {
 
 	// Set type of primitive that should be rendered from this vertex m_Buffer, in this case triangles
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-}
-
-
-int Model::GetIndexCount() {
-	return m_IndexCount;
-}
-
-
-const ComPtr<ID3D11ShaderResourceView>& Model::GetTexture() {
-	return m_Texture;
-}
-
-
-ShaderTypes Model::GetShader() {
-	return m_Shader;
 }

@@ -13,9 +13,9 @@ Shader::~Shader() {
 bool Shader::Init(HWND hWnd, const ComPtr<ID3D11Device>& device, const WCHAR* vsFilename, const WCHAR* psFilename,
                   const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements) {
 	HRESULT result;
-	ID3D10Blob* errorMessage;
-	ID3D10Blob* vertexShaderBuffer;
-	ID3D10Blob* pixelShaderBuffer;
+	ID3D10Blob* errorMessage = {};
+	ID3D10Blob* vertexShaderBuffer = {};
+	ID3D10Blob* pixelShaderBuffer = {};
 
 	// Compile vertex shader
 	result = D3DCompileFromFile(vsFilename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VS", "vs_5_0",

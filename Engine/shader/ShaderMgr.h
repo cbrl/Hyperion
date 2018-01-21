@@ -42,6 +42,11 @@ struct ShaderMgr {
 									                         VertexPositionNormalTexture::InputElements, VertexPositionNormalTexture::InputElementCount);
 		if (!result) return false;
 
+		// Texture shader
+		result = m_Shaders.at(ShaderTypes::TextureShader).Init(hWnd, device, L"./shaders/texture/texture.vs", L"./shaders/texture/texture.ps",
+															 VertexPositionTexture::InputElements, VertexPositionTexture::InputElementCount);
+		if (!result) return false;
+
 		// etc...
 
 		return true;

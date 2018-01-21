@@ -27,7 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="shaders\color\color.vs">
       <Filter>Resource Files\Shaders\Color</Filter>
     </None>
@@ -46,6 +45,7 @@
     <None Include="shaders\texture\texture.vs">
       <Filter>Resource Files\Shaders\Texture</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

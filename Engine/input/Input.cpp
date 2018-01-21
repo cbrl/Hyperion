@@ -36,6 +36,8 @@ void Input::Reset() {
 
 
 void Input::GetMouseState(int &xPos, int &yPos) {
+	//Mouse::MODE_ABSOLUTE gives mouse position
+	//Mouse::MODE_RELATIVE gives mouse delta
 	xPos = m_MouseState.x;
 	yPos = m_MouseState.y;
 }

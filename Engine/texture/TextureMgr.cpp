@@ -63,18 +63,18 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 	size_t size = filenames.size();
 	vector<ComPtr<ID3D11Texture2D>> srcTex(size);
 
-	// Create the vector of texture SRVs
+	// Create a vector of textures
 	for(size_t i = 0; i < size; i++) {
 		HR(CreateWICTextureFromFileEx(m_Device.Get(), m_DeviceContext.Get(), filenames[i].c_str(),
 									  NULL, D3D11_USAGE_STAGING, NULL,D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
 									  (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr));
 	}
 
-	// Get the texture description
+	// Get the texture description from a texture
 	D3D11_TEXTURE2D_DESC desc = {};
 	srcTex[0].Get()->GetDesc(&desc);
 
-	// Create texture array description
+	// Create the texture array description
 	D3D11_TEXTURE2D_DESC arrayDesc = {};
 	arrayDesc.Width              = desc.Width;
 	arrayDesc.Height             = desc.Height;

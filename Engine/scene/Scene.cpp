@@ -12,7 +12,7 @@
 // - Create a model loader, and a model class that can take any vertex type
 // - Create a simple geometry generator
 // - More elegant solution for setting m_WindowWidth/Height in System/MainWindow
-// - Add const to return types that shouldn't be modified (e.g. Camera getters)
+// - Add const to return types (mainly references) that shouldn't be modified (e.g. Buffer getters)
 
 Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
 	m_hWnd(hWnd),
@@ -107,51 +107,51 @@ void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 
 void Scene::Tick(Input& input, float deltaTime) {
 	int mouseX, mouseY;
-	XMFLOAT3 rotationUnits(0.0f, 0.0f, 0.0f);
-	XMFLOAT3 moveUnits(0.0f, 0.0f, 0.0f);
+	XMINT3 rotateDirections(0, 0, 0);
+	XMINT3 moveDirections(0, 0, 0);
 
 	// Get mouse state
 	input.GetMouseState(mouseX, mouseY);
 
 	// Set x/y rotation with mouse data
-	rotationUnits.x = mouseY;
-	rotationUnits.y = mouseX;
+	rotateDirections.x = mouseY;
+	rotateDirections.y = mouseX;
 
 	// Roll rotation
 	if (input.IsKeyPressed(Keyboard::Q)) {
-		rotationUnits.z -= deltaTime;
+		rotateDirections.z -= 1;
 	}
 	if (input.IsKeyPressed(Keyboard::E)) {
-		rotationUnits.z += deltaTime;
+		rotateDirections.z += 1;
 	}
 
 	// Forward/Back movement
 	if (input.IsKeyPressed(Keyboard::W)) {
-		moveUnits.z += deltaTime;
+		moveDirections.z += 1;
 	}
 	if (input.IsKeyPressed(Keyboard::S)) {
-		moveUnits.z -= deltaTime;
+		moveDirections.z -= 1;
 	}
 
 	// Left/Right movement
 	if (input.IsKeyPressed(Keyboard::A)) {
-		moveUnits.x -= deltaTime;
+		moveDirections.x -= 1;
 	}
 	if (input.IsKeyPressed(Keyboard::D)) {
-		moveUnits.x += deltaTime;
+		moveDirections.x += 1;
 	}
 
 	// Up/Down movement
 	if (input.IsKeyPressed(Keyboard::Space)) {
-		moveUnits.y += deltaTime;
+		moveDirections.y += 1;
 	}
 	if (input.IsKeyPressed(Keyboard::LeftControl)) {
-		moveUnits.y -= deltaTime;
+		moveDirections.y -= 1;
 	}
 
 	// Update camera rotation and position
-	m_Camera->Rotate(rotationUnits);
-	m_Camera->Move(moveUnits);
+	m_Camera->Rotate(rotateDirections, deltaTime);
+	m_Camera->Move(moveDirections, deltaTime);
 
 	// Update camera 
 	m_Camera->Update();
