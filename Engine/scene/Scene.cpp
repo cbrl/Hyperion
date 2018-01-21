@@ -72,17 +72,17 @@ bool Scene::Init() {
 	m_Texts.try_emplace(L"FPS", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
 	m_Texts.at(L"FPS").SetPosition(XMFLOAT2(10, 10));
 
-	m_Texts.try_emplace(L"Mouse X", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
-	m_Texts.at(L"Mouse X").SetPosition(XMFLOAT2(10, 30));
-
-	m_Texts.try_emplace(L"Mouse Y", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
-	m_Texts.at(L"Mouse Y").SetPosition(XMFLOAT2(10, 50));
+	m_Texts.try_emplace(L"Mouse", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
+	m_Texts.at(L"Mouse").SetPosition(XMFLOAT2(10, 40));
 
 	m_Texts.try_emplace(L"Position", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
-	m_Texts.at(L"Position").SetPosition(XMFLOAT2(10, 100));
+	m_Texts.at(L"Position").SetPosition(XMFLOAT2(10, 110));
 	
 	m_Texts.try_emplace(L"Rotation", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
 	m_Texts.at(L"Rotation").SetPosition(XMFLOAT2(10, 200));
+
+	m_Texts.try_emplace(L"Velocity", m_Device, m_DeviceContext, L"./data/courier-12.spritefont");
+	m_Texts.at(L"Velocity").SetPosition(XMFLOAT2(10, 300));
 
 	return true;
 }
@@ -92,8 +92,9 @@ void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 	// FPS, CPU usage, memory usage, mouse position, etc...
 
 	m_Texts.at(L"FPS").SetText(L"FPS: " + to_wstring(FPS));
-	m_Texts.at(L"Mouse X").SetText(L"Mouse X: " + to_wstring(mouseX));
-	m_Texts.at(L"Mouse Y").SetText(L"Mouse Y: " + to_wstring(mouseY));
+
+	m_Texts.at(L"Mouse").SetText(L"Mouse \nX: " + to_wstring(mouseX)
+	                             + L"\nY: " + to_wstring(mouseY));
 
 	m_Texts.at(L"Position").SetText(L"Position \nX: " + to_wstring(m_Camera->GetPosition().x)
 	                                + L"\nY: " + to_wstring(m_Camera->GetPosition().y)
@@ -102,57 +103,65 @@ void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 	m_Texts.at(L"Rotation").SetText(L"Rotation \nX: " + to_wstring(m_Camera->GetRotation().x)
 									+ L"\nY: " + to_wstring(m_Camera->GetRotation().y)
 									+ L"\nZ: " + to_wstring(m_Camera->GetRotation().z));
+
+	m_Texts.at(L"Velocity").SetText(L"Velocity \nX: " + to_wstring(m_Camera->GetVelocity().x)
+	                                + L"\nY: " + to_wstring(m_Camera->GetVelocity().y)
+								    + L"\nZ: " + to_wstring(m_Camera->GetVelocity().z));
 }
 
 
 void Scene::Tick(Input& input, float deltaTime) {
 	int mouseX, mouseY;
-	XMINT3 rotateDirections(0, 0, 0);
-	XMINT3 moveDirections(0, 0, 0);
+	XMFLOAT3 rotateUnits(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 moveUnits(0.0f, 0.0f, 0.0f);
 
 	// Get mouse state
 	input.GetMouseState(mouseX, mouseY);
 
 	// Set x/y rotation with mouse data
-	rotateDirections.x = mouseY;
-	rotateDirections.y = mouseX;
+	rotateUnits.x = mouseY;
+	rotateUnits.y = mouseX;
 
 	// Roll rotation
 	if (input.IsKeyPressed(Keyboard::Q)) {
-		rotateDirections.z -= 1;
+		rotateUnits.z -= deltaTime;
 	}
-	if (input.IsKeyPressed(Keyboard::E)) {
-		rotateDirections.z += 1;
+	else if (input.IsKeyPressed(Keyboard::E)) {
+		rotateUnits.z += deltaTime;
 	}
 
 	// Forward/Back movement
 	if (input.IsKeyPressed(Keyboard::W)) {
-		moveDirections.z += 1;
+		moveUnits.z += deltaTime;
 	}
-	if (input.IsKeyPressed(Keyboard::S)) {
-		moveDirections.z -= 1;
+	else if (input.IsKeyPressed(Keyboard::S)) {
+		moveUnits.z -= deltaTime;
 	}
 
 	// Left/Right movement
 	if (input.IsKeyPressed(Keyboard::A)) {
-		moveDirections.x -= 1;
+		moveUnits.x -= deltaTime;
 	}
-	if (input.IsKeyPressed(Keyboard::D)) {
-		moveDirections.x += 1;
+	else if (input.IsKeyPressed(Keyboard::D)) {
+		moveUnits.x += deltaTime;
 	}
 
 	// Up/Down movement
 	if (input.IsKeyPressed(Keyboard::Space)) {
-		moveDirections.y += 1;
+		moveUnits.y += deltaTime;
 	}
-	if (input.IsKeyPressed(Keyboard::LeftControl)) {
-		moveDirections.y -= 1;
+	else if (input.IsKeyPressed(Keyboard::LeftControl)) {
+		moveUnits.y -= deltaTime;
 	}
 
 	// Update camera rotation and position
-	m_Camera->Rotate(rotateDirections, deltaTime);
-	m_Camera->Move(moveDirections, deltaTime);
+	if (moveUnits.x || moveUnits.y || moveUnits.z) {
+		m_Camera->Move(moveUnits);
+	}
+	if (rotateUnits.x || rotateUnits.y || rotateUnits.z) {
+		m_Camera->Rotate(rotateUnits);
+	}
 
 	// Update camera 
-	m_Camera->Update();
+	m_Camera->Update(deltaTime);
 }

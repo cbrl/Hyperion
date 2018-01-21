@@ -14,22 +14,26 @@ class Camera {
 
 		void SetPosition(XMFLOAT3 position) { 
 			m_Buffer.position = position; 
-			m_Position = XMVectorSet(position.x, position.y, position.z, 0.0f);
+			m_Position        = XMVectorSet(position.x, position.y, position.z, 0.0f);
 		}
-		void SetRotation(XMFLOAT3 rotation) { m_Rotation = rotation; }
+		void SetRotation(XMFLOAT3 rotation) {
+			m_Pitch = rotation.x;
+			m_Yaw   = rotation.y;
+			m_Roll  = rotation.z;
+		}
 
-		void Move(XMINT3 directions, float deltaTime);
-		void Rotate(XMINT3 directions, float deltaTime);
-		void Update();
+		void Move(XMFLOAT3 units);
+		void Rotate(XMFLOAT3 units);
+		void Update(float deltaTime);
 
 		CameraBuffer GetBuffer()     { return m_Buffer; }
+		XMMATRIX     GetViewMatrix() { return m_ViewMatrix; }
 		XMFLOAT3     GetPosition()   { return m_Buffer.position; }
 		XMFLOAT3     GetRotation()   { return XMFLOAT3(XMConvertToDegrees(m_Pitch), XMConvertToDegrees(m_Yaw), XMConvertToDegrees(m_Roll)); }
-		XMMATRIX     GetViewMatrix() { return m_ViewMatrix; }
+		XMFLOAT3     GetVelocity()   { return m_Velocity; }
 
 	private:
 		CameraBuffer m_Buffer;
-		XMFLOAT3     m_Rotation;
 		XMMATRIX     m_ViewMatrix;
 
 		const XMVECTOR   m_DefaultForward;
@@ -42,18 +46,19 @@ class Camera {
 		XMVECTOR    m_LookAt;
 		XMVECTOR    m_Position;
 
-		XMFLOAT3    m_MoveSpeed;
+		XMFLOAT3    m_MoveUnits;
+		XMFLOAT3    m_Velocity;
 		const float m_MoveAccel;
 		const float m_MoveDecel;
-		const float m_MaxMoveSpeed;
+		const float m_MaxVelocity;
 
 		float       m_Pitch;
 		float       m_Yaw;
 		float       m_Roll;
-		float       m_TurnSpeed;
 		const float m_MaxPitch;
 		const float m_TurnFactor;
 
 		bool m_EnableFreeLook;
+		bool m_IsMoving;
 };
 
