@@ -15,10 +15,10 @@ class Input {
 		
 		void Tick();
 		void Reset();
-		void GetMouseState(int &xPos, int &yPos);
+		void GetMouseDelta(int &xPos, int &yPos);
+		bool IsKeyDown(Keyboard::Keys key);
 		bool IsKeyPressed(Keyboard::Keys key);
-		bool IsKeyPressedTracker(Keyboard::Keys key);
-		bool IsKeyReleasedTracker(Keyboard::Keys key);
+		bool IsKeyReleased(Keyboard::Keys key);
 
 
 	private:
@@ -26,10 +26,12 @@ class Input {
 
 
 	private:
-		unique_ptr<Keyboard> m_Keyboard;
-		unique_ptr<Mouse>    m_Mouse;
+		unique_ptr<Keyboard> keyboard;
+		unique_ptr<Mouse>    mouse;
 
-		Keyboard::KeyboardStateTracker m_Tracker;
-		Keyboard::State                m_KeyboardState;
-		Mouse::State                   m_MouseState;
+		Keyboard::KeyboardStateTracker keyboardTracker;
+		Keyboard::State                keyboardState;
+		Mouse::ButtonStateTracker      buttonTracker;
+		Mouse::State                   mouseState;
+		Mouse::State                   lastMouseState;
 };

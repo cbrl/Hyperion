@@ -38,27 +38,28 @@ class Direct3D {
 
 
 	private:
-		ComPtr<ID3D11Device>           m_Device;
-		ComPtr<ID3D11DeviceContext>    m_DeviceContext;
-		ComPtr<IDXGISwapChain>         m_SwapChain;
-		ComPtr<ID3D11Texture2D>        m_DepthStencilBuffer;
-		ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
-		ComPtr<ID3D11RenderTargetView> m_RenderTargetView;
-		D3D11_VIEWPORT                 m_WindowViewport;
-		D3D_DRIVER_TYPE                m_DriverType;
+		ComPtr<ID3D11Device>           device;
+		ComPtr<ID3D11DeviceContext>    deviceContext;
+		ComPtr<ID3D11Debug>            debug;
+		ComPtr<IDXGISwapChain>         swapChain;
+		ComPtr<ID3D11Texture2D>        depthStencilBuffer;
+		ComPtr<ID3D11DepthStencilView> depthStencilView;
+		ComPtr<ID3D11RenderTargetView> renderTargetView;
+		D3D11_VIEWPORT                 windowViewport;
+		D3D_DRIVER_TYPE                driverType;
 
-		XMMATRIX m_WorldMatrix;
-		XMMATRIX m_ProjectionMatrix;
-		XMMATRIX m_OrthoMatrix;
+		XMMATRIX worldMatrix;
+		XMMATRIX projectionMatrix;
+		XMMATRIX orthoMatrix;
 
-		HWND m_hWnd;
-		int  m_WindowWidth;
-		int  m_WindowHeight;
-		bool m_EnableVSync;
-		bool m_EnableFullscreen;
-		bool m_Enable4xMSAA;
-		UINT m_4xMSAAQuality;
-		UINT m_Numerator;
-		UINT m_Denominator;
+		HWND hWnd;
+		int  windowWidth;
+		int  windowHeight;
+		bool enableVSync;
+		bool enableFullscreen;
+		bool enable4xMSAA;
+		UINT MSAA4xQuality;
+		UINT numerator;
+		UINT denominator;
 };
 

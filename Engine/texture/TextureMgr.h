@@ -34,7 +34,7 @@ class TextureMgr {
 		map<vector<wstring>, ComPtr<ID3D11ShaderResourceView>> m_TextureMap;
 		map<UINT, ComPtr<ID3D11ShaderResourceView>> m_SimpleTextureMap;
 
-		ComPtr<ID3D11Device>        m_Device;
-		ComPtr<ID3D11DeviceContext> m_DeviceContext;
+		ComPtr<ID3D11Device>        device;
+		ComPtr<ID3D11DeviceContext> deviceContext;
 };
 

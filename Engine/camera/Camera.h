@@ -12,53 +12,53 @@ class Camera {
 		Camera();
 		~Camera();
 
-		void SetPosition(XMFLOAT3 position) { 
-			m_Buffer.position = position; 
-			m_Position        = XMVectorSet(position.x, position.y, position.z, 0.0f);
+		void SetPosition(XMFLOAT3 newPosition) { 
+			buffer.position = newPosition;
+			position        = XMVectorSet(newPosition.x, newPosition.y, newPosition.z, 0.0f);
 		}
 		void SetRotation(XMFLOAT3 rotation) {
-			m_Pitch = rotation.x;
-			m_Yaw   = rotation.y;
-			m_Roll  = rotation.z;
+			pitch = rotation.x;
+			yaw   = rotation.y;
+			roll  = rotation.z;
 		}
 
 		void Move(XMFLOAT3 units);
 		void Rotate(XMFLOAT3 units);
 		void Update(float deltaTime);
 
-		CameraBuffer GetBuffer()     { return m_Buffer; }
-		XMMATRIX     GetViewMatrix() { return m_ViewMatrix; }
-		XMFLOAT3     GetPosition()   { return m_Buffer.position; }
-		XMFLOAT3     GetRotation()   { return XMFLOAT3(XMConvertToDegrees(m_Pitch), XMConvertToDegrees(m_Yaw), XMConvertToDegrees(m_Roll)); }
-		XMFLOAT3     GetVelocity()   { return m_Velocity; }
+		CameraBuffer GetBuffer()     { return buffer; }
+		XMMATRIX     GetViewMatrix() { return viewMatrix; }
+		XMFLOAT3     GetPosition()   { return buffer.position; }
+		XMFLOAT3     GetRotation()   { return XMFLOAT3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
+		XMFLOAT3     GetVelocity()   { return velocity; }
 
 	private:
-		CameraBuffer m_Buffer;
-		XMMATRIX     m_ViewMatrix;
+		CameraBuffer buffer;
+		XMMATRIX     viewMatrix;
 
-		const XMVECTOR   m_DefaultForward;
-		const XMVECTOR   m_DefaultRight;
-		const XMVECTOR   m_DefaultUp;
+		const XMVECTOR   defaultForward;
+		const XMVECTOR   defaultRight;
+		const XMVECTOR   defaultUp;
 
-		XMVECTOR    m_CameraForward;
-		XMVECTOR    m_CameraRight;
-		XMVECTOR    m_CameraUp;
-		XMVECTOR    m_LookAt;
-		XMVECTOR    m_Position;
+		XMVECTOR    cameraForward;
+		XMVECTOR    cameraRight;
+		XMVECTOR    cameraUp;
+		XMVECTOR    lookAt;
+		XMVECTOR    position;
 
-		XMFLOAT3    m_MoveUnits;
-		XMFLOAT3    m_Velocity;
-		const float m_MoveAccel;
-		const float m_MoveDecel;
-		const float m_MaxVelocity;
+		XMFLOAT3    moveUnits;
+		XMFLOAT3    velocity;
+		const float moveAccel;
+		const float moveDecel;
+		const float maxVelocity;
 
-		float       m_Pitch;
-		float       m_Yaw;
-		float       m_Roll;
-		const float m_MaxPitch;
-		const float m_TurnFactor;
+		float       pitch;
+		float       yaw;
+		float       roll;
+		const float maxPitch;
+		const float turnFactor;
 
-		bool m_EnableFreeLook;
-		bool m_IsMoving;
+		bool enableFreeLook;
+		bool isMoving;
 };
 

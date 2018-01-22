@@ -8,13 +8,13 @@ using Microsoft::WRL::ComPtr;
 
 class Sampler {
 	public:
-		Sampler(const ComPtr<ID3D11Device>& device) {
+		Sampler(ID3D11Device* device) {
 			CreateSampler(device);
 		}
 		~Sampler() = default;
 
 	private:
-		void CreateSampler(const ComPtr<ID3D11Device>& device) {
+		void CreateSampler(ID3D11Device* device) {
 			D3D11_SAMPLER_DESC samplerDesc;
 
 			// Create texture sampler description

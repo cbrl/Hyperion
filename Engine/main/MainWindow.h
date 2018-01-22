@@ -19,11 +19,11 @@ class MainWindow {
 
 
 	public:
-		HINSTANCE m_hInstance;
-		HWND      m_hWnd;
-		LPCWSTR   m_AppName;
-		int       m_WindowWidth;
-		int       m_WindowHeight;
+		HINSTANCE hInstance;
+		HWND      hWnd;
+		LPCWSTR   appName;
+		int       windowWidth;
+		int       windowHeight;
 };
 
 static MainWindow *handle = nullptr;

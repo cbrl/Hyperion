@@ -17,15 +17,15 @@ class Model {
 		Model();
 		~Model();
 		
-		bool Init(const ComPtr<ID3D11Device>& device, const char* modelFilename,
-		          ComPtr<ID3D11ShaderResourceView> texture, ShaderTypes shader);
+		bool Init(ID3D11Device* device, const char* modelFilename,
+		          ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType);
 
 		void RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext);
 
-		int         GetIndexCount() { return m_IndexCount; }
-		ShaderTypes GetShader()     { return m_Shader; }
+		int         GetIndexCount() { return indexCount; }
+		ShaderTypes GetShader()     { return shader; }
 
-		const ComPtr<ID3D11ShaderResourceView>& GetTexture() { return m_Texture; }
+		const ComPtr<ID3D11ShaderResourceView>& GetTexture() { return texture; }
 
 
 	private:
@@ -48,14 +48,14 @@ class Model {
 
 
 	private:
-		int               m_VertexCount;
-		int               m_IndexCount;
-		vector<ModelData> m_ModelData;
+		int               vertexCount;
+		int               indexCount;
+		vector<ModelData> modelData;
 
-		ComPtr<ID3D11Buffer>             m_VertexBuffer;
-		ComPtr<ID3D11Buffer>             m_IndexBuffer;
-		ComPtr<ID3D11ShaderResourceView> m_Texture;
-		Material                         m_Material;
-		ShaderTypes                      m_Shader;
+		ComPtr<ID3D11Buffer>             vertexBuffer;
+		ComPtr<ID3D11Buffer>             indexBuffer;
+		ComPtr<ID3D11ShaderResourceView> texture;
+		Material                         material;
+		ShaderTypes                      shader;
 };
 

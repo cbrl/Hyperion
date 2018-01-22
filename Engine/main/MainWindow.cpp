@@ -18,14 +18,14 @@ MainWindow::~MainWindow() {
 
 
 bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
-	m_AppName = name;
-	m_WindowHeight = width;
-	m_WindowWidth = height;
+	appName = name;
+	windowHeight = width;
+	windowWidth = height;
 
-	int xPos = (GetSystemMetrics(SM_CXSCREEN) - m_WindowWidth) / 2;
-	int	yPos = (GetSystemMetrics(SM_CYSCREEN) - m_WindowHeight) / 2;
+	int xPos = (GetSystemMetrics(SM_CXSCREEN) - windowWidth) / 2;
+	int	yPos = (GetSystemMetrics(SM_CYSCREEN) - windowHeight) / 2;
 
-	m_hInstance = GetModuleHandle(NULL);
+	hInstance = GetModuleHandle(NULL);
 
 
 	//----------------------------------------------------------------------------------
@@ -37,13 +37,13 @@ bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
 	wc.lpfnWndProc = WndProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hInstance = m_hInstance;
+	wc.hInstance = hInstance;
 	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
 	wc.hIconSm = wc.hIcon;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wc.lpszMenuName = NULL;
-	wc.lpszClassName = m_AppName;
+	wc.lpszClassName = appName;
 	wc.cbSize = sizeof(WNDCLASSEX);
 
 
@@ -54,17 +54,17 @@ bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
 	}
 
 	// Create window and store window handle
-	m_hWnd = CreateWindowEx(WS_EX_APPWINDOW, m_AppName, m_AppName, WS_OVERLAPPEDWINDOW,
-							xPos, yPos, m_WindowWidth, m_WindowHeight, NULL, NULL, m_hInstance, NULL);
-	if (!m_hWnd) {
+	hWnd = CreateWindowEx(WS_EX_APPWINDOW, appName, appName, WS_OVERLAPPEDWINDOW,
+							xPos, yPos, windowWidth, windowHeight, NULL, NULL, hInstance, NULL);
+	if (!hWnd) {
 		OutputDebugString(L"Failed to create main window\n");
 		return false;
 	}
 
 	// Show window and set focus
-	ShowWindow(m_hWnd, SW_SHOW);
-	SetForegroundWindow(m_hWnd);
-	SetFocus(m_hWnd);
+	ShowWindow(hWnd, SW_SHOW);
+	SetForegroundWindow(hWnd);
+	SetFocus(hWnd);
 
 	return true;
 }

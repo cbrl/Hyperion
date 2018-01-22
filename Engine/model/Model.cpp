@@ -2,8 +2,7 @@
 #include "Model.h"
 
 
-Model::Model() : m_VertexBuffer(nullptr){
-
+Model::Model() {
 }
 
 
@@ -11,8 +10,8 @@ Model::~Model() {
 }
 
 
-bool Model::Init(const ComPtr<ID3D11Device>& device, const char* modelFilename,
-				 ComPtr<ID3D11ShaderResourceView> texture, ShaderTypes shader) {
+bool Model::Init(ID3D11Device* device, const char* modelFilename,
+				 ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType) {
 
 	if (!LoadModel(modelFilename)) {
 		return false;
@@ -22,8 +21,8 @@ bool Model::Init(const ComPtr<ID3D11Device>& device, const char* modelFilename,
 		return false;
 	}
 
-	m_Texture = texture;
-	m_Shader  = shader;
+	texture = modelTexture;
+	shader  = shaderType;
 
 	return true;
 }
@@ -44,8 +43,8 @@ bool Model::LoadModel(const char* filename) {
 	}
 
 	// Read vertex count, copy value to index count
-	file >> m_VertexCount;
-	m_IndexCount = m_VertexCount;
+	file >> vertexCount;
+	indexCount = vertexCount;
 
 	// Read up to vertex data
 	file.get(ch);
@@ -56,12 +55,12 @@ bool Model::LoadModel(const char* filename) {
 	file.get(ch);
 
 	// Store vertex data
-	for (int i = 0; i < m_VertexCount; i++) {
+	for (int i = 0; i < vertexCount; i++) {
 		file >> temp.x >> temp.y >> temp.z;
 		file >> temp.tu >> temp.tv;
 		file >> temp.nx >> temp.ny >> temp.nz;
 
-		m_ModelData.push_back(temp);
+		modelData.push_back(temp);
 	}
 	
 	file.close();
@@ -80,19 +79,19 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 
 
 	// Fill vertex and index vector data
-	for (int i = 0; i < m_VertexCount; i++) {
-		temp.position           = XMFLOAT3(m_ModelData[i].x, m_ModelData[i].y, m_ModelData[i].z);
-		temp.textureCoordinate  = XMFLOAT2(m_ModelData[i].tu, m_ModelData[i].tv);
-		temp.normal             = XMFLOAT3(m_ModelData[i].nx, m_ModelData[i].ny, m_ModelData[i].nz);
-		//temp.color = XMFLOAT4((float)i / m_VertexCount, 1.0f - ((float)i / m_VertexCount), 1.0f, 1.0f);
+	for (int i = 0; i < vertexCount; i++) {
+		temp.position           = XMFLOAT3(modelData[i].x, modelData[i].y, modelData[i].z);
+		temp.textureCoordinate  = XMFLOAT2(modelData[i].tu, modelData[i].tv);
+		temp.normal             = XMFLOAT3(modelData[i].nx, modelData[i].ny, modelData[i].nz);
+		//temp.color = XMFLOAT4((float)i / vertexCount, 1.0f - ((float)i / vertexCount), 1.0f, 1.0f);
 
 		vertices.push_back(temp);
 		indices.push_back(i);
 	}
 
-	// Vertex m_Buffer description
+	// Vertex buffer description
 	vertexBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth      = sizeof(VertexPositionNormalTexture) * m_VertexCount;
+	vertexBufferDesc.ByteWidth      = sizeof(VertexPositionNormalTexture) * vertexCount;
 	vertexBufferDesc.BindFlags      = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags      = 0;
@@ -103,13 +102,13 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 	vertexData.SysMemPitch      = 0;
 	vertexData.SysMemSlicePitch = 0;
 
-	// Create vertex m_Buffer
-	HR(device->CreateBuffer(&vertexBufferDesc, &vertexData, m_VertexBuffer.GetAddressOf()));
+	// Create vertex buffer
+	HR(device->CreateBuffer(&vertexBufferDesc, &vertexData, vertexBuffer.GetAddressOf()));
 
 
-	// Index m_Buffer description
+	// Index buffer description
 	indexBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth      = sizeof(ULONG) * m_IndexCount;
+	indexBufferDesc.ByteWidth      = sizeof(ULONG) * indexCount;
 	indexBufferDesc.BindFlags      = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags      = 0;
@@ -120,8 +119,8 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
-	// Create index m_Buffer
-	HR(device->CreateBuffer(&indexBufferDesc, &indexData, m_IndexBuffer.GetAddressOf()));
+	// Create index buffer
+	HR(device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.GetAddressOf()));
 
 	return true;
 }
@@ -133,12 +132,12 @@ void Model::RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext) {
 	stride = sizeof(VertexPositionNormalTexture);
 	offset = 0;
 
-	// Set vertex m_Buffer to active in the input assembler so it can be rendered
-	deviceContext->IASetVertexBuffers(0, 1, m_VertexBuffer.GetAddressOf(), &stride, &offset);
+	// Set vertex buffer to active in the input assembler so it can be rendered
+	deviceContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
 
-	// Set index m_Buffer to active in the input assembler so it can be rendered
-	deviceContext->IASetIndexBuffer(m_IndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	// Set index buffer to active in the input assembler so it can be rendered
+	deviceContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 
-	// Set type of primitive that should be rendered from this vertex m_Buffer, in this case triangles
+	// Set type of primitive that should be rendered from this vertex buffer, in this case triangles
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

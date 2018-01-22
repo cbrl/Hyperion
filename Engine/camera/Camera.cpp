@@ -3,27 +3,27 @@
 
 
 Camera::Camera() :
-	m_EnableFreeLook(true),
+	enableFreeLook(true),
 
-	m_LookAt(XMVectorZero()),
-	m_Position(XMVectorZero()),
-	m_Velocity(0.0f, 0.0f, 0.0f),
-	m_MoveAccel(0.0001f),
-	m_MoveDecel(0.0001f),
-	m_MaxVelocity(0.02f),
+	lookAt(XMVectorZero()),
+	position(XMVectorZero()),
+	velocity(0.0f, 0.0f, 0.0f),
+	moveAccel(0.0001f),
+	moveDecel(0.0001f),
+	maxVelocity(0.02f),
 
-	m_TurnFactor(0.002f),
-	m_Pitch(0.0f),
-	m_Yaw(0.0f),
-	m_Roll(0.0f),
-	m_MaxPitch(XMConvertToRadians(89.0f)),
+	turnFactor(0.002f),
+	pitch(0.0f),
+	yaw(0.0f),
+	roll(0.0f),
+	maxPitch(XMConvertToRadians(89.0f)),
 
-	m_CameraForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
-	m_CameraRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
-	m_CameraUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
-	m_DefaultForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
-	m_DefaultRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
-	m_DefaultUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))
+	cameraForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
+	cameraRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+	cameraUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
+	defaultForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
+	defaultRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
+	defaultUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))
 {
 }
 
@@ -34,40 +34,40 @@ Camera::~Camera() {
 
 void Camera::Move(XMFLOAT3 units) {
 	// IsMoving determines if the camera will decelerate when Update is called
-	m_IsMoving = true;
+	isMoving = true;
 
 	//----------------------------------------------------------------------------------
 	// X movement
 	//----------------------------------------------------------------------------------
 	// If the movement is in the same direction as the camera is currently moving,
 	// then add to the velocity. Otherwise, reset the velocity using the new value.
-	if (copysign(1.0f, units.x) == copysign(1.0f, m_Velocity.x)) {
-		m_Velocity.x += units.x * m_MoveAccel;
+	if (copysign(1.0f, units.x) == copysign(1.0f, velocity.x)) {
+		velocity.x += units.x * moveAccel;
 	}
 	else {
-		m_Velocity.x = units.x * m_MoveAccel;
+		velocity.x = units.x * moveAccel;
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Y movement
 	//----------------------------------------------------------------------------------
-	if (copysign(1.0f, units.y) == copysign(1.0f, m_Velocity.y)) {
-		m_Velocity.y += units.y * m_MoveAccel;
+	if (copysign(1.0f, units.y) == copysign(1.0f, velocity.y)) {
+		velocity.y += units.y * moveAccel;
 	}
 	else {
-		m_Velocity.y = units.y * m_MoveAccel;
+		velocity.y = units.y * moveAccel;
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Z movement
 	//----------------------------------------------------------------------------------
-	if (copysign(1.0f, units.z) == copysign(1.0f, m_Velocity.z)) {
-		m_Velocity.z += units.z * m_MoveAccel;
+	if (copysign(1.0f, units.z) == copysign(1.0f, velocity.z)) {
+		velocity.z += units.z * moveAccel;
 	}
 	else {
-		m_Velocity.z = units.z * m_MoveAccel;
+		velocity.z = units.z * moveAccel;
 	}
 }
 
@@ -77,24 +77,24 @@ void Camera::Rotate(XMFLOAT3 units) {
 	// X rotation (Pitch)
 	//----------------------------------------------------------------------------------
 	if (units.x) {
-		float xUnits = units.x * m_TurnFactor;
+		float xUnits = units.x * turnFactor;
 
-		if (!m_EnableFreeLook) {
-			m_Pitch -= xUnits;
-			if (m_Pitch > m_MaxPitch) {
-				xUnits += m_Pitch - m_MaxPitch;
+		if (!enableFreeLook) {
+			pitch -= xUnits;
+			if (pitch > maxPitch) {
+				xUnits += pitch - maxPitch;
 			}
-			else if (m_Pitch < -m_MaxPitch) {
-				xUnits += m_Pitch + m_MaxPitch;
+			else if (pitch < -maxPitch) {
+				xUnits += pitch + maxPitch;
 			}
 		}
 
-		XMMATRIX xRotation = XMMatrixRotationAxis(m_CameraRight, (xUnits));
+		XMMATRIX xRotation = XMMatrixRotationAxis(cameraRight, (xUnits));
 
-		if (m_EnableFreeLook) {
-			m_CameraUp = XMVector3TransformNormal(m_CameraUp, xRotation);
+		if (enableFreeLook) {
+			cameraUp = XMVector3TransformNormal(cameraUp, xRotation);
 		}
-		m_CameraForward = XMVector3TransformNormal(m_CameraForward, xRotation);
+		cameraForward = XMVector3TransformNormal(cameraForward, xRotation);
 	}
 
 
@@ -102,99 +102,99 @@ void Camera::Rotate(XMFLOAT3 units) {
 	// Y rotation (Yaw)
 	//----------------------------------------------------------------------------------
 	if (units.y) {
-		XMMATRIX yRotation = XMMatrixRotationAxis(m_CameraUp, (units.y * m_TurnFactor));
-		m_CameraRight = XMVector3TransformNormal(m_CameraRight, yRotation);
-		m_CameraForward = XMVector3TransformNormal(m_CameraForward, yRotation);
+		XMMATRIX yRotation = XMMatrixRotationAxis(cameraUp, (units.y * turnFactor));
+		cameraRight = XMVector3TransformNormal(cameraRight, yRotation);
+		cameraForward = XMVector3TransformNormal(cameraForward, yRotation);
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Z rotation (Roll)
 	//----------------------------------------------------------------------------------
-	if (units.z && m_EnableFreeLook) {
-		XMMATRIX zRotation = XMMatrixRotationAxis(m_CameraForward, (units.z * m_TurnFactor));
-		m_CameraRight = XMVector3TransformNormal(m_CameraRight, zRotation);
-		m_CameraUp = XMVector3TransformNormal(m_CameraUp, zRotation);
+	if (units.z && enableFreeLook) {
+		XMMATRIX zRotation = XMMatrixRotationAxis(cameraForward, (units.z * turnFactor));
+		cameraRight = XMVector3TransformNormal(cameraRight, zRotation);
+		cameraUp = XMVector3TransformNormal(cameraUp, zRotation);
 	}
 }
 
 
 void Camera::Update(float deltaTime) {
-	XMVECTOR velocityVec = XMLoadFloat3(&m_Velocity);
+	XMVECTOR velocityVec = XMLoadFloat3(&velocity);
 
 	// Limit veloctiy to maximum
-	if (XMVectorGetX(XMVector3Length(velocityVec)) > m_MaxVelocity) {
+	if (XMVectorGetX(XMVector3Length(velocityVec)) > maxVelocity) {
 
-		velocityVec = XMVector3Normalize(velocityVec) * m_MaxVelocity;
-		XMStoreFloat3(&m_Velocity, velocityVec);
+		velocityVec = XMVector3Normalize(velocityVec) * maxVelocity;
+		XMStoreFloat3(&velocity, velocityVec);
 	}
 
 
 	// Move camera
-	m_Position += m_CameraRight   * m_Velocity.x * deltaTime;
-	m_Position += m_CameraUp      * m_Velocity.y * deltaTime;
-	m_Position += m_CameraForward * m_Velocity.z * deltaTime;
+	position += cameraRight   * velocity.x * deltaTime;
+	position += cameraUp      * velocity.y * deltaTime;
+	position += cameraForward * velocity.z * deltaTime;
 
 
 	// Update position buffer
-	m_Buffer.position.x = XMVectorGetX(m_Position);
-	m_Buffer.position.y = XMVectorGetY(m_Position);
-	m_Buffer.position.z = XMVectorGetZ(m_Position);
+	buffer.position.x = XMVectorGetX(position);
+	buffer.position.y = XMVectorGetY(position);
+	buffer.position.z = XMVectorGetZ(position);
 
 
 	// Add the position and forward vectors of the camera to the target vector
-	m_LookAt = m_Position + m_CameraForward;
+	lookAt = position + cameraForward;
 
 
 	// Create the new view matrix
-	m_ViewMatrix = XMMatrixLookAtLH(m_Position, m_LookAt, m_CameraUp);
+	viewMatrix = XMMatrixLookAtLH(position, lookAt, cameraUp);
 
 
 	// Calculate the new pitch, yaw, and roll values
-	float lookLengthXZ = sqrtf(powf(XMVectorGetX(m_CameraForward), 2) + powf(XMVectorGetZ(m_CameraForward), 2));
-	m_Pitch = atan2f(XMVectorGetY(m_CameraForward), lookLengthXZ);
-	m_Yaw   = atan2f(XMVectorGetX(m_CameraForward), XMVectorGetZ(m_CameraForward));
-	m_Roll  = atan2f(XMVectorGetX(m_CameraUp), XMVectorGetY(m_CameraUp));
+	float lookLengthXZ = sqrtf(powf(XMVectorGetX(cameraForward), 2) + powf(XMVectorGetZ(cameraForward), 2));
+	pitch = atan2f(XMVectorGetY(cameraForward), lookLengthXZ);
+	yaw   = atan2f(XMVectorGetX(cameraForward), XMVectorGetZ(cameraForward));
+	roll  = atan2f(XMVectorGetX(cameraUp), XMVectorGetY(cameraUp));
 
 
 	// Decelerate if not moving
-	if (!m_IsMoving) {
+	if (!isMoving) {
 		float deceleration;
 
-		if (m_Velocity.x != 0.0f) {
-			deceleration = copysign(1.0f, m_Velocity.x) * m_MoveDecel * deltaTime;
+		if (velocity.x != 0.0f) {
+			deceleration = copysign(1.0f, velocity.x) * moveDecel * deltaTime;
 
-			if (abs(deceleration) > abs(m_Velocity.x)) {
-				m_Velocity.x = 0.0f;
+			if (abs(deceleration) > abs(velocity.x)) {
+				velocity.x = 0.0f;
 			}
 			else {
-				m_Velocity.x -= deceleration;
+				velocity.x -= deceleration;
 			}
 		}
 
-		if (m_Velocity.y != 0.0f) {
-			deceleration = copysign(1.0f, m_Velocity.y) * m_MoveDecel * deltaTime;
+		if (velocity.y != 0.0f) {
+			deceleration = copysign(1.0f, velocity.y) * moveDecel * deltaTime;
 
-			if (abs(deceleration) > abs(m_Velocity.y)) {
-				m_Velocity.y = 0.0f;
+			if (abs(deceleration) > abs(velocity.y)) {
+				velocity.y = 0.0f;
 			}
 			else {
-				m_Velocity.y -= deceleration;
+				velocity.y -= deceleration;
 			}
 		}
 
-		if (m_Velocity.z != 0.0f) {
-			deceleration = copysign(1.0f, m_Velocity.z) * m_MoveDecel * deltaTime;
+		if (velocity.z != 0.0f) {
+			deceleration = copysign(1.0f, velocity.z) * moveDecel * deltaTime;
 
-			if (abs(deceleration) > abs(m_Velocity.z)) {
-				m_Velocity.z = 0.0f;
+			if (abs(deceleration) > abs(velocity.z)) {
+				velocity.z = 0.0f;
 			}
 			else {
-				m_Velocity.z -= deceleration;
+				velocity.z -= deceleration;
 			}
 		}
 	}
 
 	// Set IsMoving to false. Will be set to true if camera moves again before update.
-	m_IsMoving = false;
+	isMoving = false;
 }

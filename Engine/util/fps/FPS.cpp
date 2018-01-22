@@ -2,8 +2,8 @@
 #include "FPS.h"
 
 
-FPS::FPS() : m_FPS(0), m_Count(0) {
-	m_StartTime = timeGetTime();
+FPS::FPS() : fps(0), count(0) {
+	startTime = timeGetTime();
 }
 
 
@@ -13,18 +13,18 @@ FPS::~FPS() {
 
 void FPS::Tick() {
 	// Increment frame count
-	m_Count++;
+	count++;
 
 	// Update FPS every half second
-	if (timeGetTime() >= (m_StartTime + 500)) {
-		m_FPS = m_Count * 2;
-		m_Count = 0;
+	if (timeGetTime() >= (startTime + 500)) {
+		fps = count * 2;
+		count = 0;
 
-		m_StartTime = timeGetTime();
+		startTime = timeGetTime();
 	}
 }
 
 
 int FPS::GetFPS() {
-	return m_FPS;
+	return fps;
 }

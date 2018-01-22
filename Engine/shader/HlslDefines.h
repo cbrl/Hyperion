@@ -10,7 +10,7 @@
 	#define REGISTER_S(slot) s##slot
 	#define SAMPLER_STATE(name, slot) SamplerState name : register(REGISTER_S(slot))
 
-	// Constant m_Buffer
+	// Constant buffer
 	#define REGISTER_B(slot) b##slot
 	#define CONSTANT_BUFFER(name, slot) cbuffer name : register(REGISTER_B(slot))
 

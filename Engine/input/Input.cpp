@@ -12,56 +12,65 @@ Input::~Input() {
 
 
 void Input::Init(HWND hWnd) {
-	m_Keyboard = make_unique<Keyboard>();
-	m_Mouse    = make_unique<Mouse>();
+	keyboard = make_unique<Keyboard>();
+	mouse    = make_unique<Mouse>();
 
-	m_Mouse->SetWindow(hWnd);
-	m_Mouse->SetMode(Mouse::MODE_RELATIVE);
+	mouse->SetWindow(hWnd);
+	mouse->SetMode(Mouse::MODE_RELATIVE);
 }
 
 
 void Input::Tick() {
 	// Read current keyboard state
-	m_KeyboardState = m_Keyboard->GetState();
-	m_Tracker.Update(m_KeyboardState);
+	keyboardState = keyboard->GetState();
+	keyboardTracker.Update(keyboardState);
 
 	// Read current mouse state
-	m_MouseState = m_Mouse->GetState();
+	lastMouseState = mouseState;
+	mouseState = mouse->GetState();
+	buttonTracker.Update(mouseState);
 }
 
 
 void Input::Reset() {
-	m_Tracker.Reset();
+	keyboardTracker.Reset();
 }
 
 
-void Input::GetMouseState(int &xPos, int &yPos) {
-	//Mouse::MODE_ABSOLUTE gives mouse position
-	//Mouse::MODE_RELATIVE gives mouse delta
-	xPos = m_MouseState.x;
-	yPos = m_MouseState.y;
+void Input::GetMouseDelta(int &xPos, int &yPos) {
+	// Mouse::MODE_ABSOLUTE - x/y are the position
+	// Mouse::MODE_RELATIVE - x/y are the delta
+
+	if (mouseState.positionMode == Mouse::MODE_ABSOLUTE) {
+		xPos = mouseState.x - lastMouseState.x;
+		yPos = mouseState.y - lastMouseState.y;
+	}
+	else {
+		xPos = mouseState.x;
+		yPos = mouseState.y;
+	}
+}
+
+
+bool Input::IsKeyDown(Keyboard::Keys key) {
+	if (keyboardState.IsKeyDown(key)) {
+		return true;
+	}
+
+	return false;
 }
 
 
 bool Input::IsKeyPressed(Keyboard::Keys key) {
-	if (m_KeyboardState.IsKeyDown(key)) {
-		return true;
-	}
-
-	return false;
-}
-
-
-bool Input::IsKeyPressedTracker(Keyboard::Keys key) {
-	if (m_Tracker.IsKeyPressed(key)) {
+	if (keyboardTracker.IsKeyPressed(key)) {
 		return true;
 	}
 	return false;
 }
 
 
-bool Input::IsKeyReleasedTracker(Keyboard::Keys key) {
-	if (m_Tracker.IsKeyReleased(key)) {
+bool Input::IsKeyReleased(Keyboard::Keys key) {
+	if (keyboardTracker.IsKeyReleased(key)) {
 		return true;
 	}
 	return false;

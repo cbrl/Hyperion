@@ -28,11 +28,11 @@ class Renderer {
 
 
 	private:
-		HWND                        m_hWnd;
-		ComPtr<ID3D11Device>        m_Device;
-		ComPtr<ID3D11DeviceContext> m_DeviceContext;
-		shared_ptr<Direct3D>        m_Direct3D;
-		unique_ptr<RenderingMgr>    m_RenderingMgr;
+		HWND                        hWnd;
+		ComPtr<ID3D11Device>        device;
+		ComPtr<ID3D11DeviceContext> deviceContext;
+		shared_ptr<Direct3D>        direct3D;
+		unique_ptr<RenderingMgr>    renderingMgr;
 };
 
 static float rotation = 0.0f;

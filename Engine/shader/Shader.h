@@ -22,10 +22,10 @@ class Shader {
 		Shader();
 		~Shader();
 
-		bool Init(HWND hWnd, const ComPtr<ID3D11Device>& device, const WCHAR* vsFilename, const WCHAR* psFilename,
+		bool Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, const WCHAR* psFilename,
 		          const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements);
 
-		void BindShader(const ComPtr<ID3D11DeviceContext>& deviceContext);
+		void BindShader(ID3D11DeviceContext* deviceContext);
 
 
 	private:

@@ -23,7 +23,7 @@ using std::is_same_v;
 
 class Scene {
 	public:
-		Scene(HWND hWnd, ComPtr<ID3D11Device> m_Device, ComPtr<ID3D11DeviceContext> m_DeviceContext);
+		Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
 		~Scene();
 
 		bool Init();
@@ -32,38 +32,36 @@ class Scene {
 
 
 	public:
-		unique_ptr<Camera>    m_Camera;
-		vector<Light>         m_Lights;
-		vector<Model>         m_Models;
-		map<wstring, Text>    m_Texts;
+		unique_ptr<Camera>    camera;
+		vector<Light>         lights;
+		vector<Model>         models;
+		map<wstring, Text>    texts;
 
 
 	private:
-	    HWND                        m_hWnd;
-		ComPtr<ID3D11Device>        m_Device;
-		ComPtr<ID3D11DeviceContext> m_DeviceContext;
-		unique_ptr<TextureMgr>      m_TextureMgr;
-
-		XMFLOAT3 m_Rotation;
+	    HWND                        hWnd;
+		ComPtr<ID3D11Device>        device;
+		ComPtr<ID3D11DeviceContext> deviceContext;
+		unique_ptr<TextureMgr>      textureMgr;
 
 
 	public:
 		template<typename Element, typename Action>
 		void ForEach(Action act) {
 			if constexpr (is_same_v<Model, Element>) {
-				for (auto &e : m_Models) {
+				for (auto &e : models) {
 					act(e);
 				}
 			}
 
 			if constexpr (is_same_v<Text, Element>) {
-				for (auto &e : m_Texts) {
+				for (auto &e : texts) {
 					act(e.second);
 				}
 			}
 
 			if constexpr (is_same_v<Light, Element>) {
-				for (auto& e : m_Lights) {
+				for (auto& e : lights) {
 					act(e);
 				}
 			}

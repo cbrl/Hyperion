@@ -2,12 +2,12 @@
 #include "Timer.h"
 
 
-Timer::Timer() : m_Stopped(false) {
+Timer::Timer() : stopped(false) {
 	INT64 frequency;
 
 	QueryPerformanceFrequency((LARGE_INTEGER*)&frequency);
 
-	m_TicksPerMS = (double)(frequency / 1000);
+	ticksPerMS = (double)(frequency / 1000);
 
 	Reset();
 }
@@ -18,41 +18,41 @@ Timer::~Timer() {
 
 
 void Timer::Tick() {
-	if (m_Stopped) {
-		m_DeltaTime = 0.0;
+	if (stopped) {
+		deltaTime = 0.0;
 		return;
 	}
 
 	// Get current time
 	INT64 currentTime;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
-	m_CurrTime = currentTime;
+	currTime = currentTime;
 
 	// Calculate time since last tick
-	m_DeltaTime = (double)(m_CurrTime - m_PrevTime);
-	m_DeltaTime /= m_TicksPerMS;
+	deltaTime = (double)(currTime - prevTime);
+	deltaTime /= ticksPerMS;
 
 	// Store time of this tick
-	m_PrevTime = m_CurrTime;
+	prevTime = currTime;
 
-	if (m_DeltaTime < 0.0) {
-		m_DeltaTime = 0.0;
+	if (deltaTime < 0.0) {
+		deltaTime = 0.0;
 	}
 }
 
 
 float Timer::DeltaTime() {
-	return (float)m_DeltaTime;
+	return (float)deltaTime;
 }
 
 
 float Timer::TotalTime() {
 	// Return total time since the timer was started/reset, minus time spent paused.
-	if (m_Stopped) {
-		return (float)(((m_StopTime - m_PausedTime) - m_BaseTime)/m_TicksPerMS);
+	if (stopped) {
+		return (float)(((stopTime - pausedTime) - baseTime)/ticksPerMS);
 	}
 	else {
-		return (float)(((m_CurrTime - m_PausedTime) - m_BaseTime)/m_TicksPerMS);
+		return (float)(((currTime - pausedTime) - baseTime)/ticksPerMS);
 	}
 }
 
@@ -68,23 +68,23 @@ void Timer::Start() {
 	// ----*---------------*-----------------*------------> time
 	//  mBaseTime       mStopTime        startTime     
 
-	if (m_Stopped) {
-		m_PausedTime += (startTime - m_StopTime);
+	if (stopped) {
+		pausedTime += (startTime - stopTime);
 
-		m_PrevTime = startTime;
-		m_StopTime = 0;
-		m_Stopped  = false;
+		prevTime = startTime;
+		stopTime = 0;
+		stopped  = false;
 	}
 }
 
 
 void Timer::Stop() {
-	if (!m_Stopped) {
+	if (!stopped) {
 		INT64 currTime;
 		QueryPerformanceCounter((LARGE_INTEGER*)&currTime);
 
-		m_StopTime = currTime;
-		m_Stopped = true;
+		stopTime = currTime;
+		stopped = true;
 	}
 }
 
@@ -93,8 +93,8 @@ void Timer::Reset() {
 	INT64 currTime;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currTime);
 
-	m_BaseTime = currTime;
-	m_PrevTime = currTime;
-	m_StopTime = 0;
-	m_Stopped  = false;
+	baseTime = currTime;
+	prevTime = currTime;
+	stopTime = 0;
+	stopped  = false;
 }

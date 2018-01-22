@@ -29,7 +29,7 @@ struct ShaderMgr {
 		m_Shaders.clear();
 	}
 
-	bool Init(HWND hWnd, const ComPtr<ID3D11Device>& device) {
+	bool Init(HWND hWnd, ID3D11Device* device) {
 		bool result;
 
 		// Color shader
@@ -52,7 +52,7 @@ struct ShaderMgr {
 		return true;
 	}
 
-	void BindShader(ShaderTypes shader, const ComPtr<ID3D11DeviceContext>& deviceContext) {
+	void BindShader(ShaderTypes shader, ID3D11DeviceContext* deviceContext) {
 		m_Shaders.at(shader).BindShader(deviceContext);
 	}
 

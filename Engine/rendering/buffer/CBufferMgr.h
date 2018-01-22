@@ -16,38 +16,38 @@ using Microsoft::WRL::ComPtr;
 
 class CBufferMgr {
 	public:
-		CBufferMgr(const ComPtr<ID3D11Device>& device, ComPtr<ID3D11DeviceContext> deviceContext);
+		CBufferMgr(ID3D11Device* device, ComPtr<ID3D11DeviceContext> deviceContext);
 		CBufferMgr();
 
-		void BindCBuffer(BufferTypes m_Buffer);
+		void BindCBuffer(BufferTypes buffer);
 
 		template<typename DataT>
 		void UpdateData(const DataT& data);
 
 	private:
-		void CreateBuffers(const ComPtr<ID3D11Device>& device);
+		void CreateBuffers(ID3D11Device* device);
 
 
 	private:
-		ComPtr<ID3D11DeviceContext> m_DeviceContext;
+		ComPtr<ID3D11DeviceContext> deviceContext;
 
-		unique_ptr<ConstantBuffer<MatrixBuffer>> m_MatrixBuffer;
-		unique_ptr<ConstantBuffer<CameraBuffer>> m_CameraBuffer;
-		unique_ptr<ConstantBuffer<LightBuffer>>  m_LightBuffer;
+		unique_ptr<ConstantBuffer<MatrixBuffer>> matrixBuffer;
+		unique_ptr<ConstantBuffer<CameraBuffer>> cameraBuffer;
+		unique_ptr<ConstantBuffer<LightBuffer>>  lightBuffer;
 };
 
 
 template<typename DataT>
 void CBufferMgr::UpdateData(const DataT& data) {
 	if constexpr (is_same_v<DataT, MatrixBuffer>) {
-		m_MatrixBuffer->UpdateData(m_DeviceContext, data);
+		matrixBuffer->UpdateData(deviceContext.Get(), data);
 	}
 
 	if constexpr (is_same_v<DataT, CameraBuffer>) {
-		m_CameraBuffer->UpdateData(m_DeviceContext, data);
+		cameraBuffer->UpdateData(deviceContext.Get(), data);
 	}
 
 	if constexpr (is_same_v<DataT, LightBuffer>) {
-		m_LightBuffer->UpdateData(m_DeviceContext, data);
+		lightBuffer->UpdateData(deviceContext.Get(), data);
 	}
 }

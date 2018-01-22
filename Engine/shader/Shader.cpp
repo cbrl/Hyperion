@@ -10,7 +10,7 @@ Shader::~Shader() {
 }
 
 
-bool Shader::Init(HWND hWnd, const ComPtr<ID3D11Device>& device, const WCHAR* vsFilename, const WCHAR* psFilename,
+bool Shader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, const WCHAR* psFilename,
                   const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements) {
 	HRESULT result;
 	ID3D10Blob* errorMessage = {};
@@ -62,7 +62,7 @@ bool Shader::Init(HWND hWnd, const ComPtr<ID3D11Device>& device, const WCHAR* vs
 }
 
 
-void Shader::BindShader(const ComPtr<ID3D11DeviceContext>& deviceContext) {
+void Shader::BindShader(ID3D11DeviceContext* deviceContext) {
 	deviceContext->IASetInputLayout(m_VertexLayout.Get());
 
 	deviceContext->VSSetShader(m_VertexShader.Get(), nullptr, 0);
@@ -76,7 +76,7 @@ void Shader::OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const
 	ofstream fout;
 
 
-	// Get a pointer to the error message text m_Buffer
+	// Get a pointer to the error message text buffer
 	compileErrors = (char*)(errorMessage->GetBufferPointer());
 
 	// Get the length of the message

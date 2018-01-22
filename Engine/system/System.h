@@ -42,13 +42,13 @@ class System : public MainWindow {
 
 
 	private:
-		unique_ptr<MainWindow> m_MainWindow;
-		shared_ptr<Direct3D>   m_Direct3D;
-		unique_ptr<Input>      m_Input;
-		unique_ptr<Renderer>   m_Renderer;
-		unique_ptr<Scene>      m_Scene;
-		unique_ptr<Timer>      m_Timer;
-		unique_ptr<FPS>        m_FPSCounter;
+		unique_ptr<MainWindow> mainWindow;
+		shared_ptr<Direct3D>   direct3D;
+		unique_ptr<Input>      input;
+		unique_ptr<Renderer>   renderer;
+		unique_ptr<Scene>      scene;
+		unique_ptr<Timer>      timer;
+		unique_ptr<FPS>        fpsCounter;
 
 		bool m_Resizing;
 };

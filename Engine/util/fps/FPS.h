@@ -15,8 +15,8 @@ class FPS {
 
 
 	private:
-		int   m_FPS;
-		int   m_Count;
-		ULONG m_StartTime;
+		int   fps;
+		int   count;
+		ULONG startTime;
 };
 

@@ -3,24 +3,26 @@
 
 
 Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool MSAA, bool vSync, bool fullscreen):
-	m_hWnd(hWnd),
-	m_WindowWidth(windowWidth),
-	m_WindowHeight(windowHeight),
-	m_Enable4xMSAA(MSAA),
-	m_EnableVSync(vSync),
-	m_EnableFullscreen(fullscreen),
-	m_DriverType(D3D_DRIVER_TYPE_HARDWARE),
-	m_4xMSAAQuality(0)
+	hWnd(hWnd),
+	windowWidth(windowWidth),
+	windowHeight(windowHeight),
+	enable4xMSAA(MSAA),
+	enableVSync(vSync),
+	enableFullscreen(fullscreen),
+	driverType(D3D_DRIVER_TYPE_HARDWARE),
+	MSAA4xQuality(0),
+	windowViewport({})
 {
-	ZeroMemory(&m_WindowViewport, sizeof(D3D11_VIEWPORT));
 }
 
 
 Direct3D::~Direct3D() {
 	// Restore all default settings
-	if (m_DeviceContext) {
-		m_DeviceContext->ClearState();
+	if (deviceContext) {
+		deviceContext->ClearState();
+		deviceContext->Flush();
 	}
+	debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 }
 
 
@@ -33,14 +35,14 @@ bool Direct3D::Init() {
 	D3D_FEATURE_LEVEL featureLevel;
 	HRESULT hr = D3D11CreateDevice(
 		0,                 // default adapter
-		m_DriverType,
+		driverType,
 		0,                 // no software device
 		createDeviceFlags,
 		0, 0,              // default feature level array
 		D3D11_SDK_VERSION,
-		&m_Device,
+		&device,
 		&featureLevel,
-		&m_DeviceContext);
+		&deviceContext);
 
 	if (FAILED(hr)) {
 		MessageBox(0, L"D3D11CreateDevice Failed.", 0, 0);
@@ -52,28 +54,30 @@ bool Direct3D::Init() {
 		return false;
 	}
 
-	// Check 4X MSAA quality support for our back m_Buffer format.
+	device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(debug.GetAddressOf()));
+
+	// Check 4X MSAA quality support for our back buffer format.
 	// All Direct3D 11 capable devices support 4X MSAA for all render 
 	// target formats, so we only need to check quality support.
 
-	HR(m_Device->CheckMultisampleQualityLevels(
-	   DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m_4xMSAAQuality));
-	assert(m_4xMSAAQuality > 0);
+	HR(device->CheckMultisampleQualityLevels(
+	   DXGI_FORMAT_R8G8B8A8_UNORM, 4, &MSAA4xQuality));
+	assert(MSAA4xQuality > 0);
 
 	//----------------------------------------------------------------------------------
 	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
 	//----------------------------------------------------------------------------------
 	DXGI_SWAP_CHAIN_DESC sd;
-	sd.BufferDesc.Width            = m_WindowWidth;
-	sd.BufferDesc.Height           = m_WindowHeight;
+	sd.BufferDesc.Width            = windowWidth;
+	sd.BufferDesc.Height           = windowHeight;
 	sd.BufferDesc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.BufferDesc.Scaling          = DXGI_MODE_SCALING_UNSPECIFIED;
 
 	// 4X MSAA
-	if (m_Enable4xMSAA) {
+	if (enable4xMSAA) {
 		sd.SampleDesc.Count = 4;
-		sd.SampleDesc.Quality = m_4xMSAAQuality - 1;
+		sd.SampleDesc.Quality = MSAA4xQuality - 1;
 	}
 	else {
 		sd.SampleDesc.Count = 1;
@@ -81,10 +85,10 @@ bool Direct3D::Init() {
 	}
 
 	// V-Sync
-	if (m_EnableVSync) {
+	if (enableVSync) {
 		GetRefreshRate();
-		sd.BufferDesc.RefreshRate.Numerator   = m_Numerator;
-		sd.BufferDesc.RefreshRate.Denominator = m_Denominator;
+		sd.BufferDesc.RefreshRate.Numerator   = numerator;
+		sd.BufferDesc.RefreshRate.Denominator = denominator;
 	}
 	else {
 		sd.BufferDesc.RefreshRate.Numerator   = 0;
@@ -92,7 +96,7 @@ bool Direct3D::Init() {
 	}
 
 	// Fullscreen
-	if (m_EnableFullscreen) {
+	if (enableFullscreen) {
 		sd.Windowed = false;
 	}
 	else {
@@ -101,7 +105,7 @@ bool Direct3D::Init() {
 
 	sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.BufferCount  = 1;
-	sd.OutputWindow = m_hWnd;
+	sd.OutputWindow = hWnd;
 	sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags        = 0;
 
@@ -111,7 +115,7 @@ bool Direct3D::Init() {
 	// This function is being called with a device from a different IDXGIFactory."
 
 	ComPtr<IDXGIDevice> dxgiDevice = nullptr;
-	HR(m_Device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.ReleaseAndGetAddressOf()));
+	HR(device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.ReleaseAndGetAddressOf()));
 
 	ComPtr<IDXGIAdapter> dxgiAdapter = nullptr;
 	HR(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)dxgiAdapter.ReleaseAndGetAddressOf()));
@@ -119,9 +123,9 @@ bool Direct3D::Init() {
 	ComPtr<IDXGIFactory> dxgiFactory = nullptr;
 	HR(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)dxgiFactory.ReleaseAndGetAddressOf()));
 
-	HR(dxgiFactory->CreateSwapChain(m_Device.Get(), &sd, m_SwapChain.ReleaseAndGetAddressOf()));
+	HR(dxgiFactory->CreateSwapChain(device.Get(), &sd, swapChain.ReleaseAndGetAddressOf()));
 
-	OnResize(m_WindowWidth, m_WindowHeight);
+	OnResize(windowWidth, windowHeight);
 
 
 	return true;
@@ -149,8 +153,8 @@ void Direct3D::GetRefreshRate() {
 	for (UINT i = 0; i < modes; i++) {
 		if (displayModeList[i].Width == GetSystemMetrics(SM_CXSCREEN)) {
 			if (displayModeList[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
-				m_Numerator = displayModeList[i].RefreshRate.Numerator;
-				m_Denominator = displayModeList[i].RefreshRate.Denominator;
+				numerator = displayModeList[i].RefreshRate.Numerator;
+				denominator = displayModeList[i].RefreshRate.Denominator;
 			}
 		}
 	}
@@ -158,65 +162,65 @@ void Direct3D::GetRefreshRate() {
 
 
 ComPtr<ID3D11Device> Direct3D::GetDevice() {
-	return m_Device;
+	return device;
 }
 
 
 ComPtr<ID3D11DeviceContext> Direct3D::GetDeviceContext() {
-	return m_DeviceContext;
+	return deviceContext;
 }
 
 
 XMMATRIX Direct3D::GetWorldMatrix() {
-	return m_WorldMatrix;
+	return worldMatrix;
 }
 
 
 XMMATRIX Direct3D::GetProjectionMatrix() {
-	return m_ProjectionMatrix;
+	return projectionMatrix;
 }
 
 
 XMMATRIX Direct3D::GetOrthoMatrix() {
-	return m_OrthoMatrix;
+	return orthoMatrix;
 }
 
 
 void Direct3D::OnResize(int windowWidth, int windowHeight) {
-	assert(m_DeviceContext);
-	assert(m_Device);
-	assert(m_SwapChain);
+	assert(deviceContext);
+	assert(device);
+	assert(swapChain);
 
-	m_WindowWidth  = windowWidth;
-	m_WindowHeight = windowHeight;
+	windowWidth  = windowWidth;
+	windowHeight = windowHeight;
 
-	m_RenderTargetView.Reset();
-	m_DepthStencilView.Reset();
-	m_DepthStencilBuffer.Reset();
+	renderTargetView.Reset();
+	depthStencilView.Reset();
+	depthStencilBuffer.Reset();
 
 	// Resize the swap chain and recreate the render target view.
 
-	HR(m_SwapChain->ResizeBuffers(1, m_WindowWidth, m_WindowHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
+	HR(swapChain->ResizeBuffers(1, windowWidth, windowHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 	ComPtr<ID3D11Texture2D> backBuffer;
-	HR(m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.ReleaseAndGetAddressOf())));
-	HR(m_Device->CreateRenderTargetView(backBuffer.Get(), 0, m_RenderTargetView.ReleaseAndGetAddressOf()));
+	HR(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.ReleaseAndGetAddressOf())));
+	HR(device->CreateRenderTargetView(backBuffer.Get(), 0, renderTargetView.ReleaseAndGetAddressOf()));
 
 
 	//----------------------------------------------------------------------------------
-	// Create the depth/stencil m_Buffer and view.
+	// Create the depth/stencil buffer and view.
 	//----------------------------------------------------------------------------------
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 
-	depthStencilDesc.Width = m_WindowWidth;
-	depthStencilDesc.Height = m_WindowHeight;
+	depthStencilDesc.Width = windowWidth;
+	depthStencilDesc.Height = windowHeight;
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
 	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	// Use 4X MSAA? --must match swap chain MSAA values.
-	if (m_Enable4xMSAA) {
+	if (enable4xMSAA) {
 		depthStencilDesc.SampleDesc.Count = 4;
-		depthStencilDesc.SampleDesc.Quality = m_4xMSAAQuality - 1;
+		depthStencilDesc.SampleDesc.Quality = MSAA4xQuality - 1;
 	}
 	// No MSAA
 	else {
@@ -229,39 +233,39 @@ void Direct3D::OnResize(int windowWidth, int windowHeight) {
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags = 0;
 
-	HR(m_Device->CreateTexture2D(&depthStencilDesc, 0, &m_DepthStencilBuffer));
-	HR(m_Device->CreateDepthStencilView(m_DepthStencilBuffer.Get(), 0, &m_DepthStencilView));
+	HR(device->CreateTexture2D(&depthStencilDesc, 0, &depthStencilBuffer));
+	HR(device->CreateDepthStencilView(depthStencilBuffer.Get(), 0, &depthStencilView));
 
 
 	// Bind the render target view and depth/stencil view to the pipeline
 
-	m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
+	deviceContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
 
 
 	// Set the viewport transform
 
-	m_WindowViewport.TopLeftX = 0;
-	m_WindowViewport.TopLeftY = 0;
-	m_WindowViewport.Width = static_cast<float>(m_WindowWidth);
-	m_WindowViewport.Height = static_cast<float>(m_WindowHeight);
-	m_WindowViewport.MinDepth = 0.0f;
-	m_WindowViewport.MaxDepth = 1.0f;
+	windowViewport.TopLeftX = 0;
+	windowViewport.TopLeftY = 0;
+	windowViewport.Width = static_cast<float>(windowWidth);
+	windowViewport.Height = static_cast<float>(windowHeight);
+	windowViewport.MinDepth = 0.0f;
+	windowViewport.MaxDepth = 1.0f;
 
-	m_DeviceContext->RSSetViewports(1, &m_WindowViewport);
+	deviceContext->RSSetViewports(1, &windowViewport);
 
 
 	// Set FOV and aspect ratio
 	float fov = XM_PI / 4.0f;
-	float aspectRatio = (float)m_WindowWidth / (float)m_WindowHeight;
+	float aspectRatio = (float)windowWidth / (float)windowHeight;
 
 	// Create projection matrix
-	m_ProjectionMatrix = XMMatrixPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
+	projectionMatrix = XMMatrixPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
 
 	// Create world matrix
-	m_WorldMatrix = XMMatrixIdentity();
+	worldMatrix = XMMatrixIdentity();
 
 	// Create ortho matrix for 2D rendering
-	m_OrthoMatrix = XMMatrixOrthographicLH((float)m_WindowWidth, (float)m_WindowHeight, zNear, zFar);
+	orthoMatrix = XMMatrixOrthographicLH((float)windowWidth, (float)windowHeight, zNear, zFar);
 }
 
 
@@ -269,18 +273,18 @@ void Direct3D::BeginScene(float red, float green, float blue, float alpha) {
 	float color[4] = { red, green, blue, alpha };
 
 	// Clear render taget view and depth stencil view
-	m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), color);
-	m_DeviceContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	deviceContext->ClearRenderTargetView(renderTargetView.Get(), color);
+	deviceContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 
 void Direct3D::EndScene() {
-	if (m_EnableVSync) {
+	if (enableVSync) {
 		// If VSync is enabled, present with next frame
-		HR(m_SwapChain->Present(1, 0));
+		HR(swapChain->Present(1, 0));
 	}
 	else {
 		// If it's disabled, present as soon as possible
-		HR(m_SwapChain->Present(0, 0));
+		HR(swapChain->Present(0, 0));
 	}
 }

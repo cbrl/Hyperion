@@ -3,8 +3,8 @@
 
 
 TextureMgr::TextureMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11DeviceContext> deviceContext) :
-	m_Device(device),
-	m_DeviceContext(deviceContext)
+	device(device),
+	deviceContext(deviceContext)
 {
 }
 
@@ -51,7 +51,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(vector<wstring>
 	ComPtr<ID3D11ShaderResourceView> textureView;
 
 	// Create a shader resource view
-	HR(CreateWICTextureFromFile(m_Device.Get(), m_DeviceContext.Get(), filenames[0].c_str(), nullptr, textureView.GetAddressOf()));
+	HR(CreateWICTextureFromFile(device.Get(), deviceContext.Get(), filenames[0].c_str(), nullptr, textureView.GetAddressOf()));
 
 	return textureView;
 }
@@ -65,7 +65,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 
 	// Create a vector of textures
 	for(size_t i = 0; i < size; i++) {
-		HR(CreateWICTextureFromFileEx(m_Device.Get(), m_DeviceContext.Get(), filenames[i].c_str(),
+		HR(CreateWICTextureFromFileEx(device.Get(), deviceContext.Get(), filenames[i].c_str(),
 									  NULL, D3D11_USAGE_STAGING, NULL,D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
 									  (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr));
 	}
@@ -90,19 +90,19 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 
 	// Create texture array
 	ComPtr<ID3D11Texture2D> texArray;
-	HR(m_Device->CreateTexture2D(&arrayDesc, NULL, texArray.GetAddressOf()));
+	HR(device->CreateTexture2D(&arrayDesc, NULL, texArray.GetAddressOf()));
 
 	// Update texture array with texture data
 	for (UINT texElement = 0; texElement < size; texElement++) {
 		for (UINT mipLevel = 0; mipLevel < desc.MipLevels; mipLevel++) {
 			D3D11_MAPPED_SUBRESOURCE mappedTex = {};
 
-			HR(m_DeviceContext->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex));
+			HR(deviceContext->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex));
 
-			m_DeviceContext->UpdateSubresource(texArray.Get(), D3D11CalcSubresource(mipLevel, texElement, desc.MipLevels), nullptr,
+			deviceContext->UpdateSubresource(texArray.Get(), D3D11CalcSubresource(mipLevel, texElement, desc.MipLevels), nullptr,
 											   mappedTex.pData, mappedTex.RowPitch, mappedTex.DepthPitch);
 
-			m_DeviceContext->Unmap(srcTex[texElement].Get(), mipLevel);
+			deviceContext->Unmap(srcTex[texElement].Get(), mipLevel);
 		}
 	}
 
@@ -116,7 +116,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 	viewDesc.Texture2DArray.ArraySize       = size;
 
 	// Create the SRV
-	HR(m_Device->CreateShaderResourceView(texArray.Get(), &viewDesc, textureSRV.GetAddressOf()));
+	HR(device->CreateShaderResourceView(texArray.Get(), &viewDesc, textureSRV.GetAddressOf()));
 
 
 	return textureSRV;
@@ -138,14 +138,14 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSimpleTexture(UINT color) {
 	desc.Usage            = D3D11_USAGE_IMMUTABLE;
 	desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
 
-	HR(m_Device->CreateTexture2D(&desc, &initData, texture.GetAddressOf()));
+	HR(device->CreateTexture2D(&desc, &initData, texture.GetAddressOf()));
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
 	SRVDesc.Format              = DXGI_FORMAT_R8G8B8A8_UNORM;
 	SRVDesc.ViewDimension       = D3D11_SRV_DIMENSION_TEXTURE2D;
 	SRVDesc.Texture2D.MipLevels = 1;
 
-	HR(m_Device->CreateShaderResourceView(texture.Get(), &SRVDesc, textureSRV.GetAddressOf()));
+	HR(device->CreateShaderResourceView(texture.Get(), &SRVDesc, textureSRV.GetAddressOf()));
 
 	return textureSRV;
 }

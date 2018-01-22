@@ -17,15 +17,15 @@ class Timer {
 
 
 	private:
-	bool m_Stopped;
+	bool stopped;
 
-	double m_TicksPerMS;
-	double m_DeltaTime;
+	double ticksPerMS;
+	double deltaTime;
 
-	INT64 m_BaseTime;
-	INT64 m_CurrTime;
-	INT64 m_PrevTime;
-	INT64 m_PausedTime;
-	INT64 m_StopTime;
+	INT64 baseTime;
+	INT64 currTime;
+	INT64 prevTime;
+	INT64 pausedTime;
+	INT64 stopTime;
 };
 

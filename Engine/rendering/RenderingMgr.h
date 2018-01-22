@@ -26,15 +26,15 @@ class RenderingMgr {
 
 		template<typename DataT>
 		void UpdateData(const DataT& data) {
-			m_CBufferMgr->UpdateData(data);
+			cBufferMgr->UpdateData(data);
 		}
 
 
 	private:
-		HWND                        m_hWnd;
-		ComPtr<ID3D11Device>        m_Device;
-		ComPtr<ID3D11DeviceContext> m_DeviceContext;
-		unique_ptr<ShaderMgr>       m_ShaderMgr;
-		unique_ptr<CBufferMgr>      m_CBufferMgr;
-		unique_ptr<Sampler>         m_Sampler;
+		HWND                        hWnd;
+		ComPtr<ID3D11Device>        device;
+		ComPtr<ID3D11DeviceContext> deviceContext;
+		unique_ptr<ShaderMgr>       shaderMgr;
+		unique_ptr<CBufferMgr>      cBufferMgr;
+		unique_ptr<Sampler>         sampler;
 };
