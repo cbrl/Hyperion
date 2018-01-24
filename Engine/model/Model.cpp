@@ -2,7 +2,10 @@
 #include "Model.h"
 
 
-Model::Model() {
+Model::Model() :
+	position(XMMatrixTranslation(0.0f, 0.0f, 0.0f)),
+	rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
+{
 }
 
 
@@ -69,7 +72,7 @@ bool Model::LoadModel(const char* filename) {
 }
 
 
-bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
+bool Model::InitBuffers(ID3D11Device* device) {
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 
@@ -126,7 +129,7 @@ bool Model::InitBuffers(const ComPtr<ID3D11Device>& device) {
 }
 
 
-void Model::RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext) {
+void Model::RenderBuffers(ID3D11DeviceContext* deviceContext) {
 	UINT stride, offset;
 
 	stride = sizeof(VertexPositionNormalTexture);

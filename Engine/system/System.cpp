@@ -26,8 +26,14 @@ bool System::Init() {
 		return false;
 	}
 
-	// Initialize DirectInput
+	// Create input handler
 	input = make_unique<Input>(hWnd);
+
+	// Create Timer
+	timer = make_unique<Timer>();
+
+	// Create FPS Counter
+	fpsCounter = make_unique<FPS>();
 
 	// Initialize renderer
 	renderer = make_unique<Renderer>(hWnd, direct3D);
@@ -40,12 +46,6 @@ bool System::Init() {
 	if (!scene->Init()) {
 		return false;
 	}
-
-	// Create Timer
-	timer = make_unique<Timer>();
-
-	// Create FPS Counter
-	fpsCounter = make_unique<FPS>();
 
 	return true;
 }

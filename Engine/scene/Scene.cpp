@@ -7,6 +7,8 @@
 // - Create frustum and implement frustum culling
 // - Create a model loader, and a model class that can take any vertex type
 // - Create a simple geometry generator
+// - Bounding boxes on geometry for frustum culling
+// - Global shader include
 
 Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
 	hWnd(hWnd),
@@ -87,23 +89,35 @@ void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 	texts.at(L"FPS").SetText(L"FPS: " + to_wstring(FPS));
 
 	texts.at(L"Mouse").SetText(L"Mouse \nX: " + to_wstring(mouseX)
-	                             + L"\nY: " + to_wstring(mouseY));
+	                           + L"\nY: " + to_wstring(mouseY));
 
 	texts.at(L"Position").SetText(L"Position \nX: " + to_wstring(camera->GetPosition().x)
-	                                + L"\nY: " + to_wstring(camera->GetPosition().y)
-	                                + L"\nZ: " + to_wstring(camera->GetPosition().z));
+	                              + L"\nY: " + to_wstring(camera->GetPosition().y)
+	                              + L"\nZ: " + to_wstring(camera->GetPosition().z));
 
 	texts.at(L"Rotation").SetText(L"Rotation \nX: " + to_wstring(camera->GetRotation().x)
-									+ L"\nY: " + to_wstring(camera->GetRotation().y)
-									+ L"\nZ: " + to_wstring(camera->GetRotation().z));
+	                              + L"\nY: " + to_wstring(camera->GetRotation().y)
+	                              + L"\nZ: " + to_wstring(camera->GetRotation().z));
 
 	texts.at(L"Velocity").SetText(L"Velocity \nX: " + to_wstring(camera->GetVelocity().x)
-	                                + L"\nY: " + to_wstring(camera->GetVelocity().y)
-								    + L"\nZ: " + to_wstring(camera->GetVelocity().z));
+	                              + L"\nY: " + to_wstring(camera->GetVelocity().y)
+	                              + L"\nZ: " + to_wstring(camera->GetVelocity().z));
 }
 
 
 void Scene::Tick(Input& input, float deltaTime) {
+
+	// Rotate models
+	rotation += (XM_PI * deltaTime) / 2500;
+	if (rotation >= (2.0f * XM_PI)) rotation = 0;
+	for (auto model : models) {
+		model.SetRotation(0.0f, rotation, 0.0f);
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Camera movement
+	//----------------------------------------------------------------------------------
 	int mouseX, mouseY;
 	XMFLOAT3 rotateUnits(0.0f, 0.0f, 0.0f);
 	XMFLOAT3 moveUnits(0.0f, 0.0f, 0.0f);

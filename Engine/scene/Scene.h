@@ -44,6 +44,8 @@ class Scene {
 		ComPtr<ID3D11DeviceContext> deviceContext;
 		unique_ptr<TextureMgr>      textureMgr;
 
+		float rotation = 0.0f;
+
 
 	public:
 		template<typename Element, typename Action>

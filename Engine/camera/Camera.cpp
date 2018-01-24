@@ -11,6 +11,7 @@ Camera::Camera() :
 	moveAccel(0.0001f),
 	moveDecel(0.0001f),
 	maxVelocity(0.02f),
+	isMoving(false),
 
 	turnFactor(0.002f),
 	pitch(0.0f),
@@ -23,7 +24,9 @@ Camera::Camera() :
 	cameraUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
 	defaultForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
 	defaultRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
-	defaultUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))
+	defaultUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
+
+	viewMatrix(XMVectorZero(), XMVectorZero(), XMVectorZero(), XMVectorZero())
 {
 }
 
@@ -150,7 +153,9 @@ void Camera::Update(float deltaTime) {
 	viewMatrix = XMMatrixLookAtLH(position, lookAt, cameraUp);
 
 
-	// Calculate the new pitch, yaw, and roll values
+	// Calculate the new pitch, yaw, and roll values.
+	// lookLengthXZ is used in place of cameraForward.z for the pitch. This ensures the
+	// pitch does not exceed +-90 degrees, which is needed for limiting the max pitch.
 	float lookLengthXZ = sqrtf(powf(XMVectorGetX(cameraForward), 2) + powf(XMVectorGetZ(cameraForward), 2));
 	pitch = atan2f(XMVectorGetY(cameraForward), lookLengthXZ);
 	yaw   = atan2f(XMVectorGetX(cameraForward), XMVectorGetZ(cameraForward));

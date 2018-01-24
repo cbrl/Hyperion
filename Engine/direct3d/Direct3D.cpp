@@ -22,7 +22,11 @@ Direct3D::~Direct3D() {
 		deviceContext->ClearState();
 		deviceContext->Flush();
 	}
-	debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+
+	// Report any live objects
+	#if defined(DEBUG) || defined(_DEBUG)  
+		debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+	#endif
 }
 
 
@@ -54,7 +58,10 @@ bool Direct3D::Init() {
 		return false;
 	}
 
-	device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(debug.GetAddressOf()));
+	// Create debug object
+	#if defined(DEBUG) || defined(_DEBUG)  
+		device->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(debug.GetAddressOf()));
+	#endif
 
 	// Check 4X MSAA quality support for our back buffer format.
 	// All Direct3D 11 capable devices support 4X MSAA for all render 

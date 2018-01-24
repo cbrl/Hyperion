@@ -34,17 +34,17 @@ struct ShaderMgr {
 
 		// Color shader
 		result = m_Shaders.at(ShaderTypes::ColorShader).Init(hWnd, device, L"./shaders/color/color.vs", L"./shaders/color/color.ps", 
-									                         VertexPositionColor::InputElements, VertexPositionColor::InputElementCount);
+															 VertexPositionColor::InputElements, VertexPositionColor::InputElementCount);
 		if (!result) return false;
 		
 		// Light shader
 		result = m_Shaders.at(ShaderTypes::LightShader).Init(hWnd, device, L"./shaders/light/light.vs", L"./shaders/light/light.ps",
-									                         VertexPositionNormalTexture::InputElements, VertexPositionNormalTexture::InputElementCount);
+															 VertexPositionNormalTexture::InputElements, VertexPositionNormalTexture::InputElementCount);
 		if (!result) return false;
 
 		// Texture shader
 		result = m_Shaders.at(ShaderTypes::TextureShader).Init(hWnd, device, L"./shaders/texture/texture.vs", L"./shaders/texture/texture.ps",
-															 VertexPositionTexture::InputElements, VertexPositionTexture::InputElementCount);
+		                                                       VertexPositionTexture::InputElements, VertexPositionTexture::InputElementCount);
 		if (!result) return false;
 
 		// etc...

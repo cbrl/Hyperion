@@ -20,9 +20,27 @@ class Model {
 		bool Init(ID3D11Device* device, const char* modelFilename,
 		          ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType);
 
-		void RenderBuffers(const ComPtr<ID3D11DeviceContext>& deviceContext);
+		void RenderBuffers(ID3D11DeviceContext* deviceContext);
+
+		void SetPosition(float x, float y, float z) {
+			position = XMMatrixTranslation(x, y, z);
+		}
+
+		void Move(float x, float y, float z) {
+			position = XMMatrixMultiply(position, XMMatrixTranslation(x, y, z));
+		}
+
+		void SetRotation(float x, float y, float z) {
+			rotation = XMMatrixRotationRollPitchYaw(x, y, z);
+		}
+
+		void Rotate(float x, float y, float z) {
+			rotation = XMMatrixMultiply(rotation, XMMatrixRotationRollPitchYaw(x, y, z));
+		}
 
 		int         GetIndexCount() { return indexCount; }
+		XMMATRIX    GetPosition()   { return position; }
+		XMMATRIX    GetRotation()   { return rotation; }
 		ShaderTypes GetShader()     { return shader; }
 
 		const ComPtr<ID3D11ShaderResourceView>& GetTexture() { return texture; }
@@ -30,7 +48,7 @@ class Model {
 
 	private:
 		bool LoadModel(const char* filename);
-		bool InitBuffers(const ComPtr<ID3D11Device>& device);
+		bool InitBuffers(ID3D11Device* device);
 
 
 	private:
@@ -57,5 +75,7 @@ class Model {
 		ComPtr<ID3D11ShaderResourceView> texture;
 		Material                         material;
 		ShaderTypes                      shader;
+		XMMATRIX                         position;
+		XMMATRIX                         rotation;
 };
 

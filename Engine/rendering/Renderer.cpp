@@ -36,20 +36,13 @@ bool Renderer::Tick(Scene& scene, float deltaTime) {
 	XMMATRIX projection = direct3D->GetProjectionMatrix();
 	XMMATRIX view       = scene.camera->GetViewMatrix();
 
-
-	rotation += (XM_PI * deltaTime) / 2500;
-	if (rotation >= (2.0f * XM_PI)) rotation = 0;
-	world = XMMatrixRotationRollPitchYaw(rotation, 0.0f, 0.0f);
-	
+	// Create matrix buffer
+	MatrixBuffer matrixBuffer;
 
 	// Transpose matrices for shader
-	world      = XMMatrixTranspose(world);
 	view       = XMMatrixTranspose(view);
 	projection = XMMatrixTranspose(projection);
-
-	// Create matrix buffer
-	MatrixBuffer matrixBuffer = MatrixBuffer(world, view, projection);
-
+	
 
 	//----------------------------------------------------------------------------------
 	// Render objects with color shader
@@ -64,7 +57,17 @@ bool Renderer::Tick(Scene& scene, float deltaTime) {
 	// Render models
 	scene.ForEach<Model>([&](Model& model){
 		if (model.GetShader() == ShaderTypes::ColorShader) {
-			model.RenderBuffers(deviceContext);
+
+			// Transform world matrix according to model position and rotation
+			world = XMMatrixMultiply(world, model.GetRotation());
+			world = XMMatrixMultiply(world, model.GetPosition());
+			world = XMMatrixTranspose(world);
+
+			// Create matrix buffer and update cbuffer
+			matrixBuffer = MatrixBuffer(world, view, projection);
+			renderingMgr->UpdateData(matrixBuffer);
+
+			model.RenderBuffers(deviceContext.Get());
 			deviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);
 		}
 	});
@@ -75,14 +78,20 @@ bool Renderer::Tick(Scene& scene, float deltaTime) {
 	//----------------------------------------------------------------------------------
 	renderingMgr->BindShader(ShaderTypes::LightShader);
 
-	renderingMgr->UpdateData(matrixBuffer);
 	renderingMgr->UpdateData(scene.camera->GetBuffer());
 	renderingMgr->UpdateData(scene.lights.front().GetBuffer());
 
 	scene.ForEach<Model>([&](Model& model) {
 		if (model.GetShader() == ShaderTypes::LightShader) {
 
-			model.RenderBuffers(deviceContext);
+			world = XMMatrixMultiply(world, model.GetRotation());
+			world = XMMatrixMultiply(world, model.GetPosition());
+			world = XMMatrixTranspose(world);
+
+			matrixBuffer = MatrixBuffer(world, view, projection);
+			renderingMgr->UpdateData(matrixBuffer);
+
+			model.RenderBuffers(deviceContext.Get());
 			deviceContext->PSSetShaderResources(0, 1, model.GetTexture().GetAddressOf());
 			deviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);
 		}

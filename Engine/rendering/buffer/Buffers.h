@@ -6,7 +6,7 @@
 using namespace DirectX;
 
 struct MatrixBuffer {
-	MatrixBuffer() : world({}), view({}), projection({}) {}
+	MatrixBuffer() : world(g_XMZero), view(g_XMZero), projection(g_XMZero) {}
 	MatrixBuffer(XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix) :
 		world(worldMatrix),
 		view(viewMatrix),
