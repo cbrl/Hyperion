@@ -3,7 +3,8 @@
 
 
 Camera::Camera() :
-	enableFreeLook(true),
+	enableFreeLook(false),
+	fpsMode(true),
 
 	lookAt(XMVectorZero()),
 	position(XMVectorZero()),
@@ -20,6 +21,7 @@ Camera::Camera() :
 	maxPitch(XMConvertToRadians(89.0f)),
 
 	cameraForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
+	fpsForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
 	cameraRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
 	cameraUp(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
 	defaultForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
@@ -28,6 +30,7 @@ Camera::Camera() :
 
 	viewMatrix(XMVectorZero(), XMVectorZero(), XMVectorZero(), XMVectorZero())
 {
+	if (enableFreeLook) fpsMode = false;
 }
 
 
@@ -82,6 +85,7 @@ void Camera::Rotate(XMFLOAT3 units) {
 	if (units.x) {
 		float xUnits = units.x * turnFactor;
 
+		// Limit max pitch if free look isn't enabled
 		if (!enableFreeLook) {
 			pitch -= xUnits;
 			if (pitch > maxPitch) {
@@ -94,6 +98,7 @@ void Camera::Rotate(XMFLOAT3 units) {
 
 		XMMATRIX xRotation = XMMatrixRotationAxis(cameraRight, (xUnits));
 
+		// Transform Up vector only if free look is enabled
 		if (enableFreeLook) {
 			cameraUp = XMVector3TransformNormal(cameraUp, xRotation);
 		}
@@ -108,6 +113,11 @@ void Camera::Rotate(XMFLOAT3 units) {
 		XMMATRIX yRotation = XMMatrixRotationAxis(cameraUp, (units.y * turnFactor));
 		cameraRight = XMVector3TransformNormal(cameraRight, yRotation);
 		cameraForward = XMVector3TransformNormal(cameraForward, yRotation);
+
+		// fpsForward will be used for movement if fpsMode is enabled
+		if (fpsMode) {
+			fpsForward = XMVector3TransformNormal(fpsForward, yRotation);
+		}
 	}
 
 
@@ -134,9 +144,14 @@ void Camera::Update(float deltaTime) {
 
 
 	// Move camera
-	position += cameraRight   * velocity.x * deltaTime;
-	position += cameraUp      * velocity.y * deltaTime;
-	position += cameraForward * velocity.z * deltaTime;
+	position += cameraRight * velocity.x * deltaTime;
+	position += cameraUp    * velocity.y * deltaTime;
+	if (fpsMode) {
+		position += fpsForward * velocity.z * deltaTime;
+	}
+	else {
+		position += cameraForward * velocity.z * deltaTime;
+	}
 
 
 	// Update position buffer

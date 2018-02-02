@@ -2,11 +2,16 @@
 #include "System.h"
 
 
+System* System::systemPtr = nullptr;
+
+
 System::System() {
+	systemPtr = this;
 }
 
 
 System::~System() {
+	systemPtr = nullptr;
 }
 
 
@@ -20,9 +25,9 @@ bool System::Init() {
 		return false;
 	}
 
-	// Initialize Direct3D
-	direct3D = make_shared<Direct3D>(hWnd, windowWidth, windowHeight, MSAA_STATE, VSYNC_STATE, FULLSCREEN_STATE);
-	if (!direct3D->Init()) {
+	// Initialize rendering manager
+	renderingMgr = make_unique<RenderingMgr>(hWnd);
+	if (!renderingMgr->Init(windowWidth, windowHeight, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE)) {
 		return false;
 	}
 
@@ -35,14 +40,8 @@ bool System::Init() {
 	// Create FPS Counter
 	fpsCounter = make_unique<FPS>();
 
-	// Initialize renderer
-	renderer = make_unique<Renderer>(hWnd, direct3D);
-	if (!renderer->Init()) {
-		return false;
-	}
-
 	// Initialize scene
-	scene = make_unique<Scene>(hWnd, direct3D->GetDevice(), direct3D->GetDeviceContext());
+	scene = make_unique<Scene>(hWnd, Direct3D::Get()->GetDevice(), Direct3D::Get()->GetDeviceContext());
 	if (!scene->Init()) {
 		return false;
 	}
@@ -103,7 +102,7 @@ bool System::Tick() {
 	scene->UpdateMetrics(fpsCounter->GetFPS(), NULL, mouseX, mouseY);
 
 	// Render scene
-	if (!renderer->Tick(*scene, deltaTime)) {
+	if (!scene->Render(deltaTime)) {
 		return false;
 	}
 
@@ -187,6 +186,6 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 
 void System::OnResize(int windowWidth, int windowHeight) {
-	if (direct3D == nullptr) return;
-	direct3D->OnResize(windowWidth, windowHeight);
+	if (renderingMgr == nullptr) return;
+	renderingMgr->GetD3D()->OnResize(windowWidth, windowHeight);
 }

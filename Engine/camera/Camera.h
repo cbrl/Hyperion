@@ -41,6 +41,7 @@ class Camera {
 		const XMVECTOR   defaultUp;
 
 		XMVECTOR    cameraForward;
+		XMVECTOR    fpsForward;
 		XMVECTOR    cameraRight;
 		XMVECTOR    cameraUp;
 		XMVECTOR    lookAt;
@@ -59,6 +60,7 @@ class Camera {
 		const float turnFactor;
 
 		bool enableFreeLook;
+		bool fpsMode;
 		bool isMoving;
 };
 

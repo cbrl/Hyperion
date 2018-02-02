@@ -162,15 +162,17 @@
   <ItemGroup>
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="direct3d\Direct3D.h" />
+    <ClInclude Include="geometry\frustum\Frustum.h" />
+    <ClInclude Include="geometry\model\Model.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="main\MainWindow.h" />
-    <ClInclude Include="model\Model.h" />
     <ClInclude Include="rendering\buffer\Buffers.h" />
     <ClInclude Include="rendering\buffer\CBufferMgr.h" />
     <ClInclude Include="rendering\buffer\ConstantBuffer.h" />
     <ClInclude Include="rendering\Renderer.h" />
     <ClInclude Include="rendering\RenderingMgr.h" />
+    <ClInclude Include="rendering\RenderStateMgr.h" />
     <ClInclude Include="rendering\Sampler.h" />
     <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="shader\Shader.h" />
@@ -188,13 +190,15 @@
   <ItemGroup>
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="direct3d\Direct3D.cpp" />
+    <ClCompile Include="geometry\frustum\Frustum.cpp" />
+    <ClCompile Include="geometry\model\Model.cpp" />
     <ClCompile Include="input\Input.cpp" />
     <ClCompile Include="main\main.cpp" />
     <ClCompile Include="main\MainWindow.cpp" />
-    <ClCompile Include="model\Model.cpp" />
     <ClCompile Include="rendering\buffer\CBufferMgr.cpp" />
     <ClCompile Include="rendering\Renderer.cpp" />
     <ClCompile Include="rendering\RenderingMgr.cpp" />
+    <ClCompile Include="rendering\RenderStateMgr.cpp" />
     <ClCompile Include="scene\Scene.cpp" />
     <ClCompile Include="shader\Shader.cpp" />
     <ClCompile Include="stdafx.cpp">

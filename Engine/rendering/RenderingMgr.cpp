@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "RenderingMgr.h"
+#include "system\System.h"
 
 
-RenderingMgr::RenderingMgr(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
-	hWnd(hWnd),
-	device(device),
-	deviceContext(deviceContext)
-{
+const RenderingMgr* RenderingMgr::Get() {
+	return System::Get()->GetRenderingMgr();
+}
+
+
+RenderingMgr::RenderingMgr(HWND window) : hWnd(window) {
 }
 
 
@@ -14,50 +16,29 @@ RenderingMgr::~RenderingMgr() {
 }
 
 
-bool RenderingMgr::Init() {
-	// Create buffer manager
-	cBufferMgr = make_unique<CBufferMgr>(device.Get(), deviceContext);
+bool RenderingMgr::Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bool vsync, bool msaa) {
 
-
-	// Create sampler state
-	sampler = make_unique<Sampler>(device.Get());
-
-
-	// Create shader manager
-	shaderMgr = make_unique<ShaderMgr>();
-	if (!shaderMgr->Init(hWnd, device.Get())) {
+	// Initialize Direct3D
+	direct3D = make_unique<Direct3D>(hWnd, windowWidth, windowHeight, fullscreen, vsync, msaa);
+	if (!direct3D->Init()) {
 		return false;
 	}
 
-	return true;
-}
 
-void RenderingMgr::BindShader(ShaderTypes shader) {
-	switch (shader) {
-		case ShaderTypes::ColorShader:
-			shaderMgr->BindShader(ShaderTypes::ColorShader, deviceContext.Get());
-			cBufferMgr->BindCBuffer(BufferTypes::MatrixBuffer);
-			break;
-
-		case ShaderTypes::TextureShader:
-			shaderMgr->BindShader(ShaderTypes::TextureShader, deviceContext.Get());
-			cBufferMgr->BindCBuffer(BufferTypes::MatrixBuffer);
-			cBufferMgr->BindCBuffer(BufferTypes::CameraBuffer);
-			deviceContext->PSSetSamplers(0, 1, sampler->samplerState.GetAddressOf());
-			break;
-
-		case ShaderTypes::LightShader:
-			shaderMgr->BindShader(ShaderTypes::LightShader, deviceContext.Get());
-			cBufferMgr->BindCBuffer(BufferTypes::MatrixBuffer);
-			cBufferMgr->BindCBuffer(BufferTypes::CameraBuffer);
-			cBufferMgr->BindCBuffer(BufferTypes::LightBuffer);
-			deviceContext->PSSetSamplers(0, 1, sampler->samplerState.GetAddressOf());
-			break;
-
-		case ShaderTypes::NormalShader:
-			break;
-
-		case ShaderTypes::SpecularShader:
-			break;
+	// Initialize render state manager
+	renderStateMgr = make_unique<RenderStateMgr>(hWnd, direct3D->GetDevice(), direct3D->GetDeviceContext());
+	if (!renderStateMgr->Init()) {
+		return false;
 	}
+
+
+	// Create and bind buffers
+	cBufferMgr = make_unique<CBufferMgr>(direct3D->GetDevice().Get(), direct3D->GetDeviceContext().Get());
+
+
+	// Create renderer
+	renderer = make_unique<Renderer>();
+
+
+	return true;
 }

@@ -17,24 +17,36 @@ static const float zFar  = 1000.0f;
 
 class Direct3D {
 	public:
-		Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool MSAA, bool vSync, bool fullscreen);
+		static const Direct3D* Get();
+
+		Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool fullscreen, bool vSync, bool MSAA);
 		~Direct3D();
 
 		bool Init();
-		void BeginScene(float red, float green, float blue, float alpha);
-		void EndScene();
-		void OnResize(int windowWidth, int windowHeight);
+		void BeginScene(float red, float green, float blue, float alpha) const;
+		void EndScene() const;
+		void OnResize(int winWidth, int winHeight);
 
-		ComPtr<ID3D11Device>        GetDevice();
-		ComPtr<ID3D11DeviceContext> GetDeviceContext();
+		ComPtr<ID3D11Device> GetDevice() const {
+			return device;
+		}
+		ComPtr<ID3D11DeviceContext> GetDeviceContext() const {
+			return deviceContext;
+		}
 
-		XMMATRIX GetWorldMatrix();
-		XMMATRIX GetProjectionMatrix();
-		XMMATRIX GetOrthoMatrix();
+		XMMATRIX GetWorldMatrix() const {
+			return worldMatrix;
+		}
+		XMMATRIX GetProjectionMatrix() const {
+			return projectionMatrix;
+		}
+		XMMATRIX GetOrthoMatrix() const {
+			return orthoMatrix;
+		}
 
 
 	private:
-		void GetRefreshRate();
+		void ReadRefreshRate();
 
 
 	private:

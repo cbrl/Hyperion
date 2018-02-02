@@ -1,14 +1,20 @@
 #include "stdafx.h"
 #include "Scene.h"
+#include "rendering\renderingMgr.h"
 
 // TODO:
 // - PARTIAL - Method for setting sampler state
 // - Implement material data into shaders
-// - Create frustum and implement frustum culling
+// - PARTIAL - Create frustum and implement frustum culling
 // - Create a model loader, and a model class that can take any vertex type
 // - Create a simple geometry generator
 // - Bounding boxes on geometry for frustum culling
 // - Global shader include
+// - Static rendering manager?
+// - Pipeline?
+// - Class for creating direct3d states, or a collection of state descriptions (DirectXTK CommonStates.h)
+// - Revamp error handling (look at DX::ThrowIfFailed)
+// - Look at naming objects in debug mode (DirectXHelpers.h)
 
 Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
 	hWnd(hWnd),
@@ -19,6 +25,11 @@ Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext>
 
 
 Scene::~Scene() {
+}
+
+
+bool Scene::Render(float deltaTime) {
+	return Renderer::Get()->Tick(*this, deltaTime);
 }
 
 
@@ -52,14 +63,19 @@ bool Scene::Init() {
 	//----------------------------------------------------------------------------------
 	// Create models
 	//----------------------------------------------------------------------------------
+	vector<wstring> brick;
+	brick.push_back(L"./data/brick.jpg");
+	//brick.push_back(L"./data/brick2.jpg");
+
 	models.push_back(Model());
-	vector<wstring> v;
-	v.push_back(L"./data/brick.jpg");
-	//v.push_back(L"./data/brick2.jpg");
-	result = models[0].Init(device.Get(), "./data/cube.txt", textureMgr->Texture(v), ShaderTypes::LightShader);
-	//result = models[0].Init(device.Get(), "./data/cube.txt", textureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
+	result = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->Texture(brick), ShaderTypes::LightShader);
+	//result = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
 	if (!result) return false;
 
+	models.push_back(Model());
+	result = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->Texture(brick), ShaderTypes::LightShader);
+	if (!result) return false;
+	models.back().SetPosition(4, 0, 0);
 
 	//----------------------------------------------------------------------------------
 	// Create text objects
@@ -110,7 +126,7 @@ void Scene::Tick(Input& input, float deltaTime) {
 	// Rotate models
 	rotation += (XM_PI * deltaTime) / 2500;
 	if (rotation >= (2.0f * XM_PI)) rotation = 0;
-	for (auto model : models) {
+	for (auto& model : models) {
 		model.SetRotation(0.0f, rotation, 0.0f);
 	}
 

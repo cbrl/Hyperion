@@ -1,8 +1,13 @@
 #include "stdafx.h"
 #include "Direct3D.h"
+#include "rendering\RenderingMgr.h"
+
+const Direct3D* Direct3D::Get() {
+	return RenderingMgr::Get()->GetD3D();
+}
 
 
-Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool MSAA, bool vSync, bool fullscreen):
+Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool fullscreen, bool vSync, bool MSAA):
 	hWnd(hWnd),
 	windowWidth(windowWidth),
 	windowHeight(windowHeight),
@@ -93,7 +98,7 @@ bool Direct3D::Init() {
 
 	// V-Sync
 	if (enableVSync) {
-		GetRefreshRate();
+		ReadRefreshRate();
 		sd.BufferDesc.RefreshRate.Numerator   = numerator;
 		sd.BufferDesc.RefreshRate.Denominator = denominator;
 	}
@@ -132,6 +137,9 @@ bool Direct3D::Init() {
 
 	HR(dxgiFactory->CreateSwapChain(device.Get(), &sd, swapChain.ReleaseAndGetAddressOf()));
 
+
+	// Call OnResize to create the render target view, and world/view/projection matrices
+
 	OnResize(windowWidth, windowHeight);
 
 
@@ -139,7 +147,7 @@ bool Direct3D::Init() {
 }
 
 
-void Direct3D::GetRefreshRate() {
+void Direct3D::ReadRefreshRate() {
 	// Create graphics interface factory
 	ComPtr<IDXGIFactory>   factory;
 	ComPtr<IDXGIAdapter>   adapter;
@@ -168,38 +176,13 @@ void Direct3D::GetRefreshRate() {
 }
 
 
-ComPtr<ID3D11Device> Direct3D::GetDevice() {
-	return device;
-}
-
-
-ComPtr<ID3D11DeviceContext> Direct3D::GetDeviceContext() {
-	return deviceContext;
-}
-
-
-XMMATRIX Direct3D::GetWorldMatrix() {
-	return worldMatrix;
-}
-
-
-XMMATRIX Direct3D::GetProjectionMatrix() {
-	return projectionMatrix;
-}
-
-
-XMMATRIX Direct3D::GetOrthoMatrix() {
-	return orthoMatrix;
-}
-
-
-void Direct3D::OnResize(int windowWidth, int windowHeight) {
+void Direct3D::OnResize(int winWidth, int winHeight) {
 	assert(deviceContext);
 	assert(device);
 	assert(swapChain);
 
-	windowWidth  = windowWidth;
-	windowHeight = windowHeight;
+	windowWidth  = winWidth;
+	windowHeight = winHeight;
 
 	renderTargetView.Reset();
 	depthStencilView.Reset();
@@ -218,27 +201,27 @@ void Direct3D::OnResize(int windowWidth, int windowHeight) {
 	//----------------------------------------------------------------------------------
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 
-	depthStencilDesc.Width = windowWidth;
-	depthStencilDesc.Height = windowHeight;
+	depthStencilDesc.Width     = windowWidth;
+	depthStencilDesc.Height    = windowHeight;
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
-	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthStencilDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	// Use 4X MSAA? --must match swap chain MSAA values.
 	if (enable4xMSAA) {
-		depthStencilDesc.SampleDesc.Count = 4;
+		depthStencilDesc.SampleDesc.Count   = 4;
 		depthStencilDesc.SampleDesc.Quality = MSAA4xQuality - 1;
 	}
 	// No MSAA
 	else {
-		depthStencilDesc.SampleDesc.Count = 1;
+		depthStencilDesc.SampleDesc.Count   = 1;
 		depthStencilDesc.SampleDesc.Quality = 0;
 	}
 
-	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthStencilDesc.Usage          = D3D11_USAGE_DEFAULT;
+	depthStencilDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
 	depthStencilDesc.CPUAccessFlags = 0;
-	depthStencilDesc.MiscFlags = 0;
+	depthStencilDesc.MiscFlags      = 0;
 
 	HR(device->CreateTexture2D(&depthStencilDesc, 0, &depthStencilBuffer));
 	HR(device->CreateDepthStencilView(depthStencilBuffer.Get(), 0, &depthStencilView));
@@ -253,8 +236,8 @@ void Direct3D::OnResize(int windowWidth, int windowHeight) {
 
 	windowViewport.TopLeftX = 0;
 	windowViewport.TopLeftY = 0;
-	windowViewport.Width = static_cast<float>(windowWidth);
-	windowViewport.Height = static_cast<float>(windowHeight);
+	windowViewport.Width    = static_cast<float>(windowWidth);
+	windowViewport.Height   = static_cast<float>(windowHeight);
 	windowViewport.MinDepth = 0.0f;
 	windowViewport.MaxDepth = 1.0f;
 
@@ -276,7 +259,7 @@ void Direct3D::OnResize(int windowWidth, int windowHeight) {
 }
 
 
-void Direct3D::BeginScene(float red, float green, float blue, float alpha) {
+void Direct3D::BeginScene(float red, float green, float blue, float alpha) const {
 	float color[4] = { red, green, blue, alpha };
 
 	// Clear render taget view and depth stencil view
@@ -285,7 +268,7 @@ void Direct3D::BeginScene(float red, float green, float blue, float alpha) {
 }
 
 
-void Direct3D::EndScene() {
+void Direct3D::EndScene() const {
 	if (enableVSync) {
 		// If VSync is enabled, present with next frame
 		HR(swapChain->Present(1, 0));

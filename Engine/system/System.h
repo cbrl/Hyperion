@@ -10,6 +10,7 @@
 #include "direct3d\Direct3D.h"
 #include "input\input.h"
 #include "rendering\Renderer.h"
+#include "rendering\RenderingMgr.h"
 #include "scene\Scene.h"
 #include "util\timer\Timer.h"
 #include "util\fps\FPS.h"
@@ -28,13 +29,20 @@ using std::make_shared;
 
 class System : public MainWindow {
 	public:
+		static System* Get() { return systemPtr; }
+
 		System();
 		~System();
 
 		bool Init();
 		int  Run();
+
 		virtual LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		void OnResize(int windowWidth, int windowHeight);
+
+		RenderingMgr* GetRenderingMgr() { return renderingMgr.get(); }
+		Scene* GetScene()               { return scene.get(); }
+		Input* GetInput()               { return input.get(); }
 
 
 	private:
@@ -42,13 +50,14 @@ class System : public MainWindow {
 
 
 	private:
-		unique_ptr<MainWindow> mainWindow;
-		shared_ptr<Direct3D>   direct3D;
-		unique_ptr<Input>      input;
-		unique_ptr<Renderer>   renderer;
-		unique_ptr<Scene>      scene;
-		unique_ptr<Timer>      timer;
-		unique_ptr<FPS>        fpsCounter;
+		static System* systemPtr;
+
+		unique_ptr<MainWindow>   mainWindow;
+		unique_ptr<RenderingMgr> renderingMgr;
+		unique_ptr<Scene>        scene;
+		unique_ptr<Input>        input;
+		unique_ptr<Timer>        timer;
+		unique_ptr<FPS>          fpsCounter;
 
 		bool m_Resizing;
 };

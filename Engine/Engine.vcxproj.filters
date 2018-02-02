@@ -66,9 +66,6 @@
     <ClInclude Include="main\MainWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="model\Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="rendering\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -99,9 +96,6 @@
     <ClInclude Include="rendering\buffer\ConstantBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\RenderingMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="rendering\Sampler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -118,6 +112,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="input\Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\model\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\frustum\Frustum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\RenderStateMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\RenderingMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -161,16 +167,22 @@
     <ClCompile Include="util\timer\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rendering\RenderingMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="rendering\buffer\CBufferMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="model\Model.cpp">
+    <ClCompile Include="input\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input\Input.cpp">
+    <ClCompile Include="geometry\model\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="geometry\frustum\Frustum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\RenderStateMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\RenderingMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

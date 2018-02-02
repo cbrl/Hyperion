@@ -11,7 +11,7 @@
 #include "input\Input.h"
 #include "camera\Camera.h"
 #include "light\Light.h"
-#include "model\Model.h"
+#include "geometry\model\Model.h"
 #include "text\Text.h"
 #include "texture\TextureMgr.h"
 
@@ -29,6 +29,7 @@ class Scene {
 		bool Init();
 		void UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY);
 		void Tick(Input& input, float deltaTime);
+		bool Render(float deltaTime);
 
 
 	public:

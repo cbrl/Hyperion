@@ -26,6 +26,7 @@ class CBufferMgr {
 
 	private:
 		void CreateBuffers(ID3D11Device* device);
+		void BindBuffers();
 
 
 	private:

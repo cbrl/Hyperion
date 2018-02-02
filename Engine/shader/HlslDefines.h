@@ -38,11 +38,11 @@
 //----------------------------------------------------------------------------------
 
 	// Vertex Shader slots
-	#define MATRIX_BUFFER_SLOT 0
-	#define CAMERA_BUFFER_SLOT 1
+	#define MATRIX_BUFFER_SLOT 1
+	#define CAMERA_BUFFER_SLOT 2
 
 	// Pixel Shader slots
-	#define LIGHT_BUFFER_SLOT  0
+	#define LIGHT_BUFFER_SLOT  1
 
 
 #endif //__HLSL_DEFINES__

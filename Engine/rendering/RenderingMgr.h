@@ -1,40 +1,54 @@
 #pragma once
 
+#include <Windows.h>
 #include <d3d11.h>
-#include <VertexTypes.h>
 #include <wrl\client.h>
-#include <memory>
 
-#include "util\EngineUtil.h"
-#include "shader\Shader.h"
-#include "shader\ShaderMgr.h"
-#include "rendering\buffer\CBufferMgr.h"
-#include "rendering\buffer\Buffers.h"
-#include "rendering\Sampler.h"
+#include "direct3d\direct3d.h"
+#include "rendering\RenderStateMgr.h"
+#include "rendering\Renderer.h"
+#include "buffer\CBufferMgr.h"
 
 using std::unique_ptr;
 using std::make_unique;
-using Microsoft::WRL::ComPtr;
 
 class RenderingMgr {
 	public:
-		RenderingMgr(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
+		static const RenderingMgr* Get();
+
+		RenderingMgr(HWND window);
 		~RenderingMgr();
 
-		bool Init();
-		void BindShader(ShaderTypes shader);
-
+		bool Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bool vsync, bool msaa);
+		
 		template<typename DataT>
-		void UpdateData(const DataT& data) {
+		void UpdateData(const DataT& data) const {
 			cBufferMgr->UpdateData(data);
 		}
 
 
+		Direct3D* GetD3D() const {
+			return direct3D.get();
+		}
+
+		Renderer* GetRenderer() const {
+			return renderer.get();
+		}
+
+		RenderStateMgr* GetRenderStateMgr() const {
+			return renderStateMgr.get();
+		}
+
+		CBufferMgr* GetCBufferMgr() const {
+			return cBufferMgr.get();
+		}
+
+
 	private:
-		HWND                        hWnd;
-		ComPtr<ID3D11Device>        device;
-		ComPtr<ID3D11DeviceContext> deviceContext;
-		unique_ptr<ShaderMgr>       shaderMgr;
-		unique_ptr<CBufferMgr>      cBufferMgr;
-		unique_ptr<Sampler>         sampler;
+		unique_ptr<Direct3D>       direct3D;
+		unique_ptr<RenderStateMgr> renderStateMgr;
+		unique_ptr<CBufferMgr>     cBufferMgr;
+		unique_ptr<Renderer>       renderer;
+
+		HWND hWnd;
 };
