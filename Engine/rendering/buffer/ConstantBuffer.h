@@ -27,13 +27,13 @@ struct ConstantBuffer {
 			bufferDesc.MiscFlags = 0;
 			bufferDesc.StructureByteStride = 0;
 
-			HR(device->CreateBuffer(&bufferDesc, nullptr, buffer.ReleaseAndGetAddressOf()));
+			DX::ThrowIfFailed(device->CreateBuffer(&bufferDesc, nullptr, buffer.ReleaseAndGetAddressOf()), "Failed to create buffer");
 		}
 
 		void UpdateData(ID3D11DeviceContext* deviceContext, const DataT& data) {
 			D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
 
-			HR(deviceContext->Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedBuffer));
+			DX::ThrowIfFailed(deviceContext->Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedBuffer), "Failed to map buffer");
 
 			memcpy(mappedBuffer.pData, &data, sizeof(DataT));
 

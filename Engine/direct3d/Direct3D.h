@@ -22,7 +22,7 @@ class Direct3D {
 		Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool fullscreen, bool vSync, bool MSAA);
 		~Direct3D();
 
-		bool Init();
+		void Init();
 		void BeginScene(float red, float green, float blue, float alpha) const;
 		void EndScene() const;
 		void OnResize(int winWidth, int winHeight);

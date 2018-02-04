@@ -17,13 +17,11 @@ RenderingMgr::~RenderingMgr() {
 }
 
 
-bool RenderingMgr::Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bool vsync, bool msaa) {
+void RenderingMgr::Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bool vsync, bool msaa) {
 
 	// Initialize Direct3D
 	direct3D = make_unique<Direct3D>(hWnd, windowWidth, windowHeight, fullscreen, vsync, msaa);
-	if (!direct3D->Init()) {
-		return false;
-	}
+	direct3D->Init();
 
 
 	// Create render state manager and render states
@@ -33,9 +31,7 @@ bool RenderingMgr::Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bo
 
 	// Initialize shader manager and shaders
 	shaderMgr = make_unique<ShaderMgr>();
-	if (!shaderMgr->Init(hWnd, direct3D->GetDevice().Get())) {
-		return false;
-	}
+	shaderMgr->Init(hWnd, direct3D->GetDevice().Get());
 
 
 	// Create and bind buffers
@@ -44,7 +40,4 @@ bool RenderingMgr::Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bo
 
 	// Create renderer
 	renderer = make_unique<Renderer>();
-
-
-	return true;
 }

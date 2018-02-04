@@ -106,7 +106,8 @@ bool Model::InitBuffers(ID3D11Device* device) {
 	vertexData.SysMemSlicePitch = 0;
 
 	// Create vertex buffer
-	HR(device->CreateBuffer(&vertexBufferDesc, &vertexData, vertexBuffer.GetAddressOf()));
+	DX::ThrowIfFailed(device->CreateBuffer(&vertexBufferDesc, &vertexData, vertexBuffer.GetAddressOf()),
+	                  "Failed to create model vertex buffer");
 
 
 	// Index buffer description
@@ -123,7 +124,8 @@ bool Model::InitBuffers(ID3D11Device* device) {
 	indexData.SysMemSlicePitch = 0;
 
 	// Create index buffer
-	HR(device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.GetAddressOf()));
+	DX::ThrowIfFailed(device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.GetAddressOf()),
+	                  "Failed to create model index buffer");
 
 	return true;
 }

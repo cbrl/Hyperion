@@ -8,7 +8,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-MainWindow::MainWindow() {
+MainWindow::MainWindow() :
+	hInstance(),
+	hWnd(),
+	appName()
+{
 	handle = this;
 }
 
@@ -18,9 +22,9 @@ MainWindow::~MainWindow() {
 
 
 bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
-	appName = name;
+	appName      = name;
 	windowHeight = width;
-	windowWidth = height;
+	windowWidth  = height;
 
 	int xPos = (GetSystemMetrics(SM_CXSCREEN) - windowWidth) / 2;
 	int	yPos = (GetSystemMetrics(SM_CYSCREEN) - windowHeight) / 2;

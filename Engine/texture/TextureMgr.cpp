@@ -51,7 +51,8 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(vector<wstring>
 	ComPtr<ID3D11ShaderResourceView> textureView;
 
 	// Create a shader resource view
-	HR(CreateWICTextureFromFile(device.Get(), deviceContext.Get(), filenames[0].c_str(), nullptr, textureView.GetAddressOf()));
+	DX::ThrowIfFailed(CreateWICTextureFromFile(device.Get(), deviceContext.Get(), filenames[0].c_str(), nullptr, textureView.GetAddressOf()),
+	                  "Failed to create WIC texture");
 
 	return textureView;
 }
@@ -65,9 +66,10 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 
 	// Create a vector of textures
 	for(size_t i = 0; i < size; i++) {
-		HR(CreateWICTextureFromFileEx(device.Get(), deviceContext.Get(), filenames[i].c_str(),
-									  NULL, D3D11_USAGE_STAGING, NULL,D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
-									  (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr));
+		DX::ThrowIfFailed(CreateWICTextureFromFileEx(device.Get(), deviceContext.Get(), filenames[i].c_str(),
+									                 NULL, D3D11_USAGE_STAGING, NULL,D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
+									                 (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr),
+		                  "Failed to create WIC texture");
 	}
 
 	// Get the texture description from a texture
@@ -90,14 +92,16 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 
 	// Create texture array
 	ComPtr<ID3D11Texture2D> texArray;
-	HR(device->CreateTexture2D(&arrayDesc, NULL, texArray.GetAddressOf()));
+	DX::ThrowIfFailed(device->CreateTexture2D(&arrayDesc, NULL, texArray.GetAddressOf()),
+	                  "Failed to create texture array");
 
 	// Update texture array with texture data
 	for (UINT texElement = 0; texElement < size; texElement++) {
 		for (UINT mipLevel = 0; mipLevel < desc.MipLevels; mipLevel++) {
 			D3D11_MAPPED_SUBRESOURCE mappedTex = {};
 
-			HR(deviceContext->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex));
+			DX::ThrowIfFailed(deviceContext->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex),
+			                  "Failed to map texture element");
 
 			deviceContext->UpdateSubresource(texArray.Get(), D3D11CalcSubresource(mipLevel, texElement, desc.MipLevels), nullptr,
 											   mappedTex.pData, mappedTex.RowPitch, mappedTex.DepthPitch);
@@ -116,7 +120,8 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 	viewDesc.Texture2DArray.ArraySize       = size;
 
 	// Create the SRV
-	HR(device->CreateShaderResourceView(texArray.Get(), &viewDesc, textureSRV.GetAddressOf()));
+	DX::ThrowIfFailed(device->CreateShaderResourceView(texArray.Get(), &viewDesc, textureSRV.GetAddressOf()),
+	                  "Failed to create SRV");
 
 
 	return textureSRV;
@@ -138,14 +143,16 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSimpleTexture(UINT color) {
 	desc.Usage            = D3D11_USAGE_IMMUTABLE;
 	desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
 
-	HR(device->CreateTexture2D(&desc, &initData, texture.GetAddressOf()));
+	DX::ThrowIfFailed(device->CreateTexture2D(&desc, &initData, texture.GetAddressOf()),
+	                  "Failed to create texture");
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc = {};
 	SRVDesc.Format              = DXGI_FORMAT_R8G8B8A8_UNORM;
 	SRVDesc.ViewDimension       = D3D11_SRV_DIMENSION_TEXTURE2D;
 	SRVDesc.Texture2D.MipLevels = 1;
 
-	HR(device->CreateShaderResourceView(texture.Get(), &SRVDesc, textureSRV.GetAddressOf()));
+	DX::ThrowIfFailed(device->CreateShaderResourceView(texture.Get(), &SRVDesc, textureSRV.GetAddressOf()),
+	                  "Failed to create SRV");
 
 	return textureSRV;
 }

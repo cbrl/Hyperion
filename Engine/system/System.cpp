@@ -17,7 +17,7 @@ System::~System() {
 
 bool System::Init() {
 	// Set width/height variables. Later on this can be read from a config file.
-	windowWidth = WINDOW_WIDTH;
+	windowWidth  = WINDOW_WIDTH;
 	windowHeight = WINDOW_HEIGHT;
 
 	// Create main window
@@ -27,9 +27,7 @@ bool System::Init() {
 
 	// Initialize rendering manager
 	renderingMgr = make_unique<RenderingMgr>(hWnd);
-	if (!renderingMgr->Init(windowWidth, windowHeight, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE)) {
-		return false;
-	}
+	renderingMgr->Init(windowWidth, windowHeight, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
 
 	// Create input handler
 	input = make_unique<Input>(hWnd);
@@ -69,7 +67,7 @@ int System::Run() {
 			// Process frame
 			if (!Tick()) {
 				MessageBox(hWnd, L"Frame processing failed", L"Error", MB_OK);
-				return 1;
+				return 2;
 			}
 
 			if (input->IsKeyDown(Keyboard::Escape)) {

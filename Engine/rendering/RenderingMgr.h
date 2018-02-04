@@ -21,7 +21,7 @@ class RenderingMgr {
 		RenderingMgr(HWND window);
 		~RenderingMgr();
 
-		bool Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bool vsync, bool msaa);
+		void Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bool vsync, bool msaa);
 		
 		void BindShader(ShaderTypes shader) const {
 			shaderMgr->BindShader(direct3D->GetDeviceContext().Get(), shader);

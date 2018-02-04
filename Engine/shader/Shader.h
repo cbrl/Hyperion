@@ -9,6 +9,8 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <locale>
+#include <codecvt>
 #include "util\EngineUtil.h"
 
 using std::string;
@@ -22,7 +24,7 @@ class Shader {
 		Shader();
 		~Shader();
 
-		bool Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, const WCHAR* psFilename,
+		void Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, const WCHAR* psFilename,
 		          const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements);
 
 		void BindShader(ID3D11DeviceContext* deviceContext);

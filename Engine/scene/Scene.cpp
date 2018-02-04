@@ -3,6 +3,7 @@
 #include "rendering\renderingMgr.h"
 
 // TODO:
+// - Finish error handling and function returns
 // - PARTIAL - Method for setting sampler states
 // - Implement material data into shaders
 // - PARTIAL - Create frustum and implement frustum culling
@@ -10,9 +11,8 @@
 // - Create a simple geometry generator
 // - Bounding boxes on geometry for frustum culling
 // - Global shader include
-// - Class for creating direct3d states, or a collection of state descriptions (DirectXTK CommonStates.h)
-// - PARTIAL - Revamp error handling (look at DX::ThrowIfFailed)
 // - Look at naming objects in debug mode (DirectXHelpers.h)
+// - Comment stuff
 
 Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
 	hWnd(hWnd),
