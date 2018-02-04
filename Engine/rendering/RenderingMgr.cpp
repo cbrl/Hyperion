@@ -4,6 +4,7 @@
 
 
 const RenderingMgr* RenderingMgr::Get() {
+	assert(System::Get());
 	return System::Get()->GetRenderingMgr();
 }
 
@@ -25,9 +26,14 @@ bool RenderingMgr::Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bo
 	}
 
 
-	// Initialize render state manager
-	renderStateMgr = make_unique<RenderStateMgr>(hWnd, direct3D->GetDevice(), direct3D->GetDeviceContext());
-	if (!renderStateMgr->Init()) {
+	// Create render state manager and render states
+	renderStateMgr = make_unique<RenderStateMgr>(direct3D->GetDevice(), direct3D->GetDeviceContext());
+	renderStateMgr->SetupStates();
+
+
+	// Initialize shader manager and shaders
+	shaderMgr = make_unique<ShaderMgr>();
+	if (!shaderMgr->Init(hWnd, direct3D->GetDevice().Get())) {
 		return false;
 	}
 

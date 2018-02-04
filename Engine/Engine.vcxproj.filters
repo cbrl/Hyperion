@@ -96,9 +96,6 @@
     <ClInclude Include="rendering\buffer\ConstantBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\Sampler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="rendering\buffer\CBufferMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -120,10 +117,10 @@
     <ClInclude Include="geometry\frustum\Frustum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\RenderStateMgr.h">
+    <ClInclude Include="rendering\RenderingMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\RenderingMgr.h">
+    <ClInclude Include="rendering\RenderStateMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -179,10 +176,10 @@
     <ClCompile Include="geometry\frustum\Frustum.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rendering\RenderStateMgr.cpp">
+    <ClCompile Include="rendering\RenderingMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rendering\RenderingMgr.cpp">
+    <ClCompile Include="rendering\RenderStateMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

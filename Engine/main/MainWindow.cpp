@@ -34,7 +34,7 @@ bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
 	WNDCLASSEX wc;
 
 	wc.style = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc = WndProc;
+	wc.lpfnWndProc = &WndProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;

@@ -173,7 +173,6 @@
     <ClInclude Include="rendering\Renderer.h" />
     <ClInclude Include="rendering\RenderingMgr.h" />
     <ClInclude Include="rendering\RenderStateMgr.h" />
-    <ClInclude Include="rendering\Sampler.h" />
     <ClInclude Include="scene\Scene.h" />
     <ClInclude Include="shader\Shader.h" />
     <ClInclude Include="shader\HlslDefines.h" />

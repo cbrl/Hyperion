@@ -52,7 +52,7 @@ struct ShaderMgr {
 		return true;
 	}
 
-	void BindShader(ShaderTypes shader, ID3D11DeviceContext* deviceContext) {
+	void BindShader(ID3D11DeviceContext* deviceContext, ShaderTypes shader) {
 		m_Shaders.at(shader).BindShader(deviceContext);
 	}
 

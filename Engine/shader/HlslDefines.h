@@ -37,12 +37,20 @@
 // Slots
 //----------------------------------------------------------------------------------
 
-	// Vertex Shader slots
+	// Vertex Shader buffer slots
 	#define MATRIX_BUFFER_SLOT 1
 	#define CAMERA_BUFFER_SLOT 2
 
-	// Pixel Shader slots
+	// Pixel Shader buffer slots
 	#define LIGHT_BUFFER_SLOT  1
+
+	// Sampler slots
+	#define LINEAR_WRAP_SLOT 1
+	#define LINEAR_CLAMP_SLOT 2
+	#define POINT_WRAP_SLOT 3
+	#define POINT_CLAMP_SLOT 4
+	#define ANISO_WRAP_SLOT 5
+	#define ANISO_CLAMP_SLOT 6
 
 
 #endif //__HLSL_DEFINES__

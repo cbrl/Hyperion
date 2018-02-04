@@ -3,6 +3,7 @@
 #include "rendering\RenderingMgr.h"
 
 const Direct3D* Direct3D::Get() {
+	assert(RenderingMgr::Get());
 	return RenderingMgr::Get()->GetD3D();
 }
 
@@ -72,8 +73,7 @@ bool Direct3D::Init() {
 	// All Direct3D 11 capable devices support 4X MSAA for all render 
 	// target formats, so we only need to check quality support.
 
-	HR(device->CheckMultisampleQualityLevels(
-	   DXGI_FORMAT_R8G8B8A8_UNORM, 4, &MSAA4xQuality));
+	HR(device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &MSAA4xQuality));
 	assert(MSAA4xQuality > 0);
 
 	//----------------------------------------------------------------------------------

@@ -3,17 +3,15 @@
 #include "rendering\renderingMgr.h"
 
 // TODO:
-// - PARTIAL - Method for setting sampler state
+// - PARTIAL - Method for setting sampler states
 // - Implement material data into shaders
 // - PARTIAL - Create frustum and implement frustum culling
 // - Create a model loader, and a model class that can take any vertex type
 // - Create a simple geometry generator
 // - Bounding boxes on geometry for frustum culling
 // - Global shader include
-// - Static rendering manager?
-// - Pipeline?
 // - Class for creating direct3d states, or a collection of state descriptions (DirectXTK CommonStates.h)
-// - Revamp error handling (look at DX::ThrowIfFailed)
+// - PARTIAL - Revamp error handling (look at DX::ThrowIfFailed)
 // - Look at naming objects in debug mode (DirectXHelpers.h)
 
 Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
@@ -76,6 +74,7 @@ bool Scene::Init() {
 	result = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->Texture(brick), ShaderTypes::LightShader);
 	if (!result) return false;
 	models.back().SetPosition(4, 0, 0);
+
 
 	//----------------------------------------------------------------------------------
 	// Create text objects

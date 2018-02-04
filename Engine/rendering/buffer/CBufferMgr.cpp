@@ -30,7 +30,7 @@ void CBufferMgr::BindBuffers() {
 }
 
 
-void CBufferMgr::BindCBuffer(BufferTypes buffer) {
+void CBufferMgr::BindBuffer(BufferTypes buffer) {
 	switch (buffer) {
 		case BufferTypes::MatrixBuffer:
 			deviceContext->VSSetConstantBuffers(MATRIX_BUFFER_SLOT, 1, matrixBuffer->buffer.GetAddressOf());

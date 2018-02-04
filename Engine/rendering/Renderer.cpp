@@ -4,6 +4,7 @@
 
 
 const Renderer* Renderer::Get() {
+	assert(RenderingMgr::Get());
 	return RenderingMgr::Get()->GetRenderer();
 }
 
@@ -22,7 +23,7 @@ Renderer::~Renderer() {
 bool Renderer::Tick(Scene& scene, float deltaTime) const {
 	// Clear background with specified color
 	Direct3D::Get()->BeginScene(0.39f, 0.58f, 0.93f, 1.0f);
-
+	RenderStateMgr::Get()->BindDepthDefault();
 
 	// Create matrix buffer
 	MatrixBuffer matrixBuffer;
@@ -41,7 +42,7 @@ bool Renderer::Tick(Scene& scene, float deltaTime) const {
 	// Render objects with color shader
 	//----------------------------------------------------------------------------------
 	// Bind shader
-	RenderingMgr::Get()->GetRenderStateMgr()->BindShader(ShaderTypes::ColorShader);
+	RenderingMgr::Get()->BindShader(ShaderTypes::ColorShader);
 
 	// Update cbuffers
 	RenderingMgr::Get()->UpdateData(matrixBuffer);
@@ -71,7 +72,7 @@ bool Renderer::Tick(Scene& scene, float deltaTime) const {
 	//----------------------------------------------------------------------------------
 	// Render objects with light shader
 	//----------------------------------------------------------------------------------
-	RenderingMgr::Get()->GetRenderStateMgr()->BindShader(ShaderTypes::LightShader);
+	RenderingMgr::Get()->BindShader(ShaderTypes::LightShader);
 
 	RenderingMgr::Get()->UpdateData(scene.camera->GetBuffer());
 	RenderingMgr::Get()->UpdateData(scene.lights.front().GetBuffer());
