@@ -22,7 +22,7 @@ class Renderer {
 		Renderer();
 		~Renderer();
 
-		bool Tick(Scene& scene, float deltaTime) const;
+		void Tick(Scene& scene, float deltaTime) const;
 
 
 	private:

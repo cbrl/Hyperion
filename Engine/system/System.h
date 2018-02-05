@@ -46,7 +46,7 @@ class System : public MainWindow {
 
 
 	private:
-		bool Tick();
+		void Tick();
 
 
 	private:

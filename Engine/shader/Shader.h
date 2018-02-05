@@ -7,10 +7,6 @@
 #include <Windows.h>
 #include <wrl\client.h>
 #include <fstream>
-#include <string>
-#include <vector>
-#include <locale>
-#include <codecvt>
 #include "util\EngineUtil.h"
 
 using std::string;

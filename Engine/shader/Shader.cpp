@@ -28,7 +28,6 @@ void Shader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, cons
 			MessageBox(hWnd, vsFilename, L"Missing vertex shader file", MB_OK);
 		}
 
-		string filename = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(vsFilename);
 		DX::ThrowIfFailed(result, "Error compiling vertex shader");
 	}
 
@@ -43,8 +42,7 @@ void Shader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, cons
 			MessageBox(hWnd, psFilename, L"Missing pixel shader file", MB_OK);
 		}
 
-		string filename = std::wstring_convert<std::codecvt_utf8<wchar_t>>().to_bytes(psFilename);
-		DX::ThrowIfFailed(result, "Error compiling pixel shader: " + filename);
+		DX::ThrowIfFailed(result, "Error compiling pixel shader");
 	}
 
 

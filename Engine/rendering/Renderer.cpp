@@ -20,7 +20,7 @@ Renderer::~Renderer() {
 }
 
 
-bool Renderer::Tick(Scene& scene, float deltaTime) const {
+void Renderer::Tick(Scene& scene, float deltaTime) const {
 	// Clear background with specified color
 	Direct3D::Get()->BeginScene(0.39f, 0.58f, 0.93f, 1.0f);
 	RenderStateMgr::Get()->BindDepthDefault();
@@ -106,6 +106,4 @@ bool Renderer::Tick(Scene& scene, float deltaTime) const {
 
 	// Present the frame
 	Direct3D::Get()->EndScene();
-
-	return true;
 }

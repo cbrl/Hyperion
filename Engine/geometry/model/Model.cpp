@@ -13,31 +13,34 @@ Model::~Model() {
 }
 
 
-bool Model::Init(ID3D11Device* device, const char* modelFilename,
+HRESULT Model::Init(ID3D11Device* device, const char* modelFilename,
 				 ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType) {
+	HRESULT hr;
 
-	if (!LoadModel(modelFilename)) {
-		return false;
+	hr = LoadModel(modelFilename);
+	if (FAILED(hr)) {
+		return hr;
 	}
 
-	if (!InitBuffers(device)) {
-		return false;
+	hr = InitBuffers(device);
+	if (FAILED(hr)) {
+		return hr;
 	}
 
 	texture = modelTexture;
 	shader  = shaderType;
 
-	return true;
+	return S_OK;
 }
 
 
-bool Model::LoadModel(const char* filename) {
+HRESULT Model::LoadModel(const char* filename) {
 	char      ch;
 	ifstream  file;
 	ModelData temp;
 
 	file.open(filename);
-	if (file.fail()) return false;
+	if (file.fail()) return E_FAIL;
 
 	// Move file pointer to vertex count
 	file.get(ch);
@@ -68,11 +71,13 @@ bool Model::LoadModel(const char* filename) {
 	
 	file.close();
 
-	return true;
+	return S_OK;
 }
 
 
-bool Model::InitBuffers(ID3D11Device* device) {
+HRESULT Model::InitBuffers(ID3D11Device* device) {
+	HRESULT hr;
+
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 
@@ -106,9 +111,7 @@ bool Model::InitBuffers(ID3D11Device* device) {
 	vertexData.SysMemSlicePitch = 0;
 
 	// Create vertex buffer
-	DX::ThrowIfFailed(device->CreateBuffer(&vertexBufferDesc, &vertexData, vertexBuffer.GetAddressOf()),
-	                  "Failed to create model vertex buffer");
-
+	hr = device->CreateBuffer(&vertexBufferDesc, &vertexData, vertexBuffer.GetAddressOf());
 
 	// Index buffer description
 	indexBufferDesc.Usage          = D3D11_USAGE_DEFAULT;
@@ -124,10 +127,9 @@ bool Model::InitBuffers(ID3D11Device* device) {
 	indexData.SysMemSlicePitch = 0;
 
 	// Create index buffer
-	DX::ThrowIfFailed(device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.GetAddressOf()),
-	                  "Failed to create model index buffer");
+	hr = device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.GetAddressOf());
 
-	return true;
+	return hr;
 }
 
 

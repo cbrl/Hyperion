@@ -26,10 +26,10 @@ class Scene {
 		Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
 		~Scene();
 
-		bool Init();
+		void Init();
 		void UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY);
 		void Tick(Input& input, float deltaTime);
-		bool Render(float deltaTime);
+		void Render(float deltaTime);
 
 
 	public:

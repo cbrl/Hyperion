@@ -60,8 +60,9 @@ HRESULT RenderStateMgr::CreateBlendState(D3D11_BLEND srcBlend, D3D11_BLEND destB
 
 	HRESULT hr = device->CreateBlendState(&desc, pResult);
 
-	if (SUCCEEDED(hr))
+	if (SUCCEEDED(hr)) {
 		SetDebugObjectName(*pResult, "RenderStateMgr BlendState");
+	}
 
 	return hr;
 }
@@ -87,8 +88,9 @@ HRESULT RenderStateMgr::CreateDepthStencilState(bool enable, bool writeEnable, I
 
 	HRESULT hr = device->CreateDepthStencilState(&desc, pResult);
 
-	if (SUCCEEDED(hr))
+	if (SUCCEEDED(hr)) {
 		SetDebugObjectName(*pResult, "RenderStateMgr DepthState");
+	}
 
 	return hr;
 }
@@ -104,8 +106,9 @@ HRESULT RenderStateMgr::CreateRasterizerState(D3D11_CULL_MODE cullMode, D3D11_FI
 
 	HRESULT hr = device->CreateRasterizerState(&desc, pResult);
 
-	if (SUCCEEDED(hr))
+	if (SUCCEEDED(hr)) {
 		SetDebugObjectName(*pResult, "RenderStateMgr RasterState");
+	}
 
 	return hr;
 }
@@ -127,8 +130,9 @@ HRESULT RenderStateMgr::CreateSamplerState(D3D11_FILTER filter, D3D11_TEXTURE_AD
 
 	HRESULT hr = device->CreateSamplerState(&desc, pResult);
 
-	if (SUCCEEDED(hr))
+	if (SUCCEEDED(hr)) {
 		SetDebugObjectName(*pResult, "RenderStateMgr SamplerState");
+	}
 
 	return hr;
 }
@@ -144,7 +148,8 @@ void RenderStateMgr::Opaque() {
 	else {
 		auto temp = opaque.GetAddressOf();
 
-		DX::ThrowIfFailed(CreateBlendState(D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, temp), "Error creating opaque blend state");
+		DX::ThrowIfFailed(CreateBlendState(D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, temp),
+		                  "Error creating opaque blend state");
 	}
 
 
@@ -158,7 +163,8 @@ void RenderStateMgr::AlphaBlend() {
 	else {
 		auto temp = alphaBlend.GetAddressOf();
 
-		DX::ThrowIfFailed(CreateBlendState(D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, temp), "Error creating alphablend blend state");
+		DX::ThrowIfFailed(CreateBlendState(D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, temp),
+		                  "Error creating alphablend blend state");
 	}
 }
 
@@ -170,7 +176,8 @@ void RenderStateMgr::Additive() {
 	else {
 		auto temp = additive.GetAddressOf();
 
-		DX::ThrowIfFailed(CreateBlendState(D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_ONE, temp), "Error creating additive blend state");
+		DX::ThrowIfFailed(CreateBlendState(D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_ONE, temp),
+						  "Error creating additive blend state");
 	}
 }
 
@@ -182,7 +189,8 @@ void RenderStateMgr::NonPremultiplied() {
 	else {
 		auto temp = nonPremultiplied.GetAddressOf();
 
-		DX::ThrowIfFailed(CreateBlendState(D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_INV_SRC_ALPHA, temp), "Error creating nonpremultiplied blend state");
+		DX::ThrowIfFailed(CreateBlendState(D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_INV_SRC_ALPHA, temp),
+						  "Error creating nonpremultiplied blend state");
 	}
 }
 

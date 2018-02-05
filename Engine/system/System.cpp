@@ -40,9 +40,7 @@ bool System::Init() {
 
 	// Initialize scene
 	scene = make_unique<Scene>(hWnd, Direct3D::Get()->GetDevice(), Direct3D::Get()->GetDeviceContext());
-	if (!scene->Init()) {
-		return false;
-	}
+	scene->Init();
 
 	return true;
 }
@@ -65,10 +63,7 @@ int System::Run() {
 		}
 		else {
 			// Process frame
-			if (!Tick()) {
-				MessageBox(hWnd, L"Frame processing failed", L"Error", MB_OK);
-				return 2;
-			}
+			Tick();
 
 			if (input->IsKeyDown(Keyboard::Escape)) {
 				done = true;
@@ -80,7 +75,7 @@ int System::Run() {
 }
 
 
-bool System::Tick() {
+void System::Tick() {
 	int   mouseX, mouseY;
 	float deltaTime;
 
@@ -100,11 +95,7 @@ bool System::Tick() {
 	scene->UpdateMetrics(fpsCounter->GetFPS(), NULL, mouseX, mouseY);
 
 	// Render scene
-	if (!scene->Render(deltaTime)) {
-		return false;
-	}
-
-	return true;
+	scene->Render(deltaTime);
 }
 
 

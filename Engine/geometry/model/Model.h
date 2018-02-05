@@ -17,7 +17,7 @@ class Model {
 		Model();
 		~Model();
 		
-		bool Init(ID3D11Device* device, const char* modelFilename,
+		HRESULT Init(ID3D11Device* device, const char* modelFilename,
 		          ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType);
 
 		void RenderBuffers(ID3D11DeviceContext* deviceContext);
@@ -47,8 +47,8 @@ class Model {
 
 
 	private:
-		bool LoadModel(const char* filename);
-		bool InitBuffers(ID3D11Device* device);
+		HRESULT LoadModel(const char* filename);
+		HRESULT InitBuffers(ID3D11Device* device);
 
 
 	private:

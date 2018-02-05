@@ -3,7 +3,6 @@
 #include "rendering\renderingMgr.h"
 
 // TODO:
-// - Finish error handling and function returns
 // - PARTIAL - Method for setting sampler states
 // - Implement material data into shaders
 // - PARTIAL - Create frustum and implement frustum culling
@@ -26,13 +25,13 @@ Scene::~Scene() {
 }
 
 
-bool Scene::Render(float deltaTime) {
-	return Renderer::Get()->Tick(*this, deltaTime);
+void Scene::Render(float deltaTime) {
+	Renderer::Get()->Tick(*this, deltaTime);
 }
 
 
-bool Scene::Init() {
-	bool result;
+void Scene::Init() {
+	HRESULT hr;
 
 	//----------------------------------------------------------------------------------
 	// Create camera
@@ -66,14 +65,14 @@ bool Scene::Init() {
 	//brick.push_back(L"./data/brick2.jpg");
 
 	models.push_back(Model());
-	result = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->Texture(brick), ShaderTypes::LightShader);
+	hr = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->Texture(brick), ShaderTypes::LightShader);
 	//result = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
-	if (!result) return false;
+	DX::LogIfFailed(hr, "Failed to create model");
 
 	models.push_back(Model());
-	result = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->Texture(brick), ShaderTypes::LightShader);
-	if (!result) return false;
-	models.back().SetPosition(4, 0, 0);
+	hr = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->Texture(brick), ShaderTypes::LightShader);
+	DX::LogIfFailed(hr, "Failed to create model");
+	if (SUCCEEDED(hr)) models.back().SetPosition(4, 0, 0);
 
 
 	//----------------------------------------------------------------------------------
@@ -93,8 +92,6 @@ bool Scene::Init() {
 
 	texts.try_emplace(L"Velocity", device.Get(), deviceContext.Get(), L"./data/courier-12.spritefont");
 	texts.at(L"Velocity").SetPosition(XMFLOAT2(10, 300));
-
-	return true;
 }
 
 
