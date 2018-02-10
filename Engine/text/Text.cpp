@@ -8,8 +8,8 @@ Text::Text(ID3D11Device* device, ID3D11DeviceContext* deviceContext, const WCHAR
 	color(Colors::White),
 	rotation(0.0f)
 {
-	m_SpriteBatch = make_unique<SpriteBatch>(deviceContext);
-	m_SpriteFont = make_unique<SpriteFont>(device, fontFilename);
+	spriteBatch = make_unique<SpriteBatch>(deviceContext);
+	spriteFont = make_unique<SpriteFont>(device, fontFilename);
 }
 
 
@@ -59,7 +59,7 @@ void Text::SetRotation(float newRotation) {
 
 
 void Text::Render() {
-	m_SpriteBatch->Begin();
-	m_SpriteFont->DrawString(m_SpriteBatch.get(), &text[0], position, color, rotation);
-	m_SpriteBatch->End();
+	spriteBatch->Begin();
+	spriteFont->DrawString(spriteBatch.get(), &text[0], position, color, rotation);
+	spriteBatch->End();
 }

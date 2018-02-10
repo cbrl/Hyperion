@@ -1,12 +1,13 @@
 #pragma once
 
-#include <d3d11.h>
-#include <wrl\client.h>
-#include <type_traits>
 #include <memory>
+#include <type_traits>
+#include <wrl\client.h>
+#include <d3d11.h>
 
 #include "util\EngineUtil.h"
 #include "shader\HlslDefines.h"
+#include "direct3d\direct3d.h"
 #include "rendering\buffer\Buffers.h"
 #include "rendering\buffer\ConstantBuffer.h"
 
@@ -16,8 +17,8 @@ using Microsoft::WRL::ComPtr;
 
 class CBufferMgr {
 	public:
-		CBufferMgr(ID3D11Device* device, ComPtr<ID3D11DeviceContext> deviceContext);
 		CBufferMgr();
+		~CBufferMgr();
 
 		void BindBuffer(BufferTypes buffer);
 

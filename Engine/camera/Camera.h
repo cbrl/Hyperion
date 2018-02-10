@@ -1,8 +1,8 @@
 #pragma once
 
+#include <math.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include <math.h>
 #include "rendering\buffer\Buffers.h"
 
 using namespace DirectX;

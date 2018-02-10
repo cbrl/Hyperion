@@ -39,14 +39,14 @@ bool System::Init() {
 	fpsCounter = make_unique<FPS>();
 
 	// Initialize scene
-	scene = make_unique<Scene>(hWnd, Direct3D::Get()->GetDevice(), Direct3D::Get()->GetDeviceContext());
+	scene = make_unique<Scene>(Direct3D::Get()->GetDevice(), Direct3D::Get()->GetDeviceContext());
 	scene->Init();
 
 	return true;
 }
 
 
-int System::Run() {
+void System::Run() {
 	MSG   msg = { 0 };
 	bool done = false;
 
@@ -70,8 +70,6 @@ int System::Run() {
 			}
 		}
 	}
-
-	return 0;
 }
 
 
@@ -120,7 +118,7 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				OnResize(windowWidth, windowHeight);
 			}
 			else if (wParam == SIZE_RESTORED) {
-				if (m_Resizing) {
+				if (resizing) {
 					// Do nothing. Constantly calling the resize function would be slow.
 				}
 				else {
@@ -130,11 +128,11 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			return 0;
 
 		case WM_ENTERSIZEMOVE:
-			m_Resizing = true;
+			resizing = true;
 			return 0;
 
 		case WM_EXITSIZEMOVE:
-			m_Resizing = false;
+			resizing = false;
 			OnResize(windowWidth, windowHeight);
 			return 0;
 

@@ -1,8 +1,8 @@
 #pragma once
 
+#include <wrl\client.h>
 #include <Keyboard.h>
 #include <Mouse.h>
-#include <wrl\client.h>
 
 using std::unique_ptr;
 using std::make_unique;
@@ -15,10 +15,15 @@ class Input {
 		
 		void Tick();
 		void Reset();
+
+		void SetMouseAbsolute() { mouse->SetMode(Mouse::MODE_ABSOLUTE); }
+		void SetMouseRelative() { mouse->SetMode(Mouse::MODE_RELATIVE); }
+
 		void GetMouseDelta(int &xPos, int &yPos);
-		bool IsKeyDown(Keyboard::Keys key);
-		bool IsKeyPressed(Keyboard::Keys key);
-		bool IsKeyReleased(Keyboard::Keys key);
+
+		bool IsKeyDown(Keyboard::Keys key) { return keyboardState.IsKeyDown(key); }
+		bool IsKeyPressed(Keyboard::Keys key) { return keyboardTracker.IsKeyPressed(key); }
+		bool IsKeyReleased(Keyboard::Keys key) { return keyboardTracker.IsKeyReleased(key); }
 
 
 	private:

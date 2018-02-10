@@ -48,26 +48,26 @@ void Shader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, cons
 
 	// Create vertex and pixel shader
 	DX::ThrowIfFailed(device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
-	                                             nullptr, m_VertexShader.ReleaseAndGetAddressOf()),
+	                                             nullptr, vertexShader.ReleaseAndGetAddressOf()),
 	                  "Failed to create vertex shader");
 
 	DX::ThrowIfFailed(device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(),
-	                             nullptr, m_PixelShader.ReleaseAndGetAddressOf()),
+	                             nullptr, pixelShader.ReleaseAndGetAddressOf()),
 	                  "Failed to create pixel shader");
 
 
 	// Create the vertex input layout
 	DX::ThrowIfFailed(device->CreateInputLayout(inputElementDesc, numElements, vertexShaderBuffer->GetBufferPointer(),
-								                vertexShaderBuffer->GetBufferSize(), m_VertexLayout.ReleaseAndGetAddressOf()),
+								                vertexShaderBuffer->GetBufferSize(), vertexLayout.ReleaseAndGetAddressOf()),
 	                  "Failed to create input layout");
 }
 
 
 void Shader::BindShader(ID3D11DeviceContext* deviceContext) {
-	deviceContext->IASetInputLayout(m_VertexLayout.Get());
+	deviceContext->IASetInputLayout(vertexLayout.Get());
 
-	deviceContext->VSSetShader(m_VertexShader.Get(), nullptr, 0);
-	deviceContext->PSSetShader(m_PixelShader.Get(), nullptr, 0);
+	deviceContext->VSSetShader(vertexShader.Get(), nullptr, 0);
+	deviceContext->PSSetShader(pixelShader.Get(), nullptr, 0);
 }
 
 

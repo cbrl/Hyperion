@@ -1,8 +1,8 @@
 #pragma once
 
+#include <wrl\client.h>
 #include <d3d11.h>
 #include <DirectXColors.h>
-#include <wrl\client.h>
 
 #include "util\EngineUtil.h"
 #include "direct3d\Direct3D.h"

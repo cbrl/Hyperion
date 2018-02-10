@@ -1,9 +1,9 @@
 #pragma once
 
-#include <VertexTypes.h>
-#include <wrl\client.h>
 #include <vector>
 #include <fstream>
+#include <wrl\client.h>
+#include <VertexTypes.h>
 #include "util\EngineUtil.h"
 
 using std::vector;
@@ -12,13 +12,16 @@ using Microsoft::WRL::ComPtr;
 
 using namespace DirectX;
 
+template<typename VertexT>
 class Model {
 	public:
-		Model();
+		Model() :
+			position(XMMatrixTranslation(0.0f, 0.0f, 0.0f)),
+			rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f)) {}
 		~Model();
 		
-		bool Init(ID3D11Device* device, const char* modelFilename,
-		          ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType);
+		HRESULT Init(ID3D11Device* device, vector<VertexT> vertices, vector<ULONG> indices,
+					 ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType);
 
 		void RenderBuffers(ID3D11DeviceContext* deviceContext);
 
@@ -47,17 +50,10 @@ class Model {
 
 
 	private:
-		bool LoadModel(const char* filename);
-		bool InitBuffers(ID3D11Device* device);
+		HRESULT CreateBuffers(ID3D11Device* device);
 
 
 	private:
-		struct ModelData {
-			float x, y, z;
-			float nx, ny, nz;
-			float tu, tv;
-		};
-
 		struct Material {
 			XMFLOAT4 diffuse;
 			XMFLOAT4 ambient;
@@ -68,14 +64,18 @@ class Model {
 	private:
 		int               vertexCount;
 		int               indexCount;
-		vector<ModelData> modelData;
+		vector<VertexT>   vertices;
+		vector<ULONG>     indices;
 
-		ComPtr<ID3D11Buffer>             vertexBuffer;
-		ComPtr<ID3D11Buffer>             indexBuffer;
+		ComPtr<ID3D11Buffer> vertexBuffer;
+		ComPtr<ID3D11Buffer> indexBuffer;
+
 		ComPtr<ID3D11ShaderResourceView> texture;
-		Material                         material;
-		ShaderTypes                      shader;
-		XMMATRIX                         position;
-		XMMATRIX                         rotation;
+		Material     material;
+		ShaderTypes  shader;
+		XMMATRIX     position;
+		XMMATRIX     rotation;
 };
 
+
+#include "model2.tpp"

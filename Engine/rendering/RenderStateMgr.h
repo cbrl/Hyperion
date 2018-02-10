@@ -1,11 +1,12 @@
 #pragma once
 
+#include <wrl\client.h>
 #include <d3d11.h>
 #include <DirectXHelpers.h>
-#include <wrl\client.h>
 
 #include "util\EngineUtil.h"
 #include "shader\HlslDefines.h"
+#include "direct3d\direct3d.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -15,7 +16,7 @@ class RenderStateMgr {
 	public:
 		static const RenderStateMgr* Get();
 
-		RenderStateMgr(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
+		RenderStateMgr();
 		~RenderStateMgr();
 
 		void SetupStates();
@@ -58,30 +59,10 @@ class RenderStateMgr {
 		HRESULT CreateRasterizerState(D3D11_CULL_MODE cullMode, D3D11_FILL_MODE fillMode, _Out_ ID3D11RasterizerState** pResult);
 		HRESULT CreateSamplerState(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE addressMode, _Out_ ID3D11SamplerState** pResult);
 
-		// Blend states
-		void Opaque();
-		void AlphaBlend();
-		void Additive();
-		void NonPremultiplied();
-
-		// Depth stencil states
-		void DepthNone();
-		void DepthDefault();
-		void DepthRead();
-
-		// Rasterizer states
-		void CullNone();
-		void CullClockwise();
-		void CullCounterClockwise();
-		void Wireframe();
-
-		// Sampler states
-		void PointWrap();
-		void PointClamp();
-		void LinearWrap();
-		void LinearClamp();
-		void AnisotropicWrap();
-		void AnisotropicClamp();
+		void CreateBlendStates();
+		void CreateDepthStencilStates();
+		void CreateRasterizerStates();
+		void CreateSamplerStates();
 
 
 	private:

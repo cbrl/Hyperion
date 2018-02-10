@@ -1,12 +1,12 @@
 #pragma once
 
+#include <fstream>
+#include <wrl\client.h>
+#include <Windows.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <VertexTypes.h>
-#include <Windows.h>
-#include <wrl\client.h>
-#include <fstream>
 #include "util\EngineUtil.h"
 
 using std::string;
@@ -31,8 +31,8 @@ class Shader {
 
 
 	private:
-		ComPtr<ID3D11VertexShader> m_VertexShader;
-		ComPtr<ID3D11InputLayout>  m_VertexLayout;
-		ComPtr<ID3D11PixelShader>  m_PixelShader;
+		ComPtr<ID3D11VertexShader> vertexShader;
+		ComPtr<ID3D11InputLayout>  vertexLayout;
+		ComPtr<ID3D11PixelShader>  pixelShader;
 };
 

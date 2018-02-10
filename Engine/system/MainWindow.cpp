@@ -74,7 +74,7 @@ bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
 }
 
 
-int MainWindow::Run() {
+void MainWindow::Run() {
 	MSG   msg = { 0 };
 	bool done = false;
 
@@ -93,8 +93,6 @@ int MainWindow::Run() {
 			// Process frame
 		}
 	}
-
-	return 0;
 }
 
 

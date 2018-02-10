@@ -1,9 +1,9 @@
 #pragma once
 
-#include <VertexTypes.h>
-#include <wrl\client.h>
 #include <vector>
 #include <fstream>
+#include <wrl\client.h>
+#include <VertexTypes.h>
 #include "util\EngineUtil.h"
 
 using std::vector;
@@ -17,8 +17,8 @@ class Model {
 		Model();
 		~Model();
 		
-		HRESULT Init(ID3D11Device* device, const char* modelFilename,
-		          ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType);
+		void Init(ID3D11Device* device, const char* modelFilename,
+		             ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType);
 
 		void RenderBuffers(ID3D11DeviceContext* deviceContext);
 

@@ -13,24 +13,15 @@ Model::~Model() {
 }
 
 
-HRESULT Model::Init(ID3D11Device* device, const char* modelFilename,
+void Model::Init(ID3D11Device* device, const char* modelFilename,
 				 ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType) {
-	HRESULT hr;
 
-	hr = LoadModel(modelFilename);
-	if (FAILED(hr)) {
-		return hr;
-	}
+	DX::ThrowIfFailed(LoadModel(modelFilename), "Failed to load model");
 
-	hr = InitBuffers(device);
-	if (FAILED(hr)) {
-		return hr;
-	}
+	DX::ThrowIfFailed(InitBuffers(device), "Failed to initialize model buffers.");
 
 	texture = modelTexture;
 	shader  = shaderType;
-
-	return S_OK;
 }
 
 

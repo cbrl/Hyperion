@@ -1,8 +1,8 @@
 #pragma once
 
+#include <wrl\client.h>
 #include <Windows.h>
 #include <d3d11.h>
-#include <wrl\client.h>
 
 #include "util\EngineUtil.h"
 #include "direct3d\direct3d.h"
@@ -24,7 +24,7 @@ class RenderingMgr {
 		void Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bool vsync, bool msaa);
 		
 		void BindShader(ShaderTypes shader) const {
-			shaderMgr->BindShader(direct3D->GetDeviceContext().Get(), shader);
+			shaderMgr->BindShader(shader);
 		}
 
 		template<typename DataT>

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <d3d11.h>
-#include <SpriteBatch.h>
-#include <SpriteFont.h>
-#include <DirectXColors.h>
 #include <string>
 #include <memory>
 #include <Windows.h>
 #include <wrl\client.h>
+#include <d3d11.h>
+#include <SpriteBatch.h>
+#include <SpriteFont.h>
+#include <DirectXColors.h>
 
 using std::wstring;
 using std::unique_ptr;
@@ -33,8 +33,8 @@ class Text {
 
 
 	private:
-		unique_ptr<SpriteFont>  m_SpriteFont;
-		unique_ptr<SpriteBatch> m_SpriteBatch;
+		unique_ptr<SpriteFont>  spriteFont;
+		unique_ptr<SpriteBatch> spriteBatch;
 
 		wstring     text;
 		XMFLOAT2    position;

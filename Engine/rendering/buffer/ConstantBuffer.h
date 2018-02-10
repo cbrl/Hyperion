@@ -1,17 +1,16 @@
 #pragma once
 #include "stdafx.h"
 
-#include <d3d11.h>
-#include <wrl\client.h>
 #include <memory.h>
+#include <wrl\client.h>
+#include <d3d11.h>
 #include "util\EngineUtil.h"
 
 using Microsoft::WRL::ComPtr;
 
 template<typename DataT>
 struct ConstantBuffer {
-		ComPtr<ID3D11Buffer> buffer;
-
+	public:
 		ConstantBuffer(ID3D11Device* device) {
 			CreateBuffer(device);
 		}
@@ -30,6 +29,8 @@ struct ConstantBuffer {
 			DX::ThrowIfFailed(device->CreateBuffer(&bufferDesc, nullptr, buffer.ReleaseAndGetAddressOf()), "Failed to create buffer");
 		}
 
+		ID3D11Buffer** GetBufferAddress() { return buffer.GetAddressOf(); }
+
 		void UpdateData(ID3D11DeviceContext* deviceContext, const DataT& data) {
 			D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
 
@@ -39,4 +40,8 @@ struct ConstantBuffer {
 
 			deviceContext->Unmap(buffer.Get(), NULL);
 		}
+
+
+	private:
+		ComPtr<ID3D11Buffer> buffer;
 };

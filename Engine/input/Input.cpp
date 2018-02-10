@@ -34,6 +34,7 @@ void Input::Tick() {
 
 void Input::Reset() {
 	keyboardTracker.Reset();
+	buttonTracker.Reset();
 }
 
 
@@ -49,29 +50,4 @@ void Input::GetMouseDelta(int &xPos, int &yPos) {
 		xPos = mouseState.x;
 		yPos = mouseState.y;
 	}
-}
-
-
-bool Input::IsKeyDown(Keyboard::Keys key) {
-	if (keyboardState.IsKeyDown(key)) {
-		return true;
-	}
-
-	return false;
-}
-
-
-bool Input::IsKeyPressed(Keyboard::Keys key) {
-	if (keyboardTracker.IsKeyPressed(key)) {
-		return true;
-	}
-	return false;
-}
-
-
-bool Input::IsKeyReleased(Keyboard::Keys key) {
-	if (keyboardTracker.IsKeyReleased(key)) {
-		return true;
-	}
-	return false;
 }

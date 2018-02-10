@@ -15,7 +15,10 @@
 #include "text\Text.h"
 #include "texture\TextureMgr.h"
 
+#include "loader\OBJLoader.h"
+
 using std::map;
+using std::string;
 using std::wstring;
 using std::to_wstring;
 using std::vector;
@@ -23,7 +26,7 @@ using std::is_same_v;
 
 class Scene {
 	public:
-		Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
+		Scene(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
 		~Scene();
 
 		void Init();
@@ -36,11 +39,10 @@ class Scene {
 		unique_ptr<Camera>    camera;
 		vector<Light>         lights;
 		vector<Model>         models;
-		map<wstring, Text>    texts;
+		map<string, Text>     texts;
 
 
 	private:
-	    HWND                        hWnd;
 		ComPtr<ID3D11Device>        device;
 		ComPtr<ID3D11DeviceContext> deviceContext;
 		unique_ptr<TextureMgr>      textureMgr;

@@ -3,18 +3,17 @@
 #include "rendering\renderingMgr.h"
 
 // TODO:
-// - PARTIAL - Method for setting sampler states
 // - Implement material data into shaders
-// - PARTIAL - Create frustum and implement frustum culling
-// - Create a model loader, and a model class that can take any vertex type
+// - Implement frustum culling
+// - Create a model loader
+// - Create a model class that can take any vertex type
 // - Create a simple geometry generator
 // - Bounding boxes on geometry for frustum culling
 // - Global shader include
 // - Look at naming objects in debug mode (DirectXHelpers.h)
 // - Comment stuff
 
-Scene::Scene(HWND hWnd, ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
-	hWnd(hWnd),
+Scene::Scene(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
 	device(device),
 	deviceContext(deviceContext)
 {
@@ -31,8 +30,6 @@ void Scene::Render(float deltaTime) {
 
 
 void Scene::Init() {
-	HRESULT hr;
-
 	//----------------------------------------------------------------------------------
 	// Create camera
 	//----------------------------------------------------------------------------------
@@ -54,66 +51,72 @@ void Scene::Init() {
 	lights[0].SetAmbientColor(XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f));
 	lights[0].SetDiffuseColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	lights[0].SetSpecularColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	lights[0].SetSpecularPower(32.0f);
+	lights[0].SetSpecularPower(48.0f);
 
 
 	//----------------------------------------------------------------------------------
 	// Create models
 	//----------------------------------------------------------------------------------
-	vector<wstring> brick;
-	brick.push_back(L"./data/brick.jpg");
-	//brick.push_back(L"./data/brick2.jpg");
+	wstring brick(L"./data/models/cube/brick.jpg");
+	const char* cube = "./data/models/cube/cube.txt";
 
 	models.push_back(Model());
-	hr = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->Texture(brick), ShaderTypes::LightShader);
-	//result = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
-	DX::LogIfFailed(hr, "Failed to create model");
+	models.back().Init(device.Get(), cube, textureMgr->Texture(brick), ShaderTypes::LightShader);
+	//result = models.back().Init(device.Get(), cube, textureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
 
 	models.push_back(Model());
-	hr = models.back().Init(device.Get(), "./data/cube.txt", textureMgr->Texture(brick), ShaderTypes::LightShader);
-	DX::LogIfFailed(hr, "Failed to create model");
-	if (SUCCEEDED(hr)) models.back().SetPosition(4, 0, 0);
+	models.back().Init(device.Get(), cube, textureMgr->Texture(brick), ShaderTypes::LightShader);
+	models.back().SetPosition(4, 0, 0);
+
+
+	OBJLoader loader;
+	loader.Load(L"data/models/spaceCompound/spaceCompound.obj", true);
 
 
 	//----------------------------------------------------------------------------------
 	// Create text objects
 	//----------------------------------------------------------------------------------
-	texts.try_emplace(L"FPS", device.Get(), deviceContext.Get(), L"./data/courier-12.spritefont");
-	texts.at(L"FPS").SetPosition(XMFLOAT2(10, 10));
+	const wchar_t* font = L"./data/fonts/courier-12.spritefont";
 
-	texts.try_emplace(L"Mouse", device.Get(), deviceContext.Get(), L"./data/courier-12.spritefont");
-	texts.at(L"Mouse").SetPosition(XMFLOAT2(10, 40));
+	texts.try_emplace("FPS", device.Get(), deviceContext.Get(), font);
+	texts.at("FPS").SetPosition(XMFLOAT2(10, 10));
 
-	texts.try_emplace(L"Position", device.Get(), deviceContext.Get(), L"./data/courier-12.spritefont");
-	texts.at(L"Position").SetPosition(XMFLOAT2(10, 110));
+	texts.try_emplace("Mouse", device.Get(), deviceContext.Get(), font);
+	texts.at("Mouse").SetPosition(XMFLOAT2(10, 40));
+
+	texts.try_emplace("Position", device.Get(), deviceContext.Get(), font);
+	texts.at("Position").SetPosition(XMFLOAT2(10, 110));
 	
-	texts.try_emplace(L"Rotation", device.Get(), deviceContext.Get(), L"./data/courier-12.spritefont");
-	texts.at(L"Rotation").SetPosition(XMFLOAT2(10, 200));
+	texts.try_emplace("Rotation", device.Get(), deviceContext.Get(), font);
+	texts.at("Rotation").SetPosition(XMFLOAT2(10, 200));
 
-	texts.try_emplace(L"Velocity", device.Get(), deviceContext.Get(), L"./data/courier-12.spritefont");
-	texts.at(L"Velocity").SetPosition(XMFLOAT2(10, 300));
+	texts.try_emplace("Velocity", device.Get(), deviceContext.Get(), font);
+	texts.at("Velocity").SetPosition(XMFLOAT2(10, 300));
 }
 
 
 void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 	// FPS, CPU usage, memory usage, mouse position, etc...
 
-	texts.at(L"FPS").SetText(L"FPS: " + to_wstring(FPS));
+	texts.at("FPS").SetText(L"FPS: " + to_wstring(FPS));
 
-	texts.at(L"Mouse").SetText(L"Mouse \nX: " + to_wstring(mouseX)
+	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouseX)
 	                           + L"\nY: " + to_wstring(mouseY));
 
-	texts.at(L"Position").SetText(L"Position \nX: " + to_wstring(camera->GetPosition().x)
-	                              + L"\nY: " + to_wstring(camera->GetPosition().y)
-	                              + L"\nZ: " + to_wstring(camera->GetPosition().z));
+	XMFLOAT3 position = camera->GetPosition();
+	texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
+	                              + L"\nY: " + to_wstring(position.y)
+	                              + L"\nZ: " + to_wstring(position.z));
 
-	texts.at(L"Rotation").SetText(L"Rotation \nX: " + to_wstring(camera->GetRotation().x)
-	                              + L"\nY: " + to_wstring(camera->GetRotation().y)
-	                              + L"\nZ: " + to_wstring(camera->GetRotation().z));
+	XMFLOAT3 rotation = camera->GetRotation();
+	texts.at("Rotation").SetText(L"Rotation \nX: " + to_wstring(rotation.x)
+	                              + L"\nY: " + to_wstring(rotation.y)
+	                              + L"\nZ: " + to_wstring(rotation.z));
 
-	texts.at(L"Velocity").SetText(L"Velocity \nX: " + to_wstring(camera->GetVelocity().x)
-	                              + L"\nY: " + to_wstring(camera->GetVelocity().y)
-	                              + L"\nZ: " + to_wstring(camera->GetVelocity().z));
+	XMFLOAT3 velocity = camera->GetVelocity();
+	texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)
+	                              + L"\nY: " + to_wstring(velocity.y)
+	                              + L"\nZ: " + to_wstring(velocity.z));
 }
 
 
@@ -122,9 +125,11 @@ void Scene::Tick(Input& input, float deltaTime) {
 	// Rotate models
 	rotation += (XM_PI * deltaTime) / 2500;
 	if (rotation >= (2.0f * XM_PI)) rotation = 0;
-	for (auto& model : models) {
-		model.SetRotation(0.0f, rotation, 0.0f);
-	}
+	models.at(0).SetRotation(0.0f, rotation, 0.0f);
+	models.at(1).SetRotation(rotation, 0.0f, 0.0f);
+	//for (auto& model : models) {
+	//	model.SetRotation(0.0f, rotation, 0.0f);
+	//}
 
 
 	//----------------------------------------------------------------------------------

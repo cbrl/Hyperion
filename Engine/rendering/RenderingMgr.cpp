@@ -25,17 +25,17 @@ void RenderingMgr::Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bo
 
 
 	// Create render state manager and render states
-	renderStateMgr = make_unique<RenderStateMgr>(direct3D->GetDevice(), direct3D->GetDeviceContext());
+	renderStateMgr = make_unique<RenderStateMgr>();
 	renderStateMgr->SetupStates();
 
 
 	// Initialize shader manager and shaders
 	shaderMgr = make_unique<ShaderMgr>();
-	shaderMgr->Init(hWnd, direct3D->GetDevice().Get());
+	shaderMgr->Init(hWnd);
 
 
 	// Create and bind buffers
-	cBufferMgr = make_unique<CBufferMgr>(direct3D->GetDevice().Get(), direct3D->GetDeviceContext().Get());
+	cBufferMgr = make_unique<CBufferMgr>();
 
 
 	// Create renderer

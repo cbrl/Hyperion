@@ -10,25 +10,20 @@ TextureMgr::TextureMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11Dev
 
 
 TextureMgr::~TextureMgr() {
-	m_TextureMap.clear();
-	m_SimpleTextureMap.clear();
+	textureMap.clear();
+	simpleTextureMap.clear();
+	multiTextureMap.clear();
 }
 
 
-const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture(vector<wstring> filenames) {
+const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture(wstring filename) {
 	// Create the texture if it doesn't exist
-	if (m_TextureMap.find(filenames) == m_TextureMap.end()) {
-		if (filenames.size() == 1) {
-			m_TextureMap[filenames] = CreateSingleTexture(filenames);
-			return m_TextureMap.at(filenames);
-		}
-		else {
-			m_TextureMap[filenames] = CreateTexture2DArray(filenames);
-			return m_TextureMap.at(filenames);
-		}
+	if (textureMap.find(filename) == textureMap.end()) {
+		textureMap[filename] = CreateSingleTexture(filename);
+		return textureMap.at(filename);
 	}
 	else {
-		return m_TextureMap.at(filenames);
+		return textureMap.at(filename);
 	}
 }
 
@@ -37,24 +32,38 @@ const ComPtr<ID3D11ShaderResourceView>& TextureMgr::SimpleTexture(XMFLOAT4 color
 	// Convert the float4 into a single hex color value, which is also used as the texture data when creating it
 	UINT texColor = (UINT)(color.x * 0xff) + ((UINT)(color.y * 0xff) << 8) + ((UINT)(color.z * 0xff) << 16) + ((UINT)(color.w * 0xff) << 24);
 
-	if (m_SimpleTextureMap.find(texColor) == m_SimpleTextureMap.end()) {
-		m_SimpleTextureMap[texColor] = CreateSimpleTexture(texColor);
-		return m_SimpleTextureMap.at(texColor);
+	if (simpleTextureMap.find(texColor) == simpleTextureMap.end()) {
+		simpleTextureMap[texColor] = CreateSimpleTexture(texColor);
+		return simpleTextureMap.at(texColor);
 	}
 	else {
-		return m_SimpleTextureMap.at(texColor);
+		return simpleTextureMap.at(texColor);
 	}
 }
 
 
-ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(vector<wstring> filenames) {
-	ComPtr<ID3D11ShaderResourceView> textureView;
+const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture2DArray(vector<wstring> filenames) {
+	// Create the texture if it doesn't exist
+	if (multiTextureMap.find(filenames) == multiTextureMap.end()) {
+		multiTextureMap[filenames] = CreateTexture2DArray(filenames);
+		return multiTextureMap.at(filenames);
+	}
+	else {
+		return multiTextureMap.at(filenames);
+	}
+}
+
+
+ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(wstring filename) {
+	ComPtr<ID3D11ShaderResourceView> textureSRV;
 
 	// Create a shader resource view
-	DX::ThrowIfFailed(CreateWICTextureFromFile(device.Get(), deviceContext.Get(), filenames[0].c_str(), nullptr, textureView.GetAddressOf()),
+	DX::ThrowIfFailed(CreateWICTextureFromFile(device.Get(), deviceContext.Get(), filename.c_str(), nullptr, textureSRV.GetAddressOf()),
 	                  "Failed to create WIC texture");
 
-	return textureView;
+	SetDebugObjectName(textureSRV.Get(), "TextureMgr Texture");
+
+	return textureSRV;
 }
 
 
@@ -123,6 +132,8 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 	DX::ThrowIfFailed(device->CreateShaderResourceView(texArray.Get(), &viewDesc, textureSRV.GetAddressOf()),
 	                  "Failed to create SRV");
 
+	SetDebugObjectName(texArray.Get(), "TextureMgr Texture2DArray");
+
 
 	return textureSRV;
 }
@@ -153,6 +164,8 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSimpleTexture(UINT color) {
 
 	DX::ThrowIfFailed(device->CreateShaderResourceView(texture.Get(), &SRVDesc, textureSRV.GetAddressOf()),
 	                  "Failed to create SRV");
+
+	SetDebugObjectName(textureSRV.Get(), "TextureMgr SimpleTexture");
 
 	return textureSRV;
 }

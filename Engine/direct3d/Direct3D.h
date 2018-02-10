@@ -27,11 +27,11 @@ class Direct3D {
 		void EndScene() const;
 		void OnResize(int winWidth, int winHeight);
 
-		ComPtr<ID3D11Device> GetDevice() const {
-			return device;
+		ID3D11Device* GetDevice() const {
+			return device.Get();
 		}
-		ComPtr<ID3D11DeviceContext> GetDeviceContext() const {
-			return deviceContext;
+		ID3D11DeviceContext* GetDeviceContext() const {
+			return deviceContext.Get();
 		}
 
 		XMMATRIX GetWorldMatrix() const {
