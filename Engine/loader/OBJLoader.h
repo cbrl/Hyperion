@@ -34,13 +34,24 @@ class OBJLoader {
 		void ReadFace(wstring line);
 		void ReadMaterialLibrary(wstring line);
 		void ReadMaterial(wstring line);
-
+		void ReadDiffuse(wstring line);
+		void ReadAmbient(wstring line);
+		void ReadTransparency(wstring line, bool inverse);
+		void NewMaterial(wstring line);
+		void ReadDiffuseMap(wstring line);
+		void ReadAlphaMap(wstring line);
+		
 
 	private:
 		struct Material {
+			Material() {
+				hasTexture = false;
+				transparent = false;
+			}
 			wstring name;
+			wstring diffuseMap;
+			wstring alphaMap;
 			XMFLOAT4 diffuseColor;
-			int texArrayIndex;
 			bool hasTexture;
 			bool transparent;
 		};
@@ -50,11 +61,14 @@ class OBJLoader {
 		bool RHcoord;
 		bool hasNormals;
 		bool hasTexture;
+		bool kdSet;
 
 		int vIndex;
 		int vTotal;
 		int triangleCount;
 		int meshTriangles;
+		// If diffuse color wasn't set, the ambient color can be used (usually the same)
+		int materialCount;
 
 		vector<XMFLOAT3> vPositions;
 		vector<XMFLOAT3> vNormals;

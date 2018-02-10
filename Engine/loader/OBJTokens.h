@@ -13,6 +13,7 @@ namespace OBJTokens {
 
 	const wchar_t* mtl_library = L"mtllib";
 	const wchar_t* group_mtl   = L"usemtl";
+	const wchar_t* new_mtl     = L"newmtl";
 
 	const wchar_t* specular_power      = L"Ns";
 	const wchar_t* specular_color      = L"Ks";

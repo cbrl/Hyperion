@@ -7,11 +7,13 @@ OBJLoader::OBJLoader() :
 	RHcoord(false),
 	hasNormals(false),
 	hasTexture(false),
+	kdSet(false),
 	vIndex(0),
 	vTotal(0),
 	groupCount(0),
 	triangleCount(0),
-	meshTriangles(0)
+	meshTriangles(0),
+	materialCount(0)
 {
 }
 
@@ -23,6 +25,7 @@ OBJLoader::~OBJLoader() {
 /*Model<VertexPositionNormalTexture>*/ void OBJLoader::Load(wstring filename, bool RHcoordinates) {
 	RHcoord = RHcoordinates;
 
+	wstring line;
 
 	// Open OBJ file
 	wifstream file(filename);
@@ -31,7 +34,6 @@ OBJLoader::~OBJLoader() {
 	}
 
 	// Read file contents
-	wstring line;
 	while (std::getline(file, line)) {
 		ReadLine(line);
 	}
@@ -61,11 +63,11 @@ OBJLoader::~OBJLoader() {
 
 	// Open material file
 	file.open(meshMatLib);
+	materialCount = materials.size();
 	
-	int mtlCount = materials.size();
-
-	// FINISH FROM HERE
-
+	while (std::getline(file, line)) {
+		ReadLine(line);
+	}
 
 
 
@@ -117,6 +119,30 @@ void OBJLoader::ReadLine(wstring line) {
 
 	else if (wcscmp(token, OBJTokens::group_mtl) == 0) {
 		ReadMaterial(line);
+	}
+
+	else if (wcscmp(token, OBJTokens::diffuse_color) == 0) {
+		ReadDiffuse(line);
+	}
+
+	else if (wcscmp(token, OBJTokens::ambient_color) == 0) {
+		ReadAmbient(line);
+	}
+
+	else if (wcscmp(token, OBJTokens::transparency) == 0) {
+		ReadTransparency(line, false);
+	}
+
+	else if (wcscmp(token, OBJTokens::transparency_inv) == 0) {
+		ReadTransparency(line, true);
+	}
+
+	else if (wcscmp(token, OBJTokens::diffuse_color_map) == 0) {
+		ReadDiffuseMap(line);
+	}
+
+	else if (wcscmp(token, OBJTokens::new_mtl) == 0) {
+		NewMaterial(line);
 	}
 }
 
@@ -174,8 +200,6 @@ void OBJLoader::NewGroup() {
 
 
 void OBJLoader::ReadFace(wstring line) {
-	if (line.length() <= 0) return;
-
 	wstringstream stream(line);
 	wstring vDef;
 
@@ -427,4 +451,82 @@ void OBJLoader::ReadMaterial(wstring line) {
 	stream >> temp;
 
 	meshMaterials.push_back(temp);
+}
+
+
+void OBJLoader::ReadDiffuse(wstring line) {
+	wstringstream stream(line);
+
+	stream >> materials[materialCount - 1].diffuseColor.x;
+	stream >> materials[materialCount - 1].diffuseColor.y;
+	stream >> materials[materialCount - 1].diffuseColor.z;
+
+	kdSet = true;
+}
+
+
+void OBJLoader::ReadAmbient(wstring line) {
+	wstringstream stream(line);
+
+	if (!kdSet) {
+		stream >> materials[materialCount - 1].diffuseColor.x;
+		stream >> materials[materialCount - 1].diffuseColor.y;
+		stream >> materials[materialCount - 1].diffuseColor.z;
+	}
+}
+
+
+void OBJLoader::ReadTransparency(wstring line, bool inverse) {
+	wstringstream stream(line);
+
+	float transparency;
+	stream >> transparency;
+
+	if (inverse) {
+		transparency = 1.0f - transparency;
+	}
+
+	materials[materialCount - 1].diffuseColor.w = transparency;
+
+	if (transparency > 0.0f) {
+		materials[materialCount - 1].transparent = true;
+	}
+}
+
+
+void OBJLoader::NewMaterial(wstring line) {
+	wstringstream stream(line);
+
+	Material temp;
+	stream >> temp.name;
+	materials.push_back(temp);
+
+	++materialCount;
+	kdSet = false;
+}
+
+
+void OBJLoader::ReadDiffuseMap(wstring line) {
+	wstringstream stream(line);
+
+	wstring filename;
+	stream >> filename;
+
+	// CREATE TEXTURE WITH TEXTUREMGR
+
+	materials[materialCount - 1].diffuseMap = filename;
+	materials[materialCount - 1].hasTexture = true;
+}
+
+
+void OBJLoader::ReadAlphaMap(wstring line) {
+	wstringstream stream(line);
+
+	wstring filename;
+	stream >> filename;
+
+	// CREATE TEXTURE WITH TEXTUREMGR
+
+	materials[materialCount - 1].alphaMap = filename;
+	materials[materialCount - 1].transparent = true;
 }
