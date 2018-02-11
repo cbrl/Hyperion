@@ -136,6 +136,9 @@
     <Filter Include="Header Files\shader">
       <UniqueIdentifier>{2ef3f4d4-a0d7-49a0-8128-b0b094557c91}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\material">
+      <UniqueIdentifier>{81a4139d-7d18-4619-bd4c-376ab1b5b74f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\color\color.vs">
@@ -192,9 +195,6 @@
     <ClInclude Include="geometry\model\Model2.h">
       <Filter>Header Files\geometry\model</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\model\Model.h">
-      <Filter>Header Files\geometry\model</Filter>
-    </ClInclude>
     <ClInclude Include="direct3d\Direct3D.h">
       <Filter>Header Files\direct3d</Filter>
     </ClInclude>
@@ -240,14 +240,14 @@
     <ClInclude Include="loader\OBJLoader.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\model\Model2.tpp">
-      <Filter>Source Files\geometry\model</Filter>
-    </ClInclude>
     <ClInclude Include="loader\OBJTokens.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\mesh\mesh.h">
+    <ClInclude Include="geometry\mesh\Mesh.h">
       <Filter>Header Files\geometry\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="material\Material.h">
+      <Filter>Header Files\material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -308,11 +308,8 @@
     <ClCompile Include="loader\OBJLoader.cpp">
       <Filter>Source Files\loader</Filter>
     </ClCompile>
-    <ClCompile Include="geometry\model\Model.cpp">
+    <ClCompile Include="geometry\model\Model2.cpp">
       <Filter>Source Files\geometry\model</Filter>
-    </ClCompile>
-    <ClCompile Include="geometry\mesh\mesh.cpp">
-      <Filter>Source Files\geometry\mesh</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -11,7 +11,8 @@
 #include "input\Input.h"
 #include "camera\Camera.h"
 #include "light\Light.h"
-#include "geometry\model\Model.h"
+//#include "geometry\model\Model.h"
+#include "geometry\model\Model2.h"
 #include "text\Text.h"
 #include "texture\TextureMgr.h"
 
@@ -26,13 +27,15 @@ using std::is_same_v;
 
 class Scene {
 	public:
-		Scene(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext);
+		Scene();
 		~Scene();
 
-		void Init();
 		void UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY);
 		void Tick(Input& input, float deltaTime);
 		void Render(float deltaTime);
+
+	private:
+		void Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 
 
 	public:
@@ -43,9 +46,7 @@ class Scene {
 
 
 	private:
-		ComPtr<ID3D11Device>        device;
-		ComPtr<ID3D11DeviceContext> deviceContext;
-		unique_ptr<TextureMgr>      textureMgr;
+		//unique_ptr<TextureMgr>      textureMgr;
 
 		float rotation = 0.0f;
 

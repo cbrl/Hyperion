@@ -23,7 +23,7 @@ Renderer::~Renderer() {
 void Renderer::Tick(Scene& scene, float deltaTime) const {
 	// Clear background with specified color
 	Direct3D::Get()->BeginScene(0.39f, 0.58f, 0.93f, 1.0f);
-	RenderStateMgr::Get()->BindDepthDefault();
+	RenderStateMgr::Get()->BindDepthDefault(Direct3D::Get()->GetDeviceContext());
 
 	// Create matrix buffer
 	MatrixBuffer matrixBuffer;
@@ -63,8 +63,8 @@ void Renderer::Tick(Scene& scene, float deltaTime) const {
 			matrixBuffer = MatrixBuffer(world, view, projection);
 			RenderingMgr::Get()->UpdateData(matrixBuffer);
 
-			model.RenderBuffers(deviceContext.Get());
-			deviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);
+			model.Draw(deviceContext.Get());
+			//deviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);
 		}
 	});
 
@@ -89,9 +89,9 @@ void Renderer::Tick(Scene& scene, float deltaTime) const {
 			matrixBuffer = MatrixBuffer(world, view, projection);
 			RenderingMgr::Get()->UpdateData(matrixBuffer);
 
-			model.RenderBuffers(deviceContext.Get());
-			deviceContext->PSSetShaderResources(0, 1, model.GetTexture().GetAddressOf());
-			deviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);
+			model.Draw(deviceContext.Get());
+			//deviceContext->PSSetShaderResources(0, 1, model.GetTexture().GetAddressOf());
+			//deviceContext->DrawIndexed(model.GetIndexCount(), 0, 0);
 		}
 	});
 

@@ -10,7 +10,7 @@
 #include "scene\Scene.h"
 #include "camera\Camera.h"
 #include "light\Light.h"
-#include "geometry\model\model.h"
+#include "geometry\model\Model2.h"
 #include "text\text.h"
 
 using Microsoft::WRL::ComPtr;

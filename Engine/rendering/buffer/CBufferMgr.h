@@ -7,7 +7,7 @@
 
 #include "util\EngineUtil.h"
 #include "shader\HlslDefines.h"
-#include "direct3d\direct3d.h"
+#include "direct3d\Direct3D.h"
 #include "rendering\buffer\Buffers.h"
 #include "rendering\buffer\ConstantBuffer.h"
 
@@ -20,19 +20,17 @@ class CBufferMgr {
 		CBufferMgr();
 		~CBufferMgr();
 
-		void BindBuffer(BufferTypes buffer);
+		void BindBuffer(ID3D11DeviceContext* deviceContext, BufferTypes buffer);
+		void BindBuffers(ID3D11DeviceContext* deviceContext);
 
 		template<typename DataT>
-		void UpdateData(const DataT& data);
+		void UpdateData(ID3D11DeviceContext* deviceContext, const DataT& data);
 
 	private:
 		void CreateBuffers(ID3D11Device* device);
-		void BindBuffers();
 
 
 	private:
-		ComPtr<ID3D11DeviceContext> deviceContext;
-
 		unique_ptr<ConstantBuffer<MatrixBuffer>> matrixBuffer;
 		unique_ptr<ConstantBuffer<CameraBuffer>> cameraBuffer;
 		unique_ptr<ConstantBuffer<LightBuffer>>  lightBuffer;
@@ -40,16 +38,16 @@ class CBufferMgr {
 
 
 template<typename DataT>
-void CBufferMgr::UpdateData(const DataT& data) {
+void CBufferMgr::UpdateData(ID3D11DeviceContext* deviceContext, const DataT& data) {
 	if constexpr (is_same_v<DataT, MatrixBuffer>) {
-		matrixBuffer->UpdateData(deviceContext.Get(), data);
+		matrixBuffer->UpdateData(deviceContext, data);
 	}
 
 	if constexpr (is_same_v<DataT, CameraBuffer>) {
-		cameraBuffer->UpdateData(deviceContext.Get(), data);
+		cameraBuffer->UpdateData(deviceContext, data);
 	}
 
 	if constexpr (is_same_v<DataT, LightBuffer>) {
-		lightBuffer->UpdateData(deviceContext.Get(), data);
+		lightBuffer->UpdateData(deviceContext, data);
 	}
 }

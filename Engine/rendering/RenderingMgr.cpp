@@ -26,16 +26,19 @@ void RenderingMgr::Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bo
 
 	// Create render state manager and render states
 	renderStateMgr = make_unique<RenderStateMgr>();
-	renderStateMgr->SetupStates();
 
 
 	// Initialize shader manager and shaders
 	shaderMgr = make_unique<ShaderMgr>();
-	shaderMgr->Init(hWnd);
+	shaderMgr->Init(hWnd, direct3D->GetDevice());
 
 
 	// Create and bind buffers
 	cBufferMgr = make_unique<CBufferMgr>();
+
+
+	// Create texture manager
+	textureMgr = make_unique<TextureMgr>();
 
 
 	// Create renderer

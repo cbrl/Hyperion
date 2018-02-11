@@ -1,11 +1,15 @@
 #include "stdafx.h"
 #include "TextureMgr.h"
+#include "rendering\RenderingMgr.h"
+
+TextureMgr* TextureMgr::Get() {
+	assert(RenderingMgr::Get());
+
+	return RenderingMgr::Get()->GetTextureMgr();
+}
 
 
-TextureMgr::TextureMgr(const ComPtr<ID3D11Device> device, const ComPtr<ID3D11DeviceContext> deviceContext) :
-	device(device),
-	deviceContext(deviceContext)
-{
+TextureMgr::TextureMgr() {
 }
 
 
@@ -16,10 +20,17 @@ TextureMgr::~TextureMgr() {
 }
 
 
-const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture(wstring filename) {
+// Create a single texture from a file (jpg, png, etc...)
+const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wstring filename) {
+	// Check for valid file
+	if (filename.empty())
+		return nullptr;
+	if (!exists(filename))
+		return nullptr;
+
 	// Create the texture if it doesn't exist
 	if (textureMap.find(filename) == textureMap.end()) {
-		textureMap[filename] = CreateSingleTexture(filename);
+		textureMap[filename] = CreateSingleTexture(device, deviceContext, filename);
 		return textureMap.at(filename);
 	}
 	else {
@@ -28,12 +39,13 @@ const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture(wstring filename) {
 }
 
 
-const ComPtr<ID3D11ShaderResourceView>& TextureMgr::SimpleTexture(XMFLOAT4 color) {
+// Create a single texture from a float4 (r, g, b, a)
+const ComPtr<ID3D11ShaderResourceView>& TextureMgr::PlainTexture(ID3D11Device* device, XMFLOAT4 color) {
 	// Convert the float4 into a single hex color value, which is also used as the texture data when creating it
 	UINT texColor = (UINT)(color.x * 0xff) + ((UINT)(color.y * 0xff) << 8) + ((UINT)(color.z * 0xff) << 16) + ((UINT)(color.w * 0xff) << 24);
 
 	if (simpleTextureMap.find(texColor) == simpleTextureMap.end()) {
-		simpleTextureMap[texColor] = CreateSimpleTexture(texColor);
+		simpleTextureMap[texColor] = CreatePlainTexture(device, texColor);
 		return simpleTextureMap.at(texColor);
 	}
 	else {
@@ -41,11 +53,19 @@ const ComPtr<ID3D11ShaderResourceView>& TextureMgr::SimpleTexture(XMFLOAT4 color
 	}
 }
 
+// Create a Texture2DArray from multiple files
+const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture2DArray(ID3D11Device* device, ID3D11DeviceContext* deviceContext, vector<wstring> filenames) {
+	// Check for valid file
+	if (filenames.empty())
+		return nullptr;
+	for (auto& file : filenames) {
+		if (!exists(file))
+			return nullptr;
+	}
 
-const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture2DArray(vector<wstring> filenames) {
 	// Create the texture if it doesn't exist
 	if (multiTextureMap.find(filenames) == multiTextureMap.end()) {
-		multiTextureMap[filenames] = CreateTexture2DArray(filenames);
+		multiTextureMap[filenames] = CreateTexture2DArray(device, deviceContext, filenames);
 		return multiTextureMap.at(filenames);
 	}
 	else {
@@ -54,11 +74,11 @@ const ComPtr<ID3D11ShaderResourceView>& TextureMgr::Texture2DArray(vector<wstrin
 }
 
 
-ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(wstring filename) {
+ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wstring filename) {
 	ComPtr<ID3D11ShaderResourceView> textureSRV;
 
 	// Create a shader resource view
-	DX::ThrowIfFailed(CreateWICTextureFromFile(device.Get(), deviceContext.Get(), filename.c_str(), nullptr, textureSRV.GetAddressOf()),
+	DX::ThrowIfFailed(CreateWICTextureFromFile(device, deviceContext, filename.c_str(), nullptr, textureSRV.GetAddressOf()),
 	                  "Failed to create WIC texture");
 
 	SetDebugObjectName(textureSRV.Get(), "TextureMgr Texture");
@@ -67,7 +87,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSingleTexture(wstring filenam
 }
 
 
-ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring> filenames) {
+ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(ID3D11Device* device, ID3D11DeviceContext* deviceContext, vector<wstring> filenames) {
 	ComPtr<ID3D11ShaderResourceView> textureSRV;
 
 	size_t size = filenames.size();
@@ -75,7 +95,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 
 	// Create a vector of textures
 	for(size_t i = 0; i < size; i++) {
-		DX::ThrowIfFailed(CreateWICTextureFromFileEx(device.Get(), deviceContext.Get(), filenames[i].c_str(),
+		DX::ThrowIfFailed(CreateWICTextureFromFileEx(device, deviceContext, filenames[i].c_str(),
 									                 NULL, D3D11_USAGE_STAGING, NULL,D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
 									                 (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr),
 		                  "Failed to create WIC texture");
@@ -139,7 +159,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateTexture2DArray(vector<wstring
 }
 
 
-ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSimpleTexture(UINT color) {
+ComPtr<ID3D11ShaderResourceView> TextureMgr::CreatePlainTexture(ID3D11Device* device, UINT color) {
 	ComPtr<ID3D11Texture2D>          texture;
 	ComPtr<ID3D11ShaderResourceView> textureSRV;
 
@@ -165,7 +185,7 @@ ComPtr<ID3D11ShaderResourceView> TextureMgr::CreateSimpleTexture(UINT color) {
 	DX::ThrowIfFailed(device->CreateShaderResourceView(texture.Get(), &SRVDesc, textureSRV.GetAddressOf()),
 	                  "Failed to create SRV");
 
-	SetDebugObjectName(textureSRV.Get(), "TextureMgr SimpleTexture");
+	SetDebugObjectName(textureSRV.Get(), "TextureMgr PlainTexture");
 
 	return textureSRV;
 }

@@ -5,18 +5,14 @@
 // TODO:
 // - Implement material data into shaders
 // - Implement frustum culling
-// - Create a model loader
-// - Create a model class that can take any vertex type
 // - Create a simple geometry generator
 // - Bounding boxes on geometry for frustum culling
 // - Global shader include
 // - Look at naming objects in debug mode (DirectXHelpers.h)
 // - Comment stuff
 
-Scene::Scene(ComPtr<ID3D11Device> device, ComPtr<ID3D11DeviceContext> deviceContext) :
-	device(device),
-	deviceContext(deviceContext)
-{
+Scene::Scene() {
+	Init(Direct3D::Get()->GetDevice(), Direct3D::Get()->GetDeviceContext());
 }
 
 
@@ -29,7 +25,7 @@ void Scene::Render(float deltaTime) {
 }
 
 
-void Scene::Init() {
+void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext) {
 	//----------------------------------------------------------------------------------
 	// Create camera
 	//----------------------------------------------------------------------------------
@@ -40,7 +36,7 @@ void Scene::Init() {
 	//----------------------------------------------------------------------------------
 	// Create texture manager
 	//----------------------------------------------------------------------------------
-	textureMgr = make_unique<TextureMgr>(device, deviceContext);
+	//textureMgr = make_unique<TextureMgr>(device, deviceContext);
 
 
 	//----------------------------------------------------------------------------------
@@ -60,17 +56,18 @@ void Scene::Init() {
 	wstring brick(L"./data/models/cube/brick.jpg");
 	const char* cube = "./data/models/cube/cube.txt";
 
-	models.push_back(Model());
-	models.back().Init(device.Get(), cube, textureMgr->Texture(brick), ShaderTypes::LightShader);
-	//result = models.back().Init(device.Get(), cube, textureMgr->SimpleTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
+	//models.push_back(Model());
+	//models.back().Init(device, cube, textureMgr->Texture(brick), ShaderTypes::LightShader);
+	////result = models.back().Init(device.Get(), cube, textureMgr->PlainTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
 
-	models.push_back(Model());
-	models.back().Init(device.Get(), cube, textureMgr->Texture(brick), ShaderTypes::LightShader);
-	models.back().SetPosition(4, 0, 0);
+	//models.push_back(Model());
+	//models.back().Init(device, cube, textureMgr->Texture(brick), ShaderTypes::LightShader);
+	//models.back().SetPosition(4, 0, 0);
 
 
 	OBJLoader loader;
-	loader.Load(L"data/models/spaceCompound/spaceCompound.obj", true);
+	models.push_back(loader.Load(device, deviceContext, L"data/models/cube2/", L"cube.obj", false));
+	models.at(0).SetShader(ShaderTypes::LightShader);
 
 
 	//----------------------------------------------------------------------------------
@@ -78,19 +75,19 @@ void Scene::Init() {
 	//----------------------------------------------------------------------------------
 	const wchar_t* font = L"./data/fonts/courier-12.spritefont";
 
-	texts.try_emplace("FPS", device.Get(), deviceContext.Get(), font);
+	texts.try_emplace("FPS", device, deviceContext, font);
 	texts.at("FPS").SetPosition(XMFLOAT2(10, 10));
 
-	texts.try_emplace("Mouse", device.Get(), deviceContext.Get(), font);
+	texts.try_emplace("Mouse", device, deviceContext, font);
 	texts.at("Mouse").SetPosition(XMFLOAT2(10, 40));
 
-	texts.try_emplace("Position", device.Get(), deviceContext.Get(), font);
+	texts.try_emplace("Position", device, deviceContext, font);
 	texts.at("Position").SetPosition(XMFLOAT2(10, 110));
 	
-	texts.try_emplace("Rotation", device.Get(), deviceContext.Get(), font);
+	texts.try_emplace("Rotation", device, deviceContext, font);
 	texts.at("Rotation").SetPosition(XMFLOAT2(10, 200));
 
-	texts.try_emplace("Velocity", device.Get(), deviceContext.Get(), font);
+	texts.try_emplace("Velocity", device, deviceContext, font);
 	texts.at("Velocity").SetPosition(XMFLOAT2(10, 300));
 }
 
@@ -125,8 +122,8 @@ void Scene::Tick(Input& input, float deltaTime) {
 	// Rotate models
 	rotation += (XM_PI * deltaTime) / 2500;
 	if (rotation >= (2.0f * XM_PI)) rotation = 0;
-	models.at(0).SetRotation(0.0f, rotation, 0.0f);
-	models.at(1).SetRotation(rotation, 0.0f, 0.0f);
+	//models.at(0).SetRotation(0.0f, rotation, 0.0f);
+	//models.at(1).SetRotation(rotation, 0.0f, 0.0f);
 	//for (auto& model : models) {
 	//	model.SetRotation(0.0f, rotation, 0.0f);
 	//}

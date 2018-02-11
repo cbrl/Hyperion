@@ -39,8 +39,7 @@ bool System::Init() {
 	fpsCounter = make_unique<FPS>();
 
 	// Initialize scene
-	scene = make_unique<Scene>(Direct3D::Get()->GetDevice(), Direct3D::Get()->GetDeviceContext());
-	scene->Init();
+	scene = make_unique<Scene>();
 
 	return true;
 }
