@@ -3,6 +3,7 @@
 #include "rendering\renderingMgr.h"
 
 // TODO:
+// - Add emmisive color to material
 // - Implement material data into shaders
 // - Implement frustum culling
 // - Create a simple geometry generator
@@ -47,7 +48,7 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext) {
 	lights[0].SetAmbientColor(XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f));
 	lights[0].SetDiffuseColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 	lights[0].SetSpecularColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	lights[0].SetSpecularPower(48.0f);
+	lights[0].SetSpecularPower(64.0f);
 
 
 	//----------------------------------------------------------------------------------
@@ -66,7 +67,7 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext) {
 
 
 	OBJLoader loader;
-	models.push_back(loader.Load(device, deviceContext, L"data/models/cube2/", L"cube.obj", false));
+	models.push_back(loader.Load(device, deviceContext, L"data/models/spaceCompound/", L"spaceCompound.obj", true));
 	models.at(0).SetShader(ShaderTypes::LightShader);
 
 

@@ -13,13 +13,13 @@ class Mesh {
 	public:
 		Mesh() {}
 		template<typename VertexT>
-		Mesh(ID3D11Device* device, vector<VertexT>& vertices, vector<ULONG>& indices, UINT groupCount,
-		     vector<UINT>& groupVertexIndices, vector<Material>& materials, vector<UINT>& groupMaterialIndices);
+		Mesh(ID3D11Device* device, vector<VertexT>& vertices, vector<UINT>& indices, vector<Material>& materials,
+		     UINT groupCount, vector<UINT>& groupVertexIndices, vector<UINT>& groupMaterialIndices);
 		~Mesh() {
 		}
 
 		template<typename VertexT>
-		void Init(ID3D11Device* device, vector<VertexT>& vertices, vector<ULONG>& indices);
+		void Init(ID3D11Device* device, vector<VertexT>& vertices, vector<UINT>& indices);
 
 		ID3D11Buffer** GetVertexBuffer() { return vertexBuffer.GetAddressOf(); }
 		ID3D11Buffer* GetIndexBuffer() { return indexBuffer.Get(); }
@@ -42,8 +42,8 @@ class Mesh {
 
 
 template<typename VertexT>
-Mesh::Mesh(ID3D11Device* device, vector<VertexT>& vertices, vector<ULONG>& indices, UINT groupCount,
-           vector<UINT>& groupVertexIndices, vector<Material>& materials, vector<UINT>& groupMaterialIndices) :
+Mesh::Mesh(ID3D11Device* device, vector<VertexT>& vertices, vector<UINT>& indices, vector<Material>& materials,
+           UINT groupCount, vector<UINT>& groupVertexIndices, vector<UINT>& groupMaterialIndices) :
 	materials(materials),
 	groupVertexIndices(groupVertexIndices),
 	groupMaterialIndices(groupMaterialIndices),
@@ -57,7 +57,7 @@ Mesh::Mesh(ID3D11Device* device, vector<VertexT>& vertices, vector<ULONG>& indic
 
 
 template<typename VertexT>
-void Mesh::Init(ID3D11Device* device, vector<VertexT>& vertices, vector<ULONG>& indices) {
+void Mesh::Init(ID3D11Device* device, vector<VertexT>& vertices, vector<UINT>& indices) {
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
 	D3D11_BUFFER_DESC indexBufferDesc = {};
 
@@ -82,14 +82,14 @@ void Mesh::Init(ID3D11Device* device, vector<VertexT>& vertices, vector<ULONG>& 
 
 	// Index buffer description
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(ULONG) * indexCount;
+	indexBufferDesc.ByteWidth = sizeof(UINT) * indexCount;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the index data
-	indexData.pSysMem = const_cast<ULONG*>(indices.data());
+	indexData.pSysMem = const_cast<UINT*>(indices.data());
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 

@@ -19,7 +19,7 @@ namespace OBJTokens {
 	const wchar_t* specular_color      = L"Ks";
 	const wchar_t* ambient_color       = L"Ka";
 	const wchar_t* diffuse_color       = L"Kd";
-	const wchar_t* emmisive_color      = L"Ke";
+	const wchar_t* emissive_color      = L"Ke";
 	const wchar_t* optical_density     = L"Ni";
 	const wchar_t* transparency        = L"Tr";
 	const wchar_t* transparency_inv    = L"d";

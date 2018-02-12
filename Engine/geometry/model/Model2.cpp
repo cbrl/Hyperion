@@ -26,9 +26,11 @@ void Model::Draw(ID3D11DeviceContext* deviceContext) {
 	// Set type of primitive that should be rendered from this vertex buffer, in this case triangles
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	for (int i = 0; i < mesh.groupCount; ++i) {
-		if (mesh.materials[mesh.groupMaterialIndices[i]].map_Kd) {
-			deviceContext->PSSetShaderResources(0, 1, mesh.materials[mesh.groupMaterialIndices[i]].map_Kd.GetAddressOf());
+	for (UINT i = 0; i < mesh.groupCount; ++i) {
+		auto& material = mesh.materials[mesh.groupMaterialIndices[i]];
+
+		if (material.map_Kd) {
+			deviceContext->PSSetShaderResources(0, 1, material.map_Kd.GetAddressOf());
 		}
 
 		// Draw the model

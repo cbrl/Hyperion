@@ -124,9 +124,6 @@
     <Filter Include="Header Files\geometry\mesh">
       <UniqueIdentifier>{c1e2b0da-0ceb-4906-a40f-6ed53e4e4174}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\geometry\mesh">
-      <UniqueIdentifier>{6abbc089-3fd1-45c3-8489-b06b15575901}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\geometry\model">
       <UniqueIdentifier>{9323311e-f65b-418d-bfd2-2298a231c2de}</UniqueIdentifier>
     </Filter>
@@ -138,6 +135,15 @@
     </Filter>
     <Filter Include="Header Files\material">
       <UniqueIdentifier>{81a4139d-7d18-4619-bd4c-376ab1b5b74f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util\math">
+      <UniqueIdentifier>{aefc5daf-8b66-450d-ad11-95d6db7f745f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util\math\directxmath">
+      <UniqueIdentifier>{fc70a83f-0a92-475e-8d9a-179939f34dde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util\string">
+      <UniqueIdentifier>{11a86b40-978f-490a-9e1a-9763223d2041}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +254,15 @@
     </ClInclude>
     <ClInclude Include="material\Material.h">
       <Filter>Header Files\material</Filter>
+    </ClInclude>
+    <ClInclude Include="util\directxmath\extensions.h">
+      <Filter>Header Files\util\math\directxmath</Filter>
+    </ClInclude>
+    <ClInclude Include="util\math\math.h">
+      <Filter>Header Files\util\math</Filter>
+    </ClInclude>
+    <ClInclude Include="util\string\string.h">
+      <Filter>Header Files\util\string</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

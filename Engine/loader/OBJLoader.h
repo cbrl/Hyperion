@@ -9,11 +9,15 @@
 #include <DirectXMath.h>
 #include <VertexTypes.h>
 
+#include "util\math\math.h"
+#include "util\math\directxmath\extensions.h"
+#include "util\string\string.h"
 #include "direct3d\Direct3d.h"
 #include "geometry\model\Model2.h"
 #include "geometry\mesh\Mesh.h"
 #include "material\Material.h"
 
+using std::stoi;
 using std::wstring;
 using std::vector;
 using std::wifstream;
@@ -29,33 +33,15 @@ class OBJLoader {
 		Model Load(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wstring folder, wstring filename, bool RHcoordinates);
 
 	private:
-		wstring TrimWhiteSpace(wstring& in);
-		void ReadLine(wstring line);
+		template<typename ElementT>
+		const ElementT& GetElement(vector<ElementT>& in, int index);
 
-		// Model Info
-		void ReadVertex(wstring& line);
-		void ReadNormal(wstring& line);
-		void ReadTexCoord(wstring& line);
-		void NewGroup();
+		void LoadModel(wstring folder, wstring filename);
+		void LoadMaterials(wstring folder);
+
 		void ReadFace(wstring& line);
-
-		// Material Info
-		void ReadMaterialLibrary(wstring& line);
-		void ReadMaterial(wstring& line);
-		void ReadDiffuse(wstring& line);
-		void ReadAmbient(wstring& line);
+		void Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<UINT>& outIndices);
 		void ReadTransparency(wstring& line, bool inverse);
-		void ReadSpecularColor(wstring& line);
-		void ReadSpecularExp(wstring& line);
-		void ReadOpticalDensity(wstring& line);
-		void ReadIllumination(wstring& line);
-		void NewMaterial(wstring& line);
-		void ReadDiffuseMap(wstring& line);
-		void ReadAlphaMap(wstring& line);
-		void ReadAmbientMap(wstring& line);
-		void ReadSpecularMap(wstring& line);
-		void ReadSpecHighlightMap(wstring& line);
-		void ReadBumpMap(wstring& line);
 		
 
 	private:
@@ -105,37 +91,41 @@ class OBJLoader {
 		bool RHcoord;
 		bool hasNormals;
 		bool hasTexture;
-		// If diffuse color wasn't set, the ambient color can be used (usually the same)
-		bool kdSet;
 
-		int vIndex;
-		int vTotal;
-		int triangleCount;
-		int meshTriangles;
-		int materialCount;
+		int groupCount;
+		int mtlCount;
+
+		// Vector of complete vertex definitions
+		vector<VertexPositionNormalTexture> vertices;
 
 		// Vectors to store model info
 		vector<XMFLOAT3> vPositions;
 		vector<XMFLOAT3> vNormals;
 		vector<XMFLOAT2> vTexCoords;
-		vector<ULONG>    indices;
-
-		// Vectors to store indices for vertex definitions
-		vector<UINT> vPositionIndices;
-		vector<UINT> vNormalIndices;
-		vector<UINT> vTexCoordIndices;
-
-		// Index values of the start of new groups
-		vector<UINT> groupIndexStart;
-		int groupCount;
-
-		vector<UINT> groupMaterials;
+		vector<UINT>    indices;
 
 		// Material library name
 		wstring meshMatLib;
-		// Material names for each group
+
+		// Material names for each group <grp number, mat name>
 		std::map<int, wstring> meshMaterials;
 
 		// Vector of material descriptions
 		vector<OBJMaterial> materials;
+
+		// List of vertices where a new group starts
+		vector<UINT> groupVertexIndices;
+
+		// Index values of the material for each group
+		vector<UINT> groupMaterialIndices;
 };
+
+
+template<typename ElementT>
+inline const ElementT& OBJLoader::GetElement(vector<ElementT>& in, int index) {
+	if (index < 0) {
+		index = in.size() + index;
+	}
+
+	return in[index];
+}
