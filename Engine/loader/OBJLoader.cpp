@@ -7,8 +7,6 @@
 
 OBJLoader::OBJLoader() :
 	RHcoord(false),
-	hasNormals(false),
-	hasTexture(false),
 	groupCount(0),
 	mtlCount(0)
 {
@@ -19,33 +17,40 @@ OBJLoader::~OBJLoader() {
 }
 
 
+void OBJLoader::Reset() {
+	// Reset the local variables
+	RHcoord    = false;
+	groupCount = 0;
+	mtlCount   = 0;
+
+	vertices.clear();
+	indices.clear();
+	vPositions.clear();
+	vNormals.clear();
+	vTexCoords.clear();
+	meshMatLib.clear();
+	groupMaterials.clear();
+	materials.clear();
+	groupVertexIndices.clear();
+	groupMaterialIndices.clear();
+}
+
+
 Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wstring folder, wstring filename, bool RHcoordinates) {
 	RHcoord = RHcoordinates;
 
+	// Load the model
 	LoadModel(folder, filename);
+
+	// Load the materials
 	LoadMaterials(folder);
-
-
-	//----------------------------------------------------------------------------------
-	// Create Model
-	//----------------------------------------------------------------------------------
-
-	// Create the vertices and store in a vector
-	//vector<VertexPositionNormalTexture> vertices;
-	//VertexPositionNormalTexture vertex;
-	//for (int i = 0; i < vTotal; ++i) {
-	//	vertex.position = vPositions[vPositionIndices[i]];
-	//	vertex.normal = vNormals[vNormalIndices[i]];
-	//	vertex.textureCoordinate = vTexCoords[vTexCoordIndices[i]];
-
-	//	vertices.push_back(vertex);
-	//}
 
 	
 	// Create the materials
 	vector<Material> mtlVector;
 	for (int i = 0; i < mtlCount; ++i) {
 		Material mtl;
+
 		mtl.name = materials[i].name;
 		
 		if (!materials[i].map_Ka.empty())
@@ -64,6 +69,7 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* deviceContext, 
 		mtl.Ka = materials[i].Ka;
 		mtl.Kd = materials[i].Kd;
 		mtl.Ks = materials[i].Ks;
+		mtl.Ke = materials[i].Ke;
 		mtl.Ns = materials[i].Ns;
 		mtl.d  = materials[i].d;
 		mtl.Ni = materials[i].Ni;
@@ -73,18 +79,13 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* deviceContext, 
 		mtlVector.push_back(mtl);
 	}
 
+	// Create the mesh and model
 	Mesh mesh(device, vertices, indices, mtlVector, groupCount, groupVertexIndices, groupMaterialIndices);
 	Model model(mesh);
 
 
-	// Constuct model
-	// Maybe make this a mesh, and have another class that constructs the model
-	//Model<VertexPositionNormalTexture> model;
-
-	//DX::ThrowIfFailed(model.Init(Direct3D::Get()->GetDevice().Get(), vertices, indices, texture));
-
-
-	// RESET
+	// Reset the obj loader
+	Reset();
 
 
 	return model;
@@ -144,7 +145,6 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 			}
 
 			vNormals.push_back(normal);
-			hasNormals = true;
 		}
 
 		// Texture
@@ -157,7 +157,6 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 			}
 
 			vTexCoords.push_back(texCoord);
-			hasTexture = true;
 		}
 
 		// Group
@@ -178,7 +177,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 		// Group Material
 		else if (token.compare(OBJTokens::group_mtl) == 0) {
-			meshMaterials[groupCount - 1] = TrimWhiteSpace(line);
+			groupMaterials[groupCount - 1] = TrimWhiteSpace(line);
 		}
 	}
 
@@ -194,14 +193,6 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 	if (groupVertexIndices[1] == 0) {
 		groupVertexIndices.erase(groupVertexIndices.begin() + 1);
 		--groupCount;
-	}
-
-	// Make sure there is a default texCoord and normal
-	if (!hasNormals) {
-		vNormals.push_back(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	}
-	if (!hasTexture) {
-		vTexCoords.push_back(XMFLOAT2(0.0f, 0.0f));
 	}
 }
 
@@ -260,6 +251,30 @@ void OBJLoader::LoadMaterials(wstring folder) {
 			stream >> materials[mtlCount - 1].Ka.z;
 		}
 
+		// Specular Color
+		else if (token.compare(OBJTokens::specular_color) == 0) {
+			stream >> materials[mtlCount - 1].Ks.x;
+			stream >> materials[mtlCount - 1].Ks.y;
+			stream >> materials[mtlCount - 1].Ks.z;
+		}
+
+		// Emissive Color
+		else if (token.compare(OBJTokens::emissive_color) == 0) {
+			stream >> materials[mtlCount - 1].Ke.x;
+			stream >> materials[mtlCount - 1].Ke.y;
+			stream >> materials[mtlCount - 1].Ke.z;
+		}
+
+		// Specular Expononet
+		else if (token.compare(OBJTokens::specular_exponent) == 0) {
+			stream >> materials[mtlCount - 1].Ns;
+		}
+
+		// Optical Density
+		else if (token.compare(OBJTokens::optical_density) == 0) {
+			stream >> materials[mtlCount - 1].Ni;
+		}
+
 		// Dissolve (transparency)
 		else if (token.compare(OBJTokens::transparency) == 0) {
 			ReadTransparency(line, false);
@@ -268,27 +283,6 @@ void OBJLoader::LoadMaterials(wstring folder) {
 		// Dissolve (transparency)
 		else if (token.compare(OBJTokens::transparency_inv) == 0) {
 			ReadTransparency(line, true);
-		}
-
-		// Specular Color
-		else if (token.compare(OBJTokens::specular_color) == 0) {
-			stream >> materials[mtlCount - 1].Ks.x;
-			stream >> materials[mtlCount - 1].Ks.y;
-			stream >> materials[mtlCount - 1].Ks.z;
-		}
-
-		// Specular Expononet
-		else if (token.compare(OBJTokens::specular_exponent) == 0) {
-			stream >> materials[mtlCount - 1].Ns;
-		}
-
-		else if (token.compare(OBJTokens::emissive_color) == 0) {
-			// READ EMISSIVE COLOR
-		}
-
-		// Optical Density
-		else if (token.compare(OBJTokens::optical_density) == 0) {
-			stream >> materials[mtlCount - 1].Ni;
 		}
 
 		// Illumination
@@ -332,19 +326,19 @@ void OBJLoader::LoadMaterials(wstring folder) {
 	file.close();
 
 
-	// Set the group material to the index value of its
+	// Set the group's material to the index value of its
 	// material in the material vector.
 	for (int i = 0; i < groupCount; ++i) {
 		bool hasMat = false;
 
 		// If the group doesn't have a material set, then
 		// use the first material.
-		if (meshMaterials[i].empty()) {
-			meshMaterials[i] = materials[0].name;
+		if (groupMaterials[i].empty()) {
+			groupMaterials[i] = materials[0].name;
 		}
 
 		for (int j = 0; j < materials.size(); ++j) {
-			if (meshMaterials[i] == materials[j].name) {
+			if (groupMaterials[i] == materials[j].name) {
 				groupMaterialIndices.push_back(j);
 				hasMat = true;
 			}
@@ -501,11 +495,8 @@ void OBJLoader::ReadFace(wstring& line) {
 void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<UINT>& outIndices) {
 	vector<VertexPositionNormalTexture> vVerts = inVerts;
 
-	for (size_t i = 0; i < vVerts.size(); ++i) {
-
-
-
-		while (true) {
+	while (true) {
+		for (size_t i = 0; i < vVerts.size(); ++i) {
 			XMFLOAT3 prev;
 			if (i == 0) {
 				prev = vVerts[vVerts.size() - 1].position;
@@ -594,7 +585,8 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 				if (PointInTriangle(inVerts[j].position, prev, curr, next)
 					&& !XMFloat3Equal(inVerts[j].position, prev)
 					&& !XMFloat3Equal(inVerts[j].position, curr)
-					&& !XMFloat3Equal(inVerts[j].position, next)) {
+					&& !XMFloat3Equal(inVerts[j].position, next))
+				{
 					inTriangle = true;
 					break;
 				}

@@ -186,9 +186,9 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="texture\TextureMgr.h" />
     <ClInclude Include="text\Text.h" />
-    <ClInclude Include="util\directxmath\extensions.h" />
     <ClInclude Include="util\EngineUtil.h" />
     <ClInclude Include="util\fps\FPS.h" />
+    <ClInclude Include="util\math\directxmath\extensions.h" />
     <ClInclude Include="util\math\math.h" />
     <ClInclude Include="util\string\string.h" />
     <ClInclude Include="util\timer\Timer.h" />

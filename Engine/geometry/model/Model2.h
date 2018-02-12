@@ -40,9 +40,9 @@ class Model {
 			rotation = XMMatrixMultiply(rotation, XMMatrixRotationRollPitchYaw(x, y, z));
 		}
 
-		XMMATRIX    GetPosition()   { return position; }
-		XMMATRIX    GetRotation()   { return rotation; }
-		ShaderTypes GetShader()     { return shader; }
+		XMMATRIX    GetPosition() { return position; }
+		XMMATRIX    GetRotation() { return rotation; }
+		ShaderTypes GetShader()   { return shader; }
 
 
 	private:

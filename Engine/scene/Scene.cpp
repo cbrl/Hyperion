@@ -4,11 +4,12 @@
 
 // TODO:
 // - Add emmisive color to material
-// - Implement material data into shaders
+// - Add vertex normal generation to obj loader
 // - Implement frustum culling
 // - Create a simple geometry generator
 // - Bounding boxes on geometry for frustum culling
 // - Global shader include
+// - Implement material data into shaders
 // - Look at naming objects in debug mode (DirectXHelpers.h)
 // - Comment stuff
 
@@ -35,12 +36,6 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext) {
 
 
 	//----------------------------------------------------------------------------------
-	// Create texture manager
-	//----------------------------------------------------------------------------------
-	//textureMgr = make_unique<TextureMgr>(device, deviceContext);
-
-
-	//----------------------------------------------------------------------------------
 	// Create lights
 	//----------------------------------------------------------------------------------
 	lights.push_back(Light());
@@ -54,20 +49,8 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext) {
 	//----------------------------------------------------------------------------------
 	// Create models
 	//----------------------------------------------------------------------------------
-	wstring brick(L"./data/models/cube/brick.jpg");
-	const char* cube = "./data/models/cube/cube.txt";
-
-	//models.push_back(Model());
-	//models.back().Init(device, cube, textureMgr->Texture(brick), ShaderTypes::LightShader);
-	////result = models.back().Init(device.Get(), cube, textureMgr->PlainTexture(XMFLOAT4(Colors::Aqua)), ShaderTypes::LightShader);
-
-	//models.push_back(Model());
-	//models.back().Init(device, cube, textureMgr->Texture(brick), ShaderTypes::LightShader);
-	//models.back().SetPosition(4, 0, 0);
-
-
 	OBJLoader loader;
-	models.push_back(loader.Load(device, deviceContext, L"data/models/spaceCompound/", L"spaceCompound.obj", true));
+	models.push_back(loader.Load(device, deviceContext, L"data/models/cube2/", L"cube.obj", false));
 	models.at(0).SetShader(ShaderTypes::LightShader);
 
 

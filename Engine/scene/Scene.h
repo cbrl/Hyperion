@@ -14,8 +14,6 @@
 //#include "geometry\model\Model.h"
 #include "geometry\model\Model2.h"
 #include "text\Text.h"
-#include "texture\TextureMgr.h"
-
 #include "loader\OBJLoader.h"
 
 using std::map;
@@ -46,8 +44,6 @@ class Scene {
 
 
 	private:
-		//unique_ptr<TextureMgr>      textureMgr;
-
 		float rotation = 0.0f;
 
 
@@ -55,13 +51,13 @@ class Scene {
 		template<typename Element, typename Action>
 		void ForEach(Action act) {
 			if constexpr (is_same_v<Model, Element>) {
-				for (auto &e : models) {
+				for (auto& e : models) {
 					act(e);
 				}
 			}
 
 			if constexpr (is_same_v<Text, Element>) {
-				for (auto &e : texts) {
+				for (auto& e : texts) {
 					act(e.second);
 				}
 			}

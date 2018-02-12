@@ -41,6 +41,8 @@ struct Material {
 	XMFLOAT3 Kd;
 	// Specular Color
 	XMFLOAT3 Ks;
+	// Emissive Color
+	XMFLOAT3 Ke;
 
 	// Specular Exponent
 	float Ns;

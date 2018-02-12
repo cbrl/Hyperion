@@ -19,6 +19,7 @@
 
 using std::stoi;
 using std::wstring;
+using std::map;
 using std::vector;
 using std::wifstream;
 using std::wstringstream;
@@ -35,6 +36,8 @@ class OBJLoader {
 	private:
 		template<typename ElementT>
 		const ElementT& GetElement(vector<ElementT>& in, int index);
+
+		void Reset();
 
 		void LoadModel(wstring folder, wstring filename);
 		void LoadMaterials(wstring folder);
@@ -73,6 +76,8 @@ class OBJLoader {
 			XMFLOAT3 Kd;
 			// Specular Color
 			XMFLOAT3 Ks;
+			// Emissive Color
+			XMFLOAT3 Ke;
 			// Specular Exponent
 			float Ns;
 			// Optical Density
@@ -89,11 +94,8 @@ class OBJLoader {
 
 	private:
 		bool RHcoord;
-		bool hasNormals;
-		bool hasTexture;
-
-		int groupCount;
-		int mtlCount;
+		int  groupCount;
+		int  mtlCount;
 
 		// Vector of complete vertex definitions
 		vector<VertexPositionNormalTexture> vertices;
@@ -102,13 +104,13 @@ class OBJLoader {
 		vector<XMFLOAT3> vPositions;
 		vector<XMFLOAT3> vNormals;
 		vector<XMFLOAT2> vTexCoords;
-		vector<UINT>    indices;
+		vector<UINT>     indices;
 
 		// Material library name
 		wstring meshMatLib;
 
 		// Material names for each group <grp number, mat name>
-		std::map<int, wstring> meshMaterials;
+		map<int, wstring> groupMaterials;
 
 		// Vector of material descriptions
 		vector<OBJMaterial> materials;
@@ -116,7 +118,7 @@ class OBJLoader {
 		// List of vertices where a new group starts
 		vector<UINT> groupVertexIndices;
 
-		// Index values of the material for each group
+		// List of materials for each group. Value is an index for the material vector.
 		vector<UINT> groupMaterialIndices;
 };
 

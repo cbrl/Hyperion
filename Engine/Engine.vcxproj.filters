@@ -255,14 +255,14 @@
     <ClInclude Include="material\Material.h">
       <Filter>Header Files\material</Filter>
     </ClInclude>
-    <ClInclude Include="util\directxmath\extensions.h">
-      <Filter>Header Files\util\math\directxmath</Filter>
-    </ClInclude>
     <ClInclude Include="util\math\math.h">
       <Filter>Header Files\util\math</Filter>
     </ClInclude>
     <ClInclude Include="util\string\string.h">
       <Filter>Header Files\util\string</Filter>
+    </ClInclude>
+    <ClInclude Include="util\math\directxmath\extensions.h">
+      <Filter>Header Files\util\math\directxmath</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
