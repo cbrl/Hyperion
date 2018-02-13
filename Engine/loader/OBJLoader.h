@@ -11,10 +11,12 @@
 
 #include "util\math\math.h"
 #include "util\math\directxmath\extensions.h"
+#include "util\directxtk\extensions.h"
 #include "util\string\string.h"
 #include "direct3d\Direct3d.h"
 #include "geometry\model\Model2.h"
 #include "geometry\mesh\Mesh.h"
+#include "geometry\boundingvolume\BoundingVolume.h"
 #include "material\Material.h"
 
 using std::stoi;
@@ -49,13 +51,16 @@ class OBJLoader {
 
 	private:
 		struct OBJMaterial {
-			OBJMaterial() {
-				Ns = 0.0f;
-				Ni = 0.0f;
-				d = 0.0f;
-				illum = 0;
-				transparency = false;
-			}
+			OBJMaterial() :
+				Ka(0.0f, 0.0f, 0.0f),
+				Kd(0.0f, 0.0f, 0.0f),
+				Ks(0.0f, 0.0f, 0.0f),
+				Ke(0.0f, 0.0f, 0.0f),
+				Ns(0.0f),
+				Ni(0.0f),
+				d(0.0f),
+				illum(0),
+				transparency(false) {}
 
 			wstring name;
 			// Ambient map
@@ -115,11 +120,13 @@ class OBJLoader {
 		// Vector of material descriptions
 		vector<OBJMaterial> materials;
 
-		// List of vertices where a new group starts
-		vector<UINT> groupVertexIndices;
+		// List of indices where a new group starts (e.g. new group at 8th index)
+		vector<UINT> newGroupIndices;
 
 		// List of materials for each group. Value is an index for the material vector.
 		vector<UINT> groupMaterialIndices;
+
+		vector<wstring> definedVerts;
 };
 
 

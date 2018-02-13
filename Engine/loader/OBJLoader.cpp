@@ -31,7 +31,7 @@ void OBJLoader::Reset() {
 	meshMatLib.clear();
 	groupMaterials.clear();
 	materials.clear();
-	groupVertexIndices.clear();
+	newGroupIndices.clear();
 	groupMaterialIndices.clear();
 }
 
@@ -79,9 +79,12 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* deviceContext, 
 		mtlVector.push_back(mtl);
 	}
 
-	// Create the mesh and model
-	Mesh mesh(device, vertices, indices, mtlVector, groupCount, groupVertexIndices, groupMaterialIndices);
-	Model model(mesh);
+	// Create the mesh and bounding box
+	Mesh mesh(device, vertices, indices, mtlVector, groupCount, newGroupIndices, groupMaterialIndices);
+	AABB boundingBox(vPositions);
+
+	// Create the model
+	Model model(mesh, boundingBox);
 
 
 	// Reset the obj loader
@@ -161,7 +164,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 		// Group
 		else if (token.compare(OBJTokens::group) == 0) {
-			groupVertexIndices.push_back(indices.size());
+			newGroupIndices.push_back(indices.size());
 			++groupCount;
 		}
 
@@ -186,13 +189,15 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 
 	// There won't be another index start after the last group, so set it here
-	groupVertexIndices.push_back(indices.size());
+	//newGroupIndices.push_back(indices.size());
 
 	// Sometimes a group is defined at the top of the file, then an extra one
 	// before the first vertex. If that happened, then remove the extra.
-	if (groupVertexIndices[1] == 0) {
-		groupVertexIndices.erase(groupVertexIndices.begin() + 1);
-		--groupCount;
+	if (newGroupIndices.size() > 1) {
+		if (newGroupIndices[1] == 0) {
+			newGroupIndices.erase(newGroupIndices.begin() + 1);
+			--groupCount;
+		}
 	}
 }
 
@@ -387,6 +392,11 @@ void OBJLoader::ReadFace(wstring& line) {
 		// Split the vertex definition into separate parts
 		Split(vList[i], vParts, L"/");
 
+		// If this vertex hasn't been defined already, then do it now
+		if (std::find(definedVerts.begin(), definedVerts.end(), vList[i]) == definedVerts.end()) {
+			definedVerts.push_back(vList[i]);
+		}
+
 		switch (vParts.size()) {
 			// Position
 			case 1:
@@ -410,7 +420,7 @@ void OBJLoader::ReadFace(wstring& line) {
 			// Position
 			case 1:
 			{
-				vertex.position = GetElement(vPositions, stoi(vParts[0])-1);
+				vertex.position = GetElement(vPositions, stoi(vParts[0])-1);  //Subtract 1 since arrays start at index 0
 				vertex.textureCoordinate = XMFLOAT2(0.0f, 0.0f);
 				hasNormal = false;
 
@@ -462,36 +472,55 @@ void OBJLoader::ReadFace(wstring& line) {
 		}
 	}
 
-	// Add vertices to vector
+	// Add vertices to vector if they're not in it already
 	for (size_t i = 0; i < vVerts.size(); ++i) {
-		vertices.push_back(vVerts[i]);
+		auto pos = std::find(vertices.begin(), vertices.end(), vVerts[i]);
+		if (pos == vertices.end()) {
+			vertices.push_back(vVerts[i]);
+		}
 	}
-
-
 
 	// If no group has been defined, then create one manually
 	if (groupCount == 0) {
-		groupVertexIndices.push_back(indices.size());
+		newGroupIndices.push_back(indices.size());
 		++groupCount;
 	}
 
-	// Add indices to vector if the face was a triangle
-	if (vVerts.size() == 3) {
-		indices.push_back(vertices.size());
-		indices.push_back(vertices.size() + 1);
-		indices.push_back(vertices.size() + 2);
+	// Add indices to index vector if the face was a triangle
+	if (vList.size() == 3) {
+		// Get the index of each vertex and add it to the index vector
+		for (size_t i = 0; i < vList.size(); ++i) {
+
+			auto pos = std::find(vertices.begin(), vertices.end(), vVerts[i]);
+			if (pos != vertices.end()) {
+				auto index = std::distance(vertices.begin(), pos);
+				indices.push_back(index);
+			}
+		}
 	}
 
 	// Triangulate the face if there were more than 3 points
-	else if (vVerts.size() > 3) {
+	else if (vList.size() > 3) {
 		vector<UINT> vIndices;
 
+		// Triangulate the vertices
 		Triangulate(vVerts, vIndices);
-	}
 
+		// Add the new indices to the vector
+		for (size_t i = 0; i < vIndices.size(); ++i) {
+
+			// Find the index of each vertex and add it to the index vector
+			auto pos = std::find(vertices.begin(), vertices.end(), vVerts[vIndices[i]]);
+			if (pos != vertices.end()) {
+				auto index = std::distance(vertices.begin(), pos);
+				indices.push_back(index);
+			}
+		}
+	}
 }
 
 
+// Converts the input face into triangles. Returns a list of indices that correspond to the input vertex list.
 void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<UINT>& outIndices) {
 	vector<VertexPositionNormalTexture> vVerts = inVerts;
 
@@ -519,11 +548,11 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 			// Create a triangle from previous, current, and next vertices
 			if (vVerts.size() == 3) {
 				for (size_t j = 0; j < vVerts.size(); ++j) {
-					if (XMFloat3Equal(inVerts[j].position, prev))
+					if (inVerts[j].position == prev)
 						indices.push_back(j);
-					if (XMFloat3Equal(inVerts[j].position, curr))
+					if (inVerts[j].position == curr)
 						indices.push_back(j);
-					if (XMFloat3Equal(inVerts[j].position, next))
+					if (inVerts[j].position == next)
 						indices.push_back(j);
 				}
 
@@ -534,19 +563,20 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 			if (vVerts.size() == 4) {
 				// Create a triangle
 				for (size_t j = 0; j < inVerts.size(); ++j) {
-					if (XMFloat3Equal(inVerts[j].position, prev))
+					if (inVerts[j].position == prev)
 						indices.push_back(j);
-					if (XMFloat3Equal(inVerts[j].position, curr))
+					if (inVerts[j].position == curr)
 						indices.push_back(j);
-					if (XMFloat3Equal(inVerts[j].position, next))
+					if (inVerts[j].position == next)
 						indices.push_back(j);
 				}
 
 				XMFLOAT3 temp;
 				for (size_t j = 0; j < vVerts.size(); ++j) {
-					if (!XMFloat3Equal(vVerts[j].position, prev) &&
-						!XMFloat3Equal(vVerts[j].position, curr) &&
-						!XMFloat3Equal(vVerts[j].position, next)) {
+					if (vVerts[j].position != prev &&
+						vVerts[j].position != curr &&
+						vVerts[j].position != next)
+					{
 						temp = vVerts[j].position;
 						break;
 					}
@@ -554,11 +584,11 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 
 				// Create a triangle
 				for (size_t j = 0; j < inVerts.size(); ++j) {
-					if (XMFloat3Equal(inVerts[j].position, prev))
+					if (inVerts[j].position == prev)
 						indices.push_back(j);
-					if (XMFloat3Equal(inVerts[j].position, next))
+					if (inVerts[j].position == next)
 						indices.push_back(j);
-					if (XMFloat3Equal(inVerts[j].position, temp))
+					if (inVerts[j].position == temp)
 						indices.push_back(j);
 				}
 
@@ -583,9 +613,9 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 			bool inTriangle = false;
 			for (size_t j = 0; j < inVerts.size(); ++j) {
 				if (PointInTriangle(inVerts[j].position, prev, curr, next)
-					&& !XMFloat3Equal(inVerts[j].position, prev)
-					&& !XMFloat3Equal(inVerts[j].position, curr)
-					&& !XMFloat3Equal(inVerts[j].position, next))
+					&& inVerts[j].position != prev
+					&& inVerts[j].position != curr
+					&& inVerts[j].position != next)
 				{
 					inTriangle = true;
 					break;
@@ -597,17 +627,17 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 
 			// Create a triangle from previous, current, and next vertices
 			for (size_t j = 0; j < inVerts.size(); ++j) {
-				if (XMFloat3Equal(inVerts[j].position, prev))
+				if (inVerts[j].position == prev)
 					indices.push_back(j);
-				if (XMFloat3Equal(inVerts[j].position, curr))
+				if (inVerts[j].position == curr)
 					indices.push_back(j);
-				if (XMFloat3Equal(inVerts[j].position, next))
+				if (inVerts[j].position == next)
 					indices.push_back(j);
 			}
 
 			// Delete current vertex from the list
 			for (size_t j = 0; j < vVerts.size(); ++j) {
-				if (XMFloat3Equal(vVerts[j].position, curr)) {
+				if (vVerts[j].position == curr) {
 					vVerts.erase(vVerts.begin() + j);
 					break;
 				}

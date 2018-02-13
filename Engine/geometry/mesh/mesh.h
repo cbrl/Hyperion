@@ -13,39 +13,41 @@ class Mesh {
 	public:
 		Mesh() {}
 		template<typename VertexT>
-		Mesh(ID3D11Device* device, vector<VertexT>& vertices, vector<UINT>& indices, vector<Material>& materials,
-		     UINT groupCount, vector<UINT>& groupVertexIndices, vector<UINT>& groupMaterialIndices);
+		Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices, const vector<Material>& materials,
+		     UINT groupCount, const vector<UINT>& newGroupIndices, const vector<UINT>& groupMaterialIndices);
 		~Mesh() {
 		}
 
 		template<typename VertexT>
-		void Init(ID3D11Device* device, vector<VertexT>& vertices, vector<UINT>& indices);
+		void Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices);
 
 		ID3D11Buffer** GetVertexBuffer() { return vertexBuffer.GetAddressOf(); }
 		ID3D11Buffer* GetIndexBuffer() { return indexBuffer.Get(); }
 
 
 	public:
-		UINT vertexCount;
-		UINT indexCount;
-		UINT groupCount;
-		UINT stride;
-
 		ComPtr<ID3D11Buffer> vertexBuffer;
 		ComPtr<ID3D11Buffer> indexBuffer;
 
 		vector<Material> materials;
 
-		vector<UINT> groupVertexIndices;
+		// Vector of indices where a new group starts
+		vector<UINT> newGroupIndices;
+		// Vector of indices for the material belonging to a group
 		vector<UINT> groupMaterialIndices;
+
+		UINT vertexCount;
+		UINT indexCount;
+		UINT groupCount;
+		UINT stride;
 };
 
 
 template<typename VertexT>
-Mesh::Mesh(ID3D11Device* device, vector<VertexT>& vertices, vector<UINT>& indices, vector<Material>& materials,
-           UINT groupCount, vector<UINT>& groupVertexIndices, vector<UINT>& groupMaterialIndices) :
+Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices, const vector<Material>& materials,
+           UINT groupCount, const vector<UINT>& newGroupIndices, const vector<UINT>& groupMaterialIndices) :
 	materials(materials),
-	groupVertexIndices(groupVertexIndices),
+	newGroupIndices(newGroupIndices),
 	groupMaterialIndices(groupMaterialIndices),
 	vertexCount(vertices.size()),
 	indexCount(indices.size()),
@@ -57,7 +59,7 @@ Mesh::Mesh(ID3D11Device* device, vector<VertexT>& vertices, vector<UINT>& indice
 
 
 template<typename VertexT>
-void Mesh::Init(ID3D11Device* device, vector<VertexT>& vertices, vector<UINT>& indices) {
+void Mesh::Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices) {
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
 	D3D11_BUFFER_DESC indexBufferDesc = {};
 

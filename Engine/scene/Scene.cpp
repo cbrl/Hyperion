@@ -3,11 +3,10 @@
 #include "rendering\renderingMgr.h"
 
 // TODO:
-// - Add emmisive color to material
 // - Add vertex normal generation to obj loader
+// - Bounding boxes on geometry for frustum culling
 // - Implement frustum culling
 // - Create a simple geometry generator
-// - Bounding boxes on geometry for frustum culling
 // - Global shader include
 // - Implement material data into shaders
 // - Look at naming objects in debug mode (DirectXHelpers.h)

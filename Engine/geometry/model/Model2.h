@@ -7,6 +7,7 @@
 #include <VertexTypes.h>
 #include "util\EngineUtil.h"
 #include "geometry\mesh\Mesh.h"
+#include "geometry\boundingvolume\BoundingVolume.h"
 
 using std::vector;
 using std::ifstream;
@@ -17,7 +18,7 @@ using namespace DirectX;
 
 class Model {
 	public:
-		Model(Mesh mesh);
+		Model(const Mesh& mesh, const AABB& aabb);
 		~Model();
 
 		void SetShader(ShaderTypes shaderType) { shader = shaderType; }
@@ -47,6 +48,7 @@ class Model {
 
 	private:
 		Mesh mesh;
+		AABB aabb;
 
 		ShaderTypes  shader;
 		XMMATRIX     position;

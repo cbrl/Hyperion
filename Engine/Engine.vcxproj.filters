@@ -145,6 +145,12 @@
     <Filter Include="Header Files\util\string">
       <UniqueIdentifier>{11a86b40-978f-490a-9e1a-9763223d2041}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\geometry\boundingvolume">
+      <UniqueIdentifier>{e1ceb31f-9268-4f50-bcdf-98b20c935b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util\directxtk">
+      <UniqueIdentifier>{de045884-14ab-4d89-b825-6fcd2c64cedb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\color\color.vs">
@@ -263,6 +269,12 @@
     </ClInclude>
     <ClInclude Include="util\math\directxmath\extensions.h">
       <Filter>Header Files\util\math\directxmath</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\boundingvolume\BoundingVolume.h">
+      <Filter>Header Files\geometry\boundingvolume</Filter>
+    </ClInclude>
+    <ClInclude Include="util\directxtk\extensions.h">
+      <Filter>Header Files\util\directxtk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

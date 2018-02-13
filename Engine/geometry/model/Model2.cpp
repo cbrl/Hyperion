@@ -2,10 +2,11 @@
 #include "Model2.h"
 
 
-Model::Model(Mesh mesh) :
+Model::Model(const Mesh& mesh, const AABB& aabb) :
 	position(XMMatrixTranslation(0.0f, 0.0f, 0.0f)),
 	rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f)),
-	mesh(mesh)
+	mesh(mesh),
+	aabb(aabb)
 {
 }
 
@@ -34,6 +35,9 @@ void Model::Draw(ID3D11DeviceContext* deviceContext) {
 		}
 
 		// Draw the model
-		deviceContext->DrawIndexed(mesh.groupVertexIndices[i+1] - mesh.groupVertexIndices[i], mesh.groupVertexIndices[i], 0);
+		if (mesh.newGroupIndices.size()-1 > i)
+			deviceContext->DrawIndexed(mesh.newGroupIndices[i+1] - mesh.newGroupIndices[i], mesh.newGroupIndices[i], 0);
+		else
+			deviceContext->DrawIndexed(mesh.indexCount - mesh.newGroupIndices[i], mesh.newGroupIndices[i], 0);
 	}
 }

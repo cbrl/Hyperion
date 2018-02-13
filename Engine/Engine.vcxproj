@@ -162,6 +162,7 @@
   <ItemGroup>
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="direct3d\Direct3D.h" />
+    <ClInclude Include="geometry\boundingvolume\BoundingVolume.h" />
     <ClInclude Include="geometry\frustum\Frustum.h" />
     <ClInclude Include="geometry\mesh\Mesh.h" />
     <ClInclude Include="geometry\model\Model2.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="texture\TextureMgr.h" />
     <ClInclude Include="text\Text.h" />
+    <ClInclude Include="util\directxtk\extensions.h" />
     <ClInclude Include="util\EngineUtil.h" />
     <ClInclude Include="util\fps\FPS.h" />
     <ClInclude Include="util\math\directxmath\extensions.h" />
