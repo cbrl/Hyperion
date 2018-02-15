@@ -14,7 +14,7 @@
 #include "util\directxtk\extensions.h"
 #include "util\string\string.h"
 #include "direct3d\Direct3d.h"
-#include "geometry\model\Model2.h"
+#include "geometry\model\Model.h"
 #include "geometry\mesh\Mesh.h"
 #include "geometry\boundingvolume\BoundingVolume.h"
 #include "material\Material.h"
@@ -125,8 +125,6 @@ class OBJLoader {
 
 		// List of materials for each group. Value is an index for the material vector.
 		vector<UINT> groupMaterialIndices;
-
-		vector<wstring> definedVerts;
 };
 
 

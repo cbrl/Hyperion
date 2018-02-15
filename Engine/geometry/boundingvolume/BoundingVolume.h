@@ -39,8 +39,13 @@ struct AABB {
 
 		~AABB() = default;
 
-		XMVECTOR Min() { return minPoint; }
-		XMVECTOR Max() { return maxPoint; }
+		XMVECTOR Min() const { return minPoint; }
+		XMVECTOR Max() const { return maxPoint; }
+
+		void SetMin(XMVECTOR min) { minPoint = min; }
+		void SetMin(XMFLOAT3 min) { minPoint = XMLoadFloat3(&min); }
+		void SetMax(XMVECTOR max) { maxPoint = max; }
+		void SetMax(XMFLOAT3 max) { maxPoint = XMLoadFloat3(&max); }
 
 
 	private:

@@ -4,13 +4,9 @@
 
 // TODO:
 // - Add vertex normal generation to obj loader
-// - Bounding boxes on geometry for frustum culling
-// - Implement frustum culling
 // - Create a simple geometry generator
 // - Global shader include
 // - Implement material data into shaders
-// - Look at naming objects in debug mode (DirectXHelpers.h)
-// - Comment stuff
 
 Scene::Scene() {
 	Init(Direct3D::Get()->GetDevice(), Direct3D::Get()->GetDeviceContext());

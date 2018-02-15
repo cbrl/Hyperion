@@ -7,10 +7,12 @@
 #include "util\EngineUtil.h"
 #include "direct3d\Direct3D.h"
 #include "rendering\buffer\Buffers.h"
+#include "geometry\frustum\Frustum.h"
+#include "geometry\boundingvolume\BoundingVolume.h"
 #include "scene\Scene.h"
 #include "camera\Camera.h"
 #include "light\Light.h"
-#include "geometry\model\Model2.h"
+#include "geometry\model\Model.h"
 #include "text\text.h"
 
 using Microsoft::WRL::ComPtr;

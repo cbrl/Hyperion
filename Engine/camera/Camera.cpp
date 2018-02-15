@@ -39,7 +39,7 @@ Camera::~Camera() {
 
 
 void Camera::Move(XMFLOAT3 units) {
-	// IsMoving determines if the camera will decelerate when Update is called
+	// isMoving determines if the camera will decelerate when Update is called
 	isMoving = true;
 
 	//----------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ void Camera::Rotate(XMFLOAT3 units) {
 			}
 		}
 
-		XMMATRIX xRotation = XMMatrixRotationAxis(cameraRight, (xUnits));
+		XMMATRIX xRotation = XMMatrixRotationAxis(cameraRight, xUnits);
 
 		// Transform Up vector only if free look is enabled
 		if (enableFreeLook) {

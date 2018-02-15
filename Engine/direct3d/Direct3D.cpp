@@ -140,7 +140,6 @@ void Direct3D::Init() {
 
 
 	// Call OnResize to create the render target view, and world/view/projection matrices
-
 	OnResize(windowWidth, windowHeight);
 }
 
@@ -155,7 +154,9 @@ void Direct3D::ReadRefreshRate() {
 	DX::ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory),
 	                  "Failed to create dxgiFactory");
 
+
 	// Get list of display modes
+
 	factory->EnumAdapters(0, &adapter);
 	adapter->EnumOutputs(0, &adapterOut);
 	adapterOut->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, NULL);
@@ -163,7 +164,9 @@ void Direct3D::ReadRefreshRate() {
 	std::vector<DXGI_MODE_DESC> displayModeList(modes);
 	adapterOut->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, displayModeList.data());
 
+
 	// Find the mode that matches the screen, then store numerator and denominator for refresh rate
+
 	for (UINT i = 0; i < modes; i++) {
 		if (displayModeList[i].Width == GetSystemMetrics(SM_CXSCREEN)) {
 			if (displayModeList[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
@@ -187,7 +190,7 @@ void Direct3D::OnResize(int winWidth, int winHeight) {
 	depthStencilView.Reset();
 	depthStencilBuffer.Reset();
 
-	// Resize the swap chain and recreate the render target view.
+	// Resize the swap chain and recreate the render target view
 
 	DX::ThrowIfFailed(swapChain->ResizeBuffers(1, windowWidth, windowHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0),
 	                  "Failed to resize swapchain buffers");
@@ -197,6 +200,11 @@ void Direct3D::OnResize(int winWidth, int winHeight) {
 	                  "Failed to get backbuffer");
 	DX::ThrowIfFailed(device->CreateRenderTargetView(backBuffer.Get(), 0, renderTargetView.ReleaseAndGetAddressOf()),
 	                  "Failed to create render target view");
+
+
+	// Set the name the backbuffer and render target view for debugging purposes
+	SetDebugObjectName(backBuffer.Get(), "D3D BackBuffer");
+	SetDebugObjectName(renderTargetView.Get(), "D3D RenderTargetView");
 
 
 	//----------------------------------------------------------------------------------
@@ -230,6 +238,10 @@ void Direct3D::OnResize(int winWidth, int winHeight) {
 	                  "Failed to create depth stencil buffer");
 	DX::ThrowIfFailed(device->CreateDepthStencilView(depthStencilBuffer.Get(), 0, &depthStencilView),
 	                  "Failed to create depth stencil view");
+
+	// Set object names for debugging
+	SetDebugObjectName(depthStencilBuffer.Get(), "D3D DepthStencilBuffer");
+	SetDebugObjectName(depthStencilView.Get(), "D3DDepthStencilView");
 
 
 	// Bind the render target view and depth/stencil view to the pipeline

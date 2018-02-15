@@ -392,11 +392,8 @@ void OBJLoader::ReadFace(wstring& line) {
 		// Split the vertex definition into separate parts
 		Split(vList[i], vParts, L"/");
 
-		// If this vertex hasn't been defined already, then do it now
-		if (std::find(definedVerts.begin(), definedVerts.end(), vList[i]) == definedVerts.end()) {
-			definedVerts.push_back(vList[i]);
-		}
 
+		// Determine the vertex type
 		switch (vParts.size()) {
 			// Position
 			case 1:
@@ -416,6 +413,7 @@ void OBJLoader::ReadFace(wstring& line) {
 				break;
 		}
 
+		// Create the vertex definition and add it to the temporary vector
 		switch (type) {
 			// Position
 			case 1:
@@ -508,9 +506,9 @@ void OBJLoader::ReadFace(wstring& line) {
 
 		// Add the new indices to the vector
 		for (size_t i = 0; i < vIndices.size(); ++i) {
-
 			// Find the index of each vertex and add it to the index vector
 			auto pos = std::find(vertices.begin(), vertices.end(), vVerts[vIndices[i]]);
+
 			if (pos != vertices.end()) {
 				auto index = std::distance(vertices.begin(), pos);
 				indices.push_back(index);

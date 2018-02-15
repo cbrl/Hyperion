@@ -165,7 +165,7 @@
     <ClInclude Include="geometry\boundingvolume\BoundingVolume.h" />
     <ClInclude Include="geometry\frustum\Frustum.h" />
     <ClInclude Include="geometry\mesh\Mesh.h" />
-    <ClInclude Include="geometry\model\Model2.h" />
+    <ClInclude Include="geometry\model\Model.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="loader\OBJLoader.h" />
@@ -199,7 +199,7 @@
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="direct3d\Direct3D.cpp" />
     <ClCompile Include="geometry\frustum\Frustum.cpp" />
-    <ClCompile Include="geometry\model\Model2.cpp">
+    <ClCompile Include="geometry\model\Model.cpp">
       <FileType>Document</FileType>
     </ClCompile>
     <ClCompile Include="input\Input.cpp" />

@@ -26,11 +26,11 @@ class Camera {
 		void Rotate(XMFLOAT3 units);
 		void Update(float deltaTime);
 
-		CameraBuffer GetBuffer()     { return buffer; }
-		XMMATRIX     GetViewMatrix() { return viewMatrix; }
-		XMFLOAT3     GetPosition()   { return buffer.position; }
-		XMFLOAT3     GetRotation()   { return XMFLOAT3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
-		XMFLOAT3     GetVelocity()   { return velocity; }
+		CameraBuffer GetBuffer()     const { return buffer; }
+		XMMATRIX     GetViewMatrix() const { return viewMatrix; }
+		XMFLOAT3     GetPosition()   const { return buffer.position; }
+		XMFLOAT3     GetRotation()   const { return XMFLOAT3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
+		XMFLOAT3     GetVelocity()   const { return velocity; }
 
 	private:
 		CameraBuffer buffer;

@@ -2,25 +2,28 @@
 
 #include <vector>
 #include <fstream>
+#include <memory>
 #include <wrl\client.h>
 #include <VertexTypes.h>
 #include "util\EngineUtil.h"
+#include "geometry\mesh\Mesh.h"
+#include "geometry\boundingvolume\BoundingVolume.h"
 
 using std::vector;
 using std::ifstream;
+using std::unique_ptr;
 using Microsoft::WRL::ComPtr;
 
 using namespace DirectX;
 
 class Model {
 	public:
-		Model();
+		Model(const Mesh& mesh, const AABB& aabb);
 		~Model();
-		
-		void Init(ID3D11Device* device, const char* modelFilename,
-		             ComPtr<ID3D11ShaderResourceView> modelTexture, ShaderTypes shaderType);
 
-		void RenderBuffers(ID3D11DeviceContext* deviceContext);
+		void SetShader(ShaderTypes shaderType) { shader = shaderType; }
+
+		void Draw(ID3D11DeviceContext* deviceContext);
 
 		void SetPosition(float x, float y, float z) {
 			position = XMMatrixTranslation(x, y, z);
@@ -38,44 +41,17 @@ class Model {
 			rotation = XMMatrixMultiply(rotation, XMMatrixRotationRollPitchYaw(x, y, z));
 		}
 
-		int         GetIndexCount() { return indexCount; }
-		XMMATRIX    GetPosition()   { return position; }
-		XMMATRIX    GetRotation()   { return rotation; }
-		ShaderTypes GetShader()     { return shader; }
-
-		const ComPtr<ID3D11ShaderResourceView>& GetTexture() { return texture; }
+		AABB        GetAABB()     const { return aabb; }
+		XMMATRIX    GetPosition() const { return position; }
+		XMMATRIX    GetRotation() const { return rotation; }
+		ShaderTypes GetShader()   const { return shader; }
 
 
 	private:
-		HRESULT LoadModel(const char* filename);
-		HRESULT InitBuffers(ID3D11Device* device);
+		Mesh mesh;
+		AABB aabb;
 
-
-	private:
-		struct ModelData {
-			float x, y, z;
-			float nx, ny, nz;
-			float tu, tv;
-		};
-
-		struct Material {
-			XMFLOAT4 diffuse;
-			XMFLOAT4 ambient;
-			XMFLOAT4 specular;
-		};
-
-
-	private:
-		int               vertexCount;
-		int               indexCount;
-		vector<ModelData> modelData;
-
-		ComPtr<ID3D11Buffer>             vertexBuffer;
-		ComPtr<ID3D11Buffer>             indexBuffer;
-		ComPtr<ID3D11ShaderResourceView> texture;
-		Material                         material;
-		ShaderTypes                      shader;
-		XMMATRIX                         position;
-		XMMATRIX                         rotation;
+		ShaderTypes  shader;
+		XMMATRIX     position;
+		XMMATRIX     rotation;
 };
-

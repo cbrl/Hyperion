@@ -11,8 +11,7 @@
 #include "input\Input.h"
 #include "camera\Camera.h"
 #include "light\Light.h"
-//#include "geometry\model\Model.h"
-#include "geometry\model\Model2.h"
+#include "geometry\model\Model.h"
 #include "text\Text.h"
 #include "loader\OBJLoader.h"
 

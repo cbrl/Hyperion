@@ -20,11 +20,11 @@ class CBufferMgr {
 		CBufferMgr();
 		~CBufferMgr();
 
-		void BindBuffer(ID3D11DeviceContext* deviceContext, BufferTypes buffer);
-		void BindBuffers(ID3D11DeviceContext* deviceContext);
+		void BindBuffer(ID3D11DeviceContext* deviceContext, BufferTypes buffer) const;
+		void BindBuffers(ID3D11DeviceContext* deviceContext) const;
 
 		template<typename DataT>
-		void UpdateData(ID3D11DeviceContext* deviceContext, const DataT& data);
+		void UpdateData(ID3D11DeviceContext* deviceContext, const DataT& data) const;
 
 	private:
 		void CreateBuffers(ID3D11Device* device);
@@ -38,7 +38,7 @@ class CBufferMgr {
 
 
 template<typename DataT>
-void CBufferMgr::UpdateData(ID3D11DeviceContext* deviceContext, const DataT& data) {
+void CBufferMgr::UpdateData(ID3D11DeviceContext* deviceContext, const DataT& data) const {
 	if constexpr (is_same_v<DataT, MatrixBuffer>) {
 		matrixBuffer->UpdateData(deviceContext, data);
 	}

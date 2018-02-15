@@ -204,9 +204,6 @@
     <ClInclude Include="geometry\frustum\Frustum.h">
       <Filter>Header Files\geometry\frustum</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\model\Model2.h">
-      <Filter>Header Files\geometry\model</Filter>
-    </ClInclude>
     <ClInclude Include="direct3d\Direct3D.h">
       <Filter>Header Files\direct3d</Filter>
     </ClInclude>
@@ -276,6 +273,9 @@
     <ClInclude Include="util\directxtk\extensions.h">
       <Filter>Header Files\util\directxtk</Filter>
     </ClInclude>
+    <ClInclude Include="geometry\model\Model.h">
+      <Filter>Header Files\geometry\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -335,7 +335,7 @@
     <ClCompile Include="loader\OBJLoader.cpp">
       <Filter>Source Files\loader</Filter>
     </ClCompile>
-    <ClCompile Include="geometry\model\Model2.cpp">
+    <ClCompile Include="geometry\model\Model.cpp">
       <Filter>Source Files\geometry\model</Filter>
     </ClCompile>
   </ItemGroup>

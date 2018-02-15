@@ -15,8 +15,7 @@ class Mesh {
 		template<typename VertexT>
 		Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices, const vector<Material>& materials,
 		     UINT groupCount, const vector<UINT>& newGroupIndices, const vector<UINT>& groupMaterialIndices);
-		~Mesh() {
-		}
+		~Mesh() {}
 
 		template<typename VertexT>
 		void Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices);
@@ -54,7 +53,7 @@ Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<U
 	groupCount(groupCount),
 	stride(sizeof(VertexT))
 {
-	Init<VertexT>(device, vertices, indices);
+	Init(device, vertices, indices);
 }
 
 
@@ -98,5 +97,3 @@ void Mesh::Init(ID3D11Device* device, const vector<VertexT>& vertices, const vec
 	// Create index buffer
 	DX::ThrowIfFailed(device->CreateBuffer(&indexBufferDesc, &indexData, indexBuffer.GetAddressOf()));
 }
-
-//#include "Mesh.tpp"
