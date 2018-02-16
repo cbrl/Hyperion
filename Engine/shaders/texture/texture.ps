@@ -1,4 +1,5 @@
-#include "shader\HlslDefines.h"
+#include "shaders\include\syntax.hlsl"
+#include "shader\HLSL.h"
 
 /////////////
 // GLOBALS //

@@ -23,7 +23,7 @@ class Shader {
 		void Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, const WCHAR* psFilename,
 		          const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements);
 
-		void BindShader(ID3D11DeviceContext* deviceContext);
+		void BindShader(ID3D11DeviceContext* device_context);
 
 
 	private:
@@ -31,8 +31,8 @@ class Shader {
 
 
 	private:
-		ComPtr<ID3D11VertexShader> vertexShader;
-		ComPtr<ID3D11InputLayout>  vertexLayout;
-		ComPtr<ID3D11PixelShader>  pixelShader;
+		ComPtr<ID3D11VertexShader> vertex_shader;
+		ComPtr<ID3D11InputLayout>  vertex_layout;
+		ComPtr<ID3D11PixelShader>  pixel_shader;
 };
 

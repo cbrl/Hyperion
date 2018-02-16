@@ -2,32 +2,32 @@
 #include "System.h"
 
 
-System* System::systemPtr = nullptr;
+System* System::system_ptr = nullptr;
 
 
 System::System() {
-	systemPtr = this;
+	system_ptr = this;
 }
 
 
 System::~System() {
-	systemPtr = nullptr;
+	system_ptr = nullptr;
 }
 
 
 bool System::Init() {
 	// Set width/height variables. Later on this can be read from a config file.
-	windowWidth  = WINDOW_WIDTH;
-	windowHeight = WINDOW_HEIGHT;
+	window_width  = WINDOW_WIDTH;
+	window_height = WINDOW_HEIGHT;
 
 	// Create main window
-	if (!InitWindow(L"Engine", windowWidth, windowHeight)) {
+	if (!InitWindow(L"Engine", window_width, window_height)) {
 		return false;
 	}
 
 	// Initialize rendering manager
-	renderingMgr = make_unique<RenderingMgr>(hWnd);
-	renderingMgr->Init(windowWidth, windowHeight, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
+	rendering_mgr = make_unique<RenderingMgr>(hWnd);
+	rendering_mgr->Init(window_width, window_height, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
 
 	// Create input handler
 	input = make_unique<Input>(hWnd);
@@ -36,7 +36,7 @@ bool System::Init() {
 	timer = make_unique<Timer>();
 
 	// Create FPS Counter
-	fpsCounter = make_unique<FPS>();
+	fps_counter = make_unique<FPS>();
 
 	// Initialize scene
 	scene = make_unique<Scene>();
@@ -78,7 +78,7 @@ void System::Tick() {
 
 	// Update system metrics
 	timer->Tick();
-	fpsCounter->Tick();
+	fps_counter->Tick();
 	deltaTime = timer->DeltaTime();
 
 	// Process input
@@ -89,7 +89,7 @@ void System::Tick() {
 
 	// Update scene
 	scene->Tick(*input, deltaTime);
-	scene->UpdateMetrics(fpsCounter->GetFPS(), NULL, mouseX, mouseY);
+	scene->UpdateMetrics(fps_counter->GetFPS(), NULL, mouseX, mouseY);
 
 	// Render scene
 	scene->Render(deltaTime);
@@ -110,18 +110,18 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		// Handle window resize
 		case WM_SIZE:
-			windowWidth = LOWORD(lParam);
-			windowHeight = HIWORD(lParam);
+			window_width = LOWORD(lParam);
+			window_height = HIWORD(lParam);
 
 			if (wParam == SIZE_MAXIMIZED) {
-				OnResize(windowWidth, windowHeight);
+				OnResize(window_width, window_height);
 			}
 			else if (wParam == SIZE_RESTORED) {
 				if (resizing) {
 					// Do nothing. Constantly calling the resize function would be slow.
 				}
 				else {
-					OnResize(windowWidth, windowHeight);
+					OnResize(window_width, window_height);
 				}
 			}
 			return 0;
@@ -132,7 +132,7 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 		case WM_EXITSIZEMOVE:
 			resizing = false;
-			OnResize(windowWidth, windowHeight);
+			OnResize(window_width, window_height);
 			return 0;
 
 		case WM_GETMINMAXINFO:
@@ -171,7 +171,7 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-void System::OnResize(int windowWidth, int windowHeight) {
-	if (renderingMgr == nullptr) return;
-	renderingMgr->GetD3D()->OnResize(windowWidth, windowHeight);
+void System::OnResize(int window_width, int window_height) {
+	if (rendering_mgr == nullptr) return;
+	rendering_mgr->GetD3D()->OnResize(window_width, window_height);
 }

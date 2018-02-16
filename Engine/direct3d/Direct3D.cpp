@@ -8,25 +8,25 @@ const Direct3D* Direct3D::Get() {
 }
 
 
-Direct3D::Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool fullscreen, bool vSync, bool MSAA):
+Direct3D::Direct3D(HWND hWnd, int window_width, int window_height, bool fullscreen, bool vSync, bool MSAA):
 	hWnd(hWnd),
-	windowWidth(windowWidth),
-	windowHeight(windowHeight),
-	enable4xMSAA(MSAA),
-	enableVSync(vSync),
-	enableFullscreen(fullscreen),
-	driverType(D3D_DRIVER_TYPE_HARDWARE),
-	MSAA4xQuality(0),
-	windowViewport({})
+	window_width(window_width),
+	window_height(window_height),
+	enable_4xMSAA(MSAA),
+	enable_vsync(vSync),
+	enable_fullscreen(fullscreen),
+	driver_type(D3D_DRIVER_TYPE_HARDWARE),
+	MSAA4x_quality(0),
+	window_viewport({})
 {
 }
 
 
 Direct3D::~Direct3D() {
 	// Restore all default settings
-	if (deviceContext) {
-		deviceContext->ClearState();
-		deviceContext->Flush();
+	if (device_context) {
+		device_context->ClearState();
+		device_context->Flush();
 	}
 
 	// Report any live objects
@@ -45,14 +45,14 @@ void Direct3D::Init() {
 	D3D_FEATURE_LEVEL featureLevel;
 	HRESULT hr = D3D11CreateDevice(
 		0,                 // default adapter
-		driverType,
+		driver_type,
 		0,                 // no software device
 		createDeviceFlags,
 		0, 0,              // default feature level array
 		D3D11_SDK_VERSION,
 		&device,
 		&featureLevel,
-		&deviceContext);
+		&device_context);
 
 	DX::ThrowIfFailed(hr, "D3D11CreateDevice Failed");
 
@@ -69,24 +69,24 @@ void Direct3D::Init() {
 	// All Direct3D 11 capable devices support 4X MSAA for all render 
 	// target formats, so we only need to check quality support.
 
-	DX::ThrowIfFailed(device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &MSAA4xQuality),
+	DX::ThrowIfFailed(device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &MSAA4x_quality),
 	                  "CheckMultisampleQualityLevels() failed");
-	assert(MSAA4xQuality > 0);
+	assert(MSAA4x_quality > 0);
 
 	//----------------------------------------------------------------------------------
 	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
 	//----------------------------------------------------------------------------------
 	DXGI_SWAP_CHAIN_DESC sd;
-	sd.BufferDesc.Width            = windowWidth;
-	sd.BufferDesc.Height           = windowHeight;
+	sd.BufferDesc.Width            = window_width;
+	sd.BufferDesc.Height           = window_height;
 	sd.BufferDesc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.BufferDesc.Scaling          = DXGI_MODE_SCALING_UNSPECIFIED;
 
 	// 4X MSAA
-	if (enable4xMSAA) {
+	if (enable_4xMSAA) {
 		sd.SampleDesc.Count = 4;
-		sd.SampleDesc.Quality = MSAA4xQuality - 1;
+		sd.SampleDesc.Quality = MSAA4x_quality - 1;
 	}
 	else {
 		sd.SampleDesc.Count = 1;
@@ -94,7 +94,7 @@ void Direct3D::Init() {
 	}
 
 	// V-Sync
-	if (enableVSync) {
+	if (enable_vsync) {
 		ReadRefreshRate();
 		sd.BufferDesc.RefreshRate.Numerator   = numerator;
 		sd.BufferDesc.RefreshRate.Denominator = denominator;
@@ -105,7 +105,7 @@ void Direct3D::Init() {
 	}
 
 	// Fullscreen
-	if (enableFullscreen) {
+	if (enable_fullscreen) {
 		sd.Windowed = false;
 	}
 	else {
@@ -135,12 +135,12 @@ void Direct3D::Init() {
 	DX::ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)dxgiFactory.ReleaseAndGetAddressOf()),
 	                  "Failed to get parent of dxgiFactory");
 
-	DX::ThrowIfFailed(dxgiFactory->CreateSwapChain(device.Get(), &sd, swapChain.ReleaseAndGetAddressOf()),
+	DX::ThrowIfFailed(dxgiFactory->CreateSwapChain(device.Get(), &sd, swap_chain.ReleaseAndGetAddressOf()),
 	                  "Failed to create swapchain");
 
 
 	// Call OnResize to create the render target view, and world/view/projection matrices
-	OnResize(windowWidth, windowHeight);
+	OnResize(window_width, window_height);
 }
 
 
@@ -179,32 +179,32 @@ void Direct3D::ReadRefreshRate() {
 
 
 void Direct3D::OnResize(int winWidth, int winHeight) {
-	assert(deviceContext);
+	assert(device_context);
 	assert(device);
-	assert(swapChain);
+	assert(swap_chain);
 
-	windowWidth  = winWidth;
-	windowHeight = winHeight;
+	window_width  = winWidth;
+	window_height = winHeight;
 
-	renderTargetView.Reset();
-	depthStencilView.Reset();
-	depthStencilBuffer.Reset();
+	render_target_view.Reset();
+	depth_stencil_view.Reset();
+	depth_stencil_buffer.Reset();
 
 	// Resize the swap chain and recreate the render target view
 
-	DX::ThrowIfFailed(swapChain->ResizeBuffers(1, windowWidth, windowHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0),
+	DX::ThrowIfFailed(swap_chain->ResizeBuffers(1, window_width, window_height, DXGI_FORMAT_R8G8B8A8_UNORM, 0),
 	                  "Failed to resize swapchain buffers");
 
 	ComPtr<ID3D11Texture2D> backBuffer;
-	DX::ThrowIfFailed(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.ReleaseAndGetAddressOf())),
+	DX::ThrowIfFailed(swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.ReleaseAndGetAddressOf())),
 	                  "Failed to get backbuffer");
-	DX::ThrowIfFailed(device->CreateRenderTargetView(backBuffer.Get(), 0, renderTargetView.ReleaseAndGetAddressOf()),
+	DX::ThrowIfFailed(device->CreateRenderTargetView(backBuffer.Get(), 0, render_target_view.ReleaseAndGetAddressOf()),
 	                  "Failed to create render target view");
 
 
 	// Set the name the backbuffer and render target view for debugging purposes
 	SetDebugObjectName(backBuffer.Get(), "D3D BackBuffer");
-	SetDebugObjectName(renderTargetView.Get(), "D3D RenderTargetView");
+	SetDebugObjectName(render_target_view.Get(), "D3D RenderTargetView");
 
 
 	//----------------------------------------------------------------------------------
@@ -212,16 +212,16 @@ void Direct3D::OnResize(int winWidth, int winHeight) {
 	//----------------------------------------------------------------------------------
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 
-	depthStencilDesc.Width     = windowWidth;
-	depthStencilDesc.Height    = windowHeight;
+	depthStencilDesc.Width     = window_width;
+	depthStencilDesc.Height    = window_height;
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
 	depthStencilDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	// Use 4X MSAA? --must match swap chain MSAA values.
-	if (enable4xMSAA) {
+	if (enable_4xMSAA) {
 		depthStencilDesc.SampleDesc.Count   = 4;
-		depthStencilDesc.SampleDesc.Quality = MSAA4xQuality - 1;
+		depthStencilDesc.SampleDesc.Quality = MSAA4x_quality - 1;
 	}
 	// No MSAA
 	else {
@@ -234,45 +234,45 @@ void Direct3D::OnResize(int winWidth, int winHeight) {
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags      = 0;
 
-	DX::ThrowIfFailed(device->CreateTexture2D(&depthStencilDesc, 0, &depthStencilBuffer),
+	DX::ThrowIfFailed(device->CreateTexture2D(&depthStencilDesc, 0, &depth_stencil_buffer),
 	                  "Failed to create depth stencil buffer");
-	DX::ThrowIfFailed(device->CreateDepthStencilView(depthStencilBuffer.Get(), 0, &depthStencilView),
+	DX::ThrowIfFailed(device->CreateDepthStencilView(depth_stencil_buffer.Get(), 0, &depth_stencil_view),
 	                  "Failed to create depth stencil view");
 
 	// Set object names for debugging
-	SetDebugObjectName(depthStencilBuffer.Get(), "D3D DepthStencilBuffer");
-	SetDebugObjectName(depthStencilView.Get(), "D3DDepthStencilView");
+	SetDebugObjectName(depth_stencil_buffer.Get(), "D3D DepthStencilBuffer");
+	SetDebugObjectName(depth_stencil_view.Get(), "D3DDepthStencilView");
 
 
 	// Bind the render target view and depth/stencil view to the pipeline
 
-	deviceContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
+	device_context->OMSetRenderTargets(1, render_target_view.GetAddressOf(), depth_stencil_view.Get());
 
 
 	// Set the viewport transform
 
-	windowViewport.TopLeftX = 0;
-	windowViewport.TopLeftY = 0;
-	windowViewport.Width    = static_cast<float>(windowWidth);
-	windowViewport.Height   = static_cast<float>(windowHeight);
-	windowViewport.MinDepth = 0.0f;
-	windowViewport.MaxDepth = 1.0f;
+	window_viewport.TopLeftX = 0;
+	window_viewport.TopLeftY = 0;
+	window_viewport.Width    = static_cast<float>(window_width);
+	window_viewport.Height   = static_cast<float>(window_height);
+	window_viewport.MinDepth = 0.0f;
+	window_viewport.MaxDepth = 1.0f;
 
-	deviceContext->RSSetViewports(1, &windowViewport);
+	device_context->RSSetViewports(1, &window_viewport);
 
 
 	// Set FOV and aspect ratio
 	float fov = XM_PI / 4.0f;
-	float aspectRatio = (float)windowWidth / (float)windowHeight;
+	float aspectRatio = (float)window_width / (float)window_height;
 
 	// Create projection matrix
-	projectionMatrix = XMMatrixPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
+	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
 
 	// Create world matrix
-	worldMatrix = XMMatrixIdentity();
+	world_matrix = XMMatrixIdentity();
 
 	// Create ortho matrix for 2D rendering
-	orthoMatrix = XMMatrixOrthographicLH((float)windowWidth, (float)windowHeight, zNear, zFar);
+	ortho_matrix = XMMatrixOrthographicLH((float)window_width, (float)window_height, zNear, zFar);
 }
 
 
@@ -280,20 +280,20 @@ void Direct3D::BeginScene(float red, float green, float blue, float alpha) const
 	float color[4] = { red, green, blue, alpha };
 
 	// Clear render taget view and depth stencil view
-	deviceContext->ClearRenderTargetView(renderTargetView.Get(), color);
-	deviceContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	device_context->ClearRenderTargetView(render_target_view.Get(), color);
+	device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
 
 void Direct3D::EndScene() const {
-	if (enableVSync) {
+	if (enable_vsync) {
 		// If VSync is enabled, present with next frame
-		DX::ThrowIfFailed(swapChain->Present(1, 0),
+		DX::ThrowIfFailed(swap_chain->Present(1, 0),
 		                  "Failed to present frame");
 	}
 	else {
 		// If it's disabled, present as soon as possible
-		DX::ThrowIfFailed(swapChain->Present(0, 0),
+		DX::ThrowIfFailed(swap_chain->Present(0, 0),
 		                  "Failed to present frame");
 	}
 }

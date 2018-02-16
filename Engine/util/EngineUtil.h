@@ -108,14 +108,3 @@ enum class ShaderTypes {
 	NormalShader,
 	SpecularShader,
 };
-
-
-//----------------------------------------------------------------------------------
-// Buffer Type enum
-//----------------------------------------------------------------------------------
-
-enum class BufferTypes {
-	MatrixBuffer,
-	CameraBuffer,
-	LightBuffer
-};

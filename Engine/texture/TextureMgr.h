@@ -26,19 +26,19 @@ class TextureMgr {
 		TextureMgr();
 		~TextureMgr();
 
-		const ComPtr<ID3D11ShaderResourceView>& Texture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wstring filename);
+		const ComPtr<ID3D11ShaderResourceView>& Texture(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring filename);
 		const ComPtr<ID3D11ShaderResourceView>& PlainTexture(ID3D11Device* device, XMFLOAT4 color);
-		const ComPtr<ID3D11ShaderResourceView>& Texture2DArray(ID3D11Device* device, ID3D11DeviceContext* deviceContext, vector<wstring> filenames);
+		const ComPtr<ID3D11ShaderResourceView>& Texture2DArray(ID3D11Device* device, ID3D11DeviceContext* device_context, vector<wstring> filenames);
 
 
 	private:
-		ComPtr<ID3D11ShaderResourceView> CreateSingleTexture(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wstring filename);
-		ComPtr<ID3D11ShaderResourceView> CreateTexture2DArray(ID3D11Device* device, ID3D11DeviceContext* deviceContext, vector<wstring> filenames);
+		ComPtr<ID3D11ShaderResourceView> CreateSingleTexture(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring filename);
+		ComPtr<ID3D11ShaderResourceView> CreateTexture2DArray(ID3D11Device* device, ID3D11DeviceContext* device_context, vector<wstring> filenames);
 		ComPtr<ID3D11ShaderResourceView> CreatePlainTexture(ID3D11Device* device, UINT color);
 
 	private:
-		map<wstring, ComPtr<ID3D11ShaderResourceView>>         textureMap;
-		map<UINT, ComPtr<ID3D11ShaderResourceView>>            simpleTextureMap;
-		map<vector<wstring>, ComPtr<ID3D11ShaderResourceView>> multiTextureMap;
+		map<wstring, ComPtr<ID3D11ShaderResourceView>>         texture_map;
+		map<UINT, ComPtr<ID3D11ShaderResourceView>>            simple_texture_map;
+		map<vector<wstring>, ComPtr<ID3D11ShaderResourceView>> texture_array_map;
 };
 

@@ -29,7 +29,5 @@ class Renderer {
 
 	private:
 		ComPtr<ID3D11Device>        device;
-		ComPtr<ID3D11DeviceContext> deviceContext;
+		ComPtr<ID3D11DeviceContext> device_context;
 };
-
-static float rotation = 0.0f;

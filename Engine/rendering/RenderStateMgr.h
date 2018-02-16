@@ -5,7 +5,7 @@
 #include <DirectXHelpers.h>
 
 #include "util\EngineUtil.h"
-#include "shader\HlslDefines.h"
+#include "shader\HLSL.h"
 #include "direct3d\Direct3D.h"
 
 using Microsoft::WRL::ComPtr;
@@ -19,35 +19,35 @@ class RenderStateMgr {
 		RenderStateMgr();
 		~RenderStateMgr();
 
-		void SetupStates(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+		void SetupStates(ID3D11Device* device, ID3D11DeviceContext* device_context);
 
 		//----------------------------------------------------------------------------------
 		// Bind states
 		//----------------------------------------------------------------------------------
 		// Blend states
-		void BindOpaque(ID3D11DeviceContext* deviceContext, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
-		void BindAlphaBlend(ID3D11DeviceContext* deviceContext, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
-		void BindAdditive(ID3D11DeviceContext* deviceContext, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
-		void BindNonPremultiplied(ID3D11DeviceContext* deviceContext, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
+		void BindOpaque(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
+		void BindAlphaBlend(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
+		void BindAdditive(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
+		void BindNonPremultiplied(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
 
 		// Depth stencil states
-		void BindDepthNone(ID3D11DeviceContext* deviceContext, unsigned int stencilRef = 0) const;
-		void BindDepthDefault(ID3D11DeviceContext* deviceContext, unsigned int stencilRef = 0) const;
-		void BindDepthRead(ID3D11DeviceContext* deviceContext, unsigned int stencilRef = 0) const;
+		void BindDepthNone(ID3D11DeviceContext* device_context, unsigned int stencilRef = 0) const;
+		void BindDepthDefault(ID3D11DeviceContext* device_context, unsigned int stencilRef = 0) const;
+		void BindDepthRead(ID3D11DeviceContext* device_context, unsigned int stencilRef = 0) const;
 
 		// Rasterizer states
-		void BindCullNone(ID3D11DeviceContext* deviceContext) const;
-		void BindCullClockwise(ID3D11DeviceContext* deviceContext) const;
-		void BindCullCounterClockwise(ID3D11DeviceContext* deviceContext) const;
-		void BindWireframe(ID3D11DeviceContext* deviceContext) const;
+		void BindCullNone(ID3D11DeviceContext* device_context) const;
+		void BindCullClockwise(ID3D11DeviceContext* device_context) const;
+		void BindCullCounterClockwise(ID3D11DeviceContext* device_context) const;
+		void BindWireframe(ID3D11DeviceContext* device_context) const;
 
 		// Sampler states
-		void BindPointWrap(ID3D11DeviceContext* deviceContext) const;
-		void BindPointClamp(ID3D11DeviceContext* deviceContext) const;
-		void BindLinearWrap(ID3D11DeviceContext* deviceContext) const;
-		void BindLinearClamp(ID3D11DeviceContext* deviceContext) const;
-		void BindAnisotropicWrap(ID3D11DeviceContext* deviceContext) const;
-		void BindAnisotropicClamp(ID3D11DeviceContext* deviceContext) const;
+		void BindPointWrap(ID3D11DeviceContext* device_context) const;
+		void BindPointClamp(ID3D11DeviceContext* device_context) const;
+		void BindLinearWrap(ID3D11DeviceContext* device_context) const;
+		void BindLinearClamp(ID3D11DeviceContext* device_context) const;
+		void BindAnisotropicWrap(ID3D11DeviceContext* device_context) const;
+		void BindAnisotropicClamp(ID3D11DeviceContext* device_context) const;
 
 
 	private:
@@ -67,30 +67,30 @@ class RenderStateMgr {
 
 	private:
 		//ComPtr<ID3D11Device>        device;
-		//ComPtr<ID3D11DeviceContext> deviceContext;
+		//ComPtr<ID3D11DeviceContext> device_context;
 
 		// Blend states
 		ComPtr<ID3D11BlendState> opaque;
-		ComPtr<ID3D11BlendState> alphaBlend;
+		ComPtr<ID3D11BlendState> alpha_blend;
 		ComPtr<ID3D11BlendState> additive;
-		ComPtr<ID3D11BlendState> nonPremultiplied;
+		ComPtr<ID3D11BlendState> non_premultiplied;
 
 		// Depth stencil states
-		ComPtr<ID3D11DepthStencilState> depthNone;
-		ComPtr<ID3D11DepthStencilState> depthDefault;
-		ComPtr<ID3D11DepthStencilState> depthRead;
+		ComPtr<ID3D11DepthStencilState> depth_none;
+		ComPtr<ID3D11DepthStencilState> depth_default;
+		ComPtr<ID3D11DepthStencilState> depth_read;
 
 		// Rasterizer states
-		ComPtr<ID3D11RasterizerState> cullNone;
-		ComPtr<ID3D11RasterizerState> cullClockwise;
-		ComPtr<ID3D11RasterizerState> cullCounterClockwise;
+		ComPtr<ID3D11RasterizerState> cull_none;
+		ComPtr<ID3D11RasterizerState> cull_clockwise;
+		ComPtr<ID3D11RasterizerState> cull_counter_clockwise;
 		ComPtr<ID3D11RasterizerState> wireframe;
 
 		// Sampler states
-		ComPtr<ID3D11SamplerState> pointWrap;
-		ComPtr<ID3D11SamplerState> pointClamp;
-		ComPtr<ID3D11SamplerState> linearWrap;
-		ComPtr<ID3D11SamplerState> linearClamp;
-		ComPtr<ID3D11SamplerState> anisotropicWrap;
-		ComPtr<ID3D11SamplerState> anisotropicClamp;
+		ComPtr<ID3D11SamplerState> point_wrap;
+		ComPtr<ID3D11SamplerState> point_clamp;
+		ComPtr<ID3D11SamplerState> linear_wrap;
+		ComPtr<ID3D11SamplerState> linear_clamp;
+		ComPtr<ID3D11SamplerState> anisotropic_wrap;
+		ComPtr<ID3D11SamplerState> anisotropic_clamp;
 };

@@ -1,4 +1,6 @@
-#include "shader\HlslDefines.h"
+#include "shaders\include\light.hlsl"
+#include "shaders\include\global.hlsl"
+
 
 /////////////
 // GLOBALS //
@@ -42,28 +44,28 @@ struct PixelInput
 PixelInput VS(VertexInput input)
 {
     PixelInput output;
-	float4 worldPosition;
+	float4 world_position;
     
 
 	// Change the position vector to be 4 units for proper matrix calculations.
     input.position.w = 1.0f;
 
 	// Calculate the position of the vertex against the world, view, and projection matrices.
-    output.position = mul(input.position, worldMatrix);
-    output.position = mul(output.position, viewMatrix);
-    output.position = mul(output.position, projectionMatrix);
+    output.position = mul(input.position, world_matrix);
+    output.position = mul(output.position, view_matrix);
+    output.position = mul(output.position, projection_matrix);
     
 	// Store the texture coordinates for the pixel shader.
 	output.tex = input.tex;
     
 	// Calculate the normal vector against the world matrix only.
-    output.normal = mul(input.normal, (float3x3)worldMatrix);
+    output.normal = mul(input.normal, (float3x3)world_matrix);
 	
     // Normalize the normal vector.
     output.normal = normalize(output.normal);
 
 	// Calculate the position of the vertex in the world.
-	worldPosition = mul(input.position, worldMatrix);
+	world_position = mul(input.position, world_matrix);
 
 	// Determine the viewing direction based on the position of the camera and the position of the vertex in the world.
 	output.viewDirection = cameraPosition.xyz - worldPosition.xyz;

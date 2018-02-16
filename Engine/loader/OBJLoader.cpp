@@ -6,9 +6,9 @@
 
 
 OBJLoader::OBJLoader() :
-	RHcoord(false),
-	groupCount(0),
-	mtlCount(0)
+	RH_coord(false),
+	group_count(0),
+	mtl_count(0)
 {
 }
 
@@ -19,25 +19,25 @@ OBJLoader::~OBJLoader() {
 
 void OBJLoader::Reset() {
 	// Reset the local variables
-	RHcoord    = false;
-	groupCount = 0;
-	mtlCount   = 0;
+	RH_coord    = false;
+	group_count = 0;
+	mtl_count   = 0;
 
 	vertices.clear();
 	indices.clear();
-	vPositions.clear();
-	vNormals.clear();
-	vTexCoords.clear();
+	vertex_positions.clear();
+	vertex_normals.clear();
+	vertex_texCoords.clear();
 	meshMatLib.clear();
-	groupMaterials.clear();
+	group_materials.clear();
 	materials.clear();
-	newGroupIndices.clear();
-	groupMaterialIndices.clear();
+	new_group_indices.clear();
+	group_material_indices.clear();
 }
 
 
-Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wstring folder, wstring filename, bool RHcoordinates) {
-	RHcoord = RHcoordinates;
+Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring folder, wstring filename, bool RHcoordinates) {
+	RH_coord = RHcoordinates;
 
 	// Load the model
 	LoadModel(folder, filename);
@@ -48,23 +48,23 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* deviceContext, 
 	
 	// Create the materials
 	vector<Material> mtlVector;
-	for (int i = 0; i < mtlCount; ++i) {
+	for (int i = 0; i < mtl_count; ++i) {
 		Material mtl;
 
 		mtl.name = materials[i].name;
 		
 		if (!materials[i].map_Ka.empty())
-			mtl.map_Ka   = TextureMgr::Get()->Texture(device, deviceContext, folder + materials[i].map_Ka);
+			mtl.map_Ka   = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_Ka);
 		if (!materials[i].map_Kd.empty())
-			mtl.map_Kd   = TextureMgr::Get()->Texture(device, deviceContext, folder + materials[i].map_Kd);
+			mtl.map_Kd   = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_Kd);
 		if (!materials[i].map_Ks.empty())
-			mtl.map_Ks   = TextureMgr::Get()->Texture(device, deviceContext, folder + materials[i].map_Ks);
+			mtl.map_Ks   = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_Ks);
 		if (!materials[i].map_Ns.empty())
-			mtl.map_Ns   = TextureMgr::Get()->Texture(device, deviceContext, folder + materials[i].map_Ns);
+			mtl.map_Ns   = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_Ns);
 		if (!materials[i].map_d.empty())
-			mtl.map_d    = TextureMgr::Get()->Texture(device, deviceContext, folder + materials[i].map_d);
+			mtl.map_d    = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_d);
 		if (!materials[i].map_bump.empty())
-			mtl.map_bump = TextureMgr::Get()->Texture(device, deviceContext, folder + materials[i].map_bump);
+			mtl.map_bump = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_bump);
 
 		mtl.Ka = materials[i].Ka;
 		mtl.Kd = materials[i].Kd;
@@ -80,8 +80,8 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* deviceContext, 
 	}
 
 	// Create the mesh and bounding box
-	Mesh mesh(device, vertices, indices, mtlVector, groupCount, newGroupIndices, groupMaterialIndices);
-	AABB boundingBox(vPositions);
+	Mesh mesh(device, vertices, indices, mtlVector, group_count, new_group_indices, group_material_indices);
+	AABB boundingBox(vertex_positions);
 
 	// Create the model
 	Model model(mesh, boundingBox);
@@ -131,11 +131,11 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 			XMFLOAT3 position;
 			stream >> position.x >> position.y >> position.z;
 
-			if (RHcoord) {
+			if (RH_coord) {
 				position.z *= -1.0f;
 			}
 
-			vPositions.push_back(position);
+			vertex_positions.push_back(position);
 		}
 
 		// Normal
@@ -143,11 +143,11 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 			XMFLOAT3 normal;
 			stream >> normal.x >> normal.y >> normal.z;
 
-			if (RHcoord) {
+			if (RH_coord) {
 				normal.z *= -1.0f;
 			}
 
-			vNormals.push_back(normal);
+			vertex_normals.push_back(normal);
 		}
 
 		// Texture
@@ -155,17 +155,17 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 			XMFLOAT2 texCoord;
 			stream >> texCoord.x >> texCoord.y;
 
-			if (RHcoord) {
+			if (RH_coord) {
 				texCoord.y = 1.0f - texCoord.y;
 			}
 
-			vTexCoords.push_back(texCoord);
+			vertex_texCoords.push_back(texCoord);
 		}
 
 		// Group
 		else if (token.compare(OBJTokens::group) == 0) {
-			newGroupIndices.push_back(indices.size());
-			++groupCount;
+			new_group_indices.push_back(indices.size());
+			++group_count;
 		}
 
 		// Face
@@ -179,8 +179,8 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 		}
 
 		// Group Material
-		else if (token.compare(OBJTokens::group_mtl) == 0) {
-			groupMaterials[groupCount - 1] = TrimWhiteSpace(line);
+		else if (token.compare(OBJTokens::use_mtl) == 0) {
+			group_materials[group_count - 1] = TrimWhiteSpace(line);
 		}
 	}
 
@@ -189,14 +189,14 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 
 	// There won't be another index start after the last group, so set it here
-	//newGroupIndices.push_back(indices.size());
+	//new_group_indices.push_back(indices.size());
 
 	// Sometimes a group is defined at the top of the file, then an extra one
 	// before the first vertex. If that happened, then remove the extra.
-	if (newGroupIndices.size() > 1) {
-		if (newGroupIndices[1] == 0) {
-			newGroupIndices.erase(newGroupIndices.begin() + 1);
-			--groupCount;
+	if (new_group_indices.size() > 1) {
+		if (new_group_indices[1] == 0) {
+			new_group_indices.erase(new_group_indices.begin() + 1);
+			--group_count;
 		}
 	}
 }
@@ -239,45 +239,45 @@ void OBJLoader::LoadMaterials(wstring folder) {
 			temp.name = TrimWhiteSpace(line);
 			materials.push_back(temp);
 
-			++mtlCount;
+			++mtl_count;
 		}
 
 		// Diffuse Color
 		else if (token.compare(OBJTokens::diffuse_color) == 0) {
-			stream >> materials[mtlCount - 1].Kd.x;
-			stream >> materials[mtlCount - 1].Kd.y;
-			stream >> materials[mtlCount - 1].Kd.z;
+			stream >> materials[mtl_count - 1].Kd.x;
+			stream >> materials[mtl_count - 1].Kd.y;
+			stream >> materials[mtl_count - 1].Kd.z;
 		}
 
 		// Ambient Color
 		else if (token.compare(OBJTokens::ambient_color) == 0) {
-			stream >> materials[mtlCount - 1].Ka.x;
-			stream >> materials[mtlCount - 1].Ka.y;
-			stream >> materials[mtlCount - 1].Ka.z;
+			stream >> materials[mtl_count - 1].Ka.x;
+			stream >> materials[mtl_count - 1].Ka.y;
+			stream >> materials[mtl_count - 1].Ka.z;
 		}
 
 		// Specular Color
 		else if (token.compare(OBJTokens::specular_color) == 0) {
-			stream >> materials[mtlCount - 1].Ks.x;
-			stream >> materials[mtlCount - 1].Ks.y;
-			stream >> materials[mtlCount - 1].Ks.z;
+			stream >> materials[mtl_count - 1].Ks.x;
+			stream >> materials[mtl_count - 1].Ks.y;
+			stream >> materials[mtl_count - 1].Ks.z;
 		}
 
 		// Emissive Color
 		else if (token.compare(OBJTokens::emissive_color) == 0) {
-			stream >> materials[mtlCount - 1].Ke.x;
-			stream >> materials[mtlCount - 1].Ke.y;
-			stream >> materials[mtlCount - 1].Ke.z;
+			stream >> materials[mtl_count - 1].Ke.x;
+			stream >> materials[mtl_count - 1].Ke.y;
+			stream >> materials[mtl_count - 1].Ke.z;
 		}
 
 		// Specular Expononet
 		else if (token.compare(OBJTokens::specular_exponent) == 0) {
-			stream >> materials[mtlCount - 1].Ns;
+			stream >> materials[mtl_count - 1].Ns;
 		}
 
 		// Optical Density
 		else if (token.compare(OBJTokens::optical_density) == 0) {
-			stream >> materials[mtlCount - 1].Ni;
+			stream >> materials[mtl_count - 1].Ni;
 		}
 
 		// Dissolve (transparency)
@@ -292,38 +292,38 @@ void OBJLoader::LoadMaterials(wstring folder) {
 
 		// Illumination
 		else if (token.compare(OBJTokens::illumination_model) == 0) {
-			stream >> materials[mtlCount - 1].illum;
+			stream >> materials[mtl_count - 1].illum;
 		}
 
 		// Diffuse Map
 		else if (token.compare(OBJTokens::diffuse_color_map) == 0) {
-			materials[mtlCount - 1].map_Kd = TrimWhiteSpace(line);
+			materials[mtl_count - 1].map_Kd = TrimWhiteSpace(line);
 		}
 
 		// Alpha Map
 		else if (token.compare(OBJTokens::alpha_texture_map) == 0) {
-			materials[mtlCount - 1].map_d = TrimWhiteSpace(line);
-			materials[mtlCount - 1].transparency = true;
+			materials[mtl_count - 1].map_d = TrimWhiteSpace(line);
+			materials[mtl_count - 1].transparency = true;
 		}
 
 		// Ambient Map
 		else if (token.compare(OBJTokens::ambient_color_map) == 0) {
-			materials[mtlCount - 1].map_Ka = TrimWhiteSpace(line);
+			materials[mtl_count - 1].map_Ka = TrimWhiteSpace(line);
 		}
 
 		// Specular Map
 		else if (token.compare(OBJTokens::specular_color_map) == 0) {
-			materials[mtlCount - 1].map_Ks = TrimWhiteSpace(line);
+			materials[mtl_count - 1].map_Ks = TrimWhiteSpace(line);
 		}
 
 		// Specular Highlight Map
 		else if (token.compare(OBJTokens::spec_highlight_map) == 0) {
-			materials[mtlCount - 1].map_Ns = TrimWhiteSpace(line);
+			materials[mtl_count - 1].map_Ns = TrimWhiteSpace(line);
 		}
 
 		// Bump Map
 		else if (token.compare(OBJTokens::bump_map) == 0 || token.compare(OBJTokens::bump_map2) == 0) {
-			materials[mtlCount - 1].map_bump = TrimWhiteSpace(line);
+			materials[mtl_count - 1].map_bump = TrimWhiteSpace(line);
 		}
 	}
 
@@ -333,25 +333,25 @@ void OBJLoader::LoadMaterials(wstring folder) {
 
 	// Set the group's material to the index value of its
 	// material in the material vector.
-	for (int i = 0; i < groupCount; ++i) {
+	for (int i = 0; i < group_count; ++i) {
 		bool hasMat = false;
 
 		// If the group doesn't have a material set, then
 		// use the first material.
-		if (groupMaterials[i].empty()) {
-			groupMaterials[i] = materials[0].name;
+		if (group_materials[i].empty()) {
+			group_materials[i] = materials[0].name;
 		}
 
 		for (int j = 0; j < materials.size(); ++j) {
-			if (groupMaterials[i] == materials[j].name) {
-				groupMaterialIndices.push_back(j);
+			if (group_materials[i] == materials[j].name) {
+				group_material_indices.push_back(j);
 				hasMat = true;
 			}
 		}
 
 		if (!hasMat) {
 			// Use first material in vector
-			groupMaterialIndices.push_back(0);
+			group_material_indices.push_back(0);
 		}
 	}
 }
@@ -367,10 +367,10 @@ void OBJLoader::ReadTransparency(wstring& line, bool inverse) {
 		transparency = 1.0f - transparency;
 	}
 
-	materials[mtlCount - 1].d = transparency;
+	materials[mtl_count - 1].d = transparency;
 
 	if (transparency > 0.0f) {
-		materials[mtlCount - 1].transparency = true;
+		materials[mtl_count - 1].transparency = true;
 	}
 }
 
@@ -418,7 +418,7 @@ void OBJLoader::ReadFace(wstring& line) {
 			// Position
 			case 1:
 			{
-				vertex.position = GetElement(vPositions, stoi(vParts[0])-1);  //Subtract 1 since arrays start at index 0
+				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);  //Subtract 1 since arrays start at index 0
 				vertex.textureCoordinate = XMFLOAT2(0.0f, 0.0f);
 				hasNormal = false;
 
@@ -429,8 +429,8 @@ void OBJLoader::ReadFace(wstring& line) {
 			// Position/Texture
 			case 2:
 			{
-				vertex.position = GetElement(vPositions, stoi(vParts[0])-1);
-				vertex.textureCoordinate = GetElement(vTexCoords, stoi(vParts[1])-1);
+				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
+				vertex.textureCoordinate = GetElement(vertex_texCoords, stoi(vParts[1])-1);
 				hasNormal = false;
 
 				vVerts.push_back(vertex);
@@ -440,8 +440,8 @@ void OBJLoader::ReadFace(wstring& line) {
 			// Position/Normal
 			case 3:
 			{
-				vertex.position = GetElement(vPositions, stoi(vParts[0])-1);
-				vertex.normal = GetElement(vNormals, stoi(vParts[2])-1);
+				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
+				vertex.normal = GetElement(vertex_normals, stoi(vParts[2])-1);
 				vertex.textureCoordinate = XMFLOAT2(0.0f, 0.0f);
 				hasNormal = true;
 
@@ -452,9 +452,9 @@ void OBJLoader::ReadFace(wstring& line) {
 			// Position/Texture/Normal
 			case 4:
 			{
-				vertex.position = GetElement(vPositions, stoi(vParts[0])-1);
-				vertex.normal = GetElement(vNormals, stoi(vParts[2])-1);
-				vertex.textureCoordinate = GetElement(vTexCoords, stoi(vParts[1])-1);
+				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
+				vertex.normal = GetElement(vertex_normals, stoi(vParts[2])-1);
+				vertex.textureCoordinate = GetElement(vertex_texCoords, stoi(vParts[1])-1);
 				hasNormal = true;
 
 				vVerts.push_back(vertex);
@@ -479,9 +479,9 @@ void OBJLoader::ReadFace(wstring& line) {
 	}
 
 	// If no group has been defined, then create one manually
-	if (groupCount == 0) {
-		newGroupIndices.push_back(indices.size());
-		++groupCount;
+	if (group_count == 0) {
+		new_group_indices.push_back(indices.size());
+		++group_count;
 	}
 
 	// Add indices to index vector if the face was a triangle

@@ -22,15 +22,15 @@ class RenderingMgr {
 		RenderingMgr(HWND window);
 		~RenderingMgr();
 
-		void Init(UINT windowWidth, UINT windowHeight, bool fullscreen, bool vsync, bool msaa);
+		void Init(UINT window_width, UINT window_height, bool fullscreen, bool vsync, bool msaa);
 		
 		void BindShader(ShaderTypes shader) const {
-			shaderMgr->BindShader(direct3D->GetDeviceContext(), shader);
+			shader_mgr->BindShader(direct3D->GetDeviceContext(), shader);
 		}
 
 		template<typename DataT>
 		void UpdateData(const DataT& data) const {
-			cBufferMgr->UpdateData(direct3D->GetDeviceContext(), data);
+			cbuffer_mgr->UpdateData(direct3D->GetDeviceContext(), data);
 		}
 
 
@@ -43,24 +43,24 @@ class RenderingMgr {
 		}
 
 		RenderStateMgr* GetRenderStateMgr() const {
-			return renderStateMgr.get();
+			return render_state_mgr.get();
 		}
 
 		CBufferMgr* GetCBufferMgr() const {
-			return cBufferMgr.get();
+			return cbuffer_mgr.get();
 		}
 
 		TextureMgr* GetTextureMgr() const {
-			return textureMgr.get();
+			return texture_mgr.get();
 		}
 
 
 	private:
 		unique_ptr<Direct3D>       direct3D;
-		unique_ptr<RenderStateMgr> renderStateMgr;
-		unique_ptr<ShaderMgr>      shaderMgr;
-		unique_ptr<CBufferMgr>     cBufferMgr;
-		unique_ptr<TextureMgr>     textureMgr;
+		unique_ptr<RenderStateMgr> render_state_mgr;
+		unique_ptr<ShaderMgr>      shader_mgr;
+		unique_ptr<CBufferMgr>     cbuffer_mgr;
+		unique_ptr<TextureMgr>     texture_mgr;
 		unique_ptr<Renderer>       renderer;
 
 		HWND hWnd;

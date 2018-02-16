@@ -10,14 +10,14 @@ using std::vector;
 
 // Trim whitespace at the beginning and end of a string
 inline wstring TrimWhiteSpace(wstring& in) {
-	size_t textStart = in.find_first_not_of(L" \t");
-	size_t textEnd = in.find_last_not_of(L" \t");
+	size_t text_start = in.find_first_not_of(L" \t");
+	size_t text_end = in.find_last_not_of(L" \t");
 
-	if (textStart != wstring::npos && textEnd != wstring::npos) {
-		return in.substr(textStart, textEnd - textStart + 1);
+	if (text_start != wstring::npos && text_end != wstring::npos) {
+		return in.substr(text_start, text_end - text_start + 1);
 	}
-	else if (textStart != wstring::npos) {
-		return in.substr(textStart);
+	else if (text_start != wstring::npos) {
+		return in.substr(text_start);
 	}
 
 	return L"";
@@ -26,14 +26,14 @@ inline wstring TrimWhiteSpace(wstring& in) {
 
 // Trim whitespace at the beginning and end of a string
 inline string TrimWhiteSpace(string& in) {
-	size_t textStart = in.find_first_not_of(" \t");
-	size_t textEnd = in.find_last_not_of(" \t");
+	size_t text_start = in.find_first_not_of(" \t");
+	size_t text_end = in.find_last_not_of(" \t");
 
-	if (textStart != string::npos && textEnd != string::npos) {
-		return in.substr(textStart, textEnd - textStart + 1);
+	if (text_start != string::npos && text_end != string::npos) {
+		return in.substr(text_start, text_end - text_start + 1);
 	}
-	else if (textStart != string::npos) {
-		return in.substr(textStart);
+	else if (text_start != string::npos) {
+		return in.substr(text_start);
 	}
 
 	return "";

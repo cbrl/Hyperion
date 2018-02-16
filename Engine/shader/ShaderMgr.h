@@ -46,8 +46,8 @@ struct ShaderMgr {
 		// etc...
 	}
 
-	void BindShader(ID3D11DeviceContext* deviceContext, ShaderTypes shader) {
-		shaders.at(shader).BindShader(deviceContext);
+	void BindShader(ID3D11DeviceContext* device_context, ShaderTypes shader) {
+		shaders.at(shader).BindShader(device_context);
 	}
 
 	private:

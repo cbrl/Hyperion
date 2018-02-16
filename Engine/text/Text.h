@@ -17,7 +17,7 @@ using namespace DirectX;
 
 class Text {
 	public:
-		Text(ID3D11Device* device, ID3D11DeviceContext* deviceContext, const WCHAR* fontFilename);
+		Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const WCHAR* fontFilename);
 		~Text();
 
 		void SetText(wstring newText);
@@ -33,8 +33,8 @@ class Text {
 
 
 	private:
-		unique_ptr<SpriteFont>  spriteFont;
-		unique_ptr<SpriteBatch> spriteBatch;
+		unique_ptr<SpriteFont>  sprite_font;
+		unique_ptr<SpriteBatch> sprite_batch;
 
 		wstring     text;
 		XMFLOAT2    position;

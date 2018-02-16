@@ -32,7 +32,7 @@ class Scene {
 		void Render(float deltaTime);
 
 	private:
-		void Init(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+		void Init(ID3D11Device* device, ID3D11DeviceContext* device_context);
 
 
 	public:
@@ -40,10 +40,6 @@ class Scene {
 		vector<Light>         lights;
 		vector<Model>         models;
 		map<string, Text>     texts;
-
-
-	private:
-		float rotation = 0.0f;
 
 
 	public:

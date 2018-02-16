@@ -20,8 +20,8 @@ using std::make_unique;
 using std::shared_ptr;
 using std::make_shared;
 
-#define WINDOW_WIDTH  800
-#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH  1200
+#define WINDOW_HEIGHT 900
 
 #define MSAA_STATE       false
 #define VSYNC_STATE      false
@@ -29,7 +29,7 @@ using std::make_shared;
 
 class System : public MainWindow {
 	public:
-		static System* Get() { return systemPtr; }
+		static System* Get() { return system_ptr; }
 
 		System();
 		~System();
@@ -38,9 +38,9 @@ class System : public MainWindow {
 		void Run();
 
 		virtual LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-		void OnResize(int windowWidth, int windowHeight);
+		void OnResize(int window_width, int window_height);
 
-		RenderingMgr* GetRenderingMgr() { return renderingMgr.get(); }
+		RenderingMgr* GetRenderingMgr() { return rendering_mgr.get(); }
 		Scene* GetScene()               { return scene.get(); }
 		Input* GetInput()               { return input.get(); }
 
@@ -50,14 +50,14 @@ class System : public MainWindow {
 
 
 	private:
-		static System* systemPtr;
+		static System* system_ptr;
 
-		unique_ptr<MainWindow>   mainWindow;
-		unique_ptr<RenderingMgr> renderingMgr;
+		unique_ptr<MainWindow>   main_window;
+		unique_ptr<RenderingMgr> rendering_mgr;
 		unique_ptr<Scene>        scene;
 		unique_ptr<Input>        input;
 		unique_ptr<Timer>        timer;
-		unique_ptr<FPS>          fpsCounter;
+		unique_ptr<FPS>          fps_counter;
 
 		bool resizing;
 };

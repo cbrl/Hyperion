@@ -3,7 +3,7 @@
 
 
 FPS::FPS() : fps(0), count(0) {
-	startTime = timeGetTime();
+	start_time = timeGetTime();
 }
 
 
@@ -16,11 +16,11 @@ void FPS::Tick() {
 	count++;
 
 	// Update FPS every half second
-	if (timeGetTime() >= (startTime + 500)) {
+	if (timeGetTime() >= (start_time + 500)) {
 		fps = count * 2;
 		count = 0;
 
-		startTime = timeGetTime();
+		start_time = timeGetTime();
 	}
 }
 

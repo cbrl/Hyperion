@@ -31,15 +31,15 @@ struct ConstantBuffer {
 		}
 
 		// Map the buffer and copy the new data into it
-		void UpdateData(ID3D11DeviceContext* deviceContext, const DataT& data) {
+		void UpdateData(ID3D11DeviceContext* device_context, const DataT& data) {
 			D3D11_MAPPED_SUBRESOURCE mappedBuffer = {};
 
-			DX::ThrowIfFailed(deviceContext->Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedBuffer),
+			DX::ThrowIfFailed(device_context->Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mappedBuffer),
 			                  "Failed to map buffer");
 
 			memcpy(mappedBuffer.pData, &data, sizeof(DataT));
 
-			deviceContext->Unmap(buffer.Get(), NULL);
+			device_context->Unmap(buffer.Get(), NULL);
 		}
 
 		ID3D11Buffer** GetBufferAddress() { return buffer.GetAddressOf(); }

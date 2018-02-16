@@ -58,20 +58,20 @@ float Timer::TotalTime() {
 
 
 void Timer::Start() {
-	INT64 startTime;
-	QueryPerformanceCounter((LARGE_INTEGER*)&startTime);
+	INT64 start_time;
+	QueryPerformanceCounter((LARGE_INTEGER*)&start_time);
 
 
 	// Accumulate the time elapsed between stop and start pairs.
 	//
 	//                     |<-------d------->|
 	// ----*---------------*-----------------*------------> time
-	//  mBaseTime       mStopTime        startTime     
+	//  mBaseTime       mStopTime        start_time     
 
 	if (stopped) {
-		pausedTime += (startTime - stopTime);
+		pausedTime += (start_time - stopTime);
 
-		prevTime = startTime;
+		prevTime = start_time;
 		stopTime = 0;
 		stopped  = false;
 	}

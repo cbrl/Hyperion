@@ -19,7 +19,7 @@ class Direct3D {
 	public:
 		static const Direct3D* Get();
 
-		Direct3D(HWND hWnd, int windowWidth, int windowHeight, bool fullscreen, bool vSync, bool MSAA);
+		Direct3D(HWND hWnd, int window_width, int window_height, bool fullscreen, bool vSync, bool MSAA);
 		~Direct3D();
 
 		void Init();
@@ -31,17 +31,17 @@ class Direct3D {
 			return device.Get();
 		}
 		ID3D11DeviceContext* GetDeviceContext() const {
-			return deviceContext.Get();
+			return device_context.Get();
 		}
 
 		XMMATRIX GetWorldMatrix() const {
-			return worldMatrix;
+			return world_matrix;
 		}
 		XMMATRIX GetProjectionMatrix() const {
-			return projectionMatrix;
+			return projection_matrix;
 		}
 		XMMATRIX GetOrthoMatrix() const {
-			return orthoMatrix;
+			return ortho_matrix;
 		}
 
 
@@ -51,26 +51,26 @@ class Direct3D {
 
 	private:
 		ComPtr<ID3D11Device>           device;
-		ComPtr<ID3D11DeviceContext>    deviceContext;
+		ComPtr<ID3D11DeviceContext>    device_context;
 		ComPtr<ID3D11Debug>            debug;
-		ComPtr<IDXGISwapChain>         swapChain;
-		ComPtr<ID3D11Texture2D>        depthStencilBuffer;
-		ComPtr<ID3D11DepthStencilView> depthStencilView;
-		ComPtr<ID3D11RenderTargetView> renderTargetView;
-		D3D11_VIEWPORT                 windowViewport;
-		D3D_DRIVER_TYPE                driverType;
+		ComPtr<IDXGISwapChain>         swap_chain;
+		ComPtr<ID3D11Texture2D>        depth_stencil_buffer;
+		ComPtr<ID3D11DepthStencilView> depth_stencil_view;
+		ComPtr<ID3D11RenderTargetView> render_target_view;
+		D3D11_VIEWPORT                 window_viewport;
+		D3D_DRIVER_TYPE                driver_type;
 
-		XMMATRIX worldMatrix;
-		XMMATRIX projectionMatrix;
-		XMMATRIX orthoMatrix;
+		XMMATRIX world_matrix;
+		XMMATRIX projection_matrix;
+		XMMATRIX ortho_matrix;
 
 		HWND hWnd;
-		int  windowWidth;
-		int  windowHeight;
-		bool enableVSync;
-		bool enableFullscreen;
-		bool enable4xMSAA;
-		UINT MSAA4xQuality;
+		int  window_width;
+		int  window_height;
+		bool enable_vsync;
+		bool enable_fullscreen;
+		bool enable_4xMSAA;
+		UINT MSAA4x_quality;
 		UINT numerator;
 		UINT denominator;
 };

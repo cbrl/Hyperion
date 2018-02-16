@@ -33,7 +33,7 @@ class OBJLoader {
 		OBJLoader();
 		~OBJLoader();
 
-		Model Load(ID3D11Device* device, ID3D11DeviceContext* deviceContext, wstring folder, wstring filename, bool RHcoordinates);
+		Model Load(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring folder, wstring filename, bool RHcoordinates);
 
 	private:
 		template<typename ElementT>
@@ -98,33 +98,33 @@ class OBJLoader {
 
 
 	private:
-		bool RHcoord;
-		int  groupCount;
-		int  mtlCount;
+		bool RH_coord;
+		int  group_count;
+		int  mtl_count;
 
 		// Vector of complete vertex definitions
 		vector<VertexPositionNormalTexture> vertices;
 
 		// Vectors to store model info
-		vector<XMFLOAT3> vPositions;
-		vector<XMFLOAT3> vNormals;
-		vector<XMFLOAT2> vTexCoords;
+		vector<XMFLOAT3> vertex_positions;
+		vector<XMFLOAT3> vertex_normals;
+		vector<XMFLOAT2> vertex_texCoords;
 		vector<UINT>     indices;
 
 		// Material library name
 		wstring meshMatLib;
 
 		// Material names for each group <grp number, mat name>
-		map<int, wstring> groupMaterials;
+		map<int, wstring> group_materials;
 
 		// Vector of material descriptions
 		vector<OBJMaterial> materials;
 
 		// List of indices where a new group starts (e.g. new group at 8th index)
-		vector<UINT> newGroupIndices;
+		vector<UINT> new_group_indices;
 
 		// List of materials for each group. Value is an index for the material vector.
-		vector<UINT> groupMaterialIndices;
+		vector<UINT> group_material_indices;
 };
 
 

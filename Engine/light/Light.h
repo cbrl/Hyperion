@@ -11,21 +11,25 @@ struct Light {
 		Light()  = default;
 		~Light() = default;
 
-		void SetDirection(XMFLOAT3 direction) { buffer.lightDirection = direction; }
-		void SetAmbientColor(XMFLOAT4 color)  { buffer.ambientColor = color; }
-		void SetDiffuseColor(XMFLOAT4 color)  { buffer.diffuseColor = color; }
-		void SetSpecularColor(XMFLOAT4 color) { buffer.specularColor = color; }
-		void SetSpecularPower(float power)    { buffer.specularPower = power; }
+		void SetDirection(XMFLOAT3 direction) { buffer.direction = direction; }
+		void SetAmbientColor(XMFLOAT4 color)  { buffer.ambient_color = color; }
+		void SetDiffuseColor(XMFLOAT4 color)  { buffer.diffuse_color = color; }
+		void SetSpecularPower(float power)    { buffer.specular.w = power; }
+		void SetSpecularColor(XMFLOAT3 color) {
+			buffer.specular.x = color.x;
+			buffer.specular.y = color.y;
+			buffer.specular.z = color.z;
+		}
 
-		LightBuffer GetBuffer()        { return buffer; }
-		XMFLOAT3    GetDirection()     { return buffer.lightDirection; }
-		XMFLOAT4    GetAmbientColor()  { return buffer.ambientColor; }
-		XMFLOAT4    GetDiffuseColor()  { return buffer.diffuseColor; }
-		XMFLOAT4    GetSpecularColor() { return buffer.specularColor; }
-		float       GetSpecularPower() { return buffer.specularPower; }
+		DirectionalLight GetBuffer()        { return buffer; }
+		XMFLOAT3    GetDirection()     { return buffer.direction; }
+		XMFLOAT4    GetAmbientColor()  { return buffer.ambient_color; }
+		XMFLOAT4    GetDiffuseColor()  { return buffer.diffuse_color; }
+		XMFLOAT3    GetSpecularColor() { return XMFLOAT3(buffer.specular.x, buffer.specular.y, buffer.specular.z); }
+		float       GetSpecularPower() { return buffer.specular.w; }
 
 
 	private:
-		LightBuffer buffer;
+		DirectionalLight buffer;
 };
 

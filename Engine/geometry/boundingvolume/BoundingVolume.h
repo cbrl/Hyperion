@@ -8,20 +8,20 @@ using namespace DirectX;
 
 struct AABB {
 	public:
-		AABB() : minPoint(g_XMInfinity), maxPoint(-g_XMInfinity) {}
+		AABB() : min_point(g_XMInfinity), max_point(-g_XMInfinity) {}
 
 		AABB(XMFLOAT3 min, XMFLOAT3 max)
-			: minPoint(XMLoadFloat3(&min)), maxPoint(XMLoadFloat3(&max)) {}
+			: min_point(XMLoadFloat3(&min)), max_point(XMLoadFloat3(&max)) {}
 
 		AABB(XMVECTOR min, XMVECTOR max)
-			: minPoint(min), maxPoint(max) {}
+			: min_point(min), max_point(max) {}
 
 		AABB(const std::vector<XMFLOAT3>& vertices) 
-			: minPoint(g_XMInfinity), maxPoint(-g_XMInfinity)
+			: min_point(g_XMInfinity), max_point(-g_XMInfinity)
 		{
 			XMFLOAT3 min, max;
-			XMStoreFloat3(&min, minPoint);
-			XMStoreFloat3(&max, maxPoint);
+			XMStoreFloat3(&min, min_point);
+			XMStoreFloat3(&max, max_point);
 
 			for (size_t i = 0; i < vertices.size(); ++i) {
 				min.x = std::fminf(min.x, vertices[i].x);
@@ -33,22 +33,22 @@ struct AABB {
 				max.z = std::fmaxf(max.z, vertices[i].y);
 			}
 
-			minPoint = XMLoadFloat3(&min);
-			maxPoint = XMLoadFloat3(&max);
+			min_point = XMLoadFloat3(&min);
+			max_point = XMLoadFloat3(&max);
 		}
 
 		~AABB() = default;
 
-		XMVECTOR Min() const { return minPoint; }
-		XMVECTOR Max() const { return maxPoint; }
+		XMVECTOR Min() const { return min_point; }
+		XMVECTOR Max() const { return max_point; }
 
-		void SetMin(XMVECTOR min) { minPoint = min; }
-		void SetMin(XMFLOAT3 min) { minPoint = XMLoadFloat3(&min); }
-		void SetMax(XMVECTOR max) { maxPoint = max; }
-		void SetMax(XMFLOAT3 max) { maxPoint = XMLoadFloat3(&max); }
+		void SetMin(XMVECTOR min) { min_point = min; }
+		void SetMin(XMFLOAT3 min) { min_point = XMLoadFloat3(&min); }
+		void SetMax(XMVECTOR max) { max_point = max; }
+		void SetMax(XMFLOAT3 max) { max_point = XMLoadFloat3(&max); }
 
 
 	private:
-		XMVECTOR minPoint;
-		XMVECTOR maxPoint;
+		XMVECTOR min_point;
+		XMVECTOR max_point;
 };

@@ -151,6 +151,9 @@
     <Filter Include="Header Files\util\directxtk">
       <UniqueIdentifier>{de045884-14ab-4d89-b825-6fcd2c64cedb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\include">
+      <UniqueIdentifier>{e37a59d3-6884-44fb-9f57-55214849b3e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\color\color.vs">
@@ -172,6 +175,12 @@
       <Filter>Resource Files\Shaders\Texture</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="shaders\include\light.hlsl">
+      <Filter>Resource Files\include</Filter>
+    </None>
+    <None Include="shaders\include\syntax.hlsl">
+      <Filter>Resource Files\include</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -243,9 +252,6 @@
     <ClInclude Include="util\fps\FPS.h">
       <Filter>Header Files\util\fps</Filter>
     </ClInclude>
-    <ClInclude Include="shader\HlslDefines.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
     <ClInclude Include="loader\OBJLoader.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
@@ -275,6 +281,9 @@
     </ClInclude>
     <ClInclude Include="geometry\model\Model.h">
       <Filter>Header Files\geometry\model</Filter>
+    </ClInclude>
+    <ClInclude Include="shader\HLSL.h">
+      <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -338,5 +347,10 @@
     <ClCompile Include="geometry\model\Model.cpp">
       <Filter>Source Files\geometry\model</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\include\global.hlsl">
+      <Filter>Resource Files\include</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -13,31 +13,31 @@ CBufferMgr::~CBufferMgr() {
 
 
 void CBufferMgr::CreateBuffers(ID3D11Device* device) {
-	matrixBuffer = make_unique<ConstantBuffer<MatrixBuffer>>(device);
-	cameraBuffer = make_unique<ConstantBuffer<CameraBuffer>>(device);
-	lightBuffer = make_unique<ConstantBuffer<LightBuffer>>(device);
+	matrix_buffer = make_unique<ConstantBuffer<MatrixBuffer>>(device);
+	camera_buffer = make_unique<ConstantBuffer<CameraBuffer>>(device);
+	light_buffer = make_unique<ConstantBuffer<DirectionalLight>>(device);
 }
 
 
-void CBufferMgr::BindBuffers(ID3D11DeviceContext* deviceContext) const {
-	deviceContext->VSSetConstantBuffers(MATRIX_BUFFER_SLOT, 1, matrixBuffer->GetBufferAddress());
-	deviceContext->VSSetConstantBuffers(CAMERA_BUFFER_SLOT, 1, cameraBuffer->GetBufferAddress());
-	deviceContext->PSSetConstantBuffers(LIGHT_BUFFER_SLOT, 1, lightBuffer->GetBufferAddress());
+void CBufferMgr::BindBuffers(ID3D11DeviceContext* device_context) const {
+	device_context->VSSetConstantBuffers(SLOT_CBUFFER_MATRIX, 1, matrix_buffer->GetBufferAddress());
+	device_context->VSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer->GetBufferAddress());
+	device_context->PSSetConstantBuffers(SLOT_CBUFFER_LIGHT, 1, light_buffer->GetBufferAddress());
 }
 
 
-void CBufferMgr::BindBuffer(ID3D11DeviceContext* deviceContext, BufferTypes buffer) const {
+void CBufferMgr::BindBuffer(ID3D11DeviceContext* device_context, BufferTypes buffer) const {
 	switch (buffer) {
 		case BufferTypes::MatrixBuffer:
-			deviceContext->VSSetConstantBuffers(MATRIX_BUFFER_SLOT, 1, matrixBuffer->GetBufferAddress());
+			device_context->VSSetConstantBuffers(SLOT_CBUFFER_MATRIX, 1, matrix_buffer->GetBufferAddress());
 			break;
 
 		case BufferTypes::CameraBuffer:
-			deviceContext->VSSetConstantBuffers(CAMERA_BUFFER_SLOT, 1, cameraBuffer->GetBufferAddress());
+			device_context->VSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer->GetBufferAddress());
 			break;
 
-		case BufferTypes::LightBuffer:
-			deviceContext->PSSetConstantBuffers(LIGHT_BUFFER_SLOT, 1, lightBuffer->GetBufferAddress());
+		case BufferTypes::DirectionalLight:
+			device_context->PSSetConstantBuffers(SLOT_CBUFFER_LIGHT, 1, light_buffer->GetBufferAddress());
 			break;
 	}
 }

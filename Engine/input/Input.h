@@ -21,9 +21,9 @@ class Input {
 
 		void GetMouseDelta(int &xPos, int &yPos);
 
-		bool IsKeyDown(Keyboard::Keys key) { return keyboardState.IsKeyDown(key); }
-		bool IsKeyPressed(Keyboard::Keys key) { return keyboardTracker.IsKeyPressed(key); }
-		bool IsKeyReleased(Keyboard::Keys key) { return keyboardTracker.IsKeyReleased(key); }
+		bool IsKeyDown(Keyboard::Keys key) { return keyboard_state.IsKeyDown(key); }
+		bool IsKeyPressed(Keyboard::Keys key) { return keyboard_tracker.IsKeyPressed(key); }
+		bool IsKeyReleased(Keyboard::Keys key) { return keyboard_tracker.IsKeyReleased(key); }
 
 
 	private:
@@ -34,9 +34,9 @@ class Input {
 		unique_ptr<Keyboard> keyboard;
 		unique_ptr<Mouse>    mouse;
 
-		Keyboard::KeyboardStateTracker keyboardTracker;
-		Keyboard::State                keyboardState;
-		Mouse::ButtonStateTracker      buttonTracker;
-		Mouse::State                   mouseState;
-		Mouse::State                   lastMouseState;
+		Keyboard::KeyboardStateTracker keyboard_tracker;
+		Keyboard::State                keyboard_state;
+		Mouse::ButtonStateTracker      button_tracker;
+		Mouse::State                   mouse_state;
+		Mouse::State                   last_mouse_state;
 };

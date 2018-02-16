@@ -23,7 +23,7 @@ class Model {
 
 		void SetShader(ShaderTypes shaderType) { shader = shaderType; }
 
-		void Draw(ID3D11DeviceContext* deviceContext);
+		void Draw(ID3D11DeviceContext* device_context);
 
 		void SetPosition(float x, float y, float z) {
 			position = XMMatrixTranslation(x, y, z);

@@ -17,6 +17,6 @@ class FPS {
 	private:
 		int   fps;
 		int   count;
-		ULONG startTime;
+		ULONG start_time;
 };
 

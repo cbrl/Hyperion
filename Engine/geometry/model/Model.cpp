@@ -15,29 +15,29 @@ Model::~Model() {
 }
 
 
-void Model::Draw(ID3D11DeviceContext* deviceContext) {
+void Model::Draw(ID3D11DeviceContext* device_context) {
 	UINT offset = 0;
 
 	// Set vertex buffer to active in the input assembler so it can be rendered
-	deviceContext->IASetVertexBuffers(0, 1, mesh.GetVertexBuffer(), &mesh.stride, &offset);
+	device_context->IASetVertexBuffers(0, 1, mesh.GetVertexBuffer(), &mesh.stride, &offset);
 
 	// Set index buffer to active in the input assembler so it can be rendered
-	deviceContext->IASetIndexBuffer(mesh.GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
+	device_context->IASetIndexBuffer(mesh.GetIndexBuffer(), DXGI_FORMAT_R32_UINT, 0);
 
 	// Set type of primitive that should be rendered from this vertex buffer, in this case triangles
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	for (UINT i = 0; i < mesh.groupCount; ++i) {
-		auto& material = mesh.materials[mesh.groupMaterialIndices[i]];
+	for (UINT i = 0; i < mesh.group_count; ++i) {
+		auto& material = mesh.materials[mesh.group_material_indices[i]];
 
 		if (material.map_Kd) {
-			deviceContext->PSSetShaderResources(0, 1, material.map_Kd.GetAddressOf());
+			device_context->PSSetShaderResources(0, 1, material.map_Kd.GetAddressOf());
 		}
 
 		// Draw the model
-		if (mesh.newGroupIndices.size()-1 > i)
-			deviceContext->DrawIndexed(mesh.newGroupIndices[i+1] - mesh.newGroupIndices[i], mesh.newGroupIndices[i], 0);
+		if (mesh.new_group_indices.size()-1 > i)
+			device_context->DrawIndexed(mesh.new_group_indices[i+1] - mesh.new_group_indices[i], mesh.new_group_indices[i], 0);
 		else
-			deviceContext->DrawIndexed(mesh.indexCount - mesh.newGroupIndices[i], mesh.newGroupIndices[i], 0);
+			device_context->DrawIndexed(mesh.index_count - mesh.new_group_indices[i], mesh.new_group_indices[i], 0);
 	}
 }

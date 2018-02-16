@@ -22,8 +22,8 @@ class MainWindow {
 		HINSTANCE hInstance;
 		HWND      hWnd;
 		LPCWSTR   appName;
-		int       windowWidth;
-		int       windowHeight;
+		int       window_width;
+		int       window_height;
 };
 
 static MainWindow *handle = nullptr;

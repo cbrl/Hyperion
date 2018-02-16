@@ -11,7 +11,7 @@ const Renderer* Renderer::Get() {
 
 Renderer::Renderer() :
 	device(Direct3D::Get()->GetDevice()),
-	deviceContext(Direct3D::Get()->GetDeviceContext())
+	device_context(Direct3D::Get()->GetDeviceContext())
 {
 }
 
@@ -23,10 +23,10 @@ Renderer::~Renderer() {
 void Renderer::Tick(Scene& scene, float deltaTime) const {
 	// Clear background with specified color
 	Direct3D::Get()->BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
-	RenderStateMgr::Get()->BindDepthDefault(deviceContext.Get());
+	RenderStateMgr::Get()->BindDepthDefault(device_context.Get());
 
 	// Create matrix buffer
-	MatrixBuffer matrixBuffer;
+	MatrixBuffer matrix_buffer;
 
 	// Get matrices
 	XMMATRIX world;
@@ -64,10 +64,10 @@ void Renderer::Tick(Scene& scene, float deltaTime) const {
 				world = XMMatrixTranspose(world);
 
 				// Create matrix buffer and update cbuffer
-				matrixBuffer = MatrixBuffer(world, view, projection);
-				RenderingMgr::Get()->UpdateData(matrixBuffer);
+				matrix_buffer = MatrixBuffer(world, view, projection);
+				RenderingMgr::Get()->UpdateData(matrix_buffer);
 
-				model.Draw(deviceContext.Get());
+				model.Draw(device_context.Get());
 			}
 		}
 	});
@@ -92,10 +92,10 @@ void Renderer::Tick(Scene& scene, float deltaTime) const {
 				world = XMMatrixMultiply(world, model.GetPosition());
 				world = XMMatrixTranspose(world);
 
-				matrixBuffer = MatrixBuffer(world, view, projection);
-				RenderingMgr::Get()->UpdateData(matrixBuffer);
+				matrix_buffer = MatrixBuffer(world, view, projection);
+				RenderingMgr::Get()->UpdateData(matrix_buffer);
 
-				model.Draw(deviceContext.Get());
+				model.Draw(device_context.Get());
 			}
 		}
 	});

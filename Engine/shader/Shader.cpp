@@ -48,32 +48,32 @@ void Shader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, cons
 
 	// Create vertex and pixel shader
 	DX::ThrowIfFailed(device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
-	                                             nullptr, vertexShader.ReleaseAndGetAddressOf()),
+	                                             nullptr, vertex_shader.ReleaseAndGetAddressOf()),
 	                  "Failed to create vertex shader");
 
 	DX::ThrowIfFailed(device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(),
-	                             nullptr, pixelShader.ReleaseAndGetAddressOf()),
+	                             nullptr, pixel_shader.ReleaseAndGetAddressOf()),
 	                  "Failed to create pixel shader");
 
 
 	// Create the vertex input layout
 	DX::ThrowIfFailed(device->CreateInputLayout(inputElementDesc, numElements, vertexShaderBuffer->GetBufferPointer(),
-								                vertexShaderBuffer->GetBufferSize(), vertexLayout.ReleaseAndGetAddressOf()),
+								                vertexShaderBuffer->GetBufferSize(), vertex_layout.ReleaseAndGetAddressOf()),
 	                  "Failed to create input layout");
 }
 
 
-void Shader::BindShader(ID3D11DeviceContext* deviceContext) {
-	deviceContext->IASetInputLayout(vertexLayout.Get());
+void Shader::BindShader(ID3D11DeviceContext* device_context) {
+	device_context->IASetInputLayout(vertex_layout.Get());
 
-	deviceContext->VSSetShader(vertexShader.Get(), nullptr, 0);
-	deviceContext->PSSetShader(pixelShader.Get(), nullptr, 0);
+	device_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
+	device_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
 }
 
 
 void Shader::OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const WCHAR* shaderFilename) {
 	char*    compileErrors;
-	ULONG    bufferSize;
+	size_t   bufferSize;
 	ofstream fout;
 
 
@@ -86,7 +86,7 @@ void Shader::OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const
 	fout.open("shader_error.txt");
 
 	// Write out the error message
-	for (ULONG i = 0; i < bufferSize; i++) {
+	for (size_t i = 0; i < bufferSize; i++) {
 		fout << compileErrors[i];
 	}
 

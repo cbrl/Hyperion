@@ -27,40 +27,40 @@ class Camera {
 		void Update(float deltaTime);
 
 		CameraBuffer GetBuffer()     const { return buffer; }
-		XMMATRIX     GetViewMatrix() const { return viewMatrix; }
+		XMMATRIX     GetViewMatrix() const { return view_matrix; }
 		XMFLOAT3     GetPosition()   const { return buffer.position; }
 		XMFLOAT3     GetRotation()   const { return XMFLOAT3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
 		XMFLOAT3     GetVelocity()   const { return velocity; }
 
 	private:
 		CameraBuffer buffer;
-		XMMATRIX     viewMatrix;
+		XMMATRIX     view_matrix;
 
-		const XMVECTOR   defaultForward;
-		const XMVECTOR   defaultRight;
-		const XMVECTOR   defaultUp;
+		const XMVECTOR   default_forward;
+		const XMVECTOR   default_right;
+		const XMVECTOR   default_up;
 
-		XMVECTOR    cameraForward;
-		XMVECTOR    fpsForward;
-		XMVECTOR    cameraRight;
-		XMVECTOR    cameraUp;
-		XMVECTOR    lookAt;
+		XMVECTOR    camera_forward;
+		XMVECTOR    fps_forward;
+		XMVECTOR    camera_right;
+		XMVECTOR    camera_up;
+		XMVECTOR    look_at;
 		XMVECTOR    position;
 
-		XMFLOAT3    moveUnits;
+		XMFLOAT3    move_units;
 		XMFLOAT3    velocity;
-		const float moveAccel;
-		const float moveDecel;
-		const float maxVelocity;
+		const float move_accel;
+		const float move_decel;
+		const float max_velocity;
 
 		float       pitch;
 		float       yaw;
 		float       roll;
-		const float maxPitch;
-		const float turnFactor;
+		const float max_pitch;
+		const float turn_factor;
 
-		bool enableFreeLook;
-		bool fpsMode;
-		bool isMoving;
+		bool enable_free_look;
+		bool fps_mode;
+		bool is_moving;
 };
 

@@ -23,11 +23,11 @@ MainWindow::~MainWindow() {
 
 bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
 	appName      = name;
-	windowHeight = width;
-	windowWidth  = height;
+	window_width  = width;
+	window_height = height;
 
-	int xPos = (GetSystemMetrics(SM_CXSCREEN) - windowWidth) / 2;
-	int	yPos = (GetSystemMetrics(SM_CYSCREEN) - windowHeight) / 2;
+	int xPos = (GetSystemMetrics(SM_CXSCREEN) - window_width) / 2;
+	int	yPos = (GetSystemMetrics(SM_CYSCREEN) - window_height) / 2;
 
 	hInstance = GetModuleHandle(NULL);
 
@@ -59,7 +59,7 @@ bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
 
 	// Create window and store window handle
 	hWnd = CreateWindowEx(WS_EX_APPWINDOW, appName, appName, WS_OVERLAPPEDWINDOW,
-							xPos, yPos, windowWidth, windowHeight, NULL, NULL, hInstance, NULL);
+							xPos, yPos, window_width, window_height, NULL, NULL, hInstance, NULL);
 	if (!hWnd) {
 		OutputDebugString(L"Failed to create main window\n");
 		return false;
