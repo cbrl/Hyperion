@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Timer.h"
+#include "timer.h"
 
 
 Timer::Timer() : stopped(false) {

@@ -8,7 +8,7 @@ using namespace DirectX;
 
 struct AABB {
 	public:
-		AABB() : min_point(g_XMInfinity), max_point(-g_XMInfinity) {}
+		AABB() : min_point(g_XMInfinity), max_point(g_XMNegInfinity) {}
 
 		AABB(XMFLOAT3 min, XMFLOAT3 max)
 			: min_point(XMLoadFloat3(&min)), max_point(XMLoadFloat3(&max)) {}
@@ -17,7 +17,7 @@ struct AABB {
 			: min_point(min), max_point(max) {}
 
 		AABB(const std::vector<XMFLOAT3>& vertices) 
-			: min_point(g_XMInfinity), max_point(-g_XMInfinity)
+			: min_point(g_XMInfinity), max_point(g_XMNegInfinity)
 		{
 			XMFLOAT3 min, max;
 			XMStoreFloat3(&min, min_point);

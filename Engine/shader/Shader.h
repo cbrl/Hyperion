@@ -6,33 +6,55 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
-#include <VertexTypes.h>
-#include "util\EngineUtil.h"
+#include "geometry\mesh\vertex_types.h"
+#include "util\engine_util.h"
 
-using std::string;
-using std::vector;
+
 using std::ofstream;
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 
-class Shader {
+
+class VertexShader {
 	public:
-		Shader();
-		~Shader();
+		VertexShader() = default;
+		~VertexShader() = default;
 
-		void Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, const WCHAR* psFilename,
-		          const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements);
+		void Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
+	              const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements);
 
-		void BindShader(ID3D11DeviceContext* device_context);
+		void Bind(ID3D11DeviceContext* device_context) {
+			device_context->IASetInputLayout(layout.Get());
+			device_context->VSSetShader(shader.Get(), nullptr, 0);
+		}
 
 
 	private:
-		void OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const WCHAR* shaderFilename);
-
-
-	private:
-		ComPtr<ID3D11VertexShader> vertex_shader;
-		ComPtr<ID3D11InputLayout>  vertex_layout;
-		ComPtr<ID3D11PixelShader>  pixel_shader;
+		ComPtr<ID3D11VertexShader> shader;
+		ComPtr<ID3D11InputLayout>  layout;
 };
 
+
+class PixelShader {
+	public:
+		PixelShader() = default;
+		~PixelShader() = default;
+
+		void Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename);
+		void Bind(ID3D11DeviceContext* device_context) {
+			device_context->PSSetShader(shader.Get(), nullptr, 0);
+		}
+
+
+	private:
+		ComPtr<ID3D11PixelShader> shader;
+};
+
+
+class ShaderError {
+	public:
+	static void OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const WCHAR* shaderFilename);
+
+	private:
+	ShaderError();
+};

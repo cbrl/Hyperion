@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Frustum.h"
+#include "frustum.h"
 
 
 Frustum::Frustum(const XMMATRIX& in) {

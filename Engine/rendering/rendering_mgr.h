@@ -4,13 +4,11 @@
 #include <Windows.h>
 #include <d3d11.h>
 
-#include "util\EngineUtil.h"
-#include "direct3d\Direct3D.h"
-#include "shader\ShaderMgr.h"
-#include "buffer\CBufferMgr.h"
-#include "rendering\RenderStateMgr.h"
-#include "rendering\Renderer.h"
-#include "texture\TextureMgr.h"
+#include "util\engine_util.h"
+#include "direct3d\direct3d.h"
+#include "rendering\render_state_mgr.h"
+#include "rendering\renderer.h"
+#include "texture\texture_mgr.h"
 
 using std::unique_ptr;
 using std::make_unique;
@@ -23,16 +21,23 @@ class RenderingMgr {
 		~RenderingMgr();
 
 		void Init(UINT window_width, UINT window_height, bool fullscreen, bool vsync, bool msaa);
-		
-		void BindShader(ShaderTypes shader) const {
-			shader_mgr->BindShader(direct3D->GetDeviceContext(), shader);
+
+
+		//----------------------------------------------------------------------------------
+		// Get device / device context
+		//----------------------------------------------------------------------------------
+
+		static ID3D11Device* GetDevice() {
+			return Direct3D::Get()->GetDevice();
+		}
+		static ID3D11DeviceContext* GetDeviceContext() {
+			return Direct3D::Get()->GetDeviceContext();
 		}
 
-		template<typename DataT>
-		void UpdateData(const DataT& data) const {
-			cbuffer_mgr->UpdateData(direct3D->GetDeviceContext(), data);
-		}
 
+		//----------------------------------------------------------------------------------
+		// Get members
+		//----------------------------------------------------------------------------------
 
 		Direct3D* GetD3D() const {
 			return direct3D.get();
@@ -46,10 +51,6 @@ class RenderingMgr {
 			return render_state_mgr.get();
 		}
 
-		CBufferMgr* GetCBufferMgr() const {
-			return cbuffer_mgr.get();
-		}
-
 		TextureMgr* GetTextureMgr() const {
 			return texture_mgr.get();
 		}
@@ -58,8 +59,6 @@ class RenderingMgr {
 	private:
 		unique_ptr<Direct3D>       direct3D;
 		unique_ptr<RenderStateMgr> render_state_mgr;
-		unique_ptr<ShaderMgr>      shader_mgr;
-		unique_ptr<CBufferMgr>     cbuffer_mgr;
 		unique_ptr<TextureMgr>     texture_mgr;
 		unique_ptr<Renderer>       renderer;
 

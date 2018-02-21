@@ -1,77 +1,84 @@
 #include "stdafx.h"
-#include "Shader.h"
+#include "shader.h"
 
 
-Shader::Shader() {
-}
+//----------------------------------------------------------------------------------
+// Vertex Shader
+//----------------------------------------------------------------------------------
 
-
-Shader::~Shader() {
-}
-
-
-void Shader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* vsFilename, const WCHAR* psFilename,
-                  const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements) {
+void VertexShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
+						const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements) {
 	HRESULT result;
-	ID3D10Blob* errorMessage = {};
-	ID3D10Blob* vertexShaderBuffer = {};
-	ID3D10Blob* pixelShaderBuffer = {};
+	ID3D10Blob* error_message = {};
+	ID3D10Blob* shader_buffer = {};
 
 	// Compile vertex shader
-	result = D3DCompileFromFile(vsFilename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VS", "vs_5_0",
-								D3D10_SHADER_ENABLE_STRICTNESS, NULL, &vertexShaderBuffer, &errorMessage);
+	result = D3DCompileFromFile(filename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VS", "vs_5_0",
+								D3D10_SHADER_ENABLE_STRICTNESS, NULL, &shader_buffer, &error_message);
 	if (FAILED(result)) {
-		if (errorMessage) {
-			OutputShaderErrorMessage(hWnd, errorMessage, vsFilename);
+		if (error_message) {
+			ShaderError::OutputShaderErrorMessage(hWnd, error_message, filename);
 		}
 		else {
-			MessageBox(hWnd, vsFilename, L"Missing vertex shader file", MB_OK);
+			MessageBox(hWnd, filename, L"Missing vertex shader file", MB_OK);
 		}
 
 		DX::ThrowIfFailed(result, "Error compiling vertex shader");
 	}
 
-	// Compile pixel shader
-	result = D3DCompileFromFile(psFilename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PS", "ps_5_0",
-								D3D10_SHADER_ENABLE_STRICTNESS, NULL, &pixelShaderBuffer, &errorMessage);
+
+	// Create the vertex shader
+	DX::ThrowIfFailed(device->CreateVertexShader(shader_buffer->GetBufferPointer(), shader_buffer->GetBufferSize(),
+												 nullptr, shader.ReleaseAndGetAddressOf()),
+					  "Failed to create vertex shader");
+
+
+	// Create the vertex input layout
+	DX::ThrowIfFailed(device->CreateInputLayout(inputElementDesc, static_cast<uint32_t>(numElements), shader_buffer->GetBufferPointer(),
+												shader_buffer->GetBufferSize(), layout.ReleaseAndGetAddressOf()),
+					  "Failed to create input layout");
+}
+
+
+
+//----------------------------------------------------------------------------------
+// Pixel Shader
+//----------------------------------------------------------------------------------
+
+void PixelShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename) {
+	HRESULT result;
+	ID3D10Blob* error_message = {};
+	ID3D10Blob* shader_buffer = {};
+
+
+	// Compile the pixel shader
+	result = D3DCompileFromFile(filename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PS", "ps_5_0",
+								D3D10_SHADER_ENABLE_STRICTNESS, NULL, &shader_buffer, &error_message);
 	if (FAILED(result)) {
-		if (errorMessage) {
-			OutputShaderErrorMessage(hWnd, errorMessage, psFilename);
+		if (error_message) {
+			ShaderError::OutputShaderErrorMessage(hWnd, error_message, filename);
 		}
 		else {
-			MessageBox(hWnd, psFilename, L"Missing pixel shader file", MB_OK);
+			MessageBox(hWnd, filename, L"Missing pixel shader file", MB_OK);
 		}
 
 		DX::ThrowIfFailed(result, "Error compiling pixel shader");
 	}
 
 
-	// Create vertex and pixel shader
-	DX::ThrowIfFailed(device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(),
-	                                             nullptr, vertex_shader.ReleaseAndGetAddressOf()),
-	                  "Failed to create vertex shader");
-
-	DX::ThrowIfFailed(device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(),
-	                             nullptr, pixel_shader.ReleaseAndGetAddressOf()),
-	                  "Failed to create pixel shader");
-
-
-	// Create the vertex input layout
-	DX::ThrowIfFailed(device->CreateInputLayout(inputElementDesc, numElements, vertexShaderBuffer->GetBufferPointer(),
-								                vertexShaderBuffer->GetBufferSize(), vertex_layout.ReleaseAndGetAddressOf()),
-	                  "Failed to create input layout");
+	// Create the pixel shader
+	DX::ThrowIfFailed(device->CreatePixelShader(shader_buffer->GetBufferPointer(), shader_buffer->GetBufferSize(),
+												nullptr, shader.ReleaseAndGetAddressOf()),
+					  "Failed to create pixel shader");
 }
 
 
-void Shader::BindShader(ID3D11DeviceContext* device_context) {
-	device_context->IASetInputLayout(vertex_layout.Get());
 
-	device_context->VSSetShader(vertex_shader.Get(), nullptr, 0);
-	device_context->PSSetShader(pixel_shader.Get(), nullptr, 0);
-}
+//----------------------------------------------------------------------------------
+// Display error message if shader compilation failed
+//----------------------------------------------------------------------------------
 
-
-void Shader::OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const WCHAR* shaderFilename) {
+void ShaderError::OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const WCHAR* shaderFilename) {
 	char*    compileErrors;
 	size_t   bufferSize;
 	ofstream fout;

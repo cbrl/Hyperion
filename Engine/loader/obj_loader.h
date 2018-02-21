@@ -4,20 +4,19 @@
 #include <string>
 #include <cwchar>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include <VertexTypes.h>
 
 #include "util\math\math.h"
-#include "util\math\directxmath\extensions.h"
-#include "util\directxtk\extensions.h"
+#include "geometry\mesh\vertex_types.h"
 #include "util\string\string.h"
-#include "direct3d\Direct3d.h"
-#include "geometry\model\Model.h"
-#include "geometry\mesh\Mesh.h"
-#include "geometry\boundingvolume\BoundingVolume.h"
-#include "material\Material.h"
+#include "texture\texture_mgr.h"
+#include "geometry\model\model.h"
+#include "geometry\mesh\mesh.h"
+#include "geometry\boundingvolume\bounding_volume.h"
+#include "material\material.h"
 
 using std::stoi;
 using std::wstring;
@@ -37,7 +36,12 @@ class OBJLoader {
 
 	private:
 		template<typename ElementT>
-		const ElementT& GetElement(vector<ElementT>& in, int index);
+		const ElementT& GetElement(vector<ElementT>& in, size_t index) {
+			if (index < 0) {
+				index = in.size() + index;
+			}
+			return in[index];
+		}
 
 		void Reset();
 
@@ -52,10 +56,10 @@ class OBJLoader {
 	private:
 		struct OBJMaterial {
 			OBJMaterial() :
-				Ka(0.0f, 0.0f, 0.0f),
-				Kd(0.0f, 0.0f, 0.0f),
-				Ks(0.0f, 0.0f, 0.0f),
-				Ke(0.0f, 0.0f, 0.0f),
+				Ka(0.0f, 0.0f, 0.0f, 1.0f),
+				Kd(0.0f, 0.0f, 0.0f, 1.0f),
+				Ks(0.0f, 0.0f, 0.0f, 1.0f),
+				Ke(0.0f, 0.0f, 0.0f, 1.0f),
 				Ns(0.0f),
 				Ni(0.0f),
 				d(0.0f),
@@ -76,13 +80,13 @@ class OBJLoader {
 			// Bump map
 			wstring map_bump;
 			// Ambient Color
-			XMFLOAT3 Ka;
+			XMFLOAT4 Ka;
 			// Diffuse Color
-			XMFLOAT3 Kd;
+			XMFLOAT4 Kd;
 			// Specular Color
-			XMFLOAT3 Ks;
+			XMFLOAT4 Ks;
 			// Emissive Color
-			XMFLOAT3 Ke;
+			XMFLOAT4 Ke;
 			// Specular Exponent
 			float Ns;
 			// Optical Density
@@ -120,19 +124,9 @@ class OBJLoader {
 		// Vector of material descriptions
 		vector<OBJMaterial> materials;
 
-		// List of indices where a new group starts (e.g. new group at 8th index)
+		// List of indices where a new group starts (e.g. 8 = new group at indices[8])
 		vector<UINT> new_group_indices;
 
 		// List of materials for each group. Value is an index for the material vector.
 		vector<UINT> group_material_indices;
 };
-
-
-template<typename ElementT>
-inline const ElementT& OBJLoader::GetElement(vector<ElementT>& in, int index) {
-	if (index < 0) {
-		index = in.size() + index;
-	}
-
-	return in[index];
-}

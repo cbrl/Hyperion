@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "input\Input.h"
+#include "input.h"
 
 
 Input::Input(HWND hWnd) {

@@ -1,8 +1,6 @@
 #include "stdafx.h"
-#include "OBJLoader.h"
-#include "loader\OBJTokens.h"
-#include "direct3d\Direct3D.h"
-#include "texture\TextureMgr.h"
+#include "obj_loader.h"
+#include "loader\obj_tokens.h"
 
 
 OBJLoader::OBJLoader() :
@@ -54,17 +52,17 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context,
 		mtl.name = materials[i].name;
 		
 		if (!materials[i].map_Ka.empty())
-			mtl.map_Ka   = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_Ka);
+			mtl.map_Ka   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Ka);
 		if (!materials[i].map_Kd.empty())
-			mtl.map_Kd   = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_Kd);
+			mtl.map_Kd   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Kd);
 		if (!materials[i].map_Ks.empty())
-			mtl.map_Ks   = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_Ks);
+			mtl.map_Ks   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Ks);
 		if (!materials[i].map_Ns.empty())
-			mtl.map_Ns   = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_Ns);
+			mtl.map_Ns   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Ns);
 		if (!materials[i].map_d.empty())
-			mtl.map_d    = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_d);
+			mtl.map_d    = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_d);
 		if (!materials[i].map_bump.empty())
-			mtl.map_bump = TextureMgr::Get()->Texture(device, device_context, folder + materials[i].map_bump);
+			mtl.map_bump = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_bump);
 
 		mtl.Ka = materials[i].Ka;
 		mtl.Kd = materials[i].Kd;
@@ -79,12 +77,8 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context,
 		mtlVector.push_back(mtl);
 	}
 
-	// Create the mesh and bounding box
-	Mesh mesh(device, vertices, indices, mtlVector, group_count, new_group_indices, group_material_indices);
-	AABB boundingBox(vertex_positions);
-
 	// Create the model
-	Model model(mesh, boundingBox);
+	Model model(device, vertices, indices, mtlVector, group_count, new_group_indices, group_material_indices);
 
 
 	// Reset the obj loader
@@ -247,6 +241,7 @@ void OBJLoader::LoadMaterials(wstring folder) {
 			stream >> materials[mtl_count - 1].Kd.x;
 			stream >> materials[mtl_count - 1].Kd.y;
 			stream >> materials[mtl_count - 1].Kd.z;
+			materials[mtl_count - 1].Kd.w = 1.0f;
 		}
 
 		// Ambient Color
@@ -254,6 +249,7 @@ void OBJLoader::LoadMaterials(wstring folder) {
 			stream >> materials[mtl_count - 1].Ka.x;
 			stream >> materials[mtl_count - 1].Ka.y;
 			stream >> materials[mtl_count - 1].Ka.z;
+			materials[mtl_count - 1].Ka.w = 1.0f;
 		}
 
 		// Specular Color
@@ -261,6 +257,7 @@ void OBJLoader::LoadMaterials(wstring folder) {
 			stream >> materials[mtl_count - 1].Ks.x;
 			stream >> materials[mtl_count - 1].Ks.y;
 			stream >> materials[mtl_count - 1].Ks.z;
+			materials[mtl_count - 1].Ks.w = 1.0f;
 		}
 
 		// Emissive Color
@@ -268,6 +265,7 @@ void OBJLoader::LoadMaterials(wstring folder) {
 			stream >> materials[mtl_count - 1].Ke.x;
 			stream >> materials[mtl_count - 1].Ke.y;
 			stream >> materials[mtl_count - 1].Ke.z;
+			materials[mtl_count - 1].Ke.w = 1.0f;
 		}
 
 		// Specular Expononet
@@ -419,7 +417,7 @@ void OBJLoader::ReadFace(wstring& line) {
 			case 1:
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);  //Subtract 1 since arrays start at index 0
-				vertex.textureCoordinate = XMFLOAT2(0.0f, 0.0f);
+				vertex.texCoord = XMFLOAT2(0.0f, 0.0f);
 				hasNormal = false;
 
 				vVerts.push_back(vertex);
@@ -430,7 +428,7 @@ void OBJLoader::ReadFace(wstring& line) {
 			case 2:
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
-				vertex.textureCoordinate = GetElement(vertex_texCoords, stoi(vParts[1])-1);
+				vertex.texCoord = GetElement(vertex_texCoords, stoi(vParts[1])-1);
 				hasNormal = false;
 
 				vVerts.push_back(vertex);
@@ -442,7 +440,7 @@ void OBJLoader::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
 				vertex.normal = GetElement(vertex_normals, stoi(vParts[2])-1);
-				vertex.textureCoordinate = XMFLOAT2(0.0f, 0.0f);
+				vertex.texCoord = XMFLOAT2(0.0f, 0.0f);
 				hasNormal = true;
 
 				vVerts.push_back(vertex);
@@ -454,7 +452,7 @@ void OBJLoader::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
 				vertex.normal = GetElement(vertex_normals, stoi(vParts[2])-1);
-				vertex.textureCoordinate = GetElement(vertex_texCoords, stoi(vParts[1])-1);
+				vertex.texCoord = GetElement(vertex_texCoords, stoi(vParts[1])-1);
 				hasNormal = true;
 
 				vVerts.push_back(vertex);
@@ -492,7 +490,7 @@ void OBJLoader::ReadFace(wstring& line) {
 			auto pos = std::find(vertices.begin(), vertices.end(), vVerts[i]);
 			if (pos != vertices.end()) {
 				auto index = std::distance(vertices.begin(), pos);
-				indices.push_back(index);
+				indices.push_back(static_cast<uint32_t>(index));
 			}
 		}
 	}
@@ -523,7 +521,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 	vector<VertexPositionNormalTexture> vVerts = inVerts;
 
 	while (true) {
-		for (size_t i = 0; i < vVerts.size(); ++i) {
+		for (uint32_t i = 0; i < vVerts.size(); ++i) {
 			XMFLOAT3 prev;
 			if (i == 0) {
 				prev = vVerts[vVerts.size() - 1].position;
@@ -545,7 +543,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 
 			// Create a triangle from previous, current, and next vertices
 			if (vVerts.size() == 3) {
-				for (size_t j = 0; j < vVerts.size(); ++j) {
+				for (uint32_t j = 0; j < vVerts.size(); ++j) {
 					if (inVerts[j].position == prev)
 						indices.push_back(j);
 					if (inVerts[j].position == curr)
@@ -560,7 +558,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 
 			if (vVerts.size() == 4) {
 				// Create a triangle
-				for (size_t j = 0; j < inVerts.size(); ++j) {
+				for (uint32_t j = 0; j < inVerts.size(); ++j) {
 					if (inVerts[j].position == prev)
 						indices.push_back(j);
 					if (inVerts[j].position == curr)
@@ -570,7 +568,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 				}
 
 				XMFLOAT3 temp;
-				for (size_t j = 0; j < vVerts.size(); ++j) {
+				for (uint32_t j = 0; j < vVerts.size(); ++j) {
 					if (vVerts[j].position != prev &&
 						vVerts[j].position != curr &&
 						vVerts[j].position != next)
@@ -581,7 +579,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 				}
 
 				// Create a triangle
-				for (size_t j = 0; j < inVerts.size(); ++j) {
+				for (uint32_t j = 0; j < inVerts.size(); ++j) {
 					if (inVerts[j].position == prev)
 						indices.push_back(j);
 					if (inVerts[j].position == next)
@@ -609,7 +607,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 
 			// Ensure that no vertices are inside the triangle
 			bool inTriangle = false;
-			for (size_t j = 0; j < inVerts.size(); ++j) {
+			for (uint32_t j = 0; j < inVerts.size(); ++j) {
 				if (PointInTriangle(inVerts[j].position, prev, curr, next)
 					&& inVerts[j].position != prev
 					&& inVerts[j].position != curr
@@ -624,7 +622,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 			}
 
 			// Create a triangle from previous, current, and next vertices
-			for (size_t j = 0; j < inVerts.size(); ++j) {
+			for (uint32_t j = 0; j < inVerts.size(); ++j) {
 				if (inVerts[j].position == prev)
 					indices.push_back(j);
 				if (inVerts[j].position == curr)
@@ -634,7 +632,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 			}
 
 			// Delete current vertex from the list
-			for (size_t j = 0; j < vVerts.size(); ++j) {
+			for (uint32_t j = 0; j < vVerts.size(); ++j) {
 				if (vVerts[j].position == curr) {
 					vVerts.erase(vVerts.begin() + j);
 					break;

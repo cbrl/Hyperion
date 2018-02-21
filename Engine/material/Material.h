@@ -4,8 +4,10 @@
 #include <wrl\client.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include "texture\texture.h"
 
 using std::wstring;
+using std::shared_ptr;
 using Microsoft::WRL::ComPtr;
 
 using namespace DirectX;
@@ -13,11 +15,11 @@ using namespace DirectX;
 struct Material {
 	Material() :
 		name(L"material"),
-		Ka(0.0f, 0.0f, 0.0f),
-		Kd(0.0f, 0.0f, 0.0f),
-		Ks(0.0f, 0.0f, 0.0f),
-		Ke(0.0f, 0.0f, 0.0f),
-		Ns(0.0f),
+		Ka(0.0f, 0.0f, 0.0f, 1.0f),
+		Kd(0.0f, 0.0f, 0.0f, 1.0f),
+		Ks(0.0f, 0.0f, 0.0f, 1.0f),
+		Ke(0.0f, 0.0f, 0.0f, 1.0f),
+		Ns(1.0f),
 		Ni(0.0f),
 		d(0.0f),
 		illum(0),
@@ -28,26 +30,26 @@ struct Material {
 	wstring name;
 
 	// Ambient map
-	ComPtr<ID3D11ShaderResourceView> map_Ka;
+	shared_ptr<Texture> map_Ka;
 	// Diffuse map
-	ComPtr<ID3D11ShaderResourceView> map_Kd;
+	shared_ptr<Texture> map_Kd;
 	// Specular map
-	ComPtr<ID3D11ShaderResourceView> map_Ks;
+	shared_ptr<Texture> map_Ks;
 	// Specular Highlight map
-	ComPtr<ID3D11ShaderResourceView> map_Ns;
+	shared_ptr<Texture> map_Ns;
 	// Alpha map
-	ComPtr<ID3D11ShaderResourceView> map_d;
+	shared_ptr<Texture> map_d;
 	// Bump map
-	ComPtr<ID3D11ShaderResourceView> map_bump;
+	shared_ptr<Texture> map_bump;
 
 	// Ambient Color
-	XMFLOAT3 Ka;
+	XMFLOAT4 Ka;
 	// Diffuse Color
-	XMFLOAT3 Kd;
+	XMFLOAT4 Kd;
 	// Specular Color
-	XMFLOAT3 Ks;
+	XMFLOAT4 Ks;
 	// Emissive Color
-	XMFLOAT3 Ke;
+	XMFLOAT4 Ke;
 
 	// Specular Exponent
 	float Ns;

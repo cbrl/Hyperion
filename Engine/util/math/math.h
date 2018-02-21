@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include "util\math\directxmath\extensions.h"
 
 namespace DirectX {
 
@@ -53,12 +54,59 @@ namespace DirectX {
 
 		if (0 <= a && a <= 1 &&
 			0 <= b && b <= 1 &&
-			0 <= y && y <= 1)
-		{
+			0 <= y && y <= 1) {
 			return true;
 		}
 		else {
 			return false;
 		}
+	}
+
+
+	// Find the minimum and maximum points in a vector of vertices
+	template<typename VertexT>
+	inline std::pair<XMFLOAT3, XMFLOAT3> MinMaxPoint(const std::vector<VertexT>& vertices) {
+		XMFLOAT3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
+		XMFLOAT3 max = { FLT_MIN, FLT_MIN, FLT_MIN };
+
+		for (const auto& vertex : vertices) {
+			min.x = std::fminf(min.x, vertex.position.x);
+			min.y = std::fminf(min.y, vertex.position.y);
+			min.z = std::fminf(min.z, vertex.position.y);
+
+			max.x = std::fmaxf(max.x, vertex.position.x);
+			max.y = std::fmaxf(max.y, vertex.position.y);
+			max.z = std::fmaxf(max.z, vertex.position.y);
+		}
+
+		return std::pair<XMFLOAT3, XMFLOAT3>(min, max);
+	}
+
+	inline std::pair<XMFLOAT3, XMFLOAT3> MinMaxPoint(const std::vector<XMFLOAT3>& vertices) {
+		XMFLOAT3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
+		XMFLOAT3 max = { FLT_MIN, FLT_MIN, FLT_MIN };
+
+		for (const auto& vertex : vertices) {
+			min.x = std::fminf(min.x, vertex.x);
+			min.y = std::fminf(min.y, vertex.y);
+			min.z = std::fminf(min.z, vertex.y);
+
+			max.x = std::fmaxf(max.x, vertex.x);
+			max.y = std::fmaxf(max.y, vertex.y);
+			max.z = std::fmaxf(max.z, vertex.y);
+		}
+
+		return std::pair<XMFLOAT3, XMFLOAT3>(min, max);
+	}
+
+
+	// Calculate the inverse transpose of a matrix
+	inline XMMATRIX InverseTranspose(const XMMATRIX& in) {
+		XMMATRIX M = in;
+
+		M.r[3] = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+		XMVECTOR determinant = XMMatrixDeterminant(M);
+
+		return XMMatrixTranspose(XMMatrixInverse(&determinant, M));
 	}
 }

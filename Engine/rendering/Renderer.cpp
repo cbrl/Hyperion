@@ -1,6 +1,7 @@
 #include "stdafx.h"
-#include "Renderer.h"
-#include "rendering\RenderingMgr.h"
+#include "renderer.h"
+#include "system\system.h"
+#include "rendering\rendering_mgr.h"
 
 
 const Renderer* Renderer::Get() {
@@ -9,10 +10,12 @@ const Renderer* Renderer::Get() {
 }
 
 
-Renderer::Renderer() :
-	device(Direct3D::Get()->GetDevice()),
-	device_context(Direct3D::Get()->GetDeviceContext())
+Renderer::Renderer()
+	: device(RenderingMgr::GetDevice())
+	, device_context(RenderingMgr::GetDeviceContext())
+	, camera_buffer(device.Get())
 {
+	forward_renderer = make_unique<ForwardRenderer>();
 }
 
 
@@ -22,83 +25,29 @@ Renderer::~Renderer() {
 
 void Renderer::Tick(Scene& scene, float deltaTime) const {
 	// Clear background with specified color
-	Direct3D::Get()->BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
-	RenderStateMgr::Get()->BindDepthDefault(device_context.Get());
+	Direct3D::Get()->BeginScene(0.6f, 0.6f, 0.6f, 1.0f);
 
-	// Create matrix buffer
-	MatrixBuffer matrix_buffer;
+	//// Create matrix buffer
+	//MatrixBuffer matrix_buffer;
 
-	// Get matrices
-	XMMATRIX world;
-	XMMATRIX view = scene.camera->GetViewMatrix();
-	XMMATRIX projection = Direct3D::Get()->GetProjectionMatrix();
+	//// Get matrices
+	//XMMATRIX world;
+	//XMMATRIX view = scene.camera->GetViewMatrix();
+	//XMMATRIX projection = Direct3D::Get()->GetProjectionMatrix();
 
-	// Create the frustum
-	Frustum frustum(view*projection);
+	//// Create the frustum
+	//Frustum frustum(view*projection);
 
-	// Transpose matrices for shader
-	view = XMMatrixTranspose(view);
-	projection = XMMatrixTranspose(projection);
-
-
-	//----------------------------------------------------------------------------------
-	// Render objects with color shader
-	//----------------------------------------------------------------------------------
-
-	// Bind shader
-	RenderingMgr::Get()->BindShader(ShaderTypes::ColorShader);
-
-	// Update cbuffers
-	RenderingMgr::Get()->UpdateData(scene.camera->GetBuffer());
-
-	// Render models
-	scene.ForEach<Model>([&](Model& model){
-		if (frustum.Contains(model.GetAABB())) {
-			if (model.GetShader() == ShaderTypes::ColorShader) {
-				// Get world matrix
-				world = Direct3D::Get()->GetWorldMatrix();
-
-				// Transform world matrix according to model position and rotation
-				world = XMMatrixMultiply(world, model.GetRotation());
-				world = XMMatrixMultiply(world, model.GetPosition());
-				world = XMMatrixTranspose(world);
-
-				// Create matrix buffer and update cbuffer
-				matrix_buffer = MatrixBuffer(world, view, projection);
-				RenderingMgr::Get()->UpdateData(matrix_buffer);
-
-				model.Draw(device_context.Get());
-			}
-		}
-	});
+	//// Transpose matrices for shader
+	//view = XMMatrixTranspose(view);
+	//projection = XMMatrixTranspose(projection);
 
 	
 	//----------------------------------------------------------------------------------
-	// Render objects with light shader
+	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
-	RenderingMgr::Get()->BindShader(ShaderTypes::LightShader);
-
-	RenderingMgr::Get()->UpdateData(scene.camera->GetBuffer());
-	RenderingMgr::Get()->UpdateData(scene.lights.front().GetBuffer());
-
-	scene.ForEach<Model>([&](Model& model) {
-		if (frustum.Contains(model.GetAABB()))
-		{
-			if (model.GetShader() == ShaderTypes::LightShader) {
-
-				world = Direct3D::Get()->GetWorldMatrix();
-
-				world = XMMatrixMultiply(world, model.GetRotation());
-				world = XMMatrixMultiply(world, model.GetPosition());
-				world = XMMatrixTranspose(world);
-
-				matrix_buffer = MatrixBuffer(world, view, projection);
-				RenderingMgr::Get()->UpdateData(matrix_buffer);
-
-				model.Draw(device_context.Get());
-			}
-		}
-	});
+	
+	forward_renderer->Render(scene);
 
 
 	//----------------------------------------------------------------------------------

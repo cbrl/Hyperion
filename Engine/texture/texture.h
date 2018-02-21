@@ -1,0 +1,24 @@
+#pragma once
+
+#include <cstdint>
+#include <wrl\client.h>
+#include <d3d11.h>
+
+using Microsoft::WRL::ComPtr;
+
+
+class Texture {
+	public:
+		Texture(ID3D11ShaderResourceView* texture) : texture(texture) {}
+
+		Texture(ComPtr<ID3D11ShaderResourceView> texture) : texture(texture) {}
+
+		~Texture() = default;
+
+		void Bind(ID3D11DeviceContext* device_context, uint32_t slot) {
+			device_context->PSSetShaderResources(slot, 1, texture.GetAddressOf());
+		}
+
+	private:
+		ComPtr<ID3D11ShaderResourceView> texture;
+};

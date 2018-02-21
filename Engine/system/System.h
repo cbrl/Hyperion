@@ -5,15 +5,15 @@
 #include <Keyboard.h>
 #include <Mouse.h>
 
-#include "util\EngineUtil.h"
-#include "system\MainWindow.h"
-#include "direct3d\Direct3D.h"
+#include "util\engine_util.h"
+#include "system\main_window.h"
+#include "direct3d\direct3d.h"
 #include "input\input.h"
-#include "rendering\Renderer.h"
-#include "rendering\RenderingMgr.h"
-#include "scene\Scene.h"
-#include "util\timer\Timer.h"
-#include "util\fps\FPS.h"
+#include "rendering\renderer.h"
+#include "rendering\rendering_mgr.h"
+#include "scene\scene.h"
+#include "util\timer\timer.h"
+#include "util\fps\fps.h"
 
 using std::unique_ptr;
 using std::make_unique;
@@ -38,11 +38,14 @@ class System : public MainWindow {
 		void Run();
 
 		virtual LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 		void OnResize(int window_width, int window_height);
 
-		RenderingMgr* GetRenderingMgr() { return rendering_mgr.get(); }
-		Scene* GetScene()               { return scene.get(); }
-		Input* GetInput()               { return input.get(); }
+		HWND GetHWND() { return hWnd; }
+
+		RenderingMgr* GetRenderingMgr() const { return rendering_mgr.get(); }
+		Scene*        GetScene()        const { return scene.get(); }
+		Input*        GetInput()        const { return input.get(); }
 
 
 	private:

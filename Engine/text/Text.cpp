@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Text.h"
+#include "text.h"
 
 
 Text::Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const WCHAR* fontFilename) :

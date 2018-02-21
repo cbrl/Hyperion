@@ -1,13 +1,15 @@
-#ifndef __HLSL_DEFINES__
-#define __HLSL_DEFINES__
+#ifndef HLSL_DEFINES
+#define HLSL_DEFINES
+
 
 //----------------------------------------------------------------------------------
 // Constant Buffers
 //----------------------------------------------------------------------------------
 
-#define SLOT_CBUFFER_MATRIX 1
+#define SLOT_CBUFFER_ENGINE 1
 #define SLOT_CBUFFER_CAMERA 2
-//#define SLOT_CBUFFER_LIGHT  3
+#define SLOT_CBUFFER_LIGHT  3
+#define SLOT_CBUFFER_MODEL  4
 
 
 //----------------------------------------------------------------------------------
@@ -27,16 +29,17 @@
 //----------------------------------------------------------------------------------
 
 // Material
-#define SLOT_SRV_DIFFUSE  1
-#define SLOT_SRV_AMBIENT  2
-#define SLOT_SRV_SPECULAR 3
-#define SLOT_SRV_ALPHA    4
-#define SLOT_SRV_BUMP     5
+#define SLOT_SRV_DIFFUSE        1
+#define SLOT_SRV_AMBIENT        2
+#define SLOT_SRV_SPECULAR       3
+#define SLOT_SRV_SPEC_HIGHLIGHT 4
+#define SLOT_SRV_ALPHA          5
+#define SLOT_SRV_BUMP           6
 
 // Light
-#define SLOT_SRV_POINT_LIGHTS       6
-#define SLOT_SRV_SPOT_LIGHTS        7
-#define SLOT_SRV_DIRECTIONAL_LIGHTS 8
+#define SLOT_SRV_DIRECTIONAL_LIGHTS 7
+#define SLOT_SRV_POINT_LIGHTS       8
+#define SLOT_SRV_SPOT_LIGHTS        9
 
 
-#endif //__HLSL_DEFINES__
+#endif //HLSL_DEFINES

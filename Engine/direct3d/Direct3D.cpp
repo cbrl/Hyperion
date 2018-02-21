@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "Direct3D.h"
-#include "rendering\RenderingMgr.h"
+#include "direct3d.h"
+#include "rendering\rendering_mgr.h"
 
 const Direct3D* Direct3D::Get() {
 	assert(RenderingMgr::Get());
@@ -19,6 +19,7 @@ Direct3D::Direct3D(HWND hWnd, int window_width, int window_height, bool fullscre
 	MSAA4x_quality(0),
 	window_viewport({})
 {
+	Init();
 }
 
 
@@ -96,8 +97,8 @@ void Direct3D::Init() {
 	// V-Sync
 	if (enable_vsync) {
 		ReadRefreshRate();
-		sd.BufferDesc.RefreshRate.Numerator   = numerator;
-		sd.BufferDesc.RefreshRate.Denominator = denominator;
+		sd.BufferDesc.RefreshRate.Numerator   = refresh_rate_numerator;
+		sd.BufferDesc.RefreshRate.Denominator = refresh_rate_denominator;
 	}
 	else {
 		sd.BufferDesc.RefreshRate.Numerator   = 0;
@@ -170,8 +171,8 @@ void Direct3D::ReadRefreshRate() {
 	for (UINT i = 0; i < modes; i++) {
 		if (displayModeList[i].Width == GetSystemMetrics(SM_CXSCREEN)) {
 			if (displayModeList[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
-				numerator = displayModeList[i].RefreshRate.Numerator;
-				denominator = displayModeList[i].RefreshRate.Denominator;
+				refresh_rate_numerator = displayModeList[i].RefreshRate.Numerator;
+				refresh_rate_denominator = displayModeList[i].RefreshRate.Denominator;
 			}
 		}
 	}

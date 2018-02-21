@@ -3,7 +3,7 @@
 #include <math.h>
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include "rendering\buffer\Buffers.h"
+#include "rendering\buffer\buffers.h"
 
 using namespace DirectX;
 
@@ -13,8 +13,7 @@ class Camera {
 		~Camera();
 
 		void SetPosition(XMFLOAT3 newPosition) { 
-			buffer.position = newPosition;
-			position        = XMVectorSet(newPosition.x, newPosition.y, newPosition.z, 0.0f);
+			position = XMVectorSet(newPosition.x, newPosition.y, newPosition.z, 0.0f);
 		}
 		void SetRotation(XMFLOAT3 rotation) {
 			pitch = rotation.x;
@@ -26,15 +25,17 @@ class Camera {
 		void Rotate(XMFLOAT3 units);
 		void Update(float deltaTime);
 
-		CameraBuffer GetBuffer()     const { return buffer; }
-		XMMATRIX     GetViewMatrix() const { return view_matrix; }
-		XMFLOAT3     GetPosition()   const { return buffer.position; }
-		XMFLOAT3     GetRotation()   const { return XMFLOAT3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
-		XMFLOAT3     GetVelocity()   const { return velocity; }
+		XMMATRIX GetViewMatrix() const { return view_matrix; }
+		XMFLOAT3 GetRotation()   const { return XMFLOAT3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
+		XMFLOAT3 GetVelocity()   const { return velocity; }
+		XMFLOAT3 GetPosition()   const {
+			XMFLOAT3 pos;
+			XMStoreFloat3(&pos, position);
+			return pos;
+		}
 
 	private:
-		CameraBuffer buffer;
-		XMMATRIX     view_matrix;
+		XMMATRIX view_matrix;
 
 		const XMVECTOR   default_forward;
 		const XMVECTOR   default_right;

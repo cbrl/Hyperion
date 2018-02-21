@@ -4,9 +4,9 @@
 #include <d3d11.h>
 #include <DirectXHelpers.h>
 
-#include "util\EngineUtil.h"
-#include "shader\HLSL.h"
-#include "direct3d\Direct3D.h"
+#include "util\engine_util.h"
+#include "shader\hlsl.h"
+#include "direct3d\direct3d.h"
 
 using Microsoft::WRL::ComPtr;
 

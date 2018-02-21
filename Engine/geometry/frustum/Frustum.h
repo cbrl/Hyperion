@@ -1,6 +1,6 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include "geometry\boundingvolume\BoundingVolume.h"
+#include "geometry\boundingvolume\bounding_volume.h"
 
 using namespace DirectX;
 

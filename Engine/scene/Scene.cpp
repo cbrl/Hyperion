@@ -1,17 +1,20 @@
 #include "stdafx.h"
-#include "Scene.h"
-#include "rendering\renderingMgr.h"
+#include "scene.h"
+#include "rendering\rendering_mgr.h"
 
 // TODO:
+// - Vertex shader SV_POSITION
+// - Move FOV to camera
 // - Add vertex normal generation to obj loader
 // - Create a simple geometry generator
 // - Global shader include
 // - Shader buffers for different lights and number of them
 // - Implement material data into shaders
 // - Pipleline class for binding resources to pipline stages
+// - Replace UINT/unsigned int with uint32_t
 
 Scene::Scene() {
-	Init(Direct3D::Get()->GetDevice(), Direct3D::Get()->GetDeviceContext());
+	Init(RenderingMgr::GetDevice(), RenderingMgr::GetDeviceContext());
 }
 
 
@@ -35,12 +38,11 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 	//----------------------------------------------------------------------------------
 	// Create lights
 	//----------------------------------------------------------------------------------
-	lights.push_back(Light());
-	lights[0].SetDirection(XMFLOAT3(0.0f, 0.0f, 1.0f));
-	lights[0].SetAmbientColor(XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f));
-	lights[0].SetDiffuseColor(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	lights[0].SetSpecularColor(XMFLOAT3(1.0f, 1.0f, 1.0f));
-	lights[0].SetSpecularPower(64.0f);
+	directional_lights.push_back(DirectionalLight());
+	directional_lights[0].ambient_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	directional_lights[0].diffuse_color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	directional_lights[0].specular      = XMFLOAT4(1.0f, 1.0f, 1.0f, 16.0f);
+	directional_lights[0].direction     = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 
 	//----------------------------------------------------------------------------------
@@ -48,7 +50,6 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 	//----------------------------------------------------------------------------------
 	OBJLoader loader;
 	models.push_back(loader.Load(device, device_context, L"data/models/cube2/", L"cube.obj", false));
-	models.at(0).SetShader(ShaderTypes::LightShader);
 
 
 	//----------------------------------------------------------------------------------
@@ -117,8 +118,8 @@ void Scene::Tick(Input& input, float deltaTime) {
 	input.GetMouseDelta(mouseX, mouseY);
 
 	// Set x/y rotation with mouse data
-	rotateUnits.x = mouseY;
-	rotateUnits.y = mouseX;
+	rotateUnits.x = static_cast<float>(mouseY);
+	rotateUnits.y = static_cast<float>(mouseX);
 
 	// Roll rotation
 	if (input.IsKeyDown(Keyboard::Q)) {

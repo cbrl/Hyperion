@@ -97,14 +97,3 @@ namespace DX {
 #define SafeDelete(x) { delete x; x = nullptr; }
 
 
-//----------------------------------------------------------------------------------
-// Shader Type enum
-//----------------------------------------------------------------------------------
-
-enum class ShaderTypes {
-	ColorShader,
-	TextureShader,
-	LightShader,
-	NormalShader,
-	SpecularShader,
-};

@@ -1,5 +1,10 @@
+#ifndef HLSL_GLOBAL
+#define HLSL_GLOBAL
+
+
 #include "shaders\include\syntax.hlsl"
 #include "shader\HLSL.h"
+
 
 //----------------------------------------------------------------------------------
 // Sampler States
@@ -17,13 +22,14 @@ SAMPLER_STATE(aniso_clamp,  SLOT_SAMPLER_ANISO_CLAMP);
 // Constant Buffers
 //----------------------------------------------------------------------------------
 
-CONSTANT_BUFFER(matrix_buffer, SLOT_CBUFFER_MATRIX) {
-	matrix world_matrix;
-	matrix view_matrix;
-	matrix projection_matrix;
-};
+//CONSTANT_BUFFER(EngineBuffer, SLOT_CBUFFER_MATRIX) {
+//}
 
-CONSTANT_BUFFER(camera_buffer, SLOT_CBUFFER_CAMERA) {
+CONSTANT_BUFFER(CameraBuffer, SLOT_CBUFFER_CAMERA) {
 	float3 camera_position;
 	float  padding;
 };
+
+
+
+#endif //HLSL_GLOBAL

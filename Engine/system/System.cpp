@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "System.h"
+#include "system.h"
 
 
 System* System::system_ptr = nullptr;

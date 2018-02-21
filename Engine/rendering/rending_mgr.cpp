@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "RenderingMgr.h"
-#include "system\System.h"
+#include "rendering_mgr.h"
+#include "system\system.h"
 
 
 const RenderingMgr* RenderingMgr::Get() {
@@ -21,20 +21,10 @@ void RenderingMgr::Init(UINT window_width, UINT window_height, bool fullscreen, 
 
 	// Initialize Direct3D
 	direct3D = make_unique<Direct3D>(hWnd, window_width, window_height, fullscreen, vsync, msaa);
-	direct3D->Init();
 
 
 	// Create render state manager and render states
 	render_state_mgr = make_unique<RenderStateMgr>();
-
-
-	// Initialize shader manager and shaders
-	shader_mgr = make_unique<ShaderMgr>();
-	shader_mgr->Init(hWnd, direct3D->GetDevice());
-
-
-	// Create and bind buffers
-	cbuffer_mgr = make_unique<CBufferMgr>();
 
 
 	// Create texture manager

@@ -7,7 +7,7 @@
 #include <wrl\client.h>
 #include <d3d11.h>
 #include <dxgi.h>
-#include "util\EngineUtil.h"
+#include "util\engine_util.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -22,7 +22,6 @@ class Direct3D {
 		Direct3D(HWND hWnd, int window_width, int window_height, bool fullscreen, bool vSync, bool MSAA);
 		~Direct3D();
 
-		void Init();
 		void BeginScene(float red, float green, float blue, float alpha) const;
 		void EndScene() const;
 		void OnResize(int winWidth, int winHeight);
@@ -46,6 +45,7 @@ class Direct3D {
 
 
 	private:
+		void Init();
 		void ReadRefreshRate();
 
 
@@ -71,7 +71,7 @@ class Direct3D {
 		bool enable_fullscreen;
 		bool enable_4xMSAA;
 		UINT MSAA4x_quality;
-		UINT numerator;
-		UINT denominator;
+		UINT refresh_rate_numerator;
+		UINT refresh_rate_denominator;
 };
 

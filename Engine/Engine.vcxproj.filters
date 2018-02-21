@@ -16,12 +16,6 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{cd0f1874-c186-4bbb-9a3d-1e503a7555b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Shaders\Color">
-      <UniqueIdentifier>{8c3bd23e-85df-4dd4-be02-ba436c40fede}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Shaders\Texture">
-      <UniqueIdentifier>{76832d29-042d-4957-aafb-2344647e9aa7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Shaders\Light">
       <UniqueIdentifier>{999f1396-2253-4ac5-9dc4-c72477cf8a31}</UniqueIdentifier>
     </Filter>
@@ -52,9 +46,6 @@
     <Filter Include="Header Files\input">
       <UniqueIdentifier>{1a0f6be9-4fb4-4134-ac43-1512e747e9cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\light">
-      <UniqueIdentifier>{53b7d68e-4fc6-40da-84cb-4c05f6ec0075}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\scene">
       <UniqueIdentifier>{cdbb0389-a8ef-494c-8f26-43881fa48c68}</UniqueIdentifier>
     </Filter>
@@ -75,9 +66,6 @@
     </Filter>
     <Filter Include="Source Files\rendering">
       <UniqueIdentifier>{4c82db23-914c-4d04-a44d-d91e5c4f017e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\rendering\buffer">
-      <UniqueIdentifier>{b8ee651d-9bef-4427-96a4-b7e3b316e075}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\direct3d">
       <UniqueIdentifier>{c757a6a4-d168-4d4f-9408-fdb3807cbce3}</UniqueIdentifier>
@@ -118,9 +106,6 @@
     <Filter Include="Header Files\loader">
       <UniqueIdentifier>{6cd25658-9ada-4b96-9fa0-d75790403dc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\loader">
-      <UniqueIdentifier>{00b76d75-1f8e-47cc-ae9f-be261b967984}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\geometry\mesh">
       <UniqueIdentifier>{c1e2b0da-0ceb-4906-a40f-6ed53e4e4174}</UniqueIdentifier>
     </Filter>
@@ -148,38 +133,50 @@
     <Filter Include="Header Files\geometry\boundingvolume">
       <UniqueIdentifier>{e1ceb31f-9268-4f50-bcdf-98b20c935b8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\util\directxtk">
-      <UniqueIdentifier>{de045884-14ab-4d89-b825-6fcd2c64cedb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\include">
+    <Filter Include="Resource Files\Shaders\include">
       <UniqueIdentifier>{e37a59d3-6884-44fb-9f57-55214849b3e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\forward">
+      <UniqueIdentifier>{88c266ce-fe7b-489d-a8b1-f43e59451cd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\loader">
+      <UniqueIdentifier>{0be34d4d-40ba-4ce3-aac8-9a4bc558aa86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering\forward">
+      <UniqueIdentifier>{f4ad6bbd-aba9-4705-8854-81c98694d208}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering\forward">
+      <UniqueIdentifier>{208ac0aa-f7c6-48fb-9912-34453247733c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry\mesh">
+      <UniqueIdentifier>{d9a807b8-a68b-407f-9574-5b1ed21aaac4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\color\color.vs">
-      <Filter>Resource Files\Shaders\Color</Filter>
-    </None>
-    <None Include="shaders\color\color.ps">
-      <Filter>Resource Files\Shaders\Color</Filter>
-    </None>
     <None Include="shaders\light\light.ps">
       <Filter>Resource Files\Shaders\Light</Filter>
     </None>
     <None Include="shaders\light\light.vs">
       <Filter>Resource Files\Shaders\Light</Filter>
     </None>
-    <None Include="shaders\texture\texture.ps">
-      <Filter>Resource Files\Shaders\Texture</Filter>
-    </None>
-    <None Include="shaders\texture\texture.vs">
-      <Filter>Resource Files\Shaders\Texture</Filter>
-    </None>
     <None Include="packages.config" />
     <None Include="shaders\include\light.hlsl">
-      <Filter>Resource Files\include</Filter>
+      <Filter>Resource Files\Shaders\include</Filter>
     </None>
     <None Include="shaders\include\syntax.hlsl">
-      <Filter>Resource Files\include</Filter>
+      <Filter>Resource Files\Shaders\include</Filter>
+    </None>
+    <None Include="shaders\include\global.hlsl">
+      <Filter>Resource Files\Shaders\include</Filter>
+    </None>
+    <None Include="shaders\forward\forward.hlsl">
+      <Filter>Resource Files\Shaders\forward</Filter>
+    </None>
+    <None Include="shaders\include\input_structs.hlsl">
+      <Filter>Resource Files\Shaders\include</Filter>
+    </None>
+    <None Include="shaders\forward\forward_VS.hlsl">
+      <Filter>Resource Files\Shaders\forward</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -189,22 +186,10 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\RenderStateMgr.h">
-      <Filter>Header Files\rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\RenderingMgr.h">
-      <Filter>Header Files\rendering</Filter>
-    </ClInclude>
     <ClInclude Include="rendering\Renderer.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
     <ClInclude Include="rendering\buffer\Buffers.h">
-      <Filter>Header Files\rendering\buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\buffer\CBufferMgr.h">
-      <Filter>Header Files\rendering\buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\buffer\ConstantBuffer.h">
       <Filter>Header Files\rendering\buffer</Filter>
     </ClInclude>
     <ClInclude Include="camera\Camera.h">
@@ -216,47 +201,20 @@
     <ClInclude Include="direct3d\Direct3D.h">
       <Filter>Header Files\direct3d</Filter>
     </ClInclude>
-    <ClInclude Include="system\MainWindow.h">
-      <Filter>Header Files\system</Filter>
-    </ClInclude>
     <ClInclude Include="system\System.h">
       <Filter>Header Files\system</Filter>
-    </ClInclude>
-    <ClInclude Include="util\EngineUtil.h">
-      <Filter>Header Files\util</Filter>
     </ClInclude>
     <ClInclude Include="input\Input.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
-    <ClInclude Include="light\Light.h">
-      <Filter>Header Files\light</Filter>
-    </ClInclude>
     <ClInclude Include="scene\Scene.h">
       <Filter>Header Files\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="shader\ShaderMgr.h">
-      <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="shader\Shader.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="text\Text.h">
       <Filter>Header Files\text</Filter>
-    </ClInclude>
-    <ClInclude Include="texture\TextureMgr.h">
-      <Filter>Header Files\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="util\timer\Timer.h">
-      <Filter>Header Files\util\timer</Filter>
-    </ClInclude>
-    <ClInclude Include="util\fps\FPS.h">
-      <Filter>Header Files\util\fps</Filter>
-    </ClInclude>
-    <ClInclude Include="loader\OBJLoader.h">
-      <Filter>Header Files\loader</Filter>
-    </ClInclude>
-    <ClInclude Include="loader\OBJTokens.h">
-      <Filter>Header Files\loader</Filter>
     </ClInclude>
     <ClInclude Include="geometry\mesh\Mesh.h">
       <Filter>Header Files\geometry\mesh</Filter>
@@ -273,17 +231,56 @@
     <ClInclude Include="util\math\directxmath\extensions.h">
       <Filter>Header Files\util\math\directxmath</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\boundingvolume\BoundingVolume.h">
-      <Filter>Header Files\geometry\boundingvolume</Filter>
-    </ClInclude>
-    <ClInclude Include="util\directxtk\extensions.h">
-      <Filter>Header Files\util\directxtk</Filter>
-    </ClInclude>
     <ClInclude Include="geometry\model\Model.h">
       <Filter>Header Files\geometry\model</Filter>
     </ClInclude>
     <ClInclude Include="shader\HLSL.h">
       <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\boundingvolume\bounding_volume.h">
+      <Filter>Header Files\geometry\boundingvolume</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\buffer\constant_buffer.h">
+      <Filter>Header Files\rendering\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\buffer\structured_buffer.h">
+      <Filter>Header Files\rendering\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\obj_loader.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\obj_tokens.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="system\main_window.h">
+      <Filter>Header Files\system</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\render_state_mgr.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\rendering_mgr.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="texture\texture_mgr.h">
+      <Filter>Header Files\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="util\engine_util.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\fps\fps.h">
+      <Filter>Header Files\util\fps</Filter>
+    </ClInclude>
+    <ClInclude Include="util\timer\timer.h">
+      <Filter>Header Files\util\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\forward\forward_render.h">
+      <Filter>Header Files\rendering\forward</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\mesh\vertex_types.h">
+      <Filter>Header Files\geometry\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="texture\texture.h">
+      <Filter>Header Files\texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -293,64 +290,62 @@
     <ClCompile Include="main\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="camera\Camera.cpp">
-      <Filter>Source Files\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\buffer\CBufferMgr.cpp">
-      <Filter>Source Files\rendering\buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\Renderer.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\RenderingMgr.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\RenderStateMgr.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="direct3d\Direct3D.cpp">
-      <Filter>Source Files\direct3d</Filter>
-    </ClCompile>
-    <ClCompile Include="util\timer\Timer.cpp">
-      <Filter>Source Files\util\timer</Filter>
-    </ClCompile>
-    <ClCompile Include="util\fps\FPS.cpp">
-      <Filter>Source Files\util\fps</Filter>
-    </ClCompile>
     <ClCompile Include="geometry\frustum\Frustum.cpp">
       <Filter>Source Files\geometry\frustum</Filter>
-    </ClCompile>
-    <ClCompile Include="shader\Shader.cpp">
-      <Filter>Source Files\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="scene\Scene.cpp">
-      <Filter>Source Files\scene</Filter>
-    </ClCompile>
-    <ClCompile Include="system\MainWindow.cpp">
-      <Filter>Source Files\system</Filter>
-    </ClCompile>
-    <ClCompile Include="system\System.cpp">
-      <Filter>Source Files\system</Filter>
     </ClCompile>
     <ClCompile Include="input\Input.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
-    <ClCompile Include="text\Text.cpp">
-      <Filter>Source Files\text</Filter>
-    </ClCompile>
-    <ClCompile Include="texture\TextureMgr.cpp">
-      <Filter>Source Files\texture</Filter>
-    </ClCompile>
-    <ClCompile Include="loader\OBJLoader.cpp">
-      <Filter>Source Files\loader</Filter>
-    </ClCompile>
     <ClCompile Include="geometry\model\Model.cpp">
       <Filter>Source Files\geometry\model</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="shaders\include\global.hlsl">
-      <Filter>Resource Files\include</Filter>
-    </FxCompile>
+    <ClCompile Include="loader\obj_loader.cpp">
+      <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\render_state_mgr.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\renderer.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\rending_mgr.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\scene.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="shader\shader.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="system\main_window.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\system.cpp">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="text\text.cpp">
+      <Filter>Source Files\text</Filter>
+    </ClCompile>
+    <ClCompile Include="texture\texture_mgr.cpp">
+      <Filter>Source Files\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="util\fps\fps.cpp">
+      <Filter>Source Files\util\fps</Filter>
+    </ClCompile>
+    <ClCompile Include="util\timer\timer.cpp">
+      <Filter>Source Files\util\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\camera.cpp">
+      <Filter>Source Files\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="direct3d\direct3d.cpp">
+      <Filter>Source Files\direct3d</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\forward\forward_render.cpp">
+      <Filter>Source Files\rendering\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="geometry\mesh\vertex_types.cpp">
+      <Filter>Source Files\geometry\mesh</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

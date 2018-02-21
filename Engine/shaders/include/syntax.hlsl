@@ -1,5 +1,5 @@
-#ifndef __HLSL_SYNTAX__
-#define __HLSL_SYNTAX__
+#ifndef HLSL_SYNTAX
+#define HLSL_SYNTAX
 
 
 //----------------------------------------------------------------------------------
@@ -35,11 +35,12 @@
 #define TEXTURE_1D(name, slot) Texture1D name : register(REG_T(slot))
 #define TEXTURE_1D_ARRAY(name, slot) Texture1DArray name : register(REG_T(slot))
 
-#define TEXTURE_2D(name, slot) Texture2D name : register(REGISTER_T(slot))
+#define TEXTURE_2D(name, slot) Texture2D name : register(REG_T(slot))
 #define TEXTURE_2D_ARRAY(name, slot) Texture2DArray name : register(REG_T(slot))
 
 #define TEXTURE_3D(name, slot) Texture3D name : register(REG_T(slot))
 #define TEXTURE_CUBE(name, slot) TextureCube name : register(REG_T(slot))
 #define TEXTURE_CUBE_ARRAY(name, sloat) TextureCubeArray name : register(REG_T(slot))
 
-#endif //__HLSL_SYNTAX__
+
+#endif //HLSL_SYNTAX

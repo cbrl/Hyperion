@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "RenderStateMgr.h"
-#include "rendering\RenderingMgr.h"
+#include "render_state_mgr.h"
+#include "rendering\rendering_mgr.h"
 
 
 const RenderStateMgr* RenderStateMgr::Get() {
@@ -10,7 +10,7 @@ const RenderStateMgr* RenderStateMgr::Get() {
 
 
 RenderStateMgr::RenderStateMgr() {
-	SetupStates(Direct3D::Get()->GetDevice(), Direct3D::Get()->GetDeviceContext());
+	SetupStates(RenderingMgr::GetDevice(), RenderingMgr::GetDeviceContext());
 }
 
 

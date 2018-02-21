@@ -8,12 +8,12 @@
 #include <Keyboard.h>
 #include <Mouse.h>
 
-#include "input\Input.h"
-#include "camera\Camera.h"
-#include "light\Light.h"
-#include "geometry\model\Model.h"
-#include "text\Text.h"
-#include "loader\OBJLoader.h"
+#include "input\input.h"
+#include "camera\camera.h"
+#include "rendering\buffer\buffers.h"
+#include "geometry\model\model.h"
+#include "text\text.h"
+#include "loader\obj_loader.h"
 
 using std::map;
 using std::string;
@@ -36,29 +36,37 @@ class Scene {
 
 
 	public:
-		unique_ptr<Camera>    camera;
-		vector<Light>         lights;
-		vector<Model>         models;
-		map<string, Text>     texts;
+		unique_ptr<Camera>       camera;
+		vector<PointLight>       point_lights;
+		vector<DirectionalLight> directional_lights;
+		vector<SpotLight>        spot_lights;
+		vector<Model>            models;
+		map<string, Text>        texts;
 
 
 	public:
-		template<typename Element, typename Action>
-		void ForEach(Action act) {
-			if constexpr (is_same_v<Model, Element>) {
-				for (auto& e : models) {
+		template<typename ElementT, typename ActionT>
+		void ForEach(ActionT act) {
+			if constexpr (is_same_v<Model, ElementT>) {
+				for (const auto& e : models) {
 					act(e);
 				}
 			}
 
-			if constexpr (is_same_v<Text, Element>) {
+			if constexpr (is_same_v<Text, ElementT>) {
 				for (auto& e : texts) {
 					act(e.second);
 				}
 			}
 
-			if constexpr (is_same_v<Light, Element>) {
-				for (auto& e : lights) {
+			if constexpr (is_same_v<PointLight, ElementT>) {
+				for (const auto& e : lights) {
+					act(e);
+				}
+			}
+
+			if constexpr (is_same_v<PointLight, ElementT>) {
+				for (const auto& e : lights) {
 					act(e);
 				}
 			}

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "FPS.h"
+#include "fps.h"
 
 
 FPS::FPS() : fps(0), count(0) {

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Camera.h"
+#include "camera.h"
 
 
 Camera::Camera() :
@@ -152,12 +152,6 @@ void Camera::Update(float deltaTime) {
 	else {
 		position += camera_forward * velocity.z * deltaTime;
 	}
-
-
-	// Update position buffer
-	buffer.position.x = XMVectorGetX(position);
-	buffer.position.y = XMVectorGetY(position);
-	buffer.position.z = XMVectorGetZ(position);
 
 
 	// Add the position and forward vectors of the camera to the target vector
