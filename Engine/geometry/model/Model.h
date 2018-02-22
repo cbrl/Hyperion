@@ -29,13 +29,20 @@ struct ModelPart {
 
 class Model {
 	public:
-		Model(const Mesh& mesh, const AABB& aabb);
+		Model() = default;
+		~Model() = default;
+
+		Model(const Mesh& mesh, const AABB& aabb)
+			: position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
+			, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
+			, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
+			, mesh(mesh)
+			, aabb(aabb)
+		{}
 
 		template<typename VertexT>
 		Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices, const vector<Material>& materials,
 			  UINT group_count, const vector<UINT>& group_indices, const vector<UINT>& material_indices);
-
-		~Model();
 
 		void Draw(ID3D11DeviceContext* device_context, unsigned int index_count, unsigned int start_index) const {
 			mesh.Draw(device_context, index_count, start_index);
@@ -108,7 +115,7 @@ Model::Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector
 	for (size_t i = 0; i < group_count; ++i) {
 		ModelPart temp;
 
-		temp.index_start = indices[group_indices[i]];
+		temp.index_start = group_indices[i];
 		temp.material_index = material_indices[i];
 
 		// Index count
@@ -118,9 +125,14 @@ Model::Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector
 			temp.index_count = group_indices[i + 1] - group_indices[i];
 
 		// Create the AABB for the model part
-		auto begin = vertices.begin() + indices[temp.index_start];
+		vector<VertexT> subvec;
+		for (size_t j = temp.index_start; j < (temp.index_start + temp.index_count); ++j) {
+			subvec.push_back(vertices[indices[j]]);
+		}
+		auto pair = MinMaxPoint(subvec);
+		/*auto begin = vertices.begin() + indices[temp.index_start];
 		auto end = vertices.begin() + indices[temp.index_start + temp.index_count - 1];
-		auto pair = MinMaxPoint(vector<VertexT>(begin, end));
+		auto pair = MinMaxPoint(vector<VertexT>(begin, end));*/
 		temp.aabb = AABB(pair.first, pair.second);
 
 		model_parts.push_back(temp);

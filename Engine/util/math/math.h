@@ -98,15 +98,4 @@ namespace DirectX {
 
 		return std::pair<XMFLOAT3, XMFLOAT3>(min, max);
 	}
-
-
-	// Calculate the inverse transpose of a matrix
-	inline XMMATRIX InverseTranspose(const XMMATRIX& in) {
-		XMMATRIX M = in;
-
-		M.r[3] = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
-		XMVECTOR determinant = XMMatrixDeterminant(M);
-
-		return XMMatrixTranspose(XMMatrixInverse(&determinant, M));
-	}
 }

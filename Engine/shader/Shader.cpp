@@ -9,15 +9,24 @@
 void VertexShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
 						const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements) {
 	HRESULT result;
-	ID3D10Blob* error_message = {};
-	ID3D10Blob* shader_buffer = {};
+	ComPtr<ID3D10Blob> error_message = {};
+	ComPtr<ID3D10Blob> shader_buffer = {};
 
-	// Compile vertex shader
+	// Shader compile flags
+	uint32_t flags = D3D10_SHADER_ENABLE_STRICTNESS; 
+
+	// Disable optimization in debug builds
+	#if defined(DEBUG) || defined(_DEBUG)
+		flags |= D3DCOMPILE_DEBUG;
+		flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+	#endif
+
+	// Compile the vertex shader
 	result = D3DCompileFromFile(filename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VS", "vs_5_0",
-								D3D10_SHADER_ENABLE_STRICTNESS, NULL, &shader_buffer, &error_message);
+								flags, NULL, shader_buffer.GetAddressOf(), error_message.GetAddressOf());
 	if (FAILED(result)) {
 		if (error_message) {
-			ShaderError::OutputShaderErrorMessage(hWnd, error_message, filename);
+			ShaderError::OutputShaderErrorMessage(hWnd, error_message.Get(), filename);
 		}
 		else {
 			MessageBox(hWnd, filename, L"Missing vertex shader file", MB_OK);
@@ -47,16 +56,24 @@ void VertexShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
 
 void PixelShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename) {
 	HRESULT result;
-	ID3D10Blob* error_message = {};
-	ID3D10Blob* shader_buffer = {};
+	ComPtr<ID3D10Blob> error_message = {};
+	ComPtr<ID3D10Blob> shader_buffer = {};
 
+	// Shader compile flags
+	uint32_t flags = D3D10_SHADER_ENABLE_STRICTNESS;
+
+	// Disable optimization in debug builds
+	#if defined(DEBUG) || defined(_DEBUG)
+	flags |= D3DCOMPILE_DEBUG;
+	flags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+	#endif
 
 	// Compile the pixel shader
 	result = D3DCompileFromFile(filename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PS", "ps_5_0",
-								D3D10_SHADER_ENABLE_STRICTNESS, NULL, &shader_buffer, &error_message);
+								flags, NULL, shader_buffer.GetAddressOf(), error_message.GetAddressOf());
 	if (FAILED(result)) {
 		if (error_message) {
-			ShaderError::OutputShaderErrorMessage(hWnd, error_message, filename);
+			ShaderError::OutputShaderErrorMessage(hWnd, error_message.Get(), filename);
 		}
 		else {
 			MessageBox(hWnd, filename, L"Missing pixel shader file", MB_OK);

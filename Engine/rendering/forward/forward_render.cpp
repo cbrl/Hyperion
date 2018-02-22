@@ -90,8 +90,10 @@ void ForwardRenderer::Render(Scene& scene) {
 			world = XMMatrixMultiply(world, model.GetRotation());
 			world = XMMatrixMultiply(world, model.GetPosition());
 
-			// Create the inverse transpose of the world matrix
-			XMMATRIX inv_transpose = InverseTranspose(world);
+			// Create the inverse transpose of the world matrix.
+			// DXMath uses row major matrices, unlike HLSL, so
+			// the transpose is implied when sending it to the shader.
+			XMMATRIX inv_transpose = XMMatrixInverse(NULL, world);
 
 
 			// Render each model part individually
@@ -99,28 +101,27 @@ void ForwardRenderer::Render(Scene& scene) {
 
 				// Update model buffer
 				ModelBuffer model_data;
-				model_data.world = world;
+				model_data.world               = world;
 				model_data.world_inv_transpose = inv_transpose;
-				model_data.world_view_proj = XMMatrixTranspose(world * view * projection);
-				model_data.texTransform = XMMatrixIdentity();	//Replace with actual texTransform
+				model_data.world_view_proj     = XMMatrixTranspose(world * view * projection);
+				model_data.texTransform        = XMMatrixIdentity();	//Replace with actual texTransform
 
 				// Get the material for this model part
 				auto mat = model.GetMaterial(part.material_index);
 
 				// Set the material parameters in the model buffer
-				MaterialBuffer temp_mat = { mat.Ka, mat.Kd, mat.Ks, mat.Ke, mat.Ns, mat.Ni, mat.d };
-				model_data.mat = temp_mat;
+				model_data.mat = { mat.Ka, mat.Kd, mat.Ks, mat.Ke, mat.Ns, mat.Ni, mat.d };
 
 				// Update the model buffer
 				model_buffer.UpdateData(device_context, model_data);
 
 
 				// Bind the SRVs
-				if (mat.map_Kd)   mat.map_Kd->Bind(device_context, SLOT_SRV_DIFFUSE);
-				if (mat.map_Ka)   mat.map_Ka->Bind(device_context, SLOT_SRV_AMBIENT);
-				if (mat.map_Ks)   mat.map_Ks->Bind(device_context, SLOT_SRV_SPECULAR);
-				if (mat.map_Ns)   mat.map_Ns->Bind(device_context, SLOT_SRV_SPEC_HIGHLIGHT);
-				if (mat.map_d)    mat.map_d->Bind(device_context, SLOT_SRV_ALPHA);
+				if (mat.map_Kd)   mat.map_Kd->Bind(device_context,   SLOT_SRV_DIFFUSE);
+				if (mat.map_Ka)   mat.map_Ka->Bind(device_context,   SLOT_SRV_AMBIENT);
+				if (mat.map_Ks)   mat.map_Ks->Bind(device_context,   SLOT_SRV_SPECULAR);
+				if (mat.map_Ns)   mat.map_Ns->Bind(device_context,   SLOT_SRV_SPEC_HIGHLIGHT);
+				if (mat.map_d)    mat.map_d->Bind(device_context,    SLOT_SRV_ALPHA);
 				if (mat.map_bump) mat.map_bump->Bind(device_context, SLOT_SRV_BUMP);
 
 

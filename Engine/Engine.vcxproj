@@ -76,6 +76,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+    <ExecutablePath>$(WindowsSDK_ExecutablePath_x64);$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -196,9 +197,6 @@
     <ClCompile Include="direct3d\direct3d.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
     <ClCompile Include="geometry\mesh\vertex_types.cpp" />
-    <ClCompile Include="geometry\model\model.cpp">
-      <FileType>Document</FileType>
-    </ClCompile>
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="loader\obj_loader.cpp" />
     <ClCompile Include="main\main.cpp" />

@@ -3,7 +3,7 @@
 
 
 #include "shaders\include\syntax.hlsl"
-#include "shader\HLSL.h"
+#include "shader\hlsl.h"
 
 
 //----------------------------------------------------------------------------------

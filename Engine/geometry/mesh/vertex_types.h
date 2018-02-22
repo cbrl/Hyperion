@@ -106,7 +106,7 @@ struct VertexPositionDualTexture {
 	VertexPositionDualTexture(FXMVECTOR position,
 	                          FXMVECTOR texCoord0,
 							  FXMVECTOR texCoord1) {
-		XMStoreFloat3(&this->position, position);
+		XMStoreFloat3(&this->position,  position);
 		XMStoreFloat2(&this->texCoord0, texCoord0);
 		XMStoreFloat2(&this->texCoord1, texCoord1);
 	}
@@ -140,7 +140,7 @@ struct VertexPositionNormal {
 
 	VertexPositionNormal(FXMVECTOR position, FXMVECTOR normal) {
 		XMStoreFloat3(&this->position, position);
-		XMStoreFloat3(&this->normal, normal);
+		XMStoreFloat3(&this->normal,   normal);
 	}
 
 	bool operator==(const VertexPositionNormal& compare) {
@@ -171,8 +171,8 @@ struct VertexPositionNormalColor {
 
 	VertexPositionNormalColor(FXMVECTOR position, FXMVECTOR normal, FXMVECTOR color) {
 		XMStoreFloat3(&this->position, position);
-		XMStoreFloat3(&this->normal, normal);
-		XMStoreFloat4(&this->color, color);
+		XMStoreFloat3(&this->normal,   normal);
+		XMStoreFloat4(&this->color,    color);
 	}
 
 	bool operator==(const VertexPositionNormalColor& compare) {
@@ -205,7 +205,7 @@ struct VertexPositionNormalTexture {
 
 	VertexPositionNormalTexture(FXMVECTOR position, FXMVECTOR normal, FXMVECTOR texCoord) {
 		XMStoreFloat3(&this->position, position);
-		XMStoreFloat3(&this->normal, normal);
+		XMStoreFloat3(&this->normal,   normal);
 		XMStoreFloat2(&this->texCoord, texCoord);
 	}
 

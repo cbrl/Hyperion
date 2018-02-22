@@ -3,15 +3,12 @@
 #include "rendering\rendering_mgr.h"
 
 // TODO:
-// - Vertex shader SV_POSITION
 // - Move FOV to camera
+// - Clean code
 // - Add vertex normal generation to obj loader
 // - Create a simple geometry generator
-// - Global shader include
-// - Shader buffers for different lights and number of them
-// - Implement material data into shaders
 // - Pipleline class for binding resources to pipline stages
-// - Replace UINT/unsigned int with uint32_t
+// - Replace UINT and unsigned int with uint32_t
 
 Scene::Scene() {
 	Init(RenderingMgr::GetDevice(), RenderingMgr::GetDeviceContext());
@@ -31,6 +28,7 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 	//----------------------------------------------------------------------------------
 	// Create camera
 	//----------------------------------------------------------------------------------
+
 	camera = make_unique<Camera>();
 	camera->SetPosition(XMFLOAT3(0.0f, 0.0f, -5.0f));
 
@@ -38,23 +36,41 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 	//----------------------------------------------------------------------------------
 	// Create lights
 	//----------------------------------------------------------------------------------
+
+	// X+ direction = Red
 	directional_lights.push_back(DirectionalLight());
 	directional_lights[0].ambient_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
-	directional_lights[0].diffuse_color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	directional_lights[0].specular      = XMFLOAT4(1.0f, 1.0f, 1.0f, 16.0f);
-	directional_lights[0].direction     = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	directional_lights[0].diffuse_color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+	directional_lights[0].specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 16.0f);
+	directional_lights[0].direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
+
+	// Y- direction = Green
+	directional_lights.push_back(DirectionalLight());
+	directional_lights[1].ambient_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	directional_lights[1].diffuse_color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	directional_lights[1].specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 16.0f);
+	directional_lights[1].direction = XMFLOAT3(0.0f, -1.0f, 0.0f);
+
+	// Z+ direction = Blue
+	directional_lights.push_back(DirectionalLight());
+	directional_lights[2].ambient_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	directional_lights[2].diffuse_color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+	directional_lights[2].specular      = XMFLOAT4(1.0f, 1.0f, 1.0f, 16.0f);
+	directional_lights[2].direction     = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 
 	//----------------------------------------------------------------------------------
 	// Create models
 	//----------------------------------------------------------------------------------
+
 	OBJLoader loader;
-	models.push_back(loader.Load(device, device_context, L"data/models/cube2/", L"cube.obj", false));
+	models.push_back(loader.Load(device, device_context, L"data/models/spaceCompound/", L"spaceCompound.obj", false));
 
 
 	//----------------------------------------------------------------------------------
 	// Create text objects
 	//----------------------------------------------------------------------------------
+
 	const wchar_t* font = L"./data/fonts/courier-12.spritefont";
 
 	texts.try_emplace("FPS", device, device_context, font);
@@ -102,9 +118,9 @@ void Scene::UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY) {
 void Scene::Tick(Input& input, float deltaTime) {
 
 	// Rotate models
-	for (auto& model : models) {
-		model.Rotate(0.0f, ((XM_PI * deltaTime) / 2500), 0.0f);
-	}
+	//for (auto& model : models) {
+	//	model.Rotate(0.0f, ((XM_PI * deltaTime) / 2500), 0.0f);
+	//}
 
 
 	//----------------------------------------------------------------------------------

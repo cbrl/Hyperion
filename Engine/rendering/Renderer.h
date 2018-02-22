@@ -29,10 +29,9 @@ class Renderer {
 
 
 	private:
-		ComPtr<ID3D11Device>        device;
-		ComPtr<ID3D11DeviceContext> device_context;
-
-		ConstantBuffer<CameraBuffer> camera_buffer;
-
+		// Renderers
 		unique_ptr<ForwardRenderer> forward_renderer;
+
+		// Buffers
+		ConstantBuffer<CameraBuffer> camera_buffer;
 };

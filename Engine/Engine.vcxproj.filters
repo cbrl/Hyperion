@@ -109,9 +109,6 @@
     <Filter Include="Header Files\geometry\mesh">
       <UniqueIdentifier>{c1e2b0da-0ceb-4906-a40f-6ed53e4e4174}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\geometry\model">
-      <UniqueIdentifier>{9323311e-f65b-418d-bfd2-2298a231c2de}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\geometry\model">
       <UniqueIdentifier>{f6f030ec-aeac-4622-b88b-02d88822aa9b}</UniqueIdentifier>
     </Filter>
@@ -169,11 +166,11 @@
     <None Include="shaders\include\global.hlsl">
       <Filter>Resource Files\Shaders\include</Filter>
     </None>
-    <None Include="shaders\forward\forward.hlsl">
-      <Filter>Resource Files\Shaders\forward</Filter>
-    </None>
     <None Include="shaders\include\input_structs.hlsl">
       <Filter>Resource Files\Shaders\include</Filter>
+    </None>
+    <None Include="shaders\forward\forward.hlsl">
+      <Filter>Resource Files\Shaders\forward</Filter>
     </None>
     <None Include="shaders\forward\forward_VS.hlsl">
       <Filter>Resource Files\Shaders\forward</Filter>
@@ -295,9 +292,6 @@
     </ClCompile>
     <ClCompile Include="input\Input.cpp">
       <Filter>Source Files\input</Filter>
-    </ClCompile>
-    <ClCompile Include="geometry\model\Model.cpp">
-      <Filter>Source Files\geometry\model</Filter>
     </ClCompile>
     <ClCompile Include="loader\obj_loader.cpp">
       <Filter>Source Files\loader</Filter>

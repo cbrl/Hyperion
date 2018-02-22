@@ -10,11 +10,12 @@ const Renderer* Renderer::Get() {
 }
 
 
-Renderer::Renderer()
-	: device(RenderingMgr::GetDevice())
-	, device_context(RenderingMgr::GetDeviceContext())
-	, camera_buffer(device.Get())
-{
+Renderer::Renderer() : camera_buffer(RenderingMgr::GetDevice()) {
+	// Set cbuffers
+	RenderingMgr::GetDeviceContext()->PSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer.GetBufferAddress());
+	RenderingMgr::GetDeviceContext()->VSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer.GetBufferAddress());
+
+	// Create forward renderer
 	forward_renderer = make_unique<ForwardRenderer>();
 }
 
@@ -24,23 +25,13 @@ Renderer::~Renderer() {
 
 
 void Renderer::Tick(Scene& scene, float deltaTime) const {
+
 	// Clear background with specified color
-	Direct3D::Get()->BeginScene(0.6f, 0.6f, 0.6f, 1.0f);
+	Direct3D::Get()->BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
 
-	//// Create matrix buffer
-	//MatrixBuffer matrix_buffer;
 
-	//// Get matrices
-	//XMMATRIX world;
-	//XMMATRIX view = scene.camera->GetViewMatrix();
-	//XMMATRIX projection = Direct3D::Get()->GetProjectionMatrix();
-
-	//// Create the frustum
-	//Frustum frustum(view*projection);
-
-	//// Transpose matrices for shader
-	//view = XMMatrixTranspose(view);
-	//projection = XMMatrixTranspose(projection);
+	// Update the camera buffer
+	camera_buffer.UpdateData(RenderingMgr::GetDeviceContext(), CameraBuffer(scene.camera->GetPosition()));
 
 	
 	//----------------------------------------------------------------------------------
