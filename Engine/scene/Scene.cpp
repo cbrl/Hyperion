@@ -1,14 +1,20 @@
 #include "stdafx.h"
 #include "scene.h"
+#include "system\system.h"
 #include "rendering\rendering_mgr.h"
 
 // TODO:
-// - Move FOV to camera
 // - Clean code
 // - Add vertex normal generation to obj loader
 // - Create a simple geometry generator
 // - Pipleline class for binding resources to pipline stages
 // - Replace UINT and unsigned int with uint32_t
+
+
+static const float zNear = 0.1f;
+static const float zFar  = 1000.0f;
+static const float FOV   = XM_PI / 3.0f;
+
 
 Scene::Scene() {
 	Init(RenderingMgr::GetDevice(), RenderingMgr::GetDeviceContext());
@@ -29,7 +35,8 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 	// Create camera
 	//----------------------------------------------------------------------------------
 
-	camera = make_unique<Camera>();
+	camera = make_unique<Camera>(System::Get()->GetWindowWidth(), System::Get()->GetWindowHeight(),
+								 FOV, zNear, zFar);
 	camera->SetPosition(XMFLOAT3(0.0f, 0.0f, -5.0f));
 
 
@@ -39,24 +46,32 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 
 	// X+ direction = Red
 	directional_lights.push_back(DirectionalLight());
-	directional_lights[0].ambient_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	directional_lights[0].ambient_color = XMFLOAT4(0.2f, 0.0f, 0.0f, 1.0f);
 	directional_lights[0].diffuse_color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
-	directional_lights[0].specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 16.0f);
-	directional_lights[0].direction = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	directional_lights[0].specular      = XMFLOAT4(1.0f, 1.0f, 1.0f, 32.0f);
+	directional_lights[0].direction     = XMFLOAT3(1.0f, 0.0f, 0.0f);
 
 	// Y- direction = Green
 	directional_lights.push_back(DirectionalLight());
-	directional_lights[1].ambient_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	directional_lights[1].ambient_color = XMFLOAT4(0.0f, 0.2f, 0.0f, 1.0f);
 	directional_lights[1].diffuse_color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
-	directional_lights[1].specular = XMFLOAT4(1.0f, 1.0f, 1.0f, 16.0f);
-	directional_lights[1].direction = XMFLOAT3(0.0f, -1.0f, 0.0f);
+	directional_lights[1].specular      = XMFLOAT4(1.0f, 1.0f, 1.0f, 32.0f);
+	directional_lights[1].direction     = XMFLOAT3(0.0f, -1.0f, 0.0f);
 
 	// Z+ direction = Blue
 	directional_lights.push_back(DirectionalLight());
-	directional_lights[2].ambient_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	directional_lights[2].ambient_color = XMFLOAT4(0.0f, 0.0f, 0.2f, 1.0f);
 	directional_lights[2].diffuse_color = XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
-	directional_lights[2].specular      = XMFLOAT4(1.0f, 1.0f, 1.0f, 16.0f);
+	directional_lights[2].specular      = XMFLOAT4(1.0f, 1.0f, 1.0f, 32.0f);
 	directional_lights[2].direction     = XMFLOAT3(0.0f, 0.0f, 1.0f);
+
+	//point_lights.push_back(PointLight());
+	//point_lights.back().ambient_color = XMFLOAT4(0.2f, 0.2f, 0.2f, 1.0f);
+	//point_lights.back().diffuse_color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	//point_lights.back().attenuation   = XMFLOAT3(1.0f, 1.0f, 1.0f);
+	//point_lights.back().specular      = XMFLOAT4(1.0f, 1.0f, 1.0f, 32.0f);
+	//point_lights.back().position      = XMFLOAT3(0.0f, 0.0f, -2.0f);
+	//point_lights.back().range         = 10.0f;
 
 
 	//----------------------------------------------------------------------------------

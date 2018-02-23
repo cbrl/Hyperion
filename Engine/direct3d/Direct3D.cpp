@@ -8,16 +8,16 @@ const Direct3D* Direct3D::Get() {
 }
 
 
-Direct3D::Direct3D(HWND hWnd, int window_width, int window_height, bool fullscreen, bool vSync, bool MSAA):
-	hWnd(hWnd),
-	window_width(window_width),
-	window_height(window_height),
-	enable_4xMSAA(MSAA),
-	enable_vsync(vSync),
-	enable_fullscreen(fullscreen),
-	driver_type(D3D_DRIVER_TYPE_HARDWARE),
-	MSAA4x_quality(0),
-	window_viewport({})
+Direct3D::Direct3D(HWND hWnd, int window_width, int window_height, bool fullscreen, bool vSync, bool MSAA)
+	: hWnd(hWnd)
+	, window_width(window_width)
+	, window_height(window_height)
+	, enable_4xMSAA(MSAA)
+	, enable_vsync(vSync)
+	, enable_fullscreen(fullscreen)
+	, driver_type(D3D_DRIVER_TYPE_HARDWARE)
+	, MSAA4x_quality(0)
+	, window_viewport({})
 {
 	Init();
 }
@@ -260,20 +260,6 @@ void Direct3D::OnResize(int winWidth, int winHeight) {
 	window_viewport.MaxDepth = 1.0f;
 
 	device_context->RSSetViewports(1, &window_viewport);
-
-
-	// Set FOV and aspect ratio
-	float fov = XM_PI / 4.0f;
-	float aspectRatio = (float)window_width / (float)window_height;
-
-	// Create projection matrix
-	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspectRatio, zNear, zFar);
-
-	// Create world matrix
-	world_matrix = XMMatrixIdentity();
-
-	// Create ortho matrix for 2D rendering
-	ortho_matrix = XMMatrixOrthographicLH((float)window_width, (float)window_height, zNear, zFar);
 }
 
 

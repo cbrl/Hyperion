@@ -43,9 +43,11 @@ void ForwardRenderer::Render(Scene& scene) {
 	RenderStateMgr::Get()->BindDepthDefault(device_context);
 
 
-	XMMATRIX world      = Direct3D::Get()->GetWorldMatrix();
+	//XMMATRIX world      = Direct3D::Get()->GetWorldMatrix();
+	XMMATRIX world      = scene.camera->GetWorldMatrix();
 	XMMATRIX view       = scene.camera->GetViewMatrix();
-	XMMATRIX projection = Direct3D::Get()->GetProjectionMatrix();
+	XMMATRIX projection = scene.camera->GetProjMatrix();
+	//XMMATRIX projection = Direct3D::Get()->GetProjectionMatrix();
 
 
 	// Create frustum
@@ -69,14 +71,11 @@ void ForwardRenderer::Render(Scene& scene) {
 
 
 	// Update light data buffers
-	if (scene.directional_lights.size() > 0)
-		directional_light_buffer.UpdateData(device, device_context, scene.directional_lights);
-
-	if (scene.point_lights.size() > 0)
-		point_light_buffer.UpdateData(device, device_context, scene.point_lights);
-
-	if (scene.spot_lights.size() > 0)
-		spot_light_buffer.UpdateData(device, device_context, scene.spot_lights);
+	directional_light_buffer.UpdateData(device, device_context, scene.directional_lights);
+	
+	point_light_buffer.UpdateData(device, device_context, scene.point_lights);
+	
+	spot_light_buffer.UpdateData(device, device_context, scene.spot_lights);
 	
 
 	// Render models
@@ -85,7 +84,7 @@ void ForwardRenderer::Render(Scene& scene) {
 		if (frustum.Contains(model.GetAABB())) {
 
 			// Create the world matrix
-			world = Direct3D::Get()->GetWorldMatrix();
+			world = scene.camera->GetWorldMatrix();
 			world = XMMatrixMultiply(world, model.GetScale());
 			world = XMMatrixMultiply(world, model.GetRotation());
 			world = XMMatrixMultiply(world, model.GetPosition());
@@ -101,7 +100,7 @@ void ForwardRenderer::Render(Scene& scene) {
 
 				// Update model buffer
 				ModelBuffer model_data;
-				model_data.world               = world;
+				model_data.world               = XMMatrixTranspose(world);
 				model_data.world_inv_transpose = inv_transpose;
 				model_data.world_view_proj     = XMMatrixTranspose(world * view * projection);
 				model_data.texTransform        = XMMatrixIdentity();	//Replace with actual texTransform

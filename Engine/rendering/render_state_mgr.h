@@ -1,16 +1,13 @@
 #pragma once
 
-#include <wrl\client.h>
 #include <d3d11.h>
-#include <DirectXHelpers.h>
-
 #include "util\engine_util.h"
+#include "util\datatypes\datatypes.h"
 #include "shader\hlsl.h"
-#include "direct3d\direct3d.h"
 
-using Microsoft::WRL::ComPtr;
 
 using namespace DirectX;
+
 
 class RenderStateMgr {
 	public:
@@ -66,9 +63,6 @@ class RenderStateMgr {
 
 
 	private:
-		//ComPtr<ID3D11Device>        device;
-		//ComPtr<ID3D11DeviceContext> device_context;
-
 		// Blend states
 		ComPtr<ID3D11BlendState> opaque;
 		ComPtr<ID3D11BlendState> alpha_blend;

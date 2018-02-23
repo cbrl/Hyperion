@@ -26,11 +26,17 @@ Renderer::~Renderer() {
 
 void Renderer::Tick(Scene& scene, float deltaTime) const {
 
+	//----------------------------------------------------------------------------------
 	// Clear background with specified color
+	//----------------------------------------------------------------------------------
+
 	Direct3D::Get()->BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
 
 
+	//----------------------------------------------------------------------------------
 	// Update the camera buffer
+	//----------------------------------------------------------------------------------
+
 	camera_buffer.UpdateData(RenderingMgr::GetDeviceContext(), CameraBuffer(scene.camera->GetPosition()));
 
 	
@@ -44,11 +50,15 @@ void Renderer::Tick(Scene& scene, float deltaTime) const {
 	//----------------------------------------------------------------------------------
 	// Render text objects
 	//----------------------------------------------------------------------------------
+
 	scene.ForEach<Text>([](Text& text) {
 		text.Render();
 	});
 
 
+	//----------------------------------------------------------------------------------
 	// Present the frame
+	//----------------------------------------------------------------------------------
+
 	Direct3D::Get()->EndScene();
 }

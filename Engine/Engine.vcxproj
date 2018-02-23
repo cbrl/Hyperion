@@ -108,11 +108,16 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <ShowIncludes>false</ShowIncludes>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -185,6 +190,7 @@
     <ClInclude Include="texture\texture.h" />
     <ClInclude Include="texture\texture_mgr.h" />
     <ClInclude Include="text\text.h" />
+    <ClInclude Include="util\datatypes\datatypes.h" />
     <ClInclude Include="util\engine_util.h" />
     <ClInclude Include="util\fps\fps.h" />
     <ClInclude Include="util\math\directxmath\extensions.h" />

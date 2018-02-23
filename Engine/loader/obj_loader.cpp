@@ -3,12 +3,11 @@
 #include "loader\obj_tokens.h"
 
 
-OBJLoader::OBJLoader() :
-	RH_coord(false),
-	group_count(0),
-	mtl_count(0)
-{
-}
+OBJLoader::OBJLoader()
+	: RH_coord(false)
+	, group_count(0)
+	, mtl_count(0)
+{}
 
 
 OBJLoader::~OBJLoader() {

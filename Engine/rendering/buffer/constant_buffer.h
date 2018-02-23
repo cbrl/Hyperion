@@ -1,12 +1,9 @@
 #pragma once
-#include "stdafx.h"
 
-#include <memory.h>
-#include <wrl\client.h>
 #include <d3d11.h>
 #include "util\engine_util.h"
+#include "util\datatypes\datatypes.h"
 
-using Microsoft::WRL::ComPtr;
 
 template<typename DataT>
 struct ConstantBuffer {
@@ -45,6 +42,8 @@ struct ConstantBuffer {
 
 			DX::ThrowIfFailed(device->CreateBuffer(&bufferDesc, nullptr, buffer.ReleaseAndGetAddressOf()),
 							  "Failed to create constant buffer");
+
+			SetDebugObjectName(buffer.Get(), "Constant Buffer");
 		}
 
 

@@ -1,26 +1,19 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <map>
 #include <filesystem>
-#include <wrl\client.h>
 #include <d3d11.h>
 #include <WICTextureLoader.h>
 #include <DDSTextureLoader.h>
 #include <DirectXHelpers.h>
 
 #include "util\engine_util.h"
+#include "util\datatypes\datatypes.h"
 #include "texture\texture.h"
 
-using std::map;
-using std::vector;
-using std::wstring;
-using std::shared_ptr;
-using std::make_shared;
+
 using std::experimental::filesystem::exists;
-using Microsoft::WRL::ComPtr;
 using namespace DirectX;
+
 
 class TextureMgr {
 	public:
@@ -43,9 +36,5 @@ class TextureMgr {
 		map<wstring, shared_ptr<Texture>>         texture_map;
 		map<UINT, shared_ptr<Texture>>            color_texture_map;
 		map<vector<wstring>, shared_ptr<Texture>> texture_array_map;
-
-		//map<wstring, ComPtr<ID3D11ShaderResourceView>>         texture_map;
-		//map<UINT, ComPtr<ID3D11ShaderResourceView>>            simple_texture_map;
-		//map<vector<wstring>, ComPtr<ID3D11ShaderResourceView>> texture_array_map;
 };
 

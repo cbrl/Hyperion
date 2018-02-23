@@ -148,6 +148,9 @@
     <Filter Include="Source Files\geometry\mesh">
       <UniqueIdentifier>{d9a807b8-a68b-407f-9574-5b1ed21aaac4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\util\datatypes">
+      <UniqueIdentifier>{0aaa8c60-4881-43ee-b138-a9d0a6cf1d7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\light\light.ps">
@@ -278,6 +281,9 @@
     </ClInclude>
     <ClInclude Include="texture\texture.h">
       <Filter>Header Files\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="util\datatypes\datatypes.h">
+      <Filter>Header Files\util\datatypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

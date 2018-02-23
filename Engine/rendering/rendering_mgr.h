@@ -1,17 +1,15 @@
 #pragma once
 
-#include <wrl\client.h>
 #include <Windows.h>
 #include <d3d11.h>
 
 #include "util\engine_util.h"
+#include "util\datatypes\datatypes.h"
 #include "direct3d\direct3d.h"
 #include "rendering\render_state_mgr.h"
 #include "rendering\renderer.h"
 #include "texture\texture_mgr.h"
 
-using std::unique_ptr;
-using std::make_unique;
 
 class RenderingMgr {
 	public:

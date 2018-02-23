@@ -2,10 +2,14 @@
 
 #include <string>
 #include <vector>
+#include <cwchar>
+
 
 using std::string;
 using std::wstring;
-using std::vector;
+
+using std::to_string;
+using std::to_wstring;
 
 
 // Trim whitespace at the beginning and end of a string
@@ -41,7 +45,7 @@ inline string TrimWhiteSpace(string& in) {
 
 
 // Split a string by a specified token
-inline void Split(wstring& in, vector<wstring>& out, const wchar_t* token) {
+inline void Split(wstring& in, std::vector<wstring>& out, const wchar_t* token) {
 	out.clear();
 
 	wstring sToken(token);
@@ -74,7 +78,7 @@ inline void Split(wstring& in, vector<wstring>& out, const wchar_t* token) {
 
 
 // Split a string by a specified token
-inline void Split(string& in, vector<string>& out, const char* token) {
+inline void Split(string& in, std::vector<string>& out, const char* token) {
 	out.clear();
 
 	string sToken(token);

@@ -2,39 +2,56 @@
 #include "camera.h"
 
 
-Camera::Camera() :
-	enable_free_look(false),
-	fps_mode(true),
+Camera::Camera()
+	: enable_free_look(false)
+	, fps_mode(false)
 
-	look_at(XMVectorZero()),
-	position(XMVectorZero()),
-	velocity(0.0f, 0.0f, 0.0f),
-	move_accel(0.0001f),
-	move_decel(0.0001f),
-	max_velocity(0.02f),
-	is_moving(false),
+	, look_at(XMVectorZero())
+	, position(XMVectorZero())
+	, velocity(0.0f, 0.0f, 0.0f)
+	, move_accel(0.0001f)
+	, move_decel(0.0001f)
+	, max_velocity(0.02f)
+	, is_moving(false)
 
-	turn_factor(0.002f),
-	pitch(0.0f),
-	yaw(0.0f),
-	roll(0.0f),
-	max_pitch(XMConvertToRadians(89.0f)),
+	, turn_factor(0.002f)
+	, pitch(0.0f)
+	, yaw(0.0f)
+	, roll(0.0f)
+	, max_pitch(XMConvertToRadians(89.0f))
 
-	camera_forward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
-	fps_forward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
-	camera_right(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
-	camera_up(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
-	default_forward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
-	default_right(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
-	default_up(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
+	, camera_forward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f))
+	, fps_forward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f))
+	, camera_right(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f))
+	, camera_up(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))
 
-	view_matrix(XMVectorZero(), XMVectorZero(), XMVectorZero(), XMVectorZero())
+	, fov(XM_PI/4.0f)
+	, viewport_width(800)
+	, viewport_height(800)
+	, z_near(0.1f)
+	, z_far(1000.0f)
+	, world_matrix(XMMatrixIdentity())
+	, view_matrix(XMMatrixIdentity())
+	, projection_matrix(XMMatrixIdentity())
+	, ortho_matrix(XMMatrixIdentity())
 {
 	if (enable_free_look) fps_mode = false;
 }
 
 
-Camera::~Camera() {
+Camera::Camera(uint32_t viewportWidth, uint32_t viewportHeight,
+			   float FOV, float zNear, float zFar) : Camera()
+{
+	viewport_width = viewportWidth;
+	viewport_height = viewportHeight;
+	fov = FOV;
+	z_near = zNear;
+	z_far = zFar;
+
+	aspect_ratio      = (float)viewport_width / (float)viewport_height;
+	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
+
+	ortho_matrix = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
 }
 
 

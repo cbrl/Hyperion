@@ -1,13 +1,11 @@
 #pragma once
 
-#include <map>
-#include <string>
-#include <vector>
 #include <type_traits>
 #include <Windows.h>
 #include <Keyboard.h>
 #include <Mouse.h>
 
+#include "util\datatypes\datatypes.h"
 #include "input\input.h"
 #include "camera\camera.h"
 #include "rendering\buffer\buffers.h"
@@ -15,12 +13,9 @@
 #include "text\text.h"
 #include "loader\obj_loader.h"
 
-using std::map;
-using std::string;
-using std::wstring;
-using std::to_wstring;
-using std::vector;
+
 using std::is_same_v;
+
 
 class Scene {
 	public:

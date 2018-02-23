@@ -1,17 +1,17 @@
 #pragma once
 
 #include <fstream>
-#include <wrl\client.h>
 #include <Windows.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
-#include <DirectXMath.h>
-#include "geometry\mesh\vertex_types.h"
+
 #include "util\engine_util.h"
+#include "util\math\math.h"
+#include "util\datatypes\datatypes.h"
+#include "geometry\mesh\vertex_types.h"
 
 
 using std::ofstream;
-using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 
 

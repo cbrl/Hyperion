@@ -1,21 +1,16 @@
 #pragma once
 
-#include <vector>
 #include <fstream>
-#include <memory>
-#include <wrl\client.h>
+#include "util\math\math.h"
+#include "util\datatypes\datatypes.h"
 #include "util\engine_util.h"
 #include "geometry\mesh\vertex_types.h"
 #include "material\material.h"
 #include "geometry\mesh\mesh.h"
 #include "geometry\boundingvolume\bounding_volume.h"
-#include "util\math\math.h"
 
-using std::vector;
+
 using std::ifstream;
-using std::unique_ptr;
-using Microsoft::WRL::ComPtr;
-
 using namespace DirectX;
 
 

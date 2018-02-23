@@ -1,7 +1,6 @@
 #pragma once
 
-#include <d3d11.h>
-#include <DirectXMath.h>
+#include "util\math\math.h"
 
 using namespace DirectX;
 

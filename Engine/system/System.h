@@ -1,11 +1,11 @@
 #pragma once
 
-#include <memory>
 #include <Windows.h>
 #include <Keyboard.h>
 #include <Mouse.h>
 
 #include "util\engine_util.h"
+#include "util\datatypes\datatypes.h"
 #include "system\main_window.h"
 #include "direct3d\direct3d.h"
 #include "input\input.h"
@@ -15,10 +15,6 @@
 #include "util\timer\timer.h"
 #include "util\fps\fps.h"
 
-using std::unique_ptr;
-using std::make_unique;
-using std::shared_ptr;
-using std::make_shared;
 
 #define WINDOW_WIDTH  1200
 #define WINDOW_HEIGHT 900
@@ -26,6 +22,7 @@ using std::make_shared;
 #define MSAA_STATE       false
 #define VSYNC_STATE      false
 #define FULLSCREEN_STATE false
+
 
 class System : public MainWindow {
 	public:
@@ -41,7 +38,9 @@ class System : public MainWindow {
 
 		void OnResize(int window_width, int window_height);
 
-		HWND GetHWND() { return hWnd; }
+		HWND GetHWND()         const { return hWnd; }
+		int  GetWindowWidth()  const { return window_width; }
+		int  GetWindowHeight() const { return window_height; }
 
 		RenderingMgr* GetRenderingMgr() const { return rendering_mgr.get(); }
 		Scene*        GetScene()        const { return scene.get(); }

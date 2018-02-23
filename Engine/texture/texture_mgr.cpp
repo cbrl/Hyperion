@@ -18,7 +18,9 @@ const shared_ptr<Texture> TextureMgr::CreateTexture(ID3D11Device* device, ID3D11
 
 	// Create the texture if it doesn't exist
 	if (texture_map.find(filename) == texture_map.end()) {
+
 		texture_map[filename] = NewTexture(device, device_context, filename);
+
 		return texture_map.at(filename);
 	}
 	else {
@@ -33,8 +35,10 @@ const shared_ptr<Texture> TextureMgr::CreateColorTexture(ID3D11Device* device, X
 	// Convert the float4 into a single hex color value, which is also used as the texture data when creating it
 	UINT texColor = (UINT)(color.x * 0xff) + ((UINT)(color.y * 0xff) << 8) + ((UINT)(color.z * 0xff) << 16) + ((UINT)(color.w * 0xff) << 24);
 
-	if (color_texture_map.find(texColor) == color_texture_map.end()) {
+	if (color_texture_map.find(texColor) == color_texture_map.end()) 
+	{
 		color_texture_map[texColor] = NewColorTexture(device, texColor);
+
 		return color_texture_map.at(texColor);
 	}
 	else {
@@ -48,6 +52,7 @@ const shared_ptr<Texture> TextureMgr::CreateTexture2DArray(ID3D11Device* device,
 	// Check for valid file, return default texture if failed
 	if (filenames.empty())
 		return CreateColorTexture(device, XMFLOAT4(0.0f, 0.0f, 1.0f, 0.0f));
+
 	for (auto& file : filenames) {
 		if (!exists(file))
 			return CreateColorTexture(device, XMFLOAT4(0.0f, 0.0f, 1.0f, 0.0f));
@@ -55,7 +60,9 @@ const shared_ptr<Texture> TextureMgr::CreateTexture2DArray(ID3D11Device* device,
 
 	// Create the texture if it doesn't exist
 	if (texture_array_map.find(filenames) == texture_array_map.end()) {
+
 		texture_array_map[filenames] = NewTexture2DArray(device, device_context, filenames);
+
 		return texture_array_map.at(filenames);
 	}
 	else {

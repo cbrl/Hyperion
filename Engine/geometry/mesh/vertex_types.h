@@ -1,7 +1,6 @@
 #pragma once
 
-#include <d3d11_1.h>
-#include <DirectXMath.h>
+#include <d3d11.h>
 #include "util\math\math.h"
 
 

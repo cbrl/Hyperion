@@ -2,11 +2,11 @@
 #include "text.h"
 
 
-Text::Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const WCHAR* fontFilename) :
-	text(L"Default Text"),
-	position(XMFLOAT2(0, 0)),
-	color(Colors::White),
-	rotation(0.0f)
+Text::Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const WCHAR* fontFilename)
+	: text(L"Default Text")
+	, position(XMFLOAT2(0, 0))
+	, color(Colors::White)
+	, rotation(0.0f)
 {
 	sprite_batch = make_unique<SpriteBatch>(device_context);
 	sprite_font = make_unique<SpriteFont>(device, fontFilename);

@@ -5,15 +5,16 @@
 #include <sstream>
 #include <string>
 
-using std::ofstream;
-using std::string;
-using std::wstring;
-using std::ostringstream;
 
 #if defined(DEBUG) || defined(_DEBUG)
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 #endif
+
+
+// Include for SetDebugObjectName()
+#include <DirectXHelpers.h>
+using DirectX::SetDebugObjectName;
 
 
 //----------------------------------------------------------------------------------
@@ -24,10 +25,10 @@ namespace DX {
 	// Helper class for COM exceptions
 	class com_exception : public std::exception {
 		public:
-			com_exception(HRESULT hr, string msg = "") : result(hr), msg(msg) {}
+			com_exception(HRESULT hr, std::string msg = "") : result(hr), msg(msg) {}
 
 			virtual const char* what() const override {
-				ostringstream stream;
+				std::ostringstream stream;
 
 				stream << msg << " (Failure with HRESULT of " << std::hex << result << ")";
 
@@ -36,17 +37,17 @@ namespace DX {
 
 		private:
 			HRESULT result;
-			string msg;
+			std::string msg;
 	};
 
 	// Helper utility converts D3D API failures into exceptions
-	inline void ThrowIfFailed(HRESULT hr, string msg = "") {
+	inline void ThrowIfFailed(HRESULT hr, std::string msg = "") {
 		if (FAILED(hr)) {
 			throw com_exception(hr, msg);
 		}
 	}
 
-	inline void AlertIfFailed(HRESULT hr, wstring msg = L"") {
+	inline void AlertIfFailed(HRESULT hr, std::wstring msg = L"") {
 		if (FAILED(hr)) {
 			if (!msg.empty()) {
 				MessageBox(NULL, msg.c_str(), L"Error", MB_OK);
@@ -67,9 +68,9 @@ namespace DX {
 		}
 	}
 
-	inline void LogIfFailed(HRESULT hr, string msg = "") {
+	inline void LogIfFailed(HRESULT hr, std::string msg = "") {
 		if (FAILED(hr)) {
-			ofstream file;
+			std::ofstream file;
 
 			file.open("log.txt", std::ofstream::out | std::ofstream::app);
 			if (file.fail()) {

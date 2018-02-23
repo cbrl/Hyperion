@@ -4,16 +4,12 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
-#include <wrl\client.h>
 #include <d3d11.h>
 #include <dxgi.h>
 #include "util\engine_util.h"
+#include "util\datatypes\datatypes.h"
 
-using Microsoft::WRL::ComPtr;
 using namespace DirectX;
-
-static const float zNear = 0.1f;
-static const float zFar  = 1000.0f;
 
 class Direct3D {
 	public:
@@ -33,16 +29,6 @@ class Direct3D {
 			return device_context.Get();
 		}
 
-		XMMATRIX GetWorldMatrix() const {
-			return world_matrix;
-		}
-		XMMATRIX GetProjectionMatrix() const {
-			return projection_matrix;
-		}
-		XMMATRIX GetOrthoMatrix() const {
-			return ortho_matrix;
-		}
-
 
 	private:
 		void Init();
@@ -59,10 +45,6 @@ class Direct3D {
 		ComPtr<ID3D11RenderTargetView> render_target_view;
 		D3D11_VIEWPORT                 window_viewport;
 		D3D_DRIVER_TYPE                driver_type;
-
-		XMMATRIX world_matrix;
-		XMMATRIX projection_matrix;
-		XMMATRIX ortho_matrix;
 
 		HWND hWnd;
 		int  window_width;

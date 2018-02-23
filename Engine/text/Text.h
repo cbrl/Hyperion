@@ -1,19 +1,15 @@
 #pragma once
 
-#include <string>
-#include <memory>
 #include <Windows.h>
-#include <wrl\client.h>
 #include <d3d11.h>
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
 #include <DirectXColors.h>
+#include "util\datatypes\datatypes.h"
 
-using std::wstring;
-using std::unique_ptr;
-using std::make_unique;
-using Microsoft::WRL::ComPtr;
+
 using namespace DirectX;
+
 
 class Text {
 	public:

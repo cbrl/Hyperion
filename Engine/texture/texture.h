@@ -1,10 +1,7 @@
 #pragma once
 
-#include <cstdint>
-#include <wrl\client.h>
 #include <d3d11.h>
-
-using Microsoft::WRL::ComPtr;
+#include "util\datatypes\datatypes.h"
 
 
 class Texture {

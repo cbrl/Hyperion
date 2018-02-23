@@ -1,9 +1,7 @@
 #pragma once
 
-#include <memory>
-#include <DirectXMath.h>
-
 #include "util\math\math.h"
+#include "util\datatypes\datatypes.h"
 #include "geometry\frustum\frustum.h"
 #include "shader\shader.h"
 #include "shader\hlsl.h"
@@ -13,7 +11,6 @@
 #include "scene\scene.h"
 
 
-using std::unique_ptr;
 using namespace DirectX;
 
 

@@ -1,12 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <wrl\client.h>
 #include <d3d11.h>
 #include "util\engine_util.h"
-
-using std::vector;
-using Microsoft::WRL::ComPtr;
+#include "util\datatypes\datatypes.h"
 
 
 template<typename DataT>
@@ -18,6 +14,10 @@ class StructuredBuffer {
 		~StructuredBuffer() = default;
 
 		void UpdateData(ID3D11Device* device, ID3D11DeviceContext* device_context, const vector<DataT>& data) {
+			if (data.size() == 0) {
+				return;
+			}
+
 			// Recreate the buffer if the data being fed to it is larger than the buffer
 			if (data.size() > size) {
 				size = static_cast<uint32_t>(data.size());
@@ -53,6 +53,8 @@ class StructuredBuffer {
 			DX::ThrowIfFailed(device->CreateBuffer(&desc, nullptr, buffer.ReleaseAndGetAddressOf()),
 			                  "Failed to create structured buffer");
 
+			SetDebugObjectName(buffer.Get(), "Structured Buffer");
+
 
 			D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
 			srv_desc.Buffer.FirstElement = 0;
@@ -62,6 +64,8 @@ class StructuredBuffer {
 
 			DX::ThrowIfFailed(device->CreateShaderResourceView(buffer.Get(), &srv_desc, srv.ReleaseAndGetAddressOf()),
 							  "Failed to create structured buffer SRV");
+
+			SetDebugObjectName(srv.Get(), "Structured Buffer SRV");
 		}
 
 

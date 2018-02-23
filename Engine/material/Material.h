@@ -1,14 +1,8 @@
 #pragma once
 
-#include <string>
-#include <wrl\client.h>
-#include <d3d11.h>
-#include <DirectXMath.h>
+#include "util\math\math.h"
+#include "util\datatypes\datatypes.h"
 #include "texture\texture.h"
-
-using std::wstring;
-using std::shared_ptr;
-using Microsoft::WRL::ComPtr;
 
 using namespace DirectX;
 

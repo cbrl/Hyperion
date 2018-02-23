@@ -172,6 +172,9 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 
 void System::OnResize(int window_width, int window_height) {
-	if (rendering_mgr == nullptr) return;
+	if (!rendering_mgr) return;
 	rendering_mgr->GetD3D()->OnResize(window_width, window_height);
+	
+	if (!scene) return;
+	scene->camera->OnResize(window_width, window_height);
 }

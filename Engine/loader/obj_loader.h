@@ -1,17 +1,12 @@
 #pragma once
 
 #include <fstream>
-#include <string>
-#include <cwchar>
-#include <vector>
-#include <map>
 #include <algorithm>
 #include <d3d11.h>
-#include <DirectXMath.h>
 
 #include "util\math\math.h"
+#include "util\datatypes\datatypes.h"
 #include "geometry\mesh\vertex_types.h"
-#include "util\string\string.h"
 #include "texture\texture_mgr.h"
 #include "geometry\model\model.h"
 #include "geometry\mesh\mesh.h"
@@ -19,9 +14,6 @@
 #include "material\material.h"
 
 using std::stoi;
-using std::wstring;
-using std::map;
-using std::vector;
 using std::wifstream;
 using std::wstringstream;
 

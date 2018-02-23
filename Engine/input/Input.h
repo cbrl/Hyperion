@@ -1,11 +1,9 @@
 #pragma once
 
-#include <wrl\client.h>
 #include <Keyboard.h>
 #include <Mouse.h>
+#include "util\datatypes\datatypes.h"
 
-using std::unique_ptr;
-using std::make_unique;
 using namespace DirectX;
 
 class Input {

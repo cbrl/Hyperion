@@ -1,5 +1,5 @@
 #include <d3d11.h>
-#include <DirectXMath.h>
+#include "util\datatypes\datatypes.h"
 #include "geometry\boundingvolume\bounding_volume.h"
 
 using namespace DirectX;

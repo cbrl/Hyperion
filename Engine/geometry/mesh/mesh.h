@@ -1,12 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <wrl\client.h>
 #include <d3d11.h>
+#include "util\datatypes\datatypes.h"
 #include "material\material.h"
-
-using std::vector;
-using Microsoft::WRL::ComPtr;
 
 
 class Mesh {

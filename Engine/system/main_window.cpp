@@ -8,10 +8,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-MainWindow::MainWindow() :
-	hInstance(),
-	hWnd(),
-	appName()
+MainWindow::MainWindow()
+	: hInstance()
+	, hWnd()
+	, appName()
 {
 	handle = this;
 }
