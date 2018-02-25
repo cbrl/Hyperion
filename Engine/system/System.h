@@ -36,7 +36,7 @@ class System : public MainWindow {
 
 		virtual LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
 
-		void OnResize(i32 window_width, i32 window_height);
+		void OnResize(u32 window_width, u32 window_height) const;
 
 		HWND GetHWND()         const { return hWnd; }
 		u32  GetWindowWidth()  const { return window_width; }

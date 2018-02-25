@@ -13,6 +13,9 @@ class StructuredBuffer {
 		}
 		~StructuredBuffer() = default;
 
+		ID3D11Buffer* const* GetBufferAddress() const { return buffer.GetAddressOf(); }
+		ID3D11ShaderResourceView* const* GetSRVAddress() const { return srv.GetAddressOf(); }
+
 		void UpdateData(ID3D11Device* device, ID3D11DeviceContext* device_context, const vector<DataT>& data) {
 			if (data.size() == 0) {
 				return;
@@ -34,9 +37,6 @@ class StructuredBuffer {
 
 			device_context->Unmap(buffer.Get(), NULL);
 		}
-
-		ID3D11Buffer* const* GetBufferAddress() const { return buffer.GetAddressOf(); }
-		ID3D11ShaderResourceView* const* GetSRVAddress() const { return srv.GetAddressOf(); }
 
 
 	private:

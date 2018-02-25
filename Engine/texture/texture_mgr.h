@@ -34,7 +34,7 @@ class TextureMgr {
 
 	private:
 		map<wstring, shared_ptr<Texture>>         texture_map;
-		map<u32, shared_ptr<Texture>>            color_texture_map;
+		map<u32, shared_ptr<Texture>>             color_texture_map;
 		map<vector<wstring>, shared_ptr<Texture>> texture_array_map;
 };
 

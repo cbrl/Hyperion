@@ -64,8 +64,8 @@ struct MaterialBuffer {
 	float4 diffuse;
 	float4 specular;
 	float4 emissive;
-	float    optical_density;
-	float    dissolve;
+	float  optical_density;
+	float  dissolve;
 	float2 pad;
 };
 
@@ -117,8 +117,8 @@ struct LightBuffer {
 	u32 pad;
 
 	float4 fog_color;
-	float    fog_start;
-	float    fog_range;
+	float  fog_start;
+	float  fog_range;
 	float2 pad2;
 };
 
@@ -143,7 +143,7 @@ struct DirectionalLight {
 	float4 diffuse_color;
 	float4 specular; //specular.w is the specular power
 	float3 direction;
-	float    pad;
+	float  pad;
 };
 
 
@@ -172,9 +172,9 @@ struct PointLight {
 	float4 diffuse_color;
 	float4 specular; //specular.w is the specular power
 	float3 position;
-	float    range;
+	float  range;
 	float3 attenuation;
-	float    pad;
+	float  pad;
 };
 
 
@@ -207,9 +207,9 @@ struct SpotLight {
 	float4 diffuse_color;
 	float4 specular; //specular.w is the specular power
 	float3 position;
-	float    range;
+	float  range;
 	float3 direction;
-	float    spot;
+	float  spot;
 	float3 attenuation;
-	float    pad;
+	float  pad;
 };

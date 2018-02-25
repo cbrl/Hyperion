@@ -106,7 +106,7 @@ class OBJLoader {
 		wstring meshMatLib;
 
 		// Material names for each group <grp number, mat name>
-		map<i32, wstring> group_materials;
+		map<u32, wstring> group_materials;
 
 		// Vector of material descriptions
 		vector<OBJMaterial> materials;

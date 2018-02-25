@@ -33,7 +33,7 @@ class Text {
 		unique_ptr<SpriteBatch> sprite_batch;
 
 		wstring     text;
-		float2    position;
+		float2      position;
 		XMVECTORF32 color;
 		float       rotation;
 };

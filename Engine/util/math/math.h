@@ -6,7 +6,7 @@
 //#include "util\math\directxmath\extensions.h"
 
 
-using DirectX::XMVECTOR;
+using namespace DirectX;
 
 
 // Determine if a point is inside a triangle using barycentric coordinates

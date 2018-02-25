@@ -15,10 +15,12 @@ class RenderingMgr {
 	public:
 		static const RenderingMgr* Get();
 
-		RenderingMgr(HWND window);
+		RenderingMgr();
 		~RenderingMgr();
 
 		void Init(u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
+
+		void OnResize(u32 window_width, u32 window_height) const { direct3D->OnResize(window_width, window_height); }
 
 
 		//----------------------------------------------------------------------------------
@@ -37,15 +39,15 @@ class RenderingMgr {
 		// Get members
 		//----------------------------------------------------------------------------------
 
-		Direct3D* GetD3D() const {
+		const Direct3D* GetD3D() const {
 			return direct3D.get();
 		}
 
-		Renderer* GetRenderer() const {
+		const Renderer* GetRenderer() const {
 			return renderer.get();
 		}
 
-		RenderStateMgr* GetRenderStateMgr() const {
+		const RenderStateMgr* GetRenderStateMgr() const {
 			return render_state_mgr.get();
 		}
 
@@ -59,6 +61,4 @@ class RenderingMgr {
 		unique_ptr<RenderStateMgr> render_state_mgr;
 		unique_ptr<TextureMgr>     texture_mgr;
 		unique_ptr<Renderer>       renderer;
-
-		HWND hWnd;
 };

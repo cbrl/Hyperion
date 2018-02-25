@@ -11,7 +11,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 MainWindow::MainWindow()
 	: hInstance()
 	, hWnd()
-	, appName()
+	, app_name()
 {
 	handle = this;
 }
@@ -22,7 +22,7 @@ MainWindow::~MainWindow() {
 
 
 bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
-	appName      = name;
+	app_name      = name;
 	window_width  = width;
 	window_height = height;
 
@@ -47,7 +47,7 @@ bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 	wc.lpszMenuName = NULL;
-	wc.lpszClassName = appName;
+	wc.lpszClassName = app_name;
 	wc.cbSize = sizeof(WNDCLASSEX);
 
 
@@ -58,7 +58,7 @@ bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
 	}
 
 	// Create window and store window handle
-	hWnd = CreateWindowEx(WS_EX_APPWINDOW, appName, appName, WS_OVERLAPPEDWINDOW,
+	hWnd = CreateWindowEx(WS_EX_APPWINDOW, app_name, app_name, WS_OVERLAPPEDWINDOW,
 							xPos, yPos, window_width, window_height, NULL, NULL, hInstance, NULL);
 	if (!hWnd) {
 		OutputDebugString(L"Failed to create main window\n");

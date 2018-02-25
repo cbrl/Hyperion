@@ -26,7 +26,7 @@ bool System::Init() {
 	}
 
 	// Initialize rendering manager
-	rendering_mgr = make_unique<RenderingMgr>(hWnd);
+	rendering_mgr = make_unique<RenderingMgr>();
 	rendering_mgr->Init(window_width, window_height, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
 
 	// Create input handler
@@ -171,9 +171,9 @@ LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-void System::OnResize(i32 window_width, i32 window_height) {
+void System::OnResize(u32 window_width, u32 window_height) const {
 	if (!rendering_mgr) return;
-	rendering_mgr->GetD3D()->OnResize(window_width, window_height);
+	rendering_mgr->OnResize(window_width, window_height);
 	
 	if (!scene) return;
 	scene->camera->OnResize(window_width, window_height);

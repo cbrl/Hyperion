@@ -39,6 +39,7 @@ void ForwardRenderer::Render(Scene& scene) {
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
 
+	// Bind the default depth render state
 	RenderStateMgr::Get()->BindDepthDefault(device_context.Get());
 
 

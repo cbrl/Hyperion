@@ -16,6 +16,11 @@ class Camera {
 			   float fov, float z_near, float z_far);
 
 
+		// Calculate new view matrix and velocity
+		void Update(float delta_time);
+
+
+		// Resize the viewport
 		void OnResize(u32 width, u32 height) {
 			viewport_width = width;
 			viewport_height = height;
@@ -28,10 +33,6 @@ class Camera {
 		// Move and rotate camera
 		void Move(float3 units);
 		void Rotate(float3 units);
-
-
-		// Calculate new view matrix and velocity
-		void Update(float deltaTime);
 
 
 		void SetPosition(float3 newPosition) { 
@@ -69,7 +70,7 @@ class Camera {
 		XMMATRIX GetProjMatrix()  const { return projection_matrix; }
 		XMMATRIX GetOrthoMatrix() const { return ortho_matrix; }
 
-		// Get position, rotation, velocity
+		// Get position, rotation, velocity (in units/ms)
 		float3 GetRotation() const { return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
 		float3 GetVelocity() const { return velocity; }
 		float3 GetPosition() const {
@@ -105,12 +106,12 @@ class Camera {
 		XMVECTOR look_at;
 		XMVECTOR position;
 
-		// Position, veloctiy, acceleration
+		// Position, veloctiy, acceleration (units per ms)
 		float3 move_units;
 		float3 velocity;
-		float    move_accel;
-		float    move_decel;
-		float    max_velocity;
+		float  move_accel;
+		float  move_decel;
+		float  max_velocity;
 
 		// Pitch, yaw, roll
 		float pitch;

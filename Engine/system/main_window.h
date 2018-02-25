@@ -19,10 +19,10 @@ class MainWindow {
 		virtual LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
 
 
-	public:
+	protected:
 		HINSTANCE hInstance;
 		HWND      hWnd;
-		LPCWSTR   appName;
+		LPCWSTR   app_name;
 		u32       window_width;
 		u32       window_height;
 };

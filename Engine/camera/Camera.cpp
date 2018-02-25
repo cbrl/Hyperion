@@ -9,9 +9,9 @@ Camera::Camera()
 	, look_at(XMVectorZero())
 	, position(XMVectorZero())
 	, velocity(0.0f, 0.0f, 0.0f)
-	, move_accel(0.0001f)
-	, move_decel(0.0001f)
-	, max_velocity(0.02f)
+	, move_accel(0.00002f)
+	, move_decel(0.00005f)
+	, max_velocity(0.01f)
 	, is_moving(false)
 
 	, turn_factor(0.002f)
@@ -149,7 +149,8 @@ void Camera::Rotate(float3 units) {
 }
 
 
-void Camera::Update(float deltaTime) {
+void Camera::Update(float delta_time) {
+
 	XMVECTOR velocityVec = XMLoadFloat3(&velocity);
 
 	// Limit veloctiy to maximum
@@ -161,13 +162,13 @@ void Camera::Update(float deltaTime) {
 
 
 	// Move camera
-	position += camera_right * velocity.x * deltaTime;
-	position += camera_up    * velocity.y * deltaTime;
+	position += camera_right * velocity.x * delta_time;
+	position += camera_up    * velocity.y * delta_time;
 	if (fps_mode) {
-		position += fps_forward * velocity.z * deltaTime;
+		position += fps_forward * velocity.z * delta_time;
 	}
 	else {
-		position += camera_forward * velocity.z * deltaTime;
+		position += camera_forward * velocity.z * delta_time;
 	}
 
 
@@ -193,7 +194,7 @@ void Camera::Update(float deltaTime) {
 		float deceleration;
 
 		if (velocity.x != 0.0f) {
-			deceleration = copysign(1.0f, velocity.x) * move_decel * deltaTime;
+			deceleration = copysign(1.0f, velocity.x) * move_decel * delta_time;
 
 			if (abs(deceleration) > abs(velocity.x)) {
 				velocity.x = 0.0f;
@@ -204,7 +205,7 @@ void Camera::Update(float deltaTime) {
 		}
 
 		if (velocity.y != 0.0f) {
-			deceleration = copysign(1.0f, velocity.y) * move_decel * deltaTime;
+			deceleration = copysign(1.0f, velocity.y) * move_decel * delta_time;
 
 			if (abs(deceleration) > abs(velocity.y)) {
 				velocity.y = 0.0f;
@@ -215,7 +216,7 @@ void Camera::Update(float deltaTime) {
 		}
 
 		if (velocity.z != 0.0f) {
-			deceleration = copysign(1.0f, velocity.z) * move_decel * deltaTime;
+			deceleration = copysign(1.0f, velocity.z) * move_decel * delta_time;
 
 			if (abs(deceleration) > abs(velocity.z)) {
 				velocity.z = 0.0f;

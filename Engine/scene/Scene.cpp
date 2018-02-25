@@ -123,7 +123,7 @@ void Scene::UpdateMetrics(i32 FPS, i32 CPU, i32 mouseX, i32 mouseY) {
 	                              + L"\nY: " + to_wstring(rotation.y)
 	                              + L"\nZ: " + to_wstring(rotation.z));
 
-	float3 velocity = camera->GetVelocity();
+	float3 velocity = camera->GetVelocity() * 1000.0f;
 	texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)
 	                              + L"\nY: " + to_wstring(velocity.y)
 	                              + L"\nZ: " + to_wstring(velocity.z));

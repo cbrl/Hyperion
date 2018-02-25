@@ -81,9 +81,9 @@ class Model {
 		Mesh mesh;
 		AABB aabb;
 
-		XMMATRIX     position;
-		XMMATRIX     rotation;
-		XMMATRIX     scale;
+		XMMATRIX position;
+		XMMATRIX rotation;
+		XMMATRIX scale;
 
 		vector<ModelPart> model_parts;
 		vector<Material>  materials;
