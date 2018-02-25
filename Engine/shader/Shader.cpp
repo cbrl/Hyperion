@@ -13,7 +13,7 @@ void VertexShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
 	ComPtr<ID3D10Blob> shader_buffer = {};
 
 	// Shader compile flags
-	uint32_t flags = D3D10_SHADER_ENABLE_STRICTNESS; 
+	u32 flags = D3D10_SHADER_ENABLE_STRICTNESS; 
 
 	// Disable optimization in debug builds
 	#if defined(DEBUG) || defined(_DEBUG)
@@ -43,7 +43,7 @@ void VertexShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
 
 
 	// Create the vertex input layout
-	DX::ThrowIfFailed(device->CreateInputLayout(inputElementDesc, static_cast<uint32_t>(numElements), shader_buffer->GetBufferPointer(),
+	DX::ThrowIfFailed(device->CreateInputLayout(inputElementDesc, static_cast<u32>(numElements), shader_buffer->GetBufferPointer(),
 												shader_buffer->GetBufferSize(), layout.ReleaseAndGetAddressOf()),
 					  "Failed to create input layout");
 }
@@ -60,7 +60,7 @@ void PixelShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename) {
 	ComPtr<ID3D10Blob> shader_buffer = {};
 
 	// Shader compile flags
-	uint32_t flags = D3D10_SHADER_ENABLE_STRICTNESS;
+	u32 flags = D3D10_SHADER_ENABLE_STRICTNESS;
 
 	// Disable optimization in debug builds
 	#if defined(DEBUG) || defined(_DEBUG)

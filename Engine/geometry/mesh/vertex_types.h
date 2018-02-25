@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include "util\datatypes\datatypes.h"
 #include "util\math\math.h"
 
 
@@ -10,7 +11,7 @@ using namespace DirectX;
 struct VertexPosition {
 	VertexPosition() = default;
 
-	VertexPosition(const XMFLOAT3& position)
+	VertexPosition(const float3& position)
 		: position(position)
 	{}
 
@@ -26,9 +27,9 @@ struct VertexPosition {
 		return !(*this == compare);
 	}
 
-	XMFLOAT3 position;
+	float3 position;
 
-	static const int InputElementCount = 1;
+	static const i32 InputElementCount = 1;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
 };
 
@@ -36,7 +37,7 @@ struct VertexPosition {
 struct VertexPositionColor {
 	VertexPositionColor() = default;
 
-	VertexPositionColor(const XMFLOAT3& position, const XMFLOAT4& color)
+	VertexPositionColor(const float3& position, const float4& color)
 		: position(position)
 		, color(color)
 	{}
@@ -55,10 +56,10 @@ struct VertexPositionColor {
 		return !(*this == compare);
 	}
 
-	XMFLOAT3 position;
-	XMFLOAT4 color;
+	float3 position;
+	float4 color;
 
-	static const int InputElementCount = 2;
+	static const i32 InputElementCount = 2;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
 };
 
@@ -66,7 +67,7 @@ struct VertexPositionColor {
 struct VertexPositionTexture {
 	VertexPositionTexture() = default;
 
-	VertexPositionTexture(const XMFLOAT3& position, const XMFLOAT2& texCoord)
+	VertexPositionTexture(const float3& position, const float2& texCoord)
 		: position(position)
 		, texCoord(texCoord)
 	{}
@@ -85,10 +86,10 @@ struct VertexPositionTexture {
 		return !(*this == compare);
 	}
 
-	XMFLOAT3 position;
-	XMFLOAT2 texCoord;
+	float3 position;
+	float2 texCoord;
 
-	static const int InputElementCount = 2;
+	static const i32 InputElementCount = 2;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
 };
 
@@ -96,7 +97,7 @@ struct VertexPositionTexture {
 struct VertexPositionDualTexture {
 	VertexPositionDualTexture() = default;
 
-	VertexPositionDualTexture(const XMFLOAT3& position, const XMFLOAT2& texCoord0, const XMFLOAT2& texCoord1)
+	VertexPositionDualTexture(const float3& position, const float2& texCoord0, const float2& texCoord1)
 		: position(position)
 		, texCoord0(texCoord0)
 		, texCoord1(texCoord1)
@@ -120,11 +121,11 @@ struct VertexPositionDualTexture {
 		return !(*this == compare);
 	}
 
-	XMFLOAT3 position;
-	XMFLOAT2 texCoord0;
-	XMFLOAT2 texCoord1;
+	float3 position;
+	float2 texCoord0;
+	float2 texCoord1;
 
-	static const int InputElementCount = 3;
+	static const i32 InputElementCount = 3;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
 };
 
@@ -132,7 +133,7 @@ struct VertexPositionDualTexture {
 struct VertexPositionNormal {
 	VertexPositionNormal() = default;
 
-	VertexPositionNormal(const XMFLOAT3& position, const XMFLOAT3& normal)
+	VertexPositionNormal(const float3& position, const float3& normal)
 		: position(position)
 		, normal(normal)
 	{}
@@ -151,10 +152,10 @@ struct VertexPositionNormal {
 		return !(*this == compare);
 	}
 
-	XMFLOAT3 position;
-	XMFLOAT3 normal;
+	float3 position;
+	float3 normal;
 
-	static const int InputElementCount = 2;
+	static const i32 InputElementCount = 2;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
 };
 
@@ -162,7 +163,7 @@ struct VertexPositionNormal {
 struct VertexPositionNormalColor {
 	VertexPositionNormalColor() = default;
 
-	VertexPositionNormalColor(const XMFLOAT3& position, const XMFLOAT3& normal, const XMFLOAT4& color)
+	VertexPositionNormalColor(const float3& position, const float3& normal, const float4& color)
 		: position(position)
 		, normal(normal)
 		, color(color)
@@ -184,11 +185,11 @@ struct VertexPositionNormalColor {
 		return !(*this == compare);
 	}
 
-	XMFLOAT3 position;
-	XMFLOAT3 normal;
-	XMFLOAT4 color;
+	float3 position;
+	float3 normal;
+	float4 color;
 
-	static const int InputElementCount = 3;
+	static const i32 InputElementCount = 3;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
 };
 
@@ -196,7 +197,7 @@ struct VertexPositionNormalColor {
 struct VertexPositionNormalTexture {
 	VertexPositionNormalTexture() = default;
 
-	VertexPositionNormalTexture(const XMFLOAT3& position, const XMFLOAT3& normal, const XMFLOAT2& texCoord)
+	VertexPositionNormalTexture(const float3& position, const float3& normal, const float2& texCoord)
 		: position(position)
 		, normal(normal)
 		, texCoord(texCoord)
@@ -218,10 +219,10 @@ struct VertexPositionNormalTexture {
 		return !(*this == compare);
 	}
 
-	XMFLOAT3 position;
-	XMFLOAT3 normal;
-	XMFLOAT2 texCoord;
+	float3 position;
+	float3 normal;
+	float2 texCoord;
 
-	static const int InputElementCount = 3;
+	static const i32 InputElementCount = 3;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
 };

@@ -11,12 +11,12 @@ class FPS {
 		~FPS();
 
 		void Tick();
-		int  GetFPS();
+		i32  GetFPS();
 
 
 	private:
-		int   fps;
-		int   count;
+		i32   fps;
+		i32   count;
 		ULONG start_time;
 };
 

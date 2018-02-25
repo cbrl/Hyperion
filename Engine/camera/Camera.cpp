@@ -39,7 +39,7 @@ Camera::Camera()
 }
 
 
-Camera::Camera(uint32_t viewportWidth, uint32_t viewportHeight,
+Camera::Camera(u32 viewportWidth, u32 viewportHeight,
 			   float FOV, float zNear, float zFar) : Camera()
 {
 	viewport_width = viewportWidth;
@@ -55,7 +55,7 @@ Camera::Camera(uint32_t viewportWidth, uint32_t viewportHeight,
 }
 
 
-void Camera::Move(XMFLOAT3 units) {
+void Camera::Move(float3 units) {
 	// is_moving determines if the camera will decelerate when Update is called
 	is_moving = true;
 
@@ -95,7 +95,7 @@ void Camera::Move(XMFLOAT3 units) {
 }
 
 
-void Camera::Rotate(XMFLOAT3 units) {
+void Camera::Rotate(float3 units) {
 	//----------------------------------------------------------------------------------
 	// X rotation (Pitch)
 	//----------------------------------------------------------------------------------

@@ -15,12 +15,12 @@ class Direct3D {
 	public:
 		static const Direct3D* Get();
 
-		Direct3D(HWND hWnd, int window_width, int window_height, bool fullscreen, bool vSync, bool MSAA);
+		Direct3D(HWND hWnd, i32 window_width, i32 window_height, bool fullscreen, bool vSync, bool MSAA);
 		~Direct3D();
 
 		void BeginScene(float red, float green, float blue, float alpha) const;
 		void EndScene() const;
-		void OnResize(int winWidth, int winHeight);
+		void OnResize(i32 winWidth, i32 winHeight);
 
 		ID3D11Device* GetDevice() const {
 			return device.Get();
@@ -47,13 +47,13 @@ class Direct3D {
 		D3D_DRIVER_TYPE                driver_type;
 
 		HWND hWnd;
-		int  window_width;
-		int  window_height;
+		i32  window_width;
+		i32  window_height;
 		bool enable_vsync;
 		bool enable_fullscreen;
 		bool enable_4xMSAA;
-		UINT MSAA4x_quality;
-		UINT refresh_rate_numerator;
-		UINT refresh_rate_denominator;
+		u32  MSAA4x_quality;
+		u32  refresh_rate_numerator;
+		u32  refresh_rate_denominator;
 };
 

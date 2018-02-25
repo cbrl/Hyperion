@@ -22,15 +22,15 @@ class RenderStateMgr {
 		// Bind states
 		//----------------------------------------------------------------------------------
 		// Blend states
-		void BindOpaque(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
-		void BindAlphaBlend(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
-		void BindAdditive(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
-		void BindNonPremultiplied(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, unsigned int sampleMask = 0xffffffff) const;
+		void BindOpaque(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, u32 sampleMask = 0xffffffff) const;
+		void BindAlphaBlend(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, u32 sampleMask = 0xffffffff) const;
+		void BindAdditive(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, u32 sampleMask = 0xffffffff) const;
+		void BindNonPremultiplied(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, u32 sampleMask = 0xffffffff) const;
 
 		// Depth stencil states
-		void BindDepthNone(ID3D11DeviceContext* device_context, unsigned int stencilRef = 0) const;
-		void BindDepthDefault(ID3D11DeviceContext* device_context, unsigned int stencilRef = 0) const;
-		void BindDepthRead(ID3D11DeviceContext* device_context, unsigned int stencilRef = 0) const;
+		void BindDepthNone(ID3D11DeviceContext* device_context, u32 stencilRef = 0) const;
+		void BindDepthDefault(ID3D11DeviceContext* device_context, u32 stencilRef = 0) const;
+		void BindDepthRead(ID3D11DeviceContext* device_context, u32 stencilRef = 0) const;
 
 		// Rasterizer states
 		void BindCullNone(ID3D11DeviceContext* device_context) const;

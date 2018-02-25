@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include "util\math\math.h"
+#include "util\datatypes\datatypes.h"
 #include "rendering\buffer\buffers.h"
 
 using namespace DirectX;
@@ -11,11 +12,11 @@ class Camera {
 		Camera();
 		~Camera() = default;
 
-		Camera(uint32_t viewport_width, uint32_t viewport_height,
+		Camera(u32 viewport_width, u32 viewport_height,
 			   float fov, float z_near, float z_far);
 
 
-		void OnResize(uint32_t width, uint32_t height) {
+		void OnResize(u32 width, u32 height) {
 			viewport_width = width;
 			viewport_height = height;
 			aspect_ratio = (float)viewport_width / (float)viewport_height;
@@ -25,19 +26,19 @@ class Camera {
 
 
 		// Move and rotate camera
-		void Move(XMFLOAT3 units);
-		void Rotate(XMFLOAT3 units);
+		void Move(float3 units);
+		void Rotate(float3 units);
 
 
 		// Calculate new view matrix and velocity
 		void Update(float deltaTime);
 
 
-		void SetPosition(XMFLOAT3 newPosition) { 
+		void SetPosition(float3 newPosition) { 
 			position = XMVectorSet(newPosition.x, newPosition.y, newPosition.z, 0.0f);
 		}
 
-		void SetRotation(XMFLOAT3 rotation) {
+		void SetRotation(float3 rotation) {
 			pitch = rotation.x;
 			yaw   = rotation.y;
 			roll  = rotation.z;
@@ -69,18 +70,18 @@ class Camera {
 		XMMATRIX GetOrthoMatrix() const { return ortho_matrix; }
 
 		// Get position, rotation, velocity
-		XMFLOAT3 GetRotation() const { return XMFLOAT3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
-		XMFLOAT3 GetVelocity() const { return velocity; }
-		XMFLOAT3 GetPosition() const {
-			XMFLOAT3 pos;
+		float3 GetRotation() const { return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
+		float3 GetVelocity() const { return velocity; }
+		float3 GetPosition() const {
+			float3 pos;
 			XMStoreFloat3(&pos, position);
 			return pos;
 		}
 
 
 	private:
-		uint32_t viewport_width;
-		uint32_t viewport_height;
+		u32   viewport_width;
+		u32   viewport_height;
 		float z_near;
 		float z_far;
 		float fov;
@@ -97,16 +98,16 @@ class Camera {
 		static constexpr XMVECTOR default_up = { 0.0f, 1.0f, 0.0f, 0.0f };
 
 		// Looking vectors
-		XMVECTOR    camera_forward;
-		XMVECTOR    fps_forward;
-		XMVECTOR    camera_right;
-		XMVECTOR    camera_up;
-		XMVECTOR    look_at;
-		XMVECTOR    position;
+		XMVECTOR camera_forward;
+		XMVECTOR fps_forward;
+		XMVECTOR camera_right;
+		XMVECTOR camera_up;
+		XMVECTOR look_at;
+		XMVECTOR position;
 
 		// Position, veloctiy, acceleration
-		XMFLOAT3 move_units;
-		XMFLOAT3 velocity;
+		float3 move_units;
+		float3 velocity;
 		float    move_accel;
 		float    move_decel;
 		float    max_velocity;

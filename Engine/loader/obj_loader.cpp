@@ -45,7 +45,7 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context,
 	
 	// Create the materials
 	vector<Material> mtlVector;
-	for (int i = 0; i < mtl_count; ++i) {
+	for (i32 i = 0; i < mtl_count; ++i) {
 		Material mtl;
 
 		mtl.name = materials[i].name;
@@ -67,7 +67,6 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context,
 		mtl.Kd = materials[i].Kd;
 		mtl.Ks = materials[i].Ks;
 		mtl.Ke = materials[i].Ke;
-		mtl.Ns = materials[i].Ns;
 		mtl.d  = materials[i].d;
 		mtl.Ni = materials[i].Ni;
 		mtl.illum = materials[i].illum;
@@ -121,7 +120,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 		// Vertex
 		if (token.compare(OBJTokens::vertex) == 0) {
-			XMFLOAT3 position;
+			float3 position;
 			stream >> position.x >> position.y >> position.z;
 
 			if (RH_coord) {
@@ -133,7 +132,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 		// Normal
 		else if (token.compare(OBJTokens::normal) == 0) {
-			XMFLOAT3 normal;
+			float3 normal;
 			stream >> normal.x >> normal.y >> normal.z;
 
 			if (RH_coord) {
@@ -145,7 +144,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 		// Texture
 		else if (token.compare(OBJTokens::texture) == 0) {
-			XMFLOAT2 texCoord;
+			float2 texCoord;
 			stream >> texCoord.x >> texCoord.y;
 
 			if (RH_coord) {
@@ -256,7 +255,6 @@ void OBJLoader::LoadMaterials(wstring folder) {
 			stream >> materials[mtl_count - 1].Ks.x;
 			stream >> materials[mtl_count - 1].Ks.y;
 			stream >> materials[mtl_count - 1].Ks.z;
-			materials[mtl_count - 1].Ks.w = 1.0f;
 		}
 
 		// Emissive Color
@@ -269,7 +267,7 @@ void OBJLoader::LoadMaterials(wstring folder) {
 
 		// Specular Expononet
 		else if (token.compare(OBJTokens::specular_exponent) == 0) {
-			stream >> materials[mtl_count - 1].Ns;
+			stream >> materials[mtl_count - 1].Ks.w;
 		}
 
 		// Optical Density
@@ -282,7 +280,7 @@ void OBJLoader::LoadMaterials(wstring folder) {
 			ReadTransparency(line, false);
 		}
 
-		// Dissolve (transparency)
+		// Dissolve (transparency inverse)
 		else if (token.compare(OBJTokens::transparency_inv) == 0) {
 			ReadTransparency(line, true);
 		}
@@ -330,7 +328,7 @@ void OBJLoader::LoadMaterials(wstring folder) {
 
 	// Set the group's material to the index value of its
 	// material in the material vector.
-	for (int i = 0; i < group_count; ++i) {
+	for (i32 i = 0; i < group_count; ++i) {
 		bool hasMat = false;
 
 		// If the group doesn't have a material set, then
@@ -339,7 +337,7 @@ void OBJLoader::LoadMaterials(wstring folder) {
 			group_materials[i] = materials[0].name;
 		}
 
-		for (int j = 0; j < materials.size(); ++j) {
+		for (i32 j = 0; j < materials.size(); ++j) {
 			if (group_materials[i] == materials[j].name) {
 				group_material_indices.push_back(j);
 				hasMat = true;
@@ -384,7 +382,7 @@ void OBJLoader::ReadFace(wstring& line) {
 	Split(line, vList, L" ");
 
 	for (size_t i = 0; i < vList.size(); ++i) {
-		int type = 0;
+		i32 type = 0;
 
 		// Split the vertex definition into separate parts
 		Split(vList[i], vParts, L"/");
@@ -416,7 +414,7 @@ void OBJLoader::ReadFace(wstring& line) {
 			case 1:
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);  //Subtract 1 since arrays start at index 0
-				vertex.texCoord = XMFLOAT2(0.0f, 0.0f);
+				vertex.texCoord = float2(0.0f, 0.0f);
 				hasNormal = false;
 
 				vVerts.push_back(vertex);
@@ -439,7 +437,7 @@ void OBJLoader::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
 				vertex.normal = GetElement(vertex_normals, stoi(vParts[2])-1);
-				vertex.texCoord = XMFLOAT2(0.0f, 0.0f);
+				vertex.texCoord = float2(0.0f, 0.0f);
 				hasNormal = true;
 
 				vVerts.push_back(vertex);
@@ -489,14 +487,14 @@ void OBJLoader::ReadFace(wstring& line) {
 			auto pos = std::find(vertices.begin(), vertices.end(), vVerts[i]);
 			if (pos != vertices.end()) {
 				auto index = std::distance(vertices.begin(), pos);
-				indices.push_back(static_cast<uint32_t>(index));
+				indices.push_back(static_cast<u32>(index));
 			}
 		}
 	}
 
 	// Triangulate the face if there were more than 3 points
 	else if (vList.size() > 3) {
-		vector<UINT> vIndices;
+		vector<u32> vIndices;
 
 		// Triangulate the vertices
 		Triangulate(vVerts, vIndices);
@@ -516,12 +514,12 @@ void OBJLoader::ReadFace(wstring& line) {
 
 
 // Converts the input face into triangles. Returns a list of indices that correspond to the input vertex list.
-void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<UINT>& outIndices) {
+void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<u32>& outIndices) {
 	vector<VertexPositionNormalTexture> vVerts = inVerts;
 
 	while (true) {
-		for (uint32_t i = 0; i < vVerts.size(); ++i) {
-			XMFLOAT3 prev;
+		for (u32 i = 0; i < vVerts.size(); ++i) {
+			float3 prev;
 			if (i == 0) {
 				prev = vVerts[vVerts.size() - 1].position;
 			}
@@ -529,9 +527,9 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 				prev = vVerts[i - 1].position;
 			}
 
-			XMFLOAT3 curr = vVerts[i].position;
+			float3 curr = vVerts[i].position;
 
-			XMFLOAT3 next;
+			float3 next;
 			if (i == vVerts.size() - 1) {
 				next = vVerts[0].position;
 			}
@@ -542,7 +540,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 
 			// Create a triangle from previous, current, and next vertices
 			if (vVerts.size() == 3) {
-				for (uint32_t j = 0; j < vVerts.size(); ++j) {
+				for (u32 j = 0; j < vVerts.size(); ++j) {
 					if (inVerts[j].position == prev)
 						indices.push_back(j);
 					if (inVerts[j].position == curr)
@@ -557,7 +555,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 
 			if (vVerts.size() == 4) {
 				// Create a triangle
-				for (uint32_t j = 0; j < inVerts.size(); ++j) {
+				for (u32 j = 0; j < inVerts.size(); ++j) {
 					if (inVerts[j].position == prev)
 						indices.push_back(j);
 					if (inVerts[j].position == curr)
@@ -566,8 +564,8 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 						indices.push_back(j);
 				}
 
-				XMFLOAT3 temp;
-				for (uint32_t j = 0; j < vVerts.size(); ++j) {
+				float3 temp;
+				for (u32 j = 0; j < vVerts.size(); ++j) {
 					if (vVerts[j].position != prev &&
 						vVerts[j].position != curr &&
 						vVerts[j].position != next)
@@ -578,7 +576,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 				}
 
 				// Create a triangle
-				for (uint32_t j = 0; j < inVerts.size(); ++j) {
+				for (u32 j = 0; j < inVerts.size(); ++j) {
 					if (inVerts[j].position == prev)
 						indices.push_back(j);
 					if (inVerts[j].position == next)
@@ -606,7 +604,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 
 			// Ensure that no vertices are inside the triangle
 			bool inTriangle = false;
-			for (uint32_t j = 0; j < inVerts.size(); ++j) {
+			for (u32 j = 0; j < inVerts.size(); ++j) {
 				if (PointInTriangle(inVerts[j].position, prev, curr, next)
 					&& inVerts[j].position != prev
 					&& inVerts[j].position != curr
@@ -621,7 +619,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 			}
 
 			// Create a triangle from previous, current, and next vertices
-			for (uint32_t j = 0; j < inVerts.size(); ++j) {
+			for (u32 j = 0; j < inVerts.size(); ++j) {
 				if (inVerts[j].position == prev)
 					indices.push_back(j);
 				if (inVerts[j].position == curr)
@@ -631,7 +629,7 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 			}
 
 			// Delete current vertex from the list
-			for (uint32_t j = 0; j < vVerts.size(); ++j) {
+			for (u32 j = 0; j < vVerts.size(); ++j) {
 				if (vVerts[j].position == curr) {
 					vVerts.erase(vVerts.begin() + j);
 					break;

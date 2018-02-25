@@ -1,5 +1,6 @@
 #pragma once
 
+#include "util\datatypes\datatypes.h"
 #include "util\math\math.h"
 
 using namespace DirectX;
@@ -29,8 +30,8 @@ struct MatrixBuffer {
 
 struct CameraBuffer {
 	CameraBuffer() : position(0.0f, 0.0f, 0.0f), padding(0.0f) {}
-	CameraBuffer(XMFLOAT3 pos) : position(pos), padding(0.0f) {}
-	XMFLOAT3 position;
+	CameraBuffer(float3 pos) : position(pos), padding(0.0f) {}
+	float3 position;
 	float    padding;
 };
 
@@ -46,29 +47,26 @@ struct MaterialBuffer {
 		, diffuse(0.0f, 0.0f, 0.0f, 1.0f)
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
 		, emissive(0.0f, 0.0f, 0.0f, 1.0f)
-		, specular_power(1.0f)
 		, optical_density(0.0f)
 		, dissolve(0.0f)
-		, pad(0.0f)
+		, pad(0.0f, 0.0f)
 	{}
-	MaterialBuffer(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT4 specular, XMFLOAT4 emissive,
+	MaterialBuffer(float4 ambient, float4 diffuse, float4 specular, float4 emissive,
 				   float specular_power, float optical_density, float dissolve)
 		: ambient(ambient)
 		, diffuse(diffuse)
 		, specular(specular)
 		, emissive(emissive)
-		, specular_power(specular_power)
 		, dissolve(dissolve)
-		, pad(0.0f)
+		, pad(0.0f, 0.0f)
 	{}
-	XMFLOAT4 ambient;
-	XMFLOAT4 diffuse;
-	XMFLOAT4 specular;
-	XMFLOAT4 emissive;
-	float    specular_power;
+	float4 ambient;
+	float4 diffuse;
+	float4 specular;
+	float4 emissive;
 	float    optical_density;
 	float    dissolve;
-	float    pad;
+	float2 pad;
 };
 
 struct ModelBuffer {
@@ -102,8 +100,8 @@ struct LightBuffer {
 		, fog_range(0.0f)
 		, pad2(0.0f, 0.0f)
 	{}
-	LightBuffer(unsigned int point_lights, unsigned int directional_lights, unsigned int spot_lights,
-				XMFLOAT4 fog_color, float fog_start, float fog_range)
+	LightBuffer(u32 point_lights, u32 directional_lights, u32 spot_lights,
+				float4 fog_color, float fog_start, float fog_range)
 		: directional_light_count(directional_lights)
 		, point_light_count(point_lights)
 		, spot_light_count(spot_lights)
@@ -113,15 +111,15 @@ struct LightBuffer {
 		, fog_range(fog_range)
 		, pad2(0.0f, 0.0f)
 	{}
-	unsigned int directional_light_count;
-	unsigned int point_light_count;
-	unsigned int spot_light_count;
-	unsigned int pad;
+	u32 directional_light_count;
+	u32 point_light_count;
+	u32 spot_light_count;
+	u32 pad;
 
-	XMFLOAT4 fog_color;
+	float4 fog_color;
 	float    fog_start;
 	float    fog_range;
-	XMFLOAT2 pad2;
+	float2 pad2;
 };
 
 
@@ -133,7 +131,7 @@ struct DirectionalLight {
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
 		, pad(0.0f)
 	{}
-	DirectionalLight(XMFLOAT4 ambient, XMFLOAT4 diffuse, XMFLOAT3 direction, XMFLOAT4 specular)
+	DirectionalLight(float4 ambient, float4 diffuse, float3 direction, float4 specular)
 		: ambient_color(ambient)
 		, diffuse_color(diffuse)
 		, direction(direction)
@@ -141,10 +139,10 @@ struct DirectionalLight {
 		, pad(0.0f)
 	{}
 
-	XMFLOAT4 ambient_color;
-	XMFLOAT4 diffuse_color;
-	XMFLOAT4 specular; //specular.w is the specular power
-	XMFLOAT3 direction;
+	float4 ambient_color;
+	float4 diffuse_color;
+	float4 specular; //specular.w is the specular power
+	float3 direction;
 	float    pad;
 };
 
@@ -159,8 +157,8 @@ struct PointLight {
 		, attenuation(0.0f, 0.0f, 0.0f)
 		, pad(0.0f)
 	{}
-	PointLight(XMFLOAT4 ambient_color, XMFLOAT4 diffuse_color, XMFLOAT4 specular,
-			   XMFLOAT3 position, float range, XMFLOAT3 attenuation)
+	PointLight(float4 ambient_color, float4 diffuse_color, float4 specular,
+			   float3 position, float range, float3 attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)
@@ -170,12 +168,12 @@ struct PointLight {
 		, pad(0.0f)
 	{}
 
-	XMFLOAT4 ambient_color;
-	XMFLOAT4 diffuse_color;
-	XMFLOAT4 specular; //specular.w is the specular power
-	XMFLOAT3 position;
+	float4 ambient_color;
+	float4 diffuse_color;
+	float4 specular; //specular.w is the specular power
+	float3 position;
 	float    range;
-	XMFLOAT3 attenuation;
+	float3 attenuation;
 	float    pad;
 };
 
@@ -192,8 +190,8 @@ struct SpotLight {
 		, attenuation(0.0f, 0.0f, 0.0f)
 		, pad(0.0f)
 	{}
-	SpotLight(XMFLOAT4 ambient_color, XMFLOAT4 diffuse_color, XMFLOAT4 specular, XMFLOAT3 position,
-	          float range, XMFLOAT3 direction, float spot, XMFLOAT3 attenuation)
+	SpotLight(float4 ambient_color, float4 diffuse_color, float4 specular, float3 position,
+	          float range, float3 direction, float spot, float3 attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)
@@ -205,13 +203,13 @@ struct SpotLight {
 		, pad(0.0f)
 	{}
 
-	XMFLOAT4 ambient_color;
-	XMFLOAT4 diffuse_color;
-	XMFLOAT4 specular; //specular.w is the specular power
-	XMFLOAT3 position;
+	float4 ambient_color;
+	float4 diffuse_color;
+	float4 specular; //specular.w is the specular power
+	float3 position;
 	float    range;
-	XMFLOAT3 direction;
+	float3 direction;
 	float    spot;
-	XMFLOAT3 attenuation;
+	float3 attenuation;
 	float    pad;
 };

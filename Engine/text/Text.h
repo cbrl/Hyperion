@@ -17,11 +17,11 @@ class Text {
 		~Text();
 
 		void SetText(wstring newText);
-		void SetText(wstring newText, XMFLOAT2 newPosition);
-		void SetText(wstring newText, XMFLOAT2 newPosition, XMVECTORF32 newColor);
-		void SetText(wstring newText, XMFLOAT2 newPosition, XMVECTORF32 newColor, float newRotation);
+		void SetText(wstring newText, float2 newPosition);
+		void SetText(wstring newText, float2 newPosition, XMVECTORF32 newColor);
+		void SetText(wstring newText, float2 newPosition, XMVECTORF32 newColor, float newRotation);
 
-		void SetPosition(XMFLOAT2 newPosition);
+		void SetPosition(float2 newPosition);
 		void SetColor(XMVECTORF32 newColor);
 		void SetRotation(float newRotation);
 
@@ -33,7 +33,7 @@ class Text {
 		unique_ptr<SpriteBatch> sprite_batch;
 
 		wstring     text;
-		XMFLOAT2    position;
+		float2    position;
 		XMVECTORF32 color;
 		float       rotation;
 };

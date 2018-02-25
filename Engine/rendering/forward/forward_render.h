@@ -23,6 +23,9 @@ class ForwardRenderer {
 
 
 	private:
+		ComPtr<ID3D11Device> device;
+		ComPtr<ID3D11DeviceContext> device_context;
+
 		unique_ptr<PixelShader>  pixel_shader;
 		unique_ptr<VertexShader> vertex_shader;
 

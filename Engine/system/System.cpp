@@ -73,7 +73,7 @@ void System::Run() {
 
 
 void System::Tick() {
-	int   mouseX, mouseY;
+	i32   mouseX, mouseY;
 	float deltaTime;
 
 	// Update system metrics
@@ -96,7 +96,7 @@ void System::Tick() {
 }
 
 
-LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 		case WM_DESTROY:
 		case WM_CLOSE:
@@ -171,7 +171,7 @@ LRESULT System::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-void System::OnResize(int window_width, int window_height) {
+void System::OnResize(i32 window_width, i32 window_height) {
 	if (!rendering_mgr) return;
 	rendering_mgr->GetD3D()->OnResize(window_width, window_height);
 	

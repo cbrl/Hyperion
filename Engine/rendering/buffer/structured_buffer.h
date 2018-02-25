@@ -8,7 +8,7 @@
 template<typename DataT>
 class StructuredBuffer {
 	public:
-		StructuredBuffer(ID3D11Device* device, unsigned int size) : size(size) {
+		StructuredBuffer(ID3D11Device* device, u32 size) : size(size) {
 			CreateBuffer(device);
 		}
 		~StructuredBuffer() = default;
@@ -20,7 +20,7 @@ class StructuredBuffer {
 
 			// Recreate the buffer if the data being fed to it is larger than the buffer
 			if (data.size() > size) {
-				size = static_cast<uint32_t>(data.size());
+				size = static_cast<u32>(data.size());
 				CreateBuffer(device);
 			}
 
@@ -74,5 +74,5 @@ class StructuredBuffer {
 		ComPtr<ID3D11ShaderResourceView> srv;
 
 		// Number of elements in the buffer
-		uint32_t size;
+		u32 size;
 };

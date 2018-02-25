@@ -11,13 +11,13 @@ class Mesh {
 		~Mesh() = default;
 
 		template<typename VertexT>
-		Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices);
+		Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices);
 
 		template<typename VertexT>
-		void Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices);
+		void Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices);
 
-		void Draw(ID3D11DeviceContext* device_context, unsigned int index_count, unsigned int start_index) const {
-			UINT offset = 0;
+		void Draw(ID3D11DeviceContext* device_context, u32 index_count, u32 start_index) const {
+			u32 offset = 0;
 
 			// Set vertex buffer to active in the input assembler so it can be rendered
 			device_context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
@@ -36,16 +36,16 @@ class Mesh {
 		ComPtr<ID3D11Buffer> vertex_buffer;
 		ComPtr<ID3D11Buffer> index_buffer;
 
-		UINT vertex_count;
-		UINT index_count;
-		UINT stride;
+		u32 vertex_count;
+		u32 index_count;
+		u32 stride;
 };
 
 
 template<typename VertexT>
-Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices)
-	: vertex_count(static_cast<uint32_t>(vertices.size()))
-	, index_count(static_cast<uint32_t>(indices.size()))
+Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices)
+	: vertex_count(static_cast<u32>(vertices.size()))
+	, index_count(static_cast<u32>(indices.size()))
 	, stride(sizeof(VertexT))
 {
 	Init(device, vertices, indices);
@@ -53,7 +53,7 @@ Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<U
 
 
 template<typename VertexT>
-void Mesh::Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices) {
+void Mesh::Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices) {
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
 	D3D11_BUFFER_DESC indexBufferDesc = {};
 
@@ -78,14 +78,14 @@ void Mesh::Init(ID3D11Device* device, const vector<VertexT>& vertices, const vec
 
 	// Index buffer description
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(UINT) * index_count;
+	indexBufferDesc.ByteWidth = sizeof(u32) * index_count;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.StructureByteStride = 0;
 
 	// Give the subresource structure a pointer to the index data
-	indexData.pSysMem = const_cast<UINT*>(indices.data());
+	indexData.pSysMem = const_cast<u32*>(indices.data());
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 

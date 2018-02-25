@@ -16,9 +16,6 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{cd0f1874-c186-4bbb-9a3d-1e503a7555b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files\Shaders\Light">
-      <UniqueIdentifier>{999f1396-2253-4ac5-9dc4-c72477cf8a31}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\camera">
       <UniqueIdentifier>{fa337d56-6b66-4890-baf9-7d5ed271087b}</UniqueIdentifier>
     </Filter>
@@ -151,14 +148,11 @@
     <Filter Include="Header Files\util\datatypes">
       <UniqueIdentifier>{0aaa8c60-4881-43ee-b138-a9d0a6cf1d7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\util\io">
+      <UniqueIdentifier>{10095f51-1ba0-4d97-97b1-76b3d1785ceb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\light\light.ps">
-      <Filter>Resource Files\Shaders\Light</Filter>
-    </None>
-    <None Include="shaders\light\light.vs">
-      <Filter>Resource Files\Shaders\Light</Filter>
-    </None>
     <None Include="packages.config" />
     <None Include="shaders\include\light.hlsl">
       <Filter>Resource Files\Shaders\include</Filter>
@@ -228,9 +222,6 @@
     <ClInclude Include="util\string\string.h">
       <Filter>Header Files\util\string</Filter>
     </ClInclude>
-    <ClInclude Include="util\math\directxmath\extensions.h">
-      <Filter>Header Files\util\math\directxmath</Filter>
-    </ClInclude>
     <ClInclude Include="geometry\model\Model.h">
       <Filter>Header Files\geometry\model</Filter>
     </ClInclude>
@@ -283,6 +274,12 @@
       <Filter>Header Files\texture</Filter>
     </ClInclude>
     <ClInclude Include="util\datatypes\datatypes.h">
+      <Filter>Header Files\util\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="util\io\io.h">
+      <Filter>Header Files\util\io</Filter>
+    </ClInclude>
+    <ClInclude Include="util\datatypes\vector_types.h">
       <Filter>Header Files\util\datatypes</Filter>
     </ClInclude>
   </ItemGroup>

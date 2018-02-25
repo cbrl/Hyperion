@@ -22,7 +22,7 @@ class Scene {
 		Scene();
 		~Scene();
 
-		void UpdateMetrics(int FPS, int CPU, int mouseX, int mouseY);
+		void UpdateMetrics(i32 FPS, i32 CPU, i32 mouseX, i32 mouseY);
 		void Tick(Input& input, float deltaTime);
 		void Render(float deltaTime);
 

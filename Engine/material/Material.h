@@ -13,7 +13,6 @@ struct Material {
 		Kd(0.0f, 0.0f, 0.0f, 1.0f),
 		Ks(0.0f, 0.0f, 0.0f, 1.0f),
 		Ke(0.0f, 0.0f, 0.0f, 1.0f),
-		Ns(1.0f),
 		Ni(0.0f),
 		d(0.0f),
 		illum(0),
@@ -37,22 +36,20 @@ struct Material {
 	shared_ptr<Texture> map_bump;
 
 	// Ambient Color
-	XMFLOAT4 Ka;
+	float4 Ka;
 	// Diffuse Color
-	XMFLOAT4 Kd;
-	// Specular Color
-	XMFLOAT4 Ks;
+	float4 Kd;
+	// Specular Color, w = spec exponent
+	float4 Ks;
 	// Emissive Color
-	XMFLOAT4 Ke;
+	float4 Ke;
 
-	// Specular Exponent
-	float Ns;
 	// Optical Density
 	float Ni;
 	// Dissolve
 	float d;
 	// Illumination
-	int illum;
+	i32 illum;
 
 	// Transparency flag
 	bool transparent;

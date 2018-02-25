@@ -17,7 +17,7 @@ RenderingMgr::~RenderingMgr() {
 }
 
 
-void RenderingMgr::Init(UINT window_width, UINT window_height, bool fullscreen, bool vsync, bool msaa) {
+void RenderingMgr::Init(u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa) {
 
 	// Initialize Direct3D
 	direct3D = make_unique<Direct3D>(hWnd, window_width, window_height, fullscreen, vsync, msaa);

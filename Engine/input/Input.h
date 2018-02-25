@@ -17,7 +17,7 @@ class Input {
 		void SetMouseAbsolute() { mouse->SetMode(Mouse::MODE_ABSOLUTE); }
 		void SetMouseRelative() { mouse->SetMode(Mouse::MODE_RELATIVE); }
 
-		void GetMouseDelta(int &xPos, int &yPos);
+		void GetMouseDelta(i32& xPos, i32& yPos);
 
 		bool IsKeyDown(Keyboard::Keys key) { return keyboard_state.IsKeyDown(key); }
 		bool IsKeyPressed(Keyboard::Keys key) { return keyboard_tracker.IsKeyPressed(key); }

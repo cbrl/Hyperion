@@ -18,7 +18,7 @@ class RenderingMgr {
 		RenderingMgr(HWND window);
 		~RenderingMgr();
 
-		void Init(UINT window_width, UINT window_height, bool fullscreen, bool vsync, bool msaa);
+		void Init(u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
 
 
 		//----------------------------------------------------------------------------------

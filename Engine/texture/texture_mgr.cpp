@@ -14,7 +14,7 @@ const shared_ptr<Texture> TextureMgr::CreateTexture(ID3D11Device* device, ID3D11
 	
 	// Check for valid file. Return default texture if failed.
 	if (filename.empty() || !exists(filename))
-		return CreateColorTexture(device, XMFLOAT4(0.0f, 0.0f, 1.0f, 0.0f));
+		return CreateColorTexture(device, float4(0.0f, 0.0f, 1.0f, 0.0f));
 
 	// Create the texture if it doesn't exist
 	if (texture_map.find(filename) == texture_map.end()) {
@@ -30,10 +30,10 @@ const shared_ptr<Texture> TextureMgr::CreateTexture(ID3D11Device* device, ID3D11
 
 
 // Create a single texture from a float4 (r, g, b, a)
-const shared_ptr<Texture> TextureMgr::CreateColorTexture(ID3D11Device* device, XMFLOAT4 color) {
+const shared_ptr<Texture> TextureMgr::CreateColorTexture(ID3D11Device* device, float4 color) {
 	
 	// Convert the float4 into a single hex color value, which is also used as the texture data when creating it
-	UINT texColor = (UINT)(color.x * 0xff) + ((UINT)(color.y * 0xff) << 8) + ((UINT)(color.z * 0xff) << 16) + ((UINT)(color.w * 0xff) << 24);
+	u32 texColor = (u32)(color.x * 0xff) + ((u32)(color.y * 0xff) << 8) + ((u32)(color.z * 0xff) << 16) + ((u32)(color.w * 0xff) << 24);
 
 	if (color_texture_map.find(texColor) == color_texture_map.end()) 
 	{
@@ -51,11 +51,11 @@ const shared_ptr<Texture> TextureMgr::CreateTexture2DArray(ID3D11Device* device,
 	
 	// Check for valid file, return default texture if failed
 	if (filenames.empty())
-		return CreateColorTexture(device, XMFLOAT4(0.0f, 0.0f, 1.0f, 0.0f));
+		return CreateColorTexture(device, float4(0.0f, 0.0f, 1.0f, 0.0f));
 
 	for (auto& file : filenames) {
 		if (!exists(file))
-			return CreateColorTexture(device, XMFLOAT4(0.0f, 0.0f, 1.0f, 0.0f));
+			return CreateColorTexture(device, float4(0.0f, 0.0f, 1.0f, 0.0f));
 	}
 
 	// Create the texture if it doesn't exist
@@ -87,11 +87,11 @@ shared_ptr<Texture> TextureMgr::NewTexture(ID3D11Device* device, ID3D11DeviceCon
 shared_ptr<Texture> TextureMgr::NewTexture2DArray(ID3D11Device* device, ID3D11DeviceContext* device_context, vector<wstring> filenames) {
 	ComPtr<ID3D11ShaderResourceView> texture_srv;
 
-	uint32_t size = static_cast<uint32_t>(filenames.size());
+	u32 size = static_cast<u32>(filenames.size());
 	vector<ComPtr<ID3D11Texture2D>> srcTex(size);
 
 	// Create a vector of textures
-	for(uint32_t i = 0; i < size; i++) {
+	for(u32 i = 0; i < size; i++) {
 		DX::ThrowIfFailed(CreateWICTextureFromFileEx(device, device_context, filenames[i].c_str(),
 									                 NULL, D3D11_USAGE_STAGING, NULL,D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
 									                 (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr),
@@ -122,8 +122,8 @@ shared_ptr<Texture> TextureMgr::NewTexture2DArray(ID3D11Device* device, ID3D11De
 	                  "Failed to create texture array");
 
 	// Update texture array with texture data
-	for (UINT texElement = 0; texElement < size; texElement++) {
-		for (UINT mipLevel = 0; mipLevel < desc.MipLevels; mipLevel++) {
+	for (u32 texElement = 0; texElement < size; texElement++) {
+		for (u32 mipLevel = 0; mipLevel < desc.MipLevels; mipLevel++) {
 			D3D11_MAPPED_SUBRESOURCE mappedTex = {};
 
 			DX::ThrowIfFailed(device_context->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex),
@@ -156,13 +156,13 @@ shared_ptr<Texture> TextureMgr::NewTexture2DArray(ID3D11Device* device, ID3D11De
 }
 
 
-shared_ptr<Texture> TextureMgr::NewColorTexture(ID3D11Device* device, UINT color) {
+shared_ptr<Texture> TextureMgr::NewColorTexture(ID3D11Device* device, u32 color) {
 	ComPtr<ID3D11Texture2D>          texture;
 	ComPtr<ID3D11ShaderResourceView> texture_srv;
 
-	//UINT texColor = (UINT)(color.x * 0xff) + ((UINT)(color.y * 0xff) << 8) + ((UINT)(color.z * 0xff) << 16) + ((UINT)(color.w * 0xff) << 24);
+	//u32 texColor = (u32)(color.x * 0xff) + ((u32)(color.y * 0xff) << 8) + ((u32)(color.z * 0xff) << 16) + ((u32)(color.w * 0xff) << 24);
 
-	D3D11_SUBRESOURCE_DATA initData = { &color, sizeof(UINT), 0 };
+	D3D11_SUBRESOURCE_DATA initData = { &color, sizeof(u32), 0 };
 
 	D3D11_TEXTURE2D_DESC desc = {};
 	desc.Width = desc.Height = desc.MipLevels = desc.ArraySize = 1;

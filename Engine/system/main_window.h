@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include "util\engine_util.h"
+#include "util\datatypes\datatypes.h"
 
 // Forward declaration of parent class.
 // Parent class reference is used to call Tick(), OnResize(), etc...
@@ -12,18 +13,18 @@ class MainWindow {
 		MainWindow();
 		~MainWindow();
 
-		bool InitWindow(LPCWSTR name, int width, int height);
+		bool InitWindow(LPCWSTR name, u32 width, u32 height);
 		virtual void Run();
 
-		virtual LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		virtual LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
 
 
 	public:
 		HINSTANCE hInstance;
 		HWND      hWnd;
 		LPCWSTR   appName;
-		int       window_width;
-		int       window_height;
+		u32       window_width;
+		u32       window_height;
 };
 
 static MainWindow *handle = nullptr;

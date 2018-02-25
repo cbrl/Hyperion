@@ -1,23 +1,22 @@
 #pragma once
 
-#include <fstream>
+#include "util\engine_util.h"
+#include "util\io\io.h"
 #include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
-#include "util\engine_util.h"
 #include "geometry\mesh\vertex_types.h"
 #include "material\material.h"
 #include "geometry\mesh\mesh.h"
 #include "geometry\boundingvolume\bounding_volume.h"
 
 
-using std::ifstream;
 using namespace DirectX;
 
 
 struct ModelPart {
-	unsigned int index_start;
-	unsigned int index_count;
-	unsigned int material_index;
+	u32  index_start;
+	u32  index_count;
+	u32  material_index;
 	AABB aabb;
 };
 
@@ -36,10 +35,10 @@ class Model {
 		{}
 
 		template<typename VertexT>
-		Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices, const vector<Material>& materials,
-			  UINT group_count, const vector<UINT>& group_indices, const vector<UINT>& material_indices);
+		Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices, const vector<Material>& materials,
+			  u32 group_count, const vector<u32>& group_indices, const vector<u32>& material_indices);
 
-		void Draw(ID3D11DeviceContext* device_context, unsigned int index_count, unsigned int start_index) const {
+		void Draw(ID3D11DeviceContext* device_context, u32 index_count, u32 start_index) const {
 			mesh.Draw(device_context, index_count, start_index);
 		}
 
@@ -75,7 +74,7 @@ class Model {
 		const XMMATRIX& GetRotation() const { return rotation; }
 		const XMMATRIX& GetScale()    const { return scale; }
 
-		const Material& GetMaterial(unsigned int index) const { return materials[index]; }
+		const Material& GetMaterial(u32 index) const { return materials[index]; }
 
 
 	private:
@@ -92,9 +91,9 @@ class Model {
 
 
 template<typename VertexT>
-Model::Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector<UINT>& indices,
-			 const vector<Material>& materials, UINT group_count, const vector<UINT>& group_indices,
-			 const vector<UINT>& material_indices)
+Model::Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices,
+			 const vector<Material>& materials, u32 group_count, const vector<u32>& group_indices,
+			 const vector<u32>& material_indices)
 	: position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
 	, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
 	, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
@@ -115,7 +114,7 @@ Model::Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector
 
 		// Index count
 		if (i == group_count - 1)
-			temp.index_count = static_cast<uint32_t>(indices.size() - group_indices[i]);
+			temp.index_count = static_cast<u32>(indices.size() - group_indices[i]);
 		else
 			temp.index_count = group_indices[i + 1] - group_indices[i];
 

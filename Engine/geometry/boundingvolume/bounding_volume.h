@@ -9,16 +9,16 @@ struct AABB {
 	public:
 		AABB() : min_point(g_XMInfinity), max_point(g_XMNegInfinity) {}
 
-		AABB(XMFLOAT3 min, XMFLOAT3 max)
+		AABB(float3 min, float3 max)
 			: min_point(XMLoadFloat3(&min)), max_point(XMLoadFloat3(&max)) {}
 
 		AABB(XMVECTOR min, XMVECTOR max)
 			: min_point(min), max_point(max) {}
 
-		AABB(const std::vector<XMFLOAT3>& vertices) 
+		AABB(const std::vector<float3>& vertices) 
 			: min_point(g_XMInfinity), max_point(g_XMNegInfinity)
 		{
-			XMFLOAT3 min, max;
+			float3 min, max;
 			XMStoreFloat3(&min, min_point);
 			XMStoreFloat3(&max, max_point);
 
@@ -42,9 +42,9 @@ struct AABB {
 		XMVECTOR Max() const { return max_point; }
 
 		void SetMin(XMVECTOR min) { min_point = min; }
-		void SetMin(XMFLOAT3 min) { min_point = XMLoadFloat3(&min); }
+		void SetMin(float3 min) { min_point = XMLoadFloat3(&min); }
 		void SetMax(XMVECTOR max) { max_point = max; }
-		void SetMax(XMFLOAT3 max) { max_point = XMLoadFloat3(&max); }
+		void SetMax(float3 max) { max_point = XMLoadFloat3(&max); }
 
 
 	private:

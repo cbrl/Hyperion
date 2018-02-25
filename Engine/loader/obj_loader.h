@@ -1,9 +1,9 @@
 #pragma once
 
-#include <fstream>
 #include <algorithm>
 #include <d3d11.h>
 
+#include "util\io\io.h"
 #include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
 #include "geometry\mesh\vertex_types.h"
@@ -13,11 +13,9 @@
 #include "geometry\boundingvolume\bounding_volume.h"
 #include "material\material.h"
 
-using std::stoi;
-using std::wifstream;
-using std::wstringstream;
 
 using namespace DirectX;
+
 
 class OBJLoader {
 	public:
@@ -41,7 +39,7 @@ class OBJLoader {
 		void LoadMaterials(wstring folder);
 
 		void ReadFace(wstring& line);
-		void Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<UINT>& outIndices);
+		void Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<u32>& outIndices);
 		void ReadTransparency(wstring& line, bool inverse);
 		
 
@@ -52,7 +50,6 @@ class OBJLoader {
 				Kd(0.0f, 0.0f, 0.0f, 1.0f),
 				Ks(0.0f, 0.0f, 0.0f, 1.0f),
 				Ke(0.0f, 0.0f, 0.0f, 1.0f),
-				Ns(0.0f),
 				Ni(0.0f),
 				d(0.0f),
 				illum(0),
@@ -72,21 +69,19 @@ class OBJLoader {
 			// Bump map
 			wstring map_bump;
 			// Ambient Color
-			XMFLOAT4 Ka;
+			float4 Ka;
 			// Diffuse Color
-			XMFLOAT4 Kd;
-			// Specular Color
-			XMFLOAT4 Ks;
+			float4 Kd;
+			// Specular Color, w = spec exponent
+			float4 Ks;
 			// Emissive Color
-			XMFLOAT4 Ke;
-			// Specular Exponent
-			float Ns;
+			float4 Ke;
 			// Optical Density
 			float Ni;
 			// Dissolve
 			float d;
 			// Illumination
-			int illum;
+			i32 illum;
 
 			// Transparency flag
 			bool transparency;
@@ -95,30 +90,30 @@ class OBJLoader {
 
 	private:
 		bool RH_coord;
-		int  group_count;
-		int  mtl_count;
+		i32  group_count;
+		i32  mtl_count;
 
 		// Vector of complete vertex definitions
 		vector<VertexPositionNormalTexture> vertices;
 
 		// Vectors to store model info
-		vector<XMFLOAT3> vertex_positions;
-		vector<XMFLOAT3> vertex_normals;
-		vector<XMFLOAT2> vertex_texCoords;
-		vector<UINT>     indices;
+		vector<float3> vertex_positions;
+		vector<float3> vertex_normals;
+		vector<float2> vertex_texCoords;
+		vector<u32>     indices;
 
 		// Material library name
 		wstring meshMatLib;
 
 		// Material names for each group <grp number, mat name>
-		map<int, wstring> group_materials;
+		map<i32, wstring> group_materials;
 
 		// Vector of material descriptions
 		vector<OBJMaterial> materials;
 
 		// List of indices where a new group starts (e.g. 8 = new group at indices[8])
-		vector<UINT> new_group_indices;
+		vector<u32> new_group_indices;
 
 		// List of materials for each group. Value is an index for the material vector.
-		vector<UINT> group_material_indices;
+		vector<u32> group_material_indices;
 };

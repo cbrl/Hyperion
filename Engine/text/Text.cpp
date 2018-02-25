@@ -4,7 +4,7 @@
 
 Text::Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const WCHAR* fontFilename)
 	: text(L"Default Text")
-	, position(XMFLOAT2(0, 0))
+	, position(float2(0, 0))
 	, color(Colors::White)
 	, rotation(0.0f)
 {
@@ -22,20 +22,20 @@ void Text::SetText(wstring newText) {
 }
 
 
-void Text::SetText(wstring newText, XMFLOAT2 newPosition) {
+void Text::SetText(wstring newText, float2 newPosition) {
 	text     = newText;
 	position = position;
 }
 
 
-void Text::SetText(wstring newText, XMFLOAT2 newPosition, XMVECTORF32 newColor) {
+void Text::SetText(wstring newText, float2 newPosition, XMVECTORF32 newColor) {
 	text     = newText;
 	position = newPosition;
 	color    = newColor;
 }
 
 
-void Text::SetText(wstring newText, XMFLOAT2 newPosition, XMVECTORF32 newColor, float newRotation) {
+void Text::SetText(wstring newText, float2 newPosition, XMVECTORF32 newColor, float newRotation) {
 	text     = newText;
 	position = newPosition;
 	color    = newColor;
@@ -43,7 +43,7 @@ void Text::SetText(wstring newText, XMFLOAT2 newPosition, XMVECTORF32 newColor, 
 }
 
 
-void Text::SetPosition(XMFLOAT2 newPosition) {
+void Text::SetPosition(float2 newPosition) {
 	position = newPosition;
 }
 

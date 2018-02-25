@@ -8,7 +8,7 @@ const Direct3D* Direct3D::Get() {
 }
 
 
-Direct3D::Direct3D(HWND hWnd, int window_width, int window_height, bool fullscreen, bool vSync, bool MSAA)
+Direct3D::Direct3D(HWND hWnd, i32 window_width, i32 window_height, bool fullscreen, bool vSync, bool MSAA)
 	: hWnd(hWnd)
 	, window_width(window_width)
 	, window_height(window_height)
@@ -38,7 +38,7 @@ Direct3D::~Direct3D() {
 
 
 void Direct3D::Init() {
-	UINT createDeviceFlags = 0;
+	u32 createDeviceFlags = 0;
 	#if defined(DEBUG) || defined(_DEBUG)  
 		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 	#endif
@@ -150,7 +150,7 @@ void Direct3D::ReadRefreshRate() {
 	ComPtr<IDXGIFactory>   factory;
 	ComPtr<IDXGIAdapter>   adapter;
 	ComPtr<IDXGIOutput>    adapterOut;
-	UINT modes;
+	u32 modes;
 
 	DX::ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory),
 	                  "Failed to create dxgiFactory");
@@ -168,7 +168,7 @@ void Direct3D::ReadRefreshRate() {
 
 	// Find the mode that matches the screen, then store numerator and denominator for refresh rate
 
-	for (UINT i = 0; i < modes; i++) {
+	for (u32 i = 0; i < modes; i++) {
 		if (displayModeList[i].Width == GetSystemMetrics(SM_CXSCREEN)) {
 			if (displayModeList[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
 				refresh_rate_numerator = displayModeList[i].RefreshRate.Numerator;
@@ -179,7 +179,7 @@ void Direct3D::ReadRefreshRate() {
 }
 
 
-void Direct3D::OnResize(int winWidth, int winHeight) {
+void Direct3D::OnResize(i32 winWidth, i32 winHeight) {
 	assert(device_context);
 	assert(device);
 	assert(swap_chain);

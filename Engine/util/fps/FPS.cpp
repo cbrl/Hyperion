@@ -25,6 +25,6 @@ void FPS::Tick() {
 }
 
 
-int FPS::GetFPS() {
+i32 FPS::GetFPS() {
 	return fps;
 }

@@ -12,7 +12,7 @@ class Texture {
 
 		~Texture() = default;
 
-		void Bind(ID3D11DeviceContext* device_context, uint32_t slot) {
+		void Bind(ID3D11DeviceContext* device_context, u32 slot) {
 			device_context->PSSetShaderResources(slot, 1, texture.GetAddressOf());
 		}
 

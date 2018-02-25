@@ -12,7 +12,7 @@
 struct DirectionalLight {
 	float4 ambient;
 	float4 diffuse;
-	float4 specular; //specular.w = specular power
+	float4 specular;
 	float3 direction;
 	float  pad;
 };
@@ -20,7 +20,7 @@ struct DirectionalLight {
 struct PointLight {
 	float4 ambient;
 	float4 diffuse;
-	float4 specular; //specular.w = specular power
+	float4 specular;
 	float3 position;
 	float  range;
 	float3 attenuation;
@@ -30,7 +30,7 @@ struct PointLight {
 struct SpotLight {
 	float4 ambient;
 	float4 diffuse;
-	float4 specular; //specular.w = specular power
+	float4 specular;
 	float3 position;
 	float  range;
 	float3 direction;
@@ -42,9 +42,8 @@ struct SpotLight {
 struct Material {
 	float4 ambient;
 	float4 diffuse;
-	float4 specular;
+	float4 specular; //specular.w = specular power
 	float4 emissive;
-	float  specular_power;
 	float  optical_density;
 	float  dissolve;
 	float  pad;
@@ -112,7 +111,7 @@ void ComputeDirectionalLight(Material mat, DirectionalLight L,
 	[flatten]
 	if (diffuseFactor > 0.0f) {
 		float3 v = reflect(-lightVec, normal);
-		float specFactor = pow(max(dot(v, toEye), 0.0f), mat.specular_power);
+		float specFactor = pow(max(dot(v, toEye), 0.0f), mat.specular.w);
 
 		diffuse = diffuseFactor * mat.diffuse * L.diffuse;
 		spec = specFactor * mat.specular * L.specular;
@@ -156,7 +155,7 @@ void ComputePointLight(Material mat, PointLight L, float3 pos, float3 normal, fl
 	[flatten]
 	if (diffuseFactor > 0.0f) {
 		float3 v = reflect(-lightVec, normal);
-		float specFactor = pow(max(dot(v, toEye), 0.0f), mat.specular_power);
+		float specFactor = pow(max(dot(v, toEye), 0.0f), mat.specular.w);
 
 		diffuse = diffuseFactor * mat.diffuse * L.diffuse;
 		spec = specFactor * mat.specular * L.specular;
@@ -206,7 +205,7 @@ void ComputeSpotLight(Material mat, SpotLight L, float3 pos, float3 normal, floa
 	[flatten]
 	if (diffuseFactor > 0.0f) {
 		float3 v = reflect(-lightVec, normal);
-		float specFactor = pow(max(dot(v, toEye), 0.0f), mat.specular_power);
+		float specFactor = pow(max(dot(v, toEye), 0.0f), mat.specular.w);
 
 		diffuse = diffuseFactor * mat.diffuse * L.diffuse;
 		spec = specFactor * mat.specular * L.specular;

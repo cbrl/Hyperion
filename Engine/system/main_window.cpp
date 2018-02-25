@@ -2,7 +2,7 @@
 #include "main_window.h"
 
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WndProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 	//Send message to handler in System class
 	return handle->MsgProc(hWnd, msg, wParam, lParam);
 }
@@ -21,13 +21,13 @@ MainWindow::~MainWindow() {
 }
 
 
-bool MainWindow::InitWindow(LPCWSTR name, int width, int height) {
+bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
 	appName      = name;
 	window_width  = width;
 	window_height = height;
 
-	int xPos = (GetSystemMetrics(SM_CXSCREEN) - window_width) / 2;
-	int	yPos = (GetSystemMetrics(SM_CYSCREEN) - window_height) / 2;
+	u32 xPos = (GetSystemMetrics(SM_CXSCREEN) - window_width) / 2;
+	u32	yPos = (GetSystemMetrics(SM_CYSCREEN) - window_height) / 2;
 
 	hInstance = GetModuleHandle(NULL);
 
@@ -96,7 +96,7 @@ void MainWindow::Run() {
 }
 
 
-LRESULT MainWindow::MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT MainWindow::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 		case WM_DESTROY:
 			PostQuitMessage(0);

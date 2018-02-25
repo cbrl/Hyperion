@@ -34,13 +34,13 @@ class System : public MainWindow {
 		bool Init();
 		void Run();
 
-		virtual LRESULT MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		virtual LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
 
-		void OnResize(int window_width, int window_height);
+		void OnResize(i32 window_width, i32 window_height);
 
 		HWND GetHWND()         const { return hWnd; }
-		int  GetWindowWidth()  const { return window_width; }
-		int  GetWindowHeight() const { return window_height; }
+		u32  GetWindowWidth()  const { return window_width; }
+		u32  GetWindowHeight() const { return window_height; }
 
 		RenderingMgr* GetRenderingMgr() const { return rendering_mgr.get(); }
 		Scene*        GetScene()        const { return scene.get(); }

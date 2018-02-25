@@ -215,22 +215,22 @@ void RenderStateMgr::CreateSamplerStates(ID3D11Device* device) {
 //----------------------------------------------------------------------------------
 // Bind blend states
 //----------------------------------------------------------------------------------
-void RenderStateMgr::BindOpaque(ID3D11DeviceContext* device_context, float blendFactor[4], unsigned int sampleMask) const {
+void RenderStateMgr::BindOpaque(ID3D11DeviceContext* device_context, float blendFactor[4], u32 sampleMask) const {
 	device_context->OMSetBlendState(opaque.Get(), blendFactor, sampleMask);
 }
 
 
-void RenderStateMgr::BindAlphaBlend(ID3D11DeviceContext* device_context, float blendFactor[4], unsigned int sampleMask) const {
+void RenderStateMgr::BindAlphaBlend(ID3D11DeviceContext* device_context, float blendFactor[4], u32 sampleMask) const {
 	device_context->OMSetBlendState(alpha_blend.Get(), blendFactor, sampleMask);
 }
 
 
-void RenderStateMgr::BindAdditive(ID3D11DeviceContext* device_context, float blendFactor[4], unsigned int sampleMask) const {
+void RenderStateMgr::BindAdditive(ID3D11DeviceContext* device_context, float blendFactor[4], u32 sampleMask) const {
 	device_context->OMSetBlendState(additive.Get(), blendFactor, sampleMask);
 }
 
 
-void RenderStateMgr::BindNonPremultiplied(ID3D11DeviceContext* device_context, float blendFactor[4], unsigned int sampleMask) const {
+void RenderStateMgr::BindNonPremultiplied(ID3D11DeviceContext* device_context, float blendFactor[4], u32 sampleMask) const {
 	device_context->OMSetBlendState(non_premultiplied.Get(), blendFactor, sampleMask);
 }
 
@@ -238,17 +238,17 @@ void RenderStateMgr::BindNonPremultiplied(ID3D11DeviceContext* device_context, f
 //----------------------------------------------------------------------------------
 // Bind depth stencil states
 //----------------------------------------------------------------------------------
-void RenderStateMgr::BindDepthNone(ID3D11DeviceContext* device_context, unsigned int stencilRef) const {
+void RenderStateMgr::BindDepthNone(ID3D11DeviceContext* device_context, u32 stencilRef) const {
 	device_context->OMSetDepthStencilState(depth_none.Get(), stencilRef);
 }
 
 
-void RenderStateMgr::BindDepthDefault(ID3D11DeviceContext* device_context, unsigned int stencilRef) const {
+void RenderStateMgr::BindDepthDefault(ID3D11DeviceContext* device_context, u32 stencilRef) const {
 	device_context->OMSetDepthStencilState(depth_default.Get(), stencilRef);
 }
 
 
-void RenderStateMgr::BindDepthRead(ID3D11DeviceContext* device_context, unsigned int stencilRef) const {
+void RenderStateMgr::BindDepthRead(ID3D11DeviceContext* device_context, u32 stencilRef) const {
 	device_context->OMSetDepthStencilState(depth_read.Get(), stencilRef);
 }
 
