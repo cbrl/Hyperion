@@ -12,89 +12,117 @@
 #endif
 
 
-// Include for SetDebugObjectName()
+// Include SetDebugObjectName()
 #include <DirectXHelpers.h>
 using DirectX::SetDebugObjectName;
 
 
 //----------------------------------------------------------------------------------
-// Error handler
+// Error handling
 //----------------------------------------------------------------------------------
 
-namespace DX {
-	// Helper class for COM exceptions
-	class com_exception : public std::exception {
-		public:
-			com_exception(HRESULT hr, std::string msg = "") : result(hr), msg(msg) {}
+// Helper class for COM exceptions
+class com_exception : public std::exception {
+	public:
+		com_exception(HRESULT hr, std::string msg = "") : result(hr), msg(msg) {}
 
-			virtual const char* what() const override {
-				std::ostringstream stream;
+		virtual const char* what() const override {
+			std::ostringstream stream;
 
-				stream << msg << " (Failure with HRESULT of " << std::hex << result << ")";
+			stream << msg << " (Failure with HRESULT of " << std::hex << result << ")";
 
-				return stream.str().c_str();
-			}
+			return stream.str().c_str();
+		}
 
-		private:
-			HRESULT result;
-			std::string msg;
-	};
+	private:
+		HRESULT result;
+		std::string msg;
+};
 
-	// Helper utility converts D3D API failures into exceptions
-	inline void ThrowIfFailed(HRESULT hr, std::string msg = "") {
-		if (FAILED(hr)) {
-			throw com_exception(hr, msg);
+
+// Throw
+inline void ThrowIfFailed(HRESULT hr, std::string msg = "") {
+	if (FAILED(hr)) {
+		throw com_exception(hr, msg);
+	}
+}
+
+inline void ThrowIfFailed(bool result, std::string msg = "") {
+	if (!result) {
+		throw std::exception(msg.c_str());
+	}
+}
+
+
+// Alert Window
+inline void AlertIfFailed(HRESULT hr, std::wstring msg = L"") {
+	if (FAILED(hr)) {
+		if (!msg.empty()) {
+			MessageBox(NULL, msg.c_str(), L"Error", MB_OK);
+		}
+		else {
+			LPWSTR output;
+			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
+							FORMAT_MESSAGE_IGNORE_INSERTS |
+							FORMAT_MESSAGE_ALLOCATE_BUFFER,
+							NULL,
+							hr,
+							MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+							(LPTSTR)&output,
+							0,
+							NULL);
+			MessageBox(NULL, output, L"Error", MB_OK);
 		}
 	}
+}
 
-	inline void AlertIfFailed(HRESULT hr, std::wstring msg = L"") {
-		if (FAILED(hr)) {
-			if (!msg.empty()) {
-				MessageBox(NULL, msg.c_str(), L"Error", MB_OK);
-			}
-			else {
-				LPWSTR output;
-				FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
-							  FORMAT_MESSAGE_IGNORE_INSERTS |
-							  FORMAT_MESSAGE_ALLOCATE_BUFFER,
-							  NULL,
-							  hr,
-							  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-							  (LPTSTR)&output,
-							  0,
-							  NULL);
-				MessageBox(NULL, output, L"Error", MB_OK);
-			}
+inline void AlertIfFailed(bool result, std::wstring msg = L"") {
+	if (!result) {
+		if (!msg.empty()) {
+			MessageBox(NULL, msg.c_str(), L"Error", MB_OK);
 		}
-	}
-
-	inline void LogIfFailed(HRESULT hr, std::string msg = "") {
-		if (FAILED(hr)) {
-			std::ofstream file;
-
-			file.open("log.txt", std::ofstream::out | std::ofstream::app);
-			if (file.fail()) {
-				return;
-			}
-
-			file << "\n" << msg << " (Failure with HRESULT of " << std::hex << hr << ")";
-			file.close();
+		else {
+			LPWSTR output;
+			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
+							FORMAT_MESSAGE_IGNORE_INSERTS |
+							FORMAT_MESSAGE_ALLOCATE_BUFFER,
+							NULL,
+							E_FAIL,
+							MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+							(LPTSTR)&output,
+							0,
+							NULL);
+			MessageBox(NULL, output, L"Error", MB_OK);
 		}
 	}
 }
 
 
-//----------------------------------------------------------------------------------
-// Helper for releasing COM objects
-//----------------------------------------------------------------------------------
+// Log
+inline void LogIfFailed(HRESULT hr, std::string msg = "") {
+	if (FAILED(hr)) {
+		std::ofstream file;
 
-#define ReleaseCOM(x) { if(x){ x->Release(); x = nullptr; } }
+		file.open("log.txt", std::ofstream::out | std::ofstream::app);
+		if (file.fail()) {
+			return;
+		}
 
+		file << msg << " (Failure with HRESULT of " << std::hex << hr << ")" << std::endl;
+		file.close();
+	}
+}
 
-//----------------------------------------------------------------------------------
-// Helper for deleting objects
-//----------------------------------------------------------------------------------
+inline void LogIfFailed(bool result, std::string msg = "") {
+	if (!result) {
+		std::ofstream file;
 
-#define SafeDelete(x) { delete x; x = nullptr; }
+		file.open("log.txt", std::ofstream::out | std::ofstream::app);
+		if (file.fail()) {
+			return;
+		}
 
-
+		file << msg << std::endl;
+		file.close();
+	}
+}

@@ -76,11 +76,11 @@ inline std::pair<float3, float3> MinMaxPoint(const std::vector<VertexT>& vertice
 	for (const auto& vertex : vertices) {
 		min.x = std::fminf(min.x, vertex.position.x);
 		min.y = std::fminf(min.y, vertex.position.y);
-		min.z = std::fminf(min.z, vertex.position.y);
+		min.z = std::fminf(min.z, vertex.position.z);
 
 		max.x = std::fmaxf(max.x, vertex.position.x);
 		max.y = std::fmaxf(max.y, vertex.position.y);
-		max.z = std::fmaxf(max.z, vertex.position.y);
+		max.z = std::fmaxf(max.z, vertex.position.z);
 	}
 
 	return std::pair<float3, float3>(min, max);
@@ -90,15 +90,40 @@ inline std::pair<float3, float3> MinMaxPoint(const std::vector<float3>& vertices
 	float3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
 	float3 max = { FLT_MIN, FLT_MIN, FLT_MIN };
 
-	for (const auto& vertex : vertices) {
+	for (const float3& vertex : vertices) {
 		min.x = std::fminf(min.x, vertex.x);
 		min.y = std::fminf(min.y, vertex.y);
-		min.z = std::fminf(min.z, vertex.y);
+		min.z = std::fminf(min.z, vertex.z);
 
 		max.x = std::fmaxf(max.x, vertex.x);
 		max.y = std::fmaxf(max.y, vertex.y);
-		max.z = std::fmaxf(max.z, vertex.y);
+		max.z = std::fmaxf(max.z, vertex.z);
 	}
 
 	return std::pair<float3, float3>(min, max);
+}
+
+inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<XMVECTOR>& vertices) {
+	XMVECTOR min = { FLT_MAX, FLT_MAX, FLT_MAX };
+	XMVECTOR max = { FLT_MIN, FLT_MIN, FLT_MIN };
+
+	for (const XMVECTOR& vertex : vertices) {
+		min = XMVectorMin(min, vertex);
+		max = XMVectorMax(max, vertex);
+	}
+
+	return std::pair<XMVECTOR, XMVECTOR>(min, max);
+}
+
+
+inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const XMVECTOR* vertices, i32 size) {
+	XMVECTOR min = { FLT_MAX, FLT_MAX, FLT_MAX };
+	XMVECTOR max = { FLT_MIN, FLT_MIN, FLT_MIN };
+
+	for (i32 i = 0; i < size; ++i) {
+		min = XMVectorMin(min, vertices[i]);
+		max = XMVectorMax(max, vertices[i]);
+	}
+
+	return std::pair<XMVECTOR, XMVECTOR>(min, max);
 }

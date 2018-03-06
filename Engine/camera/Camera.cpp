@@ -12,7 +12,9 @@ Camera::Camera()
 	, move_accel(0.00002f)
 	, move_decel(0.00005f)
 	, max_velocity(0.01f)
-	, is_moving(false)
+	, is_moving_x(false)
+	, is_moving_y(false)
+	, is_moving_z(false)
 
 	, turn_factor(0.002f)
 	, pitch(0.0f)
@@ -56,41 +58,52 @@ Camera::Camera(u32 viewportWidth, u32 viewportHeight,
 
 
 void Camera::Move(float3 units) {
-	// is_moving determines if the camera will decelerate when Update is called
-	is_moving = true;
-
 	//----------------------------------------------------------------------------------
 	// X movement
 	//----------------------------------------------------------------------------------
 	// If the movement is in the same direction as the camera is currently moving,
 	// then add to the velocity. Otherwise, reset the velocity using the new value.
-	if (copysign(1.0f, units.x) == copysign(1.0f, velocity.x)) {
-		velocity.x += units.x * move_accel;
-	}
-	else {
-		velocity.x = units.x * move_accel;
+	if (units.x) {
+
+		// is_moving determines if the camera will decelerate when Update is called
+		is_moving_x = true;
+
+		if (copysign(1.0f, units.x) == copysign(1.0f, velocity.x)) {
+			velocity.x += units.x * move_accel;
+		}
+		else {
+			velocity.x = units.x * move_accel;
+		}
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Y movement
 	//----------------------------------------------------------------------------------
-	if (copysign(1.0f, units.y) == copysign(1.0f, velocity.y)) {
-		velocity.y += units.y * move_accel;
-	}
-	else {
-		velocity.y = units.y * move_accel;
+	if (units.y) {
+		is_moving_y = true;
+
+		if (copysign(1.0f, units.y) == copysign(1.0f, velocity.y)) {
+			velocity.y += units.y * move_accel;
+		}
+		else {
+			velocity.y = units.y * move_accel;
+		}
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Z movement
 	//----------------------------------------------------------------------------------
-	if (copysign(1.0f, units.z) == copysign(1.0f, velocity.z)) {
-		velocity.z += units.z * move_accel;
-	}
-	else {
-		velocity.z = units.z * move_accel;
+	if (units.z) {
+		is_moving_z = true;
+
+		if (copysign(1.0f, units.z) == copysign(1.0f, velocity.z)) {
+			velocity.z += units.z * move_accel;
+		}
+		else {
+			velocity.z = units.z * move_accel;
+		}
 	}
 }
 
@@ -190,9 +203,9 @@ void Camera::Update(float delta_time) {
 
 
 	// Decelerate if not moving
-	if (!is_moving) {
-		float deceleration;
+	float deceleration;
 
+	if (!is_moving_x) {
 		if (velocity.x != 0.0f) {
 			deceleration = copysign(1.0f, velocity.x) * move_decel * delta_time;
 
@@ -203,7 +216,9 @@ void Camera::Update(float delta_time) {
 				velocity.x -= deceleration;
 			}
 		}
+	}
 
+	if (!is_moving_y) {
 		if (velocity.y != 0.0f) {
 			deceleration = copysign(1.0f, velocity.y) * move_decel * delta_time;
 
@@ -214,7 +229,9 @@ void Camera::Update(float delta_time) {
 				velocity.y -= deceleration;
 			}
 		}
+	}
 
+	if (!is_moving_z) {
 		if (velocity.z != 0.0f) {
 			deceleration = copysign(1.0f, velocity.z) * move_decel * delta_time;
 
@@ -228,5 +245,7 @@ void Camera::Update(float delta_time) {
 	}
 
 	// Set IsMoving to false. Will be set to true if camera moves again before update.
-	is_moving = false;
+	is_moving_x = false;
+	is_moving_y = false;
+	is_moving_z = false;
 }

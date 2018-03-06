@@ -17,10 +17,6 @@ class Frustum {
 		bool Encloses(const AABB& aabb) const;
 		bool Contains(const AABB& aabb) const;
 
-		//bool ContainsPoint(float3 point);
-		//bool ContainsSphere(float3 center, float radius);
-		//bool ContainsCube(float3 center, float radius);
-		//bool ContainsBox(float3 center, float3 xyzSize);
 
 	private:
 		XMVECTOR planes[6];

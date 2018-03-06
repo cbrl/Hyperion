@@ -63,9 +63,12 @@ void ForwardRenderer::Render(Scene& scene) {
 	light_data.directional_light_count = static_cast<u32>(scene.directional_lights.size());
 	light_data.point_light_count       = static_cast<u32>(scene.point_lights.size());
 	light_data.spot_light_count        = static_cast<u32>(scene.spot_lights.size());
-	//light_data.fog_color = ; //fog memeber in scene?
-	//light_data.fog_start = ;
-	//light_data.fog_range = ;
+
+	//fog memeber in scene?
+	light_data.fog_color = float4(0.4f, 0.4f, 0.4f, 0.4f);
+	light_data.fog_start = 20.0f;
+	light_data.fog_range = 50.0f;
+
 	light_buffer.UpdateData(device_context.Get(), light_data);
 
 

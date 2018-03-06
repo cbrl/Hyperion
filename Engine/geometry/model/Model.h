@@ -36,12 +36,22 @@ class Model {
 
 		template<typename VertexT>
 		Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices, const vector<Material>& materials,
-			  u32 group_count, const vector<u32>& group_indices, const vector<u32>& material_indices);
+		      const vector<u32>& material_indices, u32 group_count, const vector<u32>& group_indices);
 
+
+		// Construct the model
+		template<typename VertexT>
+		void Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices, const vector<Material>& materials,
+		          const vector<u32>& material_indices, u32 group_count, const vector<u32>& group_indices);
+
+
+		// Render the model with the given index count and start index
 		void Draw(ID3D11DeviceContext* device_context, u32 index_count, u32 start_index) const {
 			mesh.Draw(device_context, index_count, start_index);
 		}
 
+
+		// Preform an action for each part of the model
 		template<typename ActionT>
 		void ForEachPart(ActionT act) const {
 			for (const auto& part : model_parts) {
@@ -49,25 +59,52 @@ class Model {
 			}
 		}
 
+
+		//----------------------------------------------------------------------------------
+		// Move / Rotate / Scale
+		//----------------------------------------------------------------------------------
+
 		void SetPosition(float x, float y, float z) {
 			position = XMMatrixTranslation(x, y, z);
+			UpdateAABBs();
 		}
 
 		void Move(float x, float y, float z) {
 			position = XMMatrixMultiply(position, XMMatrixTranslation(x, y, z));
+			UpdateAABBs();
 		}
 
 		void SetRotation(float x, float y, float z) {
 			rotation = XMMatrixRotationRollPitchYaw(x, y, z);
+			UpdateAABBs();
 		}
 
 		void Rotate(float x, float y, float z) {
 			rotation = XMMatrixMultiply(rotation, XMMatrixRotationRollPitchYaw(x, y, z));
+			UpdateAABBs();
 		}
 
 		void SetScale(float x, float y, float z) {
-			scale = XMMatrixMultiply(scale, XMMatrixScaling(x, y, z));
+			scale = XMMatrixScaling(x, y, z);
+			UpdateAABBs();
 		}
+
+		void Scale(float x, float y, float z) {
+			scale = XMMatrixMultiply(scale, XMMatrixScaling(x, y, z));
+			UpdateAABBs();
+		}
+
+		void UpdateAABBs() {
+			aabb.Transform(scale * rotation * position);
+			for (auto& part : model_parts) {
+				part.aabb.Transform(scale * rotation * position);
+			}
+		}
+
+
+		//----------------------------------------------------------------------------------
+		// Getters
+		//----------------------------------------------------------------------------------
 
 		const AABB&     GetAABB()     const { return aabb; }
 		const XMMATRIX& GetPosition() const { return position; }
@@ -90,45 +127,4 @@ class Model {
 };
 
 
-template<typename VertexT>
-Model::Model(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices,
-			 const vector<Material>& materials, u32 group_count, const vector<u32>& group_indices,
-			 const vector<u32>& material_indices)
-	: position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
-	, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
-	, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
-	, materials(materials)
-{
-	// Create the mesh
-	mesh = Mesh(device, vertices, indices);
-
-	// Create the AABB for the model
-	auto pair = MinMaxPoint(vertices);
-	aabb = AABB(pair.first, pair.second);
-
-	for (size_t i = 0; i < group_count; ++i) {
-		ModelPart temp;
-
-		temp.index_start = group_indices[i];
-		temp.material_index = material_indices[i];
-
-		// Index count
-		if (i == group_count - 1)
-			temp.index_count = static_cast<u32>(indices.size() - group_indices[i]);
-		else
-			temp.index_count = group_indices[i + 1] - group_indices[i];
-
-		// Create the AABB for the model part
-		vector<VertexT> subvec;
-		for (size_t j = temp.index_start; j < (temp.index_start + temp.index_count); ++j) {
-			subvec.push_back(vertices[indices[j]]);
-		}
-		auto pair = MinMaxPoint(subvec);
-		/*auto begin = vertices.begin() + indices[temp.index_start];
-		auto end = vertices.begin() + indices[temp.index_start + temp.index_count - 1];
-		auto pair = MinMaxPoint(vector<VertexT>(begin, end));*/
-		temp.aabb = AABB(pair.first, pair.second);
-
-		model_parts.push_back(temp);
-	}
-}
+#include "model.tpp"

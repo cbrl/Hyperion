@@ -24,13 +24,13 @@ Renderer::~Renderer() {
 }
 
 
-void Renderer::Tick(Scene& scene, float deltaTime) const {
+void Renderer::Tick(Scene& scene) const {
 
 	//----------------------------------------------------------------------------------
 	// Clear background with specified color
 	//----------------------------------------------------------------------------------
 
-	Direct3D::Get()->BeginScene(0.2f, 0.2f, 0.2f, 1.0f);
+	Direct3D::Get()->BeginScene(0.3f, 0.3f, 0.3f, 1.0f);
 
 
 	//----------------------------------------------------------------------------------

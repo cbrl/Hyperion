@@ -13,17 +13,17 @@ using namespace DirectX;
 
 class Text {
 	public:
-		Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const WCHAR* fontFilename);
+		Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const WCHAR* font_filename);
 		~Text();
 
-		void SetText(wstring newText);
-		void SetText(wstring newText, float2 newPosition);
-		void SetText(wstring newText, float2 newPosition, XMVECTORF32 newColor);
-		void SetText(wstring newText, float2 newPosition, XMVECTORF32 newColor, float newRotation);
+		void SetText(wstring new_text);
+		void SetText(wstring new_text, float2 new_position);
+		void SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color);
+		void SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color, float new_rotation);
 
-		void SetPosition(float2 newPosition);
-		void SetColor(XMVECTORF32 newColor);
-		void SetRotation(float newRotation);
+		void SetPosition(float2 new_position);
+		void SetColor(XMVECTORF32 new_color);
+		void SetRotation(float new_rotation);
 
 		void Render();
 

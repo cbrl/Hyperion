@@ -4,7 +4,7 @@
 #include "util\datatypes\datatypes.h"
 
 
-class Texture {
+struct Texture {
 	public:
 		Texture(ID3D11ShaderResourceView* texture) : texture(texture) {}
 

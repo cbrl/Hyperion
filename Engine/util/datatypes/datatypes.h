@@ -2,10 +2,14 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <type_traits>
 #include <wrl\client.h>
 
 #include "util\string\string.h"
 #include "util\datatypes\vector_types.h"
+
+
+using std::is_same_v;
 
 
 //----------------------------------------------------------------------------------

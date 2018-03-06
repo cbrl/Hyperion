@@ -55,10 +55,10 @@ void Direct3D::Init() {
 		&featureLevel,
 		&device_context);
 
-	DX::ThrowIfFailed(hr, "D3D11CreateDevice Failed");
+	ThrowIfFailed(hr, "D3D11CreateDevice Failed");
 
 	if (featureLevel != D3D_FEATURE_LEVEL_11_0) {
-		DX::ThrowIfFailed(E_FAIL, "Direct3D Feature Level 11 unsupported");
+		ThrowIfFailed(E_FAIL, "Direct3D Feature Level 11 unsupported");
 	}
 
 	// Create debug object
@@ -70,7 +70,7 @@ void Direct3D::Init() {
 	// All Direct3D 11 capable devices support 4X MSAA for all render 
 	// target formats, so we only need to check quality support.
 
-	DX::ThrowIfFailed(device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &MSAA4x_quality),
+	ThrowIfFailed(device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &MSAA4x_quality),
 	                  "CheckMultisampleQualityLevels() failed");
 	assert(MSAA4x_quality > 0);
 
@@ -125,18 +125,18 @@ void Direct3D::Init() {
 	// This function is being called with a device from a different IDXGIFactory."
 
 	ComPtr<IDXGIDevice> dxgiDevice = nullptr;
-	DX::ThrowIfFailed(device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.ReleaseAndGetAddressOf()),
 	                  "QueryInterface failed on dxgiDevice");
 
 	ComPtr<IDXGIAdapter> dxgiAdapter = nullptr;
-	DX::ThrowIfFailed(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)dxgiAdapter.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)dxgiAdapter.ReleaseAndGetAddressOf()),
 	                  "Failed to get parent of dxgiDevice");
 
 	ComPtr<IDXGIFactory> dxgiFactory = nullptr;
-	DX::ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)dxgiFactory.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)dxgiFactory.ReleaseAndGetAddressOf()),
 	                  "Failed to get parent of dxgiFactory");
 
-	DX::ThrowIfFailed(dxgiFactory->CreateSwapChain(device.Get(), &sd, swap_chain.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(dxgiFactory->CreateSwapChain(device.Get(), &sd, swap_chain.ReleaseAndGetAddressOf()),
 	                  "Failed to create swapchain");
 
 
@@ -152,7 +152,7 @@ void Direct3D::ReadRefreshRate() {
 	ComPtr<IDXGIOutput>    adapterOut;
 	u32 modes;
 
-	DX::ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory),
+	ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory),
 	                  "Failed to create dxgiFactory");
 
 
@@ -193,13 +193,13 @@ void Direct3D::OnResize(i32 winWidth, i32 winHeight) {
 
 	// Resize the swap chain and recreate the render target view
 
-	DX::ThrowIfFailed(swap_chain->ResizeBuffers(1, window_width, window_height, DXGI_FORMAT_R8G8B8A8_UNORM, 0),
+	ThrowIfFailed(swap_chain->ResizeBuffers(1, window_width, window_height, DXGI_FORMAT_R8G8B8A8_UNORM, 0),
 	                  "Failed to resize swapchain buffers");
 
 	ComPtr<ID3D11Texture2D> backBuffer;
-	DX::ThrowIfFailed(swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.ReleaseAndGetAddressOf())),
+	ThrowIfFailed(swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.ReleaseAndGetAddressOf())),
 	                  "Failed to get backbuffer");
-	DX::ThrowIfFailed(device->CreateRenderTargetView(backBuffer.Get(), 0, render_target_view.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(device->CreateRenderTargetView(backBuffer.Get(), 0, render_target_view.ReleaseAndGetAddressOf()),
 	                  "Failed to create render target view");
 
 
@@ -235,9 +235,9 @@ void Direct3D::OnResize(i32 winWidth, i32 winHeight) {
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags      = 0;
 
-	DX::ThrowIfFailed(device->CreateTexture2D(&depthStencilDesc, 0, &depth_stencil_buffer),
+	ThrowIfFailed(device->CreateTexture2D(&depthStencilDesc, 0, &depth_stencil_buffer),
 	                  "Failed to create depth stencil buffer");
-	DX::ThrowIfFailed(device->CreateDepthStencilView(depth_stencil_buffer.Get(), 0, &depth_stencil_view),
+	ThrowIfFailed(device->CreateDepthStencilView(depth_stencil_buffer.Get(), 0, &depth_stencil_view),
 	                  "Failed to create depth stencil view");
 
 	// Set object names for debugging
@@ -275,12 +275,12 @@ void Direct3D::BeginScene(float red, float green, float blue, float alpha) const
 void Direct3D::EndScene() const {
 	if (enable_vsync) {
 		// If VSync is enabled, present with next frame
-		DX::ThrowIfFailed(swap_chain->Present(1, 0),
+		ThrowIfFailed(swap_chain->Present(1, 0),
 		                  "Failed to present frame");
 	}
 	else {
 		// If it's disabled, present as soon as possible
-		DX::ThrowIfFailed(swap_chain->Present(0, 0),
+		ThrowIfFailed(swap_chain->Present(0, 0),
 		                  "Failed to present frame");
 	}
 }

@@ -22,11 +22,11 @@ class Camera {
 
 		// Resize the viewport
 		void OnResize(u32 width, u32 height) {
-			viewport_width = width;
-			viewport_height = height;
-			aspect_ratio = (float)viewport_width / (float)viewport_height;
+			viewport_width    = width;
+			viewport_height   = height;
+			aspect_ratio      = (float)viewport_width / (float)viewport_height;
 			projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
-			ortho_matrix = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
+			ortho_matrix      = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
 		}
 
 
@@ -35,22 +35,23 @@ class Camera {
 		void Rotate(float3 units);
 
 
-		void SetPosition(float3 newPosition) { 
-			position = XMVectorSet(newPosition.x, newPosition.y, newPosition.z, 0.0f);
+		// Set position and rotation
+		void SetPosition(float3 new_position) { 
+			position = XMVectorSet(new_position.x, new_position.y, new_position.z, 0.0f);
 		}
-
 		void SetRotation(float3 rotation) {
 			pitch = rotation.x;
 			yaw   = rotation.y;
 			roll  = rotation.z;
 		}
 
+
+		// Set depth and fov
 		void SetDepthRange(float zNear, float zFar) {
 			z_near = zNear;
-			z_far = zFar;
+			z_far  = zFar;
 			ortho_matrix = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
 		}
-
 		void SetFOV(float radians) {
 			fov = radians;
 			projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
@@ -69,6 +70,7 @@ class Camera {
 		XMMATRIX GetViewMatrix()  const { return view_matrix; }
 		XMMATRIX GetProjMatrix()  const { return projection_matrix; }
 		XMMATRIX GetOrthoMatrix() const { return ortho_matrix; }
+
 
 		// Get position, rotation, velocity (in units/ms)
 		float3 GetRotation() const { return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
@@ -123,6 +125,8 @@ class Camera {
 		// Booleans
 		bool enable_free_look;
 		bool fps_mode;
-		bool is_moving;
+		bool is_moving_x;
+		bool is_moving_y;
+		bool is_moving_z;
 };
 

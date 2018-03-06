@@ -4,10 +4,14 @@
 #include "rendering\rendering_mgr.h"
 
 // TODO:
-// - Fix frustum culling for objects that have been moved/rotated/scaled
-// - Add vertex normal generation to obj loader
+// - Create bounding spheres for models
+// - CPU usage
+// - Normal mapping
+// - Skybox
 // - Create a simple geometry generator
 // - Pipeline class for binding resources to pipeline stages
+// - Resource manager that handles creating or getting models/textures/etc
+// - TextureMgr -> TextureFactory
 
 
 static const float zNear = 0.1f;
@@ -24,8 +28,8 @@ Scene::~Scene() {
 }
 
 
-void Scene::Render(float deltaTime) {
-	Renderer::Get()->Tick(*this, deltaTime);
+void Scene::Render(float delta_time) {
+	Renderer::Get()->Tick(*this);
 }
 
 
@@ -36,7 +40,7 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 
 	camera = make_unique<Camera>(System::Get()->GetWindowWidth(), System::Get()->GetWindowHeight(),
 								 FOV, zNear, zFar);
-	camera->SetPosition(float3(0.0f, 0.0f, -5.0f));
+	camera->SetPosition(float3(0.0f, 1.0f, -5.0f));
 
 
 	//----------------------------------------------------------------------------------
@@ -65,7 +69,7 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 	directional_lights[2].direction     = float3(0.0f, 0.0f, 1.0f);
 
 	//point_lights.push_back(PointLight());
-	//point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
+	//point_lights.back().ambient_color = float4(0.5f, 0.5f, 0.5f, 1.0f);
 	//point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
 	//point_lights.back().attenuation   = float3(1.0f, 1.0f, 1.0f);
 	//point_lights.back().specular      = float4(1.0f, 1.0f, 1.0f, 32.0f);
@@ -78,8 +82,10 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 	//----------------------------------------------------------------------------------
 
 	OBJLoader loader;
-	models.push_back(loader.Load(device, device_context, L"data/models/cube2/", L"cube.obj", false));
-	models.back().SetScale(3.0f, 3.0f, 3.0f);
+	models.push_back(loader.Load(device, device_context, L"data/models/test/", L"test.obj", false));
+	models.back().Scale(3.0f, 3.0f, 3.0f);
+	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
+	//models.back().SetRotation(0.0f, 1.2f, 0.0f);
 
 
 	//----------------------------------------------------------------------------------
@@ -105,13 +111,13 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 }
 
 
-void Scene::UpdateMetrics(i32 FPS, i32 CPU, i32 mouseX, i32 mouseY) {
+void Scene::UpdateMetrics(i32 FPS, i32 CPU, i32 mouse_x, i32 mouse_y) {
 	// FPS, CPU usage, memory usage, mouse position, etc...
 
 	texts.at("FPS").SetText(L"FPS: " + to_wstring(FPS));
 
-	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouseX)
-	                           + L"\nY: " + to_wstring(mouseY));
+	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_x)
+	                           + L"\nY: " + to_wstring(mouse_y));
 
 	float3 position = camera->GetPosition();
 	texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
@@ -130,13 +136,12 @@ void Scene::UpdateMetrics(i32 FPS, i32 CPU, i32 mouseX, i32 mouseY) {
 }
 
 
-void Scene::Tick(Input& input, float deltaTime) {
+void Scene::Tick(Input& input, float delta_time) {
 
 	// Rotate models
 	//for (auto& model : models) {
-	//	model.Rotate(0.0f, ((XM_PI * deltaTime) / 2500), 0.0f);
+	//	model.Rotate(0.0f, ((XM_PI * delta_time) / 2500), 0.0f);
 	//}
-
 
 	//----------------------------------------------------------------------------------
 	// Camera movement
@@ -154,34 +159,34 @@ void Scene::Tick(Input& input, float deltaTime) {
 
 	// Roll rotation
 	if (input.IsKeyDown(Keyboard::Q)) {
-		rotateUnits.z -= deltaTime;
+		rotateUnits.z -= delta_time;
 	}
 	else if (input.IsKeyDown(Keyboard::E)) {
-		rotateUnits.z += deltaTime;
+		rotateUnits.z += delta_time;
 	}
 
 	// Forward/Back movement
 	if (input.IsKeyDown(Keyboard::W)) {
-		move_units.z += deltaTime;
+		move_units.z += delta_time;
 	}
 	else if (input.IsKeyDown(Keyboard::S)) {
-		move_units.z -= deltaTime;
+		move_units.z -= delta_time;
 	}
 
 	// Left/Right movement
 	if (input.IsKeyDown(Keyboard::A)) {
-		move_units.x -= deltaTime;
+		move_units.x -= delta_time;
 	}
 	else if (input.IsKeyDown(Keyboard::D)) {
-		move_units.x += deltaTime;
+		move_units.x += delta_time;
 	}
 
 	// Up/Down movement
 	if (input.IsKeyDown(Keyboard::Space)) {
-		move_units.y += deltaTime;
+		move_units.y += delta_time;
 	}
 	else if (input.IsKeyDown(Keyboard::LeftControl)) {
-		move_units.y -= deltaTime;
+		move_units.y -= delta_time;
 	}
 
 	// Update camera rotation and position
@@ -193,5 +198,5 @@ void Scene::Tick(Input& input, float deltaTime) {
 	}
 
 	// Update camera 
-	camera->Update(deltaTime);
+	camera->Update(delta_time);
 }

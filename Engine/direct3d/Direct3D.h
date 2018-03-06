@@ -18,9 +18,9 @@ class Direct3D {
 		Direct3D(HWND hWnd, i32 window_width, i32 window_height, bool fullscreen, bool vSync, bool MSAA);
 		~Direct3D();
 
-		void BeginScene(float red, float green, float blue, float alpha) const;
+		void BeginScene(float r, float g, float b, float a) const;
 		void EndScene() const;
-		void OnResize(i32 winWidth, i32 winHeight);
+		void OnResize(i32 win_width, i32 win_height);
 
 		ID3D11Device* GetDevice() const {
 			return device.Get();

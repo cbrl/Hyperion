@@ -151,6 +151,9 @@
     <Filter Include="Header Files\util\io">
       <UniqueIdentifier>{10095f51-1ba0-4d97-97b1-76b3d1785ceb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\geometry\model">
+      <UniqueIdentifier>{7d1f81af-1b80-450a-a3b0-63008a0d739d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -166,10 +169,10 @@
     <None Include="shaders\include\input_structs.hlsl">
       <Filter>Resource Files\Shaders\include</Filter>
     </None>
-    <None Include="shaders\forward\forward.hlsl">
+    <None Include="shaders\forward\forward_VS.hlsl">
       <Filter>Resource Files\Shaders\forward</Filter>
     </None>
-    <None Include="shaders\forward\forward_VS.hlsl">
+    <None Include="shaders\forward\forward.hlsl">
       <Filter>Resource Files\Shaders\forward</Filter>
     </None>
   </ItemGroup>
@@ -281,6 +284,12 @@
     </ClInclude>
     <ClInclude Include="util\datatypes\vector_types.h">
       <Filter>Header Files\util\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\mesh\mesh.tpp">
+      <Filter>Source Files\geometry\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\model\model.tpp">
+      <Filter>Source Files\geometry\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

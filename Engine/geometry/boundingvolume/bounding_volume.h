@@ -8,46 +8,84 @@ using namespace DirectX;
 struct AABB {
 	public:
 		AABB() : min_point(g_XMInfinity), max_point(g_XMNegInfinity) {}
-
-		AABB(float3 min, float3 max)
-			: min_point(XMLoadFloat3(&min)), max_point(XMLoadFloat3(&max)) {}
-
-		AABB(XMVECTOR min, XMVECTOR max)
-			: min_point(min), max_point(max) {}
-
-		AABB(const std::vector<float3>& vertices) 
-			: min_point(g_XMInfinity), max_point(g_XMNegInfinity)
-		{
-			float3 min, max;
-			XMStoreFloat3(&min, min_point);
-			XMStoreFloat3(&max, max_point);
-
-			for (size_t i = 0; i < vertices.size(); ++i) {
-				min.x = std::fminf(min.x, vertices[i].x);
-				min.y = std::fminf(min.y, vertices[i].y);
-				min.z = std::fminf(min.z, vertices[i].y);
-
-				max.x = std::fmaxf(max.x, vertices[i].x);
-				max.y = std::fmaxf(max.y, vertices[i].y);
-				max.z = std::fmaxf(max.z, vertices[i].y);
-			}
-
-			min_point = XMLoadFloat3(&min);
-			max_point = XMLoadFloat3(&max);
-		}
-
 		~AABB() = default;
 
-		XMVECTOR Min() const { return min_point; }
-		XMVECTOR Max() const { return max_point; }
+		AABB(float3 min, float3 max)
+			: min_point(XMLoadFloat3(&min)), max_point(XMLoadFloat3(&max)) {
 
-		void SetMin(XMVECTOR min) { min_point = min; }
-		void SetMin(float3 min) { min_point = XMLoadFloat3(&min); }
-		void SetMax(XMVECTOR max) { max_point = max; }
-		void SetMax(float3 max) { max_point = XMLoadFloat3(&max); }
+			vertices.push_back(XMLoadFloat3(&min));
+			vertices.push_back(XMLoadFloat3(&float3(min.x, max.y, min.z)));
+			vertices.push_back(XMLoadFloat3(&float3(max.x, max.y, min.x)));
+			vertices.push_back(XMLoadFloat3(&float3(max.x, min.y, min.z)));
+
+			vertices.push_back(XMLoadFloat3(&float3(min.x, min.y, max.z)));
+			vertices.push_back(XMLoadFloat3(&float3(max.x, min.y, max.z)));
+			vertices.push_back(XMLoadFloat3(&max));
+			vertices.push_back(XMLoadFloat3(&float3(min.x, max.y, max.z)));
+		}
+
+		AABB(XMVECTOR min, XMVECTOR max)
+			: min_point(min), max_point(max) {
+
+			float3 fmin, fmax;
+			XMStoreFloat3(&fmin, min);
+			XMStoreFloat3(&fmax, max);
+
+			vertices.push_back(XMLoadFloat3(&fmin));
+			vertices.push_back(XMLoadFloat3(&float3(fmin.x, fmax.y, fmin.z)));
+			vertices.push_back(XMLoadFloat3(&float3(fmax.x, fmax.y, fmin.x)));
+			vertices.push_back(XMLoadFloat3(&float3(fmax.x, fmin.y, fmin.z)));
+
+			vertices.push_back(XMLoadFloat3(&float3(fmin.x, fmin.y, fmax.z)));
+			vertices.push_back(XMLoadFloat3(&float3(fmax.x, fmin.y, fmax.z)));
+			vertices.push_back(XMLoadFloat3(&fmax));
+			vertices.push_back(XMLoadFloat3(&float3(fmin.x, fmax.y, fmax.z)));
+		}
+
+		const XMVECTOR Min() const { return min_point; }
+		const XMVECTOR Max() const { return max_point; }
+
+		void Transform(XMMATRIX M) {
+			XMVECTOR transformed_verts[8];
+
+			for (i32 i = 0; i < 8; ++i) {
+				transformed_verts[i] = XMVector3TransformCoord(vertices[i], M);
+			}
+
+			auto pair = MinMaxPoint(transformed_verts, 8);
+			min_point = pair.first;
+			max_point = pair.second;
+		}
 
 
 	private:
 		XMVECTOR min_point;
 		XMVECTOR max_point;
+
+		vector<XMVECTOR> vertices;
+};
+
+
+struct BoundingSphere {
+	BoundingSphere() : center(XMVectorZero()), radius(FLT_MAX) {}
+	~BoundingSphere() = default;
+
+	BoundingSphere(float3 center, float radius)
+		: center(XMLoadFloat3(&center))
+		, radius(radius)
+	{}
+
+	BoundingSphere(XMVECTOR center, float radius)
+		: center(center)
+		, radius(radius)
+	{}
+
+
+	const XMVECTOR& Center() const { return center; }
+	const float&    Radius() const { return radius; }
+
+
+	private:
+		XMVECTOR center;
+		float    radius;
 };

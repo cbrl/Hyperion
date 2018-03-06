@@ -46,7 +46,7 @@ struct Material {
 	float4 emissive;
 	float  optical_density;
 	float  dissolve;
-	float  pad;
+	float2 pad;
 };
 
 

@@ -54,14 +54,13 @@ float4 PS(PSInputPositionNormalTexture pin) : SV_Target {
 
 	float4 litColor = texColor;
 
-	if (directional_light_count > 0) {
-		// Start with a sum of zero. 
-		float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
-		float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-		float4 spec = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	// Start with a sum of zero. 
+	float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 spec = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
+	if (directional_light_count > 0) {
 		// Sum the light contribution from each light source.  
-		//[unroll]
 		for (int i = 0; i < directional_light_count; ++i) {
 			float4 A, D, S;
 			ComputeDirectionalLight(mat, directional_lights[i], pin.normal, toEye,
@@ -71,16 +70,9 @@ float4 PS(PSInputPositionNormalTexture pin) : SV_Target {
 			diffuse += D;
 			spec    += S;
 		}
-
-		// Modulate with late add.
-		litColor = texColor * (ambient + diffuse) + spec;
 	}
 
 	if (point_light_count > 0) {
-		float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
-		float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-		float4 spec = float4(0.0f, 0.0f, 0.0f, 0.0f);
-
 		for (int i = 0; i < point_light_count; ++i) {
 			float4 A, D, S;
 			ComputePointLight(mat, point_lights[i], pin.positionW, pin.normal, toEye,
@@ -90,15 +82,9 @@ float4 PS(PSInputPositionNormalTexture pin) : SV_Target {
 			diffuse += D;
 			spec    += S;
 		}
-
-		litColor = texColor * (ambient + diffuse) + spec;
 	}
 
 	if (spot_light_count > 0) {
-		float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
-		float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-		float4 spec = float4(0.0f, 0.0f, 0.0f, 0.0f);
-
 		for (int i = 0; i < spot_light_count; ++i) {
 			float4 A, D, S;
 			ComputeSpotLight(mat, spot_lights[i], pin.positionW, pin.normal, toEye,
@@ -108,23 +94,26 @@ float4 PS(PSInputPositionNormalTexture pin) : SV_Target {
 			diffuse += D;
 			spec += S;
 		}
-
-		litColor = texColor * (ambient + diffuse) + spec;
 	}
+
+	// Modulate with late add.
+	litColor = texColor * (ambient + diffuse) + spec;
 
 
 	//----------------------------------------------------------------------------------
 	// Fogging
 	//----------------------------------------------------------------------------------
 
-	//float fogLerp = saturate((distToEye - fog_start) / fog_range);
+	float fogLerp = saturate((distToEye - fog_start) / fog_range);
 
 	// Blend the fog color and the lit color.
-	//litColor = lerp(litColor, fog_color, fogLerp);
+	litColor = lerp(litColor, fog_color, fogLerp);
 
 
 	// Common to take alpha from diffuse material and texture.
 	litColor.a = mat.diffuse.a * texColor.a;
+
+	litColor = saturate(litColor);
 
 	return litColor;
 }

@@ -34,7 +34,12 @@ void OBJLoader::Reset() {
 
 
 Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring folder, wstring filename, bool RHcoordinates) {
+	// Make sure the file exists first
+	ThrowIfFailed(fs::exists(folder + filename), "Error loading file");
+
+	// Set the coordinate system
 	RH_coord = RHcoordinates;
+
 
 	// Load the model
 	LoadModel(folder, filename);
@@ -50,10 +55,13 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context,
 
 		mtl.name = materials[i].name;
 		
+		if (!materials[i].map_Kd.empty())
+			mtl.map_Kd = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Kd);
+		else
+			mtl.map_Kd = TextureMgr::Get()->CreateColorTexture(device, float4(1.0f, 1.0f, 1.0f, 1.0f));
+
 		if (!materials[i].map_Ka.empty())
 			mtl.map_Ka   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Ka);
-		if (!materials[i].map_Kd.empty())
-			mtl.map_Kd   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Kd);
 		if (!materials[i].map_Ks.empty())
 			mtl.map_Ks   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Ks);
 		if (!materials[i].map_Ns.empty())
@@ -76,7 +84,7 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context,
 	}
 
 	// Create the model
-	Model model(device, vertices, indices, mtlVector, group_count, new_group_indices, group_material_indices);
+	Model model(device, vertices, indices, mtlVector, group_material_indices, group_count, new_group_indices);
 
 
 	// Reset the obj loader
@@ -371,25 +379,25 @@ void OBJLoader::ReadTransparency(wstring& line, bool inverse) {
 
 
 void OBJLoader::ReadFace(wstring& line) {
-	vector<wstring> vList, vParts;
+	vector<wstring> vert_list, vert_parts;
 
-	vector<VertexPositionNormalTexture> vVerts;
+	vector<VertexPositionNormalTexture> verts;
 	VertexPositionNormalTexture vertex;
 
 	bool hasNormal = false;
 
 	// Split the line into separate vertex definitions
-	Split(line, vList, L" ");
+	Split(line, vert_list, L" ");
 
-	for (size_t i = 0; i < vList.size(); ++i) {
+	for (size_t i = 0; i < vert_list.size(); ++i) {
 		i32 type = 0;
 
 		// Split the vertex definition into separate parts
-		Split(vList[i], vParts, L"/");
+		Split(vert_list[i], vert_parts, L"/");
 
 
 		// Determine the vertex type
-		switch (vParts.size()) {
+		switch (vert_parts.size()) {
 			// Position
 			case 1:
 				type = 1;
@@ -402,7 +410,7 @@ void OBJLoader::ReadFace(wstring& line) {
 
 			case 3:
 				// Position/Normal
-				if (vParts[1] == L"") type = 3;
+				if (vert_parts[1] == L"") type = 3;
 				// Position/Texture/Normal
 				else type = 4;
 				break;
@@ -413,46 +421,46 @@ void OBJLoader::ReadFace(wstring& line) {
 			// Position
 			case 1:
 			{
-				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);  //Subtract 1 since arrays start at index 0
+				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);  //Subtract 1 since arrays start at index 0
 				vertex.texCoord = float2(0.0f, 0.0f);
 				hasNormal = false;
 
-				vVerts.push_back(vertex);
+				verts.push_back(vertex);
 				break;
 			}
 
 			// Position/Texture
 			case 2:
 			{
-				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
-				vertex.texCoord = GetElement(vertex_texCoords, stoi(vParts[1])-1);
+				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
+				vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
 				hasNormal = false;
 
-				vVerts.push_back(vertex);
+				verts.push_back(vertex);
 				break;
 			}
 
 			// Position/Normal
 			case 3:
 			{
-				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
-				vertex.normal = GetElement(vertex_normals, stoi(vParts[2])-1);
+				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
+				vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2])-1);
 				vertex.texCoord = float2(0.0f, 0.0f);
 				hasNormal = true;
 
-				vVerts.push_back(vertex);
+				verts.push_back(vertex);
 				break;
 			}
 
 			// Position/Texture/Normal
 			case 4:
 			{
-				vertex.position = GetElement(vertex_positions, stoi(vParts[0])-1);
-				vertex.normal = GetElement(vertex_normals, stoi(vParts[2])-1);
-				vertex.texCoord = GetElement(vertex_texCoords, stoi(vParts[1])-1);
+				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
+				vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2])-1);
+				vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
 				hasNormal = true;
 
-				vVerts.push_back(vertex);
+				verts.push_back(vertex);
 				break;
 			}
 
@@ -461,15 +469,23 @@ void OBJLoader::ReadFace(wstring& line) {
 		}
 
 		if (!hasNormal) {
-			// CALCULATE NORMALS
+			XMVECTOR a = XMLoadFloat3(&(verts[0].position - verts[1].position));
+			XMVECTOR b = XMLoadFloat3(&(verts[2].position - verts[1].position));
+
+			float3 normal;
+			XMStoreFloat3(&normal, XMVector3Cross(a, b));
+
+			for (size_t i = 0; i < verts.size(); ++i) {
+				verts[i].normal = normal;
+			}
 		}
 	}
 
 	// Add vertices to vector if they're not in it already
-	for (size_t i = 0; i < vVerts.size(); ++i) {
-		auto pos = std::find(vertices.begin(), vertices.end(), vVerts[i]);
+	for (size_t i = 0; i < verts.size(); ++i) {
+		auto pos = std::find(vertices.begin(), vertices.end(), verts[i]);
 		if (pos == vertices.end()) {
-			vertices.push_back(vVerts[i]);
+			vertices.push_back(verts[i]);
 		}
 	}
 
@@ -480,11 +496,11 @@ void OBJLoader::ReadFace(wstring& line) {
 	}
 
 	// Add indices to index vector if the face was a triangle
-	if (vList.size() == 3) {
+	if (vert_list.size() == 3) {
 		// Get the index of each vertex and add it to the index vector
-		for (size_t i = 0; i < vList.size(); ++i) {
+		for (size_t i = 0; i < vert_list.size(); ++i) {
 
-			auto pos = std::find(vertices.begin(), vertices.end(), vVerts[i]);
+			auto pos = std::find(vertices.begin(), vertices.end(), verts[i]);
 			if (pos != vertices.end()) {
 				auto index = std::distance(vertices.begin(), pos);
 				indices.push_back(static_cast<u32>(index));
@@ -493,16 +509,16 @@ void OBJLoader::ReadFace(wstring& line) {
 	}
 
 	// Triangulate the face if there were more than 3 points
-	else if (vList.size() > 3) {
+	else if (vert_list.size() > 3) {
 		vector<u32> vIndices;
 
 		// Triangulate the vertices
-		Triangulate(vVerts, vIndices);
+		Triangulate(verts, vIndices);
 
 		// Add the new indices to the vector
 		for (size_t i = 0; i < vIndices.size(); ++i) {
 			// Find the index of each vertex and add it to the index vector
-			auto pos = std::find(vertices.begin(), vertices.end(), vVerts[vIndices[i]]);
+			auto pos = std::find(vertices.begin(), vertices.end(), verts[vIndices[i]]);
 
 			if (pos != vertices.end()) {
 				auto index = std::distance(vertices.begin(), pos);
@@ -542,11 +558,11 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 			if (vVerts.size() == 3) {
 				for (u32 j = 0; j < vVerts.size(); ++j) {
 					if (inVerts[j].position == prev)
-						indices.push_back(j);
+						outIndices.push_back(j);
 					if (inVerts[j].position == curr)
-						indices.push_back(j);
+						outIndices.push_back(j);
 					if (inVerts[j].position == next)
-						indices.push_back(j);
+						outIndices.push_back(j);
 				}
 
 				vVerts.clear();
@@ -557,11 +573,11 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 				// Create a triangle
 				for (u32 j = 0; j < inVerts.size(); ++j) {
 					if (inVerts[j].position == prev)
-						indices.push_back(j);
+						outIndices.push_back(j);
 					if (inVerts[j].position == curr)
-						indices.push_back(j);
+						outIndices.push_back(j);
 					if (inVerts[j].position == next)
-						indices.push_back(j);
+						outIndices.push_back(j);
 				}
 
 				float3 temp;
@@ -578,11 +594,11 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 				// Create a triangle
 				for (u32 j = 0; j < inVerts.size(); ++j) {
 					if (inVerts[j].position == prev)
-						indices.push_back(j);
+						outIndices.push_back(j);
 					if (inVerts[j].position == next)
-						indices.push_back(j);
+						outIndices.push_back(j);
 					if (inVerts[j].position == temp)
-						indices.push_back(j);
+						outIndices.push_back(j);
 				}
 
 				vVerts.clear();
@@ -621,11 +637,11 @@ void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector
 			// Create a triangle from previous, current, and next vertices
 			for (u32 j = 0; j < inVerts.size(); ++j) {
 				if (inVerts[j].position == prev)
-					indices.push_back(j);
+					outIndices.push_back(j);
 				if (inVerts[j].position == curr)
-					indices.push_back(j);
+					outIndices.push_back(j);
 				if (inVerts[j].position == next)
-					indices.push_back(j);
+					outIndices.push_back(j);
 			}
 
 			// Delete current vertex from the list

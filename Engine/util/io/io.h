@@ -1,5 +1,6 @@
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 
 // fstream
 using std::fstream;
@@ -20,3 +21,6 @@ using std::ostringstream;
 using std::wstringstream;
 using std::wistringstream;
 using std::wostringstream;
+
+// filesystem namespace
+namespace fs = std::experimental::filesystem;

@@ -13,8 +13,8 @@ TextureMgr* TextureMgr::Get() {
 const shared_ptr<Texture> TextureMgr::CreateTexture(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring filename) {
 	
 	// Check for valid file. Return default texture if failed.
-	if (filename.empty() || !exists(filename))
-		return CreateColorTexture(device, float4(0.0f, 0.0f, 1.0f, 0.0f));
+	if (filename.empty() || !fs::exists(filename))
+		return CreateColorTexture(device, float4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	// Create the texture if it doesn't exist
 	if (texture_map.find(filename) == texture_map.end()) {
@@ -51,10 +51,10 @@ const shared_ptr<Texture> TextureMgr::CreateTexture2DArray(ID3D11Device* device,
 	
 	// Check for valid file, return default texture if failed
 	if (filenames.empty())
-		return CreateColorTexture(device, float4(0.0f, 0.0f, 1.0f, 0.0f));
+		return CreateColorTexture(device, float4(1.0f, 1.0f, 1.0f, 1.0f));
 
 	for (auto& file : filenames) {
-		if (!exists(file))
+		if (!fs::exists(file))
 			return CreateColorTexture(device, float4(0.0f, 0.0f, 1.0f, 0.0f));
 	}
 
@@ -75,7 +75,7 @@ shared_ptr<Texture> TextureMgr::NewTexture(ID3D11Device* device, ID3D11DeviceCon
 	ComPtr<ID3D11ShaderResourceView> texture_srv;
 
 	// Create a shader resource view
-	DX::ThrowIfFailed(CreateWICTextureFromFile(device, device_context, filename.c_str(), nullptr, texture_srv.GetAddressOf()),
+	ThrowIfFailed(CreateWICTextureFromFile(device, device_context, filename.c_str(), nullptr, texture_srv.GetAddressOf()),
 	                  "Failed to create WIC texture");
 
 	SetDebugObjectName(texture_srv.Get(), "TextureMgr Texture");
@@ -92,7 +92,7 @@ shared_ptr<Texture> TextureMgr::NewTexture2DArray(ID3D11Device* device, ID3D11De
 
 	// Create a vector of textures
 	for(u32 i = 0; i < size; i++) {
-		DX::ThrowIfFailed(CreateWICTextureFromFileEx(device, device_context, filenames[i].c_str(),
+		ThrowIfFailed(CreateWICTextureFromFileEx(device, device_context, filenames[i].c_str(),
 									                 NULL, D3D11_USAGE_STAGING, NULL,D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
 									                 (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr),
 		                  "Failed to create WIC texture");
@@ -118,7 +118,7 @@ shared_ptr<Texture> TextureMgr::NewTexture2DArray(ID3D11Device* device, ID3D11De
 
 	// Create texture array
 	ComPtr<ID3D11Texture2D> tex_array;
-	DX::ThrowIfFailed(device->CreateTexture2D(&array_desc, NULL, tex_array.GetAddressOf()),
+	ThrowIfFailed(device->CreateTexture2D(&array_desc, NULL, tex_array.GetAddressOf()),
 	                  "Failed to create texture array");
 
 	// Update texture array with texture data
@@ -126,7 +126,7 @@ shared_ptr<Texture> TextureMgr::NewTexture2DArray(ID3D11Device* device, ID3D11De
 		for (u32 mipLevel = 0; mipLevel < desc.MipLevels; mipLevel++) {
 			D3D11_MAPPED_SUBRESOURCE mappedTex = {};
 
-			DX::ThrowIfFailed(device_context->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex),
+			ThrowIfFailed(device_context->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex),
 			                  "Failed to map texture element");
 
 			device_context->UpdateSubresource(tex_array.Get(), D3D11CalcSubresource(mipLevel, texElement, desc.MipLevels), nullptr,
@@ -146,7 +146,7 @@ shared_ptr<Texture> TextureMgr::NewTexture2DArray(ID3D11Device* device, ID3D11De
 	viewDesc.Texture2DArray.ArraySize       = size;
 
 	// Create the SRV
-	DX::ThrowIfFailed(device->CreateShaderResourceView(tex_array.Get(), &viewDesc, texture_srv.GetAddressOf()),
+	ThrowIfFailed(device->CreateShaderResourceView(tex_array.Get(), &viewDesc, texture_srv.GetAddressOf()),
 	                  "Failed to create SRV");
 
 	SetDebugObjectName(tex_array.Get(), "TextureMgr Texture2DArray");
@@ -171,7 +171,7 @@ shared_ptr<Texture> TextureMgr::NewColorTexture(ID3D11Device* device, u32 color)
 	desc.Usage            = D3D11_USAGE_IMMUTABLE;
 	desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
 
-	DX::ThrowIfFailed(device->CreateTexture2D(&desc, &initData, texture.GetAddressOf()),
+	ThrowIfFailed(device->CreateTexture2D(&desc, &initData, texture.GetAddressOf()),
 	                  "Failed to create texture");
 
 	D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
@@ -179,7 +179,7 @@ shared_ptr<Texture> TextureMgr::NewColorTexture(ID3D11Device* device, u32 color)
 	srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_TEXTURE2D;
 	srv_desc.Texture2D.MipLevels = 1;
 
-	DX::ThrowIfFailed(device->CreateShaderResourceView(texture.Get(), &srv_desc, texture_srv.GetAddressOf()),
+	ThrowIfFailed(device->CreateShaderResourceView(texture.Get(), &srv_desc, texture_srv.GetAddressOf()),
 	                  "Failed to create SRV");
 
 	SetDebugObjectName(texture_srv.Get(), "TextureMgr ColorTexture");

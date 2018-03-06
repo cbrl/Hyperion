@@ -30,7 +30,7 @@ class StructuredBuffer {
 			// Map the buffer and update the data
 			D3D11_MAPPED_SUBRESOURCE mapped_data = {};
 
-			DX::ThrowIfFailed(device_context->Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mapped_data),
+			ThrowIfFailed(device_context->Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mapped_data),
 			                  "Failed to map structured buffer");
 
 			memcpy(mapped_data.pData, data.data(), sizeof(DataT) * size);
@@ -50,7 +50,7 @@ class StructuredBuffer {
 			desc.ByteWidth           = sizeof(DataT) * size;
 			desc.StructureByteStride = sizeof(DataT);
 
-			DX::ThrowIfFailed(device->CreateBuffer(&desc, nullptr, buffer.ReleaseAndGetAddressOf()),
+			ThrowIfFailed(device->CreateBuffer(&desc, nullptr, buffer.ReleaseAndGetAddressOf()),
 			                  "Failed to create structured buffer");
 
 			SetDebugObjectName(buffer.Get(), "Structured Buffer");
@@ -62,7 +62,7 @@ class StructuredBuffer {
 			srv_desc.Format              = DXGI_FORMAT_UNKNOWN;
 			srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_BUFFER;
 
-			DX::ThrowIfFailed(device->CreateShaderResourceView(buffer.Get(), &srv_desc, srv.ReleaseAndGetAddressOf()),
+			ThrowIfFailed(device->CreateShaderResourceView(buffer.Get(), &srv_desc, srv.ReleaseAndGetAddressOf()),
 							  "Failed to create structured buffer SRV");
 
 			SetDebugObjectName(srv.Get(), "Structured Buffer SRV");

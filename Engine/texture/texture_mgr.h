@@ -1,6 +1,5 @@
 #pragma once
 
-#include <filesystem>
 #include <d3d11.h>
 #include <WICTextureLoader.h>
 #include <DDSTextureLoader.h>
@@ -9,10 +8,6 @@
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
 #include "texture\texture.h"
-
-
-using std::experimental::filesystem::exists;
-using namespace DirectX;
 
 
 class TextureMgr {

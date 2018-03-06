@@ -1,6 +1,5 @@
 #pragma once
 
-#include <type_traits>
 #include <Windows.h>
 #include <Keyboard.h>
 #include <Mouse.h>
@@ -14,17 +13,14 @@
 #include "loader\obj_loader.h"
 
 
-using std::is_same_v;
-
-
 class Scene {
 	public:
 		Scene();
 		~Scene();
 
-		void UpdateMetrics(i32 FPS, i32 CPU, i32 mouseX, i32 mouseY);
-		void Tick(Input& input, float deltaTime);
-		void Render(float deltaTime);
+		void UpdateMetrics(i32 FPS, i32 CPU, i32 mouse_x, i32 mouse_y);
+		void Tick(Input& input, float delta_time);
+		void Render(float delta_time);
 
 	private:
 		void Init(ID3D11Device* device, ID3D11DeviceContext* device_context);

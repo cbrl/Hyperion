@@ -17,44 +17,44 @@ Text::~Text() {
 }
 
 
-void Text::SetText(wstring newText) {
-	text = newText;
+void Text::SetText(wstring new_text) {
+	text = new_text;
 }
 
 
-void Text::SetText(wstring newText, float2 newPosition) {
-	text     = newText;
+void Text::SetText(wstring new_text, float2 new_position) {
+	text     = new_text;
 	position = position;
 }
 
 
-void Text::SetText(wstring newText, float2 newPosition, XMVECTORF32 newColor) {
-	text     = newText;
-	position = newPosition;
-	color    = newColor;
+void Text::SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color) {
+	text     = new_text;
+	position = new_position;
+	color    = new_color;
 }
 
 
-void Text::SetText(wstring newText, float2 newPosition, XMVECTORF32 newColor, float newRotation) {
-	text     = newText;
-	position = newPosition;
-	color    = newColor;
-	rotation = newRotation;
+void Text::SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color, float new_rotation) {
+	text     = new_text;
+	position = new_position;
+	color    = new_color;
+	rotation = new_rotation;
 }
 
 
-void Text::SetPosition(float2 newPosition) {
-	position = newPosition;
+void Text::SetPosition(float2 new_position) {
+	position = new_position;
 }
 
 
-void Text::SetColor(XMVECTORF32 newColor) {
-	color = newColor;
+void Text::SetColor(XMVECTORF32 new_color) {
+	color = new_color;
 }
 
 
-void Text::SetRotation(float newRotation) {
-	rotation = newRotation;
+void Text::SetRotation(float new_rotation) {
+	rotation = new_rotation;
 }
 
 

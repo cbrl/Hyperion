@@ -24,6 +24,7 @@ class OBJLoader {
 
 		Model Load(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring folder, wstring filename, bool RHcoordinates);
 
+
 	private:
 		template<typename ElementT>
 		const ElementT& GetElement(vector<ElementT>& in, size_t index) {
@@ -100,7 +101,7 @@ class OBJLoader {
 		vector<float3> vertex_positions;
 		vector<float3> vertex_normals;
 		vector<float2> vertex_texCoords;
-		vector<u32>     indices;
+		vector<u32>    indices;
 
 		// Material library name
 		wstring meshMatLib;
