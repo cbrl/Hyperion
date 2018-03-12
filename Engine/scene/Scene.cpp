@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "scene.h"
 #include "system\system.h"
-#include "rendering\rendering_mgr.h"
 
 // TODO:
 // - Create bounding spheres for models
@@ -9,9 +8,8 @@
 // - Normal mapping
 // - Skybox
 // - Create a simple geometry generator
-// - Pipeline class for binding resources to pipeline stages
-// - Resource manager that handles creating or getting models/textures/etc
-// - TextureMgr -> TextureFactory
+// - Move other resources to resource manager (shaders and text?)
+// - Move Material to resource folder
 
 
 static const float zNear = 0.1f;
@@ -19,8 +17,8 @@ static const float zFar  = 1000.0f;
 static const float FOV   = XM_PI / 3.0f;
 
 
-Scene::Scene() {
-	Init(RenderingMgr::GetDevice(), RenderingMgr::GetDeviceContext());
+Scene::Scene(ID3D11Device* device, ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr) {
+	Init(device, device_context, resource_mgr);
 }
 
 
@@ -28,12 +26,7 @@ Scene::~Scene() {
 }
 
 
-void Scene::Render(float delta_time) {
-	Renderer::Get()->Tick(*this);
-}
-
-
-void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
+void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr) {
 	//----------------------------------------------------------------------------------
 	// Create camera
 	//----------------------------------------------------------------------------------
@@ -81,8 +74,7 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	OBJLoader loader;
-	models.push_back(loader.Load(device, device_context, L"data/models/test/", L"test.obj", false));
+	models.push_back(resource_mgr.CreateModel(L"data/models/test/", L"test.obj", false));
 	models.back().Scale(3.0f, 3.0f, 3.0f);
 	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
 	//models.back().SetRotation(0.0f, 1.2f, 0.0f);

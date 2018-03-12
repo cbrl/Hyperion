@@ -1,13 +1,17 @@
 #pragma once
 
+#include <d3d11.h>
+
 #include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
-#include "geometry\frustum\frustum.h"
-#include "shader\shader.h"
-#include "shader\hlsl.h"
+#include "rendering\pipeline.h"
 #include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
 #include "rendering\buffer\structured_buffer.h"
+#include "rendering\render_state_mgr.h"
+#include "geometry\frustum\frustum.h"
+#include "shader\shader.h"
+#include "shader\hlsl.h"
 #include "scene\scene.h"
 
 
@@ -16,10 +20,10 @@ using namespace DirectX;
 
 class ForwardRenderer {
 	public:
-		ForwardRenderer();
+		ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* device_context);
 		~ForwardRenderer() = default;
 
-		void Render(Scene& scene);
+		void Render(Scene& scene, RenderStateMgr& render_state_mgr);
 
 
 	private:

@@ -7,25 +7,18 @@
 
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
-#include "texture\texture.h"
+#include "resource\texture\texture.h"
 
 
-class TextureMgr {
+class TextureFactory {
 	public:
-		static TextureMgr* Get();
-
-		TextureMgr() = default;
-		~TextureMgr() = default;
+		TextureFactory() = default;
+		~TextureFactory() = default;
 
 		const shared_ptr<Texture> CreateTexture(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring filename);
-		const shared_ptr<Texture> CreateColorTexture(ID3D11Device* device, float4 color);
+		const shared_ptr<Texture> CreateColorTexture(ID3D11Device* device, u32 color);
 		const shared_ptr<Texture> CreateTexture2DArray(ID3D11Device* device, ID3D11DeviceContext* device_context, vector<wstring> filenames);
 
-
-	private:
-		shared_ptr<Texture> NewTexture(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring filename);
-		shared_ptr<Texture> NewTexture2DArray(ID3D11Device* device, ID3D11DeviceContext* device_context, vector<wstring> filenames);
-		shared_ptr<Texture> NewColorTexture(ID3D11Device* device, u32 color);
 
 	private:
 		map<wstring, shared_ptr<Texture>>         texture_map;

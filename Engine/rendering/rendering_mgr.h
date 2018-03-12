@@ -8,30 +8,33 @@
 #include "direct3d\direct3d.h"
 #include "rendering\render_state_mgr.h"
 #include "rendering\renderer.h"
-#include "texture\texture_mgr.h"
+#include "resource\resource_mgr.h"
+#include "scene\scene.h"
 
 
 class RenderingMgr {
 	public:
-		static const RenderingMgr* Get();
-
 		RenderingMgr();
 		~RenderingMgr();
 
 		void Init(u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
 
-		void OnResize(u32 window_width, u32 window_height) const { direct3D->OnResize(window_width, window_height); }
+		void OnResize(u32 window_width, u32 window_height) const {
+			direct3D->OnResize(window_width, window_height);
+		}
+
+		void Render(Scene& scene) const;
 
 
 		//----------------------------------------------------------------------------------
 		// Get device / device context
 		//----------------------------------------------------------------------------------
 
-		static ID3D11Device* GetDevice() {
-			return Direct3D::Get()->GetDevice();
+		ID3D11Device* GetDevice() {
+			return direct3D->GetDevice();
 		}
-		static ID3D11DeviceContext* GetDeviceContext() {
-			return Direct3D::Get()->GetDeviceContext();
+		ID3D11DeviceContext* GetDeviceContext() {
+			return direct3D->GetDeviceContext();
 		}
 
 
@@ -43,22 +46,14 @@ class RenderingMgr {
 			return direct3D.get();
 		}
 
-		const Renderer* GetRenderer() const {
-			return renderer.get();
-		}
-
-		const RenderStateMgr* GetRenderStateMgr() const {
-			return render_state_mgr.get();
-		}
-
-		TextureMgr* GetTextureMgr() const {
-			return texture_mgr.get();
+		ResourceMgr* GetResourceMgr() const {
+			return resource_mgr.get();
 		}
 
 
 	private:
 		unique_ptr<Direct3D>       direct3D;
 		unique_ptr<RenderStateMgr> render_state_mgr;
-		unique_ptr<TextureMgr>     texture_mgr;
 		unique_ptr<Renderer>       renderer;
+		unique_ptr<ResourceMgr>    resource_mgr;
 };

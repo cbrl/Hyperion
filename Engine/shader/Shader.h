@@ -8,11 +8,7 @@
 #include "util\engine_util.h"
 #include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
-#include "geometry\mesh\vertex_types.h"
-
-
-using std::ofstream;
-using namespace DirectX;
+#include "resource\mesh\vertex_types.h"
 
 
 class VertexShader {
@@ -20,7 +16,7 @@ class VertexShader {
 		VertexShader() = default;
 		~VertexShader() = default;
 
-		void Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
+		void Init(ID3D11Device* device, const WCHAR* filename,
 	              const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements);
 
 		void Bind(ID3D11DeviceContext* device_context) {
@@ -40,7 +36,7 @@ class PixelShader {
 		PixelShader() = default;
 		~PixelShader() = default;
 
-		void Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename);
+		void Init(ID3D11Device* device, const WCHAR* filename);
 		void Bind(ID3D11DeviceContext* device_context) {
 			device_context->PSSetShader(shader.Get(), nullptr, 0);
 		}
@@ -53,7 +49,7 @@ class PixelShader {
 
 class ShaderError {
 	public:
-	static void OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const WCHAR* shaderFilename);
+	static void OutputShaderErrorMessage(ID3D10Blob* errorMessage, const WCHAR* shaderFilename);
 
 	private:
 	ShaderError();

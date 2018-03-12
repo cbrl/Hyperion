@@ -1,46 +1,46 @@
 #include "stdafx.h"
 #include "forward_render.h"
-#include "rendering\rendering_mgr.h"
-#include "system\system.h"
 
 
-ForwardRenderer::ForwardRenderer()
-	: device(RenderingMgr::GetDevice())
-	, device_context(RenderingMgr::GetDeviceContext())
-	, model_buffer(device.Get())
-	, light_buffer(device.Get())
-	, directional_light_buffer(device.Get(), 16)
-	, point_light_buffer(device.Get(), 16)
-	, spot_light_buffer(device.Get(), 16)
+ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
+	: device(device)
+	, device_context(device_context)
+	, model_buffer(device)
+	, light_buffer(device)
+	, directional_light_buffer(device, 16)
+	, point_light_buffer(device, 16)
+	, spot_light_buffer(device, 16)
 {
 	// Create the vertex shader
 	vertex_shader = make_unique<VertexShader>();
-	vertex_shader->Init(System::Get()->GetHWND(), device.Get(), L"shaders/forward/forward_VS.hlsl",
+	vertex_shader->Init(device, L"shaders/forward/forward_VS.hlsl",
 						VertexPositionNormalTexture::InputElements, VertexPositionNormalTexture::InputElementCount);
 
 	// Create the pixel shader
 	pixel_shader = make_unique<PixelShader>();
-	pixel_shader->Init(System::Get()->GetHWND(), device.Get(), L"shaders/forward/forward.hlsl");
+	pixel_shader->Init(device, L"shaders/forward/forward.hlsl");
 
 
-	// Set buffers
-	/***/device_context->PSSetConstantBuffers(SLOT_CBUFFER_MODEL, 1, model_buffer.GetBufferAddress());
-	/***/device_context->VSSetConstantBuffers(SLOT_CBUFFER_MODEL, 1, model_buffer.GetBufferAddress());
-	device_context->PSSetConstantBuffers(SLOT_CBUFFER_LIGHT, 1, light_buffer.GetBufferAddress());
-	device_context->PSSetShaderResources(SLOT_SRV_DIRECTIONAL_LIGHTS, 1, directional_light_buffer.GetSRVAddress());
-	device_context->PSSetShaderResources(SLOT_SRV_POINT_LIGHTS, 1, point_light_buffer.GetSRVAddress());
-	device_context->PSSetShaderResources(SLOT_SRV_SPOT_LIGHTS, 1, spot_light_buffer.GetSRVAddress());
+	// Bind buffers
+	Pipeline::PS::BindConstantBuffers(device_context, SLOT_CBUFFER_MODEL, 1, model_buffer.GetBufferAddress());
+	Pipeline::VS::BindConstantBuffers(device_context, SLOT_CBUFFER_MODEL, 1, model_buffer.GetBufferAddress());
+	Pipeline::PS::BindConstantBuffers(device_context, SLOT_CBUFFER_LIGHT, 1, light_buffer.GetBufferAddress());
+
+	// Bind SRVs
+	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHTS, 1, directional_light_buffer.GetSRVAddress());
+	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_POINT_LIGHTS, 1, point_light_buffer.GetSRVAddress());
+	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_SPOT_LIGHTS, 1, spot_light_buffer.GetSRVAddress());
 }
 
 
-void ForwardRenderer::Render(Scene& scene) {
+void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 	//----------------------------------------------------------------------------------
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
 
 	// Bind the default depth render state
-	RenderStateMgr::Get()->BindDepthDefault(device_context.Get());
+	render_state_mgr.BindDepthDefault(device_context.Get());
 
 
 	// Get the matrices

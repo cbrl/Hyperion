@@ -39,7 +39,7 @@ bool System::Init() {
 	fps_counter = make_unique<FPS>();
 
 	// Initialize scene
-	scene = make_unique<Scene>();
+	scene = make_unique<Scene>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext(), *rendering_mgr->GetResourceMgr());
 
 	return true;
 }
@@ -92,7 +92,7 @@ void System::Tick() {
 	scene->UpdateMetrics(fps_counter->GetFPS(), NULL, mouseX, mouseY);
 
 	// Render scene
-	scene->Render(deltaTime);
+	rendering_mgr->Render(*scene);
 }
 
 

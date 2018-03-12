@@ -4,6 +4,7 @@
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
 #include "shader\hlsl.h"
+#include "rendering\pipeline.h"
 
 
 using namespace DirectX;
@@ -11,16 +12,16 @@ using namespace DirectX;
 
 class RenderStateMgr {
 	public:
-		static const RenderStateMgr* Get();
-
-		RenderStateMgr();
+		RenderStateMgr(ID3D11Device* device, ID3D11DeviceContext* device_context);
 		~RenderStateMgr();
 
 		void SetupStates(ID3D11Device* device, ID3D11DeviceContext* device_context);
 
+
 		//----------------------------------------------------------------------------------
 		// Bind states
 		//----------------------------------------------------------------------------------
+
 		// Blend states
 		void BindOpaque(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, u32 sampleMask = 0xffffffff) const;
 		void BindAlphaBlend(ID3D11DeviceContext* device_context, float blendFactor[4] = {}, u32 sampleMask = 0xffffffff) const;
@@ -51,6 +52,7 @@ class RenderStateMgr {
 		//----------------------------------------------------------------------------------
 		// Create states
 		//----------------------------------------------------------------------------------
+
 		HRESULT CreateBlendState(ID3D11Device* device, D3D11_BLEND srcBlend, D3D11_BLEND destBlend, _Out_ ID3D11BlendState** pResult);
 		HRESULT CreateDepthStencilState(ID3D11Device* device, bool enable, bool writeEnable, _Out_ ID3D11DepthStencilState** pResult);
 		HRESULT CreateRasterizerState(ID3D11Device* device, D3D11_CULL_MODE cullMode, D3D11_FILL_MODE fillMode, _Out_ ID3D11RasterizerState** pResult);

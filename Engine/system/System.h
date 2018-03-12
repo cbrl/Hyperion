@@ -43,7 +43,6 @@ class System : public MainWindow {
 		u32  GetWindowHeight() const { return window_height; }
 
 		RenderingMgr* GetRenderingMgr() const { return rendering_mgr.get(); }
-		Scene*        GetScene()        const { return scene.get(); }
 		Input*        GetInput()        const { return input.get(); }
 
 

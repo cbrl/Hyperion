@@ -6,15 +6,13 @@
 #include "util\io\io.h"
 #include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
-#include "geometry\mesh\vertex_types.h"
-#include "texture\texture_mgr.h"
-#include "geometry\model\model.h"
-#include "geometry\mesh\mesh.h"
-#include "geometry\boundingvolume\bounding_volume.h"
+#include "resource\mesh\vertex_types.h"
+#include "resource\model\model_blueprint.h"
+#include "resource\model\model.h"
 #include "material\material.h"
 
 
-using namespace DirectX;
+class ResourceMgr;
 
 
 class OBJLoader {
@@ -22,7 +20,10 @@ class OBJLoader {
 		OBJLoader();
 		~OBJLoader();
 
-		Model Load(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring folder, wstring filename, bool RHcoordinates);
+		Model Load(ID3D11Device* device,
+		           ResourceMgr& resource_mgr,
+				   wstring folder, wstring filename,
+				   bool right_hand_coords);
 
 
 	private:
@@ -90,7 +91,7 @@ class OBJLoader {
 
 
 	private:
-		bool RH_coord;
+		bool rh_coord;
 		i32  group_count;
 		i32  mtl_count;
 

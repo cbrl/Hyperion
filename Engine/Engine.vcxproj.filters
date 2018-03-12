@@ -49,9 +49,6 @@
     <Filter Include="Header Files\text">
       <UniqueIdentifier>{35fd1fe2-1c90-48f9-a055-04e3fa6524df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\texture">
-      <UniqueIdentifier>{f9f52a59-596f-44dd-8f5f-1afeac0aa322}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\util\fps">
       <UniqueIdentifier>{02d3e234-4218-4870-85d5-2a4793a4b768}</UniqueIdentifier>
     </Filter>
@@ -97,17 +94,8 @@
     <Filter Include="Source Files\text">
       <UniqueIdentifier>{0a58a3af-0d61-4c95-85ff-ea60d0e0f617}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\texture">
-      <UniqueIdentifier>{96c39175-8f0c-4b0d-98f3-6e70567f4dd0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\loader">
       <UniqueIdentifier>{6cd25658-9ada-4b96-9fa0-d75790403dc9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\mesh">
-      <UniqueIdentifier>{c1e2b0da-0ceb-4906-a40f-6ed53e4e4174}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\model">
-      <UniqueIdentifier>{f6f030ec-aeac-4622-b88b-02d88822aa9b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\shader">
       <UniqueIdentifier>{2ef3f4d4-a0d7-49a0-8128-b0b094557c91}</UniqueIdentifier>
@@ -142,17 +130,35 @@
     <Filter Include="Header Files\rendering\forward">
       <UniqueIdentifier>{208ac0aa-f7c6-48fb-9912-34453247733c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\geometry\mesh">
-      <UniqueIdentifier>{d9a807b8-a68b-407f-9574-5b1ed21aaac4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\util\datatypes">
       <UniqueIdentifier>{0aaa8c60-4881-43ee-b138-a9d0a6cf1d7f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\util\io">
       <UniqueIdentifier>{10095f51-1ba0-4d97-97b1-76b3d1785ceb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\geometry\model">
+    <Filter Include="Source Files\resource">
+      <UniqueIdentifier>{e9668fe2-2879-4a67-836e-08254b995230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource\model">
       <UniqueIdentifier>{7d1f81af-1b80-450a-a3b0-63008a0d739d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource\mesh">
+      <UniqueIdentifier>{d9a807b8-a68b-407f-9574-5b1ed21aaac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource\texture">
+      <UniqueIdentifier>{96c39175-8f0c-4b0d-98f3-6e70567f4dd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resource">
+      <UniqueIdentifier>{9f03ef2d-2e6e-42bf-ae71-8275e4d6de43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resource\model">
+      <UniqueIdentifier>{f6f030ec-aeac-4622-b88b-02d88822aa9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resource\mesh">
+      <UniqueIdentifier>{c1e2b0da-0ceb-4906-a40f-6ed53e4e4174}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resource\texture">
+      <UniqueIdentifier>{f9f52a59-596f-44dd-8f5f-1afeac0aa322}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +180,12 @@
     </None>
     <None Include="shaders\forward\forward.hlsl">
       <Filter>Resource Files\Shaders\forward</Filter>
+    </None>
+    <None Include="resource\mesh\mesh.tpp">
+      <Filter>Source Files\resource\mesh</Filter>
+    </None>
+    <None Include="resource\model\model.tpp">
+      <Filter>Source Files\resource\model</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -213,9 +225,6 @@
     <ClInclude Include="text\Text.h">
       <Filter>Header Files\text</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\mesh\Mesh.h">
-      <Filter>Header Files\geometry\mesh</Filter>
-    </ClInclude>
     <ClInclude Include="material\Material.h">
       <Filter>Header Files\material</Filter>
     </ClInclude>
@@ -224,9 +233,6 @@
     </ClInclude>
     <ClInclude Include="util\string\string.h">
       <Filter>Header Files\util\string</Filter>
-    </ClInclude>
-    <ClInclude Include="geometry\model\Model.h">
-      <Filter>Header Files\geometry\model</Filter>
     </ClInclude>
     <ClInclude Include="shader\HLSL.h">
       <Filter>Header Files\shader</Filter>
@@ -255,9 +261,6 @@
     <ClInclude Include="rendering\rendering_mgr.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
-    <ClInclude Include="texture\texture_mgr.h">
-      <Filter>Header Files\texture</Filter>
-    </ClInclude>
     <ClInclude Include="util\engine_util.h">
       <Filter>Header Files\util</Filter>
     </ClInclude>
@@ -270,12 +273,6 @@
     <ClInclude Include="rendering\forward\forward_render.h">
       <Filter>Header Files\rendering\forward</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\mesh\vertex_types.h">
-      <Filter>Header Files\geometry\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="texture\texture.h">
-      <Filter>Header Files\texture</Filter>
-    </ClInclude>
     <ClInclude Include="util\datatypes\datatypes.h">
       <Filter>Header Files\util\datatypes</Filter>
     </ClInclude>
@@ -285,11 +282,32 @@
     <ClInclude Include="util\datatypes\vector_types.h">
       <Filter>Header Files\util\datatypes</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\mesh\mesh.tpp">
-      <Filter>Source Files\geometry\mesh</Filter>
+    <ClInclude Include="rendering\pipeline.h">
+      <Filter>Header Files\rendering</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\model\model.tpp">
-      <Filter>Source Files\geometry\model</Filter>
+    <ClInclude Include="resource\resource_mgr.h">
+      <Filter>Header Files\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\texture\texture.h">
+      <Filter>Header Files\resource\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\model\model.h">
+      <Filter>Header Files\resource\model</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\mesh\mesh.h">
+      <Filter>Header Files\resource\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\mesh\vertex_types.h">
+      <Filter>Header Files\resource\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\texture\texture_factory.h">
+      <Filter>Header Files\resource\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\model\model_factory.h">
+      <Filter>Header Files\resource\model</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\model\model_blueprint.h">
+      <Filter>Header Files\resource\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -332,9 +350,6 @@
     <ClCompile Include="text\text.cpp">
       <Filter>Source Files\text</Filter>
     </ClCompile>
-    <ClCompile Include="texture\texture_mgr.cpp">
-      <Filter>Source Files\texture</Filter>
-    </ClCompile>
     <ClCompile Include="util\fps\fps.cpp">
       <Filter>Source Files\util\fps</Filter>
     </ClCompile>
@@ -350,8 +365,14 @@
     <ClCompile Include="rendering\forward\forward_render.cpp">
       <Filter>Source Files\rendering\forward</Filter>
     </ClCompile>
-    <ClCompile Include="geometry\mesh\vertex_types.cpp">
-      <Filter>Source Files\geometry\mesh</Filter>
+    <ClCompile Include="resource\resource_mgr.cpp">
+      <Filter>Source Files\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="resource\mesh\vertex_types.cpp">
+      <Filter>Source Files\resource\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="resource\texture\texture_factory.cpp">
+      <Filter>Source Files\resource\texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

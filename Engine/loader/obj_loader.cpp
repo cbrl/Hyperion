@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "obj_loader.h"
 #include "loader\obj_tokens.h"
+#include "resource\resource_mgr.h"
 
 
 OBJLoader::OBJLoader()
-	: RH_coord(false)
+	: rh_coord(false)
 	, group_count(0)
 	, mtl_count(0)
 {}
@@ -16,7 +17,7 @@ OBJLoader::~OBJLoader() {
 
 void OBJLoader::Reset() {
 	// Reset the local variables
-	RH_coord    = false;
+	rh_coord = false;
 	group_count = 0;
 	mtl_count   = 0;
 
@@ -33,12 +34,17 @@ void OBJLoader::Reset() {
 }
 
 
-Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context, wstring folder, wstring filename, bool RHcoordinates) {
+Model OBJLoader::Load(ID3D11Device* device,
+                      ResourceMgr& resource_mgr,
+					  wstring folder, wstring filename,
+					  bool right_hand_coords) {
+
 	// Make sure the file exists first
-	ThrowIfFailed(fs::exists(folder + filename), "Error loading file");
+	ThrowIfFailed(fs::exists(folder + filename),
+	              "Error loading file");
 
 	// Set the coordinate system
-	RH_coord = RHcoordinates;
+	rh_coord = right_hand_coords;
 
 
 	// Load the model
@@ -56,20 +62,20 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context,
 		mtl.name = materials[i].name;
 		
 		if (!materials[i].map_Kd.empty())
-			mtl.map_Kd = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Kd);
+			mtl.map_Kd = resource_mgr.CreateTexture(folder + materials[i].map_Kd);
 		else
-			mtl.map_Kd = TextureMgr::Get()->CreateColorTexture(device, float4(1.0f, 1.0f, 1.0f, 1.0f));
+			mtl.map_Kd = resource_mgr.CreateTexture(float4(1.0f, 1.0f, 1.0f, 1.0f));
 
 		if (!materials[i].map_Ka.empty())
-			mtl.map_Ka   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Ka);
+			mtl.map_Ka   = resource_mgr.CreateTexture(folder + materials[i].map_Ka);
 		if (!materials[i].map_Ks.empty())
-			mtl.map_Ks   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Ks);
+			mtl.map_Ks   = resource_mgr.CreateTexture(folder + materials[i].map_Ks);
 		if (!materials[i].map_Ns.empty())
-			mtl.map_Ns   = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_Ns);
+			mtl.map_Ns   = resource_mgr.CreateTexture(folder + materials[i].map_Ns);
 		if (!materials[i].map_d.empty())
-			mtl.map_d    = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_d);
+			mtl.map_d    = resource_mgr.CreateTexture(folder + materials[i].map_d);
 		if (!materials[i].map_bump.empty())
-			mtl.map_bump = TextureMgr::Get()->CreateTexture(device, device_context, folder + materials[i].map_bump);
+			mtl.map_bump = resource_mgr.CreateTexture(folder + materials[i].map_bump);
 
 		mtl.Ka = materials[i].Ka;
 		mtl.Kd = materials[i].Kd;
@@ -84,8 +90,8 @@ Model OBJLoader::Load(ID3D11Device* device, ID3D11DeviceContext* device_context,
 	}
 
 	// Create the model
-	Model model(device, vertices, indices, mtlVector, group_material_indices, group_count, new_group_indices);
-
+	ModelBlueprint<VertexPositionNormalTexture> blueprint(vertices, indices, mtlVector, group_material_indices, group_count, new_group_indices);
+	Model model(device, blueprint);
 
 	// Reset the obj loader
 	Reset();
@@ -131,7 +137,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 			float3 position;
 			stream >> position.x >> position.y >> position.z;
 
-			if (RH_coord) {
+			if (rh_coord) {
 				position.z *= -1.0f;
 			}
 
@@ -143,7 +149,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 			float3 normal;
 			stream >> normal.x >> normal.y >> normal.z;
 
-			if (RH_coord) {
+			if (rh_coord) {
 				normal.z *= -1.0f;
 			}
 
@@ -155,7 +161,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 			float2 texCoord;
 			stream >> texCoord.x >> texCoord.y;
 
-			if (RH_coord) {
+			if (rh_coord) {
 				texCoord.y = 1.0f - texCoord.y;
 			}
 

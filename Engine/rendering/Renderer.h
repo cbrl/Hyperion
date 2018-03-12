@@ -5,25 +5,26 @@
 
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
-#include "geometry\mesh\vertex_types.h"
+#include "resource\mesh\vertex_types.h"
 #include "direct3d\direct3d.h"
 #include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
-#include "scene\scene.h"
+#include "rendering\render_state_mgr.h"
 #include "rendering\forward\forward_render.h"
+#include "scene\scene.h"
 
 
 class Renderer {
 	public:
-		static const Renderer* Get();
+		Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context);
+		~Renderer() = default;
 
-		Renderer();
-		~Renderer();
-
-		void Tick(Scene& scene) const;
+		void Render(Scene& scene, RenderStateMgr& render_state_mgr) const;
 
 
 	private:
+		ComPtr<ID3D11DeviceContext> device_context;
+
 		// Renderers
 		unique_ptr<ForwardRenderer> forward_renderer;
 

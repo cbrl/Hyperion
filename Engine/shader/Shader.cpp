@@ -6,7 +6,7 @@
 // Vertex Shader
 //----------------------------------------------------------------------------------
 
-void VertexShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
+void VertexShader::Init(ID3D11Device* device, const WCHAR* filename,
 						const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements) {
 	HRESULT result;
 	ComPtr<ID3D10Blob> error_message = {};
@@ -26,10 +26,10 @@ void VertexShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
 								flags, NULL, shader_buffer.GetAddressOf(), error_message.GetAddressOf());
 	if (FAILED(result)) {
 		if (error_message) {
-			ShaderError::OutputShaderErrorMessage(hWnd, error_message.Get(), filename);
+			ShaderError::OutputShaderErrorMessage(error_message.Get(), filename);
 		}
 		else {
-			MessageBox(hWnd, filename, L"Missing vertex shader file", MB_OK);
+			MessageBox(NULL, filename, L"Missing vertex shader file", MB_OK);
 		}
 
 		ThrowIfFailed(result, "Error compiling vertex shader");
@@ -54,7 +54,7 @@ void VertexShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename,
 // Pixel Shader
 //----------------------------------------------------------------------------------
 
-void PixelShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename) {
+void PixelShader::Init(ID3D11Device* device, const WCHAR* filename) {
 	HRESULT result;
 	ComPtr<ID3D10Blob> error_message = {};
 	ComPtr<ID3D10Blob> shader_buffer = {};
@@ -73,10 +73,10 @@ void PixelShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename) {
 								flags, NULL, shader_buffer.GetAddressOf(), error_message.GetAddressOf());
 	if (FAILED(result)) {
 		if (error_message) {
-			ShaderError::OutputShaderErrorMessage(hWnd, error_message.Get(), filename);
+			ShaderError::OutputShaderErrorMessage(error_message.Get(), filename);
 		}
 		else {
-			MessageBox(hWnd, filename, L"Missing pixel shader file", MB_OK);
+			MessageBox(NULL, filename, L"Missing pixel shader file", MB_OK);
 		}
 
 		ThrowIfFailed(result, "Error compiling pixel shader");
@@ -95,7 +95,7 @@ void PixelShader::Init(HWND hWnd, ID3D11Device* device, const WCHAR* filename) {
 // Display error message if shader compilation failed
 //----------------------------------------------------------------------------------
 
-void ShaderError::OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, const WCHAR* shaderFilename) {
+void ShaderError::OutputShaderErrorMessage(ID3D10Blob* errorMessage, const WCHAR* shaderFilename) {
 	char*    compileErrors;
 	size_t   bufferSize;
 	ofstream fout;
@@ -117,5 +117,5 @@ void ShaderError::OutputShaderErrorMessage(HWND hWnd, ID3D10Blob* errorMessage, 
 	fout.close();
 
 	// Pop a message up on the screen to notify the user to check the text file for compile errors
-	MessageBox(hWnd, L"Error compiling shader.  Check shader_error.txt", shaderFilename, MB_OK);
+	MessageBox(NULL, L"Error compiling shader.  Check shader_error.txt", shaderFilename, MB_OK);
 }

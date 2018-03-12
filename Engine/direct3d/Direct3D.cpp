@@ -2,11 +2,6 @@
 #include "direct3d.h"
 #include "rendering\rendering_mgr.h"
 
-const Direct3D* Direct3D::Get() {
-	assert(RenderingMgr::Get());
-	return RenderingMgr::Get()->GetD3D();
-}
-
 
 Direct3D::Direct3D(HWND hWnd, i32 window_width, i32 window_height, bool fullscreen, bool vSync, bool MSAA)
 	: hWnd(hWnd)
@@ -51,15 +46,14 @@ void Direct3D::Init() {
 		createDeviceFlags,
 		0, 0,              // default feature level array
 		D3D11_SDK_VERSION,
-		&device,
+		device.GetAddressOf(),
 		&featureLevel,
-		&device_context);
+		device_context.GetAddressOf());
 
 	ThrowIfFailed(hr, "D3D11CreateDevice Failed");
 
-	if (featureLevel != D3D_FEATURE_LEVEL_11_0) {
-		ThrowIfFailed(E_FAIL, "Direct3D Feature Level 11 unsupported");
-	}
+	ThrowIfFailed(featureLevel == D3D_FEATURE_LEVEL_11_0,
+				  "Direct3D Feature Level 11 unsupported");
 
 	// Create debug object
 	#if defined(DEBUG) || defined(_DEBUG)  
@@ -125,18 +119,18 @@ void Direct3D::Init() {
 	// This function is being called with a device from a different IDXGIFactory."
 
 	ComPtr<IDXGIDevice> dxgiDevice = nullptr;
-	ThrowIfFailed(device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.GetAddressOf()),
 	                  "QueryInterface failed on dxgiDevice");
 
 	ComPtr<IDXGIAdapter> dxgiAdapter = nullptr;
-	ThrowIfFailed(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)dxgiAdapter.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)dxgiAdapter.GetAddressOf()),
 	                  "Failed to get parent of dxgiDevice");
 
 	ComPtr<IDXGIFactory> dxgiFactory = nullptr;
-	ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)dxgiFactory.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)dxgiFactory.GetAddressOf()),
 	                  "Failed to get parent of dxgiFactory");
 
-	ThrowIfFailed(dxgiFactory->CreateSwapChain(device.Get(), &sd, swap_chain.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(dxgiFactory->CreateSwapChain(device.Get(), &sd, swap_chain.GetAddressOf()),
 	                  "Failed to create swapchain");
 
 
@@ -247,7 +241,7 @@ void Direct3D::OnResize(i32 winWidth, i32 winHeight) {
 
 	// Bind the render target view and depth/stencil view to the pipeline
 
-	device_context->OMSetRenderTargets(1, render_target_view.GetAddressOf(), depth_stencil_view.Get());
+	Pipeline::OM::BindRTVs(device_context.Get(), 1, render_target_view.GetAddressOf(), depth_stencil_view.Get());
 
 
 	// Set the viewport transform
@@ -259,16 +253,18 @@ void Direct3D::OnResize(i32 winWidth, i32 winHeight) {
 	window_viewport.MinDepth = 0.0f;
 	window_viewport.MaxDepth = 1.0f;
 
-	device_context->RSSetViewports(1, &window_viewport);
+	Pipeline::RS::BindViewports(device_context.Get(), 1, &window_viewport);
 }
 
 
-void Direct3D::BeginScene(float red, float green, float blue, float alpha) const {
-	float color[4] = { red, green, blue, alpha };
+void Direct3D::Clear() const {
+	Pipeline::OM::ClearRTV(device_context.Get(), render_target_view.Get());
+}
 
-	// Clear render taget view and depth stencil view
-	device_context->ClearRenderTargetView(render_target_view.Get(), color);
-	device_context->ClearDepthStencilView(depth_stencil_view.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+void Direct3D::Clear(const float color[4]) const {
+	Pipeline::OM::ClearRTV(device_context.Get(), render_target_view.Get(), color);
+	Pipeline::OM::ClearDSV(device_context.Get(), depth_stencil_view.Get());
 }
 
 

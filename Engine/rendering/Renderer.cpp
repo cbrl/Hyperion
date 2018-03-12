@@ -1,50 +1,34 @@
 #include "stdafx.h"
 #include "renderer.h"
-#include "system\system.h"
-#include "rendering\rendering_mgr.h"
 
 
-const Renderer* Renderer::Get() {
-	assert(RenderingMgr::Get());
-	return RenderingMgr::Get()->GetRenderer();
-}
-
-
-Renderer::Renderer() : camera_buffer(RenderingMgr::GetDevice()) {
+Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
+	: device_context(device_context)
+	, camera_buffer(device)
+{
 	// Set cbuffers
-	RenderingMgr::GetDeviceContext()->PSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer.GetBufferAddress());
-	RenderingMgr::GetDeviceContext()->VSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer.GetBufferAddress());
+	device_context->PSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer.GetBufferAddress());
+	device_context->VSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer.GetBufferAddress());
 
 	// Create forward renderer
-	forward_renderer = make_unique<ForwardRenderer>();
+	forward_renderer = make_unique<ForwardRenderer>(device, device_context);
 }
 
 
-Renderer::~Renderer() {
-}
-
-
-void Renderer::Tick(Scene& scene) const {
-
-	//----------------------------------------------------------------------------------
-	// Clear background with specified color
-	//----------------------------------------------------------------------------------
-
-	Direct3D::Get()->BeginScene(0.3f, 0.3f, 0.3f, 1.0f);
-
+void Renderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) const {
 
 	//----------------------------------------------------------------------------------
 	// Update the camera buffer
 	//----------------------------------------------------------------------------------
 
-	camera_buffer.UpdateData(RenderingMgr::GetDeviceContext(), CameraBuffer(scene.camera->GetPosition()));
+	camera_buffer.UpdateData(device_context.Get(), CameraBuffer(scene.camera->GetPosition()));
 
 	
 	//----------------------------------------------------------------------------------
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
 	
-	forward_renderer->Render(scene);
+	forward_renderer->Render(scene, render_state_mgr);
 
 
 	//----------------------------------------------------------------------------------
@@ -54,11 +38,4 @@ void Renderer::Tick(Scene& scene) const {
 	scene.ForEach<Text>([](Text& text) {
 		text.Render();
 	});
-
-
-	//----------------------------------------------------------------------------------
-	// Present the frame
-	//----------------------------------------------------------------------------------
-
-	Direct3D::Get()->EndScene();
 }

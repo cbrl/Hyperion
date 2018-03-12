@@ -2,7 +2,7 @@
 
 #include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
-#include "texture\texture.h"
+#include "resource\texture\texture.h"
 
 using namespace DirectX;
 

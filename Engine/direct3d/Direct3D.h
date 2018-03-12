@@ -8,17 +8,17 @@
 #include <dxgi.h>
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
+#include "rendering\pipeline.h"
 
 using namespace DirectX;
 
 class Direct3D {
 	public:
-		static const Direct3D* Get();
-
 		Direct3D(HWND hWnd, i32 window_width, i32 window_height, bool fullscreen, bool vSync, bool MSAA);
 		~Direct3D();
 
-		void BeginScene(float r, float g, float b, float a) const;
+		void Clear() const;
+		void Clear(const float color[4]) const;
 		void EndScene() const;
 		void OnResize(i32 win_width, i32 win_height);
 

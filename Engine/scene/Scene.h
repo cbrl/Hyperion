@@ -8,22 +8,21 @@
 #include "input\input.h"
 #include "camera\camera.h"
 #include "rendering\buffer\buffers.h"
-#include "geometry\model\model.h"
+#include "resource\resource_mgr.h"
+#include "resource\model\model.h"
 #include "text\text.h"
-#include "loader\obj_loader.h"
 
 
 class Scene {
 	public:
-		Scene();
+		Scene(ID3D11Device* device, ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr);
 		~Scene();
 
 		void UpdateMetrics(i32 FPS, i32 CPU, i32 mouse_x, i32 mouse_y);
 		void Tick(Input& input, float delta_time);
-		void Render(float delta_time);
 
 	private:
-		void Init(ID3D11Device* device, ID3D11DeviceContext* device_context);
+		void Init(ID3D11Device* device, ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr);
 
 
 	public:

@@ -157,12 +157,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="geometry\mesh\mesh.tpp">
-      <FileType>Document</FileType>
-    </ClInclude>
-    <ClInclude Include="geometry\model\model.tpp">
-      <FileType>Document</FileType>
-    </ClInclude>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +164,6 @@
     <ClInclude Include="direct3d\direct3d.h" />
     <ClInclude Include="geometry\boundingvolume\bounding_volume.h" />
     <ClInclude Include="geometry\frustum\frustum.h" />
-    <ClInclude Include="geometry\mesh\mesh.h" />
-    <ClInclude Include="geometry\mesh\vertex_types.h" />
-    <ClInclude Include="geometry\model\model.h" />
     <ClInclude Include="input\input.h" />
     <ClInclude Include="loader\obj_loader.h" />
     <ClInclude Include="loader\obj_tokens.h" />
@@ -181,9 +172,18 @@
     <ClInclude Include="rendering\buffer\constant_buffer.h" />
     <ClInclude Include="rendering\buffer\structured_buffer.h" />
     <ClInclude Include="rendering\forward\forward_render.h" />
+    <ClInclude Include="rendering\pipeline.h" />
     <ClInclude Include="rendering\renderer.h" />
     <ClInclude Include="rendering\rendering_mgr.h" />
     <ClInclude Include="rendering\render_state_mgr.h" />
+    <ClInclude Include="resource\mesh\mesh.h" />
+    <ClInclude Include="resource\mesh\vertex_types.h" />
+    <ClInclude Include="resource\model\model.h" />
+    <ClInclude Include="resource\model\model_blueprint.h" />
+    <ClInclude Include="resource\model\model_factory.h" />
+    <ClInclude Include="resource\resource_mgr.h" />
+    <ClInclude Include="resource\texture\texture.h" />
+    <ClInclude Include="resource\texture\texture_factory.h" />
     <ClInclude Include="scene\scene.h" />
     <ClInclude Include="shader\hlsl.h" />
     <ClInclude Include="shader\shader.h" />
@@ -191,8 +191,6 @@
     <ClInclude Include="system\main_window.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="texture\texture.h" />
-    <ClInclude Include="texture\texture_mgr.h" />
     <ClInclude Include="text\text.h" />
     <ClInclude Include="util\datatypes\datatypes.h" />
     <ClInclude Include="util\datatypes\vector_types.h" />
@@ -207,7 +205,6 @@
     <ClCompile Include="camera\camera.cpp" />
     <ClCompile Include="direct3d\direct3d.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
-    <ClCompile Include="geometry\mesh\vertex_types.cpp" />
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="loader\obj_loader.cpp" />
     <ClCompile Include="main\main.cpp" />
@@ -215,6 +212,9 @@
     <ClCompile Include="rendering\renderer.cpp" />
     <ClCompile Include="rendering\render_state_mgr.cpp" />
     <ClCompile Include="rendering\rending_mgr.cpp" />
+    <ClCompile Include="resource\mesh\vertex_types.cpp" />
+    <ClCompile Include="resource\resource_mgr.cpp" />
+    <ClCompile Include="resource\texture\texture_factory.cpp" />
     <ClCompile Include="scene\scene.cpp" />
     <ClCompile Include="shader\shader.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -223,12 +223,13 @@
     </ClCompile>
     <ClCompile Include="system\main_window.cpp" />
     <ClCompile Include="system\system.cpp" />
-    <ClCompile Include="texture\texture_mgr.cpp" />
     <ClCompile Include="text\text.cpp" />
     <ClCompile Include="util\fps\fps.cpp" />
     <ClCompile Include="util\timer\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resource\mesh\mesh.tpp" />
+    <None Include="resource\model\model.tpp" />
     <None Include="shaders\include\light.hlsl">
       <FileType>Document</FileType>
     </None>
