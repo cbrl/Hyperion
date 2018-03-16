@@ -6,7 +6,7 @@
 #include "util\datatypes\datatypes.h"
 #include "resource\model\model_blueprint.h"
 #include "resource\mesh\mesh.h"
-#include "material\material.h"
+#include "resource\material\material.h"
 #include "geometry\boundingvolume\bounding_volume.h"
 
 

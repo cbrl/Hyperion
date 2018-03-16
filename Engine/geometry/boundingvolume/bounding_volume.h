@@ -46,13 +46,11 @@ struct AABB {
 		const XMVECTOR Max() const { return max_point; }
 
 		void Transform(XMMATRIX M) {
-			XMVECTOR transformed_verts[8];
-
 			for (i32 i = 0; i < 8; ++i) {
-				transformed_verts[i] = XMVector3TransformCoord(vertices[i], M);
+				vertices[i] = XMVector3TransformCoord(vertices[i], M);
 			}
 
-			auto pair = MinMaxPoint(transformed_verts, 8);
+			auto pair = MinMaxPoint(vertices);
 			min_point = pair.first;
 			max_point = pair.second;
 		}

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
-#include "util\datatypes\datatypes.h"
+#include "util\datatypes\vector_types.h"
 #include "util\math\math.h"
 
 

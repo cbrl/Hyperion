@@ -21,7 +21,7 @@ class StructuredBuffer {
 				return;
 			}
 
-			// Recreate the buffer if the data being fed to it is larger than the buffer
+			// Recreate the buffer if the array of data being fed to it is larger than the buffer
 			if (data.size() > size) {
 				size = static_cast<u32>(data.size());
 				CreateBuffer(device);
@@ -31,7 +31,7 @@ class StructuredBuffer {
 			D3D11_MAPPED_SUBRESOURCE mapped_data = {};
 
 			ThrowIfFailed(device_context->Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mapped_data),
-			                  "Failed to map structured buffer");
+			              "Failed to map structured buffer");
 
 			memcpy(mapped_data.pData, data.data(), sizeof(DataT) * size);
 
@@ -51,7 +51,7 @@ class StructuredBuffer {
 			desc.StructureByteStride = sizeof(DataT);
 
 			ThrowIfFailed(device->CreateBuffer(&desc, nullptr, buffer.ReleaseAndGetAddressOf()),
-			                  "Failed to create structured buffer");
+			              "Failed to create structured buffer");
 
 			SetDebugObjectName(buffer.Get(), "Structured Buffer");
 
@@ -63,7 +63,7 @@ class StructuredBuffer {
 			srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_BUFFER;
 
 			ThrowIfFailed(device->CreateShaderResourceView(buffer.Get(), &srv_desc, srv.ReleaseAndGetAddressOf()),
-							  "Failed to create structured buffer SRV");
+			              "Failed to create structured buffer SRV");
 
 			SetDebugObjectName(srv.Get(), "Structured Buffer SRV");
 		}

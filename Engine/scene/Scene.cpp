@@ -9,7 +9,6 @@
 // - Skybox
 // - Create a simple geometry generator
 // - Move other resources to resource manager (shaders and text?)
-// - Move Material to resource folder
 
 
 static const float zNear = 0.1f;
@@ -44,30 +43,30 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context, Reso
 	directional_lights.push_back(DirectionalLight());
 	directional_lights[0].ambient_color = float4(0.2f, 0.0f, 0.0f, 1.0f);
 	directional_lights[0].diffuse_color = float4(1.0f, 0.0f, 0.0f, 1.0f);
-	directional_lights[0].specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	directional_lights[0].specular      = float4(1.0f, 0.0f, 0.0f, 1.0f);
 	directional_lights[0].direction     = float3(1.0f, 0.0f, 0.0f);
 
 	// Y- direction = Green
 	directional_lights.push_back(DirectionalLight());
 	directional_lights[1].ambient_color = float4(0.0f, 0.2f, 0.0f, 1.0f);
 	directional_lights[1].diffuse_color = float4(0.0f, 1.0f, 0.0f, 1.0f);
-	directional_lights[1].specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	directional_lights[1].specular      = float4(0.0f, 1.0f, 0.0f, 1.0f);
 	directional_lights[1].direction     = float3(0.0f, -1.0f, 0.0f);
 
 	// Z+ direction = Blue
 	directional_lights.push_back(DirectionalLight());
 	directional_lights[2].ambient_color = float4(0.0f, 0.0f, 0.2f, 1.0f);
 	directional_lights[2].diffuse_color = float4(0.0f, 0.0f, 1.0f, 1.0f);
-	directional_lights[2].specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	directional_lights[2].specular      = float4(0.0f, 0.0f, 1.0f, 1.0f);
 	directional_lights[2].direction     = float3(0.0f, 0.0f, 1.0f);
 
 	//point_lights.push_back(PointLight());
-	//point_lights.back().ambient_color = float4(0.5f, 0.5f, 0.5f, 1.0f);
+	//point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
 	//point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	//point_lights.back().attenuation   = float3(1.0f, 1.0f, 1.0f);
-	//point_lights.back().specular      = float4(1.0f, 1.0f, 1.0f, 32.0f);
-	//point_lights.back().position      = float3(0.0f, 0.0f, -2.0f);
-	//point_lights.back().range         = 10.0f;
+	//point_lights.back().attenuation   = float3(0.0f, 1.0f, 0.0f);
+	//point_lights.back().specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	//point_lights.back().position      = float3(0.0f, 2.0f, 0.0f);
+	//point_lights.back().range         = 50.0f;
 
 
 	//----------------------------------------------------------------------------------
@@ -109,22 +108,22 @@ void Scene::UpdateMetrics(i32 FPS, i32 CPU, i32 mouse_x, i32 mouse_y) {
 	texts.at("FPS").SetText(L"FPS: " + to_wstring(FPS));
 
 	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_x)
-	                           + L"\nY: " + to_wstring(mouse_y));
+	                          + L"\nY: " + to_wstring(mouse_y));
 
 	float3 position = camera->GetPosition();
 	texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
-	                              + L"\nY: " + to_wstring(position.y)
-	                              + L"\nZ: " + to_wstring(position.z));
+	                             + L"\nY: " + to_wstring(position.y)
+	                             + L"\nZ: " + to_wstring(position.z));
 
 	float3 rotation = camera->GetRotation();
 	texts.at("Rotation").SetText(L"Rotation \nX: " + to_wstring(rotation.x)
-	                              + L"\nY: " + to_wstring(rotation.y)
-	                              + L"\nZ: " + to_wstring(rotation.z));
+	                             + L"\nY: " + to_wstring(rotation.y)
+	                             + L"\nZ: " + to_wstring(rotation.z));
 
 	float3 velocity = camera->GetVelocity() * 1000.0f;
 	texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)
-	                              + L"\nY: " + to_wstring(velocity.y)
-	                              + L"\nZ: " + to_wstring(velocity.z));
+	                             + L"\nY: " + to_wstring(velocity.y)
+	                             + L"\nZ: " + to_wstring(velocity.z));
 }
 
 
@@ -182,12 +181,8 @@ void Scene::Tick(Input& input, float delta_time) {
 	}
 
 	// Update camera rotation and position
-	if (move_units.x || move_units.y || move_units.z) {
-		camera->Move(move_units);
-	}
-	if (rotateUnits.x || rotateUnits.y || rotateUnits.z) {
-		camera->Rotate(rotateUnits);
-	}
+	camera->Move(move_units);
+	camera->Rotate(rotateUnits);
 
 	// Update camera 
 	camera->Update(delta_time);

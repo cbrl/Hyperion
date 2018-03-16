@@ -2,7 +2,7 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
-#include "material\material.h"
+#include "resource\material\material.h"
 
 
 class Mesh {

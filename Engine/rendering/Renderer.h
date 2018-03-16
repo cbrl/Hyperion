@@ -5,7 +5,6 @@
 
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
-#include "resource\mesh\vertex_types.h"
 #include "direct3d\direct3d.h"
 #include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"

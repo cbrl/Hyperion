@@ -8,7 +8,6 @@
 #include "util\engine_util.h"
 #include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
-#include "resource\mesh\vertex_types.h"
 
 
 class VertexShader {

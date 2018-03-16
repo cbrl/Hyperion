@@ -167,7 +167,6 @@
     <ClInclude Include="input\input.h" />
     <ClInclude Include="loader\obj_loader.h" />
     <ClInclude Include="loader\obj_tokens.h" />
-    <ClInclude Include="material\material.h" />
     <ClInclude Include="rendering\buffer\buffers.h" />
     <ClInclude Include="rendering\buffer\constant_buffer.h" />
     <ClInclude Include="rendering\buffer\structured_buffer.h" />
@@ -176,8 +175,8 @@
     <ClInclude Include="rendering\renderer.h" />
     <ClInclude Include="rendering\rendering_mgr.h" />
     <ClInclude Include="rendering\render_state_mgr.h" />
+    <ClInclude Include="resource\material\material.h" />
     <ClInclude Include="resource\mesh\mesh.h" />
-    <ClInclude Include="resource\mesh\vertex_types.h" />
     <ClInclude Include="resource\model\model.h" />
     <ClInclude Include="resource\model\model_blueprint.h" />
     <ClInclude Include="resource\model\model_factory.h" />
@@ -194,6 +193,7 @@
     <ClInclude Include="text\text.h" />
     <ClInclude Include="util\datatypes\datatypes.h" />
     <ClInclude Include="util\datatypes\vector_types.h" />
+    <ClInclude Include="util\datatypes\vertex_types.h" />
     <ClInclude Include="util\engine_util.h" />
     <ClInclude Include="util\fps\fps.h" />
     <ClInclude Include="util\io\io.h" />
@@ -212,7 +212,6 @@
     <ClCompile Include="rendering\renderer.cpp" />
     <ClCompile Include="rendering\render_state_mgr.cpp" />
     <ClCompile Include="rendering\rending_mgr.cpp" />
-    <ClCompile Include="resource\mesh\vertex_types.cpp" />
     <ClCompile Include="resource\resource_mgr.cpp" />
     <ClCompile Include="resource\texture\texture_factory.cpp" />
     <ClCompile Include="scene\scene.cpp" />
@@ -224,6 +223,7 @@
     <ClCompile Include="system\main_window.cpp" />
     <ClCompile Include="system\system.cpp" />
     <ClCompile Include="text\text.cpp" />
+    <ClCompile Include="util\datatypes\vertex_types.cpp" />
     <ClCompile Include="util\fps\fps.cpp" />
     <ClCompile Include="util\timer\timer.cpp" />
   </ItemGroup>

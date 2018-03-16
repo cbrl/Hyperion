@@ -4,7 +4,7 @@
 #include "util\string\string.h"
 #include "util\math\math.h"
 #include "geometry\boundingvolume\bounding_volume.h"
-#include "material\material.h"
+#include "resource\material\material.h"
 
 
 struct ModelPart {

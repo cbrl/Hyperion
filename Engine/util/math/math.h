@@ -114,16 +114,3 @@ inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<XMVECTOR>& ve
 
 	return std::pair<XMVECTOR, XMVECTOR>(min, max);
 }
-
-
-inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const XMVECTOR* vertices, i32 size) {
-	XMVECTOR min = { FLT_MAX, FLT_MAX, FLT_MAX };
-	XMVECTOR max = { FLT_MIN, FLT_MIN, FLT_MIN };
-
-	for (i32 i = 0; i < size; ++i) {
-		min = XMVectorMin(min, vertices[i]);
-		max = XMVectorMax(max, vertices[i]);
-	}
-
-	return std::pair<XMVECTOR, XMVECTOR>(min, max);
-}

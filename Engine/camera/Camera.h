@@ -66,7 +66,6 @@ class Camera {
 
 
 		// Get matrices
-		XMMATRIX GetWorldMatrix() const { return world_matrix; }
 		XMMATRIX GetViewMatrix()  const { return view_matrix; }
 		XMMATRIX GetProjMatrix()  const { return projection_matrix; }
 		XMMATRIX GetOrthoMatrix() const { return ortho_matrix; }
@@ -83,6 +82,7 @@ class Camera {
 
 
 	private:
+		// Viewport and depth range
 		u32   viewport_width;
 		u32   viewport_height;
 		float z_near;
@@ -90,7 +90,6 @@ class Camera {
 		float fov;
 		float aspect_ratio;
 
-		XMMATRIX world_matrix;
 		XMMATRIX view_matrix;
 		XMMATRIX projection_matrix;
 		XMMATRIX ortho_matrix;

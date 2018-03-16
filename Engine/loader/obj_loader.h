@@ -6,10 +6,9 @@
 #include "util\io\io.h"
 #include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
-#include "resource\mesh\vertex_types.h"
 #include "resource\model\model_blueprint.h"
 #include "resource\model\model.h"
-#include "material\material.h"
+#include "resource\material\material.h"
 
 
 class ResourceMgr;

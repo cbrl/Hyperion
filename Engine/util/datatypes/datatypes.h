@@ -7,6 +7,7 @@
 
 #include "util\string\string.h"
 #include "util\datatypes\vector_types.h"
+#include "util\datatypes\vertex_types.h"
 
 
 using std::is_same_v;

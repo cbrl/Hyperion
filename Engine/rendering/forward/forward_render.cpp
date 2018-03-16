@@ -28,35 +28,47 @@ ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* devi
 
 	// Bind SRVs
 	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHTS, 1, directional_light_buffer.GetSRVAddress());
-	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_POINT_LIGHTS, 1, point_light_buffer.GetSRVAddress());
-	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_SPOT_LIGHTS, 1, spot_light_buffer.GetSRVAddress());
+	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_POINT_LIGHTS,       1, point_light_buffer.GetSRVAddress());
+	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_SPOT_LIGHTS,        1, spot_light_buffer.GetSRVAddress());
 }
 
 
 void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 	//----------------------------------------------------------------------------------
-	// Render objects with forward shader
+	// Bind the default depth render state
 	//----------------------------------------------------------------------------------
 
-	// Bind the default depth render state
 	render_state_mgr.BindDepthDefault(device_context.Get());
 
 
+	//----------------------------------------------------------------------------------
 	// Get the matrices
-	XMMATRIX world      = scene.camera->GetWorldMatrix();
+	//----------------------------------------------------------------------------------
+
+	XMMATRIX world;
 	XMMATRIX view       = scene.camera->GetViewMatrix();
 	XMMATRIX projection = scene.camera->GetProjMatrix();
 
 
-	// Create frustum
-	Frustum frustum(view*projection);
+	//----------------------------------------------------------------------------------
+	// Create the frustum
+	//----------------------------------------------------------------------------------
+
+	Frustum frustum(view * projection);
 
 
+	//----------------------------------------------------------------------------------
 	// Bind shaders
+	//----------------------------------------------------------------------------------
+
 	pixel_shader->Bind(device_context.Get());
 	vertex_shader->Bind(device_context.Get());
 
+
+	//----------------------------------------------------------------------------------
+	// Update buffers
+	//----------------------------------------------------------------------------------
 
 	// Update light buffer
 	LightBuffer light_data;
@@ -74,19 +86,21 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 	// Update light data buffers
 	directional_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.directional_lights);
-	
-	point_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.point_lights);
-	
-	spot_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.spot_lights);
+	point_light_buffer.UpdateData(device.Get(),       device_context.Get(), scene.point_lights);
+	spot_light_buffer.UpdateData(device.Get(),        device_context.Get(), scene.spot_lights);
 	
 
+	//----------------------------------------------------------------------------------
 	// Render models
+	//----------------------------------------------------------------------------------
+
 	scene.ForEach<Model>([&](const Model& model) {
 
+		// Cull models that aren't on screen
 		if (frustum.Contains(model.GetAABB())) {
 
 			// Create the world matrix
-			world = scene.camera->GetWorldMatrix();
+			world = XMMatrixIdentity();
 			world = XMMatrixMultiply(world, model.GetScale());
 			world = XMMatrixMultiply(world, model.GetRotation());
 			world = XMMatrixMultiply(world, model.GetPosition());
@@ -100,39 +114,43 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 			// Render each model part individually
 			model.ForEachPart([&](const ModelPart& part) {
 
-				// Update model buffer
-				ModelBuffer model_data;
-				model_data.world               = XMMatrixTranspose(world);
-				model_data.world_inv_transpose = inv_transpose;
-				model_data.world_view_proj     = XMMatrixTranspose(world * view * projection);
-				model_data.texTransform        = XMMatrixIdentity();	//Replace with actual texTransform
+				// Cull model parts that aren't on screen
+				if (frustum.Contains(part.aabb)) {
 
-				// Get the material for this model part
-				auto mat = model.GetMaterial(part.material_index);
+					// Update model buffer
+					ModelBuffer model_data;
+					model_data.world               = XMMatrixTranspose(world);
+					model_data.world_inv_transpose = inv_transpose;
+					model_data.world_view_proj     = XMMatrixTranspose(world * view * projection);
+					model_data.texTransform        = XMMatrixIdentity();	//Replace with actual texTransform
 
-				// Set the material parameters in the model buffer
-				model_data.mat.ambient         = mat.Ka;
-				model_data.mat.diffuse         = mat.Kd;
-				model_data.mat.dissolve        = mat.d;
-				model_data.mat.emissive        = mat.Ke;
-				model_data.mat.optical_density = mat.Ni;
-				model_data.mat.specular        = mat.Ks;
+					// Get the material for this model part
+					auto mat = model.GetMaterial(part.material_index);
 
-				// Update the model buffer
-				model_buffer.UpdateData(device_context.Get(), model_data);
+					// Set the material parameters in the model buffer
+					model_data.mat.ambient         = mat.Ka;
+					model_data.mat.diffuse         = mat.Kd;
+					model_data.mat.dissolve        = mat.d;
+					model_data.mat.emissive        = mat.Ke;
+					model_data.mat.optical_density = mat.Ni;
+					model_data.mat.specular        = mat.Ks;
 
-
-				// Bind the SRVs
-				if (mat.map_Kd)   mat.map_Kd->Bind(device_context.Get(),   SLOT_SRV_DIFFUSE);
-				if (mat.map_Ka)   mat.map_Ka->Bind(device_context.Get(),   SLOT_SRV_AMBIENT);
-				if (mat.map_Ks)   mat.map_Ks->Bind(device_context.Get(),   SLOT_SRV_SPECULAR);
-				if (mat.map_Ns)   mat.map_Ns->Bind(device_context.Get(),   SLOT_SRV_SPEC_HIGHLIGHT);
-				if (mat.map_d)    mat.map_d->Bind(device_context.Get(),    SLOT_SRV_ALPHA);
-				if (mat.map_bump) mat.map_bump->Bind(device_context.Get(), SLOT_SRV_BUMP);
+					// Update the model buffer
+					model_buffer.UpdateData(device_context.Get(), model_data);
 
 
-				// Draw the model part
-				model.Draw(device_context.Get(), part.index_count, part.index_start);
+					// Bind the SRVs
+					if (mat.map_Kd)   mat.map_Kd->Bind(device_context.Get(),   SLOT_SRV_DIFFUSE);
+					if (mat.map_Ka)   mat.map_Ka->Bind(device_context.Get(),   SLOT_SRV_AMBIENT);
+					if (mat.map_Ks)   mat.map_Ks->Bind(device_context.Get(),   SLOT_SRV_SPECULAR);
+					if (mat.map_Ns)   mat.map_Ns->Bind(device_context.Get(),   SLOT_SRV_SPEC_HIGHLIGHT);
+					if (mat.map_d)    mat.map_d->Bind(device_context.Get(),    SLOT_SRV_ALPHA);
+					if (mat.map_bump) mat.map_bump->Bind(device_context.Get(), SLOT_SRV_BUMP);
+
+
+					// Draw the model part
+					model.Draw(device_context.Get(), part.index_count, part.index_start);
+				}
 			});
 		}
 	});
