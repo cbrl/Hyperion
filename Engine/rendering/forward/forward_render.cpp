@@ -96,61 +96,59 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	scene.ForEach<Model>([&](const Model& model) {
 
 		// Cull models that aren't on screen
-		if (frustum.Contains(model.GetAABB())) {
+		if (!frustum.Contains(model.GetAABB())) return;
 
-			// Create the world matrix
-			world = XMMatrixIdentity();
-			world = XMMatrixMultiply(world, model.GetScale());
-			world = XMMatrixMultiply(world, model.GetRotation());
-			world = XMMatrixMultiply(world, model.GetPosition());
+		// Create the world matrix
+		world = XMMatrixIdentity();
+		world = XMMatrixMultiply(world, model.GetScale());
+		world = XMMatrixMultiply(world, model.GetRotation());
+		world = XMMatrixMultiply(world, model.GetPosition());
 
-			// Create the inverse transpose of the world matrix.
-			// DXMath uses row major matrices, unlike HLSL, so
-			// the transpose is implied when sending it to the shader.
-			XMMATRIX inv_transpose = XMMatrixInverse(NULL, world);
-
-
-			// Render each model part individually
-			model.ForEachPart([&](const ModelPart& part) {
-
-				// Cull model parts that aren't on screen
-				if (frustum.Contains(part.aabb)) {
-
-					// Update model buffer
-					ModelBuffer model_data;
-					model_data.world               = XMMatrixTranspose(world);
-					model_data.world_inv_transpose = inv_transpose;
-					model_data.world_view_proj     = XMMatrixTranspose(world * view * projection);
-					model_data.texTransform        = XMMatrixIdentity();	//Replace with actual texTransform
-
-					// Get the material for this model part
-					auto mat = model.GetMaterial(part.material_index);
-
-					// Set the material parameters in the model buffer
-					model_data.mat.ambient         = mat.Ka;
-					model_data.mat.diffuse         = mat.Kd;
-					model_data.mat.dissolve        = mat.d;
-					model_data.mat.emissive        = mat.Ke;
-					model_data.mat.optical_density = mat.Ni;
-					model_data.mat.specular        = mat.Ks;
-
-					// Update the model buffer
-					model_buffer.UpdateData(device_context.Get(), model_data);
+		// Create the inverse transpose of the world matrix.
+		// DXMath uses row major matrices, unlike HLSL, so
+		// the transpose is implied when sending it to the shader.
+		XMMATRIX inv_transpose = XMMatrixInverse(NULL, world);
 
 
-					// Bind the SRVs
-					if (mat.map_Kd)   mat.map_Kd->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_DIFFUSE);
-					if (mat.map_Ka)   mat.map_Ka->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_AMBIENT);
-					if (mat.map_Ks)   mat.map_Ks->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPECULAR);
-					if (mat.map_Ns)   mat.map_Ns->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPEC_HIGHLIGHT);
-					if (mat.map_d)    mat.map_d->Bind<Pipeline::PS>(device_context.Get(),    SLOT_SRV_ALPHA);
-					if (mat.map_bump) mat.map_bump->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_BUMP);
+		// Render each model part individually
+		model.ForEachPart([&](const ModelPart& part) {
+
+			// Cull model parts that aren't on screen
+			if (!frustum.Contains(part.aabb)) return;
+
+			// Update model buffer
+			ModelBuffer model_data;
+			model_data.world               = XMMatrixTranspose(world);
+			model_data.world_inv_transpose = inv_transpose;
+			model_data.world_view_proj     = XMMatrixTranspose(world * view * projection);
+			model_data.texTransform        = XMMatrixIdentity();	//Replace with actual texTransform
+
+			// Get a pointer to the material for this model part
+			auto mat = &model.GetMaterial(part.material_index);
+
+			// Set the material parameters in the model buffer
+			model_data.mat.ambient         = mat->Ka;
+			model_data.mat.diffuse         = mat->Kd;
+			model_data.mat.dissolve        = mat->d;
+			model_data.mat.emissive        = mat->Ke;
+			model_data.mat.optical_density = mat->Ni;
+			model_data.mat.specular        = mat->Ks;
+
+			// Update the model buffer
+			model_buffer.UpdateData(device_context.Get(), model_data);
 
 
-					// Draw the model part
-					model.Draw(device_context.Get(), part.index_count, part.index_start);
-				}
-			});
-		}
+			// Bind the SRVs
+			if (mat->map_Kd)   mat->map_Kd->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_DIFFUSE);
+			if (mat->map_Ka)   mat->map_Ka->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_AMBIENT);
+			if (mat->map_Ks)   mat->map_Ks->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPECULAR);
+			if (mat->map_Ns)   mat->map_Ns->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPEC_HIGHLIGHT);
+			if (mat->map_d)    mat->map_d->Bind<Pipeline::PS>(device_context.Get(),    SLOT_SRV_ALPHA);
+			if (mat->map_bump) mat->map_bump->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_BUMP);
+
+
+			// Draw the model part
+			model.Draw(device_context.Get(), part.index_count, part.index_start);
+		});
 	});
 }

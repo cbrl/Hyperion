@@ -8,6 +8,7 @@
 
 
 struct ModelPart {
+	wstring name;
 	u32  index_start;
 	u32  index_count;
 	u32  material_index;
@@ -15,11 +16,19 @@ struct ModelPart {
 };
 
 
+struct Group {
+	wstring name;
+	u32 index_start;
+	u32 material_index;
+};
+
+
 template<typename VertexT>
 struct ModelBlueprint {
-	ModelBlueprint(const vector<VertexT>& vertices, const vector<u32>& indices,
-				   const vector<Material>& materials, const vector<u32>& material_indices,
-				   u32 group_count = 1, const vector<u32>& group_indices = {});
+	ModelBlueprint(const vector<VertexT>& vertices,
+				   const vector<u32>& indices,
+				   const vector<Material>& materials,
+				   const vector<Group>& groups);
 
 	~ModelBlueprint() = default;
 
@@ -28,13 +37,11 @@ struct ModelBlueprint {
 	vector<VertexT> vertices;
 	vector<u32>     indices;
 
-	// Material info
+	// Materials
 	vector<Material> materials;
-	vector<u32>      material_indices;
 
 	// Group info
-	u32         group_count;
-	vector<u32> group_indices;
+	u32 group_count;
 
 	// Model parts
 	vector<ModelPart> model_parts;
@@ -46,15 +53,14 @@ struct ModelBlueprint {
 
 
 template<typename VertexT>
-ModelBlueprint<VertexT>::ModelBlueprint(const vector<VertexT>& vertices, const vector<u32>& indices,
-										const vector<Material>& materials, const vector<u32>& material_indices,
-										u32 group_count, const vector<u32>& group_indices)
+ModelBlueprint<VertexT>::ModelBlueprint(const vector<VertexT>& vertices,
+										const vector<u32>& indices,
+										const vector<Material>& materials,
+										const vector<Group>& groups)
 	: vertices(vertices)
 	, indices(indices)
 	, materials(materials)
-	, material_indices(material_indices)
-	, group_count(group_count)
-	, group_indices(group_indices)
+	, group_count(static_cast<u32>(groups.size()))
 {
 	// Create the AABB for the model
 	auto pair = MinMaxPoint(vertices);
@@ -63,15 +69,15 @@ ModelBlueprint<VertexT>::ModelBlueprint(const vector<VertexT>& vertices, const v
 	for (size_t i = 0; i < group_count; ++i) {
 		ModelPart temp;
 
-		temp.index_start = group_indices[i];
-		temp.material_index = material_indices[i];
-
+		temp.name           = groups[i].name;
+		temp.index_start    = groups[i].index_start;
+		temp.material_index = groups[i].material_index;
 
 		// Index count
 		if (i == group_count - 1)
-			temp.index_count = static_cast<u32>(indices.size() - group_indices[i]);
+			temp.index_count = static_cast<u32>(indices.size() - temp.index_start);
 		else
-			temp.index_count = group_indices[i + 1] - group_indices[i];
+			temp.index_count = groups[i+1].index_start - temp.index_start;
 
 
 		// Create the AABB for the model part

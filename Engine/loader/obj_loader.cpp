@@ -26,11 +26,10 @@ void OBJLoader::Reset() {
 	vertex_positions.clear();
 	vertex_normals.clear();
 	vertex_texCoords.clear();
-	meshMatLib.clear();
-	group_materials.clear();
+	mat_lib.clear();
 	materials.clear();
-	new_group_indices.clear();
-	group_material_indices.clear();
+	groups.clear();
+	group_mat_names.clear();
 }
 
 
@@ -56,7 +55,7 @@ Model OBJLoader::Load(ID3D11Device* device,
 	
 	// Create the materials
 	vector<Material> mtlVector;
-	for (i32 i = 0; i < mtl_count; ++i) {
+	for (u32 i = 0; i < mtl_count; ++i) {
 		Material mtl;
 
 		mtl.name = materials[i].name;
@@ -90,7 +89,7 @@ Model OBJLoader::Load(ID3D11Device* device,
 	}
 
 	// Create the model
-	ModelBlueprint<VertexPositionNormalTexture> blueprint(vertices, indices, mtlVector, group_material_indices, group_count, new_group_indices);
+	ModelBlueprint<VertexPositionNormalTexture> blueprint(vertices, indices, mtlVector, groups);
 	Model model(device, blueprint);
 
 	// Reset the obj loader
@@ -170,7 +169,10 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 		// Group
 		else if (token.compare(OBJTokens::group) == 0) {
-			new_group_indices.push_back(indices.size());
+			groups.push_back(Group());
+			stream >> groups.back().name;
+			groups.back().index_start = indices.size();
+
 			++group_count;
 		}
 
@@ -181,12 +183,12 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 		// Material Library
 		if (token.compare(OBJTokens::mtl_library) == 0) {
-			meshMatLib = TrimWhiteSpace(line);
+			mat_lib = TrimWhiteSpace(line);
 		}
 
 		// Group Material
 		else if (token.compare(OBJTokens::use_mtl) == 0) {
-			group_materials[group_count - 1] = TrimWhiteSpace(line);
+			group_mat_names[group_count - 1] = TrimWhiteSpace(line);
 		}
 	}
 
@@ -199,9 +201,9 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 
 	// Sometimes a group is defined at the top of the file, then an extra one
 	// before the first vertex. If that happened, then remove the extra.
-	if (new_group_indices.size() > 1) {
-		if (new_group_indices[1] == 0) {
-			new_group_indices.erase(new_group_indices.begin() + 1);
+	if (groups.size() > 1) {
+		if (groups[1].index_start == 0) {
+			groups.erase(groups.begin() + 1);
 			--group_count;
 		}
 	}
@@ -211,7 +213,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 void OBJLoader::LoadMaterials(wstring folder) {
 	
 	// Open the material file
-	wifstream file(folder + meshMatLib);
+	wifstream file(folder + mat_lib);
 	if (file.fail()) {
 		throw std::exception("Could not open mtl file");
 	}
@@ -342,25 +344,17 @@ void OBJLoader::LoadMaterials(wstring folder) {
 
 	// Set the group's material to the index value of its
 	// material in the material vector.
-	for (i32 i = 0; i < group_count; ++i) {
-		bool hasMat = false;
+	for (u32 i = 0; i < group_count; ++i) {
 
-		// If the group doesn't have a material set, then
-		// use the first material.
-		if (group_materials[i].empty()) {
-			group_materials[i] = materials[0].name;
+		// Use the first material if the group has no material assigned
+		if (group_mat_names[i].empty()) {
+			group_mat_names[i] = materials[0].name;
 		}
 
-		for (i32 j = 0; j < materials.size(); ++j) {
-			if (group_materials[i] == materials[j].name) {
-				group_material_indices.push_back(j);
-				hasMat = true;
+		for (u32 j = 0; j < materials.size(); ++j) {
+			if (group_mat_names[i] == materials[j].name) {
+				groups[i].material_index = j;
 			}
-		}
-
-		if (!hasMat) {
-			// Use first material in vector
-			group_material_indices.push_back(0);
 		}
 	}
 }
@@ -497,7 +491,9 @@ void OBJLoader::ReadFace(wstring& line) {
 
 	// If no group has been defined, then create one manually
 	if (group_count == 0) {
-		new_group_indices.push_back(indices.size());
+		groups.push_back(Group());
+		groups.back().index_start = indices.size();
+		//new_group_indices.push_back(indices.size());
 		++group_count;
 	}
 

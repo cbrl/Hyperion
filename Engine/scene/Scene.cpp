@@ -7,7 +7,6 @@
 // - CPU usage
 // - Normal mapping
 // - Skybox
-// - Model part names
 // - Create a simple geometry generator
 // - Move other resources to resource manager (shaders and text?)
 // - ImGui

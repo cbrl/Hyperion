@@ -40,14 +40,14 @@ VertexShader::VertexShader(ID3D11Device* device,
 
 	// Create the vertex shader
 	ThrowIfFailed(device->CreateVertexShader(shader_buffer->GetBufferPointer(), shader_buffer->GetBufferSize(),
-												 nullptr, shader.ReleaseAndGetAddressOf()),
-					  "Failed to create vertex shader");
+											 nullptr, shader.ReleaseAndGetAddressOf()),
+				  "Failed to create vertex shader");
 
 
 	// Create the vertex input layout
 	ThrowIfFailed(device->CreateInputLayout(inputElementDesc, static_cast<u32>(numElements), shader_buffer->GetBufferPointer(),
-												shader_buffer->GetBufferSize(), layout.ReleaseAndGetAddressOf()),
-					  "Failed to create input layout");
+											shader_buffer->GetBufferSize(), layout.ReleaseAndGetAddressOf()),
+				  "Failed to create input layout");
 }
 
 
@@ -88,7 +88,7 @@ PixelShader::PixelShader(ID3D11Device* device, const WCHAR* filename) {
 	// Create the pixel shader
 	ThrowIfFailed(device->CreatePixelShader(shader_buffer->GetBufferPointer(), shader_buffer->GetBufferSize(),
 												nullptr, shader.ReleaseAndGetAddressOf()),
-					  "Failed to create pixel shader");
+				  "Failed to create pixel shader");
 }
 
 

@@ -91,30 +91,27 @@ class OBJLoader {
 
 	private:
 		bool rh_coord;
-		i32  group_count;
-		i32  mtl_count;
+		u32  group_count;
+		u32  mtl_count;
 
 		// Vector of complete vertex definitions
 		vector<VertexPositionNormalTexture> vertices;
 
-		// Vectors to store model info
+		// Vectors for position/normal/texCoord/index
 		vector<float3> vertex_positions;
 		vector<float3> vertex_normals;
 		vector<float2> vertex_texCoords;
 		vector<u32>    indices;
 
 		// Material library name
-		wstring meshMatLib;
+		wstring mat_lib;
+
+		// Vector of group definitions
+		vector<Group> groups;
 
 		// Material names for each group <grp number, mat name>
-		map<u32, wstring> group_materials;
+		map<u32, wstring> group_mat_names;
 
-		// Vector of material descriptions
+		// Vector of material definitions
 		vector<OBJMaterial> materials;
-
-		// List of indices where a new group starts (e.g. 8 = new group at indices[8])
-		vector<u32> new_group_indices;
-
-		// List of materials for each group. Value is an index for the material vector.
-		vector<u32> group_material_indices;
 };
