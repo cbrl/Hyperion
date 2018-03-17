@@ -12,28 +12,35 @@ ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* devi
 	, spot_light_buffer(device, 16)
 {
 	// Create the vertex shader
-	vertex_shader = make_unique<VertexShader>();
-	vertex_shader->Init(device, L"shaders/forward/forward_VS.hlsl",
-						VertexPositionNormalTexture::InputElements, VertexPositionNormalTexture::InputElementCount);
+	vertex_shader = make_unique<VertexShader>(device, L"shaders/forward/forward_VS.hlsl",
+											  VertexPositionNormalTexture::InputElements,
+											  VertexPositionNormalTexture::InputElementCount);
 
 	// Create the pixel shader
-	pixel_shader = make_unique<PixelShader>();
-	pixel_shader->Init(device, L"shaders/forward/forward.hlsl");
+	pixel_shader = make_unique<PixelShader>(device, L"shaders/forward/forward.hlsl");
 
 
 	// Bind buffers
-	Pipeline::PS::BindConstantBuffers(device_context, SLOT_CBUFFER_MODEL, 1, model_buffer.GetBufferAddress());
-	Pipeline::VS::BindConstantBuffers(device_context, SLOT_CBUFFER_MODEL, 1, model_buffer.GetBufferAddress());
-	Pipeline::PS::BindConstantBuffers(device_context, SLOT_CBUFFER_LIGHT, 1, light_buffer.GetBufferAddress());
+	model_buffer.Bind<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
+	model_buffer.Bind<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
+	light_buffer.Bind<Pipeline::PS>(device_context, SLOT_CBUFFER_LIGHT);
 
 	// Bind SRVs
-	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHTS, 1, directional_light_buffer.GetSRVAddress());
-	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_POINT_LIGHTS,       1, point_light_buffer.GetSRVAddress());
-	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_SPOT_LIGHTS,        1, spot_light_buffer.GetSRVAddress());
+	directional_light_buffer.Bind<Pipeline::PS>(device_context, SLOT_SRV_DIRECTIONAL_LIGHTS);
+	point_light_buffer.Bind<Pipeline::PS>(device_context, SLOT_SRV_POINT_LIGHTS);
+	spot_light_buffer.Bind<Pipeline::PS>(device_context, SLOT_SRV_SPOT_LIGHTS);
 }
 
 
 void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
+
+	//----------------------------------------------------------------------------------
+	// Bind shaders
+	//----------------------------------------------------------------------------------
+
+	pixel_shader->Bind(device_context.Get());
+	vertex_shader->Bind(device_context.Get());
+
 
 	//----------------------------------------------------------------------------------
 	// Bind the default depth render state
@@ -56,14 +63,6 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	//----------------------------------------------------------------------------------
 
 	Frustum frustum(view * projection);
-
-
-	//----------------------------------------------------------------------------------
-	// Bind shaders
-	//----------------------------------------------------------------------------------
-
-	pixel_shader->Bind(device_context.Get());
-	vertex_shader->Bind(device_context.Get());
 
 
 	//----------------------------------------------------------------------------------
@@ -140,12 +139,12 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 
 					// Bind the SRVs
-					if (mat.map_Kd)   mat.map_Kd->Bind(device_context.Get(),   SLOT_SRV_DIFFUSE);
-					if (mat.map_Ka)   mat.map_Ka->Bind(device_context.Get(),   SLOT_SRV_AMBIENT);
-					if (mat.map_Ks)   mat.map_Ks->Bind(device_context.Get(),   SLOT_SRV_SPECULAR);
-					if (mat.map_Ns)   mat.map_Ns->Bind(device_context.Get(),   SLOT_SRV_SPEC_HIGHLIGHT);
-					if (mat.map_d)    mat.map_d->Bind(device_context.Get(),    SLOT_SRV_ALPHA);
-					if (mat.map_bump) mat.map_bump->Bind(device_context.Get(), SLOT_SRV_BUMP);
+					if (mat.map_Kd)   mat.map_Kd->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_DIFFUSE);
+					if (mat.map_Ka)   mat.map_Ka->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_AMBIENT);
+					if (mat.map_Ks)   mat.map_Ks->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPECULAR);
+					if (mat.map_Ns)   mat.map_Ns->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPEC_HIGHLIGHT);
+					if (mat.map_d)    mat.map_d->Bind<Pipeline::PS>(device_context.Get(),    SLOT_SRV_ALPHA);
+					if (mat.map_bump) mat.map_bump->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_BUMP);
 
 
 					// Draw the model part

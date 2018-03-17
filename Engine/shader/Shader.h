@@ -1,26 +1,28 @@
 #pragma once
 
-#include <fstream>
 #include <Windows.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
 #include "util\engine_util.h"
-#include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
+#include "util\math\math.h"
+#include "util\io\io.h"
+#include "rendering\pipeline.h"
 
 
 class VertexShader {
 	public:
-		VertexShader() = default;
+		VertexShader(ID3D11Device* device,
+					 const WCHAR* filename,
+					 const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
+					 size_t numElements);
+
 		~VertexShader() = default;
 
-		void Init(ID3D11Device* device, const WCHAR* filename,
-	              const D3D11_INPUT_ELEMENT_DESC* inputElementDesc, size_t numElements);
-
 		void Bind(ID3D11DeviceContext* device_context) {
-			device_context->IASetInputLayout(layout.Get());
-			device_context->VSSetShader(shader.Get(), nullptr, 0);
+			Pipeline::IA::BindInputLayout(device_context, layout.Get());
+			Pipeline::VS::BindShader(device_context, shader.Get(), nullptr, 0);
 		}
 
 
@@ -32,12 +34,13 @@ class VertexShader {
 
 class PixelShader {
 	public:
-		PixelShader() = default;
+		PixelShader(ID3D11Device* device,
+					const WCHAR* filename);
+
 		~PixelShader() = default;
 
-		void Init(ID3D11Device* device, const WCHAR* filename);
 		void Bind(ID3D11DeviceContext* device_context) {
-			device_context->PSSetShader(shader.Get(), nullptr, 0);
+			Pipeline::PS::BindShader(device_context, shader.Get(), nullptr, 0);
 		}
 
 
@@ -46,10 +49,4 @@ class PixelShader {
 };
 
 
-class ShaderError {
-	public:
-	static void OutputShaderErrorMessage(ID3D10Blob* errorMessage, const WCHAR* shaderFilename);
-
-	private:
-	ShaderError();
-};
+static void OutputShaderErrorMessage(ID3D10Blob* errorMessage, const WCHAR* shaderFilename);

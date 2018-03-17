@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
+#include "rendering\pipeline.h"
 #include "resource\material\material.h"
 
 
@@ -24,13 +25,13 @@ class Mesh {
 			u32 offset = 0;
 
 			// Set vertex buffer to active in the input assembler so it can be rendered
-			device_context->IASetVertexBuffers(0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
+			Pipeline::IA::BindVertexBuffers(device_context, 0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
 			
 			// Set index buffer to active in the input assembler so it can be rendered
-			device_context->IASetIndexBuffer(index_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+			Pipeline::IA::BindIndexBuffer(device_context, index_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 			
 			// Set type of primitive that should be rendered from this vertex buffer, in this case triangles
-			device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			Pipeline::IA::BindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 			device_context->DrawIndexed(index_count, start_index, 0);
 		}

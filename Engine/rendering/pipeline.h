@@ -65,8 +65,8 @@ class Pipeline {
 										  u32 start_slot,
 										  u32 num_buffers,
 										  ID3D11Buffer* const* buffers,
-										  u32* strides,
-										  u32* offsets) {
+										  const u32* strides,
+										  const u32* offsets) {
 
 				device_context->IASetVertexBuffers(start_slot, num_buffers, buffers, strides, offsets);
 			}

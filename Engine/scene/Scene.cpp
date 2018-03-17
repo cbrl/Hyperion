@@ -1,14 +1,16 @@
 #include "stdafx.h"
 #include "scene.h"
-#include "system\system.h"
+#include "system/system.h"
 
 // TODO:
 // - Create bounding spheres for models
 // - CPU usage
 // - Normal mapping
 // - Skybox
+// - Model part names
 // - Create a simple geometry generator
 // - Move other resources to resource manager (shaders and text?)
+// - ImGui
 
 
 static const float zNear = 0.1f;

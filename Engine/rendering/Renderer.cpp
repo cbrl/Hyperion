@@ -7,8 +7,8 @@ Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
 	, camera_buffer(device)
 {
 	// Set cbuffers
-	device_context->PSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer.GetBufferAddress());
-	device_context->VSSetConstantBuffers(SLOT_CBUFFER_CAMERA, 1, camera_buffer.GetBufferAddress());
+	camera_buffer.Bind<Pipeline::PS>(device_context, SLOT_CBUFFER_CAMERA);
+	camera_buffer.Bind<Pipeline::VS>(device_context, SLOT_CBUFFER_CAMERA);
 
 	// Create forward renderer
 	forward_renderer = make_unique<ForwardRenderer>(device, device_context);

@@ -136,9 +136,6 @@
     <Filter Include="Source Files\resource">
       <UniqueIdentifier>{e9668fe2-2879-4a67-836e-08254b995230}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\resource\model">
-      <UniqueIdentifier>{7d1f81af-1b80-450a-a3b0-63008a0d739d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\resource\mesh">
       <UniqueIdentifier>{d9a807b8-a68b-407f-9574-5b1ed21aaac4}</UniqueIdentifier>
     </Filter>
@@ -186,9 +183,6 @@
     </None>
     <None Include="resource\mesh\mesh.tpp">
       <Filter>Source Files\resource\mesh</Filter>
-    </None>
-    <None Include="resource\model\model.tpp">
-      <Filter>Source Files\resource\model</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

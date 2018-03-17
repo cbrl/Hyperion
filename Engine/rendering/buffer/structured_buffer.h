@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
+#include "rendering\pipeline.h"
 
 
 template<typename DataT>
@@ -11,10 +12,9 @@ class StructuredBuffer {
 		StructuredBuffer(ID3D11Device* device, u32 size) : size(size) {
 			CreateBuffer(device);
 		}
+
 		~StructuredBuffer() = default;
 
-		ID3D11Buffer* const* GetBufferAddress() const { return buffer.GetAddressOf(); }
-		ID3D11ShaderResourceView* const* GetSRVAddress() const { return srv.GetAddressOf(); }
 
 		void UpdateData(ID3D11Device* device, ID3D11DeviceContext* device_context, const vector<DataT>& data) {
 			if (data.size() == 0) {
@@ -38,32 +38,38 @@ class StructuredBuffer {
 			device_context->Unmap(buffer.Get(), NULL);
 		}
 
+		// Bind the buffer to the specified pipeline stage
+		template<typename StageT>
+		void Bind(ID3D11DeviceContext* device_context, u32 slot) {
+			StageT::BindSRVs(device_context, slot, 1, srv.GetAddressOf());
+		}
+
 
 	private:
 		void CreateBuffer(ID3D11Device* device) {
 			D3D11_BUFFER_DESC desc = {};
 
-			desc.BindFlags           = D3D11_BIND_SHADER_RESOURCE;
-			desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
-			desc.MiscFlags           = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-			desc.Usage               = D3D11_USAGE_DYNAMIC;
-			desc.ByteWidth           = sizeof(DataT) * size;
+			desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+			desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+			desc.Usage = D3D11_USAGE_DYNAMIC;
+			desc.ByteWidth = sizeof(DataT) * size;
 			desc.StructureByteStride = sizeof(DataT);
 
 			ThrowIfFailed(device->CreateBuffer(&desc, nullptr, buffer.ReleaseAndGetAddressOf()),
-			              "Failed to create structured buffer");
+						  "Failed to create structured buffer");
 
 			SetDebugObjectName(buffer.Get(), "Structured Buffer");
 
 
 			D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
 			srv_desc.Buffer.FirstElement = 0;
-			srv_desc.Buffer.NumElements  = size;
-			srv_desc.Format              = DXGI_FORMAT_UNKNOWN;
-			srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_BUFFER;
+			srv_desc.Buffer.NumElements = size;
+			srv_desc.Format = DXGI_FORMAT_UNKNOWN;
+			srv_desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 
 			ThrowIfFailed(device->CreateShaderResourceView(buffer.Get(), &srv_desc, srv.ReleaseAndGetAddressOf()),
-			              "Failed to create structured buffer SRV");
+						  "Failed to create structured buffer SRV");
 
 			SetDebugObjectName(srv.Get(), "Structured Buffer SRV");
 		}

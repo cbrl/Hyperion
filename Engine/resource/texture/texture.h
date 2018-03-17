@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
+#include "rendering\pipeline.h"
 
 
 struct Texture {
@@ -12,8 +13,9 @@ struct Texture {
 
 		~Texture() = default;
 
+		template<typename StageT>
 		void Bind(ID3D11DeviceContext* device_context, u32 slot) {
-			device_context->PSSetShaderResources(slot, 1, texture.GetAddressOf());
+			StageT::BindSRVs(device_context, slot, 1, texture.GetAddressOf());
 		}
 
 	private:

@@ -109,6 +109,3 @@ class Model {
 		vector<ModelPart> model_parts;
 		vector<Material>  materials;
 };
-
-
-//#include "model.tpp"

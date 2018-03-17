@@ -6,6 +6,7 @@
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
 #include "direct3d\direct3d.h"
+#include "rendering\pipeline.h"
 #include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
 #include "rendering\render_state_mgr.h"
