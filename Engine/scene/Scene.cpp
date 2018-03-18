@@ -10,6 +10,10 @@
 // - Create a simple geometry generator
 // - Move other resources to resource manager (shaders and text?)
 // - ImGui
+// - Default constructors
+// - Delete unwanted copy constructors
+// - ResourceMap.Create() -> calls constructor for resource -> calls appropriate method
+// - Texture constructor -> calls static TextureLoader
 
 
 static const float zNear = 0.1f;
@@ -74,7 +78,8 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context, Reso
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	models.push_back(resource_mgr.CreateModel(L"data/models/test/", L"test.obj", false));
+	auto bp = resource_mgr.Create<ModelBlueprint>(L"../data/models/test/", L"test.obj");
+	models.push_back(Model(device, *bp));
 	models.back().Scale(3.0f, 3.0f, 3.0f);
 	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
 	//models.back().SetRotation(0.0f, 1.2f, 0.0f);
@@ -84,7 +89,7 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context, Reso
 	// Create text objects
 	//----------------------------------------------------------------------------------
 
-	const wchar_t* font = L"./data/fonts/courier-12.spritefont";
+	const wchar_t* font = L"../data/fonts/courier-12.spritefont";
 
 	texts.try_emplace("FPS", device, device_context, font);
 	texts.at("FPS").SetPosition(float2(10, 10));

@@ -1,24 +1,54 @@
 #pragma once
 
 #include "util\datatypes\datatypes.h"
-#include "util\string\string.h"
 #include "resource\mesh\mesh.h"
-#include "resource\model\model.h"
-#include "loader\obj_loader.h"
-#include "resource\model\model_factory.h"
-#include "resource\texture\texture_factory.h"
+#include "resource\model\model_blueprint.h"
+#include "resource\text\text.h"
+
+class ModelBlueprint;
+
+template<typename KeyT, typename ValueT>
+class ResourceMap {
+	public:
+	ResourceMap() = default;
+	~ResourceMap() = default;
+
+	template<typename... ArgsT>
+	shared_ptr<ValueT> Create(const KeyT& key, ArgsT&&... args);
+
+	shared_ptr<ValueT> Get(const KeyT& key);
+
+
+	private:
+	map<KeyT, weak_ptr<ValueT>> resource_map;
+};
 
 
 class ResourceMgr {
 	public:
-		ResourceMgr(ID3D11Device* device, ID3D11DeviceContext* device_context);
+		ResourceMgr() = delete;
+
+		ResourceMgr(ID3D11Device* device, ID3D11DeviceContext* device_context)
+			: device(device)
+			, device_context(device_context)
+		{}
+
 		~ResourceMgr() = default;
 
-		Model CreateModel(wstring folder, wstring filename, bool right_hand_coords);
+		template<typename ResourceT>
+		enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> Create(const wstring& folder, const wstring& filename);
 
-		shared_ptr<Texture> CreateTexture(wstring filename);
-		shared_ptr<Texture> CreateTexture(float4 color);
-		shared_ptr<Texture> CreateTexture(vector<wstring> filenames);
+		template<typename ResourceT>
+		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const wstring& filename);
+
+		template<typename ResourceT>
+		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const vector<wstring>& filenames);
+
+		template<typename ResourceT>
+		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const float4& color);
+
+		template<typename ResourceT>
+		enable_if_t<is_same_v<Text, ResourceT>, shared_ptr<Text>> Create(const wstring& label, const wstring& font);
 
 
 	private:
@@ -26,15 +56,17 @@ class ResourceMgr {
 		ComPtr<ID3D11Device>        device;
 		ComPtr<ID3D11DeviceContext> device_context;
 
-		// Resource factories
-		unique_ptr<TextureFactory> texture_factory;
-		unique_ptr<ModelFactory>   model_factory;
-
 		// Models
-		map<wstring, Model> models;
+		ResourceMap<wstring, ModelBlueprint> models;
 
 		// Textures
-		map<wstring, shared_ptr<Texture>>         textures;
-		map<u32, shared_ptr<Texture>>             color_textures;
-		map<vector<wstring>, shared_ptr<Texture>> texture_arrays;
+		ResourceMap<wstring, Texture>         textures;
+		ResourceMap<u32, Texture>             color_textures;
+		ResourceMap<vector<wstring>, Texture> texture_arrays;
+
+		// Text
+		ResourceMap<wstring, Text> texts;
 };
+
+
+#include "resource_mgr.tpp"

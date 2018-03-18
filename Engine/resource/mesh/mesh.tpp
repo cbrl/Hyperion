@@ -2,17 +2,18 @@
 
 
 template<typename VertexT>
-Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices)
-	: vertex_count(static_cast<u32>(vertices.size()))
-	, index_count(static_cast<u32>(indices.size()))
-	, stride(sizeof(VertexT))
-{
+Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices) {
 	Init(device, vertices, indices);
 }
 
 
 template<typename VertexT>
 void Mesh::Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices) {
+
+	vertex_count = static_cast<u32>(vertices.size());
+	index_count  = static_cast<u32>(indices.size());
+	stride       = sizeof(VertexT);
+
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
 	D3D11_BUFFER_DESC indexBufferDesc = {};
 

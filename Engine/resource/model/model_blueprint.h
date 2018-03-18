@@ -1,11 +1,14 @@
 #pragma once
 
+#include <d3d11.h>
 #include "util\datatypes\datatypes.h"
-#include "util\string\string.h"
 #include "util\math\math.h"
-#include "geometry\boundingvolume\bounding_volume.h"
+#include "resource\resource_mgr.h"
+#include "resource\mesh\mesh.h"
 #include "resource\material\material.h"
+#include "geometry\boundingvolume\bounding_volume.h"
 
+class ResourceMgr;
 
 struct ModelPart {
 	wstring name;
@@ -23,45 +26,48 @@ struct Group {
 };
 
 
-template<typename VertexT>
-struct ModelBlueprint {
-	ModelBlueprint(const vector<VertexT>& vertices,
-				   const vector<u32>& indices,
-				   const vector<Material>& materials,
-				   const vector<Group>& groups);
+class ModelBlueprint {
+	public:
+		ModelBlueprint() = default;
 
-	~ModelBlueprint() = default;
+		ModelBlueprint(ID3D11Device* device,
+					   ResourceMgr& resource_mgr,
+					   const wstring& folder,
+					   const wstring& filename);
+
+		template<typename VertexT>
+		void Init(ID3D11Device* device,
+				  const vector<VertexT>& vertices,
+				  const vector<u32>& indices,
+				  const vector<Material>& _materials,
+				  const vector<Group>& groups);
+
+		~ModelBlueprint() = default;
 
 
-	// Vertex info
-	vector<VertexT> vertices;
-	vector<u32>     indices;
+	public:
+		Mesh mesh;
+		AABB aabb;
+		u32  group_count;
 
-	// Materials
-	vector<Material> materials;
-
-	// Group info
-	u32 group_count;
-
-	// Model parts
-	vector<ModelPart> model_parts;
-
-	// AABB
-	AABB aabb;
+		vector<Material>  materials;
+		vector<ModelPart> model_parts;
 };
 
 
-
 template<typename VertexT>
-ModelBlueprint<VertexT>::ModelBlueprint(const vector<VertexT>& vertices,
-										const vector<u32>& indices,
-										const vector<Material>& materials,
-										const vector<Group>& groups)
-	: vertices(vertices)
-	, indices(indices)
-	, materials(materials)
-	, group_count(static_cast<u32>(groups.size()))
-{
+void ModelBlueprint::Init(ID3D11Device* device,
+						  const vector<VertexT>& vertices,
+						  const vector<u32>& indices,
+						  const vector<Material>& _materials,
+						  const vector<Group>& groups) {
+
+	materials   = _materials;
+	group_count = static_cast<u32>(groups.size());
+
+	// Create the mesh
+	mesh.Init(device, vertices, indices);
+
 	// Create the AABB for the model
 	auto pair = MinMaxPoint(vertices);
 	aabb = AABB(pair.first, pair.second);
@@ -69,15 +75,15 @@ ModelBlueprint<VertexT>::ModelBlueprint(const vector<VertexT>& vertices,
 	for (size_t i = 0; i < group_count; ++i) {
 		ModelPart temp;
 
-		temp.name           = groups[i].name;
-		temp.index_start    = groups[i].index_start;
+		temp.name = groups[i].name;
+		temp.index_start = groups[i].index_start;
 		temp.material_index = groups[i].material_index;
 
 		// Index count
 		if (i == group_count - 1)
 			temp.index_count = static_cast<u32>(indices.size() - temp.index_start);
 		else
-			temp.index_count = groups[i+1].index_start - temp.index_start;
+			temp.index_count = groups[i + 1].index_start - temp.index_start;
 
 
 		// Create the AABB for the model part

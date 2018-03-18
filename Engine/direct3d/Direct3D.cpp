@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "direct3d.h"
-#include "rendering\rendering_mgr.h"
 
 
 Direct3D::Direct3D(HWND hWnd, i32 window_width, i32 window_height, bool fullscreen, bool vSync, bool MSAA)
@@ -259,6 +258,7 @@ void Direct3D::OnResize(i32 winWidth, i32 winHeight) {
 
 void Direct3D::Clear() const {
 	Pipeline::OM::ClearRTV(device_context.Get(), render_target_view.Get());
+	Pipeline::OM::ClearDSV(device_context.Get(), depth_stencil_view.Get());
 }
 
 
@@ -268,7 +268,7 @@ void Direct3D::Clear(const float color[4]) const {
 }
 
 
-void Direct3D::EndScene() const {
+void Direct3D::PresentFrame() const {
 	if (enable_vsync) {
 		// If VSync is enabled, present with next frame
 		ThrowIfFailed(swap_chain->Present(1, 0),

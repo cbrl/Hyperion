@@ -10,6 +10,7 @@
 #include "util\datatypes\vertex_types.h"
 
 
+using std::enable_if_t;
 using std::is_same_v;
 
 
@@ -38,13 +39,13 @@ using std::map;
 // Shorthand for fixed-size datatypes
 //----------------------------------------------------------------------------------
 
-// Signed i32
+// Signed int
 using i8  = int8_t;
 using i16 = int16_t;
 using i32 = int32_t;
 using i64 = int64_t;
 
-// Unsigned i32
+// Unsigned	int
 using u8  = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;

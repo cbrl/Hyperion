@@ -46,9 +46,6 @@
     <Filter Include="Header Files\scene">
       <UniqueIdentifier>{cdbb0389-a8ef-494c-8f26-43881fa48c68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\text">
-      <UniqueIdentifier>{35fd1fe2-1c90-48f9-a055-04e3fa6524df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\util\fps">
       <UniqueIdentifier>{02d3e234-4218-4870-85d5-2a4793a4b768}</UniqueIdentifier>
     </Filter>
@@ -90,9 +87,6 @@
     </Filter>
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{a3101e3b-e5e3-4452-8a01-db76e2565a79}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\text">
-      <UniqueIdentifier>{0a58a3af-0d61-4c95-85ff-ea60d0e0f617}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\loader">
       <UniqueIdentifier>{6cd25658-9ada-4b96-9fa0-d75790403dc9}</UniqueIdentifier>
@@ -139,9 +133,6 @@
     <Filter Include="Source Files\resource\mesh">
       <UniqueIdentifier>{d9a807b8-a68b-407f-9574-5b1ed21aaac4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\resource\texture">
-      <UniqueIdentifier>{96c39175-8f0c-4b0d-98f3-6e70567f4dd0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\resource">
       <UniqueIdentifier>{9f03ef2d-2e6e-42bf-ae71-8275e4d6de43}</UniqueIdentifier>
     </Filter>
@@ -159,6 +150,21 @@
     </Filter>
     <Filter Include="Source Files\util\datatypes">
       <UniqueIdentifier>{40d777e3-f258-4856-ad1b-a0fd67863f9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\resource\text">
+      <UniqueIdentifier>{35fd1fe2-1c90-48f9-a055-04e3fa6524df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource\text">
+      <UniqueIdentifier>{0a58a3af-0d61-4c95-85ff-ea60d0e0f617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource\model">
+      <UniqueIdentifier>{92c8699b-0e7b-4853-ae21-fc2bda847aef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\loader\obj">
+      <UniqueIdentifier>{a09a780e-e3e2-4ab8-927b-4e75cbeb0f96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\loader\obj">
+      <UniqueIdentifier>{3578838e-8a14-4e1a-999e-896471f7fb0f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +189,9 @@
     </None>
     <None Include="resource\mesh\mesh.tpp">
       <Filter>Source Files\resource\mesh</Filter>
+    </None>
+    <None Include="resource\resource_mgr.tpp">
+      <Filter>Source Files\resource</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -219,9 +228,6 @@
     <ClInclude Include="shader\Shader.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
-    <ClInclude Include="text\Text.h">
-      <Filter>Header Files\text</Filter>
-    </ClInclude>
     <ClInclude Include="util\math\math.h">
       <Filter>Header Files\util\math</Filter>
     </ClInclude>
@@ -239,12 +245,6 @@
     </ClInclude>
     <ClInclude Include="rendering\buffer\structured_buffer.h">
       <Filter>Header Files\rendering\buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="loader\obj_loader.h">
-      <Filter>Header Files\loader</Filter>
-    </ClInclude>
-    <ClInclude Include="loader\obj_tokens.h">
-      <Filter>Header Files\loader</Filter>
     </ClInclude>
     <ClInclude Include="system\main_window.h">
       <Filter>Header Files\system</Filter>
@@ -291,12 +291,6 @@
     <ClInclude Include="resource\mesh\mesh.h">
       <Filter>Header Files\resource\mesh</Filter>
     </ClInclude>
-    <ClInclude Include="resource\texture\texture_factory.h">
-      <Filter>Header Files\resource\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="resource\model\model_factory.h">
-      <Filter>Header Files\resource\model</Filter>
-    </ClInclude>
     <ClInclude Include="resource\model\model_blueprint.h">
       <Filter>Header Files\resource\model</Filter>
     </ClInclude>
@@ -305,6 +299,21 @@
     </ClInclude>
     <ClInclude Include="util\datatypes\vertex_types.h">
       <Filter>Header Files\util\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\text\text.h">
+      <Filter>Header Files\resource\text</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\model_loader.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\obj\obj_loader.h">
+      <Filter>Header Files\loader\obj</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\obj\obj_tokens.h">
+      <Filter>Header Files\loader\obj</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\texture_loader.h">
+      <Filter>Header Files\loader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -319,9 +328,6 @@
     </ClCompile>
     <ClCompile Include="input\Input.cpp">
       <Filter>Source Files\input</Filter>
-    </ClCompile>
-    <ClCompile Include="loader\obj_loader.cpp">
-      <Filter>Source Files\loader</Filter>
     </ClCompile>
     <ClCompile Include="rendering\render_state_mgr.cpp">
       <Filter>Source Files\rendering</Filter>
@@ -344,9 +350,6 @@
     <ClCompile Include="system\system.cpp">
       <Filter>Source Files\system</Filter>
     </ClCompile>
-    <ClCompile Include="text\text.cpp">
-      <Filter>Source Files\text</Filter>
-    </ClCompile>
     <ClCompile Include="util\fps\fps.cpp">
       <Filter>Source Files\util\fps</Filter>
     </ClCompile>
@@ -362,14 +365,20 @@
     <ClCompile Include="rendering\forward\forward_render.cpp">
       <Filter>Source Files\rendering\forward</Filter>
     </ClCompile>
-    <ClCompile Include="resource\resource_mgr.cpp">
-      <Filter>Source Files\resource</Filter>
-    </ClCompile>
-    <ClCompile Include="resource\texture\texture_factory.cpp">
-      <Filter>Source Files\resource\texture</Filter>
-    </ClCompile>
     <ClCompile Include="util\datatypes\vertex_types.cpp">
       <Filter>Source Files\util\datatypes</Filter>
+    </ClCompile>
+    <ClCompile Include="resource\text\text.cpp">
+      <Filter>Source Files\resource\text</Filter>
+    </ClCompile>
+    <ClCompile Include="resource\model\model_blueprint.cpp">
+      <Filter>Source Files\resource\model</Filter>
+    </ClCompile>
+    <ClCompile Include="loader\obj\obj_loader.cpp">
+      <Filter>Source Files\loader\obj</Filter>
+    </ClCompile>
+    <ClCompile Include="loader\texture_loader.cpp">
+      <Filter>Source Files\loader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

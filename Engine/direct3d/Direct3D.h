@@ -19,7 +19,7 @@ class Direct3D {
 
 		void Clear() const;
 		void Clear(const float color[4]) const;
-		void EndScene() const;
+		void PresentFrame() const;
 		void OnResize(i32 win_width, i32 win_height);
 
 		ID3D11Device* GetDevice() const {

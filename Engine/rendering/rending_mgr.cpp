@@ -62,5 +62,5 @@ void RenderingMgr::Render(Scene& scene) const {
 	// Present the frame
 	//----------------------------------------------------------------------------------
 
-	direct3D->EndScene();
+	direct3D->PresentFrame();
 }

@@ -15,18 +15,15 @@ class Model {
 		Model() = default;
 		~Model() = default;
 
-		template<typename VertexT>
-		Model(ID3D11Device* device, ModelBlueprint<VertexT> blueprint)
-			: position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
-			, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
-			, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
+		Model(ID3D11Device* device, ModelBlueprint blueprint)
+			: mesh(blueprint.mesh)
 			, model_parts(blueprint.model_parts)
 			, materials(blueprint.materials)
 			, aabb(blueprint.aabb)
-		{
-			// Create the mesh
-			mesh = Mesh(device, blueprint.vertices, blueprint.indices);
-		}
+			, position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
+			, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
+			, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
+		{}
 
 
 		// Render the model with the given index count and start index
