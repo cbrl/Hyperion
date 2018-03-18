@@ -1,10 +1,7 @@
 #pragma once
 
 #include <Windows.h>
-#include <Keyboard.h>
-#include <Mouse.h>
 
-#include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
 #include "system\main_window.h"
 #include "direct3d\direct3d.h"
@@ -41,9 +38,6 @@ class System : public MainWindow {
 		HWND GetHWND()         const { return hWnd; }
 		u32  GetWindowWidth()  const { return window_width; }
 		u32  GetWindowHeight() const { return window_height; }
-
-		RenderingMgr* GetRenderingMgr() const { return rendering_mgr.get(); }
-		Input*        GetInput()        const { return input.get(); }
 
 
 	private:

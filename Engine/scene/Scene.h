@@ -1,9 +1,5 @@
 #pragma once
 
-#include <Windows.h>
-#include <Keyboard.h>
-#include <Mouse.h>
-
 #include "util\datatypes\datatypes.h"
 #include "input\input.h"
 #include "camera\camera.h"

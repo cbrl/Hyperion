@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "renderer.h"
 
+#include "util\engine_util.h"
+#include "shader\hlsl.h"
+#include "rendering\pipeline.h"
+
 
 Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
 	: device_context(device_context)

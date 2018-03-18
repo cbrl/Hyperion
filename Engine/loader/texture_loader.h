@@ -1,13 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
-#include <WICTextureLoader.h>
-#include <DDSTextureLoader.h>
-#include <DirectXHelpers.h>
-
-#include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
-#include "resource\texture\texture.h"
 
 
 class TextureLoader {

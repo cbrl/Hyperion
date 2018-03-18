@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Windows.h>
 #include <d3d11.h>
 #include <SpriteBatch.h>
 #include <SpriteFont.h>
@@ -8,12 +7,9 @@
 #include "util\datatypes\datatypes.h"
 
 
-using namespace DirectX;
-
-
 class Text {
 	public:
-		Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const WCHAR* font_filename);
+		Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const wchar_t* font_filename);
 		~Text();
 
 		void SetText(wstring new_text);

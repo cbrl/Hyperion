@@ -4,10 +4,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-#include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
-#include "util\math\math.h"
-#include "util\io\io.h"
 #include "rendering\pipeline.h"
 
 

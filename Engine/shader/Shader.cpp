@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "shader.h"
 
+#include "util\engine_util.h"
+#include "util\io\io.h"
+
 
 //----------------------------------------------------------------------------------
 // Vertex Shader

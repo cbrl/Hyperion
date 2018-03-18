@@ -3,9 +3,12 @@
 #include "util\datatypes\datatypes.h"
 #include "resource\mesh\mesh.h"
 #include "resource\model\model_blueprint.h"
+#include "resource\texture\texture.h"
 #include "resource\text\text.h"
 
+
 class ModelBlueprint;
+
 
 template<typename KeyT, typename ValueT>
 class ResourceMap {

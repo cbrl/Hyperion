@@ -1,12 +1,8 @@
 #pragma once
 
 #include <Windows.h>
-#include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
 
-// Forward declaration of parent class.
-// Parent class reference is used to call Tick(), OnResize(), etc...
-class System;
 
 class MainWindow {
 	public:

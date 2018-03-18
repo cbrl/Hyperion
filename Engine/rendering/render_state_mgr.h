@@ -1,13 +1,6 @@
 #pragma once
 
 #include <d3d11.h>
-#include "util\engine_util.h"
-#include "util\datatypes\datatypes.h"
-#include "shader\hlsl.h"
-#include "rendering\pipeline.h"
-
-
-using namespace DirectX;
 
 
 class RenderStateMgr {

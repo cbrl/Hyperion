@@ -1,11 +1,8 @@
 #pragma once
 
 #include <d3d11.h>
-#include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
-#include "rendering\buffer\buffers.h"
 
-using namespace DirectX;
 
 class Camera {
 	public:

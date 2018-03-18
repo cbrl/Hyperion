@@ -164,6 +164,13 @@
     <ClInclude Include="direct3d\direct3d.h" />
     <ClInclude Include="geometry\boundingvolume\bounding_volume.h" />
     <ClInclude Include="geometry\frustum\frustum.h" />
+    <ClInclude Include="imgui\imconfig.h" />
+    <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="imgui\imgui_internal.h" />
+    <ClInclude Include="imgui\stb_rect_pack.h" />
+    <ClInclude Include="imgui\stb_textedit.h" />
+    <ClInclude Include="imgui\stb_truetype.h" />
     <ClInclude Include="input\input.h" />
     <ClInclude Include="loader\model_loader.h" />
     <ClInclude Include="loader\obj\obj_loader.h" />
@@ -205,6 +212,18 @@
     <ClCompile Include="camera\camera.cpp" />
     <ClCompile Include="direct3d\direct3d.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
+    <ClCompile Include="imgui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_dx11.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="input\input.cpp" />
     <ClCompile Include="loader\obj\obj_loader.cpp" />
     <ClCompile Include="loader\texture_loader.cpp" />

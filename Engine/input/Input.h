@@ -4,7 +4,6 @@
 #include <Mouse.h>
 #include "util\datatypes\datatypes.h"
 
-using namespace DirectX;
 
 class Input {
 	public:

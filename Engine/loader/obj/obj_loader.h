@@ -1,10 +1,7 @@
 #pragma once
 
-#include <algorithm>
 #include <d3d11.h>
 
-#include "util\io\io.h"
-#include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
 #include "resource\resource_mgr.h"
 #include "resource\model\model_blueprint.h"

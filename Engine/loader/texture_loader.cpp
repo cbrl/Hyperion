@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "texture_loader.h"
 
+#include <WICTextureLoader.h>
+#include <DDSTextureLoader.h>
+#include <DirectXHelpers.h>
+#include "util\engine_util.h"
+
 
 // Load a texture from a file (jpg, png, etc...)
 void TextureLoader::LoadTexture(ID3D11Device* device,

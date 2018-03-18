@@ -10,6 +10,7 @@
 // - Create a simple geometry generator
 // - Move other resources to resource manager (shaders and text?)
 // - ImGui
+// - Work on ResourceMgr
 
 
 static const float zNear = 0.1f;

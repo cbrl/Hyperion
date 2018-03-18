@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "direct3d.h"
 
+#include "util\engine_util.h"
+#include "rendering\pipeline.h"
+
 
 Direct3D::Direct3D(HWND hWnd, i32 window_width, i32 window_height, bool fullscreen, bool vSync, bool MSAA)
 	: hWnd(hWnd)

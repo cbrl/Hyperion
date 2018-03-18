@@ -3,7 +3,6 @@
 #include <math.h>
 #include <DirectXMath.h>
 #include "util\datatypes\datatypes.h"
-//#include "util\math\directxmath\extensions.h"
 
 
 using namespace DirectX;

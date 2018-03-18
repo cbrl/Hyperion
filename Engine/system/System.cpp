@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "system.h"
 
+#include "util\engine_util.h"
+
 
 System* System::system_ptr = nullptr;
 

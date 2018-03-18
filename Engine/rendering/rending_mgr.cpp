@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "rendering_mgr.h"
+
+#include "util\engine_util.h"
 #include "system\system.h"
 
 

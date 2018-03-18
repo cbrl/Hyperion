@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "forward_render.h"
 
+#include "util\math\math.h"
+#include "rendering\pipeline.h"
+#include "geometry\frustum\frustum.h"
+#include "shader\hlsl.h"
+
 
 ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
 	: device(device)

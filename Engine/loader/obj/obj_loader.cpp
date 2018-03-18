@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "obj_loader.h"
+
+#include <algorithm>
 #include "loader\obj\obj_tokens.h"
+#include "util\io\io.h"
+#include "util\math\math.h"
 
 
 //----------------------------------------------------------------------------------

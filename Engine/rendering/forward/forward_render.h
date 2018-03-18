@@ -2,20 +2,13 @@
 
 #include <d3d11.h>
 
-#include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
-#include "rendering\pipeline.h"
 #include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
 #include "rendering\buffer\structured_buffer.h"
 #include "rendering\render_state_mgr.h"
-#include "geometry\frustum\frustum.h"
 #include "shader\shader.h"
-#include "shader\hlsl.h"
 #include "scene\scene.h"
-
-
-using namespace DirectX;
 
 
 class ForwardRenderer {

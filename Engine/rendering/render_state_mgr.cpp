@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "render_state_mgr.h"
 
+#include "util\engine_util.h"
+#include "shader\hlsl.h"
+#include "rendering\pipeline.h"
+
 
 RenderStateMgr::RenderStateMgr(ID3D11Device* device, ID3D11DeviceContext* device_context) {
 	SetupStates(device, device_context);

@@ -8,7 +8,9 @@
 #include "resource\material\material.h"
 #include "geometry\boundingvolume\bounding_volume.h"
 
+
 class ResourceMgr;
+
 
 struct ModelPart {
 	wstring name;

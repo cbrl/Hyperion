@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "camera.h"
+#include "util\math\math.h"
 
 
 Camera::Camera()

@@ -6,9 +6,7 @@
 
 #include <d3d11.h>
 #include <dxgi.h>
-#include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
-#include "rendering\pipeline.h"
 
 using namespace DirectX;
 
