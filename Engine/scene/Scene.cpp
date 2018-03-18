@@ -10,10 +10,6 @@
 // - Create a simple geometry generator
 // - Move other resources to resource manager (shaders and text?)
 // - ImGui
-// - Default constructors
-// - Delete unwanted copy constructors
-// - ResourceMap.Create() -> calls constructor for resource -> calls appropriate method
-// - Texture constructor -> calls static TextureLoader
 
 
 static const float zNear = 0.1f;
