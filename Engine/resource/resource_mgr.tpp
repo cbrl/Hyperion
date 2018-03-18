@@ -9,20 +9,41 @@ template<typename KeyT, typename ValueT>
 template<typename... ArgsT>
 shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::Create(const KeyT& key, ArgsT&&... args) {
 
-	if (resource_map.find(key) != resource_map.end()) {
-		return resource_map.at(key).lock();
+	const auto n = resource_map.find(key);
+
+	if (n != resource_map.end()) {
+		
+		if (!n->second.expired()) {
+			return n->second.lock();
+		}
+		else {
+			resource_map.erase(n);
+		}
 	}
-	else {
-		auto resource = shared_ptr<ValueT>(new ValueT(std::forward<ArgsT>(args)...));
-		resource_map[key] = resource;
-		return resource;
-	}
+
+	const auto resource = shared_ptr<ValueT>(new ValueT(std::forward<ArgsT>(args)...));
+	resource_map[key] = resource;
+
+	return resource;
 }
 
 
 template<typename KeyT, typename ValueT>
 shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::Get(const KeyT& key) {
-	return resource_map.at(key).lock();
+
+	const auto n = resource_map.find(key);
+
+	if (n != resource_map.end()) {
+
+		if (!n->second.expired()) {
+			return n->second.lock();
+		}
+		else {
+			resource_map.erase(n);
+		}
+	}
+	
+	return nullptr;
 }
 
 
