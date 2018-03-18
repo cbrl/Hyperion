@@ -26,8 +26,7 @@ bool System::Init() {
 	}
 
 	// Initialize rendering manager
-	rendering_mgr = make_unique<RenderingMgr>();
-	rendering_mgr->Init(window_width, window_height, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
+	rendering_mgr = make_unique<RenderingMgr>(window_width, window_height, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
 
 	// Create input handler
 	input = make_unique<Input>(hWnd);
@@ -117,10 +116,8 @@ LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 				OnResize(window_width, window_height);
 			}
 			else if (wParam == SIZE_RESTORED) {
-				if (resizing) {
-					// Do nothing. Constantly calling the resize function would be slow.
-				}
-				else {
+				// Do nothing if resizing. Constantly calling the resize function would be slow.
+				if (!resizing) {
 					OnResize(window_width, window_height);
 				}
 			}

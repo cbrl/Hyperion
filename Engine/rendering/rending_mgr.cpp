@@ -3,15 +3,7 @@
 #include "system\system.h"
 
 
-RenderingMgr::RenderingMgr() {
-}
-
-
-RenderingMgr::~RenderingMgr() {
-}
-
-
-void RenderingMgr::Init(u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa) {
+RenderingMgr::RenderingMgr(u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa) {
 	//----------------------------------------------------------------------------------
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------

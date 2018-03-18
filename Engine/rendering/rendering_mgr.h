@@ -14,10 +14,9 @@
 
 class RenderingMgr {
 	public:
-		RenderingMgr();
-		~RenderingMgr();
+		RenderingMgr(u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
+		~RenderingMgr() = default;
 
-		void Init(u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
 
 		void OnResize(u32 window_width, u32 window_height) const {
 			direct3D->OnResize(window_width, window_height);
