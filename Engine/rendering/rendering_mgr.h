@@ -5,6 +5,7 @@
 
 #include "util\datatypes\datatypes.h"
 #include "direct3d\direct3d.h"
+#include "imgui\imgui_impl_dx11.h"
 #include "rendering\render_state_mgr.h"
 #include "rendering\renderer.h"
 #include "resource\resource_mgr.h"
@@ -13,12 +14,14 @@
 
 class RenderingMgr {
 	public:
-		RenderingMgr(u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
-		~RenderingMgr() = default;
+		RenderingMgr(HWND hWnd, u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
+		~RenderingMgr();
 
 
 		void OnResize(u32 window_width, u32 window_height) const {
 			direct3D->OnResize(window_width, window_height);
+			ImGui_ImplDX11_InvalidateDeviceObjects();
+			ImGui_ImplDX11_CreateDeviceObjects();
 		}
 
 		void Render(Scene& scene) const;

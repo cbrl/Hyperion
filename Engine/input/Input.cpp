@@ -3,17 +3,8 @@
 
 
 Input::Input(HWND hWnd) {
-	Init(hWnd);
-}
-
-
-Input::~Input() {
-}
-
-
-void Input::Init(HWND hWnd) {
 	keyboard = make_unique<Keyboard>();
-	mouse    = make_unique<Mouse>();
+	mouse = make_unique<Mouse>();
 
 	mouse->SetWindow(hWnd);
 	mouse->SetMode(Mouse::MODE_RELATIVE);
@@ -26,7 +17,6 @@ void Input::Tick() {
 	keyboard_tracker.Update(keyboard_state);
 
 	// Read current mouse state
-	last_mouse_state = mouse_state;
 	mouse_state = mouse->GetState();
 	button_tracker.Update(mouse_state);
 }
@@ -38,16 +28,16 @@ void Input::Reset() {
 }
 
 
-void Input::GetMouseDelta(i32 &xPos, i32 &yPos) {
+void Input::GetMouseDelta(i32& delta_x, i32& delta_y) {
 	// Mouse::MODE_ABSOLUTE - x/y are the position
 	// Mouse::MODE_RELATIVE - x/y are the delta
 
 	if (mouse_state.positionMode == Mouse::MODE_ABSOLUTE) {
-		xPos = mouse_state.x - last_mouse_state.x;
-		yPos = mouse_state.y - last_mouse_state.y;
+		delta_x = 0;
+		delta_y = 0;
 	}
 	else {
-		xPos = mouse_state.x;
-		yPos = mouse_state.y;
+		delta_x = mouse_state.x;
+		delta_y = mouse_state.y;
 	}
 }

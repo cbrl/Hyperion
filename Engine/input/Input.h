@@ -8,23 +8,37 @@
 class Input {
 	public:
 		Input(HWND hWnd);
-		~Input();
+		~Input() = default;
 		
 		void Tick();
 		void Reset();
 
+		// Set mouse to use absolute screen coords. Allows
+		// the mouse to leave the window.
 		void SetMouseAbsolute() { mouse->SetMode(Mouse::MODE_ABSOLUTE); }
+
+		// Set mouse to use relative window coords. Prevents
+		// mouse from leaving the window and hides the cursor.
 		void SetMouseRelative() { mouse->SetMode(Mouse::MODE_RELATIVE); }
 
-		void GetMouseDelta(i32& xPos, i32& yPos);
+		// Toggle the mouse mode.
+		void ToggleMouseMode() {
+			mouse_state.positionMode == Mouse::MODE_ABSOLUTE ? mouse->SetMode(Mouse::MODE_RELATIVE)
+				                                             : mouse->SetMode(Mouse::MODE_ABSOLUTE);
+		}
 
+		// Get mouse movement since last update
+		void GetMouseDelta(i32& delta_x, i32& delta_y);
+
+		// Check if key is currently down
 		bool IsKeyDown(Keyboard::Keys key) { return keyboard_state.IsKeyDown(key); }
-		bool IsKeyPressed(Keyboard::Keys key) { return keyboard_tracker.IsKeyPressed(key); }
+		// Check if key is currently up
+		bool IsKeyUp(Keyboard::Keys key)   { return keyboard_state.IsKeyUp(key); }
+
+		// Check if key has been pressed, but not released
+		bool IsKeyPressed(Keyboard::Keys key)  { return keyboard_tracker.IsKeyPressed(key); }
+		// Check if key has been released
 		bool IsKeyReleased(Keyboard::Keys key) { return keyboard_tracker.IsKeyReleased(key); }
-
-
-	private:
-		void Init(HWND hWnd);
 
 
 	private:
@@ -33,7 +47,7 @@ class Input {
 
 		Keyboard::KeyboardStateTracker keyboard_tracker;
 		Keyboard::State                keyboard_state;
-		Mouse::ButtonStateTracker      button_tracker;
-		Mouse::State                   mouse_state;
-		Mouse::State                   last_mouse_state;
+
+		Mouse::ButtonStateTracker button_tracker;
+		Mouse::State              mouse_state;
 };

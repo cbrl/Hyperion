@@ -5,7 +5,7 @@
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
-	//Send message to handler in System class
+	//Send message to handler in MainWindow (or derived class)
 	return handle->MsgProc(hWnd, msg, wParam, lParam);
 }
 

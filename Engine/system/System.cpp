@@ -5,6 +5,7 @@
 
 
 System* System::system_ptr = nullptr;
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
 System::System() {
@@ -28,7 +29,7 @@ bool System::Init() {
 	}
 
 	// Initialize rendering manager
-	rendering_mgr = make_unique<RenderingMgr>(window_width, window_height, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
+	rendering_mgr = make_unique<RenderingMgr>(hWnd, window_width, window_height, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
 
 	// Create input handler
 	input = make_unique<Input>(hWnd);
@@ -49,7 +50,7 @@ bool System::Init() {
 void System::Run() {
 	MSG   msg = { 0 };
 	bool done = false;
-
+	
 	// Main loop
 	while (!done) {
 
@@ -67,6 +68,9 @@ void System::Run() {
 
 			if (input->IsKeyDown(Keyboard::Escape)) {
 				done = true;
+			}
+			if (input->IsKeyPressed(Keyboard::F1)) {
+				input->ToggleMouseMode();
 			}
 		}
 	}
@@ -98,6 +102,11 @@ void System::Tick() {
 
 
 LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
+
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam)) {
+		return true;
+	}
+
 	switch (msg) {
 		case WM_DESTROY:
 		case WM_CLOSE:

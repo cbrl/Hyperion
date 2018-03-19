@@ -262,3 +262,4 @@ __pycache__/
 
 /Engine/shader_error.txt
 *.blend
+/Engine/imgui.ini
