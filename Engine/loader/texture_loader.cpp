@@ -14,11 +14,17 @@ void TextureLoader::LoadTexture(ID3D11Device* device,
 								ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if the file is missing
-	if (!fs::exists(filename)) return LoadTexture(device, UINT32_MAX, srv_out);
+	if (!fs::exists(filename)) return LoadTexture(device, 0xFFFFFFFF, srv_out);
 	
 	// Load the texture into the shader resource view
-	ThrowIfFailed(CreateWICTextureFromFile(device, device_context, filename.c_str(), nullptr, srv_out),
-				  "Failed to create WIC texture");
+	if (GetFileExtension(filename) == L".dds") {
+		ThrowIfFailed(CreateDDSTextureFromFile(device, filename.c_str(), nullptr, srv_out),
+					  "Failed to create DDS texture");
+	}
+	else {
+		ThrowIfFailed(CreateWICTextureFromFile(device, device_context, filename.c_str(), nullptr, srv_out),
+					  "Failed to create WIC texture");
+	}
 
 	SetDebugObjectName(*srv_out, "TextureLoader Texture");
 }
@@ -66,7 +72,7 @@ void TextureLoader::LoadTexture(ID3D11Device* device,
 
 	// Return white texture if a file is missing
 	for (wstring fn : filenames) {
-		if (!fs::exists(fn)) return LoadTexture(device, UINT32_MAX, srv_out);
+		if (!fs::exists(fn)) return LoadTexture(device, 0xFFFFFFFF, srv_out);
 	}
 
 	// Create a vector of textures
@@ -74,10 +80,18 @@ void TextureLoader::LoadTexture(ID3D11Device* device,
 	vector<ComPtr<ID3D11Texture2D>> srcTex(size);
 
 	for (u32 i = 0; i < size; i++) {
-		ThrowIfFailed(CreateWICTextureFromFileEx(device, device_context, filenames[i].c_str(),
-												 NULL, D3D11_USAGE_STAGING, NULL, D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
-												 (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr),
-					  "Failed to create WIC texture");
+		if (GetFileExtension(filenames[i]) == L".dds") {
+			ThrowIfFailed(CreateDDSTextureFromFileEx(device, filenames[i].c_str(), NULL, D3D11_USAGE_STAGING, NULL,
+													 D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, false,
+													 (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr),
+						  "Failed to create DDS texture");
+		}
+		else {
+			ThrowIfFailed(CreateWICTextureFromFileEx(device, device_context, filenames[i].c_str(), NULL, D3D11_USAGE_STAGING,
+													 NULL, D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
+													 (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr),
+						  "Failed to create WIC texture");
+		}
 	}
 
 

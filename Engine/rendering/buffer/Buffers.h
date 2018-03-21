@@ -32,7 +32,7 @@ struct CameraBuffer {
 	CameraBuffer() : position(0.0f, 0.0f, 0.0f), padding(0.0f) {}
 	CameraBuffer(float3 pos) : position(pos), padding(0.0f) {}
 	float3 position;
-	float    padding;
+	float  padding;
 };
 
 
@@ -88,6 +88,22 @@ struct ModelBuffer {
 //----------------------------------------------------------------------------------
 // Light Buffers
 //----------------------------------------------------------------------------------
+
+struct Fog {
+	Fog()
+		: color(0.4f, 0.4f, 0.4f, 1.0f)
+		, start(20.0f)
+		, range(50.0f)
+	{}
+	Fog(float4 color, float start, float range)
+		: color(color)
+		, start(start)
+		, range(range)
+	{}
+	float4 color;
+	float  start;
+	float  range;
+};
 
 struct LightBuffer {
 	LightBuffer()

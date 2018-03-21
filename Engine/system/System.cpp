@@ -2,9 +2,12 @@
 #include "system.h"
 
 #include "util\engine_util.h"
+#include "imgui\imgui.h"
 
 
 System* System::system_ptr = nullptr;
+
+// Declare the ImGui msg handler
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
@@ -66,11 +69,12 @@ void System::Run() {
 			// Process frame
 			Tick();
 
+			// Process input
+			ProcessInput();
+
+			// Quit if escape is pressed
 			if (input->IsKeyDown(Keyboard::Escape)) {
 				done = true;
-			}
-			if (input->IsKeyPressed(Keyboard::F1)) {
-				input->ToggleMouseMode();
 			}
 		}
 	}
@@ -81,30 +85,52 @@ void System::Tick() {
 	i32   mouseX, mouseY;
 	float deltaTime;
 
+
 	// Update system metrics
 	timer->Tick();
 	fps_counter->Tick();
 	deltaTime = timer->DeltaTime();
 
-	// Process input
+
+	// Read input
 	input->Tick();
+
 
 	// Get mouse position
 	input->GetMouseDelta(mouseX, mouseY);
 
+
 	// Update scene
 	scene->Tick(*input, deltaTime);
 	scene->UpdateMetrics(fps_counter->GetFPS(), NULL, mouseX, mouseY);
+
 
 	// Render scene
 	rendering_mgr->Render(*scene);
 }
 
 
+void System::ProcessInput() {
+
+	// Toggle mouse mode on F1 press
+	if (input->IsKeyPressed(Keyboard::F1)) {
+		input->ToggleMouseMode();
+	}
+
+	// Disable input in scene if ImGui is focused
+	ImGuiIO& io = ImGui::GetIO();
+
+	if (io.WantCaptureKeyboard || io.WantCaptureMouse)
+		scene->InputEnabled(false);
+	else
+		scene->InputEnabled(true);
+}
+
+
 LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam)) {
-		return true;
+		return 0;
 	}
 
 	switch (msg) {

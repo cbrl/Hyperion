@@ -3,14 +3,12 @@
 #include "system/system.h"
 
 // TODO:
-// - Create bounding spheres for models
-// - CPU usage
 // - Normal mapping
 // - Skybox
+// - Create bounding spheres for models
+// - CPU usage
 // - Create a simple geometry generator
-// - Move other resources to resource manager (shaders and text?)
-// - ImGui
-// - Work on ResourceMgr
+// - Move other resources to resource manager (shaders?)
 
 
 static const float zNear = 0.1f;
@@ -18,16 +16,19 @@ static const float zFar  = 1000.0f;
 static const float FOV   = XM_PI / 3.0f;
 
 
-Scene::Scene(ID3D11Device* device, ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr) {
+Scene::Scene(ID3D11Device* device,
+			 ID3D11DeviceContext* device_context,
+			 ResourceMgr& resource_mgr) {
+
+	enable_input = true;
 	Init(device, device_context, resource_mgr);
 }
 
 
-Scene::~Scene() {
-}
+void Scene::Init(ID3D11Device* device,
+				 ID3D11DeviceContext* device_context,
+				 ResourceMgr& resource_mgr) {
 
-
-void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr) {
 	//----------------------------------------------------------------------------------
 	// Create camera
 	//----------------------------------------------------------------------------------
@@ -41,34 +42,40 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context, Reso
 	// Create lights
 	//----------------------------------------------------------------------------------
 
-	// X+ direction = Red
-	directional_lights.push_back(DirectionalLight());
-	directional_lights[0].ambient_color = float4(0.2f, 0.0f, 0.0f, 1.0f);
-	directional_lights[0].diffuse_color = float4(1.0f, 0.0f, 0.0f, 1.0f);
-	directional_lights[0].specular      = float4(1.0f, 0.0f, 0.0f, 1.0f);
-	directional_lights[0].direction     = float3(1.0f, 0.0f, 0.0f);
+	//// X+ direction = Red
+	//directional_lights.push_back(DirectionalLight());
+	//directional_lights[0].ambient_color = float4(0.2f, 0.0f, 0.0f, 1.0f);
+	//directional_lights[0].diffuse_color = float4(1.0f, 0.0f, 0.0f, 1.0f);
+	//directional_lights[0].specular      = float4(1.0f, 0.0f, 0.0f, 1.0f);
+	//directional_lights[0].direction     = float3(1.0f, 0.0f, 0.0f);
 
-	// Y- direction = Green
-	directional_lights.push_back(DirectionalLight());
-	directional_lights[1].ambient_color = float4(0.0f, 0.2f, 0.0f, 1.0f);
-	directional_lights[1].diffuse_color = float4(0.0f, 1.0f, 0.0f, 1.0f);
-	directional_lights[1].specular      = float4(0.0f, 1.0f, 0.0f, 1.0f);
-	directional_lights[1].direction     = float3(0.0f, -1.0f, 0.0f);
+	//// Y- direction = Green
+	//directional_lights.push_back(DirectionalLight());
+	//directional_lights[1].ambient_color = float4(0.0f, 0.2f, 0.0f, 1.0f);
+	//directional_lights[1].diffuse_color = float4(0.0f, 1.0f, 0.0f, 1.0f);
+	//directional_lights[1].specular      = float4(0.0f, 1.0f, 0.0f, 1.0f);
+	//directional_lights[1].direction     = float3(0.0f, -1.0f, 0.0f);
 
-	// Z+ direction = Blue
-	directional_lights.push_back(DirectionalLight());
-	directional_lights[2].ambient_color = float4(0.0f, 0.0f, 0.2f, 1.0f);
-	directional_lights[2].diffuse_color = float4(0.0f, 0.0f, 1.0f, 1.0f);
-	directional_lights[2].specular      = float4(0.0f, 0.0f, 1.0f, 1.0f);
-	directional_lights[2].direction     = float3(0.0f, 0.0f, 1.0f);
+	//// Z+ direction = Blue
+	//directional_lights.push_back(DirectionalLight());
+	//directional_lights[2].ambient_color = float4(0.0f, 0.0f, 0.2f, 1.0f);
+	//directional_lights[2].diffuse_color = float4(0.0f, 0.0f, 1.0f, 1.0f);
+	//directional_lights[2].specular      = float4(0.0f, 0.0f, 1.0f, 1.0f);
+	//directional_lights[2].direction     = float3(0.0f, 0.0f, 1.0f);
 
-	//point_lights.push_back(PointLight());
-	//point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
-	//point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	//point_lights.back().attenuation   = float3(0.0f, 1.0f, 0.0f);
-	//point_lights.back().specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	//point_lights.back().position      = float3(0.0f, 2.0f, 0.0f);
-	//point_lights.back().range         = 50.0f;
+	point_lights.push_back(PointLight());
+	point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
+	point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	point_lights.back().attenuation   = float3(1.0f, 0.0f, 0.1f);
+	point_lights.back().specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	point_lights.back().position      = float3(0.0f, 2.0f, 0.0f);
+	point_lights.back().range         = 50.0f;
+
+
+	// Fog
+	fog.color = float4(0.4f, 0.4f, 0.4f, 1.0f);
+	fog.start = 25.0f;
+	fog.range = 45.0f;
 
 
 	//----------------------------------------------------------------------------------
@@ -86,21 +93,21 @@ void Scene::Init(ID3D11Device* device, ID3D11DeviceContext* device_context, Reso
 	// Create text objects
 	//----------------------------------------------------------------------------------
 
-	const wchar_t* font = L"../data/fonts/courier-12.spritefont";
+	const wstring font(L"../data/fonts/courier-12.spritefont");
 
-	texts.try_emplace("FPS", device, device_context, font);
+	texts.try_emplace("FPS", device_context, resource_mgr, font);
 	texts.at("FPS").SetPosition(float2(10, 10));
 
-	texts.try_emplace("Mouse", device, device_context, font);
+	texts.try_emplace("Mouse", device_context, resource_mgr, font);
 	texts.at("Mouse").SetPosition(float2(10, 40));
 
-	texts.try_emplace("Position", device, device_context, font);
+	texts.try_emplace("Position", device_context, resource_mgr, font);
 	texts.at("Position").SetPosition(float2(10, 110));
 	
-	texts.try_emplace("Rotation", device, device_context, font);
+	texts.try_emplace("Rotation", device_context, resource_mgr, font);
 	texts.at("Rotation").SetPosition(float2(10, 200));
 
-	texts.try_emplace("Velocity", device, device_context, font);
+	texts.try_emplace("Velocity", device_context, resource_mgr, font);
 	texts.at("Velocity").SetPosition(float2(10, 300));
 }
 
@@ -137,9 +144,15 @@ void Scene::Tick(Input& input, float delta_time) {
 	//	model.Rotate(0.0f, ((XM_PI * delta_time) / 2500), 0.0f);
 	//}
 
+
+	// Exit if input is disabled
+	if (!enable_input) return;
+
+
 	//----------------------------------------------------------------------------------
 	// Camera movement
 	//----------------------------------------------------------------------------------
+
 	i32 mouseX, mouseY;
 	float3 rotateUnits(0.0f, 0.0f, 0.0f);
 	float3 move_units(0.0f, 0.0f, 0.0f);

@@ -30,14 +30,19 @@ class Input {
 		// Get mouse movement since last update
 		void GetMouseDelta(i32& delta_x, i32& delta_y);
 
+
 		// Check if key is currently down
 		bool IsKeyDown(Keyboard::Keys key) { return keyboard_state.IsKeyDown(key); }
 		// Check if key is currently up
-		bool IsKeyUp(Keyboard::Keys key)   { return keyboard_state.IsKeyUp(key); }
+		bool IsKeyUp(Keyboard::Keys key) { return keyboard_state.IsKeyUp(key); }
 
-		// Check if key has been pressed, but not released
-		bool IsKeyPressed(Keyboard::Keys key)  { return keyboard_tracker.IsKeyPressed(key); }
-		// Check if key has been released
+
+		// Check if key has been pressed. If it has, the function
+		// will only return true for the first query
+		bool IsKeyPressed(Keyboard::Keys key) { return keyboard_tracker.IsKeyPressed(key); }
+
+		// Check if key has been released. If it has, the function
+		// will only return true for the first query
 		bool IsKeyReleased(Keyboard::Keys key) { return keyboard_tracker.IsKeyReleased(key); }
 
 

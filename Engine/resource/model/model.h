@@ -16,7 +16,8 @@ class Model {
 		~Model() = default;
 
 		Model(ID3D11Device* device, ModelBlueprint blueprint)
-			: mesh(blueprint.mesh)
+			: name(blueprint.name)
+			, mesh(blueprint.mesh)
 			, model_parts(blueprint.model_parts)
 			, materials(blueprint.materials)
 			, aabb(blueprint.aabb)
@@ -96,8 +97,9 @@ class Model {
 
 
 	private:
-		Mesh mesh;
-		AABB aabb;
+		wstring name;
+		Mesh    mesh;
+		AABB    aabb;
 
 		XMMATRIX position;
 		XMMATRIX rotation;

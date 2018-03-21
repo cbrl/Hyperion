@@ -53,13 +53,16 @@ RenderingMgr::~RenderingMgr() {
 
 void RenderingMgr::Render(Scene& scene) const {
 
-	// Create a new ImGui frame
+	// Start a new ImGui frame
 	ImGui_ImplDX11_NewFrame();
+
 	ImGui::ShowDemoWindow();
 
 
 	// Clear the render target view with a specified color
-	float color[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
+	static float color[4] = { 0.39f, 0.39f, 0.39f, 1.0f };
+	ImGui::ColorEdit4("Clear Color", (float*)&color);
+
 	direct3D->Clear(color);
 
 

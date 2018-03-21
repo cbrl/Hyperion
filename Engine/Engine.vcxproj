@@ -190,7 +190,6 @@
     <ClInclude Include="resource\model\model_blueprint.h" />
     <ClInclude Include="resource\resource_mgr.h" />
     <ClInclude Include="resource\texture\texture.h" />
-    <ClInclude Include="resource\text\text.h" />
     <ClInclude Include="scene\scene.h" />
     <ClInclude Include="shader\hlsl.h" />
     <ClInclude Include="shader\shader.h" />
@@ -198,6 +197,7 @@
     <ClInclude Include="system\main_window.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="text\text.h" />
     <ClInclude Include="util\datatypes\datatypes.h" />
     <ClInclude Include="util\datatypes\vector_types.h" />
     <ClInclude Include="util\datatypes\vertex_types.h" />
@@ -233,7 +233,6 @@
     <ClCompile Include="rendering\render_state_mgr.cpp" />
     <ClCompile Include="rendering\rending_mgr.cpp" />
     <ClCompile Include="resource\model\model_blueprint.cpp" />
-    <ClCompile Include="resource\text\text.cpp" />
     <ClCompile Include="scene\scene.cpp" />
     <ClCompile Include="shader\shader.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -242,6 +241,7 @@
     </ClCompile>
     <ClCompile Include="system\main_window.cpp" />
     <ClCompile Include="system\system.cpp" />
+    <ClCompile Include="text\text.cpp" />
     <ClCompile Include="util\datatypes\vertex_types.cpp" />
     <ClCompile Include="util\fps\fps.cpp" />
     <ClCompile Include="util\timer\timer.cpp" />

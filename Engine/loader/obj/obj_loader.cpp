@@ -107,7 +107,8 @@ void OBJLoader::Load(ID3D11Device* device,
 	}
 
 	// Create the model
-	blueprint_out.Init(device, vertices, indices, mtlVector, groups);
+	wstring name = filename.substr(0, filename.find(L'.'));
+	blueprint_out.Init(device, name, vertices, indices, mtlVector, groups);
 
 	// Reset the obj loader
 	Reset();

@@ -8,6 +8,15 @@
 using namespace DirectX;
 
 
+// Convert a float4 to a hex color value
+inline u32 Float4ColorToU32(const float4& color) {
+	return static_cast<u32>(color.x * 0xff)             //R
+	       | (static_cast<u32>(color.y * 0xff) << 8)    //G
+	       | (static_cast<u32>(color.z * 0xff) << 16)   //B
+	       | (static_cast<u32>(color.w * 0xff) << 24);  //A
+}
+
+
 // Determine if a point is inside a triangle using barycentric coordinates
 inline bool PointInTriangle(const float3& point, const float3& vert1,
 							const float3& vert2, const float3& vert3) {
@@ -68,7 +77,7 @@ inline bool PointInTriangle(const XMVECTOR& point, const XMVECTOR& vert1,
 
 // Find the minimum and maximum points in a vector of vertices
 template<typename VertexT>
-inline std::pair<float3, float3> MinMaxPoint(const std::vector<VertexT>& vertices) {
+inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& vertices) {
 	float3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
 	float3 max = { FLT_MIN, FLT_MIN, FLT_MIN };
 
@@ -82,10 +91,10 @@ inline std::pair<float3, float3> MinMaxPoint(const std::vector<VertexT>& vertice
 		max.z = std::fmaxf(max.z, vertex.position.z);
 	}
 
-	return std::pair<float3, float3>(min, max);
+	return std::pair<XMVECTOR, XMVECTOR>(XMLoadFloat3(&min), XMLoadFloat3(&max));
 }
 
-inline std::pair<float3, float3> MinMaxPoint(const std::vector<float3>& vertices) {
+inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<float3>& vertices) {
 	float3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
 	float3 max = { FLT_MIN, FLT_MIN, FLT_MIN };
 
@@ -99,7 +108,7 @@ inline std::pair<float3, float3> MinMaxPoint(const std::vector<float3>& vertices
 		max.z = std::fmaxf(max.z, vertex.z);
 	}
 
-	return std::pair<float3, float3>(min, max);
+	return std::pair<XMVECTOR, XMVECTOR>(XMLoadFloat3(&min), XMLoadFloat3(&max));
 }
 
 inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<XMVECTOR>& vertices) {

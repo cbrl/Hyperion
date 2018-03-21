@@ -39,6 +39,7 @@ class ModelBlueprint {
 
 		template<typename VertexT>
 		void Init(ID3D11Device* device,
+				  const wstring& name,
 				  const vector<VertexT>& vertices,
 				  const vector<u32>& indices,
 				  const vector<Material>& _materials,
@@ -48,9 +49,10 @@ class ModelBlueprint {
 
 
 	public:
-		Mesh mesh;
-		AABB aabb;
-		u32  group_count;
+		wstring name;
+		Mesh    mesh;
+		AABB    aabb;
+		u32     group_count;
 
 		vector<Material>  materials;
 		vector<ModelPart> model_parts;
@@ -59,11 +61,13 @@ class ModelBlueprint {
 
 template<typename VertexT>
 void ModelBlueprint::Init(ID3D11Device* device,
+						  const wstring& _name,
 						  const vector<VertexT>& vertices,
 						  const vector<u32>& indices,
 						  const vector<Material>& _materials,
 						  const vector<Group>& groups) {
 
+	name        = _name;
 	materials   = _materials;
 	group_count = static_cast<u32>(groups.size());
 

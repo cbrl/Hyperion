@@ -5,11 +5,12 @@
 #include <SpriteFont.h>
 #include <DirectXColors.h>
 #include "util\datatypes\datatypes.h"
+#include "resource\resource_mgr.h"
 
 
 class Text {
 	public:
-		Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const wchar_t* font_filename);
+		Text(ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr, const wstring& font_filename);
 		~Text();
 
 		void SetText(wstring new_text);
@@ -25,7 +26,7 @@ class Text {
 
 
 	private:
-		unique_ptr<SpriteFont>  sprite_font;
+		shared_ptr<SpriteFont>  sprite_font;
 		unique_ptr<SpriteBatch> sprite_batch;
 
 		wstring     text;

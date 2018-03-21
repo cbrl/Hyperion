@@ -151,12 +151,6 @@
     <Filter Include="Source Files\util\datatypes">
       <UniqueIdentifier>{40d777e3-f258-4856-ad1b-a0fd67863f9b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\resource\text">
-      <UniqueIdentifier>{35fd1fe2-1c90-48f9-a055-04e3fa6524df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\resource\text">
-      <UniqueIdentifier>{0a58a3af-0d61-4c95-85ff-ea60d0e0f617}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\resource\model">
       <UniqueIdentifier>{92c8699b-0e7b-4853-ae21-fc2bda847aef}</UniqueIdentifier>
     </Filter>
@@ -171,6 +165,12 @@
     </Filter>
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{a3cb52ab-27e8-4074-9f6f-bfa31f48ce1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\text">
+      <UniqueIdentifier>{b1be935a-51e7-4959-87fd-0b2806d45aa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\text">
+      <UniqueIdentifier>{ac66256c-4821-446d-89c4-c1c6a0d0e045}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -306,9 +306,6 @@
     <ClInclude Include="util\datatypes\vertex_types.h">
       <Filter>Header Files\util\datatypes</Filter>
     </ClInclude>
-    <ClInclude Include="resource\text\text.h">
-      <Filter>Header Files\resource\text</Filter>
-    </ClInclude>
     <ClInclude Include="loader\model_loader.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
@@ -341,6 +338,9 @@
     </ClInclude>
     <ClInclude Include="imgui\imgui_impl_dx11.h">
       <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="text\text.h">
+      <Filter>Header Files\text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -395,9 +395,6 @@
     <ClCompile Include="util\datatypes\vertex_types.cpp">
       <Filter>Source Files\util\datatypes</Filter>
     </ClCompile>
-    <ClCompile Include="resource\text\text.cpp">
-      <Filter>Source Files\resource\text</Filter>
-    </ClCompile>
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <Filter>Source Files\resource\model</Filter>
     </ClCompile>
@@ -418,6 +415,9 @@
     </ClCompile>
     <ClCompile Include="imgui\imgui_impl_dx11.cpp">
       <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="text\text.cpp">
+      <Filter>Source Files\text</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

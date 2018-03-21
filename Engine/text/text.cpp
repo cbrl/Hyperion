@@ -2,14 +2,14 @@
 #include "text.h"
 
 
-Text::Text(ID3D11Device* device, ID3D11DeviceContext* device_context, const WCHAR* fontFilename)
+Text::Text(ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr, const wstring& font_filename)
 	: text(L"Default Text")
 	, position(float2(0, 0))
 	, color(Colors::White)
 	, rotation(0.0f)
 {
 	sprite_batch = make_unique<SpriteBatch>(device_context);
-	sprite_font = make_unique<SpriteFont>(device, fontFilename);
+	sprite_font  = resource_mgr.Create<SpriteFont>(font_filename);
 }
 
 

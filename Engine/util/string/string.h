@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <cwchar>
+#include <filesystem>
 
 
 using std::string;
@@ -13,47 +14,34 @@ using std::to_wstring;
 
 
 // Trim whitespace at the beginning and end of a string
-inline wstring TrimWhiteSpace(wstring& in) {
+template<typename StringT>
+inline StringT TrimWhiteSpace(StringT& in) {
 	size_t text_start = in.find_first_not_of(L" \t");
 	size_t text_end = in.find_last_not_of(L" \t");
 
-	if (text_start != wstring::npos && text_end != wstring::npos) {
+	if (text_start != StringT::npos && text_end != StringT::npos) {
 		return in.substr(text_start, text_end - text_start + 1);
 	}
-	else if (text_start != wstring::npos) {
+	else if (text_start != StringT::npos) {
 		return in.substr(text_start);
 	}
 
-	return L"";
+	return StringT();
 }
 
-
-// Trim whitespace at the beginning and end of a string
-inline string TrimWhiteSpace(string& in) {
-	size_t text_start = in.find_first_not_of(" \t");
-	size_t text_end = in.find_last_not_of(" \t");
-
-	if (text_start != string::npos && text_end != string::npos) {
-		return in.substr(text_start, text_end - text_start + 1);
-	}
-	else if (text_start != string::npos) {
-		return in.substr(text_start);
-	}
-
-	return "";
-}
 
 
 // Split a string by a specified token
-inline void Split(wstring& in, std::vector<wstring>& out, const wchar_t* token) {
+template<typename StringT, typename CharT>
+inline void Split(StringT& in, std::vector<StringT>& out, const CharT* token) {
 	out.clear();
 
-	wstring sToken(token);
-	wstring temp;
+	StringT sToken(token);
+	StringT temp;
 
 	for (size_t i = 0; i < in.size(); ++i) {
 
-		wstring substr = in.substr(i, sToken.size());
+		StringT substr = in.substr(i, sToken.size());
 
 		if (substr == token) {
 			if (!temp.empty()) {
@@ -62,7 +50,7 @@ inline void Split(wstring& in, std::vector<wstring>& out, const wchar_t* token) 
 				i += sToken.size() - 1;
 			}
 			else {
-				out.push_back(L"");
+				out.push_back((CharT*)"");
 			}
 		}
 		else if ((i + sToken.size()) >= in.size()) {
@@ -77,34 +65,13 @@ inline void Split(wstring& in, std::vector<wstring>& out, const wchar_t* token) 
 }
 
 
-// Split a string by a specified token
-inline void Split(string& in, std::vector<string>& out, const char* token) {
-	out.clear();
 
-	string sToken(token);
-	string temp;
+// Get the extension of a file
+inline string GetFileExtension(const string& in) {
+	return std::experimental::filesystem::path(in).extension().string();
+}
 
-	for (size_t i = 0; i < in.size(); ++i) {
-
-		string substr = in.substr(i, sToken.size());
-
-		if (substr == token) {
-			if (!temp.empty()) {
-				out.push_back(temp);
-				temp.clear();
-				i += sToken.size() - 1;
-			}
-			else {
-				out.push_back("");
-			}
-		}
-		else if ((i + sToken.size()) >= in.size()) {
-			temp += in.substr(i, sToken.size());
-			out.push_back(temp);
-			break;
-		}
-		else {
-			temp += in[i];
-		}
-	}
+// Get the extension of a file
+inline wstring GetFileExtension(const wstring& in) {
+	return std::experimental::filesystem::path(in).extension().wstring();
 }

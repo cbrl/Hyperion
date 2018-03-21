@@ -4,7 +4,7 @@
 #include "resource\mesh\mesh.h"
 #include "resource\model\model_blueprint.h"
 #include "resource\texture\texture.h"
-#include "resource\text\text.h"
+#include <SpriteFont.h>
 
 
 class ModelBlueprint;
@@ -51,7 +51,7 @@ class ResourceMgr {
 		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const float4& color);
 
 		template<typename ResourceT>
-		enable_if_t<is_same_v<Text, ResourceT>, shared_ptr<Text>> Create(const wstring& label, const wstring& font);
+		enable_if_t<is_same_v<SpriteFont, ResourceT>, shared_ptr<SpriteFont>> Create(const wstring& filename);
 
 
 	private:
@@ -67,8 +67,8 @@ class ResourceMgr {
 		ResourceMap<u32, Texture>             color_textures;
 		ResourceMap<vector<wstring>, Texture> texture_arrays;
 
-		// Text
-		ResourceMap<wstring, Text> texts;
+		// Fonts
+		ResourceMap<wstring, SpriteFont> fonts;
 };
 
 

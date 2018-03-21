@@ -42,6 +42,7 @@ class System : public MainWindow {
 
 	private:
 		void Tick();
+		void ProcessInput();
 
 
 	private:
