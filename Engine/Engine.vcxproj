@@ -188,6 +188,7 @@
     <ClInclude Include="resource\mesh\mesh.h" />
     <ClInclude Include="resource\model\model.h" />
     <ClInclude Include="resource\model\model_blueprint.h" />
+    <ClInclude Include="resource\model\model_output.h" />
     <ClInclude Include="resource\resource_mgr.h" />
     <ClInclude Include="resource\texture\texture.h" />
     <ClInclude Include="scene\scene.h" />
@@ -225,14 +226,18 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="input\input.cpp" />
-    <ClCompile Include="loader\obj\obj_loader.cpp" />
+    <ClInclude Include="loader\obj\obj_loader.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <ClCompile Include="loader\texture_loader.cpp" />
     <ClCompile Include="main\main.cpp" />
     <ClCompile Include="rendering\forward\forward_render.cpp" />
     <ClCompile Include="rendering\renderer.cpp" />
     <ClCompile Include="rendering\render_state_mgr.cpp" />
     <ClCompile Include="rendering\rending_mgr.cpp" />
-    <ClCompile Include="resource\model\model_blueprint.cpp" />
+    <ClCompile Include="resource\model\model_blueprint.cpp">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClCompile Include="scene\scene.cpp" />
     <ClCompile Include="shader\shader.cpp" />
     <ClCompile Include="stdafx.cpp">

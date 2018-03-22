@@ -1,42 +1,17 @@
-#include "stdafx.h"
-#include "obj_loader.h"
-
 #include <algorithm>
 #include "loader\obj\obj_tokens.h"
 #include "util\io\io.h"
 #include "util\math\math.h"
 
 
-//----------------------------------------------------------------------------------
-// Definitions of static members
-//----------------------------------------------------------------------------------
-
-bool OBJLoader::rh_coord = false;
-u32  OBJLoader::group_count = 0;
-u32  OBJLoader::mtl_count = 0;
-
-vector<VertexPositionNormalTexture> OBJLoader::vertices;
-
-vector<float3> OBJLoader::vertex_positions;
-vector<float3> OBJLoader::vertex_normals;
-vector<float2> OBJLoader::vertex_texCoords;
-vector<u32>    OBJLoader::indices;
-
-wstring OBJLoader::mat_lib;
-
-vector<Group> OBJLoader::groups;
-
-map<u32, wstring> OBJLoader::group_mat_names;
-
-vector<OBJLoader::OBJMaterial> OBJLoader::materials;
-
-
-void OBJLoader::Reset() {
+template<typename VertexT>
+void OBJLoader<VertexT>::Reset() {
 	// Reset the local variables
-	rh_coord = false;
+	rh_coord    = false;
 	group_count = 0;
 	mtl_count   = 0;
 
+	// Clear vectors
 	vertices.clear();
 	indices.clear();
 	vertex_positions.clear();
@@ -49,12 +24,12 @@ void OBJLoader::Reset() {
 }
 
 
-void OBJLoader::Load(ID3D11Device* device,
-					 ResourceMgr& resource_mgr,
-					 const wstring& folder,
-					 const wstring& filename,
-					 bool right_hand_coords,
-					 ModelBlueprint& blueprint_out) {
+template<typename VertexT>
+ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
+											  ResourceMgr& resource_mgr,
+											  const wstring& folder,
+											  const wstring& filename,
+											  bool right_hand_coords) {
 
 	// Make sure the file exists first
 	ThrowIfFailed(fs::exists(folder + filename),
@@ -108,14 +83,19 @@ void OBJLoader::Load(ID3D11Device* device,
 
 	// Create the model
 	wstring name = filename.substr(0, filename.find(L'.'));
-	blueprint_out.Init(device, name, vertices, indices, mtlVector, groups);
+	ModelOutput<VertexT> out(name, vertices, indices, mtlVector, groups);
+
 
 	// Reset the obj loader
 	Reset();
+
+
+	return out;
 }
 
 
-void OBJLoader::LoadModel(wstring folder, wstring filename) {
+template<typename VertexT>
+void OBJLoader<VertexT>::LoadModel(wstring folder, wstring filename) {
 	
 	// Open the file
 	wifstream file(folder + filename);
@@ -186,7 +166,7 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 		else if (token.compare(OBJTokens::group) == 0) {
 			groups.push_back(Group());
 			stream >> groups.back().name;
-			groups.back().index_start = indices.size();
+			groups.back().index_start = static_cast<u32>(indices.size());
 
 			++group_count;
 		}
@@ -211,9 +191,6 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 	file.close();
 
 
-	// There won't be another index start after the last group, so set it here
-	//new_group_indices.push_back(indices.size());
-
 	// Sometimes a group is defined at the top of the file, then an extra one
 	// before the first vertex. If that happened, then remove the extra.
 	if (groups.size() > 1) {
@@ -225,7 +202,8 @@ void OBJLoader::LoadModel(wstring folder, wstring filename) {
 }
 
 
-void OBJLoader::LoadMaterials(wstring folder) {
+template<typename VertexT>
+void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 	
 	// Open the material file
 	wifstream file(folder + mat_lib);
@@ -375,7 +353,8 @@ void OBJLoader::LoadMaterials(wstring folder) {
 }
 
 
-void OBJLoader::ReadTransparency(wstring& line, bool inverse) {
+template<typename VertexT>
+void OBJLoader<VertexT>::ReadTransparency(wstring& line, bool inverse) {
 	wstringstream stream(line);
 
 	float transparency;
@@ -393,7 +372,8 @@ void OBJLoader::ReadTransparency(wstring& line, bool inverse) {
 }
 
 
-void OBJLoader::ReadFace(wstring& line) {
+template<typename VertexT>
+void OBJLoader<VertexT>::ReadFace(wstring& line) {
 	vector<wstring> vert_list, vert_parts;
 
 	vector<VertexPositionNormalTexture> verts;
@@ -437,7 +417,10 @@ void OBJLoader::ReadFace(wstring& line) {
 			case 1:
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);  //Subtract 1 since arrays start at index 0
-				vertex.texCoord = float2(0.0f, 0.0f);
+
+				if (HasTexCoord<VertexT>::value)
+					vertex.texCoord = float2(0.0f, 0.0f);
+
 				hasNormal = false;
 
 				verts.push_back(vertex);
@@ -448,7 +431,10 @@ void OBJLoader::ReadFace(wstring& line) {
 			case 2:
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
-				vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
+
+				if (HasTexCoord<VertexT>::value)
+					vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
+
 				hasNormal = false;
 
 				verts.push_back(vertex);
@@ -459,8 +445,15 @@ void OBJLoader::ReadFace(wstring& line) {
 			case 3:
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
-				vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2])-1);
-				vertex.texCoord = float2(0.0f, 0.0f);
+
+				if (HasNormal<VertexT>::value) {
+					vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2]) - 1);
+				}
+
+				if (HasTexCoord<VertexT>::value)
+					vertex.texCoord = float2(0.0f, 0.0f);
+
+
 				hasNormal = true;
 
 				verts.push_back(vertex);
@@ -471,8 +464,13 @@ void OBJLoader::ReadFace(wstring& line) {
 			case 4:
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
-				vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2])-1);
-				vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
+
+				if (HasNormal<VertexT>::value)
+					vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2])-1);
+
+				if (HasTexCoord<VertexT>::value)
+					vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
+
 				hasNormal = true;
 
 				verts.push_back(vertex);
@@ -483,7 +481,8 @@ void OBJLoader::ReadFace(wstring& line) {
 				break;
 		}
 
-		if (!hasNormal) {
+		// Generate normals if the vertex type has a normal, but the file doesn't
+		if (!hasNormal && HasNormal<VertexT>::value) {
 			XMVECTOR a = XMLoadFloat3(&(verts[0].position - verts[1].position));
 			XMVECTOR b = XMLoadFloat3(&(verts[2].position - verts[1].position));
 
@@ -507,8 +506,7 @@ void OBJLoader::ReadFace(wstring& line) {
 	// If no group has been defined, then create one manually
 	if (group_count == 0) {
 		groups.push_back(Group());
-		groups.back().index_start = indices.size();
-		//new_group_indices.push_back(indices.size());
+		groups.back().index_start = static_cast<u32>(indices.size());
 		++group_count;
 	}
 
@@ -539,7 +537,7 @@ void OBJLoader::ReadFace(wstring& line) {
 
 			if (pos != vertices.end()) {
 				auto index = std::distance(vertices.begin(), pos);
-				indices.push_back(index);
+				indices.push_back(static_cast<u32>(index));
 			}
 		}
 	}
@@ -547,7 +545,8 @@ void OBJLoader::ReadFace(wstring& line) {
 
 
 // Converts the input face into triangles. Returns a list of indices that correspond to the input vertex list.
-void OBJLoader::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<u32>& outIndices) {
+template<typename VertexT>
+void OBJLoader<VertexT>::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<u32>& outIndices) {
 	vector<VertexPositionNormalTexture> vVerts = inVerts;
 
 	while (true) {

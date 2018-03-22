@@ -114,6 +114,10 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 		XMMATRIX inv_transpose = XMMatrixInverse(NULL, world);
 
 
+		const auto wvp = XMMatrixTranspose(world * view * projection);
+		world = XMMatrixTranspose(world);
+
+
 		// Render each model part individually
 		model.ForEachPart([&](const ModelPart& part) {
 
@@ -122,13 +126,13 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 			// Update model buffer
 			ModelBuffer model_data;
-			model_data.world               = XMMatrixTranspose(world);
+			model_data.world               = world;
 			model_data.world_inv_transpose = inv_transpose;
-			model_data.world_view_proj     = XMMatrixTranspose(world * view * projection);
+			model_data.world_view_proj     = wvp;
 			model_data.texTransform        = XMMatrixIdentity();	//Replace with actual texTransform
 
 			// Get a pointer to the material for this model part
-			auto mat = &model.GetMaterial(part.material_index);
+			const auto mat = &model.GetMaterial(part.material_index);
 
 			// Set the material parameters in the model buffer
 			model_data.mat.ambient         = mat->Ka;

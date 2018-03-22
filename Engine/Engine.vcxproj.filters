@@ -342,6 +342,12 @@
     <ClInclude Include="text\text.h">
       <Filter>Header Files\text</Filter>
     </ClInclude>
+    <ClInclude Include="resource\model\model_output.h">
+      <Filter>Header Files\resource\model</Filter>
+    </ClInclude>
+    <ClInclude Include="loader\obj\obj_loader.tpp">
+      <Filter>Source Files\loader\obj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -395,12 +401,6 @@
     <ClCompile Include="util\datatypes\vertex_types.cpp">
       <Filter>Source Files\util\datatypes</Filter>
     </ClCompile>
-    <ClCompile Include="resource\model\model_blueprint.cpp">
-      <Filter>Source Files\resource\model</Filter>
-    </ClCompile>
-    <ClCompile Include="loader\obj\obj_loader.cpp">
-      <Filter>Source Files\loader\obj</Filter>
-    </ClCompile>
     <ClCompile Include="loader\texture_loader.cpp">
       <Filter>Source Files\loader</Filter>
     </ClCompile>
@@ -418,6 +418,9 @@
     </ClCompile>
     <ClCompile Include="text\text.cpp">
       <Filter>Source Files\text</Filter>
+    </ClCompile>
+    <ClCompile Include="resource\model\model_blueprint.cpp">
+      <Filter>Source Files\resource\model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

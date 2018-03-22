@@ -225,3 +225,29 @@ struct VertexPositionNormalTexture {
 	static const i32 InputElementCount = 3;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
 };
+
+
+
+// Check if vertex type has a normal
+template <typename T, typename = int>
+struct HasNormal : std::false_type {};
+
+template <typename T>
+struct HasNormal <T, decltype((void)T::normal, 0)> : std::true_type {};
+
+
+
+// Check if vertex type has a texCoord
+template <typename T, typename = int>
+struct HasTexCoord : std::false_type {};
+
+template <typename T>
+struct HasTexCoord <T, decltype((void)T::texCoord, 0)> : std::true_type {};
+
+
+// Check if vertex type has a color
+template <typename T, typename = int>
+struct HasColor : std::false_type {};
+
+template <typename T>
+struct HasColor <T, decltype((void)T::color, 0)> : std::true_type {};
