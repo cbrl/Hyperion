@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
+#include "geometry\frustum\frustum.h"
 
 
 class Camera {
@@ -66,6 +67,9 @@ class Camera {
 		XMMATRIX GetViewMatrix()  const { return view_matrix; }
 		XMMATRIX GetProjMatrix()  const { return projection_matrix; }
 		XMMATRIX GetOrthoMatrix() const { return ortho_matrix; }
+		
+		// Get Frustum
+		const Frustum& GetFrustum() const { return frustum; }
 
 
 		// Get position, rotation, velocity (in units/ms)
@@ -90,6 +94,8 @@ class Camera {
 		XMMATRIX view_matrix;
 		XMMATRIX projection_matrix;
 		XMMATRIX ortho_matrix;
+
+		Frustum frustum;
 
 		// Default vectors
 		static constexpr XMVECTOR default_forward = { 0.0f, 0.0f, 1.0f, 0.0f };

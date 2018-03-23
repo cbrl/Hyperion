@@ -3,7 +3,7 @@
 
 
 Frustum::Frustum(const XMMATRIX& in) {
-	CreateFrustum(in);
+	UpdateFrustum(in);
 }
 
 
@@ -11,7 +11,7 @@ Frustum::~Frustum() {
 }
 
 
-void Frustum::CreateFrustum(const XMMATRIX& in) {
+void Frustum::UpdateFrustum(const XMMATRIX& in) {
 	XMMATRIX input = XMMatrixTranspose(in);
 
 	// Near plane

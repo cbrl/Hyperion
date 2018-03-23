@@ -64,10 +64,10 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 
 	//----------------------------------------------------------------------------------
-	// Create the frustum
+	// Get the frustum
 	//----------------------------------------------------------------------------------
 
-	Frustum frustum(view * projection);
+	auto& frustum = scene.camera->GetFrustum();
 
 
 	//----------------------------------------------------------------------------------

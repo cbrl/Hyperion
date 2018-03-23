@@ -11,7 +11,7 @@ class Frustum {
 		Frustum(const XMMATRIX& viewProj);
 		~Frustum();
 
-		void CreateFrustum(const XMMATRIX& viewProj);
+		void UpdateFrustum(const XMMATRIX& viewProj);
 
 		bool Encloses(const XMVECTOR& point) const;
 		bool Encloses(const AABB& aabb) const;
