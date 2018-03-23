@@ -7,8 +7,8 @@
 
 struct Group {
 	wstring name;
-	u32 index_start;
-	u32 material_index;
+	u32     index_start;
+	u32     material_index;
 };
 
 
@@ -31,9 +31,9 @@ struct ModelOutput {
 
 
 	public:
-		wstring name;
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		wstring          name;
+		vector<VertexT>  vertices;
+		vector<u32>      indices;
 		vector<Material> materials;
-		vector<Group> groups;
+		vector<Group>    groups;
 };

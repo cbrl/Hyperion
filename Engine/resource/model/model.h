@@ -21,6 +21,7 @@ class Model {
 			, model_parts(blueprint.model_parts)
 			, materials(blueprint.materials)
 			, aabb(blueprint.aabb)
+			, sphere(blueprint.sphere)
 			, position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
 			, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
 			, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
@@ -98,7 +99,9 @@ class Model {
 
 	private:
 		wstring name;
-		AABB    aabb;
+
+		AABB           aabb;
+		BoundingSphere sphere;
 
 		shared_ptr<Mesh> mesh;
 

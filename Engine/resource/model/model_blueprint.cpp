@@ -16,13 +16,22 @@ ModelBlueprint::ModelBlueprint(ID3D11Device* device,
 
 	size_t group_count = out.groups.size();
 
+
 	// Create the mesh
 	mesh = make_shared<Mesh>(device, out.vertices, out.indices);
+
 
 	// Create the AABB for the model
 	auto pair = MinMaxPoint(out.vertices);
 	aabb = AABB(pair.first, pair.second);
 
+	// Create the bounding sphere for the model
+	auto center = (pair.second - pair.first) / 2;
+	auto radius = XMVectorGetX(XMVector3Length(center));
+	sphere = BoundingSphere(center, radius);
+
+
+	// Create the model parts
 	for (size_t i = 0; i < group_count; ++i) {
 		ModelPart temp;
 

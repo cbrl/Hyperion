@@ -5,9 +5,8 @@
 // TODO:
 // - Normal mapping
 // - Skybox
-// - Lighting
-// - Create bounding spheres for models
-// - Buffers as a member of models/lights?
+// - Shadows
+// - Buffers as a member of models/camera?
 // - CPU usage
 // - Create a simple geometry generator
 // - Move other resources to resource manager (shaders?)

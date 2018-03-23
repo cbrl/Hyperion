@@ -15,10 +15,11 @@ class ResourceMgr;
 
 struct ModelPart {
 	wstring name;
-	u32  index_start;
-	u32  index_count;
-	u32  material_index;
-	AABB aabb;
+	u32     index_start;
+	u32     index_count;
+	u32     material_index;
+	AABB    aabb;
+	BoundingSphere sphere;
 };
 
 
@@ -36,7 +37,9 @@ class ModelBlueprint {
 
 	public:
 		wstring name;
-		AABB    aabb;
+
+		AABB           aabb;
+		BoundingSphere sphere;
 
 		shared_ptr<Mesh> mesh;
 
