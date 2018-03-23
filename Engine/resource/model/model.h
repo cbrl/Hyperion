@@ -89,10 +89,11 @@ class Model {
 		// Getters
 		//----------------------------------------------------------------------------------
 
-		const AABB&     GetAABB()     const { return aabb; }
-		const XMMATRIX& GetPosition() const { return position; }
-		const XMMATRIX& GetRotation() const { return rotation; }
-		const XMMATRIX& GetScale()    const { return scale; }
+		const AABB&           GetAABB()     const { return aabb; }
+		const BoundingSphere& GetSphere()   const { return sphere; }
+		const XMMATRIX&       GetPosition() const { return position; }
+		const XMMATRIX&       GetRotation() const { return rotation; }
+		const XMMATRIX&       GetScale()    const { return scale; }
 
 		const Material& GetMaterial(u32 index) const { return materials[index]; }
 

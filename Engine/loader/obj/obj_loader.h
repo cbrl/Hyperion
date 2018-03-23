@@ -116,25 +116,41 @@ class OBJLoader {
 // Definitions of static members
 //----------------------------------------------------------------------------------
 
-template<typename VertexT> bool OBJLoader<VertexT>::rh_coord = false;
-template<typename VertexT> u32  OBJLoader<VertexT>::group_count = 0;
-template<typename VertexT> u32  OBJLoader<VertexT>::mtl_count = 0;
+template<typename VertexT>
+bool OBJLoader<VertexT>::rh_coord = false;
+
+template<typename VertexT>
+u32  OBJLoader<VertexT>::group_count = 0;
+
+template<typename VertexT>
+u32  OBJLoader<VertexT>::mtl_count = 0;
 
 template<typename VertexT>
 vector<VertexPositionNormalTexture> OBJLoader<VertexT>::vertices;
 
-template<typename VertexT> vector<float3> OBJLoader<VertexT>::vertex_positions;
-template<typename VertexT> vector<float3> OBJLoader<VertexT>::vertex_normals;
-template<typename VertexT> vector<float2> OBJLoader<VertexT>::vertex_texCoords;
-template<typename VertexT> vector<u32>    OBJLoader<VertexT>::indices;
+template<typename VertexT>
+vector<float3> OBJLoader<VertexT>::vertex_positions;
 
-template<typename VertexT> wstring OBJLoader<VertexT>::mat_lib;
+template<typename VertexT>
+vector<float3> OBJLoader<VertexT>::vertex_normals;
 
-template<typename VertexT> vector<Group> OBJLoader<VertexT>::groups;
+template<typename VertexT>
+vector<float2> OBJLoader<VertexT>::vertex_texCoords;
 
-template<typename VertexT> map<u32, wstring> OBJLoader<VertexT>::group_mat_names;
+template<typename VertexT>
+vector<u32> OBJLoader<VertexT>::indices;
 
-template<typename VertexT> vector<OBJMaterial> OBJLoader<VertexT>::materials;
+template<typename VertexT>
+wstring OBJLoader<VertexT>::mat_lib;
+
+template<typename VertexT>
+vector<Group> OBJLoader<VertexT>::groups;
+
+template<typename VertexT>
+map<u32, wstring> OBJLoader<VertexT>::group_mat_names;
+
+template<typename VertexT>
+vector<OBJMaterial> OBJLoader<VertexT>::materials;
 
 
 
