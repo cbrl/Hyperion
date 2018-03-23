@@ -229,25 +229,35 @@ struct VertexPositionNormalTexture {
 
 
 // Check if vertex type has a normal
-template <typename T, typename = int>
-struct HasNormal : std::false_type {};
+template<typename T, typename = int>
+struct has_normal : std::false_type {};
 
-template <typename T>
-struct HasNormal <T, decltype((void)T::normal, 0)> : std::true_type {};
+template<typename T>
+struct has_normal <T, decltype((void)T::normal, 0)> : std::true_type {};
+
+template<typename T>
+inline constexpr bool has_normal_v = has_normal<T>::value;
 
 
 
 // Check if vertex type has a texCoord
-template <typename T, typename = int>
-struct HasTexCoord : std::false_type {};
+template<typename T, typename = int>
+struct has_texCoord : std::false_type {};
 
-template <typename T>
-struct HasTexCoord <T, decltype((void)T::texCoord, 0)> : std::true_type {};
+template<typename T>
+struct has_texCoord <T, decltype((void)T::texCoord, 0)> : std::true_type {};
+
+template<typename T>
+inline constexpr bool has_texCoord_v = has_texCoord<T>::value;
+
 
 
 // Check if vertex type has a color
-template <typename T, typename = int>
-struct HasColor : std::false_type {};
+template<typename T, typename = int>
+struct has_color : std::false_type {};
 
-template <typename T>
-struct HasColor <T, decltype((void)T::color, 0)> : std::true_type {};
+template<typename T>
+struct has_color <T, decltype((void)T::color, 0)> : std::true_type {};
+
+template<typename T>
+inline constexpr bool has_color_v = has_color<T>::value;

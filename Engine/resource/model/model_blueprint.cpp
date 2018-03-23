@@ -9,10 +9,7 @@ ModelBlueprint::ModelBlueprint(ID3D11Device* device,
 							   const wstring& folder,
 							   const wstring& filename) {
 
-	//ModelLoader::Load(device, resource_mgr, folder, filename, *this);
-
 	auto out = ModelLoader::Load<VertexPositionNormalTexture>(device, resource_mgr, folder, filename);
-
 	
 	name        = out.name;
 	materials   = out.materials;
@@ -36,7 +33,7 @@ ModelBlueprint::ModelBlueprint(ID3D11Device* device,
 		if (i == group_count - 1)
 			temp.index_count = static_cast<u32>(out.indices.size() - temp.index_start);
 		else
-			temp.index_count = out.groups[i + 1].index_start - temp.index_start;
+			temp.index_count = out.groups[i+1].index_start - temp.index_start;
 
 
 		// Create the AABB for the model part

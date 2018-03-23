@@ -418,7 +418,7 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);  //Subtract 1 since arrays start at index 0
 
-				if (HasTexCoord<VertexT>::value)
+				if (has_texCoord_v<VertexT>)
 					vertex.texCoord = float2(0.0f, 0.0f);
 
 				hasNormal = false;
@@ -432,7 +432,7 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
 
-				if (HasTexCoord<VertexT>::value)
+				if (has_texCoord_v<VertexT>)
 					vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
 
 				hasNormal = false;
@@ -446,11 +446,11 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
 
-				if (HasNormal<VertexT>::value) {
+				if (has_normal_v<VertexT>) {
 					vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2]) - 1);
 				}
 
-				if (HasTexCoord<VertexT>::value)
+				if (has_texCoord_v<VertexT>)
 					vertex.texCoord = float2(0.0f, 0.0f);
 
 
@@ -465,10 +465,10 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
 
-				if (HasNormal<VertexT>::value)
+				if (has_normal_v<VertexT>)
 					vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2])-1);
 
-				if (HasTexCoord<VertexT>::value)
+				if (has_texCoord_v<VertexT>)
 					vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
 
 				hasNormal = true;
@@ -482,7 +482,7 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 		}
 
 		// Generate normals if the vertex type has a normal, but the file doesn't
-		if (!hasNormal && HasNormal<VertexT>::value) {
+		if (!hasNormal && has_normal_v<VertexT>) {
 			XMVECTOR a = XMLoadFloat3(&(verts[0].position - verts[1].position));
 			XMVECTOR b = XMLoadFloat3(&(verts[2].position - verts[1].position));
 
