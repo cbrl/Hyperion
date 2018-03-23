@@ -13,10 +13,11 @@ ModelBlueprint::ModelBlueprint(ID3D11Device* device,
 	
 	name        = out.name;
 	materials   = out.materials;
-	group_count = static_cast<u32>(out.groups.size());
+
+	size_t group_count = out.groups.size();
 
 	// Create the mesh
-	mesh.Init(device, out.vertices, out.indices);
+	mesh = make_shared<Mesh>(device, out.vertices, out.indices);
 
 	// Create the AABB for the model
 	auto pair = MinMaxPoint(out.vertices);

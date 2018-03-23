@@ -29,7 +29,7 @@ class Model {
 
 		// Render the model with the given index count and start index
 		void Draw(ID3D11DeviceContext* device_context, u32 index_count, u32 start_index) const {
-			mesh.Draw(device_context, index_count, start_index);
+			mesh->Draw(device_context, index_count, start_index);
 		}
 
 
@@ -98,8 +98,9 @@ class Model {
 
 	private:
 		wstring name;
-		Mesh    mesh;
 		AABB    aabb;
+
+		shared_ptr<Mesh> mesh;
 
 		XMMATRIX position;
 		XMMATRIX rotation;

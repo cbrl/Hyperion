@@ -14,11 +14,6 @@ class Mesh {
 		Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices);
 
 
-		// Construct the mesh
-		template<typename VertexT>
-		void Init(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices);
-
-
 		// Draw the mesh with the given start index and index count
 		void Draw(ID3D11DeviceContext* device_context, u32 index_count, u32 start_index) const {
 			u32 offset = 0;

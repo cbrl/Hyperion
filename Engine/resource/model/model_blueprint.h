@@ -36,9 +36,9 @@ class ModelBlueprint {
 
 	public:
 		wstring name;
-		Mesh    mesh;
 		AABB    aabb;
-		u32     group_count;
+
+		shared_ptr<Mesh> mesh;
 
 		vector<Material>  materials;
 		vector<ModelPart> model_parts;
