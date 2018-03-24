@@ -2,24 +2,23 @@
 
 #include <math.h>
 #include <DirectXMath.h>
-#include "util\datatypes\datatypes.h"
 
 
 using namespace DirectX;
 
 
 // Convert a float4 to a hex color value
-inline u32 Float4ColorToU32(const float4& color) {
-	return static_cast<u32>(color.x * 0xff)             //R
-	       | (static_cast<u32>(color.y * 0xff) << 8)    //G
-	       | (static_cast<u32>(color.z * 0xff) << 16)   //B
-	       | (static_cast<u32>(color.w * 0xff) << 24);  //A
+inline uint32_t Float4ColorToU32(const XMFLOAT4& color) {
+	return static_cast<uint32_t>(color.x * 0xff)             //R
+	       | (static_cast<uint32_t>(color.y * 0xff) << 8)    //G
+	       | (static_cast<uint32_t>(color.z * 0xff) << 16)   //B
+	       | (static_cast<uint32_t>(color.w * 0xff) << 24);  //A
 }
 
 
 // Determine if a point is inside a triangle using barycentric coordinates
-inline bool PointInTriangle(const float3& point, const float3& vert1,
-							const float3& vert2, const float3& vert3) {
+inline bool PointInTriangle(const XMFLOAT3& point, const XMFLOAT3& vert1,
+							const XMFLOAT3& vert2, const XMFLOAT3& vert3) {
 	XMVECTOR v0 = XMLoadFloat3(&vert2) - XMLoadFloat3(&vert1);
 	XMVECTOR v1 = XMLoadFloat3(&vert3) - XMLoadFloat3(&vert1);
 	XMVECTOR v2 = XMLoadFloat3(&point) - XMLoadFloat3(&vert1);

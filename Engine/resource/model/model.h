@@ -4,6 +4,7 @@
 #include "util\io\io.h"
 #include "util\math\math.h"
 #include "util\datatypes\datatypes.h"
+
 #include "resource\model\model_blueprint.h"
 #include "resource\mesh\mesh.h"
 #include "resource\material\material.h"
@@ -12,7 +13,7 @@
 
 class Model {
 	public:
-		Model() = default;
+		Model() = delete;
 		~Model() = default;
 
 		Model(ID3D11Device* device, ModelBlueprint blueprint)
@@ -25,8 +26,13 @@ class Model {
 			, position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
 			, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
 			, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
+			, transform(XMMatrixIdentity())
 		{}
 
+
+		void Bind(ID3D11DeviceContext* device_context) const {
+			mesh->Bind(device_context);
+		}
 
 		// Render the model with the given index count and start index
 		void Draw(ID3D11DeviceContext* device_context, u32 index_count, u32 start_index) const {
@@ -49,44 +55,55 @@ class Model {
 
 		void SetPosition(float x, float y, float z) {
 			position = XMMatrixTranslation(x, y, z);
-			UpdateBoundingVolumes();
+			//UpdateBoundingVolumes();
 		}
 
 		void Move(float x, float y, float z) {
 			position = XMMatrixMultiply(position, XMMatrixTranslation(x, y, z));
-			UpdateBoundingVolumes();
+			//UpdateBoundingVolumes();
 		}
 
 		void SetRotation(float x, float y, float z) {
 			rotation = XMMatrixRotationRollPitchYaw(x, y, z);
-			UpdateBoundingVolumes();
+			//UpdateBoundingVolumes();
 		}
 
 		void Rotate(float x, float y, float z) {
 			rotation = XMMatrixMultiply(rotation, XMMatrixRotationRollPitchYaw(x, y, z));
-			UpdateBoundingVolumes();
+			//UpdateBoundingVolumes();
 		}
 
 		void SetScale(float x, float y, float z) {
 			scale = XMMatrixScaling(x, y, z);
-			UpdateBoundingVolumes();
+			//UpdateBoundingVolumes();
 		}
 
 		void Scale(float x, float y, float z) {
 			scale = XMMatrixMultiply(scale, XMMatrixScaling(x, y, z));
-			UpdateBoundingVolumes();
+			//UpdateBoundingVolumes();
 		}
 
 		void UpdateBoundingVolumes() {
-			auto matrix = scale * rotation * position;
-
-			aabb.Transform(matrix);
-			sphere.Transform(matrix);
+			aabb.Transform(transform);
+			sphere.Transform(transform);
 
 			for (auto& part : model_parts) {
-				part.aabb.Transform(matrix);
-				part.sphere.Transform(matrix);
+				part.aabb.Transform(transform);
+				part.sphere.Transform(transform);
 			}
+		}
+
+
+		//----------------------------------------------------------------------------------
+		// Update model
+		//----------------------------------------------------------------------------------
+
+		void Update() {
+			transform = XMMatrixMultiply(transform, (scale*rotation*position));
+
+			UpdateBoundingVolumes();
+
+			scale = rotation = position = XMMatrixIdentity();
 		}
 
 
@@ -94,11 +111,9 @@ class Model {
 		// Getters
 		//----------------------------------------------------------------------------------
 
-		const AABB&           GetAABB()     const { return aabb; }
-		const BoundingSphere& GetSphere()   const { return sphere; }
-		const XMMATRIX&       GetPosition() const { return position; }
-		const XMMATRIX&       GetRotation() const { return rotation; }
-		const XMMATRIX&       GetScale()    const { return scale; }
+		const AABB&           GetAABB()      const { return aabb; }
+		const BoundingSphere& GetSphere()    const { return sphere; }
+		const XMMATRIX&       GetTransform() const { return transform; }
 
 		const Material& GetMaterial(u32 index) const { return materials[index]; }
 
@@ -114,6 +129,7 @@ class Model {
 		XMMATRIX position;
 		XMMATRIX rotation;
 		XMMATRIX scale;
+		XMMATRIX transform;
 
 		vector<ModelPart> model_parts;
 		vector<Material>  materials;

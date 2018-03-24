@@ -44,7 +44,7 @@ class Scene {
 		template<typename ElementT, typename ActionT>
 		void ForEach(ActionT act) {
 			if constexpr (is_same_v<Model, ElementT>) {
-				for (const auto& e : models) {
+				for (auto& e : models) {
 					act(e);
 				}
 			}
@@ -56,13 +56,13 @@ class Scene {
 			}
 
 			if constexpr (is_same_v<PointLight, ElementT>) {
-				for (const auto& e : lights) {
+				for (auto& e : lights) {
 					act(e);
 				}
 			}
 
 			if constexpr (is_same_v<PointLight, ElementT>) {
-				for (const auto& e : lights) {
+				for (auto& e : lights) {
 					act(e);
 				}
 			}

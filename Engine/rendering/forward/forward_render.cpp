@@ -3,7 +3,6 @@
 
 #include "util\math\math.h"
 #include "rendering\pipeline.h"
-//#include "geometry\frustum\frustum.h"
 #include "shader\hlsl.h"
 
 
@@ -16,6 +15,7 @@ ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* devi
 	, point_light_buffer(device, 16)
 	, spot_light_buffer(device, 16)
 {
+
 	// Create the vertex shader
 	vertex_shader = make_unique<VertexShader>(device, L"shaders/forward/forward_VS.hlsl",
 											  VertexPositionNormalTexture::InputElements,
@@ -29,6 +29,7 @@ ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* devi
 	model_buffer.Bind<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 	model_buffer.Bind<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
 	light_buffer.Bind<Pipeline::PS>(device_context, SLOT_CBUFFER_LIGHT);
+
 
 	// Bind SRVs
 	directional_light_buffer.Bind<Pipeline::PS>(device_context, SLOT_SRV_DIRECTIONAL_LIGHTS);
@@ -59,8 +60,8 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	//----------------------------------------------------------------------------------
 
 	XMMATRIX world;
-	XMMATRIX view       = scene.camera->GetViewMatrix();
-	XMMATRIX projection = scene.camera->GetProjMatrix();
+	const XMMATRIX view       = scene.camera->GetViewMatrix();
+	const XMMATRIX projection = scene.camera->GetProjMatrix();
 
 
 	//----------------------------------------------------------------------------------
@@ -97,17 +98,24 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	// Render models
 	//----------------------------------------------------------------------------------
 
-	scene.ForEach<Model>([&](const Model& model) {
+	scene.ForEach<Model>([&](Model& model) {
 
 		// Cull models that aren't on screen
-		if (!frustum.Contains(model.GetAABB())) 
-			return;
+		if (!frustum.Contains(model.GetAABB())) return;
+
+
+		// Bind the model's mesh
+		model.Bind(device_context.Get());
+
+
+		// Update the model's transform matrix and bounding volumes
+		model.Update();
+
 
 		// Create the world matrix
 		world = XMMatrixIdentity();
-		world = XMMatrixMultiply(world, model.GetScale());
-		world = XMMatrixMultiply(world, model.GetRotation());
-		world = XMMatrixMultiply(world, model.GetPosition());
+		world = XMMatrixMultiply(world, model.GetTransform());
+
 
 		// Create the inverse transpose of the world matrix.
 		// DXMath uses row major matrices, unlike HLSL, so
@@ -115,6 +123,8 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 		XMMATRIX inv_transpose = XMMatrixInverse(NULL, world);
 
 
+		// Create the transposed world-view-projection matrix
+		// and world matrix for the shader.
 		const auto wvp = XMMatrixTranspose(world * view * projection);
 		world = XMMatrixTranspose(world);
 

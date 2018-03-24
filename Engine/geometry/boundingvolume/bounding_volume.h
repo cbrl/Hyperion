@@ -51,8 +51,6 @@ struct AABB {
 			vertices[7] = XMLoadFloat3(&float3(fmin.x, fmax.y, fmax.z));
 		}
 
-		const XMVECTOR& Min() const { return min_point; }
-		const XMVECTOR& Max() const { return max_point; }
 
 		void Transform(const XMMATRIX& M) {
 			for (u32 i = 0; i < 8; ++i) {
@@ -63,6 +61,10 @@ struct AABB {
 			min_point = pair.first;
 			max_point = pair.second;
 		}
+
+
+		const XMVECTOR& Min() const { return min_point; }
+		const XMVECTOR& Max() const { return max_point; }
 
 
 	private:
@@ -86,6 +88,7 @@ struct BoundingSphere {
 		: center(center)
 		, radius(radius)
 	{}
+
 
 	void Transform(const XMMATRIX& M) {
 		float x = XMVectorGetX(XMVector3Length(M.r[0]));
