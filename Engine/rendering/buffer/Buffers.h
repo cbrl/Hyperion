@@ -3,26 +3,6 @@
 #include "util\datatypes\datatypes.h"
 #include "util\math\math.h"
 
-using namespace DirectX;
-
-
-//----------------------------------------------------------------------------------
-// Matrix Buffer
-//----------------------------------------------------------------------------------
-
-struct MatrixBuffer {
-	MatrixBuffer() : world(XMMatrixIdentity()), view(XMMatrixIdentity()), projection(XMMatrixIdentity()) {}
-	MatrixBuffer(XMMATRIX world_matrix, XMMATRIX view_matrix, XMMATRIX projection_matrix)
-		: world(world_matrix)
-		, view(view_matrix)
-		, projection(projection_matrix)
-	{}
-	XMMATRIX world;
-	XMMATRIX view;
-	XMMATRIX projection;
-};
-
-
 
 //----------------------------------------------------------------------------------
 // Camera Buffer
@@ -31,6 +11,7 @@ struct MatrixBuffer {
 struct CameraBuffer {
 	CameraBuffer() : position(0.0f, 0.0f, 0.0f), padding(0.0f) {}
 	CameraBuffer(float3 pos) : position(pos), padding(0.0f) {}
+	CameraBuffer(XMVECTOR pos) { XMStoreFloat3(&position, pos); }
 	float3 position;
 	float  padding;
 };

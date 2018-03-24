@@ -24,7 +24,4 @@ class Renderer {
 
 		// Renderers
 		unique_ptr<ForwardRenderer> forward_renderer;
-
-		// Buffers
-		ConstantBuffer<CameraBuffer> camera_buffer;
 };

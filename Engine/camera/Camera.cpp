@@ -3,8 +3,10 @@
 #include "util\math\math.h"
 
 
-Camera::Camera()
-	: enable_free_look(false)
+Camera::Camera(ID3D11Device* device)
+	: buffer(device)
+	
+	, enable_free_look(false)
 	, fps_mode(false)
 
 	, look_at(XMVectorZero())
@@ -41,8 +43,13 @@ Camera::Camera()
 }
 
 
-Camera::Camera(u32 viewportWidth, u32 viewportHeight,
-			   float FOV, float zNear, float zFar) : Camera()
+Camera::Camera(ID3D11Device* device,
+			   u32 viewportWidth,
+			   u32 viewportHeight,
+			   float FOV,
+			   float zNear,
+			   float zFar)
+	: Camera(device)
 {
 	viewport_width = viewportWidth;
 	viewport_height = viewportHeight;
@@ -54,6 +61,18 @@ Camera::Camera(u32 viewportWidth, u32 viewportHeight,
 	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
 
 	ortho_matrix = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
+}
+
+
+void Camera::OnResize(u32 width, u32 height) {
+
+	viewport_width = width;
+	viewport_height = height;
+
+	aspect_ratio = (float)viewport_width / (float)viewport_height;
+
+	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
+	ortho_matrix      = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
 }
 
 
@@ -162,7 +181,7 @@ void Camera::Rotate(float3 units) {
 }
 
 
-void Camera::Update(float delta_time) {
+void Camera::UpdateMovement(float delta_time) {
 
 	XMVECTOR velocity_vec = XMLoadFloat3(&velocity);
 
@@ -174,7 +193,7 @@ void Camera::Update(float delta_time) {
 	}
 
 
-	// Move camera
+	// Move the camera
 	position += camera_right * velocity.x * delta_time;
 	position += camera_up    * velocity.y * delta_time;
 	if (fps_mode) {

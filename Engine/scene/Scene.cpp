@@ -6,7 +6,7 @@
 // - Normal mapping
 // - Skybox
 // - Shadows
-// - Buffers as a member of models/camera?
+// - CBuffers as a member of models?
 // - CPU usage
 // - Create a simple geometry generator
 // - Move other resources to resource manager (shaders?)
@@ -34,8 +34,11 @@ void Scene::Init(ID3D11Device* device,
 	// Create camera
 	//----------------------------------------------------------------------------------
 
-	camera = make_unique<Camera>(System::Get()->GetWindowWidth(), System::Get()->GetWindowHeight(),
+	camera = make_unique<Camera>(device,
+								 System::Get()->GetWindowWidth(),
+								 System::Get()->GetWindowHeight(),
 								 FOV, zNear, zFar);
+
 	camera->SetPosition(float3(0.0f, 1.0f, -5.0f));
 
 
@@ -201,6 +204,6 @@ void Scene::Tick(Input& input, float delta_time) {
 	camera->Move(move_units);
 	camera->Rotate(rotateUnits);
 
-	// Update camera 
-	camera->Update(delta_time);
+	// Update the camera position/rotation
+	camera->UpdateMovement(delta_time);
 }

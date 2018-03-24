@@ -100,16 +100,16 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 	scene.ForEach<Model>([&](Model& model) {
 
-		// Cull models that aren't on screen
+		// Update the model's transform matrix and bounding volumes
+		model.Update();
+
+
+		// Cull the model if it isn't on screen
 		if (!frustum.Contains(model.GetAABB())) return;
 
 
 		// Bind the model's mesh
 		model.Bind(device_context.Get());
-
-
-		// Update the model's transform matrix and bounding volumes
-		model.Update();
 
 
 		// Create the world matrix

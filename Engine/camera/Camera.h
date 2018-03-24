@@ -3,32 +3,44 @@
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
 #include "geometry\frustum\frustum.h"
+#include "rendering\buffer\constant_buffer.h"
+#include "rendering\buffer\buffers.h"
 
 
 class Camera {
 	public:
-		Camera();
-		~Camera() = default;
+		Camera(ID3D11Device* device);
 
-		Camera(u32 viewport_width, u32 viewport_height,
-			   float fov, float z_near, float z_far);
+		Camera(ID3D11Device* device,
+			   u32 viewport_width,
+			   u32 viewport_height,
+			   float fov,
+			   float z_near,
+			   float z_far);
+
+		~Camera() = default;
 
 
 		// Calculate new view matrix and velocity
-		void Update(float delta_time);
+		void UpdateMovement(float delta_time);
 
 
-		// Resize the viewport
-		void OnResize(u32 width, u32 height) {
-			viewport_width    = width;
-			viewport_height   = height;
-			aspect_ratio      = (float)viewport_width / (float)viewport_height;
-			projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
-			ortho_matrix      = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
+		// Update the constant buffer
+		void UpdateBuffer(ID3D11DeviceContext* device_context) {
+			buffer.UpdateData(device_context, CameraBuffer(position));
+		}
+
+		// Bind the constant buffer
+		void BindBuffer(ID3D11DeviceContext* device_context, u32 slot) {
+			buffer.Bind<Pipeline>(device_context, slot);
 		}
 
 
-		// Move and rotate camera
+		// Resize the viewport
+		void OnResize(u32 width, u32 height);
+
+
+		// Move and rotate the camera
 		void Move(float3 units);
 		void Rotate(float3 units);
 
@@ -64,9 +76,9 @@ class Camera {
 
 
 		// Get matrices
-		XMMATRIX GetViewMatrix()  const { return view_matrix; }
-		XMMATRIX GetProjMatrix()  const { return projection_matrix; }
-		XMMATRIX GetOrthoMatrix() const { return ortho_matrix; }
+		const XMMATRIX GetViewMatrix()  const { return view_matrix; }
+		const XMMATRIX GetProjMatrix()  const { return projection_matrix; }
+		const XMMATRIX GetOrthoMatrix() const { return ortho_matrix; }
 		
 		// Get Frustum
 		const Frustum& GetFrustum() const { return frustum; }
@@ -83,6 +95,9 @@ class Camera {
 
 
 	private:
+		// Camera's constant buffer
+		ConstantBuffer<CameraBuffer> buffer;
+
 		// Viewport and depth range
 		u32   viewport_width;
 		u32   viewport_height;
