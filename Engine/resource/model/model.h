@@ -49,38 +49,43 @@ class Model {
 
 		void SetPosition(float x, float y, float z) {
 			position = XMMatrixTranslation(x, y, z);
-			UpdateAABBs();
+			UpdateBoundingVolumes();
 		}
 
 		void Move(float x, float y, float z) {
 			position = XMMatrixMultiply(position, XMMatrixTranslation(x, y, z));
-			UpdateAABBs();
+			UpdateBoundingVolumes();
 		}
 
 		void SetRotation(float x, float y, float z) {
 			rotation = XMMatrixRotationRollPitchYaw(x, y, z);
-			UpdateAABBs();
+			UpdateBoundingVolumes();
 		}
 
 		void Rotate(float x, float y, float z) {
 			rotation = XMMatrixMultiply(rotation, XMMatrixRotationRollPitchYaw(x, y, z));
-			UpdateAABBs();
+			UpdateBoundingVolumes();
 		}
 
 		void SetScale(float x, float y, float z) {
 			scale = XMMatrixScaling(x, y, z);
-			UpdateAABBs();
+			UpdateBoundingVolumes();
 		}
 
 		void Scale(float x, float y, float z) {
 			scale = XMMatrixMultiply(scale, XMMatrixScaling(x, y, z));
-			UpdateAABBs();
+			UpdateBoundingVolumes();
 		}
 
-		void UpdateAABBs() {
-			aabb.Transform(scale * rotation * position);
+		void UpdateBoundingVolumes() {
+			auto matrix = scale * rotation * position;
+
+			aabb.Transform(matrix);
+			sphere.Transform(matrix);
+
 			for (auto& part : model_parts) {
-				part.aabb.Transform(scale * rotation * position);
+				part.aabb.Transform(matrix);
+				part.sphere.Transform(matrix);
 			}
 		}
 

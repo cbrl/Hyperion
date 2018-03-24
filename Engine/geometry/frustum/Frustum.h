@@ -14,8 +14,12 @@ class Frustum {
 		void UpdateFrustum(const XMMATRIX& viewProj);
 
 		bool Encloses(const XMVECTOR& point) const;
+
 		bool Encloses(const AABB& aabb) const;
 		bool Contains(const AABB& aabb) const;
+
+		bool Encloses(const BoundingSphere& sphere) const;
+		bool Contains(const BoundingSphere& sphere) const;
 
 
 	private:

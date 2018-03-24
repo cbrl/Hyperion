@@ -3,7 +3,7 @@
 
 #include "util\math\math.h"
 #include "rendering\pipeline.h"
-#include "geometry\frustum\frustum.h"
+//#include "geometry\frustum\frustum.h"
 #include "shader\hlsl.h"
 
 
@@ -100,7 +100,8 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	scene.ForEach<Model>([&](const Model& model) {
 
 		// Cull models that aren't on screen
-		if (!frustum.Contains(model.GetAABB())) return;
+		if (!frustum.Contains(model.GetAABB())) 
+			return;
 
 		// Create the world matrix
 		world = XMMatrixIdentity();

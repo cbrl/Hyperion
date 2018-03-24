@@ -216,9 +216,6 @@
     <ClInclude Include="camera\Camera.h">
       <Filter>Header Files\camera</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\frustum\Frustum.h">
-      <Filter>Header Files\geometry\frustum</Filter>
-    </ClInclude>
     <ClInclude Include="direct3d\Direct3D.h">
       <Filter>Header Files\direct3d</Filter>
     </ClInclude>
@@ -242,9 +239,6 @@
     </ClInclude>
     <ClInclude Include="shader\HLSL.h">
       <Filter>Header Files\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="geometry\boundingvolume\bounding_volume.h">
-      <Filter>Header Files\geometry\boundingvolume</Filter>
     </ClInclude>
     <ClInclude Include="rendering\buffer\constant_buffer.h">
       <Filter>Header Files\rendering\buffer</Filter>
@@ -348,6 +342,12 @@
     <ClInclude Include="loader\obj\obj_loader.tpp">
       <Filter>Source Files\loader\obj</Filter>
     </ClInclude>
+    <ClInclude Include="geometry\boundingvolume\bounding_volume.h">
+      <Filter>Header Files\geometry\boundingvolume</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\frustum\frustum.h">
+      <Filter>Header Files\geometry\frustum</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -355,9 +355,6 @@
     </ClCompile>
     <ClCompile Include="main\main.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="geometry\frustum\Frustum.cpp">
-      <Filter>Source Files\geometry\frustum</Filter>
     </ClCompile>
     <ClCompile Include="input\Input.cpp">
       <Filter>Source Files\input</Filter>
@@ -421,6 +418,9 @@
     </ClCompile>
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <Filter>Source Files\resource\model</Filter>
+    </ClCompile>
+    <ClCompile Include="geometry\frustum\frustum.cpp">
+      <Filter>Source Files\geometry\frustum</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
