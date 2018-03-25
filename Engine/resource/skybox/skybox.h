@@ -66,7 +66,7 @@ class SkyBox {
 		}
 
 
-		void Bind(ID3D11DeviceContext* device_context) {
+		void Bind(ID3D11DeviceContext* device_context) const {
 			u32 offset = 0;
 
 			Pipeline::IA::BindVertexBuffers(device_context, 0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
@@ -76,7 +76,7 @@ class SkyBox {
 			Pipeline::IA::BindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		}
 
-		void Draw(ID3D11DeviceContext* device_context) {
+		void Draw(ID3D11DeviceContext* device_context) const {
 			device_context->DrawIndexed(index_count, 0, 0);
 		}
 

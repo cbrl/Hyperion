@@ -4,7 +4,6 @@
 
 #include "util\datatypes\datatypes.h"
 #include "rendering\render_state_mgr.h"
-#include "rendering\buffer\constant_buffer.h"
 #include "resource\resource_mgr.h"
 #include "shader\hlsl.h"
 #include "shader\shader.h"
@@ -25,6 +24,4 @@ class SkyRenderer {
 
 		unique_ptr<VertexShader> vertex_shader;
 		unique_ptr<PixelShader>  pixel_shader;
-
-		ConstantBuffer<WVPBuffer> buffer;
 };

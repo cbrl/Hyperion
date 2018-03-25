@@ -48,19 +48,23 @@ Camera::Camera(ID3D11Device* device,
 			   u32 viewportHeight,
 			   float FOV,
 			   float zNear,
-			   float zFar)
+			   float zFar,
+			   ResourceMgr& resource_mgr,
+			   wstring skybox_filename)
 	: Camera(device)
 {
-	viewport_width = viewportWidth;
+	viewport_width  = viewportWidth;
 	viewport_height = viewportHeight;
-	fov = FOV;
-	z_near = zNear;
-	z_far = zFar;
+	fov             = FOV;
+	z_near          = zNear;
+	z_far           = zFar;
 
 	aspect_ratio      = (float)viewport_width / (float)viewport_height;
 	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
 
 	ortho_matrix = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
+
+	skybox.Init(device, resource_mgr, skybox_filename);
 }
 
 
@@ -204,7 +208,7 @@ void Camera::UpdateMovement(float delta_time) {
 	}
 
 
-	// Add the position and forward vectors of the camera to the target vector
+	// Update the target vector with sum of the position and forward vectors
 	look_at = position + camera_forward;
 
 	// Create the new view matrix

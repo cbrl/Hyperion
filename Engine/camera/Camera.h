@@ -4,6 +4,8 @@
 #include "util\datatypes\datatypes.h"
 #include "geometry\frustum\frustum.h"
 #include "rendering\buffer\constant_buffer.h"
+#include "resource\resource_mgr.h"
+#include "resource\skybox\skybox.h"
 
 
 class Camera {
@@ -15,7 +17,9 @@ class Camera {
 			   u32 viewport_height,
 			   float fov,
 			   float z_near,
-			   float z_far);
+			   float z_far,
+			   ResourceMgr& resource_mgr,
+			   wstring skybox_filename);
 
 		~Camera() = default;
 
@@ -26,7 +30,10 @@ class Camera {
 
 		// Update the constant buffer
 		void UpdateBuffer(ID3D11DeviceContext* device_context) {
-			buffer.UpdateData(device_context, CameraBuffer(position));
+
+			XMMATRIX world = XMMatrixTranslationFromVector(position);
+
+			buffer.UpdateData(device_context, CameraBuffer(position, XMMatrixTranspose(world * view_matrix * projection_matrix)));
 		}
 
 		// Bind the constant buffer
@@ -82,6 +89,9 @@ class Camera {
 		// Get Frustum
 		const Frustum& GetFrustum() const { return frustum; }
 
+		// Get SkyBox
+		const SkyBox& GetSkybox() const { return skybox; }
+
 
 		// Get position, rotation, velocity (in units/ms)
 		float3 GetRotation() const { return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
@@ -97,7 +107,13 @@ class Camera {
 		// Camera's constant buffer
 		ConstantBuffer<CameraBuffer> buffer;
 
-		// Viewport and depth range
+		// Camera's skybox
+		SkyBox skybox;
+
+		// Camera frustum
+		Frustum frustum;
+
+		// Viewport size and depth range
 		u32   viewport_width;
 		u32   viewport_height;
 		float z_near;
@@ -105,23 +121,26 @@ class Camera {
 		float fov;
 		float aspect_ratio;
 
+		// Matrices
 		XMMATRIX view_matrix;
 		XMMATRIX projection_matrix;
 		XMMATRIX ortho_matrix;
-
-		Frustum frustum;
 
 		// Default vectors
 		static constexpr XMVECTOR default_forward = { 0.0f, 0.0f, 1.0f, 0.0f };
 		static constexpr XMVECTOR default_right = { 1.0f, 0.0f, 0.0f, 0.0f };
 		static constexpr XMVECTOR default_up = { 0.0f, 1.0f, 0.0f, 0.0f };
 
-		// Looking vectors
+		// Orientation vectors
 		XMVECTOR camera_forward;
 		XMVECTOR fps_forward;
 		XMVECTOR camera_right;
 		XMVECTOR camera_up;
+
+		// Target vector
 		XMVECTOR look_at;
+
+		// Camera position
 		XMVECTOR position;
 
 		// Position, veloctiy, acceleration (units per ms)

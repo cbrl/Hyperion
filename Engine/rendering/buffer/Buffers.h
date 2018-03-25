@@ -10,23 +10,17 @@
 
 struct CameraBuffer {
 	CameraBuffer() : position(0.0f, 0.0f, 0.0f), padding(0.0f) {}
-	CameraBuffer(float3 pos) : position(pos), padding(0.0f) {}
-	CameraBuffer(XMVECTOR pos) { XMStoreFloat3(&position, pos); }
+	CameraBuffer(float3 pos, const XMMATRIX& wvp)
+		: position(pos)
+		, world_view_proj(wvp)
+		, padding(0.0f)
+	{}
+	CameraBuffer(XMVECTOR pos, const XMMATRIX& wvp) : world_view_proj(wvp) {
+		XMStoreFloat3(&position, pos);
+	}
 
-	float3 position;
-	float  padding;
-};
-
-
-
-//----------------------------------------------------------------------------------
-// WVP Buffer
-//----------------------------------------------------------------------------------
-
-struct WVPBuffer {
-	WVPBuffer() : world_view_proj(XMMatrixIdentity()) {}
-	WVPBuffer(const XMMATRIX& wvp) : world_view_proj(wvp) {}
-
+	float3   position;
+	float    padding;
 	XMMATRIX world_view_proj;
 };
 
@@ -46,8 +40,13 @@ struct MaterialBuffer {
 		, dissolve(0.0f)
 		, pad(0.0f, 0.0f)
 	{}
-	MaterialBuffer(float4 ambient, float4 diffuse, float4 specular, float4 emissive,
-				   float specular_power, float optical_density, float dissolve)
+	MaterialBuffer(const float4& ambient,
+				   const float4& diffuse,
+				   const float4& specular,
+				   const float4& emissive,
+				   const float&  specular_power,
+				   const float&  optical_density,
+				   const float&  dissolve)
 		: ambient(ambient)
 		, diffuse(diffuse)
 		, specular(specular)
@@ -92,7 +91,9 @@ struct Fog {
 		, start(20.0f)
 		, range(50.0f)
 	{}
-	Fog(float4 color, float start, float range)
+	Fog(const float4& color,
+		const float&  start,
+		const float&  range)
 		: color(color)
 		, start(start)
 		, range(range)
@@ -114,8 +115,12 @@ struct LightBuffer {
 		, fog_range(0.0f)
 		, pad2(0.0f, 0.0f)
 	{}
-	LightBuffer(u32 point_lights, u32 directional_lights, u32 spot_lights,
-				float4 fog_color, float fog_start, float fog_range)
+	LightBuffer(const u32&    point_lights,
+				const u32&    directional_lights,
+				const u32&    spot_lights,
+				const float4& fog_color,
+				const float&  fog_start,
+				const float&  fog_range)
 		: directional_light_count(directional_lights)
 		, point_light_count(point_lights)
 		, spot_light_count(spot_lights)
@@ -146,7 +151,10 @@ struct DirectionalLight {
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
 		, pad(0.0f)
 	{}
-	DirectionalLight(float4 ambient, float4 diffuse, float3 direction, float4 specular)
+	DirectionalLight(const float4& ambient,
+					 const float4& diffuse,
+					 const float3& direction,
+					 const float4& specular)
 		: ambient_color(ambient)
 		, diffuse_color(diffuse)
 		, direction(direction)
@@ -172,8 +180,12 @@ struct PointLight {
 		, attenuation(0.0f, 0.0f, 0.0f)
 		, pad(0.0f)
 	{}
-	PointLight(float4 ambient_color, float4 diffuse_color, float4 specular,
-			   float3 position, float range, float3 attenuation)
+	PointLight(const float4& ambient_color,
+			   const float4& diffuse_color,
+			   const float4& specular,
+			   const float3& position,
+			   const float&  range,
+			   const float3& attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)
@@ -205,8 +217,14 @@ struct SpotLight {
 		, attenuation(0.0f, 0.0f, 0.0f)
 		, pad(0.0f)
 	{}
-	SpotLight(float4 ambient_color, float4 diffuse_color, float4 specular, float3 position,
-	          float range, float3 direction, float spot, float3 attenuation)
+	SpotLight(const float4& ambient_color,
+			  const float4& diffuse_color,
+			  const float4& specular,
+			  const float3& position,
+			  const float&  range,
+			  const float3& direction,
+			  const float&  spot,
+			  const float3& attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)

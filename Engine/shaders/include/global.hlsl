@@ -18,6 +18,7 @@ SAMPLER_STATE(aniso_wrap,   SLOT_SAMPLER_ANISO_WRAP);
 SAMPLER_STATE(aniso_clamp,  SLOT_SAMPLER_ANISO_CLAMP);
 
 
+
 //----------------------------------------------------------------------------------
 // Constant Buffers
 //----------------------------------------------------------------------------------
@@ -25,9 +26,16 @@ SAMPLER_STATE(aniso_clamp,  SLOT_SAMPLER_ANISO_CLAMP);
 //CONSTANT_BUFFER(EngineBuffer, SLOT_CBUFFER_MATRIX) {
 //}
 
+
 CONSTANT_BUFFER(CameraBuffer, SLOT_CBUFFER_CAMERA) {
+
+	// Camera's position
 	float3 camera_position;
+
 	float  padding;
+
+	// Camera's world-view-projecton matrix
+	matrix camera_wvp;
 };
 
 
