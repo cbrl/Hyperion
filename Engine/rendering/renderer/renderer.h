@@ -8,7 +8,7 @@
 #include "rendering\render_state_mgr.h"
 #include "scene\scene.h"
 #include "rendering\renderer\forward\forward_render.h"
-#include "rendering\renderer\sky\sky.h"
+#include "rendering\renderer\sky\sky_renderer.h"
 
 
 class Renderer {

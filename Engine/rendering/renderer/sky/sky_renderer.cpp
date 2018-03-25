@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "sky.h"
+#include "sky_renderer.h"
 
 
 SkyRenderer::SkyRenderer(ID3D11Device* device, ID3D11DeviceContext* device_context)

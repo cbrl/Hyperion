@@ -378,14 +378,14 @@
     <ClInclude Include="rendering\direct3d\direct3d.h">
       <Filter>Header Files\direct3d</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\renderer\sky\sky.h">
-      <Filter>Header Files\rendering\renderer\sky</Filter>
-    </ClInclude>
     <ClInclude Include="geometry\shapes\shapes.h">
       <Filter>Header Files\geometry\shapes</Filter>
     </ClInclude>
     <ClInclude Include="geometry\shapes\bezier.h">
       <Filter>Header Files\geometry\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\renderer\sky\sky_renderer.h">
+      <Filter>Header Files\rendering\renderer\sky</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -461,11 +461,11 @@
     <ClCompile Include="rendering\direct3d\direct3d.cpp">
       <Filter>Source Files\direct3d</Filter>
     </ClCompile>
-    <ClCompile Include="rendering\renderer\sky\sky.cpp">
-      <Filter>Source Files\rendering\renderer\sky</Filter>
-    </ClCompile>
     <ClCompile Include="geometry\shapes\shapes.tpp">
       <Filter>Source Files\geometry\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\renderer\sky\sky_renderer.cpp">
+      <Filter>Source Files\rendering\renderer\sky</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
