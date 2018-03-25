@@ -4,6 +4,7 @@
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
 #include "rendering\pipeline.h"
+#include "rendering\buffer\buffers.h"
 
 
 template<typename DataT>

@@ -4,11 +4,11 @@
 #include <d3d11.h>
 
 #include "util\datatypes\datatypes.h"
-#include "direct3d\direct3d.h"
-#include "imgui\imgui_impl_dx11.h"
+#include "rendering\direct3d\direct3d.h"
 #include "rendering\render_state_mgr.h"
-#include "rendering\renderer.h"
+#include "rendering\renderer\renderer.h"
 #include "resource\resource_mgr.h"
+#include "imgui\imgui_impl_dx11.h"
 #include "scene\scene.h"
 
 

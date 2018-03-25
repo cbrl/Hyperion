@@ -4,11 +4,11 @@
 #include <DirectXColors.h>
 
 #include "util\datatypes\datatypes.h"
-#include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
 #include "rendering\render_state_mgr.h"
-#include "rendering\forward\forward_render.h"
 #include "scene\scene.h"
+#include "rendering\renderer\forward\forward_render.h"
+#include "rendering\renderer\sky\sky.h"
 
 
 class Renderer {
@@ -24,4 +24,5 @@ class Renderer {
 
 		// Renderers
 		unique_ptr<ForwardRenderer> forward_renderer;
+		unique_ptr<SkyRenderer>     sky_renderer;
 };

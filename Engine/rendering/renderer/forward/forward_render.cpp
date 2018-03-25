@@ -17,28 +17,32 @@ ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* devi
 {
 
 	// Create the vertex shader
-	vertex_shader = make_unique<VertexShader>(device, L"shaders/forward/forward_VS.hlsl",
+	vertex_shader = make_unique<VertexShader>(device, L"shaders/forward/forward_vs.hlsl",
 											  VertexPositionNormalTexture::InputElements,
 											  VertexPositionNormalTexture::InputElementCount);
 
 	// Create the pixel shader
 	pixel_shader = make_unique<PixelShader>(device, L"shaders/forward/forward.hlsl");
-
-
-	// Bind buffers
-	model_buffer.Bind<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
-	model_buffer.Bind<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
-	light_buffer.Bind<Pipeline::PS>(device_context, SLOT_CBUFFER_LIGHT);
-
-
-	// Bind SRVs
-	directional_light_buffer.Bind<Pipeline::PS>(device_context, SLOT_SRV_DIRECTIONAL_LIGHTS);
-	point_light_buffer.Bind<Pipeline::PS>(device_context, SLOT_SRV_POINT_LIGHTS);
-	spot_light_buffer.Bind<Pipeline::PS>(device_context, SLOT_SRV_SPOT_LIGHTS);
 }
 
 
 void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
+
+	//----------------------------------------------------------------------------------
+	// Bind buffers
+	//----------------------------------------------------------------------------------
+	model_buffer.Bind<Pipeline::VS>(device_context.Get(), SLOT_CBUFFER_MODEL);
+	model_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_CBUFFER_MODEL);
+	light_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_CBUFFER_LIGHT);
+
+
+	//----------------------------------------------------------------------------------
+	// Bind SRVs
+	//----------------------------------------------------------------------------------
+	directional_light_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_DIRECTIONAL_LIGHTS);
+	point_light_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_POINT_LIGHTS);
+	spot_light_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SPOT_LIGHTS);
+
 
 	//----------------------------------------------------------------------------------
 	// Bind shaders
@@ -49,10 +53,11 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 
 	//----------------------------------------------------------------------------------
-	// Bind the default depth render state
+	// Bind the render states
 	//----------------------------------------------------------------------------------
 
 	render_state_mgr.BindDepthDefault(device_context.Get());
+	render_state_mgr.BindCullCounterClockwise(device_context.Get());
 
 
 	//----------------------------------------------------------------------------------

@@ -8,6 +8,8 @@
 
 struct Texture {
 	public:
+		Texture() = default;
+
 		template<typename... ArgsT>
 		Texture(ID3D11Device* device, ArgsT&&... args) {
 

@@ -3,7 +3,7 @@
 #include "shaders\forward\forward.hlsl"
 
 
-// Included from forward.hlsl
+//-----Included from forward.hlsl
 //CONSTANT_BUFFER(Model, SLOT_CBUFFER_MODEL) {
 //	matrix world;
 //	matrix world_inv_transpose;
@@ -13,13 +13,14 @@
 //};
 
 
-PSInputPositionNormalTexture VS(VSInputPositionNormalTexture vin) {
-	PSInputPositionNormalTexture vout;
+PSPositionNormalTexture VS(VSPositionNormalTexture vin) {
+	PSPositionNormalTexture vout;
 
 	// Transform to world space
-	vout.positionW = mul(float4(vin.position, 1.0f), world).xyz;
+	vout.w_position = mul(float4(vin.position, 1.0f), world).xyz;
 
 	vout.normal = mul(vin.normal, (float3x3)world_inv_transpose);
+
 	// Interpolating normal can unnormalize it, so normalize it
 	vout.normal = normalize(vout.normal);
 

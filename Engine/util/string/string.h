@@ -3,7 +3,8 @@
 #include <string>
 #include <vector>
 #include <cwchar>
-#include <filesystem>
+#include <locale>
+#include <codecvt>
 
 
 using std::string;
@@ -11,6 +12,18 @@ using std::wstring;
 
 using std::to_string;
 using std::to_wstring;
+
+
+
+// Convert a string to a wide string
+inline wstring str2wstr(const string& in) {
+	return std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().from_bytes(in);
+}
+
+// Convert a wide string to a string
+inline string wstr2str(const wstring& in) {
+	return std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(in);
+}
 
 
 // Trim whitespace at the beginning and end of a string
@@ -62,16 +75,4 @@ inline void Split(StringT& in, std::vector<StringT>& out, const CharT* token) {
 			temp += in[i];
 		}
 	}
-}
-
-
-
-// Get the extension of a file
-inline string GetFileExtension(const string& in) {
-	return std::experimental::filesystem::path(in).extension().string();
-}
-
-// Get the extension of a file
-inline wstring GetFileExtension(const wstring& in) {
-	return std::experimental::filesystem::path(in).extension().wstring();
 }

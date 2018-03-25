@@ -6,18 +6,18 @@
 //  Vertex Shader input structs
 //----------------------------------------------------------------------------------
 
-struct VSInputPosition {
+struct VSPosition {
 	float3 position : POSITION0;
 };
 
 
-struct VSInputPositionNormal {
+struct VSPositionNormal {
 	float3 position : POSITION0;
 	float3 normal   : NORMAL0;
 };
 
 
-struct VSInputPositionNormalTexture {
+struct VSPositionNormalTexture {
 	float3 position : POSITION0;
 	float3 normal   : NORMAL0;
 	float2 tex      : TEXCOORD0;
@@ -29,22 +29,23 @@ struct VSInputPositionNormalTexture {
 //  Pixel Shader input structs
 //----------------------------------------------------------------------------------
 
-struct PSInputPosition {
-	float4 position : SV_POSITION;
+struct PSPosition {
+	float4 position   : SV_POSITION;
+	float3 w_position : POSITION0;
 };
 
 
-struct PSInputPositionNormal {
+struct PSPositionNormal {
 	float4 position : SV_POSITION;
 	float3 normal   : NORMAL0;
 };
 
 
-struct PSInputPositionNormalTexture {
-	float4 position  : SV_POSITION;
-	float3 positionW : POSITION;
-	float3 normal    : NORMAL0;
-	float2 tex       : TEXCOORD0;
+struct PSPositionNormalTexture {
+	float4 position   : SV_POSITION;
+	float3 w_position : POSITION0;
+	float3 normal     : NORMAL0;
+	float2 tex        : TEXCOORD0;
 };
 
 

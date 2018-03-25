@@ -157,13 +157,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="camera\camera.h" />
-    <ClInclude Include="direct3d\direct3d.h" />
     <ClInclude Include="geometry\boundingvolume\bounding_volume.h" />
     <ClInclude Include="geometry\frustum\frustum.h" />
+    <ClInclude Include="geometry\shapes\bezier.h" />
+    <ClInclude Include="geometry\shapes\shapes.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -179,9 +177,11 @@
     <ClInclude Include="rendering\buffer\buffers.h" />
     <ClInclude Include="rendering\buffer\constant_buffer.h" />
     <ClInclude Include="rendering\buffer\structured_buffer.h" />
-    <ClInclude Include="rendering\forward\forward_render.h" />
+    <ClInclude Include="rendering\direct3d\direct3d.h" />
     <ClInclude Include="rendering\pipeline.h" />
-    <ClInclude Include="rendering\renderer.h" />
+    <ClInclude Include="rendering\renderer\forward\forward_render.h" />
+    <ClInclude Include="rendering\renderer\renderer.h" />
+    <ClInclude Include="rendering\renderer\sky\sky.h" />
     <ClInclude Include="rendering\rendering_mgr.h" />
     <ClInclude Include="rendering\render_state_mgr.h" />
     <ClInclude Include="resource\material\material.h" />
@@ -190,6 +190,7 @@
     <ClInclude Include="resource\model\model_blueprint.h" />
     <ClInclude Include="resource\model\model_output.h" />
     <ClInclude Include="resource\resource_mgr.h" />
+    <ClInclude Include="resource\skybox\skybox.h" />
     <ClInclude Include="resource\texture\texture.h" />
     <ClInclude Include="scene\scene.h" />
     <ClInclude Include="shader\hlsl.h" />
@@ -211,8 +212,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera\camera.cpp" />
-    <ClCompile Include="direct3d\direct3d.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
+    <ClCompile Include="geometry\shapes\shapes.tpp" />
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -235,10 +236,12 @@
     </ClInclude>
     <ClCompile Include="loader\texture_loader.cpp" />
     <ClCompile Include="main\main.cpp" />
-    <ClCompile Include="rendering\forward\forward_render.cpp" />
-    <ClCompile Include="rendering\renderer.cpp" />
+    <ClCompile Include="rendering\direct3d\direct3d.cpp" />
+    <ClCompile Include="rendering\renderer\forward\forward_render.cpp" />
+    <ClCompile Include="rendering\renderer\renderer.cpp" />
+    <ClCompile Include="rendering\renderer\sky\sky.cpp" />
+    <ClCompile Include="rendering\rendering_mgr.cpp" />
     <ClCompile Include="rendering\render_state_mgr.cpp" />
-    <ClCompile Include="rendering\rending_mgr.cpp" />
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <FileType>Document</FileType>
     </ClCompile>
@@ -256,6 +259,7 @@
     <ClCompile Include="util\timer\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="resource\mesh\mesh.tpp" />
     <None Include="resource\resource_mgr.tpp" />
     <None Include="shaders\include\light.hlsl">
@@ -283,7 +287,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\forward\forward_VS.hlsl">
+    <None Include="shaders\skybox\skybox.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\forward\forward_vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="shaders\skybox\skybox_vs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -376,8 +376,8 @@ template<typename VertexT>
 void OBJLoader<VertexT>::ReadFace(wstring& line) {
 	vector<wstring> vert_list, vert_parts;
 
-	vector<VertexPositionNormalTexture> verts;
-	VertexPositionNormalTexture vertex;
+	vector<VertexT> verts;
+	VertexT vertex;
 
 	bool hasNormal = false;
 
@@ -418,8 +418,7 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);  //Subtract 1 since arrays start at index 0
 
-				if (has_texCoord_v<VertexT>)
-					vertex.texCoord = float2(0.0f, 0.0f);
+				vertex.SetTexCoord(float2(0.0f, 0.0f));
 
 				hasNormal = false;
 
@@ -432,8 +431,7 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
 
-				if (has_texCoord_v<VertexT>)
-					vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
+				vertex.SetTexCoord(GetElement(vertex_texCoords, stoi(vert_parts[1])-1));
 
 				hasNormal = false;
 
@@ -446,12 +444,9 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
 
-				if (has_normal_v<VertexT>) {
-					vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2]) - 1);
-				}
+				vertex.SetNormal(GetElement(vertex_normals, stoi(vert_parts[2]) - 1));
 
-				if (has_texCoord_v<VertexT>)
-					vertex.texCoord = float2(0.0f, 0.0f);
+				vertex.SetTexCoord(float2(0.0f, 0.0f));
 
 
 				hasNormal = true;
@@ -465,11 +460,9 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
 
-				if (has_normal_v<VertexT>)
-					vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2])-1);
+				vertex.SetNormal(GetElement(vertex_normals, stoi(vert_parts[2])-1));
 
-				if (has_texCoord_v<VertexT>)
-					vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
+				vertex.SetTexCoord(GetElement(vertex_texCoords, stoi(vert_parts[1])-1));
 
 				hasNormal = true;
 
@@ -486,11 +479,8 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			XMVECTOR a = XMLoadFloat3(&(verts[0].position - verts[1].position));
 			XMVECTOR b = XMLoadFloat3(&(verts[2].position - verts[1].position));
 
-			float3 normal;
-			XMStoreFloat3(&normal, XMVector3Cross(a, b));
-
 			for (size_t i = 0; i < verts.size(); ++i) {
-				verts[i].normal = normal;
+				verts[i].SetNormal(XMVector3Cross(a, b));
 			}
 		}
 	}
@@ -546,8 +536,8 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 
 // Converts the input face into triangles. Returns a list of indices that correspond to the input vertex list.
 template<typename VertexT>
-void OBJLoader<VertexT>::Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<u32>& outIndices) {
-	vector<VertexPositionNormalTexture> vVerts = inVerts;
+void OBJLoader<VertexT>::Triangulate(vector<VertexT>& inVerts, vector<u32>& outIndices) {
+	vector<VertexT> vVerts = inVerts;
 
 	while (true) {
 		for (u32 i = 0; i < vVerts.size(); ++i) {

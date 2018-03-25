@@ -12,8 +12,22 @@ struct CameraBuffer {
 	CameraBuffer() : position(0.0f, 0.0f, 0.0f), padding(0.0f) {}
 	CameraBuffer(float3 pos) : position(pos), padding(0.0f) {}
 	CameraBuffer(XMVECTOR pos) { XMStoreFloat3(&position, pos); }
+
 	float3 position;
 	float  padding;
+};
+
+
+
+//----------------------------------------------------------------------------------
+// WVP Buffer
+//----------------------------------------------------------------------------------
+
+struct WVPBuffer {
+	WVPBuffer() : world_view_proj(XMMatrixIdentity()) {}
+	WVPBuffer(const XMMATRIX& wvp) : world_view_proj(wvp) {}
+
+	XMMATRIX world_view_proj;
 };
 
 
@@ -41,6 +55,7 @@ struct MaterialBuffer {
 		, dissolve(dissolve)
 		, pad(0.0f, 0.0f)
 	{}
+
 	float4 ambient;
 	float4 diffuse;
 	float4 specular;
@@ -57,6 +72,7 @@ struct ModelBuffer {
 		, world_view_proj(XMMatrixIdentity())
 		, texTransform(XMMatrixIdentity())
 	{}
+
 	XMMATRIX world;
 	XMMATRIX world_inv_transpose;
 	XMMATRIX world_view_proj;
@@ -81,6 +97,7 @@ struct Fog {
 		, start(start)
 		, range(range)
 	{}
+
 	float4 color;
 	float  start;
 	float  range;
@@ -108,6 +125,7 @@ struct LightBuffer {
 		, fog_range(fog_range)
 		, pad2(0.0f, 0.0f)
 	{}
+
 	u32 directional_light_count;
 	u32 point_light_count;
 	u32 spot_light_count;

@@ -4,9 +4,7 @@
 
 #include "util\datatypes\datatypes.h"
 #include "system\main_window.h"
-#include "direct3d\direct3d.h"
 #include "input\input.h"
-#include "rendering\renderer.h"
 #include "rendering\rendering_mgr.h"
 #include "scene\scene.h"
 #include "util\timer\timer.h"

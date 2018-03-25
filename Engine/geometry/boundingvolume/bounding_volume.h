@@ -95,7 +95,7 @@ struct BoundingSphere {
 		float y = XMVectorGetX(XMVector3Length(M.r[1]));
 		float z = XMVectorGetX(XMVector3Length(M.r[2]));
 
-		radius *= std::max<float>(std::max<float>(x, y), z);
+		radius *= std::max(std::max(x, y), z);
 		center  = XMVector3TransformCoord(center, M);
 	}
 

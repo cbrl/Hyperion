@@ -6,6 +6,7 @@
 #include "rendering\buffer\buffers.h"
 #include "resource\resource_mgr.h"
 #include "resource\model\model.h"
+#include "resource\skybox\skybox.h"
 #include "text\text.h"
 
 
@@ -31,13 +32,18 @@ class Scene {
 
 	public:
 		bool                     enable_input;
+
 		unique_ptr<Camera>       camera;
+
 		vector<PointLight>       point_lights;
 		vector<DirectionalLight> directional_lights;
 		vector<SpotLight>        spot_lights;
+
 		vector<Model>            models;
 		map<string, Text>        texts;
+
 		Fog                      fog;
+		SkyBox                   skybox;
 
 
 	public:

@@ -80,7 +80,7 @@ class OBJLoader {
 		static void LoadMaterials(wstring folder);
 
 		static void ReadFace(wstring& line);
-		static void Triangulate(vector<VertexPositionNormalTexture>& inVerts, vector<u32>& outIndices);
+		static void Triangulate(vector<VertexT>& inVerts, vector<u32>& outIndices);
 		static void ReadTransparency(wstring& line, bool inverse);
 		
 
@@ -90,7 +90,7 @@ class OBJLoader {
 		static u32  mtl_count;
 
 		// Vector of complete vertex definitions
-		static vector<VertexPositionNormalTexture> vertices;
+		static vector<VertexT> vertices;
 
 		// Vectors for position/normal/texCoord/index
 		static vector<float3> vertex_positions;
@@ -126,7 +126,7 @@ template<typename VertexT>
 u32  OBJLoader<VertexT>::mtl_count = 0;
 
 template<typename VertexT>
-vector<VertexPositionNormalTexture> OBJLoader<VertexT>::vertices;
+vector<VertexT> OBJLoader<VertexT>::vertices;
 
 template<typename VertexT>
 vector<float3> OBJLoader<VertexT>::vertex_positions;

@@ -26,9 +26,9 @@ TEXTURE_2D(diffuse_map, SLOT_SRV_DIFFUSE);
 
 
 
-float4 PS(PSInputPositionNormalTexture pin) : SV_Target {
+float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// The toEye vector is used in lighting.
-	float3 toEye = camera_position - pin.positionW;
+	float3 toEye = camera_position - pin.w_position;
 
 	// Cache the distance to the eye from this surface point.
 	float distToEye = length(toEye);
@@ -75,7 +75,7 @@ float4 PS(PSInputPositionNormalTexture pin) : SV_Target {
 	if (point_light_count > 0) {
 		for (int i = 0; i < point_light_count; ++i) {
 			float4 A, D, S;
-			ComputePointLight(mat, point_lights[i], pin.positionW, pin.normal, toEye,
+			ComputePointLight(mat, point_lights[i], pin.w_position, pin.normal, toEye,
 							  A, D, S);
 			
 			ambient += A;
@@ -87,7 +87,7 @@ float4 PS(PSInputPositionNormalTexture pin) : SV_Target {
 	if (spot_light_count > 0) {
 		for (int i = 0; i < spot_light_count; ++i) {
 			float4 A, D, S;
-			ComputeSpotLight(mat, spot_lights[i], pin.positionW, pin.normal, toEye,
+			ComputeSpotLight(mat, spot_lights[i], pin.w_position, pin.normal, toEye,
 							 A, D, S);
 
 			ambient += A;

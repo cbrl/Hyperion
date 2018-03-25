@@ -97,9 +97,6 @@
     <Filter Include="Header Files\util\math">
       <UniqueIdentifier>{aefc5daf-8b66-450d-ad11-95d6db7f745f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\util\math\directxmath">
-      <UniqueIdentifier>{fc70a83f-0a92-475e-8d9a-179939f34dde}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\util\string">
       <UniqueIdentifier>{11a86b40-978f-490a-9e1a-9763223d2041}</UniqueIdentifier>
     </Filter>
@@ -114,12 +111,6 @@
     </Filter>
     <Filter Include="Source Files\loader">
       <UniqueIdentifier>{0be34d4d-40ba-4ce3-aac8-9a4bc558aa86}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\rendering\forward">
-      <UniqueIdentifier>{f4ad6bbd-aba9-4705-8854-81c98694d208}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\rendering\forward">
-      <UniqueIdentifier>{208ac0aa-f7c6-48fb-9912-34453247733c}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\util\datatypes">
       <UniqueIdentifier>{0aaa8c60-4881-43ee-b138-a9d0a6cf1d7f}</UniqueIdentifier>
@@ -172,9 +163,38 @@
     <Filter Include="Source Files\text">
       <UniqueIdentifier>{ac66256c-4821-446d-89c4-c1c6a0d0e045}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resource\skybox">
+      <UniqueIdentifier>{fc7f2de2-0101-4fb0-9aea-152ec6943ec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\skybox">
+      <UniqueIdentifier>{15a161b8-153a-421e-b655-463d6d1cdfe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering\renderer">
+      <UniqueIdentifier>{b191d349-8f13-413a-8cdf-6ebf0d08f4b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering\renderer\forward">
+      <UniqueIdentifier>{b41dd7de-4e6d-4010-b3f8-c9eb000bd33e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering\renderer">
+      <UniqueIdentifier>{2716864a-74f9-4716-bc8a-b69005825224}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering\renderer\forward">
+      <UniqueIdentifier>{f4ad6bbd-aba9-4705-8854-81c98694d208}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering\renderer\sky">
+      <UniqueIdentifier>{2817f489-1732-4e69-b036-36f4b89026c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering\renderer\sky">
+      <UniqueIdentifier>{31c47838-a300-4664-bf10-6317a5fad368}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\geometry\shapes">
+      <UniqueIdentifier>{3ab9f463-2228-401b-898b-86553033e6b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry\shapes">
+      <UniqueIdentifier>{21cdbda1-324f-4929-9eed-db1a32292357}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="shaders\include\light.hlsl">
       <Filter>Resource Files\Shaders\include</Filter>
     </None>
@@ -187,9 +207,6 @@
     <None Include="shaders\include\input_structs.hlsl">
       <Filter>Resource Files\Shaders\include</Filter>
     </None>
-    <None Include="shaders\forward\forward_VS.hlsl">
-      <Filter>Resource Files\Shaders\forward</Filter>
-    </None>
     <None Include="shaders\forward\forward.hlsl">
       <Filter>Resource Files\Shaders\forward</Filter>
     </None>
@@ -199,6 +216,16 @@
     <None Include="resource\resource_mgr.tpp">
       <Filter>Source Files\resource</Filter>
     </None>
+    <None Include="shaders\skybox\skybox.hlsl">
+      <Filter>Resource Files\Shaders\skybox</Filter>
+    </None>
+    <None Include="shaders\skybox\skybox_vs.hlsl">
+      <Filter>Resource Files\Shaders\skybox</Filter>
+    </None>
+    <None Include="shaders\forward\forward_vs.hlsl">
+      <Filter>Resource Files\Shaders\forward</Filter>
+    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -207,17 +234,11 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\Renderer.h">
-      <Filter>Header Files\rendering</Filter>
-    </ClInclude>
     <ClInclude Include="rendering\buffer\Buffers.h">
       <Filter>Header Files\rendering\buffer</Filter>
     </ClInclude>
     <ClInclude Include="camera\Camera.h">
       <Filter>Header Files\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="direct3d\Direct3D.h">
-      <Filter>Header Files\direct3d</Filter>
     </ClInclude>
     <ClInclude Include="system\System.h">
       <Filter>Header Files\system</Filter>
@@ -263,9 +284,6 @@
     </ClInclude>
     <ClInclude Include="util\timer\timer.h">
       <Filter>Header Files\util\timer</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\forward\forward_render.h">
-      <Filter>Header Files\rendering\forward</Filter>
     </ClInclude>
     <ClInclude Include="util\datatypes\datatypes.h">
       <Filter>Header Files\util\datatypes</Filter>
@@ -348,6 +366,27 @@
     <ClInclude Include="geometry\frustum\frustum.h">
       <Filter>Header Files\geometry\frustum</Filter>
     </ClInclude>
+    <ClInclude Include="resource\skybox\skybox.h">
+      <Filter>Header Files\resource\skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\renderer\renderer.h">
+      <Filter>Header Files\rendering\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\renderer\forward\forward_render.h">
+      <Filter>Header Files\rendering\renderer\forward</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\direct3d\direct3d.h">
+      <Filter>Header Files\direct3d</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\renderer\sky\sky.h">
+      <Filter>Header Files\rendering\renderer\sky</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\shapes\shapes.h">
+      <Filter>Header Files\geometry\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="geometry\shapes\bezier.h">
+      <Filter>Header Files\geometry\shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -360,12 +399,6 @@
       <Filter>Source Files\input</Filter>
     </ClCompile>
     <ClCompile Include="rendering\render_state_mgr.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\renderer.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\rending_mgr.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
     <ClCompile Include="scene\scene.cpp">
@@ -388,12 +421,6 @@
     </ClCompile>
     <ClCompile Include="camera\camera.cpp">
       <Filter>Source Files\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="direct3d\direct3d.cpp">
-      <Filter>Source Files\direct3d</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\forward\forward_render.cpp">
-      <Filter>Source Files\rendering\forward</Filter>
     </ClCompile>
     <ClCompile Include="util\datatypes\vertex_types.cpp">
       <Filter>Source Files\util\datatypes</Filter>
@@ -421,6 +448,24 @@
     </ClCompile>
     <ClCompile Include="geometry\frustum\frustum.cpp">
       <Filter>Source Files\geometry\frustum</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\rendering_mgr.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\renderer\renderer.cpp">
+      <Filter>Source Files\rendering\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\renderer\forward\forward_render.cpp">
+      <Filter>Source Files\rendering\renderer\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\direct3d\direct3d.cpp">
+      <Filter>Source Files\direct3d</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\renderer\sky\sky.cpp">
+      <Filter>Source Files\rendering\renderer\sky</Filter>
+    </ClCompile>
+    <ClCompile Include="geometry\shapes\shapes.tpp">
+      <Filter>Source Files\geometry\shapes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

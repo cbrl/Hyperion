@@ -4,7 +4,6 @@
 #include "util\datatypes\datatypes.h"
 #include "geometry\frustum\frustum.h"
 #include "rendering\buffer\constant_buffer.h"
-#include "rendering\buffer\buffers.h"
 
 
 class Camera {

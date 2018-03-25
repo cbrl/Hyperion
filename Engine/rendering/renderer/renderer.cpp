@@ -10,8 +10,9 @@
 Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
 	: device_context(device_context)
 {
-	// Create forward renderer
+	// Create renderers
 	forward_renderer = make_unique<ForwardRenderer>(device, device_context);
+	sky_renderer     = make_unique<SkyRenderer>(device, device_context);
 }
 
 
@@ -48,6 +49,14 @@ void Renderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) const {
 	//ImGui::DragFloat("Fog Range", (float*)&scene.fog.range, 1.0f, 0.0f, 200.0f);
 
 	
+
+	//----------------------------------------------------------------------------------
+	// Render the skybox
+	//----------------------------------------------------------------------------------
+
+	sky_renderer->Render(scene, render_state_mgr);
+
+
 	//----------------------------------------------------------------------------------
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------

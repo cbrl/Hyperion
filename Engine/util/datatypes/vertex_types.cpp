@@ -7,6 +7,7 @@ using namespace DirectX;
 using namespace DirectX::PackedVector;
 
 
+
 // VertexPosition
 const D3D11_INPUT_ELEMENT_DESC VertexPosition::InputElements[] =
 {

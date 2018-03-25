@@ -1,15 +1,17 @@
 #include "stdafx.h"
 #include "scene.h"
-#include "system/system.h"
+#include "system\system.h"
 
 // TODO:
 // - Normal mapping
 // - Skybox
 // - Shadows
-// - CBuffers as a member of models?
+// - CBuffers as a member of models? Model parts -> child models
+// - has_texture in model class
 // - CPU usage
 // - Create a simple geometry generator
 // - Move other resources to resource manager (shaders?)
+// - Improve logging
 
 
 static const float zNear = 0.1f;
@@ -80,6 +82,10 @@ void Scene::Init(ID3D11Device* device,
 	fog.color = float4(0.4f, 0.4f, 0.4f, 1.0f);
 	fog.start = 25.0f;
 	fog.range = 45.0f;
+
+
+	// Create the skybox
+	skybox.Init(device, resource_mgr, L"../data/Textures/grasscube1024.dds");
 
 
 	//----------------------------------------------------------------------------------

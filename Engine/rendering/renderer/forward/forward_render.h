@@ -3,7 +3,6 @@
 #include <d3d11.h>
 
 #include "util\datatypes\datatypes.h"
-#include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
 #include "rendering\buffer\structured_buffer.h"
 #include "rendering\render_state_mgr.h"
@@ -20,7 +19,7 @@ class ForwardRenderer {
 
 
 	private:
-		ComPtr<ID3D11Device> device;
+		ComPtr<ID3D11Device>        device;
 		ComPtr<ID3D11DeviceContext> device_context;
 
 		unique_ptr<PixelShader>  pixel_shader;

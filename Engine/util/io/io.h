@@ -1,6 +1,9 @@
+#pragma once
+
 #include <fstream>
 #include <sstream>
 #include <filesystem>
+
 
 // fstream
 using std::fstream;
@@ -24,3 +27,15 @@ using std::wostringstream;
 
 // filesystem namespace
 namespace fs = std::experimental::filesystem;
+
+
+
+// Get the extension of a file
+inline string GetFileExtension(const string& in) {
+	return fs::path(in).extension().string();
+}
+
+// Get the extension of a file
+inline wstring GetFileExtension(const wstring& in) {
+	return fs::path(in).extension().wstring();
+}
