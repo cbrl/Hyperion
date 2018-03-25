@@ -4,12 +4,9 @@
 
 // TODO:
 // - Normal mapping
-// - Skybox
 // - Shadows
 // - CBuffers as a member of models? Model parts -> child models
-// - has_texture in model class
 // - CPU usage
-// - Create a simple geometry generator
 // - Move other resources to resource manager (shaders?)
 // - Improve logging
 

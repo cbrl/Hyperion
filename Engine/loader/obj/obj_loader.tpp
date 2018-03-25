@@ -56,7 +56,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
 		if (!materials[i].map_Kd.empty())
 			mtl.map_Kd = resource_mgr.Create<Texture>(folder + materials[i].map_Kd);
 		else
-			mtl.map_Kd = resource_mgr.Create<Texture>(float4(1.0f, 1.0f, 1.0f, 1.0f));
+			mtl.has_texture = false;
 
 		if (!materials[i].map_Ka.empty())
 			mtl.map_Ka   = resource_mgr.Create<Texture>(folder + materials[i].map_Ka);

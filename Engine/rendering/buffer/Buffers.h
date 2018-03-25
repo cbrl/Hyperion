@@ -38,7 +38,8 @@ struct MaterialBuffer {
 		, emissive(0.0f, 0.0f, 0.0f, 1.0f)
 		, optical_density(0.0f)
 		, dissolve(0.0f)
-		, pad(0.0f, 0.0f)
+		, has_texture(0)
+		, pad(0.0f)
 	{}
 	MaterialBuffer(const float4& ambient,
 				   const float4& diffuse,
@@ -46,13 +47,15 @@ struct MaterialBuffer {
 				   const float4& emissive,
 				   const float&  specular_power,
 				   const float&  optical_density,
-				   const float&  dissolve)
+				   const float&  dissolve,
+				   const bool&   has_texture)
 		: ambient(ambient)
 		, diffuse(diffuse)
 		, specular(specular)
 		, emissive(emissive)
 		, dissolve(dissolve)
-		, pad(0.0f, 0.0f)
+		, has_texture(has_texture)
+		, pad(0.0f)
 	{}
 
 	float4 ambient;
@@ -61,7 +64,8 @@ struct MaterialBuffer {
 	float4 emissive;
 	float  optical_density;
 	float  dissolve;
-	float2 pad;
+	u32    has_texture;
+	float  pad;
 };
 
 struct ModelBuffer {

@@ -157,6 +157,7 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 			model_data.mat.emissive        = mat->Ke;
 			model_data.mat.optical_density = mat->Ni;
 			model_data.mat.specular        = mat->Ks;
+			model_data.mat.has_texture     = mat->has_texture;
 
 			// Update the model buffer
 			model_buffer.UpdateData(device_context.Get(), model_data);

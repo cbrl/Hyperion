@@ -27,20 +27,25 @@ TEXTURE_2D(diffuse_map, SLOT_SRV_DIFFUSE);
 
 
 float4 PS(PSPositionNormalTexture pin) : SV_Target {
-	// The toEye vector is used in lighting.
+	// The toEye vector is used in lighting
 	float3 toEye = camera_position - pin.w_position;
 
-	// Cache the distance to the eye from this surface point.
+	// Cache the distance to the eye from this surface point
 	float distToEye = length(toEye);
 
-	// Normalize.
+	// Normalize
 	toEye /= distToEye;
 
-	// Default to multiplicative identity.
+	// Default to multiplicative identity
 	float4 texColor = float4(1, 1, 1, 1);
 
-	// Sample texture.
-	texColor = diffuse_map.Sample(aniso_wrap, pin.tex);
+	// Sample texture
+	if (mat.has_texture) {
+		texColor = diffuse_map.Sample(aniso_wrap, pin.tex);
+	}
+	else {
+		texColor = mat.diffuse;
+	}
 
 	// Discard pixel if texture alpha < 0.1.  Note that we do this
 	// test as soon as possible so that we can potentially exit the shader 
@@ -54,13 +59,13 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 	float4 litColor = texColor;
 
-	// Start with a sum of zero. 
+	// Start with a sum of zero.
 	float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	float4 spec = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	if (directional_light_count > 0) {
-		// Sum the light contribution from each light source.  
+		// Sum the light contribution from each light source
 		for (int i = 0; i < directional_light_count; ++i) {
 			float4 A, D, S;
 			ComputeDirectionalLight(mat, directional_lights[i], pin.normal, toEye,
@@ -96,7 +101,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 		}
 	}
 
-	// Modulate with late add.
+	// Modulate with late add
 	litColor = texColor * (ambient + diffuse) + spec;
 
 
@@ -106,11 +111,11 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 	float fogLerp = saturate((distToEye - fog_start) / fog_range);
 
-	// Blend the fog color and the lit color.
+	// Blend the fog color and the lit color
 	litColor = lerp(litColor, fog_color, fogLerp);
 
 
-	// Common to take alpha from diffuse material and texture.
+	// Common to take alpha from diffuse material and texture
 	litColor.a = mat.diffuse.a * texColor.a;
 
 	litColor = saturate(litColor);

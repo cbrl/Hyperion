@@ -53,4 +53,7 @@ struct Material {
 
 	// Transparency flag
 	bool transparent;
+
+	// Diffuse texture flag
+	bool has_texture;
 };
