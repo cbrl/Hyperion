@@ -15,7 +15,7 @@ struct AABB {
 
 		~AABB() = default;
 
-		AABB(float3 min, float3 max)
+		AABB(const float3& min, const float3& max)
 			: min_point(XMLoadFloat3(&min))
 			, max_point(XMLoadFloat3(&max))
 			, vertices(8) {
@@ -31,7 +31,7 @@ struct AABB {
 			vertices[7] = XMLoadFloat3(&float3(min.x, max.y, max.z));
 		}
 
-		AABB(XMVECTOR min, XMVECTOR max)
+		AABB(FXMVECTOR min, FXMVECTOR max)
 			: min_point(min)
 			, max_point(max)
 			, vertices(8) {
@@ -52,7 +52,7 @@ struct AABB {
 		}
 
 
-		void Transform(const XMMATRIX& M) {
+		void XM_CALLCONV Transform(FXMMATRIX M) {
 			for (u32 i = 0; i < 8; ++i) {
 				vertices[i] = XMVector3TransformCoord(vertices[i], M);
 			}
@@ -79,18 +79,18 @@ struct BoundingSphere {
 	BoundingSphere() : center(XMVectorZero()), radius(FLT_MAX) {}
 	~BoundingSphere() = default;
 
-	BoundingSphere(float3 center, float radius)
+	BoundingSphere(const float3& center, float radius)
 		: center(XMLoadFloat3(&center))
 		, radius(radius)
 	{}
 
-	BoundingSphere(XMVECTOR center, float radius)
+	BoundingSphere(FXMVECTOR center, float radius)
 		: center(center)
 		, radius(radius)
 	{}
 
 
-	void Transform(const XMMATRIX& M) {
+	void XM_CALLCONV Transform(FXMMATRIX M) {
 		float x = XMVectorGetX(XMVector3Length(M.r[0]));
 		float y = XMVectorGetX(XMVector3Length(M.r[1]));
 		float z = XMVectorGetX(XMVector3Length(M.r[2]));

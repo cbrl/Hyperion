@@ -28,13 +28,13 @@ struct VertexPosition {
 
 	// These getters and setters can be used for templated functions where
 	// it isn't known if the vertex has the specified memeber.
-	void SetPosition(const FXMVECTOR& position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetPosition(FXMVECTOR position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetNormal(FXMVECTOR normal) {}
+	void XM_CALLCONV SetColor(FXMVECTOR color) {}
+	void XM_CALLCONV SetTexCoord(FXMVECTOR texCoord) {}
 	void SetPosition(const float3& position) { this->position = position; }
-	void SetNormal(const FXMVECTOR& normal) {}
 	void SetNormal(const float3& normal) {}
-	void SetColor(const FXMVECTOR& color) {}
 	void SetColor(const float4& color) {}
-	void SetTexCoord(const FXMVECTOR& texCoord) {}
 	void SetTexCoord(const float2& texCoord) {}
 
 	float3& GetPosition() { return position; }
@@ -77,13 +77,13 @@ struct VertexPositionColor {
 
 	// These getters and setters can be used for templated functions where
 	// it isn't known if the vertex has the specified memeber.
-	void SetPosition(const FXMVECTOR& position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetPosition(FXMVECTOR position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetNormal(FXMVECTOR normal) {}
+	void XM_CALLCONV SetColor(FXMVECTOR color) { XMStoreFloat4(&this->color, color); }
+	void XM_CALLCONV SetTexCoord(FXMVECTOR texCoord) {}
 	void SetPosition(const float3& position) { this->position = position; }
-	void SetNormal(const FXMVECTOR& normal) {}
 	void SetNormal(const float3& normal) {}
-	void SetColor(const FXMVECTOR& color) { XMStoreFloat4(&this->color, color); }
 	void SetColor(const float4& color) { this->color = color; }
-	void SetTexCoord(const FXMVECTOR& texCoord) {}
 	void SetTexCoord(const float2& texCoord) {}
 
 	float3& GetPosition() { return position; }
@@ -127,13 +127,13 @@ struct VertexPositionTexture {
 
 	// These getters and setters can be used for templated functions where
 	// it isn't known if the vertex has the specified memeber.
-	void SetPosition(const FXMVECTOR& position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetPosition(FXMVECTOR position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetNormal(FXMVECTOR normal) {}
+	void XM_CALLCONV SetColor(FXMVECTOR color) {}
+	void XM_CALLCONV SetTexCoord(FXMVECTOR texCoord) { XMStoreFloat2(&this->texCoord, texCoord); }
 	void SetPosition(const float3& position) { this->position = position; }
-	void SetNormal(const FXMVECTOR& normal) {}
 	void SetNormal(const float3& normal) {}
-	void SetColor(const FXMVECTOR& color) {}
 	void SetColor(const float4& color) {}
-	void SetTexCoord(const FXMVECTOR& texCoord) { XMStoreFloat2(&this->texCoord, texCoord); }
 	void SetTexCoord(const float2& texCoord) { this->texCoord = texCoord; }
 
 	float3& GetPosition() { return position; }
@@ -162,9 +162,7 @@ struct VertexPositionDualTexture {
 		, texCoord1(texCoord1) {
 	}
 
-	VertexPositionDualTexture(FXMVECTOR position,
-								FXMVECTOR texCoord0,
-								FXMVECTOR texCoord1) {
+	VertexPositionDualTexture(FXMVECTOR position, FXMVECTOR texCoord0, FXMVECTOR texCoord1) {
 		XMStoreFloat3(&this->position, position);
 		XMStoreFloat2(&this->texCoord0, texCoord0);
 		XMStoreFloat2(&this->texCoord1, texCoord1);
@@ -182,15 +180,17 @@ struct VertexPositionDualTexture {
 
 	// These getters and setters can be used for templated functions where
 	// it isn't known if the vertex has the specified memeber.
-	void SetPosition(const FXMVECTOR& position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetPosition(FXMVECTOR position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetNormal(FXMVECTOR normal) {}
+	void XM_CALLCONV SetColor(FXMVECTOR color) {}
+	void XM_CALLCONV SetTexCoord(FXMVECTOR texCoord) {}
+	void XM_CALLCONV SetTexCoord0(FXMVECTOR texCoord) { XMStoreFloat2(&this->texCoord0, texCoord); }
+	void XM_CALLCONV SetTexCoord1(FXMVECTOR texCoord) { XMStoreFloat2(&this->texCoord1, texCoord); }
 	void SetPosition(const float3& position) { this->position = position; }
-	void SetNormal(const FXMVECTOR& normal) {}
 	void SetNormal(const float3& normal) {}
-	void SetColor(const FXMVECTOR& color) {}
 	void SetColor(const float4& color) {}
-	void SetTexCoord0(const FXMVECTOR& texCoord) { XMStoreFloat2(&this->texCoord0, texCoord); }
+	void SetTexCoord(const float2& texCoord) {}
 	void SetTexCoord0(const float2& texCoord) { this->texCoord0 = texCoord; }
-	void SetTexCoord1(const FXMVECTOR& texCoord) { XMStoreFloat2(&this->texCoord1, texCoord); }
 	void SetTexCoord1(const float2& texCoord) { this->texCoord1 = texCoord; }
 
 	float3& GetPosition()  { return position; }
@@ -236,12 +236,13 @@ struct VertexPositionNormal {
 
 	// These getters and setters can be used for templated functions where
 	// it isn't known if the vertex has the specified memeber.
-	void SetPosition(const FXMVECTOR& position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetPosition(FXMVECTOR position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetNormal(FXMVECTOR normal) { XMStoreFloat3(&this->normal, normal); }
+	void XM_CALLCONV SetColor(FXMVECTOR color) {}
+	void XM_CALLCONV SetTexCoord(FXMVECTOR texCoord) {}
 	void SetPosition(const float3& position) { this->position = position; }
-	void SetNormal(const FXMVECTOR& normal) { XMStoreFloat3(&this->normal, normal); }
-	void SetColor(const FXMVECTOR& color) {}
+	void SetNormal(const float3& normal) { this->normal = normal; }
 	void SetColor(const float4& color) {}
-	void SetTexCoord(const FXMVECTOR& texCoord) {}
 	void SetTexCoord(const float2& texCoord) {}
 
 	float3& GetPosition() { return position; }
@@ -288,13 +289,13 @@ struct VertexPositionNormalColor {
 
 	// These getters and setters can be used for templated functions where
 	// it isn't known if the vertex has the specified memeber.
-	void SetPosition(const FXMVECTOR& position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetPosition(FXMVECTOR position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetNormal(FXMVECTOR normal) { XMStoreFloat3(&this->normal, normal); }
+	void XM_CALLCONV SetColor(FXMVECTOR color) { XMStoreFloat4(&this->color, color); }
+	void XM_CALLCONV SetTexCoord(FXMVECTOR texCoord) {}
 	void SetPosition(const float3& position) { this->position = position; }
-	void SetNormal(const FXMVECTOR& normal) { XMStoreFloat3(&this->normal, normal); }
 	void SetNormal(const float3& normal) { this->normal = normal; }
-	void SetColor(const FXMVECTOR& color) { XMStoreFloat4(&this->color, color); }
 	void SetColor(const float4& color) { this->color = color; }
-	void SetTexCoord(const FXMVECTOR& texCoord) {}
 	void SetTexCoord(const float2& texCoord) {}
 
 	float3& GetPosition() { return position; }
@@ -342,13 +343,13 @@ struct VertexPositionNormalTexture {
 
 	// These getters and setters can be used for templated functions where
 	// it isn't known if the vertex has the specified memeber.
-	void SetPosition(const FXMVECTOR& position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetPosition(FXMVECTOR position) { XMStoreFloat3(&this->position, position); }
+	void XM_CALLCONV SetNormal(FXMVECTOR normal) { XMStoreFloat3(&this->normal, normal); }
+	void XM_CALLCONV SetColor(FXMVECTOR color) {}
+	void XM_CALLCONV SetTexCoord(FXMVECTOR texCoord) { XMStoreFloat2(&this->texCoord, texCoord); }
 	void SetPosition(const float3& position) { this->position = position; }
-	void SetNormal(const FXMVECTOR& normal) { XMStoreFloat3(&this->normal, normal); }
 	void SetNormal(const float3& normal) { this->normal = normal; }
-	void SetColor(const FXMVECTOR& color) {}
 	void SetColor(const float4& color) {}
-	void SetTexCoord(const FXMVECTOR& texCoord) { XMStoreFloat2(&this->texCoord, texCoord); }
 	void SetTexCoord(const float2& texCoord) { this->texCoord = texCoord; }
 
 	float3& GetPosition() { return position; }

@@ -25,7 +25,7 @@ void SkyRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mgr) {
 	// Bind the render states
 	//----------------------------------------------------------------------------------
 
-	render_state_mgr.BindDepthNone(device_context.Get());
+	render_state_mgr.BindDepthDefault(device_context.Get());
 	render_state_mgr.BindCullNone(device_context.Get());
 
 

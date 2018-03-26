@@ -627,7 +627,7 @@ void OBJLoader<VertexT>::Triangulate(vector<VertexT>& inVerts, vector<u32>& outI
 			// Ensure that no vertices are inside the triangle
 			bool inTriangle = false;
 			for (u32 j = 0; j < inVerts.size(); ++j) {
-				if (PointInTriangle(inVerts[j].position, prev, curr, next)
+				if (PointInTriangle(prev, curr, next, inVerts[j].position)
 					&& inVerts[j].position != prev
 					&& inVerts[j].position != curr
 					&& inVerts[j].position != next)

@@ -17,8 +17,8 @@ inline uint32_t Float4ColorToU32(const XMFLOAT4& color) {
 
 
 // Determine if a point is inside a triangle using barycentric coordinates
-inline bool PointInTriangle(const XMFLOAT3& point, const XMFLOAT3& vert1,
-							const XMFLOAT3& vert2, const XMFLOAT3& vert3) {
+inline bool PointInTriangle(const XMFLOAT3& vert1, const XMFLOAT3& vert2,
+							const XMFLOAT3& vert3, const XMFLOAT3& point) {
 	XMVECTOR v0 = XMLoadFloat3(&vert2) - XMLoadFloat3(&vert1);
 	XMVECTOR v1 = XMLoadFloat3(&vert3) - XMLoadFloat3(&vert1);
 	XMVECTOR v2 = XMLoadFloat3(&point) - XMLoadFloat3(&vert1);
@@ -46,8 +46,8 @@ inline bool PointInTriangle(const XMFLOAT3& point, const XMFLOAT3& vert1,
 
 
 // Determine if a point is inside a triangle using barycentric coordinates
-inline bool PointInTriangle(const XMVECTOR& point, const XMVECTOR& vert1,
-							const XMVECTOR& vert2, const XMVECTOR& vert3) {
+inline bool XM_CALLCONV PointInTriangle(FXMVECTOR vert1, FXMVECTOR vert2,
+										FXMVECTOR vert3, CXMVECTOR point) {
 	XMVECTOR v0 = vert2 - vert1;
 	XMVECTOR v1 = vert3 - vert1;
 	XMVECTOR v2 = point - vert1;

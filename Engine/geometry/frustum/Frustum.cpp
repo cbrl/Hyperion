@@ -2,7 +2,7 @@
 #include "frustum.h"
 
 
-Frustum::Frustum(const XMMATRIX& in) {
+Frustum::Frustum(CXMMATRIX in) {
 	UpdateFrustum(in);
 }
 
@@ -11,7 +11,7 @@ Frustum::~Frustum() {
 }
 
 
-void Frustum::UpdateFrustum(const XMMATRIX& in) {
+void XM_CALLCONV Frustum::UpdateFrustum(FXMMATRIX in) {
 	const XMMATRIX input = XMMatrixTranspose(in);
 
 	// Near plane
@@ -44,7 +44,7 @@ void Frustum::UpdateFrustum(const XMMATRIX& in) {
 // Encloses - Object completely contained within frustum
 //----------------------------------------------------------------------------------
 
-bool Frustum::Encloses(const XMVECTOR& point) const {
+bool XM_CALLCONV Frustum::Encloses(FXMVECTOR point) const {
 	for (u32 i = 0; i < 6; ++i) {
 		auto result = XMPlaneDotCoord(planes[i], point);
 		if (XMVectorGetX(result) < 0.0f) {

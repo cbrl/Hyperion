@@ -10,12 +10,12 @@
 
 struct CameraBuffer {
 	CameraBuffer() : position(0.0f, 0.0f, 0.0f), padding(0.0f) {}
-	CameraBuffer(float3 pos, const XMMATRIX& wvp)
+	CameraBuffer(const float3& pos, CXMMATRIX wvp)
 		: position(pos)
 		, world_view_proj(wvp)
 		, padding(0.0f)
 	{}
-	CameraBuffer(XMVECTOR pos, const XMMATRIX& wvp) : world_view_proj(wvp) {
+	CameraBuffer(FXMVECTOR pos, CXMMATRIX wvp) : world_view_proj(wvp) {
 		XMStoreFloat3(&position, pos);
 	}
 
