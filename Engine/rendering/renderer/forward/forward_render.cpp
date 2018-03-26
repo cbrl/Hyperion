@@ -169,7 +169,7 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 			if (mat->map_Ks)   mat->map_Ks->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPECULAR);
 			if (mat->map_Ns)   mat->map_Ns->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPEC_HIGHLIGHT);
 			if (mat->map_d)    mat->map_d->Bind<Pipeline::PS>(device_context.Get(),    SLOT_SRV_ALPHA);
-			if (mat->map_bump) mat->map_bump->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_BUMP);
+			if (mat->map_bump) mat->map_bump->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_NORMAL);
 
 
 			// Draw the model part

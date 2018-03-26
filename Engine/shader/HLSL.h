@@ -10,7 +10,6 @@
 #define SLOT_CBUFFER_CAMERA 2
 #define SLOT_CBUFFER_LIGHT  3
 #define SLOT_CBUFFER_MODEL  4
-#define SLOT_CBUFFER_WVP    5
 
 
 //----------------------------------------------------------------------------------
@@ -35,15 +34,13 @@
 #define SLOT_SRV_SPECULAR       3
 #define SLOT_SRV_SPEC_HIGHLIGHT 4
 #define SLOT_SRV_ALPHA          5
-#define SLOT_SRV_BUMP           6
+#define SLOT_SRV_NORMAL         6
 
 // Light
 #define SLOT_SRV_DIRECTIONAL_LIGHTS 7
 #define SLOT_SRV_POINT_LIGHTS       8
 #define SLOT_SRV_SPOT_LIGHTS        9
 
-// Skybox
-#define SLOT_SRV_SKYBOX 10
 
 
 #endif //HLSL_DEFINES

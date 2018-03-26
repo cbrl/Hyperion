@@ -226,6 +226,9 @@
       <Filter>Resource Files\Shaders\forward</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="shaders\include\normal.hlsl">
+      <Filter>Resource Files\Shaders\include</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

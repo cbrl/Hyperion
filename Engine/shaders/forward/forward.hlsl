@@ -1,6 +1,7 @@
 #include "shaders\include\global.hlsl"
 #include "shaders\include\input_structs.hlsl"
 #include "shaders\include\light.hlsl"
+#include "shaders\include\normal.hlsl"
 
 
 //----------------------------------------------------------------------------------
@@ -22,6 +23,7 @@ CONSTANT_BUFFER(Model, SLOT_CBUFFER_MODEL) {
 //----------------------------------------------------------------------------------
 
 TEXTURE_2D(diffuse_map, SLOT_SRV_DIFFUSE);
+TEXTURE_2D(normal_map, SLOT_SRV_NORMAL);
 // ambient, specular, etc...
 
 
@@ -36,10 +38,8 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Normalize
 	toEye /= distToEye;
 
-	// Default to multiplicative identity
-	float4 texColor = float4(1, 1, 1, 1);
-
 	// Sample texture
+	float4 texColor;
 	if (mat.has_texture) {
 		texColor = diffuse_map.Sample(aniso_wrap, pin.tex);
 	}
@@ -54,7 +54,16 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 
 	//----------------------------------------------------------------------------------
-	// Lighting.
+	// Normal Mapping
+	//----------------------------------------------------------------------------------
+
+	float3 normal_map_sample = normal_map.Sample(linear_wrap, pin.tex);
+	float3 transformed_normal = TransformNormal(pin.position, pin.normal, pin.tex, normal_map_sample);
+
+
+
+	//----------------------------------------------------------------------------------
+	// Lighting
 	//----------------------------------------------------------------------------------
 
 	float4 litColor = texColor;
@@ -68,7 +77,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 		// Sum the light contribution from each light source
 		for (int i = 0; i < directional_light_count; ++i) {
 			float4 A, D, S;
-			ComputeDirectionalLight(mat, directional_lights[i], pin.normal, toEye,
+			ComputeDirectionalLight(mat, directional_lights[i], transformed_normal, toEye,
 									A, D, S);
 
 			ambient += A;
@@ -80,7 +89,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	if (point_light_count > 0) {
 		for (int i = 0; i < point_light_count; ++i) {
 			float4 A, D, S;
-			ComputePointLight(mat, point_lights[i], pin.w_position, pin.normal, toEye,
+			ComputePointLight(mat, point_lights[i], pin.w_position, transformed_normal, toEye,
 							  A, D, S);
 			
 			ambient += A;
@@ -92,7 +101,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	if (spot_light_count > 0) {
 		for (int i = 0; i < spot_light_count; ++i) {
 			float4 A, D, S;
-			ComputeSpotLight(mat, spot_lights[i], pin.w_position, pin.normal, toEye,
+			ComputeSpotLight(mat, spot_lights[i], pin.w_position, transformed_normal, toEye,
 							 A, D, S);
 
 			ambient += A;

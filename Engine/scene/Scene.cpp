@@ -3,8 +3,8 @@
 #include "system\system.h"
 
 // TODO:
-// - Normal mapping
 // - Shadows
+// - Improve ui implementation
 // - CBuffers as a member of models? Model parts -> child models
 // - CPU usage
 // - Move other resources to resource manager (shaders?)
@@ -73,9 +73,9 @@ void Scene::Init(ID3D11Device* device,
 	point_lights.push_back(PointLight());
 	point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
 	point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().attenuation   = float3(1.0f, 0.0f, 0.1f);
+	point_lights.back().attenuation   = float3(0.5f, 0.0f, 0.1f);
 	point_lights.back().specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().position      = float3(0.0f, 2.0f, 0.0f);
+	point_lights.back().position      = float3(0.0f, 1.0f, -2.0f);
 	point_lights.back().range         = 50.0f;
 
 
@@ -89,7 +89,7 @@ void Scene::Init(ID3D11Device* device,
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	auto bp = resource_mgr.Create<ModelBlueprint>(L"../data/models/test/", L"test.obj");
+	auto bp = resource_mgr.Create<ModelBlueprint>(L"../data/models/cube/", L"cube.obj");
 	models.push_back(Model(device, *bp));
 	models.back().Scale(3.0f, 3.0f, 3.0f);
 	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
@@ -147,9 +147,9 @@ void Scene::UpdateMetrics(i32 FPS, i32 CPU, i32 mouse_x, i32 mouse_y) {
 void Scene::Tick(Input& input, float delta_time) {
 
 	// Rotate models
-	//for (auto& model : models) {
-	//	model.Rotate(0.0f, ((XM_PI * delta_time) / 2500), 0.0f);
-	//}
+	for (auto& model : models) {
+		model.Rotate(0.0f, ((XM_PI * delta_time) / 2500), 0.0f);
+	}
 
 
 	// Exit if input is disabled
