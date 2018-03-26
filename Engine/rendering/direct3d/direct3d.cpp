@@ -5,7 +5,12 @@
 #include "rendering\pipeline.h"
 
 
-Direct3D::Direct3D(HWND hWnd, i32 window_width, i32 window_height, bool fullscreen, bool vSync, bool MSAA)
+Direct3D::Direct3D(HWND hWnd,
+				   u32 window_width,
+				   u32 window_height,
+				   bool fullscreen,
+				   bool vSync,
+				   bool MSAA)
 	: hWnd(hWnd)
 	, window_width(window_width)
 	, window_height(window_height)
@@ -35,6 +40,7 @@ Direct3D::~Direct3D() {
 
 
 void Direct3D::Init() {
+
 	u32 createDeviceFlags = 0;
 	#if defined(DEBUG) || defined(_DEBUG)  
 		createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -67,7 +73,8 @@ void Direct3D::Init() {
 	// target formats, so we only need to check quality support.
 
 	ThrowIfFailed(device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &MSAA4x_quality),
-	                  "CheckMultisampleQualityLevels() failed");
+	              "CheckMultisampleQualityLevels() failed");
+
 	assert(MSAA4x_quality > 0);
 
 	//----------------------------------------------------------------------------------
@@ -92,9 +99,9 @@ void Direct3D::Init() {
 
 	// V-Sync
 	if (enable_vsync) {
-		ReadRefreshRate();
-		sd.BufferDesc.RefreshRate.Numerator   = refresh_rate_numerator;
-		sd.BufferDesc.RefreshRate.Denominator = refresh_rate_denominator;
+		// Read refresh rate into buffer description
+		ReadRefreshRate(sd.BufferDesc.RefreshRate.Numerator,
+						sd.BufferDesc.RefreshRate.Denominator);
 	}
 	else {
 		sd.BufferDesc.RefreshRate.Numerator   = 0;
@@ -120,20 +127,20 @@ void Direct3D::Init() {
 	// (by calling CreateDXGIFactory), we get an error: "IDXGIFactory::CreateSwapChain: 
 	// This function is being called with a device from a different IDXGIFactory."
 
-	ComPtr<IDXGIDevice> dxgiDevice = nullptr;
+	ComPtr<IDXGIDevice> dxgiDevice;
 	ThrowIfFailed(device->QueryInterface(__uuidof(IDXGIDevice), (void**)dxgiDevice.GetAddressOf()),
-	                  "QueryInterface failed on dxgiDevice");
+	              "QueryInterface failed on dxgiDevice");
 
-	ComPtr<IDXGIAdapter> dxgiAdapter = nullptr;
+	ComPtr<IDXGIAdapter> dxgiAdapter;
 	ThrowIfFailed(dxgiDevice->GetParent(__uuidof(IDXGIAdapter), (void**)dxgiAdapter.GetAddressOf()),
-	                  "Failed to get parent of dxgiDevice");
+	              "Failed to get parent of dxgiDevice");
 
-	ComPtr<IDXGIFactory> dxgiFactory = nullptr;
+	ComPtr<IDXGIFactory> dxgiFactory;
 	ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void**)dxgiFactory.GetAddressOf()),
-	                  "Failed to get parent of dxgiFactory");
+	              "Failed to get parent of dxgiFactory");
 
 	ThrowIfFailed(dxgiFactory->CreateSwapChain(device.Get(), &sd, swap_chain.GetAddressOf()),
-	                  "Failed to create swapchain");
+	              "Failed to create swapchain");
 
 
 	// Call OnResize to create the render target view, and world/view/projection matrices
@@ -141,15 +148,16 @@ void Direct3D::Init() {
 }
 
 
-void Direct3D::ReadRefreshRate() {
+void Direct3D::ReadRefreshRate(UINT& numerator, UINT& denominator) {
+
 	// Create graphics interface factory
-	ComPtr<IDXGIFactory>   factory;
-	ComPtr<IDXGIAdapter>   adapter;
-	ComPtr<IDXGIOutput>    adapterOut;
+	ComPtr<IDXGIFactory> factory;
+	ComPtr<IDXGIAdapter> adapter;
+	ComPtr<IDXGIOutput>  adapterOut;
 	u32 modes;
 
-	ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory),
-	                  "Failed to create dxgiFactory");
+	ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), static_cast<void**>(&factory)),
+	              "Failed to create dxgiFactory");
 
 
 	// Get list of display modes
@@ -167,15 +175,16 @@ void Direct3D::ReadRefreshRate() {
 	for (u32 i = 0; i < modes; i++) {
 		if (displayModeList[i].Width == GetSystemMetrics(SM_CXSCREEN)) {
 			if (displayModeList[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
-				refresh_rate_numerator = displayModeList[i].RefreshRate.Numerator;
-				refresh_rate_denominator = displayModeList[i].RefreshRate.Denominator;
+				numerator = displayModeList[i].RefreshRate.Numerator;
+				denominator = displayModeList[i].RefreshRate.Denominator;
 			}
 		}
 	}
 }
 
 
-void Direct3D::OnResize(i32 winWidth, i32 winHeight) {
+void Direct3D::OnResize(u32 winWidth, u32 winHeight) {
+
 	assert(device_context);
 	assert(device);
 	assert(swap_chain);
@@ -275,11 +284,11 @@ void Direct3D::PresentFrame() const {
 	if (enable_vsync) {
 		// If VSync is enabled, present with next frame
 		ThrowIfFailed(swap_chain->Present(1, 0),
-		                  "Failed to present frame");
+		              "Failed to present frame");
 	}
 	else {
 		// If it's disabled, present as soon as possible
 		ThrowIfFailed(swap_chain->Present(0, 0),
-		                  "Failed to present frame");
+		              "Failed to present frame");
 	}
 }

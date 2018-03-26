@@ -44,12 +44,12 @@ Camera::Camera(ID3D11Device* device)
 
 
 Camera::Camera(ID3D11Device* device,
+			   ResourceMgr& resource_mgr,
 			   u32 viewportWidth,
 			   u32 viewportHeight,
 			   float FOV,
 			   float zNear,
 			   float zFar,
-			   ResourceMgr& resource_mgr,
 			   wstring skybox_filename)
 	: Camera(device)
 {

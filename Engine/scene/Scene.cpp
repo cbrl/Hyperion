@@ -34,10 +34,10 @@ void Scene::Init(ID3D11Device* device,
 	//----------------------------------------------------------------------------------
 
 	camera = make_unique<Camera>(device,
+								 resource_mgr,
 								 System::Get()->GetWindowWidth(),
 								 System::Get()->GetWindowHeight(),
 								 FOV, zNear, zFar,
-								 resource_mgr,
 								 L"../data/Textures/grasscube1024.dds");
 
 	camera->SetPosition(float3(0.0f, 1.0f, -5.0f));
@@ -47,26 +47,28 @@ void Scene::Init(ID3D11Device* device,
 	// Create lights
 	//----------------------------------------------------------------------------------
 
-	//// X+ direction = Red
-	//directional_lights.push_back(DirectionalLight());
-	//directional_lights[0].ambient_color = float4(0.2f, 0.0f, 0.0f, 1.0f);
-	//directional_lights[0].diffuse_color = float4(1.0f, 0.0f, 0.0f, 1.0f);
-	//directional_lights[0].specular      = float4(1.0f, 0.0f, 0.0f, 1.0f);
-	//directional_lights[0].direction     = float3(1.0f, 0.0f, 0.0f);
+	/*
+	// X+ direction = Red
+	directional_lights.push_back(DirectionalLight());
+	directional_lights[0].ambient_color = float4(0.2f, 0.0f, 0.0f, 1.0f);
+	directional_lights[0].diffuse_color = float4(1.0f, 0.0f, 0.0f, 1.0f);
+	directional_lights[0].specular      = float4(1.0f, 0.0f, 0.0f, 1.0f);
+	directional_lights[0].direction     = float3(1.0f, 0.0f, 0.0f);
 
-	//// Y- direction = Green
-	//directional_lights.push_back(DirectionalLight());
-	//directional_lights[1].ambient_color = float4(0.0f, 0.2f, 0.0f, 1.0f);
-	//directional_lights[1].diffuse_color = float4(0.0f, 1.0f, 0.0f, 1.0f);
-	//directional_lights[1].specular      = float4(0.0f, 1.0f, 0.0f, 1.0f);
-	//directional_lights[1].direction     = float3(0.0f, -1.0f, 0.0f);
+	// Y- direction = Green
+	directional_lights.push_back(DirectionalLight());
+	directional_lights[1].ambient_color = float4(0.0f, 0.2f, 0.0f, 1.0f);
+	directional_lights[1].diffuse_color = float4(0.0f, 1.0f, 0.0f, 1.0f);
+	directional_lights[1].specular      = float4(0.0f, 1.0f, 0.0f, 1.0f);
+	directional_lights[1].direction     = float3(0.0f, -1.0f, 0.0f);
 
-	//// Z+ direction = Blue
-	//directional_lights.push_back(DirectionalLight());
-	//directional_lights[2].ambient_color = float4(0.0f, 0.0f, 0.2f, 1.0f);
-	//directional_lights[2].diffuse_color = float4(0.0f, 0.0f, 1.0f, 1.0f);
-	//directional_lights[2].specular      = float4(0.0f, 0.0f, 1.0f, 1.0f);
-	//directional_lights[2].direction     = float3(0.0f, 0.0f, 1.0f);
+	// Z+ direction = Blue
+	directional_lights.push_back(DirectionalLight());
+	directional_lights[2].ambient_color = float4(0.0f, 0.0f, 0.2f, 1.0f);
+	directional_lights[2].diffuse_color = float4(0.0f, 0.0f, 1.0f, 1.0f);
+	directional_lights[2].specular      = float4(0.0f, 0.0f, 1.0f, 1.0f);
+	directional_lights[2].direction     = float3(0.0f, 0.0f, 1.0f);
+	*/
 
 	point_lights.push_back(PointLight());
 	point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);

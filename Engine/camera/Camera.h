@@ -13,12 +13,12 @@ class Camera {
 		Camera(ID3D11Device* device);
 
 		Camera(ID3D11Device* device,
+			   ResourceMgr& resource_mgr,
 			   u32 viewport_width,
 			   u32 viewport_height,
 			   float fov,
 			   float z_near,
 			   float z_far,
-			   ResourceMgr& resource_mgr,
 			   wstring skybox_filename);
 
 		~Camera() = default;
