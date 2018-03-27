@@ -6,7 +6,6 @@
 // - Shadows
 // - Improve ui implementation
 // - CBuffers as a member of models? Model parts -> child models
-// - CPU usage
 // - Move other resources to resource manager (shaders?)
 // - Improve logging
 

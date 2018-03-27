@@ -2,13 +2,15 @@
 
 #include <Windows.h>
 
-#include "util\datatypes\datatypes.h"
 #include "system\main_window.h"
+
+#include "util\datatypes\datatypes.h"
+#include "util\sysmon\system_monitor.h"
+#include "util\timer\timer.h"
+#include "util\fps\fps.h"
 #include "input\input.h"
 #include "rendering\rendering_mgr.h"
 #include "scene\scene.h"
-#include "util\timer\timer.h"
-#include "util\fps\fps.h"
 
 
 #define WINDOW_WIDTH  1200
@@ -46,12 +48,12 @@ class System : public MainWindow {
 	private:
 		static System* system_ptr;
 
-		unique_ptr<MainWindow>   main_window;
-		unique_ptr<RenderingMgr> rendering_mgr;
-		unique_ptr<Scene>        scene;
-		unique_ptr<Input>        input;
-		unique_ptr<Timer>        timer;
-		unique_ptr<FPS>          fps_counter;
+		unique_ptr<Input>         input;
+		unique_ptr<SystemMonitor> system_monitor;
+		unique_ptr<Timer>         timer;
+		unique_ptr<FPS>           fps_counter;
+		unique_ptr<RenderingMgr>  rendering_mgr;
+		unique_ptr<Scene>         scene;
 
 		bool resizing;
 };

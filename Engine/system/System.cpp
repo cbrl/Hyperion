@@ -22,29 +22,41 @@ System::~System() {
 
 
 bool System::Init() {
+
 	// Set width/height variables. Later on this can be read from a config file.
 	window_width  = WINDOW_WIDTH;
 	window_height = WINDOW_HEIGHT;
+
 
 	// Create main window
 	if (!InitWindow(L"Engine", window_width, window_height)) {
 		return false;
 	}
 
-	// Initialize rendering manager
-	rendering_mgr = make_unique<RenderingMgr>(hWnd, window_width, window_height, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
+
+	// Initialize system monitor
+	system_monitor = make_unique<SystemMonitor>();
+
 
 	// Create input handler
 	input = make_unique<Input>(hWnd);
 
+
 	// Create Timer
 	timer = make_unique<Timer>();
+
 
 	// Create FPS Counter
 	fps_counter = make_unique<FPS>();
 
+
+	// Initialize rendering manager
+	rendering_mgr = make_unique<RenderingMgr>(hWnd, window_width, window_height, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
+
+
 	// Initialize scene
 	scene = make_unique<Scene>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext(), *rendering_mgr->GetResourceMgr());
+
 
 	return true;
 }
@@ -87,6 +99,7 @@ void System::Tick() {
 
 
 	// Update system metrics
+	system_monitor->Tick();
 	timer->Tick();
 	fps_counter->Tick();
 	deltaTime = timer->DeltaTime();

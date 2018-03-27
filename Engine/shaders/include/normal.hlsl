@@ -27,9 +27,7 @@ float3 TransformNormal(float3 position, float3 normal, float2 tex, float3 normal
 
 	float3x3 TBN = ComputeTBN(position, normal, tex);
 
-	float3 transformed_normal = mul(tex_normal, TBN);
-
-	return transformed_normal;
+	return mul(tex_normal, TBN);
 }
 
 

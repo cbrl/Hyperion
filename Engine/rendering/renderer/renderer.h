@@ -4,7 +4,6 @@
 #include <DirectXColors.h>
 
 #include "util\datatypes\datatypes.h"
-#include "rendering\buffer\constant_buffer.h"
 #include "rendering\render_state_mgr.h"
 #include "scene\scene.h"
 #include "rendering\renderer\forward\forward_render.h"

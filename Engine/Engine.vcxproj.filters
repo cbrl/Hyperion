@@ -193,6 +193,12 @@
     <Filter Include="Source Files\geometry\shapes">
       <UniqueIdentifier>{21cdbda1-324f-4929-9eed-db1a32292357}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\util\sysmon">
+      <UniqueIdentifier>{d86f4f88-d9f8-4bbf-be8f-644d9d24f802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util\sysmon">
+      <UniqueIdentifier>{0c5e121e-f3d0-4175-b40f-c52239b3a06e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -225,10 +231,10 @@
     <None Include="shaders\forward\forward_vs.hlsl">
       <Filter>Resource Files\Shaders\forward</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="shaders\include\normal.hlsl">
       <Filter>Resource Files\Shaders\include</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -390,6 +396,9 @@
     <ClInclude Include="rendering\renderer\sky\sky_renderer.h">
       <Filter>Header Files\rendering\renderer\sky</Filter>
     </ClInclude>
+    <ClInclude Include="util\sysmon\system_monitor.h">
+      <Filter>Header Files\util\sysmon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -469,6 +478,9 @@
     </ClCompile>
     <ClCompile Include="rendering\renderer\sky\sky_renderer.cpp">
       <Filter>Source Files\rendering\renderer\sky</Filter>
+    </ClCompile>
+    <ClCompile Include="util\sysmon\system_monitor.cpp">
+      <Filter>Source Files\util\sysmon</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
