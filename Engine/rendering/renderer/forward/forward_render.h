@@ -25,7 +25,6 @@ class ForwardRenderer {
 		unique_ptr<PixelShader>  pixel_shader;
 		unique_ptr<VertexShader> vertex_shader;
 
-		ConstantBuffer<ModelBuffer>        model_buffer;
 		ConstantBuffer<LightBuffer>        light_buffer;
 		StructuredBuffer<DirectionalLight> directional_light_buffer;
 		StructuredBuffer<PointLight>       point_light_buffer;

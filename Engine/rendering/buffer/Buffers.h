@@ -45,10 +45,9 @@ struct MaterialBuffer {
 				   const float4& diffuse,
 				   const float4& specular,
 				   const float4& emissive,
-				   const float&  specular_power,
-				   const float&  optical_density,
-				   const float&  dissolve,
-				   const bool&   has_texture)
+				   const float   optical_density,
+				   const float   dissolve,
+				   const bool    has_texture)
 		: ambient(ambient)
 		, diffuse(diffuse)
 		, specular(specular)
@@ -96,8 +95,8 @@ struct Fog {
 		, range(50.0f)
 	{}
 	Fog(const float4& color,
-		const float&  start,
-		const float&  range)
+		const float   start,
+		const float   range)
 		: color(color)
 		, start(start)
 		, range(range)
@@ -119,12 +118,12 @@ struct LightBuffer {
 		, fog_range(0.0f)
 		, pad2(0.0f, 0.0f)
 	{}
-	LightBuffer(const u32&    point_lights,
-				const u32&    directional_lights,
-				const u32&    spot_lights,
+	LightBuffer(const u32     point_lights,
+				const u32     directional_lights,
+				const u32     spot_lights,
 				const float4& fog_color,
-				const float&  fog_start,
-				const float&  fog_range)
+				const float   fog_start,
+				const float   fog_range)
 		: directional_light_count(directional_lights)
 		, point_light_count(point_lights)
 		, spot_light_count(spot_lights)
@@ -188,7 +187,7 @@ struct PointLight {
 			   const float4& diffuse_color,
 			   const float4& specular,
 			   const float3& position,
-			   const float&  range,
+			   const float   range,
 			   const float3& attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
@@ -225,9 +224,9 @@ struct SpotLight {
 			  const float4& diffuse_color,
 			  const float4& specular,
 			  const float3& position,
-			  const float&  range,
+			  const float   range,
 			  const float3& direction,
-			  const float&  spot,
+			  const float   spot,
 			  const float3& attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)

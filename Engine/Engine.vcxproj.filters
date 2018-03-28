@@ -482,5 +482,8 @@
     <ClCompile Include="util\sysmon\system_monitor.cpp">
       <Filter>Source Files\util\sysmon</Filter>
     </ClCompile>
+    <ClCompile Include="resource\model\model.cpp">
+      <Filter>Source Files\resource\model</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -3,7 +3,7 @@
 
 
 //----------------------------------------------------------------------------------
-// CPU
+// CPUMonitor
 //----------------------------------------------------------------------------------
 
 SystemMonitor::CPUMonitor::~CPUMonitor() {
@@ -101,8 +101,8 @@ void SystemMonitor::CPUMonitor::Tick() {
 }
 
 
-u32 SystemMonitor::CPUMonitor::GetTotalCpuPercentage() const {
-	return can_read_cpu ? static_cast<u32>(total_usage) : 0;
+u64 SystemMonitor::CPUMonitor::GetTotalCpuPercentage() const {
+	return can_read_cpu ? total_usage : 0;
 }
 
 
@@ -114,7 +114,7 @@ double SystemMonitor::CPUMonitor::GetProcessCpuPercentage() const {
 
 
 //----------------------------------------------------------------------------------
-// Memory
+// MemoryMonitor
 //----------------------------------------------------------------------------------
 
 void SystemMonitor::MemoryMonitor::Init(HANDLE handle) {

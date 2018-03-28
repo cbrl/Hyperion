@@ -45,7 +45,7 @@ struct ConstantBuffer {
 
 		// Bind the cbuffer to the specified pipeline stage
 		template<typename StageT>
-		void Bind(ID3D11DeviceContext* device_context, u32 slot) {
+		void Bind(ID3D11DeviceContext* device_context, u32 slot) const {
 			StageT::BindConstantBuffers(device_context, slot, 1, buffer.GetAddressOf());
 		}
 

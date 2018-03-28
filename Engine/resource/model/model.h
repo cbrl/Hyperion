@@ -9,6 +9,65 @@
 #include "resource\mesh\mesh.h"
 #include "resource\material\material.h"
 #include "geometry\boundingvolume\bounding_volume.h"
+#include "rendering\buffer\constant_buffer.h"
+
+
+
+class ChildModel {
+	friend class Model;
+
+	protected:
+		ChildModel(ID3D11Device* device, ModelPart& part, shared_ptr<Material> mat)
+			: name(part.name)
+			, buffer(device)
+			, index_start(part.index_start)
+			, index_count(part.index_count)
+			, material(mat)
+			, aabb(part.aabb)
+			, sphere(part.sphere) {
+		}
+
+		void XM_CALLCONV Update(ID3D11DeviceContext* device_context,
+								FXMMATRIX world,
+								CXMMATRIX world_inv_transpose,
+								CXMMATRIX world_view_proj,
+								CXMMATRIX tex_transform);
+
+		void XM_CALLCONV UpdateBoundingVolumes(FXMMATRIX transform) {
+			aabb.Transform(transform);
+			sphere.Transform(transform);
+		}
+
+
+	public:
+		~ChildModel() = default;
+
+		const u32 GetIndexStart() const { return index_start; }
+		const u32 GetIndexCount() const { return index_count; }
+
+		const AABB&           GetAABB()     const { return aabb; }
+		const BoundingSphere& GetSphere()   const { return sphere; }
+		const Material&       GetMaterial() const { return *material; }
+
+		template<typename StageT>
+		void BindBuffer(ID3D11DeviceContext* device_context, u32 slot) const {
+			buffer.Bind<StageT>(device_context, slot);
+		}
+
+
+	private:
+		wstring name;
+
+		ConstantBuffer<ModelBuffer> buffer;
+
+		u32 index_start;
+		u32 index_count;
+
+		shared_ptr<Material> material;
+
+		AABB           aabb;
+		BoundingSphere sphere;
+};
 
 
 class Model {
@@ -16,20 +75,10 @@ class Model {
 		Model() = delete;
 		~Model() = default;
 
-		Model(ID3D11Device* device, ModelBlueprint blueprint)
-			: name(blueprint.name)
-			, mesh(blueprint.mesh)
-			, model_parts(blueprint.model_parts)
-			, materials(blueprint.materials)
-			, aabb(blueprint.aabb)
-			, sphere(blueprint.sphere)
-			, position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
-			, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
-			, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
-			, transform(XMMatrixIdentity())
-		{}
+		Model(ID3D11Device* device, ModelBlueprint blueprint);
 
 
+		// Bind the model's vertex and index buffers
 		void Bind(ID3D11DeviceContext* device_context) const {
 			mesh->Bind(device_context);
 		}
@@ -40,11 +89,11 @@ class Model {
 		}
 
 
-		// Preform an action for each part of the model
+		// Preform an action for each child model
 		template<typename ActionT>
-		void ForEachPart(ActionT act) const {
-			for (const auto& part : model_parts) {
-				act(part);
+		void ForEachChildModel(ActionT act) {
+			for (auto& child : child_models) {
+				act(child);
 			}
 		}
 
@@ -55,56 +104,37 @@ class Model {
 
 		void SetPosition(float x, float y, float z) {
 			position = XMMatrixTranslation(x, y, z);
-			//UpdateBoundingVolumes();
+			update_bounding_volumes = true;
 		}
 
 		void Move(float x, float y, float z) {
 			position = XMMatrixMultiply(position, XMMatrixTranslation(x, y, z));
-			//UpdateBoundingVolumes();
+			update_bounding_volumes = true;
 		}
 
 		void SetRotation(float x, float y, float z) {
 			rotation = XMMatrixRotationRollPitchYaw(x, y, z);
-			//UpdateBoundingVolumes();
+			update_bounding_volumes = true;
 		}
 
 		void Rotate(float x, float y, float z) {
 			rotation = XMMatrixMultiply(rotation, XMMatrixRotationRollPitchYaw(x, y, z));
-			//UpdateBoundingVolumes();
+			update_bounding_volumes = true;
 		}
 
 		void SetScale(float x, float y, float z) {
 			scale = XMMatrixScaling(x, y, z);
-			//UpdateBoundingVolumes();
+			update_bounding_volumes = true;
 		}
 
 		void Scale(float x, float y, float z) {
 			scale = XMMatrixMultiply(scale, XMMatrixScaling(x, y, z));
-			//UpdateBoundingVolumes();
-		}
-
-		void UpdateBoundingVolumes() {
-			aabb.Transform(transform);
-			sphere.Transform(transform);
-
-			for (auto& part : model_parts) {
-				part.aabb.Transform(transform);
-				part.sphere.Transform(transform);
-			}
+			update_bounding_volumes = true;
 		}
 
 
-		//----------------------------------------------------------------------------------
-		// Update model
-		//----------------------------------------------------------------------------------
-
-		void Update() {
-			transform = XMMatrixMultiply(transform, (scale*rotation*position));
-
-			UpdateBoundingVolumes();
-
-			scale = rotation = position = XMMatrixIdentity();
-		}
+		// Update model matrix and bounding volumes, as well as those of the child models.
+		void XM_CALLCONV Update(ID3D11DeviceContext* device_context, FXMMATRIX view, CXMMATRIX proj);
 
 
 		//----------------------------------------------------------------------------------
@@ -114,8 +144,6 @@ class Model {
 		const AABB&           GetAABB()      const { return aabb; }
 		const BoundingSphere& GetSphere()    const { return sphere; }
 		const XMMATRIX&       GetTransform() const { return transform; }
-
-		const Material& GetMaterial(u32 index) const { return materials[index]; }
 
 
 	private:
@@ -130,7 +158,8 @@ class Model {
 		XMMATRIX rotation;
 		XMMATRIX scale;
 		XMMATRIX transform;
+		bool     update_bounding_volumes;
 
-		vector<ModelPart> model_parts;
-		vector<Material>  materials;
+		vector<ChildModel> child_models;
+		vector<shared_ptr<Material>> materials;
 };

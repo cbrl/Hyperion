@@ -22,7 +22,7 @@ class SystemMonitor {
 
 
 		public:
-			u32    GetTotalCpuPercentage() const;
+			u64    GetTotalCpuPercentage() const;
 			double GetProcessCpuPercentage() const;
 
 
@@ -100,7 +100,7 @@ class SystemMonitor {
 		}
 
 		// Access CPU stats
-		const CPUMonitor&    CPU()    { return cpu_mon; }
+		const CPUMonitor& CPU() { return cpu_mon; }
 
 		// Access memory stats
 		const MemoryMonitor& Memory() { return memory_mon; }

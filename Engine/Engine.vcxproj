@@ -243,6 +243,7 @@
     <ClCompile Include="rendering\renderer\sky\sky_renderer.cpp" />
     <ClCompile Include="rendering\rendering_mgr.cpp" />
     <ClCompile Include="rendering\render_state_mgr.cpp" />
+    <ClCompile Include="resource\model\model.cpp" />
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <FileType>Document</FileType>
     </ClCompile>
