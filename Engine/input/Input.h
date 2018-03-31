@@ -5,7 +5,7 @@
 #include "util\datatypes\datatypes.h"
 
 
-class Input {
+class Input final {
 	public:
 		Input(HWND hWnd);
 		~Input() = default;

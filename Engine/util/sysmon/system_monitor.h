@@ -8,9 +8,9 @@
 #include "util\datatypes\datatypes.h"
 
 
-class SystemMonitor {
+class SystemMonitor final {
 
-	class CPUMonitor {
+	class CPUMonitor final {
 		friend class SystemMonitor;
 
 		protected:
@@ -54,7 +54,7 @@ class SystemMonitor {
 	};
 
 
-	class MemoryMonitor {
+	class MemoryMonitor final {
 		friend class SystemMonitor;
 
 		protected:

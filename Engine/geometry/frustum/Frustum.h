@@ -5,7 +5,7 @@
 
 using namespace DirectX;
 
-class Frustum {
+class Frustum final {
 	public:
 		Frustum() = default;
 		Frustum(CXMMATRIX viewProj);

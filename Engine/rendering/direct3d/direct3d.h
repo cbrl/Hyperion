@@ -10,7 +10,7 @@
 
 using namespace DirectX;
 
-class Direct3D {
+class Direct3D final {
 	public:
 		Direct3D(HWND hWnd,
 				 u32 window_width,

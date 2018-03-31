@@ -12,7 +12,7 @@
 #include "scene\scene.h"
 
 
-class RenderingMgr {
+class RenderingMgr final {
 	public:
 		RenderingMgr(HWND hWnd, u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
 		~RenderingMgr();

@@ -8,7 +8,7 @@
 #include "resource\resource_mgr.h"
 
 
-class Text {
+class Text final {
 	public:
 		Text(ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr, const wstring& font_filename);
 		~Text();

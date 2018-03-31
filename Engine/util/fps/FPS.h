@@ -5,7 +5,7 @@
 #include <Windows.h>
 #include <timeapi.h>
 
-class FPS {
+class FPS final {
 	public:
 		FPS();
 		~FPS();

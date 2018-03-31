@@ -13,7 +13,7 @@ struct Group {
 
 
 template<typename VertexT>
-struct ModelOutput {
+struct ModelOutput final {
 	public:
 		ModelOutput(const wstring& name,
 					const vector<VertexT>& vertices,

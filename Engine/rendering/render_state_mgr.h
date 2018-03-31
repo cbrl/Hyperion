@@ -3,7 +3,7 @@
 #include <d3d11.h>
 
 
-class RenderStateMgr {
+class RenderStateMgr final {
 	public:
 		RenderStateMgr(ID3D11Device* device, ID3D11DeviceContext* device_context);
 		~RenderStateMgr();

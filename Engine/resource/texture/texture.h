@@ -6,7 +6,7 @@
 #include "loader\texture_loader.h"
 
 
-struct Texture {
+struct Texture final {
 	public:
 		Texture() = default;
 

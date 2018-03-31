@@ -23,7 +23,7 @@ struct ModelPart {
 };
 
 
-class ModelBlueprint {
+class ModelBlueprint final {
 	public:
 		ModelBlueprint() = default;
 

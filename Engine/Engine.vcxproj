@@ -264,6 +264,9 @@
     <ClCompile Include="util\timer\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="loader\model_loader.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <None Include="packages.config" />
     <None Include="resource\mesh\mesh.tpp" />
     <None Include="resource\resource_mgr.tpp" />

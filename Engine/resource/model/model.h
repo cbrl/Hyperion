@@ -13,7 +13,7 @@
 
 
 
-class ChildModel {
+class ChildModel final {
 	friend class Model;
 
 	protected:
@@ -70,7 +70,7 @@ class ChildModel {
 };
 
 
-class Model {
+class Model final {
 	public:
 		Model(ID3D11Device* device, ModelBlueprint blueprint);
 		~Model() = default;

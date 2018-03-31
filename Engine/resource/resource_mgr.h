@@ -11,7 +11,7 @@ class ModelBlueprint;
 
 
 template<typename KeyT, typename ValueT>
-class ResourceMap {
+class ResourceMap final {
 	public:
 	ResourceMap() = default;
 	~ResourceMap() = default;
@@ -27,7 +27,7 @@ class ResourceMap {
 };
 
 
-class ResourceMgr {
+class ResourceMgr final {
 	public:
 		ResourceMgr(ID3D11Device* device, ID3D11DeviceContext* device_context)
 			: device(device)

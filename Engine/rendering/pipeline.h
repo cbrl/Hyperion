@@ -4,7 +4,7 @@
 #include "util\datatypes\datatypes.h"
 
 
-class Pipeline {
+class Pipeline final {
 	public:
 		// Bind samplers to every stage
 		static void BindSamplers(ID3D11DeviceContext* device_context,

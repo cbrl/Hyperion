@@ -5,7 +5,7 @@
 #include "util\engine_util.h"
 
 
-class TextureLoader {
+class TextureLoader final {
 	public:
 		TextureLoader() = delete;
 

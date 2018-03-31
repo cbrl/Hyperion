@@ -8,7 +8,7 @@
 #include "resource\skybox\skybox.h"
 
 
-class Camera {
+class Camera final {
 	public:
 		Camera(ID3D11Device* device);
 

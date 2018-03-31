@@ -22,7 +22,7 @@
 #define FULLSCREEN_STATE false
 
 
-class System : public MainWindow {
+class System final : public MainWindow {
 	public:
 		static System* Get() { return system_ptr; }
 

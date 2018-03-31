@@ -408,6 +408,9 @@
     <ClInclude Include="scene\test_scene.h">
       <Filter>Header Files\scene</Filter>
     </ClInclude>
+    <ClInclude Include="loader\model_loader.tpp">
+      <Filter>Source Files\loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -8,7 +8,7 @@
 
 
 template<typename DataT>
-struct ConstantBuffer {
+struct ConstantBuffer final {
 	public:
 		ConstantBuffer(ID3D11Device* device) {
 			D3D11_BUFFER_DESC bufferDesc = {};

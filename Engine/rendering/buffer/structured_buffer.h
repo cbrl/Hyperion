@@ -7,7 +7,7 @@
 
 
 template<typename DataT>
-class StructuredBuffer {
+class StructuredBuffer final {
 	public:
 		StructuredBuffer(ID3D11Device* device, u32 size) : size(size) {
 			CreateBuffer(device);

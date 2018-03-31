@@ -6,7 +6,7 @@
 
 using namespace DirectX;
 
-struct Material {
+struct Material final {
 	Material()
 		: name(L"material")
 		, Ka(0.0f, 0.0f, 0.0f, 1.0f)

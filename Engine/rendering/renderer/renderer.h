@@ -10,7 +10,7 @@
 #include "rendering\renderer\sky\sky_renderer.h"
 
 
-class Renderer {
+class Renderer final {
 	public:
 		Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context);
 		~Renderer() = default;

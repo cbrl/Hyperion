@@ -5,7 +5,7 @@
 
 using namespace DirectX;
 
-struct AABB {
+struct AABB final {
 	public:
 		AABB()
 			: min_point(g_XMInfinity)
@@ -75,7 +75,7 @@ struct AABB {
 };
 
 
-struct BoundingSphere {
+struct BoundingSphere final {
 	BoundingSphere() : center(XMVectorZero()), radius(FLT_MAX) {}
 	~BoundingSphere() = default;
 

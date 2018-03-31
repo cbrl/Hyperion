@@ -5,7 +5,7 @@
 #include "rendering\pipeline.h"
 
 
-class Mesh {
+class Mesh final {
 	public:
 		Mesh() = default;
 		~Mesh() = default;

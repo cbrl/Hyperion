@@ -8,7 +8,7 @@
 #include "rendering\pipeline.h"
 
 
-class VertexShader {
+class VertexShader final {
 	public:
 		VertexShader(ID3D11Device* device,
 					 const WCHAR* filename,
@@ -29,7 +29,7 @@ class VertexShader {
 };
 
 
-class PixelShader {
+class PixelShader final {
 	public:
 		PixelShader(ID3D11Device* device,
 					const WCHAR* filename);

@@ -10,7 +10,7 @@
 #include "text\text.h"
 
 
-class Scene {
+class Scene final {
 	public:
 		~Scene() = default;
 

@@ -54,7 +54,7 @@ struct OBJMaterial {
 
 
 template<typename VertexT>
-class OBJLoader {
+class OBJLoader final {
 	public:
 		OBJLoader() = delete;
 

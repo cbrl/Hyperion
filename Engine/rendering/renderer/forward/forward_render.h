@@ -10,7 +10,7 @@
 #include "scene\scene.h"
 
 
-class ForwardRenderer {
+class ForwardRenderer final {
 	public:
 		ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* device_context);
 		~ForwardRenderer() = default;

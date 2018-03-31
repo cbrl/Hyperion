@@ -10,7 +10,7 @@
 #include "scene\scene.h"
 
 
-class SkyRenderer {
+class SkyRenderer final {
 	public:
 		SkyRenderer(ID3D11Device* device, ID3D11DeviceContext* device_context);
 		~SkyRenderer() = default;

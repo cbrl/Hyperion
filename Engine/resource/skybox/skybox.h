@@ -7,7 +7,7 @@
 #include "geometry\shapes\shapes.h"
 
 
-class SkyBox {
+class SkyBox final {
 	public:
 		SkyBox() = default;
 
