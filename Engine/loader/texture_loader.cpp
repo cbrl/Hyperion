@@ -86,10 +86,10 @@ void TextureLoader::LoadTexture(ID3D11Device* device,
 	}
 
 	// Create a vector of textures
-	u32 size = static_cast<u32>(filenames.size());
+	size_t size = filenames.size();
 	vector<ComPtr<ID3D11Texture2D>> srcTex(size);
 
-	for (u32 i = 0; i < size; i++) {
+	for (size_t i = 0; i < size; i++) {
 		if (GetFileExtension(filenames[i]) == L".dds") {
 			ThrowIfFailed(CreateDDSTextureFromFileEx(device, filenames[i].c_str(), NULL, D3D11_USAGE_STAGING, NULL,
 													 D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, false,

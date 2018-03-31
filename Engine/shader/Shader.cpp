@@ -48,7 +48,7 @@ VertexShader::VertexShader(ID3D11Device* device,
 
 
 	// Create the vertex input layout
-	ThrowIfFailed(device->CreateInputLayout(inputElementDesc, static_cast<u32>(numElements), shader_buffer->GetBufferPointer(),
+	ThrowIfFailed(device->CreateInputLayout(inputElementDesc, static_cast<UINT>(numElements), shader_buffer->GetBufferPointer(),
 											shader_buffer->GetBufferSize(), layout.ReleaseAndGetAddressOf()),
 				  "Failed to create input layout");
 }
