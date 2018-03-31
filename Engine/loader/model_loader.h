@@ -1,6 +1,7 @@
 #pragma once
 
 #include <d3d11.h>
+#include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
 #include "util\io\io.h"
 #include "resource\resource_mgr.h"
@@ -23,6 +24,9 @@ class ModelLoader {
 			// now, the only loader is the obj loader.
 
 			// Create a model blueprint from an obj file
-			return OBJLoader<VertexT>::Load(device, resource_mgr, folder, filename, false);
+			ModelOutput<VertexT> out = OBJLoader<VertexT>::Load(device, resource_mgr, folder, filename, false);
+			FILE_LOG(logDEBUG) << "Loaded OBJ file: " << wstr2str(folder + filename);
+
+			return out;
 		}
 };

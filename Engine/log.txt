@@ -1,0 +1,33 @@
+- 14:44:23.000 INFO: <=========================STARTING ENGINE=========================>
+- 14:44:23.047 INFO: Initialized main window
+- 14:44:23.313 INFO: Initialized Direct3D
+- 14:44:23.485 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 14:44:23.516 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 14:44:23.532 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 14:44:23.532 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 14:44:23.547 INFO: Loaded scene
+- 14:44:27.063 INFO: <=========================EXITING ENGINE=========================>
+
+- 14:44:59.000 INFO: <=========================STARTING ENGINE=========================>
+- 14:44:59.047 INFO: Initialized main window
+- 14:44:59.281 INFO: Initialized Direct3D
+- 14:44:59.406 WARNING: Error loading texture (file not found): ../data/Textures/grasscube1024.dds
+- 14:44:59.406 DEBUG: Created single color texture (color: ffffffff)
+- 14:44:59.422 WARNING: Error loading texture (file not found): ../data/models/cube/bricks.dds
+- 14:44:59.422 DEBUG: Created single color texture (color: ffffffff)
+- 14:44:59.422 WARNING: Error loading texture (file not found): ../data/models/cube/bricks_nmap.dds
+- 14:44:59.422 DEBUG: Created single color texture (color: ffffffff)
+- 14:44:59.422 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 14:44:59.453 INFO: Loaded scene
+- 14:45:01.328 INFO: <=========================EXITING ENGINE=========================>
+
+- 14:48:27.000 INFO: <=========================STARTING ENGINE=========================>
+- 14:48:27.047 INFO: Initialized main window
+- 14:48:27.266 INFO: Initialized Direct3D
+- 14:48:27.391 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 14:48:27.406 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 14:48:27.406 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 14:48:27.406 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 14:48:27.438 INFO: Loaded scene
+- 14:48:30.703 INFO: <=========================EXITING ENGINE=========================>
+

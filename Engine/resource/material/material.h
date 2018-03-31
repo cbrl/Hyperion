@@ -7,16 +7,18 @@
 using namespace DirectX;
 
 struct Material {
-	Material() :
-		name(L"material"),
-		Ka(0.0f, 0.0f, 0.0f, 1.0f),
-		Kd(0.0f, 0.0f, 0.0f, 1.0f),
-		Ks(0.0f, 0.0f, 0.0f, 1.0f),
-		Ke(0.0f, 0.0f, 0.0f, 1.0f),
-		Ni(0.0f),
-		d(0.0f),
-		illum(0),
-		transparent(false) {}
+	Material()
+		: name(L"material")
+		, Ka(0.0f, 0.0f, 0.0f, 1.0f)
+		, Kd(0.0f, 0.0f, 0.0f, 1.0f)
+		, Ks(0.0f, 0.0f, 0.0f, 1.0f)
+		, Ke(0.0f, 0.0f, 0.0f, 1.0f)
+		, Ni(0.0f)
+		, d(0.0f)
+		, illum(0)
+		, transparent(false)
+		, has_texture(true)
+	{}
 
 
 	// Material name

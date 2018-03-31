@@ -1,6 +1,9 @@
 #ifndef HLSL_SYNTAX
 #define HLSL_SYNTAX
 
+// Simplifies defining buffers, textures, etc. by removing
+// the need to manually specify a register.
+
 
 //----------------------------------------------------------------------------------
 // Registers
@@ -40,7 +43,7 @@
 
 #define TEXTURE_3D(name, slot) Texture3D name : REG_T(slot)
 #define TEXTURE_CUBE(name, slot) TextureCube name : REG_T(slot)
-#define TEXTURE_CUBE_ARRAY(name, sloat) TextureCubeArray name : REG_T(slot)
+#define TEXTURE_CUBE_ARRAY(name, slot) TextureCubeArray name : REG_T(slot)
 
 
 #endif //HLSL_SYNTAX

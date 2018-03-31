@@ -206,6 +206,7 @@
     <ClInclude Include="util\engine_util.h" />
     <ClInclude Include="util\fps\fps.h" />
     <ClInclude Include="util\io\io.h" />
+    <ClInclude Include="util\log\log.h" />
     <ClInclude Include="util\math\math.h" />
     <ClInclude Include="util\string\string.h" />
     <ClInclude Include="util\sysmon\system_monitor.h" />

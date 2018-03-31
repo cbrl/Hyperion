@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "util\log\log.h"
 
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -43,12 +44,14 @@ class com_exception : public std::exception {
 // Throw
 inline void ThrowIfFailed(HRESULT hr, std::string msg = "") {
 	if (FAILED(hr)) {
+		FILE_LOG(logERROR) << msg;
 		throw com_exception(hr, msg);
 	}
 }
 
 inline void ThrowIfFailed(bool result, std::string msg = "") {
 	if (!result) {
+		FILE_LOG(logERROR) << msg;
 		throw std::exception(msg.c_str());
 	}
 }
@@ -94,35 +97,5 @@ inline void AlertIfFailed(bool result, std::wstring msg = L"") {
 							NULL);
 			MessageBox(NULL, output, L"Error", MB_OK);
 		}
-	}
-}
-
-
-// Log
-inline void LogIfFailed(HRESULT hr, std::string msg = "") {
-	if (FAILED(hr)) {
-		std::ofstream file;
-
-		file.open("log.txt", std::ofstream::out | std::ofstream::app);
-		if (file.fail()) {
-			return;
-		}
-
-		file << msg << " (Failure with HRESULT of " << std::hex << hr << ")" << std::endl;
-		file.close();
-	}
-}
-
-inline void LogIfFailed(bool result, std::string msg = "") {
-	if (!result) {
-		std::ofstream file;
-
-		file.open("log.txt", std::ofstream::out | std::ofstream::app);
-		if (file.fail()) {
-			return;
-		}
-
-		file << msg << std::endl;
-		file.close();
 	}
 }

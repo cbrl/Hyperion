@@ -14,8 +14,8 @@ VertexShader::VertexShader(ID3D11Device* device,
 						   const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
 						   size_t numElements) {
 	HRESULT result;
-	ComPtr<ID3D10Blob> error_message = {};
-	ComPtr<ID3D10Blob> shader_buffer = {};
+	ComPtr<ID3D10Blob> error_message;
+	ComPtr<ID3D10Blob> shader_buffer;
 
 	// Shader compile flags
 	u32 flags = D3D10_SHADER_ENABLE_STRICTNESS; 
@@ -61,8 +61,8 @@ VertexShader::VertexShader(ID3D11Device* device,
 
 PixelShader::PixelShader(ID3D11Device* device, const WCHAR* filename) {
 	HRESULT result;
-	ComPtr<ID3D10Blob> error_message = {};
-	ComPtr<ID3D10Blob> shader_buffer = {};
+	ComPtr<ID3D10Blob> error_message;
+	ComPtr<ID3D10Blob> shader_buffer;
 
 	// Shader compile flags
 	u32 flags = D3D10_SHADER_ENABLE_STRICTNESS;
@@ -90,7 +90,7 @@ PixelShader::PixelShader(ID3D11Device* device, const WCHAR* filename) {
 
 	// Create the pixel shader
 	ThrowIfFailed(device->CreatePixelShader(shader_buffer->GetBufferPointer(), shader_buffer->GetBufferSize(),
-												nullptr, shader.ReleaseAndGetAddressOf()),
+											nullptr, shader.ReleaseAndGetAddressOf()),
 				  "Failed to create pixel shader");
 }
 

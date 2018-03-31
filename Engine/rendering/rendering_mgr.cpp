@@ -11,6 +11,7 @@ RenderingMgr::RenderingMgr(HWND hWnd, u32 window_width, u32 window_height, bool 
 	//----------------------------------------------------------------------------------
 
 	direct3D = make_unique<Direct3D>(System::Get()->GetHWND(), window_width, window_height, fullscreen, vsync, msaa);
+	FILE_LOG(logINFO) << "Initialized Direct3D";
 
 
 	//----------------------------------------------------------------------------------

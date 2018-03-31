@@ -199,6 +199,9 @@
     <Filter Include="Header Files\util\sysmon">
       <UniqueIdentifier>{0c5e121e-f3d0-4175-b40f-c52239b3a06e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\util\log">
+      <UniqueIdentifier>{4c5a9742-531b-457b-bf7a-24552e162c5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -398,6 +401,9 @@
     </ClInclude>
     <ClInclude Include="util\sysmon\system_monitor.h">
       <Filter>Header Files\util\sysmon</Filter>
+    </ClInclude>
+    <ClInclude Include="util\log\log.h">
+      <Filter>Header Files\util\log</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

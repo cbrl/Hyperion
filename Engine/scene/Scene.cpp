@@ -4,10 +4,8 @@
 
 // TODO:
 // - Shadows
-// - Improve ui implementation
-// - CBuffers as a member of models? Model parts -> child models
 // - Move other resources to resource manager (shaders?)
-// - Improve logging
+// - Improve ui implementation
 
 
 static const float zNear = 0.1f;

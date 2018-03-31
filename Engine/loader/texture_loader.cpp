@@ -10,11 +10,14 @@
 // Load a texture from a file (jpg, png, etc...)
 void TextureLoader::LoadTexture(ID3D11Device* device,
 								ID3D11DeviceContext* device_context,
-								wstring filename,
+								const wstring& filename,
 								ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if the file is missing
-	if (!fs::exists(filename)) return LoadTexture(device, 0xFFFFFFFF, srv_out);
+	if (!fs::exists(filename)) {
+		FILE_LOG(logWARNING) << "Error loading texture (file not found): " << wstr2str(filename);
+		return LoadTexture(device, 0xFFFFFFFF, srv_out);
+	}
 	
 	// Load the texture into the shader resource view
 	if (GetFileExtension(filename) == L".dds") {
@@ -27,6 +30,8 @@ void TextureLoader::LoadTexture(ID3D11Device* device,
 	}
 
 	SetDebugObjectName(*srv_out, "TextureLoader Texture");
+
+	FILE_LOG(logDEBUG) << "Loaded texture: " << wstr2str(filename);
 }
 
 
@@ -61,18 +66,23 @@ void TextureLoader::LoadTexture(ID3D11Device* device,
 				  "Failed to create SRV");
 
 	SetDebugObjectName(*srv_out, "TextureLoader ColorTexture");
+
+	FILE_LOG(logDEBUG) << "Created single color texture (color: 0x" << std::hex << color << ")" << std::dec;
 }
 
 
 // Load a Texture2DArray from multiple files
 void TextureLoader::LoadTexture(ID3D11Device* device,
 								ID3D11DeviceContext* device_context,
-								vector<wstring> filenames,
+								const vector<wstring>& filenames,
 								ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if a file is missing
-	for (wstring fn : filenames) {
-		if (!fs::exists(fn)) return LoadTexture(device, 0xFFFFFFFF, srv_out);
+	for (const wstring& fn : filenames) {
+		if (!fs::exists(fn)) {
+			FILE_LOG(logWARNING) << "Error loading texture (file not found): " << wstr2str(fn);
+			return LoadTexture(device, 0xFFFFFFFF, srv_out);
+		}
 	}
 
 	// Create a vector of textures

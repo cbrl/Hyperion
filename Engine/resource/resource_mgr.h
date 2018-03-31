@@ -29,8 +29,6 @@ class ResourceMap {
 
 class ResourceMgr {
 	public:
-		ResourceMgr() = delete;
-
 		ResourceMgr(ID3D11Device* device, ID3D11DeviceContext* device_context)
 			: device(device)
 			, device_context(device_context)

@@ -32,6 +32,7 @@ bool System::Init() {
 	if (!InitWindow(L"Engine", window_width, window_height)) {
 		return false;
 	}
+	FILE_LOG(logINFO) << "Initialized main window";
 
 
 	// Initialize system monitor
@@ -56,6 +57,7 @@ bool System::Init() {
 
 	// Initialize scene
 	scene = make_unique<Scene>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext(), *rendering_mgr->GetResourceMgr());
+	FILE_LOG(logINFO) << "Loaded scene";
 
 
 	return true;

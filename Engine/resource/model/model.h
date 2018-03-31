@@ -72,10 +72,8 @@ class ChildModel {
 
 class Model {
 	public:
-		Model() = delete;
-		~Model() = default;
-
 		Model(ID3D11Device* device, ModelBlueprint blueprint);
+		~Model() = default;
 
 
 		// Bind the model's vertex and index buffers
@@ -154,12 +152,13 @@ class Model {
 
 		shared_ptr<Mesh> mesh;
 
+		vector<ChildModel> child_models;
+
+		vector<shared_ptr<Material>> materials;
+
 		XMMATRIX position;
 		XMMATRIX rotation;
 		XMMATRIX scale;
 		XMMATRIX transform;
 		bool     update_bounding_volumes;
-
-		vector<ChildModel> child_models;
-		vector<shared_ptr<Material>> materials;
 };
