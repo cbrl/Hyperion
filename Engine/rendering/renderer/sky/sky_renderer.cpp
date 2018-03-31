@@ -18,7 +18,7 @@ SkyRenderer::SkyRenderer(ID3D11Device* device, ID3D11DeviceContext* device_conte
 void SkyRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mgr) {
 
 	// Get a reference to the camera's skybox
-	const SkyBox& skybox = scene.camera->GetSkybox();
+	const SkyBox& skybox = scene.GetCamera().GetSkybox();
 
 
 	//----------------------------------------------------------------------------------

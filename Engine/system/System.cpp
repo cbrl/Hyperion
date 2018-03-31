@@ -56,7 +56,7 @@ bool System::Init() {
 
 
 	// Initialize scene
-	scene = make_unique<Scene>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext(), *rendering_mgr->GetResourceMgr());
+	scene = make_unique<TestScene>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext(), *rendering_mgr->GetResourceMgr());
 	FILE_LOG(logINFO) << "Loaded scene";
 
 
@@ -116,8 +116,7 @@ void System::Tick() {
 
 
 	// Update scene
-	scene->Tick(*input, deltaTime);
-	scene->UpdateMetrics(fps_counter->GetFPS(), NULL, mouseX, mouseY);
+	scene->Tick(deltaTime);
 
 
 	// Render scene
@@ -225,5 +224,5 @@ void System::OnResize(u32 window_width, u32 window_height) const {
 	rendering_mgr->OnResize(window_width, window_height);
 	
 	if (!scene) return;
-	scene->camera->OnResize(window_width, window_height);
+	scene->GetCamera().OnResize(window_width, window_height);
 }

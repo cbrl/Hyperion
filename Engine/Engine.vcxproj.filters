@@ -405,6 +405,9 @@
     <ClInclude Include="util\log\log.h">
       <Filter>Header Files\util\log</Filter>
     </ClInclude>
+    <ClInclude Include="scene\test_scene.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -418,9 +421,6 @@
     </ClCompile>
     <ClCompile Include="rendering\render_state_mgr.cpp">
       <Filter>Source Files\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="scene\scene.cpp">
-      <Filter>Source Files\scene</Filter>
     </ClCompile>
     <ClCompile Include="shader\shader.cpp">
       <Filter>Source Files\shader</Filter>
@@ -490,6 +490,9 @@
     </ClCompile>
     <ClCompile Include="resource\model\model.cpp">
       <Filter>Source Files\resource\model</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\test_scene.cpp">
+      <Filter>Source Files\scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

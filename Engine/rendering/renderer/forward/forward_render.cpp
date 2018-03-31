@@ -63,15 +63,15 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	// Get the matrices
 	//----------------------------------------------------------------------------------
 
-	const XMMATRIX view       = scene.camera->GetViewMatrix();
-	const XMMATRIX projection = scene.camera->GetProjMatrix();
+	const XMMATRIX view       = scene.GetCamera().GetViewMatrix();
+	const XMMATRIX projection = scene.GetCamera().GetProjMatrix();
 
 
 	//----------------------------------------------------------------------------------
 	// Get the frustum
 	//----------------------------------------------------------------------------------
 
-	auto& frustum = scene.camera->GetFrustum();
+	auto& frustum = scene.GetCamera().GetFrustum();
 
 
 	//----------------------------------------------------------------------------------
@@ -80,21 +80,21 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 	// Update light buffer
 	LightBuffer light_data;
-	light_data.directional_light_count = static_cast<u32>(scene.directional_lights.size());
-	light_data.point_light_count       = static_cast<u32>(scene.point_lights.size());
-	light_data.spot_light_count        = static_cast<u32>(scene.spot_lights.size());
+	light_data.directional_light_count = static_cast<u32>(scene.GetDirectionalLights().size());
+	light_data.point_light_count       = static_cast<u32>(scene.GetPointLights().size());
+	light_data.spot_light_count        = static_cast<u32>(scene.GetSpotLights().size());
 
-	light_data.fog_color = scene.fog.color;
-	light_data.fog_start = scene.fog.start;
-	light_data.fog_range = scene.fog.range;
+	light_data.fog_color = scene.GetFog().color;
+	light_data.fog_start = scene.GetFog().start;
+	light_data.fog_range = scene.GetFog().range;
 
 	light_buffer.UpdateData(device_context.Get(), light_data);
 
 
 	// Update light data buffers
-	directional_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.directional_lights);
-	point_light_buffer.UpdateData(device.Get(),       device_context.Get(), scene.point_lights);
-	spot_light_buffer.UpdateData(device.Get(),        device_context.Get(), scene.spot_lights);
+	directional_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.GetDirectionalLights());
+	point_light_buffer.UpdateData(device.Get(),       device_context.Get(), scene.GetPointLights());
+	spot_light_buffer.UpdateData(device.Get(),        device_context.Get(), scene.GetSpotLights());
 	
 
 	//----------------------------------------------------------------------------------

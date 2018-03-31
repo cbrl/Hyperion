@@ -1,30 +1,23 @@
 #include "stdafx.h"
-#include "scene.h"
+#include "test_scene.h"
 #include "system\system.h"
-
-// TODO:
-// - Shadows
-// - Move other resources to resource manager (shaders?)
-// - Improve ui implementation
 
 
 static const float zNear = 0.1f;
-static const float zFar  = 1000.0f;
-static const float FOV   = XM_PI / 3.0f;
+static const float zFar = 1000.0f;
+static const float FOV = XM_PI / 3.0f;
 
 
-Scene::Scene(ID3D11Device* device,
-			 ID3D11DeviceContext* device_context,
-			 ResourceMgr& resource_mgr) {
-
-	enable_input = true;
+TestScene::TestScene(ID3D11Device* device,
+					 ID3D11DeviceContext* device_context,
+					 ResourceMgr& resource_mgr) {
 	Init(device, device_context, resource_mgr);
 }
 
 
-void Scene::Init(ID3D11Device* device,
-				 ID3D11DeviceContext* device_context,
-				 ResourceMgr& resource_mgr) {
+void TestScene::Init(ID3D11Device* device,
+					 ID3D11DeviceContext* device_context,
+					 ResourceMgr& resource_mgr) {
 
 	//----------------------------------------------------------------------------------
 	// Create camera
@@ -70,10 +63,10 @@ void Scene::Init(ID3D11Device* device,
 	point_lights.push_back(PointLight());
 	point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
 	point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().attenuation   = float3(0.5f, 0.0f, 0.1f);
-	point_lights.back().specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().position      = float3(0.0f, 1.0f, -2.0f);
-	point_lights.back().range         = 50.0f;
+	point_lights.back().attenuation = float3(0.5f, 0.0f, 0.1f);
+	point_lights.back().specular = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	point_lights.back().position = float3(0.0f, 1.0f, -2.0f);
+	point_lights.back().range = 50.0f;
 
 
 	// Fog
@@ -107,7 +100,7 @@ void Scene::Init(ID3D11Device* device,
 
 	texts.try_emplace("Position", device_context, resource_mgr, font);
 	texts.at("Position").SetPosition(float2(10, 110));
-	
+
 	texts.try_emplace("Rotation", device_context, resource_mgr, font);
 	texts.at("Rotation").SetPosition(float2(10, 200));
 
@@ -116,57 +109,64 @@ void Scene::Init(ID3D11Device* device,
 }
 
 
-void Scene::UpdateMetrics(i32 FPS, i32 CPU, i32 mouse_x, i32 mouse_y) {
-	// FPS, CPU usage, memory usage, mouse position, etc...
+void TestScene::Tick(float delta_time) {
 
-	texts.at("FPS").SetText(L"FPS: " + to_wstring(FPS));
+	// Get input handler
+	const Input& input = System::Get()->GetInput();
 
-	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_x)
-	                          + L"\nY: " + to_wstring(mouse_y));
-
-	float3 position = camera->GetPosition();
-	texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
-	                             + L"\nY: " + to_wstring(position.y)
-	                             + L"\nZ: " + to_wstring(position.z));
-
-	float3 rotation = camera->GetRotation();
-	texts.at("Rotation").SetText(L"Rotation \nX: " + to_wstring(rotation.x)
-	                             + L"\nY: " + to_wstring(rotation.y)
-	                             + L"\nZ: " + to_wstring(rotation.z));
-
-	float3 velocity = camera->GetVelocity() * 1000.0f;
-	texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)
-	                             + L"\nY: " + to_wstring(velocity.y)
-	                             + L"\nZ: " + to_wstring(velocity.z));
-}
+	// Get mouse delta
+	i32 mouse_x, mouse_y;
+	input.GetMouseDelta(mouse_x, mouse_y);
 
 
-void Scene::Tick(Input& input, float delta_time) {
 
 	// Rotate models
 	for (auto& model : models) {
 		model.Rotate(0.0f, ((XM_PI * delta_time) / 2500), 0.0f);
 	}
 
+	
 
-	// Exit if input is disabled
-	if (!enable_input) return;
+	//----------------------------------------------------------------------------------
+	// Update FPS, CPU usage, memory usage, mouse position, etc...
+	//----------------------------------------------------------------------------------
+
+	u32 fps = System::Get()->GetFPSCounter().GetFPS();
+
+	texts.at("FPS").SetText(L"FPS: " + to_wstring(fps));
+
+	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_x)
+							  + L"\nY: " + to_wstring(mouse_y));
+
+	float3 position = camera->GetPosition();
+	texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
+								 + L"\nY: " + to_wstring(position.y)
+								 + L"\nZ: " + to_wstring(position.z));
+
+	float3 rotation = camera->GetRotation();
+	texts.at("Rotation").SetText(L"Rotation \nX: " + to_wstring(rotation.x)
+								 + L"\nY: " + to_wstring(rotation.y)
+								 + L"\nZ: " + to_wstring(rotation.z));
+
+	float3 velocity = camera->GetVelocity() * 1000.0f;
+	texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)
+								 + L"\nY: " + to_wstring(velocity.y)
+								 + L"\nZ: " + to_wstring(velocity.z));
 
 
 	//----------------------------------------------------------------------------------
 	// Camera movement
 	//----------------------------------------------------------------------------------
 
-	i32 mouseX, mouseY;
+	// Exit if input is disabled
+	if (!enable_input) return;
+
 	float3 rotateUnits(0.0f, 0.0f, 0.0f);
 	float3 move_units(0.0f, 0.0f, 0.0f);
 
-	// Get mouse state
-	input.GetMouseDelta(mouseX, mouseY);
-
 	// Set x/y rotation with mouse data
-	rotateUnits.x = static_cast<float>(mouseY);
-	rotateUnits.y = static_cast<float>(mouseX);
+	rotateUnits.x = static_cast<float>(mouse_y);
+	rotateUnits.y = static_cast<float>(mouse_x);
 
 	// Roll rotation
 	if (input.IsKeyDown(Keyboard::Q)) {

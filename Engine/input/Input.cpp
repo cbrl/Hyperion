@@ -28,7 +28,7 @@ void Input::Reset() {
 }
 
 
-void Input::GetMouseDelta(i32& delta_x, i32& delta_y) {
+void Input::GetMouseDelta(i32& delta_x, i32& delta_y) const {
 	// Mouse::MODE_ABSOLUTE - x/y are the position
 	// Mouse::MODE_RELATIVE - x/y are the delta
 

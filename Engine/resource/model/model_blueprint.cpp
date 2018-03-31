@@ -56,6 +56,6 @@ ModelBlueprint::ModelBlueprint(ID3D11Device* device,
 		auto pair = MinMaxPoint(subvec);
 		temp.aabb = AABB(pair.first, pair.second);
 
-		model_parts.push_back(temp);
+		model_parts.push_back(std::move(temp));
 	}
 }

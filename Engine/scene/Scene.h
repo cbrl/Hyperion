@@ -12,35 +12,46 @@
 
 class Scene {
 	public:
-		Scene(ID3D11Device* device,
-			  ID3D11DeviceContext* device_context,
-			  ResourceMgr& resource_mgr);
-
 		~Scene() = default;
 
+		// Enable or disable input
 		void InputEnabled(bool enable) { enable_input = enable; }
 
-		void UpdateMetrics(i32 FPS, i32 CPU, i32 mouse_x, i32 mouse_y);
-		void Tick(Input& input, float delta_time);
+		// Update the scene
+		virtual void Tick(float delta_time) = 0;
 
 
-	private:
-		void Init(ID3D11Device* device,
-				  ID3D11DeviceContext* device_context,
-				  ResourceMgr& resource_mgr);
+		//----------------------------------------------------------------------------------
+		// Getters
+		//----------------------------------------------------------------------------------
+
+		Camera&    GetCamera() const { return *camera; }
+		const Fog& GetFog()    const { return fog; }
+
+		const vector<DirectionalLight>& GetDirectionalLights() const { return directional_lights; }
+		const vector<PointLight>&       GetPointLights() const { return point_lights; }
+		const vector<SpotLight>&        GetSpotLights() const { return spot_lights; }
 
 
-	public:
+	protected:
+		Scene() : enable_input(true) {}
+		virtual void Init(ID3D11Device* device,
+						  ID3D11DeviceContext* device_context,
+						  ResourceMgr& resource_mgr) = 0;
+
+
+	protected:
 		bool                     enable_input;
 
 		unique_ptr<Camera>       camera;
 
+		vector<Model>            models;
+
+		map<string, Text>        texts;
+
 		vector<PointLight>       point_lights;
 		vector<DirectionalLight> directional_lights;
 		vector<SpotLight>        spot_lights;
-
-		vector<Model>            models;
-		map<string, Text>        texts;
 
 		Fog                      fog;
 		SkyBox                   skybox;
@@ -58,18 +69,6 @@ class Scene {
 			if constexpr (is_same_v<Text, ElementT>) {
 				for (auto& e : texts) {
 					act(e.second);
-				}
-			}
-
-			if constexpr (is_same_v<PointLight, ElementT>) {
-				for (auto& e : lights) {
-					act(e);
-				}
-			}
-
-			if constexpr (is_same_v<PointLight, ElementT>) {
-				for (auto& e : lights) {
-					act(e);
 				}
 			}
 		}

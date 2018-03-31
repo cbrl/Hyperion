@@ -23,10 +23,10 @@ void Renderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) const {
 	//----------------------------------------------------------------------------------
 
 	// Update the camera 
-	scene.camera->UpdateBuffer(device_context.Get());
+	scene.GetCamera().UpdateBuffer(device_context.Get());
 
 	// Bind the buffer
-	scene.camera->BindBuffer(device_context.Get(), SLOT_CBUFFER_CAMERA);
+	scene.GetCamera().BindBuffer(device_context.Get(), SLOT_CBUFFER_CAMERA);
 
 
 

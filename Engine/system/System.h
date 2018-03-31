@@ -11,6 +11,7 @@
 #include "input\input.h"
 #include "rendering\rendering_mgr.h"
 #include "scene\scene.h"
+#include "scene\test_scene.h"
 
 
 #define WINDOW_WIDTH  1200
@@ -39,6 +40,11 @@ class System : public MainWindow {
 		u32  GetWindowWidth()  const { return window_width; }
 		u32  GetWindowHeight() const { return window_height; }
 
+		Input&         GetInput()      const { return *input; }
+		Timer&         GetTimer()      const { return *timer; }
+		FPS&           GetFPSCounter() const { return *fps_counter; }
+		SystemMonitor& GetSysMon()     const { return *system_monitor; }
+		
 
 	private:
 		void Tick();

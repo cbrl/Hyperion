@@ -193,6 +193,7 @@
     <ClInclude Include="resource\skybox\skybox.h" />
     <ClInclude Include="resource\texture\texture.h" />
     <ClInclude Include="scene\scene.h" />
+    <ClInclude Include="scene\test_scene.h" />
     <ClInclude Include="shader\hlsl.h" />
     <ClInclude Include="shader\shader.h" />
     <ClInclude Include="stdafx.h" />
@@ -248,7 +249,7 @@
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClCompile Include="scene\scene.cpp" />
+    <ClCompile Include="scene\test_scene.cpp" />
     <ClCompile Include="shader\shader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
