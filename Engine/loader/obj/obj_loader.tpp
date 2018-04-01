@@ -418,7 +418,7 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);  //Subtract 1 since arrays start at index 0
 
-				vertex.SetTexCoord(float2(0.0f, 0.0f));
+				vertex.texCoord = float2(0.0f, 0.0f);
 
 				hasNormal = false;
 
@@ -431,7 +431,7 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
 
-				vertex.SetTexCoord(GetElement(vertex_texCoords, stoi(vert_parts[1])-1));
+				vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
 
 				hasNormal = false;
 
@@ -444,9 +444,9 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
 
-				vertex.SetNormal(GetElement(vertex_normals, stoi(vert_parts[2]) - 1));
+				vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2]) - 1);
 
-				vertex.SetTexCoord(float2(0.0f, 0.0f));
+				vertex.texCoord = float2(0.0f, 0.0f);
 
 
 				hasNormal = true;
@@ -460,9 +460,9 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			{
 				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
 
-				vertex.SetNormal(GetElement(vertex_normals, stoi(vert_parts[2])-1));
+				vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2])-1);
 
-				vertex.SetTexCoord(GetElement(vertex_texCoords, stoi(vert_parts[1])-1));
+				vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
 
 				hasNormal = true;
 
@@ -475,12 +475,12 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 		}
 
 		// Generate normals if the vertex type has a normal, but the file doesn't
-		if (!hasNormal && has_normal_v<VertexT>) {
+		if (!hasNormal && VertexT::HasNormal()) {
 			XMVECTOR a = XMLoadFloat3(&(verts[0].position - verts[1].position));
 			XMVECTOR b = XMLoadFloat3(&(verts[2].position - verts[1].position));
 
 			for (size_t i = 0; i < verts.size(); ++i) {
-				verts[i].SetNormal(XMVector3Cross(a, b));
+				XMStoreFloat3(&verts[i].normal, XMVector3Cross(a, b));
 			}
 		}
 	}

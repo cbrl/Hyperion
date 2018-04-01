@@ -45,13 +45,16 @@ namespace DirectX
             std::swap(*it, *(it + 2));
         }
 
-        for (auto it = vertices.begin(); it != vertices.end(); ++it)
-        {
-			float2 texCoord = it->GetTexCoord();
+		if constexpr (VertexT::HasTexture())
+		{
+			for (auto it = vertices.begin(); it != vertices.end(); ++it)
+			{
+			float2 texCoord = it->texCoord;
 			texCoord.x = 1.0f - texCoord.x;
 
-			it->SetTexCoord(texCoord);
-        }
+			it->texCoord = texCoord;
+			}
+		}
     }
 
 
@@ -59,15 +62,18 @@ namespace DirectX
 	template<typename VertexT>
     inline void InvertNormals(vector<VertexT>& vertices)
     {
-        for (auto it = vertices.begin(); it != vertices.end(); ++it)
-        {
-			float3 normal = it->GetNormal();
-			normal.x = -normal.x;
-			normal.y = -normal.y;
-			normal.z = -normal.z;
+		if constexpr (VertexT::HasNormal())
+		{
+			for (auto it = vertices.begin(); it != vertices.end(); ++it)
+			{
+				float3 normal = it->normal;
+				normal.x = -normal.x;
+				normal.y = -normal.y;
+				normal.z = -normal.z;
 
-			it->SetNormal(normal);
-        }
+				it->normal = normal;
+			}
+		}
     }
 
 
@@ -135,21 +141,24 @@ namespace DirectX
 			// Four vertices per face.
 			vertices.resize(vertices.size() + 4);
 
-			vertices.at(vertices.back() - 3).SetPosition((normal - side1 - side2) * tsize);
-			vertices.at(vertices.back() - 3).SetNormal(normal);
-			vertices.at(vertices.back() - 3).SetTexCoord(textureCoordinates[0]);
+			XMStoreFloat3(&vertices.rbegin[3].position, (normal - side1 - side2) * tsize);
+			XMStoreFloat3(&vertices.rbegin[2].position, (normal - side1 + side2) * tsize);
+			XMStoreFloat3(&vertices.rbegin[1].position, (normal + side1 + side2) * tsize);
+			XMStoreFloat3(&vertices.rbegin[0].position, (normal + side1 - side2) * tsize);
 
-			vertices.at(vertices.back() - 2).SetPosition((normal - side1 + side2) * tsize);
-			vertices.at(vertices.back() - 2).SetNormal(normal);
-			vertices.at(vertices.back() - 2).SetTexCoord(textureCoordinates[1]);
+			if constexpr (VertexT::HasNormal()) {
+				XMStoreFloat3(&vertices.rbegin[3].normal, normal);
+				XMStoreFloat3(&vertices.rbegin[2].normal, normal);
+				XMStoreFloat3(&vertices.rbegin[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin[0].normal, normal);
+			}
 
-			vertices.at(vertices.back() - 1).SetPosition((normal + side1 + side2) * tsize);
-			vertices.at(vertices.back() - 1).SetNormal(normal);
-			vertices.at(vertices.back() - 1).SetTexCoord(textureCoordinates[2]);
-
-			vertices.at(vertices.back()).SetPosition((normal + side1 - side2) * tsize);
-			vertices.at(vertices.back()).SetNormal(normal);
-			vertices.at(vertices.back()).SetTexCoord(textureCoordinates[3]);
+			if constexpr (VertexT::HasTexture()) {
+				XMStoreFloat2(&vertices.rbegin[3].texCoord, textureCoordinates[0]);
+				XMStoreFloat2(&vertices.rbegin[2].texCoord, textureCoordinates[1]);
+				XMStoreFloat2(&vertices.rbegin[1].texCoord, textureCoordinates[2]);
+				XMStoreFloat2(&vertices.rbegin[0].texCoord, textureCoordinates[3]);
+			}
 		}
 
 		// Build RH above
@@ -205,9 +214,11 @@ namespace DirectX
 				XMVECTOR textureCoordinate = XMVectorSet(u, v, 0, 0);
 
 				vertices.push_back(VertexT());
-				vertices.back().SetPosition(normal * radius);
-				vertices.back().SetNormal(normal);
-				vertices.back().SetTexCoord(textureCoordinate);
+				XMStoreFloat3(&vertices.back().position, normal * radius);
+				if constexpr (VertexT::HasNormal())
+					XMStoreFloat3(&vertices.back().normal, normal);
+				if constexpr (VertexT::HasTexture())
+					XMStoreFloat2(&vertices.back().texCoord, textureCoordinate);
 			}
 		}
 
@@ -414,9 +425,11 @@ namespace DirectX
 			auto texcoord = XMVectorSet(1.0f - u, v, 0.0f, 0.0f);
 
 			vertices.push_back(VertexT());
-			vertices.back().SetPosition(pos);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(texcoord);
+			XMStoreFloat3(&vertices.back().position, pos);
+			if constexpr (VertexT::HasNormal())
+				XMStoreFloat3(&vertices.back().normal, normal);
+			if constexpr (VertexT::HasTexture())
+				XMStoreFloat3(&vertices.back().texCoord, texcoord);
 		}
 
 		// There are a couple of fixes to do. One is a texture coordinate wraparound fixup. At some point, there will be
@@ -636,9 +649,11 @@ namespace DirectX
 				XMVECTOR textureCoordinate = XMVectorMultiplyAdd(XMVectorSwizzle<0, 2, 3, 3>(circleVector), textureScale, g_XMOneHalf);
 
 				vertices.push_back(VertexT());
-				vertices.back().SetPosition(position);
-				vertices.back().SetNormal(normal);
-				vertices.back().SetTexCoord(textureCoordinate);
+				XMStoreFloat3(&vertices.back().position, position);
+				if constexpr (VertexT::HasNormal())
+					XMStoreFloat3(&vertices.back().normal, normal);
+				if constexpr (VertexT::HasTexture())
+					XMStoreFloat2(&vertices.back().texCoord, textureCoordinate);
 			}
 		}
 	}
@@ -671,13 +686,20 @@ namespace DirectX
 			XMVECTOR textureCoordinate = XMLoadFloat(&u);
 
 			vertices.resize(vertices.size() + 2);
-			vertices.at(vertices.back() - 1).SetPosition(sideOffset + topOffset);
-			vertices.at(vertices.back() - 1).SetNormal(normal);
-			vertices.at(vertices.back() - 1).SetTexCoord(textureCoordinate);
 
-			vertices.back().SetPosition(sideOffset - topOffset);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(textureCoordinate + g_XMIdentityR1);
+			XMStoreFloat3(&vertices.rbegin[1].position, sideOffset + topOffset);
+			XMStoreFloat3(&vertices.rbegin[0].position, sideOffset - topOffset);
+
+			if constexpr (VertexT::HasNormal()) {
+				XMStoreFloat3(&vertices.rbegin[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin[0].normal, normal);
+			}
+
+			if constexpr (VertexT::HasTexture()) {
+				XMStoreFloat2(&vertices.rbegin[1].texCoord, textureCoordinate);
+				XMStoreFloat2(&vertices.rbegin[0].texCoord, textureCoordinate + g_XMIdentityR1);
+			}
+
 
 			index_push_back(indices, i * 2);
 			index_push_back(indices, (i * 2 + 2) % (stride * 2));
@@ -733,13 +755,19 @@ namespace DirectX
 
 			// Duplicate the top vertex for distinct normals
 			vertices.resize(vertices.size() + 2);
-			vertices.at(vertices.back() - 1).SetPosition(topOffset);
-			vertices.at(vertices.back() - 1).SetNormal(normal);
-			vertices.at(vertices.back() - 1).SetTexCoord(g_XMZero);
 
-			vertices.back().SetPosition(pt);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(textureCoordinate + g_XMIdentityR1);
+			XMStoreFloat3(&vertices.rbegin[1].position, topOffset);
+			XMStoreFloat3(&vertices.rbegin[0].position, pt);
+
+			if constexpr (VertexT::HasNormal()) {
+				XMStoreFloat3(&vertices.rbegin[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin[0].normal, normal);
+			}
+
+			if constexpr (VertexT::HasTexture()) {
+				XMStoreFloat2(&vertices.rbegin[1].texCoord, g_XMZero);
+				XMStoreFloat2(&vertices.rbegin[0].texCoord, textureCoordinate + g_XMIdentityR1);
+			}
 
 			index_push_back(indices, i * 2);
 			index_push_back(indices, (i * 2 + 3) % (stride * 2));
@@ -799,9 +827,11 @@ namespace DirectX
 				normal = XMVector3TransformNormal(normal, transform);
 
 				vertices.push_back(VertexT());
-				vertices.back().SetPosition(position);
-				vertices.back().SetNormal(normal);
-				vertices.back().SetTexCoord(textureCoordinate);
+				XMStoreFloat3(&vertices.back().position, position);
+				if constexpr (VertexT::HasNormal())
+					XMStoreFloat3(&vertices.back().normal, normal);
+				if constexpr (VertexT::HasTexture())
+					XMStoreFloat2(&vertices.back().texCoord, textureCoordinate);
 
 				// And create indices for two triangles.
 				size_t nextI = (i + 1) % stride;
@@ -864,23 +894,28 @@ namespace DirectX
 			index_push_back(indices, base + 2);
 
 			// Duplicate vertices to use face normals
-			XMVECTOR position = XMVectorScale(verts[v0], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(g_XMZero);
+			vertices.resize(vertices.size() + 3);
 
+			XMVECTOR position = XMVectorScale(verts[v0], size);
+			XMStoreFloat3(&vertices.rbegin()[2].position, position);
+			
 			position = XMVectorScale(verts[v1], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(g_XMIdentityR0);
+			XMStoreFloat3(&vertices.rbegin()[1].position, position);
 
 			position = XMVectorScale(verts[v2], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(g_XMIdentityR1);
+			XMStoreFloat3(&vertices.rbegin()[0].position, position);
+
+			if constexpr (VertexT::HasNormal()) {
+				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+			}
+
+			if constexpr (VertexT::HasTexture()) {
+				XMStoreFloat2(&vertices.rbegin()[2].texCoord, g_XMZero);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
+			}
 		}
 
 		// Built LH above
@@ -939,23 +974,28 @@ namespace DirectX
 			index_push_back(indices, base + 2);
 
 			// Duplicate vertices to use face normals
+			vertices.resize(vertices.size() + 3);
+
 			XMVECTOR position = XMVectorScale(verts[v0], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(g_XMZero);
+			XMStoreFloat3(&vertices.rbegin()[2].position, position);
 
 			position = XMVectorScale(verts[v1], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(g_XMIdentityR0);
+			XMStoreFloat3(&vertices.rbegin()[1].position, position);
 
 			position = XMVectorScale(verts[v2], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(g_XMIdentityR1);
+			XMStoreFloat3(&vertices.rbegin()[0].position, position);
+
+			if constexpr (VertexT::HasNormal()) {
+				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+			}
+
+			if constexpr (VertexT::HasTexture()) {
+				XMStoreFloat2(&vertices.rbegin()[2].texCoord, g_XMZero);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
+			}
 		}
 
 		// Built LH above
@@ -1073,35 +1113,38 @@ namespace DirectX
 			index_push_back(indices, base + 4);
 
 			// Duplicate vertices to use face normals
+			vertices.resize(vertices.size() + 5);
+
 			XMVECTOR position = XMVectorScale(verts[v0], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(textureCoordinates[textureIndex[t][0]]);
-
+			XMStoreFloat3(&vertices.rbegin()[4].position, position);
+			
 			position = XMVectorScale(verts[v1], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(textureCoordinates[textureIndex[t][1]]);
-
+			XMStoreFloat3(&vertices.rbegin()[3].position, position);
+			
 			position = XMVectorScale(verts[v2], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(textureCoordinates[textureIndex[t][2]]);
+			XMStoreFloat3(&vertices.rbegin()[2].position, position);
 
 			position = XMVectorScale(verts[v3], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(textureCoordinates[textureIndex[t][3]]);
+			XMStoreFloat3(&vertices.rbegin()[1].position, position);
 
 			position = XMVectorScale(verts[v4], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(textureCoordinates[textureIndex[t][4]]);
+			XMStoreFloat3(&vertices.rbegin()[0].position, position);
+			
+			if constexpr (VertexT::HasNormal()) {
+				XMStoreFloat3(&vertices.rbegin()[4].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[3].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+			}
+
+			if constexpr (VertexT::HasTexture()) {
+				XMStoreFloat2(&vertices.rbegin()[4].texCoord, textureCoordinates[textureIndex[t][0]]);
+				XMStoreFloat2(&vertices.rbegin()[3].texCoord, textureCoordinates[textureIndex[t][1]]);
+				XMStoreFloat2(&vertices.rbegin()[2].texCoord, textureCoordinates[textureIndex[t][2]]);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, textureCoordinates[textureIndex[t][3]]);
+				XMStoreFloat2(&vertices.rbegin()[9].texCoord, textureCoordinates[textureIndex[t][4]]);
+			}
 		}
 
 		// Built LH above
@@ -1181,23 +1224,28 @@ namespace DirectX
 			index_push_back(indices, base + 2);
 
 			// Duplicate vertices to use face normals
+			vertices.resize(vertices.size() + 3);
+
 			XMVECTOR position = XMVectorScale(verts[v0], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(g_XMZero);
+			XMStoreFloat3(&vertices.rbegin()[2].position, position);
 
 			position = XMVectorScale(verts[v1], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(g_XMIdentityR0);
+			XMStoreFloat3(&vertices.rbegin()[1].position, position);
 
 			position = XMVectorScale(verts[v2], size);
-			vertices.push_back(VertexT());
-			vertices.back().SetPosition(position);
-			vertices.back().SetNormal(normal);
-			vertices.back().SetTexCoord(g_XMIdentityR1);
+			XMStoreFloat3(&vertices.rbegin()[0].position, position);
+
+			if constexpr (VertexT::HasNormal()) {
+				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+			}
+
+			if constexpr (VertexT::HasTexture()) {
+				XMStoreFloat3(&vertices.rbegin()[2].texCoord, g_XMZero);
+				XMStoreFloat3(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
+				XMStoreFloat3(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
+			}
 		}
 
 		// Built LH above
