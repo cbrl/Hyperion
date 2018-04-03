@@ -17,13 +17,14 @@ class RenderingMgr final {
 		RenderingMgr(HWND hWnd, u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
 		~RenderingMgr();
 
-
+		// Resize the viewport
 		void OnResize(u32 window_width, u32 window_height) const {
 			direct3D->OnResize(window_width, window_height);
 			ImGui_ImplDX11_InvalidateDeviceObjects();
 			ImGui_ImplDX11_CreateDeviceObjects();
 		}
 
+		// Render a given scene
 		void Render(Scene& scene) const;
 
 

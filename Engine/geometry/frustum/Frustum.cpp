@@ -2,17 +2,13 @@
 #include "frustum.h"
 
 
-Frustum::Frustum(CXMMATRIX in) {
-	UpdateFrustum(in);
+Frustum::Frustum(CXMMATRIX M) {
+	UpdateFrustum(M);
 }
 
 
-Frustum::~Frustum() {
-}
-
-
-void XM_CALLCONV Frustum::UpdateFrustum(FXMMATRIX in) {
-	const XMMATRIX input = XMMatrixTranspose(in);
+void XM_CALLCONV Frustum::UpdateFrustum(FXMMATRIX M) {
+	const XMMATRIX input = XMMatrixTranspose(M);
 
 	// Near plane
 	planes[0] = input.r[2];

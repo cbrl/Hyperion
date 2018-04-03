@@ -12,6 +12,8 @@ void XM_CALLCONV ChildModel::Update(ID3D11DeviceContext* device_context,
 									CXMMATRIX world_view_proj,
 									CXMMATRIX tex_transform) {
 
+	// Create a new ModelBuffer struc with the updated data
+	// and send it to the constant buffer.
 	ModelBuffer buffer_data;
 
 	buffer_data.world = world;

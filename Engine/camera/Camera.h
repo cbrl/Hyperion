@@ -24,9 +24,8 @@ class Camera final {
 		~Camera() = default;
 
 
-		// Calculate new view matrix and velocity
-		void UpdateMovement(float delta_time);
-
+		// Resize the viewport
+		void OnResize(u32 width, u32 height);
 
 		// Update the constant buffer
 		void UpdateBuffer(ID3D11DeviceContext* device_context) {
@@ -36,62 +35,66 @@ class Camera final {
 			buffer.UpdateData(device_context, CameraBuffer(position, XMMatrixTranspose(world * view_matrix * projection_matrix)));
 		}
 
-		// Bind the constant buffer
+		// Bind the camera's constant buffer
 		void BindBuffer(ID3D11DeviceContext* device_context, u32 slot) {
 			buffer.Bind<Pipeline>(device_context, slot);
 		}
-
-
-		// Resize the viewport
-		void OnResize(u32 width, u32 height);
 
 
 		// Move and rotate the camera
 		void Move(float3 units);
 		void Rotate(float3 units);
 
+		// Calculate new view matrix and velocity
+		void UpdateMovement(float delta_time);
 
-		// Set position and rotation
-		void SetPosition(float3 new_position) { 
-			position = XMVectorSet(new_position.x, new_position.y, new_position.z, 0.0f);
+
+		//----------------------------------------------------------------------------------
+		// Setters
+		//----------------------------------------------------------------------------------
+
+		void SetPosition(float3 position) { 
+			this->position = XMVectorSet(position.x, position.y, position.z, 0.0f);
 		}
+
 		void SetRotation(float3 rotation) {
 			pitch = rotation.x;
 			yaw   = rotation.y;
 			roll  = rotation.z;
 		}
 
-
-		// Set depth and fov
 		void SetDepthRange(float zNear, float zFar) {
 			z_near = zNear;
 			z_far  = zFar;
 			ortho_matrix = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
 		}
+
 		void SetFOV(float radians) {
 			fov = radians;
 			projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
 		}
 
-
-		// Setters for movement speed related variables
+		// Movement speed related variables
 		void SetAcceleration(float accel) { move_accel = accel; }
 		void SetDeceleration(float decel) { move_decel = decel; }
 		void SetMaxVelocity(float velocity) { max_velocity = velocity; }
 		void SetSensitivity(float sensitivity) { turn_factor = sensitivity; }
 
 
+		//----------------------------------------------------------------------------------
+		// Getters
+		//----------------------------------------------------------------------------------
+
 		// Get matrices
 		const XMMATRIX GetViewMatrix()  const { return view_matrix; }
 		const XMMATRIX GetProjMatrix()  const { return projection_matrix; }
 		const XMMATRIX GetOrthoMatrix() const { return ortho_matrix; }
 		
-		// Get Frustum
+		// Get the Frustum
 		const Frustum& GetFrustum() const { return frustum; }
 
-		// Get SkyBox
+		// Get the Skybox
 		const SkyBox& GetSkybox() const { return skybox; }
-
 
 		// Get position, rotation, velocity (in units/ms)
 		float3 GetRotation() const { return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }

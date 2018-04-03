@@ -3,9 +3,9 @@
 #include "system\system.h"
 
 
-static const float zNear = 0.1f;
-static const float zFar = 1000.0f;
-static const float FOV = XM_PI / 3.0f;
+static constexpr float zNear = 0.1f;
+static constexpr float zFar = 1000.0f;
+static constexpr float FOV = XM_PI / 3.0f;
 
 
 TestScene::TestScene(ID3D11Device* device,

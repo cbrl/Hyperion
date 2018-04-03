@@ -71,7 +71,7 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	// Get the frustum
 	//----------------------------------------------------------------------------------
 
-	auto& frustum = scene.GetCamera().GetFrustum();
+	const auto& frustum = scene.GetCamera().GetFrustum();
 
 
 	//----------------------------------------------------------------------------------

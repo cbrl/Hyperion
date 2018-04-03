@@ -46,11 +46,13 @@ class RenderStateMgr final {
 		// Create states
 		//----------------------------------------------------------------------------------
 
+		// Create a render states
 		HRESULT CreateBlendState(ID3D11Device* device, D3D11_BLEND srcBlend, D3D11_BLEND destBlend, _Out_ ID3D11BlendState** pResult);
 		HRESULT CreateDepthStencilState(ID3D11Device* device, bool enable, bool writeEnable, _Out_ ID3D11DepthStencilState** pResult);
 		HRESULT CreateRasterizerState(ID3D11Device* device, D3D11_CULL_MODE cullMode, D3D11_FILL_MODE fillMode, _Out_ ID3D11RasterizerState** pResult);
 		HRESULT CreateSamplerState(ID3D11Device* device, D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE addressMode, _Out_ ID3D11SamplerState** pResult);
 
+		// Create the standard render states
 		void CreateBlendStates(ID3D11Device* device);
 		void CreateDepthStencilStates(ID3D11Device* device);
 		void CreateRasterizerStates(ID3D11Device* device);

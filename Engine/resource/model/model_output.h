@@ -12,6 +12,8 @@ struct Group {
 };
 
 
+// A ModelOuput object is returned by a model loader and
+// used in the construction of a ModelBlueprint.
 template<typename VertexT>
 struct ModelOutput final {
 	public:

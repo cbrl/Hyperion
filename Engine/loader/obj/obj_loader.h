@@ -8,6 +8,7 @@
 #include "resource\material\material.h"
 
 
+// Material definition used by OBJLoader
 struct OBJMaterial {
 	OBJMaterial() :
 		Ka(0.0f, 0.0f, 0.0f, 1.0f),

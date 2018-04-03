@@ -249,6 +249,7 @@
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <FileType>Document</FileType>
     </ClCompile>
+    <ClCompile Include="resource\skybox\skybox.cpp" />
     <ClCompile Include="scene\test_scene.cpp" />
     <ClCompile Include="shader\shader.cpp" />
     <ClCompile Include="stdafx.cpp">

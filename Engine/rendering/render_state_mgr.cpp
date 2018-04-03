@@ -132,80 +132,80 @@ HRESULT RenderStateMgr::CreateSamplerState(ID3D11Device* device, D3D11_FILTER fi
 void RenderStateMgr::CreateBlendStates(ID3D11Device* device) {
 	// Opaque
 	ThrowIfFailed(CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, opaque.GetAddressOf()),
-					  "Error creating opaque blend state");
+				  "Error creating opaque blend state");
 
 	// Alpha Blend
 	ThrowIfFailed(CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, alpha_blend.GetAddressOf()),
-					  "Error creating alphablend blend state");
+				  "Error creating alphablend blend state");
 
 	// Additive
 	ThrowIfFailed(CreateBlendState(device, D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_ONE, additive.GetAddressOf()),
-					  "Error creating additive blend state");
+				  "Error creating additive blend state");
 
 	// Non-Premultiplied
 	ThrowIfFailed(CreateBlendState(device, D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_INV_SRC_ALPHA, non_premultiplied.GetAddressOf()),
-					  "Error creating nonpremultiplied blend state");
+				  "Error creating nonpremultiplied blend state");
 }
 
 
 void RenderStateMgr::CreateDepthStencilStates(ID3D11Device* device) {
 	// Depth None
 	ThrowIfFailed(CreateDepthStencilState(device, false, false, depth_none.GetAddressOf()),
-					  "Error creating depthnone depth state");
+				  "Error creating depthnone depth state");
 
 	// Depth Default
 	ThrowIfFailed(CreateDepthStencilState(device, true, true, depth_default.GetAddressOf()),
-					  "Error creating depthdefault depth state");
+				  "Error creating depthdefault depth state");
 
 	// Depth Read
 	ThrowIfFailed(CreateDepthStencilState(device, true, false, depth_read.GetAddressOf()),
-					  "Error creating depthread depth state");
+				  "Error creating depthread depth state");
 }
 
 
 void RenderStateMgr::CreateRasterizerStates(ID3D11Device* device) {
 	// Cull None
 	ThrowIfFailed(CreateRasterizerState(device, D3D11_CULL_NONE, D3D11_FILL_SOLID, cull_none.GetAddressOf()),
-					  "Error creating cullnone raster state");
+				  "Error creating cullnone raster state");
 
 	// Cull Clockwise
 	ThrowIfFailed(CreateRasterizerState(device, D3D11_CULL_FRONT, D3D11_FILL_SOLID, cull_clockwise.GetAddressOf()),
-					  "Error creating cullclockwise raster state");
+				  "Error creating cullclockwise raster state");
 
 	// Cull Counterclockwise
 	ThrowIfFailed(CreateRasterizerState(device, D3D11_CULL_BACK, D3D11_FILL_SOLID, cull_counter_clockwise.GetAddressOf()),
-					  "Error creating cullcounterclockwise raster state");
+				  "Error creating cullcounterclockwise raster state");
 
 	// Wireframe
 	ThrowIfFailed(CreateRasterizerState(device, D3D11_CULL_NONE, D3D11_FILL_WIREFRAME, wireframe.GetAddressOf()),
-					  "Error creating wireframe raster state");
+				  "Error creating wireframe raster state");
 }
 
 
 void RenderStateMgr::CreateSamplerStates(ID3D11Device* device) {
 	// Point Wrap
 	ThrowIfFailed(CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_POINT, D3D11_TEXTURE_ADDRESS_WRAP, point_wrap.GetAddressOf()),
-					  "Error creating pointwrap sampler state");
+				  "Error creating pointwrap sampler state");
 
 	// Point Clamp
 	ThrowIfFailed(CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_POINT, D3D11_TEXTURE_ADDRESS_CLAMP, point_clamp.GetAddressOf()),
-					  "Error creating pointclamp sampler state");
+				  "Error creating pointclamp sampler state");
 
 	// Linear Wrap
 	ThrowIfFailed(CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_WRAP, linear_wrap.GetAddressOf()),
-					  "Error creating linearwrap sampler state");
+				  "Error creating linearwrap sampler state");
 
 	// Linear Clamp
 	ThrowIfFailed(CreateSamplerState(device, D3D11_FILTER_MIN_MAG_MIP_LINEAR, D3D11_TEXTURE_ADDRESS_CLAMP, linear_clamp.GetAddressOf()),
-					  "Error creating linearclamp sampler state");
+				  "Error creating linearclamp sampler state");
 
 	// Anisotropic Wrap
 	ThrowIfFailed(CreateSamplerState(device, D3D11_FILTER_ANISOTROPIC, D3D11_TEXTURE_ADDRESS_WRAP, anisotropic_wrap.GetAddressOf()),
-					  "Error creating anisotropicwrap sampler state");
+				  "Error creating anisotropicwrap sampler state");
 
 	// Anisotropic Clamp
 	ThrowIfFailed(CreateSamplerState(device, D3D11_FILTER_ANISOTROPIC, D3D11_TEXTURE_ADDRESS_CLAMP, anisotropic_clamp.GetAddressOf()),
-					  "Error creating anisotropicclamp sampler state");
+				  "Error creating anisotropicclamp sampler state");
 }
 
 

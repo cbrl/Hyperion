@@ -147,14 +147,15 @@ class Model final {
 	private:
 		wstring name;
 
-		AABB           aabb;
+		AABB aabb;
 		BoundingSphere sphere;
 
 		shared_ptr<Mesh> mesh;
 
-		vector<ChildModel> child_models;
-
 		vector<shared_ptr<Material>> materials;
+
+		vector<ChildModel> child_models;
+		
 
 		XMMATRIX position;
 		XMMATRIX rotation;

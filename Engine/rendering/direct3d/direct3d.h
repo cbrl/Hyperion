@@ -20,10 +20,18 @@ class Direct3D final {
 				 bool MSAA);
 		~Direct3D();
 
+		// Clear the backbuffer
 		void Clear() const;
+
+		// Clear the backbuffer with a specified color
 		void Clear(const float color[4]) const;
+
+		// Present the current frame
 		void PresentFrame() const;
+
+		// Resize the viewport window
 		void OnResize(u32 win_width, u32 win_height);
+
 
 		ID3D11Device* GetDevice() const {
 			return device.Get();

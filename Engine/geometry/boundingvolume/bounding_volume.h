@@ -15,6 +15,7 @@ struct AABB final {
 
 		~AABB() = default;
 
+		// Construct an AABB from the min and max points on an object
 		AABB(const float3& min, const float3& max)
 			: min_point(XMLoadFloat3(&min))
 			, max_point(XMLoadFloat3(&max))
@@ -31,6 +32,7 @@ struct AABB final {
 			vertices[7] = XMLoadFloat3(&float3(min.x, max.y, max.z));
 		}
 
+		// Construct an AABB from the min and max points on an object
 		AABB(FXMVECTOR min, FXMVECTOR max)
 			: min_point(min)
 			, max_point(max)
@@ -52,6 +54,7 @@ struct AABB final {
 		}
 
 
+		// Transform the AABB by a matrix
 		void XM_CALLCONV Transform(FXMMATRIX M) {
 			for (u32 i = 0; i < 8; ++i) {
 				vertices[i] = XMVector3TransformCoord(vertices[i], M);
@@ -79,17 +82,20 @@ struct BoundingSphere final {
 	BoundingSphere() : center(XMVectorZero()), radius(FLT_MAX) {}
 	~BoundingSphere() = default;
 
+	// Construct a bounding sphere from the center point and radius of an object
 	BoundingSphere(const float3& center, float radius)
 		: center(XMLoadFloat3(&center))
 		, radius(radius)
 	{}
 
+	// Construct a bounding sphere from the center point and radius of an object
 	BoundingSphere(FXMVECTOR center, float radius)
 		: center(center)
 		, radius(radius)
 	{}
 
 
+	// Transform the bounding sphere by a matrix
 	void XM_CALLCONV Transform(FXMMATRIX M) {
 		float x = XMVectorGetX(XMVector3Length(M.r[0]));
 		float y = XMVectorGetX(XMVector3Length(M.r[1]));

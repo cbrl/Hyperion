@@ -59,22 +59,33 @@ Camera::Camera(ID3D11Device* device,
 	z_near          = zNear;
 	z_far           = zFar;
 
+
+	// Calculate the aspect ratio
 	aspect_ratio      = (float)viewport_width / (float)viewport_height;
+
+
+	// Calculate the projection and orthographic matrices
 	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
+	ortho_matrix      = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
 
-	ortho_matrix = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
 
+	// Initialize the camera's skybox
 	skybox.Init(device, resource_mgr, skybox_filename);
 }
 
 
 void Camera::OnResize(u32 width, u32 height) {
 
+	// Set the new veiwport width and height
 	viewport_width = width;
 	viewport_height = height;
 
+
+	// Recalculate the aspect ratio
 	aspect_ratio = (float)viewport_width / (float)viewport_height;
 
+
+	// Recalculate the projection and orthographic matrices
 	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
 	ortho_matrix      = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
 }
@@ -176,7 +187,7 @@ void Camera::Rotate(float3 units) {
 
 	//----------------------------------------------------------------------------------
 	// Z rotation (Roll)
-	
+	//----------------------------------------------------------------------------------
 	if (units.z && enable_free_look) {
 		XMMATRIX zRotation = XMMatrixRotationAxis(camera_forward, (units.z * turn_factor));
 		camera_right = XMVector3TransformNormal(camera_right, zRotation);

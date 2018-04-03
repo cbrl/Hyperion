@@ -78,7 +78,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
 		mtl.illum = materials[i].illum;
 		mtl.transparent = materials[i].transparency;
 
-		mtlVector.push_back(mtl);
+		mtlVector.push_back(std::move(mtl));
 	}
 
 	// Create the model

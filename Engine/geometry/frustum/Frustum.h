@@ -8,10 +8,15 @@ using namespace DirectX;
 class Frustum final {
 	public:
 		Frustum() = default;
-		Frustum(CXMMATRIX viewProj);
-		~Frustum();
 
-		void XM_CALLCONV UpdateFrustum(FXMMATRIX viewProj);
+		// Construct a frustum from a given matrix
+		Frustum(CXMMATRIX M);
+
+		~Frustum() = default;
+
+		// Recalculate the frustum
+		void XM_CALLCONV UpdateFrustum(FXMMATRIX M);
+
 
 		bool XM_CALLCONV Encloses(FXMVECTOR point) const;
 

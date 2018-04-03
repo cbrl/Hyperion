@@ -202,6 +202,9 @@
     <Filter Include="Header Files\util\log">
       <UniqueIdentifier>{4c5a9742-531b-457b-bf7a-24552e162c5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resource\skybox">
+      <UniqueIdentifier>{dbe49a5c-db14-4dea-8f10-b619b128cfca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -496,6 +499,9 @@
     </ClCompile>
     <ClCompile Include="scene\test_scene.cpp">
       <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="resource\skybox\skybox.cpp">
+      <Filter>Source Files\resource\skybox</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

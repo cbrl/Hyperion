@@ -36,18 +36,23 @@ class ResourceMgr final {
 
 		~ResourceMgr() = default;
 
+		// ModelBlueprint
 		template<typename ResourceT>
 		enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> Create(const wstring& folder, const wstring& filename);
 
+		// Texture
 		template<typename ResourceT>
 		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const wstring& filename);
 
+		// Texture2DArray
 		template<typename ResourceT>
 		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const vector<wstring>& filenames);
 
+		// Texture
 		template<typename ResourceT>
 		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const float4& color);
 
+		// SpriteFont
 		template<typename ResourceT>
 		enable_if_t<is_same_v<SpriteFont, ResourceT>, shared_ptr<SpriteFont>> Create(const wstring& filename);
 
@@ -65,7 +70,7 @@ class ResourceMgr final {
 		ResourceMap<u32, Texture>             color_textures;
 		ResourceMap<vector<wstring>, Texture> texture_arrays;
 
-		// Fonts
+		// SpriteFonts
 		ResourceMap<wstring, SpriteFont> fonts;
 };
 

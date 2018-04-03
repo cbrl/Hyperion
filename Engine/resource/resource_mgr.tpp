@@ -54,6 +54,7 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::Get(const KeyT& key) {
 // ResourceMgr
 //----------------------------------------------------------------------------------
 
+// ModelBlueprint
 template<typename ResourceT>
 enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::Create(const wstring& folder, const wstring& filename) {
 
@@ -61,6 +62,7 @@ enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> Re
 }
 
 
+// Texture
 template<typename ResourceT>
 enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Create(const wstring& filename) {
 
@@ -68,6 +70,7 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Cre
 }
 
 
+// Texture2DArray
 template<typename ResourceT>
 enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Create(const vector<wstring>& filenames) {
 
@@ -75,6 +78,7 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Cre
 }
 
 
+// Texture
 template<typename ResourceT>
 enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Create(const float4& color) {
 
@@ -84,6 +88,7 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Cre
 }
 
 
+// SpriteFont
 template<typename ResourceT>
 enable_if_t<is_same_v<SpriteFont, ResourceT>, shared_ptr<SpriteFont>> ResourceMgr::Create(const wstring& filename) {
 

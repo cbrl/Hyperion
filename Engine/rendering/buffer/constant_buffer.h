@@ -9,15 +9,16 @@
 
 template<typename DataT>
 struct ConstantBuffer final {
+
 	public:
 		ConstantBuffer(ID3D11Device* device) {
 			D3D11_BUFFER_DESC bufferDesc = {};
 
-			bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-			bufferDesc.ByteWidth = sizeof(DataT);
-			bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-			bufferDesc.MiscFlags = NULL;
+			bufferDesc.Usage               = D3D11_USAGE_DYNAMIC;
+			bufferDesc.ByteWidth           = sizeof(DataT);
+			bufferDesc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
+			bufferDesc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
+			bufferDesc.MiscFlags           = NULL;
 			bufferDesc.StructureByteStride = NULL;
 
 			ThrowIfFailed(device->CreateBuffer(&bufferDesc, nullptr, buffer.ReleaseAndGetAddressOf()),

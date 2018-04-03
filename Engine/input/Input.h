@@ -23,8 +23,8 @@ class Input final {
 
 		// Toggle the mouse mode.
 		void ToggleMouseMode() {
-			mouse_state.positionMode == Mouse::MODE_ABSOLUTE ? mouse->SetMode(Mouse::MODE_RELATIVE)
-				                                             : mouse->SetMode(Mouse::MODE_ABSOLUTE);
+			(mouse_state.positionMode == Mouse::MODE_ABSOLUTE) ? mouse->SetMode(Mouse::MODE_RELATIVE)
+				                                               : mouse->SetMode(Mouse::MODE_ABSOLUTE);
 		}
 
 		// Get mouse movement since last update

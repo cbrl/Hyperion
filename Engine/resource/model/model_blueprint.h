@@ -46,6 +46,3 @@ class ModelBlueprint final {
 		vector<Material>  materials;
 		vector<ModelPart> model_parts;
 };
-
-
-//#include "model_blueprint.tpp"

@@ -9,6 +9,7 @@
 struct Texture final {
 	public:
 		Texture() = default;
+		~Texture() = default;
 
 		template<typename... ArgsT>
 		Texture(ID3D11Device* device, ArgsT&&... args) {
@@ -21,13 +22,13 @@ struct Texture final {
 
 		Texture(ComPtr<ID3D11ShaderResourceView> texture) : texture(texture) {}
 
-		~Texture() = default;
-
+		// Bind the texture to the specified pipeline stage
 		template<typename StageT>
 		void Bind(ID3D11DeviceContext* device_context, u32 slot) {
 
 			StageT::BindSRVs(device_context, slot, 1, texture.GetAddressOf());
 		}
+
 
 	private:
 		ComPtr<ID3D11ShaderResourceView> texture;
