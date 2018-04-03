@@ -9,20 +9,25 @@
 
 template<typename KeyT, typename ValueT>
 template<typename... ArgsT>
-shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::Create(const KeyT& key, ArgsT&&... args) {
+shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetOrCreate(const KeyT& key, ArgsT&&... args) {
 
+	// Find the resource
 	const auto n = resource_map.find(key);
 
+	// Check if the resource exists
 	if (n != resource_map.end()) {
 		
+		// Return the resource if it hasn't expired
 		if (!n->second.expired()) {
 			return n->second.lock();
 		}
+		// If the resource is expired then delete it
 		else {
 			resource_map.erase(n);
 		}
 	}
 
+	// Create the resource if it doesn't exist or expired
 	const auto resource = shared_ptr<ValueT>(new ValueT(std::forward<ArgsT>(args)...));
 	resource_map[key] = resource;
 
@@ -58,7 +63,7 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::Get(const KeyT& key) {
 template<typename ResourceT>
 enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::Create(const wstring& folder, const wstring& filename) {
 
-	return models.Create(folder + filename, device.Get(), *this, folder, filename);
+	return models.GetOrCreate(folder + filename, device.Get(), *this, folder, filename);
 }
 
 
@@ -66,7 +71,7 @@ enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> Re
 template<typename ResourceT>
 enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Create(const wstring& filename) {
 
-	return textures.Create(filename, device.Get(), device_context.Get(), filename);
+	return textures.GetOrCreate(filename, device.Get(), device_context.Get(), filename);
 }
 
 
@@ -74,7 +79,7 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Cre
 template<typename ResourceT>
 enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Create(const vector<wstring>& filenames) {
 
-	return texture_arrays.Create(filename, device.Get(), device_context.Get(), filenames);
+	return texture_arrays.GetOrCreate(filename, device.Get(), device_context.Get(), filenames);
 }
 
 
@@ -84,7 +89,7 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Cre
 
 	u32 texColor = Float4ColorToU32(color);
 
-	return color_textures.Create(texColor, device.Get(), texColor);
+	return color_textures.GetOrCreate(texColor, device.Get(), texColor);
 }
 
 
@@ -92,5 +97,5 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Cre
 template<typename ResourceT>
 enable_if_t<is_same_v<SpriteFont, ResourceT>, shared_ptr<SpriteFont>> ResourceMgr::Create(const wstring& filename) {
 
-	return fonts.Create(filename, device.Get(), filename.c_str());
+	return fonts.GetOrCreate(filename, device.Get(), filename.c_str());
 }

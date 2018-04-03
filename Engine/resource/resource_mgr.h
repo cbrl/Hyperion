@@ -13,17 +13,17 @@ class ModelBlueprint;
 template<typename KeyT, typename ValueT>
 class ResourceMap final {
 	public:
-	ResourceMap() = default;
-	~ResourceMap() = default;
+		ResourceMap() = default;
+		~ResourceMap() = default;
 
-	template<typename... ArgsT>
-	shared_ptr<ValueT> Create(const KeyT& key, ArgsT&&... args);
+		template<typename... ArgsT>
+		shared_ptr<ValueT> GetOrCreate(const KeyT& key, ArgsT&&... args);
 
-	shared_ptr<ValueT> Get(const KeyT& key);
+		shared_ptr<ValueT> Get(const KeyT& key);
 
 
 	private:
-	map<KeyT, weak_ptr<ValueT>> resource_map;
+		map<KeyT, weak_ptr<ValueT>> resource_map;
 };
 
 
