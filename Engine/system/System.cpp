@@ -128,23 +128,25 @@ void System::ProcessInput() {
 
 	// Toggle mouse mode on F1 press
 	if (input->IsKeyPressed(Keyboard::F1)) {
-		input->ToggleMouseMode();
+		if (input->GetMouseMode() == Mouse::MODE_ABSOLUTE) {
+			input->SetMouseRelative();
+			scene->InputEnabled(true);
+		}
+		else {
+			input->SetMouseAbsolute();
+			scene->InputEnabled(false);
+		}
 	}
-
-	// Disable input in scene if ImGui is focused
-	ImGuiIO& io = ImGui::GetIO();
-
-	if (io.WantCaptureKeyboard || io.WantCaptureMouse)
-		scene->InputEnabled(false);
-	else
-		scene->InputEnabled(true);
 }
 
 
 LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 
-	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam)) {
-		return 0;
+	// Send events to ImGui handler if the mouse mode is set to absolute
+	if (input && (input->GetMouseMode() == Mouse::MODE_ABSOLUTE)) {
+		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam)) {
+			return 0;
+		}
 	}
 
 	switch (msg) {

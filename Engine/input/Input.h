@@ -13,8 +13,11 @@ class Input final {
 		void Tick();
 		void Reset();
 
-		// Set mouse to use absolute screen coords. Allows
-		// the mouse to leave the window.
+		// Get the current mouse mode
+		Mouse::Mode GetMouseMode() { return mouse_state.positionMode; }
+
+		// Set mouse to use absolute screen coords.
+		// Allows the mouse to leave the window.
 		void SetMouseAbsolute() { mouse->SetMode(Mouse::MODE_ABSOLUTE); }
 
 		// Set mouse to use relative window coords. Prevents
