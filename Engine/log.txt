@@ -118,3 +118,117 @@
 - 23:26:12.437 INFO: Loaded scene
 - 23:26:23.422 INFO: <=========================EXITING ENGINE=========================>
 
+- 23:28:56.000 INFO: <=========================STARTING ENGINE=========================>
+- 23:28:56.062 INFO: Initialized main window
+- 23:28:57.265 INFO: Initialized Direct3D
+- 23:28:57.390 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 23:28:57.421 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 23:28:57.421 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 23:28:57.421 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 23:28:57.437 INFO: Loaded scene
+- 23:30:40.890 INFO: <=========================EXITING ENGINE=========================>
+
+- 23:38:47.000 INFO: <=========================STARTING ENGINE=========================>
+- 23:38:48.046 INFO: Initialized main window
+- 23:38:48.281 INFO: Initialized Direct3D
+- 23:38:48.421 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 23:38:48.437 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 23:38:48.437 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 23:38:48.437 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 23:38:48.468 INFO: Loaded scene
+- 23:39:12.000 INFO: <=========================STARTING ENGINE=========================>
+- 23:39:12.032 INFO: Initialized main window
+- 23:39:13.266 INFO: Initialized Direct3D
+- 23:39:13.407 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 23:39:13.422 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 23:39:13.422 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 23:39:13.438 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 23:39:13.453 INFO: Loaded scene
+- 23:39:34.750 INFO: <=========================EXITING ENGINE=========================>
+
+- 23:39:45.000 INFO: <=========================STARTING ENGINE=========================>
+- 23:39:45.047 INFO: Initialized main window
+- 23:39:45.282 INFO: Initialized Direct3D
+- 23:39:45.407 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 23:39:45.438 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 23:39:45.438 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 23:39:45.438 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 23:39:45.453 INFO: Loaded scene
+- 23:39:55.641 INFO: <=========================EXITING ENGINE=========================>
+
+- 23:40:13.000 INFO: <=========================STARTING ENGINE=========================>
+- 23:40:13.047 INFO: Initialized main window
+- 23:40:14.250 INFO: Initialized Direct3D
+- 23:40:14.375 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 23:40:14.406 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 23:40:14.406 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 23:40:14.406 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 23:40:14.422 INFO: Loaded scene
+- 23:40:16.094 INFO: <=========================EXITING ENGINE=========================>
+
+- 23:47:53.000 INFO: <=========================STARTING ENGINE=========================>
+- 23:47:53.047 INFO: Initialized main window
+- 23:47:54.281 INFO: Initialized Direct3D
+- 23:47:54.406 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 23:47:54.422 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 23:47:54.422 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 23:47:54.422 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 23:47:54.438 INFO: Loaded scene
+- 23:48:48.047 INFO: <=========================EXITING ENGINE=========================>
+
+- 23:50:46.000 INFO: <=========================STARTING ENGINE=========================>
+- 23:50:46.046 INFO: Initialized main window
+- 23:50:46.265 INFO: Initialized Direct3D
+- 23:50:46.390 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 23:50:46.421 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 23:50:46.421 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 23:50:46.421 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 23:50:46.437 INFO: Loaded scene
+- 00:07:04.000 INFO: <=========================STARTING ENGINE=========================>
+- 00:07:04.063 INFO: Initialized main window
+- 00:07:04.281 INFO: Initialized Direct3D
+- 00:07:04.406 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 00:07:04.438 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 00:07:04.438 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 00:07:04.438 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 00:07:04.453 INFO: Loaded scene
+- 00:07:06.360 INFO: <=========================EXITING ENGINE=========================>
+
+- 00:07:17.000 INFO: <=========================STARTING ENGINE=========================>
+- 00:07:17.031 INFO: Initialized main window
+- 00:07:18.266 INFO: Initialized Direct3D
+- 00:07:18.391 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 00:07:18.422 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 00:07:18.422 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 00:07:18.422 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 00:07:18.453 INFO: Loaded scene
+- 00:08:36.219 INFO: <=========================EXITING ENGINE=========================>
+
+- 00:09:14.000 INFO: <=========================STARTING ENGINE=========================>
+- 00:09:14.031 INFO: Initialized main window
+- 00:09:15.265 INFO: Initialized Direct3D
+- 00:09:15.390 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 00:09:15.422 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 00:09:15.422 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 00:09:15.422 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 00:09:15.437 INFO: Loaded scene
+- 00:11:04.562 INFO: <=========================EXITING ENGINE=========================>
+
+- 00:12:37.000 INFO: <=========================STARTING ENGINE=========================>
+- 00:12:37.032 INFO: Initialized main window
+- 00:12:38.282 INFO: Initialized Direct3D
+- 00:12:38.407 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 00:12:38.438 DEBUG: Loaded texture: ../data/models/cube/bricks.dds
+- 00:12:38.438 DEBUG: Loaded texture: ../data/models/cube/bricks_nmap.dds
+- 00:12:38.438 DEBUG: Loaded OBJ file: ../data/models/cube/cube.obj
+- 00:12:38.454 INFO: Loaded scene
+- 00:15:06.766 INFO: <=========================EXITING ENGINE=========================>
+
+- 00:15:36.000 INFO: <=========================STARTING ENGINE=========================>
+- 00:15:36.031 INFO: Initialized main window
+- 00:15:36.250 INFO: Initialized Direct3D
+- 00:15:36.390 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 00:15:41.609 DEBUG: Loaded OBJ file: ../data/models/test/test.obj
+- 00:15:41.640 INFO: Loaded scene
+- 00:22:41.625 INFO: <=========================EXITING ENGINE=========================>
+

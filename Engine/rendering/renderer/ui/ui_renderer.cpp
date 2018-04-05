@@ -9,8 +9,13 @@ void UIRenderer::Render(Scene& scene) {
 	
 	ImGui::SetNextWindowSize(ImVec2(550, 600), ImGuiCond_FirstUseEver);
 
+	bool open = true;
+
 	// Begin window
-	if (ImGui::Begin("Scene")) {
+	if (ImGui::Begin("Scene", &open, ImGuiWindowFlags_MenuBar)) {
+
+		// Draw Menu
+		DrawMenu(scene);
 
 		// Left pane (object list)
 		DrawObjectList(scene);
@@ -24,6 +29,32 @@ void UIRenderer::Render(Scene& scene) {
 	
 	// End window
 	ImGui::End();
+}
+
+
+void UIRenderer::DrawMenu(Scene& scene) {
+
+	if (ImGui::BeginMenuBar()) {
+
+		if (ImGui::BeginMenu("Lights")) {
+
+			if (ImGui::MenuItem("Add Dir. Light")) {
+				scene.GetDirectionalLights().push_back(DirectionalLight());
+			}
+
+			if (ImGui::MenuItem("Add Point Light")) {
+				scene.GetPointLights().push_back(PointLight());
+			}
+
+			if (ImGui::MenuItem("Add Spot Light")) {
+				scene.GetSpotLights().push_back(SpotLight());
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
 }
 
 
@@ -41,6 +72,12 @@ void UIRenderer::DrawObjectList(Scene& scene) {
 		ImGui::Selectable("Camera", selected == &scene.GetCamera());
 		if (ImGui::IsItemClicked())
 			selected = &scene.GetCamera();
+
+		// Fog
+		ImGui::Selectable("Fog", selected == &scene.GetFog());
+		if (ImGui::IsItemClicked()) {
+			selected = &scene.GetFog();
+		}
 	}
 
 	ImGui::EndChild();
@@ -85,6 +122,14 @@ void UIRenderer::DrawObjectDetails(Scene& scene) {
 	// Draw camera details
 	if (selected == &scene.GetCamera())
 		DrawCameraDetails(scene.GetCamera());
+
+
+	// Draw fog details
+	if (selected == &scene.GetFog()) {
+		ImGui::DragFloat3("Color", scene.GetFog().color.RawData(), 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat( "Start", &scene.GetFog().start,          0.05f, 0.0f, FLT_MAX);
+		ImGui::DragFloat( "Range", &scene.GetFog().range,          0.05f, 0.0f, FLT_MAX);
+	}
 
 
 	ImGui::EndChild();
@@ -191,9 +236,9 @@ void UIRenderer::DrawLightList(Scene& scene) {
 
 			char name[28];
 			sprintf_s(name, "Spot Light %p", (void*)&light);
-			ImGui::Selectable(name);
+			ImGui::Selectable(name, selected == &light);
 
-			if (ImGui::IsItemClicked(), selected == &light) {
+			if (ImGui::IsItemClicked()) {
 				selected = &light;
 			}
 
@@ -249,7 +294,7 @@ void UIRenderer::DrawLightDetails(DirectionalLight& light) {
 	ImGui::DragFloat3("Direction",      light.direction.RawData(),     0.01f, -1.0f, 1.0f);
 	ImGui::DragFloat3("Diffuse Color",  light.diffuse_color.RawData(), 0.01f,  0.0f, 1.0f);
 	ImGui::DragFloat3("Ambient Color",  light.ambient_color.RawData(), 0.01f,  0.0f, 1.0f);
-	ImGui::DragFloat4("Specular Color", light.specular.RawData(),      0.01f,  0.0f, 1.0f);
+	ImGui::DragFloat3("Specular Color", light.specular.RawData(),      0.01f,  0.0f, 1.0f);
 }
 
 
@@ -278,11 +323,12 @@ void UIRenderer::DrawLightDetails(SpotLight& light) {
 	ImGui::Text(name);
 	ImGui::Separator();
 
-	ImGui::DragFloat3("Position",       light.position.RawData(),        0.1f, -FLT_MAX, FLT_MAX);
-	ImGui::DragFloat( "Range",         &light.range,                     0.1f,  0.0f, FLT_MAX);
-	ImGui::DragFloat( "Spot",          &light.spot,                      0.05f, 0.0f, FLT_MAX);
-	ImGui::DragFloat3("Attenuation",    light.attenuation.RawData(),     0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat3("Diffuse Color",  light.diffuse_color.RawData(),   0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat3("Ambient Color",  light.ambient_color.RawData(),   0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat3("Specular Color", light.specular.RawData(),        0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat3("Position",       light.position.RawData(),        0.1f,  -FLT_MAX, FLT_MAX);
+	ImGui::DragFloat3("Direction", light.direction.RawData(),            0.01f, -1.0f, 1.0f);
+	ImGui::DragFloat( "Range",         &light.range,                     0.1f,   0.0f, FLT_MAX);
+	ImGui::DragFloat( "Spot",          &light.spot,                      0.05f,  0.0f, FLT_MAX);
+	ImGui::DragFloat3("Attenuation",    light.attenuation.RawData(),     0.01f,  0.0f, 1.0f);
+	ImGui::DragFloat3("Diffuse Color",  light.diffuse_color.RawData(),   0.01f,  0.0f, 1.0f);
+	ImGui::DragFloat3("Ambient Color",  light.ambient_color.RawData(),   0.01f,  0.0f, 1.0f);
+	ImGui::DragFloat3("Specular Color", light.specular.RawData(),        0.01f,  0.0f, 1.0f);
 }

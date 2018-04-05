@@ -26,11 +26,11 @@ class Scene {
 		//----------------------------------------------------------------------------------
 
 		Camera&    GetCamera() const { return *camera; }
-		const Fog& GetFog()    const { return fog; }
+		Fog&       GetFog()          { return fog; }
 
-		const vector<DirectionalLight>& GetDirectionalLights() const { return directional_lights; }
-		const vector<PointLight>&       GetPointLights() const { return point_lights; }
-		const vector<SpotLight>&        GetSpotLights() const { return spot_lights; }
+		vector<DirectionalLight>& GetDirectionalLights() { return directional_lights; }
+		vector<PointLight>&       GetPointLights()       { return point_lights; }
+		vector<SpotLight>&        GetSpotLights()        { return spot_lights; }
 
 
 	protected:

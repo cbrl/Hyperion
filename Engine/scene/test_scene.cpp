@@ -79,7 +79,7 @@ void TestScene::Init(ID3D11Device* device,
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	auto bp = resource_mgr.Create<ModelBlueprint>(L"../data/models/cube/", L"cube.obj");
+	auto bp = resource_mgr.Create<ModelBlueprint>(L"../data/models/test/", L"test.obj");
 	models.push_back(Model(device, *bp));
 	models.back().Scale(3.0f, 3.0f, 3.0f);
 	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
@@ -121,9 +121,9 @@ void TestScene::Tick(float delta_time) {
 
 
 	// Rotate models
-	for (auto& model : models) {
-		model.Rotate(0.0f, ((XM_PI * delta_time) / 2500), 0.0f);
-	}
+	//for (auto& model : models) {
+	//	model.Rotate(0.0f, ((XM_PI * delta_time) / 2500), 0.0f);
+	//}
 
 	
 

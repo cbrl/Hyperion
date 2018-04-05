@@ -12,6 +12,8 @@ class UIRenderer final {
 		~UIRenderer() = default;
 
 		void Render(Scene& scene);
+
+		void DrawMenu(Scene& scene);
 		void DrawObjectList(Scene& scene);
 		void DrawObjectDetails(Scene& scene);
 
