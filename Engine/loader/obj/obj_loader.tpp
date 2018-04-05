@@ -51,7 +51,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
 	for (u32 i = 0; i < mtl_count; ++i) {
 		Material mtl;
 
-		mtl.name = materials[i].name;
+		mtl.name = wstr2str(materials[i].name);
 		
 		if (!materials[i].map_Kd.empty())
 			mtl.map_Kd = resource_mgr.Create<Texture>(folder + materials[i].map_Kd);
@@ -82,7 +82,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
 	}
 
 	// Create the model
-	wstring name = filename.substr(0, filename.find(L'.'));
+	string name = wstr2str(filename.substr(0, filename.find(L'.')));
 	ModelOutput<VertexT> out(name, vertices, indices, mtlVector, groups);
 
 
@@ -164,8 +164,11 @@ void OBJLoader<VertexT>::LoadModel(wstring folder, wstring filename) {
 
 		// Group
 		else if (token.compare(OBJTokens::group) == 0) {
+			wstring name;
+			stream >> name;
+
 			groups.push_back(Group());
-			stream >> groups.back().name;
+			groups.back().name = wstr2str(name);
 			groups.back().index_start = static_cast<u32>(indices.size());
 
 			++group_count;

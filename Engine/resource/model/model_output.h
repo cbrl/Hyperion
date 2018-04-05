@@ -6,7 +6,7 @@
 
 
 struct Group {
-	wstring name;
+	string  name;
 	u32     index_start;
 	u32     material_index;
 };
@@ -17,7 +17,7 @@ struct Group {
 template<typename VertexT>
 struct ModelOutput final {
 	public:
-		ModelOutput(const wstring& name,
+		ModelOutput(const string& name,
 					const vector<VertexT>& vertices,
 					const vector<u32>& indices,
 					const vector<Material>& materials,
@@ -33,7 +33,7 @@ struct ModelOutput final {
 
 
 	public:
-		wstring          name;
+		string           name;
 		vector<VertexT>  vertices;
 		vector<u32>      indices;
 		vector<Material> materials;

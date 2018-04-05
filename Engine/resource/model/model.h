@@ -45,6 +45,7 @@ class ChildModel final {
 		const u32 GetIndexStart() const { return index_start; }
 		const u32 GetIndexCount() const { return index_count; }
 
+		const string&         GetName()     const { return name; }
 		const AABB&           GetAABB()     const { return aabb; }
 		const BoundingSphere& GetSphere()   const { return sphere; }
 		const Material&       GetMaterial() const { return *material; }
@@ -56,7 +57,7 @@ class ChildModel final {
 
 
 	private:
-		wstring name;
+		string name;
 
 		ConstantBuffer<ModelBuffer> buffer;
 
@@ -68,6 +69,8 @@ class ChildModel final {
 		AABB           aabb;
 		BoundingSphere sphere;
 };
+
+
 
 
 class Model final {
@@ -89,7 +92,7 @@ class Model final {
 
 		// Preform an action for each child model
 		template<typename ActionT>
-		void ForEachChildModel(ActionT act) {
+		void ForEachChild(ActionT act) {
 			for (auto& child : child_models) {
 				act(child);
 			}
@@ -139,13 +142,14 @@ class Model final {
 		// Getters
 		//----------------------------------------------------------------------------------
 
+		const string&         GetName()      const { return name; }
 		const AABB&           GetAABB()      const { return aabb; }
 		const BoundingSphere& GetSphere()    const { return sphere; }
 		const XMMATRIX&       GetTransform() const { return transform; }
 
 
 	private:
-		wstring name;
+		string name;
 
 		AABB aabb;
 		BoundingSphere sphere;

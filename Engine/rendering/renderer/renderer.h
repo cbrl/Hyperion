@@ -6,6 +6,7 @@
 #include "util\datatypes\datatypes.h"
 #include "rendering\render_state_mgr.h"
 #include "scene\scene.h"
+#include "rendering\renderer\ui\ui_renderer.h"
 #include "rendering\renderer\forward\forward_render.h"
 #include "rendering\renderer\sky\sky_renderer.h"
 
@@ -22,6 +23,7 @@ class Renderer final {
 		ComPtr<ID3D11DeviceContext> device_context;
 
 		// Renderers
+		unique_ptr<UIRenderer>      ui_renderer;
 		unique_ptr<ForwardRenderer> forward_renderer;
 		unique_ptr<SkyRenderer>     sky_renderer;
 };

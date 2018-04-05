@@ -71,13 +71,13 @@ void XM_CALLCONV Model::Update(ID3D11DeviceContext* device_context, FXMMATRIX vi
 
 
 	// Update each child model
-	for (ChildModel& child : child_models) {
+	ForEachChild([&](ChildModel& child) {
 
 		if (update_bounding_volumes)
 			child.UpdateBoundingVolumes(transform);
 
 		child.Update(device_context, world, world_inv_transpose, world_view_proj, XMMatrixIdentity());
-	}
+	});
 
 	// Update the model's bounding volumes
 	if (update_bounding_volumes) {

@@ -29,6 +29,7 @@ VertexShader::VertexShader(ID3D11Device* device,
 	// Compile the vertex shader
 	result = D3DCompileFromFile(filename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VS", "vs_5_0",
 								flags, NULL, shader_buffer.GetAddressOf(), error_message.GetAddressOf());
+
 	if (FAILED(result)) {
 		if (error_message) {
 			OutputShaderErrorMessage(error_message.Get(), filename);
@@ -76,6 +77,7 @@ PixelShader::PixelShader(ID3D11Device* device, const WCHAR* filename) {
 	// Compile the pixel shader
 	result = D3DCompileFromFile(filename, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PS", "ps_5_0",
 								flags, NULL, shader_buffer.GetAddressOf(), error_message.GetAddressOf());
+
 	if (FAILED(result)) {
 		if (error_message) {
 			OutputShaderErrorMessage(error_message.Get(), filename);

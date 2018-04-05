@@ -8,7 +8,7 @@ using namespace DirectX;
 
 struct Material final {
 	Material()
-		: name(L"material")
+		: name("material")
 		, Ka(0.0f, 0.0f, 0.0f, 1.0f)
 		, Kd(0.0f, 0.0f, 0.0f, 1.0f)
 		, Ks(0.0f, 0.0f, 0.0f, 1.0f)
@@ -22,7 +22,7 @@ struct Material final {
 
 
 	// Material name
-	wstring name;
+	string name;
 
 	// Ambient map
 	shared_ptr<Texture> map_Ka;

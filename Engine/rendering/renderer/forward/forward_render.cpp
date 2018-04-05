@@ -116,7 +116,7 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 
 		// Render each model part individually
-		model.ForEachChildModel([&](ChildModel& child) {
+		model.ForEachChild([&](ChildModel& child) {
 
 			if (!frustum.Contains(child.GetAABB())) return;
 

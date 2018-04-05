@@ -182,6 +182,7 @@
     <ClInclude Include="rendering\renderer\forward\forward_render.h" />
     <ClInclude Include="rendering\renderer\renderer.h" />
     <ClInclude Include="rendering\renderer\sky\sky_renderer.h" />
+    <ClInclude Include="rendering\renderer\ui\ui_renderer.h" />
     <ClInclude Include="rendering\rendering_mgr.h" />
     <ClInclude Include="rendering\render_state_mgr.h" />
     <ClInclude Include="resource\material\material.h" />
@@ -243,6 +244,7 @@
     <ClCompile Include="rendering\renderer\forward\forward_render.cpp" />
     <ClCompile Include="rendering\renderer\renderer.cpp" />
     <ClCompile Include="rendering\renderer\sky\sky_renderer.cpp" />
+    <ClCompile Include="rendering\renderer\ui\ui_renderer.cpp" />
     <ClCompile Include="rendering\rendering_mgr.cpp" />
     <ClCompile Include="rendering\render_state_mgr.cpp" />
     <ClCompile Include="resource\model\model.cpp" />

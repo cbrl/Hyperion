@@ -205,6 +205,12 @@
     <Filter Include="Source Files\resource\skybox">
       <UniqueIdentifier>{dbe49a5c-db14-4dea-8f10-b619b128cfca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\rendering\renderer\ui">
+      <UniqueIdentifier>{da1eaa90-0db8-4234-83e8-9cb4acfdbc66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering\renderer\ui">
+      <UniqueIdentifier>{bc1d5b83-9474-4f05-8c06-16a158147b1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -414,6 +420,9 @@
     <ClInclude Include="loader\model_loader.tpp">
       <Filter>Source Files\loader</Filter>
     </ClInclude>
+    <ClInclude Include="rendering\renderer\ui\ui_renderer.h">
+      <Filter>Header Files\rendering\renderer\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -502,6 +511,9 @@
     </ClCompile>
     <ClCompile Include="resource\skybox\skybox.cpp">
       <Filter>Source Files\resource\skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\renderer\ui\ui_renderer.cpp">
+      <Filter>Source Files\rendering\renderer\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

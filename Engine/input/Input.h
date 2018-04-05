@@ -7,7 +7,7 @@
 
 class Input final {
 	public:
-		Input(HWND hWnd);
+		explicit Input(HWND hWnd);
 		~Input() = default;
 		
 		void Tick();

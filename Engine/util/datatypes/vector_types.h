@@ -27,6 +27,14 @@ struct float2 : public XMFLOAT2 {
 
 
 	//----------------------------------------------------------------------------------
+	// Functions
+	//----------------------------------------------------------------------------------
+
+	// Return a pointer to the first element of the float2
+	float* RawData() { return &this->x; }
+
+
+	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
 
@@ -37,14 +45,14 @@ struct float2 : public XMFLOAT2 {
 		return (this->x == compare.x &&
 				this->y == compare.y);
 	}
-	const bool operator==(const float2& compare) const noexcept {
+	bool operator==(const float2& compare) const noexcept {
 		return (this->x == compare.x &&
 				this->y == compare.y);
 	}
 	bool operator!=(const float2& compare) noexcept {
 		return !(*this == compare);
 	}
-	const bool operator!=(const float2& compare) const noexcept {
+	bool operator!=(const float2& compare) const noexcept {
 		return !(*this == compare);
 	}
 
@@ -53,7 +61,7 @@ struct float2 : public XMFLOAT2 {
 		return float2(this->x + in,
 					  this->y + in);
 	}
-	const float2 operator+(const float& in) const noexcept {
+	float2 operator+(const float& in) const noexcept {
 		return float2(this->x + in,
 					  this->y + in);
 	}
@@ -61,7 +69,7 @@ struct float2 : public XMFLOAT2 {
 		return float2(this->x + in.x,
 					  this->y + in.y);
 	}
-	const float2 operator+(const float2& in) const noexcept {
+	float2 operator+(const float2& in) const noexcept {
 		return float2(this->x + in.x,
 					  this->y + in.y);
 	}
@@ -72,7 +80,7 @@ struct float2 : public XMFLOAT2 {
 		return float2(this->x - in,
 					  this->y - in);
 	}
-	const float2 operator-(const float& in) const noexcept {
+	float2 operator-(const float& in) const noexcept {
 		return float2(this->x - in,
 					  this->y - in);
 	}
@@ -80,7 +88,7 @@ struct float2 : public XMFLOAT2 {
 		return float2(this->x - in.x,
 					  this->y - in.y);
 	}
-	const float2 operator-(const float2& in) const noexcept {
+	float2 operator-(const float2& in) const noexcept {
 		return float2(this->x - in.x,
 					  this->y - in.y);
 	}
@@ -91,7 +99,7 @@ struct float2 : public XMFLOAT2 {
 		return float2(this->x * in,
 					  this->y * in);
 	}
-	const float2 operator*(const float& in) const noexcept {
+	float2 operator*(const float& in) const noexcept {
 		return float2(this->x * in,
 					  this->y * in);
 	}
@@ -99,7 +107,7 @@ struct float2 : public XMFLOAT2 {
 		return float2(this->x * in.x,
 					  this->y * in.y);
 	}
-	const float2 operator*(const float2& in) const noexcept {
+	float2 operator*(const float2& in) const noexcept {
 		return float2(this->x * in.x,
 					  this->y * in.y);
 	}
@@ -110,7 +118,7 @@ struct float2 : public XMFLOAT2 {
 		return float2(this->x / in,
 					  this->y / in);
 	}
-	const float2 operator/(const float& in) const noexcept {
+	float2 operator/(const float& in) const noexcept {
 		return float2(this->x / in,
 					  this->y / in);
 	}
@@ -118,7 +126,7 @@ struct float2 : public XMFLOAT2 {
 		return float2(this->x / in.x,
 					  this->y / in.y);
 	}
-	const float2 operator/(const float2& in) const noexcept {
+	float2 operator/(const float2& in) const noexcept {
 		return float2(this->x / in.x,
 					  this->y / in.y);
 	}
@@ -148,6 +156,14 @@ struct float3 : public XMFLOAT3 {
 
 
 	//----------------------------------------------------------------------------------
+	// Functions
+	//----------------------------------------------------------------------------------
+
+	// Return a pointer to the first element of the float3
+	float* RawData() { return &this->x; }
+
+
+	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
 
@@ -172,13 +188,13 @@ struct float3 : public XMFLOAT3 {
 	}
 
 
-	// Operator + and +=
+	// Operator +
 	float3 operator+(const float& in) noexcept {
 		return float3(this->x + in,
 					  this->y + in,
 					  this->z + in);
 	}
-	const float3 operator+(const float& in) const noexcept {
+	float3 operator+(const float& in) const noexcept {
 		return float3(this->x + in,
 					  this->y + in,
 					  this->z + in);
@@ -188,7 +204,7 @@ struct float3 : public XMFLOAT3 {
 					  this->y + in.y,
 					  this->z + in.z);
 	}
-	const float3 operator+(const float3& in) const noexcept {
+	float3 operator+(const float3& in) const noexcept {
 		return float3(this->x + in.x,
 					  this->y + in.y,
 					  this->z + in.z);
@@ -201,7 +217,7 @@ struct float3 : public XMFLOAT3 {
 					  this->y - in,
 					  this->z - in);
 	}
-	const float3 operator-(const float& in) const noexcept {
+	float3 operator-(const float& in) const noexcept {
 		return float3(this->x - in,
 					  this->y - in,
 					  this->z - in);
@@ -211,7 +227,7 @@ struct float3 : public XMFLOAT3 {
 					  this->y - in.y,
 					  this->z - in.z);
 	}
-	const float3 operator-(const float3& in) const noexcept {
+	float3 operator-(const float3& in) const noexcept {
 		return float3(this->x - in.x,
 					  this->y - in.y,
 					  this->z - in.z);
@@ -224,7 +240,7 @@ struct float3 : public XMFLOAT3 {
 					  this->y * in,
 					  this->z * in);
 	}
-	const float3 operator*(const float& in) const noexcept {
+	float3 operator*(const float& in) const noexcept {
 		return float3(this->x * in,
 					  this->y * in,
 					  this->z * in);
@@ -234,7 +250,7 @@ struct float3 : public XMFLOAT3 {
 					  this->y * in.y,
 					  this->z * in.z);
 	}
-	const float3 operator*(const float3& in) const noexcept {
+	float3 operator*(const float3& in) const noexcept {
 		return float3(this->x * in.x,
 					  this->y * in.y,
 					  this->z * in.z);
@@ -247,7 +263,7 @@ struct float3 : public XMFLOAT3 {
 					  this->y / in,
 					  this->z / in);
 	}
-	const float3 operator/(const float& in) const noexcept {
+	float3 operator/(const float& in) const noexcept {
 		return float3(this->x / in,
 					  this->y / in,
 					  this->z / in);
@@ -257,7 +273,7 @@ struct float3 : public XMFLOAT3 {
 					  this->y / in.y,
 					  this->z / in.z);
 	}
-	const float3 operator/(const float3& in) const noexcept {
+	float3 operator/(const float3& in) const noexcept {
 		return float3(this->x / in.x,
 					  this->y / in.y,
 					  this->z / in.z);
@@ -288,6 +304,14 @@ struct float4 : public XMFLOAT4 {
 	float4(XMFLOAT3 _xyz, float _w) noexcept : XMFLOAT4(_xyz.x, _xyz.y, _xyz.z, _w) {}
 
 	float4(const float4& _float4) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Functions
+	//----------------------------------------------------------------------------------
+
+	// Return a pointer to the first element of the float4
+	float* RawData() { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -324,7 +348,7 @@ struct float4 : public XMFLOAT4 {
 					  this->z + in,
 					  this->w + in);
 	}
-	const float4 operator+(const float& in) const noexcept {
+	float4 operator+(const float& in) const noexcept {
 		return float4(this->x + in,
 					  this->y + in,
 					  this->z + in,
@@ -336,7 +360,7 @@ struct float4 : public XMFLOAT4 {
 					  this->z + in.z,
 					  this->w + in.w);
 	}
-	const float4 operator+(const float4& in) const noexcept {
+	float4 operator+(const float4& in) const noexcept {
 		return float4(this->x + in.x,
 					  this->y + in.y,
 					  this->z + in.z,
@@ -351,7 +375,7 @@ struct float4 : public XMFLOAT4 {
 					  this->z - in,
 					  this->w - in);
 	}
-	const float4 operator-(const float& in) const noexcept {
+	float4 operator-(const float& in) const noexcept {
 		return float4(this->x - in,
 					  this->y - in,
 					  this->z - in,
@@ -363,7 +387,7 @@ struct float4 : public XMFLOAT4 {
 					  this->z - in.z,
 					  this->w - in.w);
 	}
-	const float4 operator-(const float4& in) const noexcept {
+	float4 operator-(const float4& in) const noexcept {
 		return float4(this->x - in.x,
 					  this->y - in.y,
 					  this->z - in.z,
@@ -378,7 +402,7 @@ struct float4 : public XMFLOAT4 {
 					  this->z * in,
 					  this->w * in);
 	}
-	const float4 operator*(const float& in) const noexcept {
+	float4 operator*(const float& in) const noexcept {
 		return float4(this->x * in,
 					  this->y * in,
 					  this->z * in,
@@ -390,7 +414,7 @@ struct float4 : public XMFLOAT4 {
 					  this->z * in.z,
 					  this->w * in.w);
 	}
-	const float4 operator*(const float4& in) const noexcept {
+	float4 operator*(const float4& in) const noexcept {
 		return float4(this->x * in.x,
 					  this->y * in.y,
 					  this->z * in.z,
@@ -405,7 +429,7 @@ struct float4 : public XMFLOAT4 {
 					  this->z / in,
 					  this->w / in);
 	}
-	const float4 operator/(const float& in) const noexcept {
+	float4 operator/(const float& in) const noexcept {
 		return float4(this->x / in,
 					  this->y / in,
 					  this->z / in,
@@ -417,7 +441,7 @@ struct float4 : public XMFLOAT4 {
 					  this->z / in.z,
 					  this->w / in.w);
 	}
-	const float4 operator/(const float4& in) const noexcept {
+	float4 operator/(const float4& in) const noexcept {
 		return float4(this->x / in.x,
 					  this->y / in.y,
 					  this->z / in.z,

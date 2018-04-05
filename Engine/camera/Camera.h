@@ -9,9 +9,10 @@
 
 
 class Camera final {
-	public:
+	private:
 		Camera(ID3D11Device* device);
 
+	public:
 		Camera(ID3D11Device* device,
 			   ResourceMgr& resource_mgr,
 			   u32 viewport_width,

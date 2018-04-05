@@ -71,6 +71,24 @@ class Scene {
 					act(e.second);
 				}
 			}
+
+			if constexpr (is_same_v<DirectionalLight, ElementT>) {
+				for (auto& e : directional_lights) {
+					act(e);
+				}
+			}
+
+			if constexpr (is_same_v<PointLight, ElementT>) {
+				for (auto& e : point_lights) {
+					act(e);
+				}
+			}
+
+			if constexpr (is_same_v<SpotLight, ElementT>) {
+				for (auto& e : spot_lights) {
+					act(e);
+				}
+			}
 		}
 };
 

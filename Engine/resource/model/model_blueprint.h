@@ -14,7 +14,7 @@ class ResourceMgr;
 
 
 struct ModelPart {
-	wstring name;
+	string  name;
 	u32     index_start;
 	u32     index_count;
 	u32     material_index;
@@ -36,7 +36,7 @@ class ModelBlueprint final {
 
 
 	public:
-		wstring name;
+		string name;
 
 		AABB           aabb;
 		BoundingSphere sphere;
