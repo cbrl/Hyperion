@@ -1,11 +1,12 @@
 #include "stdafx.h"
-#include "ui_renderer.h"
+#include "user_interface.h"
+#include "scene\scene.h"
 
 
 static void* selected = 0;
 
 
-void UIRenderer::Render(Scene& scene) {
+void UserInterface::Draw(Scene& scene) {
 	
 	ImGui::SetNextWindowSize(ImVec2(550, 600), ImGuiCond_FirstUseEver);
 
@@ -32,7 +33,7 @@ void UIRenderer::Render(Scene& scene) {
 }
 
 
-void UIRenderer::DrawMenu(Scene& scene) {
+void UserInterface::DrawMenu(Scene& scene) {
 
 	if (ImGui::BeginMenuBar()) {
 
@@ -58,7 +59,7 @@ void UIRenderer::DrawMenu(Scene& scene) {
 }
 
 
-void UIRenderer::DrawObjectList(Scene& scene) {
+void UserInterface::DrawObjectList(Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
 
@@ -84,59 +85,7 @@ void UIRenderer::DrawObjectList(Scene& scene) {
 }
 
 
-void UIRenderer::DrawObjectDetails(Scene& scene) {
-
-	ImGui::BeginChild("object properties", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
-
-	// Draw model details
-	scene.ForEach<Model>([&](Model& model) {
-		if (selected == &model) {
-			DrawModelDetails(model);
-		}
-		else {
-			model.ForEachChild([&](auto& child) {
-				if (selected == &child)
-					DrawChildModelDetails(child);
-			});
-		}
-	});
-
-
-	// Draw light details
-	scene.ForEach<DirectionalLight>([&](auto& light) {
-		if (selected == &light)
-			DrawLightDetails(light);
-	});
-
-	scene.ForEach<PointLight>([&](auto& light) {
-		if (selected == &light)
-			DrawLightDetails(light);
-	});
-
-	scene.ForEach<SpotLight>([&](auto& light) {
-		if (selected == &light)
-			DrawLightDetails(light);
-	});
-
-
-	// Draw camera details
-	if (selected == &scene.GetCamera())
-		DrawCameraDetails(scene.GetCamera());
-
-
-	// Draw fog details
-	if (selected == &scene.GetFog()) {
-		ImGui::DragFloat3("Color", scene.GetFog().color.RawData(), 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat( "Start", &scene.GetFog().start,          0.05f, 0.0f, FLT_MAX);
-		ImGui::DragFloat( "Range", &scene.GetFog().range,          0.05f, 0.0f, FLT_MAX);
-	}
-
-
-	ImGui::EndChild();
-}
-
-
-void UIRenderer::DrawModelList(Scene& scene) {
+void UserInterface::DrawModelList(Scene& scene) {
 
 	bool node_open = ImGui::TreeNode("Models");
 
@@ -176,7 +125,7 @@ void UIRenderer::DrawModelList(Scene& scene) {
 }
 
 
-void UIRenderer::DrawLightList(Scene& scene) {
+void UserInterface::DrawLightList(Scene& scene) {
 	//----------------------------------------------------------------------------------
 	// Directional Lights
 	//----------------------------------------------------------------------------------
@@ -250,13 +199,102 @@ void UIRenderer::DrawLightList(Scene& scene) {
 }
 
 
-void UIRenderer::DrawCameraDetails(Camera& camera) {
+void UserInterface::DrawObjectDetails(Scene& scene) {
+
+	ImGui::BeginChild("object properties", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
+
+	// Draw model details
+	scene.ForEach<Model>([&](Model& model) {
+		if (selected == &model) {
+			DrawModelDetails(model);
+
+			ImGui::Separator();
+			ImGui::Button("Delete Model");
+
+			if (ImGui::IsItemClicked()) {
+				auto& models = scene.GetModels();
+				models.erase(models.begin() + (&model - models.data()));
+			}
+		}
+		else {
+			model.ForEachChild([&](auto& child) {
+				if (selected == &child)
+					DrawChildModelDetails(child);
+			});
+		}
+	});
+
+
+	// Directional light details
+	scene.ForEach<DirectionalLight>([&](auto& light) {
+		if (selected == &light) {
+			DrawLightDetails(light);
+
+			ImGui::Separator();
+			ImGui::Button("Delete Light");
+
+			if (ImGui::IsItemClicked()) {
+				auto& lights = scene.GetDirectionalLights();
+				lights.erase(lights.begin() + (&light - lights.data()));
+			}
+		}
+	});
+
+	// Point light details
+	scene.ForEach<PointLight>([&](auto& light) {
+		if (selected == &light) {
+			DrawLightDetails(light);
+
+			ImGui::Separator();
+			ImGui::Button("Delete Light");
+
+			if (ImGui::IsItemClicked()) {
+				auto& lights = scene.GetPointLights();
+				lights.erase(lights.begin() + (&light - lights.data()));
+			}
+		}
+	});
+
+	// Spot light details
+	scene.ForEach<SpotLight>([&](auto& light) {
+		if (selected == &light) {
+			DrawLightDetails(light);
+
+			ImGui::Separator();
+			ImGui::Button("Delete Light");
+
+			if (ImGui::IsItemClicked()) {
+				auto& lights = scene.GetSpotLights();
+				lights.erase(lights.begin() + (&light - lights.data()));
+			}
+		}
+	});
+
+
+	// Draw camera details
+	if (selected == &scene.GetCamera())
+		DrawCameraDetails(scene.GetCamera());
+
+
+	// Draw fog details
+	if (selected == &scene.GetFog()) {
+		ImGui::DragFloat3("Color", scene.GetFog().color.RawData(), 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat( "Start", &scene.GetFog().start,          0.05f, 0.0f, FLT_MAX);
+		ImGui::DragFloat( "Range", &scene.GetFog().range,          0.05f, 0.0f, FLT_MAX);
+	}
+
+
+	ImGui::EndChild();
+}
+
+
+void UserInterface::DrawCameraDetails(Camera& camera) {
 	// Set max veloctiy, accel rate, decel rate
 	// Change camera mode
 }
 
 
-void UIRenderer::DrawModelDetails(Model& model) {
+void UserInterface::DrawModelDetails(Model& model) {
 
 	ImGui::Text(model.GetName().c_str());
 	ImGui::Separator();
@@ -269,21 +307,22 @@ void UIRenderer::DrawModelDetails(Model& model) {
 }
 
 
-void UIRenderer::DrawChildModelDetails(ChildModel& child) {
+void UserInterface::DrawChildModelDetails(ChildModel& child) {
 
 	ImGui::Text(child.GetName().c_str());
 	ImGui::Separator();
 
 	// Change material properties, textures
-	ImGui::Text("Material");
-	ImGui::DragFloat3("Diffuse Color",     (float*)&child.GetMaterial().Kd,   0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat3("Ambient Color",     (float*)&child.GetMaterial().Ka,   0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat3("Specular Color",    (float*)&child.GetMaterial().Ks,   0.01f, 0.0f, 1.0f);
+	string name = "Material - " + child.GetMaterial().name;
+	ImGui::Text(name.c_str());
+	ImGui::ColorEdit3("Diffuse Color",     (float*)&child.GetMaterial().Kd);
+	ImGui::ColorEdit3("Ambient Color",     (float*)&child.GetMaterial().Ka);
+	ImGui::ColorEdit3("Specular Color",    (float*)&child.GetMaterial().Ks);
 	ImGui::DragFloat( "Specular Exponent", (float*)&child.GetMaterial().Ks.w, 0.01f, 0.0f, FLT_MAX);
 }
 
 
-void UIRenderer::DrawLightDetails(DirectionalLight& light) {
+void UserInterface::DrawLightDetails(DirectionalLight& light) {
 
 	char name[28];
 	sprintf_s(name, "Dir. Light %p", (void*)&light);
@@ -291,14 +330,14 @@ void UIRenderer::DrawLightDetails(DirectionalLight& light) {
 	ImGui::Text(name);
 	ImGui::Separator();
 
-	ImGui::DragFloat3("Direction",      light.direction.RawData(),     0.01f, -1.0f, 1.0f);
-	ImGui::DragFloat3("Diffuse Color",  light.diffuse_color.RawData(), 0.01f,  0.0f, 1.0f);
-	ImGui::DragFloat3("Ambient Color",  light.ambient_color.RawData(), 0.01f,  0.0f, 1.0f);
-	ImGui::DragFloat3("Specular Color", light.specular.RawData(),      0.01f,  0.0f, 1.0f);
+	ImGui::DragFloat3("Direction",      light.direction.RawData(), 0.01f, -1.0f, 1.0f);
+	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.RawData());
+	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.RawData());
+	ImGui::ColorEdit3("Specular Color", light.specular.RawData());
 }
 
 
-void UIRenderer::DrawLightDetails(PointLight& light) {
+void UserInterface::DrawLightDetails(PointLight& light) {
 
 	char name[29];
 	sprintf_s(name, "Point Light %p", (void*)&light);
@@ -306,16 +345,16 @@ void UIRenderer::DrawLightDetails(PointLight& light) {
 	ImGui::Text(name);
 	ImGui::Separator();
 
-	ImGui::DragFloat3("Position",       light.position.RawData(),        0.1f, -FLT_MAX, FLT_MAX);
-	ImGui::DragFloat( "Range",         &light.range,                     0.1f,  0.0f, FLT_MAX);
-	ImGui::DragFloat3("Attenuation",    light.attenuation.RawData(),     0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat3("Diffuse Color",  light.diffuse_color.RawData(),   0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat3("Ambient Color",  light.ambient_color.RawData(),   0.01f, 0.0f, 1.0f);
-	ImGui::DragFloat3("Specular Color", light.specular.RawData(),        0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat3("Position",       light.position.RawData(),    0.1f, -FLT_MAX, FLT_MAX);
+	ImGui::DragFloat( "Range",         &light.range,                 0.1f,  0.0f, FLT_MAX);
+	ImGui::DragFloat3("Attenuation",    light.attenuation.RawData(), 0.01f, 0.0f, 1.0f);
+	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.RawData());
+	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.RawData());
+	ImGui::ColorEdit3("Specular Color", light.specular.RawData());
 }
 
 
-void UIRenderer::DrawLightDetails(SpotLight& light) {
+void UserInterface::DrawLightDetails(SpotLight& light) {
 
 	char name[28];
 	sprintf_s(name, "Spot Light %p", (void*)&light);
@@ -323,12 +362,12 @@ void UIRenderer::DrawLightDetails(SpotLight& light) {
 	ImGui::Text(name);
 	ImGui::Separator();
 
-	ImGui::DragFloat3("Position",       light.position.RawData(),        0.1f,  -FLT_MAX, FLT_MAX);
-	ImGui::DragFloat3("Direction", light.direction.RawData(),            0.01f, -1.0f, 1.0f);
-	ImGui::DragFloat( "Range",         &light.range,                     0.1f,   0.0f, FLT_MAX);
-	ImGui::DragFloat( "Spot",          &light.spot,                      0.05f,  0.0f, FLT_MAX);
-	ImGui::DragFloat3("Attenuation",    light.attenuation.RawData(),     0.01f,  0.0f, 1.0f);
-	ImGui::DragFloat3("Diffuse Color",  light.diffuse_color.RawData(),   0.01f,  0.0f, 1.0f);
-	ImGui::DragFloat3("Ambient Color",  light.ambient_color.RawData(),   0.01f,  0.0f, 1.0f);
-	ImGui::DragFloat3("Specular Color", light.specular.RawData(),        0.01f,  0.0f, 1.0f);
+	ImGui::DragFloat3("Position",       light.position.RawData(),    0.1f,  -FLT_MAX, FLT_MAX);
+	ImGui::DragFloat3("Direction",      light.direction.RawData(),   0.01f, -1.0f, 1.0f);
+	ImGui::DragFloat( "Range",         &light.range,                 0.1f,   0.0f, FLT_MAX);
+	ImGui::DragFloat( "Spot",          &light.spot,                  0.05f,  0.0f, FLT_MAX);
+	ImGui::DragFloat3("Attenuation",    light.attenuation.RawData(), 0.01f,  0.0f, 1.0f);
+	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.RawData());
+	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.RawData());
+	ImGui::ColorEdit3("Specular Color", light.specular.RawData());
 }

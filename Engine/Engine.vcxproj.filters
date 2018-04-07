@@ -205,11 +205,11 @@
     <Filter Include="Source Files\resource\skybox">
       <UniqueIdentifier>{dbe49a5c-db14-4dea-8f10-b619b128cfca}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\rendering\renderer\ui">
-      <UniqueIdentifier>{da1eaa90-0db8-4234-83e8-9cb4acfdbc66}</UniqueIdentifier>
+    <Filter Include="Header Files\scene\ui">
+      <UniqueIdentifier>{666b8bd1-3500-41f2-8ede-09b17476d93d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\rendering\renderer\ui">
-      <UniqueIdentifier>{bc1d5b83-9474-4f05-8c06-16a158147b1e}</UniqueIdentifier>
+    <Filter Include="Source Files\scene\ui">
+      <UniqueIdentifier>{40d0d5d7-2308-4c95-8ee7-ffa4ee811da2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -420,8 +420,8 @@
     <ClInclude Include="loader\model_loader.tpp">
       <Filter>Source Files\loader</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\renderer\ui\ui_renderer.h">
-      <Filter>Header Files\rendering\renderer\ui</Filter>
+    <ClInclude Include="scene\ui\user_interface.h">
+      <Filter>Header Files\scene\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -512,8 +512,8 @@
     <ClCompile Include="resource\skybox\skybox.cpp">
       <Filter>Source Files\resource\skybox</Filter>
     </ClCompile>
-    <ClCompile Include="rendering\renderer\ui\ui_renderer.cpp">
-      <Filter>Source Files\rendering\renderer\ui</Filter>
+    <ClCompile Include="scene\ui\user_interface.cpp">
+      <Filter>Source Files\scene\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

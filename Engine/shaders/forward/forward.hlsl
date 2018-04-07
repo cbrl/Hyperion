@@ -58,7 +58,15 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	//----------------------------------------------------------------------------------
 
 	float3 normal_map_sample = normal_map.Sample(linear_wrap, pin.tex);
-	float3 transformed_normal = TransformNormal(pin.position, pin.normal, pin.tex, normal_map_sample);
+	float3 transformed_normal;
+
+	[flatten]
+	if (normal_map_sample.z) {
+		transformed_normal = TransformNormal(pin.position, pin.normal, pin.tex, normal_map_sample);
+	}
+	else {
+		transformed_normal = pin.normal;
+	}
 
 
 

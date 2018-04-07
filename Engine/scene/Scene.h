@@ -6,8 +6,8 @@
 #include "rendering\buffer\buffers.h"
 #include "resource\resource_mgr.h"
 #include "resource\model\model.h"
-#include "resource\skybox\skybox.h"
 #include "text\text.h"
+#include "scene\ui\user_interface.h"
 
 
 class Scene {
@@ -20,17 +20,20 @@ class Scene {
 		// Update the scene
 		virtual void Tick(float delta_time) = 0;
 
+		// Draw the UI
+		void DrawUI() { ui.Draw(*this); }
+
 
 		//----------------------------------------------------------------------------------
 		// Getters
 		//----------------------------------------------------------------------------------
 
-		Camera&    GetCamera() const { return *camera; }
-		Fog&       GetFog()          { return fog; }
-
-		vector<DirectionalLight>& GetDirectionalLights() { return directional_lights; }
-		vector<PointLight>&       GetPointLights()       { return point_lights; }
-		vector<SpotLight>&        GetSpotLights()        { return spot_lights; }
+		auto& GetCamera() const      { return *camera; }
+		auto& GetFog()               { return fog; }
+		auto& GetDirectionalLights() { return directional_lights; }
+		auto& GetPointLights()       { return point_lights; }
+		auto& GetSpotLights()        { return spot_lights; }
+		auto& GetModels()            { return models; }
 
 
 	protected:
@@ -44,17 +47,14 @@ class Scene {
 		bool                     enable_input;
 
 		unique_ptr<Camera>       camera;
-
+		Fog                      fog;
 		vector<Model>            models;
-
-		map<string, Text>        texts;
-
 		vector<PointLight>       point_lights;
 		vector<DirectionalLight> directional_lights;
 		vector<SpotLight>        spot_lights;
+		map<string, Text>        texts;
 
-		Fog                      fog;
-		SkyBox                   skybox;
+		UserInterface            ui;
 
 
 	public:

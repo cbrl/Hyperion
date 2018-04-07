@@ -11,7 +11,6 @@ Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
 	: device_context(device_context)
 {
 	// Create renderers
-	ui_renderer      = make_unique<UIRenderer>();
 	forward_renderer = make_unique<ForwardRenderer>(device, device_context);
 	sky_renderer     = make_unique<SkyRenderer>(device, device_context);
 }
@@ -57,5 +56,5 @@ void Renderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) const {
 	// Render the ImGui UI
 	//----------------------------------------------------------------------------------
 
-	ui_renderer->Render(scene);
+	scene.DrawUI();
 }

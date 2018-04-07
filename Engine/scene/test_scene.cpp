@@ -63,7 +63,7 @@ void TestScene::Init(ID3D11Device* device,
 	point_lights.push_back(PointLight());
 	point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
 	point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().attenuation = float3(0.5f, 0.0f, 0.1f);
+	point_lights.back().attenuation = float3(0.3f, 0.0f, 0.05f);
 	point_lights.back().specular = float4(1.0f, 1.0f, 1.0f, 1.0f);
 	point_lights.back().position = float3(0.0f, 1.0f, -2.0f);
 	point_lights.back().range = 50.0f;
