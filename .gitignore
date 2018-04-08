@@ -260,7 +260,9 @@ paket-files/
 __pycache__/
 *.pyc
 
+# User defined files
 /Engine/shader_error.txt
 *.blend
 /Engine/imgui.ini
 /Engine/TODO.txt
+/Engine/log.txt
