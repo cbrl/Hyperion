@@ -17,12 +17,16 @@ using std::to_wstring;
 
 // Convert a string to a wide string
 inline wstring str2wstr(const string& in) {
-	return std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().from_bytes(in);
+	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
+
+	return wstring_converter.from_bytes(in);
 }
 
 // Convert a wide string to a string
 inline string wstr2str(const wstring& in) {
-	return std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(in);
+	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
+
+	return wstring_converter.to_bytes(in);
 }
 
 
@@ -47,6 +51,15 @@ inline StringT TrimWhiteSpace(StringT& in) {
 // Split a string by a specified token
 template<typename StringT, typename CharT>
 inline void Split(StringT& in, std::vector<StringT>& out, const CharT* token) {
+
+	// Ensure the string's char type and token's type are the same
+	if constexpr (is_same_v<string, StringT>)
+		static_assert(is_same_v<string, StringT> && is_same_v<char, CharT>, "Split() string/token type mismatch");
+
+	if constexpr (is_same_v<wstring, StringT>)
+		static_assert(is_same_v<wstring, StringT> && is_same_v<wchar_t, CharT>, "Split() string/token type mismatch");
+
+
 	out.clear();
 
 	StringT sToken(token);
