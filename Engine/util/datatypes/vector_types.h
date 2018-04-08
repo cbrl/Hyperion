@@ -3,35 +3,64 @@
 #include <DirectXMath.h>
 
 
-using DirectX::XMFLOAT2;
-using DirectX::XMFLOAT3;
-using DirectX::XMFLOAT4;
+//----------------------------------------------------------------------------------
+// Default base vectors
+//----------------------------------------------------------------------------------
+template<typename DataT>
+struct BaseVec2 {
+	BaseVec2() noexcept = default;
+	BaseVec2(DataT _x, DataT _y) { x = _x; y = _y; }
+	DataT x;
+	DataT y;
+};
+
+template<typename DataT>
+struct BaseVec3 {
+	BaseVec3() noexcept = default;
+	BaseVec3(int _x, int _y, int _z) { x = _x; y = _y; z = _z; }
+	DataT x;
+	DataT y;
+	DataT z;
+};
+
+template<typename DataT>
+struct BaseVec4 {
+	BaseVec4() noexcept = default;
+	BaseVec4(int _x, int _y, int _z, int _w) { x = _x; y = _y; z = _z; w = _w; }
+	DataT x;
+	DataT y;
+	DataT z;
+	DataT w;
+};
+
 
 
 //----------------------------------------------------------------------------------
-// float2
+// Vec2
 //----------------------------------------------------------------------------------
+template<typename DataT, typename DerivedT = BaseVec2<DataT>>
+struct Vec2 : public DerivedT {
 
-struct float2 : public XMFLOAT2 {
+	static_assert(std::is_arithmetic_v<DataT>, "Vec2 data type is not an arithmetic type");
+	static_assert((sizeof(DerivedT) / sizeof(DataT)) == 2, "Vec2 base class does not have 2 members");
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	float2() noexcept = default;
+	Vec2() noexcept = default;
 
-	float2(float _x, float _y) noexcept : XMFLOAT2(_x, _y) {}
+	Vec2(DataT _x, DataT _y) noexcept : DerivedT(_x, _y) {}
 
-	float2(XMFLOAT2 _xy) noexcept : XMFLOAT2(_xy) {}
-
-	float2(const float2& _float2) noexcept  = default;
+	Vec2(const Vec2<DataT, DerivedT>& _xy) noexcept : DerivedT(_xy) {}
 
 
 	//----------------------------------------------------------------------------------
 	// Functions
 	//----------------------------------------------------------------------------------
 
-	// Return a pointer to the first element of the float2
-	float* RawData() { return &this->x; }
+	// Return a pointer to the first element of the Vec2<DataT, DerivedT>
+	DataT* RawData() { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -41,93 +70,93 @@ struct float2 : public XMFLOAT2 {
 	#pragma region operators
 
 	// Operator == and !=
-	bool operator==(const float2& compare) noexcept {
+	bool operator==(const Vec2<DataT, DerivedT>& compare) noexcept {
 		return (this->x == compare.x &&
 				this->y == compare.y);
 	}
-	bool operator==(const float2& compare) const noexcept {
+	bool operator==(const Vec2<DataT, DerivedT>& compare) const noexcept {
 		return (this->x == compare.x &&
 				this->y == compare.y);
 	}
-	bool operator!=(const float2& compare) noexcept {
+	bool operator!=(const Vec2<DataT, DerivedT>& compare) noexcept {
 		return !(*this == compare);
 	}
-	bool operator!=(const float2& compare) const noexcept {
+	bool operator!=(const Vec2<DataT, DerivedT>& compare) const noexcept {
 		return !(*this == compare);
 	}
 
 	// Operator +
-	float2 operator+(const float& in) noexcept {
-		return float2(this->x + in,
+	Vec2<DataT, DerivedT> operator+(const DataT& in) noexcept {
+		return Vec2<DataT, DerivedT><DataT, DerivecT>(this->x + in,
 					  this->y + in);
 	}
-	float2 operator+(const float& in) const noexcept {
-		return float2(this->x + in,
+	Vec2<DataT, DerivedT> operator+(const DataT& in) const noexcept {
+		return Vec2<DataT, DerivedT>(this->x + in,
 					  this->y + in);
 	}
-	float2 operator+(const float2& in) noexcept {
-		return float2(this->x + in.x,
+	Vec2<DataT, DerivedT> operator+(const Vec2<DataT, DerivedT>& in) noexcept {
+		return Vec2<DataT, DerivedT>(this->x + in.x,
 					  this->y + in.y);
 	}
-	float2 operator+(const float2& in) const noexcept {
-		return float2(this->x + in.x,
+	Vec2<DataT, DerivedT> operator+(const Vec2<DataT, DerivedT>& in) const noexcept {
+		return Vec2<DataT, DerivedT>(this->x + in.x,
 					  this->y + in.y);
 	}
 
 
 	// Operator -
-	float2 operator-(const float& in) noexcept {
-		return float2(this->x - in,
+	Vec2<DataT, DerivedT> operator-(const DataT& in) noexcept {
+		return Vec2<DataT, DerivedT>(this->x - in,
 					  this->y - in);
 	}
-	float2 operator-(const float& in) const noexcept {
-		return float2(this->x - in,
+	Vec2<DataT, DerivedT> operator-(const DataT& in) const noexcept {
+		return Vec2<DataT, DerivedT>(this->x - in,
 					  this->y - in);
 	}
-	float2 operator-(const float2& in) noexcept {
-		return float2(this->x - in.x,
+	Vec2<DataT, DerivedT> operator-(const Vec2<DataT, DerivedT>& in) noexcept {
+		return Vec2<DataT, DerivedT>(this->x - in.x,
 					  this->y - in.y);
 	}
-	float2 operator-(const float2& in) const noexcept {
-		return float2(this->x - in.x,
+	Vec2<DataT, DerivedT> operator-(const Vec2<DataT, DerivedT>& in) const noexcept {
+		return Vec2<DataT, DerivedT>(this->x - in.x,
 					  this->y - in.y);
 	}
 
 
 	// Operator *
-	float2 operator*(const float& in) noexcept {
-		return float2(this->x * in,
+	Vec2<DataT, DerivedT> operator*(const DataT& in) noexcept {
+		return Vec2<DataT, DerivedT>(this->x * in,
 					  this->y * in);
 	}
-	float2 operator*(const float& in) const noexcept {
-		return float2(this->x * in,
+	Vec2<DataT, DerivedT> operator*(const DataT& in) const noexcept {
+		return Vec2<DataT, DerivedT>(this->x * in,
 					  this->y * in);
 	}
-	float2 operator*(const float2& in) noexcept {
-		return float2(this->x * in.x,
+	Vec2<DataT, DerivedT> operator*(const Vec2<DataT, DerivedT>& in) noexcept {
+		return Vec2<DataT, DerivedT>(this->x * in.x,
 					  this->y * in.y);
 	}
-	float2 operator*(const float2& in) const noexcept {
-		return float2(this->x * in.x,
+	Vec2<DataT, DerivedT> operator*(const Vec2<DataT, DerivedT>& in) const noexcept {
+		return Vec2<DataT, DerivedT>(this->x * in.x,
 					  this->y * in.y);
 	}
 
 
 	// Operator /
-	float2 operator/(const float& in) noexcept {
-		return float2(this->x / in,
+	Vec2<DataT, DerivedT> operator/(const DataT& in) noexcept {
+		return Vec2<DataT, DerivedT>(this->x / in,
 					  this->y / in);
 	}
-	float2 operator/(const float& in) const noexcept {
-		return float2(this->x / in,
+	Vec2<DataT, DerivedT> operator/(const DataT& in) const noexcept {
+		return Vec2<DataT, DerivedT>(this->x / in,
 					  this->y / in);
 	}
-	float2 operator/(const float2& in) noexcept {
-		return float2(this->x / in.x,
+	Vec2<DataT, DerivedT> operator/(const Vec2<DataT, DerivedT>& in) noexcept {
+		return Vec2<DataT, DerivedT>(this->x / in.x,
 					  this->y / in.y);
 	}
-	float2 operator/(const float2& in) const noexcept {
-		return float2(this->x / in.x,
+	Vec2<DataT, DerivedT> operator/(const Vec2<DataT, DerivedT>& in) const noexcept {
+		return Vec2<DataT, DerivedT>(this->x / in.x,
 					  this->y / in.y);
 	}
 
@@ -137,30 +166,33 @@ struct float2 : public XMFLOAT2 {
 
 
 //----------------------------------------------------------------------------------
-// float3
+// Vec3
 //----------------------------------------------------------------------------------
+template<typename DataT, typename DerivedT = BaseVec3<DataT>>
+struct Vec3 : public DerivedT {
 
-struct float3 : public XMFLOAT3 {
+	static_assert(std::is_arithmetic_v<DataT>, "Vec3 data type is not an arithmetic type");
+	static_assert((sizeof(DerivedT) / sizeof(DataT)) == 3, "Vec3 base class does not have 3 members");
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	float3() noexcept = default;
+	Vec3() noexcept = default;
 
-	float3(float _x, float _y, float _z) noexcept : XMFLOAT3(_x, _y, _z) {}
+	Vec3(DataT _x, DataT _y, DataT _z) noexcept : DerivedT(_x, _y, _z) {}
 
-	float3(float2 _xy, float _z) noexcept : XMFLOAT3(_xy.x, _xy.y, z) {}
-	float3(XMFLOAT2 _xy, float _z) noexcept : XMFLOAT3(_xy.x, _xy.y, _z) {}
+	Vec3(const DerivedT& _xy, DataT _z) noexcept : DerivedT(_xy.x, _xy.y, _z) {}
 
-	float3(const float3& _float3) noexcept = default;
+	Vec3(const Vec3<DataT, DerivedT>& _xyz) noexcept : DerivedT(_xyz.x, _xyz.y, _xyz.z) {}
 
 
 	//----------------------------------------------------------------------------------
 	// Functions
 	//----------------------------------------------------------------------------------
 
-	// Return a pointer to the first element of the float3
-	float* RawData() { return &this->x; }
+	// Return a pointer to the first element of the Vec3<DataT, DerivedT>
+	DataT* RawData() { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -170,111 +202,111 @@ struct float3 : public XMFLOAT3 {
 	#pragma region operators
 
 	// Operator == and !=
-	bool operator==(const float3& compare) noexcept {
+	bool operator==(const Vec3<DataT, DerivedT>& compare) noexcept {
 		return (this->x == compare.x &&
 				this->y == compare.y &&
 				this->z == compare.z);
 	}
-	const bool operator==(const float3& compare) const noexcept {
+	const bool operator==(const Vec3<DataT, DerivedT>& compare) const noexcept {
 		return (this->x == compare.x &&
 				this->y == compare.y &&
 				this->z == compare.z);
 	}
-	bool operator!=(const float3& compare) noexcept {
+	bool operator!=(const Vec3<DataT, DerivedT>& compare) noexcept {
 		return !(*this == compare);
 	}
-	const bool operator!=(const float3& compare) const noexcept {
+	const bool operator!=(const Vec3<DataT, DerivedT>& compare) const noexcept {
 		return !(*this == compare);
 	}
 
 
 	// Operator +
-	float3 operator+(const float& in) noexcept {
-		return float3(this->x + in,
+	Vec3<DataT, DerivedT> operator+(const DataT& in) noexcept {
+		return Vec3<DataT, DerivedT>(this->x + in,
 					  this->y + in,
 					  this->z + in);
 	}
-	float3 operator+(const float& in) const noexcept {
-		return float3(this->x + in,
+	Vec3<DataT, DerivedT> operator+(const DataT& in) const noexcept {
+		return Vec3<DataT, DerivedT>(this->x + in,
 					  this->y + in,
 					  this->z + in);
 	}
-	float3 operator+(const float3& in) noexcept {
-		return float3(this->x + in.x,
+	Vec3<DataT, DerivedT> operator+(const Vec3<DataT, DerivedT>& in) noexcept {
+		return Vec3<DataT, DerivedT>(this->x + in.x,
 					  this->y + in.y,
 					  this->z + in.z);
 	}
-	float3 operator+(const float3& in) const noexcept {
-		return float3(this->x + in.x,
+	Vec3<DataT, DerivedT> operator+(const Vec3<DataT, DerivedT>& in) const noexcept {
+		return Vec3<DataT, DerivedT>(this->x + in.x,
 					  this->y + in.y,
 					  this->z + in.z);
 	}
 
 
 	// Operator -
-	float3 operator-(const float& in) noexcept {
-		return float3(this->x - in,
+	Vec3<DataT, DerivedT> operator-(const DataT& in) noexcept {
+		return Vec3<DataT, DerivedT>(this->x - in,
 					  this->y - in,
 					  this->z - in);
 	}
-	float3 operator-(const float& in) const noexcept {
-		return float3(this->x - in,
+	Vec3<DataT, DerivedT> operator-(const DataT& in) const noexcept {
+		return Vec3<DataT, DerivedT>(this->x - in,
 					  this->y - in,
 					  this->z - in);
 	}
-	float3 operator-(const float3& in) noexcept {
-		return float3(this->x - in.x,
+	Vec3<DataT, DerivedT> operator-(const Vec3<DataT, DerivedT>& in) noexcept {
+		return Vec3<DataT, DerivedT>(this->x - in.x,
 					  this->y - in.y,
 					  this->z - in.z);
 	}
-	float3 operator-(const float3& in) const noexcept {
-		return float3(this->x - in.x,
+	Vec3<DataT, DerivedT> operator-(const Vec3<DataT, DerivedT>& in) const noexcept {
+		return Vec3<DataT, DerivedT>(this->x - in.x,
 					  this->y - in.y,
 					  this->z - in.z);
 	}
 
 
 	// Operator *
-	float3 operator*(const float& in) noexcept {
-		return float3(this->x * in,
+	Vec3<DataT, DerivedT> operator*(const DataT& in) noexcept {
+		return Vec3<DataT, DerivedT>(this->x * in,
 					  this->y * in,
 					  this->z * in);
 	}
-	float3 operator*(const float& in) const noexcept {
-		return float3(this->x * in,
+	Vec3<DataT, DerivedT> operator*(const DataT& in) const noexcept {
+		return Vec3<DataT, DerivedT>(this->x * in,
 					  this->y * in,
 					  this->z * in);
 	}
-	float3 operator*(const float3& in) noexcept {
-		return float3(this->x * in.x,
+	Vec3<DataT, DerivedT> operator*(const Vec3<DataT, DerivedT>& in) noexcept {
+		return Vec3<DataT, DerivedT>(this->x * in.x,
 					  this->y * in.y,
 					  this->z * in.z);
 	}
-	float3 operator*(const float3& in) const noexcept {
-		return float3(this->x * in.x,
+	Vec3<DataT, DerivedT> operator*(const Vec3<DataT, DerivedT>& in) const noexcept {
+		return Vec3<DataT, DerivedT>(this->x * in.x,
 					  this->y * in.y,
 					  this->z * in.z);
 	}
 
 
 	// Operator /
-	float3 operator/(const float& in) noexcept {
-		return float3(this->x / in,
+	Vec3<DataT, DerivedT> operator/(const DataT& in) noexcept {
+		return Vec3<DataT, DerivedT>(this->x / in,
 					  this->y / in,
 					  this->z / in);
 	}
-	float3 operator/(const float& in) const noexcept {
-		return float3(this->x / in,
+	Vec3<DataT, DerivedT> operator/(const DataT& in) const noexcept {
+		return Vec3<DataT, DerivedT>(this->x / in,
 					  this->y / in,
 					  this->z / in);
 	}
-	float3 operator/(const float3& in) noexcept {
-		return float3(this->x / in.x,
+	Vec3<DataT, DerivedT> operator/(const Vec3<DataT, DerivedT>& in) noexcept {
+		return Vec3<DataT, DerivedT>(this->x / in.x,
 					  this->y / in.y,
 					  this->z / in.z);
 	}
-	float3 operator/(const float3& in) const noexcept {
-		return float3(this->x / in.x,
+	Vec3<DataT, DerivedT> operator/(const Vec3<DataT, DerivedT>& in) const noexcept {
+		return Vec3<DataT, DerivedT>(this->x / in.x,
 					  this->y / in.y,
 					  this->z / in.z);
 	}
@@ -285,33 +317,35 @@ struct float3 : public XMFLOAT3 {
 
 
 //----------------------------------------------------------------------------------
-// float4
+// Vec4
 //----------------------------------------------------------------------------------
+template<typename DataT, typename DerivedT = BaseVec4<DataT>>
+struct Vec4 : public DerivedT {
 
-struct float4 : public XMFLOAT4 {
+	static_assert(std::is_arithmetic_v<DataT>, "Vec4 data type is not an arithetic type");
+	static_assert((sizeof(DerivedT) / sizeof(DataT)) == 4, "Vec4 base class does not have 4 members");
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	float4() noexcept = default;
+	Vec4() noexcept = default;
 
-	float4(float _x, float _y, float _z, float _w) noexcept : XMFLOAT4(_x, _y, _z, _w) {}
+	Vec4(DataT _x, DataT _y, DataT _z, DataT _w) noexcept : DerivedT(_x, _y, _z, _w) {}
 
-	float4(float2 _xy, float _z, float _w) noexcept : XMFLOAT4(_xy.x, _xy.y, _z, _w) {}
-	float4(XMFLOAT2 _xy, float _z, float _w) noexcept : XMFLOAT4(_xy.x, _xy.y, _z, _w) {}
+	Vec4(const DerivedT& _xy, DataT _z, DataT _w) noexcept : DerivedT(_xy.x, _xy.y, _z, _w) {}
 
-	float4(float3 _xyz, float _w) noexcept : XMFLOAT4(_xyz.x, _xyz.y, _xyz.z, _w) {}
-	float4(XMFLOAT3 _xyz, float _w) noexcept : XMFLOAT4(_xyz.x, _xyz.y, _xyz.z, _w) {}
+	Vec4(const DerivedT& _xyz, DataT _w) noexcept : DerivedT(_xyz.x, _xyz.y, _xyz.z, _w) {}
 
-	float4(const float4& _float4) noexcept = default;
+	Vec4(const Vec4<DataT, DerivedT>& _xyzw) noexcept : DerivedT(_xyzw.x, _xyzw.y, _xyzw.z, _xyzw.w) {}
 
 
 	//----------------------------------------------------------------------------------
 	// Functions
 	//----------------------------------------------------------------------------------
 
-	// Return a pointer to the first element of the float4
-	float* RawData() { return &this->x; }
+	// Return a pointer to the first element of the Vec4<DataT, DerivedT>
+	DataT* RawData() { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -321,47 +355,47 @@ struct float4 : public XMFLOAT4 {
 	#pragma region operators
 
 	// Operator == and !=
-	bool operator==(const float4& compare) noexcept {
+	bool operator==(const Vec4<DataT, DerivedT>& compare) noexcept {
 		return (this->x == compare.x &&
 				this->y == compare.y &&
 				this->z == compare.z &&
 				this->w == compare.w);
 	}
-	const bool operator==(const float4& compare) const noexcept {
+	const bool operator==(const Vec4<DataT, DerivedT>& compare) const noexcept {
 		return (this->x == compare.x &&
 				this->y == compare.y &&
 				this->z == compare.z &&
 				this->w == compare.w);
 	}
-	bool operator!=(const float4& compare) noexcept {
+	bool operator!=(const Vec4<DataT, DerivedT>& compare) noexcept {
 		return !(*this == compare);
 	}
-	const bool operator!=(const float4& compare) const noexcept {
+	const bool operator!=(const Vec4<DataT, DerivedT>& compare) const noexcept {
 		return !(*this == compare);
 	}
 
 
 	// Operator +
-	float4 operator+(const float& in) noexcept {
-		return float4(this->x + in,
+	Vec4<DataT, DerivedT> operator+(const DataT& in) noexcept {
+		return Vec4<DataT, DerivedT>(this->x + in,
 					  this->y + in,
 					  this->z + in,
 					  this->w + in);
 	}
-	float4 operator+(const float& in) const noexcept {
-		return float4(this->x + in,
+	Vec4<DataT, DerivedT> operator+(const DataT& in) const noexcept {
+		return Vec4<DataT, DerivedT>(this->x + in,
 					  this->y + in,
 					  this->z + in,
 					  this->w + in);
 	}
-	float4 operator+(const float4& in) noexcept {
-		return float4(this->x + in.x,
+	Vec4<DataT, DerivedT> operator+(const Vec4<DataT, DerivedT>& in) noexcept {
+		return Vec4<DataT, DerivedT>(this->x + in.x,
 					  this->y + in.y,
 					  this->z + in.z,
 					  this->w + in.w);
 	}
-	float4 operator+(const float4& in) const noexcept {
-		return float4(this->x + in.x,
+	Vec4<DataT, DerivedT> operator+(const Vec4<DataT, DerivedT>& in) const noexcept {
+		return Vec4<DataT, DerivedT>(this->x + in.x,
 					  this->y + in.y,
 					  this->z + in.z,
 					  this->w + in.w);
@@ -369,26 +403,26 @@ struct float4 : public XMFLOAT4 {
 
 
 	// Operator -
-	float4 operator-(const float& in) noexcept {
-		return float4(this->x - in,
+	Vec4<DataT, DerivedT> operator-(const DataT& in) noexcept {
+		return Vec4<DataT, DerivedT>(this->x - in,
 					  this->y - in,
 					  this->z - in,
 					  this->w - in);
 	}
-	float4 operator-(const float& in) const noexcept {
-		return float4(this->x - in,
+	Vec4<DataT, DerivedT> operator-(const DataT& in) const noexcept {
+		return Vec4<DataT, DerivedT>(this->x - in,
 					  this->y - in,
 					  this->z - in,
 					  this->w - in);
 	}
-	float4 operator-(const float4& in) noexcept {
-		return float4(this->x - in.x,
+	Vec4<DataT, DerivedT> operator-(const Vec4<DataT, DerivedT>& in) noexcept {
+		return Vec4<DataT, DerivedT>(this->x - in.x,
 					  this->y - in.y,
 					  this->z - in.z,
 					  this->w - in.w);
 	}
-	float4 operator-(const float4& in) const noexcept {
-		return float4(this->x - in.x,
+	Vec4<DataT, DerivedT> operator-(const Vec4<DataT, DerivedT>& in) const noexcept {
+		return Vec4<DataT, DerivedT>(this->x - in.x,
 					  this->y - in.y,
 					  this->z - in.z,
 					  this->w - in.w);
@@ -396,26 +430,26 @@ struct float4 : public XMFLOAT4 {
 
 
 	// Operator *
-	float4 operator*(const float& in) noexcept {
-		return float4(this->x * in,
+	Vec4<DataT, DerivedT> operator*(const DataT& in) noexcept {
+		return Vec4<DataT, DerivedT>(this->x * in,
 					  this->y * in,
 					  this->z * in,
 					  this->w * in);
 	}
-	float4 operator*(const float& in) const noexcept {
-		return float4(this->x * in,
+	Vec4<DataT, DerivedT> operator*(const DataT& in) const noexcept {
+		return Vec4<DataT, DerivedT>(this->x * in,
 					  this->y * in,
 					  this->z * in,
 					  this->w * in);
 	}
-	float4 operator*(const float4& in) noexcept {
-		return float4(this->x * in.x,
+	Vec4<DataT, DerivedT> operator*(const Vec4<DataT, DerivedT>& in) noexcept {
+		return Vec4<DataT, DerivedT>(this->x * in.x,
 					  this->y * in.y,
 					  this->z * in.z,
 					  this->w * in.w);
 	}
-	float4 operator*(const float4& in) const noexcept {
-		return float4(this->x * in.x,
+	Vec4<DataT, DerivedT> operator*(const Vec4<DataT, DerivedT>& in) const noexcept {
+		return Vec4<DataT, DerivedT>(this->x * in.x,
 					  this->y * in.y,
 					  this->z * in.z,
 					  this->w * in.w);
@@ -423,26 +457,26 @@ struct float4 : public XMFLOAT4 {
 
 
 	// Operator /
-	float4 operator/(const float& in) noexcept {
-		return float4(this->x / in,
+	Vec4<DataT, DerivedT> operator/(const DataT& in) noexcept {
+		return Vec4<DataT, DerivedT>(this->x / in,
 					  this->y / in,
 					  this->z / in,
 					  this->w / in);
 	}
-	float4 operator/(const float& in) const noexcept {
-		return float4(this->x / in,
+	Vec4<DataT, DerivedT> operator/(const DataT& in) const noexcept {
+		return Vec4<DataT, DerivedT>(this->x / in,
 					  this->y / in,
 					  this->z / in,
 					  this->w / in);
 	}
-	float4 operator/(const float4& in) noexcept {
-		return float4(this->x / in.x,
+	Vec4<DataT, DerivedT> operator/(const Vec4<DataT, DerivedT>& in) noexcept {
+		return Vec4<DataT, DerivedT>(this->x / in.x,
 					  this->y / in.y,
 					  this->z / in.z,
 					  this->w / in.w);
 	}
-	float4 operator/(const float4& in) const noexcept {
-		return float4(this->x / in.x,
+	Vec4<DataT, DerivedT> operator/(const Vec4<DataT, DerivedT>& in) const noexcept {
+		return Vec4<DataT, DerivedT>(this->x / in.x,
 					  this->y / in.y,
 					  this->z / in.z,
 					  this->w / in.w);
@@ -450,3 +484,25 @@ struct float4 : public XMFLOAT4 {
 
 	#pragma endregion operators
 };
+
+
+
+
+//----------------------------------------------------------------------------------
+// Vector aliases
+//----------------------------------------------------------------------------------
+
+//using int2 = Vec2<int>;
+using int2 = Vec2<int32_t, DirectX::XMINT2>;
+using int3 = Vec3<int32_t, DirectX::XMINT3>;
+using int4 = Vec4<int32_t, DirectX::XMINT4>;
+
+
+using uint2 = Vec2<uint32_t, DirectX::XMUINT2>;
+using uint3 = Vec2<uint32_t, DirectX::XMUINT3>;
+using uint4 = Vec2<uint32_t, DirectX::XMUINT4>;
+
+
+using float2 = Vec2<float, DirectX::XMFLOAT2>;
+using float3 = Vec3<float, DirectX::XMFLOAT3>;
+using float4 = Vec4<float, DirectX::XMFLOAT4>;

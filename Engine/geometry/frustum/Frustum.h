@@ -10,7 +10,7 @@ class Frustum final {
 		Frustum() = default;
 
 		// Construct a frustum from a given matrix
-		explicit Frustum(CXMMATRIX M);
+		Frustum(CXMMATRIX M);
 
 		~Frustum() = default;
 

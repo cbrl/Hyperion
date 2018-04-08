@@ -396,3 +396,17 @@
 - 22:54:03.671 INFO: Loaded scene
 - 22:54:09.609 INFO: <=========================EXITING ENGINE=========================>
 
+- 15:19:23.000 INFO: <=========================STARTING ENGINE=========================>
+- 15:19:23.031 INFO: Initialized main window
+- 15:19:23.234 INFO: Initialized Direct3D
+- 15:21:23.000 INFO: <=========================STARTING ENGINE=========================>
+- 15:21:23.063 INFO: Initialized main window
+- 15:21:24.297 INFO: Initialized Direct3D
+- 16:37:07.000 INFO: <=========================STARTING ENGINE=========================>
+- 16:37:07.047 INFO: Initialized main window
+- 16:37:07.282 INFO: Initialized Direct3D
+- 16:37:07.407 DEBUG: Loaded texture: ../data/Textures/grasscube1024.dds
+- 16:37:11.579 DEBUG: Loaded OBJ file: ../data/models/test/test.obj
+- 16:37:11.625 INFO: Loaded scene
+- 16:37:15.063 INFO: <=========================EXITING ENGINE=========================>
+
