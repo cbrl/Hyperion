@@ -28,16 +28,14 @@ void Input::Reset() {
 }
 
 
-void Input::GetMouseDelta(i32& delta_x, i32& delta_y) const {
+int2 Input::GetMouseDelta() const {
 	// Mouse::MODE_ABSOLUTE - x/y are the position
 	// Mouse::MODE_RELATIVE - x/y are the delta
 
 	if (mouse_state.positionMode == Mouse::MODE_ABSOLUTE) {
-		delta_x = 0;
-		delta_y = 0;
+		return int2(0, 0);
 	}
 	else {
-		delta_x = mouse_state.x;
-		delta_y = mouse_state.y;
+		return int2(mouse_state.x, mouse_state.y);
 	}
 }

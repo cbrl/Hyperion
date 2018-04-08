@@ -115,8 +115,7 @@ void TestScene::Tick(float delta_time) {
 	const Input& input = System::Get()->GetInput();
 
 	// Get mouse delta
-	i32 mouse_x, mouse_y;
-	input.GetMouseDelta(mouse_x, mouse_y);
+	int2 mouse_delta = input.GetMouseDelta();
 
 
 
@@ -135,8 +134,8 @@ void TestScene::Tick(float delta_time) {
 
 	texts.at("FPS").SetText(L"FPS: " + to_wstring(fps));
 
-	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_x)
-							  + L"\nY: " + to_wstring(mouse_y));
+	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_delta.x)
+							  + L"\nY: " + to_wstring(mouse_delta.y));
 
 	float3 position = camera->GetPosition();
 	texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
@@ -165,8 +164,8 @@ void TestScene::Tick(float delta_time) {
 	float3 move_units(0.0f, 0.0f, 0.0f);
 
 	// Set x/y rotation with mouse data
-	rotateUnits.x = static_cast<float>(mouse_y);
-	rotateUnits.y = static_cast<float>(mouse_x);
+	rotateUnits.x = static_cast<float>(mouse_delta.y);
+	rotateUnits.y = static_cast<float>(mouse_delta.x);
 
 	// Roll rotation
 	if (input.IsKeyDown(Keyboard::Q)) {

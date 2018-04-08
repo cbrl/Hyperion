@@ -96,27 +96,23 @@ void System::Run() {
 
 
 void System::Tick() {
-	i32   mouseX, mouseY;
-	float deltaTime;
 
+	float delta_time;
 
 	// Update system metrics
 	system_monitor->Tick();
 	timer->Tick();
 	fps_counter->Tick();
-	deltaTime = timer->DeltaTime();
+
+	delta_time = timer->DeltaTime();
 
 
 	// Read input
 	input->Tick();
 
 
-	// Get mouse position
-	input->GetMouseDelta(mouseX, mouseY);
-
-
 	// Update scene
-	scene->Tick(deltaTime);
+	scene->Tick(delta_time);
 
 
 	// Render scene

@@ -31,7 +31,7 @@ class Input final {
 		}
 
 		// Get mouse movement since last update
-		void GetMouseDelta(i32& delta_x, i32& delta_y) const;
+		int2 GetMouseDelta() const;
 
 
 		// Check if key is currently down
