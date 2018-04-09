@@ -11,10 +11,11 @@
 #include "imgui\imgui_impl_dx11.h"
 #include "scene\scene.h"
 
+class System;
 
 class RenderingMgr final {
 	public:
-		RenderingMgr(HWND hWnd, u32 window_width, u32 window_height, bool fullscreen, bool vsync, bool msaa);
+		RenderingMgr(System& system, bool fullscreen, bool vsync, bool msaa);
 		~RenderingMgr();
 
 		// Resize the viewport
@@ -24,18 +25,18 @@ class RenderingMgr final {
 			ImGui_ImplDX11_CreateDeviceObjects();
 		}
 
-		// Render a given scene
-		void Render(Scene& scene) const;
+		// Render the scene
+		void Render(System& system) const;
 
 
 		//----------------------------------------------------------------------------------
 		// Get device / device context
 		//----------------------------------------------------------------------------------
 
-		ID3D11Device* GetDevice() {
+		ID3D11Device* GetDevice() const {
 			return direct3D->GetDevice();
 		}
-		ID3D11DeviceContext* GetDeviceContext() {
+		ID3D11DeviceContext* GetDeviceContext() const {
 			return direct3D->GetDeviceContext();
 		}
 

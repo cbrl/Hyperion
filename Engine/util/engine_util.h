@@ -44,7 +44,7 @@ class com_exception : public std::exception {
 // Throw
 inline void ThrowIfFailed(HRESULT hr, std::string msg = "") {
 	if (FAILED(hr)) {
-		FILE_LOG(logERROR) << msg;
+		FILE_LOG(logERROR) << msg << " (Failure with HRESULT of " << std::hex << hr << ")";
 		throw com_exception(hr, msg);
 	}
 }
@@ -57,32 +57,31 @@ inline void ThrowIfFailed(bool result, std::string msg = "") {
 }
 
 
-// Alert Window
-inline void AlertIfFailed(HRESULT hr, std::wstring msg = L"") {
+// Log
+inline void LogIfFailed(HRESULT hr, const char* msg = "", TLogLevel log_level = logWARNING) {
 	if (FAILED(hr)) {
-		if (!msg.empty()) {
-			MessageBox(NULL, msg.c_str(), L"Error", MB_OK);
-		}
-		else {
-			LPWSTR output;
-			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
-							FORMAT_MESSAGE_IGNORE_INSERTS |
-							FORMAT_MESSAGE_ALLOCATE_BUFFER,
-							NULL,
-							hr,
-							MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-							(LPTSTR)&output,
-							0,
-							NULL);
-			MessageBox(NULL, output, L"Error", MB_OK);
-		}
+		LogIfFailed(false, msg, log_level);
 	}
 }
 
-inline void AlertIfFailed(bool result, std::wstring msg = L"") {
+inline void LogIfFailed(bool result, const char* msg = "", TLogLevel log_level = logWARNING) {
 	if (!result) {
-		if (!msg.empty()) {
-			MessageBox(NULL, msg.c_str(), L"Error", MB_OK);
+		FILE_LOG(log_level) << msg;
+	}
+}
+
+
+// Alert Window
+inline void AlertIfFailed(HRESULT hr, const wchar_t* msg = L"") {
+	if (FAILED(hr)) {
+		AlertIfFailed(false, msg);
+	}
+}
+
+inline void AlertIfFailed(bool result, const wchar_t* msg = L"") {
+	if (!result) {
+		if (msg != L"") {
+			MessageBox(NULL, msg, L"Error", MB_OK);
 		}
 		else {
 			LPWSTR output;

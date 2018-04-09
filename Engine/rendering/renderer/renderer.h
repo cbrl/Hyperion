@@ -3,11 +3,14 @@
 #include <d3d11.h>
 #include <DirectXColors.h>
 
+#include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
+#include "shader\hlsl.h"
+#include "rendering\pipeline.h"
 #include "rendering\render_state_mgr.h"
-#include "scene\scene.h"
 #include "rendering\renderer\forward\forward_render.h"
 #include "rendering\renderer\sky\sky_renderer.h"
+#include "scene\scene.h"
 
 
 class Renderer final {
@@ -15,7 +18,7 @@ class Renderer final {
 		Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context);
 		~Renderer() = default;
 
-		void Render(Scene& scene, RenderStateMgr& render_state_mgr) const;
+		void Render(System& system, RenderStateMgr& render_state_mgr) const;
 
 
 	private:

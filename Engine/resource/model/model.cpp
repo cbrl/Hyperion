@@ -33,23 +33,23 @@ void XM_CALLCONV ChildModel::Update(ID3D11DeviceContext* device_context,
 // Model
 //----------------------------------------------------------------------------------
 
-Model::Model(ID3D11Device* device, ModelBlueprint blueprint)
-	: name(blueprint.name)
-	, mesh(blueprint.mesh)
-	, aabb(blueprint.aabb)
-	, sphere(blueprint.sphere)
+Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
+	: name(blueprint->name)
+	, mesh(blueprint->mesh)
+	, aabb(blueprint->aabb)
+	, sphere(blueprint->sphere)
 	, position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
 	, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
 	, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
 	, transform(XMMatrixIdentity())
 {
 	// Create the shared ptrs for the material vector
-	for (Material& mat : blueprint.materials) {
+	for (Material& mat : blueprint->materials) {
 		materials.push_back(make_shared<Material>(mat));
 	}
 
 	// Create each model part
-	for (ModelPart& part : blueprint.model_parts) {
+	for (ModelPart& part : blueprint->model_parts) {
 		child_models.push_back(ChildModel(device, part, materials[part.material_index]));
 	}
 }

@@ -24,15 +24,13 @@
 
 class System final : public MainWindow {
 	public:
-		static System* Get() { return system_ptr; }
-
-		System();
-		~System();
+		System() = default;
+		~System() = default;
 
 		bool Init();
 		void Run();
 
-		virtual LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
+		LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
 
 		void OnResize(u32 window_width, u32 window_height) const;
 
@@ -40,10 +38,12 @@ class System final : public MainWindow {
 		u32  GetWindowWidth()  const { return window_width; }
 		u32  GetWindowHeight() const { return window_height; }
 
+		Scene&         GetScene()            { return *scene; }
 		Input&         GetInput()      const { return *input; }
 		Timer&         GetTimer()      const { return *timer; }
 		FPS&           GetFPSCounter() const { return *fps_counter; }
 		SystemMonitor& GetSysMon()     const { return *system_monitor; }
+		RenderingMgr&  GetRenderingMgr() const { return *rendering_mgr; }
 		
 
 	private:
@@ -52,8 +52,6 @@ class System final : public MainWindow {
 
 
 	private:
-		static System* system_ptr;
-
 		unique_ptr<Input>         input;
 		unique_ptr<SystemMonitor> system_monitor;
 		unique_ptr<Timer>         timer;

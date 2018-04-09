@@ -1,22 +1,25 @@
 #include "stdafx.h"
 #include "user_interface.h"
 #include "scene\scene.h"
+#include "system\system.h"
 
 
 static void* selected = 0;
 
 
-void UserInterface::Draw(Scene& scene) {
-	
-	ImGui::SetNextWindowSize(ImVec2(550, 600), ImGuiCond_FirstUseEver);
+void UserInterface::Draw(System& system) {
+
+	Scene& scene = system.GetScene();
 
 	bool open = true;
+	
+	ImGui::SetNextWindowSize(ImVec2(550, 600), ImGuiCond_FirstUseEver);
 
 	// Begin window
 	if (ImGui::Begin("Scene", &open, ImGuiWindowFlags_MenuBar)) {
 
 		// Draw Menu
-		DrawMenu(scene);
+		DrawMenu(system, scene);
 
 		// Left pane (object list)
 		DrawObjectList(scene);
@@ -33,7 +36,8 @@ void UserInterface::Draw(Scene& scene) {
 }
 
 
-void UserInterface::DrawMenu(Scene& scene) {
+void UserInterface::DrawMenu(System& system, Scene& scene) {
+	static bool new_model_popup;
 
 	if (ImGui::BeginMenuBar()) {
 
@@ -54,7 +58,67 @@ void UserInterface::DrawMenu(Scene& scene) {
 			ImGui::EndMenu();
 		}
 
+		if (ImGui::BeginMenu("Models")) {
+			if (ImGui::BeginMenu("Add Model")) {
+				if (ImGui::MenuItem("From file")) {
+					wchar_t szFile[512] = {};
+
+					OPENFILENAME ofn = {};
+					ofn.lStructSize = sizeof(ofn);
+					ofn.lpstrFile = szFile;
+					ofn.lpstrFile[0] = '\0';
+					ofn.nMaxFile = sizeof(szFile);
+					ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+					if (GetOpenFileName(&ofn)) {
+						auto bp = system.GetRenderingMgr().GetResourceMgr()->Create<ModelBlueprint>(szFile);
+						scene.GetModels().push_back(Model(system.GetRenderingMgr().GetDevice(), bp));
+					}
+					else {
+						FILE_LOG(logWARNING) << "Failed to open file dialog";
+					}
+				}
+
+				if (ImGui::MenuItem("From existing")) {
+					new_model_popup = true;
+				}
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenu();
+		}
+
 		ImGui::EndMenuBar();
+	}
+
+	if(new_model_popup)
+		ImGui::OpenPopup("New Model");
+
+	if (ImGui::BeginPopupModal("New Model", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		new_model_popup = false;
+
+		static int selected_combo = NULL;
+
+		static auto getter = [](void* vec, int idx, const char** out_text) {
+			auto& vector = *static_cast<std::vector<Model>*>(vec);
+			if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+			*out_text = vector.at(idx).GetName().c_str();
+			return true;
+		};
+
+		ImGui::Combo("Models", &selected_combo, getter, (void*)&scene.GetModels(), scene.GetModels().size());
+
+		if (ImGui::Button("Ok")) {
+			scene.GetModels().push_back(Model(scene.GetModels().at(selected_combo)));
+		}
+			
+
+		if (ImGui::Button("Close"))
+			ImGui::CloseCurrentPopup();
+
+		ImGui::EndPopup();
 	}
 }
 

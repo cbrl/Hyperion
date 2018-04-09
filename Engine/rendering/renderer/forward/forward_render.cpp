@@ -136,7 +136,13 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 			if (mat.map_bump) mat.map_bump->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_NORMAL);
 
 
+			// Draw the child
 			model.Draw(device_context.Get(), child.GetIndexCount(), child.GetIndexStart());
+
+
+			// Unbind the SRVs
+			ID3D11ShaderResourceView* null_srv[6] = { nullptr };
+			Pipeline::PS::BindSRVs(device_context.Get(), 0, std::size(null_srv), null_srv);
 		});
 	});
 }

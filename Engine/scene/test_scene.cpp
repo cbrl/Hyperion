@@ -8,16 +8,17 @@ static constexpr float zFar = 1000.0f;
 static constexpr float FOV = XM_PI / 3.0f;
 
 
-TestScene::TestScene(ID3D11Device* device,
-					 ID3D11DeviceContext* device_context,
-					 ResourceMgr& resource_mgr) {
-	Init(device, device_context, resource_mgr);
+TestScene::TestScene(const System& system) {
+	Init(system);
 }
 
 
-void TestScene::Init(ID3D11Device* device,
-					 ID3D11DeviceContext* device_context,
-					 ResourceMgr& resource_mgr) {
+void TestScene::Init(const System& system) {
+
+	const auto& rendering_mgr = system.GetRenderingMgr();
+	auto& resource_mgr = *rendering_mgr.GetResourceMgr();
+	const auto  device = rendering_mgr.GetDevice();
+	const auto  device_context = rendering_mgr.GetDeviceContext();
 
 	//----------------------------------------------------------------------------------
 	// Create camera
@@ -25,8 +26,8 @@ void TestScene::Init(ID3D11Device* device,
 
 	camera = make_unique<Camera>(device,
 								 resource_mgr,
-								 System::Get()->GetWindowWidth(),
-								 System::Get()->GetWindowHeight(),
+								 system.GetWindowWidth(),
+								 system.GetWindowHeight(),
 								 FOV, zNear, zFar,
 								 L"../data/Textures/grasscube1024.dds");
 
@@ -79,8 +80,8 @@ void TestScene::Init(ID3D11Device* device,
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	auto bp = resource_mgr.Create<ModelBlueprint>(L"../data/models/test/", L"test.obj");
-	models.push_back(Model(device, *bp));
+	auto bp = resource_mgr.Create<ModelBlueprint>(L"../data/models/test/test.obj");
+	models.push_back(Model(device, bp));
 	models.back().Scale(3.0f, 3.0f, 3.0f);
 	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
 	//models.back().SetRotation(0.0f, 1.2f, 0.0f);
@@ -109,13 +110,16 @@ void TestScene::Init(ID3D11Device* device,
 }
 
 
-void TestScene::Tick(float delta_time) {
+void TestScene::Tick(const System& system) {
 
 	// Get input handler
-	const Input& input = System::Get()->GetInput();
+	const Input& input = system.GetInput();
 
 	// Get mouse delta
 	int2 mouse_delta = input.GetMouseDelta();
+
+	// Get delta time
+	float delta_time = system.GetTimer().DeltaTime();
 
 
 
@@ -130,7 +134,7 @@ void TestScene::Tick(float delta_time) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	u32 fps = System::Get()->GetFPSCounter().GetFPS();
+	u32 fps = system.GetFPSCounter().GetFPS();
 
 	texts.at("FPS").SetText(L"FPS: " + to_wstring(fps));
 

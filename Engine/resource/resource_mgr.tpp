@@ -21,7 +21,7 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetOrCreate(const KeyT& key, ArgsT
 		if (!n->second.expired()) {
 			return n->second.lock();
 		}
-		// If the resource is expired then delete it
+		// If the resource has expired then remove the ptr from the map
 		else {
 			resource_map.erase(n);
 		}
@@ -61,9 +61,9 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::Get(const KeyT& key) {
 
 // ModelBlueprint
 template<typename ResourceT>
-enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::Create(const wstring& folder, const wstring& filename) {
+enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::Create(const wstring& filename) {
 
-	return models.GetOrCreate(folder + filename, device.Get(), *this, folder, filename);
+	return models.GetOrCreate(filename, device.Get(), *this, filename);
 }
 
 

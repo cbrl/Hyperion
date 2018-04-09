@@ -8,15 +8,11 @@
 class TestScene final : public Scene {
 
 	public:
-		TestScene(ID3D11Device* device,
-				  ID3D11DeviceContext* device_context,
-				  ResourceMgr& resource_mgr);
+		TestScene(const System& system);
 
 		~TestScene() = default;
 
-		void Init(ID3D11Device* device,
-				  ID3D11DeviceContext* device_context,
-				  ResourceMgr& resource_mgr);
+		void Init(const System& system);
 
-		void Tick(float delta_time);
+		void Tick(const System& system);
 };

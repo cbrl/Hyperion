@@ -6,10 +6,9 @@
 
 ModelBlueprint::ModelBlueprint(ID3D11Device* device,
 							   ResourceMgr& resource_mgr,
-							   const wstring& folder,
 							   const wstring& filename) {
 
-	auto out = ModelLoader::Load<VertexPositionNormalTexture>(device, resource_mgr, folder, filename);
+	auto out = ModelLoader::Load<VertexPositionNormalTexture>(device, resource_mgr, filename);
 	
 	name        = out.name;
 	materials   = out.materials;

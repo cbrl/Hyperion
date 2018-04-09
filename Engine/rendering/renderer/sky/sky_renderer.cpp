@@ -41,7 +41,7 @@ void SkyRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mgr) {
 	// Bind the texture
 	//----------------------------------------------------------------------------------
 
-	skybox.GetTexture()->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_DIFFUSE);
+	skybox.GetTexture()->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SKYBOX);
 
 
 	//----------------------------------------------------------------------------------

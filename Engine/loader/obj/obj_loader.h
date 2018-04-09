@@ -61,7 +61,6 @@ class OBJLoader final {
 
 		static ModelOutput<VertexT> Load(ID3D11Device* device,
 										 ResourceMgr& resource_mgr,
-										 const wstring& folder,
 										 const wstring& filename,
 										 bool right_hand_coords);
 
@@ -77,7 +76,7 @@ class OBJLoader final {
 
 		static void Reset();
 
-		static void LoadModel(wstring folder, wstring filename);
+		static void LoadModel(wstring filename);
 		static void LoadMaterials(wstring folder);
 
 		static void ReadFace(wstring& line);

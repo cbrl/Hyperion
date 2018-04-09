@@ -16,7 +16,6 @@ class ModelLoader final {
 		template<typename VertexT>
 		static ModelOutput<VertexT> Load(ID3D11Device* device,
 										 ResourceMgr& resource_mgr,
-										 const wstring& folder,
 										 const wstring& filename);
 };
 

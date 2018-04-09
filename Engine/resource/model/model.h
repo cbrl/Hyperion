@@ -75,7 +75,7 @@ class ChildModel final {
 
 class Model final {
 	public:
-		Model(ID3D11Device* device, ModelBlueprint blueprint);
+		Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint);
 		~Model() = default;
 
 

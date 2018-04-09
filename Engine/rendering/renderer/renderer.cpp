@@ -1,10 +1,8 @@
 #include "stdafx.h"
 #include "renderer.h"
 
-#include "util\engine_util.h"
-#include "shader\hlsl.h"
-#include "rendering\pipeline.h"
 #include "imgui\imgui.h"
+#include "system\system.h"
 
 
 Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
@@ -16,7 +14,10 @@ Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
 }
 
 
-void Renderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) const {
+void Renderer::Render(System& system, RenderStateMgr& render_state_mgr) const {
+
+	// Get the scene
+	Scene& scene = system.GetScene();
 
 	//----------------------------------------------------------------------------------
 	// Update the camera buffer
@@ -56,5 +57,5 @@ void Renderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) const {
 	// Render the ImGui UI
 	//----------------------------------------------------------------------------------
 
-	scene.DrawUI();
+	scene.DrawUI(system);
 }

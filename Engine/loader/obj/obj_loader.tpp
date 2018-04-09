@@ -27,20 +27,22 @@ void OBJLoader<VertexT>::Reset() {
 template<typename VertexT>
 ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
 											  ResourceMgr& resource_mgr,
-											  const wstring& folder,
 											  const wstring& filename,
 											  bool right_hand_coords) {
 
 	// Make sure the file exists first
-	ThrowIfFailed(fs::exists(folder + filename),
+	ThrowIfFailed(fs::exists(filename),
 	              "Error loading file");
 
 	// Set the coordinate system
 	rh_coord = right_hand_coords;
 
 
+	// Get the folder that the file is in
+	wstring folder = GetParentPath(filename);
+
 	// Load the model
-	LoadModel(folder, filename);
+	LoadModel(filename);
 
 	// Load the materials
 	LoadMaterials(folder);
@@ -82,7 +84,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
 	}
 
 	// Create the model
-	string name = wstr2str(filename.substr(0, filename.find(L'.')));
+	string name = wstr2str(GetFilename(filename));
 	ModelOutput<VertexT> out(name, vertices, indices, mtlVector, groups);
 
 
@@ -95,10 +97,10 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::LoadModel(wstring folder, wstring filename) {
+void OBJLoader<VertexT>::LoadModel(wstring filename) {
 	
 	// Open the file
-	wifstream file(folder + filename);
+	wifstream file(filename);
 	if (file.fail()) {
 		throw std::exception("Could not open obj file");
 	}

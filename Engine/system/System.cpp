@@ -5,20 +5,8 @@
 #include "imgui\imgui.h"
 
 
-System* System::system_ptr = nullptr;
-
 // Declare the ImGui msg handler
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-
-System::System() {
-	system_ptr = this;
-}
-
-
-System::~System() {
-	system_ptr = nullptr;
-}
 
 
 bool System::Init() {
@@ -52,11 +40,11 @@ bool System::Init() {
 
 
 	// Initialize rendering manager
-	rendering_mgr = make_unique<RenderingMgr>(hWnd, window_width, window_height, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
+	rendering_mgr = make_unique<RenderingMgr>(*this, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
 
 
 	// Initialize scene
-	scene = make_unique<TestScene>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext(), *rendering_mgr->GetResourceMgr());
+	scene = make_unique<TestScene>(*this);
 	FILE_LOG(logINFO) << "Loaded scene";
 
 
@@ -97,14 +85,10 @@ void System::Run() {
 
 void System::Tick() {
 
-	float delta_time;
-
 	// Update system metrics
 	system_monitor->Tick();
 	timer->Tick();
 	fps_counter->Tick();
-
-	delta_time = timer->DeltaTime();
 
 
 	// Read input
@@ -112,11 +96,11 @@ void System::Tick() {
 
 
 	// Update scene
-	scene->Tick(delta_time);
+	scene->Tick(*this);
 
 
 	// Render scene
-	rendering_mgr->Render(*scene);
+	rendering_mgr->Render(*this);
 }
 
 

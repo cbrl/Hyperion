@@ -38,7 +38,7 @@ class ResourceMgr final {
 
 		// ModelBlueprint
 		template<typename ResourceT>
-		enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> Create(const wstring& folder, const wstring& filename);
+		enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> Create(const wstring& filename);
 
 		// Texture
 		template<typename ResourceT>

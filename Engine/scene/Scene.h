@@ -9,6 +9,7 @@
 #include "text\text.h"
 #include "scene\ui\user_interface.h"
 
+class System;
 
 class Scene {
 	public:
@@ -18,10 +19,10 @@ class Scene {
 		void InputEnabled(bool enable) { enable_input = enable; }
 
 		// Update the scene
-		virtual void Tick(float delta_time) = 0;
+		virtual void Tick(const System& system) = 0;
 
 		// Draw the UI
-		void DrawUI() { ui.Draw(*this); }
+		void DrawUI(System& system) { ui.Draw(system); }
 
 
 		//----------------------------------------------------------------------------------
@@ -38,9 +39,7 @@ class Scene {
 
 	protected:
 		Scene() : enable_input(true) {}
-		virtual void Init(ID3D11Device* device,
-						  ID3D11DeviceContext* device_context,
-						  ResourceMgr& resource_mgr) = 0;
+		virtual void Init(const System& system) = 0;
 
 
 	protected:
