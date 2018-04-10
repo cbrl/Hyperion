@@ -60,7 +60,7 @@ struct Vec2 : public DerivedT {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the vector
-	constexpr DataT* RawData() { return &this->x; }
+	constexpr DataT* Data() { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ struct Vec3 : public DerivedT {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the vector
-	constexpr DataT* RawData() { return &this->x; }
+	constexpr DataT* Data() { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ struct Vec4 : public DerivedT {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the vector
-	constexpr DataT* RawData() { return &this->x; }
+	constexpr DataT* Data() { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------

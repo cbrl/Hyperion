@@ -62,7 +62,7 @@ struct AABB final {
 		// Transform the AABB by a matrix
 		void XM_CALLCONV Transform(FXMMATRIX M) {
 			for (u32 i = 0; i < 8; ++i) {
-				transformed_verts[i] = XMVector3Transform(origin_verts[i], M);
+				transformed_verts[i] = XMVector3TransformCoord(origin_verts[i], M);
 			}
 
 			auto pair = MinMaxPoint(transformed_verts);

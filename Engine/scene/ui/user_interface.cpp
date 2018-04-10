@@ -337,7 +337,7 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 
 	// Draw fog details
 	if (selected == &scene.GetFog()) {
-		ImGui::DragFloat3("Color",  scene.GetFog().color.RawData(), 0.01f, 0.0f, 1.0f);
+		ImGui::DragFloat3("Color",  scene.GetFog().color.Data(), 0.01f, 0.0f, 1.0f);
 		ImGui::DragFloat( "Start", &scene.GetFog().start,           0.05f, 0.0f, FLT_MAX);
 		ImGui::DragFloat( "Range", &scene.GetFog().range,           0.05f, 0.0f, FLT_MAX);
 	}
@@ -368,13 +368,13 @@ void UserInterface::DrawModelDetails(Model& model) {
 	XMStoreFloat3(&rotation, t.GetRotation());
 	XMStoreFloat3(&scale, t.GetScale());
 
-	if (ImGui::InputFloat3("Position", position.RawData()))
+	if (ImGui::InputFloat3("Position", position.Data()))
 		model.SetPosition(position);
 
-	if (ImGui::InputFloat3("Rotation", rotation.RawData()))
+	if (ImGui::InputFloat3("Rotation", rotation.Data()))
 		model.SetRotation(rotation);
 
-	if (ImGui::InputFloat3("Scale", scale.RawData()))
+	if (ImGui::InputFloat3("Scale", scale.Data()))
 		model.SetScale(scale);
 }
 
@@ -402,11 +402,11 @@ void UserInterface::DrawLightDetails(DirectionalLight& light) {
 	ImGui::Text(name);
 	ImGui::Separator();
 
-	ImGui::DragFloat3("Direction",      light.direction.RawData(), 0.01f, -1.0f, 1.0f);
+	ImGui::DragFloat3("Direction",      light.direction.Data(), 0.01f, -1.0f, 1.0f);
 	ImGui::NewLine();
-	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.RawData());
-	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.RawData());
-	ImGui::ColorEdit3("Specular Color", light.specular.RawData());
+	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.Data());
+	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.Data());
+	ImGui::ColorEdit3("Specular Color", light.specular.Data());
 }
 
 
@@ -418,13 +418,13 @@ void UserInterface::DrawLightDetails(PointLight& light) {
 	ImGui::Text(name);
 	ImGui::Separator();
 
-	ImGui::DragFloat3("Position",       light.position.RawData(),    0.1f, -FLT_MAX, FLT_MAX);
+	ImGui::DragFloat3("Position",       light.position.Data(),    0.1f, -FLT_MAX, FLT_MAX);
 	ImGui::DragFloat( "Range",         &light.range,                 0.1f,  0.0f, FLT_MAX);
-	ImGui::DragFloat3("Attenuation",    light.attenuation.RawData(), 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat3("Attenuation",    light.attenuation.Data(), 0.01f, 0.0f, 1.0f);
 	ImGui::NewLine();
-	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.RawData());
-	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.RawData());
-	ImGui::ColorEdit3("Specular Color", light.specular.RawData());
+	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.Data());
+	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.Data());
+	ImGui::ColorEdit3("Specular Color", light.specular.Data());
 }
 
 
@@ -436,13 +436,13 @@ void UserInterface::DrawLightDetails(SpotLight& light) {
 	ImGui::Text(name);
 	ImGui::Separator();
 
-	ImGui::DragFloat3("Position",       light.position.RawData(),    0.1f,  -FLT_MAX, FLT_MAX);
-	ImGui::DragFloat3("Direction",      light.direction.RawData(),   0.01f, -1.0f, 1.0f);
+	ImGui::DragFloat3("Position",       light.position.Data(),    0.1f,  -FLT_MAX, FLT_MAX);
+	ImGui::DragFloat3("Direction",      light.direction.Data(),   0.01f, -1.0f, 1.0f);
 	ImGui::DragFloat( "Range",         &light.range,                 0.1f,   0.0f, FLT_MAX);
 	ImGui::DragFloat( "Spot",          &light.spot,                  0.05f,  0.0f, FLT_MAX);
-	ImGui::DragFloat3("Attenuation",    light.attenuation.RawData(), 0.01f,  0.0f, 1.0f);
+	ImGui::DragFloat3("Attenuation",    light.attenuation.Data(), 0.01f,  0.0f, 1.0f);
 	ImGui::NewLine();
-	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.RawData());
-	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.RawData());
-	ImGui::ColorEdit3("Specular Color", light.specular.RawData());
+	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.Data());
+	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.Data());
+	ImGui::ColorEdit3("Specular Color", light.specular.Data());
 }
