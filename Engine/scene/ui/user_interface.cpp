@@ -63,14 +63,7 @@ void UserInterface::DrawMenu(System& system, Scene& scene) {
 				if (ImGui::MenuItem("From file")) {
 					wchar_t szFile[512] = {};
 
-					OPENFILENAME ofn = {};
-					ofn.lStructSize = sizeof(ofn);
-					ofn.lpstrFile = szFile;
-					ofn.lpstrFile[0] = '\0';
-					ofn.nMaxFile = sizeof(szFile);
-					ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-					if (GetOpenFileName(&ofn)) {
+					if (OpenFilePicker(szFile, sizeof(szFile))) {
 						auto bp = system.GetRenderingMgr().GetResourceMgr().Create<ModelBlueprint>(szFile);
 						scene.GetModels().push_back(Model(system.GetRenderingMgr().GetDevice(), bp));
 					}
@@ -92,12 +85,14 @@ void UserInterface::DrawMenu(System& system, Scene& scene) {
 		ImGui::EndMenuBar();
 	}
 
-	if(new_model_popup)
+
+	// Open new model popup
+	if (new_model_popup) {
 		ImGui::OpenPopup("New Model");
+		new_model_popup = false;
+	}
 
 	if (ImGui::BeginPopupModal("New Model", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-
-		new_model_popup = false;
 
 		static int selected_combo = NULL;
 
