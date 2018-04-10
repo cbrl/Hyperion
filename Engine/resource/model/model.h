@@ -18,7 +18,7 @@ class ChildModel final {
 	friend class Model;
 
 	protected:
-		ChildModel(ID3D11Device* device, ModelPart& part, shared_ptr<Material> mat)
+		ChildModel(ID3D11Device* device, ModelPart& part, Material mat)
 			: name(part.name)
 			, buffer(device)
 			, index_start(part.index_start)
@@ -49,7 +49,7 @@ class ChildModel final {
 		const string&         GetName()     const { return name; }
 		const AABB&           GetAABB()     const { return aabb; }
 		const BoundingSphere& GetSphere()   const { return sphere; }
-		const Material&       GetMaterial() const { return *material; }
+		const Material&       GetMaterial() const { return material; }
 
 		template<typename StageT>
 		void BindBuffer(ID3D11DeviceContext* device_context, u32 slot) const {
@@ -65,7 +65,7 @@ class ChildModel final {
 		u32 index_start;
 		u32 index_count;
 
-		shared_ptr<Material> material;
+		Material material;
 
 		AABB           aabb;
 		BoundingSphere sphere;
@@ -154,7 +154,7 @@ class Model final {
 
 		shared_ptr<Mesh> mesh;
 
-		vector<shared_ptr<Material>> materials;
+		vector<Material> materials;
 
 		AABB           aabb;
 		BoundingSphere sphere;

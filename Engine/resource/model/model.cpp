@@ -21,8 +21,8 @@ void XM_CALLCONV ChildModel::Update(ID3D11DeviceContext* device_context,
 	buffer_data.world_view_proj = world_view_proj;
 	buffer_data.texTransform = tex_transform;
 
-	buffer_data.mat = MaterialBuffer(material->Ka, material->Kd, material->Ks, material->Ke,
-									 material->Ni, material->d, material->has_texture);
+	buffer_data.mat = MaterialBuffer(material.Ka, material.Kd, material.Ks, material.Ke,
+									 material.Ni, material.d, material.has_texture);
 
 	buffer.UpdateData(device_context, buffer_data);
 }
@@ -41,7 +41,7 @@ Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
 {
 	// Create the shared ptrs for the material vector
 	for (Material& mat : blueprint->materials) {
-		materials.push_back(make_shared<Material>(mat));
+		materials.push_back(mat);
 	}
 
 	// Create each model part
