@@ -8,6 +8,7 @@
 #include "resource\model\model_blueprint.h"
 #include "resource\mesh\mesh.h"
 #include "resource\material\material.h"
+#include "geometry\transform\transform.h"
 #include "geometry\boundingvolume\bounding_volume.h"
 #include "rendering\buffer\constant_buffer.h"
 
@@ -103,34 +104,34 @@ class Model final {
 		// Move / Rotate / Scale
 		//----------------------------------------------------------------------------------
 
-		void SetPosition(float x, float y, float z) {
-			position = XMMatrixTranslation(x, y, z);
+		void SetPosition(const float3& position) {
 			update_bounding_volumes = true;
+			transform.SetPosition(position);
 		}
 
-		void Move(float x, float y, float z) {
-			position = XMMatrixMultiply(position, XMMatrixTranslation(x, y, z));
+		void Move(const float3& position) {
 			update_bounding_volumes = true;
+			transform.Move(position);
 		}
 
-		void SetRotation(float x, float y, float z) {
-			rotation = XMMatrixRotationRollPitchYaw(x, y, z);
+		void SetRotation(const float3& rotation) {
 			update_bounding_volumes = true;
+			transform.SetRotation(rotation);
 		}
 
-		void Rotate(float x, float y, float z) {
-			rotation = XMMatrixMultiply(rotation, XMMatrixRotationRollPitchYaw(x, y, z));
+		void Rotate(const float3& rotation) {
 			update_bounding_volumes = true;
+			transform.Rotate(rotation);
 		}
 
-		void SetScale(float x, float y, float z) {
-			scale = XMMatrixScaling(x, y, z);
+		void SetScale(const float3& scale) {
 			update_bounding_volumes = true;
+			transform.SetScale(scale);
 		}
 
-		void Scale(float x, float y, float z) {
-			scale = XMMatrixMultiply(scale, XMMatrixScaling(x, y, z));
+		void Scale(const float3& scale) {
 			update_bounding_volumes = true;
+			transform.Scale(scale);
 		}
 
 
@@ -145,25 +146,21 @@ class Model final {
 		const string&         GetName()      const { return name; }
 		const AABB&           GetAABB()      const { return aabb; }
 		const BoundingSphere& GetSphere()    const { return sphere; }
-		const XMMATRIX&       GetTransform() const { return transform; }
+		const Transform&      GetTransform() const { return transform; }
 
 
 	private:
 		string name;
 
-		AABB aabb;
-		BoundingSphere sphere;
-
 		shared_ptr<Mesh> mesh;
 
 		vector<shared_ptr<Material>> materials;
 
-		vector<ChildModel> child_models;
+		AABB           aabb;
+		BoundingSphere sphere;
+		Transform      transform;
 		
+		vector<ChildModel> child_models;
 
-		XMMATRIX position;
-		XMMATRIX rotation;
-		XMMATRIX scale;
-		XMMATRIX transform;
 		bool     update_bounding_volumes;
 };

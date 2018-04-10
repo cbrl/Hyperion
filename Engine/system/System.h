@@ -38,11 +38,11 @@ class System final : public MainWindow {
 		u32  GetWindowWidth()  const { return window_width; }
 		u32  GetWindowHeight() const { return window_height; }
 
-		Scene&         GetScene()            { return *scene; }
-		Input&         GetInput()      const { return *input; }
-		Timer&         GetTimer()      const { return *timer; }
-		FPS&           GetFPSCounter() const { return *fps_counter; }
-		SystemMonitor& GetSysMon()     const { return *system_monitor; }
+		Scene&         GetScene()              { return *scene; }
+		Input&         GetInput()        const { return *input; }
+		Timer&         GetTimer()        const { return *timer; }
+		FPS&           GetFPSCounter()   const { return *fps_counter; }
+		SystemMonitor& GetSysMon()       const { return *system_monitor; }
 		RenderingMgr&  GetRenderingMgr() const { return *rendering_mgr; }
 		
 

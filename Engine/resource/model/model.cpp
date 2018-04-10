@@ -38,10 +38,6 @@ Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
 	, mesh(blueprint->mesh)
 	, aabb(blueprint->aabb)
 	, sphere(blueprint->sphere)
-	, position(XMMatrixTranslation(0.0f, 0.0f, 0.0f))
-	, rotation(XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f))
-	, scale(XMMatrixScaling(1.0f, 1.0f, 1.0f))
-	, transform(XMMatrixIdentity())
 {
 	// Create the shared ptrs for the material vector
 	for (Material& mat : blueprint->materials) {
@@ -57,36 +53,35 @@ Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
 
 void XM_CALLCONV Model::Update(ID3D11DeviceContext* device_context, FXMMATRIX view, CXMMATRIX proj) {
 
-	// Update the object matrix
-	transform = XMMatrixMultiply(transform, (scale*rotation*position));
+	// Update the object's transform
+	transform.Update();
 
 	// Create the model-to-world matrix. Transposed for HLSL.
-	auto world = XMMatrixTranspose(transform);
+	auto world = XMMatrixTranspose(transform.GetWorld());
 
 	// Create the inverse transpose of the model-to-world matrix
-	auto world_inv_transpose = XMMatrixInverse(NULL, transform);
+	auto world_inv_transpose = XMMatrixInverse(NULL, transform.GetWorld());
 
 	// Create the world-view-projection matrix
-	auto world_view_proj = XMMatrixTranspose(transform * view * proj);
+	auto world_view_proj = XMMatrixTranspose(transform.GetWorld() * view * proj);
 
 
 	// Update each child model
 	ForEachChild([&](ChildModel& child) {
 
 		if (update_bounding_volumes)
-			child.UpdateBoundingVolumes(transform);
+			child.UpdateBoundingVolumes(transform.GetWorld());
 
 		child.Update(device_context, world, world_inv_transpose, world_view_proj, XMMatrixIdentity());
 	});
 
 	// Update the model's bounding volumes
 	if (update_bounding_volumes) {
-		aabb.Transform(transform);
-		sphere.Transform(transform);
+		aabb.Transform(transform.GetWorld());
+		sphere.Transform(transform.GetWorld());
 	}
 
 
-	// Reset the individual transformation matrices and the update flag
-	scale = rotation = position = XMMatrixIdentity();
+	// Reset the update flag
 	update_bounding_volumes = false;
 }

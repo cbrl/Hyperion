@@ -30,27 +30,19 @@ class RenderingMgr final {
 
 
 		//----------------------------------------------------------------------------------
-		// Get device / device context
+		// Getters
 		//----------------------------------------------------------------------------------
 
 		ID3D11Device* GetDevice() const {
 			return direct3D->GetDevice();
 		}
+
 		ID3D11DeviceContext* GetDeviceContext() const {
 			return direct3D->GetDeviceContext();
 		}
 
-
-		//----------------------------------------------------------------------------------
-		// Get members
-		//----------------------------------------------------------------------------------
-
-		const Direct3D* GetD3D() const {
-			return direct3D.get();
-		}
-
-		ResourceMgr* GetResourceMgr() const {
-			return resource_mgr.get();
+		ResourceMgr& GetResourceMgr() const {
+			return *resource_mgr;
 		}
 
 

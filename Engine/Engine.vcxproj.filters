@@ -211,6 +211,12 @@
     <Filter Include="Source Files\scene\ui">
       <UniqueIdentifier>{40d0d5d7-2308-4c95-8ee7-ffa4ee811da2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\geometry\transform">
+      <UniqueIdentifier>{1d6337aa-c0a5-4b95-a5f4-9d82402475a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry\transform">
+      <UniqueIdentifier>{02b16749-85fb-496c-952f-88ba08dffaaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -423,6 +429,9 @@
     <ClInclude Include="scene\ui\user_interface.h">
       <Filter>Header Files\scene\ui</Filter>
     </ClInclude>
+    <ClInclude Include="geometry\transform\transform.h">
+      <Filter>Header Files\geometry\transform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -514,6 +523,9 @@
     </ClCompile>
     <ClCompile Include="scene\ui\user_interface.cpp">
       <Filter>Source Files\scene\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="geometry\transform\transform.cpp">
+      <Filter>Source Files\geometry\transform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

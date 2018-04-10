@@ -71,7 +71,7 @@ void UserInterface::DrawMenu(System& system, Scene& scene) {
 					ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
 					if (GetOpenFileName(&ofn)) {
-						auto bp = system.GetRenderingMgr().GetResourceMgr()->Create<ModelBlueprint>(szFile);
+						auto bp = system.GetRenderingMgr().GetResourceMgr().Create<ModelBlueprint>(szFile);
 						scene.GetModels().push_back(Model(system.GetRenderingMgr().GetDevice(), bp));
 					}
 					else {
@@ -363,11 +363,24 @@ void UserInterface::DrawModelDetails(Model& model) {
 	ImGui::Text(model.GetName().c_str());
 	ImGui::Separator();
 
-	// Set position, rotation, scale
 
-	//auto& m = model.GetTransform();
-	//float pos[3] = { XMVectorGetX(m.r[3]), XMVectorGetY(m.r[3]), XMVectorGetZ(m.r[3]) };
-	//ImGui::InputFloat3("Position", (float*)&pos);
+	auto& t = model.GetTransform();
+
+	float3 position;
+	float3 rotation;
+	float3 scale;
+	XMStoreFloat3(&position, t.GetPosition());
+	XMStoreFloat3(&rotation, t.GetRotation());
+	XMStoreFloat3(&scale, t.GetScale());
+
+	if (ImGui::InputFloat3("Position", (float*)&position))
+		model.SetPosition(position);
+
+	if (ImGui::InputFloat3("Rotation", (float*)&rotation))
+		model.SetRotation(rotation);
+
+	if (ImGui::InputFloat3("Scale", (float*)&scale))
+		model.SetScale(scale);
 }
 
 

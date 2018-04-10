@@ -15,10 +15,12 @@ TestScene::TestScene(const System& system) {
 
 void TestScene::Init(const System& system) {
 
-	const auto& rendering_mgr = system.GetRenderingMgr();
-	auto& resource_mgr = *rendering_mgr.GetResourceMgr();
-	const auto  device = rendering_mgr.GetDevice();
+	const auto& rendering_mgr  = system.GetRenderingMgr();
+	const auto  device         = rendering_mgr.GetDevice();
 	const auto  device_context = rendering_mgr.GetDeviceContext();
+
+	auto& resource_mgr = rendering_mgr.GetResourceMgr();
+
 
 	//----------------------------------------------------------------------------------
 	// Create camera
@@ -82,7 +84,7 @@ void TestScene::Init(const System& system) {
 
 	auto bp = resource_mgr.Create<ModelBlueprint>(L"../data/models/test/test.obj");
 	models.push_back(Model(device, bp));
-	models.back().Scale(3.0f, 3.0f, 3.0f);
+	models.back().Scale(float3(3.0f, 3.0f, 3.0f));
 	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
 	//models.back().SetRotation(0.0f, 1.2f, 0.0f);
 

@@ -162,6 +162,7 @@
     <ClInclude Include="geometry\frustum\frustum.h" />
     <ClInclude Include="geometry\shapes\bezier.h" />
     <ClInclude Include="geometry\shapes\shapes.h" />
+    <ClInclude Include="geometry\transform\transform.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="camera\camera.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
     <ClCompile Include="geometry\shapes\shapes.tpp" />
+    <ClCompile Include="geometry\transform\transform.cpp" />
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
