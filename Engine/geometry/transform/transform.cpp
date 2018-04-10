@@ -12,15 +12,18 @@ Transform::Transform()
 
 void Transform::Update() {
 
+	// Don't update if the object hasn't been transformed
 	if (!needs_update) return;
 
 	needs_update = false;
 
 
+	// Calculate the new object-to-world matrix
 	XMMATRIX transform = XMMatrixScalingFromVector(scale)
 	                     * XMMatrixRotationRollPitchYawFromVector(rotation)
 	                     * XMMatrixTranslationFromVector(translation);
 
+	// Set the new matrix
 	world = transform;
 }
 

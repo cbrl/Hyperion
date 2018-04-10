@@ -66,14 +66,14 @@ void TestScene::Init(const System& system) {
 	point_lights.push_back(PointLight());
 	point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
 	point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().attenuation = float3(0.3f, 0.0f, 0.05f);
+	point_lights.back().attenuation = float3(0.3f, 0.0f, 0.02f);
 	point_lights.back().specular = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().position = float3(0.0f, 1.0f, -2.0f);
+	point_lights.back().position = float3(0.0f, 5.0f, 0.0f);
 	point_lights.back().range = 50.0f;
 
 
 	// Fog
-	fog.color = float4(0.4f, 0.4f, 0.4f, 1.0f);
+	fog.color = float4(0.3f, 0.3f, 0.3f, 1.0f);
 	fog.start = 25.0f;
 	fog.range = 45.0f;
 

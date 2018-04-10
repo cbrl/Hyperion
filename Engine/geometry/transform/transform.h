@@ -9,6 +9,7 @@ class Transform final {
 		Transform();
 		~Transform() = default;
 
+		// Update the object-to-world matrix
 		void Update();
 
 		void Move(const float3& move);
@@ -33,11 +34,14 @@ class Transform final {
 
 
 	private:
+		// The object-to-world matrix
 		XMMATRIX world;
 		
+		// Translation, rotation, and scale vectors
 		XMVECTOR translation;
 		XMVECTOR rotation;
 		XMVECTOR scale;
 
+		// Flag that decides if a new matrix needs to be calculated
 		bool needs_update;
 };
