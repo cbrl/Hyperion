@@ -6,14 +6,13 @@
 Camera::Camera(ID3D11Device* device)
 	: buffer(device)
 	
-	, enable_free_look(false)
-	, fps_mode(false)
+	, free_look(false)
 
 	, look_at(XMVectorZero())
 	, position(XMVectorZero())
 	, velocity(0.0f, 0.0f, 0.0f)
-	, move_accel(0.00002f)
-	, move_decel(0.00005f)
+	, acceleration(0.00002f)
+	, deceleration(0.00005f)
 	, max_velocity(0.01f)
 	, is_moving_x(false)
 	, is_moving_y(false)
@@ -38,9 +37,7 @@ Camera::Camera(ID3D11Device* device)
 	, view_matrix(XMMatrixIdentity())
 	, projection_matrix(XMMatrixIdentity())
 	, ortho_matrix(XMMatrixIdentity())
-{
-	if (enable_free_look) fps_mode = false;
-}
+{}
 
 
 Camera::Camera(ID3D11Device* device,
@@ -103,10 +100,10 @@ void Camera::Move(float3 units) {
 		is_moving_x = true;
 
 		if (copysign(1.0f, units.x) == copysign(1.0f, velocity.x)) {
-			velocity.x += units.x * move_accel;
+			velocity.x += units.x * acceleration;
 		}
 		else {
-			velocity.x = units.x * move_accel;
+			velocity.x = units.x * acceleration;
 		}
 	}
 
@@ -118,10 +115,10 @@ void Camera::Move(float3 units) {
 		is_moving_y = true;
 
 		if (copysign(1.0f, units.y) == copysign(1.0f, velocity.y)) {
-			velocity.y += units.y * move_accel;
+			velocity.y += units.y * acceleration;
 		}
 		else {
-			velocity.y = units.y * move_accel;
+			velocity.y = units.y * acceleration;
 		}
 	}
 
@@ -133,10 +130,10 @@ void Camera::Move(float3 units) {
 		is_moving_z = true;
 
 		if (copysign(1.0f, units.z) == copysign(1.0f, velocity.z)) {
-			velocity.z += units.z * move_accel;
+			velocity.z += units.z * acceleration;
 		}
 		else {
-			velocity.z = units.z * move_accel;
+			velocity.z = units.z * acceleration;
 		}
 	}
 }
@@ -150,7 +147,7 @@ void Camera::Rotate(float3 units) {
 		float xUnits = units.x * turn_factor;
 
 		// Limit max pitch if free look isn't enabled
-		if (!enable_free_look) {
+		if (!free_look) {
 			pitch -= xUnits;
 			if (pitch > max_pitch) {
 				xUnits += pitch - max_pitch;
@@ -163,7 +160,7 @@ void Camera::Rotate(float3 units) {
 		XMMATRIX xRotation = XMMatrixRotationAxis(camera_right, xUnits);
 
 		// Transform Up vector only if free look is enabled
-		if (enable_free_look) {
+		if (free_look) {
 			camera_up = XMVector3TransformNormal(camera_up, xRotation);
 		}
 		camera_forward = XMVector3TransformNormal(camera_forward, xRotation);
@@ -177,18 +174,13 @@ void Camera::Rotate(float3 units) {
 		XMMATRIX yRotation = XMMatrixRotationAxis(camera_up, (units.y * turn_factor));
 		camera_right = XMVector3TransformNormal(camera_right, yRotation);
 		camera_forward = XMVector3TransformNormal(camera_forward, yRotation);
-
-		// fps_forward will be used for movement if fps_mode is enabled
-		if (fps_mode) {
-			fps_forward = XMVector3TransformNormal(fps_forward, yRotation);
-		}
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Z rotation (Roll)
 	//----------------------------------------------------------------------------------
-	if (units.z && enable_free_look) {
+	if (units.z && free_look) {
 		XMMATRIX zRotation = XMMatrixRotationAxis(camera_forward, (units.z * turn_factor));
 		camera_right = XMVector3TransformNormal(camera_right, zRotation);
 		camera_up = XMVector3TransformNormal(camera_up, zRotation);
@@ -209,14 +201,9 @@ void Camera::UpdateMovement(float delta_time) {
 
 
 	// Move the camera
-	position += camera_right * velocity.x * delta_time;
-	position += camera_up    * velocity.y * delta_time;
-	if (fps_mode) {
-		position += fps_forward * velocity.z * delta_time;
-	}
-	else {
-		position += camera_forward * velocity.z * delta_time;
-	}
+	position += camera_right   * velocity.x * delta_time;
+	position += camera_up      * velocity.y * delta_time;
+	position += camera_forward * velocity.z * delta_time;
 
 
 	// Update the target vector with sum of the position and forward vectors
@@ -232,51 +219,54 @@ void Camera::UpdateMovement(float delta_time) {
 	// Calculate the new pitch, yaw, and roll values.
 	// lookLengthXZ is used in place of camera_forward.z for the pitch. This ensures the
 	// pitch does not exceed +-90 degrees, which is needed for limiting the max pitch.
-	float lookLengthXZ = sqrtf(powf(XMVectorGetX(camera_forward), 2) + powf(XMVectorGetZ(camera_forward), 2));
-	pitch = atan2f(XMVectorGetY(camera_forward), lookLengthXZ);
-	yaw   = atan2f(XMVectorGetX(camera_forward), XMVectorGetZ(camera_forward));
-	roll  = atan2f(XMVectorGetX(camera_up), XMVectorGetY(camera_up));
+	float3 forward;
+	XMStoreFloat3(&forward, camera_forward);
+
+	float lookLengthXZ = sqrtf(powf(forward.x, 2) + powf(forward.z, 2));
+	pitch = atan2f(forward.y, lookLengthXZ);
+	yaw   = atan2f(forward.x, forward.z);
+	roll  = atan2f(forward.x, XMVectorGetY(camera_up));
 
 
 	//----------------------------------------------------------------------------------
 	// Decelerate if not moving
 	//----------------------------------------------------------------------------------
 
-	float deceleration;
+	float decel_amount;
 
 	if (!is_moving_x && velocity.x != 0.0f) {
 
-		deceleration = copysign(1.0f, velocity.x) * move_decel * delta_time;
+		decel_amount = copysign(1.0f, velocity.x) * deceleration * delta_time;
 
-		if (abs(deceleration) > abs(velocity.x)) {
+		if (abs(decel_amount) > abs(velocity.x)) {
 			velocity.x = 0.0f;
 		}
 		else {
-			velocity.x -= deceleration;
+			velocity.x -= decel_amount;
 		}
 	}
 
 	if (!is_moving_y && velocity.y != 0.0f) {
 
-		deceleration = copysign(1.0f, velocity.y) * move_decel * delta_time;
+		decel_amount = copysign(1.0f, velocity.y) * deceleration * delta_time;
 
-		if (abs(deceleration) > abs(velocity.y)) {
+		if (abs(decel_amount) > abs(velocity.y)) {
 			velocity.y = 0.0f;
 		}
 		else {
-			velocity.y -= deceleration;
+			velocity.y -= decel_amount;
 		}
 	}
 
 	if (!is_moving_z && velocity.z != 0.0f) {
 
-		deceleration = copysign(1.0f, velocity.z) * move_decel * delta_time;
+		decel_amount = copysign(1.0f, velocity.z) * deceleration * delta_time;
 
-		if (abs(deceleration) > abs(velocity.z)) {
+		if (abs(decel_amount) > abs(velocity.z)) {
 			velocity.z = 0.0f;
 		}
 		else {
-			velocity.z -= deceleration;
+			velocity.z -= decel_amount;
 		}
 	}
 

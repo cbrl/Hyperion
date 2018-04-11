@@ -146,9 +146,10 @@ void UserInterface::DrawObjectList(Scene& scene) {
 
 void UserInterface::DrawModelList(Scene& scene) {
 
-	bool node_open = ImGui::TreeNode("Models");
+	// Draw the tree node and check if it's open
+	if (ImGui::TreeNode("Models")) {
 
-	if (node_open) {
+		// Draw a node for each model
 		scene.ForEach<Model>([&](Model& model) {
 			ImGui::PushID(&model);
 
@@ -156,9 +157,11 @@ void UserInterface::DrawModelList(Scene& scene) {
 
 			bool node_open = ImGui::TreeNodeEx(&model, node_flags, model.GetName().c_str());
 
+			// Check if the node is selected
 			if (ImGui::IsItemClicked())
 				selected = &model;
 
+			// Draw a node for each child model
 			if (node_open) {
 				model.ForEachChild([&](ChildModel& child) {
 
@@ -348,8 +351,29 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 
 
 void UserInterface::DrawCameraDetails(Camera& camera) {
-	// Set max veloctiy, accel rate, decel rate
-	// Change camera mode
+
+	float max_velocity = camera.GetMaxVelocity();
+	float acceleration = camera.GetAcceleration();
+	float deceleration = camera.GetDeleceration();
+	float sensitivity  = camera.GetSensitivity();
+
+	if (ImGui::InputFloat("Max Velocity", &max_velocity))
+		camera.SetMaxVelocity(max_velocity);
+
+	if (ImGui::InputFloat("Acceleration", &acceleration))
+		camera.SetAcceleration(acceleration);
+
+	if (ImGui::InputFloat("Deceleration", &deceleration))
+		camera.SetDeceleration(deceleration);
+
+	if (ImGui::InputFloat("Sensitivity", &sensitivity))
+		camera.SetSensitivity(sensitivity);
+
+
+	bool free_look = camera.IsFreeLookEnabled();
+
+	if (ImGui::Checkbox("Free Look", &free_look))
+		camera.SetFreeLook(free_look);
 }
 
 

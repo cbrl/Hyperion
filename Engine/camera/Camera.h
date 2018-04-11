@@ -28,6 +28,11 @@ class Camera final {
 		// Resize the viewport
 		void OnResize(u32 width, u32 height);
 
+
+		//----------------------------------------------------------------------------------
+		// Constant Buffer
+		//----------------------------------------------------------------------------------
+
 		// Update the constant buffer
 		void UpdateBuffer(ID3D11DeviceContext* device_context) {
 
@@ -42,11 +47,14 @@ class Camera final {
 		}
 
 
-		// Move and rotate the camera
+		//----------------------------------------------------------------------------------
+		// Movement
+		//----------------------------------------------------------------------------------
+
 		void Move(float3 units);
 		void Rotate(float3 units);
 
-		// Calculate new view matrix and velocity
+		// Calculate new view matrix, position, and velocity
 		void UpdateMovement(float delta_time);
 
 
@@ -75,11 +83,21 @@ class Camera final {
 			projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
 		}
 
-		// Movement speed related variables
-		void SetAcceleration(float accel) { move_accel = accel; }
-		void SetDeceleration(float decel) { move_decel = decel; }
-		void SetMaxVelocity(float velocity) { max_velocity = velocity; }
+		// Set movement speed related variables
+		void SetAcceleration(float accel)      { acceleration = accel; }
+		void SetDeceleration(float decel)      { deceleration = decel; }
+		void SetMaxVelocity(float velocity)    { max_velocity = velocity; }
 		void SetSensitivity(float sensitivity) { turn_factor = sensitivity; }
+
+		// Set camera movement style
+		void SetFreeLook(bool enabled) {
+			if (!enabled && free_look) {
+				camera_forward = default_forward;
+				camera_right   = default_right;
+				camera_up      = default_up;
+			}
+			free_look = enabled;
+		}
 
 
 		//----------------------------------------------------------------------------------
@@ -97,10 +115,19 @@ class Camera final {
 		// Get the Skybox
 		const SkyBox& GetSkybox() const { return skybox; }
 
+		// Camera movement style
+		bool IsFreeLookEnabled() const { return free_look; }
+
+		// Get movement speed related variables
+		const float GetAcceleration() const { return acceleration; }
+		const float GetDeleceration() const { return deceleration; }
+		const float GetMaxVelocity()  const { return max_velocity; }
+		const float GetSensitivity()  const { return turn_factor; }
+
 		// Get position, rotation, velocity (in units/ms)
-		float3 GetRotation() const { return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
-		float3 GetVelocity() const { return velocity; }
-		float3 GetPosition() const {
+		const float3 GetRotation() const { return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
+		const float3 GetVelocity() const { return velocity; }
+		const float3 GetPosition() const {
 			float3 pos;
 			XMStoreFloat3(&pos, position);
 			return pos;
@@ -150,8 +177,8 @@ class Camera final {
 		// Position, veloctiy, acceleration (units per ms)
 		float3 move_units;
 		float3 velocity;
-		float  move_accel;
-		float  move_decel;
+		float  acceleration;
+		float  deceleration;
 		float  max_velocity;
 
 		// Pitch, yaw, roll
@@ -162,8 +189,7 @@ class Camera final {
 		const float max_pitch;
 
 		// Booleans
-		bool enable_free_look;
-		bool fps_mode;
+		bool free_look;
 		bool is_moving_x;
 		bool is_moving_y;
 		bool is_moving_z;

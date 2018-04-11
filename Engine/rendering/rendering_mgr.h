@@ -45,6 +45,10 @@ class RenderingMgr final {
 			return *resource_mgr;
 		}
 
+		const RenderStateMgr& GetRenderStateMgr() const {
+			return *render_state_mgr;
+		}
+
 
 	private:
 		unique_ptr<Direct3D>       direct3D;
