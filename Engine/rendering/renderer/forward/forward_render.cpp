@@ -141,8 +141,10 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 
 			// Unbind the SRVs
+			// Slot definition could be used as a more dynamic way of unbinding any amount of srvs
+			// E.g. null_srv[SLOT_SRV_ALPHA + 1] = { nullptr };
 			ID3D11ShaderResourceView* null_srv[6] = { nullptr };
-			Pipeline::PS::BindSRVs(device_context.Get(), 0, std::size(null_srv), null_srv);
+			Pipeline::PS::BindSRVs(device_context.Get(), 0, 6, null_srv);
 		});
 	});
 }

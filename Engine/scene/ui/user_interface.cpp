@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "user_interface.h"
-#include "scene\scene.h"
 #include "system\system.h"
+#include "scene\scene.h"
 
 
 static void* selected = 0;
@@ -9,7 +9,9 @@ static void* selected = 0;
 
 void UserInterface::Draw(System& system) {
 
-	Scene& scene = system.GetScene();
+	Scene& scene        = system.GetScene();
+	auto*  device       = system.GetRenderingMgr().GetDevice();
+	auto&  resource_mgr = system.GetRenderingMgr().GetResourceMgr();
 
 	bool open = true;
 	
@@ -18,17 +20,23 @@ void UserInterface::Draw(System& system) {
 	// Begin window
 	if (ImGui::Begin("Scene", &open, ImGuiWindowFlags_MenuBar)) {
 
+		// Popup enum determines if any popups need to be drawn
+		Popups popup;
+
 		// Draw Menu
-		DrawMenu(system, scene);
+		DrawMenu(device, resource_mgr, scene, popup);
 
 		// Left pane (object list)
-		DrawObjectList(scene);
+		DrawObjectLists(scene);
 
 		// Keep next child on the same line
 		ImGui::SameLine();
 
 		// Right pane (object properties)
 		DrawObjectDetails(scene);
+		
+		// Draw the opened popup windows
+		DrawPopups(device, scene, popup);
 	}
 	
 	// End window
@@ -36,8 +44,15 @@ void UserInterface::Draw(System& system) {
 }
 
 
-void UserInterface::DrawMenu(System& system, Scene& scene) {
-	static bool new_model_popup;
+
+
+//----------------------------------------------------------------------------------
+//
+//   Menu
+//
+//----------------------------------------------------------------------------------
+
+void UserInterface::DrawMenu(ID3D11Device* device, ResourceMgr& resource_mgr, Scene& scene, Popups& popup) {
 
 	if (ImGui::BeginMenuBar()) {
 
@@ -59,13 +74,15 @@ void UserInterface::DrawMenu(System& system, Scene& scene) {
 		}
 
 		if (ImGui::BeginMenu("Models")) {
+
 			if (ImGui::BeginMenu("Add Model")) {
+
 				if (ImGui::MenuItem("From file")) {
 					wchar_t szFile[512] = {};
 
 					if (OpenFilePicker(szFile, sizeof(szFile))) {
-						auto bp = system.GetRenderingMgr().GetResourceMgr().Create<ModelBlueprint>(szFile);
-						scene.GetModels().push_back(Model(system.GetRenderingMgr().GetDevice(), bp));
+						auto bp = resource_mgr.Create<ModelBlueprint>(szFile);
+						scene.GetModels().push_back(Model(device, bp));
 					}
 					else {
 						FILE_LOG(logWARNING) << "Failed to open file dialog";
@@ -73,7 +90,34 @@ void UserInterface::DrawMenu(System& system, Scene& scene) {
 				}
 
 				if (ImGui::MenuItem("From existing")) {
-					new_model_popup = true;
+					popup = Popups::NewModel;
+				}
+
+				if (ImGui::BeginMenu("Geometric Shape")) {
+					if (ImGui::MenuItem("Cube"))
+						popup = Popups::NewCube;
+					if (ImGui::MenuItem("Box"))
+						popup = Popups::NewBox;
+					if (ImGui::MenuItem("Sphere"))
+						popup = Popups::NewSphere;
+					if (ImGui::MenuItem("GeoSphere"))
+						popup = Popups::NewGeoSphere;
+					if (ImGui::MenuItem("Cylinder"))
+						popup = Popups::NewCylinder;
+					if (ImGui::MenuItem("Cone"))
+						popup = Popups::NewCone;
+					if (ImGui::MenuItem("Torus"))
+						popup = Popups::NewTorus;
+					if (ImGui::MenuItem("Tetrahedron"))
+						popup = Popups::NewTetrahedron;
+					if (ImGui::MenuItem("Octahedron"))
+						popup = Popups::NewOctahedron;
+					if (ImGui::MenuItem("Dodecahedron"))
+						popup = Popups::NewDodecahedron;
+					if (ImGui::MenuItem("Icosahedron"))
+						popup = Popups::NewIcosahedron;
+
+					ImGui::EndMenu();
 				}
 
 				ImGui::EndMenu();
@@ -84,41 +128,18 @@ void UserInterface::DrawMenu(System& system, Scene& scene) {
 
 		ImGui::EndMenuBar();
 	}
-
-
-	// Open new model popup
-	if (new_model_popup) {
-		ImGui::OpenPopup("New Model");
-		new_model_popup = false;
-	}
-
-	if (ImGui::BeginPopupModal("New Model", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-
-		static int selected_combo = NULL;
-
-		static auto getter = [](void* vec, int idx, const char** out_text) {
-			auto& vector = *static_cast<std::vector<Model>*>(vec);
-			if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-			*out_text = vector.at(idx).GetName().c_str();
-			return true;
-		};
-
-		ImGui::Combo("Models", &selected_combo, getter, (void*)&scene.GetModels(), scene.GetModels().size());
-
-		if (ImGui::Button("Ok")) {
-			scene.GetModels().push_back(Model(scene.GetModels().at(selected_combo)));
-		}
-			
-
-		if (ImGui::Button("Close"))
-			ImGui::CloseCurrentPopup();
-
-		ImGui::EndPopup();
-	}
 }
 
 
-void UserInterface::DrawObjectList(Scene& scene) {
+
+
+//----------------------------------------------------------------------------------
+//
+//   Object Tree
+//
+//----------------------------------------------------------------------------------
+
+void UserInterface::DrawObjectLists(Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
 
@@ -261,9 +282,17 @@ void UserInterface::DrawLightList(Scene& scene) {
 }
 
 
+
+
+//----------------------------------------------------------------------------------
+//
+//   Object Details
+//
+//----------------------------------------------------------------------------------
+
 void UserInterface::DrawObjectDetails(Scene& scene) {
 
-	ImGui::BeginChild("object properties", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()));
+	ImGui::BeginChild("object properties", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true);
 
 	// Draw model details
 	scene.ForEach<Model>([&](Model& model) {
@@ -392,13 +421,13 @@ void UserInterface::DrawModelDetails(Model& model) {
 	XMStoreFloat3(&rotation, t.GetRotation());
 	XMStoreFloat3(&scale, t.GetScale());
 
-	if (ImGui::InputFloat3("Position", position.Data()))
+	if (ImGui::DragFloat3("Position", position.Data(), 0.01f, -FLT_MAX, FLT_MAX))
 		model.SetPosition(position);
 
-	if (ImGui::InputFloat3("Rotation", rotation.Data()))
+	if (ImGui::DragFloat3("Rotation", rotation.Data(), 0.01f, -FLT_MAX, FLT_MAX))
 		model.SetRotation(rotation);
 
-	if (ImGui::InputFloat3("Scale", scale.Data()))
+	if (ImGui::DragFloat3("Scale", scale.Data(), 0.01f, -FLT_MAX, FLT_MAX))
 		model.SetScale(scale);
 }
 
@@ -469,4 +498,388 @@ void UserInterface::DrawLightDetails(SpotLight& light) {
 	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.Data());
 	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.Data());
 	ImGui::ColorEdit3("Specular Color", light.specular.Data());
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+//
+//   Popup Windows
+//
+//----------------------------------------------------------------------------------
+
+void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup) {
+
+	switch (popup) {
+		case Popups::NewModel:
+			ImGui::OpenPopup("New Model");
+			break;
+		case Popups::NewCube:
+			ImGui::OpenPopup("New Cube");
+			break;
+		case Popups::NewBox:
+			ImGui::OpenPopup("New Box");
+			break;
+		case Popups::NewSphere:
+			ImGui::OpenPopup("New Sphere");
+			break;
+		case Popups::NewGeoSphere:
+			ImGui::OpenPopup("New GeoSphere");
+			break;
+		case Popups::NewCylinder:
+			ImGui::OpenPopup("New Cylinder");
+			break;
+		case Popups::NewTorus:
+			ImGui::OpenPopup("New Torus");
+			break;
+		case Popups::NewCone:
+			ImGui::OpenPopup("New Cone");
+			break;
+		case Popups::NewTetrahedron:
+			ImGui::OpenPopup("New Tetrahedron");
+			break;
+		case Popups::NewOctahedron:
+			ImGui::OpenPopup("New Octahedron");
+			break;
+		case Popups::NewDodecahedron:
+			ImGui::OpenPopup("New Dodecahedron");
+			break;
+		case Popups::NewIcosahedron:
+			ImGui::OpenPopup("New Icosahedron");
+			break;
+	}
+
+
+	if (ImGui::BeginPopupModal("New Model", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		static int selected_combo = NULL;
+
+		static auto getter = [](void* vec, int idx, const char** out_text) {
+			auto& vector = *static_cast<std::vector<Model>*>(vec);
+			if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+			*out_text = vector.at(idx).GetName().c_str();
+			return true;
+		};
+
+		ImGui::Combo("Models", &selected_combo, getter, (void*)&scene.GetModels(), scene.GetModels().size());
+
+		if (ImGui::Button("Ok")) {
+			scene.GetModels().push_back(Model(scene.GetModels().at(selected_combo)));
+		}
+
+		if (ImGui::Button("Close"))
+			ImGui::CloseCurrentPopup();
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Cube", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float size = 1.0f;
+		static bool  rhcoords = false;
+		static bool  invertn = false;
+
+		ImGui::InputFloat("Size", &size);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Invert Normals", &invertn);
+
+		if (ImGui::Button("Create")) {
+			auto bp = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(device, size, rhcoords, invertn);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Box", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float3 size = { 1.0f, 1.0f, 1.0f };
+		static bool   rhcoords = false;
+		static bool   invertn = false;
+
+		ImGui::InputFloat3("Size", size.Data());
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Invert Normals", &invertn);
+
+		if (ImGui::Button("Create")) {
+			auto bp = BlueprintFactory::CreateBox<VertexPositionNormalTexture>(device, size, rhcoords, invertn);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Sphere", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float  diameter = 1.0f;
+		static size_t tessellation = 16;
+		static bool   rhcoords = false;
+		static bool   invertn = false;
+
+		ImGui::InputFloat("Diameter", &diameter);
+		ImGui::InputInt("Tessellation", (int*)&tessellation);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Invert Normals", &invertn);
+
+		ImGui::Button("Create");
+
+		if (ImGui::IsItemHovered() && tessellation >= 96) {
+			ImGui::BeginTooltip();
+			ImGui::Text("WARNING: Tessellation amount is very high");
+			ImGui::EndTooltip();
+		}
+
+		if (ImGui::IsItemClicked()) {
+			if (tessellation < 3) tessellation = 3;
+			auto bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(device, diameter, tessellation, rhcoords, invertn);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New GeoSphere", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float  diameter = 1.0f;
+		static size_t tessellation = 3;
+		static bool   rhcoords = false;
+
+		ImGui::InputFloat("Diameter", &diameter);
+		ImGui::InputInt("Tessellation", (int*)&tessellation);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+
+		ImGui::Button("Create");
+
+		if (ImGui::IsItemHovered() && tessellation >= 8) {
+			ImGui::BeginTooltip();
+			ImGui::Text("WARNING: Tessellation amount is extremely high");
+			ImGui::EndTooltip();
+		}
+
+		if (ImGui::IsItemClicked()) {
+			if (tessellation < 3) tessellation = 3;
+			auto bp = BlueprintFactory::CreateGeoSphere<VertexPositionNormalTexture>(device, diameter, tessellation, rhcoords);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Cylinder", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float  height = 1.0f;
+		static float  diameter = 1.0f;
+		static size_t tessellation = 32;
+		static bool   rhcoords = false;
+
+		ImGui::InputFloat("Height", &height);
+		ImGui::InputFloat("Diameter", &diameter);
+		ImGui::InputInt("Tessellation", (int*)&tessellation);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+
+		ImGui::Button("Create");
+
+		if (ImGui::IsItemHovered() && tessellation >= 128) {
+			ImGui::BeginTooltip();
+			ImGui::Text("WARNING: Tessellation amount is very high");
+			ImGui::EndTooltip();
+		}
+
+		if (ImGui::IsItemClicked()) {
+			if (tessellation < 3) tessellation = 3;
+			auto bp = BlueprintFactory::CreateCylinder<VertexPositionNormalTexture>(device, diameter, height, tessellation, rhcoords);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Cone", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float  height = 1.0f;
+		static float  diameter = 1.0f;
+		static size_t tessellation = 32;
+		static bool   rhcoords = false;
+
+		ImGui::InputFloat("Height", &height);
+		ImGui::InputFloat("Diameter", &diameter);
+		ImGui::InputInt("Tessellation", (int*)&tessellation);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+
+		ImGui::Button("Create");
+
+		if (ImGui::IsItemHovered() && tessellation >= 128) {
+			ImGui::BeginTooltip();
+			ImGui::Text("WARNING: Tessellation amount is very high");
+			ImGui::EndTooltip();
+		}
+
+		if (ImGui::IsItemClicked()) {
+			if (tessellation < 3) tessellation = 3;
+			auto bp = BlueprintFactory::CreateCone<VertexPositionNormalTexture>(device, diameter, height, tessellation, rhcoords);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Torus", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float  thickness = 0.333f;
+		static float  diameter = 1.0f;
+		static size_t tessellation = 32;
+		static bool   rhcoords = false;
+
+		ImGui::InputFloat("Thickness", &thickness);
+		ImGui::InputFloat("Diameter", &diameter);
+		ImGui::InputInt("Tessellation", (int*)&tessellation);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+
+		ImGui::Button("Create");
+
+		if (ImGui::IsItemHovered() && tessellation >= 128) {
+			ImGui::BeginTooltip();
+			ImGui::Text("WARNING: Tessellation amount is very high");
+			ImGui::EndTooltip();
+		}
+
+		if (ImGui::IsItemClicked()) {
+			if (tessellation < 3) tessellation = 3;
+			auto bp = BlueprintFactory::CreateTorus<VertexPositionNormalTexture>(device, diameter, thickness, tessellation, rhcoords);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Tetrahedron", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float size = 1.0f;
+		static bool  rhcoords = false;
+
+		ImGui::InputFloat("Size", &size);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+
+		if (ImGui::Button("Create")) {
+			auto bp = BlueprintFactory::CreateTetrahedron<VertexPositionNormalTexture>(device, size, rhcoords);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Octahedron", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float size = 1.0f;
+		static bool  rhcoords = false;
+
+		ImGui::InputFloat("Size", &size);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+
+		if (ImGui::Button("Create")) {
+			auto bp = BlueprintFactory::CreateOctahedron<VertexPositionNormalTexture>(device, size, rhcoords);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Dodecahedron", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float size = 1.0f;
+		static bool  rhcoords = false;
+
+		ImGui::InputFloat("Size", &size);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+
+		if (ImGui::Button("Create")) {
+			auto bp = BlueprintFactory::CreateDodecahedron<VertexPositionNormalTexture>(device, size, rhcoords);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Icosahedron", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+		static float size = 1.0f;
+		static bool  rhcoords = false;
+
+		ImGui::InputFloat("Size", &size);
+		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+
+		if (ImGui::Button("Create")) {
+			auto bp = BlueprintFactory::CreateIcosahedron<VertexPositionNormalTexture>(device, size, rhcoords);
+			scene.GetModels().push_back(Model(device, bp));
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
 }

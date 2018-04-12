@@ -106,7 +106,7 @@ namespace Shapes
 			{ { {  0, -1,  0, 0 } } },
 		};
 
-		static const XMVECTORF32 textureCoordinates[4] =
+		static const XMVECTORF32 texCoords[4] =
 		{
 			{ { { 1, 0, 0, 0 } } },
 			{ { { 1, 1, 0, 0 } } },
@@ -154,10 +154,10 @@ namespace Shapes
 			}
 
 			if constexpr (VertexT::HasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[3].texCoord, textureCoordinates[0]);
-				XMStoreFloat2(&vertices.rbegin()[2].texCoord, textureCoordinates[1]);
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, textureCoordinates[2]);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, textureCoordinates[3]);
+				XMStoreFloat2(&vertices.rbegin()[3].texCoord, texCoords[0]);
+				XMStoreFloat2(&vertices.rbegin()[2].texCoord, texCoords[1]);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, texCoords[2]);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoords[3]);
 			}
 		}
 
@@ -211,14 +211,14 @@ namespace Shapes
 				dz *= dxz;
 
 				XMVECTOR normal = XMVectorSet(dx, dy, dz, 0);
-				XMVECTOR textureCoordinate = XMVectorSet(u, v, 0, 0);
+				XMVECTOR texCoord = XMVectorSet(u, v, 0, 0);
 
 				vertices.push_back(VertexT());
 				XMStoreFloat3(&vertices.back().position, normal * radius);
 				if constexpr (VertexT::HasNormal())
 					XMStoreFloat3(&vertices.back().normal, normal);
 				if constexpr (VertexT::HasTexture())
-					XMStoreFloat2(&vertices.back().texCoord, textureCoordinate);
+					XMStoreFloat2(&vertices.back().texCoord, texCoord);
 			}
 		}
 
@@ -429,7 +429,7 @@ namespace Shapes
 			if constexpr (VertexT::HasNormal())
 				XMStoreFloat3(&vertices.back().normal, normal);
 			if constexpr (VertexT::HasTexture())
-				XMStoreFloat3(&vertices.back().texCoord, texcoord);
+				XMStoreFloat2(&vertices.back().texCoord, texcoord);
 		}
 
 		// There are a couple of fixes to do. One is a texture coordinate wraparound fixup. At some point, there will be
@@ -442,65 +442,67 @@ namespace Shapes
 		// completed sphere. If you imagine the vertices along that edge, they circumscribe a semicircular arc starting at
 		// y=1 and ending at y=-1, and sweeping across the range of z=0 to z=1. x stays zero. It's along this edge that we
 		// need to duplicate our vertices - and provide the correct texture coordinates.
-		size_t preFixupVertexCount = vertices.size();
-		for (size_t i = 0; i < preFixupVertexCount; ++i)
-		{
-			// This vertex is on the prime meridian if position.x and texcoord.u are both zero (allowing for small epsilon).
-			bool isOnPrimeMeridian = XMVector2NearEqual(
-				XMVectorSet(vertices[i].position.x, vertices[i].textureCoordinate.x, 0.0f, 0.0f),
-				XMVectorZero(),
-				XMVectorSplatEpsilon());
-
-			if (isOnPrimeMeridian)
+		if constexpr (VertexT::HasTexture()) {
+			size_t preFixupVertexCount = vertices.size();
+			for (size_t i = 0; i < preFixupVertexCount; ++i)
 			{
-				size_t newIndex = vertices.size(); // the index of this vertex that we're about to add
-				CheckIndexOverflow(newIndex);
+				// This vertex is on the prime meridian if position.x and texcoord.u are both zero (allowing for small epsilon).
+				bool isOnPrimeMeridian = XMVector2NearEqual(
+					XMVectorSet(vertices[i].position.x, vertices[i].texCoord.x, 0.0f, 0.0f),
+					XMVectorZero(),
+					XMVectorSplatEpsilon());
 
-				// copy this vertex, correct the texture coordinate, and add the vertex
-				VertexT v = vertices[i];
-				v.textureCoordinate.x = 1.0f;
-				vertices.push_back(v);
-
-				// Now find all the triangles which contain this vertex and update them if necessary
-				for (size_t j = 0; j < indices.size(); j += 3)
+				if (isOnPrimeMeridian)
 				{
-					u32* triIndex0 = &indices[j + 0];
-					u32* triIndex1 = &indices[j + 1];
-					u32* triIndex2 = &indices[j + 2];
+					size_t newIndex = vertices.size(); // the index of this vertex that we're about to add
+					CheckIndexOverflow(newIndex);
 
-					if (*triIndex0 == i)
-					{
-						// nothing; just keep going
-					}
-					else if (*triIndex1 == i)
-					{
-						std::swap(triIndex0, triIndex1); // swap the pointers (not the values)
-					}
-					else if (*triIndex2 == i)
-					{
-						std::swap(triIndex0, triIndex2); // swap the pointers (not the values)
-					}
-					else
-					{
-						// this triangle doesn't use the vertex we're interested in
-						continue;
-					}
+					// copy this vertex, correct the texture coordinate, and add the vertex
+					VertexT v = vertices[i];
+					v.texCoord.x = 1.0f;
+					vertices.push_back(v);
 
-					// If we got to this point then triIndex0 is the pointer to the index to the vertex we're looking at
-					assert(*triIndex0 == i);
-					assert(*triIndex1 != i && *triIndex2 != i); // assume no degenerate triangles
-
-					const VertexT& v0 = vertices[*triIndex0];
-					const VertexT& v1 = vertices[*triIndex1];
-					const VertexT& v2 = vertices[*triIndex2];
-
-					// check the other two vertices to see if we might need to fix this triangle
-
-					if (abs(v0.textureCoordinate.x - v1.textureCoordinate.x) > 0.5f ||
-						abs(v0.textureCoordinate.x - v2.textureCoordinate.x) > 0.5f)
+					// Now find all the triangles which contain this vertex and update them if necessary
+					for (size_t j = 0; j < indices.size(); j += 3)
 					{
-						// yep; replace the specified index to point to the new, corrected vertex
-						*triIndex0 = static_cast<u32>(newIndex);
+						u32* triIndex0 = &indices[j + 0];
+						u32* triIndex1 = &indices[j + 1];
+						u32* triIndex2 = &indices[j + 2];
+
+						if (*triIndex0 == i)
+						{
+							// nothing; just keep going
+						}
+						else if (*triIndex1 == i)
+						{
+							std::swap(triIndex0, triIndex1); // swap the pointers (not the values)
+						}
+						else if (*triIndex2 == i)
+						{
+							std::swap(triIndex0, triIndex2); // swap the pointers (not the values)
+						}
+						else
+						{
+							// this triangle doesn't use the vertex we're interested in
+							continue;
+						}
+
+						// If we got to this point then triIndex0 is the pointer to the index to the vertex we're looking at
+						assert(*triIndex0 == i);
+						assert(*triIndex1 != i && *triIndex2 != i); // assume no degenerate triangles
+
+						const VertexT& v0 = vertices[*triIndex0];
+						const VertexT& v1 = vertices[*triIndex1];
+						const VertexT& v2 = vertices[*triIndex2];
+
+						// check the other two vertices to see if we might need to fix this triangle
+
+						if (abs(v0.texCoord.x - v1.texCoord.x) > 0.5f ||
+							abs(v0.texCoord.x - v2.texCoord.x) > 0.5f)
+						{
+							// yep; replace the specified index to point to the new, corrected vertex
+							*triIndex0 = static_cast<u32>(newIndex);
+						}
 					}
 				}
 			}
@@ -513,63 +515,66 @@ namespace Shapes
 		// poles, but reduce stretching.
 		auto fixPole = [&](size_t poleIndex)
 		{
-			auto poleVertex = vertices[poleIndex];
-			bool overwrittenPoleVertex = false; // overwriting the original pole vertex saves us one vertex
+			if constexpr (VertexT::HasTexture()) {
+				auto poleVertex = vertices[poleIndex];
+				bool overwrittenPoleVertex = false; // overwriting the original pole vertex saves us one vertex
 
-			for (size_t i = 0; i < indices.size(); i += 3)
-			{
-				// These pointers point to the three indices which make up this triangle. pPoleIndex is the pointer to the
-				// entry in the index array which represents the pole index, and the other two pointers point to the other
-				// two indices making up this triangle.
-				u32* pPoleIndex;
-				u32* pOtherIndex0;
-				u32* pOtherIndex1;
-				if (indices[i + 0] == poleIndex)
+				for (size_t i = 0; i < indices.size(); i += 3)
 				{
-					pPoleIndex = &indices[i + 0];
-					pOtherIndex0 = &indices[i + 1];
-					pOtherIndex1 = &indices[i + 2];
-				}
-				else if (indices[i + 1] == poleIndex)
-				{
-					pPoleIndex = &indices[i + 1];
-					pOtherIndex0 = &indices[i + 2];
-					pOtherIndex1 = &indices[i + 0];
-				}
-				else if (indices[i + 2] == poleIndex)
-				{
-					pPoleIndex = &indices[i + 2];
-					pOtherIndex0 = &indices[i + 0];
-					pOtherIndex1 = &indices[i + 1];
-				}
-				else
-				{
-					continue;
-				}
+					// These pointers point to the three indices which make up this triangle. pPoleIndex is the pointer to the
+					// entry in the index array which represents the pole index, and the other two pointers point to the other
+					// two indices making up this triangle.
+					u32* pPoleIndex;
+					u32* pOtherIndex0;
+					u32* pOtherIndex1;
+					if (indices[i + 0] == poleIndex)
+					{
+						pPoleIndex = &indices[i + 0];
+						pOtherIndex0 = &indices[i + 1];
+						pOtherIndex1 = &indices[i + 2];
+					}
+					else if (indices[i + 1] == poleIndex)
+					{
+						pPoleIndex = &indices[i + 1];
+						pOtherIndex0 = &indices[i + 2];
+						pOtherIndex1 = &indices[i + 0];
+					}
+					else if (indices[i + 2] == poleIndex)
+					{
+						pPoleIndex = &indices[i + 2];
+						pOtherIndex0 = &indices[i + 0];
+						pOtherIndex1 = &indices[i + 1];
+					}
+					else
+					{
+						continue;
+					}
 
-				const auto& otherVertex0 = vertices[*pOtherIndex0];
-				const auto& otherVertex1 = vertices[*pOtherIndex1];
+					const auto& otherVertex0 = vertices[*pOtherIndex0];
+					const auto& otherVertex1 = vertices[*pOtherIndex1];
 
-				// Calculate the texcoords for the new pole vertex, add it to the vertices and update the index
-				VertexT newPoleVertex = poleVertex;
-				newPoleVertex.textureCoordinate.x = (otherVertex0.textureCoordinate.x + otherVertex1.textureCoordinate.x) / 2;
-				newPoleVertex.textureCoordinate.y = poleVertex.textureCoordinate.y;
+					// Calculate the texcoords for the new pole vertex, add it to the vertices and update the index
+					VertexT newPoleVertex = poleVertex;
+					newPoleVertex.texCoord.x = (otherVertex0.texCoord.x + otherVertex1.texCoord.x) / 2;
+					newPoleVertex.texCoord.y = poleVertex.texCoord.y;
 
-				if (!overwrittenPoleVertex)
-				{
-					vertices[poleIndex] = newPoleVertex;
-					overwrittenPoleVertex = true;
-				}
-				else
-				{
-					CheckIndexOverflow(vertices.size());
+					if (!overwrittenPoleVertex)
+					{
+						vertices[poleIndex] = newPoleVertex;
+						overwrittenPoleVertex = true;
+					}
+					else
+					{
+						CheckIndexOverflow(vertices.size());
 
-					*pPoleIndex = static_cast<u32>(vertices.size());
-					vertices.push_back(newPoleVertex);
+						*pPoleIndex = static_cast<u32>(vertices.size());
+						vertices.push_back(newPoleVertex);
+					}
 				}
 			}
 		};
 
+		
 		fixPole(northPoleIndex);
 		fixPole(southPoleIndex);
 
@@ -646,20 +651,20 @@ namespace Shapes
 
 				XMVECTOR position = (circleVector * radius) + (normal * height);
 
-				XMVECTOR textureCoordinate = XMVectorMultiplyAdd(XMVectorSwizzle<0, 2, 3, 3>(circleVector), textureScale, g_XMOneHalf);
+				XMVECTOR texCoord = XMVectorMultiplyAdd(XMVectorSwizzle<0, 2, 3, 3>(circleVector), textureScale, g_XMOneHalf);
 
 				vertices.push_back(VertexT());
 				XMStoreFloat3(&vertices.back().position, position);
 				if constexpr (VertexT::HasNormal())
 					XMStoreFloat3(&vertices.back().normal, normal);
 				if constexpr (VertexT::HasTexture())
-					XMStoreFloat2(&vertices.back().texCoord, textureCoordinate);
+					XMStoreFloat2(&vertices.back().texCoord, texCoord);
 			}
 		}
 	}
 
 	template<typename VertexT>
-	void ComputeCylinder(vector<VertexT>& vertices, vector<u32>& indices, float height, float diameter, size_t tessellation, bool rhcoords)
+	void ComputeCylinder(vector<VertexT>& vertices, vector<u32>& indices, float diameter, float height, size_t tessellation, bool rhcoords)
 	{
 		vertices.clear();
 		indices.clear();
@@ -683,7 +688,7 @@ namespace Shapes
 
 			float u = (float)i / tessellation;
 
-			XMVECTOR textureCoordinate = XMLoadFloat(&u);
+			XMVECTOR texCoord = XMLoadFloat(&u);
 
 			vertices.resize(vertices.size() + 2);
 
@@ -696,8 +701,8 @@ namespace Shapes
 			}
 
 			if constexpr (VertexT::HasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, textureCoordinate);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, textureCoordinate + g_XMIdentityR1);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, texCoord);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoord + g_XMIdentityR1);
 			}
 
 
@@ -746,7 +751,7 @@ namespace Shapes
 
 			float u = (float)i / tessellation;
 
-			XMVECTOR textureCoordinate = XMLoadFloat(&u);
+			XMVECTOR texCoord = XMLoadFloat(&u);
 
 			XMVECTOR pt = sideOffset - topOffset;
 
@@ -766,7 +771,7 @@ namespace Shapes
 
 			if constexpr (VertexT::HasTexture()) {
 				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMZero);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, textureCoordinate + g_XMIdentityR1);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoord + g_XMIdentityR1);
 			}
 
 			index_push_back(indices, i * 2);
@@ -821,7 +826,7 @@ namespace Shapes
 				// Create a vertex.
 				XMVECTOR normal = XMVectorSet(dx, dy, 0, 0);
 				XMVECTOR position = normal * thickness / 2;
-				XMVECTOR textureCoordinate = XMVectorSet(u, v, 0, 0);
+				XMVECTOR texCoord = XMVectorSet(u, v, 0, 0);
 
 				position = XMVector3Transform(position, transform);
 				normal = XMVector3TransformNormal(normal, transform);
@@ -831,7 +836,7 @@ namespace Shapes
 				if constexpr (VertexT::HasNormal())
 					XMStoreFloat3(&vertices.back().normal, normal);
 				if constexpr (VertexT::HasTexture())
-					XMStoreFloat2(&vertices.back().texCoord, textureCoordinate);
+					XMStoreFloat2(&vertices.back().texCoord, texCoord);
 
 				// And create indices for two triangles.
 				size_t nextI = (i + 1) % stride;
@@ -1060,7 +1065,7 @@ namespace Shapes
 			7, 19, 3, 10, 11,
 		};
 
-		static const XMVECTORF32 textureCoordinates[5] =
+		static const XMVECTORF32 texCoords[5] =
 		{
 			{ { {  0.654508f, 0.0244717f, 0, 0 } } },
 			{ { { 0.0954915f,  0.206107f, 0, 0 } } },
@@ -1139,11 +1144,11 @@ namespace Shapes
 			}
 
 			if constexpr (VertexT::HasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[4].texCoord, textureCoordinates[textureIndex[t][0]]);
-				XMStoreFloat2(&vertices.rbegin()[3].texCoord, textureCoordinates[textureIndex[t][1]]);
-				XMStoreFloat2(&vertices.rbegin()[2].texCoord, textureCoordinates[textureIndex[t][2]]);
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, textureCoordinates[textureIndex[t][3]]);
-				XMStoreFloat2(&vertices.rbegin()[9].texCoord, textureCoordinates[textureIndex[t][4]]);
+				XMStoreFloat2(&vertices.rbegin()[4].texCoord, texCoords[textureIndex[t][0]]);
+				XMStoreFloat2(&vertices.rbegin()[3].texCoord, texCoords[textureIndex[t][1]]);
+				XMStoreFloat2(&vertices.rbegin()[2].texCoord, texCoords[textureIndex[t][2]]);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, texCoords[textureIndex[t][3]]);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoords[textureIndex[t][4]]);
 			}
 		}
 
@@ -1242,9 +1247,9 @@ namespace Shapes
 			}
 
 			if constexpr (VertexT::HasTexture()) {
-				XMStoreFloat3(&vertices.rbegin()[2].texCoord, g_XMZero);
-				XMStoreFloat3(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
-				XMStoreFloat3(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
+				XMStoreFloat2(&vertices.rbegin()[2].texCoord, g_XMZero);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
 			}
 		}
 

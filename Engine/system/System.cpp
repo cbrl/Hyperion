@@ -207,4 +207,6 @@ void System::OnResize(u32 window_width, u32 window_height) const {
 	
 	if (!scene) return;
 	scene->GetCamera().ResizeViewport(window_width, window_height);
+
+	FILE_LOG(logINFO) << "Viewport resized to " << window_width << "x" << window_height;
 }

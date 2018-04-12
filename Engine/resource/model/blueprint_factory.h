@@ -21,7 +21,7 @@ namespace BlueprintFactory {
 	static shared_ptr<ModelBlueprint> CreateGeoSphere(ID3D11Device* device, float diameter = 1, size_t tessellation = 3, bool rhcoords = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateCylinder(ID3D11Device* device, float height = 1, float diameter = 1, size_t tessellation = 32, bool rhcoords = false);
+	static shared_ptr<ModelBlueprint> CreateCylinder(ID3D11Device* device, float diameter = 1, float height = 1, size_t tessellation = 32, bool rhcoords = false);
 
 	template<typename VertexT>
 	static shared_ptr<ModelBlueprint> CreateCone(ID3D11Device* device, float diameter = 1, float height = 1, size_t tessellation = 32, bool rhcoords = false);

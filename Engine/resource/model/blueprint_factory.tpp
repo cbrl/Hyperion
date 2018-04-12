@@ -39,7 +39,7 @@ namespace BlueprintFactory {
 	shared_ptr<ModelBlueprint> CreateBox(ID3D11Device* device, const float3& size, bool rhcoords, bool invertn) {
 		// Create the ModelOutput object
 		ModelOutput<VertexT> out;
-		out.name = "Box " + to_string(size) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
+		out.name = "Box " + to_string(size.x) + to_string(size.y) + to_string(size.z) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
 
 
 		// Compute the vertices and indices
@@ -138,14 +138,14 @@ namespace BlueprintFactory {
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateCylinder(ID3D11Device* device, float height, float diameter, size_t tessellation, bool rhcoords) {
+	shared_ptr<ModelBlueprint> CreateCylinder(ID3D11Device* device, float diameter, float height, size_t tessellation, bool rhcoords) {
 		// Create the ModelOutput object
 		ModelOutput<VertexT> out;
 		out.name = "Cylinder " + to_string(height) + to_string(diameter) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices
-		Shapes::ComputeCylinder(out.vertices, out.indices, height, diameter, rhcoords);
+		Shapes::ComputeCylinder(out.vertices, out.indices, diameter, height, tessellation, rhcoords);
 
 
 		// Create the material

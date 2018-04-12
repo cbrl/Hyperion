@@ -37,7 +37,7 @@ void ModelBlueprint::ConstructBlueprint(ID3D11Device* device, const ModelOutput<
 
 
 		// Create the AABB for the model part
-		vector<VertexPositionNormalTexture> subvec;
+		vector<VertexT> subvec;
 
 		for (size_t j = temp.index_start; j < (temp.index_start + temp.index_count); ++j) {
 			subvec.push_back(out.vertices[out.indices[j]]);

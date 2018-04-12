@@ -23,7 +23,7 @@ namespace Shapes
 	template<typename VertexT>
     void ComputeGeoSphere(vector<VertexT>& vertices, vector<u32>& indices, float diameter = 1, size_t tessellation = 3, bool rhcoords = false);
 	template<typename VertexT>
-    void ComputeCylinder(vector<VertexT>& vertices, vector<u32>& indices, float height = 1, float diameter = 1, size_t tessellation = 32, bool rhcoords = false);
+    void ComputeCylinder(vector<VertexT>& vertices, vector<u32>& indices, float diameter = 1, float height = 1, size_t tessellation = 32, bool rhcoords = false);
 	template<typename VertexT>
 	void ComputeCone(vector<VertexT>& vertices, vector<u32>& indices, float diameter = 1, float height = 1, size_t tessellation = 32, bool rhcoords = false);
 	template<typename VertexT>

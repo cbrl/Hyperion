@@ -6,6 +6,7 @@
 #include "imgui\imgui_impl_dx11.h"
 #include "rendering\buffer\buffers.h"
 #include "resource\model\model.h"
+#include "resource\model\blueprint_factory.h"
 #include "camera\camera.h"
 
 class Scene;
@@ -20,8 +21,25 @@ class UserInterface {
 
 
 	private:
-		void DrawMenu(System& system, Scene& scene);
-		void DrawObjectList(Scene& scene);
+		enum class Popups {
+			NewModel,
+			NewCube,
+			NewBox,
+			NewSphere,
+			NewGeoSphere,
+			NewCylinder,
+			NewTorus,
+			NewCone,
+			NewTetrahedron,
+			NewOctahedron,
+			NewDodecahedron,
+			NewIcosahedron
+		};
+
+
+	private:
+		void DrawMenu(ID3D11Device* device, ResourceMgr& resource_mgr, Scene& scene, Popups& popup);
+		void DrawObjectLists(Scene& scene);
 		void DrawObjectDetails(Scene& scene);
 
 		void DrawModelList(Scene& scene);
@@ -34,4 +52,6 @@ class UserInterface {
 		void DrawLightDetails(SpotLight& light);
 
 		void DrawCameraDetails(Camera& camera);
+
+		void DrawPopups(ID3D11Device* device, Scene& scene, Popups popup);
 };
