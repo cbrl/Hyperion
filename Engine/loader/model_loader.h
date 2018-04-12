@@ -9,14 +9,11 @@
 #include "loader\obj\obj_loader.h"
 
 
-class ModelLoader final {
-	public:
-		ModelLoader() = delete;
-
+namespace ModelLoader {
 		template<typename VertexT>
-		static ModelOutput<VertexT> Load(ID3D11Device* device,
-										 ResourceMgr& resource_mgr,
-										 const wstring& filename);
+		ModelOutput<VertexT> Load(ID3D11Device* device,
+								  ResourceMgr& resource_mgr,
+								  const wstring& filename);
 };
 
 
