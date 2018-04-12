@@ -13,7 +13,7 @@
 
 using namespace DirectX;
 
-namespace DirectX
+namespace Shapes
 {
     const float SQRT2 = 1.41421356237309504880f;
     const float SQRT3 = 1.73205080756887729352f;
@@ -141,23 +141,23 @@ namespace DirectX
 			// Four vertices per face.
 			vertices.resize(vertices.size() + 4);
 
-			XMStoreFloat3(&vertices.rbegin[3].position, (normal - side1 - side2) * tsize);
-			XMStoreFloat3(&vertices.rbegin[2].position, (normal - side1 + side2) * tsize);
-			XMStoreFloat3(&vertices.rbegin[1].position, (normal + side1 + side2) * tsize);
-			XMStoreFloat3(&vertices.rbegin[0].position, (normal + side1 - side2) * tsize);
+			XMStoreFloat3(&vertices.rbegin()[3].position, (normal - side1 - side2) * tsize);
+			XMStoreFloat3(&vertices.rbegin()[2].position, (normal - side1 + side2) * tsize);
+			XMStoreFloat3(&vertices.rbegin()[1].position, (normal + side1 + side2) * tsize);
+			XMStoreFloat3(&vertices.rbegin()[0].position, (normal + side1 - side2) * tsize);
 
 			if constexpr (VertexT::HasNormal()) {
-				XMStoreFloat3(&vertices.rbegin[3].normal, normal);
-				XMStoreFloat3(&vertices.rbegin[2].normal, normal);
-				XMStoreFloat3(&vertices.rbegin[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin[0].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[3].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::HasTexture()) {
-				XMStoreFloat2(&vertices.rbegin[3].texCoord, textureCoordinates[0]);
-				XMStoreFloat2(&vertices.rbegin[2].texCoord, textureCoordinates[1]);
-				XMStoreFloat2(&vertices.rbegin[1].texCoord, textureCoordinates[2]);
-				XMStoreFloat2(&vertices.rbegin[0].texCoord, textureCoordinates[3]);
+				XMStoreFloat2(&vertices.rbegin()[3].texCoord, textureCoordinates[0]);
+				XMStoreFloat2(&vertices.rbegin()[2].texCoord, textureCoordinates[1]);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, textureCoordinates[2]);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, textureCoordinates[3]);
 			}
 		}
 
@@ -687,17 +687,17 @@ namespace DirectX
 
 			vertices.resize(vertices.size() + 2);
 
-			XMStoreFloat3(&vertices.rbegin[1].position, sideOffset + topOffset);
-			XMStoreFloat3(&vertices.rbegin[0].position, sideOffset - topOffset);
+			XMStoreFloat3(&vertices.rbegin()[1].position, sideOffset + topOffset);
+			XMStoreFloat3(&vertices.rbegin()[0].position, sideOffset - topOffset);
 
 			if constexpr (VertexT::HasNormal()) {
-				XMStoreFloat3(&vertices.rbegin[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin[0].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::HasTexture()) {
-				XMStoreFloat2(&vertices.rbegin[1].texCoord, textureCoordinate);
-				XMStoreFloat2(&vertices.rbegin[0].texCoord, textureCoordinate + g_XMIdentityR1);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, textureCoordinate);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, textureCoordinate + g_XMIdentityR1);
 			}
 
 
@@ -756,17 +756,17 @@ namespace DirectX
 			// Duplicate the top vertex for distinct normals
 			vertices.resize(vertices.size() + 2);
 
-			XMStoreFloat3(&vertices.rbegin[1].position, topOffset);
-			XMStoreFloat3(&vertices.rbegin[0].position, pt);
+			XMStoreFloat3(&vertices.rbegin()[1].position, topOffset);
+			XMStoreFloat3(&vertices.rbegin()[0].position, pt);
 
 			if constexpr (VertexT::HasNormal()) {
-				XMStoreFloat3(&vertices.rbegin[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin[0].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
+				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::HasTexture()) {
-				XMStoreFloat2(&vertices.rbegin[1].texCoord, g_XMZero);
-				XMStoreFloat2(&vertices.rbegin[0].texCoord, textureCoordinate + g_XMIdentityR1);
+				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMZero);
+				XMStoreFloat2(&vertices.rbegin()[0].texCoord, textureCoordinate + g_XMIdentityR1);
 			}
 
 			index_push_back(indices, i * 2);

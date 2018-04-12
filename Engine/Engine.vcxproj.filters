@@ -253,6 +253,9 @@
       <Filter>Resource Files\Shaders\include</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="resource\model\blueprint_factory.tpp">
+      <Filter>Source Files\resource\model</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -432,6 +435,12 @@
     <ClInclude Include="geometry\transform\transform.h">
       <Filter>Header Files\geometry\transform</Filter>
     </ClInclude>
+    <ClInclude Include="resource\model\model_blueprint.tpp">
+      <Filter>Source Files\resource\model</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\model\blueprint_factory.h">
+      <Filter>Header Files\resource\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -485,9 +494,6 @@
     <ClCompile Include="text\text.cpp">
       <Filter>Source Files\text</Filter>
     </ClCompile>
-    <ClCompile Include="resource\model\model_blueprint.cpp">
-      <Filter>Source Files\resource\model</Filter>
-    </ClCompile>
     <ClCompile Include="geometry\frustum\frustum.cpp">
       <Filter>Source Files\geometry\frustum</Filter>
     </ClCompile>
@@ -526,6 +532,9 @@
     </ClCompile>
     <ClCompile Include="geometry\transform\transform.cpp">
       <Filter>Source Files\geometry\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="resource\model\model_blueprint.cpp">
+      <Filter>Source Files\resource\model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

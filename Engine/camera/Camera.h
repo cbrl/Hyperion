@@ -26,7 +26,7 @@ class Camera final {
 
 
 		// Resize the viewport
-		void OnResize(u32 width, u32 height);
+		void ResizeViewport(u32 width, u32 height);
 
 
 		//----------------------------------------------------------------------------------

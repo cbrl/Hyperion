@@ -3,6 +3,7 @@
 #include "util\datatypes\datatypes.h"
 #include "resource\mesh\mesh.h"
 #include "resource\model\model_blueprint.h"
+#include "resource\model\model_output.h"
 #include "resource\texture\texture.h"
 #include <SpriteFont.h>
 
@@ -36,21 +37,24 @@ class ResourceMgr final {
 
 		~ResourceMgr() = default;
 
+
 		// ModelBlueprint
 		template<typename ResourceT>
 		enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> Create(const wstring& filename);
+
 
 		// Texture
 		template<typename ResourceT>
 		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const wstring& filename);
 
+		template<typename ResourceT>
+		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const float4& color);
+
+
 		// Texture2DArray
 		template<typename ResourceT>
 		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const vector<wstring>& filenames);
 
-		// Texture
-		template<typename ResourceT>
-		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const float4& color);
 
 		// SpriteFont
 		template<typename ResourceT>
@@ -66,9 +70,7 @@ class ResourceMgr final {
 		ResourceMap<wstring, ModelBlueprint> models;
 
 		// Textures
-		ResourceMap<wstring, Texture>         textures;
-		ResourceMap<u32, Texture>             color_textures;
-		ResourceMap<vector<wstring>, Texture> texture_arrays;
+		ResourceMap<wstring, Texture> textures;
 
 		// SpriteFonts
 		ResourceMap<wstring, SpriteFont> fonts;

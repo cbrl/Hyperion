@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "test_scene.h"
 #include "system\system.h"
-
+#include "resource\model\blueprint_factory.h"
 
 static constexpr float zNear = 0.1f;
 static constexpr float zFar = 1000.0f;
@@ -16,8 +16,8 @@ TestScene::TestScene(const System& system) {
 void TestScene::Init(const System& system) {
 
 	const auto& rendering_mgr  = system.GetRenderingMgr();
-	const auto  device         = rendering_mgr.GetDevice();
-	const auto  device_context = rendering_mgr.GetDeviceContext();
+	auto* device               = rendering_mgr.GetDevice();
+	auto* device_context       = rendering_mgr.GetDeviceContext();
 
 	auto& resource_mgr = rendering_mgr.GetResourceMgr();
 
@@ -87,6 +87,9 @@ void TestScene::Init(const System& system) {
 	models.back().Scale(float3(3.0f, 3.0f, 3.0f));
 	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
 	//models.back().SetRotation(0.0f, 1.2f, 0.0f);
+
+	auto n = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(device, 5.0f);
+	models.push_back(Model(device, n));
 
 
 	//----------------------------------------------------------------------------------

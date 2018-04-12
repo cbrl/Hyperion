@@ -6,8 +6,8 @@
 #include "resource\resource_mgr.h"
 #include "resource\mesh\mesh.h"
 #include "resource\material\material.h"
-#include "geometry\boundingvolume\bounding_volume.h"
 #include "resource\model\model_output.h"
+#include "geometry\boundingvolume\bounding_volume.h"
 
 
 class ResourceMgr;
@@ -26,12 +26,23 @@ struct ModelPart {
 class ModelBlueprint final {
 	public:
 		ModelBlueprint() = default;
+		~ModelBlueprint() = default;
 
 		ModelBlueprint(ID3D11Device* device,
 					   ResourceMgr& resource_mgr,
 					   const wstring& filename);
 
-		~ModelBlueprint() = default;
+		template<typename VertexT>
+		ModelBlueprint(ID3D11Device* device,
+					   const ModelOutput<VertexT>& out)
+		{
+			ConstructBlueprint(device, out);
+		}
+
+
+	private:
+		template<typename VertexT>
+		void ConstructBlueprint(ID3D11Device* device, const ModelOutput<VertexT>& out);
 
 
 	public:
@@ -45,3 +56,6 @@ class ModelBlueprint final {
 		vector<Material>  materials;
 		vector<ModelPart> model_parts;
 };
+
+
+#include "model_blueprint.tpp"

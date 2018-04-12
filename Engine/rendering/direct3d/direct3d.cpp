@@ -144,7 +144,7 @@ void Direct3D::Init() {
 
 
 	// Call OnResize to create the render target view, and world/view/projection matrices
-	OnResize(window_width, window_height);
+	ResizeViewport(window_width, window_height);
 }
 
 
@@ -183,7 +183,7 @@ void Direct3D::ReadRefreshRate(UINT& numerator, UINT& denominator) {
 }
 
 
-void Direct3D::OnResize(u32 winWidth, u32 winHeight) {
+void Direct3D::ResizeViewport(u32 winWidth, u32 winHeight) {
 
 	assert(device_context);
 	assert(device);

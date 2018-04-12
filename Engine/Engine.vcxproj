@@ -189,6 +189,7 @@
     <ClInclude Include="resource\mesh\mesh.h" />
     <ClInclude Include="resource\model\model.h" />
     <ClInclude Include="resource\model\model_blueprint.h" />
+    <ClInclude Include="resource\model\blueprint_factory.h" />
     <ClInclude Include="resource\model\model_output.h" />
     <ClInclude Include="resource\resource_mgr.h" />
     <ClInclude Include="resource\skybox\skybox.h" />
@@ -274,6 +275,10 @@
     </ClInclude>
     <None Include="packages.config" />
     <None Include="resource\mesh\mesh.tpp" />
+    <ClInclude Include="resource\model\model_blueprint.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <None Include="resource\model\blueprint_factory.tpp" />
     <None Include="resource\resource_mgr.tpp" />
     <None Include="shaders\include\light.hlsl">
       <FileType>Document</FileType>

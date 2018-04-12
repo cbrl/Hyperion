@@ -17,6 +17,9 @@ struct Group {
 template<typename VertexT>
 struct ModelOutput final {
 	public:
+		ModelOutput() = default;
+		~ModelOutput() = default;
+
 		ModelOutput(const string& name,
 					const vector<VertexT>& vertices,
 					const vector<u32>& indices,
@@ -28,8 +31,6 @@ struct ModelOutput final {
 			, materials(materials)
 			, groups(groups)
 		{}
-
-		~ModelOutput() = default;
 
 
 	public:

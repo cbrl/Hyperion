@@ -74,22 +74,25 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Cre
 	return textures.GetOrCreate(filename, device.Get(), device_context.Get(), filename);
 }
 
-
-// Texture2DArray
-template<typename ResourceT>
-enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Create(const vector<wstring>& filenames) {
-
-	return texture_arrays.GetOrCreate(filename, device.Get(), device_context.Get(), filenames);
-}
-
-
-// Texture
 template<typename ResourceT>
 enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Create(const float4& color) {
 
 	u32 texColor = Float4ColorToU32(color);
 
-	return color_textures.GetOrCreate(texColor, device.Get(), texColor);
+	return textures.GetOrCreate(to_wstring(texColor);, device.Get(), texColor);
+}
+
+
+// Texture2DArray
+template<typename ResourceT>
+enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Create(const vector<wstring>& filenames) {
+
+	wstring key;
+	for (const wstring& fn : filenames) {
+		key += fn;
+	}
+
+	return textures.GetOrCreate(key, device.Get(), device_context.Get(), filenames);
 }
 
 

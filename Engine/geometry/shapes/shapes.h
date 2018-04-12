@@ -12,7 +12,7 @@
 
 #include "util\datatypes\datatypes.h"
 
-namespace DirectX
+namespace Shapes
 {
 	template<typename VertexT>
 	void ComputeCube(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false, bool invertn = false);

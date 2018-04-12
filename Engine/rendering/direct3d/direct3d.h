@@ -30,7 +30,7 @@ class Direct3D final {
 		void PresentFrame() const;
 
 		// Resize the viewport window
-		void OnResize(u32 win_width, u32 win_height);
+		void ResizeViewport(u32 win_width, u32 win_height);
 
 
 		ID3D11Device* GetDevice() const {

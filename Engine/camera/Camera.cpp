@@ -71,7 +71,7 @@ Camera::Camera(ID3D11Device* device,
 }
 
 
-void Camera::OnResize(u32 width, u32 height) {
+void Camera::ResizeViewport(u32 width, u32 height) {
 
 	// Set the new veiwport width and height
 	viewport_width = width;
