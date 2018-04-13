@@ -33,7 +33,7 @@ void TestScene::Init(const System& system) {
 								 FOV, zNear, zFar,
 								 L"../data/Textures/grasscube1024.dds");
 
-	camera->SetPosition(float3(0.0f, 1.0f, -5.0f));
+	camera->SetPosition(float3(0.0f, 3.0f, -5.0f));
 
 
 	//----------------------------------------------------------------------------------
@@ -66,14 +66,14 @@ void TestScene::Init(const System& system) {
 	point_lights.push_back(PointLight());
 	point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
 	point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().attenuation = float3(0.3f, 0.0f, 0.02f);
-	point_lights.back().specular = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().position = float3(0.0f, 5.0f, 0.0f);
-	point_lights.back().range = 50.0f;
+	point_lights.back().attenuation   = float3(0.0f, 0.15f, 0.0f);
+	point_lights.back().specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
+	point_lights.back().position      = float3(0.0f, 10.0f, 0.0f);
+	point_lights.back().range         = 100.0f;
 
 
 	// Fog
-	fog.color = float4(0.3f, 0.3f, 0.3f, 1.0f);
+	fog.color = float4(0.2f, 0.2f, 0.2f, 1.0f);
 	fog.start = 25.0f;
 	fog.range = 45.0f;
 

@@ -14,11 +14,11 @@
 
 
 
-class ChildModel final {
+class ModelChild final {
 	friend class Model;
 
 	protected:
-		ChildModel(ID3D11Device* device, ModelPart& part, Material mat)
+		ModelChild(ID3D11Device* device, ModelPart& part, Material mat)
 			: name(part.name)
 			, buffer(device)
 			, index_start(part.index_start)
@@ -31,8 +31,7 @@ class ChildModel final {
 		void XM_CALLCONV Update(ID3D11DeviceContext* device_context,
 								FXMMATRIX world,
 								CXMMATRIX world_inv_transpose,
-								CXMMATRIX world_view_proj,
-								CXMMATRIX tex_transform);
+								CXMMATRIX world_view_proj);
 
 		void XM_CALLCONV UpdateBoundingVolumes(FXMMATRIX transform) {
 			aabb.Transform(transform);
@@ -41,7 +40,7 @@ class ChildModel final {
 
 
 	public:
-		~ChildModel() = default;
+		~ModelChild() = default;
 
 		const u32 GetIndexStart() const { return index_start; }
 		const u32 GetIndexCount() const { return index_count; }
@@ -58,17 +57,22 @@ class ChildModel final {
 
 
 	private:
+		// The name of the model child
 		string name;
 
-		ConstantBuffer<ModelBuffer> buffer;
-
+		// Index info
 		u32 index_start;
 		u32 index_count;
 
+		// Bounding volumes
+		AABB aabb;
+		BoundingSphere sphere;
+
+		// Material
 		Material material;
 
-		AABB           aabb;
-		BoundingSphere sphere;
+		// The cbuffer for this model child
+		ConstantBuffer<ModelBuffer> buffer;
 };
 
 
@@ -150,17 +154,22 @@ class Model final {
 
 
 	private:
+		// The model's name
 		string name;
 
+		// The vertex and index buffer of the model
 		shared_ptr<Mesh> mesh;
 
-		vector<Material> materials;
-
-		AABB           aabb;
+		// Bounding volumes
+		AABB aabb;
 		BoundingSphere sphere;
-		Transform      transform;
-		
-		vector<ChildModel> child_models;
 
-		bool     update_bounding_volumes;
+		// The model's transform
+		Transform transform;
+		
+		// The child models that make up this model
+		vector<ModelChild> child_models;
+
+		// Flag that's set when the model transform changes
+		bool update_bounding_volumes;
 };

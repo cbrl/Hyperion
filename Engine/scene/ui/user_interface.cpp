@@ -21,7 +21,7 @@ void UserInterface::Draw(System& system) {
 	if (ImGui::Begin("Scene", &open, ImGuiWindowFlags_MenuBar)) {
 
 		// Popup enum determines if any popups need to be drawn
-		Popups popup;
+		Popups popup = Popups::Null;
 
 		// Draw Menu
 		DrawMenu(device, resource_mgr, scene, popup);
@@ -89,8 +89,8 @@ void UserInterface::DrawMenu(ID3D11Device* device, ResourceMgr& resource_mgr, Sc
 					}
 				}
 
-				if (ImGui::MenuItem("From existing")) {
-					popup = Popups::NewModel;
+				if (ImGui::MenuItem("Copy existing")) {
+					popup = Popups::NewModelCopy;
 				}
 
 				if (ImGui::BeginMenu("Geometric Shape")) {
@@ -184,7 +184,7 @@ void UserInterface::DrawModelList(Scene& scene) {
 
 			// Draw a node for each child model
 			if (node_open) {
-				model.ForEachChild([&](ChildModel& child) {
+				model.ForEachChild([&](ModelChild& child) {
 
 					ImGui::PushID(&child);
 					ImGui::Bullet();
@@ -432,7 +432,7 @@ void UserInterface::DrawModelDetails(Model& model) {
 }
 
 
-void UserInterface::DrawChildModelDetails(ChildModel& child) {
+void UserInterface::DrawChildModelDetails(ModelChild& child) {
 
 	ImGui::Text(child.GetName().c_str());
 	ImGui::Separator();
@@ -512,8 +512,8 @@ void UserInterface::DrawLightDetails(SpotLight& light) {
 void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup) {
 
 	switch (popup) {
-		case Popups::NewModel:
-			ImGui::OpenPopup("New Model");
+		case Popups::NewModelCopy:
+			ImGui::OpenPopup("New Model Copy");
 			break;
 		case Popups::NewCube:
 			ImGui::OpenPopup("New Cube");
@@ -551,7 +551,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 	}
 
 
-	if (ImGui::BeginPopupModal("New Model", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
+	if (ImGui::BeginPopupModal("New Model Copy", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
 
 		static int selected_combo = NULL;
 

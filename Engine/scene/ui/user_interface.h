@@ -22,7 +22,8 @@ class UserInterface {
 
 	private:
 		enum class Popups {
-			NewModel,
+			Null,
+			NewModelCopy,
 			NewCube,
 			NewBox,
 			NewSphere,
@@ -44,7 +45,7 @@ class UserInterface {
 
 		void DrawModelList(Scene& scene);
 		void DrawModelDetails(Model& model);
-		void DrawChildModelDetails(ChildModel& child);
+		void DrawChildModelDetails(ModelChild& child);
 
 		void DrawLightList(Scene& scene);
 		void DrawLightDetails(DirectionalLight& light);

@@ -3,14 +3,13 @@
 
 
 //----------------------------------------------------------------------------------
-// ChildModel
+// ModelChild
 //----------------------------------------------------------------------------------
 
-void XM_CALLCONV ChildModel::Update(ID3D11DeviceContext* device_context,
+void XM_CALLCONV ModelChild::Update(ID3D11DeviceContext* device_context,
 									FXMMATRIX world,
 									CXMMATRIX world_inv_transpose,
-									CXMMATRIX world_view_proj,
-									CXMMATRIX tex_transform) {
+									CXMMATRIX world_view_proj) {
 
 	// Create a new ModelBuffer struc with the updated data
 	// and send it to the constant buffer.
@@ -19,7 +18,7 @@ void XM_CALLCONV ChildModel::Update(ID3D11DeviceContext* device_context,
 	buffer_data.world = world;
 	buffer_data.world_inv_transpose = world_inv_transpose;
 	buffer_data.world_view_proj = world_view_proj;
-	buffer_data.texTransform = tex_transform;
+	buffer_data.texTransform = XMMatrixIdentity();
 
 	buffer_data.mat = MaterialBuffer(material.Ka, material.Kd, material.Ks, material.Ke,
 									 material.Ni, material.d, material.has_texture);
@@ -39,14 +38,12 @@ Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
 	, aabb(blueprint->aabb)
 	, sphere(blueprint->sphere)
 {
-	// Create the shared ptrs for the material vector
-	for (Material& mat : blueprint->materials) {
-		materials.push_back(mat);
-	}
-
 	// Create each model part
 	for (ModelPart& part : blueprint->model_parts) {
-		child_models.push_back(ChildModel(device, part, materials[part.material_index]));
+
+		auto& material = blueprint->materials[part.material_index];
+
+		child_models.push_back(ModelChild(device, part, material));
 	}
 }
 
@@ -67,12 +64,12 @@ void XM_CALLCONV Model::Update(ID3D11DeviceContext* device_context, FXMMATRIX vi
 
 
 	// Update each child model
-	ForEachChild([&](ChildModel& child) {
+	ForEachChild([&](ModelChild& child) {
 
 		if (update_bounding_volumes)
 			child.UpdateBoundingVolumes(transform.GetWorld());
 
-		child.Update(device_context, world, world_inv_transpose, world_view_proj, XMMatrixIdentity());
+		child.Update(device_context, world, world_inv_transpose, world_view_proj);
 	});
 
 	// Update the model's bounding volumes

@@ -6,7 +6,7 @@
 #include "rendering\buffer\buffers.h"
 #include "resource\resource_mgr.h"
 #include "resource\model\model.h"
-#include "text\text.h"
+#include "resource\text\text.h"
 #include "scene\ui\user_interface.h"
 
 class System;
