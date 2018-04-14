@@ -2,7 +2,7 @@
 
 #include "util\datatypes\datatypes.h"
 #include "input\input.h"
-#include "camera\camera.h"
+#include "camera\player_camera.h"
 #include "rendering\buffer\buffers.h"
 #include "resource\resource_mgr.h"
 #include "resource\model\model.h"
@@ -45,7 +45,7 @@ class Scene {
 	protected:
 		bool                     enable_input;
 
-		unique_ptr<Camera>       camera;
+		unique_ptr<PlayerCamera> camera;
 		Fog                      fog;
 		vector<Model>            models;
 		vector<PointLight>       point_lights;

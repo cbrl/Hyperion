@@ -217,6 +217,9 @@
     <Filter Include="Source Files\resource\text">
       <UniqueIdentifier>{ac66256c-4821-446d-89c4-c1c6a0d0e045}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\rendering\buffer">
+      <UniqueIdentifier>{08e518dc-771d-4ae2-b35c-f2161adcc59f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -441,6 +444,12 @@
     <ClInclude Include="resource\text\text.h">
       <Filter>Header Files\resource\text</Filter>
     </ClInclude>
+    <ClInclude Include="rendering\buffer\constant_buffer.tpp">
+      <Filter>Source Files\rendering\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\player_camera.h">
+      <Filter>Header Files\camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -535,6 +544,9 @@
     </ClCompile>
     <ClCompile Include="resource\text\text.cpp">
       <Filter>Source Files\resource\text</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\player_camera.cpp">
+      <Filter>Source Files\camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

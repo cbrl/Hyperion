@@ -19,8 +19,8 @@ class RenderingMgr final {
 		~RenderingMgr();
 
 		// Resize the viewport
-		void ResizeViewport(u32 window_width, u32 window_height) const {
-			direct3D->ResizeViewport(window_width, window_height);
+		void ResizeBuffers(u32 window_width, u32 window_height) const {
+			direct3D->ResizeBuffers(window_width, window_height);
 			ImGui_ImplDX11_InvalidateDeviceObjects();
 			ImGui_ImplDX11_CreateDeviceObjects();
 		}

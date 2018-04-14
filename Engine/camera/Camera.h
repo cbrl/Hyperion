@@ -2,31 +2,21 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
-#include "geometry\frustum\frustum.h"
+#include "rendering\pipeline.h"
 #include "rendering\buffer\constant_buffer.h"
+#include "geometry\frustum\frustum.h"
 #include "resource\resource_mgr.h"
 #include "resource\skybox\skybox.h"
 
 
-class Camera final {
-	private:
-		Camera(ID3D11Device* device);
-
+class Camera {
 	public:
 		Camera(ID3D11Device* device,
-			   ResourceMgr& resource_mgr,
+			   ID3D11DeviceContext* device_context,
 			   u32 viewport_width,
-			   u32 viewport_height,
-			   float fov,
-			   float z_near,
-			   float z_far,
-			   wstring skybox_filename);
+			   u32 viewport_height);
 
 		~Camera() = default;
-
-
-		// Resize the viewport
-		void ResizeViewport(u32 width, u32 height);
 
 
 		//----------------------------------------------------------------------------------
@@ -48,55 +38,48 @@ class Camera final {
 
 
 		//----------------------------------------------------------------------------------
-		// Movement
-		//----------------------------------------------------------------------------------
-
-		void Move(float3 units);
-		void Rotate(float3 units);
-
-		// Calculate new view matrix, position, and velocity
-		void UpdateMovement(float delta_time);
-
-
-		//----------------------------------------------------------------------------------
 		// Setters
 		//----------------------------------------------------------------------------------
 
-		void SetPosition(float3 position) { 
-			this->position = XMVectorSet(position.x, position.y, position.z, 0.0f);
+		void SetPosition(const float3& position);
+
+		void SetRotation(const float3& rotation);
+
+		// Set a new viewport
+		void SetViewport(ID3D11DeviceContext* device_context, const D3D11_VIEWPORT& viewport) {
+			this->viewport = viewport;
+			BindViewport(device_context);
+			UpdateProjectionMatrix();
 		}
 
-		void SetRotation(float3 rotation) {
-			pitch = rotation.x;
-			yaw   = rotation.y;
-			roll  = rotation.z;
+		// Change the viewport size
+		void ResizeViewport(u32 width, u32 height) {
+			viewport.Width  = static_cast<float>(width);
+			viewport.Height = static_cast<float>(height);
+			UpdateProjectionMatrix();
 		}
 
-		void SetDepthRange(float zNear, float zFar) {
-			z_near = zNear;
-			z_far  = zFar;
-			ortho_matrix = XMMatrixOrthographicLH((float)viewport_width, (float)viewport_height, z_near, z_far);
+		void SetViewportTopLeft(u32 top_left_x, u32 top_left_y) {
+			viewport.TopLeftX = static_cast<float>(top_left_x);
+			viewport.TopLeftY = static_cast<float>(top_left_y);
+			UpdateProjectionMatrix();
 		}
 
+		// Set the depth range
+		void SetZDepth(float z_near, float z_far) {
+			this->z_near = z_near;
+			this->z_far  = z_far;
+		}
+
+		// Change the FOV
 		void SetFOV(float radians) {
 			fov = radians;
-			projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
+			UpdateProjectionMatrix();
 		}
 
-		// Set movement speed related variables
-		void SetAcceleration(float accel)      { acceleration = accel; }
-		void SetDeceleration(float decel)      { deceleration = decel; }
-		void SetMaxVelocity(float velocity)    { max_velocity = velocity; }
-		void SetSensitivity(float sensitivity) { turn_factor = sensitivity; }
-
-		// Set camera movement style
-		void SetFreeLook(bool enabled) {
-			if (!enabled && free_look) {
-				camera_forward = default_forward;
-				camera_right   = default_right;
-				camera_up      = default_up;
-			}
-			free_look = enabled;
+		// Set the skybox for this camera
+		void SetSkybox(const SkyBox& skybox) {
+			this->skybox = skybox;
 		}
 
 
@@ -105,28 +88,28 @@ class Camera final {
 		//----------------------------------------------------------------------------------
 
 		// Get matrices
-		const XMMATRIX GetViewMatrix()  const { return view_matrix; }
-		const XMMATRIX GetProjMatrix()  const { return projection_matrix; }
-		const XMMATRIX GetOrthoMatrix() const { return ortho_matrix; }
-		
+		const XMMATRIX GetViewMatrix()  const {
+			return view_matrix;
+		}
+		const XMMATRIX GetProjMatrix()  const {
+			return projection_matrix;
+		}
+
 		// Get the Frustum
-		const Frustum& GetFrustum() const { return frustum; }
+		const Frustum& GetFrustum() const {
+			return frustum;
+		}
 
 		// Get the Skybox
-		const SkyBox& GetSkybox() const { return skybox; }
-
-		// Camera movement style
-		bool IsFreeLookEnabled() const { return free_look; }
-
-		// Get movement speed related variables
-		const float GetAcceleration() const { return acceleration; }
-		const float GetDeleceration() const { return deceleration; }
-		const float GetMaxVelocity()  const { return max_velocity; }
-		const float GetSensitivity()  const { return turn_factor; }
+		const SkyBox& GetSkybox() const {
+			return skybox;
+		}
 
 		// Get position, rotation, velocity (in units/ms)
-		const float3 GetRotation() const { return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll)); }
-		const float3 GetVelocity() const { return velocity; }
+		const float3 GetRotation() const {
+			return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll));
+		}
+
 		const float3 GetPosition() const {
 			float3 pos;
 			XMStoreFloat3(&pos, position);
@@ -134,7 +117,25 @@ class Camera final {
 		}
 
 
-	private:
+	protected:
+		// Bind the viewport to the pipeline
+		void BindViewport(ID3D11DeviceContext* device_context) {
+			Pipeline::RS::BindViewports(device_context, 1, &viewport);
+		}
+
+		// Update the viewport after changing depth/width/height/etc...
+		void UpdateProjectionMatrix();
+
+		// Update the view matrix. Used after moving/rotating the camera.
+		void UpdateViewMatrix();
+
+		// Update the frustum. Used after the projection matrix or view matrix changes.
+		void UpdateFrustum() {
+			frustum.UpdateFrustum(view_matrix * projection_matrix);
+		}
+
+
+	protected:
 		// Camera's constant buffer
 		ConstantBuffer<CameraBuffer> buffer;
 
@@ -144,54 +145,32 @@ class Camera final {
 		// Camera frustum
 		Frustum frustum;
 
-		// Viewport size and depth range
-		u32   viewport_width;
-		u32   viewport_height;
+		// Viewport, FOV, depth, and aspect ratio
+		D3D11_VIEWPORT viewport;
+		float fov;
 		float z_near;
 		float z_far;
-		float fov;
 		float aspect_ratio;
 
 		// Matrices
 		XMMATRIX view_matrix;
 		XMMATRIX projection_matrix;
-		XMMATRIX ortho_matrix;
 
 		// Default vectors
 		static constexpr XMVECTOR default_forward = { 0.0f, 0.0f, 1.0f, 0.0f };
-		static constexpr XMVECTOR default_right = { 1.0f, 0.0f, 0.0f, 0.0f };
-		static constexpr XMVECTOR default_up = { 0.0f, 1.0f, 0.0f, 0.0f };
+		static constexpr XMVECTOR default_right   = { 1.0f, 0.0f, 0.0f, 0.0f };
+		static constexpr XMVECTOR default_up      = { 0.0f, 1.0f, 0.0f, 0.0f };
 
 		// Orientation vectors
 		XMVECTOR camera_forward;
-		XMVECTOR fps_forward;
 		XMVECTOR camera_right;
 		XMVECTOR camera_up;
 
-		// Target vector
-		XMVECTOR look_at;
-
 		// Camera position
 		XMVECTOR position;
-
-		// Position, veloctiy, acceleration (units per ms)
-		float3 move_units;
-		float3 velocity;
-		float  acceleration;
-		float  deceleration;
-		float  max_velocity;
 
 		// Pitch, yaw, roll
 		float pitch;
 		float yaw;
 		float roll;
-		float turn_factor;
-		const float max_pitch;
-
-		// Booleans
-		bool free_look;
-		bool is_moving_x;
-		bool is_moving_y;
-		bool is_moving_z;
 };
-

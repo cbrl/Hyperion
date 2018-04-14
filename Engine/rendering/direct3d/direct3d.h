@@ -29,8 +29,8 @@ class Direct3D final {
 		// Present the current frame
 		void PresentFrame() const;
 
-		// Resize the viewport window
-		void ResizeViewport(u32 win_width, u32 win_height);
+		// Resize the depth/stencil/back buffers
+		void ResizeBuffers(u32 win_width, u32 win_height);
 
 
 		ID3D11Device* GetDevice() const {
@@ -54,7 +54,6 @@ class Direct3D final {
 		ComPtr<ID3D11Texture2D>        depth_stencil_buffer;
 		ComPtr<ID3D11DepthStencilView> depth_stencil_view;
 		ComPtr<ID3D11RenderTargetView> render_target_view;
-		D3D11_VIEWPORT                 window_viewport;
 		D3D_DRIVER_TYPE                driver_type;
 
 		HWND hWnd;

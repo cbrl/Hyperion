@@ -19,7 +19,6 @@ Direct3D::Direct3D(HWND hWnd,
 	, enable_fullscreen(fullscreen)
 	, driver_type(D3D_DRIVER_TYPE_HARDWARE)
 	, MSAA4x_quality(0)
-	, window_viewport({})
 {
 	Init();
 }
@@ -143,8 +142,8 @@ void Direct3D::Init() {
 	              "Failed to create swapchain");
 
 
-	// Call OnResize to create the render target view, and world/view/projection matrices
-	ResizeViewport(window_width, window_height);
+	// Call resize function to create the render target view, and world/view/projection matrices
+	ResizeBuffers(window_width, window_height);
 }
 
 
@@ -183,7 +182,7 @@ void Direct3D::ReadRefreshRate(UINT& numerator, UINT& denominator) {
 }
 
 
-void Direct3D::ResizeViewport(u32 winWidth, u32 winHeight) {
+void Direct3D::ResizeBuffers(u32 winWidth, u32 winHeight) {
 
 	assert(device_context);
 	assert(device);
@@ -253,18 +252,6 @@ void Direct3D::ResizeViewport(u32 winWidth, u32 winHeight) {
 	// Bind the render target view and depth/stencil view to the pipeline
 
 	Pipeline::OM::BindRTVs(device_context.Get(), 1, render_target_view.GetAddressOf(), depth_stencil_view.Get());
-
-
-	// Set the viewport transform
-
-	window_viewport.TopLeftX = 0;
-	window_viewport.TopLeftY = 0;
-	window_viewport.Width    = static_cast<float>(window_width);
-	window_viewport.Height   = static_cast<float>(window_height);
-	window_viewport.MinDepth = 0.0f;
-	window_viewport.MaxDepth = 1.0f;
-
-	Pipeline::RS::BindViewports(device_context.Get(), 1, &window_viewport);
 }
 
 

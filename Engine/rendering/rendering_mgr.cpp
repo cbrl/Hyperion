@@ -62,13 +62,10 @@ void RenderingMgr::Render(System& system) const {
 
 	// Clear the render target view with a specified color
 	static float color[4] = { 0.39f, 0.39f, 0.39f, 1.0f };
-	ImGui::ColorEdit4("Clear Color", (float*)&color);
+	//ImGui::ColorEdit4("Clear Color", (float*)&color);
 
 	direct3D->Clear(color);
 
-
-	// Get the scene
-	Scene& scene = system.GetScene();
 
 	// Render the scene
 	renderer->Render(system, *render_state_mgr);

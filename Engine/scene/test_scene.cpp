@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "test_scene.h"
 #include "system\system.h"
-#include "resource\model\blueprint_factory.h"
+
 
 static constexpr float zNear = 0.1f;
 static constexpr float zFar = 1000.0f;
@@ -26,13 +26,16 @@ void TestScene::Init(const System& system) {
 	// Create camera
 	//----------------------------------------------------------------------------------
 
-	camera = make_unique<Camera>(device,
-								 resource_mgr,
-								 system.GetWindowWidth(),
-								 system.GetWindowHeight(),
-								 FOV, zNear, zFar,
-								 L"../data/Textures/grasscube1024.dds");
+	// Create the camera
+	camera = make_unique<PlayerCamera>(device, device_context, system.GetWindowWidth(), system.GetWindowHeight());
 
+	// Create the skybox
+	SkyBox skybox(device, resource_mgr, L"../data/Textures/grasscube1024.dds");
+
+	// Set the parameters
+	camera->SetZDepth(zNear, zFar);
+	camera->SetFOV(FOV);
+	camera->SetSkybox(skybox);
 	camera->SetPosition(float3(0.0f, 3.0f, -5.0f));
 
 

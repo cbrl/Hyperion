@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="camera\camera.h" />
+    <ClInclude Include="camera\player_camera.h" />
     <ClInclude Include="geometry\boundingvolume\bounding_volume.h" />
     <ClInclude Include="geometry\frustum\frustum.h" />
     <ClInclude Include="geometry\shapes\bezier.h" />
@@ -218,6 +219,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera\camera.cpp" />
+    <ClCompile Include="camera\player_camera.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
     <ClCompile Include="geometry\shapes\shapes.tpp" />
     <ClCompile Include="geometry\transform\transform.cpp" />
@@ -274,6 +276,9 @@
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="packages.config" />
+    <ClInclude Include="rendering\buffer\constant_buffer.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <None Include="resource\mesh\mesh.tpp" />
     <ClInclude Include="resource\model\model_blueprint.tpp">
       <FileType>Document</FileType>

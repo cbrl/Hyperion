@@ -379,7 +379,7 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 }
 
 
-void UserInterface::DrawCameraDetails(Camera& camera) {
+void UserInterface::DrawCameraDetails(PlayerCamera& camera) {
 
 	float max_velocity = camera.GetMaxVelocity();
 	float acceleration = camera.GetAcceleration();

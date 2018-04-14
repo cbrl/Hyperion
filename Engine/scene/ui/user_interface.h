@@ -7,7 +7,7 @@
 #include "rendering\buffer\buffers.h"
 #include "resource\model\model.h"
 #include "resource\model\blueprint_factory.h"
-#include "camera\camera.h"
+#include "camera\player_camera.h"
 
 class Scene;
 class System;
@@ -52,7 +52,7 @@ class UserInterface {
 		void DrawLightDetails(PointLight& light);
 		void DrawLightDetails(SpotLight& light);
 
-		void DrawCameraDetails(Camera& camera);
+		void DrawCameraDetails(PlayerCamera& camera);
 
 		void DrawPopups(ID3D11Device* device, Scene& scene, Popups popup);
 };
