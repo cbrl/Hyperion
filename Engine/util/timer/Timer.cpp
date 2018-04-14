@@ -13,10 +13,6 @@ Timer::Timer() : stopped(false) {
 }
 
 
-Timer::~Timer() {
-}
-
-
 void Timer::Tick() {
 	if (stopped) {
 		deltaTime = 0.0;

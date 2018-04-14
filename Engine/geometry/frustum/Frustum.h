@@ -1,7 +1,7 @@
 #pragma once
 
 #include "util\datatypes\datatypes.h"
-#include "geometry\boundingvolume\bounding_volume.h"
+#include "geometry\bounding_volume\bounding_volume.h"
 
 using namespace DirectX;
 

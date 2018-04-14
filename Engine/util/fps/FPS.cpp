@@ -3,12 +3,10 @@
 
 
 FPS::FPS() : fps(0), count(0) {
+
 	start_time = timeGetTime();
 }
 
-
-FPS::~FPS() {
-}
 
 
 void FPS::Tick() {
@@ -25,6 +23,6 @@ void FPS::Tick() {
 }
 
 
-i32 FPS::GetFPS() {
+u32 FPS::GetFPS() {
 	return fps;
 }

@@ -7,7 +7,7 @@
 #include "rendering\buffer\buffers.h"
 #include "resource\model\model.h"
 #include "resource\model\blueprint_factory.h"
-#include "camera\player_camera.h"
+#include "scene\camera\player_camera.h"
 
 class Scene;
 class System;

@@ -42,6 +42,6 @@ class Transform final {
 		XMVECTOR rotation;
 		XMVECTOR scale;
 
-		// Flag that decides if a new matrix needs to be calculated
+		// Flag that decides if the object-to-world matrix requires an update
 		bool needs_update;
 };

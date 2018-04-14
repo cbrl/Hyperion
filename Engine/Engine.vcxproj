@@ -157,9 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="camera\camera.h" />
-    <ClInclude Include="camera\player_camera.h" />
-    <ClInclude Include="geometry\boundingvolume\bounding_volume.h" />
+    <ClInclude Include="geometry\bounding_volume\bounding_volume.h" />
     <ClInclude Include="geometry\frustum\frustum.h" />
     <ClInclude Include="geometry\shapes\bezier.h" />
     <ClInclude Include="geometry\shapes\shapes.h" />
@@ -196,6 +194,8 @@
     <ClInclude Include="resource\skybox\skybox.h" />
     <ClInclude Include="resource\texture\texture.h" />
     <ClInclude Include="resource\text\text.h" />
+    <ClInclude Include="scene\camera\camera.h" />
+    <ClInclude Include="scene\camera\player_camera.h" />
     <ClInclude Include="scene\scene.h" />
     <ClInclude Include="scene\test_scene.h" />
     <ClInclude Include="scene\ui\user_interface.h" />
@@ -218,8 +218,7 @@
     <ClInclude Include="util\timer\timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="camera\camera.cpp" />
-    <ClCompile Include="camera\player_camera.cpp" />
+    <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
     <ClCompile Include="geometry\shapes\shapes.tpp" />
     <ClCompile Include="geometry\transform\transform.cpp" />
@@ -257,6 +256,8 @@
     </ClCompile>
     <ClCompile Include="resource\skybox\skybox.cpp" />
     <ClCompile Include="resource\text\text.cpp" />
+    <ClCompile Include="scene\camera\camera.cpp" />
+    <ClCompile Include="scene\camera\player_camera.cpp" />
     <ClCompile Include="scene\test_scene.cpp" />
     <ClCompile Include="scene\ui\user_interface.cpp" />
     <ClCompile Include="shader\shader.cpp" />

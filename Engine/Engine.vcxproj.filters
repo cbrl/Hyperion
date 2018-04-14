@@ -16,9 +16,6 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{cd0f1874-c186-4bbb-9a3d-1e503a7555b6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\camera">
-      <UniqueIdentifier>{fa337d56-6b66-4890-baf9-7d5ed271087b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\direct3d">
       <UniqueIdentifier>{9f233e8c-ee20-4249-a8b0-1bcef832ab99}</UniqueIdentifier>
     </Filter>
@@ -51,9 +48,6 @@
     </Filter>
     <Filter Include="Header Files\util\timer">
       <UniqueIdentifier>{61fb7fef-9411-4c60-9c58-4f42cc558dbe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\camera">
-      <UniqueIdentifier>{0cb2927f-239e-4f16-b73d-0eec3ddd04cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\rendering">
       <UniqueIdentifier>{4c82db23-914c-4d04-a44d-d91e5c4f017e}</UniqueIdentifier>
@@ -99,9 +93,6 @@
     </Filter>
     <Filter Include="Header Files\util\string">
       <UniqueIdentifier>{11a86b40-978f-490a-9e1a-9763223d2041}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\boundingvolume">
-      <UniqueIdentifier>{e1ceb31f-9268-4f50-bcdf-98b20c935b8a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\Shaders\include">
       <UniqueIdentifier>{e37a59d3-6884-44fb-9f57-55214849b3e8}</UniqueIdentifier>
@@ -220,6 +211,18 @@
     <Filter Include="Source Files\rendering\buffer">
       <UniqueIdentifier>{08e518dc-771d-4ae2-b35c-f2161adcc59f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\geometry\boundingvolume">
+      <UniqueIdentifier>{d02a5641-e088-4ab4-acb9-f7a40b42e011}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\geometry\bounding_volume">
+      <UniqueIdentifier>{e1ceb31f-9268-4f50-bcdf-98b20c935b8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\camera">
+      <UniqueIdentifier>{fa337d56-6b66-4890-baf9-7d5ed271087b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\camera">
+      <UniqueIdentifier>{0cb2927f-239e-4f16-b73d-0eec3ddd04cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -269,9 +272,6 @@
     </ClInclude>
     <ClInclude Include="rendering\buffer\Buffers.h">
       <Filter>Header Files\rendering\buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="camera\Camera.h">
-      <Filter>Header Files\camera</Filter>
     </ClInclude>
     <ClInclude Include="system\System.h">
       <Filter>Header Files\system</Filter>
@@ -390,9 +390,6 @@
     <ClInclude Include="loader\obj\obj_loader.tpp">
       <Filter>Source Files\loader\obj</Filter>
     </ClInclude>
-    <ClInclude Include="geometry\boundingvolume\bounding_volume.h">
-      <Filter>Header Files\geometry\boundingvolume</Filter>
-    </ClInclude>
     <ClInclude Include="geometry\frustum\frustum.h">
       <Filter>Header Files\geometry\frustum</Filter>
     </ClInclude>
@@ -447,8 +444,14 @@
     <ClInclude Include="rendering\buffer\constant_buffer.tpp">
       <Filter>Source Files\rendering\buffer</Filter>
     </ClInclude>
-    <ClInclude Include="camera\player_camera.h">
-      <Filter>Header Files\camera</Filter>
+    <ClInclude Include="geometry\bounding_volume\bounding_volume.h">
+      <Filter>Header Files\geometry\bounding_volume</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\camera\camera.h">
+      <Filter>Header Files\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\camera\player_camera.h">
+      <Filter>Header Files\scene\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -478,9 +481,6 @@
     </ClCompile>
     <ClCompile Include="util\timer\timer.cpp">
       <Filter>Source Files\util\timer</Filter>
-    </ClCompile>
-    <ClCompile Include="camera\camera.cpp">
-      <Filter>Source Files\camera</Filter>
     </ClCompile>
     <ClCompile Include="util\datatypes\vertex_types.cpp">
       <Filter>Source Files\util\datatypes</Filter>
@@ -545,8 +545,14 @@
     <ClCompile Include="resource\text\text.cpp">
       <Filter>Source Files\resource\text</Filter>
     </ClCompile>
-    <ClCompile Include="camera\player_camera.cpp">
-      <Filter>Source Files\camera</Filter>
+    <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp">
+      <Filter>Source Files\geometry\boundingvolume</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\camera\camera.cpp">
+      <Filter>Source Files\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\camera\player_camera.cpp">
+      <Filter>Source Files\scene\camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
-#include "camera\camera.h"
+#include "scene\camera\camera.h"
 
 
 class PlayerCamera final : public Camera {

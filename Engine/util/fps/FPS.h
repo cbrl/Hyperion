@@ -8,15 +8,15 @@
 class FPS final {
 	public:
 		FPS();
-		~FPS();
+		~FPS() = default;
 
 		void Tick();
-		i32  GetFPS();
+		u32  GetFPS();
 
 
 	private:
-		i32   fps;
-		i32   count;
+		u32   fps;
+		u32   count;
 		ULONG start_time;
 };
 

@@ -2,11 +2,11 @@
 
 #include "util\datatypes\datatypes.h"
 #include "input\input.h"
-#include "camera\player_camera.h"
 #include "rendering\buffer\buffers.h"
 #include "resource\resource_mgr.h"
 #include "resource\model\model.h"
 #include "resource\text\text.h"
+#include "scene\camera\player_camera.h"
 #include "scene\ui\user_interface.h"
 
 class System;

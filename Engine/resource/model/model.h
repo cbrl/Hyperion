@@ -9,7 +9,7 @@
 #include "resource\mesh\mesh.h"
 #include "resource\material\material.h"
 #include "geometry\transform\transform.h"
-#include "geometry\boundingvolume\bounding_volume.h"
+#include "geometry\bounding_volume\bounding_volume.h"
 #include "rendering\buffer\constant_buffer.h"
 
 

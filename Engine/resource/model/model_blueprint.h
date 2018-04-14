@@ -7,7 +7,7 @@
 #include "resource\mesh\mesh.h"
 #include "resource\material\material.h"
 #include "resource\model\model_output.h"
-#include "geometry\boundingvolume\bounding_volume.h"
+#include "geometry\bounding_volume\bounding_volume.h"
 
 
 class ResourceMgr;
