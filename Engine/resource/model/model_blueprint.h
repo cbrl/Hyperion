@@ -5,8 +5,8 @@
 #include "util\math\math.h"
 #include "resource\resource_mgr.h"
 #include "resource\mesh\mesh.h"
-#include "resource\material\material.h"
 #include "resource\model\model_output.h"
+#include "resource\model\material\material.h"
 #include "geometry\bounding_volume\bounding_volume.h"
 
 

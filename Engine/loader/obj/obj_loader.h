@@ -5,7 +5,7 @@
 #include "util\datatypes\datatypes.h"
 #include "resource\resource_mgr.h"
 #include "resource\model\model_output.h"
-#include "resource\material\material.h"
+#include "resource\model\material\material.h"
 
 
 // Material definition used by OBJLoader

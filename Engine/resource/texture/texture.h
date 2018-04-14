@@ -12,10 +12,10 @@ struct Texture final {
 		~Texture() = default;
 
 		template<typename... ArgsT>
-		Texture(ID3D11Device* device, ArgsT&&... args) {
+		Texture(ArgsT&&... args) {
 
 			// Create the texture SRV
-			TextureLoader::LoadTexture(device, std::forward<ArgsT>(args)..., texture.GetAddressOf());
+			TextureLoader::LoadTexture(std::forward<ArgsT>(args)..., texture.GetAddressOf());
 		}
 
 		Texture(ID3D11ShaderResourceView* texture) : texture(texture) {}

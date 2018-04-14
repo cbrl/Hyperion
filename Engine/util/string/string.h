@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <sstream>
+#include <iomanip>
 #include <vector>
 #include <cwchar>
 #include <locale>
@@ -12,6 +14,17 @@ using std::wstring;
 
 using std::to_string;
 using std::to_wstring;
+
+// stringstream
+using std::stringstream;
+using std::istringstream;
+using std::ostringstream;
+
+// wstringstream
+using std::wstringstream;
+using std::wistringstream;
+using std::wostringstream;
+
 
 
 
@@ -27,6 +40,21 @@ inline string wstr2str(const wstring& in) {
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
 
 	return wstring_converter.to_bytes(in);
+}
+
+
+// Convert an integer to a hexadecimal string
+template<typename T>
+inline string int2hexstr(T i) {
+
+	static_assert(std::is_integral_v<T>, "int2hexstr() input type is not an integral type");
+
+	stringstream stream;
+	stream << "0x"
+	       << std::setfill('0') << std::setw(sizeof(T) * 2)
+	       << std::hex << i;
+
+	return stream.str();
 }
 
 
@@ -52,13 +80,8 @@ inline StringT TrimWhiteSpace(StringT& in) {
 template<typename StringT, typename CharT>
 inline void Split(StringT& in, std::vector<StringT>& out, const CharT* token) {
 
-	// Ensure the string's char type and token's type are the same
-	if constexpr (is_same_v<string, StringT>)
-		static_assert(is_same_v<string, StringT> && is_same_v<char, CharT>, "Split() string/token type mismatch");
-
-	if constexpr (is_same_v<wstring, StringT>)
-		static_assert(is_same_v<wstring, StringT> && is_same_v<wchar_t, CharT>, "Split() string/token type mismatch");
-
+	// Ensure the string's char type and token type are the same
+	static_assert(is_same_v<CharT, StringT::value_type>, "Split() string/token type mismatch");
 
 	out.clear();
 

@@ -190,14 +190,15 @@
     <ClInclude Include="resource\model\model_blueprint.h" />
     <ClInclude Include="resource\model\blueprint_factory.h" />
     <ClInclude Include="resource\model\model_output.h" />
+    <ClInclude Include="resource\resource.h" />
     <ClInclude Include="resource\resource_mgr.h" />
-    <ClInclude Include="resource\skybox\skybox.h" />
     <ClInclude Include="resource\texture\texture.h" />
-    <ClInclude Include="resource\text\text.h" />
     <ClInclude Include="scene\camera\camera.h" />
     <ClInclude Include="scene\camera\player_camera.h" />
+    <ClInclude Include="scene\camera\skybox\skybox.h" />
     <ClInclude Include="scene\scene.h" />
     <ClInclude Include="scene\test_scene.h" />
+    <ClInclude Include="scene\text\text.h" />
     <ClInclude Include="scene\ui\user_interface.h" />
     <ClInclude Include="shader\hlsl.h" />
     <ClInclude Include="shader\shader.h" />
@@ -254,11 +255,11 @@
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClCompile Include="resource\skybox\skybox.cpp" />
-    <ClCompile Include="resource\text\text.cpp" />
     <ClCompile Include="scene\camera\camera.cpp" />
     <ClCompile Include="scene\camera\player_camera.cpp" />
+    <ClCompile Include="scene\camera\skybox\skybox.cpp" />
     <ClCompile Include="scene\test_scene.cpp" />
+    <ClCompile Include="scene\text\text.cpp" />
     <ClCompile Include="scene\ui\user_interface.cpp" />
     <ClCompile Include="shader\shader.cpp" />
     <ClCompile Include="stdafx.cpp">

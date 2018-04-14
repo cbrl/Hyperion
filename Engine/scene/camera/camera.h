@@ -6,7 +6,7 @@
 #include "rendering\buffer\constant_buffer.h"
 #include "geometry\frustum\frustum.h"
 #include "resource\resource_mgr.h"
-#include "resource\skybox\skybox.h"
+#include "scene\camera\skybox\skybox.h"
 
 
 class Camera {

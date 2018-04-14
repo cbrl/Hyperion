@@ -79,7 +79,7 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Cre
 
 	u32 texColor = Float4ColorToU32(color);
 
-	return textures.GetOrCreate(to_wstring(texColor);, device.Get(), texColor);
+	return textures.GetOrCreate(to_wstring(texColor), device.Get(), texColor);
 }
 
 
