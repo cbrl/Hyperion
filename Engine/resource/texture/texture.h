@@ -11,16 +11,18 @@ struct Texture final {
 		Texture() = default;
 		~Texture() = default;
 
-		template<typename... ArgsT>
-		Texture(ArgsT&&... args) {
+		Texture(ID3D11Device* device,
+				ID3D11DeviceContext* device_context,
+				wstring filename) {
 
-			// Create the texture SRV
-			TextureLoader::LoadTexture(std::forward<ArgsT>(args)..., texture.GetAddressOf());
+			TextureLoader::LoadTexture(device, device_context, filename, texture.GetAddressOf());
 		}
 
-		Texture(ID3D11ShaderResourceView* texture) : texture(texture) {}
+		Texture(ID3D11Device* device, u32 color) {
 
-		Texture(ComPtr<ID3D11ShaderResourceView> texture) : texture(texture) {}
+			TextureLoader::LoadTexture(device, color, texture.GetAddressOf());
+		}
+
 
 		// Bind the texture to the specified pipeline stage
 		template<typename StageT>

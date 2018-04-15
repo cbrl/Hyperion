@@ -447,9 +447,6 @@
     <ClInclude Include="scene\camera\player_camera.h">
       <Filter>Header Files\scene\camera</Filter>
     </ClInclude>
-    <ClInclude Include="resource\resource.h">
-      <Filter>Header Files\resource</Filter>
-    </ClInclude>
     <ClInclude Include="scene\camera\skybox\skybox.h">
       <Filter>Header Files\scene\camera\skybox</Filter>
     </ClInclude>

@@ -190,7 +190,6 @@
     <ClInclude Include="resource\model\model_blueprint.h" />
     <ClInclude Include="resource\model\blueprint_factory.h" />
     <ClInclude Include="resource\model\model_output.h" />
-    <ClInclude Include="resource\resource.h" />
     <ClInclude Include="resource\resource_mgr.h" />
     <ClInclude Include="resource\texture\texture.h" />
     <ClInclude Include="scene\camera\camera.h" />

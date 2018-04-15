@@ -83,19 +83,6 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Cre
 }
 
 
-// Texture2DArray
-template<typename ResourceT>
-enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Create(const vector<wstring>& filenames) {
-
-	wstring key;
-	for (const wstring& fn : filenames) {
-		key += fn;
-	}
-
-	return textures.GetOrCreate(key, device.Get(), device_context.Get(), filenames);
-}
-
-
 // SpriteFont
 template<typename ResourceT>
 enable_if_t<is_same_v<SpriteFont, ResourceT>, shared_ptr<SpriteFont>> ResourceMgr::Create(const wstring& filename) {

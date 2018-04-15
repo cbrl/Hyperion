@@ -51,11 +51,6 @@ class ResourceMgr final {
 		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const float4& color);
 
 
-		// Texture2DArray
-		template<typename ResourceT>
-		enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> Create(const vector<wstring>& filenames);
-
-
 		// SpriteFont
 		template<typename ResourceT>
 		enable_if_t<is_same_v<SpriteFont, ResourceT>, shared_ptr<SpriteFont>> Create(const wstring& filename);
