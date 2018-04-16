@@ -39,6 +39,7 @@ namespace BlueprintFactory {
 		// Create the ModelOutput object
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
+
 		return make_shared<ModelBlueprint>(device, out);
 	}
 
@@ -424,6 +425,9 @@ namespace BlueprintFactory {
 
 		// Create the ModelOutput object
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+
+
+		return make_shared<ModelBlueprint>(device, out);
 	}
 
 	template<typename VertexT>

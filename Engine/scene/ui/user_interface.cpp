@@ -370,8 +370,8 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 	// Draw fog details
 	if (selected == &scene.GetFog()) {
 		ImGui::DragFloat3("Color",  scene.GetFog().color.Data(), 0.01f, 0.0f, 1.0f);
-		ImGui::DragFloat( "Start", &scene.GetFog().start,           0.05f, 0.0f, FLT_MAX);
-		ImGui::DragFloat( "Range", &scene.GetFog().range,           0.05f, 0.0f, FLT_MAX);
+		ImGui::DragFloat( "Start", &scene.GetFog().start,        0.05f, 0.0f, FLT_MAX);
+		ImGui::DragFloat( "Range", &scene.GetFog().range,        0.05f, 0.0f, FLT_MAX);
 	}
 
 
@@ -472,8 +472,8 @@ void UserInterface::DrawLightDetails(PointLight& light) {
 	ImGui::Separator();
 
 	ImGui::DragFloat3("Position",       light.position.Data(),    0.1f, -FLT_MAX, FLT_MAX);
-	ImGui::DragFloat( "Range",         &light.range,                 0.1f,  0.0f, FLT_MAX);
-	ImGui::DragFloat3("Attenuation",    light.attenuation.Data(), 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat( "Range",         &light.range,              0.1f,  0.0f,    FLT_MAX);
+	ImGui::DragFloat3("Attenuation",    light.attenuation.Data(), 0.01f, 0.0f,    1.0f);
 	ImGui::NewLine();
 	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.Data());
 	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.Data());
@@ -490,10 +490,10 @@ void UserInterface::DrawLightDetails(SpotLight& light) {
 	ImGui::Separator();
 
 	ImGui::DragFloat3("Position",       light.position.Data(),    0.1f,  -FLT_MAX, FLT_MAX);
-	ImGui::DragFloat3("Direction",      light.direction.Data(),   0.01f, -1.0f, 1.0f);
-	ImGui::DragFloat( "Range",         &light.range,                 0.1f,   0.0f, FLT_MAX);
-	ImGui::DragFloat( "Spot",          &light.spot,                  0.05f,  0.0f, FLT_MAX);
-	ImGui::DragFloat3("Attenuation",    light.attenuation.Data(), 0.01f,  0.0f, 1.0f);
+	ImGui::DragFloat3("Direction",      light.direction.Data(),   0.01f, -1.0f,    1.0f);
+	ImGui::DragFloat( "Range",         &light.range,              0.1f,   0.0f,    FLT_MAX);
+	ImGui::DragFloat( "Spot",          &light.spot,               0.05f,  0.0f,    FLT_MAX);
+	ImGui::DragFloat3("Attenuation",    light.attenuation.Data(), 0.01f,  0.0f,    1.0f);
 	ImGui::NewLine();
 	ImGui::ColorEdit3("Diffuse Color",  light.diffuse_color.Data());
 	ImGui::ColorEdit3("Ambient Color",  light.ambient_color.Data());

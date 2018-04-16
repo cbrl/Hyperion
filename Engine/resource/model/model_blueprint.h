@@ -43,7 +43,8 @@ class ModelBlueprint final {
 
 		shared_ptr<Mesh> mesh;
 
-		vector<Material>  materials;
+		vector<Material> materials;
+
 		vector<ModelPart> model_parts;
 };
 
