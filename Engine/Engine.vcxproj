@@ -285,6 +285,9 @@
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="resource\model\blueprint_factory.tpp" />
+    <ClInclude Include="resource\model\model_output.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <None Include="resource\resource_mgr.tpp" />
     <None Include="shaders\include\light.hlsl">
       <FileType>Document</FileType>

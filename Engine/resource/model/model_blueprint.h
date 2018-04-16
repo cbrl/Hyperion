@@ -13,16 +13,6 @@
 class ResourceMgr;
 
 
-struct ModelPart {
-	string  name;
-	u32     index_start;
-	u32     index_count;
-	u32     material_index;
-	AABB    aabb;
-	BoundingSphere sphere;
-};
-
-
 class ModelBlueprint final {
 	public:
 		ModelBlueprint() = default;

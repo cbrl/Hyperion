@@ -453,6 +453,9 @@
     <ClInclude Include="scene\text\text.h">
       <Filter>Header Files\scene\text</Filter>
     </ClInclude>
+    <ClInclude Include="resource\model\model_output.tpp">
+      <Filter>Source Files\resource\model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
