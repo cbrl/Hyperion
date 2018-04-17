@@ -9,10 +9,10 @@
 //----------------------------------------------------------------------------------
 
 CONSTANT_BUFFER(Model, SLOT_CBUFFER_MODEL) {
-	matrix world;
-	matrix world_inv_transpose;
-	matrix world_view_proj;
-	matrix texTransform;
+	matrix   world;
+	matrix   world_inv_transpose;
+	matrix   world_view_proj;
+	matrix   texTransform;
 	Material mat;
 };
 
@@ -22,35 +22,37 @@ CONSTANT_BUFFER(Model, SLOT_CBUFFER_MODEL) {
 //  SRVs
 //----------------------------------------------------------------------------------
 
+TEXTURE_CUBE(env_map, SLOT_SRV_SKYBOX);
+
 TEXTURE_2D(diffuse_map, SLOT_SRV_DIFFUSE);
-TEXTURE_2D(normal_map, SLOT_SRV_NORMAL);
+TEXTURE_2D(normal_map,  SLOT_SRV_NORMAL);
 // ambient, specular, etc...
 
 
 
 float4 PS(PSPositionNormalTexture pin) : SV_Target {
-	// The toEye vector is used in lighting
-	float3 toEye = camera_position - pin.w_position;
+	// The to_eye vector is used in lighting
+	float3 to_eye = camera_position - pin.w_position;
 
 	// Cache the distance to the eye from this surface point
-	float distToEye = length(toEye);
+	float dist_to_eye = length(to_eye);
 
 	// Normalize
-	toEye /= distToEye;
+	to_eye /= dist_to_eye;
 
 	// Sample texture
-	float4 texColor;
+	float4 tex_color;
 	if (mat.has_texture) {
-		texColor = diffuse_map.Sample(aniso_wrap, pin.tex);
+		tex_color = diffuse_map.Sample(aniso_wrap, pin.tex);
 	}
 	else {
-		texColor = mat.diffuse;
+		tex_color = mat.diffuse;
 	}
 
 	// Discard pixel if texture alpha < 0.1.  Note that we do this
 	// test as soon as possible so that we can potentially exit the shader 
 	// early, thereby skipping the rest of the shader code.
-	clip(texColor.a - 0.1f);
+	clip(tex_color.a - 0.1f);
 
 
 	//----------------------------------------------------------------------------------
@@ -73,7 +75,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Lighting
 	//----------------------------------------------------------------------------------
 
-	float4 litColor = texColor;
+	float4 lit_color = tex_color;
 
 	// Start with a sum of zero.
 	float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
@@ -84,57 +86,84 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 		// Sum the light contribution from each light source
 		for (int i = 0; i < directional_light_count; ++i) {
 			float4 A, D, S;
-			ComputeDirectionalLight(mat, directional_lights[i], transformed_normal, toEye,
+			ComputeDirectionalLight(mat, directional_lights[i], transformed_normal, to_eye,
 									A, D, S);
 
 			ambient += A;
 			diffuse += D;
 			spec    += S;
 		}
+
+		lit_color = tex_color * (ambient + diffuse) + spec;
+
+		if (mat.reflection_enabled) {
+			float3 incident = -to_eye;
+			float3 reflection_vec = reflect(incident, pin.normal);
+			float4 reflection_color = env_map.Sample(aniso_wrap, reflection_vec);
+
+			lit_color += mat.reflect * reflection_color;
+		}
 	}
 
 	if (point_light_count > 0) {
 		for (int i = 0; i < point_light_count; ++i) {
 			float4 A, D, S;
-			ComputePointLight(mat, point_lights[i], pin.w_position, transformed_normal, toEye,
+			ComputePointLight(mat, point_lights[i], pin.w_position, transformed_normal, to_eye,
 							  A, D, S);
 			
 			ambient += A;
 			diffuse += D;
 			spec    += S;
 		}
+
+		lit_color = tex_color * (ambient + diffuse) + spec;
+
+		if (mat.reflection_enabled) {
+			float3 incident = -to_eye;
+			float3 reflection_vec = reflect(incident, pin.normal);
+			float4 reflection_color = env_map.Sample(aniso_wrap, reflection_vec);
+
+			lit_color += mat.reflect * reflection_color;
+		}
 	}
 
 	if (spot_light_count > 0) {
 		for (int i = 0; i < spot_light_count; ++i) {
 			float4 A, D, S;
-			ComputeSpotLight(mat, spot_lights[i], pin.w_position, transformed_normal, toEye,
+			ComputeSpotLight(mat, spot_lights[i], pin.w_position, transformed_normal, to_eye,
 							 A, D, S);
 
 			ambient += A;
 			diffuse += D;
 			spec += S;
 		}
-	}
 
-	// Modulate with late add
-	litColor = texColor * (ambient + diffuse) + spec;
+		lit_color = tex_color * (ambient + diffuse) + spec;
+
+		if (mat.reflection_enabled) {
+			float3 incident = -to_eye;
+			float3 reflection_vec = reflect(incident, pin.normal);
+			float4 reflection_color = env_map.Sample(aniso_wrap, reflection_vec);
+
+			lit_color += mat.reflect * reflection_color;
+		}
+	}
 
 
 	//----------------------------------------------------------------------------------
 	// Fogging
 	//----------------------------------------------------------------------------------
 
-	float fogLerp = saturate((distToEye - fog_start) / fog_range);
+	float fogLerp = saturate((dist_to_eye - fog_start) / fog_range);
 
 	// Blend the fog color and the lit color
-	litColor = lerp(litColor, fog_color, fogLerp);
+	lit_color = lerp(lit_color, fog_color, fogLerp);
 
 
-	// Common to take alpha from diffuse material and texture
-	litColor.a = mat.diffuse.a * texColor.a;
+	// Common to take alpha from diffuse mat and texture
+	lit_color.a = mat.diffuse.a * tex_color.a;
 
-	litColor = saturate(litColor);
+	lit_color = saturate(lit_color);
 
-	return litColor;
+	return lit_color;
 }

@@ -184,8 +184,8 @@
     <ClInclude Include="rendering\renderer\sky\sky_renderer.h" />
     <ClInclude Include="rendering\rendering_mgr.h" />
     <ClInclude Include="rendering\render_state_mgr.h" />
-    <ClInclude Include="resource\material\material.h" />
     <ClInclude Include="resource\mesh\mesh.h" />
+    <ClInclude Include="resource\model\material\material.h" />
     <ClInclude Include="resource\model\model.h" />
     <ClInclude Include="resource\model\model_blueprint.h" />
     <ClInclude Include="resource\model\blueprint_factory.h" />

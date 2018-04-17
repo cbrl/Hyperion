@@ -440,10 +440,13 @@ void UserInterface::DrawChildModelDetails(ModelChild& child) {
 	// Change material properties, textures
 	string name = "Material - " + child.GetMaterial().name;
 	ImGui::Text(name.c_str());
-	ImGui::ColorEdit3("Diffuse Color",     (float*)&child.GetMaterial().Kd);
-	ImGui::ColorEdit3("Ambient Color",     (float*)&child.GetMaterial().Ka);
-	ImGui::ColorEdit3("Specular Color",    (float*)&child.GetMaterial().Ks);
-	ImGui::DragFloat( "Specular Exponent", (float*)&child.GetMaterial().Ks.w, 0.01f, 0.0f, FLT_MAX);
+
+	ImGui::ColorEdit3("Diffuse Color",      (float*)child.GetMaterial().diffuse.Data());
+	ImGui::ColorEdit3("Ambient Color",      (float*)child.GetMaterial().ambient.Data());
+	ImGui::ColorEdit3("Specular Color",     (float*)child.GetMaterial().specular.Data());
+	ImGui::DragFloat( "Specular Exponent",  (float*)&child.GetMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
+	ImGui::ColorEdit3("Reflective Color",   (float*)child.GetMaterial().reflect.Data());
+	ImGui::Checkbox(  "Reflection",         (bool*)&child.GetMaterial().reflection_enabled);
 }
 
 

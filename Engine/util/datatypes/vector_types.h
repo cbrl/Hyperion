@@ -346,6 +346,7 @@ struct Vec4 : public DerivedT {
 
 	// Return a pointer to the first element of the vector
 	DataT* Data() { return &this->x; }
+	const DataT* Data() const { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------

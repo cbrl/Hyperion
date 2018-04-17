@@ -9,15 +9,17 @@ using namespace DirectX;
 struct Material final {
 	Material()
 		: name("material")
-		, Ka(0.0f, 0.0f, 0.0f, 1.0f)
-		, Kd(0.0f, 0.0f, 0.0f, 1.0f)
-		, Ks(0.0f, 0.0f, 0.0f, 1.0f)
-		, Ke(0.0f, 0.0f, 0.0f, 1.0f)
-		, Ni(0.0f)
-		, d(0.0f)
+		, ambient(0.0f, 0.0f, 0.0f, 1.0f)
+		, diffuse(0.0f, 0.0f, 0.0f, 1.0f)
+		, specular(0.0f, 0.0f, 0.0f, 1.0f)
+		, reflect(0.0f, 0.0f, 0.0f, 1.0f)
+		, emissive(0.0f, 0.0f, 0.0f, 1.0f)
+		, optical_density(0.0f)
+		, dissolve(0.0f)
 		, illum(0)
 		, transparent(false)
 		, has_texture(true)
+		, reflection_enabled(false)
 	{}
 
 
@@ -25,37 +27,40 @@ struct Material final {
 	string name;
 
 	// Ambient map
-	shared_ptr<Texture> map_Ka;
+	shared_ptr<Texture> map_ambient;
 	// Diffuse map
-	shared_ptr<Texture> map_Kd;
+	shared_ptr<Texture> map_diffuse;
 	// Specular map
-	shared_ptr<Texture> map_Ks;
+	shared_ptr<Texture> map_specular;
 	// Specular Highlight map
-	shared_ptr<Texture> map_Ns;
+	shared_ptr<Texture> map_spec_highlight;
 	// Alpha map
-	shared_ptr<Texture> map_d;
+	shared_ptr<Texture> map_alpha;
 	// Bump map
 	shared_ptr<Texture> map_bump;
 
 	// Ambient Color
-	float4 Ka;
+	float4 ambient;
 	// Diffuse Color
-	float4 Kd;
+	float4 diffuse;
 	// Specular Color, w = spec exponent
-	float4 Ks;
+	float4 specular;
+	// Reflective color
+	float4 reflect;
 	// Emissive Color
-	float4 Ke;
+	float4 emissive;
 
-	// Optical Density
-	float Ni;
-	// Dissolve
-	float d;
-	// Illumination
+	// Optical Density (index of refraction)
+	float optical_density;
+	// Dissolve (alpha)
+	float dissolve;
+	// Illumination model
 	i32 illum;
 
 	// Transparency flag
 	bool transparent;
-
 	// Diffuse texture flag
 	bool has_texture;
+	// Relfection flag
+	bool reflection_enabled;
 };

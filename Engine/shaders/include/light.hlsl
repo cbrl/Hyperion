@@ -43,11 +43,12 @@ struct Material {
 	float4 ambient;
 	float4 diffuse;
 	float4 specular; //specular.w = specular power
+	float4 reflect;
 	float4 emissive;
 	float  optical_density;
 	float  dissolve;
 	bool   has_texture;
-	float  pad;
+	bool   reflection_enabled;
 };
 
 

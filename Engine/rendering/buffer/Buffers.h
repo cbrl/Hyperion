@@ -35,36 +35,41 @@ struct MaterialBuffer {
 		: ambient(0.0f, 0.0f, 0.0f, 1.0f)
 		, diffuse(0.0f, 0.0f, 0.0f, 1.0f)
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
+		, reflect(0.0f, 0.0f, 0.0f, 1.0f)
 		, emissive(0.0f, 0.0f, 0.0f, 1.0f)
 		, optical_density(0.0f)
 		, dissolve(0.0f)
 		, has_texture(0)
-		, pad(0.0f)
+		, reflection_enabled(0)
 	{}
 	MaterialBuffer(const float4& ambient,
 				   const float4& diffuse,
 				   const float4& specular,
+				   const float4& reflect,
 				   const float4& emissive,
 				   const float   optical_density,
 				   const float   dissolve,
-				   const bool    has_texture)
+				   const bool    has_texture,
+				   const bool    reflection_enabled)
 		: ambient(ambient)
 		, diffuse(diffuse)
 		, specular(specular)
+		, reflect(reflect)
 		, emissive(emissive)
 		, dissolve(dissolve)
 		, has_texture(has_texture)
-		, pad(0.0f)
+		, reflection_enabled(reflection_enabled)
 	{}
 
 	float4 ambient;
 	float4 diffuse;
 	float4 specular;
+	float4 reflect;
 	float4 emissive;
 	float  optical_density;
 	float  dissolve;
 	u32    has_texture;
-	float  pad;
+	u32    reflection_enabled;
 };
 
 struct ModelBuffer {

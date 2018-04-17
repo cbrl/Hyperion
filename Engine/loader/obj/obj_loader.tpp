@@ -56,29 +56,33 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
 		mtl.name = wstr2str(materials[i].name);
 		
 		if (!materials[i].map_Kd.empty())
-			mtl.map_Kd = resource_mgr.Create<Texture>(folder + materials[i].map_Kd);
+			mtl.map_diffuse = resource_mgr.Create<Texture>(folder + materials[i].map_Kd);
 		else
 			mtl.has_texture = false;
 
 		if (!materials[i].map_Ka.empty())
-			mtl.map_Ka   = resource_mgr.Create<Texture>(folder + materials[i].map_Ka);
+			mtl.map_alpha = resource_mgr.Create<Texture>(folder + materials[i].map_Ka);
+
 		if (!materials[i].map_Ks.empty())
-			mtl.map_Ks   = resource_mgr.Create<Texture>(folder + materials[i].map_Ks);
+			mtl.map_specular = resource_mgr.Create<Texture>(folder + materials[i].map_Ks);
+
 		if (!materials[i].map_Ns.empty())
-			mtl.map_Ns   = resource_mgr.Create<Texture>(folder + materials[i].map_Ns);
+			mtl.map_spec_highlight = resource_mgr.Create<Texture>(folder + materials[i].map_Ns);
+
 		if (!materials[i].map_d.empty())
-			mtl.map_d    = resource_mgr.Create<Texture>(folder + materials[i].map_d);
+			mtl.map_alpha = resource_mgr.Create<Texture>(folder + materials[i].map_d);
+
 		if (!materials[i].map_bump.empty())
 			mtl.map_bump = resource_mgr.Create<Texture>(folder + materials[i].map_bump);
 
-		mtl.Ka = materials[i].Ka;
-		mtl.Kd = materials[i].Kd;
-		mtl.Ks = materials[i].Ks;
-		mtl.Ke = materials[i].Ke;
-		mtl.d  = materials[i].d;
-		mtl.Ni = materials[i].Ni;
-		mtl.illum = materials[i].illum;
-		mtl.transparent = materials[i].transparency;
+		mtl.ambient         = materials[i].Ka;
+		mtl.diffuse         = materials[i].Kd;
+		mtl.specular        = materials[i].Ks;
+		mtl.emissive        = materials[i].Ke;
+		mtl.dissolve        = materials[i].d;
+		mtl.optical_density = materials[i].Ni;
+		mtl.illum           = materials[i].illum;
+		mtl.transparent     = materials[i].transparency;
 
 		mtlVector.push_back(std::move(mtl));
 	}

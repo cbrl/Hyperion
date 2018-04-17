@@ -20,8 +20,15 @@ void XM_CALLCONV ModelChild::Update(ID3D11DeviceContext* device_context,
 	buffer_data.world_view_proj = world_view_proj;
 	buffer_data.texTransform = XMMatrixIdentity();
 
-	buffer_data.mat = MaterialBuffer(material.Ka, material.Kd, material.Ks, material.Ke,
-									 material.Ni, material.d, material.has_texture);
+	buffer_data.mat = MaterialBuffer(material.ambient,
+									 material.diffuse,
+									 material.specular,
+									 material.reflect,
+									 material.emissive,
+									 material.optical_density,
+									 material.dissolve,
+									 material.has_texture,
+									 material.reflection_enabled);
 
 	buffer.UpdateData(device_context, buffer_data);
 }

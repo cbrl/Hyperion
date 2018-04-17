@@ -27,6 +27,10 @@ ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* devi
 
 void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
+	// Scene camera
+	auto& camera = scene.GetCamera();
+
+
 	//----------------------------------------------------------------------------------
 	// Bind buffers
 	//----------------------------------------------------------------------------------
@@ -39,8 +43,10 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	//----------------------------------------------------------------------------------
 
 	directional_light_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_DIRECTIONAL_LIGHTS);
-	point_light_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_POINT_LIGHTS);
-	spot_light_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SPOT_LIGHTS);
+	point_light_buffer.Bind<Pipeline::PS>(device_context.Get(),       SLOT_SRV_POINT_LIGHTS);
+	spot_light_buffer.Bind<Pipeline::PS>(device_context.Get(),        SLOT_SRV_SPOT_LIGHTS);
+
+	camera.GetSkybox().GetTexture()->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SKYBOX);
 
 
 	//----------------------------------------------------------------------------------
@@ -63,15 +69,15 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	// Get the matrices
 	//----------------------------------------------------------------------------------
 
-	const XMMATRIX view       = scene.GetCamera().GetViewMatrix();
-	const XMMATRIX projection = scene.GetCamera().GetProjMatrix();
+	const XMMATRIX view       = camera.GetViewMatrix();
+	const XMMATRIX projection = camera.GetProjMatrix();
 
 
 	//----------------------------------------------------------------------------------
 	// Get the frustum
 	//----------------------------------------------------------------------------------
 
-	const auto& frustum = scene.GetCamera().GetFrustum();
+	const auto& frustum = camera.GetFrustum();
 
 
 	//----------------------------------------------------------------------------------
@@ -95,7 +101,14 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	directional_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.GetDirectionalLights());
 	point_light_buffer.UpdateData(device.Get(),       device_context.Get(), scene.GetPointLights());
 	spot_light_buffer.UpdateData(device.Get(),        device_context.Get(), scene.GetSpotLights());
+
+
+	//----------------------------------------------------------------------------------
+	// Update buffers
+	//----------------------------------------------------------------------------------
 	
+	
+
 
 	//----------------------------------------------------------------------------------
 	// Render models
@@ -128,12 +141,12 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 			const auto& mat = child.GetMaterial();
 
 			// Bind the SRVs
-			if (mat.map_Kd)   mat.map_Kd->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_DIFFUSE);
-			if (mat.map_Ka)   mat.map_Ka->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_AMBIENT);
-			if (mat.map_Ks)   mat.map_Ks->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPECULAR);
-			if (mat.map_Ns)   mat.map_Ns->Bind<Pipeline::PS>(device_context.Get(),   SLOT_SRV_SPEC_HIGHLIGHT);
-			if (mat.map_d)    mat.map_d->Bind<Pipeline::PS>(device_context.Get(),    SLOT_SRV_ALPHA);
-			if (mat.map_bump) mat.map_bump->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_NORMAL);
+			if (mat.map_diffuse)        mat.map_diffuse->Bind<Pipeline::PS>(device_context.Get(),        SLOT_SRV_DIFFUSE);
+			if (mat.map_ambient)        mat.map_ambient->Bind<Pipeline::PS>(device_context.Get(),        SLOT_SRV_AMBIENT);
+			if (mat.map_specular)       mat.map_specular->Bind<Pipeline::PS>(device_context.Get(),       SLOT_SRV_SPECULAR);
+			if (mat.map_spec_highlight) mat.map_spec_highlight->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SPEC_HIGHLIGHT);
+			if (mat.map_alpha)          mat.map_alpha->Bind<Pipeline::PS>(device_context.Get(),          SLOT_SRV_ALPHA);
+			if (mat.map_bump)           mat.map_bump->Bind<Pipeline::PS>(device_context.Get(),           SLOT_SRV_NORMAL);
 
 
 			// Draw the child

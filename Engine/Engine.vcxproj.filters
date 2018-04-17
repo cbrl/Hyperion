@@ -345,9 +345,6 @@
     <ClInclude Include="resource\model\model_blueprint.h">
       <Filter>Header Files\resource\model</Filter>
     </ClInclude>
-    <ClInclude Include="resource\material\material.h">
-      <Filter>Header Files\resource\model\material</Filter>
-    </ClInclude>
     <ClInclude Include="util\datatypes\vertex_types.h">
       <Filter>Header Files\util\datatypes</Filter>
     </ClInclude>
@@ -455,6 +452,9 @@
     </ClInclude>
     <ClInclude Include="resource\model\model_output.tpp">
       <Filter>Source Files\resource\model</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\model\material\material.h">
+      <Filter>Header Files\resource\model\material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
