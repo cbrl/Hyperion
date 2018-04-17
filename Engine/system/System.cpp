@@ -202,11 +202,13 @@ LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 
 
 void System::OnResize(u32 window_width, u32 window_height) const {
+
 	if (!rendering_mgr) return;
 	rendering_mgr->ResizeBuffers(window_width, window_height);
 	
-	if (!scene) return;
-	scene->GetCamera().ResizeViewport(window_width, window_height);
+	if (scene) {
+		scene->GetCamera().ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+	}
 
 	FILE_LOG(logINFO) << "Viewport resized to " << window_width << "x" << window_height;
 }

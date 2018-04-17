@@ -24,8 +24,7 @@ Camera::Camera(ID3D11Device* device,
 	, z_near(0.1f)
 	, z_far(1000.0f)
 {
-	ResizeViewport(viewport_width, viewport_height);
-	BindViewport(device_context);
+	ResizeViewport(device_context, viewport_width, viewport_height);
 	UpdateProjectionMatrix();
 }
 

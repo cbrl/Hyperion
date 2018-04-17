@@ -53,9 +53,10 @@ class Camera {
 		}
 
 		// Change the viewport size
-		void ResizeViewport(u32 width, u32 height) {
+		void ResizeViewport(ID3D11DeviceContext* device_context, u32 width, u32 height) {
 			viewport.Width  = static_cast<float>(width);
 			viewport.Height = static_cast<float>(height);
+			BindViewport(device_context);
 			UpdateProjectionMatrix();
 		}
 
@@ -119,7 +120,7 @@ class Camera {
 
 	protected:
 		// Bind the viewport to the pipeline
-		void BindViewport(ID3D11DeviceContext* device_context) {
+		void BindViewport(ID3D11DeviceContext* device_context) const {
 			Pipeline::RS::BindViewports(device_context, 1, &viewport);
 		}
 

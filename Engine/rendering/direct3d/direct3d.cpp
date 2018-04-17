@@ -198,13 +198,13 @@ void Direct3D::ResizeBuffers(u32 winWidth, u32 winHeight) {
 	// Resize the swap chain and recreate the render target view
 
 	ThrowIfFailed(swap_chain->ResizeBuffers(1, window_width, window_height, DXGI_FORMAT_R8G8B8A8_UNORM, 0),
-	                  "Failed to resize swapchain buffers");
+	              "Failed to resize swapchain buffers");
 
 	ComPtr<ID3D11Texture2D> backBuffer;
 	ThrowIfFailed(swap_chain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.ReleaseAndGetAddressOf())),
-	                  "Failed to get backbuffer");
+	              "Failed to get backbuffer");
 	ThrowIfFailed(device->CreateRenderTargetView(backBuffer.Get(), 0, render_target_view.ReleaseAndGetAddressOf()),
-	                  "Failed to create render target view");
+	              "Failed to create render target view");
 
 
 	// Set the name the backbuffer and render target view for debugging purposes
@@ -240,9 +240,9 @@ void Direct3D::ResizeBuffers(u32 winWidth, u32 winHeight) {
 	depthStencilDesc.MiscFlags      = 0;
 
 	ThrowIfFailed(device->CreateTexture2D(&depthStencilDesc, 0, &depth_stencil_buffer),
-	                  "Failed to create depth stencil buffer");
+	              "Failed to create depth stencil buffer");
 	ThrowIfFailed(device->CreateDepthStencilView(depth_stencil_buffer.Get(), 0, &depth_stencil_view),
-	                  "Failed to create depth stencil view");
+	              "Failed to create depth stencil view");
 
 	// Set object names for debugging
 	SetDebugObjectName(depth_stencil_buffer.Get(), "D3D DepthStencilBuffer");
