@@ -1,3 +1,4 @@
+
 template<typename DataT>
 ConstantBuffer<DataT>::ConstantBuffer(ID3D11Device* device) {
 	D3D11_BUFFER_DESC bufferDesc = {};

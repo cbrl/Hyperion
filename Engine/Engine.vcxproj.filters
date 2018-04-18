@@ -262,6 +262,9 @@
     <None Include="resource\model\blueprint_factory.tpp">
       <Filter>Source Files\resource\model</Filter>
     </None>
+    <None Include="rendering\buffer\structured_buffer.tpp">
+      <Filter>Source Files\rendering\buffer</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
