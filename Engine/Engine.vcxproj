@@ -193,7 +193,9 @@
     <ClInclude Include="resource\model\model_output.h" />
     <ClInclude Include="resource\resource_mgr.h" />
     <ClInclude Include="resource\texture\texture.h" />
-    <ClInclude Include="scene\camera\camera.h" />
+    <ClInclude Include="scene\camera\camera_base.h" />
+    <ClInclude Include="scene\camera\orthographic_camera.h" />
+    <ClInclude Include="scene\camera\perspective_camera.h" />
     <ClInclude Include="scene\camera\player_camera.h" />
     <ClInclude Include="scene\camera\skybox\skybox.h" />
     <ClInclude Include="scene\scene.h" />
@@ -256,7 +258,9 @@
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClCompile Include="scene\camera\camera.cpp" />
+    <ClCompile Include="scene\camera\camera_base.cpp" />
+    <ClCompile Include="scene\camera\orthographic_camera.cpp" />
+    <ClCompile Include="scene\camera\perspective_camera.cpp" />
     <ClCompile Include="scene\camera\player_camera.cpp" />
     <ClCompile Include="scene\camera\skybox\skybox.cpp" />
     <ClCompile Include="scene\test_scene.cpp" />

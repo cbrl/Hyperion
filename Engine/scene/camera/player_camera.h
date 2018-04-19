@@ -2,10 +2,10 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
-#include "scene\camera\camera.h"
+#include "scene\camera\perspective_camera.h"
 
 
-class PlayerCamera final : public Camera {
+class PlayerCamera final : public PerspectiveCamera {
 	public:
 		PlayerCamera(ID3D11Device* device,
 					 ID3D11DeviceContext* device_context,

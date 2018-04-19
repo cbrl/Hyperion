@@ -7,7 +7,10 @@ PlayerCamera::PlayerCamera(ID3D11Device* device,
 						   ID3D11DeviceContext* device_context,
 						   u32 viewport_width,
 						   u32 viewport_height)
-	: Camera(device, device_context, viewport_width, viewport_height)
+	: PerspectiveCamera(device,
+						device_context,
+						viewport_width,
+						viewport_height)
 
 	, velocity(0.0f, 0.0f, 0.0f)
 	, acceleration(0.00002f)

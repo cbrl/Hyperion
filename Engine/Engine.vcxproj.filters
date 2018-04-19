@@ -438,9 +438,6 @@
     <ClInclude Include="geometry\bounding_volume\bounding_volume.h">
       <Filter>Header Files\geometry\bounding_volume</Filter>
     </ClInclude>
-    <ClInclude Include="scene\camera\camera.h">
-      <Filter>Header Files\scene\camera</Filter>
-    </ClInclude>
     <ClInclude Include="scene\camera\player_camera.h">
       <Filter>Header Files\scene\camera</Filter>
     </ClInclude>
@@ -461,6 +458,15 @@
     </ClInclude>
     <ClInclude Include="rendering\buffer\structured_buffer.tpp">
       <Filter>Source Files\rendering\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\camera\perspective_camera.h">
+      <Filter>Header Files\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\camera\orthographic_camera.h">
+      <Filter>Header Files\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\camera\camera_base.h">
+      <Filter>Header Files\scene\camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -551,9 +557,6 @@
     <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp">
       <Filter>Source Files\geometry\bounding_volume</Filter>
     </ClCompile>
-    <ClCompile Include="scene\camera\camera.cpp">
-      <Filter>Source Files\scene\camera</Filter>
-    </ClCompile>
     <ClCompile Include="scene\camera\player_camera.cpp">
       <Filter>Source Files\scene\camera</Filter>
     </ClCompile>
@@ -565,6 +568,15 @@
     </ClCompile>
     <ClCompile Include="rendering\buffer\shadow_map_buffer.cpp">
       <Filter>Source Files\rendering\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\camera\perspective_camera.cpp">
+      <Filter>Source Files\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\camera\orthographic_camera.cpp">
+      <Filter>Source Files\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\camera\camera_base.cpp">
+      <Filter>Source Files\scene\camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
