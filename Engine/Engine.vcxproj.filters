@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\direct3d">
-      <UniqueIdentifier>{9f233e8c-ee20-4249-a8b0-1bcef832ab99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\rendering">
       <UniqueIdentifier>{55f531c1-898b-4037-97c4-e93cd56dc0d0}</UniqueIdentifier>
     </Filter>
@@ -48,9 +45,6 @@
     </Filter>
     <Filter Include="Source Files\rendering">
       <UniqueIdentifier>{4c82db23-914c-4d04-a44d-d91e5c4f017e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\direct3d">
-      <UniqueIdentifier>{c757a6a4-d168-4d4f-9408-fdb3807cbce3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\util">
       <UniqueIdentifier>{18661ec8-92b8-4341-9aae-20ce490542ff}</UniqueIdentifier>
@@ -184,9 +178,6 @@
     <Filter Include="Source Files\rendering\buffer">
       <UniqueIdentifier>{08e518dc-771d-4ae2-b35c-f2161adcc59f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\geometry\boundingvolume">
-      <UniqueIdentifier>{d02a5641-e088-4ab4-acb9-f7a40b42e011}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\geometry\bounding_volume">
       <UniqueIdentifier>{e1ceb31f-9268-4f50-bcdf-98b20c935b8a}</UniqueIdentifier>
     </Filter>
@@ -222,6 +213,15 @@
     </Filter>
     <Filter Include="Source Files\scene\camera\skybox">
       <UniqueIdentifier>{dbe49a5c-db14-4dea-8f10-b619b128cfca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry\bounding_volume">
+      <UniqueIdentifier>{d02a5641-e088-4ab4-acb9-f7a40b42e011}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering\direct3d">
+      <UniqueIdentifier>{9f233e8c-ee20-4249-a8b0-1bcef832ab99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering\direct3d">
+      <UniqueIdentifier>{c757a6a4-d168-4d4f-9408-fdb3807cbce3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -261,9 +261,6 @@
     <None Include="packages.config" />
     <None Include="resource\model\blueprint_factory.tpp">
       <Filter>Source Files\resource\model</Filter>
-    </None>
-    <None Include="rendering\buffer\structured_buffer.tpp">
-      <Filter>Source Files\rendering\buffer</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -400,7 +397,7 @@
       <Filter>Header Files\rendering\renderer\forward</Filter>
     </ClInclude>
     <ClInclude Include="rendering\direct3d\direct3d.h">
-      <Filter>Header Files\direct3d</Filter>
+      <Filter>Header Files\rendering\direct3d</Filter>
     </ClInclude>
     <ClInclude Include="geometry\shapes\shapes.h">
       <Filter>Header Files\geometry\shapes</Filter>
@@ -458,6 +455,12 @@
     </ClInclude>
     <ClInclude Include="resource\model\material\material.h">
       <Filter>Header Files\resource\model\material</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\buffer\shadow_map_buffer.h">
+      <Filter>Header Files\rendering\buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="rendering\buffer\structured_buffer.tpp">
+      <Filter>Source Files\rendering\buffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -519,7 +522,7 @@
       <Filter>Source Files\rendering\renderer\forward</Filter>
     </ClCompile>
     <ClCompile Include="rendering\direct3d\direct3d.cpp">
-      <Filter>Source Files\direct3d</Filter>
+      <Filter>Source Files\rendering\direct3d</Filter>
     </ClCompile>
     <ClCompile Include="geometry\shapes\shapes.tpp">
       <Filter>Source Files\geometry\shapes</Filter>
@@ -546,7 +549,7 @@
       <Filter>Source Files\resource\model</Filter>
     </ClCompile>
     <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp">
-      <Filter>Source Files\geometry\boundingvolume</Filter>
+      <Filter>Source Files\geometry\bounding_volume</Filter>
     </ClCompile>
     <ClCompile Include="scene\camera\camera.cpp">
       <Filter>Source Files\scene\camera</Filter>
@@ -559,6 +562,9 @@
     </ClCompile>
     <ClCompile Include="scene\text\text.cpp">
       <Filter>Source Files\scene\text</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\buffer\shadow_map_buffer.cpp">
+      <Filter>Source Files\rendering\buffer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

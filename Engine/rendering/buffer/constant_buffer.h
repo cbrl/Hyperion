@@ -4,7 +4,6 @@
 #include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
 #include "rendering\pipeline.h"
-#include "rendering\buffer\buffers.h"
 
 
 template<typename DataT>
@@ -19,7 +18,9 @@ struct ConstantBuffer final {
 
 		// Bind the cbuffer to the specified pipeline stage
 		template<typename StageT>
-		void Bind(ID3D11DeviceContext* device_context, u32 slot) const;
+		void Bind(ID3D11DeviceContext* device_context, u32 slot) const {
+			StageT::BindConstantBuffers(device_context, slot, 1, buffer.GetAddressOf());
+		}
 
 
 	private:

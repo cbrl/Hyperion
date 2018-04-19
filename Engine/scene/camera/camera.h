@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
 #include "rendering\pipeline.h"
+#include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
 #include "geometry\frustum\frustum.h"
 #include "resource\resource_mgr.h"
@@ -42,7 +43,6 @@ class Camera {
 		//----------------------------------------------------------------------------------
 
 		void SetPosition(const float3& position);
-
 		void SetRotation(const float3& rotation);
 
 		// Set a new viewport
@@ -88,29 +88,32 @@ class Camera {
 		// Getters
 		//----------------------------------------------------------------------------------
 
-		// Get matrices
+		// Get the camera's view matrix
 		const XMMATRIX GetViewMatrix()  const {
 			return view_matrix;
 		}
+
+		// Get the camera's projection matrix
 		const XMMATRIX GetProjMatrix()  const {
 			return projection_matrix;
 		}
 
-		// Get the Frustum
+		// Get the Frustum for this camera
 		const Frustum& GetFrustum() const {
 			return frustum;
 		}
 
-		// Get the Skybox
+		// Get the camera's Skybox
 		const SkyBox& GetSkybox() const {
 			return skybox;
 		}
 
-		// Get position, rotation, velocity (in units/ms)
+		// Get the camera's current rotation
 		const float3 GetRotation() const {
 			return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll));
 		}
 
+		// Get the camera's current position
 		const float3 GetPosition() const {
 			float3 pos;
 			XMStoreFloat3(&pos, position);

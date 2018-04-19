@@ -29,6 +29,18 @@ Camera::Camera(ID3D11Device* device,
 }
 
 
+void Camera::UpdateViewMatrix() {
+	// Create a target vector with the sum of the position and forward vectors
+	XMVECTOR look_at = position + camera_forward;
+
+	// Create the new view matrix
+	view_matrix = XMMatrixLookAtLH(position, look_at, camera_up);
+
+	// The frustum needs to be updated when the view matrix changes
+	UpdateFrustum();
+}
+
+
 void Camera::UpdateProjectionMatrix() {
 	// Recalculate the aspect ratio
 	aspect_ratio = viewport.Width / viewport.Height;
@@ -45,7 +57,6 @@ void Camera::SetPosition(const float3& position) {
 	this->position = XMLoadFloat3(&position);
 
 	UpdateViewMatrix();
-	
 }
 
 
@@ -62,16 +73,4 @@ void Camera::SetRotation(const float3& rotation) {
 	camera_up      = XMVector3TransformNormal(default_up, M);
 	
 	UpdateViewMatrix();
-}
-
-
-void Camera::UpdateViewMatrix() {
-	// Create a target vector with the sum of the position and forward vectors
-	XMVECTOR look_at = position + camera_forward;
-
-	// Create the new view matrix
-	view_matrix = XMMatrixLookAtLH(position, look_at, camera_up);
-
-	// The frustum needs to be updated when the view matrix changes
-	UpdateFrustum();
 }

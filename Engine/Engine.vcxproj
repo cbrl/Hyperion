@@ -176,6 +176,7 @@
     <ClInclude Include="loader\texture_loader.h" />
     <ClInclude Include="rendering\buffer\buffers.h" />
     <ClInclude Include="rendering\buffer\constant_buffer.h" />
+    <ClInclude Include="rendering\buffer\shadow_map_buffer.h" />
     <ClInclude Include="rendering\buffer\structured_buffer.h" />
     <ClInclude Include="rendering\direct3d\direct3d.h" />
     <ClInclude Include="rendering\pipeline.h" />
@@ -244,6 +245,7 @@
     </ClInclude>
     <ClCompile Include="loader\texture_loader.cpp" />
     <ClCompile Include="main\main.cpp" />
+    <ClCompile Include="rendering\buffer\shadow_map_buffer.cpp" />
     <ClCompile Include="rendering\direct3d\direct3d.cpp" />
     <ClCompile Include="rendering\renderer\forward\forward_render.cpp" />
     <ClCompile Include="rendering\renderer\renderer.cpp" />
@@ -280,7 +282,9 @@
     <ClInclude Include="rendering\buffer\constant_buffer.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <None Include="rendering\buffer\structured_buffer.tpp" />
+    <ClInclude Include="rendering\buffer\structured_buffer.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <None Include="resource\mesh\mesh.tpp" />
     <ClInclude Include="resource\model\model_blueprint.tpp">
       <FileType>Document</FileType>

@@ -671,7 +671,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 
 		ImGui::Button("Create");
 
-		if (ImGui::IsItemHovered() && tessellation >= 8) {
+		if (ImGui::IsItemHovered() && tessellation >= 6) {
 			ImGui::BeginTooltip();
 			ImGui::Text("WARNING: Tessellation amount is extremely high");
 			ImGui::EndTooltip();

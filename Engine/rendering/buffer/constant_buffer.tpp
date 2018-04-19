@@ -29,10 +29,3 @@ void ConstantBuffer<DataT>::UpdateData(ID3D11DeviceContext* device_context, cons
 
 	device_context->Unmap(buffer.Get(), NULL);
 }
-
-
-template<typename DataT>
-template<typename StageT>
-void ConstantBuffer<DataT>::Bind(ID3D11DeviceContext* device_context, u32 slot) const {
-	StageT::BindConstantBuffers(device_context, slot, 1, buffer.GetAddressOf());
-}
