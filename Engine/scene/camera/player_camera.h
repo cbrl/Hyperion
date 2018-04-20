@@ -31,10 +31,11 @@ class PlayerCamera final : public PerspectiveCamera {
 		//----------------------------------------------------------------------------------
 
 		// Set movement speed related variables
-		void SetAcceleration(float accel)      { acceleration = accel; }
-		void SetDeceleration(float decel)      { deceleration = decel; }
-		void SetMaxVelocity(float velocity)    { max_velocity = velocity; }
-		void SetSensitivity(float sensitivity) { turn_factor = sensitivity; }
+		void SetAcceleration(float accel)          { acceleration = accel; }
+		void SetDeceleration(float decel)          { deceleration = decel; }
+		void SetMaxVelocity(float velocity)        { max_velocity = velocity; }
+		void SetTurnSensitivity(float sensitivity) { turn_sensitivity = sensitivity; }
+		void SetRollSensitivity(float sensitivity) { roll_sensitivity = sensitivity; }
 
 		// Set camera movement style
 		void SetFreeLook(bool enabled) {
@@ -55,13 +56,14 @@ class PlayerCamera final : public PerspectiveCamera {
 		bool IsFreeLookEnabled() const { return free_look; }
 
 		// Get movement speed related variables
-		const float GetAcceleration() const { return acceleration; }
-		const float GetDeleceration() const { return deceleration; }
-		const float GetMaxVelocity()  const { return max_velocity; }
-		const float GetSensitivity()  const { return turn_factor; }
+		float GetAcceleration()    const { return acceleration; }
+		float GetDeleceration()    const { return deceleration; }
+		float GetMaxVelocity()     const { return max_velocity; }
+		float GetTurnSensitivity() const { return turn_sensitivity; }
+		float GetRollSensitivity() const { return roll_sensitivity; }
 
 		// Get velocity (in units/ms)
-		const float3 GetVelocity() const { return velocity; }
+		float3 GetVelocity() const { return velocity; }
 
 
 	private:
@@ -78,7 +80,8 @@ class PlayerCamera final : public PerspectiveCamera {
 		float  max_velocity;
 
 		// Turning related variables
-		float turn_factor;
+		float turn_sensitivity;
+		float roll_sensitivity;
 		const float max_pitch;
 
 		// Booleans

@@ -32,15 +32,15 @@ void OrthographicCamera::UpdateProjectionMatrix() {
 
 void OrthographicCamera::SetRotation(const float3& rotation) {
 	pitch = rotation.x;
-	yaw = rotation.y;
-	roll = rotation.z;
+	yaw   = rotation.y;
+	roll  = rotation.z;
 
 	// Transform the forward/right/up vectors before updating the view matrix
 	XMMATRIX M = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 
 	camera_forward = XMVector3TransformNormal(default_forward, M);
-	camera_right = XMVector3TransformNormal(default_right, M);
-	camera_up = XMVector3TransformNormal(default_up, M);
+	camera_right   = XMVector3TransformNormal(default_right, M);
+	camera_up      = XMVector3TransformNormal(default_up, M);
 
 	UpdateViewMatrix();
 }

@@ -176,8 +176,8 @@ void TestScene::Tick(const System& system) {
 	float3 move_units(0.0f, 0.0f, 0.0f);
 
 	// Set x/y rotation with mouse data
-	rotateUnits.x = static_cast<float>(mouse_delta.y);
-	rotateUnits.y = static_cast<float>(mouse_delta.x);
+	rotateUnits.x = XMConvertToRadians(static_cast<float>(mouse_delta.y));
+	rotateUnits.y = XMConvertToRadians(static_cast<float>(mouse_delta.x));
 
 	// Roll rotation
 	if (input.IsKeyDown(Keyboard::Q)) {

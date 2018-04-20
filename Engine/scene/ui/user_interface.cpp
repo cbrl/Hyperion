@@ -381,10 +381,11 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 
 void UserInterface::DrawCameraDetails(PlayerCamera& camera) {
 
-	float max_velocity = camera.GetMaxVelocity();
-	float acceleration = camera.GetAcceleration();
-	float deceleration = camera.GetDeleceration();
-	float sensitivity  = camera.GetSensitivity();
+	float max_velocity     = camera.GetMaxVelocity();
+	float acceleration     = camera.GetAcceleration();
+	float deceleration     = camera.GetDeleceration();
+	float turn_sensitivity = camera.GetTurnSensitivity();
+	float roll_sensitivity = camera.GetRollSensitivity();
 
 	if (ImGui::InputFloat("Max Velocity", &max_velocity))
 		camera.SetMaxVelocity(max_velocity);
@@ -395,8 +396,11 @@ void UserInterface::DrawCameraDetails(PlayerCamera& camera) {
 	if (ImGui::InputFloat("Deceleration", &deceleration))
 		camera.SetDeceleration(deceleration);
 
-	if (ImGui::InputFloat("Sensitivity", &sensitivity))
-		camera.SetSensitivity(sensitivity);
+	if (ImGui::InputFloat("Turn Sensitivity", &turn_sensitivity))
+		camera.SetTurnSensitivity(turn_sensitivity);
+
+	if (ImGui::InputFloat("Sensitivity", &roll_sensitivity))
+		camera.SetRollSensitivity(roll_sensitivity);
 
 
 	bool free_look = camera.IsFreeLookEnabled();

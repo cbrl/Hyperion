@@ -20,7 +20,8 @@ PlayerCamera::PlayerCamera(ID3D11Device* device,
 	, is_moving_y(false)
 	, is_moving_z(false)
 
-	, turn_factor(0.002f)
+	, turn_sensitivity(0.1f)
+	, roll_sensitivity(0.00002f)
 	, max_pitch(XMConvertToRadians(89.0f))
 	, free_look(false)
 {}
@@ -82,7 +83,7 @@ void PlayerCamera::Rotate(float3 units) {
 	// X rotation (Pitch)
 	//----------------------------------------------------------------------------------
 	if (units.x) {
-		float xUnits = units.x * turn_factor;
+		float xUnits = units.x * turn_sensitivity;
 
 		// Limit max pitch if free look isn't enabled
 		if (!free_look) {
@@ -109,7 +110,7 @@ void PlayerCamera::Rotate(float3 units) {
 	// Y rotation (Yaw)
 	//----------------------------------------------------------------------------------
 	if (units.y) {
-		XMMATRIX yRotation = XMMatrixRotationAxis(camera_up, (units.y * turn_factor));
+		XMMATRIX yRotation = XMMatrixRotationAxis(camera_up, (units.y * turn_sensitivity));
 		camera_right = XMVector3TransformNormal(camera_right, yRotation);
 		camera_forward = XMVector3TransformNormal(camera_forward, yRotation);
 	}
@@ -119,7 +120,7 @@ void PlayerCamera::Rotate(float3 units) {
 	// Z rotation (Roll)
 	//----------------------------------------------------------------------------------
 	if (units.z && free_look) {
-		XMMATRIX zRotation = XMMatrixRotationAxis(camera_forward, (units.z * turn_factor));
+		XMMATRIX zRotation = XMMatrixRotationAxis(camera_forward, (units.z * roll_sensitivity));
 		camera_right = XMVector3TransformNormal(camera_right, zRotation);
 		camera_up = XMVector3TransformNormal(camera_up, zRotation);
 	}
