@@ -1,7 +1,6 @@
 #pragma once
 
 #include "scene\camera\camera_base.h"
-#include "geometry\frustum\frustum.h"
 #include "scene\camera\skybox\skybox.h"
 
 
@@ -88,16 +87,8 @@ class PerspectiveCamera : public CameraBase {
 		// Update the projection matrix after changing depth/width/height/etc...
 		void UpdateProjectionMatrix();
 
-		// Update the frustum. Used after the projection matrix or view matrix changes.
-		void UpdateFrustum() {
-			frustum.UpdateFrustum(view_matrix * projection_matrix);
-		}
-
 
 	protected:
 		// Camera's skybox
 		SkyBox skybox;
-
-		// Camera frustum
-		Frustum frustum;
 };

@@ -6,6 +6,7 @@
 #include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
 #include "resource\resource_mgr.h"
+#include "geometry\frustum\frustum.h"
 
 
 class CameraBase {
@@ -96,10 +97,18 @@ class CameraBase {
 		// Update the view matrix. Used after moving/rotating the camera.
 		virtual void UpdateViewMatrix() = 0;
 
+		// Update the frustum. Used after the projection matrix or view matrix changes.
+		void UpdateFrustum() {
+			frustum.UpdateFrustum(view_matrix * projection_matrix);
+		}
+
 
 	protected:
 		// Camera's constant buffer
 		ConstantBuffer<CameraBuffer> buffer;
+
+		// Camera frustum
+		Frustum frustum;
 
 		// Viewport, FOV, depth
 		D3D11_VIEWPORT viewport;

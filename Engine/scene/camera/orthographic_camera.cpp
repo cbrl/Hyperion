@@ -21,12 +21,18 @@ void OrthographicCamera::UpdateViewMatrix() {
 
 	// Create the new view matrix
 	view_matrix = XMMatrixLookAtLH(position, look_at, camera_up);
+
+	// The frustum needs to be updated when the view matrix changes
+	UpdateFrustum();
 }
 
 
 void OrthographicCamera::UpdateProjectionMatrix() {
 	// Recalculate the projection matrix
 	projection_matrix = XMMatrixOrthographicLH(viewport.Width, viewport.Height, z_near, z_far);
+
+	// Update the frustum when the projection matrix changes
+	UpdateFrustum();
 }
 
 
