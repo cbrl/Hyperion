@@ -6,6 +6,7 @@
 #include "resource\resource_mgr.h"
 #include "resource\model\model.h"
 #include "scene\text\text.h"
+#include "scene\camera\skybox\skybox.h"
 #include "scene\camera\player_camera.h"
 #include "scene\ui\user_interface.h"
 

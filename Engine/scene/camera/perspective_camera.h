@@ -13,82 +13,19 @@ class PerspectiveCamera : public CameraBase {
 
 		~PerspectiveCamera() = default;
 
-
-		//----------------------------------------------------------------------------------
-		// Setters
-		//----------------------------------------------------------------------------------
-
-		void SetRotation(const float3& rotation);
-
-		void SetPosition(const float3& position) {
-			this->position = XMLoadFloat3(&position);
-			UpdateViewMatrix();
-		}
-
-		// Set a new viewport
-		void SetViewport(ID3D11DeviceContext* device_context, const D3D11_VIEWPORT& viewport) {
-			this->viewport = viewport;
-			BindViewport(device_context);
-			UpdateProjectionMatrix();
-		}
-
-		// Change the viewport size
-		void ResizeViewport(ID3D11DeviceContext* device_context, u32 width, u32 height) {
-			viewport.Width = static_cast<float>(width);
-			viewport.Height = static_cast<float>(height);
-			BindViewport(device_context);
-			UpdateProjectionMatrix();
-		}
-
-		void SetViewportTopLeft(u32 top_left_x, u32 top_left_y) {
-			viewport.TopLeftX = static_cast<float>(top_left_x);
-			viewport.TopLeftY = static_cast<float>(top_left_y);
-			UpdateProjectionMatrix();
-		}
-
-		// Set the depth range
-		void SetZDepth(float z_near, float z_far) {
-			this->z_near = z_near;
-			this->z_far = z_far;
-			UpdateProjectionMatrix();
-		}
-
 		// Change the FOV
 		void SetFOV(float radians) {
 			fov = radians;
 			UpdateProjectionMatrix();
 		}
 
-		// Set the skybox for this camera
-		void SetSkybox(const SkyBox& skybox) {
-			this->skybox = skybox;
-		}
-
-
-		//----------------------------------------------------------------------------------
-		// Getters
-		//----------------------------------------------------------------------------------
-
-		// Get the Frustum for this camera
-		const Frustum& GetFrustum() const {
-			return frustum;
-		}
-
-		// Get the camera's Skybox
-		const SkyBox& GetSkybox() const {
-			return skybox;
-		}
-
 
 	protected:
-		// Update the view matrix. Used after moving/rotating the camera.
-		void UpdateViewMatrix();
-
 		// Update the projection matrix after changing depth/width/height/etc...
 		void UpdateProjectionMatrix();
 
 
 	protected:
-		// Camera's skybox
-		SkyBox skybox;
+		// Camera FOV
+		float fov;
 };

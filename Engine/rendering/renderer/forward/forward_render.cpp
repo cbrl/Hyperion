@@ -27,8 +27,9 @@ ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* devi
 
 void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
-	// Scene camera
+	// Get the scene's camera and camera frustum
 	auto& camera = scene.GetCamera();
+	const auto& frustum = camera.GetFrustum();
 
 
 	//----------------------------------------------------------------------------------
@@ -46,7 +47,8 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	point_light_buffer.Bind<Pipeline::PS>(device_context.Get(),       SLOT_SRV_POINT_LIGHTS);
 	spot_light_buffer.Bind<Pipeline::PS>(device_context.Get(),        SLOT_SRV_SPOT_LIGHTS);
 
-	camera.GetSkybox().GetTexture()->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SKYBOX);
+	auto texture = camera.GetSkybox().GetTexture();
+	if (texture) texture->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SKYBOX);
 
 
 	//----------------------------------------------------------------------------------
@@ -74,13 +76,6 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 
 	//----------------------------------------------------------------------------------
-	// Get the frustum
-	//----------------------------------------------------------------------------------
-
-	const auto& frustum = camera.GetFrustum();
-
-
-	//----------------------------------------------------------------------------------
 	// Update buffers
 	//----------------------------------------------------------------------------------
 
@@ -101,13 +96,6 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 	directional_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.GetDirectionalLights());
 	point_light_buffer.UpdateData(device.Get(),       device_context.Get(), scene.GetPointLights());
 	spot_light_buffer.UpdateData(device.Get(),        device_context.Get(), scene.GetSpotLights());
-
-
-	//----------------------------------------------------------------------------------
-	// Update buffers
-	//----------------------------------------------------------------------------------
-	
-	
 
 
 	//----------------------------------------------------------------------------------

@@ -26,7 +26,7 @@ struct Texture final {
 
 		// Bind the texture to the specified pipeline stage
 		template<typename StageT>
-		void Bind(ID3D11DeviceContext* device_context, u32 slot) {
+		void Bind(ID3D11DeviceContext* device_context, u32 slot) const {
 
 			StageT::BindSRVs(device_context, slot, 1, texture.GetAddressOf());
 		}

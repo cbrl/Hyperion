@@ -7,6 +7,7 @@
 #include "rendering\buffer\constant_buffer.h"
 #include "resource\resource_mgr.h"
 #include "geometry\frustum\frustum.h"
+#include "scene\camera\skybox\skybox.h"
 
 
 class CameraBase {
@@ -41,21 +42,45 @@ class CameraBase {
 		// Setters
 		//----------------------------------------------------------------------------------
 
-		virtual void SetRotation(const float3& rotation) = 0;
+		void SetRotation(const float3& rotation);
 
-		virtual void SetPosition(const float3& position) = 0;
-
-		// Set the depth range
-		virtual void SetZDepth(float z_near, float z_far) = 0;
+		void SetPosition(const float3& position) {
+			this->position = XMLoadFloat3(&position);
+			UpdateViewMatrix();
+		}
 
 		// Set a new viewport
-		virtual void SetViewport(ID3D11DeviceContext* device_context, const D3D11_VIEWPORT& viewport) = 0;
+		void SetViewport(ID3D11DeviceContext* device_context, const D3D11_VIEWPORT& viewport) {
+			this->viewport = viewport;
+			BindViewport(device_context);
+			UpdateProjectionMatrix();
+		}
 
 		// Change the viewport size
-		virtual void ResizeViewport(ID3D11DeviceContext* device_context, u32 width, u32 height) = 0;
+		void ResizeViewport(ID3D11DeviceContext* device_context, u32 width, u32 height) {
+			viewport.Width = static_cast<float>(width);
+			viewport.Height = static_cast<float>(height);
+			BindViewport(device_context);
+			UpdateProjectionMatrix();
+		}
 
-		// Set the location of the top left corner of the viewport
-		virtual void SetViewportTopLeft(u32 top_left_x, u32 top_left_y) = 0;
+		void SetViewportTopLeft(u32 top_left_x, u32 top_left_y) {
+			viewport.TopLeftX = static_cast<float>(top_left_x);
+			viewport.TopLeftY = static_cast<float>(top_left_y);
+			UpdateProjectionMatrix();
+		}
+
+		// Set the depth range
+		void SetZDepth(float z_near, float z_far) {
+			this->z_near = z_near;
+			this->z_far = z_far;
+			UpdateProjectionMatrix();
+		}
+
+		// Set the skybox for this camera
+		void SetSkybox(const SkyBox& skybox) {
+			this->skybox = skybox;
+		}
 
 
 		//----------------------------------------------------------------------------------
@@ -84,6 +109,16 @@ class CameraBase {
 			return pos;
 		}
 
+		// Get the Frustum for this camera
+		const Frustum& GetFrustum() const {
+			return frustum;
+		}
+
+		// Get the camera's Skybox
+		const SkyBox& GetSkybox() const {
+			return skybox;
+		}
+
 
 	protected:
 		// Bind the viewport to the pipeline
@@ -95,7 +130,7 @@ class CameraBase {
 		virtual void UpdateProjectionMatrix() = 0;
 
 		// Update the view matrix. Used after moving/rotating the camera.
-		virtual void UpdateViewMatrix() = 0;
+		void UpdateViewMatrix();
 
 		// Update the frustum. Used after the projection matrix or view matrix changes.
 		void UpdateFrustum() {
@@ -104,15 +139,17 @@ class CameraBase {
 
 
 	protected:
-		// Camera's constant buffer
+		// The camera's constant buffer
 		ConstantBuffer<CameraBuffer> buffer;
 
 		// Camera frustum
 		Frustum frustum;
 
-		// Viewport, FOV, depth
+		// The skybox for this camera
+		SkyBox skybox;
+
+		// Viewport and z depth
 		D3D11_VIEWPORT viewport;
-		float fov;
 		float z_near;
 		float z_far;
 

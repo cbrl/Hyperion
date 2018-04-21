@@ -15,6 +15,10 @@ class ShadowMapBuffer final {
 			BindDSV(device_context);
 		}
 
+		const ID3D11ShaderResourceView* GetSRV() const {
+			return srv.Get();
+		}
+
 
 	private:
 		void BindViewport(ID3D11DeviceContext* device_context) const {
