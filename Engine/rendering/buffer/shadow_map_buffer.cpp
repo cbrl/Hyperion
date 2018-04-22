@@ -2,6 +2,7 @@
 #include "shadow_map_buffer.h"
 
 ShadowMapBuffer::ShadowMapBuffer(ID3D11Device* device,
+								 u32 map_count,
 								 u32 width,
 								 u32 height) {
 
@@ -11,7 +12,7 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device* device,
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
 	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
 
 
 	// Create the depth map texture. Typeless format is used because
@@ -32,19 +33,23 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device* device,
 
 	ComPtr<ID3D11Texture2D> depth_map;
 	ThrowIfFailed(device->CreateTexture2D(&tex_desc, 0, depth_map.GetAddressOf()),
-				  "Failed to create the depth map texture for the shadow map buffer");
+				  "Failed to create the depth map texture for a shadow map buffer");
 
 
-	// Create the depth stencil view
+	// Create the depth stencil views
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc = {};
 	dsv_desc.Flags              = 0;
 	dsv_desc.Format             = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	dsv_desc.ViewDimension      = D3D11_DSV_DIMENSION_TEXTURE2D;
 	dsv_desc.Texture2D.MipSlice = 0;
 
-	ThrowIfFailed(device->CreateDepthStencilView(depth_map.Get(), &dsv_desc, &dsv),
-				  "Failed to create the depth stencil view for the shadow map buffer");
+	dsvs.resize(map_count);
 
+	for (u32 i = 0; i < map_count; ++i) {
+		ThrowIfFailed(device->CreateDepthStencilView(depth_map.Get(), &dsv_desc, &dsvs[i]),
+		              "Failed to create a depth stencil view for a shadow map buffer");
+	}
+	
 
 	// Create the shader resource view
 	D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
@@ -54,5 +59,5 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device* device,
 	srv_desc.Texture2D.MostDetailedMip = 0;
 
 	ThrowIfFailed(device->CreateShaderResourceView(depth_map.Get(), &srv_desc, srv.GetAddressOf()),
-				  "Failed to create the shader resource view for the shadow map buffer");
+				  "Failed to create the shader resource view for a shadow map buffer");
 }

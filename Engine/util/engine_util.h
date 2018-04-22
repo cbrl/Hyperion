@@ -25,7 +25,7 @@ using DirectX::SetDebugObjectName;
 // Helper class for COM exceptions
 class com_exception : public std::exception {
 	public:
-		com_exception(HRESULT hr, std::string msg = "") : result(hr), msg(msg) {}
+		com_exception(HRESULT hr, const char* msg = "") : result(hr), msg(msg) {}
 
 		virtual const char* what() const override {
 			std::ostringstream stream;
@@ -42,17 +42,17 @@ class com_exception : public std::exception {
 
 
 // Throw
-inline void ThrowIfFailed(HRESULT hr, std::string msg = "") {
+inline void ThrowIfFailed(HRESULT hr, const char* msg = "") {
 	if (FAILED(hr)) {
 		FILE_LOG(logERROR) << msg << " (Failure with HRESULT of " << std::hex << hr << ")";
 		throw com_exception(hr, msg);
 	}
 }
 
-inline void ThrowIfFailed(bool result, std::string msg = "") {
+inline void ThrowIfFailed(bool result, const char* msg = "") {
 	if (!result) {
 		FILE_LOG(logERROR) << msg;
-		throw std::exception(msg.c_str());
+		throw std::exception(msg);
 	}
 }
 
