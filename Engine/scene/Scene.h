@@ -49,9 +49,9 @@ class Scene {
 		unique_ptr<PlayerCamera> camera;
 		Fog                      fog;
 		vector<Model>            models;
-		vector<PointLight>       point_lights;
-		vector<DirectionalLight> directional_lights;
-		vector<SpotLight>        spot_lights;
+		vector<PointLightBuffer>       point_lights;
+		vector<DirectionalLightBuffer> directional_lights;
+		vector<SpotLightBuffer>        spot_lights;
 		map<string, Text>        texts;
 
 		UserInterface            ui;
@@ -72,19 +72,19 @@ class Scene {
 				}
 			}
 
-			if constexpr (is_same_v<DirectionalLight, ElementT>) {
+			if constexpr (is_same_v<DirectionalLightBuffer, ElementT>) {
 				for (auto& e : directional_lights) {
 					act(e);
 				}
 			}
 
-			if constexpr (is_same_v<PointLight, ElementT>) {
+			if constexpr (is_same_v<PointLightBuffer, ElementT>) {
 				for (auto& e : point_lights) {
 					act(e);
 				}
 			}
 
-			if constexpr (is_same_v<SpotLight, ElementT>) {
+			if constexpr (is_same_v<SpotLightBuffer, ElementT>) {
 				for (auto& e : spot_lights) {
 					act(e);
 				}

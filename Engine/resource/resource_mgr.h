@@ -24,7 +24,7 @@ class ResourceMap final {
 
 
 	private:
-		map<KeyT, weak_ptr<ValueT>> resource_map;
+		unordered_map<KeyT, weak_ptr<ValueT>> resource_map;
 };
 
 

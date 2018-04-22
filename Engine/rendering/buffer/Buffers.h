@@ -151,18 +151,18 @@ struct LightBuffer {
 };
 
 
-struct DirectionalLight {
-	DirectionalLight()
+struct DirectionalLightBuffer {
+	DirectionalLightBuffer()
 		: ambient_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, diffuse_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, direction(0.0f, 0.0f, 0.0f)
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
 		, pad(0.0f)
 	{}
-	DirectionalLight(const float4& ambient,
-					 const float4& diffuse,
-					 const float3& direction,
-					 const float4& specular)
+	DirectionalLightBuffer(const float4& ambient,
+						   const float4& diffuse,
+						   const float3& direction,
+						   const float4& specular)
 		: ambient_color(ambient)
 		, diffuse_color(diffuse)
 		, direction(direction)
@@ -178,8 +178,8 @@ struct DirectionalLight {
 };
 
 
-struct PointLight {
-	PointLight()
+struct PointLightBuffer {
+	PointLightBuffer()
 		: ambient_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, diffuse_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
@@ -188,12 +188,12 @@ struct PointLight {
 		, attenuation(0.0f, 0.0f, 0.0f)
 		, pad(0.0f)
 	{}
-	PointLight(const float4& ambient_color,
-			   const float4& diffuse_color,
-			   const float4& specular,
-			   const float3& position,
-			   const float   range,
-			   const float3& attenuation)
+	PointLightBuffer(const float4& ambient_color,
+					 const float4& diffuse_color,
+					 const float4& specular,
+					 const float3& position,
+					 const float   range,
+					 const float3& attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)
@@ -213,8 +213,8 @@ struct PointLight {
 };
 
 
-struct SpotLight {
-	SpotLight()
+struct SpotLightBuffer {
+	SpotLightBuffer()
 		: ambient_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, diffuse_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
@@ -225,14 +225,14 @@ struct SpotLight {
 		, attenuation(0.0f, 0.0f, 0.0f)
 		, pad(0.0f)
 	{}
-	SpotLight(const float4& ambient_color,
-			  const float4& diffuse_color,
-			  const float4& specular,
-			  const float3& position,
-			  const float   range,
-			  const float3& direction,
-			  const float   spot,
-			  const float3& attenuation)
+	SpotLightBuffer(const float4& ambient_color,
+					const float4& diffuse_color,
+					const float4& specular,
+					const float3& position,
+					const float   range,
+					const float3& direction,
+					const float   spot,
+					const float3& attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)

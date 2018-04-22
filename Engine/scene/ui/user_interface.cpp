@@ -59,15 +59,15 @@ void UserInterface::DrawMenu(ID3D11Device* device, ResourceMgr& resource_mgr, Sc
 		if (ImGui::BeginMenu("Lights")) {
 
 			if (ImGui::MenuItem("Add Dir. Light")) {
-				scene.GetDirectionalLights().push_back(DirectionalLight());
+				scene.GetDirectionalLights().push_back(DirectionalLightBuffer());
 			}
 
 			if (ImGui::MenuItem("Add Point Light")) {
-				scene.GetPointLights().push_back(PointLight());
+				scene.GetPointLights().push_back(PointLightBuffer());
 			}
 
 			if (ImGui::MenuItem("Add Spot Light")) {
-				scene.GetSpotLights().push_back(SpotLight());
+				scene.GetSpotLights().push_back(SpotLightBuffer());
 			}
 
 			ImGui::EndMenu();
@@ -215,7 +215,7 @@ void UserInterface::DrawLightList(Scene& scene) {
 	bool node_open = ImGui::TreeNode("Directional Lights");
 
 	if (node_open) {
-		scene.ForEach<DirectionalLight>([&](auto& light) {
+		scene.ForEach<DirectionalLightBuffer>([&](auto& light) {
 			ImGui::PushID(&light);
 
 			char name[28];
@@ -239,7 +239,7 @@ void UserInterface::DrawLightList(Scene& scene) {
 	node_open = ImGui::TreeNode("Point Lights");
 
 	if (node_open) {
-		scene.ForEach<PointLight>([&](auto& light) {
+		scene.ForEach<PointLightBuffer>([&](auto& light) {
 			ImGui::PushID(&light);
 
 			char name[29];
@@ -263,7 +263,7 @@ void UserInterface::DrawLightList(Scene& scene) {
 	node_open = ImGui::TreeNode("Spot Lights");
 
 	if (node_open) {
-		scene.ForEach<SpotLight>([&](auto& light) {
+		scene.ForEach<SpotLightBuffer>([&](auto& light) {
 			ImGui::PushID(&light);
 
 			char name[28];
@@ -317,7 +317,7 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 
 
 	// Directional light details
-	scene.ForEach<DirectionalLight>([&](auto& light) {
+	scene.ForEach<DirectionalLightBuffer>([&](auto& light) {
 		if (selected == &light) {
 			DrawLightDetails(light);
 
@@ -332,7 +332,7 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 	});
 
 	// Point light details
-	scene.ForEach<PointLight>([&](auto& light) {
+	scene.ForEach<PointLightBuffer>([&](auto& light) {
 		if (selected == &light) {
 			DrawLightDetails(light);
 
@@ -347,7 +347,7 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 	});
 
 	// Spot light details
-	scene.ForEach<SpotLight>([&](auto& light) {
+	scene.ForEach<SpotLightBuffer>([&](auto& light) {
 		if (selected == &light) {
 			DrawLightDetails(light);
 
@@ -454,7 +454,7 @@ void UserInterface::DrawChildModelDetails(ModelChild& child) {
 }
 
 
-void UserInterface::DrawLightDetails(DirectionalLight& light) {
+void UserInterface::DrawLightDetails(DirectionalLightBuffer& light) {
 
 	char name[28];
 	sprintf_s(name, "Dir. Light %p", (void*)&light);
@@ -470,7 +470,7 @@ void UserInterface::DrawLightDetails(DirectionalLight& light) {
 }
 
 
-void UserInterface::DrawLightDetails(PointLight& light) {
+void UserInterface::DrawLightDetails(PointLightBuffer& light) {
 
 	char name[29];
 	sprintf_s(name, "Point Light %p", (void*)&light);
@@ -488,7 +488,7 @@ void UserInterface::DrawLightDetails(PointLight& light) {
 }
 
 
-void UserInterface::DrawLightDetails(SpotLight& light) {
+void UserInterface::DrawLightDetails(SpotLightBuffer& light) {
 
 	char name[28];
 	sprintf_s(name, "Spot Light %p", (void*)&light);

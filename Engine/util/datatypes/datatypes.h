@@ -1,8 +1,9 @@
 #include <cstdint>
+#include <type_traits>
+#include <memory>
 #include <vector>
 #include <map>
-#include <memory>
-#include <type_traits>
+#include <unordered_map>
 #include <wrl\client.h>
 
 #include "util\string\string.h"
@@ -33,6 +34,7 @@ using std::make_shared;
 
 using std::vector;
 using std::map;
+using std::unordered_map;
 
 
 //----------------------------------------------------------------------------------
