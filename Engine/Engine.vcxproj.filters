@@ -223,6 +223,9 @@
     <Filter Include="Source Files\rendering\direct3d">
       <UniqueIdentifier>{c757a6a4-d168-4d4f-9408-fdb3807cbce3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene\light">
+      <UniqueIdentifier>{93405184-696e-4a73-9f28-ecaae3b77ef3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -467,6 +470,15 @@
     </ClInclude>
     <ClInclude Include="scene\camera\camera_base.h">
       <Filter>Header Files\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\light\directional_light.h">
+      <Filter>Header Files\scene\light</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\light\point_light.h">
+      <Filter>Header Files\scene\light</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\light\spot_light.h">
+      <Filter>Header Files\scene\light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

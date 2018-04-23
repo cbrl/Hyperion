@@ -11,11 +11,11 @@
 class ModelBlueprint;
 
 
-template<typename KeyT, typename ValueT>
-class ResourceMap final {
+template<typename KeyT, typename ValueT, template<typename...> typename MapT>
+class IResourceMap final {
 	public:
-		ResourceMap() = default;
-		~ResourceMap() = default;
+		IResourceMap() = default;
+		~IResourceMap() = default;
 
 		template<typename... ArgsT>
 		shared_ptr<ValueT> GetOrCreate(const KeyT& key, ArgsT&&... args);
@@ -24,8 +24,16 @@ class ResourceMap final {
 
 
 	private:
-		unordered_map<KeyT, weak_ptr<ValueT>> resource_map;
+		MapT<KeyT, weak_ptr<ValueT>> resource_map;
 };
+
+
+template<typename KeyT, typename ValueT>
+using ResourceMap = IResourceMap<KeyT, ValueT, std::map>;
+
+template<typename KeyT, typename ValueT>
+using UnorderedResourceMap = IResourceMap<KeyT, ValueT, std::unordered_map>;
+
 
 
 class ResourceMgr final {

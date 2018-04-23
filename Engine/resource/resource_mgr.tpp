@@ -4,26 +4,26 @@
 
 
 //----------------------------------------------------------------------------------
-// ResourceMap
+// IResourceMap
 //----------------------------------------------------------------------------------
 
-template<typename KeyT, typename ValueT>
+template<typename KeyT, typename ValueT, template<typename ...> typename MapT>
 template<typename... ArgsT>
-shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetOrCreate(const KeyT& key, ArgsT&&... args) {
+shared_ptr<ValueT> IResourceMap<KeyT, ValueT, MapT>::GetOrCreate(const KeyT& key, ArgsT&&... args) {
 
 	// Find the resource
-	const auto n = resource_map.find(key);
+	const auto it = resource_map.find(key);
 
 	// Check if the resource exists
-	if (n != resource_map.end()) {
+	if (it != resource_map.end()) {
 		
 		// Return the resource if it hasn't expired
-		if (!n->second.expired()) {
-			return n->second.lock();
+		if (!it->second.expired()) {
+			return it->second.lock();
 		}
 		// If the resource has expired then remove the ptr from the map
 		else {
-			resource_map.erase(n);
+			resource_map.erase(it);
 		}
 	}
 
@@ -35,8 +35,8 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetOrCreate(const KeyT& key, ArgsT
 }
 
 
-template<typename KeyT, typename ValueT>
-shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::Get(const KeyT& key) {
+template<typename KeyT, typename ValueT, template<typename ...> typename MapT>
+shared_ptr<ValueT> IResourceMap<KeyT, ValueT, MapT>::Get(const KeyT& key) {
 
 	const auto n = resource_map.find(key);
 

@@ -9,7 +9,7 @@
 template<typename DataT>
 struct BaseVec2 {
 	BaseVec2() noexcept = default;
-	BaseVec2(DataT _x, DataT _y) { x = _x; y = _y; }
+	BaseVec2(DataT _x, DataT _y) noexcept { x = _x; y = _y; }
 	DataT x;
 	DataT y;
 };
@@ -17,7 +17,7 @@ struct BaseVec2 {
 template<typename DataT>
 struct BaseVec3 {
 	BaseVec3() noexcept = default;
-	BaseVec3(int _x, int _y, int _z) { x = _x; y = _y; z = _z; }
+	BaseVec3(int _x, int _y, int _z) noexcept { x = _x; y = _y; z = _z; }
 	DataT x;
 	DataT y;
 	DataT z;
@@ -26,7 +26,7 @@ struct BaseVec3 {
 template<typename DataT>
 struct BaseVec4 {
 	BaseVec4() noexcept = default;
-	BaseVec4(int _x, int _y, int _z, int _w) { x = _x; y = _y; z = _z; w = _w; }
+	BaseVec4(int _x, int _y, int _z, int _w) noexcept { x = _x; y = _y; z = _z; w = _w; }
 	DataT x;
 	DataT y;
 	DataT z;

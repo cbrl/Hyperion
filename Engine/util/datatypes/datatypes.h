@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <type_traits>
+#include <typeindex>
 #include <memory>
 #include <vector>
 #include <map>
@@ -11,8 +12,14 @@
 #include "util\datatypes\vertex_types.h"
 
 
+//----------------------------------------------------------------------------------
+// Type Info
+//----------------------------------------------------------------------------------
+
 using std::enable_if_t;
 using std::is_same_v;
+using std::type_info;
+using std::type_index;
 
 
 //----------------------------------------------------------------------------------
