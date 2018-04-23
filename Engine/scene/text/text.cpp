@@ -2,20 +2,14 @@
 #include "text.h"
 
 
-Text::Text(ID3D11DeviceContext* device_context, ResourceMgr& resource_mgr, const wstring& font_filename)
+Text::Text(ResourceMgr& resource_mgr, const wstring& font_filename)
 	: text(L"Default Text")
 	, position(float2(0, 0))
 	, color(Colors::White)
-	, rotation(0.0f)
-{
-	sprite_batch = make_unique<SpriteBatch>(device_context);
+	, rotation(0.0f) {
+
 	sprite_font  = resource_mgr.Create<SpriteFont>(font_filename);
 }
-
-
-Text::~Text() {
-}
-
 
 void Text::SetText(wstring new_text) {
 	text = new_text;
@@ -58,8 +52,26 @@ void Text::SetRotation(float new_rotation) {
 }
 
 
-void Text::Render() {
-	sprite_batch->Begin();
-	sprite_font->DrawString(sprite_batch.get(), &text[0], position, color, rotation);
-	sprite_batch->End();
+const SpriteFont& Text::GetFont() const {
+	return *sprite_font.get();
+}
+
+
+const wstring& Text::GetText() const {
+	return text;
+}
+
+
+const float2& Text::GetPosition() const {
+	return position;
+}
+
+
+const XMVECTORF32& Text::GetColor() const {
+	return color;
+}
+
+
+const float Text::GetRotation() const {
+	return rotation;
 }

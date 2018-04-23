@@ -101,19 +101,19 @@ void TestScene::Init(const System& system) {
 
 	const wstring font(L"../data/fonts/courier-12.spritefont");
 
-	texts.try_emplace("FPS", device_context, resource_mgr, font);
+	texts.try_emplace("FPS", resource_mgr, font);
 	texts.at("FPS").SetPosition(float2(10, 10));
 
-	texts.try_emplace("Mouse", device_context, resource_mgr, font);
+	texts.try_emplace("Mouse", resource_mgr, font);
 	texts.at("Mouse").SetPosition(float2(10, 40));
 
-	texts.try_emplace("Position", device_context, resource_mgr, font);
+	texts.try_emplace("Position", resource_mgr, font);
 	texts.at("Position").SetPosition(float2(10, 110));
 
-	texts.try_emplace("Rotation", device_context, resource_mgr, font);
+	texts.try_emplace("Rotation", resource_mgr, font);
 	texts.at("Rotation").SetPosition(float2(10, 200));
 
-	texts.try_emplace("Velocity", device_context, resource_mgr, font);
+	texts.try_emplace("Velocity", resource_mgr, font);
 	texts.at("Velocity").SetPosition(float2(10, 300));
 }
 

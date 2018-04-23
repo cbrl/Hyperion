@@ -9,6 +9,7 @@ Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
 	: device_context(device_context)
 {
 	// Create renderers
+	text_renderer    = make_unique<TextRenderer>(device_context);
 	forward_renderer = make_unique<ForwardRenderer>(device, device_context);
 	sky_renderer     = make_unique<SkyRenderer>(device, device_context);
 }
@@ -48,9 +49,7 @@ void Renderer::Render(System& system, RenderStateMgr& render_state_mgr) const {
 	// Render text objects
 	//----------------------------------------------------------------------------------
 
-	scene.ForEach<Text>([](Text& text) {
-		text.Render();
-	});
+	text_renderer->Render(scene);
 
 
 	//----------------------------------------------------------------------------------

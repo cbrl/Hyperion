@@ -8,6 +8,7 @@
 #include "shader\hlsl.h"
 #include "rendering\pipeline.h"
 #include "rendering\render_state_mgr.h"
+#include "rendering\renderer\text\text_renderer.h"
 #include "rendering\renderer\forward\forward_render.h"
 #include "rendering\renderer\sky\sky_renderer.h"
 #include "scene\scene.h"
@@ -25,6 +26,7 @@ class Renderer final {
 		ComPtr<ID3D11DeviceContext> device_context;
 
 		// Renderers
+		unique_ptr<TextRenderer>    text_renderer;
 		unique_ptr<ForwardRenderer> forward_renderer;
 		unique_ptr<SkyRenderer>     sky_renderer;
 };

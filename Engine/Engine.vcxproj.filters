@@ -223,8 +223,11 @@
     <Filter Include="Source Files\rendering\direct3d">
       <UniqueIdentifier>{c757a6a4-d168-4d4f-9408-fdb3807cbce3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\light">
-      <UniqueIdentifier>{93405184-696e-4a73-9f28-ecaae3b77ef3}</UniqueIdentifier>
+    <Filter Include="Header Files\rendering\renderer\text">
+      <UniqueIdentifier>{520982e5-af25-4fcd-9fd9-bed0baead87c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering\renderer\text">
+      <UniqueIdentifier>{c95bbbe7-c6ed-4786-9286-e8ff828aa114}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -471,14 +474,8 @@
     <ClInclude Include="scene\camera\camera_base.h">
       <Filter>Header Files\scene\camera</Filter>
     </ClInclude>
-    <ClInclude Include="scene\light\directional_light.h">
-      <Filter>Header Files\scene\light</Filter>
-    </ClInclude>
-    <ClInclude Include="scene\light\point_light.h">
-      <Filter>Header Files\scene\light</Filter>
-    </ClInclude>
-    <ClInclude Include="scene\light\spot_light.h">
-      <Filter>Header Files\scene\light</Filter>
+    <ClInclude Include="rendering\renderer\text\text_renderer.h">
+      <Filter>Header Files\rendering\renderer\text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -589,6 +586,9 @@
     </ClCompile>
     <ClCompile Include="scene\camera\camera_base.cpp">
       <Filter>Source Files\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="rendering\renderer\text\text_renderer.cpp">
+      <Filter>Source Files\rendering\renderer\text</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
