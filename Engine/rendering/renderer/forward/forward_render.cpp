@@ -25,65 +25,97 @@ ForwardRenderer::ForwardRenderer(ID3D11Device* device, ID3D11DeviceContext* devi
 }
 
 
-void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
+void ForwardRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mgr) {
 
-	// Get the scene's camera and camera frustum
-	auto& camera = scene.GetCamera();
-	const auto& frustum = camera.GetFrustum();
-
-
-	//----------------------------------------------------------------------------------
 	// Bind buffers
-	//----------------------------------------------------------------------------------
-
 	light_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_CBUFFER_LIGHT);
 
 
 	//----------------------------------------------------------------------------------
 	// Bind SRVs
 	//----------------------------------------------------------------------------------
-
 	directional_light_buffer.Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_DIRECTIONAL_LIGHTS);
 	point_light_buffer.Bind<Pipeline::PS>(device_context.Get(),       SLOT_SRV_POINT_LIGHTS);
 	spot_light_buffer.Bind<Pipeline::PS>(device_context.Get(),        SLOT_SRV_SPOT_LIGHTS);
 
-	auto texture = camera.GetSkybox().GetTexture();
+	auto texture = scene.GetCamera().GetSkybox().GetTexture();
 	if (texture) texture->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SKYBOX);
 
 
-	//----------------------------------------------------------------------------------
-	// Bind shaders
-	//----------------------------------------------------------------------------------
 
+	// Bind shaders
 	pixel_shader->Bind(device_context.Get());
 	vertex_shader->Bind(device_context.Get());
 
 
-	//----------------------------------------------------------------------------------
 	// Bind the render states
-	//----------------------------------------------------------------------------------
-
-	render_state_mgr.BindDepthDefault(device_context.Get());
-	render_state_mgr.BindCullCounterClockwise(device_context.Get());
+	BindRenderStates(scene, render_state_mgr);
 
 
-	//----------------------------------------------------------------------------------
-	// Get the matrices
-	//----------------------------------------------------------------------------------
-
-	const XMMATRIX view       = camera.GetViewMatrix();
-	const XMMATRIX projection = camera.GetProjMatrix();
+	// Update the light buffers
+	UpdateLightBuffers(scene);
 
 
-	//----------------------------------------------------------------------------------
-	// Update buffers
-	//----------------------------------------------------------------------------------
+	// Render the models
+	RenderModels(scene);
+}
+
+
+void ForwardRenderer::BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr) const {
+
+	switch (scene.GetRenderStates().blend_state) {
+		case BlendStates::Default:
+		case BlendStates::Opaque:
+			render_state_mgr.BindOpaque(device_context.Get());
+			break;
+		case BlendStates::AlphaBlend:
+			render_state_mgr.BindAlphaBlend(device_context.Get());
+			break;
+		case BlendStates::Additive:
+			render_state_mgr.BindAdditive(device_context.Get());
+			break;
+		case BlendStates::NonPremultiplied:
+			render_state_mgr.BindNonPremultiplied(device_context.Get());
+			break;
+	}
+
+	switch (scene.GetRenderStates().depth_state) {
+		case DepthStates::Default:
+		case DepthStates::DepthDefault:
+			render_state_mgr.BindDepthDefault(device_context.Get());
+			break;
+		case DepthStates::DepthNone:
+			render_state_mgr.BindDepthNone(device_context.Get());
+			break;
+		case DepthStates::DepthRead:
+			render_state_mgr.BindDepthRead(device_context.Get());
+			break;
+	}
+
+	switch (scene.GetRenderStates().raster_state) {
+		case RasterStates::Default:
+		case RasterStates::CullCounterClockwise:
+			render_state_mgr.BindCullCounterClockwise(device_context.Get());
+			break;
+		case RasterStates::CullClockwise:
+			render_state_mgr.BindCullClockwise(device_context.Get());
+			break;
+		case RasterStates::CullNone:
+			render_state_mgr.BindCullNone(device_context.Get());
+			break;
+		case RasterStates::Wireframe:
+			render_state_mgr.BindWireframe(device_context.Get());
+	}
+}
+
+
+void ForwardRenderer::UpdateLightBuffers(Scene& scene) {
 
 	// Update light buffer
 	LightBuffer light_data;
 	light_data.directional_light_count = static_cast<u32>(scene.GetDirectionalLights().size());
-	light_data.point_light_count       = static_cast<u32>(scene.GetPointLights().size());
-	light_data.spot_light_count        = static_cast<u32>(scene.GetSpotLights().size());
+	light_data.point_light_count = static_cast<u32>(scene.GetPointLights().size());
+	light_data.spot_light_count = static_cast<u32>(scene.GetSpotLights().size());
 
 	light_data.fog_color = scene.GetFog().color;
 	light_data.fog_start = scene.GetFog().start;
@@ -94,13 +126,22 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 
 	// Update light data buffers
 	directional_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.GetDirectionalLights());
-	point_light_buffer.UpdateData(device.Get(),       device_context.Get(), scene.GetPointLights());
-	spot_light_buffer.UpdateData(device.Get(),        device_context.Get(), scene.GetSpotLights());
+	point_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.GetPointLights());
+	spot_light_buffer.UpdateData(device.Get(), device_context.Get(), scene.GetSpotLights());
+}
 
 
-	//----------------------------------------------------------------------------------
-	// Render models
-	//----------------------------------------------------------------------------------
+void ForwardRenderer::RenderModels(Scene & scene) const {
+
+	// Get the scene's camera and its frustum
+	auto& camera        = scene.GetCamera();
+	const auto& frustum = camera.GetFrustum();
+
+
+	// Get the matrices
+	const XMMATRIX view = camera.GetViewMatrix();
+	const XMMATRIX projection = camera.GetProjMatrix();
+
 
 	scene.ForEach<Model>([&](Model& model) {
 
@@ -129,12 +170,12 @@ void ForwardRenderer::Render(Scene& scene, RenderStateMgr& render_state_mgr) {
 			const auto& mat = child.GetMaterial();
 
 			// Bind the SRVs
-			if (mat.map_diffuse)        mat.map_diffuse->Bind<Pipeline::PS>(device_context.Get(),        SLOT_SRV_DIFFUSE);
-			if (mat.map_ambient)        mat.map_ambient->Bind<Pipeline::PS>(device_context.Get(),        SLOT_SRV_AMBIENT);
-			if (mat.map_specular)       mat.map_specular->Bind<Pipeline::PS>(device_context.Get(),       SLOT_SRV_SPECULAR);
+			if (mat.map_diffuse)        mat.map_diffuse->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_DIFFUSE);
+			if (mat.map_ambient)        mat.map_ambient->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_AMBIENT);
+			if (mat.map_specular)       mat.map_specular->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SPECULAR);
 			if (mat.map_spec_highlight) mat.map_spec_highlight->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SPEC_HIGHLIGHT);
-			if (mat.map_alpha)          mat.map_alpha->Bind<Pipeline::PS>(device_context.Get(),          SLOT_SRV_ALPHA);
-			if (mat.map_bump)           mat.map_bump->Bind<Pipeline::PS>(device_context.Get(),           SLOT_SRV_NORMAL);
+			if (mat.map_alpha)          mat.map_alpha->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_ALPHA);
+			if (mat.map_bump)           mat.map_bump->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_NORMAL);
 
 
 			// Draw the child

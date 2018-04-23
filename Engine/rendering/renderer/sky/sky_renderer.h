@@ -19,6 +19,10 @@ class SkyRenderer final {
 
 
 	private:
+		void BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr);
+
+
+	private:
 		ComPtr<ID3D11Device>        device;
 		ComPtr<ID3D11DeviceContext> device_context;
 

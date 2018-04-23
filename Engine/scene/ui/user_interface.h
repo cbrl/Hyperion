@@ -47,6 +47,7 @@ class UserInterface {
 		void DrawModelDetails(Model& model);
 		void DrawChildModelDetails(ModelChild& child);
 
+		void DrawSceneDetails(Scene& scene);
 		void DrawLightList(Scene& scene);
 		void DrawLightDetails(DirectionalLightBuffer& light);
 		void DrawLightDetails(PointLightBuffer& light);

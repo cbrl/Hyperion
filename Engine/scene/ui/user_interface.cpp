@@ -143,22 +143,38 @@ void UserInterface::DrawObjectLists(Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
 
-		// Populate list with models
-		DrawModelList(scene);
+		ImGui::PushID(&scene);
 
-		// Populate list with lights
-		DrawLightList(scene);
+		ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ((selected == &scene) ? ImGuiTreeNodeFlags_Selected : 0);
 
-		// Camera
-		ImGui::Selectable("Camera", selected == &scene.GetCamera());
+		bool node_open = ImGui::TreeNodeEx(&scene, node_flags, scene.GetName().c_str());
+
 		if (ImGui::IsItemClicked())
-			selected = &scene.GetCamera();
+			selected = &scene;
 
-		// Fog
-		ImGui::Selectable("Fog", selected == &scene.GetFog());
-		if (ImGui::IsItemClicked()) {
-			selected = &scene.GetFog();
+		if (node_open) {
+
+			// Populate list with models
+			DrawModelList(scene);
+
+			// Populate list with lights
+			DrawLightList(scene);
+
+			// Camera
+			ImGui::Selectable("Camera", selected == &scene.GetCamera());
+			if (ImGui::IsItemClicked())
+				selected = &scene.GetCamera();
+
+			// Fog
+			ImGui::Selectable("Fog", selected == &scene.GetFog());
+			if (ImGui::IsItemClicked()) {
+				selected = &scene.GetFog();
+			}
+
+			ImGui::TreePop();
 		}
+
+		ImGui::PopID();
 	}
 
 	ImGui::EndChild();
@@ -290,9 +306,48 @@ void UserInterface::DrawLightList(Scene& scene) {
 //
 //----------------------------------------------------------------------------------
 
+
+void UserInterface::DrawSceneDetails(Scene& scene) {
+
+	ImGui::Text(scene.GetName().c_str());
+	ImGui::Separator();
+
+
+	const auto& render_states = scene.GetRenderStates();
+
+	static const char* blend_states[5]  = { "Default", "Opaque", "Alpha Blend", "Additive", "Non-Premultiplied" };
+	static const char* depth_states[4]  = { "Default", "Depth None", "Depth Default", "Depth Read" };
+	static const char* raster_states[5] = { "Default", "Cull None", "Cull Clockwise", "Cull CounterClockwise", "Wireframe" };
+
+	static int curr_blend_state  = 0;
+	static int curr_depth_state  = 0;
+	static int curr_raster_state = 0;
+
+
+	if (ImGui::Combo("Blend State", &curr_blend_state, blend_states, 5)) {
+		scene.SetBlendState(static_cast<BlendStates>(curr_blend_state));
+	}
+
+	if (ImGui::Combo("Depth State", &curr_depth_state, depth_states, 4)) {
+		scene.SetDepthState(static_cast<DepthStates>(curr_depth_state));
+	}
+
+	if (ImGui::Combo("Raster State", &curr_raster_state, raster_states, 5)) {
+		scene.SetRasterState(static_cast<RasterStates>(curr_raster_state));
+	}
+}
+
+
 void UserInterface::DrawObjectDetails(Scene& scene) {
 
 	ImGui::BeginChild("object properties", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true);
+
+
+	// Draw the scene's details
+	if (selected == &scene) {
+		DrawSceneDetails(scene);
+	}
+
 
 	// Draw model details
 	scene.ForEach<Model>([&](Model& model) {
