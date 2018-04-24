@@ -498,6 +498,9 @@
     <ClInclude Include="util\memory\allocator\allocator_util.h">
       <Filter>Header Files\util\memory\allocator</Filter>
     </ClInclude>
+    <ClInclude Include="util\memory\allocator\stack_allocator.h">
+      <Filter>Header Files\util\memory\allocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -615,6 +618,9 @@
       <Filter>Source Files\util\memory\allocator</Filter>
     </ClCompile>
     <ClCompile Include="util\memory\allocator\linear_allocator.cpp">
+      <Filter>Source Files\util\memory\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="util\memory\allocator\stack_allocator.cpp">
       <Filter>Source Files\util\memory\allocator</Filter>
     </ClCompile>
   </ItemGroup>

@@ -34,8 +34,8 @@ using Microsoft::WRL::ComPtr;
 using std::make_unique;
 using std::make_shared;
 
-using ptr  = std::intptr_t;
-using uptr = std::uintptr_t;
+using intptr  = std::intptr_t;
+using uintptr = std::uintptr_t;
 
 
 //----------------------------------------------------------------------------------

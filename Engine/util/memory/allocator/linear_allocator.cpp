@@ -17,7 +17,7 @@ void LinearAllocator::Init() {
 
 	if (start_ptr == nullptr) {
 		start_ptr = malloc(memory_size);
-		offset = 0;
+		offset    = 0;
 	}
 	else {
 		free(start_ptr);
@@ -26,18 +26,22 @@ void LinearAllocator::Init() {
 
 
 void LinearAllocator::Reset() {
-	offset = 0;
 	memory_used = 0;
-	peak = 0;
+	offset      = 0;
+	peak        = 0;
 }
 
 
 void* LinearAllocator::Allocate(const size_t size, const size_t alignment) {
 
-	size_t padding     = 0;
-	uptr   padded_addr = 0;
+	// Ensure the start pointer is valid
+	assert(start_ptr != nullptr && "Linear Allocator not initialized.");
 
-	const uptr curr_addr = (uptr)start_ptr + this->offset;
+
+	size_t  padding     = 0;
+	uintptr padded_addr = 0;
+
+	const uintptr curr_addr = reinterpret_cast<uintptr>(start_ptr) + this->offset;
 
 	// Calculate the padding if it doesn't fit nicely
 	if ((alignment != 0) && (offset % alignment != 0)) {
@@ -50,14 +54,14 @@ void* LinearAllocator::Allocate(const size_t size, const size_t alignment) {
 	}
 
 
-	this->offset += (padding + size);
-
+	this->offset     += (padding + size);
 	this->memory_used = offset;
-	this->peak = std::max(peak, memory_used);
+	this->peak        = std::max(peak, memory_used);
 
-	const uptr next_addr = curr_addr + padding;
 
-	return (void*)next_addr;
+	const uintptr next_addr = curr_addr + padding;
+
+	return reinterpret_cast<void*>(next_addr);
 }
 
 

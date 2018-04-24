@@ -5,15 +5,15 @@
 
 namespace AllocatorUtil {
 
-	static inline const size_t CalculatePadding(const uptr address, const size_t alignment) {
+	static inline const size_t CalculatePadding(const uintptr address, const size_t alignment) {
 
-		return alignment - (address & static_cast<uptr>(alignment - 1));
+		return alignment - (address & static_cast<uintptr>(alignment - 1));
 	}
 
 
-	static inline const size_t CalculatePadding(const uptr   address,
-												const size_t alignment,
-												const size_t header_size) {
+	static inline const size_t CalculatePadding(const uintptr address,
+												const size_t  alignment,
+												const size_t  header_size) {
 
 		size_t padding = CalculatePadding(address, alignment);
 
