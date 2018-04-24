@@ -229,6 +229,18 @@
     <Filter Include="Source Files\rendering\renderer\text">
       <UniqueIdentifier>{c95bbbe7-c6ed-4786-9286-e8ff828aa114}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\util\memory">
+      <UniqueIdentifier>{4875941d-8181-453b-a69f-e9830c8c863d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util\memory">
+      <UniqueIdentifier>{11ccb603-4067-4a47-af0a-2a744dc32049}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util\memory\allocator">
+      <UniqueIdentifier>{91a42a98-bf64-415c-8290-be1c1098a34d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\util\memory\allocator">
+      <UniqueIdentifier>{8304ac09-19d3-4e54-8164-7359e97fc068}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -477,6 +489,15 @@
     <ClInclude Include="rendering\renderer\text\text_renderer.h">
       <Filter>Header Files\rendering\renderer\text</Filter>
     </ClInclude>
+    <ClInclude Include="util\memory\allocator\allocator.h">
+      <Filter>Header Files\util\memory\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="util\memory\allocator\linear_allocator.h">
+      <Filter>Header Files\util\memory\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="util\memory\allocator\allocator_util.h">
+      <Filter>Header Files\util\memory\allocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -589,6 +610,12 @@
     </ClCompile>
     <ClCompile Include="rendering\renderer\text\text_renderer.cpp">
       <Filter>Source Files\rendering\renderer\text</Filter>
+    </ClCompile>
+    <ClCompile Include="util\memory\allocator\allocator.cpp">
+      <Filter>Source Files\util\memory\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="util\memory\allocator\linear_allocator.cpp">
+      <Filter>Source Files\util\memory\allocator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
