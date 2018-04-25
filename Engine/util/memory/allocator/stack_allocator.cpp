@@ -43,7 +43,7 @@ void* StackAllocator::Allocate(const size_t size, const size_t alignment) {
 
 	const uintptr curr_addr = reinterpret_cast<uintptr>(start_ptr) + this->offset;
 
-	size_t padding = AllocatorUtil::CalculatePadding(curr_addr, alignment, sizeof(AllocHeader));
+	const size_t padding = AllocatorUtil::CalculatePadding(curr_addr, alignment, sizeof(AllocHeader));
 
 	// Check if enough memory is available
 	if (memory_used + size + padding > memory_size) {
@@ -60,7 +60,7 @@ void* StackAllocator::Allocate(const size_t size, const size_t alignment) {
 	const uintptr header_addr = next_addr - sizeof(AllocHeader);
 
 	// Store padding amount in the header
-	reinterpret_cast<AllocHeader*>(header_addr)->padding = padding;
+	reinterpret_cast<AllocHeader*>(header_addr)->padding = static_cast<u8>(padding);
 
 	return reinterpret_cast<void*>(next_addr);
 }

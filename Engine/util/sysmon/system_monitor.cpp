@@ -93,7 +93,7 @@ void SystemMonitor::CPUMonitor::Tick() {
 	memcpy(&sys, &fsys, sizeof(FILETIME));
 	memcpy(&user, &fuser, sizeof(FILETIME));
 
-	process_usage  = (sys.QuadPart - last_sys_cpu.QuadPart) + (user.QuadPart - last_user_cpu.QuadPart);
+	process_usage  = static_cast<double>((sys.QuadPart - last_sys_cpu.QuadPart) + (user.QuadPart - last_user_cpu.QuadPart));
 	process_usage /= (now.QuadPart - last_cpu.QuadPart);
 	process_usage /= processor_count;
 

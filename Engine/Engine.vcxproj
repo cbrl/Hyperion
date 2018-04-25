@@ -222,6 +222,7 @@
     <ClInclude Include="util\memory\allocator\linear_allocator.h" />
     <ClInclude Include="util\memory\allocator\pool_allocator.h" />
     <ClInclude Include="util\memory\allocator\stack_allocator.h" />
+    <ClInclude Include="util\memory\resource_pool.h" />
     <ClInclude Include="util\string\string.h" />
     <ClInclude Include="util\sysmon\system_monitor.h" />
     <ClInclude Include="util\timer\timer.h" />
@@ -312,6 +313,7 @@
     <None Include="shaders\include\light.hlsl">
       <FileType>Document</FileType>
     </None>
+    <None Include="util\memory\resource_pool.tpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\syntax.hlsl">

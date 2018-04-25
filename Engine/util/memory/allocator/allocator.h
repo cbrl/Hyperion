@@ -13,8 +13,11 @@ class Allocator {
 		virtual void* Allocate(const size_t size, const size_t alignment = 0) = 0;
 		virtual void  Free(void* ptr) = 0;
 
+		uintptr GetStartAddr();
+
 
 	protected:
+		void*  start_ptr = nullptr;
 		size_t memory_size;
 		size_t memory_used;
 		size_t peak;

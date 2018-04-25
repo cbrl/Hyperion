@@ -21,6 +21,5 @@ class StackAllocator : public Allocator {
 
 
 	protected:
-		void*  start_ptr = nullptr;
 		size_t offset;
 };

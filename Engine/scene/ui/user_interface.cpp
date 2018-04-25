@@ -624,7 +624,11 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 			return true;
 		};
 
-		ImGui::Combo("Models", &selected_combo, getter, (void*)&scene.GetModels(), scene.GetModels().size());
+		ImGui::Combo("Models",
+					 &selected_combo,
+					 getter,
+					 (void*)&scene.GetModels(),
+					 static_cast<int>(scene.GetModels().size()));
 
 		if (ImGui::Button("Ok")) {
 			scene.GetModels().push_back(Model(scene.GetModels().at(selected_combo)));

@@ -11,3 +11,9 @@ Allocator::Allocator(const size_t memory_size)
 Allocator::~Allocator() {
 	memory_size = 0;
 }
+
+
+uintptr Allocator::GetStartAddr() {
+
+	return reinterpret_cast<uintptr>(start_ptr);
+}

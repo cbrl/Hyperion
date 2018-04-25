@@ -49,7 +49,6 @@ class PoolAllocator : public Allocator {
 
 
 	protected:
-		void*  start_ptr = nullptr;
-		size_t chunk_size;
-		size_t align;
+		const size_t chunk_size;
+		const size_t align;
 };
