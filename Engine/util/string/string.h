@@ -78,17 +78,17 @@ inline StringT TrimWhiteSpace(StringT& in) {
 
 // Split a string by a specified token
 template<typename StringT, typename CharT>
-inline void Split(StringT& in, std::vector<StringT>& out, const CharT* token) {
+inline std::vector<StringT> Split(StringT& in, const CharT* token) {
 
 	// Ensure the string's char type and token type are the same
 	static_assert(is_same_v<CharT, StringT::value_type>, "Split() string/token type mismatch");
 
-	out.clear();
+	std::vector<StringT> out;
 
 	StringT sToken(token);
 	StringT temp;
 
-	for (size_t i = 0; i < in.size(); ++i) {
+	for (typename StringT::size_type i = 0; i < in.size(); ++i) {
 
 		StringT substr = in.substr(i, sToken.size());
 
@@ -111,4 +111,6 @@ inline void Split(StringT& in, std::vector<StringT>& out, const CharT* token) {
 			temp += in[i];
 		}
 	}
+
+	return out;
 }

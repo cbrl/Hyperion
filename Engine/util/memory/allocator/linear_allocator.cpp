@@ -4,6 +4,8 @@
 
 LinearAllocator::LinearAllocator(const size_t memory_size)
 	: Allocator(memory_size) {
+
+	Init();
 }
 
 
@@ -34,7 +36,8 @@ void LinearAllocator::Reset() {
 
 void* LinearAllocator::Allocate(const size_t size, const size_t alignment) {
 
-	// Ensure the start pointer is valid
+	// Ensure the allocation size and start pointer are valid
+	assert(size > 0 && "StackAllocator Allocate() called with 0 size.");
 	assert(start_ptr != nullptr && "Linear Allocator not initialized.");
 
 

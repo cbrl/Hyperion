@@ -391,13 +391,13 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 	bool hasNormal = false;
 
 	// Split the line into separate vertex definitions
-	Split(line, vert_list, L" ");
+	vert_list = Split(line, L" ");
 
 	for (size_t i = 0; i < vert_list.size(); ++i) {
 		i32 type = 0;
 
 		// Split the vertex definition into separate parts
-		Split(vert_list[i], vert_parts, L"/");
+		vert_parts = Split(vert_list[i], L"/");
 
 
 		// Determine the vertex type

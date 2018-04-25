@@ -4,6 +4,8 @@
 
 StackAllocator::StackAllocator(const size_t memory_size)
 	: Allocator(memory_size) {
+
+	Init();
 }
 
 
@@ -34,8 +36,9 @@ void StackAllocator::Reset() {
 
 void* StackAllocator::Allocate(const size_t size, const size_t alignment) {
 
-	// Ensure the start pointer is valid
-	assert(start_ptr != nullptr && "Stack Allocator not initialized.");
+	// Ensure the the allocation size and start pointer are valid
+	assert(size > 0 && "StackAllocator Allocate() called with 0 size.");
+	assert(start_ptr != nullptr && "StackAllocator not initialized.");
 
 
 	const uintptr curr_addr = reinterpret_cast<uintptr>(start_ptr) + this->offset;

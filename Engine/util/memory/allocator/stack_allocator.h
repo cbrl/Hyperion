@@ -14,7 +14,7 @@ class StackAllocator : public Allocator {
 		virtual void  Free(void* ptr);
 
 
-	protected:
+	private:
 		struct AllocHeader {
 			u8 padding;
 		};

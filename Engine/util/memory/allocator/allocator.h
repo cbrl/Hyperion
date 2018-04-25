@@ -10,8 +10,8 @@ class Allocator {
 		virtual ~Allocator();
 
 		virtual void  Init() = 0;
-		virtual void  Free(void* ptr) = 0;
 		virtual void* Allocate(const size_t size, const size_t alignment = 0) = 0;
+		virtual void  Free(void* ptr) = 0;
 
 
 	protected:

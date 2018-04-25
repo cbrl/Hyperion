@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <variant>
 #include <wrl\client.h>
 
 #include "util\string\string.h"
