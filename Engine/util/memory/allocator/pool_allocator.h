@@ -34,7 +34,7 @@ class LinkedList {
 
 class PoolAllocator : public Allocator {
 	public:
-		PoolAllocator(const size_t memory_size, const size_t chunk_size);
+		PoolAllocator(const size_t memory_size, const size_t chunk_size, const size_t alignment);
 		virtual ~PoolAllocator();
 
 		virtual void  Init() override;
@@ -51,4 +51,5 @@ class PoolAllocator : public Allocator {
 	protected:
 		void*  start_ptr = nullptr;
 		size_t chunk_size;
+		size_t align;
 };

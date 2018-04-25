@@ -2,9 +2,10 @@
 #include "pool_allocator.h"
 
 
-PoolAllocator::PoolAllocator(const size_t memory_size, const size_t chunk_size)
+PoolAllocator::PoolAllocator(const size_t memory_size, const size_t chunk_size, const size_t alignment)
 	: Allocator(memory_size)
-	, chunk_size(chunk_size) {
+	, chunk_size(chunk_size)
+	, align(alignment) {
 
 	assert(chunk_size >= 8 && "PoolAllocator chunk size must be 8 or greater.");
 	assert(memory_size % chunk_size == 0 && "PoolAllocator memory size must be a multiple of the chunk size.");
@@ -40,8 +41,10 @@ void PoolAllocator::Reset() {
 
 void* PoolAllocator::Allocate(const size_t size, const size_t alignment) {
 
-	// Ensure the allocation size is equal to the chunk size
-	assert(size == this->chunk_size && "PoolAllocator allocation size is not equal to chunk size.");
+	// Ensure the allocator is initialized and the arguments are valid.
+	assert(start_ptr != nullptr && "PoolAllocator not initialized");
+	assert(size == chunk_size && "PoolAllocator allocation size is not equal to chunk size.");
+	assert(alignment == this->align && "PoolAllocator allocation alignment is not equal to alignment specified on creation.");
 
 	Node* free_addr = free_list.pop_front();
 
