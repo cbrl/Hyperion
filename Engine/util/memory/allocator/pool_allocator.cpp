@@ -32,12 +32,12 @@ void PoolAllocator::Reset() {
 
 	const size_t padding = AllocatorUtil::CalculatePadding(reinterpret_cast<uintptr>(start_ptr), this->align);
 
-	const size_t num_chunks = static_cast<size_t>(floor(memory_size - padding)) / chunk_size;
+	const size_t num_chunks = (memory_size - padding) / chunk_size;
 
 	const uintptr aligned_start = reinterpret_cast<uintptr>(start_ptr) + padding;
 
 	for (size_t i = 0; i < num_chunks; ++i) {
-		uintptr addr = aligned_start + (i * chunk_size);
+		uintptr addr = aligned_start + (i * (chunk_size));
 		free_list.push_front(reinterpret_cast<Node*>(addr));
 	}
 }

@@ -280,9 +280,6 @@
     <None Include="resource\model\blueprint_factory.tpp">
       <Filter>Source Files\resource\model</Filter>
     </None>
-    <None Include="util\memory\resource_pool.tpp">
-      <Filter>Source Files\util\memory</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -509,6 +506,9 @@
     </ClInclude>
     <ClInclude Include="util\memory\resource_pool.h">
       <Filter>Header Files\util\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="util\memory\resource_pool.tpp">
+      <Filter>Source Files\util\memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

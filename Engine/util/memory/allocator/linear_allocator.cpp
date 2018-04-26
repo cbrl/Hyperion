@@ -48,7 +48,7 @@ void* LinearAllocator::Allocate(const size_t size, const size_t alignment) {
 
 	// Calculate the padding if it doesn't fit nicely
 	if ((alignment != 0) && (offset % alignment != 0)) {
-		AllocatorUtil::CalculatePadding(curr_addr, alignment);
+		size_t padding = AllocatorUtil::CalculatePadding(curr_addr, alignment);
 	}
 
 	// Check if enough memory is available

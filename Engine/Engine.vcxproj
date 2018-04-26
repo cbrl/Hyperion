@@ -313,7 +313,9 @@
     <None Include="shaders\include\light.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="util\memory\resource_pool.tpp" />
+    <ClInclude Include="util\memory\resource_pool.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\syntax.hlsl">
