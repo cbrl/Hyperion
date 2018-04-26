@@ -241,6 +241,18 @@
     <Filter Include="Header Files\util\memory\allocator">
       <UniqueIdentifier>{8304ac09-19d3-4e54-8164-7359e97fc068}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ecs">
+      <UniqueIdentifier>{baf94e4c-ce46-4001-84ba-257d71a0e109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs">
+      <UniqueIdentifier>{dc00ab84-82c0-4eb3-8d47-52fe83a55c53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs\handle">
+      <UniqueIdentifier>{a732161f-f990-46f9-aec1-e794a3f604f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs\handle">
+      <UniqueIdentifier>{f7b1093e-8211-4178-8a62-a7f5577269cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -279,6 +291,9 @@
     <None Include="packages.config" />
     <None Include="resource\model\blueprint_factory.tpp">
       <Filter>Source Files\resource\model</Filter>
+    </None>
+    <None Include="ecs\handle\handle_table.tpp">
+      <Filter>Source Files\ecs\handle</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -509,6 +524,12 @@
     </ClInclude>
     <ClInclude Include="util\memory\resource_pool.tpp">
       <Filter>Source Files\util\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\handle\handle.h">
+      <Filter>Header Files\ecs\handle</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\handle\handle_table.h">
+      <Filter>Header Files\ecs\handle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
