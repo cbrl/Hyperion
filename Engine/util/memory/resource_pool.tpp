@@ -16,7 +16,7 @@ ResourcePool<DataT, max_objs_per_chunk>::~ResourcePool() {
 
 		// Delete every object in the list
 		for (auto obj : chunk->objects) {
-			delete obj;
+			reinterpret_cast<DataT*>(obj)->~DataT();
 		}
 
 		// Clear the list

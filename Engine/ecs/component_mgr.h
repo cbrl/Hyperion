@@ -5,16 +5,28 @@
 #include "ecs\component.h"
 
 
-class IComponentPool {};
+class IComponentPool {
+	public:
+		virtual ~IComponentPool() = default;
+};
 
 template<typename ComponentT>
-class ComponentPool final : public IComponentPool, public ResourcePool<ComponentT, 512> {};
+class ComponentPool final : public IComponentPool, public ResourcePool<ComponentT, 512> {
+	public:
+		~ComponentPool() = default;
+};
 
 
 class ComponentPoolMap {
 	public:
 		ComponentPoolMap() = default;
-		~ComponentPoolMap() = default;
+
+		~ComponentPoolMap() {
+			for (auto& pair : pools) {
+				delete pair.second;
+			}
+		}
+
 
 		template<typename ComponentT>
 		ComponentPool<ComponentT>* GetOrCreatePool() {
@@ -24,17 +36,17 @@ class ComponentPoolMap {
 			const auto it = pools.find(ComponentT::type_idx);
 
 			if (it == pools.end()) {
-				pools[ComponentT::type_idx] = make_unique<pool_t>();
+				pools[ComponentT::type_idx] = new pool_t();
 
-				return static_cast<pool_t*>(pools[ComponentT::type_idx].get());
+				return static_cast<pool_t*>(pools[ComponentT::type_idx]);
 			}
 
-			return static_cast<pool_t*>(it->second.get());
+			return static_cast<pool_t*>(it->second);
 		}
 
 
 	private:
-		unordered_map<type_index, unique_ptr<IComponentPool>> pools;
+		unordered_map<type_index, IComponentPool*> pools;
 };
 
 
