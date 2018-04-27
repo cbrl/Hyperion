@@ -8,6 +8,7 @@
 #include "util\sysmon\system_monitor.h"
 #include "util\timer\timer.h"
 #include "util\fps\fps.h"
+#include "ecs\ecs.h"
 #include "input\input.h"
 #include "rendering\rendering_mgr.h"
 #include "scene\scene.h"
@@ -32,7 +33,7 @@ class System final : public MainWindow {
 
 		LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
 
-		void OnResize(u32 window_width, u32 window_height) const;
+		void OnResize(u32 window_width, u32 window_height);
 
 		HWND GetHWND()         const { return hWnd; }
 		u32  GetWindowWidth()  const { return window_width; }
@@ -52,6 +53,7 @@ class System final : public MainWindow {
 
 
 	private:
+		unique_ptr<ECS>           entity_component_system;
 		unique_ptr<Input>         input;
 		unique_ptr<SystemMonitor> system_monitor;
 		unique_ptr<Timer>         timer;

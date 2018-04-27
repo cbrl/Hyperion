@@ -16,7 +16,11 @@ class IComponent {
 	friend class IEntity;
 
 	public:
-		IComponent() = default;
+		IComponent()
+			: owner(Handle64::invalid_handle)
+			, active(true)
+		{}
+
 		virtual ~IComponent() = default;
 
 		const Handle64 GetOwner() const {
@@ -31,6 +35,8 @@ class IComponent {
 
 	protected:
 		bool     active;
+
+		// Set on creation in IEntity
 		Handle64 owner;
 };
 

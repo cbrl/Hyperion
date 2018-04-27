@@ -15,12 +15,14 @@ class IEntity {
 	friend class EntityMgr;
 
 	public:
-		IEntity() = default;
+		IEntity() : active(true) {}
 
 		virtual ~IEntity() {
-			for (auto& pair : components) {
-				component_mgr.lock()->DestroyComponent(pair.second);
-				pair.second = nullptr;
+			if (auto tmp = component_mgr.lock()) {
+				for (auto& pair : components) {
+					tmp->DestroyComponent(pair.second);
+					pair.second = nullptr;
+				}
 			}
 		}
 
@@ -45,11 +47,16 @@ class IEntity {
 
 	protected:
 		bool     active;
+
+		// Set on creation in EntityMgr
 		Handle64 handle;
+
+		// Map of components. Holds 1 of each unique type.
 		unordered_map<type_index, IComponent*> components;
 
 
 	private:
+		// Pointer to the ComponentMgr
 		weak_ptr<ComponentMgr> component_mgr;
 };
 

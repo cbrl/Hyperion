@@ -17,10 +17,14 @@ bool System::Init() {
 
 
 	// Create main window
-	if (!InitWindow(L"Engine", window_width, window_height)) {
+	if (!this->InitWindow(L"Engine", window_width, window_height)) {
 		return false;
 	}
 	FILE_LOG(logINFO) << "Initialized main window";
+
+
+	// Initialize the entity component system
+	entity_component_system = make_unique<ECS>();
 
 
 	// Initialize system monitor
@@ -201,7 +205,7 @@ LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-void System::OnResize(u32 window_width, u32 window_height) const {
+void System::OnResize(u32 window_width, u32 window_height) {
 
 	if (!rendering_mgr) return;
 	rendering_mgr->ResizeBuffers(window_width, window_height);

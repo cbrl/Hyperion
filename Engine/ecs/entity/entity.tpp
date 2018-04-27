@@ -19,9 +19,10 @@ void IEntity::AddComponent(ArgsT&&... args) {
 	// Nothing to do if the component already exists
 	if (it != components.end()) return;
 
-	components[ComponentT::type_idx] = component_mgr.lock()->CreateComponent<ComponentT>(std::forward(args)...);
-
-	components[ComponentT::type_idx]->owner = handle;
+	if (auto tmp = component_mgr.lock()) {
+		components[ComponentT::type_idx] = tmp->CreateComponent<ComponentT>(std::forward(args)...);
+		components[ComponentT::type_idx]->owner = handle;
+	}
 }
 
 

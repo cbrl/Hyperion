@@ -124,6 +124,7 @@ class EntityMgr final {
 
 			// Create the entity
 			EntityT* entity = new(memory) EntityT(std::forward(args)...);
+			entity->handle        = handle;
 			entity->component_mgr = component_mgr;
 
 			return handle;
