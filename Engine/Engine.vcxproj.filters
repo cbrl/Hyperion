@@ -531,6 +531,12 @@
     <ClInclude Include="ecs\handle\handle_table.h">
       <Filter>Header Files\ecs\handle</Filter>
     </ClInclude>
+    <ClInclude Include="ecs\component.h">
+      <Filter>Header Files\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component_mgr.h">
+      <Filter>Header Files\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

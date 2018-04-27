@@ -157,6 +157,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ecs\component.h" />
+    <ClInclude Include="ecs\component_mgr.h" />
     <ClInclude Include="ecs\handle\handle.h" />
     <ClInclude Include="ecs\handle\handle_table.h" />
     <ClInclude Include="geometry\bounding_volume\bounding_volume.h" />
