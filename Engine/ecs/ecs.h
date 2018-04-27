@@ -1,7 +1,7 @@
 #pragma once
 
-#include "entity_mgr.h"
-#include "component_mgr.h"
+#include "ecs\entity\entity_mgr.h"
+#include "ecs\component\component_mgr.h"
 
 
 class ECS final {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "util\memory\resource_pool.h"
-#include "ecs\component.h"
+#include "ecs\component\component.h"
 
 
 //----------------------------------------------------------------------------------

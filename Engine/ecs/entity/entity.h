@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs\component_mgr.h"
+#include "ecs\component\component_mgr.h"
 
 
 //----------------------------------------------------------------------------------

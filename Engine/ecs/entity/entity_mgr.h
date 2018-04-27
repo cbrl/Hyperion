@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ecs\entity.h"
-#include "ecs\component_mgr.h"
+#include "ecs\entity\entity.h"
+#include "ecs\component\component_mgr.h"
 #include "ecs\handle\handle_table.h"
 
 
