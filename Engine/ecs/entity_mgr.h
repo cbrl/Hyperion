@@ -8,6 +8,10 @@
 //----------------------------------------------------------------------------------
 // EntityPool
 //----------------------------------------------------------------------------------
+//
+// A wrapper around a resource pool
+//
+//----------------------------------------------------------------------------------
 
 class IEntityPool {
 	public:
@@ -27,8 +31,13 @@ class EntityPool : public IEntityPool, public ResourcePool<EntityT, chunk_object
 };
 
 
+
 //----------------------------------------------------------------------------------
 // EntityPool Map
+//----------------------------------------------------------------------------------
+//
+// Creates a unique resource pool for each type of entity
+//
 //----------------------------------------------------------------------------------
 
 class EntityPoolMap final {
@@ -87,6 +96,10 @@ class EntityPoolMap final {
 //----------------------------------------------------------------------------------
 // Entity Manager
 //----------------------------------------------------------------------------------
+//
+// Handles the creation and destruction of entities
+//
+//----------------------------------------------------------------------------------
 
 class EntityMgr final {
 	public:
@@ -129,6 +142,8 @@ class EntityMgr final {
 			auto pool = entity_pools.GetPool(type);
 
 			pool->DestroyEntity(static_cast<void*>(entity));
+
+			handle_table.ReleaseHandle(handle);
 		}
 
 

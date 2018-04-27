@@ -159,6 +159,7 @@
   <ItemGroup>
     <ClInclude Include="ecs\component.h" />
     <ClInclude Include="ecs\component_mgr.h" />
+    <ClInclude Include="ecs\ecs.h" />
     <ClInclude Include="ecs\entity.h" />
     <ClInclude Include="ecs\entity_mgr.h" />
     <ClInclude Include="ecs\handle\handle.h" />

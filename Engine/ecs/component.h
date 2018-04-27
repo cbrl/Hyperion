@@ -4,6 +4,14 @@
 #include "ecs\handle\handle.h"
 
 
+//----------------------------------------------------------------------------------
+// IComponent
+//----------------------------------------------------------------------------------
+//
+// Base class for the Component class. Only to be used by that class.
+//
+//----------------------------------------------------------------------------------
+
 class IComponent {
 	friend class IEntity;
 
@@ -15,14 +23,26 @@ class IComponent {
 			return owner;
 		}
 
+		void SetActive(bool state) { active = state; }
+		bool IsActive() const { return active; }
+
 		virtual const type_index GetTypeIDX() const = 0;
 
 
 	protected:
+		bool     active;
 		Handle64 owner;
 };
 
 
+
+//----------------------------------------------------------------------------------
+// Component
+//----------------------------------------------------------------------------------
+//
+// Base class that all unique components will derive from
+//
+//----------------------------------------------------------------------------------
 
 template<typename T>
 class Component : public IComponent {

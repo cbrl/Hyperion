@@ -30,7 +30,7 @@ class HandleTable {
 		~HandleTable() = default;
 
 		HandleT CreateHandle(DataT* object);
-		void    DestroyHandle(const HandleT& handle);
+		void    ReleaseHandle(HandleT handle);
 
 		bool Expired(const HandleT& handle) const {
 			return handle.counter != handle_table[handle.index].first;

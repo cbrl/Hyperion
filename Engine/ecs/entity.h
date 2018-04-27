@@ -3,6 +3,14 @@
 #include "ecs\component_mgr.h"
 
 
+//----------------------------------------------------------------------------------
+// IEntity
+//----------------------------------------------------------------------------------
+//
+// Base class for the Entity class. Only to be used by that class.
+//
+//----------------------------------------------------------------------------------
+
 class IEntity {
 	friend class EntityMgr;
 
@@ -15,6 +23,9 @@ class IEntity {
 				pair.second = nullptr;
 			}
 		}
+
+		void SetActive(bool state) { active = state; }
+		bool IsActive() const { return active; }
 
 		virtual const type_index GetTypeIDX() const = 0;
 
@@ -33,6 +44,7 @@ class IEntity {
 
 
 	protected:
+		bool     active;
 		Handle64 handle;
 		unordered_map<type_index, IComponent*> components;
 
@@ -42,6 +54,14 @@ class IEntity {
 };
 
 
+
+//----------------------------------------------------------------------------------
+// Entity
+//----------------------------------------------------------------------------------
+//
+// Base class that all unique entities will derive from
+//
+//----------------------------------------------------------------------------------
 
 template<typename T>
 class Entity : public IEntity {
