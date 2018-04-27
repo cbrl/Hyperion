@@ -5,25 +5,20 @@
 
 
 class IComponent {
+	friend class IEntity;
+
 	public:
 		IComponent() = default;
-		~IComponent() = default;
+		virtual ~IComponent() = default;
 
-		bool operator==(const IComponent& compare) const {
-			return id_hash == compare.id_hash;
+		const Handle64 GetOwner() const {
+			return owner;
 		}
 
-		bool operator!=(const IComponent& compare) const {
-			return !(*this == compare);
-		}
-
-		const u64      GetID()    const { return id; }
-		const Handle64 GetOwner() const { return owner; }
+		virtual const type_index GetTypeIDX() const = 0;
 
 
-	private:
-		u64      id_hash;
-		u64      id;
+	protected:
 		Handle64 owner;
 };
 
@@ -33,10 +28,15 @@ template<typename T>
 class Component : public IComponent {
 	public:
 		Component() = default;
-		~Component() = default;
+		virtual ~Component() = default;
+
+		const type_index GetTypeIDX() const {
+			return type_idx;
+		}
+
 
 	public:
-		// An id unique to type T
+		// An ID unique to type T
 		static const type_index type_idx;
 };
 

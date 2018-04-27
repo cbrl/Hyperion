@@ -537,6 +537,15 @@
     <ClInclude Include="ecs\component_mgr.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
+    <ClInclude Include="ecs\entity.h">
+      <Filter>Header Files\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\entity_mgr.h">
+      <Filter>Header Files\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\entity.tpp">
+      <Filter>Source Files\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -59,13 +59,13 @@ void* PoolAllocator::Allocate(const size_t size, const size_t alignment) {
 	this->memory_used += chunk_size;
 	this->peak = std::max(peak, memory_used);
 
-	return reinterpret_cast<void*>(free_addr);
+	return static_cast<void*>(free_addr);
 }
 
 
 void PoolAllocator::Free(void* ptr) {
 
-	free_list.push_front(reinterpret_cast<Node*>(ptr));
+	free_list.push_front(static_cast<Node*>(ptr));
 
 	this->memory_used -= chunk_size;
 }

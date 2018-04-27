@@ -33,7 +33,23 @@ class HandleTable {
 		void    DestroyHandle(const HandleT& handle);
 
 		bool Expired(const HandleT& handle) const {
-			return handle.counter != handles[handle.index].first;
+			return handle.counter != handle_table[handle.index].first;
+		}
+
+		HandleT operator[](typename HandleT::value_type idx) const {
+			assert(idx < handle_table.size() && "Invalid handle specified");
+			return HandleT(idx, handles[idx].first);
+		}
+
+		DataT* operator[](HandleT handle) {
+			auto pair = handle_table[handle.index];
+
+			assert(handle.counter == pair.first && "Invalid handle specified");
+
+			if (pair.first = handle.counter)
+				return pair.second;
+
+			return nullptr;
 		}
 
 
@@ -42,7 +58,7 @@ class HandleTable {
 
 
 	private:
-		vector<HandleEntry> handles;
+		vector<HandleEntry> handle_table;
 };
 
 

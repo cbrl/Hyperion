@@ -159,6 +159,8 @@
   <ItemGroup>
     <ClInclude Include="ecs\component.h" />
     <ClInclude Include="ecs\component_mgr.h" />
+    <ClInclude Include="ecs\entity.h" />
+    <ClInclude Include="ecs\entity_mgr.h" />
     <ClInclude Include="ecs\handle\handle.h" />
     <ClInclude Include="ecs\handle\handle_table.h" />
     <ClInclude Include="geometry\bounding_volume\bounding_volume.h" />
@@ -296,6 +298,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="loader\model_loader.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <ClInclude Include="ecs\entity.tpp">
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="ecs\handle\handle_table.tpp" />

@@ -16,7 +16,7 @@ ResourcePool<DataT, max_objs_per_chunk>::~ResourcePool() {
 
 		// Delete every object in the list
 		for (auto obj : chunk->objects) {
-			reinterpret_cast<DataT*>(obj)->~DataT();
+			static_cast<DataT*>(obj)->~DataT();
 		}
 
 		// Clear the list
@@ -46,7 +46,7 @@ void* ResourcePool<DataT, max_objs_per_chunk>::CreateObject() {
 		object = chunk->allocator->Allocate(sizeof(DataT), alignof(DataT));
 		
 		if (object) {
-			chunk->objects.push_back(reinterpret_cast<DataT*>(object));
+			chunk->objects.push_back(static_cast<DataT*>(object));
 			break;
 		}
 	}
@@ -64,7 +64,7 @@ void* ResourcePool<DataT, max_objs_per_chunk>::CreateObject() {
 		object = chunk->allocator->Allocate(sizeof(DataT), alignof(DataT));
 
 		assert(object != nullptr && "Unable to create object.");
-		chunk->objects.push_back(reinterpret_cast<DataT*>(object));
+		chunk->objects.push_back(static_cast<DataT*>(object));
 	}
 
 	return object;
@@ -83,7 +83,7 @@ void ResourcePool<DataT, max_objs_per_chunk>::DestroyObject(void* object) {
 
 			reinterpret_cast<DataT*>(object)->~DataT();
 
-			chunk->objects.remove(reinterpret_cast<DataT*>(object));
+			chunk->objects.remove(static_cast<DataT*>(object));
 			chunk->allocator->Free(object);
 
 			return;
