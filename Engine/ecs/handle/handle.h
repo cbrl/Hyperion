@@ -6,6 +6,9 @@
 // Handle template that can be specialized for any given data size,
 // number of counter bits, and number of index bits
 
+#pragma warning (push)
+#pragma warning (disable: 4293) //disable '<<' undefined behavior warning
+
 template<typename T, size_t counter_bits, size_t index_bits>
 struct Handle {
 
@@ -55,6 +58,8 @@ struct Handle {
 
 		static constexpr T invalid_handle = std::numeric_limits<T>::max();
 };
+
+#pragma warning (pop)
 
 
 using Handle64 = Handle<u64, 24, 40>;

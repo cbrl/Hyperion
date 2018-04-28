@@ -235,6 +235,7 @@
     <ClInclude Include="util\timer\timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ecs\ecs.cpp" />
     <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
     <ClCompile Include="geometry\shapes\shapes.tpp" />

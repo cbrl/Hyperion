@@ -29,7 +29,7 @@ class IEntity {
 		void SetActive(bool state) { active = state; }
 		bool IsActive() const { return active; }
 
-		virtual const type_index GetTypeIDX() const = 0;
+		virtual const type_index GetTypeID() const = 0;
 
 		[[nodiscard]]
 		const Handle64 GetHandle() const { return handle; }
@@ -76,19 +76,19 @@ class Entity : public IEntity {
 		Entity() = default;
 		virtual ~Entity() = default;
 
-		virtual const type_index GetTypeIDX() const {
-			return type_idx;
+		virtual const type_index GetTypeID() const {
+			return type_id;
 		}
 
 
 	public:
 		// And ID unique to type T
-		static const type_index type_idx;
+		static const type_index type_id;
 };
 
 
 template<typename T>
-const type_index Entity<T>::type_idx = type_index(typeid(T));
+const type_index Entity<T>::type_id = type_index(typeid(T));
 
 
 #include "entity.tpp"

@@ -7,21 +7,8 @@
 
 class ECS final {
 	public:
-		ECS() {
-			assert(initialized == false && "Calling ECS constructor after it has been initialized!");
-
-			component_mgr = make_shared<ComponentMgr>();
-			entity_mgr = make_unique<EntityMgr>(component_mgr);
-
-			initialized = true;
-		}
-
-		~ECS() {
-			initialized = false;
-			entity_mgr.reset();
-			component_mgr.reset();
-		}
-
+		ECS();
+		~ECS();
 
 		template<typename EntityT, typename... ArgsT>
 		static Handle64 CreateEntity(ArgsT&&... args) {
@@ -59,9 +46,3 @@ class ECS final {
 		static unique_ptr<EntityMgr>    entity_mgr;
 		static shared_ptr<ComponentMgr> component_mgr;
 };
-
-
-// Initialize static members
-bool                     ECS::initialized = false;
-unique_ptr<EntityMgr>    ECS::entity_mgr;
-shared_ptr<ComponentMgr> ECS::component_mgr;

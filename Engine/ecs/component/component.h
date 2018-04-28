@@ -30,11 +30,11 @@ class IComponent {
 		void SetActive(bool state) { active = state; }
 		bool IsActive() const { return active; }
 
-		virtual const type_index GetTypeIDX() const = 0;
+		virtual const type_index GetTypeID() const = 0;
 
 
 	protected:
-		bool     active;
+		bool active;
 
 		// Set on creation in IEntity
 		Handle64 owner;
@@ -56,16 +56,16 @@ class Component : public IComponent {
 		Component() = default;
 		virtual ~Component() = default;
 
-		const type_index GetTypeIDX() const {
-			return type_idx;
+		const type_index GetTypeID() const {
+			return type_id;
 		}
 
 
 	public:
 		// An ID unique to type T
-		static const type_index type_idx;
+		static const type_index type_id;
 };
 
 
 template<typename T>
-const type_index Component<T>::type_idx = type_index(typeid(T));
+const type_index Component<T>::type_id = type_index(typeid(T));

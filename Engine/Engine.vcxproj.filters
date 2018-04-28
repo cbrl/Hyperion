@@ -683,5 +683,8 @@
     <ClCompile Include="util\memory\allocator\pool_allocator.cpp">
       <Filter>Source Files\util\memory\allocator</Filter>
     </ClCompile>
+    <ClCompile Include="ecs\ecs.cpp">
+      <Filter>Source Files\ecs</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

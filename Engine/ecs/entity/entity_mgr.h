@@ -5,93 +5,6 @@
 #include "ecs\handle\handle_table.h"
 
 
-//----------------------------------------------------------------------------------
-// EntityPool
-//----------------------------------------------------------------------------------
-//
-// A wrapper around a resource pool
-//
-//----------------------------------------------------------------------------------
-
-class IEntityPool {
-	public:
-		virtual ~IEntityPool() = default;
-
-		virtual void DestroyEntity(void* entity) = 0;
-};
-
-template<typename EntityT, size_t chunk_objects = 512>
-class EntityPool : public IEntityPool, public ResourcePool<EntityT, chunk_objects> {
-	public:
-		~EntityPool() = default;
-
-		void DestroyEntity(void* entity) {
-			this->DestroyObject(entity);
-		}
-};
-
-
-
-//----------------------------------------------------------------------------------
-// EntityPool Map
-//----------------------------------------------------------------------------------
-//
-// Creates a unique resource pool for each type of entity
-//
-//----------------------------------------------------------------------------------
-
-class EntityPoolMap final {
-	public:
-		EntityPoolMap() = default;
-
-		~EntityPoolMap() {
-			for (auto& pair : pools) {
-				delete pair.second;
-				pair.second = nullptr;
-			}
-		}
-
-
-		template<typename EntityT>
-		EntityPool<EntityT>* GetOrCreatePool() {
-
-			using pool_t = EntityPool<EntityT>;
-
-			const auto it = pools.find(EntityT::type_idx);
-
-			if (it == pools.end()) {
-				pools[EntityT::type_idx] = new pool_t();
-				return static_cast<pool_t*>(pools[EntityT::type_idx]);
-			}
-
-			return static_cast<pool_t*>(it->second);
-		}
-
-
-		template<typename EntityT>
-		EntityPool<EntityT>* GetPool() {
-			const auto it = pools.find(EntityT::type_idx);
-
-			assert(it != pools.end() && "Invalid entity pool type requested");
-
-			return it->second;
-		}
-
-
-		IEntityPool* GetPool(type_index type) {
-			const auto it = pools.find(type);
-
-			assert(it != pools.end() && "Invalid entity pool type requested");
-
-			return it->second;
-		}
-
-
-	private:
-		unordered_map<type_index, IEntityPool*> pools;
-};
-
-
 
 //----------------------------------------------------------------------------------
 // Entity Manager
@@ -121,11 +34,11 @@ class EntityMgr final {
 
 			// Create a handle
 			Handle64 handle = handle_table.CreateHandle(static_cast<IEntity*>(memory));
+			static_cast<IEntity*>(entity)->handle        = handle;
+			static_cast<IEntity*>(entity)->component_mgr = component_mgr;
 
 			// Create the entity
 			EntityT* entity = new(memory) EntityT(std::forward(args)...);
-			entity->handle        = handle;
-			entity->component_mgr = component_mgr;
 
 			return handle;
 		}
@@ -137,12 +50,12 @@ class EntityMgr final {
 			IEntity* entity = handle_table[handle];
 
 			// Get the entity type_index
-			auto type = handle_table[handle]->GetTypeIDX();
+			auto type = handle_table[handle]->GetTypeID();
 
 			// Get the appropriate pool witht the type_index
 			auto pool = entity_pools.GetPool(type);
 
-			pool->DestroyEntity(static_cast<void*>(entity));
+			pool->DestroyObject(static_cast<void*>(entity));
 
 			handle_table.ReleaseHandle(handle);
 		}
@@ -154,8 +67,12 @@ class EntityMgr final {
 
 
 	private:
-		EntityPoolMap entity_pools;
+		// Map of unique resource pools for each type of entity
+		ResourcePoolMap entity_pools;
+
+		// Handle table, which maps handles to a pointer to an entity
 		HandleTable<Handle64, IEntity> handle_table;
 
+		// A pointer to the component manager
 		shared_ptr<ComponentMgr> component_mgr;
 };
