@@ -36,17 +36,17 @@ ResourcePool<DataT, max_objs_per_chunk>::~ResourcePool() {
 template<typename DataT, size_t max_objs_per_chunk>
 void* ResourcePool<DataT, max_objs_per_chunk>::CreateObject() {
 
-	void* object = nullptr;
+	DataT* object = nullptr;
 
 	// Find a chunk with free space and create the object
 	for (auto chunk : memory_chunks) {
 
 		if (chunk->objects.size() >= max_objs_per_chunk) continue;
 
-		object = chunk->allocator->Allocate(sizeof(DataT), alignof(DataT));
+		object = chunk->allocator->Allocate();
 		
 		if (object) {
-			chunk->objects.push_back(static_cast<DataT*>(object));
+			chunk->objects.push_back();
 			break;
 		}
 	}
@@ -54,20 +54,20 @@ void* ResourcePool<DataT, max_objs_per_chunk>::CreateObject() {
 	// Create a new chunk if the others are full
 	if (!object) {
 
-		PoolAllocator* alloc = new PoolAllocator(alloc_size, sizeof(DataT), alignof(DataT));
+		PoolAllocator* alloc = new PoolAllocator<DataT>(alloc_size);
 
 		Chunk* chunk = new Chunk(alloc);
 		chunk->objects.clear();
 
 		memory_chunks.push_front(chunk);
 
-		object = chunk->allocator->Allocate(sizeof(DataT), alignof(DataT));
+		object = chunk->allocator->Allocate();
 
 		assert(object != nullptr && "Unable to create object.");
-		chunk->objects.push_back(static_cast<DataT*>(object));
+		chunk->objects.push_back();
 	}
 
-	return object;
+	return reinterpret_cast<void*>(object);
 }
 
 
@@ -81,7 +81,7 @@ void ResourcePool<DataT, max_objs_per_chunk>::DestroyObject(void* object) {
 		if (addr >= chunk->start_addr &&
 			addr < (chunk->start_addr + alloc_size)) {
 
-			reinterpret_cast<DataT*>(object)->~DataT();
+			static_cast<DataT*>(object)->~DataT();
 
 			chunk->objects.remove(static_cast<DataT*>(object));
 			chunk->allocator->Free(object);

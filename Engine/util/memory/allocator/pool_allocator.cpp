@@ -2,7 +2,8 @@
 #include "pool_allocator.h"
 
 
-PoolAllocator::PoolAllocator(const size_t memory_size, const size_t chunk_size, const size_t alignment)
+template<typename DataT>
+PoolAllocator<DataT>::PoolAllocator(const size_t memory_size, const size_t chunk_size, const size_t alignment)
 	: Allocator(memory_size)
 	, chunk_size(chunk_size)
 	, align(alignment) {
@@ -14,19 +15,22 @@ PoolAllocator::PoolAllocator(const size_t memory_size, const size_t chunk_size, 
 }
 
 
-PoolAllocator::~PoolAllocator() {
+template<typename DataT>
+PoolAllocator<DataT>::~PoolAllocator() {
 	free(start_ptr);
 	start_ptr = nullptr;
 }
 
 
-void PoolAllocator::Init() {
+template<typename DataT>
+void PoolAllocator<DataT>::Init() {
 	start_ptr = malloc(memory_size);
 	Reset();
 }
 
 
-void PoolAllocator::Reset() {
+template<typename DataT>
+void PoolAllocator<DataT>::Reset() {
 	memory_used = 0;
 	peak = 0;
 
@@ -43,7 +47,8 @@ void PoolAllocator::Reset() {
 }
 
 
-void* PoolAllocator::Allocate(const size_t size, const size_t alignment) {
+template<typename DataT>
+void* PoolAllocator<DataT>::Allocate(const size_t size, const size_t alignment) {
 
 	// Ensure the allocator is initialized and the arguments are valid.
 	assert(start_ptr != nullptr && "PoolAllocator not initialized");
@@ -62,10 +67,22 @@ void* PoolAllocator::Allocate(const size_t size, const size_t alignment) {
 	return static_cast<void*>(free_addr);
 }
 
+template<typename DataT>
+DataT* PoolAllocator<DataT>::Allocate() {
+	return static_cast<DataT*>(Allocate(sizeof(DataT), alignof(DataT)));
+}
 
-void PoolAllocator::Free(void* ptr) {
+
+template<typename DataT>
+void PoolAllocator<DataT>::Free(void* ptr) {
 
 	free_list.push_front(static_cast<Node*>(ptr));
 
 	this->memory_used -= chunk_size;
+}
+
+template<typename DataT>
+void PoolAllocator<DataT>::Free(DataT* ptr) {
+
+	this->Free(reinterpret_cast<void*>(ptr));
 }

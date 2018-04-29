@@ -157,13 +157,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ecs\component\component.h" />
-    <ClInclude Include="ecs\component\component_mgr.h" />
-    <ClInclude Include="ecs\ecs.h" />
-    <ClInclude Include="ecs\entity\entity.h" />
-    <ClInclude Include="ecs\entity\entity_mgr.h" />
-    <ClInclude Include="ecs\handle\handle.h" />
-    <ClInclude Include="ecs\handle\handle_table.h" />
     <ClInclude Include="geometry\bounding_volume\bounding_volume.h" />
     <ClInclude Include="geometry\frustum\frustum.h" />
     <ClInclude Include="geometry\shapes\bezier.h" />
@@ -199,6 +192,7 @@
     <ClInclude Include="resource\model\model_blueprint.h" />
     <ClInclude Include="resource\model\blueprint_factory.h" />
     <ClInclude Include="resource\model\model_output.h" />
+    <ClInclude Include="resource\resource.h" />
     <ClInclude Include="resource\resource_mgr.h" />
     <ClInclude Include="resource\texture\texture.h" />
     <ClInclude Include="scene\camera\camera_base.h" />
@@ -235,7 +229,6 @@
     <ClInclude Include="util\timer\timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ecs\ecs.cpp" />
     <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
     <ClCompile Include="geometry\shapes\shapes.tpp" />
@@ -302,8 +295,6 @@
     <ClInclude Include="loader\model_loader.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <None Include="ecs\entity\entity.tpp" />
-    <None Include="ecs\handle\handle_table.tpp" />
     <None Include="packages.config" />
     <ClInclude Include="rendering\buffer\constant_buffer.tpp">
       <FileType>Document</FileType>
@@ -319,7 +310,9 @@
     <ClInclude Include="resource\model\model_output.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <None Include="resource\resource_mgr.tpp" />
+    <ClInclude Include="resource\resource_mgr.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <None Include="shaders\include\light.hlsl">
       <FileType>Document</FileType>
     </None>

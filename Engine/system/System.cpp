@@ -23,10 +23,6 @@ bool System::Init() {
 	FILE_LOG(logINFO) << "Initialized main window";
 
 
-	// Initialize the entity component system
-	entity_component_system = make_unique<ECS>();
-
-
 	// Initialize system monitor
 	system_monitor = make_unique<SystemMonitor>();
 

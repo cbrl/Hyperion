@@ -15,13 +15,13 @@ template<typename DataT, size_t max_objs_per_chunk = 512>
 class ResourcePool : public IResourcePool {
 	private:
 		struct Chunk {
-			Chunk(PoolAllocator* alloc) : allocator(alloc) {
+			Chunk(PoolAllocator<DataT>* alloc) : allocator(alloc) {
 
 				start_addr  = allocator->GetStartAddr();
 				memory_size = alloc_size;
 			}
 
-			PoolAllocator*    allocator;
+			PoolAllocator<DataT>*    allocator;
 			std::list<DataT*> objects;
 
 			uintptr start_addr;
@@ -49,11 +49,15 @@ class ResourcePool : public IResourcePool {
 // ResourcePool Map
 //----------------------------------------------------------------------------------
 //
-// Creates a unique resource pool for each type of resource. Resources should derive
-// from a base class with a static member 'type_id' of type std::type_index.
-// This is used as an index into the map. It is kept as member so the proper
-// pool can be retrieved even when the specific resource type is unkown (e.g. when
-// a resource needs to be deleted, but is referred to by its base class).
+// Creates a unique resource pool for each type of resource.
+//
+// Requirements:
+//  - Base resource class has static member 'type_id' of type std::type_index
+//
+// type_id is used as an index into the map of resource pools. This requirement
+// allows the user to retrieve the proper pool even when the specific resource
+// type is unkown (e.g. when a resource needs to be destroyed, but is referred
+// to by its base class).
 //
 //----------------------------------------------------------------------------------
 

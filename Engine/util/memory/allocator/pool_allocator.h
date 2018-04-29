@@ -3,6 +3,7 @@
 #include "allocator.h"
 
 
+template<typename DataT>
 class PoolAllocator : public Allocator {
 
 	protected:
@@ -13,7 +14,7 @@ class PoolAllocator : public Allocator {
 				};
 
 			public:
-				Node * first;
+				Node* first;
 
 			public:
 				EmptyLinkedList() = default;
@@ -32,21 +33,26 @@ class PoolAllocator : public Allocator {
 
 
 	public:
-		PoolAllocator(const size_t memory_size, const size_t chunk_size, const size_t alignment);
+		PoolAllocator(const size_t memory_size, const size_t chunk_size = sizeof(DataT), const size_t alignment = alignof(DataT));
 		virtual ~PoolAllocator();
 
-		virtual void  Init() override;
-		virtual void  Reset();
-		virtual void* Allocate(const size_t size, const size_t alignment = 0) override;
-		virtual void  Free(void* ptr);
+		virtual void   Init() override;
+		virtual void   Reset();
+		virtual void*  Allocate(const size_t size = sizeof(DataT), const size_t alignment = alignof(DataT)) override;
+		virtual DataT* Allocate();
+		virtual void   Free(void* ptr);
+		virtual void   Free(DataT* ptr);
 
 
 	private:
 		EmptyLinkedList free_list;
-		using Node = EmptyLinkedList::Node;
 
 
 	protected:
 		const size_t chunk_size;
 		const size_t align;
+
+
+	public:
+		using value_type = DataT;
 };
