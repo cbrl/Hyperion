@@ -11,7 +11,7 @@ class StackAllocator : public Allocator {
 		virtual void  Init() override;
 		virtual void  Reset();
 		virtual void* Allocate(const size_t size, const size_t alignment = 0) override;
-		virtual void  Free(void* ptr);
+		virtual void  Free(void* ptr) override;
 
 
 	private:

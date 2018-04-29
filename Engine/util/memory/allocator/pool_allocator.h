@@ -39,13 +39,14 @@ class PoolAllocator : public Allocator {
 		virtual void   Init() override;
 		virtual void   Reset();
 		virtual void*  Allocate(const size_t size = sizeof(DataT), const size_t alignment = alignof(DataT)) override;
-		virtual DataT* Allocate();
-		virtual void   Free(void* ptr);
+		virtual DataT* AllocateCast();
+		virtual void   Free(void* ptr) override;
 		virtual void   Free(DataT* ptr);
 
 
 	private:
 		EmptyLinkedList free_list;
+		using Node = typename EmptyLinkedList::Node;
 
 
 	protected:
@@ -56,3 +57,6 @@ class PoolAllocator : public Allocator {
 	public:
 		using value_type = DataT;
 };
+
+
+#include "pool_allocator.tpp"

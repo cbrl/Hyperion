@@ -1,6 +1,8 @@
 #pragma once
 
 #include "util\datatypes\datatypes.h"
+#include "util\memory\resource_pool.h"
+#include "resource\resource.h"
 #include "resource\mesh\mesh.h"
 #include "resource\model\model_blueprint.h"
 #include "resource\model\model_output.h"
@@ -9,6 +11,47 @@
 
 
 class ModelBlueprint;
+
+
+
+//----------------------------------------------------------------------------------
+// ResourcePtr
+//----------------------------------------------------------------------------------
+//
+// Wraps the raw pointer to a resource, and a pointer to the
+// resource manager that created it. Automatically frees the
+// resource and its memory when the ResourcePtr is deleted.
+//
+//----------------------------------------------------------------------------------
+
+template<typename T>
+class ResourcePtr final {
+	friend class ResourceMgr;
+
+	public:
+		ResourcePtr(ResourceMgr* const res_mgr, T* data_ptr)
+			: data(data_ptr)
+			, mgr(res_mgr) {
+		}
+		~ResourcePtr() {
+			mgr->Destroy(data);
+			data = nullptr;
+		}
+
+		T* operator->() {
+			return data;
+		}
+		T& operator*() {
+			return *data;
+		}
+
+	private:
+		T* data;
+		ResourceMgr* const mgr;
+};
+
+
+
 
 
 template<typename KeyT, typename ValueT, template<typename...> typename MapT>
@@ -77,6 +120,24 @@ class ResourceMgr final {
 
 		// SpriteFonts
 		ResourceMap<wstring, SpriteFont> fonts;
+
+
+
+
+
+
+
+	public:
+		template<typename ResourceT, typename... ArgsT>
+		ResourcePtr<ResourceT> GetOrCreate(const wstring& key, ArgsT&&... args);
+
+		template<typename ResourceT>
+		void Destroy(ResourceT* resource);
+
+
+	private:
+		ResourcePoolMap resource_pools;
+		unordered_map<type_index, unordered_map<wstring, IResource*>> resources;
 };
 
 

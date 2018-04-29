@@ -157,6 +157,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ecs\component\component.h" />
+    <ClInclude Include="ecs\component\component_mgr.h" />
+    <ClInclude Include="ecs\ecs.h" />
+    <ClInclude Include="ecs\entity\entity.h" />
+    <ClInclude Include="ecs\entity\entity_mgr.h" />
+    <ClInclude Include="ecs\handle\handle.h" />
+    <ClInclude Include="ecs\handle\handle_table.h" />
     <ClInclude Include="geometry\bounding_volume\bounding_volume.h" />
     <ClInclude Include="geometry\frustum\frustum.h" />
     <ClInclude Include="geometry\shapes\bezier.h" />
@@ -229,6 +236,7 @@
     <ClInclude Include="util\timer\timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ecs\ecs.cpp" />
     <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
     <ClCompile Include="geometry\shapes\shapes.tpp" />
@@ -286,7 +294,6 @@
     <ClCompile Include="util\fps\fps.cpp" />
     <ClCompile Include="util\memory\allocator\allocator.cpp" />
     <ClCompile Include="util\memory\allocator\linear_allocator.cpp" />
-    <ClCompile Include="util\memory\allocator\pool_allocator.cpp" />
     <ClCompile Include="util\memory\allocator\stack_allocator.cpp" />
     <ClCompile Include="util\sysmon\system_monitor.cpp" />
     <ClCompile Include="util\timer\timer.cpp" />
@@ -295,6 +302,8 @@
     <ClInclude Include="loader\model_loader.tpp">
       <FileType>Document</FileType>
     </ClInclude>
+    <None Include="ecs\entity\entity.tpp" />
+    <None Include="ecs\handle\handle_table.tpp" />
     <None Include="packages.config" />
     <ClInclude Include="rendering\buffer\constant_buffer.tpp">
       <FileType>Document</FileType>
@@ -317,6 +326,9 @@
       <FileType>Document</FileType>
     </None>
     <ClInclude Include="util\memory\resource_pool.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <ClInclude Include="util\memory\allocator\pool_allocator.tpp">
       <FileType>Document</FileType>
     </ClInclude>
   </ItemGroup>

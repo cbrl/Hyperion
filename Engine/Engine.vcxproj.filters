@@ -241,6 +241,27 @@
     <Filter Include="Header Files\util\memory\allocator">
       <UniqueIdentifier>{8304ac09-19d3-4e54-8164-7359e97fc068}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ecs">
+      <UniqueIdentifier>{569ab87d-54ff-4d8d-bbab-ded8fef93e70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs\entity">
+      <UniqueIdentifier>{ed75abbc-969f-4fcb-98c6-601f295d4a8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs\component">
+      <UniqueIdentifier>{ac095284-bca0-4845-8c20-bd0fbf25a9b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs\handle">
+      <UniqueIdentifier>{555f7150-65bd-4fc6-9c10-17711b563ce0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs">
+      <UniqueIdentifier>{1907049a-3eda-44b2-b2c5-2bd15af5365c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs\entity">
+      <UniqueIdentifier>{2ffb782e-fa22-4181-9bbd-98776655ae49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs\handle">
+      <UniqueIdentifier>{a27d01cd-28d5-49d4-8f21-e54dbe576563}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -276,6 +297,12 @@
     <None Include="packages.config" />
     <None Include="resource\model\blueprint_factory.tpp">
       <Filter>Source Files\resource\model</Filter>
+    </None>
+    <None Include="ecs\handle\handle_table.tpp">
+      <Filter>Source Files\ecs\handle</Filter>
+    </None>
+    <None Include="ecs\entity\entity.tpp">
+      <Filter>Source Files\ecs\entity</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -513,6 +540,30 @@
     <ClInclude Include="resource\resource_mgr.tpp">
       <Filter>Source Files\resource</Filter>
     </ClInclude>
+    <ClInclude Include="util\memory\allocator\pool_allocator.tpp">
+      <Filter>Source Files\util\memory\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\entity\entity.h">
+      <Filter>Header Files\ecs\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\entity\entity_mgr.h">
+      <Filter>Header Files\ecs\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component\component.h">
+      <Filter>Header Files\ecs\component</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\component\component_mgr.h">
+      <Filter>Header Files\ecs\component</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\handle\handle.h">
+      <Filter>Header Files\ecs\handle</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\handle\handle_table.h">
+      <Filter>Header Files\ecs\handle</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\ecs.h">
+      <Filter>Header Files\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -635,8 +686,8 @@
     <ClCompile Include="util\memory\allocator\stack_allocator.cpp">
       <Filter>Source Files\util\memory\allocator</Filter>
     </ClCompile>
-    <ClCompile Include="util\memory\allocator\pool_allocator.cpp">
-      <Filter>Source Files\util\memory\allocator</Filter>
+    <ClCompile Include="ecs\ecs.cpp">
+      <Filter>Source Files\ecs</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

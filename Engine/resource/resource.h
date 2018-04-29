@@ -11,6 +11,14 @@ class IResource {
 			: guid(L"")
 		{}
 
+		IResource(const wstring& guid)
+			: guid(guid)
+		{}
+
+		IResource(wstring&& guid)
+			: guid(guid)
+		{}
+
 		virtual ~IResource() = default;
 
 		const wstring& GetGUID() const {
@@ -36,10 +44,10 @@ class Resource : public IResource {
 		}
 
 
-	protected:
-		const type_index type_id;
+	public:
+		static const type_index type_id;
 };
 
 
-//template<typename ResourceT>
-//const type_index Resource<ResourceT>::type_id = type_index(typeid(ResourceT));
+template<typename ResourceT>
+const type_index Resource<ResourceT>::type_id = type_index(typeid(ResourceT));

@@ -2,7 +2,7 @@
 template<typename DataT, size_t max_objs_per_chunk>
 ResourcePool<DataT, max_objs_per_chunk>::ResourcePool() {
 
-	PoolAllocator* alloc = new PoolAllocator(alloc_size, sizeof(DataT), alignof(DataT));
+	PoolAllocator<DataT>* alloc = new PoolAllocator<DataT>(alloc_size);
 
 	// Create the first chunk
 	memory_chunks.push_front(new Chunk(alloc));
@@ -43,10 +43,10 @@ void* ResourcePool<DataT, max_objs_per_chunk>::CreateObject() {
 
 		if (chunk->objects.size() >= max_objs_per_chunk) continue;
 
-		object = chunk->allocator->Allocate();
+		object = chunk->allocator->AllocateCast();
 		
 		if (object) {
-			chunk->objects.push_back();
+			chunk->objects.push_back(object);
 			break;
 		}
 	}
@@ -54,17 +54,17 @@ void* ResourcePool<DataT, max_objs_per_chunk>::CreateObject() {
 	// Create a new chunk if the others are full
 	if (!object) {
 
-		PoolAllocator* alloc = new PoolAllocator<DataT>(alloc_size);
+		PoolAllocator<DataT>* alloc = new PoolAllocator<DataT>(alloc_size);
 
 		Chunk* chunk = new Chunk(alloc);
 		chunk->objects.clear();
 
 		memory_chunks.push_front(chunk);
 
-		object = chunk->allocator->Allocate();
+		object = chunk->allocator->AllocateCast();
 
 		assert(object != nullptr && "Unable to create object.");
-		chunk->objects.push_back();
+		chunk->objects.push_back(object);
 	}
 
 	return reinterpret_cast<void*>(object);

@@ -1,6 +1,3 @@
-#include "stdafx.h"
-#include "pool_allocator.h"
-
 
 template<typename DataT>
 PoolAllocator<DataT>::PoolAllocator(const size_t memory_size, const size_t chunk_size, const size_t alignment)
@@ -68,8 +65,8 @@ void* PoolAllocator<DataT>::Allocate(const size_t size, const size_t alignment) 
 }
 
 template<typename DataT>
-DataT* PoolAllocator<DataT>::Allocate() {
-	return static_cast<DataT*>(Allocate(sizeof(DataT), alignof(DataT)));
+DataT* PoolAllocator<DataT>::AllocateCast() {
+	return static_cast<DataT*>(Allocate());
 }
 
 
