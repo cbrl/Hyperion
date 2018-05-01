@@ -9,8 +9,8 @@ ECS::ECS() {
 	if (Engine != nullptr) return;
 
 	component_mgr = make_shared<ComponentMgr>();
-	entity_mgr = make_unique<EntityMgr>(component_mgr);
-	Engine = this;
+	entity_mgr    = make_unique<EntityMgr>(component_mgr);
+	Engine        = this;
 }
 
 

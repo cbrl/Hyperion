@@ -55,5 +55,5 @@ class UserInterface {
 
 		void DrawCameraDetails(PlayerCamera& camera);
 
-		void DrawPopups(ID3D11Device* device, Scene& scene, Popups popup);
+		void DrawPopups(ID3D11Device* device, ResourceMgr& resource_mgr, Scene& scene, Popups popup);
 };

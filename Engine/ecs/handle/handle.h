@@ -17,7 +17,7 @@ struct Handle {
 				  "Size of handle type is smaller than number of bits specified");
 
 	public:
-		Handle() : Handle(0, 0) {}
+		Handle() {}
 
 		Handle(T value)
 			: index(value & index_bitmask)

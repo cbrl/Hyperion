@@ -2,11 +2,12 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
+#include "resource\resource.h"
 #include "rendering\pipeline.h"
 #include "loader\texture_loader.h"
 
 
-struct Texture final {
+struct Texture final : public Resource<Texture> {
 	public:
 		Texture() = default;
 		~Texture() = default;

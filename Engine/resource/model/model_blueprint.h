@@ -13,7 +13,7 @@
 class ResourceMgr;
 
 
-class ModelBlueprint final {
+class ModelBlueprint final : public Resource<ModelBlueprint> {
 	public:
 		ModelBlueprint() = default;
 		~ModelBlueprint() = default;

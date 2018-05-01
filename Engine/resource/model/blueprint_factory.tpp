@@ -1,7 +1,7 @@
 
 namespace BlueprintFactory {
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateCube(ID3D11Device* device, float size, bool rhcoords, bool invertn) {
+	shared_ptr<ModelBlueprint> CreateCube(ID3D11Device* device, ResourceMgr& resource_mgr, float size, bool rhcoords, bool invertn) {
 
 		// Model name
 		string name = "Cube " + to_string(size) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
@@ -40,11 +40,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateBox(ID3D11Device* device, const float3& size, bool rhcoords, bool invertn) {
+	shared_ptr<ModelBlueprint> CreateBox(ID3D11Device* device, ResourceMgr& resource_mgr, const float3& size, bool rhcoords, bool invertn) {
 
 		// Model name
 		string name = "Box " + to_string(size.x) + to_string(size.y) + to_string(size.z) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
@@ -83,11 +83,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateSphere(ID3D11Device* device, float diameter, size_t tessellation, bool rhcoords, bool invertn) {
+	shared_ptr<ModelBlueprint> CreateSphere(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, size_t tessellation, bool rhcoords, bool invertn) {
 
 		// Model name
 		string name = "Sphere " + to_string(diameter) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
@@ -126,11 +126,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateGeoSphere(ID3D11Device* device, float diameter, size_t tessellation, bool rhcoords) {
+	shared_ptr<ModelBlueprint> CreateGeoSphere(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, size_t tessellation, bool rhcoords) {
 
 		// Model name
 		string name = "GeoSphere " + to_string(diameter) + (rhcoords ? " RH" : "");
@@ -169,11 +169,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateCylinder(ID3D11Device* device, float diameter, float height, size_t tessellation, bool rhcoords) {
+	shared_ptr<ModelBlueprint> CreateCylinder(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, float height, size_t tessellation, bool rhcoords) {
 
 		// Model name
 		string name = "Cylinder " + to_string(height) + to_string(diameter) + (rhcoords ? " RH" : "");
@@ -212,11 +212,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateCone(ID3D11Device* device, float diameter, float height, size_t tessellation, bool rhcoords) {
+	shared_ptr<ModelBlueprint> CreateCone(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, float height, size_t tessellation, bool rhcoords) {
 
 		// Model name
 		string name = "Cone " + to_string(diameter) + to_string(height) + (rhcoords ? " RH" : "");
@@ -255,11 +255,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateTorus(ID3D11Device* device, float diameter, float thickness, size_t tessellation, bool rhcoords) {
+	shared_ptr<ModelBlueprint> CreateTorus(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, float thickness, size_t tessellation, bool rhcoords) {
 
 		// Model name
 		string name = "Torus " + to_string(diameter) + to_string(thickness) + (rhcoords ? " RH" : "");
@@ -298,11 +298,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateTetrahedron(ID3D11Device* device, float size, bool rhcoords) {
+	shared_ptr<ModelBlueprint> CreateTetrahedron(ID3D11Device* device, ResourceMgr& resource_mgr, float size, bool rhcoords) {
 
 		// Model name
 		string name = "Tetrahedron " + to_string(size) + (rhcoords ? " RH" : "");
@@ -341,11 +341,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateOctahedron(ID3D11Device* device, float size, bool rhcoords) {
+	shared_ptr<ModelBlueprint> CreateOctahedron(ID3D11Device* device, ResourceMgr& resource_mgr, float size, bool rhcoords) {
 
 		// Model name
 		string name = "Octahedron " + to_string(size) + (rhcoords ? " RH" : "");
@@ -384,11 +384,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateDodecahedron(ID3D11Device* device, float size, bool rhcoords) {
+	shared_ptr<ModelBlueprint> CreateDodecahedron(ID3D11Device* device, ResourceMgr& resource_mgr, float size, bool rhcoords) {
 
 		// Model name
 		string name = "Dodecahedron " + to_string(size) + (rhcoords ? " RH" : "");
@@ -427,11 +427,11 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateIcosahedron(ID3D11Device * device, float size, bool rhcoords) {
+	shared_ptr<ModelBlueprint> CreateIcosahedron(ID3D11Device * device, ResourceMgr& resource_mgr, float size, bool rhcoords) {
 
 		// Model name
 		string name = "Icosahedron " + to_string(size) + (rhcoords ? " RH" : "");
@@ -470,6 +470,6 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return make_shared<ModelBlueprint>(device, out);
+		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 }

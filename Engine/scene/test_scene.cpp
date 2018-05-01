@@ -86,13 +86,13 @@ void TestScene::Init(const System& system) {
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	auto bp = resource_mgr.Create<ModelBlueprint>(L"../data/models/test/test.obj");
+	auto bp = resource_mgr.GetOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
 	models.push_back(Model(device, bp));
 	models.back().Scale(float3(3.0f, 3.0f, 3.0f));
 	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
 	//models.back().SetRotation(0.0f, 1.2f, 0.0f);
 
-	auto n = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(device, 5.0f);
+	auto n = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(device, resource_mgr, 5.0f);
 	models.push_back(Model(device, n));
 
 

@@ -18,11 +18,9 @@ class IEntity {
 		IEntity() : active(true) {}
 
 		virtual ~IEntity() {
-			if (auto tmp = component_mgr.lock()) {
-				for (auto& pair : components) {
-					tmp->DestroyComponent(pair.second);
-					pair.second = nullptr;
-				}
+			for (auto& pair : components) {
+				component_mgr->DestroyComponent(pair.second);
+				pair.second = nullptr;
 			}
 		}
 
@@ -46,18 +44,19 @@ class IEntity {
 
 
 	protected:
-		bool     active;
+		// Is this entity active or should it be ignored?
+		bool active;
 
-		// Set on creation in EntityMgr
+		// Handle to this entity. Set on creation in EntityMgr.
 		Handle64 handle;
 
-		// Map of components. Holds 1 of each unique type.
+		// Map of pointers to components. Holds 1 of each unique type.
 		unordered_map<type_index, IComponent*> components;
 
 
 	private:
-		// Pointer to the ComponentMgr
-		weak_ptr<ComponentMgr> component_mgr;
+		// Pointer to the component manager
+		ComponentMgr* component_mgr;
 };
 
 

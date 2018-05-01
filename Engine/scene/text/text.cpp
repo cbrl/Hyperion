@@ -8,7 +8,7 @@ Text::Text(ResourceMgr& resource_mgr, const wstring& font_filename)
 	, color(Colors::White)
 	, rotation(0.0f) {
 
-	sprite_font  = resource_mgr.Create<SpriteFont>(font_filename);
+	font = resource_mgr.GetOrCreate<Font>(font_filename);
 }
 
 void Text::SetText(wstring new_text) {
@@ -53,7 +53,7 @@ void Text::SetRotation(float new_rotation) {
 
 
 const SpriteFont& Text::GetFont() const {
-	return *sprite_font.get();
+	return *font.get();
 }
 
 

@@ -36,7 +36,7 @@ void UserInterface::Draw(System& system) {
 		DrawObjectDetails(scene);
 		
 		// Draw the opened popup windows
-		DrawPopups(device, scene, popup);
+		DrawPopups(device, resource_mgr, scene, popup);
 	}
 	
 	// End window
@@ -81,7 +81,7 @@ void UserInterface::DrawMenu(ID3D11Device* device, ResourceMgr& resource_mgr, Sc
 					wchar_t szFile[512] = {};
 
 					if (OpenFilePicker(szFile, sizeof(szFile))) {
-						auto bp = resource_mgr.Create<ModelBlueprint>(szFile);
+						auto bp = resource_mgr.GetOrCreate<ModelBlueprint>(szFile);
 						scene.GetModels().push_back(Model(device, bp));
 					}
 					else {
@@ -571,7 +571,7 @@ void UserInterface::DrawLightDetails(SpotLightBuffer& light) {
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup) {
+void UserInterface::DrawPopups(ID3D11Device* device, ResourceMgr& resource_mgr, Scene& scene, Popups popup) {
 
 	switch (popup) {
 		case Popups::NewModelCopy:
@@ -650,7 +650,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 		ImGui::Checkbox("Invert Normals", &invertn);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(device, size, rhcoords, invertn);
+			auto bp = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(device, resource_mgr, size, rhcoords, invertn);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -674,7 +674,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 		ImGui::Checkbox("Invert Normals", &invertn);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateBox<VertexPositionNormalTexture>(device, size, rhcoords, invertn);
+			auto bp = BlueprintFactory::CreateBox<VertexPositionNormalTexture>(device, resource_mgr, size, rhcoords, invertn);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -709,7 +709,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(device, diameter, tessellation, rhcoords, invertn);
+			auto bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(device, resource_mgr, diameter, tessellation, rhcoords, invertn);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -742,7 +742,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateGeoSphere<VertexPositionNormalTexture>(device, diameter, tessellation, rhcoords);
+			auto bp = BlueprintFactory::CreateGeoSphere<VertexPositionNormalTexture>(device, resource_mgr, diameter, tessellation, rhcoords);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -777,7 +777,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateCylinder<VertexPositionNormalTexture>(device, diameter, height, tessellation, rhcoords);
+			auto bp = BlueprintFactory::CreateCylinder<VertexPositionNormalTexture>(device, resource_mgr, diameter, height, tessellation, rhcoords);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -812,7 +812,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateCone<VertexPositionNormalTexture>(device, diameter, height, tessellation, rhcoords);
+			auto bp = BlueprintFactory::CreateCone<VertexPositionNormalTexture>(device, resource_mgr, diameter, height, tessellation, rhcoords);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -847,7 +847,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateTorus<VertexPositionNormalTexture>(device, diameter, thickness, tessellation, rhcoords);
+			auto bp = BlueprintFactory::CreateTorus<VertexPositionNormalTexture>(device, resource_mgr, diameter, thickness, tessellation, rhcoords);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -869,7 +869,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateTetrahedron<VertexPositionNormalTexture>(device, size, rhcoords);
+			auto bp = BlueprintFactory::CreateTetrahedron<VertexPositionNormalTexture>(device, resource_mgr, size, rhcoords);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -891,7 +891,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateOctahedron<VertexPositionNormalTexture>(device, size, rhcoords);
+			auto bp = BlueprintFactory::CreateOctahedron<VertexPositionNormalTexture>(device, resource_mgr, size, rhcoords);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -913,7 +913,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateDodecahedron<VertexPositionNormalTexture>(device, size, rhcoords);
+			auto bp = BlueprintFactory::CreateDodecahedron<VertexPositionNormalTexture>(device, resource_mgr, size, rhcoords);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}
@@ -935,7 +935,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, Scene& scene, Popups popup)
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateIcosahedron<VertexPositionNormalTexture>(device, size, rhcoords);
+			auto bp = BlueprintFactory::CreateIcosahedron<VertexPositionNormalTexture>(device, resource_mgr, size, rhcoords);
 			scene.GetModels().push_back(Model(device, bp));
 			ImGui::CloseCurrentPopup();
 		}

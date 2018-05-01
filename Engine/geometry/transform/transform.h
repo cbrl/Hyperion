@@ -2,9 +2,10 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
+#include "ecs\component\component.h"
 
 
-class Transform final {
+class Transform final : public Component<Transform> {
 	public:
 		Transform();
 		~Transform() = default;

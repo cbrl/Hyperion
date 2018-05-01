@@ -9,6 +9,8 @@
 #include "scene\camera\skybox\skybox.h"
 #include "scene\camera\player_camera.h"
 #include "scene\ui\user_interface.h"
+#include "scene\entities\world_object.h"
+
 
 class System;
 
@@ -102,6 +104,8 @@ class Scene {
 		vector<DirectionalLightBuffer> directional_lights;
 		vector<SpotLightBuffer>        spot_lights;
 		map<string, Text>              texts;
+
+		vector<Handle64>               entities;
 
 
 	public:

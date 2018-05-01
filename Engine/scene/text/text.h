@@ -1,7 +1,6 @@
 #pragma once
 
 #include <d3d11.h>
-#include <SpriteFont.h>
 #include <DirectXColors.h>
 #include "util\datatypes\datatypes.h"
 #include "resource\resource_mgr.h"
@@ -29,7 +28,7 @@ class Text final {
 
 
 	private:
-		shared_ptr<SpriteFont>  sprite_font;
+		shared_ptr<Font> font;
 
 		wstring     text;
 		float2      position;

@@ -7,7 +7,7 @@ void SkyBox::Init(ID3D11Device* device,
 				  const wstring& filename) {
 
 	// Create the texture
-	texture = resource_mgr.Create<Texture>(filename);
+	texture = resource_mgr.GetOrCreate<Texture>(filename);
 
 	// Set the vertex stride
 	stride = sizeof(VertexPosition);

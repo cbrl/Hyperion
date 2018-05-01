@@ -3,40 +3,19 @@
 #include "util\datatypes\datatypes.h"
 
 
-class IResource {
-	friend class ResourceMgr;
-
-	public:
-		IResource()
-			: guid(L"")
-		{}
-
-		IResource(const wstring& guid)
-			: guid(guid)
-		{}
-
-		IResource(wstring&& guid)
-			: guid(guid)
-		{}
-
-		virtual ~IResource() = default;
-
-		const wstring& GetGUID() const {
-			return guid;
-		}
-
-		virtual const type_index GetTypeID() const = 0;
-
-
-	protected:
-		wstring guid;
-};
-
-
 template<typename ResourceT>
-class Resource : public IResource {
+class Resource {
 	public:
 		Resource() = default;
+
+		Resource(const wstring& guid)
+			: guid(guid) {
+		}
+
+		Resource(wstring&& guid)
+			: guid(guid) {
+		}
+
 		virtual ~Resource() = default;
 
 		const type_index GetTypeID() const {
@@ -45,6 +24,7 @@ class Resource : public IResource {
 
 
 	public:
+		wstring guid;
 		static const type_index type_id;
 };
 

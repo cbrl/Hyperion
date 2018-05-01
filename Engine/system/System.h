@@ -8,6 +8,7 @@
 #include "util\sysmon\system_monitor.h"
 #include "util\timer\timer.h"
 #include "util\fps\fps.h"
+#include "ecs\ecs.h"
 #include "input\input.h"
 #include "rendering\rendering_mgr.h"
 #include "scene\scene.h"
@@ -52,6 +53,7 @@ class System final : public MainWindow {
 
 
 	private:
+		unique_ptr<ECS>           ecs_engine;
 		unique_ptr<Input>         input;
 		unique_ptr<SystemMonitor> system_monitor;
 		unique_ptr<Timer>         timer;

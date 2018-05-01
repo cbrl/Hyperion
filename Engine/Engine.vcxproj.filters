@@ -262,6 +262,12 @@
     <Filter Include="Source Files\ecs\handle">
       <UniqueIdentifier>{a27d01cd-28d5-49d4-8f21-e54dbe576563}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resource\font">
+      <UniqueIdentifier>{6760fb45-3e43-4cb0-92ea-3929979cc9d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\entities">
+      <UniqueIdentifier>{66c7bda3-ad39-442a-a6ae-de8731ac35cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -563,6 +569,12 @@
     </ClInclude>
     <ClInclude Include="ecs\ecs.h">
       <Filter>Header Files\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\font\font.h">
+      <Filter>Header Files\resource\font</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\entities\world_object.h">
+      <Filter>Header Files\scene\entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
