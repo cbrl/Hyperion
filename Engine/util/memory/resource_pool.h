@@ -35,40 +35,43 @@ class ResourcePool : public IResourcePool {
 			using object_iter = typename std::list<DataT*>::iterator;
 
 			public:
-			iterator(chunk_iter begin, chunk_iter end)
-				: chunk_current(begin)
-				, chunk_end(end) {
+				iterator(chunk_iter begin, chunk_iter end)
+					: chunk_current(begin)
+					, chunk_end(end) {
 
-				if (begin != end) {
-					assert(*chunk_current != nullptr && "ResourcePool - Invalid iterator");
-					object_current = (*chunk_current)->objects.begin();
-				}
-			}
-
-			iterator& operator++() {
-
-				object_current++;
-
-				if (object_current == (*chunk_current)->objects.end()) {
-					chunk_current++;
-
-					if (chunk_current != chunk_end) {
+					if (begin != end) {
 						assert(*chunk_current != nullptr && "ResourcePool - Invalid iterator");
 						object_current = (*chunk_current)->objects.begin();
 					}
 				}
 
-				return *this;
-			}
+				iterator& operator++() {
 
-			DataT& operator*()  const { return object_current.operator*(); }
-			DataT* operator->() const { return object_current.operator->(); }
+					object_current++;
+
+					if (object_current == (*chunk_current)->objects.end()) {
+						chunk_current++;
+
+						if (chunk_current != chunk_end) {
+							assert(*chunk_current != nullptr && "ResourcePool - Invalid iterator");
+							object_current = (*chunk_current)->objects.begin();
+						}
+					}
+
+					return *this;
+				}
+
+				bool operator==(const iterator& compare) const { return chunk_current == compare.chunk_current; }
+				bool operator!=(const iterator& compare) const { return chunk_current != compare.chunk_current; }
+
+				DataT& operator*()  const { return object_current.operator*(); }
+				DataT* operator->() const { return object_current.operator->(); }
 
 
 			private:
-			chunk_iter  chunk_current;
-			chunk_iter  chunk_end;
-			object_iter object_current;
+				chunk_iter  chunk_current;
+				chunk_iter  chunk_end;
+				object_iter object_current;
 		};
 
 
