@@ -41,9 +41,9 @@ class DynamicResourceMap final {
 		DynamicResourceMap() = default;
 
 		~DynamicResourceMap() {
-			for (auto& pair : resource_maps) {
-				delete pair.second;
-				pair.second = nullptr;
+			for (auto& [key, val] : resource_maps) {
+				delete val;
+				val = nullptr;
 			}
 		}
 

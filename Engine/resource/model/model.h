@@ -1,11 +1,12 @@
 #pragma once
 
 #include "util\engine_util.h"
+#include "util\datatypes\datatypes.h"
 #include "util\io\io.h"
 #include "util\math\math.h"
-#include "util\datatypes\datatypes.h"
 
 
+#include "ecs\component\component.h"
 #include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
 #include "resource\mesh\mesh.h"
@@ -30,10 +31,10 @@ class ModelChild final {
 			, sphere(part.sphere) {
 		}
 
-		void XM_CALLCONV Update(ID3D11DeviceContext* device_context,
-								FXMMATRIX world,
-								CXMMATRIX world_inv_transpose,
-								CXMMATRIX world_view_proj);
+		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext* device_context,
+									  FXMMATRIX world,
+									  CXMMATRIX world_inv_transpose,
+									  CXMMATRIX world_view_proj);
 
 		void XM_CALLCONV UpdateBoundingVolumes(FXMMATRIX transform) {
 			aabb.Transform(transform);
@@ -80,7 +81,7 @@ class ModelChild final {
 
 
 
-class Model final {
+class Model final : public Component<Model> {
 	public:
 		Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint);
 		~Model() = default;
@@ -106,43 +107,11 @@ class Model final {
 		}
 
 
-		//----------------------------------------------------------------------------------
-		// Move / Rotate / Scale
-		//----------------------------------------------------------------------------------
-
-		void SetPosition(const float3& position) {
-			update_bounding_volumes = true;
-			transform.SetPosition(position);
-		}
-
-		void Move(const float3& position) {
-			update_bounding_volumes = true;
-			transform.Move(position);
-		}
-
-		void SetRotation(const float3& rotation) {
-			update_bounding_volumes = true;
-			transform.SetRotation(rotation);
-		}
-
-		void Rotate(const float3& rotation) {
-			update_bounding_volumes = true;
-			transform.Rotate(rotation);
-		}
-
-		void SetScale(const float3& scale) {
-			update_bounding_volumes = true;
-			transform.SetScale(scale);
-		}
-
-		void Scale(const float3& scale) {
-			update_bounding_volumes = true;
-			transform.Scale(scale);
-		}
-
-
 		// Update model matrix and bounding volumes, as well as those of the child models.
-		void XM_CALLCONV Update(ID3D11DeviceContext* device_context, FXMMATRIX view, CXMMATRIX proj);
+		void XM_CALLCONV Update(ID3D11DeviceContext* device_context,
+								FXMMATRIX world,
+								CXMMATRIX view,
+								CXMMATRIX proj);
 
 
 		//----------------------------------------------------------------------------------
@@ -152,7 +121,6 @@ class Model final {
 		const string&         GetName()      const { return name; }
 		const AABB&           GetAABB()      const { return aabb; }
 		const BoundingSphere& GetSphere()    const { return sphere; }
-		const Transform&      GetTransform() const { return transform; }
 
 
 	private:
@@ -165,9 +133,6 @@ class Model final {
 		// Bounding volumes
 		AABB aabb;
 		BoundingSphere sphere;
-
-		// The model's transform
-		Transform transform;
 		
 		// The child models that make up this model
 		vector<ModelChild> child_models;

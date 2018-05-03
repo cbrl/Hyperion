@@ -9,7 +9,7 @@
 #include "scene\camera\skybox\skybox.h"
 #include "scene\camera\player_camera.h"
 #include "scene\ui\user_interface.h"
-#include "scene\entities\world_object.h"
+#include "scene\entities\entities.h"
 
 
 class System;
@@ -139,6 +139,14 @@ class Scene {
 				for (auto& e : spot_lights) {
 					act(e);
 				}
+			}
+		}
+
+
+		template<typename ActionT>
+		void ForEachEntity(ActionT act) {
+			for (Handle64 entity : entities) {
+				act(entity);
 			}
 		}
 };

@@ -466,7 +466,7 @@ void UserInterface::DrawCameraDetails(PlayerCamera& camera) {
 
 
 void UserInterface::DrawModelDetails(Model& model) {
-
+	/*
 	ImGui::Text(model.GetName().c_str());
 	ImGui::Separator();
 
@@ -488,6 +488,7 @@ void UserInterface::DrawModelDetails(Model& model) {
 
 	if (ImGui::DragFloat3("Scale", scale.Data(), 0.01f, -FLT_MAX, FLT_MAX))
 		model.SetScale(scale);
+	*/
 }
 
 

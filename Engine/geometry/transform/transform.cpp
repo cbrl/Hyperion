@@ -3,7 +3,8 @@
 
 
 Transform::Transform()
-	: translation(XMVectorZero())
+	: parent(Handle64::invalid_handle)
+	, translation(XMVectorZero())
 	, rotation(XMVectorZero())
 	, scale(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f))
 	, world(XMMatrixIdentity())

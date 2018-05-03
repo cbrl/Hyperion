@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include "util\datatypes\datatypes.h"
+#include "ecs\component\component.h"
 #include "rendering\pipeline.h"
 #include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
@@ -10,7 +11,7 @@
 #include "scene\camera\skybox\skybox.h"
 
 
-class CameraBase {
+class CameraBase : public Component<CameraBase> {
 	protected:
 		CameraBase(ID3D11Device* device,
 				   ID3D11DeviceContext* device_context,

@@ -33,8 +33,15 @@ class Transform final : public Component<Transform> {
 		const XMVECTOR& GetRotation() const { return rotation; }
 		const XMVECTOR& GetScale()    const { return scale; }
 
+		XMMATRIX GetPositionMatrix() const { return XMMatrixTranslationFromVector(translation); }
+		XMMATRIX GetRotationMatrix() const { return XMMatrixRotationRollPitchYawFromVector(rotation); }
+		XMMATRIX GetScaleMatrix()    const { return XMMatrixScalingFromVector(scale); }
+
 
 	private:
+		// The parent of the entity this transform is assigned to (optional)
+		Handle64 parent;
+
 		// The object-to-world matrix
 		XMMATRIX world;
 		

@@ -3,9 +3,9 @@
 
 
 CameraBase::CameraBase(ID3D11Device* device,
-					   ID3D11DeviceContext* device_context,
-					   u32 viewport_width,
-					   u32 viewport_height)
+						  ID3D11DeviceContext* device_context,
+						  u32 viewport_width,
+						  u32 viewport_height)
 	: buffer(device)
 	, viewport({ 0.0f, 0.0f, 0.0f, 0.f, 0.0f, 1.0f })
 	, position(XMVectorZero())
@@ -27,15 +27,15 @@ CameraBase::CameraBase(ID3D11Device* device,
 
 void CameraBase::SetRotation(const float3& rotation) {
 	pitch = rotation.x;
-	yaw = rotation.y;
-	roll = rotation.z;
+	yaw   = rotation.y;
+	roll  = rotation.z;
 
 	// Transform the forward/right/up vectors before updating the view matrix
 	XMMATRIX M = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 
 	camera_forward = XMVector3TransformNormal(default_forward, M);
-	camera_right = XMVector3TransformNormal(default_right, M);
-	camera_up = XMVector3TransformNormal(default_up, M);
+	camera_right   = XMVector3TransformNormal(default_right, M);
+	camera_up      = XMVector3TransformNormal(default_up, M);
 
 	UpdateViewMatrix();
 }

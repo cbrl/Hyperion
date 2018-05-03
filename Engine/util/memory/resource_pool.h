@@ -21,7 +21,7 @@ class ResourcePool : public IResourcePool {
 				memory_size = alloc_size;
 			}
 
-			PoolAllocator<DataT>*    allocator;
+			PoolAllocator<DataT>* allocator;
 			std::list<DataT*> objects;
 
 			uintptr start_addr;
@@ -30,17 +30,62 @@ class ResourcePool : public IResourcePool {
 
 
 	public:
+		class iterator : public std::iterator<std::forward_iterator_tag, DataT> {
+			using chunk_iter = typename std::list<Chunk*>::iterator;
+			using object_iter = typename std::list<DataT*>::iterator;
+
+			public:
+			iterator(chunk_iter begin, chunk_iter end)
+				: chunk_current(begin)
+				, chunk_end(end) {
+
+				if (begin != end) {
+					assert(*chunk_current != nullptr && "ResourcePool - Invalid iterator");
+					object_current = (*chunk_current)->objects.begin();
+				}
+			}
+
+			iterator& operator++() {
+
+				object_current++;
+
+				if (object_current == (*chunk_current)->objects.end()) {
+					chunk_current++;
+
+					if (chunk_current != chunk_end) {
+						assert(*chunk_current != nullptr && "ResourcePool - Invalid iterator");
+						object_current = (*chunk_current)->objects.begin();
+					}
+				}
+
+				return *this;
+			}
+
+			DataT& operator*()  const { return object_current.operator*(); }
+			DataT* operator->() const { return object_current.operator->(); }
+
+
+			private:
+			chunk_iter  chunk_current;
+			chunk_iter  chunk_end;
+			object_iter object_current;
+		};
+
+
+	public:
 		ResourcePool();
 		~ResourcePool();
 
-		void* CreateObject();
-		void  DestroyObject(void* object);
+		void* CreateObject() override;
+		void  DestroyObject(void* object) override;
+
+		iterator begin() { return iterator(memory_chunks.begin(), memory_chunks.end()); }
+		iterator end()   { return iterator(memory_chunks.end(),   memory_chunks.end()); }
 
 
 	private:
 		std::list<Chunk*> memory_chunks;
-
-		static const size_t alloc_size = max_objs_per_chunk * sizeof(DataT);
+		static constexpr size_t alloc_size = max_objs_per_chunk * sizeof(DataT);
 };
 
 
@@ -77,7 +122,7 @@ class ResourcePoolMap final {
 
 			using pool_t = ResourcePool<ResourceT>;
 
-			const auto it = pools.find(ResourceT::type_id);
+			const auto& it = pools.find(ResourceT::type_id);
 
 			if (it == pools.end()) {
 				pools[ResourceT::type_id] = new pool_t();
@@ -89,7 +134,7 @@ class ResourcePoolMap final {
 
 		template<typename ResourceT>
 		ResourcePool<ResourceT>* GetPool() {
-			const auto it = pools.find(ResourceT::type_id);
+			const auto& it = pools.find(ResourceT::type_id);
 
 			assert(it != pools.end() && "Invalid resource pool type requested");
 
@@ -97,7 +142,7 @@ class ResourcePoolMap final {
 		}
 
 		IResourcePool* GetPool(type_index type) {
-			const auto it = pools.find(type);
+			const auto& it = pools.find(type);
 
 			assert(it != pools.end() && "Invalid resource pool type requested");
 

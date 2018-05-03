@@ -2,15 +2,15 @@
 #include "ecs.h"
 
 
-ECS* ECS::Engine = nullptr;
+ECS* ECS::engine = nullptr;
 
 
 ECS::ECS() {
-	if (Engine != nullptr) return;
+	if (engine != nullptr) return;
 
 	component_mgr = make_shared<ComponentMgr>();
 	entity_mgr    = make_unique<EntityMgr>(component_mgr);
-	Engine        = this;
+	engine        = this;
 }
 
 
@@ -18,5 +18,5 @@ ECS::~ECS() {
 	entity_mgr.reset();
 	component_mgr.reset();
 
-	Engine = nullptr;
+	engine = nullptr;
 }

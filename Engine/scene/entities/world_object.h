@@ -13,7 +13,8 @@
 //
 //----------------------------------------------------------------------------------
 
-class WorldObject : public Entity<WorldObject> {
+template<typename T>
+class WorldObject : public Entity<T> {
 	public:
 		WorldObject() {
 			this->AddComponent<Transform>();

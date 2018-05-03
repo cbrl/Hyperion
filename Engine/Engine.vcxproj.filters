@@ -268,6 +268,12 @@
     <Filter Include="Header Files\scene\entities">
       <UniqueIdentifier>{66c7bda3-ad39-442a-a6ae-de8731ac35cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ecs\system">
+      <UniqueIdentifier>{8dc63880-a975-4c71-b716-681dd7183b69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs\system">
+      <UniqueIdentifier>{486691de-b9c1-419b-b597-83dc39814c2e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -300,7 +306,6 @@
     <None Include="shaders\include\normal.hlsl">
       <Filter>Resource Files\shaders\include</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="resource\model\blueprint_factory.tpp">
       <Filter>Source Files\resource\model</Filter>
     </None>
@@ -310,6 +315,7 @@
     <None Include="ecs\entity\entity.tpp">
       <Filter>Source Files\ecs\entity</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -576,6 +582,18 @@
     <ClInclude Include="scene\entities\world_object.h">
       <Filter>Header Files\scene\entities</Filter>
     </ClInclude>
+    <ClInclude Include="ecs\system\system.h">
+      <Filter>Header Files\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs\system\system_mgr.h">
+      <Filter>Header Files\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\entities\basic_model.h">
+      <Filter>Header Files\scene\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\entities\entities.h">
+      <Filter>Header Files\scene\entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -700,6 +718,9 @@
     </ClCompile>
     <ClCompile Include="ecs\ecs.cpp">
       <Filter>Source Files\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs\system\system_mgr.cpp">
+      <Filter>Source Files\ecs\system</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

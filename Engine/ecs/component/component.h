@@ -23,17 +23,24 @@ class IComponent {
 
 		virtual ~IComponent() = default;
 
+		virtual const type_index GetTypeID() const = 0;
+
 		const Handle64 GetOwner() const {
 			return owner;
 		}
 
-		void SetActive(bool state) { active = state; }
-		bool IsActive() const { return active; }
+		void SetActive(bool state) {
+			active = state;
+		}
 
-		virtual const type_index GetTypeID() const = 0;
+		bool IsActive() const {
+			return active;
+		}
+
 
 
 	protected:
+		// Is the component active?
 		bool active;
 
 		// Set on creation in IEntity
@@ -56,7 +63,7 @@ class Component : public IComponent {
 		Component() = default;
 		virtual ~Component() = default;
 
-		const type_index GetTypeID() const {
+		const type_index GetTypeID() const override {
 			return type_id;
 		}
 

@@ -10,9 +10,16 @@ class ECS final {
 		ECS();
 		~ECS();
 
+		static ECS* const Get() {
+			return engine;
+		}
+
 		template<typename EntityT, typename... ArgsT>
 		Handle64 CreateEntity(ArgsT&&... args) {
-			return entity_mgr->CreateEntity<EntityT>(std::forward(args)...);
+			static_assert(std::is_base_of_v<IEntity, EntityT>,
+						  "Calling ECS::CreateEntity() with non-component type.");
+
+			return entity_mgr->CreateEntity<EntityT>(std::forward<ArgsT>(args)...);
 		}
 
 		void DestroyEntity(Handle64 entity) {
@@ -21,7 +28,10 @@ class ECS final {
 
 		template<typename ComponentT, typename... ArgsT>
 		void AddComponent(Handle64 entity, ArgsT&&... args) {
-			entity_mgr->GetEntity(entity)->AddComponent<ComponentT>(std::forward(args)...);
+			static_assert(std::is_base_of_v<IComponent, ComponentT>,
+						  "Calling ECS::AddComponent() with non-component type.");
+
+			entity_mgr->GetEntity(entity)->AddComponent<ComponentT>(std::forward<ArgsT>(args)...);
 		}
 
 		template<typename ComponentT>
@@ -34,12 +44,25 @@ class ECS final {
 			return entity_mgr->GetEntity(entity)->GetComponent<ComponentT>();
 		}
 
-
-	public:
-		static ECS* Engine;
+		// Do something to each entity or component
+		template<typename T, typename ActionT>
+		void ForEach(ActionT act) {
+			if constexpr (std::is_base_of_v<IEntity, T>) {
+				for (auto resource = entity_mgr->begin<T>(); resource != entity_mgr->end<T>(); ++resource) {
+					act(resource);
+				}
+			}
+			if constexpr (std::is_base_of_v<IComponent, T>) {
+				for (auto resource = component_mgr->begin<T>(); resource != component_mgr->end<T>(); ++resource) {
+					act(resource);
+				}
+			}
+		}
 
 
 	private:
+		static ECS* engine;
+
 		unique_ptr<EntityMgr>    entity_mgr;
 		shared_ptr<ComponentMgr> component_mgr;
 };

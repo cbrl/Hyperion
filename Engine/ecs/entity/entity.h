@@ -24,13 +24,20 @@ class IEntity {
 			}
 		}
 
-		void SetActive(bool state) { active = state; }
-		bool IsActive() const { return active; }
-
 		virtual const type_index GetTypeID() const = 0;
 
+		void SetActive(bool state) {
+			active = state;
+		}
+
+		bool IsActive() const {
+			return active;
+		}
+
 		[[nodiscard]]
-		const Handle64 GetHandle() const { return handle; }
+		const Handle64 GetHandle() const {
+			return handle;
+		}
 
 		template<typename ComponentT>
 		[[nodiscard]]
@@ -75,7 +82,7 @@ class Entity : public IEntity {
 		Entity() = default;
 		virtual ~Entity() = default;
 
-		virtual const type_index GetTypeID() const {
+		virtual const type_index GetTypeID() const override {
 			return type_id;
 		}
 

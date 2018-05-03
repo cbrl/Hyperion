@@ -63,7 +63,7 @@ void* ResourcePool<DataT, max_objs_per_chunk>::CreateObject() {
 
 		object = chunk->allocator->AllocateCast();
 
-		assert(object != nullptr && "Unable to create object.");
+		assert(object != nullptr && "ResourcePool::CreateObject() - Unable to create object.");
 		chunk->objects.push_back(object);
 	}
 

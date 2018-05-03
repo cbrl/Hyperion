@@ -90,7 +90,7 @@ namespace BlueprintFactory {
 	shared_ptr<ModelBlueprint> CreateSphere(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, size_t tessellation, bool rhcoords, bool invertn) {
 
 		// Model name
-		string name = "Sphere " + to_string(diameter) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
+		string name = "Sphere " + to_string(diameter) + to_string(tessellation) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
 
 
 		// Compute the vertices and indices
@@ -133,7 +133,7 @@ namespace BlueprintFactory {
 	shared_ptr<ModelBlueprint> CreateGeoSphere(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, size_t tessellation, bool rhcoords) {
 
 		// Model name
-		string name = "GeoSphere " + to_string(diameter) + (rhcoords ? " RH" : "");
+		string name = "GeoSphere " + to_string(diameter) + to_string(tessellation) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices
@@ -176,7 +176,7 @@ namespace BlueprintFactory {
 	shared_ptr<ModelBlueprint> CreateCylinder(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, float height, size_t tessellation, bool rhcoords) {
 
 		// Model name
-		string name = "Cylinder " + to_string(height) + to_string(diameter) + (rhcoords ? " RH" : "");
+		string name = "Cylinder " + to_string(height) + to_string(diameter) + to_string(tessellation) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices
@@ -219,7 +219,7 @@ namespace BlueprintFactory {
 	shared_ptr<ModelBlueprint> CreateCone(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, float height, size_t tessellation, bool rhcoords) {
 
 		// Model name
-		string name = "Cone " + to_string(diameter) + to_string(height) + (rhcoords ? " RH" : "");
+		string name = "Cone " + to_string(diameter) + to_string(height) + to_string(tessellation) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices
@@ -262,7 +262,7 @@ namespace BlueprintFactory {
 	shared_ptr<ModelBlueprint> CreateTorus(ID3D11Device* device, ResourceMgr& resource_mgr, float diameter, float thickness, size_t tessellation, bool rhcoords) {
 
 		// Model name
-		string name = "Torus " + to_string(diameter) + to_string(thickness) + (rhcoords ? " RH" : "");
+		string name = "Torus " + to_string(diameter) + to_string(thickness) + to_string(tessellation) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices

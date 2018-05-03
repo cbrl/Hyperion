@@ -26,7 +26,7 @@
 class System final : public MainWindow {
 	public:
 		System() = default;
-		~System() = default;
+		~System();
 
 		bool Init();
 		void Run();

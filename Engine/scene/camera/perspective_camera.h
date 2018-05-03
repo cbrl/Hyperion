@@ -22,7 +22,7 @@ class PerspectiveCamera : public CameraBase {
 
 	protected:
 		// Update the projection matrix after changing depth/width/height/etc...
-		void UpdateProjectionMatrix();
+		void UpdateProjectionMatrix() override;
 
 
 	protected:

@@ -26,6 +26,9 @@ class EntityMgr final {
 		template<typename EntityT, typename... ArgsT>
 		Handle64 CreateEntity(ArgsT&&... args) {
 
+			static_assert(std::is_base_of_v<IEntity, EntityT>,
+						  "Calling EntityMgr::CreateEntity() with non-entity type.");
+
 			// Get the proper entity pool
 			auto pool = entity_pools.GetOrCreatePool<EntityT>();
 
@@ -64,6 +67,21 @@ class EntityMgr final {
 
 		IEntity* GetEntity(Handle64 handle) {
 			return handle_table[handle];
+		}
+
+
+		template<typename EntityT>
+		typename ResourcePool<EntityT>::iterator begin() {
+			using pool_t = ResourcePool<EntityT>;
+			auto* pool = static_cast<pool_t*>(entity_pools.GetPool<EntityT>());
+			return pool->begin();
+		}
+
+		template<typename EntityT>
+		typename ResourcePool<EntityT>::iterator end() {
+			using pool_t = ResourcePool<EntityT>;
+			auto* pool = static_cast<pool_t*>(entity_pools.GetPool<EntityT>());
+			return pool->end();
 		}
 
 

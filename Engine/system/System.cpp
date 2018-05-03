@@ -9,6 +9,15 @@
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
+System::~System() {
+	// Explicity delete the scene and entity component system before
+	// the rendering manager. This avoids D3D reporting live resources
+	// that are going to be deleted right after the report.
+	scene.reset();
+	ecs_engine.reset();
+}
+
+
 bool System::Init() {
 
 	// Set width/height variables. Later on this can be read from a config file.
