@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ecs\entity\entity.h"
-#include "geometry\transform\transform.h"
+#include "ecs_data\components\geometry\transform\transform.h"
 
 
 //----------------------------------------------------------------------------------

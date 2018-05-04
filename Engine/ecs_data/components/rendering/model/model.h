@@ -12,7 +12,6 @@
 #include "resource\mesh\mesh.h"
 #include "resource\model\model_blueprint.h"
 #include "resource\model\material\material.h"
-#include "geometry\transform\transform.h"
 #include "geometry\bounding_volume\bounding_volume.h"
 
 

@@ -1,3 +1,4 @@
+#include "ecs\ecs.h"
 
 template<typename ComponentT>
 ComponentT* IEntity::GetComponent() const {
@@ -19,7 +20,7 @@ void IEntity::AddComponent(ArgsT&&... args) {
 	// Nothing to do if the component already exists
 	if (it != components.end()) return;
 
-	components[ComponentT::type_id] = component_mgr->CreateComponent<ComponentT>(std::forward<ArgsT>(args)...);
+	components[ComponentT::type_id] = ECS::Get()->GetComponentMgr()->CreateComponent<ComponentT>(std::forward<ArgsT>(args)...);
 	components[ComponentT::type_id]->owner = handle;
 }
 
@@ -29,6 +30,6 @@ void IEntity::RemoveComponent() {
 
 	auto it = components.find(ComponentT::type_id);
 
-	component_mgr->DestroyComponent(it->second);
+	ECS::Get()->GetComponentMgr()->DestroyComponent(it->second);
 	components.erase(it);
 }

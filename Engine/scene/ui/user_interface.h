@@ -5,9 +5,9 @@
 #include "util\io\io.h"
 #include "imgui\imgui_impl_dx11.h"
 #include "rendering\buffer\buffers.h"
-#include "resource\model\model.h"
 #include "resource\model\blueprint_factory.h"
 #include "scene\camera\player_camera.h"
+#include "ecs_data\components\rendering\model\model.h"
 
 class Scene;
 class System;

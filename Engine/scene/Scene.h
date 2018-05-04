@@ -4,12 +4,12 @@
 #include "input\input.h"
 #include "rendering\buffer\buffers.h"
 #include "resource\resource_mgr.h"
-#include "resource\model\model.h"
 #include "scene\text\text.h"
 #include "scene\camera\skybox\skybox.h"
 #include "scene\camera\player_camera.h"
 #include "scene\ui\user_interface.h"
-#include "scene\entities\entities.h"
+#include "ecs_data\entities\entities.h"
+#include "ecs_data\components\components.h"
 
 
 class System;

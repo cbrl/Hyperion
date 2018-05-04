@@ -166,11 +166,17 @@
     <ClInclude Include="ecs\handle\handle_table.h" />
     <ClInclude Include="ecs\system\system.h" />
     <ClInclude Include="ecs\system\system_mgr.h" />
+    <ClInclude Include="ecs_data\components\components.h" />
+    <ClInclude Include="ecs_data\components\geometry\transform\transform.h" />
+    <ClInclude Include="ecs_data\components\rendering\model\model.h" />
+    <ClInclude Include="ecs_data\entities\entities.h" />
+    <ClInclude Include="ecs_data\entities\world\basic_model.h" />
+    <ClInclude Include="ecs_data\entities\world\world_object.h" />
+    <ClInclude Include="ecs_data\systems\systems.h" />
     <ClInclude Include="geometry\bounding_volume\bounding_volume.h" />
     <ClInclude Include="geometry\frustum\frustum.h" />
     <ClInclude Include="geometry\shapes\bezier.h" />
     <ClInclude Include="geometry\shapes\shapes.h" />
-    <ClInclude Include="geometry\transform\transform.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -198,7 +204,6 @@
     <ClInclude Include="resource\font\font.h" />
     <ClInclude Include="resource\mesh\mesh.h" />
     <ClInclude Include="resource\model\material\material.h" />
-    <ClInclude Include="resource\model\model.h" />
     <ClInclude Include="resource\model\model_blueprint.h" />
     <ClInclude Include="resource\model\blueprint_factory.h" />
     <ClInclude Include="resource\model\model_output.h" />
@@ -210,9 +215,6 @@
     <ClInclude Include="scene\camera\perspective_camera.h" />
     <ClInclude Include="scene\camera\player_camera.h" />
     <ClInclude Include="scene\camera\skybox\skybox.h" />
-    <ClInclude Include="scene\entities\basic_model.h" />
-    <ClInclude Include="scene\entities\entities.h" />
-    <ClInclude Include="scene\entities\world_object.h" />
     <ClInclude Include="scene\scene.h" />
     <ClInclude Include="scene\test_scene.h" />
     <ClInclude Include="scene\text\text.h" />
@@ -243,11 +245,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ecs\ecs.cpp" />
+    <ClCompile Include="ecs\entity\entity.cpp" />
     <ClCompile Include="ecs\system\system_mgr.cpp" />
+    <ClCompile Include="ecs_data\components\geometry\transform\transform.cpp" />
+    <ClCompile Include="ecs_data\components\rendering\model\model.cpp" />
     <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="geometry\frustum\frustum.cpp" />
     <ClCompile Include="geometry\shapes\shapes.tpp" />
-    <ClCompile Include="geometry\transform\transform.cpp" />
     <ClCompile Include="imgui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
@@ -278,7 +282,6 @@
     <ClCompile Include="rendering\renderer\text\text_renderer.cpp" />
     <ClCompile Include="rendering\rendering_mgr.cpp" />
     <ClCompile Include="rendering\render_state_mgr.cpp" />
-    <ClCompile Include="resource\model\model.cpp" />
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <FileType>Document</FileType>
     </ClCompile>

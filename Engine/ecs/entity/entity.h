@@ -15,29 +15,16 @@ class IEntity {
 	friend class EntityMgr;
 
 	public:
-		IEntity() : active(true) {}
-
-		virtual ~IEntity() {
-			for (auto& pair : components) {
-				component_mgr->DestroyComponent(pair.second);
-				pair.second = nullptr;
-			}
-		}
+		IEntity();
+		virtual ~IEntity();
 
 		virtual const type_index GetTypeID() const = 0;
 
-		void SetActive(bool state) {
-			active = state;
-		}
-
-		bool IsActive() const {
-			return active;
-		}
+		void SetActive(bool state);
+		bool IsActive() const;
 
 		[[nodiscard]]
-		const Handle64 GetHandle() const {
-			return handle;
-		}
+		const Handle64 GetHandle() const;
 
 		template<typename ComponentT>
 		[[nodiscard]]
@@ -59,11 +46,6 @@ class IEntity {
 
 		// Map of pointers to components. Holds 1 of each unique type.
 		unordered_map<type_index, IComponent*> components;
-
-
-	private:
-		// Pointer to the component manager
-		ComponentMgr* component_mgr;
 };
 
 

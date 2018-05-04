@@ -169,12 +169,6 @@
     <Filter Include="Source Files\scene\ui">
       <UniqueIdentifier>{40d0d5d7-2308-4c95-8ee7-ffa4ee811da2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\geometry\transform">
-      <UniqueIdentifier>{1d6337aa-c0a5-4b95-a5f4-9d82402475a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\geometry\transform">
-      <UniqueIdentifier>{02b16749-85fb-496c-952f-88ba08dffaaa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\rendering\buffer">
       <UniqueIdentifier>{08e518dc-771d-4ae2-b35c-f2161adcc59f}</UniqueIdentifier>
     </Filter>
@@ -265,14 +259,41 @@
     <Filter Include="Header Files\resource\font">
       <UniqueIdentifier>{6760fb45-3e43-4cb0-92ea-3929979cc9d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\entities">
-      <UniqueIdentifier>{66c7bda3-ad39-442a-a6ae-de8731ac35cb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ecs\system">
       <UniqueIdentifier>{8dc63880-a975-4c71-b716-681dd7183b69}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\ecs\system">
       <UniqueIdentifier>{486691de-b9c1-419b-b597-83dc39814c2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data">
+      <UniqueIdentifier>{f0495b12-b173-4b27-abec-65a8ebb01661}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\entities">
+      <UniqueIdentifier>{89f004db-20ae-4d08-9c55-45f666e8a1e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\components">
+      <UniqueIdentifier>{a520d516-5fe3-4fef-a6b3-e9f103c80cb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\systems">
+      <UniqueIdentifier>{c6696b37-8399-4c02-b463-d5d9bc0707ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data">
+      <UniqueIdentifier>{327f9070-95cd-468c-92db-cf6539b90970}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\components">
+      <UniqueIdentifier>{c99b6911-234c-460f-98af-c1c13eadf05d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems">
+      <UniqueIdentifier>{d2e3bb66-ea41-48d7-bba6-5bb598fc1a0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\components\rendering">
+      <UniqueIdentifier>{616781d4-c575-4f86-8c8f-eab9d9dc30a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\components\geometry">
+      <UniqueIdentifier>{7cd9c05a-2c27-48e3-a466-5eb2c89ccf95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems\rendering">
+      <UniqueIdentifier>{259a7477-42a9-42eb-9b87-ef734225828e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -390,9 +411,6 @@
     <ClInclude Include="resource\texture\texture.h">
       <Filter>Header Files\resource\texture</Filter>
     </ClInclude>
-    <ClInclude Include="resource\model\model.h">
-      <Filter>Header Files\resource\model</Filter>
-    </ClInclude>
     <ClInclude Include="resource\mesh\mesh.h">
       <Filter>Header Files\resource\mesh</Filter>
     </ClInclude>
@@ -476,9 +494,6 @@
     </ClInclude>
     <ClInclude Include="scene\ui\user_interface.h">
       <Filter>Header Files\scene\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="geometry\transform\transform.h">
-      <Filter>Header Files\geometry\transform</Filter>
     </ClInclude>
     <ClInclude Include="resource\model\model_blueprint.tpp">
       <Filter>Source Files\resource\model</Filter>
@@ -579,20 +594,32 @@
     <ClInclude Include="resource\font\font.h">
       <Filter>Header Files\resource\font</Filter>
     </ClInclude>
-    <ClInclude Include="scene\entities\world_object.h">
-      <Filter>Header Files\scene\entities</Filter>
-    </ClInclude>
     <ClInclude Include="ecs\system\system.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
     <ClInclude Include="ecs\system\system_mgr.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
-    <ClInclude Include="scene\entities\basic_model.h">
-      <Filter>Header Files\scene\entities</Filter>
+    <ClInclude Include="ecs_data\entities\entities.h">
+      <Filter>Header Files\ecs_data</Filter>
     </ClInclude>
-    <ClInclude Include="scene\entities\entities.h">
-      <Filter>Header Files\scene\entities</Filter>
+    <ClInclude Include="ecs_data\components\components.h">
+      <Filter>Header Files\ecs_data</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\systems\systems.h">
+      <Filter>Header Files\ecs_data</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\entities\world\basic_model.h">
+      <Filter>Header Files\ecs_data\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\entities\world\world_object.h">
+      <Filter>Header Files\ecs_data\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\components\rendering\model\model.h">
+      <Filter>Header Files\ecs_data\components</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\components\geometry\transform\transform.h">
+      <Filter>Header Files\ecs_data\components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -665,17 +692,11 @@
     <ClCompile Include="util\sysmon\system_monitor.cpp">
       <Filter>Source Files\util\sysmon</Filter>
     </ClCompile>
-    <ClCompile Include="resource\model\model.cpp">
-      <Filter>Source Files\resource\model</Filter>
-    </ClCompile>
     <ClCompile Include="scene\test_scene.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
     <ClCompile Include="scene\ui\user_interface.cpp">
       <Filter>Source Files\scene\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="geometry\transform\transform.cpp">
-      <Filter>Source Files\geometry\transform</Filter>
     </ClCompile>
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <Filter>Source Files\resource\model</Filter>
@@ -721,6 +742,15 @@
     </ClCompile>
     <ClCompile Include="ecs\system\system_mgr.cpp">
       <Filter>Source Files\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\components\rendering\model\model.cpp">
+      <Filter>Source Files\ecs_data\components\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\components\geometry\transform\transform.cpp">
+      <Filter>Source Files\ecs_data\components\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs\entity\entity.cpp">
+      <Filter>Source Files\ecs\entity</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -60,6 +60,10 @@ class ECS final {
 		}
 
 
+		EntityMgr*    GetEntityMgr()    const { return entity_mgr.get(); }
+		ComponentMgr* GetComponentMgr() const { return component_mgr.get(); }
+
+
 	private:
 		static ECS* engine;
 
