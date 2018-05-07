@@ -34,7 +34,7 @@ ResourcePool<DataT, max_objs_per_chunk>::~ResourcePool() {
 
 
 template<typename DataT, size_t max_objs_per_chunk>
-void* ResourcePool<DataT, max_objs_per_chunk>::CreateObject() {
+void* ResourcePool<DataT, max_objs_per_chunk>::AllocateObject() {
 
 	DataT* object = nullptr;
 
@@ -63,7 +63,7 @@ void* ResourcePool<DataT, max_objs_per_chunk>::CreateObject() {
 
 		object = chunk->allocator->AllocateCast();
 
-		assert(object != nullptr && "ResourcePool::CreateObject() - Unable to create object.");
+		assert(object != nullptr && "ResourcePool::AllocateObject() - Unable to create object.");
 		chunk->objects.push_back(object);
 	}
 

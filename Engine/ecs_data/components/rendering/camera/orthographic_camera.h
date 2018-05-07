@@ -1,9 +1,9 @@
 #pragma once
 
-#include "scene\camera\camera_base.h"
+#include "ecs_data\components\rendering\camera\camera_base.h"
 
 
-class OrthographicCamera : public CameraBase {
+class OrthographicCamera final : public CameraBase<OrthographicCamera> {
 	public:
 		OrthographicCamera(ID3D11Device* device,
 						   ID3D11DeviceContext* device_context,

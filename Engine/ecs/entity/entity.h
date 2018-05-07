@@ -31,7 +31,7 @@ class IEntity {
 		ComponentT* GetComponent() const;
 
 		template<typename ComponentT, typename... ArgsT>
-		void AddComponent(ArgsT&&... args);
+		ComponentT* AddComponent(ArgsT&&... args);
 
 		template<typename ComponentT>
 		void RemoveComponent();

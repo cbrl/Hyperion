@@ -7,7 +7,7 @@ class ISystem {
 	friend class SystemMgr;
 
 	public:
-		ISystem() = default;
+		ISystem() : active(true) {};
 		virtual ~ISystem() = default;
 
 		virtual type_index GetTypeID() const = 0;
@@ -39,6 +39,10 @@ class System : public ISystem {
 		type_index GetTypeID() const override {
 			return type_id;
 		}
+
+		virtual void PreUpdate(float dt) override {};
+		virtual void Update(float dt) override {};
+		virtual void PostUpdate(float dt) override {};
 
 
 	public:

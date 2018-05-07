@@ -8,8 +8,9 @@ ECS* ECS::engine = nullptr;
 ECS::ECS() {
 	if (engine != nullptr) return;
 
-	component_mgr = make_shared<ComponentMgr>();
-	entity_mgr    = make_unique<EntityMgr>(component_mgr);
+	entity_mgr    = make_unique<EntityMgr>();
+	component_mgr = make_unique<ComponentMgr>();
+	system_mgr    = make_unique<SystemMgr>();
 	engine        = this;
 }
 

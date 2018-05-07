@@ -6,12 +6,12 @@
 class IResourcePool {
 	public:
 		virtual ~IResourcePool() = default;
-		virtual void* CreateObject() = 0;
+		virtual void* AllocateObject() = 0;
 		virtual void  DestroyObject(void* object) = 0;
 };
 
 
-template<typename DataT, size_t max_objs_per_chunk = 512>
+template<typename DataT, size_t max_objs_per_chunk = 128>
 class ResourcePool : public IResourcePool {
 	private:
 		struct Chunk {
@@ -64,8 +64,8 @@ class ResourcePool : public IResourcePool {
 				bool operator==(const iterator& compare) const { return chunk_current == compare.chunk_current; }
 				bool operator!=(const iterator& compare) const { return chunk_current != compare.chunk_current; }
 
-				DataT& operator*()  const { return object_current.operator*(); }
-				DataT* operator->() const { return object_current.operator->(); }
+				DataT& operator*()  const { return **object_current; }
+				DataT* operator->() const { return *object_current; }
 
 
 			private:
@@ -79,7 +79,7 @@ class ResourcePool : public IResourcePool {
 		ResourcePool();
 		~ResourcePool();
 
-		void* CreateObject() override;
+		void* AllocateObject() override;
 		void  DestroyObject(void* object) override;
 
 		iterator begin() { return iterator(memory_chunks.begin(), memory_chunks.end()); }
@@ -146,10 +146,19 @@ class ResourcePoolMap final {
 
 		IResourcePool* GetPool(type_index type) {
 			const auto& it = pools.find(type);
-
+			
 			assert(it != pools.end() && "Invalid resource pool type requested");
 
 			return it->second;
+		}
+
+		template<typename ResourceT>
+		bool PoolExists() const {
+			return pools.find(ResourceT::type_id) != pools.end();
+		}
+
+		bool PoosExists(type_index type) const {
+			return pools.find(type) != pools.end();
 		}
 
 

@@ -21,16 +21,13 @@ class SystemMgr final {
 			void* memory = allocator->Allocate(sizeof(SystemT), alignof(SystemT));
 
 			if (memory != nullptr) {
-				static_cast<SystemT*>(memory)->system_manager = this;
-
 				SystemT* sys = new(memory) SystemT(std::forward<ArgsT>(args)...);
 
 				systems[SystemT::type_id] = sys;
 				return sys;
 			}
-			else {
-				assert(true && "SystemMgr::AddSystem() - Unable to allocate memory for System.");
-			}
+
+			assert(true && "SystemMgr::AddSystem() - Unable to allocate memory for System.");
 		}
 
 		template<typename SystemT>

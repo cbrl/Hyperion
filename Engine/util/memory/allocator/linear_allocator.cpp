@@ -10,7 +10,7 @@ LinearAllocator::LinearAllocator(const size_t memory_size)
 
 
 LinearAllocator::~LinearAllocator() {
-	Free(start_ptr);
+	free(start_ptr);
 	start_ptr = nullptr;
 }
 

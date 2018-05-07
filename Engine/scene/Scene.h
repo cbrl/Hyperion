@@ -5,14 +5,13 @@
 #include "rendering\buffer\buffers.h"
 #include "resource\resource_mgr.h"
 #include "scene\text\text.h"
-#include "scene\camera\skybox\skybox.h"
-#include "scene\camera\player_camera.h"
 #include "scene\ui\user_interface.h"
 #include "ecs_data\entities\entities.h"
 #include "ecs_data\components\components.h"
+#include "ecs_data\systems\systems.h"
 
 
-class System;
+class Engine;
 
 
 
@@ -53,10 +52,10 @@ class Scene {
 		void InputEnabled(bool enable) { enable_input = enable; }
 
 		// Update the scene
-		virtual void Tick(const System& system) = 0;
+		virtual void Tick(const Engine& engine) = 0;
 
 		// Draw the UI
-		void DrawUI(System& system) { ui.Draw(system); }
+		void DrawUI(Engine& engine) { ui.Draw(engine); }
 
 
 		//----------------------------------------------------------------------------------
@@ -64,7 +63,7 @@ class Scene {
 		//----------------------------------------------------------------------------------
 
 		auto& GetName()         const { return name; }
-		auto& GetCamera()       const { return *camera; }
+		auto& GetCamera()             { return camera; }
 		auto& GetFog()                { return fog; }
 		auto& GetDirectionalLights()  { return directional_lights; }
 		auto& GetPointLights()        { return point_lights; }
@@ -87,7 +86,7 @@ class Scene {
 
 		Scene(const string& name) : name(name), enable_input(true) {}
 
-		virtual void Init(const System& system) = 0;
+		virtual void Init(const Engine& engine) = 0;
 
 
 	protected:
@@ -97,7 +96,8 @@ class Scene {
 		RenderStates                   render_states;
 		UserInterface                  ui;
 
-		unique_ptr<PlayerCamera>       camera;
+		//unique_ptr<PlayerCamera>       camera;
+		Handle64 camera;
 		Fog                            fog;
 		vector<Model>                  models;
 		vector<PointLightBuffer>       point_lights;

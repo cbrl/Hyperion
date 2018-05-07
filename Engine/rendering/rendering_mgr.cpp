@@ -2,15 +2,15 @@
 #include "rendering_mgr.h"
 
 #include "util\engine_util.h"
-#include "system\system.h"
+#include "engine\engine.h"
 
 
-RenderingMgr::RenderingMgr(System& system, bool fullscreen, bool vsync, bool msaa) {
+RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msaa) {
 	//----------------------------------------------------------------------------------
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------
 
-	direct3D = make_unique<Direct3D>(system.GetHWND(), system.GetWindowWidth(), system.GetWindowHeight(), fullscreen, vsync, msaa);
+	direct3D = make_unique<Direct3D>(engine.GetHWND(), engine.GetWindowWidth(), engine.GetWindowHeight(), fullscreen, vsync, msaa);
 	FILE_LOG(logINFO) << "Initialized Direct3D";
 
 
@@ -40,7 +40,7 @@ RenderingMgr::RenderingMgr(System& system, bool fullscreen, bool vsync, bool msa
 	//----------------------------------------------------------------------------------
 
 	ImGui::CreateContext();
-	ImGui_ImplDX11_Init(system.GetHWND(), direct3D->GetDevice(), direct3D->GetDeviceContext());
+	ImGui_ImplDX11_Init(engine.GetHWND(), direct3D->GetDevice(), direct3D->GetDeviceContext());
 }
 
 
@@ -52,7 +52,7 @@ RenderingMgr::~RenderingMgr() {
 }
 
 
-void RenderingMgr::Render(System& system) const {
+void RenderingMgr::Render(Engine& engine) const {
 
 	// Start a new ImGui frame
 	ImGui_ImplDX11_NewFrame();
@@ -68,7 +68,7 @@ void RenderingMgr::Render(System& system) const {
 
 
 	// Render the scene
-	renderer->Render(system, *render_state_mgr);
+	renderer->Render(engine, *render_state_mgr);
 
 
 	// Render the ImGui frame

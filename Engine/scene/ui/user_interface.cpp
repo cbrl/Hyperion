@@ -1,17 +1,17 @@
 #include "stdafx.h"
 #include "user_interface.h"
-#include "system\system.h"
+#include "engine\engine.h"
 #include "scene\scene.h"
 
 
 static void* selected = 0;
 
 
-void UserInterface::Draw(System& system) {
+void UserInterface::Draw(Engine& engine) {
 
-	Scene& scene        = system.GetScene();
-	auto*  device       = system.GetRenderingMgr().GetDevice();
-	auto&  resource_mgr = system.GetRenderingMgr().GetResourceMgr();
+	Scene& scene        = engine.GetScene();
+	auto*  device       = engine.GetRenderingMgr().GetDevice();
+	auto&  resource_mgr = engine.GetRenderingMgr().GetResourceMgr();
 
 	bool open = true;
 	
@@ -419,7 +419,7 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 
 	// Draw camera details
 	if (selected == &scene.GetCamera())
-		DrawCameraDetails(scene.GetCamera());
+		//DrawCameraDetails(scene.GetCamera());
 
 
 	// Draw fog details
@@ -433,7 +433,7 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 	ImGui::EndChild();
 }
 
-
+/*
 void UserInterface::DrawCameraDetails(PlayerCamera& camera) {
 
 	float max_velocity     = camera.GetMaxVelocity();
@@ -463,7 +463,7 @@ void UserInterface::DrawCameraDetails(PlayerCamera& camera) {
 	if (ImGui::Checkbox("Free Look", &free_look))
 		camera.SetFreeLook(free_look);
 }
-
+*/
 
 void UserInterface::DrawModelDetails(Model& model) {
 	/*

@@ -8,17 +8,29 @@
 #include "rendering\buffer\constant_buffer.h"
 #include "resource\resource_mgr.h"
 #include "geometry\frustum\frustum.h"
-#include "scene\camera\skybox\skybox.h"
 
 
-class CameraBase : public Component<CameraBase> {
+template<typename T>
+class CameraBase : public Component<T> {
+	friend class CameraSystem;
+
 	protected:
 		CameraBase(ID3D11Device* device,
 				   ID3D11DeviceContext* device_context,
 				   u32 viewport_width,
-				   u32 viewport_height);
+				   u32 viewport_height)
+			: buffer(device)
+			, viewport({ 0.0f, 0.0f, 0.0f, 0.f, 0.0f, 1.0f })
+
+			, view_matrix(XMMatrixIdentity())
+			, projection_matrix(XMMatrixIdentity())
+
+			, z_near(0.1f)
+			, z_far(1000.0f) {
+		}
 
 		~CameraBase() = default;
+
 
 	public:
 		//----------------------------------------------------------------------------------
@@ -26,10 +38,7 @@ class CameraBase : public Component<CameraBase> {
 		//----------------------------------------------------------------------------------
 
 		// Update the camera's constant buffer
-		void UpdateBuffer(ID3D11DeviceContext* device_context) {
-
-			XMMATRIX world = XMMatrixTranslationFromVector(position);
-
+		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext* device_context, FXMMATRIX world, FXMVECTOR position) {
 			buffer.UpdateData(device_context, CameraBuffer(position, XMMatrixTranspose(world * view_matrix * projection_matrix)));
 		}
 
@@ -42,13 +51,6 @@ class CameraBase : public Component<CameraBase> {
 		//----------------------------------------------------------------------------------
 		// Setters
 		//----------------------------------------------------------------------------------
-
-		void SetRotation(const float3& rotation);
-
-		void SetPosition(const float3& position) {
-			this->position = XMLoadFloat3(&position);
-			UpdateViewMatrix();
-		}
 
 		// Set a new viewport
 		void SetViewport(ID3D11DeviceContext* device_context, const D3D11_VIEWPORT& viewport) {
@@ -78,11 +80,6 @@ class CameraBase : public Component<CameraBase> {
 			UpdateProjectionMatrix();
 		}
 
-		// Set the skybox for this camera
-		void SetSkybox(const SkyBox& skybox) {
-			this->skybox = skybox;
-		}
-
 
 		//----------------------------------------------------------------------------------
 		// Getters
@@ -98,26 +95,9 @@ class CameraBase : public Component<CameraBase> {
 			return projection_matrix;
 		}
 
-		// Get the camera's current rotation
-		const float3 GetRotation() const {
-			return float3(XMConvertToDegrees(pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll));
-		}
-
-		// Get the camera's current position
-		const float3 GetPosition() const {
-			float3 pos;
-			XMStoreFloat3(&pos, position);
-			return pos;
-		}
-
 		// Get the Frustum for this camera
 		const Frustum& GetFrustum() const {
 			return frustum;
-		}
-
-		// Get the camera's Skybox
-		const SkyBox& GetSkybox() const {
-			return skybox;
 		}
 
 
@@ -131,7 +111,16 @@ class CameraBase : public Component<CameraBase> {
 		virtual void UpdateProjectionMatrix() = 0;
 
 		// Update the view matrix. Used after moving/rotating the camera.
-		void UpdateViewMatrix();
+		void XM_CALLCONV UpdateViewMatrix(FXMVECTOR position, FXMVECTOR forward, FXMVECTOR up) {
+			// Create a target vector
+			XMVECTOR look_at = position + forward;
+
+			// Create the new view matrix
+			view_matrix = XMMatrixLookAtLH(position, look_at, up);
+
+			// The frustum needs to be updated when the view matrix changes
+			UpdateFrustum();
+		}
 
 		// Update the frustum. Used after the projection matrix or view matrix changes.
 		void UpdateFrustum() {
@@ -146,9 +135,6 @@ class CameraBase : public Component<CameraBase> {
 		// Camera frustum
 		Frustum frustum;
 
-		// The skybox for this camera
-		SkyBox skybox;
-
 		// Viewport and z depth
 		D3D11_VIEWPORT viewport;
 		float z_near;
@@ -162,17 +148,4 @@ class CameraBase : public Component<CameraBase> {
 		static constexpr XMVECTOR default_forward = { 0.0f, 0.0f, 1.0f, 0.0f };
 		static constexpr XMVECTOR default_right   = { 1.0f, 0.0f, 0.0f, 0.0f };
 		static constexpr XMVECTOR default_up      = { 0.0f, 1.0f, 0.0f, 0.0f };
-
-		// Orientation vectors
-		XMVECTOR camera_forward;
-		XMVECTOR camera_right;
-		XMVECTOR camera_up;
-
-		// Camera position
-		XMVECTOR position;
-
-		// Pitch, yaw, roll
-		float pitch;
-		float yaw;
-		float roll;
 };

@@ -16,10 +16,7 @@
 
 class EntityMgr final {
 	public:
-		EntityMgr(shared_ptr<ComponentMgr> component_mgr)
-			: component_mgr(component_mgr)
-		{}
-
+		EntityMgr() = default;
 		~EntityMgr() = default;
 
 
@@ -33,14 +30,14 @@ class EntityMgr final {
 			auto pool = entity_pools.GetOrCreatePool<EntityT>();
 
 			// Allocate memory for the entity
-			void* memory = pool->CreateObject();
+			void* memory = pool->AllocateObject();
 
 			// Create a handle
 			Handle64 handle = handle_table.CreateHandle(static_cast<IEntity*>(memory));
 
 			// Create the entity
+			static_cast<IEntity*>(memory)->handle = handle;
 			EntityT* entity = new(memory) EntityT(std::forward<ArgsT>(args)...);
-			entity->handle = handle;
 
 			return handle;
 		}
@@ -69,6 +66,12 @@ class EntityMgr final {
 
 
 		template<typename EntityT>
+		bool KnowsEntity() const {
+			return entity_pools.PoolExists<EntityT>();
+		}
+
+
+		template<typename EntityT>
 		typename ResourcePool<EntityT>::iterator begin() {
 			using pool_t = ResourcePool<EntityT>;
 			auto* pool = static_cast<pool_t*>(entity_pools.GetPool<EntityT>());
@@ -89,7 +92,4 @@ class EntityMgr final {
 
 		// Handle table, which maps handles to a pointer to an entity
 		HandleTable<Handle64, IEntity> handle_table;
-
-		// A pointer to the component manager
-		shared_ptr<ComponentMgr> component_mgr;
 };

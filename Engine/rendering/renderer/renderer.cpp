@@ -2,7 +2,7 @@
 #include "renderer.h"
 
 #include "imgui\imgui.h"
-#include "system\system.h"
+#include "engine\engine.h"
 
 
 Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
@@ -15,20 +15,21 @@ Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
 }
 
 
-void Renderer::Render(System& system, RenderStateMgr& render_state_mgr) const {
+void Renderer::Render(Engine& engine, RenderStateMgr& render_state_mgr) const {
 
 	// Get the scene
-	Scene& scene = system.GetScene();
+	Scene& scene = engine.GetScene();
 
 	//----------------------------------------------------------------------------------
 	// Update the camera buffer
 	//----------------------------------------------------------------------------------
 
 	// Update the camera 
-	scene.GetCamera().UpdateBuffer(device_context.Get());
+	auto* transform = ECS::Get()->GetComponent<Transform>(scene.GetCamera());
+	ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera())->UpdateBuffer(device_context.Get(), transform->GetWorld(), transform->GetPosition());
 
 	// Bind the buffer
-	scene.GetCamera().BindBuffer(device_context.Get(), SLOT_CBUFFER_CAMERA);
+	ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera())->BindBuffer(device_context.Get(), SLOT_CBUFFER_CAMERA);
 	
 
 	//----------------------------------------------------------------------------------
@@ -56,5 +57,5 @@ void Renderer::Render(System& system, RenderStateMgr& render_state_mgr) const {
 	// Render the ImGui UI
 	//----------------------------------------------------------------------------------
 
-	scene.DrawUI(system);
+	scene.DrawUI(engine);
 }

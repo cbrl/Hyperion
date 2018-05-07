@@ -6,18 +6,17 @@
 #include "imgui\imgui_impl_dx11.h"
 #include "rendering\buffer\buffers.h"
 #include "resource\model\blueprint_factory.h"
-#include "scene\camera\player_camera.h"
-#include "ecs_data\components\rendering\model\model.h"
+#include "ecs_data\components\components.h"
 
 class Scene;
-class System;
+class Engine;
 
 class UserInterface {
 	public:
 		UserInterface() = default;
 		~UserInterface() = default;
 
-		void Draw(System& system);
+		void Draw(Engine& engine);
 
 
 	private:
@@ -53,7 +52,7 @@ class UserInterface {
 		void DrawLightDetails(PointLightBuffer& light);
 		void DrawLightDetails(SpotLightBuffer& light);
 
-		void DrawCameraDetails(PlayerCamera& camera);
+		//void DrawCameraDetails(PlayerCamera& camera);
 
 		void DrawPopups(ID3D11Device* device, ResourceMgr& resource_mgr, Scene& scene, Popups popup);
 };

@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 
-#include "system\main_window.h"
+#include "engine\main_window.h"
 
 #include "util\datatypes\datatypes.h"
 #include "util\sysmon\system_monitor.h"
@@ -23,10 +23,10 @@
 #define FULLSCREEN_STATE false
 
 
-class System final : public MainWindow {
+class Engine final : public MainWindow {
 	public:
-		System() = default;
-		~System();
+		Engine() = default;
+		~Engine();
 
 		bool Init();
 		void Run();
@@ -39,12 +39,13 @@ class System final : public MainWindow {
 		u32  GetWindowWidth()  const { return window_width; }
 		u32  GetWindowHeight() const { return window_height; }
 
-		Scene&         GetScene()              { return *scene; }
-		Input&         GetInput()        const { return *input; }
-		Timer&         GetTimer()        const { return *timer; }
-		FPS&           GetFPSCounter()   const { return *fps_counter; }
-		SystemMonitor& GetSysMon()       const { return *system_monitor; }
-		RenderingMgr&  GetRenderingMgr() const { return *rendering_mgr; }
+		Scene&          GetScene()              { return *scene; }
+		Input&          GetInput()        const { return *input; }
+		weak_ptr<Input> GetInputWeakPtr() const { return weak_ptr<Input>(input); }
+		Timer&          GetTimer()        const { return *timer; }
+		FPS&            GetFPSCounter()   const { return *fps_counter; }
+		SystemMonitor&  GetSysMon()       const { return *system_monitor; }
+		RenderingMgr&   GetRenderingMgr() const { return *rendering_mgr; }
 		
 
 	private:
@@ -54,7 +55,7 @@ class System final : public MainWindow {
 
 	private:
 		unique_ptr<ECS>           ecs_engine;
-		unique_ptr<Input>         input;
+		shared_ptr<Input>         input;
 		unique_ptr<SystemMonitor> system_monitor;
 		unique_ptr<Timer>         timer;
 		unique_ptr<FPS>           fps_counter;

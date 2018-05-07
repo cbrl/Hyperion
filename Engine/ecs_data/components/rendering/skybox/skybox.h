@@ -1,13 +1,13 @@
 #pragma once
 
 #include <d3d11.h>
-#include "util\datatypes\datatypes.h"
+#include "ecs\component\component.h"
 #include "resource\texture\texture.h"
 #include "resource\resource_mgr.h"
 #include "geometry\shapes\shapes.h"
 
 
-class SkyBox final {
+class SkyBox final : public Component<SkyBox> {
 	public:
 		SkyBox() = default;
 		~SkyBox() = default;

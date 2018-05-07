@@ -17,8 +17,9 @@ SkyRenderer::SkyRenderer(ID3D11Device* device, ID3D11DeviceContext* device_conte
 
 void SkyRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mgr) {
 
-	// Get a reference to the camera's skybox
-	const SkyBox& skybox = scene.GetCamera().GetSkybox();
+	// Get the camera's skybox
+	const SkyBox* skybox = ECS::Get()->GetComponent<SkyBox>(scene.GetCamera());
+	if (!skybox) return;
 
 
 	// Bind the render states
@@ -31,13 +32,13 @@ void SkyRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mgr) {
 
 
 	// Bind the texture
-	auto texture = skybox.GetTexture();
+	auto texture = skybox->GetTexture();
 	if (texture) texture->Bind<Pipeline::PS>(device_context.Get(), SLOT_SRV_SKYBOX);
 
 
 	// Render the skybox
-	skybox.Bind(device_context.Get());
-	skybox.Draw(device_context.Get());
+	skybox->Bind(device_context.Get());
+	skybox->Draw(device_context.Get());
 }
 
 

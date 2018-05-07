@@ -30,7 +30,7 @@ class ComponentMgr final {
 			auto pool = component_pools.GetOrCreatePool<ComponentT>();
 
 			// Allocate memory
-			void* memory = pool->CreateObject();
+			void* memory = pool->AllocateObject();
 
 			// Construct the component
 			ComponentT* component = new(memory) ComponentT(std::forward<ArgsT>(args)...);
@@ -44,6 +44,12 @@ class ComponentMgr final {
 			auto pool = component_pools.GetPool(component->GetTypeID());
 
 			pool->DestroyObject(reinterpret_cast<void*>(component));
+		}
+
+
+		template<typename ComponentT>
+		bool KnowsComponent() const {
+			return component_pools.PoolExists<ComponentT>();
 		}
 
 

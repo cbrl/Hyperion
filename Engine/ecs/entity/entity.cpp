@@ -4,8 +4,7 @@
 
 
 IEntity::IEntity()
-	: active(true)
-	, handle(Handle64::invalid_handle) {
+	: active(true) {
 }
 
 

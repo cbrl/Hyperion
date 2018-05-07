@@ -19,12 +19,12 @@ struct Handle {
 	public:
 		Handle() {}
 
-		Handle(T value)
+		explicit Handle(T value)
 			: index(value & index_bitmask)
 			, counter((value & (counter_bitmask << counter_bits)) >> counter_bits)
 		{}
 
-		Handle(T index, T counter)
+		explicit Handle(T index, T counter)
 			: index(index)
 			, counter(counter)
 		{}

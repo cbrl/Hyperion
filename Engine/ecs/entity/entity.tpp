@@ -13,15 +13,19 @@ ComponentT* IEntity::GetComponent() const {
 
 
 template<typename ComponentT, typename... ArgsT>
-void IEntity::AddComponent(ArgsT&&... args) {
+ComponentT* IEntity::AddComponent(ArgsT&&... args) {
 
 	auto it = components.find(ComponentT::type_id);
 
-	// Nothing to do if the component already exists
-	if (it != components.end()) return;
+	// Nothing else to do if the component already exists
+	if (it != components.end()) {
+		return static_cast<ComponentT*>(it->second);
+	}
 
 	components[ComponentT::type_id] = ECS::Get()->GetComponentMgr()->CreateComponent<ComponentT>(std::forward<ArgsT>(args)...);
 	components[ComponentT::type_id]->owner = handle;
+
+	return static_cast<ComponentT*>(components[ComponentT::type_id]);
 }
 
 

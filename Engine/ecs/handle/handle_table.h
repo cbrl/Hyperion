@@ -42,6 +42,8 @@ class HandleTable {
 		}
 
 		DataT* operator[](HandleT handle) {
+			assert(handle.index != HandleT::invalid_handle && "Invalid handle specified");
+
 			auto pair = handle_table[handle.index];
 
 			assert(handle.counter == pair.first && "Invalid handle specified");

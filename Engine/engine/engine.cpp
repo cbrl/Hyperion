@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "system.h"
+#include "engine.h"
 
 #include "util\engine_util.h"
 #include "imgui\imgui.h"
@@ -9,7 +9,7 @@
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
-System::~System() {
+Engine::~Engine() {
 	// Explicity delete the scene and entity component system before
 	// the rendering manager. This avoids D3D reporting live resources
 	// that are going to be deleted right after the report.
@@ -18,7 +18,7 @@ System::~System() {
 }
 
 
-bool System::Init() {
+bool Engine::Init() {
 
 	// Set width/height variables. Later on this can be read from a config file.
 	window_width  = WINDOW_WIDTH;
@@ -34,6 +34,8 @@ bool System::Init() {
 
 	// Initialize the Entity Component System
 	ecs_engine = make_unique<ECS>();
+	ECS::Get()->AddSystem<CameraSystem>();
+	ECS::Get()->AddSystem<TransformSystem>();
 
 
 	// Initialize system monitor
@@ -41,7 +43,7 @@ bool System::Init() {
 
 
 	// Create input handler
-	input = make_unique<Input>(hWnd);
+	input = make_shared<Input>(hWnd);
 
 
 	// Create Timer
@@ -65,7 +67,7 @@ bool System::Init() {
 }
 
 
-void System::Run() {
+void Engine::Run() {
 	MSG   msg = { 0 };
 	bool done = false;
 	
@@ -96,7 +98,7 @@ void System::Run() {
 }
 
 
-void System::Tick() {
+void Engine::Tick() {	
 
 	// Update system metrics
 	system_monitor->Tick();
@@ -108,6 +110,10 @@ void System::Tick() {
 	input->Tick();
 
 
+	// Update the active systems in the ecs engine
+	ecs_engine->Update(timer->DeltaTime());
+
+
 	// Update scene
 	scene->Tick(*this);
 
@@ -117,7 +123,7 @@ void System::Tick() {
 }
 
 
-void System::ProcessInput() {
+void Engine::ProcessInput() {
 
 	// Toggle mouse mode on F1 press
 	if (input->IsKeyPressed(Keyboard::F1)) {
@@ -133,7 +139,7 @@ void System::ProcessInput() {
 }
 
 
-LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
+LRESULT Engine::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 
 	// Send events to ImGui handler if the mouse mode is set to absolute
 	if (input && (input->GetMouseMode() == Mouse::MODE_ABSOLUTE)) {
@@ -214,13 +220,14 @@ LRESULT System::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-void System::OnResize(u32 window_width, u32 window_height) {
+void Engine::OnResize(u32 window_width, u32 window_height) {
 
 	if (!rendering_mgr) return;
 	rendering_mgr->ResizeBuffers(window_width, window_height);
 	
 	if (scene) {
-		scene->GetCamera().ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+		ecs_engine->GetComponent<PerspectiveCamera>(scene->GetCamera())->ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+		//scene->GetCamera().ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
 	}
 
 	FILE_LOG(logINFO) << "Viewport resized to " << window_width << "x" << window_height;

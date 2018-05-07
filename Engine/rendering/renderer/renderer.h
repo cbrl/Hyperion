@@ -19,7 +19,7 @@ class Renderer final {
 		Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context);
 		~Renderer() = default;
 
-		void Render(System& system, RenderStateMgr& render_state_mgr) const;
+		void Render(Engine& engine, RenderStateMgr& render_state_mgr) const;
 
 
 	private:

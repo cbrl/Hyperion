@@ -11,11 +11,11 @@
 #include "imgui\imgui_impl_dx11.h"
 #include "scene\scene.h"
 
-class System;
+class Engine;
 
 class RenderingMgr final {
 	public:
-		RenderingMgr(System& system, bool fullscreen, bool vsync, bool msaa);
+		RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msaa);
 		~RenderingMgr();
 
 		// Resize the viewport
@@ -26,7 +26,7 @@ class RenderingMgr final {
 		}
 
 		// Render the scene
-		void Render(System& system) const;
+		void Render(Engine& engine) const;
 
 
 		//----------------------------------------------------------------------------------

@@ -9,11 +9,11 @@
 class TestScene final : public Scene {
 
 	public:
-		TestScene(const System& system);
+		TestScene(const Engine& engine);
 
 		~TestScene() = default;
 
-		void Init(const System& system);
+		void Init(const Engine& engine);
 
-		void Tick(const System& system);
+		void Tick(const Engine& engine);
 };

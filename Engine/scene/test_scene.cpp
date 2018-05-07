@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "test_scene.h"
-#include "system\system.h"
+#include "engine\engine.h"
 
 
 static constexpr float zNear = 0.1f;
@@ -8,15 +8,15 @@ static constexpr float zFar = 1000.0f;
 static constexpr float FOV = XM_PI / 3.0f;
 
 
-TestScene::TestScene(const System& system) : Scene("Test Scene") {
+TestScene::TestScene(const Engine& engine) : Scene("Test Scene") {
 
-	Init(system);
+	Init(engine);
 }
 
 
-void TestScene::Init(const System& system) {
+void TestScene::Init(const Engine& engine) {
 
-	const auto& rendering_mgr  = system.GetRenderingMgr();
+	const auto& rendering_mgr  = engine.GetRenderingMgr();
 	auto* device               = rendering_mgr.GetDevice();
 	auto* device_context       = rendering_mgr.GetDeviceContext();
 
@@ -28,16 +28,17 @@ void TestScene::Init(const System& system) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera
-	camera = make_unique<PlayerCamera>(device, device_context, system.GetWindowWidth(), system.GetWindowHeight());
+	camera = ECS::Get()->CreateEntity<PlayerCamera>(device, device_context, engine.GetInputWeakPtr(), engine.GetWindowWidth(), engine.GetWindowHeight());
 
 	// Create the skybox
 	SkyBox skybox(device, resource_mgr, L"../data/Textures/grasscube1024.dds");
 
 	// Set the parameters
-	camera->SetZDepth(zNear, zFar);
-	camera->SetFOV(FOV);
-	camera->SetSkybox(skybox);
-	camera->SetPosition(float3(0.0f, 3.0f, -5.0f));
+	auto cam = ECS::Get()->GetComponent<PerspectiveCamera>(camera);
+	cam->SetZDepth(zNear, zFar);
+	cam->SetFOV(FOV);
+	//camera->SetSkybox(skybox);
+	//camera->SetPosition(float3(0.0f, 3.0f, -5.0f));
 
 
 	//----------------------------------------------------------------------------------
@@ -123,16 +124,13 @@ void TestScene::Init(const System& system) {
 }
 
 
-void TestScene::Tick(const System& system) {
+void TestScene::Tick(const Engine& engine) {
 
 	// Get input handler
-	const Input& input = system.GetInput();
+	const Input& input = engine.GetInput();
 
 	// Get mouse delta
 	int2 mouse_delta = input.GetMouseDelta();
-
-	// Get delta time
-	float delta_time = system.GetTimer().DeltaTime();
 
 
 
@@ -147,79 +145,25 @@ void TestScene::Tick(const System& system) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	u32 fps = system.GetFPSCounter().GetFPS();
+	u32 fps = engine.GetFPSCounter().GetFPS();
 
 	texts.at("FPS").SetText(L"FPS: " + to_wstring(fps));
 
 	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_delta.x)
 							  + L"\nY: " + to_wstring(mouse_delta.y));
 
-	float3 position = camera->GetPosition();
-	texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
-								 + L"\nY: " + to_wstring(position.y)
-								 + L"\nZ: " + to_wstring(position.z));
+	//float3 position = camera->GetPosition();
+	//texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
+	//							 + L"\nY: " + to_wstring(position.y)
+	//							 + L"\nZ: " + to_wstring(position.z));
 
-	float3 rotation = camera->GetRotation();
-	texts.at("Rotation").SetText(L"Rotation \nX: " + to_wstring(rotation.x)
-								 + L"\nY: " + to_wstring(rotation.y)
-								 + L"\nZ: " + to_wstring(rotation.z));
+	//float3 rotation = camera->GetRotation();
+	//texts.at("Rotation").SetText(L"Rotation \nX: " + to_wstring(rotation.x)
+	//							 + L"\nY: " + to_wstring(rotation.y)
+	//							 + L"\nZ: " + to_wstring(rotation.z));
 
-	float3 velocity = camera->GetVelocity() * 1000.0f;
-	texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)
-								 + L"\nY: " + to_wstring(velocity.y)
-								 + L"\nZ: " + to_wstring(velocity.z));
-
-
-	//----------------------------------------------------------------------------------
-	// Camera movement
-	//----------------------------------------------------------------------------------
-
-	// Exit if input is disabled
-	if (!enable_input) return;
-
-	float3 rotateUnits(0.0f, 0.0f, 0.0f);
-	float3 move_units(0.0f, 0.0f, 0.0f);
-
-	// Set x/y rotation with mouse data
-	rotateUnits.x = XMConvertToRadians(static_cast<float>(mouse_delta.y));
-	rotateUnits.y = XMConvertToRadians(static_cast<float>(mouse_delta.x));
-
-	// Roll rotation
-	if (input.IsKeyDown(Keyboard::Q)) {
-		rotateUnits.z -= delta_time;
-	}
-	else if (input.IsKeyDown(Keyboard::E)) {
-		rotateUnits.z += delta_time;
-	}
-
-	// Forward/Back movement
-	if (input.IsKeyDown(Keyboard::W)) {
-		move_units.z += delta_time;
-	}
-	else if (input.IsKeyDown(Keyboard::S)) {
-		move_units.z -= delta_time;
-	}
-
-	// Left/Right movement
-	if (input.IsKeyDown(Keyboard::A)) {
-		move_units.x -= delta_time;
-	}
-	else if (input.IsKeyDown(Keyboard::D)) {
-		move_units.x += delta_time;
-	}
-
-	// Up/Down movement
-	if (input.IsKeyDown(Keyboard::Space)) {
-		move_units.y += delta_time;
-	}
-	else if (input.IsKeyDown(Keyboard::LeftControl)) {
-		move_units.y -= delta_time;
-	}
-
-	// Update camera rotation and position
-	camera->Move(move_units);
-	camera->Rotate(rotateUnits);
-
-	// Update the camera position/rotation
-	camera->UpdateMovement(delta_time);
+	//float3 velocity = camera->GetVelocity() * 1000.0f;
+	//texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)
+	//							 + L"\nY: " + to_wstring(velocity.y)
+	//							 + L"\nZ: " + to_wstring(velocity.z));
 }

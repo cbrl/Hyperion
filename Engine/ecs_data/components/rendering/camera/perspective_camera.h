@@ -1,10 +1,10 @@
 #pragma once
 
-#include "scene\camera\camera_base.h"
-#include "scene\camera\skybox\skybox.h"
+#include "ecs_data\components\rendering\camera\camera_base.h"
+#include "ecs_data\components\rendering\skybox\skybox.h"
 
 
-class PerspectiveCamera : public CameraBase {
+class PerspectiveCamera final : public CameraBase<PerspectiveCamera> {
 	public:
 		PerspectiveCamera(ID3D11Device* device,
 						  ID3D11DeviceContext* device_context,
