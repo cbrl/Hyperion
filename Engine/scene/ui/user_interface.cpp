@@ -433,7 +433,7 @@ void UserInterface::DrawObjectDetails(Scene& scene) {
 	ImGui::EndChild();
 }
 
-/*
+
 void UserInterface::DrawCameraDetails(PlayerCamera& camera) {
 
 	float max_velocity     = camera.GetMaxVelocity();
@@ -463,10 +463,10 @@ void UserInterface::DrawCameraDetails(PlayerCamera& camera) {
 	if (ImGui::Checkbox("Free Look", &free_look))
 		camera.SetFreeLook(free_look);
 }
-*/
+
 
 void UserInterface::DrawModelDetails(Model& model) {
-	/*
+	
 	ImGui::Text(model.GetName().c_str());
 	ImGui::Separator();
 
@@ -488,7 +488,6 @@ void UserInterface::DrawModelDetails(Model& model) {
 
 	if (ImGui::DragFloat3("Scale", scale.Data(), 0.01f, -FLT_MAX, FLT_MAX))
 		model.SetScale(scale);
-	*/
 }
 
 

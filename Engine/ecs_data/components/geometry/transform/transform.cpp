@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "transform.h"
+#include "ecs\ecs.h"
 
 
 Transform::Transform()

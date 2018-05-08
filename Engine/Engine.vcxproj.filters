@@ -334,6 +334,7 @@
       <Filter>Source Files\ecs\entity</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -483,9 +484,6 @@
     <ClInclude Include="loader\model_loader.tpp">
       <Filter>Source Files\loader</Filter>
     </ClInclude>
-    <ClInclude Include="scene\ui\user_interface.h">
-      <Filter>Header Files\scene\ui</Filter>
-    </ClInclude>
     <ClInclude Include="resource\model\model_blueprint.tpp">
       <Filter>Source Files\resource\model</Filter>
     </ClInclude>
@@ -627,6 +625,9 @@
     <ClInclude Include="engine\engine.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="ecs_data\components\geometry\transform\camera_transform.h">
+      <Filter>Header Files\ecs_data\components\geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -695,9 +696,6 @@
     <ClCompile Include="scene\test_scene.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
-    <ClCompile Include="scene\ui\user_interface.cpp">
-      <Filter>Source Files\scene\ui</Filter>
-    </ClCompile>
     <ClCompile Include="resource\model\model_blueprint.cpp">
       <Filter>Source Files\resource\model</Filter>
     </ClCompile>
@@ -757,6 +755,9 @@
     </ClCompile>
     <ClCompile Include="engine\main_window.cpp">
       <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\components\geometry\transform\camera_transform.cpp">
+      <Filter>Source Files\ecs_data\components\geometry</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

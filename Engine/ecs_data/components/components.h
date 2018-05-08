@@ -1,6 +1,7 @@
 #pragma once
 
 #include "geometry\transform\transform.h"
+#include "geometry\transform\camera_transform.h"
 #include "rendering\model\model.h"
 #include "rendering\camera\camera_base.h"
 #include "rendering\camera\camera_movement.h"

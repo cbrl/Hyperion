@@ -147,7 +147,7 @@ void ForwardRenderer::RenderModels(Scene& scene) const {
 	const XMMATRIX projection = camera->GetProjMatrix();
 
 
-	scene.ForEachEntity([&](Handle64 entity) {
+	scene.ForEachModel([&](Handle64 entity) {
 
 		auto* model     = ECS::Get()->GetComponent<Model>(entity);
 		auto* transform = ECS::Get()->GetComponent<Transform>(entity);

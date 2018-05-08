@@ -52,7 +52,7 @@ class UserInterface {
 		void DrawLightDetails(PointLightBuffer& light);
 		void DrawLightDetails(SpotLightBuffer& light);
 
-		//void DrawCameraDetails(PlayerCamera& camera);
+		void DrawCameraDetails(PlayerCamera& camera);
 
 		void DrawPopups(ID3D11Device* device, ResourceMgr& resource_mgr, Scene& scene, Popups popup);
 };

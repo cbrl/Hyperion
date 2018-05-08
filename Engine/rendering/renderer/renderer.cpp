@@ -25,7 +25,7 @@ void Renderer::Render(Engine& engine, RenderStateMgr& render_state_mgr) const {
 	//----------------------------------------------------------------------------------
 
 	// Update the camera 
-	auto* transform = ECS::Get()->GetComponent<Transform>(scene.GetCamera());
+	auto* transform = ECS::Get()->GetComponent<CameraTransform>(scene.GetCamera());
 	ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera())->UpdateBuffer(device_context.Get(), transform->GetWorld(), transform->GetPosition());
 
 	// Bind the buffer
@@ -57,5 +57,5 @@ void Renderer::Render(Engine& engine, RenderStateMgr& render_state_mgr) const {
 	// Render the ImGui UI
 	//----------------------------------------------------------------------------------
 
-	scene.DrawUI(engine);
+	//scene.DrawUI(engine);
 }

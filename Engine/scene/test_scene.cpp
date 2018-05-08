@@ -87,18 +87,19 @@ void TestScene::Init(const Engine& engine) {
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	auto bp = resource_mgr.GetOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
-	models.push_back(Model(device, bp));
-	//models.back().Scale(float3(3.0f, 3.0f, 3.0f));
-	//models.back().SetPosition(5.0f, 0.0f, 0.0f);
-	//models.back().SetRotation(0.0f, 1.2f, 0.0f);
-
-	auto n = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(device, resource_mgr, 5.0f);
-	models.push_back(Model(device, n));
-
+	auto bp   = resource_mgr.GetOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
+	auto cube = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(device, resource_mgr, 5.0f);
 
 	Handle64 test_model = ECS::Get()->CreateEntity<BasicModel>(device, bp);
-	entities.push_back(test_model);
+	models.push_back(test_model);
+	//ECS::Get()->GetComponent<Transform>(test_model)->SetRotation(float3(0.0f, 0.0f, 1.5f));
+
+	Handle64 m2 = ECS::Get()->CreateEntity<BasicModel>(device, bp);
+	models.push_back(m2);
+	//ECS::Get()->GetComponent<Transform>(m2)->SetPosition(float3(-1.0f, -1.0f, 0.0f));
+	//ECS::Get()->GetComponent<Transform>(m2)->SetScale(float3(0.5f, 0.5f, 0.5f));
+
+	ECS::Get()->GetComponent<Transform>(m2)->SetParent(camera);
 
 
 	//----------------------------------------------------------------------------------
@@ -152,18 +153,24 @@ void TestScene::Tick(const Engine& engine) {
 	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_delta.x)
 							  + L"\nY: " + to_wstring(mouse_delta.y));
 
-	//float3 position = camera->GetPosition();
-	//texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
-	//							 + L"\nY: " + to_wstring(position.y)
-	//							 + L"\nZ: " + to_wstring(position.z));
 
-	//float3 rotation = camera->GetRotation();
-	//texts.at("Rotation").SetText(L"Rotation \nX: " + to_wstring(rotation.x)
-	//							 + L"\nY: " + to_wstring(rotation.y)
-	//							 + L"\nZ: " + to_wstring(rotation.z));
+	const auto* transform = ECS::Get()->GetComponent<CameraTransform>(camera);
+	const auto* movement = ECS::Get()->GetComponent<CameraMovement>(camera);
 
-	//float3 velocity = camera->GetVelocity() * 1000.0f;
-	//texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)
-	//							 + L"\nY: " + to_wstring(velocity.y)
-	//							 + L"\nZ: " + to_wstring(velocity.z));
+	float3 position;
+	XMStoreFloat3(&position, transform->GetPosition());
+	texts.at("Position").SetText(L"Position \nX: " + to_wstring(position.x)
+								 + L"\nY: " + to_wstring(position.y)
+								 + L"\nZ: " + to_wstring(position.z));
+
+	float3 rotation;
+	XMStoreFloat3(&rotation, transform->GetRotation());
+	texts.at("Rotation").SetText(L"Rotation \nX: " + to_wstring(rotation.x)
+								 + L"\nY: " + to_wstring(rotation.y)
+								 + L"\nZ: " + to_wstring(rotation.z));
+
+	float3 velocity = movement->GetVelocity() * 1000.0f;
+	texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)
+								 + L"\nY: " + to_wstring(velocity.y)
+								 + L"\nZ: " + to_wstring(velocity.z));
 }

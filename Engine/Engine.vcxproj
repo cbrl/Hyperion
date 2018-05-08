@@ -167,6 +167,7 @@
     <ClInclude Include="ecs\system\system.h" />
     <ClInclude Include="ecs\system\system_mgr.h" />
     <ClInclude Include="ecs_data\components\components.h" />
+    <ClInclude Include="ecs_data\components\geometry\transform\camera_transform.h" />
     <ClInclude Include="ecs_data\components\geometry\transform\transform.h" />
     <ClInclude Include="ecs_data\components\rendering\camera\camera_base.h" />
     <ClInclude Include="ecs_data\components\rendering\camera\camera_movement.h" />
@@ -223,7 +224,6 @@
     <ClInclude Include="scene\scene.h" />
     <ClInclude Include="scene\test_scene.h" />
     <ClInclude Include="scene\text\text.h" />
-    <ClInclude Include="scene\ui\user_interface.h" />
     <ClInclude Include="shader\hlsl.h" />
     <ClInclude Include="shader\shader.h" />
     <ClInclude Include="stdafx.h" />
@@ -250,6 +250,7 @@
     <ClCompile Include="ecs\ecs.cpp" />
     <ClCompile Include="ecs\entity\entity.cpp" />
     <ClCompile Include="ecs\system\system_mgr.cpp" />
+    <ClCompile Include="ecs_data\components\geometry\transform\camera_transform.cpp" />
     <ClCompile Include="ecs_data\components\geometry\transform\transform.cpp" />
     <ClCompile Include="ecs_data\components\rendering\camera\orthographic_camera.cpp" />
     <ClCompile Include="ecs_data\components\rendering\camera\perspective_camera.cpp" />
@@ -297,7 +298,6 @@
     </ClCompile>
     <ClCompile Include="scene\test_scene.cpp" />
     <ClCompile Include="scene\text\text.cpp" />
-    <ClCompile Include="scene\ui\user_interface.cpp" />
     <ClCompile Include="shader\shader.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -315,6 +315,7 @@
     <ClInclude Include="loader\model_loader.tpp">
       <FileType>Document</FileType>
     </ClInclude>
+    <None Include="ClassDiagram.cd" />
     <None Include="ecs\entity\entity.tpp" />
     <None Include="ecs\handle\handle_table.tpp" />
     <ClInclude Include="rendering\buffer\constant_buffer.tpp">

@@ -5,6 +5,7 @@
 #include <DDSTextureLoader.h>
 #include <DirectXHelpers.h>
 #include "util\engine_util.h"
+#include "util\io\io.h"
 
 
 namespace TextureLoader {

@@ -25,6 +25,7 @@ class IComponent {
 
 		virtual const type_index GetTypeID() const = 0;
 
+		// Get the handle of the entity that owns this component
 		const Handle64 GetOwner() const {
 			return owner;
 		}

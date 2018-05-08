@@ -5,7 +5,7 @@
 #include "rendering\buffer\buffers.h"
 #include "resource\resource_mgr.h"
 #include "scene\text\text.h"
-#include "scene\ui\user_interface.h"
+//#include "scene\ui\user_interface.h"
 #include "ecs_data\entities\entities.h"
 #include "ecs_data\components\components.h"
 #include "ecs_data\systems\systems.h"
@@ -55,7 +55,7 @@ class Scene {
 		virtual void Tick(const Engine& engine) = 0;
 
 		// Draw the UI
-		void DrawUI(Engine& engine) { ui.Draw(engine); }
+		//void DrawUI(Engine& engine) { ui.Draw(engine); }
 
 
 		//----------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ class Scene {
 	protected:
 		Scene() : name("Scene"), enable_input(true) {}
 
-		Scene(const string& name) : name(name), enable_input(true) {}
+		Scene(const string&& name) : name(name), enable_input(true) {}
 
 		virtual void Init(const Engine& engine) = 0;
 
@@ -94,28 +94,26 @@ class Scene {
 
 		bool                           enable_input;
 		RenderStates                   render_states;
-		UserInterface                  ui;
+		//UserInterface                  ui;
 
-		//unique_ptr<PlayerCamera>       camera;
-		Handle64 camera;
 		Fog                            fog;
-		vector<Model>                  models;
 		vector<PointLightBuffer>       point_lights;
 		vector<DirectionalLightBuffer> directional_lights;
 		vector<SpotLightBuffer>        spot_lights;
 		map<string, Text>              texts;
 
-		vector<Handle64>               entities;
+		Handle64         camera;
+		vector<Handle64> models;
 
 
 	public:
 		template<typename ElementT, typename ActionT>
 		void ForEach(ActionT act) {
-			if constexpr (is_same_v<Model, ElementT>) {
-				for (auto& e : models) {
-					act(e);
-				}
-			}
+			//if constexpr (is_same_v<Model, ElementT>) {
+			//	for (auto& e : models) {
+			//		act(e);
+			//	}
+			//}
 
 			if constexpr (is_same_v<Text, ElementT>) {
 				for (auto& e : texts) {
@@ -144,9 +142,9 @@ class Scene {
 
 
 		template<typename ActionT>
-		void ForEachEntity(ActionT act) {
-			for (Handle64 entity : entities) {
-				act(entity);
+		void ForEachModel(ActionT act) {
+			for (Handle64 model : models) {
+				act(model);
 			}
 		}
 };

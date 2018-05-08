@@ -41,16 +41,16 @@ struct Handle {
 
 
 	private:
-		static constexpr T index_bitmask = (1U << index_bits) - 1U;
-		static constexpr T counter_bitmask = (1U << counter_bits) - 1U;
+		static constexpr T index_bitmask = (1Ui64 << index_bits) - 1Ui64;
+		static constexpr T counter_bitmask = (1Ui64 << counter_bits) - 1Ui64;
 
 
 	public:
 		using value_type = T;
 
 		// Max values
-		static constexpr T index_max   = (1U << index_bits) - 2U;
-		static constexpr T counter_max = (1U << counter_bits) - 2U;
+		static constexpr T index_max   = (1Ui64 << index_bits) - 2Ui64;
+		static constexpr T counter_max = (1Ui64 << counter_bits) - 2Ui64;
 
 		// Number of bits
 		static constexpr size_t n_counter_bits = counter_bits;
