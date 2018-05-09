@@ -80,13 +80,17 @@ void CameraSystem::ProcessMovement(CameraMovement* movement, CameraTransform* tr
 		}
 	}
 
-	UpdateMovement(movement, move_units);
-
 	if (rotate_units.x || rotate_units.y || rotate_units.z) {
 		transform->Rotate(rotate_units);
 	}
 
-	Move(movement, transform, dt);
+	if (move_units.x || move_units.y || move_units.z) {
+		UpdateMovement(movement, move_units);
+		Move(movement, transform, dt);
+	}
+
+	// Decelerate the camera
+	Decelerate(movement, dt);
 }
 
 
@@ -168,10 +172,6 @@ void CameraSystem::Move(CameraMovement* mv, CameraTransform* transform, float dt
 	position += transform->GetAxisZ() * mv->GetVelocity().z * dt;
 
 	transform->Move(position);
-
-
-	// Decelerate the camera
-	Decelerate(mv, dt);
 }
 
 

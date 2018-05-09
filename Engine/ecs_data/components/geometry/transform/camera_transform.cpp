@@ -126,13 +126,3 @@ void XM_CALLCONV CameraTransform::Move(FXMVECTOR units) {
 	position += units;
 	needs_update = true;
 }
-
-
-//const XMMATRIX CameraTransform::GetWorld() const {
-//	XMMATRIX rotation = { right,
-//	                      up,
-//	                      forward,
-//	                      {0.0f, 0.0f, 0.0f, 1.0f} };
-//
-//	return XMMatrixTranslationFromVector(position) * rotation;
-//}

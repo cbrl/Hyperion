@@ -17,23 +17,11 @@ void TransformSystem::Update(float dt) {
 void TransformSystem::PostUpdate(float dt) {
 
 	ECS::Get()->ForEach<Transform>([&](Transform& transform) {
-		if (transform.needs_update) {
-			transform.needs_update = false;
-			transform.updated      = true;
-		}
-		else {
-			transform.updated = false;
-		}
+		transform.updated = false;
 	});
 
 	ECS::Get()->ForEach<CameraTransform>([&](CameraTransform& transform) {
-		if (transform.needs_update) {
-			transform.needs_update = false;
-			transform.updated      = true;
-		}
-		else {
-			transform.updated = false;
-		}
+		transform.updated = false;
 	});
 }
 

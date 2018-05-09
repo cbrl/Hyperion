@@ -11,6 +11,10 @@ struct CameraTransform final : public Component<CameraTransform> {
 		~CameraTransform() = default;
 
 
+		//----------------------------------------------------------------------------------
+		// Setters
+		//----------------------------------------------------------------------------------
+
 		void SetParent(const Handle64 handle) { parent = handle; }
 
 		void SetRotation(const float3& rotation);
@@ -25,13 +29,18 @@ struct CameraTransform final : public Component<CameraTransform> {
 		void XM_CALLCONV Move(FXMVECTOR units);
 
 
+		//----------------------------------------------------------------------------------
+		// Getters
+		//----------------------------------------------------------------------------------
+
 		const Handle64 GetParent() const { return parent; }
 
 		const XMVECTOR GetPosition() const { return position; }
 		const XMVECTOR GetRotation() const { return XMVectorSet(pitch, yaw, roll, 0.0f); }
-		const XMVECTOR GetAxisX()    const { return right; }
-		const XMVECTOR GetAxisY()    const { return up; }
-		const XMVECTOR GetAxisZ()    const { return forward; }
+
+		const XMVECTOR GetAxisX() const { return right; }
+		const XMVECTOR GetAxisY() const { return up; }
+		const XMVECTOR GetAxisZ() const { return forward; }
 
 		const XMMATRIX GetWorld() const { return world; }
 
