@@ -38,7 +38,7 @@ void SystemMonitor::CPUMonitor::Init(HANDLE handle) {
 		can_read_cpu = false;
 	}
 
-	last_sample_time = GetTickCount();
+	last_sample_time = GetTickCount64();
 	total_usage = 0;
 
 
@@ -69,9 +69,9 @@ void SystemMonitor::CPUMonitor::Tick() {
 	PDH_FMT_COUNTERVALUE value;
 
 	if (can_read_cpu) {
-		if ((last_sample_time + 1000) < GetTickCount()) {
+		if ((last_sample_time + 1000) < GetTickCount64()) {
 
-			last_sample_time = GetTickCount();
+			last_sample_time = GetTickCount64();
 
 			PdhCollectQueryData(query_handle);
 			PdhGetFormattedCounterValue(counter_handle, PDH_FMT_LONG, NULL, &value);

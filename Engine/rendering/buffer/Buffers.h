@@ -9,13 +9,17 @@
 //----------------------------------------------------------------------------------
 
 struct CameraBuffer {
-	CameraBuffer() : position(0.0f, 0.0f, 0.0f), padding(0.0f) {}
+	CameraBuffer()
+		: position(0.0f, 0.0f, 0.0f)
+		, padding(0.0f)
+		, world_view_proj(XMMatrixIdentity())
+	{}
 	CameraBuffer(const float3& pos, CXMMATRIX wvp)
 		: position(pos)
 		, world_view_proj(wvp)
 		, padding(0.0f)
 	{}
-	CameraBuffer(FXMVECTOR pos, CXMMATRIX wvp) : world_view_proj(wvp) {
+	CameraBuffer(FXMVECTOR pos, CXMMATRIX wvp) : world_view_proj(wvp), padding(0.0f) {
 		XMStoreFloat3(&position, pos);
 	}
 
@@ -56,6 +60,7 @@ struct MaterialBuffer {
 		, specular(specular)
 		, reflect(reflect)
 		, emissive(emissive)
+		, optical_density(optical_density)
 		, dissolve(dissolve)
 		, has_texture(has_texture)
 		, reflection_enabled(reflection_enabled)

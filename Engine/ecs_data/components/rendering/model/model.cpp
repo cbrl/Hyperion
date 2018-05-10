@@ -44,6 +44,7 @@ Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
 	, mesh(blueprint->mesh)
 	, aabb(blueprint->aabb)
 	, sphere(blueprint->sphere)
+	, update_bounding_volumes(false)
 {
 	// Create each model part
 	for (ModelPart& part : blueprint->model_parts) {

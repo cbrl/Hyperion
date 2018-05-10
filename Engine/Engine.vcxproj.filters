@@ -367,7 +367,6 @@
       <Filter>Source Files\ecs\handle</Filter>
     </None>
     <None Include="packages.config" />
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

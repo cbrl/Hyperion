@@ -386,7 +386,7 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 	vector<wstring> vert_list, vert_parts;
 
 	vector<VertexT> verts;
-	VertexT vertex;
+	VertexT vertex = {};
 
 	bool hasNormal = false;
 

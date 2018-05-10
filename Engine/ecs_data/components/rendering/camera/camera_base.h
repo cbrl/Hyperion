@@ -21,10 +21,9 @@ class CameraBase : public Component<T> {
 				   u32 viewport_height)
 			: buffer(device)
 			, viewport({ 0.0f, 0.0f, 0.0f, 0.f, 0.0f, 1.0f })
-
 			, view_matrix(XMMatrixIdentity())
 			, projection_matrix(XMMatrixIdentity())
-
+			, frustum(XMMatrixIdentity())
 			, z_near(0.1f)
 			, z_far(1000.0f) {
 		}

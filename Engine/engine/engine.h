@@ -25,7 +25,7 @@
 
 class Engine final : public MainWindow {
 	public:
-		Engine() = default;
+		Engine() : resizing(false) {};
 		~Engine();
 
 		bool Init();

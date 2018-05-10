@@ -2,7 +2,7 @@
 #include "frustum.h"
 
 
-Frustum::Frustum(CXMMATRIX M) {
+Frustum::Frustum(CXMMATRIX M) : planes() {
 	UpdateFrustum(M);
 }
 
