@@ -292,6 +292,42 @@
     <Filter Include="Source Files\engine">
       <UniqueIdentifier>{97c6cc69-3abd-48cf-aaef-fa88174e6fbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ecs_data\components\geometry\transform">
+      <UniqueIdentifier>{8f6d46bf-d155-4a13-8819-74ff878fa51c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\components\rendering\light">
+      <UniqueIdentifier>{6a5d5997-6d43-4c4c-a88d-e1e843a9da4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\components\rendering\model">
+      <UniqueIdentifier>{645069c1-09c8-499e-b9c0-0e5619e22993}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\components\rendering\skybox">
+      <UniqueIdentifier>{89c5e4c5-235d-469f-869b-c4abcb552ea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\entities\world">
+      <UniqueIdentifier>{266f0d5e-59c4-4ed1-94e0-8e961871905c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\systems\geometry">
+      <UniqueIdentifier>{8ad4cc34-c894-4753-8eaf-0af877d83caf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\systems\rendering">
+      <UniqueIdentifier>{ef9bcc73-eb21-47a8-960f-a2c4fc512b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\components\geometry\transform">
+      <UniqueIdentifier>{89cd696a-27e9-4d25-9fd7-564ca98c4086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\components\rendering\model">
+      <UniqueIdentifier>{03901908-e541-4d13-8621-17b1f5b452b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\components\rendering\skybox">
+      <UniqueIdentifier>{6d192b23-4c50-4d24-b64e-b935a114300e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems\geometry">
+      <UniqueIdentifier>{1cdec8de-cdb1-4237-870e-97b832bce18a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems\rendering">
+      <UniqueIdentifier>{fe36e8e2-7a5f-4ef6-9403-f48a89ccdf58}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -329,9 +365,6 @@
     </None>
     <None Include="ecs\handle\handle_table.tpp">
       <Filter>Source Files\ecs\handle</Filter>
-    </None>
-    <None Include="ecs\entity\entity.tpp">
-      <Filter>Source Files\ecs\entity</Filter>
     </None>
     <None Include="packages.config" />
     <None Include="ClassDiagram.cd" />
@@ -583,21 +616,6 @@
     <ClInclude Include="ecs_data\systems\systems.h">
       <Filter>Header Files\ecs_data</Filter>
     </ClInclude>
-    <ClInclude Include="ecs_data\entities\world\basic_model.h">
-      <Filter>Header Files\ecs_data\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="ecs_data\entities\world\world_object.h">
-      <Filter>Header Files\ecs_data\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="ecs_data\systems\rendering\camera\camera_system.h">
-      <Filter>Header Files\ecs_data\systems</Filter>
-    </ClInclude>
-    <ClInclude Include="ecs_data\components\geometry\transform\transform.h">
-      <Filter>Header Files\ecs_data\components\geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="ecs_data\components\rendering\model\model.h">
-      <Filter>Header Files\ecs_data\components\rendering</Filter>
-    </ClInclude>
     <ClInclude Include="ecs_data\components\rendering\camera\camera_base.h">
       <Filter>Header Files\ecs_data\components\rendering\camera</Filter>
     </ClInclude>
@@ -610,23 +628,41 @@
     <ClInclude Include="ecs_data\components\rendering\camera\camera_movement.h">
       <Filter>Header Files\ecs_data\components\rendering\camera</Filter>
     </ClInclude>
-    <ClInclude Include="ecs_data\components\rendering\skybox\skybox.h">
-      <Filter>Header Files\ecs_data\components\rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="ecs_data\entities\world\player_camera.h">
-      <Filter>Header Files\ecs_data\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="ecs_data\systems\geometry\transform_system.h">
-      <Filter>Header Files\ecs_data\systems</Filter>
-    </ClInclude>
     <ClInclude Include="engine\main_window.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
     <ClInclude Include="engine\engine.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="ecs\entity\entity.tpp">
+      <Filter>Source Files\ecs\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\components\geometry\transform\transform.h">
+      <Filter>Header Files\ecs_data\components\geometry\transform</Filter>
+    </ClInclude>
     <ClInclude Include="ecs_data\components\geometry\transform\camera_transform.h">
-      <Filter>Header Files\ecs_data\components\geometry</Filter>
+      <Filter>Header Files\ecs_data\components\geometry\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\components\rendering\model\model.h">
+      <Filter>Header Files\ecs_data\components\rendering\model</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\components\rendering\skybox\skybox.h">
+      <Filter>Header Files\ecs_data\components\rendering\skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\entities\world\world_object.h">
+      <Filter>Header Files\ecs_data\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\entities\world\player_camera.h">
+      <Filter>Header Files\ecs_data\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\entities\world\basic_model.h">
+      <Filter>Header Files\ecs_data\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\systems\rendering\camera\camera_system.h">
+      <Filter>Header Files\ecs_data\systems\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\systems\geometry\transform_system.h">
+      <Filter>Header Files\ecs_data\systems\geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -726,29 +762,14 @@
     <ClCompile Include="ecs\system\system_mgr.cpp">
       <Filter>Source Files\ecs\system</Filter>
     </ClCompile>
-    <ClCompile Include="ecs_data\components\rendering\model\model.cpp">
-      <Filter>Source Files\ecs_data\components\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="ecs_data\components\geometry\transform\transform.cpp">
-      <Filter>Source Files\ecs_data\components\geometry</Filter>
-    </ClCompile>
     <ClCompile Include="ecs\entity\entity.cpp">
       <Filter>Source Files\ecs\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="ecs_data\systems\rendering\camera\camera_system.cpp">
-      <Filter>Source Files\ecs_data\systems</Filter>
     </ClCompile>
     <ClCompile Include="ecs_data\components\rendering\camera\perspective_camera.cpp">
       <Filter>Source Files\ecs_data\components\rendering\camera</Filter>
     </ClCompile>
     <ClCompile Include="ecs_data\components\rendering\camera\orthographic_camera.cpp">
       <Filter>Source Files\ecs_data\components\rendering\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="ecs_data\components\rendering\skybox\skybox.cpp">
-      <Filter>Source Files\ecs_data\components\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="ecs_data\systems\geometry\transform_system.cpp">
-      <Filter>Source Files\ecs_data\systems</Filter>
     </ClCompile>
     <ClCompile Include="engine\engine.cpp">
       <Filter>Source Files\engine</Filter>
@@ -757,7 +778,22 @@
       <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="ecs_data\components\geometry\transform\camera_transform.cpp">
-      <Filter>Source Files\ecs_data\components\geometry</Filter>
+      <Filter>Source Files\ecs_data\components\geometry\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\components\geometry\transform\transform.cpp">
+      <Filter>Source Files\ecs_data\components\geometry\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\components\rendering\model\model.cpp">
+      <Filter>Source Files\ecs_data\components\rendering\model</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\components\rendering\skybox\skybox.cpp">
+      <Filter>Source Files\ecs_data\components\rendering\skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\systems\rendering\camera\camera_system.cpp">
+      <Filter>Source Files\ecs_data\systems\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\systems\geometry\transform_system.cpp">
+      <Filter>Source Files\ecs_data\systems\geometry</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 
 #include "util\datatypes\datatypes.h"
 
+class Engine;
 
 class ISystem {
 	friend class SystemMgr;
@@ -20,9 +21,9 @@ class ISystem {
 			return active;
 		}
 
-		virtual void PreUpdate(float dt) = 0;
-		virtual void Update(float dt) = 0;
-		virtual void PostUpdate(float dt) = 0;
+		virtual void PreUpdate(const Engine& engine) = 0;
+		virtual void Update(const Engine& engine) = 0;
+		virtual void PostUpdate(const Engine& engine) = 0;
 
 	protected:
 		// Is this system enabled?
@@ -40,9 +41,9 @@ class System : public ISystem {
 			return type_id;
 		}
 
-		virtual void PreUpdate(float dt) override {};
-		virtual void Update(float dt) override {};
-		virtual void PostUpdate(float dt) override {};
+		virtual void PreUpdate(const Engine& engine) override {};
+		virtual void Update(const Engine& engine) override {};
+		virtual void PostUpdate(const Engine& engine) override {};
 
 
 	public:

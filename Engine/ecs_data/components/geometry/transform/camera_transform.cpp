@@ -16,9 +16,8 @@ CameraTransform::CameraTransform()
 	, pitch(0.0f)
 	, max_pitch(XMConvertToRadians(89.0f))
 	, yaw(0.0f)
-	, roll(0.0f)
 
-	, free_look(true)
+	, free_look(false)
 
 	, needs_update(false)
 	, updated(false) {
@@ -66,7 +65,6 @@ void CameraTransform::Rotate(const float3& units) {
 	float lookLengthXZ = sqrtf(powf(forward_f32.x, 2) + powf(forward_f32.z, 2));
 	pitch = atan2f(forward_f32.y, lookLengthXZ);
 	yaw   = atan2f(forward_f32.x, forward_f32.z);
-	roll  = atan2f(forward_f32.x, XMVectorGetY(up));
 
 	needs_update = true;
 }

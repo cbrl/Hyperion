@@ -17,14 +17,14 @@ class ECS final {
 		}
 
 
-		void Update(float delta_time) {
-			system_mgr->Update(delta_time);
+		void Update(const Engine& engine) {
+			system_mgr->Update(engine);
 		}
 
 
 		template<typename EntityT, typename... ArgsT>
 		[[nodiscard]]
-		Handle64 CreateEntity(ArgsT&&... args) {
+		const Handle64 CreateEntity(ArgsT&&... args) {
 			static_assert(std::is_base_of_v<IEntity, EntityT>,
 						  "Calling ECS::CreateEntity() with non-entity type.");
 
@@ -38,7 +38,7 @@ class ECS final {
 
 
 		template<typename ComponentT, typename... ArgsT>
-		ComponentT* AddComponent(Handle64 entity, ArgsT&&... args) {
+		ComponentT* const AddComponent(Handle64 entity, ArgsT&&... args) {
 			static_assert(std::is_base_of_v<IComponent, ComponentT>,
 						  "Calling ECS::AddComponent() with non-component type.");
 
@@ -57,7 +57,7 @@ class ECS final {
 
 		template<typename ComponentT>
 		[[nodiscard]]
-		ComponentT* GetComponent(Handle64 entity) {
+		ComponentT* const GetComponent(Handle64 entity) {
 			static_assert(std::is_base_of_v<IComponent, ComponentT>,
 						  "Calling ECS::GetComponent() with non-component type.");
 
@@ -66,7 +66,7 @@ class ECS final {
 
 
 		template<typename SystemT, typename... ArgsT>
-		SystemT* AddSystem(ArgsT&&... args) {
+		SystemT* const AddSystem(ArgsT&&... args) {
 			static_assert(std::is_base_of_v<ISystem, SystemT>,
 						  "Calling ECS::AddSystem() with non-system type.");
 
@@ -95,8 +95,8 @@ class ECS final {
 		}
 
 
-		EntityMgr*    GetEntityMgr()    const { return entity_mgr.get(); }
-		ComponentMgr* GetComponentMgr() const { return component_mgr.get(); }
+		EntityMgr* const    GetEntityMgr()    const { return entity_mgr.get(); }
+		ComponentMgr* const GetComponentMgr() const { return component_mgr.get(); }
 
 
 	private:

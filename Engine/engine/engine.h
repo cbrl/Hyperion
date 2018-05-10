@@ -39,9 +39,8 @@ class Engine final : public MainWindow {
 		u32  GetWindowWidth()  const { return window_width; }
 		u32  GetWindowHeight() const { return window_height; }
 
-		Scene&          GetScene()              { return *scene; }
+		Scene&          GetScene()        const { return *scene; }
 		Input&          GetInput()        const { return *input; }
-		weak_ptr<Input> GetInputWeakPtr() const { return weak_ptr<Input>(input); }
 		Timer&          GetTimer()        const { return *timer; }
 		FPS&            GetFPSCounter()   const { return *fps_counter; }
 		SystemMonitor&  GetSysMon()       const { return *system_monitor; }
@@ -55,7 +54,7 @@ class Engine final : public MainWindow {
 
 	private:
 		unique_ptr<ECS>           ecs_engine;
-		shared_ptr<Input>         input;
+		unique_ptr<Input>         input;
 		unique_ptr<SystemMonitor> system_monitor;
 		unique_ptr<Timer>         timer;
 		unique_ptr<FPS>           fps_counter;

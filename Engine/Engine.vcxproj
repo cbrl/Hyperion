@@ -316,7 +316,9 @@
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="ClassDiagram.cd" />
-    <None Include="ecs\entity\entity.tpp" />
+    <ClInclude Include="ecs\entity\entity.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <None Include="ecs\handle\handle_table.tpp" />
     <ClInclude Include="rendering\buffer\constant_buffer.tpp">
       <FileType>Document</FileType>

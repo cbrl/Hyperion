@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "transform_system.h"
+#include "engine\engine.h"
 
 
-void TransformSystem::Update(float dt) {
+void TransformSystem::Update(const Engine& engine) {
 
 	ECS::Get()->ForEach<Transform>([&](Transform& transform) {
 		UpdateWorld(transform);
@@ -14,7 +15,7 @@ void TransformSystem::Update(float dt) {
 }
 
 
-void TransformSystem::PostUpdate(float dt) {
+void TransformSystem::PostUpdate(const Engine& engine) {
 
 	ECS::Get()->ForEach<Transform>([&](Transform& transform) {
 		transform.updated = false;

@@ -43,7 +43,7 @@ bool Engine::Init() {
 
 
 	// Create input handler
-	input = make_shared<Input>(hWnd);
+	input = make_unique<Input>(hWnd);
 
 
 	// Create Timer
@@ -111,7 +111,7 @@ void Engine::Tick() {
 
 
 	// Update the active systems in the ecs engine
-	ecs_engine->Update(timer->DeltaTime());
+	ecs_engine->Update(*this);
 
 
 	// Update scene
@@ -129,11 +129,9 @@ void Engine::ProcessInput() {
 	if (input->IsKeyPressed(Keyboard::F1)) {
 		if (input->GetMouseMode() == Mouse::MODE_ABSOLUTE) {
 			input->SetMouseRelative();
-			scene->InputEnabled(true);
 		}
 		else {
 			input->SetMouseAbsolute();
-			scene->InputEnabled(false);
 		}
 	}
 }
@@ -226,8 +224,12 @@ void Engine::OnResize(u32 window_width, u32 window_height) {
 	rendering_mgr->ResizeBuffers(window_width, window_height);
 	
 	if (scene) {
-		ecs_engine->GetComponent<PerspectiveCamera>(scene->GetCamera())->ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
-		//scene->GetCamera().ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+		if (const auto cam = ecs_engine->GetComponent<PerspectiveCamera>(scene->GetCamera())) {
+			cam->ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+		}
+		else if (const auto cam = ecs_engine->GetComponent<OrthographicCamera>(scene->GetCamera())) {
+			cam->ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+		}
 	}
 
 	FILE_LOG(logINFO) << "Viewport resized to " << window_width << "x" << window_height;

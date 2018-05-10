@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "skybox.h"
+#include "geometry\shapes\shapes.h"
 
 
 void SkyBox::Init(ID3D11Device* device,
-				  ResourceMgr& resource_mgr,
-				  const wstring& filename) {
+				  shared_ptr<Texture> tex) {
 
 	// Create the texture
-	texture = resource_mgr.GetOrCreate<Texture>(filename);
+	texture = std::move(tex);
 
 	// Set the vertex stride
 	stride = sizeof(VertexPosition);
@@ -50,15 +50,4 @@ void SkyBox::Init(ID3D11Device* device,
 	ib_data.pSysMem = &indices[0];
 
 	device->CreateBuffer(&ib_desc, &ib_data, index_buffer.GetAddressOf());
-}
-
-
-void SkyBox::Bind(ID3D11DeviceContext* device_context) const {
-	u32 offset = 0;
-
-	Pipeline::IA::BindVertexBuffers(device_context, 0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
-
-	Pipeline::IA::BindIndexBuffer(device_context, index_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-
-	Pipeline::IA::BindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }

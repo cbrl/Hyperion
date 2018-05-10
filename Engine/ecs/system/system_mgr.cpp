@@ -23,26 +23,26 @@ SystemMgr::~SystemMgr() {
 }
 
 
-void SystemMgr::Update(float delta_time) {
+void SystemMgr::Update(const Engine& engine) {
 
 	// Pre Update
 	for (const auto& pair : systems) {
 		if (pair.second->IsActive()) {
-			pair.second->PreUpdate(delta_time);
+			pair.second->PreUpdate(engine);
 		}
 	}
 
 	// Update
 	for (const auto& pair : systems) {
 		if (pair.second->IsActive()) {
-			pair.second->Update(delta_time);
+			pair.second->Update(engine);
 		}
 	}
 
 	// Post Update
 	for (const auto& pair : systems) {
 		if (pair.second->IsActive()) {
-			pair.second->PostUpdate(delta_time);
+			pair.second->PostUpdate(engine);
 		}
 	}
 }

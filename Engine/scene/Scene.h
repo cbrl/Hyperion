@@ -48,9 +48,6 @@ class Scene {
 	public:
 		~Scene() = default;
 
-		// Enable or disable input
-		void InputEnabled(bool enable) { enable_input = enable; }
-
 		// Update the scene
 		virtual void Tick(const Engine& engine) = 0;
 
@@ -82,9 +79,9 @@ class Scene {
 
 
 	protected:
-		Scene() : name("Scene"), enable_input(true) {}
+		Scene() : name("Scene") {}
 
-		Scene(const string&& name) : name(name), enable_input(true) {}
+		Scene(string&& name) : name(std::move(name)) {}
 
 		virtual void Init(const Engine& engine) = 0;
 
@@ -92,7 +89,6 @@ class Scene {
 	protected:
 		string                         name;
 
-		bool                           enable_input;
 		RenderStates                   render_states;
 		//UserInterface                  ui;
 

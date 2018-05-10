@@ -25,6 +25,10 @@ struct Texture final : public Resource<Texture> {
 		}
 
 
+		ID3D11ShaderResourceView* Get() const {
+			return texture.Get();
+		}
+
 		// Bind the texture to the specified pipeline stage
 		template<typename StageT>
 		void Bind(ID3D11DeviceContext* device_context, u32 slot) const {

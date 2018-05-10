@@ -28,10 +28,10 @@ class IEntity {
 
 		template<typename ComponentT>
 		[[nodiscard]]
-		ComponentT* GetComponent() const;
+		ComponentT* const GetComponent() const;
 
 		template<typename ComponentT, typename... ArgsT>
-		ComponentT* AddComponent(ArgsT&&... args);
+		ComponentT* const AddComponent(ArgsT&&... args);
 
 		template<typename ComponentT>
 		void RemoveComponent();

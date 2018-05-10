@@ -27,17 +27,17 @@ void TestScene::Init(const Engine& engine) {
 	// Create camera
 	//----------------------------------------------------------------------------------
 
-	// Create the camera
-	camera = ECS::Get()->CreateEntity<PlayerCamera>(device, device_context, engine.GetInputWeakPtr(), engine.GetWindowWidth(), engine.GetWindowHeight());
-
-	// Create the skybox
-	SkyBox skybox(device, resource_mgr, L"../data/Textures/grasscube1024.dds");
+	// Create the camera and skybox
+	camera = ECS::Get()->CreateEntity<PlayerCamera>(device,
+													device_context,
+													engine.GetWindowWidth(),
+													engine.GetWindowHeight(),
+													resource_mgr.GetOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	// Set the parameters
 	auto cam = ECS::Get()->GetComponent<PerspectiveCamera>(camera);
 	cam->SetZDepth(zNear, zFar);
 	cam->SetFOV(FOV);
-	//camera->SetSkybox(skybox);
 	//camera->SetPosition(float3(0.0f, 3.0f, -5.0f));
 
 
@@ -99,7 +99,7 @@ void TestScene::Init(const Engine& engine) {
 	//ECS::Get()->GetComponent<Transform>(m2)->SetPosition(float3(-1.0f, -1.0f, 0.0f));
 	//ECS::Get()->GetComponent<Transform>(m2)->SetScale(float3(0.5f, 0.5f, 0.5f));
 
-	ECS::Get()->GetComponent<Transform>(m2)->SetParent(camera);
+	//ECS::Get()->GetComponent<Transform>(m2)->SetParent(camera);
 
 
 	//----------------------------------------------------------------------------------
@@ -163,11 +163,9 @@ void TestScene::Tick(const Engine& engine) {
 								 + L"\nY: " + to_wstring(position.y)
 								 + L"\nZ: " + to_wstring(position.z));
 
-	float3 rotation;
-	XMStoreFloat3(&rotation, transform->GetRotation());
+	float2 rotation = transform->GetPitchYaw();
 	texts.at("Rotation").SetText(L"Rotation \nX: " + to_wstring(rotation.x)
-								 + L"\nY: " + to_wstring(rotation.y)
-								 + L"\nZ: " + to_wstring(rotation.z));
+								 + L"\nY: " + to_wstring(rotation.y));
 
 	float3 velocity = movement->GetVelocity() * 1000.0f;
 	texts.at("Velocity").SetText(L"Velocity \nX: " + to_wstring(velocity.x)

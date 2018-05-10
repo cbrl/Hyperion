@@ -9,7 +9,7 @@ class SystemMgr final {
 		SystemMgr();
 		~SystemMgr();
 
-		void Update(float delta_time);
+		void Update(const Engine& engine);
 
 		template<typename SystemT, typename... ArgsT>
 		SystemT* AddSystem(ArgsT&&... args) {

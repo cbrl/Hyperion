@@ -6,9 +6,8 @@
 
 class CameraMovement : public Component<CameraMovement> {
 	public:
-		CameraMovement(weak_ptr<Input> input)
-			: input(input)
-			, velocity(0.0f, 0.0f, 0.0f)
+		CameraMovement()
+			: velocity(0.0f, 0.0f, 0.0f)
 			, acceleration(0.00002f)
 			, deceleration(0.00005f)
 			, max_velocity(0.01f)
@@ -26,8 +25,6 @@ class CameraMovement : public Component<CameraMovement> {
 		//----------------------------------------------------------------------------------
 		// Getters
 		//----------------------------------------------------------------------------------
-
-		const weak_ptr<Input>& GetInput() const { return input; }
 
 		float3 GetVelocity()     const { return velocity; }
 		float  GetAcceleration() const { return acceleration; }

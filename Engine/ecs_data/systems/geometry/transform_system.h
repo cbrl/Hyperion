@@ -10,8 +10,8 @@ class TransformSystem final : public System<TransformSystem> {
 		TransformSystem() = default;
 		~TransformSystem() = default;
 
-		void Update(float dt);
-		void PostUpdate(float dt);
+		void Update(const Engine& engine);
+		void PostUpdate(const Engine& engine);
 
 
 	private:
@@ -32,8 +32,8 @@ class TransformSystem final : public System<TransformSystem> {
 			// If the parent was updated, or if this transform already needs
 			// an update, this get the parent's matrix.
 			else {
-				auto parent = ECS::Get()->GetComponent<Transform>(transform.GetParent());
-				auto parent_cam = ECS::Get()->GetComponent<CameraTransform>(transform.GetParent());
+				const auto parent     = ECS::Get()->GetComponent<Transform>(transform.GetParent());
+				const auto parent_cam = ECS::Get()->GetComponent<CameraTransform>(transform.GetParent());
 
 				if (parent) {
 					UpdateWorld(*parent);
