@@ -37,21 +37,25 @@ class HandleTable {
 		}
 
 		HandleT operator[](typename HandleT::value_type idx) const {
-			assert(idx < handle_table.size() && "Invalid handle specified");
+			assert(idx < handle_table.size() && "Invalid handle specified. Index out of range.");
 			return HandleT(idx, handles[idx].first);
 		}
 
 		DataT* operator[](HandleT handle) {
-			assert(handle.index != HandleT::invalid_handle && "Invalid handle specified");
+			// Throw if this fails since the vector lookup will cause an exception anyway
+			ThrowIfFailed(handle.index != HandleT::invalid_handle, "Invalid handle specified");
 
 			auto pair = handle_table[handle.index];
 
-			assert(handle.counter == pair.first && "Invalid handle specified");
+			assert(handle.counter == pair.first && "Invalid handle specified. Table counter and handle counter differ.");
 
-			if (pair.first = handle.counter)
+			if (pair.first = handle.counter) {
 				return pair.second;
-
-			return nullptr;
+			}
+			else {
+				FILE_LOG(logERROR) << "Invalid handle. Table counter: " << pair.first + ", Handle counter: " << handle.counter;
+				return nullptr;
+			}
 		}
 
 

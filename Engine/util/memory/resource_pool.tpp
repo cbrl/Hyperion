@@ -53,17 +53,20 @@ void* ResourcePool<DataT, max_objs_per_chunk>::AllocateObject() {
 
 	// Create a new chunk if the others are full
 	if (!object) {
-
 		PoolAllocator<DataT>* alloc = new PoolAllocator<DataT>(alloc_size);
 
 		Chunk* chunk = new Chunk(alloc);
 		chunk->objects.clear();
-
 		memory_chunks.push_front(chunk);
 
 		object = chunk->allocator->AllocateCast();
 
+		if (object == nullptr) {
+			FILE_LOG(logERROR) << "ResourcePool::AllocateObject() - Unable to create object.";
+		}
+
 		assert(object != nullptr && "ResourcePool::AllocateObject() - Unable to create object.");
+
 		chunk->objects.push_back(object);
 	}
 
@@ -90,5 +93,6 @@ void ResourcePool<DataT, max_objs_per_chunk>::DestroyObject(void* object) {
 		}
 	}
 
+	FILE_LOG(logERROR) << "Failed to delete object. Possible corrupted memory.";
 	assert(false && "Failed to delete object. Possible corrupted memory.");
 }

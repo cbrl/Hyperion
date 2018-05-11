@@ -107,10 +107,12 @@ class Model final : public Component<Model> {
 
 
 		// Update model matrix and bounding volumes, as well as those of the child models.
-		void XM_CALLCONV Update(ID3D11DeviceContext* device_context,
-								FXMMATRIX world,
-								CXMMATRIX view,
-								CXMMATRIX proj);
+		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext* device_context,
+									  FXMMATRIX world,
+									  CXMMATRIX view,
+									  CXMMATRIX proj);
+
+		void XM_CALLCONV UpdateBoundingVolumes(FXMMATRIX world);
 
 
 		//----------------------------------------------------------------------------------
@@ -135,7 +137,4 @@ class Model final : public Component<Model> {
 		
 		// The child models that make up this model
 		vector<ModelChild> child_models;
-
-		// Flag that's set when the model transform changes
-		bool update_bounding_volumes;
 };

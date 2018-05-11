@@ -3,6 +3,7 @@
 
 #include "util\engine_util.h"
 #include "imgui\imgui.h"
+#include "ecs_data\systems\systems.h"
 
 
 // Declare the ImGui msg handler
@@ -36,6 +37,7 @@ bool Engine::Init() {
 	ecs_engine = make_unique<ECS>();
 	ECS::Get()->AddSystem<CameraSystem>();
 	ECS::Get()->AddSystem<TransformSystem>();
+	ECS::Get()->AddSystem<ModelSystem>();
 
 
 	// Initialize system monitor

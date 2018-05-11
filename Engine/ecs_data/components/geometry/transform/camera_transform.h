@@ -11,26 +11,15 @@ struct CameraTransform final : public Component<CameraTransform> {
 		~CameraTransform() = default;
 
 
-		void EnableFreeLook() {
-			free_look = true;
-		}
-
-		void DisableFreeLook() {
-			free_look = false;
-
-			right   = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-			up      = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-			forward = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-		}
-
-
 		//----------------------------------------------------------------------------------
 		// Getters
 		//----------------------------------------------------------------------------------
 
 		const Handle64 GetParent() const { return parent; }
 
-		const XMVECTOR GetPosition() const { return position; }
+		const XMVECTOR GetPosition()       const { return position; }
+		const XMMATRIX GetPositionMatrix() const { return XMMatrixTranslationFromVector(position); }
+
 		const float2   GetPitchYaw() const { return float2(pitch, yaw); }
 
 		const XMVECTOR GetAxisX() const { return right; }
@@ -38,8 +27,6 @@ struct CameraTransform final : public Component<CameraTransform> {
 		const XMVECTOR GetAxisZ() const { return forward; }
 
 		const XMMATRIX GetWorld() const { return world; }
-
-		const XMMATRIX GetTranslationMatrix() const { return XMMatrixTranslationFromVector(position); }
 
 
 		//----------------------------------------------------------------------------------
@@ -52,12 +39,15 @@ struct CameraTransform final : public Component<CameraTransform> {
 		void XM_CALLCONV SetRotation(FXMVECTOR rotation);
 
 		void Rotate(const float3& units);
-		void RotateX(const float units);
-		void RotateY(const float units);
-		void RotateZ(const float units);
 
 		void Move(const float3& units);
 		void XM_CALLCONV Move(FXMVECTOR units);
+
+
+	private:
+		void RotateX(const float units);
+		void RotateY(const float units);
+		void RotateZ(const float units);
 
 
 	private:
@@ -74,8 +64,6 @@ struct CameraTransform final : public Component<CameraTransform> {
 		float pitch;
 		float max_pitch;
 		float yaw;
-
-		bool free_look;
 
 		bool needs_update;
 		bool updated;

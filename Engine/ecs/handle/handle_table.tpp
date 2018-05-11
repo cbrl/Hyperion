@@ -47,8 +47,9 @@ HandleT HandleTable<HandleT, DataT, chunk_size>::CreateHandle(DataT* object) {
 template<typename HandleT, typename DataT, size_t chunk_size>
 void HandleTable<HandleT, DataT, chunk_size>::ReleaseHandle(HandleT handle) {
 
-	LogIfFailed((handle.index < handle_table.size()) && (handle.counter == handle_table[handle.index].first),
-				"Invalid handle specified for release.");
+	if ((handle.index > handle_table.size()) || (handle.counter != handle_table[handle.index].first)) {
+		FILE_LOG(logERROR) << "Invalid handle specified for release.";
+	}
 
 	handle_table[handle.index].second = nullptr;
 }

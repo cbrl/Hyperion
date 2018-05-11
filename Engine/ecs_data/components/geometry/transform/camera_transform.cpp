@@ -6,7 +6,6 @@ CameraTransform::CameraTransform()
 	: parent(Handle64::invalid_handle)
 
 	, world(XMMatrixIdentity())
-
 	, position(XMVectorZero())
 
 	, right({ 1.0f, 0.0f, 0.0f, 0.0f })
@@ -17,8 +16,6 @@ CameraTransform::CameraTransform()
 	, max_pitch(XMConvertToRadians(89.0f))
 	, yaw(0.0f)
 
-	, free_look(false)
-
 	, needs_update(false)
 	, updated(false) {
 }
@@ -27,9 +24,9 @@ CameraTransform::CameraTransform()
 void CameraTransform::SetRotation(const float3& rotation) {
 	XMMATRIX mat = XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
 
-	right   = mat.r[0];
-	up      = mat.r[1];
-	forward = mat.r[2];
+    right     = mat.r[0];
+	up        = mat.r[1];
+	forward   = mat.r[2];
 
 	needs_update = true;
 }
@@ -38,9 +35,9 @@ void CameraTransform::SetRotation(const float3& rotation) {
 void XM_CALLCONV CameraTransform::SetRotation(FXMVECTOR rotation) {
 	XMMATRIX mat = XMMatrixRotationRollPitchYawFromVector(rotation);
 
-	right   = mat.r[0];
-	up      = mat.r[1];
-	forward = mat.r[2];
+    right     = mat.r[0];
+	up        = mat.r[1];
+	forward   = mat.r[2];
 
 	needs_update = true;
 }
@@ -48,13 +45,9 @@ void XM_CALLCONV CameraTransform::SetRotation(FXMVECTOR rotation) {
 
 void CameraTransform::Rotate(const float3& units) {
 
-	RotateX(units.x);
-
-	RotateY(units.y);
-
-	if (free_look) {
-		RotateZ(units.z);
-	}
+	if (units.x) RotateX(units.x);
+	if (units.y) RotateY(units.y);
+	if (units.z) RotateZ(units.z);
 
 	// Calculate the new pitch, yaw, and roll values.
 	// lookLengthXZ is used in place of camera_forward.z for the pitch. This causes
@@ -71,38 +64,18 @@ void CameraTransform::Rotate(const float3& units) {
 
 
 void CameraTransform::RotateX(const float units) {
+	XMMATRIX x_rotation = XMMatrixRotationAxis(right, units);
 
-	float x_units = units;
-
-	// Limit max pitch if free look isn't enabled
-	if (!free_look) {
-		pitch -= units;
-
-
-		if (pitch > max_pitch) {
-			x_units += pitch - max_pitch;
-		}
-		else if (pitch < -max_pitch) {
-			x_units += pitch + max_pitch;
-		}
-	}
-
-	XMMATRIX xRotation = XMMatrixRotationAxis(right, x_units);
-
-	// Transform Up vector only if free look is enabled
-	if (free_look) {
-		up = XMVector3TransformNormal(up, xRotation);
-	}
-
-	forward = XMVector3TransformNormal(forward, xRotation);
+	up = XMVector3TransformNormal(up, x_rotation);
+	forward = XMVector3TransformNormal(forward, x_rotation);
 }
 
 
 void CameraTransform::RotateY(const float units) {
 	XMMATRIX y_rotation = XMMatrixRotationAxis(up, units);
 
-	right   = XMVector3TransformNormal(right, y_rotation);
-	forward = XMVector3TransformNormal(forward, y_rotation);
+	right     = XMVector3TransformNormal(right, y_rotation);
+	forward   = XMVector3TransformNormal(forward, y_rotation);
 }
 
 

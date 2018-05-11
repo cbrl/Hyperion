@@ -57,20 +57,6 @@ inline void ThrowIfFailed(bool result, const char* msg = "") {
 }
 
 
-// Log
-inline void LogIfFailed(HRESULT hr, const char* msg = "", TLogLevel log_level = logWARNING) {
-	if (FAILED(hr)) {
-		LogIfFailed(false, msg, log_level);
-	}
-}
-
-inline void LogIfFailed(bool result, const char* msg = "", TLogLevel log_level = logWARNING) {
-	if (!result) {
-		FILE_LOG(log_level) << msg;
-	}
-}
-
-
 // Alert Window
 inline void AlertIfFailed(HRESULT hr, const wchar_t* msg = L"") {
 	if (FAILED(hr)) {

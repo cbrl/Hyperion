@@ -157,7 +157,7 @@ void ForwardRenderer::RenderModels(Scene& scene) const {
 
 
 		// Update the model's cbuffer and bounding volumes
-		model->Update(device_context.Get(), transform->GetWorld(), view, projection);
+		model->UpdateBuffer(device_context.Get(), transform->GetWorld(), view, projection);
 
 
 		// Bind the model's mesh

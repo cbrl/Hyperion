@@ -99,7 +99,7 @@ void TestScene::Init(const Engine& engine) {
 	//ECS::Get()->GetComponent<Transform>(m2)->SetPosition(float3(-1.0f, -1.0f, 0.0f));
 	//ECS::Get()->GetComponent<Transform>(m2)->SetScale(float3(0.5f, 0.5f, 0.5f));
 
-	//ECS::Get()->GetComponent<Transform>(m2)->SetParent(camera);
+	ECS::Get()->GetComponent<Transform>(m2)->SetParent(camera);
 
 
 	//----------------------------------------------------------------------------------

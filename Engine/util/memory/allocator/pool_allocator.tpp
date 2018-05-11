@@ -47,8 +47,7 @@ void PoolAllocator<DataT>::Reset() {
 template<typename DataT>
 void* PoolAllocator<DataT>::Allocate(const size_t size, const size_t alignment) {
 
-	// Ensure the allocator is initialized and the arguments are valid.
-	assert(start_ptr != nullptr && "PoolAllocator not initialized");
+	// Ensure the the arguments are valid.
 	assert(size == chunk_size && "PoolAllocator allocation size is not equal to chunk size.");
 	assert(alignment == this->align && "PoolAllocator allocation alignment is not equal to alignment specified on creation.");
 

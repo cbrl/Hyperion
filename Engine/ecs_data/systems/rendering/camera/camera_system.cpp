@@ -54,10 +54,10 @@ void CameraSystem::ProcessMovement(const Engine& engine, CameraMovement* movemen
 
 	// Roll rotation
 	if (input.IsKeyDown(Keyboard::Q)) {
-		rotate_units.z -= dt * movement->GetRollSensitivity();
+		rotate_units.z += dt * movement->GetRollSensitivity();
 	}
 	else if (input.IsKeyDown(Keyboard::E)) {
-		rotate_units.z += dt * movement->GetRollSensitivity();
+		rotate_units.z -= dt * movement->GetRollSensitivity();
 	}
 
 	// Forward/Back movement

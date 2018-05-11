@@ -36,10 +36,8 @@ void LinearAllocator::Reset() {
 
 void* LinearAllocator::Allocate(const size_t size, const size_t alignment) {
 
-	// Ensure the allocation size and start pointer are valid
-	assert(size > 0 && "StackAllocator Allocate() called with 0 size.");
-	assert(start_ptr != nullptr && "Linear Allocator not initialized.");
-
+	// Ensure the allocation size is valid
+	assert(size > 0 && "LinearAllocator::Allocate() called with 0 size.");
 
 	size_t  padding     = 0;
 	uintptr padded_addr = 0;

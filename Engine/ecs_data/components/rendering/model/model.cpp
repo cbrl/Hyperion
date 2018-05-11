@@ -44,7 +44,6 @@ Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
 	, mesh(blueprint->mesh)
 	, aabb(blueprint->aabb)
 	, sphere(blueprint->sphere)
-	, update_bounding_volumes(false)
 {
 	// Create each model part
 	for (ModelPart& part : blueprint->model_parts) {
@@ -56,10 +55,10 @@ Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
 }
 
 
-void XM_CALLCONV Model::Update(ID3D11DeviceContext* device_context,
-							   FXMMATRIX world,
-							   CXMMATRIX view,
-							   CXMMATRIX proj) {
+void XM_CALLCONV Model::UpdateBuffer(ID3D11DeviceContext* device_context,
+									 FXMMATRIX world,
+									 CXMMATRIX view,
+									 CXMMATRIX proj) {
 
 	// Create the model-to-world matrix. Transposed for HLSL.
 	auto world_t = XMMatrixTranspose(world);
@@ -73,20 +72,19 @@ void XM_CALLCONV Model::Update(ID3D11DeviceContext* device_context,
 
 	// Update each child model
 	ForEachChild([&](ModelChild& child) {
-
-		if (update_bounding_volumes)
-			child.UpdateBoundingVolumes(world);
-
 		child.UpdateBuffer(device_context, world_t, world_inv_transpose, world_view_proj);
 	});
-
-	// Update the model's bounding volumes
-	if (update_bounding_volumes) {
-		aabb.Transform(world);
-		sphere.Transform(world);
-	}
+}
 
 
-	// Reset the update flag
-	update_bounding_volumes = false;
+void XM_CALLCONV Model::UpdateBoundingVolumes(FXMMATRIX world) {
+
+	// Update each child model
+	ForEachChild([&](ModelChild& child) {
+		child.UpdateBoundingVolumes(world);
+	});
+
+	// Update the model
+	aabb.Transform(world);
+	sphere.Transform(world);
 }

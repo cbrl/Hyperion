@@ -15,18 +15,6 @@ void TransformSystem::Update(const Engine& engine) {
 }
 
 
-void TransformSystem::PostUpdate(const Engine& engine) {
-
-	ECS::Get()->ForEach<Transform>([&](Transform& transform) {
-		transform.updated = false;
-	});
-
-	ECS::Get()->ForEach<CameraTransform>([&](CameraTransform& transform) {
-		transform.updated = false;
-	});
-}
-
-
 XMMATRIX TransformSystem::CalculateWorld(Transform& transform) const {
 	return XMMatrixScalingFromVector(transform.scale)
 	       * XMMatrixRotationRollPitchYawFromVector(transform.rotation)
@@ -40,5 +28,5 @@ XMMATRIX TransformSystem::CalculateWorld(CameraTransform& transform) const {
 		                  transform.GetAxisZ(),
 		                  {0.0f, 0.0f, 0.0f, 1.0f} };
 	
-	return rotation * XMMatrixTranslationFromVector(transform.GetPosition());
+	return rotation * transform.GetPositionMatrix();
 }

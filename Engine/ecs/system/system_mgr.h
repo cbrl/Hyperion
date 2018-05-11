@@ -27,7 +27,10 @@ class SystemMgr final {
 				return sys;
 			}
 
-			assert(true && "SystemMgr::AddSystem() - Unable to allocate memory for System.");
+			ThrowIfFailed(true, "SystemMgr::AddSystem() - Unable to allocate memory for System.");
+			
+			// This won't be reached, but it stops the compiler from complaining.
+			return nullptr;
 		}
 
 		template<typename SystemT>
