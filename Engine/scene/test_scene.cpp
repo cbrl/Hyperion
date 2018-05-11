@@ -17,8 +17,8 @@ TestScene::TestScene(const Engine& engine) : Scene("Test Scene") {
 void TestScene::Init(const Engine& engine) {
 
 	const auto& rendering_mgr  = engine.GetRenderingMgr();
-	auto* device               = rendering_mgr.GetDevice();
-	auto* device_context       = rendering_mgr.GetDeviceContext();
+	auto& device               = rendering_mgr.GetDevice();
+	auto& device_context       = rendering_mgr.GetDeviceContext();
 
 	auto& resource_mgr = rendering_mgr.GetResourceMgr();
 

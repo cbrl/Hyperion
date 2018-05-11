@@ -11,8 +11,8 @@
 namespace TextureLoader {
 
 	// Load a texture from a file (jpg, png, etc...)
-	void LoadTexture(ID3D11Device* device,
-					 ID3D11DeviceContext* device_context,
+	void LoadTexture(ID3D11Device& device,
+					 ID3D11DeviceContext& device_context,
 					 const wstring& filename,
 					 ID3D11ShaderResourceView** srv_out) {
 
@@ -24,11 +24,11 @@ namespace TextureLoader {
 
 		// Load the texture into the shader resource view
 		if (GetFileExtension(filename) == L".dds") {
-			ThrowIfFailed(CreateDDSTextureFromFile(device, filename.c_str(), nullptr, srv_out),
+			ThrowIfFailed(CreateDDSTextureFromFile(&device, filename.c_str(), nullptr, srv_out),
 						  "Failed to create DDS texture");
 		}
 		else {
-			ThrowIfFailed(CreateWICTextureFromFile(device, device_context, filename.c_str(), nullptr, srv_out),
+			ThrowIfFailed(CreateWICTextureFromFile(&device, &device_context, filename.c_str(), nullptr, srv_out),
 						  "Failed to create WIC texture");
 		}
 
@@ -39,7 +39,7 @@ namespace TextureLoader {
 
 
 	// Create a texture from a specified color
-	void LoadTexture(ID3D11Device* device,
+	void LoadTexture(ID3D11Device& device,
 					 u32 color,
 					 ID3D11ShaderResourceView** srv_out) {
 
@@ -55,7 +55,7 @@ namespace TextureLoader {
 		desc.Usage = D3D11_USAGE_IMMUTABLE;
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
-		ThrowIfFailed(device->CreateTexture2D(&desc, &initData, texture.GetAddressOf()),
+		ThrowIfFailed(device.CreateTexture2D(&desc, &initData, texture.GetAddressOf()),
 					  "Failed to create texture");
 
 
@@ -65,7 +65,7 @@ namespace TextureLoader {
 		srv_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		srv_desc.Texture2D.MipLevels = 1;
 
-		ThrowIfFailed(device->CreateShaderResourceView(texture.Get(), &srv_desc, srv_out),
+		ThrowIfFailed(device.CreateShaderResourceView(texture.Get(), &srv_desc, srv_out),
 					  "Failed to create SRV");
 
 		SetDebugObjectName(*srv_out, "TextureLoader ColorTexture");
@@ -75,8 +75,8 @@ namespace TextureLoader {
 
 
 	// Load a Texture2DArray from multiple files
-	void LoadTexture(ID3D11Device* device,
-					 ID3D11DeviceContext* device_context,
+	void LoadTexture(ID3D11Device& device,
+					 ID3D11DeviceContext& device_context,
 					 const vector<wstring>& filenames,
 					 ID3D11ShaderResourceView** srv_out) {
 
@@ -94,15 +94,30 @@ namespace TextureLoader {
 
 		for (u32 i = 0; i < size; i++) {
 			if (GetFileExtension(filenames[i]) == L".dds") {
-				ThrowIfFailed(CreateDDSTextureFromFileEx(device, filenames[i].c_str(), NULL, D3D11_USAGE_STAGING, NULL,
-														 D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, false,
-														 (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr),
+				ThrowIfFailed(CreateDDSTextureFromFileEx(&device,
+														 filenames[i].c_str(),
+														 NULL,
+														 D3D11_USAGE_STAGING,
+														 NULL,
+														 D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE,
+														 NULL,
+														 false,
+														 (ID3D11Resource**)srcTex[i].GetAddressOf(),
+														 nullptr),
 							  "Failed to create DDS texture");
 			}
 			else {
-				ThrowIfFailed(CreateWICTextureFromFileEx(device, device_context, filenames[i].c_str(), NULL, D3D11_USAGE_STAGING,
-														 NULL, D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE, NULL, NULL,
-														 (ID3D11Resource**)srcTex[i].GetAddressOf(), nullptr),
+				ThrowIfFailed(CreateWICTextureFromFileEx(&device,
+														 &device_context,
+														 filenames[i].c_str(),
+														 NULL,
+														 D3D11_USAGE_STAGING,
+														 NULL,
+														 D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE,
+														 NULL,
+														 NULL,
+														 (ID3D11Resource**)srcTex[i].GetAddressOf(),
+														 nullptr),
 							  "Failed to create WIC texture");
 			}
 		}
@@ -128,7 +143,7 @@ namespace TextureLoader {
 
 		// Create texture array
 		ComPtr<ID3D11Texture2D> tex_array;
-		ThrowIfFailed(device->CreateTexture2D(&array_desc, NULL, tex_array.GetAddressOf()),
+		ThrowIfFailed(device.CreateTexture2D(&array_desc, NULL, tex_array.GetAddressOf()),
 					  "Failed to create texture array");
 
 
@@ -137,13 +152,13 @@ namespace TextureLoader {
 			for (u32 mipLevel = 0; mipLevel < desc.MipLevels; mipLevel++) {
 				D3D11_MAPPED_SUBRESOURCE mappedTex = {};
 
-				ThrowIfFailed(device_context->Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex),
+				ThrowIfFailed(device_context.Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex),
 							  "Failed to map texture element");
 
-				device_context->UpdateSubresource(tex_array.Get(), D3D11CalcSubresource(mipLevel, texElement, desc.MipLevels), nullptr,
+				device_context.UpdateSubresource(tex_array.Get(), D3D11CalcSubresource(mipLevel, texElement, desc.MipLevels), nullptr,
 												  mappedTex.pData, mappedTex.RowPitch, mappedTex.DepthPitch);
 
-				device_context->Unmap(srcTex[texElement].Get(), mipLevel);
+				device_context.Unmap(srcTex[texElement].Get(), mipLevel);
 			}
 		}
 
@@ -158,7 +173,7 @@ namespace TextureLoader {
 		viewDesc.Texture2DArray.ArraySize = size;
 
 		// Create the SRV
-		ThrowIfFailed(device->CreateShaderResourceView(tex_array.Get(), &viewDesc, srv_out),
+		ThrowIfFailed(device.CreateShaderResourceView(tex_array.Get(), &viewDesc, srv_out),
 					  "Failed to create SRV");
 
 		SetDebugObjectName(*srv_out, "TextureLoader Texture2DArray");

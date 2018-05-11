@@ -9,7 +9,7 @@
 // Vertex Shader
 //----------------------------------------------------------------------------------
 
-VertexShader::VertexShader(ID3D11Device* device,
+VertexShader::VertexShader(ID3D11Device& device,
 						   const WCHAR* filename,
 						   const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
 						   size_t numElements) {
@@ -43,13 +43,13 @@ VertexShader::VertexShader(ID3D11Device* device,
 
 
 	// Create the vertex shader
-	ThrowIfFailed(device->CreateVertexShader(shader_buffer->GetBufferPointer(), shader_buffer->GetBufferSize(),
+	ThrowIfFailed(device.CreateVertexShader(shader_buffer->GetBufferPointer(), shader_buffer->GetBufferSize(),
 											 nullptr, shader.ReleaseAndGetAddressOf()),
 				  "Failed to create vertex shader");
 
 
 	// Create the vertex input layout
-	ThrowIfFailed(device->CreateInputLayout(inputElementDesc, static_cast<UINT>(numElements), shader_buffer->GetBufferPointer(),
+	ThrowIfFailed(device.CreateInputLayout(inputElementDesc, static_cast<UINT>(numElements), shader_buffer->GetBufferPointer(),
 											shader_buffer->GetBufferSize(), layout.ReleaseAndGetAddressOf()),
 				  "Failed to create input layout");
 }
@@ -60,7 +60,7 @@ VertexShader::VertexShader(ID3D11Device* device,
 // Pixel Shader
 //----------------------------------------------------------------------------------
 
-PixelShader::PixelShader(ID3D11Device* device, const WCHAR* filename) {
+PixelShader::PixelShader(ID3D11Device& device, const WCHAR* filename) {
 	HRESULT result;
 	ComPtr<ID3D10Blob> error_message;
 	ComPtr<ID3D10Blob> shader_buffer;
@@ -91,7 +91,7 @@ PixelShader::PixelShader(ID3D11Device* device, const WCHAR* filename) {
 
 
 	// Create the pixel shader
-	ThrowIfFailed(device->CreatePixelShader(shader_buffer->GetBufferPointer(), shader_buffer->GetBufferSize(),
+	ThrowIfFailed(device.CreatePixelShader(shader_buffer->GetBufferPointer(), shader_buffer->GetBufferSize(),
 											nullptr, shader.ReleaseAndGetAddressOf()),
 				  "Failed to create pixel shader");
 }

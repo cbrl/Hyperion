@@ -6,7 +6,7 @@
 
 class BasicModel : public WorldObject<BasicModel> {
 	public:
-		BasicModel(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint) {
+		BasicModel(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint) {
 			this->AddComponent<Model>(device, blueprint);
 		}
 

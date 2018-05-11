@@ -11,22 +11,22 @@ class SkyBox final : public Component<SkyBox> {
 		SkyBox() = default;
 		~SkyBox() = default;
 
-		SkyBox(ID3D11Device* device,
+		SkyBox(ID3D11Device& device,
 			   ResourceMgr& resource_mgr,
 			   const wstring& filename) {
 			Init(device, resource_mgr.GetOrCreate<Texture>(filename));
 		}
 
-		SkyBox(ID3D11Device* device,
+		SkyBox(ID3D11Device& device,
 			   shared_ptr<Texture> texture) {
 			Init(device, texture);
 		}
 
-		void Init(ID3D11Device* device,
+		void Init(ID3D11Device& device,
 				  shared_ptr<Texture> tex);
 
 		// Bind the skybox's vertex and index buffers
-		void Bind(ID3D11DeviceContext* device_context) const {
+		void Bind(ID3D11DeviceContext& device_context) const {
 			u32 offset = 0;
 
 			Pipeline::IA::BindVertexBuffers(device_context, 0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
@@ -35,8 +35,8 @@ class SkyBox final : public Component<SkyBox> {
 		}
 
 		// Draw the skybox
-		void Draw(ID3D11DeviceContext* device_context) const {
-			device_context->DrawIndexed(index_count, 0, 0);
+		void Draw(ID3D11DeviceContext& device_context) const {
+			device_context.DrawIndexed(index_count, 0, 0);
 		}
 
 		ID3D11ShaderResourceView* GetSRV() const {

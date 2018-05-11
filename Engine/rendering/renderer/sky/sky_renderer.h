@@ -12,7 +12,7 @@
 
 class SkyRenderer final {
 	public:
-		SkyRenderer(ID3D11Device* device, ID3D11DeviceContext* device_context);
+		SkyRenderer(ID3D11Device& device, ID3D11DeviceContext& device_context);
 		~SkyRenderer() = default;
 
 		void Render(Scene& scene, const RenderStateMgr& render_state_mgr);
@@ -23,8 +23,8 @@ class SkyRenderer final {
 
 
 	private:
-		ComPtr<ID3D11Device>        device;
-		ComPtr<ID3D11DeviceContext> device_context;
+		reference_wrapper<ID3D11Device>        device;
+		reference_wrapper<ID3D11DeviceContext> device_context;
 
 		unique_ptr<VertexShader> vertex_shader;
 		unique_ptr<PixelShader>  pixel_shader;

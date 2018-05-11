@@ -12,14 +12,14 @@ struct Texture final : public Resource<Texture> {
 		Texture() = default;
 		~Texture() = default;
 
-		Texture(ID3D11Device* device,
-				ID3D11DeviceContext* device_context,
+		Texture(ID3D11Device& device,
+				ID3D11DeviceContext& device_context,
 				wstring filename) {
 
 			TextureLoader::LoadTexture(device, device_context, filename, texture.GetAddressOf());
 		}
 
-		Texture(ID3D11Device* device, u32 color) {
+		Texture(ID3D11Device& device, u32 color) {
 
 			TextureLoader::LoadTexture(device, color, texture.GetAddressOf());
 		}
@@ -31,7 +31,7 @@ struct Texture final : public Resource<Texture> {
 
 		// Bind the texture to the specified pipeline stage
 		template<typename StageT>
-		void Bind(ID3D11DeviceContext* device_context, u32 slot) const {
+		void Bind(ID3D11DeviceContext& device_context, u32 slot) const {
 
 			StageT::BindSRVs(device_context, slot, 1, texture.GetAddressOf());
 		}

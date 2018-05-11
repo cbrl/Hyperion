@@ -7,13 +7,13 @@
 // Simple wrapper around SpriteFont and Resource base class
 class Font : public SpriteFont, public Resource<Font> {
 	public:
-		Font(_In_ ID3D11Device* device, _In_z_ wchar_t const* fileName, bool forceSRGB = false)
-			: SpriteFont(device, fileName, forceSRGB) 
+		Font(_In_ ID3D11Device& device, _In_z_ wchar_t const* fileName, bool forceSRGB = false)
+			: SpriteFont(&device, fileName, forceSRGB) 
 			, Resource(fileName) {
 		}
 
-		Font(_In_ ID3D11Device* device, _In_reads_bytes_(dataSize) uint8_t const* dataBlob, _In_ size_t dataSize, bool forceSRGB = false)
-			: SpriteFont(device, dataBlob, dataSize, forceSRGB) {
+		Font(_In_ ID3D11Device& device, _In_reads_bytes_(dataSize) uint8_t const* dataBlob, _In_ size_t dataSize, bool forceSRGB = false)
+			: SpriteFont(&device, dataBlob, dataSize, forceSRGB) {
 		}
 
 		Font(_In_ ID3D11ShaderResourceView* texture, _In_reads_(glyphCount) Glyph const* glyphs, _In_ size_t glyphCount, _In_ float lineSpacing)

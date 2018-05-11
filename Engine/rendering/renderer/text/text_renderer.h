@@ -9,7 +9,7 @@
 
 class TextRenderer final {
 	public:
-		TextRenderer(ID3D11DeviceContext* device_context);
+		TextRenderer(ID3D11DeviceContext& device_context);
 		~TextRenderer() = default;
 
 		void Render(Scene& scene);

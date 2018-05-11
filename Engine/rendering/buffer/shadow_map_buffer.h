@@ -7,7 +7,7 @@
 
 class ShadowMapBuffer final {
 	public:
-		ShadowMapBuffer(ID3D11Device* device,
+		ShadowMapBuffer(ID3D11Device& device,
 						u32 map_count,
 						u32 width = 256,
 						u32 height = 256);
@@ -15,13 +15,13 @@ class ShadowMapBuffer final {
 		~ShadowMapBuffer() = default;
 
 		// Bind the viewport and DSVs
-		void Bind(ID3D11DeviceContext* device_context) const {
+		void Bind(ID3D11DeviceContext& device_context) const {
 			BindViewport(device_context);
 			BindDSVs(device_context);
 		}
 
 		// Clear the DSVs
-		void Clear(ID3D11DeviceContext* device_context) const {
+		void Clear(ID3D11DeviceContext& device_context) const {
 			for (const auto& dsv : dsvs) {
 				Pipeline::OM::ClearDSV(device_context, dsv.Get());
 			}
@@ -38,11 +38,11 @@ class ShadowMapBuffer final {
 
 
 	private:
-		void BindViewport(ID3D11DeviceContext* device_context) const {
+		void BindViewport(ID3D11DeviceContext& device_context) const {
 			Pipeline::RS::BindViewports(device_context, 1, &viewport);
 		}
 
-		void BindDSVs(ID3D11DeviceContext* device_context) const {
+		void BindDSVs(ID3D11DeviceContext& device_context) const {
 			for (const auto& dsv : dsvs) {
 				Pipeline::OM::BindRTVs(device_context, 1, nullptr, dsv.Get());
 			}

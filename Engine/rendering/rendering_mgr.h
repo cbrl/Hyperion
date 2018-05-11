@@ -33,11 +33,11 @@ class RenderingMgr final {
 		// Getters
 		//----------------------------------------------------------------------------------
 
-		ID3D11Device* GetDevice() const {
+		ID3D11Device& GetDevice() const {
 			return direct3D->GetDevice();
 		}
 
-		ID3D11DeviceContext* GetDeviceContext() const {
+		ID3D11DeviceContext& GetDeviceContext() const {
 			return direct3D->GetDeviceContext();
 		}
 

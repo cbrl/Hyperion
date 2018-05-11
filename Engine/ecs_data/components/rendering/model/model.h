@@ -20,7 +20,7 @@ class ModelChild final {
 	friend class Model;
 
 	protected:
-		ModelChild(ID3D11Device* device, ModelPart& part, Material mat)
+		ModelChild(ID3D11Device& device, ModelPart& part, Material mat)
 			: name(part.name)
 			, buffer(device)
 			, index_start(part.index_start)
@@ -30,7 +30,7 @@ class ModelChild final {
 			, sphere(part.sphere) {
 		}
 
-		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext* device_context,
+		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context,
 									  FXMMATRIX world,
 									  CXMMATRIX world_inv_transpose,
 									  CXMMATRIX world_view_proj);
@@ -53,7 +53,7 @@ class ModelChild final {
 		const Material&       GetMaterial() const { return material; }
 
 		template<typename StageT>
-		void BindBuffer(ID3D11DeviceContext* device_context, u32 slot) const {
+		void BindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
 			buffer.Bind<StageT>(device_context, slot);
 		}
 
@@ -82,17 +82,17 @@ class ModelChild final {
 
 class Model final : public Component<Model> {
 	public:
-		Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint);
+		Model(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint);
 		~Model() = default;
 
 
 		// Bind the model's vertex and index buffers
-		void Bind(ID3D11DeviceContext* device_context) const {
+		void Bind(ID3D11DeviceContext& device_context) const {
 			mesh->Bind(device_context);
 		}
 
 		// Render the model with the given index count and start index
-		void Draw(ID3D11DeviceContext* device_context, u32 index_count, u32 start_index) const {
+		void Draw(ID3D11DeviceContext& device_context, u32 index_count, u32 start_index) const {
 			mesh->Draw(device_context, index_count, start_index);
 		}
 
@@ -107,7 +107,7 @@ class Model final : public Component<Model> {
 
 
 		// Update model matrix and bounding volumes, as well as those of the child models.
-		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext* device_context,
+		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context,
 									  FXMMATRIX world,
 									  CXMMATRIX view,
 									  CXMMATRIX proj);

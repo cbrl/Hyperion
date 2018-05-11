@@ -64,14 +64,14 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetResource(const KeyT& key) {
 template<typename ResourceT>
 enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::GetOrCreate(const wstring& filename) {
 
-	return models.GetOrCreateResource(filename, device.Get(), *this, filename);
+	return models.GetOrCreateResource(filename, device, *this, filename);
 }
 
 // ModelBlueprint
 template<typename ResourceT, typename VertexT>
 enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::GetOrCreate(const wstring& name, const ModelOutput<VertexT>& model_data) {
 
-	return models.GetOrCreateResource(name, device.Get(), model_data);
+	return models.GetOrCreateResource(name, device, model_data);
 }
 
 
@@ -79,7 +79,7 @@ enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> Re
 template<typename ResourceT>
 enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::GetOrCreate(const wstring& filename) {
 
-	return textures.GetOrCreateResource(filename, device.Get(), device_context.Get(), filename);
+	return textures.GetOrCreateResource(filename, device, device_context, filename);
 }
 
 template<typename ResourceT>
@@ -87,7 +87,7 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Get
 
 	u32 texColor = Float4ColorToU32(color);
 
-	return textures.GetOrCreateResource(to_wstring(texColor), device.Get(), texColor);
+	return textures.GetOrCreateResource(to_wstring(texColor), device, texColor);
 }
 
 
@@ -95,5 +95,5 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::Get
 template<typename ResourceT>
 enable_if_t<is_same_v<Font, ResourceT>, shared_ptr<Font>> ResourceMgr::GetOrCreate(const wstring& filename) {
 
-	return fonts.GetOrCreateResource(filename, device.Get(), filename.c_str());
+	return fonts.GetOrCreateResource(filename, device, filename.c_str());
 }

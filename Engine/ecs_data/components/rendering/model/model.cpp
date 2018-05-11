@@ -6,7 +6,7 @@
 // ModelChild
 //----------------------------------------------------------------------------------
 
-void XM_CALLCONV ModelChild::UpdateBuffer(ID3D11DeviceContext* device_context,
+void XM_CALLCONV ModelChild::UpdateBuffer(ID3D11DeviceContext& device_context,
 									FXMMATRIX world,
 									CXMMATRIX world_inv_transpose,
 									CXMMATRIX world_view_proj) {
@@ -39,7 +39,7 @@ void XM_CALLCONV ModelChild::UpdateBuffer(ID3D11DeviceContext* device_context,
 // Model
 //----------------------------------------------------------------------------------
 
-Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
+Model::Model(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint)
 	: name(blueprint->name)
 	, mesh(blueprint->mesh)
 	, aabb(blueprint->aabb)
@@ -55,7 +55,7 @@ Model::Model(ID3D11Device* device, shared_ptr<ModelBlueprint> blueprint)
 }
 
 
-void XM_CALLCONV Model::UpdateBuffer(ID3D11DeviceContext* device_context,
+void XM_CALLCONV Model::UpdateBuffer(ID3D11DeviceContext& device_context,
 									 FXMMATRIX world,
 									 CXMMATRIX view,
 									 CXMMATRIX proj) {

@@ -10,14 +10,14 @@
 
 class VertexShader final {
 	public:
-		VertexShader(ID3D11Device* device,
+		VertexShader(ID3D11Device& device,
 					 const WCHAR* filename,
 					 const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
 					 size_t numElements);
 
 		~VertexShader() = default;
 
-		void Bind(ID3D11DeviceContext* device_context) {
+		void Bind(ID3D11DeviceContext& device_context) {
 			Pipeline::IA::BindInputLayout(device_context, layout.Get());
 			Pipeline::VS::BindShader(device_context, shader.Get(), nullptr, 0);
 		}
@@ -31,12 +31,12 @@ class VertexShader final {
 
 class PixelShader final {
 	public:
-		PixelShader(ID3D11Device* device,
+		PixelShader(ID3D11Device& device,
 					const WCHAR* filename);
 
 		~PixelShader() = default;
 
-		void Bind(ID3D11DeviceContext* device_context) {
+		void Bind(ID3D11DeviceContext& device_context) {
 			Pipeline::PS::BindShader(device_context, shader.Get(), nullptr, 0);
 		}
 

@@ -59,7 +59,7 @@ class OBJLoader final {
 	public:
 		OBJLoader() = delete;
 
-		static ModelOutput<VertexT> Load(ID3D11Device* device,
+		static ModelOutput<VertexT> Load(ID3D11Device& device,
 										 ResourceMgr& resource_mgr,
 										 const wstring& filename,
 										 bool right_hand_coords);

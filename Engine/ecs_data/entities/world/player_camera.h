@@ -9,8 +9,8 @@
 
 class PlayerCamera final : public Entity<PlayerCamera> {
 	public:
-		PlayerCamera(ID3D11Device* device,
-					 ID3D11DeviceContext* device_context,
+		PlayerCamera(ID3D11Device& device,
+					 ID3D11DeviceContext& device_context,
 					 ResourceMgr& resource_mgr,
 					 u32 viewport_width,
 					 u32 viewport_height,
@@ -23,8 +23,8 @@ class PlayerCamera final : public Entity<PlayerCamera> {
 		}
 
 
-		PlayerCamera(ID3D11Device* device,
-					 ID3D11DeviceContext* device_context,
+		PlayerCamera(ID3D11Device& device,
+					 ID3D11DeviceContext& device_context,
 					 u32 viewport_width,
 					 u32 viewport_height,
 					 shared_ptr<Texture> skybox_texture) {

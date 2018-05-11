@@ -6,15 +6,22 @@
 #include <map>
 #include <unordered_map>
 #include <variant>
-#include <wrl\client.h>
-
 #include "util\string\string.h"
 #include "util\datatypes\vector_types.h"
-#include "util\datatypes\vertex_types.h"
+
+#if defined(_WINDOWS) | defined(_WINDOWS_)
+	#include <wrl\client.h>
+	using Microsoft::WRL::ComPtr;
+
+	// matrix/vector/vertex types and related functions
+	#include <DirectXMath.h> 
+	#include "util\datatypes\vertex_types.h"
+	using namespace DirectX;
+#endif //defined(_WINDOWS) | defined(_WINDOWS_)
 
 
 //----------------------------------------------------------------------------------
-// Type Info
+// Type Traits
 //----------------------------------------------------------------------------------
 
 using std::enable_if_t;
@@ -30,7 +37,6 @@ using std::type_index;
 using std::unique_ptr;
 using std::shared_ptr;
 using std::weak_ptr;
-using Microsoft::WRL::ComPtr;
 
 using std::make_unique;
 using std::make_shared;
@@ -63,3 +69,10 @@ using u8  = uint8_t;
 using u16 = uint16_t;
 using u32 = uint32_t;
 using u64 = uint64_t;
+
+
+//----------------------------------------------------------------------------------
+// Misc
+//----------------------------------------------------------------------------------
+
+using std::reference_wrapper;

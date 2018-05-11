@@ -1,36 +1,34 @@
 #pragma once
 
-#include <DirectXMath.h>
-
 
 //----------------------------------------------------------------------------------
 // Default base vectors
 //----------------------------------------------------------------------------------
-template<typename DataT>
+template<typename T>
 struct BaseVec2 {
 	BaseVec2() noexcept = default;
-	BaseVec2(DataT _x, DataT _y) noexcept { x = _x; y = _y; }
-	DataT x;
-	DataT y;
+	BaseVec2(T _x, T _y) noexcept { x = _x; y = _y; }
+	T x;
+	T y;
 };
 
-template<typename DataT>
+template<typename T>
 struct BaseVec3 {
 	BaseVec3() noexcept = default;
-	BaseVec3(int _x, int _y, int _z) noexcept { x = _x; y = _y; z = _z; }
-	DataT x;
-	DataT y;
-	DataT z;
+	BaseVec3(T _x, T _y, T _z) noexcept { x = _x; y = _y; z = _z; }
+	T x;
+	T y;
+	T z;
 };
 
-template<typename DataT>
+template<typename T>
 struct BaseVec4 {
 	BaseVec4() noexcept = default;
-	BaseVec4(int _x, int _y, int _z, int _w) noexcept { x = _x; y = _y; z = _z; w = _w; }
-	DataT x;
-	DataT y;
-	DataT z;
-	DataT w;
+	BaseVec4(T _x, T _y, T _z, T _w) noexcept { x = _x; y = _y; z = _z; w = _w; }
+	T x;
+	T y;
+	T z;
+	T w;
 };
 
 
@@ -493,17 +491,32 @@ struct Vec4 : public DerivedT {
 // Vector aliases
 //----------------------------------------------------------------------------------
 
-//using int2 = Vec2<int>;
-using int2 = Vec2<int32_t, DirectX::XMINT2>;
-using int3 = Vec3<int32_t, DirectX::XMINT3>;
-using int4 = Vec4<int32_t, DirectX::XMINT4>;
+#if defined (_WINDOWS) | defined (_WINDOWS_)
+	#include <DirectXMath.h>
 
+	using int2 = Vec2<int32_t, DirectX::XMINT2>;
+	using int3 = Vec3<int32_t, DirectX::XMINT3>;
+	using int4 = Vec4<int32_t, DirectX::XMINT4>;
 
-using uint2 = Vec2<uint32_t, DirectX::XMUINT2>;
-using uint3 = Vec2<uint32_t, DirectX::XMUINT3>;
-using uint4 = Vec2<uint32_t, DirectX::XMUINT4>;
+	using uint2 = Vec2<uint32_t, DirectX::XMUINT2>;
+	using uint3 = Vec2<uint32_t, DirectX::XMUINT3>;
+	using uint4 = Vec2<uint32_t, DirectX::XMUINT4>;
 
+	using float2 = Vec2<float, DirectX::XMFLOAT2>;
+	using float3 = Vec3<float, DirectX::XMFLOAT3>;
+	using float4 = Vec4<float, DirectX::XMFLOAT4>;
 
-using float2 = Vec2<float, DirectX::XMFLOAT2>;
-using float3 = Vec3<float, DirectX::XMFLOAT3>;
-using float4 = Vec4<float, DirectX::XMFLOAT4>;
+#else
+	using int2 = Vec2<int32_t>;
+	using int3 = Vec3<int32_t>;
+	using int4 = Vec4<int32_t>;
+
+	using uint2 = Vec2<uint32_t>;
+	using uint3 = Vec2<uint32_t>;
+	using uint4 = Vec2<uint32_t>;
+
+	using float2 = Vec2<float>;
+	using float3 = Vec3<float>;
+	using float4 = Vec4<float>;
+
+#endif //defined (_WINDOWS) | defined (_WINDOWS_)

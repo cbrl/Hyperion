@@ -25,7 +25,7 @@ void OBJLoader<VertexT>::Reset() {
 
 
 template<typename VertexT>
-ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device* device,
+ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device& device,
 											  ResourceMgr& resource_mgr,
 											  const wstring& filename,
 											  bool right_hand_coords) {

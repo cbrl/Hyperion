@@ -7,7 +7,7 @@
 class Pipeline final {
 	public:
 		// Bind samplers to every stage
-		static void BindSamplers(ID3D11DeviceContext* device_context,
+		static void BindSamplers(ID3D11DeviceContext& device_context,
 								 u32 start_slot,
 								 u32 num_samplers,
 								 ID3D11SamplerState* const* samplers) {
@@ -21,7 +21,7 @@ class Pipeline final {
 		}
 
 		// Bind constant buffers to every stage
-		static void BindConstantBuffers(ID3D11DeviceContext* device_context,
+		static void BindConstantBuffers(ID3D11DeviceContext& device_context,
 										u32 start_slot,
 										u32 num_buffers,
 										ID3D11Buffer* const* buffers) {
@@ -35,7 +35,7 @@ class Pipeline final {
 		}
 
 		// Bind shader resource views to every stage
-		static void BindSRVs(ID3D11DeviceContext* device_context,
+		static void BindSRVs(ID3D11DeviceContext& device_context,
 							 u32 start_slot,
 							 u32 num_views,
 							 ID3D11ShaderResourceView* const* srvs) {
@@ -53,32 +53,32 @@ class Pipeline final {
 		// Input Assembler
 		//----------------------------------------------------------------------------------
 		struct IA {
-			static void BindIndexBuffer(ID3D11DeviceContext* device_context,
+			static void BindIndexBuffer(ID3D11DeviceContext& device_context,
 										ID3D11Buffer* buffer,
 										DXGI_FORMAT format,
 										u32 offset) {
 
-				device_context->IASetIndexBuffer(buffer, format, offset);
+				device_context.IASetIndexBuffer(buffer, format, offset);
 			}
 
-			static void BindVertexBuffers(ID3D11DeviceContext* device_context,
+			static void BindVertexBuffers(ID3D11DeviceContext& device_context,
 										  u32 start_slot,
 										  u32 num_buffers,
 										  ID3D11Buffer* const* buffers,
 										  const u32* strides,
 										  const u32* offsets) {
 
-				device_context->IASetVertexBuffers(start_slot, num_buffers, buffers, strides, offsets);
+				device_context.IASetVertexBuffers(start_slot, num_buffers, buffers, strides, offsets);
 			}
 
-			static void BindInputLayout(ID3D11DeviceContext* device_context,
+			static void BindInputLayout(ID3D11DeviceContext& device_context,
 										ID3D11InputLayout* layout) {
-				device_context->IASetInputLayout(layout);
+				device_context.IASetInputLayout(layout);
 			}
 
-			static void BindPrimitiveTopology(ID3D11DeviceContext* device_context,
+			static void BindPrimitiveTopology(ID3D11DeviceContext& device_context,
 											  D3D11_PRIMITIVE_TOPOLOGY topology) {
-				device_context->IASetPrimitiveTopology(topology);
+				device_context.IASetPrimitiveTopology(topology);
 			}
 		};
 
@@ -87,55 +87,55 @@ class Pipeline final {
 		// Output Merger
 		//----------------------------------------------------------------------------------
 		struct OM {
-			static void BindBlendState(ID3D11DeviceContext* device_context,
+			static void BindBlendState(ID3D11DeviceContext& device_context,
 									   ID3D11BlendState* state,
 									   const float blend_factor[4],
 									   u32 sample_mask) {
 
-				device_context->OMSetBlendState(state, blend_factor, sample_mask);
+				device_context.OMSetBlendState(state, blend_factor, sample_mask);
 			}
 
-			static void BindDepthStencilState(ID3D11DeviceContext* device_context,
+			static void BindDepthStencilState(ID3D11DeviceContext& device_context,
 											  ID3D11DepthStencilState* state,
 											  u32 stencil_ref) {
 
-				device_context->OMSetDepthStencilState(state, stencil_ref);
+				device_context.OMSetDepthStencilState(state, stencil_ref);
 			}
 
-			static void BindRTVs(ID3D11DeviceContext* device_context,
+			static void BindRTVs(ID3D11DeviceContext& device_context,
 								 u32 num_views,
 								 ID3D11RenderTargetView* const* rtvs,
 								 ID3D11DepthStencilView* dsv) {
 
-				device_context->OMSetRenderTargets(num_views, rtvs, dsv);
+				device_context.OMSetRenderTargets(num_views, rtvs, dsv);
 			}
 
-			static void BindRTVsAndUAVs(ID3D11DeviceContext* device_context,
+			static void BindRTVsAndUAVs(ID3D11DeviceContext& device_context,
 							 u32 num_rtvs, ID3D11RenderTargetView* const* rtvs,
 							 ID3D11DepthStencilView* dsv, u32 start_slot,
 							 u32 num_uavs, ID3D11UnorderedAccessView* const* uavs, u32 initial_counts) {
 
-				device_context->OMSetRenderTargetsAndUnorderedAccessViews(num_rtvs, rtvs, dsv, start_slot, num_uavs, uavs, &initial_counts);
+				device_context.OMSetRenderTargetsAndUnorderedAccessViews(num_rtvs, rtvs, dsv, start_slot, num_uavs, uavs, &initial_counts);
 			}
 
-			static void ClearRTV(ID3D11DeviceContext* device_context,
+			static void ClearRTV(ID3D11DeviceContext& device_context,
 								 ID3D11RenderTargetView* rtv) {
 
 				float color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 				ClearRTV(device_context, rtv, color);
 			}
 
-			static void ClearRTV(ID3D11DeviceContext* device_context,
+			static void ClearRTV(ID3D11DeviceContext& device_context,
 								 ID3D11RenderTargetView* rtv,
 								 const float color[4]) {
 
-				device_context->ClearRenderTargetView(rtv, color);
+				device_context.ClearRenderTargetView(rtv, color);
 			}
 
-			static void ClearDSV(ID3D11DeviceContext* device_context,
+			static void ClearDSV(ID3D11DeviceContext& device_context,
 								 ID3D11DepthStencilView* dsv) {
 
-				device_context->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+				device_context.ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 			}
 		};
 	
@@ -144,45 +144,45 @@ class Pipeline final {
 		// Compute Stage
 		//----------------------------------------------------------------------------------
 		struct CS {
-			static void BindShader(ID3D11DeviceContext* device_context,
+			static void BindShader(ID3D11DeviceContext& device_context,
 								   ID3D11ComputeShader* shader,
 								   ID3D11ClassInstance* const* instances,
 								   u32 num_instances) {
 
-				device_context->CSSetShader(shader, instances, num_instances);
+				device_context.CSSetShader(shader, instances, num_instances);
 			}
 
-			static void BindSamplers(ID3D11DeviceContext* device_context,
+			static void BindSamplers(ID3D11DeviceContext& device_context,
 									 u32 start_slot,
 									 u32 num_samplers,
 									 ID3D11SamplerState* const* samplers) {
 
-				device_context->CSSetSamplers(start_slot, num_samplers, samplers);
+				device_context.CSSetSamplers(start_slot, num_samplers, samplers);
 			}
 
-			static void BindConstantBuffers(ID3D11DeviceContext* device_context,
+			static void BindConstantBuffers(ID3D11DeviceContext& device_context,
 											u32 start_slot,
 											u32 num_buffers,
 											ID3D11Buffer* const* buffers) {
 
-				device_context->CSSetConstantBuffers(start_slot, num_buffers, buffers);
+				device_context.CSSetConstantBuffers(start_slot, num_buffers, buffers);
 			}
 
-			static void BindSRVs(ID3D11DeviceContext* device_context,
+			static void BindSRVs(ID3D11DeviceContext& device_context,
 								 u32 start_slot,
 								 u32 num_views,
 								 ID3D11ShaderResourceView* const* srvs) {
 
-				device_context->CSSetShaderResources(start_slot, num_views, srvs);
+				device_context.CSSetShaderResources(start_slot, num_views, srvs);
 			}
 
-			static void BindUAVs(ID3D11DeviceContext* device_context,
+			static void BindUAVs(ID3D11DeviceContext& device_context,
 								 u32 start_slot,
 								 u32 num_uavs,
 								 ID3D11UnorderedAccessView* const* uavs,
 								 u32 initial_counts) {
 
-				device_context->CSSetUnorderedAccessViews(start_slot, num_uavs, uavs, &initial_counts);
+				device_context.CSSetUnorderedAccessViews(start_slot, num_uavs, uavs, &initial_counts);
 			}
 		};
 
@@ -191,36 +191,36 @@ class Pipeline final {
 		// Domain Stage
 		//----------------------------------------------------------------------------------
 		struct DS {
-			static void BindShader(ID3D11DeviceContext* device_context,
+			static void BindShader(ID3D11DeviceContext& device_context,
 								   ID3D11DomainShader* shader,
 								   ID3D11ClassInstance* const* instances,
 								   u32 num_instances) {
 
-				device_context->DSSetShader(shader, instances, num_instances);
+				device_context.DSSetShader(shader, instances, num_instances);
 			}
 
-			static void BindSamplers(ID3D11DeviceContext* device_context,
+			static void BindSamplers(ID3D11DeviceContext& device_context,
 									 u32 start_slot,
 									 u32 num_samplers,
 									 ID3D11SamplerState* const* samplers) {
 
-				device_context->DSSetSamplers(start_slot, num_samplers, samplers);
+				device_context.DSSetSamplers(start_slot, num_samplers, samplers);
 			}
 
-			static void BindConstantBuffers(ID3D11DeviceContext* device_context,
+			static void BindConstantBuffers(ID3D11DeviceContext& device_context,
 											u32 start_slot,
 											u32 num_buffers,
 											ID3D11Buffer* const* buffers) {
 
-				device_context->DSSetConstantBuffers(start_slot, num_buffers, buffers);
+				device_context.DSSetConstantBuffers(start_slot, num_buffers, buffers);
 			}
 
-			static void BindSRVs(ID3D11DeviceContext* device_context,
+			static void BindSRVs(ID3D11DeviceContext& device_context,
 								 u32 start_slot,
 								 u32 num_views,
 								 ID3D11ShaderResourceView* const* srvs) {
 
-				device_context->DSSetShaderResources(start_slot, num_views, srvs);
+				device_context.DSSetShaderResources(start_slot, num_views, srvs);
 			}
 		};
 
@@ -229,36 +229,36 @@ class Pipeline final {
 		// Geometry Stage
 		//----------------------------------------------------------------------------------
 		struct GS {
-			static void BindShader(ID3D11DeviceContext* device_context,
+			static void BindShader(ID3D11DeviceContext& device_context,
 								   ID3D11GeometryShader* shader,
 								   ID3D11ClassInstance* const* instances,
 								   u32 num_instances) {
 
-				device_context->GSSetShader(shader, instances, num_instances);
+				device_context.GSSetShader(shader, instances, num_instances);
 			}
 
-			static void BindSamplers(ID3D11DeviceContext* device_context,
+			static void BindSamplers(ID3D11DeviceContext& device_context,
 									 u32 start_slot,
 									 u32 num_samplers,
 									 ID3D11SamplerState* const* samplers) {
 
-				device_context->GSSetSamplers(start_slot, num_samplers, samplers);
+				device_context.GSSetSamplers(start_slot, num_samplers, samplers);
 			}
 
-			static void BindConstantBuffers(ID3D11DeviceContext* device_context,
+			static void BindConstantBuffers(ID3D11DeviceContext& device_context,
 											u32 start_slot,
 											u32 num_buffers,
 											ID3D11Buffer* const* buffers) {
 
-				device_context->GSSetConstantBuffers(start_slot, num_buffers, buffers);
+				device_context.GSSetConstantBuffers(start_slot, num_buffers, buffers);
 			}
 
-			static void BindSRVs(ID3D11DeviceContext* device_context,
+			static void BindSRVs(ID3D11DeviceContext& device_context,
 								 u32 start_slot,
 								 u32 num_views,
 								 ID3D11ShaderResourceView* const* srvs) {
 
-				device_context->GSSetShaderResources(start_slot, num_views, srvs);
+				device_context.GSSetShaderResources(start_slot, num_views, srvs);
 			}
 		};
 
@@ -267,36 +267,36 @@ class Pipeline final {
 		// Hull Stage
 		//----------------------------------------------------------------------------------
 		struct HS {
-			static void BindShader(ID3D11DeviceContext* device_context,
+			static void BindShader(ID3D11DeviceContext& device_context,
 								   ID3D11HullShader* shader,
 								   ID3D11ClassInstance* const* instances,
 								   u32 num_instances) {
 
-				device_context->HSSetShader(shader, instances, num_instances);
+				device_context.HSSetShader(shader, instances, num_instances);
 			}
 
-			static void BindSamplers(ID3D11DeviceContext* device_context,
+			static void BindSamplers(ID3D11DeviceContext& device_context,
 									 u32 start_slot,
 									 u32 num_samplers,
 									 ID3D11SamplerState* const* samplers) {
 
-				device_context->HSSetSamplers(start_slot, num_samplers, samplers);
+				device_context.HSSetSamplers(start_slot, num_samplers, samplers);
 			}
 
-			static void BindConstantBuffers(ID3D11DeviceContext* device_context,
+			static void BindConstantBuffers(ID3D11DeviceContext& device_context,
 											u32 start_slot,
 											u32 num_buffers,
 											ID3D11Buffer* const* buffers) {
 
-				device_context->HSSetConstantBuffers(start_slot, num_buffers, buffers);
+				device_context.HSSetConstantBuffers(start_slot, num_buffers, buffers);
 			}
 
-			static void BindSRVs(ID3D11DeviceContext* device_context,
+			static void BindSRVs(ID3D11DeviceContext& device_context,
 								 u32 start_slot,
 								 u32 num_views,
 								 ID3D11ShaderResourceView* const* srvs) {
 
-				device_context->HSSetShaderResources(start_slot, num_views, srvs);
+				device_context.HSSetShaderResources(start_slot, num_views, srvs);
 			}
 		};
 
@@ -305,36 +305,36 @@ class Pipeline final {
 		// Pixel Stage
 		//----------------------------------------------------------------------------------
 		struct PS {
-			static void BindShader(ID3D11DeviceContext* device_context,
+			static void BindShader(ID3D11DeviceContext& device_context,
 								   ID3D11PixelShader* shader,
 								   ID3D11ClassInstance* const* instances,
 								   u32 num_instances) {
 
-				device_context->PSSetShader(shader, instances, num_instances);
+				device_context.PSSetShader(shader, instances, num_instances);
 			}
 
-			static void BindSamplers(ID3D11DeviceContext* device_context,
+			static void BindSamplers(ID3D11DeviceContext& device_context,
 									 u32 start_slot,
 									 u32 num_samplers,
 									 ID3D11SamplerState* const* samplers) {
 
-				device_context->PSSetSamplers(start_slot, num_samplers, samplers);
+				device_context.PSSetSamplers(start_slot, num_samplers, samplers);
 			}
 
-			static void BindConstantBuffers(ID3D11DeviceContext* device_context,
+			static void BindConstantBuffers(ID3D11DeviceContext& device_context,
 											u32 start_slot,
 											u32 num_buffers,
 											ID3D11Buffer* const* buffers) {
 
-				device_context->PSSetConstantBuffers(start_slot, num_buffers, buffers);
+				device_context.PSSetConstantBuffers(start_slot, num_buffers, buffers);
 			}
 
-			static void BindSRVs(ID3D11DeviceContext* device_context,
+			static void BindSRVs(ID3D11DeviceContext& device_context,
 								 u32 start_slot,
 								 u32 num_views,
 								 ID3D11ShaderResourceView* const* srvs) {
 
-				device_context->PSSetShaderResources(start_slot, num_views, srvs);
+				device_context.PSSetShaderResources(start_slot, num_views, srvs);
 			}
 		};
 
@@ -343,22 +343,22 @@ class Pipeline final {
 		// Rasterizer Stage
 		//----------------------------------------------------------------------------------
 		struct RS {
-			static void BindScissorRects(ID3D11DeviceContext* device_context,
+			static void BindScissorRects(ID3D11DeviceContext& device_context,
 										 u32 num_rects, const D3D11_RECT* rects) {
 
-				device_context->RSSetScissorRects(num_rects, rects);
+				device_context.RSSetScissorRects(num_rects, rects);
 			}
 
-			static void BindState(ID3D11DeviceContext* device_context,
+			static void BindState(ID3D11DeviceContext& device_context,
 								  ID3D11RasterizerState* state) {
 
-				device_context->RSSetState(state);
+				device_context.RSSetState(state);
 			}
 
-			static void BindViewports(ID3D11DeviceContext* device_context,
+			static void BindViewports(ID3D11DeviceContext& device_context,
 									  u32 num_viewports, const D3D11_VIEWPORT* viewports) {
 
-				device_context->RSSetViewports(num_viewports, viewports);
+				device_context.RSSetViewports(num_viewports, viewports);
 			}
 		};
 
@@ -367,36 +367,36 @@ class Pipeline final {
 		// Vertex Stage
 		//----------------------------------------------------------------------------------
 		struct VS {
-			static void BindShader(ID3D11DeviceContext* device_context,
+			static void BindShader(ID3D11DeviceContext& device_context,
 								   ID3D11VertexShader* shader,
 								   ID3D11ClassInstance* const* instances,
 								   u32 num_instances) {
 
-				device_context->VSSetShader(shader, instances, num_instances);
+				device_context.VSSetShader(shader, instances, num_instances);
 			}
 
-			static void BindSamplers(ID3D11DeviceContext* device_context,
+			static void BindSamplers(ID3D11DeviceContext& device_context,
 									 u32 start_slot,
 									 u32 num_samplers,
 									 ID3D11SamplerState* const* samplers) {
 
-				device_context->VSSetSamplers(start_slot, num_samplers, samplers);
+				device_context.VSSetSamplers(start_slot, num_samplers, samplers);
 			}
 
-			static void BindConstantBuffers(ID3D11DeviceContext* device_context,
+			static void BindConstantBuffers(ID3D11DeviceContext& device_context,
 											u32 start_slot,
 											u32 num_buffers,
 											ID3D11Buffer* const* buffers) {
 
-				device_context->VSSetConstantBuffers(start_slot, num_buffers, buffers);
+				device_context.VSSetConstantBuffers(start_slot, num_buffers, buffers);
 			}
 
-			static void BindSRVs(ID3D11DeviceContext* device_context,
+			static void BindSRVs(ID3D11DeviceContext& device_context,
 								 u32 start_slot,
 								 u32 num_views,
 								 ID3D11ShaderResourceView* const* srvs) {
 
-				device_context->VSSetShaderResources(start_slot, num_views, srvs);
+				device_context.VSSetShaderResources(start_slot, num_views, srvs);
 			}
 		};
 };

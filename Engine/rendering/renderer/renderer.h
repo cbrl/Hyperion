@@ -16,14 +16,14 @@
 
 class Renderer final {
 	public:
-		Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context);
+		Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context);
 		~Renderer() = default;
 
 		void Render(Engine& engine, RenderStateMgr& render_state_mgr) const;
 
 
 	private:
-		ComPtr<ID3D11DeviceContext> device_context;
+		reference_wrapper<ID3D11DeviceContext> device_context;
 
 		// Renderers
 		unique_ptr<TextRenderer>    text_renderer;

@@ -122,7 +122,7 @@ void Direct3D::Init() {
 	sd.Flags        = 0;
 
 	// To correctly create the swap chain, we must use the IDXGIFactory that was
-	// used to create the device.  If we tried to use a different IDXGIFactory instance
+	// used to create the device->  If we tried to use a different IDXGIFactory instance
 	// (by calling CreateDXGIFactory), we get an error: "IDXGIFactory::CreateSwapChain: 
 	// This function is being called with a device from a different IDXGIFactory."
 
@@ -251,19 +251,19 @@ void Direct3D::ResizeBuffers(u32 winWidth, u32 winHeight) {
 
 	// Bind the render target view and depth/stencil view to the pipeline
 
-	Pipeline::OM::BindRTVs(device_context.Get(), 1, render_target_view.GetAddressOf(), depth_stencil_view.Get());
+	Pipeline::OM::BindRTVs(*device_context.Get(), 1, render_target_view.GetAddressOf(), depth_stencil_view.Get());
 }
 
 
 void Direct3D::Clear() const {
-	Pipeline::OM::ClearRTV(device_context.Get(), render_target_view.Get());
-	Pipeline::OM::ClearDSV(device_context.Get(), depth_stencil_view.Get());
+	Pipeline::OM::ClearRTV(*device_context.Get(), render_target_view.Get());
+	Pipeline::OM::ClearDSV(*device_context.Get(), depth_stencil_view.Get());
 }
 
 
 void Direct3D::Clear(const float color[4]) const {
-	Pipeline::OM::ClearRTV(device_context.Get(), render_target_view.Get(), color);
-	Pipeline::OM::ClearDSV(device_context.Get(), depth_stencil_view.Get());
+	Pipeline::OM::ClearRTV(*device_context.Get(), render_target_view.Get(), color);
+	Pipeline::OM::ClearDSV(*device_context.Get(), depth_stencil_view.Get());
 }
 
 

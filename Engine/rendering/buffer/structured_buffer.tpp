@@ -1,6 +1,6 @@
 
 template<typename DataT>
-void StructuredBuffer<DataT>::UpdateData(ID3D11Device* device, ID3D11DeviceContext* device_context, const vector<DataT>& data) {
+void StructuredBuffer<DataT>::UpdateData(ID3D11Device& device, ID3D11DeviceContext& device_context, const vector<DataT>& data) {
 	if (data.size() == 0) {
 		return;
 	}
@@ -14,17 +14,17 @@ void StructuredBuffer<DataT>::UpdateData(ID3D11Device* device, ID3D11DeviceConte
 	// Map the buffer and update the data
 	D3D11_MAPPED_SUBRESOURCE mapped_data = {};
 
-	ThrowIfFailed(device_context->Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mapped_data),
+	ThrowIfFailed(device_context.Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mapped_data),
 				  "Failed to map structured buffer");
 
 	memcpy(mapped_data.pData, data.data(), sizeof(DataT) * size);
 
-	device_context->Unmap(buffer.Get(), NULL);
+	device_context.Unmap(buffer.Get(), NULL);
 }
 
 
 template<typename DataT>
-void StructuredBuffer<DataT>::CreateBuffer(ID3D11Device* device) {
+void StructuredBuffer<DataT>::CreateBuffer(ID3D11Device& device) {
 	D3D11_BUFFER_DESC desc = {};
 
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
@@ -34,7 +34,7 @@ void StructuredBuffer<DataT>::CreateBuffer(ID3D11Device* device) {
 	desc.ByteWidth = sizeof(DataT) * size;
 	desc.StructureByteStride = sizeof(DataT);
 
-	ThrowIfFailed(device->CreateBuffer(&desc, nullptr, buffer.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(device.CreateBuffer(&desc, nullptr, buffer.ReleaseAndGetAddressOf()),
 				  "Failed to create structured buffer");
 
 	SetDebugObjectName(buffer.Get(), "Structured Buffer");
@@ -46,7 +46,7 @@ void StructuredBuffer<DataT>::CreateBuffer(ID3D11Device* device) {
 	srv_desc.Format = DXGI_FORMAT_UNKNOWN;
 	srv_desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 
-	ThrowIfFailed(device->CreateShaderResourceView(buffer.Get(), &srv_desc, srv.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(device.CreateShaderResourceView(buffer.Get(), &srv_desc, srv.ReleaseAndGetAddressOf()),
 				  "Failed to create structured buffer SRV");
 
 	SetDebugObjectName(srv.Get(), "Structured Buffer SRV");

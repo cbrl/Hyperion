@@ -11,11 +11,11 @@ class Mesh final {
 		~Mesh() = default;
 
 		template<typename VertexT>
-		Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices);
+		Mesh(ID3D11Device& device, const vector<VertexT>& vertices, const vector<u32>& indices);
 
 
 		// Bind the vertex buffer and index buffer
-		void Bind(ID3D11DeviceContext* device_context) const {
+		void Bind(ID3D11DeviceContext& device_context) const {
 			u32 offset = 0;
 
 			// Set vertex buffer to active in the input assembler so it can be rendered
@@ -30,8 +30,8 @@ class Mesh final {
 
 
 		// Draw the mesh with the given start index and index count
-		void Draw(ID3D11DeviceContext* device_context, u32 index_count, u32 start_index) const {
-			device_context->DrawIndexed(index_count, start_index, 0);
+		void Draw(ID3D11DeviceContext& device_context, u32 index_count, u32 start_index) const {
+			device_context.DrawIndexed(index_count, start_index, 0);
 		}
 
 

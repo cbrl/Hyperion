@@ -2,7 +2,7 @@
 namespace ModelLoader {
 
 	template<typename VertexT>
-	static ModelOutput<VertexT> Load(ID3D11Device* device,
+	static ModelOutput<VertexT> Load(ID3D11Device& device,
 									 ResourceMgr& resource_mgr,
 									 const wstring& filename) {
 

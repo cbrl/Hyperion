@@ -2,7 +2,7 @@
 
 
 template<typename VertexT>
-Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u32>& indices) {
+Mesh::Mesh(ID3D11Device& device, const vector<VertexT>& vertices, const vector<u32>& indices) {
 	
 	vertex_count = static_cast<u32>(vertices.size());
 	index_count  = static_cast<u32>(indices.size());
@@ -29,7 +29,7 @@ Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u
 	vb_data.SysMemSlicePitch = 0;
 
 	// Create vertex buffer
-	ThrowIfFailed(device->CreateBuffer(&vb_desc, &vb_data, vertex_buffer.GetAddressOf()),
+	ThrowIfFailed(device.CreateBuffer(&vb_desc, &vb_data, vertex_buffer.GetAddressOf()),
 				  "Failed to create mesh vertex buffer");
 
 
@@ -47,6 +47,6 @@ Mesh::Mesh(ID3D11Device* device, const vector<VertexT>& vertices, const vector<u
 	ib_data.SysMemSlicePitch = 0;
 
 	// Create index buffer
-	ThrowIfFailed(device->CreateBuffer(&ib_desc, &ib_data, index_buffer.GetAddressOf()),
+	ThrowIfFailed(device.CreateBuffer(&ib_desc, &ib_data, index_buffer.GetAddressOf()),
 				  "Failed to create mesh index buffer");
 }

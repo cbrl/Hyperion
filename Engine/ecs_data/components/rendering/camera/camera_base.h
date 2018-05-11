@@ -15,8 +15,8 @@ class CameraBase : public Component<T> {
 	friend class CameraSystem;
 
 	protected:
-		CameraBase(ID3D11Device* device,
-				   ID3D11DeviceContext* device_context,
+		CameraBase(ID3D11Device& device,
+				   ID3D11DeviceContext& device_context,
 				   u32 viewport_width,
 				   u32 viewport_height)
 			: buffer(device)
@@ -37,12 +37,12 @@ class CameraBase : public Component<T> {
 		//----------------------------------------------------------------------------------
 
 		// Update the camera's constant buffer
-		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext* device_context, FXMMATRIX world, FXMVECTOR position) {
+		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world, FXMVECTOR position) {
 			buffer.UpdateData(device_context, CameraBuffer(position, XMMatrixTranspose(world * view_matrix * projection_matrix)));
 		}
 
 		// Bind the camera's constant buffer
-		void BindBuffer(ID3D11DeviceContext* device_context, u32 slot) {
+		void BindBuffer(ID3D11DeviceContext& device_context, u32 slot) {
 			buffer.Bind<Pipeline>(device_context, slot);
 		}
 
@@ -52,14 +52,14 @@ class CameraBase : public Component<T> {
 		//----------------------------------------------------------------------------------
 
 		// Set a new viewport
-		void SetViewport(ID3D11DeviceContext* device_context, const D3D11_VIEWPORT& viewport) {
+		void SetViewport(ID3D11DeviceContext& device_context, const D3D11_VIEWPORT& viewport) {
 			this->viewport = viewport;
 			BindViewport(device_context);
 			UpdateProjectionMatrix();
 		}
 
 		// Change the viewport size
-		void ResizeViewport(ID3D11DeviceContext* device_context, u32 width, u32 height) {
+		void ResizeViewport(ID3D11DeviceContext& device_context, u32 width, u32 height) {
 			viewport.Width = static_cast<float>(width);
 			viewport.Height = static_cast<float>(height);
 			BindViewport(device_context);
@@ -102,7 +102,7 @@ class CameraBase : public Component<T> {
 
 	protected:
 		// Bind the viewport to the pipeline
-		void BindViewport(ID3D11DeviceContext* device_context) const {
+		void BindViewport(ID3D11DeviceContext& device_context) const {
 			Pipeline::RS::BindViewports(device_context, 1, &viewport);
 		}
 

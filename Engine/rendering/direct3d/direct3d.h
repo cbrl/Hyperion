@@ -33,11 +33,11 @@ class Direct3D final {
 		void ResizeBuffers(u32 win_width, u32 win_height);
 
 
-		ID3D11Device* GetDevice() const {
-			return device.Get();
+		ID3D11Device& GetDevice() const {
+			return *device.Get();
 		}
-		ID3D11DeviceContext* GetDeviceContext() const {
-			return device_context.Get();
+		ID3D11DeviceContext& GetDeviceContext() const {
+			return *device_context.Get();
 		}
 
 

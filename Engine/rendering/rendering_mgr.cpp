@@ -40,7 +40,7 @@ RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msa
 	//----------------------------------------------------------------------------------
 
 	ImGui::CreateContext();
-	ImGui_ImplDX11_Init(engine.GetHWND(), direct3D->GetDevice(), direct3D->GetDeviceContext());
+	ImGui_ImplDX11_Init(engine.GetHWND(), &direct3D->GetDevice(), &direct3D->GetDeviceContext());
 }
 
 

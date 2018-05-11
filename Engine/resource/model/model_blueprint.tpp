@@ -1,6 +1,6 @@
 
 template<typename VertexT>
-void ModelBlueprint::ConstructBlueprint(ID3D11Device* device, const ModelOutput<VertexT>& out) {
+void ModelBlueprint::ConstructBlueprint(ID3D11Device& device, const ModelOutput<VertexT>& out) {
 
 	// Copy members
 	name        = out.name;

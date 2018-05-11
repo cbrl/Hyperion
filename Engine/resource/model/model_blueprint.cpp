@@ -4,7 +4,7 @@
 #include "loader\model_loader.h"
 
 
-ModelBlueprint::ModelBlueprint(ID3D11Device* device,
+ModelBlueprint::ModelBlueprint(ID3D11Device& device,
 							   ResourceMgr& resource_mgr,
 							   const wstring& filename) {
 

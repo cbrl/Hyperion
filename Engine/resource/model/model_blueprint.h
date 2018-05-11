@@ -18,12 +18,12 @@ class ModelBlueprint final : public Resource<ModelBlueprint> {
 		ModelBlueprint() = default;
 		~ModelBlueprint() = default;
 
-		ModelBlueprint(ID3D11Device* device,
+		ModelBlueprint(ID3D11Device& device,
 					   ResourceMgr& resource_mgr,
 					   const wstring& filename);
 
 		template<typename VertexT>
-		ModelBlueprint(ID3D11Device* device,
+		ModelBlueprint(ID3D11Device& device,
 					   const ModelOutput<VertexT>& out)
 		{
 			ConstructBlueprint(device, out);
@@ -32,7 +32,7 @@ class ModelBlueprint final : public Resource<ModelBlueprint> {
 
 	private:
 		template<typename VertexT>
-		void ConstructBlueprint(ID3D11Device* device, const ModelOutput<VertexT>& out);
+		void ConstructBlueprint(ID3D11Device& device, const ModelOutput<VertexT>& out);
 
 
 	public:

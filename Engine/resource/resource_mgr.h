@@ -85,7 +85,7 @@ class DynamicResourceMap final {
 
 class ResourceMgr final {
 	public:
-		ResourceMgr(ID3D11Device* device, ID3D11DeviceContext* device_context)
+		ResourceMgr(ID3D11Device& device, ID3D11DeviceContext& device_context)
 			: device(device)
 			, device_context(device_context)
 		{}
@@ -116,8 +116,8 @@ class ResourceMgr final {
 
 	private:
 		// Device and device context
-		ComPtr<ID3D11Device>        device;
-		ComPtr<ID3D11DeviceContext> device_context;
+		reference_wrapper<ID3D11Device>        device;
+		reference_wrapper<ID3D11DeviceContext> device_context;
 
 		// Resources
 		ResourceMap<wstring, ModelBlueprint> models;

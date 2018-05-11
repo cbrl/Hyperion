@@ -5,7 +5,7 @@
 #include "engine\engine.h"
 
 
-Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* device_context)
+Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device_context(device_context)
 {
 	// Create renderers
@@ -26,10 +26,10 @@ void Renderer::Render(Engine& engine, RenderStateMgr& render_state_mgr) const {
 
 	// Update the camera 
 	auto* transform = ECS::Get()->GetComponent<CameraTransform>(scene.GetCamera());
-	ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera())->UpdateBuffer(device_context.Get(), transform->GetPositionMatrix(), transform->GetPosition());
+	ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera())->UpdateBuffer(device_context, transform->GetPositionMatrix(), transform->GetPosition());
 
 	// Bind the buffer
-	ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera())->BindBuffer(device_context.Get(), SLOT_CBUFFER_CAMERA);
+	ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera())->BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
 	
 
 	//----------------------------------------------------------------------------------

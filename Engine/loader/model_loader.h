@@ -11,7 +11,7 @@
 
 namespace ModelLoader {
 		template<typename VertexT>
-		ModelOutput<VertexT> Load(ID3D11Device* device,
+		ModelOutput<VertexT> Load(ID3D11Device& device,
 								  ResourceMgr& resource_mgr,
 								  const wstring& filename);
 };

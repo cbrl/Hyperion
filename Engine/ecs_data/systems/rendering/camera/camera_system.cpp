@@ -43,58 +43,69 @@ void CameraSystem::ProcessMovement(const Engine& engine, CameraMovement* movemen
 	int2  mouse_delta = input.GetMouseDelta();
 	float dt = engine.GetTimer().DeltaTime();
 
-
 	float3 rotate_units(0.0f, 0.0f, 0.0f);
 	float3 move_units(0.0f, 0.0f, 0.0f);
 
 
-	// Set x/y rotation with mouse data
-	rotate_units.x = XMConvertToRadians(static_cast<float>(mouse_delta.y)) * movement->GetTurnSensitivity();
-	rotate_units.y = XMConvertToRadians(static_cast<float>(mouse_delta.x)) * movement->GetTurnSensitivity();
+	//----------------------------------------------------------------------------------
+	// Rotation
+	//----------------------------------------------------------------------------------
 
-	// Roll rotation
-	if (input.IsKeyDown(Keyboard::Q)) {
-		rotate_units.z += dt * movement->GetRollSensitivity();
-	}
-	else if (input.IsKeyDown(Keyboard::E)) {
-		rotate_units.z -= dt * movement->GetRollSensitivity();
-	}
+	{
+		// Set x/y rotation with mouse data
+		rotate_units.x = XMConvertToRadians(static_cast<float>(mouse_delta.y)) * movement->GetTurnSensitivity();
+		rotate_units.y = XMConvertToRadians(static_cast<float>(mouse_delta.x)) * movement->GetTurnSensitivity();
 
-	// Forward/Back movement
-	if (input.IsKeyDown(Keyboard::W)) {
-		move_units.z += dt;
+		// Roll rotation
+		if (input.IsKeyDown(Keyboard::Q)) {
+			rotate_units.z += dt * movement->GetRollSensitivity();
+		}
+		else if (input.IsKeyDown(Keyboard::E)) {
+			rotate_units.z -= dt * movement->GetRollSensitivity();
+		}
 	}
-	else if (input.IsKeyDown(Keyboard::S)) {
-		move_units.z -= dt;
-	}
-
-	// Left/Right movement
-	if (input.IsKeyDown(Keyboard::A)) {
-		move_units.x -= dt;
-	}
-	else if (input.IsKeyDown(Keyboard::D)) {
-		move_units.x += dt;
-	}
-
-	// Up/Down movement
-	if (input.IsKeyDown(Keyboard::Space)) {
-		move_units.y += dt;
-	}
-	else if (input.IsKeyDown(Keyboard::LeftControl)) {
-		move_units.y -= dt;
-	}
-
 
 	// Rotate the camera
 	if (rotate_units.x || rotate_units.y || rotate_units.z) {
 		transform->Rotate(rotate_units);
 	}
 
-	// Move the camera
-	if (move_units.x || move_units.y || move_units.z) {
-		UpdateMovement(movement, move_units);
-		Move(movement, transform, dt);
+
+	//----------------------------------------------------------------------------------
+	// Movement
+	//----------------------------------------------------------------------------------
+
+	{
+		// Forward/Back movement
+		if (input.IsKeyDown(Keyboard::W)) {
+			move_units.z += dt;
+		}
+		else if (input.IsKeyDown(Keyboard::S)) {
+			move_units.z -= dt;
+		}
+
+		// Left/Right movement
+		if (input.IsKeyDown(Keyboard::A)) {
+			move_units.x -= dt;
+		}
+		else if (input.IsKeyDown(Keyboard::D)) {
+			move_units.x += dt;
+		}
+
+		// Up/Down movement
+		if (input.IsKeyDown(Keyboard::Space)) {
+			move_units.y += dt;
+		}
+		else if (input.IsKeyDown(Keyboard::LeftControl)) {
+			move_units.y -= dt;
+		}
 	}
+
+
+	// Move the camera
+	UpdateMovement(movement, move_units);
+
+	Move(movement, transform, dt);
 }
 
 
@@ -159,26 +170,30 @@ void CameraSystem::UpdateMovement(CameraMovement* mv, float3 units) {
 void CameraSystem::Move(CameraMovement* mv, CameraTransform* transform, float dt) {
 
 	XMVECTOR velocity_vec = XMLoadFloat3(&mv->GetVelocity());
+	float velocity_mag    = XMVectorGetX(XMVector3Length(velocity_vec));
 
 	// Limit veloctiy to maximum
-	if (XMVectorGetX(XMVector3Length(velocity_vec)) > mv->GetMaxVelocity()) {
+	if (velocity_mag > mv->GetMaxVelocity()) {
 
 		velocity_vec = XMVector3Normalize(velocity_vec) * mv->GetMaxVelocity();
 		mv->SetVelocity(velocity_vec);
 	}
 
 
-	// Move the camera
-	XMVECTOR position = XMVectorZero();
+	if (velocity_mag != 0.0f) {
 
-	position += transform->GetAxisX() * mv->GetVelocity().x * dt;
-	position += transform->GetAxisY() * mv->GetVelocity().y * dt;
-	position += transform->GetAxisZ() * mv->GetVelocity().z * dt;
+		// Move the camera
+		XMVECTOR position = XMVectorZero();
 
-	transform->Move(position);
+		position += transform->GetAxisX() * mv->GetVelocity().x * dt;
+		position += transform->GetAxisY() * mv->GetVelocity().y * dt;
+		position += transform->GetAxisZ() * mv->GetVelocity().z * dt;
 
-	// Decelerate the camera
-	Decelerate(mv, dt);
+		transform->Move(position);
+
+		// Decelerate the camera
+		Decelerate(mv, dt);
+	}
 }
 
 

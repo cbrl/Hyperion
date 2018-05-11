@@ -2,8 +2,8 @@
 #include "text_renderer.h"
 
 
-TextRenderer::TextRenderer(ID3D11DeviceContext* device_context) {
-	sprite_batch = make_unique<SpriteBatch>(device_context);
+TextRenderer::TextRenderer(ID3D11DeviceContext& device_context) {
+	sprite_batch = make_unique<SpriteBatch>(&device_context);
 }
 
 
