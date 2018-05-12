@@ -7,7 +7,7 @@
 
 void CameraSystem::Update(const Engine& engine) {
 	
-	ECS::Get()->ForEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	ECS::Get()->ForEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		Handle64 owner = camera.GetOwner();
 		const auto transform = ECS::Get()->GetComponent<CameraTransform>(owner);
 
@@ -21,7 +21,7 @@ void CameraSystem::Update(const Engine& engine) {
 	});
 
 
-	ECS::Get()->ForEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+	ECS::Get()->ForEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
 		Handle64 owner = camera.GetOwner();
 		const auto transform = ECS::Get()->GetComponent<CameraTransform>(owner);
 

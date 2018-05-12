@@ -5,12 +5,22 @@
 
 void TransformSystem::Update(const Engine& engine) {
 
-	ECS::Get()->ForEach<Transform>([&](Transform& transform) {
+	ECS::Get()->ForEachActive<Transform>([&](Transform& transform) {
 		UpdateWorld(transform);
 	});
 
-	ECS::Get()->ForEach<CameraTransform>([&](CameraTransform& transform) {
+	ECS::Get()->ForEachActive<CameraTransform>([&](CameraTransform& transform) {
 		UpdateWorld(transform);
+	});
+}
+
+
+void TransformSystem::PostUpdate(const Engine& engine) {
+	ECS::Get()->ForEachActive<Transform>([&](Transform& transform) {
+		transform.updated = false;
+	});
+	ECS::Get()->ForEachActive<CameraTransform>([&](CameraTransform& transform) {
+		transform.updated = false;
 	});
 }
 

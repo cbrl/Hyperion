@@ -74,11 +74,11 @@ class ECS final {
 		}
 
 
-		// Do something to each entity or component
+		// Do something to each active entity or component
 		template<typename T, typename ActionT>
-		void ForEach(ActionT act) {
+		void ForEachActive(ActionT act) {
 			if constexpr (std::is_base_of_v<IEntity, T>) {
-				if (entity_mgr->KnowsEntity<T>()) return;
+				if (!entity_mgr->KnowsEntity<T>()) return;
 
 				for (auto entity = entity_mgr->begin<T>(); entity != entity_mgr->end<T>(); ++entity) {
 					if (entity->IsActive()) act(*entity);

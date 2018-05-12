@@ -7,7 +7,7 @@
 
 void ModelSystem::Update(const Engine& engine) {
 
-	ECS::Get()->ForEach<Model>([&](Model& model) {
+	ECS::Get()->ForEachActive<Model>([&](Model& model) {
 
 		const auto owner = model.GetOwner();
 		const auto transform = ECS::Get()->GetComponent<Transform>(owner);

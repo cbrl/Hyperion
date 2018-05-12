@@ -11,14 +11,7 @@ class TransformSystem final : public System<TransformSystem> {
 		~TransformSystem() = default;
 
 		void Update(const Engine& engine) override;
-		void PostUpdate(const Engine& engine) override {
-			ECS::Get()->ForEach<Transform>([&](Transform& transform) {
-				transform.updated = false;
-			});
-			ECS::Get()->ForEach<CameraTransform>([&](CameraTransform& transform) {
-				transform.updated = false;
-			});
-		}
+		void PostUpdate(const Engine& engine) override;
 
 
 	private:
