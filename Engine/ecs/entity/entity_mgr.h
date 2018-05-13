@@ -16,7 +16,7 @@
 
 class EntityMgr final {
 	public:
-		EntityMgr() = default;
+		EntityMgr() : num_expired_entities(0) {};
 		~EntityMgr() = default;
 
 
@@ -43,19 +43,38 @@ class EntityMgr final {
 		}
 
 
+		// Add an entity to the list of expired entities. Will be
+		// destroyed at the end of the next ECS update.
 		void DestroyEntity(Handle64 handle) {
 
-			// Get the entity
-			IEntity* entity = handle_table[handle];
+			if (expired_entities.size() > num_expired_entities) {
+				expired_entities[num_expired_entities] = handle;
+				++num_expired_entities;
+			}
+			else {
+				expired_entities.push_back(handle);
+				++num_expired_entities;
+			}
+		}
 
-			// Get the entity type_index
-			auto type = handle_table[handle]->GetTypeID();
 
-			// Get the appropriate pool witht the type_index
-			auto pool = entity_pools.GetPool(type);
+		// Remove all the entities marked for deletion. Should be
+		// called once per tick.
+		void RemoveExpiredEntities() {
+			for (Handle64 handle : expired_entities) {
 
-			pool->DestroyObject(static_cast<void*>(entity));
-			handle_table.ReleaseHandle(handle);
+				// Get the entity
+				IEntity* entity = handle_table[handle];
+
+				// Get the entity type_index
+				auto type = handle_table[handle]->GetTypeID();
+
+				// Get the appropriate pool with the type_index
+				auto pool = entity_pools.GetPool(type);
+
+				handle_table.ReleaseHandle(handle);
+				pool->DestroyObject(static_cast<void*>(entity));
+			}
 		}
 
 
@@ -91,4 +110,8 @@ class EntityMgr final {
 
 		// Handle table, which maps handles to a pointer to an entity
 		HandleTable<Handle64, IEntity> handle_table;
+
+		// Container of entities that need to be deleted
+		vector<Handle64> expired_entities;
+		u32              num_expired_entities;
 };

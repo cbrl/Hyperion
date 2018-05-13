@@ -19,6 +19,7 @@ class ECS final {
 
 		void Update(const Engine& engine) {
 			system_mgr->Update(engine);
+			entity_mgr->RemoveExpiredEntities();
 		}
 
 
