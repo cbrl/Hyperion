@@ -70,5 +70,5 @@ class ComponentMgr final {
 
 	private:
 		// Map of unique resource pools for each type of component
-		ResourcePoolMap component_pools;
+		ResourcePoolFactory component_pools;
 };

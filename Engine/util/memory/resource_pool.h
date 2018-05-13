@@ -3,6 +3,17 @@
 #include "util\memory\allocator\pool_allocator.h"
 
 
+
+//----------------------------------------------------------------------------------
+// Resource Pool
+//----------------------------------------------------------------------------------
+//
+// The resource pool allocates memory for objects in chunks using the pool
+// allocator. The iterator provided allows the objects to be iterated over
+// without worrying about the underlying chunks.
+//
+//----------------------------------------------------------------------------------
+
 class IResourcePool {
 	public:
 		virtual ~IResourcePool() = default;
@@ -31,7 +42,7 @@ class ResourcePool : public IResourcePool {
 
 	public:
 		class iterator : public std::iterator<std::forward_iterator_tag, DataT> {
-			using chunk_iter = typename std::list<Chunk*>::iterator;
+			using chunk_iter  = typename std::list<Chunk*>::iterator;
 			using object_iter = typename std::list<DataT*>::iterator;
 
 			public:
@@ -94,10 +105,10 @@ class ResourcePool : public IResourcePool {
 
 
 //----------------------------------------------------------------------------------
-// ResourcePool Map
+// ResourcePool Factory
 //----------------------------------------------------------------------------------
 //
-// Creates a unique resource pool for each type of resource.
+// Creates a new resource pool for each unique resource type.
 //
 // Requirements:
 //  - Base resource class has static member 'type_id' of type std::type_index
@@ -109,11 +120,11 @@ class ResourcePool : public IResourcePool {
 //
 //----------------------------------------------------------------------------------
 
-class ResourcePoolMap final {
+class ResourcePoolFactory final {
 	public:
-		ResourcePoolMap() = default;
+		ResourcePoolFactory() = default;
 
-		~ResourcePoolMap() {
+		~ResourcePoolFactory() {
 			for (auto& pair : pools) {
 				delete pair.second;
 				pair.second = nullptr;

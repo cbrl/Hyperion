@@ -36,11 +36,11 @@ class ResourceMap final : public IResourceMap {
 
 
 template<typename ResMapKeyT>
-class DynamicResourceMap final {
+class ResourceMapFactory final {
 	public:
-		DynamicResourceMap() = default;
+		ResourceMapFactory() = default;
 
-		~DynamicResourceMap() {
+		~ResourceMapFactory() {
 			for (auto& [key, val] : resource_maps) {
 				delete val;
 				val = nullptr;

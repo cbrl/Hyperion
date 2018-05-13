@@ -55,7 +55,6 @@ class EntityMgr final {
 			auto pool = entity_pools.GetPool(type);
 
 			pool->DestroyObject(static_cast<void*>(entity));
-
 			handle_table.ReleaseHandle(handle);
 		}
 
@@ -88,7 +87,7 @@ class EntityMgr final {
 
 	private:
 		// Map of unique resource pools for each type of entity
-		ResourcePoolMap entity_pools;
+		ResourcePoolFactory entity_pools;
 
 		// Handle table, which maps handles to a pointer to an entity
 		HandleTable<Handle64, IEntity> handle_table;

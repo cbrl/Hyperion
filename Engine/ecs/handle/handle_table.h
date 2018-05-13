@@ -17,10 +17,10 @@ class HandleTable {
 			HandleEntry() = default;
 			explicit HandleEntry(ValueT next_index) : next_index(next_index) {}
 
-			ValueT        next_index  : HandleT::n_index_bits;
-			ValueT        counter     : HandleT::n_counter_bits;
-			ValueT        end_of_list : 1;
-			unique_ptr<T> entry;
+			ValueT next_index  : HandleT::n_index_bits;
+			ValueT counter     : HandleT::n_counter_bits;
+			ValueT end_of_list : 1;
+			T*     entry;
 		};
 		*/
 
