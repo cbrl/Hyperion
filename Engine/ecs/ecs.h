@@ -104,6 +104,6 @@ class ECS final {
 		static ECS* engine;
 
 		unique_ptr<EntityMgr>    entity_mgr;
-		unique_ptr<ComponentMgr> component_mgr;
+		shared_ptr<ComponentMgr> component_mgr;
 		unique_ptr<SystemMgr>    system_mgr;
 };

@@ -16,6 +16,16 @@ IEntity::~IEntity() {
 }
 
 
+void IEntity::SetHandle(Handle64 this_handle) {
+	handle = this_handle;
+}
+
+
+void IEntity::SetComponentMgr(ComponentMgr* mgr) {
+	component_mgr = mgr;
+}
+
+
 void IEntity::SetActive(bool state) {
 	active = state;
 }

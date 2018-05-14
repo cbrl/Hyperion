@@ -4,11 +4,12 @@
 #include "ecs_data\components\rendering\model\model.h"
 
 
-class BasicModel : public WorldObject<BasicModel> {
+class BasicModel final : public WorldObject<BasicModel> {
 	public:
-		BasicModel(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint) {
+		BasicModel() = default;
+		~BasicModel() = default;
+
+		void Init(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint) {
 			this->AddComponent<Model>(device, blueprint);
 		}
-
-		~BasicModel() = default;
 };

@@ -13,12 +13,23 @@
 //
 //----------------------------------------------------------------------------------
 
-template<typename T>
-class WorldObject : public Entity<T> {
+template<typename T = void>
+class WorldObject : public Entity<WorldObject<T>> {
 	public:
-		WorldObject() {
+		WorldObject() = default;
+		virtual ~WorldObject() = default;
+
+		template<typename... ArgsT>
+		void Init(ArgsT&&... args) {
 			this->AddComponent<Transform>();
+			InitImpl(std::is_same<T, void>{}, std::forward<ArgsT>(args)...);
 		}
 
-		virtual ~WorldObject() = default;
+
+	protected:
+		template<typename... ArgsT>
+		void InitImpl(std::false_type, ArgsT&&... args) {
+			if (&WorldObject::Init != &T::Init)
+				static_cast<T*>(this)->Init(std::forward<ArgsT>(args)...);
+		}
 };

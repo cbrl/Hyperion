@@ -388,6 +388,9 @@
     <None Include="ecs_data\systems\geometry\transform\transform_system.tpp">
       <Filter>Source Files\ecs_data\systems\geometry\transform</Filter>
     </None>
+    <None Include="ecs\entity\entity.tpp">
+      <Filter>Source Files\ecs\entity</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -653,9 +656,6 @@
     </ClInclude>
     <ClInclude Include="engine\engine.h">
       <Filter>Header Files\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="ecs\entity\entity.tpp">
-      <Filter>Source Files\ecs\entity</Filter>
     </ClInclude>
     <ClInclude Include="ecs_data\components\geometry\transform\transform.h">
       <Filter>Header Files\ecs_data\components\geometry\transform</Filter>

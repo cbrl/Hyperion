@@ -26,15 +26,20 @@ class IEntity {
 		[[nodiscard]]
 		const Handle64 GetHandle() const;
 
-		template<typename ComponentT>
-		[[nodiscard]]
-		ComponentT* const GetComponent() const;
-
 		template<typename ComponentT, typename... ArgsT>
 		ComponentT* const AddComponent(ArgsT&&... args);
 
 		template<typename ComponentT>
+		[[nodiscard]]
+		ComponentT* const GetComponent() const;
+
+		template<typename ComponentT>
 		void RemoveComponent();
+
+
+	private:
+		void SetHandle(Handle64 this_handle);
+		void SetComponentMgr(ComponentMgr* mgr);
 
 
 	protected:
@@ -43,6 +48,9 @@ class IEntity {
 
 		// Handle to this entity. Set on creation in EntityMgr.
 		Handle64 handle;
+
+		// A pointer to the component manager
+		ComponentMgr* component_mgr;
 
 		// Map of pointers to components. Holds 1 of each unique type.
 		unordered_map<type_index, IComponent*> components;
@@ -60,18 +68,34 @@ class IEntity {
 
 template<typename T>
 class Entity : public IEntity {
-	public:
-		Entity() = default;
-		virtual ~Entity() = default;
+	friend class EntityMgr;
 
+	public:
 		virtual const type_index GetTypeID() const override {
 			return type_id;
 		}
 
 
+	protected:
+		Entity() = default;
+		Entity(const Entity& entity) = default;
+		Entity(Entity&& entity) = delete;
+		virtual ~Entity() = default;
+
+		template<typename... ArgsT>
+		void Construct(ArgsT&&... args);
+
+		template<typename... ArgsT>
+		void Init(ArgsT&&... args);
+
+
 	public:
 		// And ID unique to type T
 		static const type_index type_id;
+
+
+	private:
+		//bool base_init_called = false;
 };
 
 

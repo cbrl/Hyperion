@@ -16,7 +16,11 @@
 
 class EntityMgr final {
 	public:
-		EntityMgr() : num_expired_entities(0) {};
+		EntityMgr(shared_ptr<ComponentMgr> component_mgr)
+			: num_expired_entities(0)
+			, component_mgr(component_mgr)
+		{}
+
 		~EntityMgr() = default;
 
 
@@ -36,8 +40,10 @@ class EntityMgr final {
 			Handle64 handle = handle_table.CreateHandle(static_cast<IEntity*>(memory));
 
 			// Create the entity
-			static_cast<IEntity*>(memory)->handle = handle;
-			EntityT* entity = new(memory) EntityT(std::forward<ArgsT>(args)...);
+			EntityT* entity = new(memory) EntityT();
+			entity->SetHandle(handle);
+			entity->SetComponentMgr(component_mgr.get());
+			entity->Construct(std::forward<ArgsT>(args)...);
 
 			return handle;
 		}
@@ -105,6 +111,9 @@ class EntityMgr final {
 
 
 	private:
+		// A pointer to the component manager
+		shared_ptr<ComponentMgr> component_mgr;
+
 		// Map of unique resource pools for each type of entity
 		ResourcePoolFactory entity_pools;
 

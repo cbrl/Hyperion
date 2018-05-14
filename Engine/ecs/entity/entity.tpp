@@ -1,5 +1,10 @@
 #include "ecs\ecs.h"
 
+
+//----------------------------------------------------------------------------------
+// IEntity
+//----------------------------------------------------------------------------------
+
 template<typename ComponentT>
 ComponentT* const IEntity::GetComponent() const {
 
@@ -22,7 +27,7 @@ ComponentT* const IEntity::AddComponent(ArgsT&&... args) {
 		return static_cast<ComponentT* const>(it->second);
 	}
 
-	components[ComponentT::type_id] = ECS::Get()->GetComponentMgr()->CreateComponent<ComponentT>(std::forward<ArgsT>(args)...);
+	components[ComponentT::type_id] = component_mgr->CreateComponent<ComponentT>(std::forward<ArgsT>(args)...);
 	components[ComponentT::type_id]->owner = handle;
 
 	return static_cast<ComponentT* const>(components[ComponentT::type_id]);
@@ -34,6 +39,27 @@ void IEntity::RemoveComponent() {
 
 	auto it = components.find(ComponentT::type_id);
 
-	ECS::Get()->GetComponentMgr()->DestroyComponent(it->second);
+	component_mgr->DestroyComponent(it->second);
 	components.erase(it);
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+// Entity
+//----------------------------------------------------------------------------------
+
+
+template<typename T>
+template<typename... ArgsT>
+void Entity<T>::Construct(ArgsT&&... args) {
+	static_assert(std::is_base_of_v<Entity, T>, "Entity<T> - Invalid derived class.");
+	Init(std::forward<ArgsT>(args)...);
+}
+
+template<typename T>
+template<typename... ArgsT>
+void Entity<T>::Init(ArgsT&&... args) {
+	static_cast<T*>(this)->Init(std::forward<ArgsT>(args)...);
 }
