@@ -687,6 +687,9 @@
     <ClInclude Include="ecs_data\systems\rendering\model\model_system.h">
       <Filter>Header Files\ecs_data\systems\rendering\model</Filter>
     </ClInclude>
+    <ClInclude Include="ecs\ecs.tpp">
+      <Filter>Source Files\ecs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

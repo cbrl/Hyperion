@@ -11,26 +11,16 @@ class ECS final {
 		ECS();
 		~ECS();
 
-
-		static ECS* const Get() {
-			return engine;
-		}
+		void Update(const Engine& engine);
 
 
-		void Update(const Engine& engine) {
-			system_mgr->Update(engine);
-			entity_mgr->RemoveExpiredEntities();
-		}
-
+		//----------------------------------------------------------------------------------
+		// Entities
+		//----------------------------------------------------------------------------------
 
 		template<typename EntityT, typename... ArgsT>
 		[[nodiscard]]
-		const Handle64 CreateEntity(ArgsT&&... args) {
-			static_assert(std::is_base_of_v<IEntity, EntityT>,
-						  "Calling ECS::CreateEntity() with non-entity type.");
-
-			return entity_mgr->CreateEntity<EntityT>(std::forward<ArgsT>(args)...);
-		}
+		const Handle64 CreateEntity(ArgsT&&... args);
 
 
 		void DestroyEntity(Handle64 entity) {
@@ -38,62 +28,38 @@ class ECS final {
 		}
 
 
-		template<typename ComponentT, typename... ArgsT>
-		ComponentT* const AddComponent(Handle64 entity, ArgsT&&... args) {
-			static_assert(std::is_base_of_v<IComponent, ComponentT>,
-						  "Calling ECS::AddComponent() with non-component type.");
+		//----------------------------------------------------------------------------------
+		// Components
+		//----------------------------------------------------------------------------------
 
-			entity_mgr->GetEntity(entity)->AddComponent<ComponentT>(std::forward<ArgsT>(args)...);
-		}
+		template<typename ComponentT, typename... ArgsT>
+		ComponentT* const AddComponent(Handle64 entity, ArgsT&&... args);
 
 
 		template<typename ComponentT>
-		void RemoveComponent(Handle64 entity) {
-			static_assert(std::is_base_of_v<IComponent, ComponentT>,
-						  "Calling ECS::RemoveComponent() with non-component type.");
-
-			entity_mgr->GetEntity(entity)->RemoveComponent<ComponentT>();
-		}
+		void RemoveComponent(Handle64 entity);
 
 
 		template<typename ComponentT>
 		[[nodiscard]]
-		ComponentT* const GetComponent(Handle64 entity) {
-			static_assert(std::is_base_of_v<IComponent, ComponentT>,
-						  "Calling ECS::GetComponent() with non-component type.");
+		ComponentT* const GetComponent(Handle64 entity);
 
-			return entity_mgr->GetEntity(entity)->GetComponent<ComponentT>();
-		}
 
+		//----------------------------------------------------------------------------------
+		// Systems
+		//----------------------------------------------------------------------------------
 
 		template<typename SystemT, typename... ArgsT>
-		SystemT* const AddSystem(ArgsT&&... args) {
-			static_assert(std::is_base_of_v<ISystem, SystemT>,
-						  "Calling ECS::AddSystem() with non-system type.");
+		SystemT* const AddSystem(ArgsT&&... args);
 
-			return system_mgr->AddSystem<SystemT>(std::forward<ArgsT>(args)...);
-		}
 
+		//----------------------------------------------------------------------------------
+		// Misc
+		//----------------------------------------------------------------------------------
 
 		// Do something to each active entity or component
 		template<typename T, typename ActionT>
-		void ForEachActive(ActionT act) {
-			if constexpr (std::is_base_of_v<IEntity, T>) {
-				if (!entity_mgr->KnowsEntity<T>()) return;
-
-				for (auto entity = entity_mgr->begin<T>(); entity != entity_mgr->end<T>(); ++entity) {
-					if (entity->IsActive()) act(*entity);
-				}
-			}
-
-			if constexpr (std::is_base_of_v<IComponent, T>) {
-				if (!component_mgr->KnowsComponent<T>()) return;
-
-				for (auto component = component_mgr->begin<T>(); component != component_mgr->end<T>(); ++component) {
-					if (component->IsActive()) act(*component);
-				}
-			}
-		}
+		void ForEachActive(ActionT act);
 
 
 		EntityMgr* const    GetEntityMgr()    const { return entity_mgr.get(); }
@@ -101,9 +67,10 @@ class ECS final {
 
 
 	private:
-		static ECS* engine;
-
 		unique_ptr<EntityMgr>    entity_mgr;
 		shared_ptr<ComponentMgr> component_mgr;
 		unique_ptr<SystemMgr>    system_mgr;
 };
+
+
+#include "ecs.tpp"

@@ -3,25 +3,30 @@
 #include <d3d11.h>
 
 #include "util\datatypes\datatypes.h"
+#include "rendering\pipeline.h"
+#include "rendering\buffer\buffers.h"
 #include "rendering\buffer\constant_buffer.h"
 #include "rendering\buffer\structured_buffer.h"
-#include "rendering\render_state_mgr.h"
+#include "shader\hlsl.h"
 #include "shader\shader.h"
-#include "scene\scene.h"
 
+class ECS;
+class Engine;
+class Scene;
+class RenderStateMgr;
 
 class ForwardRenderer final {
 	public:
 		ForwardRenderer(ID3D11Device& device, ID3D11DeviceContext& device_context);
 		~ForwardRenderer() = default;
 
-		void Render(Scene& scene, const RenderStateMgr& render_state_mgr);
+		void Render(const Engine& engine);
 
 
 	private:
 		void BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr) const;
-		void UpdateLightBuffers(Scene& scene);
-		void RenderModels(Scene& scene) const;
+		void UpdateLightBuffers(ECS& ecs_engine, Scene& scene);
+		void RenderModels(ECS& ecs_engine, Scene& scene) const;
 
 
 	private:

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs\ecs.h"
+#include "ecs\system\system.h"
 #include "ecs_data\components\geometry\transform\camera_transform.h"
 #include "ecs_data\components\rendering\camera\camera_base.h"
 #include "ecs_data\components\rendering\camera\camera_movement.h"

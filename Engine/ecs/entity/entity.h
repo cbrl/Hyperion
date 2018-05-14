@@ -49,7 +49,9 @@ class IEntity {
 		// Handle to this entity. Set on creation in EntityMgr.
 		Handle64 handle;
 
-		// A pointer to the component manager
+		// A pointer to the component manager. The ECS destroys all
+		// entities before the component manager is destroyed, so
+		// this pointer should never be invalid in this context.
 		ComponentMgr* component_mgr;
 
 		// Map of pointers to components. Holds 1 of each unique type.
@@ -92,10 +94,6 @@ class Entity : public IEntity {
 	public:
 		// And ID unique to type T
 		static const type_index type_id;
-
-
-	private:
-		//bool base_init_called = false;
 };
 
 

@@ -10,7 +10,7 @@ IEntity::IEntity()
 
 IEntity::~IEntity() {
 	for (auto& pair : components) {
-		ECS::Get()->GetComponentMgr()->DestroyComponent(pair.second);
+		component_mgr->DestroyComponent(pair.second);
 		pair.second = nullptr;
 	}
 }

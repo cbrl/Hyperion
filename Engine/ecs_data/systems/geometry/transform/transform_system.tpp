@@ -1,6 +1,6 @@
 
 template<typename TransformT>
-void TransformSystem::UpdateWorld(TransformT& transform) {
+void TransformSystem::UpdateWorld(ECS& ecs_engine, TransformT& transform) {
 
 	XMMATRIX this_world   = XMMatrixIdentity();
 	XMMATRIX parent_world = XMMatrixIdentity();
@@ -16,11 +16,11 @@ void TransformSystem::UpdateWorld(TransformT& transform) {
 	// If the parent was updated, or if this transform already needs
 	// an update, this get the parent's matrix.
 	else {
-		const auto parent     = ECS::Get()->GetComponent<Transform>(transform.GetParent());
-		const auto parent_cam = ECS::Get()->GetComponent<CameraTransform>(transform.GetParent());
+		const auto parent     = ecs_engine.GetComponent<Transform>(transform.GetParent());
+		const auto parent_cam = ecs_engine.GetComponent<CameraTransform>(transform.GetParent());
 
 		if (parent) {
-			UpdateWorld(*parent);
+			UpdateWorld(ecs_engine, *parent);
 
 			if (parent->updated)
 				transform.needs_update = true;
@@ -30,7 +30,7 @@ void TransformSystem::UpdateWorld(TransformT& transform) {
 				parent_world = parent->GetWorld();
 		}
 		else if (parent_cam) {
-			UpdateWorld(*parent_cam);
+			UpdateWorld(ecs_engine, *parent_cam);
 
 			if (parent_cam->updated)
 				transform.needs_update = true;

@@ -68,7 +68,7 @@ void RenderingMgr::Render(Engine& engine) const {
 
 
 	// Render the scene
-	renderer->Render(engine, *render_state_mgr);
+	renderer->Render(engine);
 
 
 	// Render the ImGui frame

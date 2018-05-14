@@ -4,11 +4,14 @@
 
 #include "engine\main_window.h"
 
+#include "util\engine_util.h"
 #include "util\datatypes\datatypes.h"
 #include "util\sysmon\system_monitor.h"
 #include "util\timer\timer.h"
 #include "util\fps\fps.h"
+
 #include "ecs\ecs.h"
+#include "ecs_data\systems\systems.h"
 #include "input\input.h"
 #include "rendering\rendering_mgr.h"
 #include "scene\scene.h"
@@ -39,6 +42,7 @@ class Engine final : public MainWindow {
 		u32  GetWindowWidth()  const { return window_width; }
 		u32  GetWindowHeight() const { return window_height; }
 
+		ECS&            GetECS()          const { return *ecs_engine; }
 		Scene&          GetScene()        const { return *scene; }
 		Input&          GetInput()        const { return *input; }
 		Timer&          GetTimer()        const { return *timer; }

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "sky_renderer.h"
+#include "engine\engine.h"
 
 
 SkyRenderer::SkyRenderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
@@ -15,10 +16,14 @@ SkyRenderer::SkyRenderer(ID3D11Device& device, ID3D11DeviceContext& device_conte
 }
 
 
-void SkyRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mgr) {
+void SkyRenderer::Render(const Engine& engine) {
+
+	auto& ecs_engine             = engine.GetECS();
+	const auto& render_state_mgr = engine.GetRenderingMgr().GetRenderStateMgr();
+	auto& scene                  = engine.GetScene();
 
 	// Get the camera's skybox
-	const SkyBox* skybox = ECS::Get()->GetComponent<SkyBox>(scene.GetCamera());
+	const SkyBox* skybox = ecs_engine.GetComponent<SkyBox>(scene.GetCamera());
 	if (!skybox) return;
 
 
@@ -42,7 +47,7 @@ void SkyRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mgr) {
 }
 
 
-void SkyRenderer::BindRenderStates(Scene & scene, const RenderStateMgr & render_state_mgr) {
+void SkyRenderer::BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr) {
 
 	switch (scene.GetRenderStates().blend_state) {
 		case BlendStates::Default:

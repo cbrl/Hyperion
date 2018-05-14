@@ -317,6 +317,9 @@
     <ClInclude Include="loader\model_loader.tpp">
       <FileType>Document</FileType>
     </ClInclude>
+    <ClInclude Include="ecs\ecs.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <None Include="ecs\entity\entity.tpp" />
     <None Include="ecs\handle\handle_table.tpp" />
     <ClInclude Include="rendering\buffer\constant_buffer.tpp">

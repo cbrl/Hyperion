@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "renderer.h"
-
 #include "imgui\imgui.h"
 #include "engine\engine.h"
 
@@ -15,35 +14,36 @@ Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
 }
 
 
-void Renderer::Render(Engine& engine, RenderStateMgr& render_state_mgr) const {
+void Renderer::Render(const Engine& engine) const {
 
-	// Get the scene
-	Scene& scene = engine.GetScene();
+	auto& ecs_engine             = engine.GetECS();
+	const auto& render_state_mgr = engine.GetRenderingMgr().GetRenderStateMgr();
+	auto& scene                  = engine.GetScene();
 
 	//----------------------------------------------------------------------------------
 	// Update the camera buffer
 	//----------------------------------------------------------------------------------
 
 	// Update the camera 
-	auto* transform = ECS::Get()->GetComponent<CameraTransform>(scene.GetCamera());
-	ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera())->UpdateBuffer(device_context, transform->GetPositionMatrix(), transform->GetPosition());
+	auto* transform = ecs_engine.GetComponent<CameraTransform>(scene.GetCamera());
+	ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera())->UpdateBuffer(device_context, transform->GetPositionMatrix(), transform->GetPosition());
 
 	// Bind the buffer
-	ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera())->BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
+	ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera())->BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
 	
 
 	//----------------------------------------------------------------------------------
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
 	
-	forward_renderer->Render(scene, render_state_mgr);
+	forward_renderer->Render(engine);
 
 
 	//----------------------------------------------------------------------------------
 	// Render the skybox
 	//----------------------------------------------------------------------------------
 
-	sky_renderer->Render(scene, render_state_mgr);
+	sky_renderer->Render(engine);
 
 
 	//----------------------------------------------------------------------------------

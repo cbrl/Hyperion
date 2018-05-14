@@ -4,22 +4,25 @@
 
 
 void TransformSystem::Update(const Engine& engine) {
+	auto& ecs_engine = engine.GetECS();
 
-	ECS::Get()->ForEachActive<Transform>([&](Transform& transform) {
-		UpdateWorld(transform);
+	ecs_engine.ForEachActive<Transform>([&](Transform& transform) {
+		UpdateWorld(ecs_engine, transform);
 	});
 
-	ECS::Get()->ForEachActive<CameraTransform>([&](CameraTransform& transform) {
-		UpdateWorld(transform);
+	ecs_engine.ForEachActive<CameraTransform>([&](CameraTransform& transform) {
+		UpdateWorld(ecs_engine, transform);
 	});
 }
 
 
 void TransformSystem::PostUpdate(const Engine& engine) {
-	ECS::Get()->ForEachActive<Transform>([&](Transform& transform) {
+	auto& ecs_engine = engine.GetECS();
+
+	ecs_engine.ForEachActive<Transform>([&](Transform& transform) {
 		transform.updated = false;
 	});
-	ECS::Get()->ForEachActive<CameraTransform>([&](CameraTransform& transform) {
+	ecs_engine.ForEachActive<CameraTransform>([&](CameraTransform& transform) {
 		transform.updated = false;
 	});
 }

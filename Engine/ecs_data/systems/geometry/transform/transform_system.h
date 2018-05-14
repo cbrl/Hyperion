@@ -16,7 +16,7 @@ class TransformSystem final : public System<TransformSystem> {
 
 	private:
 		template<typename TransformT>
-		void UpdateWorld(TransformT& transform);
+		void UpdateWorld(ECS& ecs_engine, TransformT& transform);
 
 		XMMATRIX CalculateWorld(Transform& transform) const;
 		XMMATRIX CalculateWorld(CameraTransform& transform) const;

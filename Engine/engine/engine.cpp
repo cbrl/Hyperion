@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include "engine.h"
-
-#include "util\engine_util.h"
 #include "imgui\imgui.h"
-#include "ecs_data\systems\systems.h"
 
 
 // Declare the ImGui msg handler
@@ -35,9 +32,9 @@ bool Engine::Init() {
 
 	// Initialize the Entity Component System
 	ecs_engine = make_unique<ECS>();
-	ECS::Get()->AddSystem<CameraSystem>();
-	ECS::Get()->AddSystem<TransformSystem>();
-	ECS::Get()->AddSystem<ModelSystem>();
+	ecs_engine->AddSystem<CameraSystem>();
+	ecs_engine->AddSystem<TransformSystem>();
+	ecs_engine->AddSystem<ModelSystem>();
 
 
 	// Initialize system monitor

@@ -1,10 +1,7 @@
 #include "stdafx.h"
 #include "forward_render.h"
-
 #include "util\math\math.h"
-#include "ecs\ecs.h"
-#include "rendering\pipeline.h"
-#include "shader\hlsl.h"
+#include "engine\engine.h"
 
 
 ForwardRenderer::ForwardRenderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
@@ -26,7 +23,11 @@ ForwardRenderer::ForwardRenderer(ID3D11Device& device, ID3D11DeviceContext& devi
 }
 
 
-void ForwardRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mgr) {
+void ForwardRenderer::Render(const Engine& engine) {
+
+	auto& ecs_engine             = engine.GetECS();
+	const auto& render_state_mgr = engine.GetRenderingMgr().GetRenderStateMgr();
+	auto& scene                  = engine.GetScene();
 
 	// Bind buffers
 	light_buffer.Bind<Pipeline::PS>(device_context, SLOT_CBUFFER_LIGHT);
@@ -39,7 +40,7 @@ void ForwardRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mg
 	point_light_buffer.Bind<Pipeline::PS>(device_context,       SLOT_SRV_POINT_LIGHTS);
 	spot_light_buffer.Bind<Pipeline::PS>(device_context,        SLOT_SRV_SPOT_LIGHTS);
 
-	auto skybox = ECS::Get()->GetComponent<SkyBox>(scene.GetCamera());
+	auto skybox = ecs_engine.GetComponent<SkyBox>(scene.GetCamera());
 	if (skybox) {
 		skybox->GetTexture()->Bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
 	}
@@ -57,11 +58,11 @@ void ForwardRenderer::Render(Scene& scene, const RenderStateMgr& render_state_mg
 
 
 	// Update the light buffers
-	UpdateLightBuffers(scene);
+	UpdateLightBuffers(ecs_engine, scene);
 
 
 	// Render the models
-	RenderModels(scene);
+	RenderModels(ecs_engine, scene);
 }
 
 
@@ -113,7 +114,7 @@ void ForwardRenderer::BindRenderStates(Scene& scene, const RenderStateMgr& rende
 }
 
 
-void ForwardRenderer::UpdateLightBuffers(Scene& scene) {
+void ForwardRenderer::UpdateLightBuffers(ECS& ecs_engine, Scene& scene) {
 
 	// Update light buffer
 	LightBuffer light_data;
@@ -135,10 +136,10 @@ void ForwardRenderer::UpdateLightBuffers(Scene& scene) {
 }
 
 
-void ForwardRenderer::RenderModels(Scene& scene) const {
+void ForwardRenderer::RenderModels(ECS& ecs_engine, Scene& scene) const {
 
 	// Get the scene's camera and its frustum
-	auto* camera        = ECS::Get()->GetComponent<PerspectiveCamera>(scene.GetCamera());
+	auto* camera        = ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera());
 	const auto& frustum = camera->GetFrustum();
 
 
@@ -149,8 +150,8 @@ void ForwardRenderer::RenderModels(Scene& scene) const {
 
 	scene.ForEachModel([&](Handle64 entity) {
 
-		auto* model     = ECS::Get()->GetComponent<Model>(entity);
-		auto* transform = ECS::Get()->GetComponent<Transform>(entity);
+		auto* model     = ecs_engine.GetComponent<Model>(entity);
+		auto* transform = ecs_engine.GetComponent<Transform>(entity);
 
 		// Cull the model if it isn't on screen
 		if (!frustum.Contains(model->GetAABB())) return;

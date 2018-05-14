@@ -16,6 +16,7 @@ TestScene::TestScene(const Engine& engine) : Scene("Test Scene") {
 
 void TestScene::Init(const Engine& engine) {
 
+	auto& ecs_engine           = engine.GetECS();
 	const auto& rendering_mgr  = engine.GetRenderingMgr();
 	auto& device               = rendering_mgr.GetDevice();
 	auto& device_context       = rendering_mgr.GetDeviceContext();
@@ -28,14 +29,14 @@ void TestScene::Init(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera and skybox
-	camera = ECS::Get()->CreateEntity<PlayerCamera>(device,
-													device_context,
-													engine.GetWindowWidth(),
-													engine.GetWindowHeight(),
-													resource_mgr.GetOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	camera = ecs_engine.CreateEntity<PlayerCamera>(device,
+												   device_context,
+												   engine.GetWindowWidth(),
+												   engine.GetWindowHeight(),
+												   resource_mgr.GetOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	// Set the parameters
-	auto cam = ECS::Get()->GetComponent<PerspectiveCamera>(camera);
+	auto cam = ecs_engine.GetComponent<PerspectiveCamera>(camera);
 	cam->SetZDepth(zNear, zFar);
 	cam->SetFOV(FOV);
 	//camera->SetPosition(float3(0.0f, 3.0f, -5.0f));
@@ -90,16 +91,16 @@ void TestScene::Init(const Engine& engine) {
 	auto bp   = resource_mgr.GetOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
 	auto cube = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(device, resource_mgr, 5.0f);
 
-	Handle64 test_model = ECS::Get()->CreateEntity<BasicModel>(device, bp);
+	Handle64 test_model = ecs_engine.CreateEntity<BasicModel>(device, bp);
 	models.push_back(test_model);
 	//ECS::Get()->GetComponent<Transform>(test_model)->SetRotation(float3(0.0f, 0.0f, 1.5f));
 
-	Handle64 m2 = ECS::Get()->CreateEntity<BasicModel>(device, bp);
+	Handle64 m2 = ecs_engine.CreateEntity<BasicModel>(device, bp);
 	models.push_back(m2);
 	//ECS::Get()->GetComponent<Transform>(m2)->SetPosition(float3(-1.0f, -1.0f, 0.0f));
 	//ECS::Get()->GetComponent<Transform>(m2)->SetScale(float3(0.5f, 0.5f, 0.5f));
 
-	ECS::Get()->GetComponent<Transform>(m2)->SetParent(camera);
+	ecs_engine.GetComponent<Transform>(m2)->SetParent(camera);
 
 
 	//----------------------------------------------------------------------------------
@@ -127,7 +128,10 @@ void TestScene::Init(const Engine& engine) {
 
 void TestScene::Tick(const Engine& engine) {
 
-	// Get input handler
+	// Get the ECS
+	auto& ecs_engine = engine.GetECS();
+
+	// Get the input handler
 	const Input& input = engine.GetInput();
 
 	// Get mouse delta
@@ -154,8 +158,8 @@ void TestScene::Tick(const Engine& engine) {
 							  + L"\nY: " + to_wstring(mouse_delta.y));
 
 
-	const auto* transform = ECS::Get()->GetComponent<CameraTransform>(camera);
-	const auto* movement = ECS::Get()->GetComponent<CameraMovement>(camera);
+	const auto* transform = ecs_engine.GetComponent<CameraTransform>(camera);
+	const auto* movement  = ecs_engine.GetComponent<CameraMovement>(camera);
 
 	float3 position;
 	XMStoreFloat3(&position, transform->GetPosition());
