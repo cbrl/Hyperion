@@ -6,7 +6,6 @@
 #include "util\datatypes\datatypes.h"
 #include "rendering\direct3d\direct3d.h"
 #include "rendering\render_state_mgr.h"
-#include "rendering\renderer\renderer.h"
 #include "resource\resource_mgr.h"
 #include "imgui\imgui_impl_dx11.h"
 #include "scene\scene.h"
@@ -25,8 +24,11 @@ class RenderingMgr final {
 			ImGui_ImplDX11_CreateDeviceObjects();
 		}
 
-		// Render the scene
-		void Render(Engine& engine) const;
+		// Start a new frame
+		void BeginFrame() const;
+
+		// End the current frame
+		void EndFrame() const;
 
 
 		//----------------------------------------------------------------------------------
@@ -53,6 +55,5 @@ class RenderingMgr final {
 	private:
 		unique_ptr<Direct3D>       direct3D;
 		unique_ptr<RenderStateMgr> render_state_mgr;
-		unique_ptr<Renderer>       renderer;
 		unique_ptr<ResourceMgr>    resource_mgr;
 };

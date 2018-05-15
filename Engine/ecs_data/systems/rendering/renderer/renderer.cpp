@@ -1,20 +1,20 @@
 #include "stdafx.h"
 #include "renderer.h"
-#include "imgui\imgui.h"
 #include "engine\engine.h"
 
 
 Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
-	: device_context(device_context)
+	: device(device)
+	, device_context(device_context)
 {
 	// Create renderers
-	text_renderer    = make_unique<TextRenderer>(device_context);
-	forward_renderer = make_unique<ForwardRenderer>(device, device_context);
-	sky_renderer     = make_unique<SkyRenderer>(device, device_context);
+	forward_pass = make_unique<ForwardPass>(device, device_context);
+	sky_pass     = make_unique<SkyPass>(device, device_context);
+	text_pass    = make_unique<TextPass>(device_context);
 }
 
 
-void Renderer::Render(const Engine& engine) const {
+void Renderer::Update(const Engine& engine) {
 
 	auto& ecs_engine             = engine.GetECS();
 	const auto& render_state_mgr = engine.GetRenderingMgr().GetRenderStateMgr();
@@ -36,21 +36,21 @@ void Renderer::Render(const Engine& engine) const {
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
 	
-	forward_renderer->Render(engine);
+	forward_pass->Render(engine);
 
 
 	//----------------------------------------------------------------------------------
 	// Render the skybox
 	//----------------------------------------------------------------------------------
 
-	sky_renderer->Render(engine);
+	sky_pass->Render(engine);
 
 
 	//----------------------------------------------------------------------------------
 	// Render text objects
 	//----------------------------------------------------------------------------------
 
-	text_renderer->Render(scene);
+	text_pass->Render(scene);
 
 
 	//----------------------------------------------------------------------------------

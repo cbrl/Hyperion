@@ -7,10 +7,10 @@
 #include "scene\scene.h"
 
 
-class TextRenderer final {
+class TextPass final {
 	public:
-		TextRenderer(ID3D11DeviceContext& device_context);
-		~TextRenderer() = default;
+		TextPass(ID3D11DeviceContext& device_context);
+		~TextPass() = default;
 
 		void Render(Scene& scene);
 

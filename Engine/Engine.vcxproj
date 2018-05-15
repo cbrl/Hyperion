@@ -182,6 +182,10 @@
     <ClInclude Include="ecs_data\systems\geometry\transform\transform_system.h" />
     <ClInclude Include="ecs_data\systems\rendering\camera\camera_system.h" />
     <ClInclude Include="ecs_data\systems\rendering\model\model_system.h" />
+    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\forward\forward_pass.h" />
+    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\sky\sky_pass.h" />
+    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\text\text_pass.h" />
+    <ClInclude Include="ecs_data\systems\rendering\renderer\renderer.h" />
     <ClInclude Include="ecs_data\systems\systems.h" />
     <ClInclude Include="engine\engine.h" />
     <ClInclude Include="engine\main_window.h" />
@@ -207,10 +211,6 @@
     <ClInclude Include="rendering\buffer\structured_buffer.h" />
     <ClInclude Include="rendering\direct3d\direct3d.h" />
     <ClInclude Include="rendering\pipeline.h" />
-    <ClInclude Include="rendering\renderer\forward\forward_render.h" />
-    <ClInclude Include="rendering\renderer\renderer.h" />
-    <ClInclude Include="rendering\renderer\sky\sky_renderer.h" />
-    <ClInclude Include="rendering\renderer\text\text_renderer.h" />
     <ClInclude Include="rendering\rendering_mgr.h" />
     <ClInclude Include="rendering\render_state_mgr.h" />
     <ClInclude Include="resource\font\font.h" />
@@ -260,6 +260,10 @@
     <ClCompile Include="ecs_data\systems\geometry\transform\transform_system.cpp" />
     <ClCompile Include="ecs_data\systems\rendering\camera\camera_system.cpp" />
     <ClCompile Include="ecs_data\systems\rendering\model\model_system.cpp" />
+    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\forward\forward_pass.cpp" />
+    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\sky\sky_pass.cpp" />
+    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\text\text_pass.cpp" />
+    <ClCompile Include="ecs_data\systems\rendering\renderer\renderer.cpp" />
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\main_window.cpp" />
     <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp" />
@@ -289,10 +293,6 @@
     <ClCompile Include="main\main.cpp" />
     <ClCompile Include="rendering\buffer\shadow_map_buffer.cpp" />
     <ClCompile Include="rendering\direct3d\direct3d.cpp" />
-    <ClCompile Include="rendering\renderer\forward\forward_render.cpp" />
-    <ClCompile Include="rendering\renderer\renderer.cpp" />
-    <ClCompile Include="rendering\renderer\sky\sky_renderer.cpp" />
-    <ClCompile Include="rendering\renderer\text\text_renderer.cpp" />
     <ClCompile Include="rendering\rendering_mgr.cpp" />
     <ClCompile Include="rendering\render_state_mgr.cpp" />
     <ClCompile Include="resource\model\model_blueprint.cpp">

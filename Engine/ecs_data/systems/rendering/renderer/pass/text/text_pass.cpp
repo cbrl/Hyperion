@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "text_renderer.h"
+#include "text_pass.h"
 
 
-TextRenderer::TextRenderer(ID3D11DeviceContext& device_context) {
+TextPass::TextPass(ID3D11DeviceContext& device_context) {
 	sprite_batch = make_unique<SpriteBatch>(&device_context);
 }
 
 
-void TextRenderer::Render(Scene& scene) {
+void TextPass::Render(Scene& scene) {
 
 	scene.ForEach<Text>([&](const Text& text) {
 		// Get the font

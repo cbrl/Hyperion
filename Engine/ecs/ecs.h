@@ -22,10 +22,7 @@ class ECS final {
 		[[nodiscard]]
 		const Handle64 CreateEntity(ArgsT&&... args);
 
-
-		void DestroyEntity(Handle64 entity) {
-			entity_mgr->DestroyEntity(entity);
-		}
+		void DestroyEntity(Handle64 entity);
 
 
 		//----------------------------------------------------------------------------------
@@ -35,10 +32,8 @@ class ECS final {
 		template<typename ComponentT, typename... ArgsT>
 		ComponentT* const AddComponent(Handle64 entity, ArgsT&&... args);
 
-
 		template<typename ComponentT>
 		void RemoveComponent(Handle64 entity);
-
 
 		template<typename ComponentT>
 		[[nodiscard]]
@@ -60,7 +55,6 @@ class ECS final {
 		// Do something to each active entity or component
 		template<typename T, typename ActionT>
 		void ForEachActive(ActionT act);
-
 
 		EntityMgr* const    GetEntityMgr()    const { return entity_mgr.get(); }
 		ComponentMgr* const GetComponentMgr() const { return component_mgr.get(); }

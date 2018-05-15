@@ -124,24 +124,6 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{a3cb52ab-27e8-4074-9f6f-bfa31f48ce1a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\rendering\renderer">
-      <UniqueIdentifier>{b191d349-8f13-413a-8cdf-6ebf0d08f4b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\rendering\renderer\forward">
-      <UniqueIdentifier>{b41dd7de-4e6d-4010-b3f8-c9eb000bd33e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\rendering\renderer">
-      <UniqueIdentifier>{2716864a-74f9-4716-bc8a-b69005825224}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\rendering\renderer\forward">
-      <UniqueIdentifier>{f4ad6bbd-aba9-4705-8854-81c98694d208}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\rendering\renderer\sky">
-      <UniqueIdentifier>{2817f489-1732-4e69-b036-36f4b89026c0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\rendering\renderer\sky">
-      <UniqueIdentifier>{31c47838-a300-4664-bf10-6317a5fad368}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\geometry\shapes">
       <UniqueIdentifier>{3ab9f463-2228-401b-898b-86553033e6b7}</UniqueIdentifier>
     </Filter>
@@ -198,12 +180,6 @@
     </Filter>
     <Filter Include="Source Files\rendering\direct3d">
       <UniqueIdentifier>{c757a6a4-d168-4d4f-9408-fdb3807cbce3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\rendering\renderer\text">
-      <UniqueIdentifier>{520982e5-af25-4fcd-9fd9-bed0baead87c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\rendering\renderer\text">
-      <UniqueIdentifier>{c95bbbe7-c6ed-4786-9286-e8ff828aa114}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\util\memory">
       <UniqueIdentifier>{4875941d-8181-453b-a69f-e9830c8c863d}</UniqueIdentifier>
@@ -345,6 +321,36 @@
     </Filter>
     <Filter Include="Header Files\ecs_data\systems\rendering\model">
       <UniqueIdentifier>{2c1a514d-99ff-461c-87b8-24968d4d34f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\systems\rendering\renderer">
+      <UniqueIdentifier>{9f595880-d0eb-4a2a-842c-203a1a4a1309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\systems\rendering\renderer\pass">
+      <UniqueIdentifier>{a5c90b14-ac43-461d-9fa6-6b3e0cb201bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems\rendering\renderer">
+      <UniqueIdentifier>{dbb1323b-d01d-41e4-b133-00679b3f4fb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems\rendering\renderer\pass">
+      <UniqueIdentifier>{20c79de1-d55b-4c5f-a57a-a1d84187f02a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\systems\rendering\renderer\pass\forward">
+      <UniqueIdentifier>{b1ef24f3-a99e-445d-8809-5c83f4482898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\systems\rendering\renderer\pass\sky">
+      <UniqueIdentifier>{7a9e9f5c-f0b9-4008-be9e-afe0c2b4abb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\systems\rendering\renderer\pass\text">
+      <UniqueIdentifier>{8c129d16-b866-4dc4-81bb-f9a1983c633b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems\rendering\renderer\pass\forward">
+      <UniqueIdentifier>{b970cbaf-799f-449a-90de-b26649e2d317}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems\rendering\renderer\pass\sky">
+      <UniqueIdentifier>{cac92105-d536-48f6-817c-41d4eae58d0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems\rendering\renderer\pass\text">
+      <UniqueIdentifier>{f965e8b3-6f07-495d-9698-fa6abc4a345c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -510,12 +516,6 @@
     <ClInclude Include="geometry\frustum\frustum.h">
       <Filter>Header Files\geometry\frustum</Filter>
     </ClInclude>
-    <ClInclude Include="rendering\renderer\renderer.h">
-      <Filter>Header Files\rendering\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\renderer\forward\forward_render.h">
-      <Filter>Header Files\rendering\renderer\forward</Filter>
-    </ClInclude>
     <ClInclude Include="rendering\direct3d\direct3d.h">
       <Filter>Header Files\rendering\direct3d</Filter>
     </ClInclude>
@@ -524,9 +524,6 @@
     </ClInclude>
     <ClInclude Include="geometry\shapes\bezier.h">
       <Filter>Header Files\geometry\shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\renderer\sky\sky_renderer.h">
-      <Filter>Header Files\rendering\renderer\sky</Filter>
     </ClInclude>
     <ClInclude Include="util\sysmon\system_monitor.h">
       <Filter>Header Files\util\sysmon</Filter>
@@ -566,9 +563,6 @@
     </ClInclude>
     <ClInclude Include="rendering\buffer\structured_buffer.tpp">
       <Filter>Source Files\rendering\buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="rendering\renderer\text\text_renderer.h">
-      <Filter>Header Files\rendering\renderer\text</Filter>
     </ClInclude>
     <ClInclude Include="util\memory\allocator\allocator.h">
       <Filter>Header Files\util\memory\allocator</Filter>
@@ -690,6 +684,18 @@
     <ClInclude Include="ecs\ecs.tpp">
       <Filter>Source Files\ecs</Filter>
     </ClInclude>
+    <ClInclude Include="ecs_data\systems\rendering\renderer\renderer.h">
+      <Filter>Header Files\ecs_data\systems\rendering\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\forward\forward_pass.h">
+      <Filter>Header Files\ecs_data\systems\rendering\renderer\pass\forward</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\text\text_pass.h">
+      <Filter>Header Files\ecs_data\systems\rendering\renderer\pass\text</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\sky\sky_pass.h">
+      <Filter>Header Files\ecs_data\systems\rendering\renderer\pass\sky</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -737,20 +743,11 @@
     <ClCompile Include="rendering\rendering_mgr.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
-    <ClCompile Include="rendering\renderer\renderer.cpp">
-      <Filter>Source Files\rendering\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\renderer\forward\forward_render.cpp">
-      <Filter>Source Files\rendering\renderer\forward</Filter>
-    </ClCompile>
     <ClCompile Include="rendering\direct3d\direct3d.cpp">
       <Filter>Source Files\rendering\direct3d</Filter>
     </ClCompile>
     <ClCompile Include="geometry\shapes\shapes.tpp">
       <Filter>Source Files\geometry\shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\renderer\sky\sky_renderer.cpp">
-      <Filter>Source Files\rendering\renderer\sky</Filter>
     </ClCompile>
     <ClCompile Include="util\sysmon\system_monitor.cpp">
       <Filter>Source Files\util\sysmon</Filter>
@@ -769,9 +766,6 @@
     </ClCompile>
     <ClCompile Include="rendering\buffer\shadow_map_buffer.cpp">
       <Filter>Source Files\rendering\buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="rendering\renderer\text\text_renderer.cpp">
-      <Filter>Source Files\rendering\renderer\text</Filter>
     </ClCompile>
     <ClCompile Include="util\memory\allocator\allocator.cpp">
       <Filter>Source Files\util\memory\allocator</Filter>
@@ -823,6 +817,18 @@
     </ClCompile>
     <ClCompile Include="ecs_data\systems\rendering\model\model_system.cpp">
       <Filter>Source Files\ecs_data\systems\rendering\model</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\systems\rendering\renderer\renderer.cpp">
+      <Filter>Source Files\ecs_data\systems\rendering\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\forward\forward_pass.cpp">
+      <Filter>Source Files\ecs_data\systems\rendering\renderer\pass\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\text\text_pass.cpp">
+      <Filter>Source Files\ecs_data\systems\rendering\renderer\pass\text</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\sky\sky_pass.cpp">
+      <Filter>Source Files\ecs_data\systems\rendering\renderer\pass\sky</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

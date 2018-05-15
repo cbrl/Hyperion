@@ -10,10 +10,10 @@ class Engine;
 class RenderStateMgr;
 class Scene;
 
-class SkyRenderer final {
+class SkyPass final {
 	public:
-		SkyRenderer(ID3D11Device& device, ID3D11DeviceContext& device_context);
-		~SkyRenderer() = default;
+		SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
+		~SkyPass() = default;
 
 		void Render(const Engine& engine);
 

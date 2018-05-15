@@ -55,6 +55,7 @@ bool Engine::Init() {
 
 	// Initialize rendering manager
 	rendering_mgr = make_unique<RenderingMgr>(*this, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
+	ecs_engine->AddSystem<Renderer>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext());
 
 
 	// Initialize scene
@@ -104,21 +105,22 @@ void Engine::Tick() {
 	timer->Tick();
 	fps_counter->Tick();
 
-
-	// Read input
+	// Update the input state
 	input->Tick();
 
+	// Update the scene
+	scene->Tick(*this);
+
+
+
+	// Begin a new frame
+	rendering_mgr->BeginFrame();
 
 	// Update the active systems in the ecs engine
 	ecs_engine->Update(*this);
 
-
-	// Update scene
-	scene->Tick(*this);
-
-
-	// Render scene
-	rendering_mgr->Render(*this);
+	// Present the frame
+	rendering_mgr->EndFrame();
 }
 
 

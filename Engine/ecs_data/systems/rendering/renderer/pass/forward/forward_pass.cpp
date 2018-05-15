@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "forward_render.h"
+#include "forward_pass.h"
 #include "util\math\math.h"
 #include "engine\engine.h"
 
 
-ForwardRenderer::ForwardRenderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
+ForwardPass::ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
 	, device_context(device_context)
 	, light_buffer(device)
@@ -14,7 +14,8 @@ ForwardRenderer::ForwardRenderer(ID3D11Device& device, ID3D11DeviceContext& devi
 {
 
 	// Create the vertex shader
-	vertex_shader = make_unique<VertexShader>(device, L"shaders/forward/forward_vs.hlsl",
+	vertex_shader = make_unique<VertexShader>(device,
+											  L"shaders/forward/forward_vs.hlsl",
 											  VertexPositionNormalTexture::InputElements,
 											  VertexPositionNormalTexture::InputElementCount);
 
@@ -23,7 +24,7 @@ ForwardRenderer::ForwardRenderer(ID3D11Device& device, ID3D11DeviceContext& devi
 }
 
 
-void ForwardRenderer::Render(const Engine& engine) {
+void ForwardPass::Render(const Engine& engine) {
 
 	auto& ecs_engine             = engine.GetECS();
 	const auto& render_state_mgr = engine.GetRenderingMgr().GetRenderStateMgr();
@@ -66,7 +67,7 @@ void ForwardRenderer::Render(const Engine& engine) {
 }
 
 
-void ForwardRenderer::BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr) const {
+void ForwardPass::BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr) const {
 
 	switch (scene.GetRenderStates().blend_state) {
 		case BlendStates::Default:
@@ -114,7 +115,7 @@ void ForwardRenderer::BindRenderStates(Scene& scene, const RenderStateMgr& rende
 }
 
 
-void ForwardRenderer::UpdateLightBuffers(ECS& ecs_engine, Scene& scene) {
+void ForwardPass::UpdateLightBuffers(ECS& ecs_engine, Scene& scene) {
 
 	// Update light buffer
 	LightBuffer light_data;
@@ -136,7 +137,7 @@ void ForwardRenderer::UpdateLightBuffers(ECS& ecs_engine, Scene& scene) {
 }
 
 
-void ForwardRenderer::RenderModels(ECS& ecs_engine, Scene& scene) const {
+void ForwardPass::RenderModels(ECS& ecs_engine, Scene& scene) const {
 
 	// Get the scene's camera and its frustum
 	auto* camera        = ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera());

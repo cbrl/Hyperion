@@ -1,14 +1,15 @@
 #include "stdafx.h"
-#include "sky_renderer.h"
+#include "sky_pass.h"
 #include "engine\engine.h"
 
 
-SkyRenderer::SkyRenderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
+SkyPass::SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
 	, device_context(device_context)
 {
 
-	vertex_shader = make_unique<VertexShader>(device, L"shaders/skybox/skybox_vs.hlsl",
+	vertex_shader = make_unique<VertexShader>(device,
+											  L"shaders/skybox/skybox_vs.hlsl",
 											  VertexPosition::InputElements,
 											  VertexPosition::InputElementCount);
 
@@ -16,7 +17,7 @@ SkyRenderer::SkyRenderer(ID3D11Device& device, ID3D11DeviceContext& device_conte
 }
 
 
-void SkyRenderer::Render(const Engine& engine) {
+void SkyPass::Render(const Engine& engine) {
 
 	auto& ecs_engine             = engine.GetECS();
 	const auto& render_state_mgr = engine.GetRenderingMgr().GetRenderStateMgr();
@@ -47,7 +48,7 @@ void SkyRenderer::Render(const Engine& engine) {
 }
 
 
-void SkyRenderer::BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr) {
+void SkyPass::BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr) {
 
 	switch (scene.GetRenderStates().blend_state) {
 		case BlendStates::Default:

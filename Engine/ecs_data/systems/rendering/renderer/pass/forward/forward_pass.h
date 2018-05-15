@@ -15,10 +15,10 @@ class Engine;
 class Scene;
 class RenderStateMgr;
 
-class ForwardRenderer final {
+class ForwardPass final {
 	public:
-		ForwardRenderer(ID3D11Device& device, ID3D11DeviceContext& device_context);
-		~ForwardRenderer() = default;
+		ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
+		~ForwardPass() = default;
 
 		void Render(const Engine& engine);
 

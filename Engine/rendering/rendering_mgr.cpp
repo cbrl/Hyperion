@@ -6,6 +6,7 @@
 
 
 RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msaa) {
+
 	//----------------------------------------------------------------------------------
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------
@@ -29,13 +30,6 @@ RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msa
 
 
 	//----------------------------------------------------------------------------------
-	// Create renderer
-	//----------------------------------------------------------------------------------
-
-	renderer = make_unique<Renderer>(direct3D->GetDevice(), direct3D->GetDeviceContext());
-
-
-	//----------------------------------------------------------------------------------
 	// Initialize ImGui
 	//----------------------------------------------------------------------------------
 
@@ -52,7 +46,7 @@ RenderingMgr::~RenderingMgr() {
 }
 
 
-void RenderingMgr::Render(Engine& engine) const {
+void RenderingMgr::BeginFrame() const {
 
 	// Start a new ImGui frame
 	ImGui_ImplDX11_NewFrame();
@@ -65,16 +59,14 @@ void RenderingMgr::Render(Engine& engine) const {
 	//ImGui::ColorEdit4("Clear Color", (float*)&color);
 
 	direct3D->Clear(color);
+}
 
 
-	// Render the scene
-	renderer->Render(engine);
-
+void RenderingMgr::EndFrame() const {
 
 	// Render the ImGui frame
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
 
 	// Present the final frame
 	direct3D->PresentFrame();

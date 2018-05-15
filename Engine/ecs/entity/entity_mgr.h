@@ -78,9 +78,12 @@ class EntityMgr final {
 				// Get the appropriate pool with the type_index
 				auto pool = entity_pools.GetPool(type);
 
+				// Destroy the entity
 				handle_table.ReleaseHandle(handle);
 				pool->DestroyObject(static_cast<void*>(entity));
 			}
+
+			num_expired_entities = 0;
 		}
 
 
