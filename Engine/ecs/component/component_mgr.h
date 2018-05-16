@@ -48,6 +48,12 @@ class ComponentMgr final {
 
 
 		template<typename ComponentT>
+		size_t CountOf() {
+			return component_pools.PoolExists<ComponentT>() ? component_pools.GetPool<ComponentT>()->GetCount() : 0;
+		}
+
+
+		template<typename ComponentT>
 		bool KnowsComponent() const {
 			return component_pools.PoolExists<ComponentT>();
 		}

@@ -46,6 +46,17 @@ SystemT* const ECS::AddSystem(ArgsT&&... args) {
 }
 
 
+template<typename T>
+size_t ECS::CountOf() const {
+	if constexpr (std::is_base_of_v<IEntity, T>) {
+		return entity_mgr->CountOf<T>();
+	}
+	if constexpr (std::is_base_of_v<IComponent, T>) {
+		return component_mgr->CountOf<T>();
+	}
+}
+
+
 // Do something to each active entity or component
 template<typename T, typename ActionT>
 void ECS::ForEachActive(ActionT act) {

@@ -28,6 +28,9 @@ void IEntity::SetComponentMgr(ComponentMgr* mgr) {
 
 void IEntity::SetActive(bool state) {
 	active = state;
+	for (auto& pair : components) {
+		pair.second->SetActive(state);
+	}
 }
 
 

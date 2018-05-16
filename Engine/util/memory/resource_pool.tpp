@@ -1,6 +1,6 @@
 
 template<typename DataT, size_t max_objs_per_chunk>
-ResourcePool<DataT, max_objs_per_chunk>::ResourcePool() {
+ResourcePool<DataT, max_objs_per_chunk>::ResourcePool() : count(0) {
 
 	PoolAllocator<DataT>* alloc = new PoolAllocator<DataT>(alloc_size);
 
@@ -30,6 +30,8 @@ ResourcePool<DataT, max_objs_per_chunk>::~ResourcePool() {
 		delete chunk;
 		chunk = nullptr;
 	}
+
+	count = 0;
 }
 
 
@@ -70,6 +72,7 @@ void* ResourcePool<DataT, max_objs_per_chunk>::AllocateObject() {
 		chunk->objects.push_back(object);
 	}
 
+	++count;
 	return reinterpret_cast<void*>(object);
 }
 
@@ -89,6 +92,7 @@ void ResourcePool<DataT, max_objs_per_chunk>::DestroyObject(void* object) {
 			chunk->objects.remove(static_cast<DataT*>(object));
 			chunk->allocator->Free(object);
 
+			--count;
 			return;
 		}
 	}

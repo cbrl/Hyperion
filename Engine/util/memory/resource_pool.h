@@ -17,8 +17,9 @@
 class IResourcePool {
 	public:
 		virtual ~IResourcePool() = default;
-		virtual void* AllocateObject() = 0;
-		virtual void  DestroyObject(void* object) = 0;
+		virtual void*  AllocateObject() = 0;
+		virtual void   DestroyObject(void* object) = 0;
+		virtual size_t GetCount() const = 0;
 };
 
 
@@ -93,6 +94,8 @@ class ResourcePool : public IResourcePool {
 		void* AllocateObject() override;
 		void  DestroyObject(void* object) override;
 
+		size_t GetCount() const { return count; }
+
 		iterator begin() { return iterator(memory_chunks.begin(), memory_chunks.end()); }
 		iterator end()   { return iterator(memory_chunks.end(),   memory_chunks.end()); }
 
@@ -100,6 +103,7 @@ class ResourcePool : public IResourcePool {
 	private:
 		std::list<Chunk*> memory_chunks;
 		static constexpr size_t alloc_size = max_objs_per_chunk * sizeof(DataT);
+		size_t count;
 };
 
 

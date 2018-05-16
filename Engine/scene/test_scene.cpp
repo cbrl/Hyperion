@@ -69,13 +69,19 @@ void TestScene::Init(const Engine& engine) {
 	directional_lights[2].direction     = float3(0.0f, 0.0f, 1.0f);
 	*/
 
-	point_lights.push_back(PointLightBuffer());
-	point_lights.back().ambient_color = float4(0.2f, 0.2f, 0.2f, 1.0f);
-	point_lights.back().diffuse_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().attenuation   = float3(0.0f, 0.15f, 0.0f);
-	point_lights.back().specular      = float4(1.0f, 1.0f, 1.0f, 1.0f);
-	point_lights.back().position      = float3(0.0f, 10.0f, 0.0f);
-	point_lights.back().range         = 100.0f;
+
+	// ECS point light
+	auto light = ecs_engine.CreateEntity<BasicPointLight>();
+
+	auto point_light = ecs_engine.GetComponent<PointLight>(light);
+	point_light->SetAmbientColor(float4(0.15f, 0.15f, 0.15f, 0.15f));
+	point_light->SetDiffuseColor(float4(1.0f, 1.0f, 1.0f, 1.0f));
+	point_light->SetAttenuation(float3(0.0f, 0.15f, 0.0f));
+	point_light->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
+	point_light->SetRange(100.0f);
+
+	auto transform = ecs_engine.GetComponent<Transform>(light);
+	transform->SetPosition(float3(0.0f, 8.0f, 0.0f));
 
 
 	// Fog

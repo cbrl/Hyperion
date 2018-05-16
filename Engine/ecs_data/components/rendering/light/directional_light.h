@@ -24,6 +24,19 @@ class DirectionalLight final : public Component<DirectionalLight> {
 			shadows = state;
 		}
 
+
+		const float4& GetAmbientColor() const {
+			return ambient_color;
+		}
+
+		const float4& GetDiffuseColor() const {
+			return diffuse_color;
+		}
+
+		const float4& GetSpecular() const {
+			return specular;
+		}
+
 		bool CastsShadows() const {
 			return shadows;
 		}
@@ -33,5 +46,6 @@ class DirectionalLight final : public Component<DirectionalLight> {
 		float4 ambient_color;
 		float4 diffuse_color;
 		float4 specular;
-		bool  shadows;
+
+		bool shadows;
 };

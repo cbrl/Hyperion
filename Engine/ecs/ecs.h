@@ -56,6 +56,10 @@ class ECS final {
 		template<typename T, typename ActionT>
 		void ForEachActive(ActionT act);
 
+		// Get the number of a specific entity/component
+		template<typename T>
+		size_t CountOf() const;
+
 		EntityMgr* const    GetEntityMgr()    const { return entity_mgr.get(); }
 		ComponentMgr* const GetComponentMgr() const { return component_mgr.get(); }
 

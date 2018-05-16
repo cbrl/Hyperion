@@ -93,6 +93,12 @@ class EntityMgr final {
 
 
 		template<typename EntityT>
+		size_t CountOf() {
+			return entity_pools.PoolExists<EntityT>() ? entity_pools.GetPool<EntityT>()->Count() : 0;
+		}
+
+
+		template<typename EntityT>
 		bool KnowsEntity() const {
 			return entity_pools.PoolExists<EntityT>();
 		}

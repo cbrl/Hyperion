@@ -36,6 +36,31 @@ class SpotLight final : public Component<SpotLight> {
 			this->shadows = state;
 		}
 
+
+		const float4& GetAmbientColor() const {
+			return ambient_color;
+		}
+
+		const float4& GetDiffuseColor() const {
+			return diffuse_color;
+		}
+
+		const float4& GetSpecular() const {
+			return specular;
+		}
+
+		const float3& GetAttenuation() const {
+			return attenuation;
+		}
+
+		const float GetSpot() const {
+			return spot;
+		}
+
+		const float GetRange() const {
+			return range;
+		}
+
 		bool CastsShadows() const {
 			return shadows;
 		}

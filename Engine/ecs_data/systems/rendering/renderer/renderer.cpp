@@ -8,6 +8,7 @@ Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	, device_context(device_context)
 {
 	// Create renderers
+	light_pass   = make_unique<LightPass>(device, device_context);
 	forward_pass = make_unique<ForwardPass>(device, device_context);
 	sky_pass     = make_unique<SkyPass>(device, device_context);
 	text_pass    = make_unique<TextPass>(device_context);
@@ -30,6 +31,13 @@ void Renderer::Update(const Engine& engine) {
 
 	// Bind the buffer
 	ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera())->BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
+
+
+	//----------------------------------------------------------------------------------
+	// Process the light buffers
+	//----------------------------------------------------------------------------------
+
+	light_pass->Render(engine);
 	
 
 	//----------------------------------------------------------------------------------

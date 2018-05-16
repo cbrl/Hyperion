@@ -7,10 +7,6 @@
 ForwardPass::ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
 	, device_context(device_context)
-	, light_buffer(device)
-	, directional_light_buffer(device, 16)
-	, point_light_buffer(device, 16)
-	, spot_light_buffer(device, 16)
 {
 
 	// Create the vertex shader
@@ -30,35 +26,17 @@ void ForwardPass::Render(const Engine& engine) {
 	const auto& render_state_mgr = engine.GetRenderingMgr().GetRenderStateMgr();
 	auto& scene                  = engine.GetScene();
 
-	// Bind buffers
-	light_buffer.Bind<Pipeline::PS>(device_context, SLOT_CBUFFER_LIGHT);
-
-
-	//----------------------------------------------------------------------------------
-	// Bind SRVs
-	//----------------------------------------------------------------------------------
-	directional_light_buffer.Bind<Pipeline::PS>(device_context, SLOT_SRV_DIRECTIONAL_LIGHTS);
-	point_light_buffer.Bind<Pipeline::PS>(device_context,       SLOT_SRV_POINT_LIGHTS);
-	spot_light_buffer.Bind<Pipeline::PS>(device_context,        SLOT_SRV_SPOT_LIGHTS);
-
 	auto skybox = ecs_engine.GetComponent<SkyBox>(scene.GetCamera());
 	if (skybox) {
 		skybox->GetTexture()->Bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
 	}
 
-
 	// Bind shaders
 	pixel_shader->Bind(device_context);
 	vertex_shader->Bind(device_context);
 
-
 	// Bind the render states
 	BindRenderStates(scene, render_state_mgr);
-
-
-	// Update the light buffers
-	UpdateLightBuffers(ecs_engine, scene);
-
 
 	// Render the models
 	RenderModels(ecs_engine, scene);
@@ -110,28 +88,6 @@ void ForwardPass::BindRenderStates(Scene& scene, const RenderStateMgr& render_st
 		case RasterStates::Wireframe:
 			render_state_mgr.BindWireframe(device_context);
 	}
-}
-
-
-void ForwardPass::UpdateLightBuffers(ECS& ecs_engine, Scene& scene) {
-
-	// Update light buffer
-	LightBuffer light_data;
-	light_data.directional_light_count = static_cast<u32>(scene.GetDirectionalLights().size());
-	light_data.point_light_count       = static_cast<u32>(scene.GetPointLights().size());
-	light_data.spot_light_count        = static_cast<u32>(scene.GetSpotLights().size());
-
-	light_data.fog_color = scene.GetFog().color;
-	light_data.fog_start = scene.GetFog().start;
-	light_data.fog_range = scene.GetFog().range;
-
-	light_buffer.UpdateData(device_context, light_data);
-
-
-	// Update light data buffers
-	directional_light_buffer.UpdateData(device, device_context, scene.GetDirectionalLights());
-	point_light_buffer.UpdateData(device, device_context, scene.GetPointLights());
-	spot_light_buffer.UpdateData(device, device_context, scene.GetSpotLights());
 }
 
 
