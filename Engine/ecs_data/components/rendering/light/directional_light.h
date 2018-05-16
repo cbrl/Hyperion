@@ -1,0 +1,37 @@
+#pragma	once
+
+#include "ecs\component\component.h"
+
+
+class DirectionalLight final : public Component<DirectionalLight> {
+	public:
+		DirectionalLight() : shadows(false) {}
+		~DirectionalLight() = default;
+
+		void SetAmbientColor(const float4& color) {
+			this->ambient_color = color;
+		}
+
+		void SetDiffuseColor(const float4& color) {
+			this->diffuse_color = color;
+		}
+
+		void SetSpecular(const float4& spec) {
+			this->specular = spec;
+		}
+
+		void SetShadows(bool state) {
+			shadows = state;
+		}
+
+		bool CastsShadows() const {
+			return shadows;
+		}
+
+
+	private:
+		float4 ambient_color;
+		float4 diffuse_color;
+		float4 specular;
+		bool  shadows;
+};

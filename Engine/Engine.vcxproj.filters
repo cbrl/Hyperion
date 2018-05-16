@@ -352,6 +352,12 @@
     <Filter Include="Source Files\ecs_data\systems\rendering\renderer\pass\text">
       <UniqueIdentifier>{f965e8b3-6f07-495d-9698-fa6abc4a345c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ecs_data\systems\rendering\renderer\pass\light">
+      <UniqueIdentifier>{ba6c54e9-a844-495f-b9a1-189245593c9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ecs_data\systems\rendering\renderer\pass\light">
+      <UniqueIdentifier>{223e76e9-8265-440a-a406-1e2b3cb45d8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -615,9 +621,6 @@
     <ClInclude Include="ecs\ecs.h">
       <Filter>Header Files\ecs</Filter>
     </ClInclude>
-    <ClInclude Include="resource\font\font.h">
-      <Filter>Header Files\resource\font</Filter>
-    </ClInclude>
     <ClInclude Include="ecs\system\system.h">
       <Filter>Header Files\ecs\system</Filter>
     </ClInclude>
@@ -695,6 +698,30 @@
     </ClInclude>
     <ClInclude Include="ecs_data\systems\rendering\renderer\pass\sky\sky_pass.h">
       <Filter>Header Files\ecs_data\systems\rendering\renderer\pass\sky</Filter>
+    </ClInclude>
+    <ClInclude Include="resource\font\font.h">
+      <Filter>Header Files\resource\font</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\entities\world\basic_directional_light.h">
+      <Filter>Header Files\ecs_data\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\entities\world\basic_point_light.h">
+      <Filter>Header Files\ecs_data\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\entities\world\basic_spot_light.h">
+      <Filter>Header Files\ecs_data\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\components\rendering\light\directional_light.h">
+      <Filter>Header Files\ecs_data\components\rendering\light</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\components\rendering\light\point_light.h">
+      <Filter>Header Files\ecs_data\components\rendering\light</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\components\rendering\light\spot_light.h">
+      <Filter>Header Files\ecs_data\components\rendering\light</Filter>
+    </ClInclude>
+    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\light\light_pass.h">
+      <Filter>Header Files\ecs_data\systems\rendering\renderer\pass\light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -829,6 +856,9 @@
     </ClCompile>
     <ClCompile Include="ecs_data\systems\rendering\renderer\pass\sky\sky_pass.cpp">
       <Filter>Source Files\ecs_data\systems\rendering\renderer\pass\sky</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\light\light_pass.cpp">
+      <Filter>Source Files\ecs_data\systems\rendering\renderer\pass\light</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

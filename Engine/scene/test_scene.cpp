@@ -95,12 +95,12 @@ void TestScene::Init(const Engine& engine) {
 	models.push_back(test_model);
 	//ECS::Get()->GetComponent<Transform>(test_model)->SetRotation(float3(0.0f, 0.0f, 1.5f));
 
-	Handle64 m2 = ecs_engine.CreateEntity<BasicModel>(device, bp);
-	models.push_back(m2);
+	//Handle64 m2 = ecs_engine.CreateEntity<BasicModel>(device, bp);
+	//models.push_back(m2);
 	//ECS::Get()->GetComponent<Transform>(m2)->SetPosition(float3(-1.0f, -1.0f, 0.0f));
 	//ECS::Get()->GetComponent<Transform>(m2)->SetScale(float3(0.5f, 0.5f, 0.5f));
 
-	ecs_engine.GetComponent<Transform>(m2)->SetParent(camera);
+	//ecs_engine.GetComponent<Transform>(m2)->SetParent(camera);
 
 
 	//----------------------------------------------------------------------------------

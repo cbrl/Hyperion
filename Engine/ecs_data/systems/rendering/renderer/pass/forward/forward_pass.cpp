@@ -45,8 +45,6 @@ void ForwardPass::Render(const Engine& engine) {
 	if (skybox) {
 		skybox->GetTexture()->Bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
 	}
-	//auto texture = scene.GetCamera().GetSkybox().GetTexture();
-
 
 
 	// Bind shaders
@@ -149,25 +147,25 @@ void ForwardPass::RenderModels(ECS& ecs_engine, Scene& scene) const {
 	const XMMATRIX projection = camera->GetProjMatrix();
 
 
-	scene.ForEachModel([&](Handle64 entity) {
+	ecs_engine.ForEachActive<Model>([&](Model& model) {
 
-		auto* model     = ecs_engine.GetComponent<Model>(entity);
-		auto* transform = ecs_engine.GetComponent<Transform>(entity);
+		auto& owner     = model.GetOwner();
+		const auto transform = ecs_engine.GetComponent<Transform>(owner);
 
 		// Cull the model if it isn't on screen
-		if (!frustum.Contains(model->GetAABB())) return;
+		if (!frustum.Contains(model.GetAABB())) return;
 
 
 		// Update the model's cbuffer and bounding volumes
-		model->UpdateBuffer(device_context, transform->GetWorld(), view, projection);
+		model.UpdateBuffer(device_context, transform->GetWorld(), view, projection);
 
 
 		// Bind the model's mesh
-		model->Bind(device_context);
+		model.Bind(device_context);
 
 
 		// Render each model part individually
-		model->ForEachChild([&](ModelChild& child) {
+		model.ForEachChild([&](ModelChild& child) {
 
 			if (!frustum.Contains(child.GetAABB())) return;
 
@@ -188,7 +186,7 @@ void ForwardPass::RenderModels(ECS& ecs_engine, Scene& scene) const {
 
 
 			// Draw the child
-			model->Draw(device_context, child.GetIndexCount(), child.GetIndexStart());
+			model.Draw(device_context, child.GetIndexCount(), child.GetIndexStart());
 
 
 			// Unbind the SRVs
