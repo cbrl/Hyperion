@@ -30,8 +30,8 @@ struct VSPositionNormalTexture {
 //----------------------------------------------------------------------------------
 
 struct PSPosition {
-	float4 position   : SV_POSITION;
-	float3 w_position : POSITION0;
+	float4 position       : SV_POSITION;
+	float3 position_world : POSITION0;
 };
 
 
@@ -42,10 +42,10 @@ struct PSPositionNormal {
 
 
 struct PSPositionNormalTexture {
-	float4 position   : SV_POSITION;
-	float3 w_position : POSITION0;
-	float3 normal     : NORMAL0;
-	float2 tex        : TEXCOORD0;
+	float4 position       : SV_POSITION;
+	float3 position_world : POSITION0;
+	float3 normal         : NORMAL0;
+	float2 tex            : TEXCOORD0;
 };
 
 

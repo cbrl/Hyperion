@@ -16,7 +16,7 @@ TEXTURE_2D(normal_map,  SLOT_SRV_NORMAL);
 
 float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// The to_eye vector is used in lighting
-	float3 to_eye = camera_position - pin.w_position;
+	float3 to_eye = camera_position - pin.position_world;
 
 	// Cache the distance to the eye from this surface point
 	float dist_to_eye = length(to_eye);
@@ -84,7 +84,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 			float4 A, D, S;
 			ShadowMap shadow_map = { pcf_sampler, directional_light_smaps, i };
 
-			ComputeShadowedDirectionalLight(shadow_directional_lights[i], shadow_map, mat, pin.w_position, transformed_normal, to_eye,
+			ComputeShadowedDirectionalLight(shadow_directional_lights[i], shadow_map, mat, pin.position_world, transformed_normal, to_eye,
 											A, D, S);
 
 			ambient += A;
@@ -96,7 +96,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	if (num_point_lights > 0) {
 		for (uint i = 0; i < num_point_lights; ++i) {
 			float4 A, D, S;
-			ComputePointLight(point_lights[i], mat, pin.w_position, transformed_normal, to_eye,
+			ComputePointLight(point_lights[i], mat, pin.position_world, transformed_normal, to_eye,
 							  A, D, S);
 
 			ambient += A;
@@ -110,7 +110,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 			float4 A, D, S;
 			ShadowCubeMap cube_map = { pcf_sampler, point_light_smaps, i };
 
-			ComputeShadowedPointLight(shadow_point_lights[i], cube_map, mat, pin.w_position, transformed_normal, to_eye,
+			ComputeShadowedPointLight(shadow_point_lights[i], cube_map, mat, pin.position_world, transformed_normal, to_eye,
 									  A, D, S);
 
 			ambient += A;
@@ -122,7 +122,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	if (num_spot_lights > 0) {
 		for (uint i = 0; i < num_spot_lights; ++i) {
 			float4 A, D, S;
-			ComputeSpotLight(spot_lights[i], mat, pin.w_position, transformed_normal, to_eye,
+			ComputeSpotLight(spot_lights[i], mat, pin.position_world, transformed_normal, to_eye,
 							 A, D, S);
 
 			ambient += A;
@@ -136,7 +136,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 			float4 A, D, S;
 			ShadowMap shadow_map = { pcf_sampler, spot_light_smaps, i };
 
-			ComputeShadowedSpotLight(shadow_spot_lights[i], shadow_map, mat, pin.w_position, transformed_normal, to_eye,
+			ComputeShadowedSpotLight(shadow_spot_lights[i], shadow_map, mat, pin.position_world, transformed_normal, to_eye,
 									 A, D, S);
 
 			ambient += A;

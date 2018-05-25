@@ -29,16 +29,16 @@ SAMPLER_COMPARISON_STATE(pcf_sampler, SLOT_SAMPLER_PCF);
 
 
 CONSTANT_BUFFER(CameraBuffer, SLOT_CBUFFER_CAMERA) {
-	// Camera's position
+	// The camera's position
 	float3 camera_position;
 
 	// Padding
 	float padding;
 
-	// Camera's world-view-projection matrix
-	//matrix camera_wvp;
-
+	// The world-to-camera (world-to-view) matrix
 	matrix world_to_camera;
+
+	// The camera-to-projection (view-to-projection) matrix
 	matrix camera_to_projection;
 };
 
