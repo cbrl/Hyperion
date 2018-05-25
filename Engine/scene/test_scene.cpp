@@ -122,10 +122,10 @@ void TestScene::Init(const Engine& engine) {
 	texts.at("CPU").SetPosition(float2(10, 70));
 
 	texts.try_emplace("RAM", resource_mgr, font);
-	texts.at("RAM").SetPosition(float2(10, 100));
+	texts.at("RAM").SetPosition(float2(10, 140));
 
 	texts.try_emplace("Mouse", resource_mgr, font);
-	texts.at("Mouse").SetPosition(float2(10, 130));
+	texts.at("Mouse").SetPosition(float2(10, 210));
 }
 
 
@@ -135,22 +135,38 @@ void TestScene::Tick(const Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const int2  mouse_delta = engine.GetInput().GetMouseDelta();
-	const u32   fps         = engine.GetFPSCounter().GetFPS();
-	const float delta_time  = engine.GetTimer().DeltaTime();
-	const u64   cpu_usage   = engine.GetSysMon().CPU().GetProcessCpuPercentage();
-	const u64   mem_usage   = engine.GetSysMon().Memory().GetProcessUsedPhysicalMem();
+	const int2   mouse_delta     = engine.GetInput().GetMouseDelta();
+	const u32    fps             = engine.GetFPSCounter().GetFPS();
+	const float  delta_time      = engine.GetTimer().DeltaTime();
+	const u64    total_cpu_usage = engine.GetSysMon().CPU().GetTotalCpuPercentage();
+	const double proc_cpu_usage  = engine.GetSysMon().CPU().GetProcessCpuPercentage();
+	const u64    total_mem_usage = engine.GetSysMon().Memory().GetTotalUsedPhysicalMem();
+	const u64    proc_mem_usage  = engine.GetSysMon().Memory().GetProcessUsedPhysicalMem();
 	
+	static wostringstream cpu_str;
+	static wostringstream mem_str;
+
+	cpu_str.clear();
+	cpu_str.str(L"");
+	cpu_str.precision(4);
+	cpu_str << L"CPU Usage\nTotal: " << total_cpu_usage << L"%"
+		    << L"\nProcess: " << proc_cpu_usage << L"%";
+	
+	mem_str.clear();
+	mem_str.str(L"");
+	mem_str.precision(4);
+	mem_str << L"RAM Usage\nTotal: " << static_cast<double>(total_mem_usage) / 1e6 << L"MB"
+	        << L"\nProcess: " << static_cast<double>(proc_mem_usage / 1e6) << L"MB";
+
 
 	texts.at("FPS").SetText(L"FPS: " + to_wstring(fps));
 
 	texts.at("FrameTime").SetText(L"Frame Time: " + to_wstring(delta_time));
 
-	texts.at("CPU").SetText(L"CPU: " + to_wstring(cpu_usage) + L"%");
+	texts.at("CPU").SetText(cpu_str.str());
 
-	texts.at("RAM").SetText(L"RAM: " + to_wstring(mem_usage / 1000000) + L"MB");
+	texts.at("RAM").SetText(mem_str.str());
 
 	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_delta.x)
 							  + L"\nY: " + to_wstring(mouse_delta.y));
-
 }

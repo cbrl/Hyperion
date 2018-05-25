@@ -7,6 +7,7 @@
 #include <cwchar>
 #include <locale>
 #include <codecvt>
+#include <charconv>
 
 
 using std::string;
@@ -62,7 +63,7 @@ inline string int2hexstr(T i) {
 template<typename StringT>
 inline StringT TrimWhiteSpace(StringT& in) {
 	size_t text_start = in.find_first_not_of(L" \t");
-	size_t text_end = in.find_last_not_of(L" \t");
+	size_t text_end   = in.find_last_not_of(L" \t");
 
 	if (text_start != StringT::npos && text_end != StringT::npos) {
 		return in.substr(text_start, text_end - text_start + 1);

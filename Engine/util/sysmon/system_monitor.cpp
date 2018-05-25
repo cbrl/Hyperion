@@ -63,23 +63,23 @@ void SystemMonitor::CPUMonitor::Init(HANDLE handle) {
 
 void SystemMonitor::CPUMonitor::Tick() {
 
+	if (!can_read_cpu) return;
+
 	//----------------------------------------------------------------------------------
 	// Get total CPU usage
 	//----------------------------------------------------------------------------------
+
 	PDH_FMT_COUNTERVALUE value;
 
-	if (can_read_cpu) {
-		if ((last_sample_time + 1000) < GetTickCount64()) {
+	if ((last_sample_time + 1000) < GetTickCount64()) {
 
-			last_sample_time = GetTickCount64();
+		last_sample_time = GetTickCount64();
 
-			PdhCollectQueryData(query_handle);
-			PdhGetFormattedCounterValue(counter_handle, PDH_FMT_LONG, NULL, &value);
+		PdhCollectQueryData(query_handle);
+		PdhGetFormattedCounterValue(counter_handle, PDH_FMT_LONG, NULL, &value);
 
-			total_usage = value.longValue;
-		}
+		total_usage = value.longValue;
 	}
-
 
 
 	//----------------------------------------------------------------------------------
@@ -93,13 +93,13 @@ void SystemMonitor::CPUMonitor::Tick() {
 	memcpy(&sys, &fsys, sizeof(FILETIME));
 	memcpy(&user, &fuser, sizeof(FILETIME));
 
-	process_usage  = static_cast<double>((sys.QuadPart - last_sys_cpu.QuadPart) + (user.QuadPart - last_user_cpu.QuadPart));
-	process_usage /= (now.QuadPart - last_cpu.QuadPart);
-	process_usage /= processor_count;
+	ULONGLONG usage = (sys.QuadPart - last_sys_cpu.QuadPart) + (user.QuadPart - last_user_cpu.QuadPart);
+	process_usage   = static_cast<double>(usage / (now.QuadPart - last_cpu.QuadPart));
+	process_usage  /= processor_count;
 
-	last_cpu = now;
+	last_cpu      = now;
 	last_user_cpu = user;
-	last_sys_cpu = sys;
+	last_sys_cpu  = sys;
 }
 
 

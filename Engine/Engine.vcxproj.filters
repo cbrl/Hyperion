@@ -750,6 +750,12 @@
     <ClInclude Include="ecs_data\systems\rendering\renderer\pass\depth\depth_pass.h">
       <Filter>Header Files\ecs_data\systems\rendering\renderer\pass\depth</Filter>
     </ClInclude>
+    <ClInclude Include="util\datatypes\container_types.h">
+      <Filter>Header Files\util\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="util\datatypes\pointer_types.h">
+      <Filter>Header Files\util\datatypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
