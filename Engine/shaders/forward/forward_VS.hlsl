@@ -1,23 +1,11 @@
-#include "shaders\include\global.hlsl"
-#include "shaders\include\input_structs.hlsl"
-#include "shaders\forward\forward.hlsl"
-
-
-//-----Included from forward.hlsl
-//CONSTANT_BUFFER(Model, SLOT_CBUFFER_MODEL) {
-//	matrix world;
-//	matrix world_inv_transpose;
-//	matrix world_view_proj;
-//	matrix texTransform;
-//	Material mat;
-//};
+#include "shaders\forward\forward_include.hlsl"
 
 
 PSPositionNormalTexture VS(VSPositionNormalTexture vin) {
 	PSPositionNormalTexture vout;
 
 	// Transform to world space
-	vout.w_position = mul(float4(vin.position, 1.0f), world).xyz;
+	vout.w_position = mul(float4(vin.position, 1.0f), object_to_world).xyz;
 
 	vout.normal = mul(vin.normal, (float3x3)world_inv_transpose);
 
@@ -28,7 +16,7 @@ PSPositionNormalTexture VS(VSPositionNormalTexture vin) {
 	vout.position = mul(float4(vin.position, 1.0f), world_view_proj);
 
 	// Output vertex attributes for interpolation across triangle
-	vout.tex = mul(float4(vin.tex, 0.0f, 1.0f), texTransform).xy;
+	vout.tex = mul(float4(vin.tex, 0.0f, 1.0f), tex_transform).xy;
 
 	return vout;
 }

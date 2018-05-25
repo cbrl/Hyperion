@@ -9,7 +9,7 @@
 #include "util\string\string.h"
 #include "util\datatypes\vector_types.h"
 
-#if defined(_WINDOWS) | defined(_WINDOWS_)
+#if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_)
 	#include <wrl\client.h>
 	using Microsoft::WRL::ComPtr;
 

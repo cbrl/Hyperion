@@ -17,16 +17,26 @@ struct CameraTransform final : public Component<CameraTransform> {
 
 		const Handle64 GetParent() const { return parent; }
 
-		const XMVECTOR GetPosition()       const { return position; }
-		const XMMATRIX GetPositionMatrix() const { return XMMatrixTranslationFromVector(position); }
+		// Relative position and rotation
+		const XMVECTOR XM_CALLCONV GetPosition() const { return position; }
+		const float2 GetPitchYaw() const { return float2(pitch, yaw); }
 
-		const float2   GetPitchYaw() const { return float2(pitch, yaw); }
+		// World space data
+		const XMVECTOR XM_CALLCONV GetWorldAxisX()  const { return right; }
+		const XMVECTOR XM_CALLCONV GetWorldAxisY()  const { return up; }
+		const XMVECTOR XM_CALLCONV GetWorldAxisZ()  const { return forward; }
+		const XMVECTOR XM_CALLCONV GetWorldOrigin() const { return world.r[3]; }
 
-		const XMVECTOR GetAxisX() const { return right; }
-		const XMVECTOR GetAxisY() const { return up; }
-		const XMVECTOR GetAxisZ() const { return forward; }
+		// Object space data
+		const XMVECTOR XM_CALLCONV GetObjectAxisX()  const { return XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f); }
+		const XMVECTOR XM_CALLCONV GetObjectAxisY()  const { return XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); }
+		const XMVECTOR XM_CALLCONV GetObjectAxisZ()  const { return XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f); }
+		const XMVECTOR XM_CALLCONV GetObjectOrigin() const { return XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); }
 
-		const XMMATRIX GetWorld() const { return world; }
+		// Matrices
+		const XMMATRIX XM_CALLCONV GetObjectToWorldMatrix()          const { return world; }
+		const XMMATRIX XM_CALLCONV GetWorldToObjectMatrix()          const { return XMMatrixInverse(NULL, world); }
+		const XMMATRIX XM_CALLCONV GetObjectToParentPositionMatrix() const { return XMMatrixTranslationFromVector(position); }
 
 
 		//----------------------------------------------------------------------------------
@@ -39,6 +49,9 @@ struct CameraTransform final : public Component<CameraTransform> {
 		void XM_CALLCONV SetRotation(FXMVECTOR rotation);
 
 		void Rotate(const float3& units);
+
+		void SetPosition(const float3& position);
+		void XM_CALLCONV SetPosition(FXMVECTOR position);
 
 		void Move(const float3& units);
 		void XM_CALLCONV Move(FXMVECTOR units);

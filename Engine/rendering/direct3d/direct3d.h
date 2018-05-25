@@ -32,6 +32,9 @@ class Direct3D final {
 		// Resize the depth/stencil/back buffers
 		void ResizeBuffers(u32 win_width, u32 win_height);
 
+		void BindDefaultRenderTarget() const {
+			device_context->OMSetRenderTargets(1, render_target_view.GetAddressOf(), depth_stencil_view.Get());
+		}
 
 		ID3D11Device& GetDevice() const {
 			return *device.Get();

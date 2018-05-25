@@ -29,7 +29,7 @@ class ResourcePool : public IResourcePool {
 		struct Chunk {
 			Chunk(PoolAllocator<DataT>* alloc) : allocator(alloc) {
 
-				start_addr  = allocator->GetStartAddr();
+				start_addr  = reinterpret_cast<uintptr>(allocator->GetStartAddr());
 				memory_size = alloc_size;
 			}
 

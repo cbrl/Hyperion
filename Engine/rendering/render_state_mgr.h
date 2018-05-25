@@ -39,6 +39,7 @@ class RenderStateMgr final {
 		void BindLinearClamp(ID3D11DeviceContext& device_context) const;
 		void BindAnisotropicWrap(ID3D11DeviceContext& device_context) const;
 		void BindAnisotropicClamp(ID3D11DeviceContext& device_context) const;
+		void BindPCFSampler(ID3D11DeviceContext& device_context) const;
 
 
 	private:
@@ -84,4 +85,5 @@ class RenderStateMgr final {
 		ComPtr<ID3D11SamplerState> linear_clamp;
 		ComPtr<ID3D11SamplerState> anisotropic_wrap;
 		ComPtr<ID3D11SamplerState> anisotropic_clamp;
+		ComPtr<ID3D11SamplerState> pcf_sampler;
 };

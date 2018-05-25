@@ -36,10 +36,10 @@ XMMATRIX TransformSystem::CalculateWorld(Transform& transform) const {
 
 
 XMMATRIX TransformSystem::CalculateWorld(CameraTransform& transform) const {
-	XMMATRIX rotation = { transform.GetAxisX(),
-		                  transform.GetAxisY(),
-		                  transform.GetAxisZ(),
+	XMMATRIX rotation = { transform.GetWorldAxisX(),
+		                  transform.GetWorldAxisY(),
+		                  transform.GetWorldAxisZ(),
 		                  {0.0f, 0.0f, 0.0f, 1.0f} };
 	
-	return rotation * transform.GetPositionMatrix();
+	return rotation * transform.GetObjectToParentPositionMatrix();
 }

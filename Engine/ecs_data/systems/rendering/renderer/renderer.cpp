@@ -18,7 +18,8 @@ Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
 void Renderer::Update(const Engine& engine) {
 
 	auto& ecs_engine             = engine.GetECS();
-	const auto& render_state_mgr = engine.GetRenderingMgr().GetRenderStateMgr();
+	const auto& rendering_mgr    = engine.GetRenderingMgr();
+	const auto& render_state_mgr = rendering_mgr.GetRenderStateMgr();
 	auto& scene                  = engine.GetScene();
 
 	//----------------------------------------------------------------------------------
@@ -26,8 +27,13 @@ void Renderer::Update(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Update the camera 
-	auto* transform = ecs_engine.GetComponent<CameraTransform>(scene.GetCamera());
-	ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera())->UpdateBuffer(device_context, transform->GetPositionMatrix(), transform->GetPosition());
+	const auto transform = ecs_engine.GetComponent<CameraTransform>(scene.GetCamera());
+	const auto camera    = ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera());
+	ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera())->UpdateBuffer(device_context, transform->GetObjectToWorldMatrix(), transform->GetWorldOrigin());
+
+	const auto world_to_camera = transform->GetWorldToObjectMatrix();
+	const auto camera_to_projection = camera->GetProjectionMatrix();
+	const auto world_to_projection = world_to_camera * camera_to_projection;
 
 	// Bind the buffer
 	ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera())->BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
@@ -37,13 +43,15 @@ void Renderer::Update(const Engine& engine) {
 	// Process the light buffers
 	//----------------------------------------------------------------------------------
 
-	light_pass->Render(engine);
+	light_pass->Render(engine, world_to_projection);
 	
 
 	//----------------------------------------------------------------------------------
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
 	
+	camera->BindViewport(device_context);
+	rendering_mgr.BindDefaultRenderTarget();
 	forward_pass->Render(engine);
 
 

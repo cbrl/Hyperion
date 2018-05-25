@@ -17,7 +17,7 @@ void SkyBox::Init(ID3D11Device& device,
 	vector<VertexPosition> vertices;
 	vector<u32> indices;
 
-	Shapes::ComputeSphere(vertices, indices, 5000.0f, 16, true, true);
+	Shapes::ComputeSphere(vertices, indices, 5000.0f, 12, true, true);
 
 
 	// Create the vertex buffer

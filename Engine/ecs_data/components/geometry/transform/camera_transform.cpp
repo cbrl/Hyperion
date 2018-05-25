@@ -87,6 +87,18 @@ void CameraTransform::RotateZ(const float units) {
 }
 
 
+void CameraTransform::SetPosition(const float3& position) {
+	this->position = XMLoadFloat3(&position);
+	needs_update = true;
+}
+
+
+void XM_CALLCONV CameraTransform::SetPosition(FXMVECTOR position) {
+	this->position = position;
+	needs_update = true;
+}
+
+
 void CameraTransform::Move(const float3 & units) {
 	position += XMLoadFloat3(&units);
 	needs_update = true;

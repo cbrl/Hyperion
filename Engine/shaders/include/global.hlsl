@@ -16,6 +16,7 @@ SAMPLER_STATE(linear_wrap,  SLOT_SAMPLER_LINEAR_WRAP);
 SAMPLER_STATE(linear_clamp, SLOT_SAMPLER_LINEAR_CLAMP);
 SAMPLER_STATE(aniso_wrap,   SLOT_SAMPLER_ANISO_WRAP);
 SAMPLER_STATE(aniso_clamp,  SLOT_SAMPLER_ANISO_CLAMP);
+SAMPLER_COMPARISON_STATE(pcf_sampler, SLOT_SAMPLER_PCF);
 
 
 
@@ -23,18 +24,18 @@ SAMPLER_STATE(aniso_clamp,  SLOT_SAMPLER_ANISO_CLAMP);
 // Constant Buffers
 //----------------------------------------------------------------------------------
 
-//CONSTANT_BUFFER(EngineBuffer, SLOT_CBUFFER_MATRIX) {
+//CONSTANT_BUFFER(EngineBuffer, SLOT_CBUFFER_ENGINE) {
 //}
 
 
 CONSTANT_BUFFER(CameraBuffer, SLOT_CBUFFER_CAMERA) {
-
 	// Camera's position
 	float3 camera_position;
 
-	float  padding;
+	// Padding
+	float padding;
 
-	// Camera's world-view-projecton matrix
+	// Camera's world-view-projection matrix
 	matrix camera_wvp;
 };
 

@@ -39,7 +39,7 @@ void TestScene::Init(const Engine& engine) {
 	auto cam = ecs_engine.GetComponent<PerspectiveCamera>(camera);
 	cam->SetZDepth(zNear, zFar);
 	cam->SetFOV(FOV);
-	//camera->SetPosition(float3(0.0f, 3.0f, -5.0f));
+	ecs_engine.GetComponent<CameraTransform>(camera)->SetPosition(float3(0.0f, 4.0f, -2.0f));
 
 
 	//----------------------------------------------------------------------------------
@@ -72,16 +72,33 @@ void TestScene::Init(const Engine& engine) {
 
 	// ECS point light
 	auto light = ecs_engine.CreateEntity<BasicPointLight>();
+	auto light2 = ecs_engine.CreateEntity<BasicSpotLight>();
 
 	auto point_light = ecs_engine.GetComponent<PointLight>(light);
-	point_light->SetAmbientColor(float4(0.15f, 0.15f, 0.15f, 0.15f));
+	point_light->SetAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
 	point_light->SetDiffuseColor(float4(1.0f, 1.0f, 1.0f, 1.0f));
 	point_light->SetAttenuation(float3(0.0f, 0.15f, 0.0f));
 	point_light->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
 	point_light->SetRange(100.0f);
+	point_light->SetShadows(true);
 
 	auto transform = ecs_engine.GetComponent<Transform>(light);
-	transform->SetPosition(float3(0.0f, 8.0f, 0.0f));
+	transform->SetPosition(float3(5.0f, 6.0f, 5.0f));
+	//transform->SetParent(camera);
+
+	auto spot_light = ecs_engine.GetComponent<SpotLight>(light2);
+	spot_light->SetAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
+	spot_light->SetDiffuseColor(float4(0.0f, 0.0f, 1.0f, 1.0f));
+	spot_light->SetAttenuation(float3(0.05f, 0.15f, 0.0f));
+	spot_light->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
+	spot_light->SetRange(100.0f);
+	spot_light->SetUmbraAngle(XM_PI / 3.0f);
+	spot_light->SetPenumbraAngle(XM_PI / 8.0f);
+	spot_light->SetShadows(true);
+
+	auto transform2 = ecs_engine.GetComponent<Transform>(light2);
+	transform2->SetPosition(float3(-1.0f, 8.0f, -5.0f));
+	transform2->SetRotation(float3(XM_PIDIV2, 0.0f, 0.0f));
 
 
 	// Fog
@@ -142,14 +159,6 @@ void TestScene::Tick(const Engine& engine) {
 
 	// Get mouse delta
 	int2 mouse_delta = input.GetMouseDelta();
-
-
-
-	// Rotate models
-	//for (auto& model : models) {
-	//	model.Rotate(0.0f, ((XM_PI * delta_time) / 2500), 0.0f);
-	//}
-
 	
 
 	//----------------------------------------------------------------------------------

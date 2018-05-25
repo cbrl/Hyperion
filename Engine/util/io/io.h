@@ -54,7 +54,7 @@ inline wstring GetFileExtension(const wstring& in) {
 
 
 // Get a file path through the Windows file picker
-#if defined(_WINDOWS) | defined(_WINDOWS_)
+#if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_)
 
 #include <Windows.h>
 #include <Commdlg.h>

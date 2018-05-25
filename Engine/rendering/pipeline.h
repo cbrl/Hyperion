@@ -107,13 +107,22 @@ class Pipeline final {
 								 ID3D11RenderTargetView* const* rtvs,
 								 ID3D11DepthStencilView* dsv) {
 
-				device_context.OMSetRenderTargets(num_views, rtvs, dsv);
+				if (rtvs) {
+					device_context.OMSetRenderTargets(num_views, rtvs, dsv);
+				}
+				else {
+					device_context.OMSetRenderTargets(0, nullptr, dsv);
+				}
 			}
 
 			static void BindRTVsAndUAVs(ID3D11DeviceContext& device_context,
-							 u32 num_rtvs, ID3D11RenderTargetView* const* rtvs,
-							 ID3D11DepthStencilView* dsv, u32 start_slot,
-							 u32 num_uavs, ID3D11UnorderedAccessView* const* uavs, u32 initial_counts) {
+										u32 num_rtvs,
+										ID3D11RenderTargetView* const* rtvs,
+										ID3D11DepthStencilView* dsv,
+										u32 start_slot,
+										u32 num_uavs,
+										ID3D11UnorderedAccessView* const* uavs,
+										u32 initial_counts) {
 
 				device_context.OMSetRenderTargetsAndUnorderedAccessViews(num_rtvs, rtvs, dsv, start_slot, num_uavs, uavs, &initial_counts);
 			}

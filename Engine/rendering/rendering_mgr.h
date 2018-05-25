@@ -24,6 +24,10 @@ class RenderingMgr final {
 			ImGui_ImplDX11_CreateDeviceObjects();
 		}
 
+		void BindDefaultRenderTarget() const {
+			direct3D->BindDefaultRenderTarget();
+		}
+
 		// Start a new frame
 		void BeginFrame() const;
 

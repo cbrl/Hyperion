@@ -60,6 +60,10 @@ class ECS final {
 		template<typename T>
 		size_t CountOf() const;
 
+		// Get the number of a specific entity/component that are active
+		template<typename T>
+		size_t CountOfActive() const;
+
 		EntityMgr* const    GetEntityMgr()    const { return entity_mgr.get(); }
 		ComponentMgr* const GetComponentMgr() const { return component_mgr.get(); }
 

@@ -14,7 +14,7 @@ void TransformSystem::UpdateWorld(ECS& ecs_engine, TransformT& transform) {
 
 	// If the transform has a parent, then process that first.
 	// If the parent was updated, or if this transform already needs
-	// an update, this get the parent's matrix.
+	// an update, then get the parent's matrix.
 	else {
 		const auto parent     = ecs_engine.GetComponent<Transform>(transform.GetParent());
 		const auto parent_cam = ecs_engine.GetComponent<CameraTransform>(transform.GetParent());
@@ -27,7 +27,7 @@ void TransformSystem::UpdateWorld(ECS& ecs_engine, TransformT& transform) {
 
 			// This may be true even if the above statement is not
 			if (transform.needs_update)
-				parent_world = parent->GetWorld();
+				parent_world = parent->GetObjectToWorldMatrix();
 		}
 		else if (parent_cam) {
 			UpdateWorld(ecs_engine, *parent_cam);
@@ -36,7 +36,7 @@ void TransformSystem::UpdateWorld(ECS& ecs_engine, TransformT& transform) {
 				transform.needs_update = true;
 
 			if (transform.needs_update)
-				parent_world = parent_cam->GetWorld();
+				parent_world = parent_cam->GetObjectToWorldMatrix();
 		}
 	}
 

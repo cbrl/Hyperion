@@ -1,11 +1,12 @@
 #pragma	once
 
 #include "ecs\component\component.h"
+#include "geometry\bounding_volume\bounding_volume.h"
 
 
 class PointLight final : public Component<PointLight> {
 	public:
-		PointLight() : shadows(false) {}
+		PointLight() : near_plane(0.1f), shadows(false) {}
 		~PointLight() = default;
 
 
@@ -23,6 +24,7 @@ class PointLight final : public Component<PointLight> {
 
 		void SetRange(const float range) {
 			this->range = range;
+			UpdateBoundingVolumes();
 		}
 
 		void SetAttenuation(const float3& attenuation) {
@@ -32,6 +34,7 @@ class PointLight final : public Component<PointLight> {
 		void SetShadows(bool state) {
 			this->shadows = state;
 		}
+
 
 
 		const float4& GetAmbientColor() const {
@@ -58,13 +61,48 @@ class PointLight final : public Component<PointLight> {
 			return shadows;
 		}
 
+		const AABB& GetAABB() const {
+			return aabb;
+		}
+
+		const BoundingSphere& GetBoundingSphere() const {
+			return sphere;
+		}
+
+		const XMMATRIX XM_CALLCONV GetLightToProjectionMatrix() const {
+
+			const float m22 = range / (range - near_plane);
+			const float m32 = -near_plane * m22;
+
+			return XMMATRIX{ 1.0f, 0.0f, 0.0f, 0.0f,
+							 0.0f, 1.0f, 0.0f, 0.0f,
+							 0.0f, 0.0f,  m22, 1.0f,
+			                 0.0f, 0.0f,  m32, 0.0f };
+		}
+
 
 	private:
+		void UpdateBoundingVolumes() {
+			aabb   = AABB(float3(-range, -range, -range), float3(range, range, range));
+			sphere = BoundingSphere(float3(0.0f, 0.0f, 0.0f), range);
+		}
+
+
+	private:
+		// Lighting parameters
 		float4 ambient_color;
 		float4 diffuse_color;
 		float4 specular;
 		float3 attenuation;
-		float  range;
 
+		// Near clipping plane and range (far plane)
+		float near_plane;
+		float range;
+
+		// Flag that decides if the light should cast shadows
 		bool shadows;
+
+		// Bounding volumes
+		AABB           aabb;
+		BoundingSphere sphere;
 };

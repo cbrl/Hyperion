@@ -358,6 +358,15 @@
     <Filter Include="Header Files\ecs_data\systems\rendering\renderer\pass\light">
       <UniqueIdentifier>{223e76e9-8265-440a-a406-1e2b3cb45d8f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ecs_data\systems\rendering\renderer\pass\depth">
+      <UniqueIdentifier>{ccfc88ea-5f5f-4074-88b6-dd9cbf4b56e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ecs_data\systems\rendering\renderer\pass\depth">
+      <UniqueIdentifier>{1467bb1c-9449-44e5-89a5-3e9b81959cd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\shaders\depth">
+      <UniqueIdentifier>{4ecf093d-21d4-4e83-831e-b08075f45eca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\include\light.hlsl">
@@ -402,6 +411,18 @@
     </None>
     <None Include="ecs\entity\entity.tpp">
       <Filter>Source Files\ecs\entity</Filter>
+    </None>
+    <None Include="shaders\forward\forward_include.hlsl">
+      <Filter>Resource Files\shaders\forward</Filter>
+    </None>
+    <None Include="shaders\depth\depth_include.hlsl">
+      <Filter>Resource Files\shaders\depth</Filter>
+    </None>
+    <None Include="shaders\depth\depth_vs.hlsl">
+      <Filter>Resource Files\shaders\depth</Filter>
+    </None>
+    <None Include="shaders\include\transform.hlsl">
+      <Filter>Resource Files\shaders\include</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -723,6 +744,9 @@
     <ClInclude Include="ecs_data\systems\rendering\renderer\pass\light\light_pass.h">
       <Filter>Header Files\ecs_data\systems\rendering\renderer\pass\light</Filter>
     </ClInclude>
+    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\depth\depth_pass.h">
+      <Filter>Header Files\ecs_data\systems\rendering\renderer\pass\depth</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -859,6 +883,9 @@
     </ClCompile>
     <ClCompile Include="ecs_data\systems\rendering\renderer\pass\light\light_pass.cpp">
       <Filter>Source Files\ecs_data\systems\rendering\renderer\pass\light</Filter>
+    </ClCompile>
+    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\depth\depth_pass.cpp">
+      <Filter>Source Files\ecs_data\systems\rendering\renderer\pass\depth</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,21 +1,5 @@
-#include "shaders\include\global.hlsl"
-#include "shaders\include\input_structs.hlsl"
+#include "shaders\forward\forward_include.hlsl"
 #include "shaders\include\light.hlsl"
-#include "shaders\include\normal.hlsl"
-
-
-//----------------------------------------------------------------------------------
-//  Constant Buffers
-//----------------------------------------------------------------------------------
-
-CONSTANT_BUFFER(Model, SLOT_CBUFFER_MODEL) {
-	matrix   world;
-	matrix   world_inv_transpose;
-	matrix   world_view_proj;
-	matrix   texTransform;
-	Material mat;
-};
-
 
 
 //----------------------------------------------------------------------------------
@@ -82,71 +66,94 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	float4 spec = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
-	if (directional_light_count > 0) {
+	if (num_directional_lights > 0) {
 		// Sum the light contribution from each light source
-		for (int i = 0; i < directional_light_count; ++i) {
+		for (uint i = 0; i < num_directional_lights; ++i) {
 			float4 A, D, S;
-			ComputeDirectionalLight(mat, directional_lights[i], transformed_normal, to_eye,
+			ComputeDirectionalLight(directional_lights[i], mat, transformed_normal, to_eye,
 									A, D, S);
 
 			ambient += A;
 			diffuse += D;
-			spec    += S;
-		}
-
-		lit_color = tex_color * (ambient + diffuse) + spec;
-
-		if (mat.reflection_enabled) {
-			float3 incident = -to_eye;
-			float3 reflection_vec = reflect(incident, pin.normal);
-			float4 reflection_color = env_map.Sample(aniso_wrap, reflection_vec);
-
-			lit_color += mat.reflect * reflection_color;
+			spec += S;
 		}
 	}
 
-	if (point_light_count > 0) {
-		for (int i = 0; i < point_light_count; ++i) {
+	if (num_shadow_directional_lights > 0) {
+		for (uint i = 0; i < num_shadow_directional_lights; ++i) {
 			float4 A, D, S;
-			ComputePointLight(mat, point_lights[i], pin.w_position, transformed_normal, to_eye,
-							  A, D, S);
-			
+			ShadowMap shadow_map = { pcf_sampler, directional_light_smaps, i };
+
+			ComputeShadowedDirectionalLight(shadow_directional_lights[i], shadow_map, mat, pin.w_position, transformed_normal, to_eye,
+											A, D, S);
+
 			ambient += A;
 			diffuse += D;
-			spec    += S;
-		}
-
-		lit_color = tex_color * (ambient + diffuse) + spec;
-
-		if (mat.reflection_enabled) {
-			float3 incident = -to_eye;
-			float3 reflection_vec = reflect(incident, pin.normal);
-			float4 reflection_color = env_map.Sample(aniso_wrap, reflection_vec);
-
-			lit_color += mat.reflect * reflection_color;
+			spec += S;
 		}
 	}
 
-	if (spot_light_count > 0) {
-		for (int i = 0; i < spot_light_count; ++i) {
+	if (num_point_lights > 0) {
+		for (uint i = 0; i < num_point_lights; ++i) {
 			float4 A, D, S;
-			ComputeSpotLight(mat, spot_lights[i], pin.w_position, transformed_normal, to_eye,
+			ComputePointLight(point_lights[i], mat, pin.w_position, transformed_normal, to_eye,
+							  A, D, S);
+
+			ambient += A;
+			diffuse += D;
+			spec += S;
+		}
+	}
+
+	if (num_shadow_point_lights > 0) {
+		for (uint i = 0; i < num_shadow_point_lights; ++i) {
+			float4 A, D, S;
+			ShadowCubeMap cube_map = { pcf_sampler, point_light_smaps, i };
+
+			ComputeShadowedPointLight(shadow_point_lights[i], cube_map, mat, pin.w_position, transformed_normal, to_eye,
+									  A, D, S);
+
+			ambient += A;
+			diffuse += D;
+			spec += S;
+		}
+	}
+
+	if (num_spot_lights > 0) {
+		for (uint i = 0; i < num_spot_lights; ++i) {
+			float4 A, D, S;
+			ComputeSpotLight(spot_lights[i], mat, pin.w_position, transformed_normal, to_eye,
 							 A, D, S);
 
 			ambient += A;
 			diffuse += D;
 			spec += S;
 		}
+	}
 
-		lit_color = tex_color * (ambient + diffuse) + spec;
+	if (num_shadow_spot_lights > 0) {
+		for (uint i = 0; i < num_shadow_spot_lights; ++i) {
+			float4 A, D, S;
+			ShadowMap shadow_map = { pcf_sampler, spot_light_smaps, i };
 
-		if (mat.reflection_enabled) {
-			float3 incident = -to_eye;
-			float3 reflection_vec = reflect(incident, pin.normal);
-			float4 reflection_color = env_map.Sample(aniso_wrap, reflection_vec);
+			ComputeShadowedSpotLight(shadow_spot_lights[i], shadow_map, mat, pin.w_position, transformed_normal, to_eye,
+									 A, D, S);
 
-			lit_color += mat.reflect * reflection_color;
+			ambient += A;
+			diffuse += D;
+			spec += S;
 		}
+	}
+
+
+	lit_color = tex_color * (ambient + diffuse) + spec;
+
+	if (mat.reflection_enabled) {
+		float3 incident = -to_eye;
+		float3 reflection_vec = reflect(incident, pin.normal);
+		float4 reflection_color = env_map.Sample(aniso_wrap, reflection_vec);
+
+		lit_color += mat.reflect * reflection_color;
 	}
 
 

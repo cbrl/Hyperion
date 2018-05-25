@@ -21,6 +21,7 @@
 //----------------------------------------------------------------------------------
 
 #define SAMPLER_STATE(name, slot) SamplerState name : REG_S(slot)
+#define SAMPLER_COMPARISON_STATE(name, slot) SamplerComparisonState name : REG_S(slot)
 
 
 //----------------------------------------------------------------------------------

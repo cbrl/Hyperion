@@ -491,7 +491,7 @@ struct Vec4 : public DerivedT {
 // Vector aliases
 //----------------------------------------------------------------------------------
 
-#if defined (_WINDOWS) | defined (_WINDOWS_)
+#if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_)
 	#include <DirectXMath.h>
 
 	using int2 = Vec2<int32_t, DirectX::XMINT2>;

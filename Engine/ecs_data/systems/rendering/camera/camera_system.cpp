@@ -18,7 +18,7 @@ void CameraSystem::Update(const Engine& engine) {
 			ProcessMovement(engine, movement, transform);
 		}
 
-		camera.UpdateViewMatrix(transform->GetPosition(), transform->GetAxisZ(), transform->GetAxisY());
+		camera.UpdateViewMatrix(transform->GetPosition(), transform->GetWorldAxisZ(), transform->GetWorldAxisY());
 	});
 
 
@@ -32,7 +32,7 @@ void CameraSystem::Update(const Engine& engine) {
 			ProcessMovement(engine, movement, transform);
 		}
 
-		camera.UpdateViewMatrix(transform->GetPosition(), transform->GetAxisZ(), transform->GetAxisY());
+		camera.UpdateViewMatrix(transform->GetPosition(), transform->GetWorldAxisZ(), transform->GetWorldAxisY());
 	});
 }
 
@@ -186,9 +186,9 @@ void CameraSystem::Move(CameraMovement* mv, CameraTransform* transform, float dt
 		// Move the camera
 		XMVECTOR position = XMVectorZero();
 
-		position += transform->GetAxisX() * mv->GetVelocity().x * dt;
-		position += transform->GetAxisY() * mv->GetVelocity().y * dt;
-		position += transform->GetAxisZ() * mv->GetVelocity().z * dt;
+		position += transform->GetWorldAxisX() * mv->GetVelocity().x * dt;
+		position += transform->GetWorldAxisY() * mv->GetVelocity().y * dt;
+		position += transform->GetWorldAxisZ() * mv->GetVelocity().z * dt;
 
 		transform->Move(position);
 

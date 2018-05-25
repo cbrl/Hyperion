@@ -15,7 +15,7 @@ void ModelSystem::Update(const Engine& engine) {
 
 		if (transform) {
 			if (transform->Updated()) {
-				model.UpdateBoundingVolumes(transform->GetWorld());
+				model.UpdateBoundingVolumes(transform->GetObjectToWorldMatrix());
 			}
 		}
 	});

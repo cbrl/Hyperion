@@ -35,6 +35,7 @@ void RenderStateMgr::SetupStates(ID3D11Device& device, ID3D11DeviceContext& devi
 	BindPointWrap(device_context);
 	BindAnisotropicClamp(device_context);
 	BindAnisotropicWrap(device_context);
+	BindPCFSampler(device_context);
 }
 
 
@@ -116,7 +117,7 @@ HRESULT RenderStateMgr::CreateSamplerState(ID3D11Device& device, D3D11_FILTER fi
 
 	desc.MaxAnisotropy = (device.GetFeatureLevel() > D3D_FEATURE_LEVEL_9_1) ? D3D11_MAX_MAXANISOTROPY : 2;
 
-	desc.MaxLOD         = FLT_MAX;
+	desc.MaxLOD         = D3D11_FLOAT32_MAX;
 	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 
 	HRESULT hr = device.CreateSamplerState(&desc, pResult);
@@ -206,6 +207,24 @@ void RenderStateMgr::CreateSamplerStates(ID3D11Device& device) {
 	// Anisotropic Clamp
 	ThrowIfFailed(CreateSamplerState(device, D3D11_FILTER_ANISOTROPIC, D3D11_TEXTURE_ADDRESS_CLAMP, anisotropic_clamp.GetAddressOf()),
 				  "Error creating anisotropicclamp sampler state");
+
+	// PCF Sampler
+	{
+		D3D11_SAMPLER_DESC desc = {};
+
+		desc.Filter         = D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+		desc.AddressU       = D3D11_TEXTURE_ADDRESS_BORDER;
+		desc.AddressV       = D3D11_TEXTURE_ADDRESS_BORDER;
+		desc.AddressW       = D3D11_TEXTURE_ADDRESS_BORDER;
+		desc.MaxAnisotropy  = (device.GetFeatureLevel() > D3D_FEATURE_LEVEL_9_1) ? D3D11_MAX_MAXANISOTROPY : 2;
+		desc.MaxLOD         = D3D11_FLOAT32_MAX;
+		desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
+
+		ThrowIfFailed(device.CreateSamplerState(&desc, pcf_sampler.GetAddressOf()),
+					  "Error creating pcf sampler state");
+
+		SetDebugObjectName(pcf_sampler.Get(), "RenderStateMgr SamplerState");
+	}
 }
 
 
@@ -303,4 +322,9 @@ void RenderStateMgr::BindAnisotropicWrap(ID3D11DeviceContext& device_context) co
 
 void RenderStateMgr::BindAnisotropicClamp(ID3D11DeviceContext& device_context) const {
 	Pipeline::BindSamplers(device_context, SLOT_SAMPLER_ANISO_CLAMP, 1, anisotropic_clamp.GetAddressOf());
+}
+
+
+void RenderStateMgr::BindPCFSampler(ID3D11DeviceContext& device_context) const {
+	Pipeline::BindSamplers(device_context, SLOT_SAMPLER_PCF, 1, pcf_sampler.GetAddressOf());
 }

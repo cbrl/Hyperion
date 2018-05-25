@@ -32,6 +32,12 @@ class CameraBase : public Component<T> {
 
 
 	public:
+		// Bind the viewport to the pipeline
+		void BindViewport(ID3D11DeviceContext& device_context) const {
+			Pipeline::RS::BindViewports(device_context, 1, &viewport);
+		}
+
+
 		//----------------------------------------------------------------------------------
 		// Constant Buffer
 		//----------------------------------------------------------------------------------
@@ -90,7 +96,7 @@ class CameraBase : public Component<T> {
 		}
 
 		// Get the camera's projection matrix
-		const XMMATRIX GetProjMatrix() const {
+		const XMMATRIX GetProjectionMatrix() const {
 			return projection_matrix;
 		}
 
@@ -99,13 +105,8 @@ class CameraBase : public Component<T> {
 			return frustum;
 		}
 
-
+		
 	protected:
-		// Bind the viewport to the pipeline
-		void BindViewport(ID3D11DeviceContext& device_context) const {
-			Pipeline::RS::BindViewports(device_context, 1, &viewport);
-		}
-
 		// Update the projection matrix after changing depth/width/height/etc...
 		virtual void UpdateProjectionMatrix() = 0;
 

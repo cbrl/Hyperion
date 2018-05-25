@@ -9,7 +9,10 @@
 template<typename DataT>
 class StructuredBuffer final {
 	public:
-		StructuredBuffer(ID3D11Device& device, u32 size) : size(size) {
+		StructuredBuffer(ID3D11Device& device, u32 reserved_size)
+			: reserved_size(reserved_size)
+			, current_size(0) {
+
 			CreateBuffer(device);
 		}
 
@@ -28,6 +31,17 @@ class StructuredBuffer final {
 		}
 
 
+		// Get the number of elements this buffer currently holds
+		u32 size() const {
+			return current_size;
+		}
+
+		// Get the max number of elements this buffer can currently hold
+		u32 reserved() const {
+			return reserved_size;
+		}
+
+
 	private:
 		void CreateBuffer(ID3D11Device& device);
 
@@ -37,7 +51,10 @@ class StructuredBuffer final {
 		ComPtr<ID3D11ShaderResourceView> srv;
 
 		// Number of elements in the buffer
-		u32 size;
+		u32 current_size;
+
+		// Max elements buffer can hold
+		u32 reserved_size;
 };
 
 

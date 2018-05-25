@@ -13,7 +13,7 @@ Allocator::~Allocator() {
 }
 
 
-uintptr Allocator::GetStartAddr() {
+void* Allocator::GetStartAddr() {
 
-	return reinterpret_cast<uintptr>(start_ptr);
+	return start_ptr;
 }

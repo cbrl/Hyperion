@@ -12,20 +12,35 @@ struct CameraBuffer {
 	CameraBuffer()
 		: position(0.0f, 0.0f, 0.0f)
 		, padding(0.0f)
-		, world_view_proj(XMMatrixIdentity())
+		, model_view_proj(XMMatrixIdentity())
 	{}
-	CameraBuffer(const float3& pos, CXMMATRIX wvp)
+	CameraBuffer(const float3& pos, CXMMATRIX mvp)
 		: position(pos)
-		, world_view_proj(wvp)
+		, model_view_proj(mvp)
 		, padding(0.0f)
 	{}
-	CameraBuffer(FXMVECTOR pos, CXMMATRIX wvp) : world_view_proj(wvp), padding(0.0f) {
+	CameraBuffer(FXMVECTOR pos, CXMMATRIX mvp) : model_view_proj(mvp), padding(0.0f) {
 		XMStoreFloat3(&position, pos);
 	}
 
 	float3   position;
 	float    padding;
-	XMMATRIX world_view_proj;
+	XMMATRIX model_view_proj;
+};
+
+
+struct AltCameraBuffer {
+	AltCameraBuffer()
+		: world_to_camera(XMMatrixIdentity())
+		, camera_to_projection(XMMatrixIdentity())
+	{}
+	AltCameraBuffer(CXMMATRIX world_to_cam, CXMMATRIX cam_to_proj)
+		: world_to_camera(world_to_cam)
+		, camera_to_projection(cam_to_proj)
+	{}
+
+	XMMATRIX world_to_camera;
+	XMMATRIX camera_to_projection;
 };
 
 
@@ -117,37 +132,54 @@ struct Fog {
 	float  range;
 };
 
+
 struct LightBuffer {
 	LightBuffer()
-		: point_light_count(0)
-		, directional_light_count(0)
-		, spot_light_count(0)
-		, pad(0)
+		: num_point_lights(0)
+		, num_directional_lights(0)
+		, num_spot_lights(0)
+		, pad0(0)
+		, num_shadow_directional_lights(0)
+		, num_shadow_point_lights(0)
+		, num_shadow_spot_lights(0)
+		, pad1(0)
 		, fog_color(1.0f, 1.0f, 1.0f, 1.0f)
 		, fog_start(0.0f)
 		, fog_range(0.0f)
 		, pad2(0.0f, 0.0f)
 	{}
-	LightBuffer(const u32     point_lights,
-				const u32     directional_lights,
+	LightBuffer(const u32     directional_lights,
+				const u32     point_lights,
 				const u32     spot_lights,
+				const u32     shadowed_directional_lights,
+				const u32     shadowed_point_lights,
+				const u32     shadowed_spot_lights,
 				const float4& fog_color,
 				const float   fog_start,
 				const float   fog_range)
-		: directional_light_count(directional_lights)
-		, point_light_count(point_lights)
-		, spot_light_count(spot_lights)
-		, pad(0)
+		: num_directional_lights(directional_lights)
+		, num_point_lights(point_lights)
+		, num_spot_lights(spot_lights)
+		, pad0(0)
+		, num_shadow_directional_lights(shadowed_directional_lights)
+		, num_shadow_point_lights(shadowed_point_lights)
+		, num_shadow_spot_lights(shadowed_spot_lights)
+		, pad1(0)
 		, fog_color(fog_color)
 		, fog_start(fog_start)
 		, fog_range(fog_range)
 		, pad2(0.0f, 0.0f)
 	{}
 
-	u32 directional_light_count;
-	u32 point_light_count;
-	u32 spot_light_count;
-	u32 pad;
+	u32 num_directional_lights;
+	u32 num_point_lights;
+	u32 num_spot_lights;
+	u32 pad0;
+
+	u32 num_shadow_directional_lights;
+	u32 num_shadow_point_lights;
+	u32 num_shadow_spot_lights;
+	u32 pad1;
 
 	float4 fog_color;
 	float  fog_start;
@@ -180,6 +212,17 @@ struct DirectionalLightBuffer {
 	float4 specular; //specular.w is the specular power
 	float3 direction;
 	float  pad;
+};
+
+
+struct ShadowedDirectionalLightBuffer {
+	ShadowedDirectionalLightBuffer()
+		: light_buffer()
+		, world_to_projection(XMMatrixIdentity())
+	{}
+
+	DirectionalLightBuffer light_buffer;
+	XMMATRIX world_to_projection;
 };
 
 
@@ -218,6 +261,21 @@ struct PointLightBuffer {
 };
 
 
+struct ShadowedPointLightBuffer {
+	ShadowedPointLightBuffer()
+		: light_buffer()
+		, world_to_light(XMMatrixIdentity())
+		, projection_values(0.0f, 0.0f)
+		, pad(0.0f, 0.0f)
+	{}
+
+	PointLightBuffer light_buffer;
+	XMMATRIX world_to_light;
+	float2 projection_values;
+	float2 pad;
+};
+
+
 struct SpotLightBuffer {
 	SpotLightBuffer()
 		: ambient_color(0.0f, 0.0f, 0.0f, 1.0f)
@@ -226,9 +284,9 @@ struct SpotLightBuffer {
 		, position(0.0f, 0.0f, 0.0f)
 		, range(0.0f)
 		, direction(0.0f, 0.0f, 0.0f)
-		, spot(0.0f)
+		, cos_umbra(0.0f)
+		, cos_penumbra(0.0f)
 		, attenuation(0.0f, 0.0f, 0.0f)
-		, pad(0.0f)
 	{}
 	SpotLightBuffer(const float4& ambient_color,
 					const float4& diffuse_color,
@@ -236,7 +294,8 @@ struct SpotLightBuffer {
 					const float3& position,
 					const float   range,
 					const float3& direction,
-					const float   spot,
+					const float   cos_umbra,
+					const float   cos_penumbra,
 					const float3& attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
@@ -244,9 +303,9 @@ struct SpotLightBuffer {
 		, position(position)
 		, range(range)
 		, direction(direction)
-		, spot(spot)
+		, cos_umbra(cos_umbra)
+		, cos_penumbra(cos_penumbra)
 		, attenuation(attenuation)
-		, pad(0.0f)
 	{}
 
 	float4 ambient_color;
@@ -255,7 +314,18 @@ struct SpotLightBuffer {
 	float3 position;
 	float  range;
 	float3 direction;
-	float  spot;
+	float  cos_umbra;
+	float  cos_penumbra;
 	float3 attenuation;
-	float  pad;
+};
+
+
+struct ShadowedSpotLightBuffer {
+	ShadowedSpotLightBuffer()
+		: light_buffer()
+		, world_to_projection(XMMatrixIdentity())
+	{}
+
+	SpotLightBuffer light_buffer;
+	XMMATRIX world_to_projection;
 };

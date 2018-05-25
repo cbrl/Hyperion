@@ -100,7 +100,7 @@ void ForwardPass::RenderModels(ECS& ecs_engine, Scene& scene) const {
 
 	// Get the matrices
 	const XMMATRIX view       = camera->GetViewMatrix();
-	const XMMATRIX projection = camera->GetProjMatrix();
+	const XMMATRIX projection = camera->GetProjectionMatrix();
 
 
 	ecs_engine.ForEachActive<Model>([&](Model& model) {
@@ -113,7 +113,7 @@ void ForwardPass::RenderModels(ECS& ecs_engine, Scene& scene) const {
 
 
 		// Update the model's cbuffer and bounding volumes
-		model.UpdateBuffer(device_context, transform->GetWorld(), view, projection);
+		model.UpdateBuffer(device_context, transform->GetObjectToWorldMatrix(), view, projection);
 
 
 		// Bind the model's mesh
