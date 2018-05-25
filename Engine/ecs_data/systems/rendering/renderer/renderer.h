@@ -22,6 +22,9 @@ class Renderer final : public System<Renderer> {
 
 		void Update(const Engine& engine);
 
+		template<typename CameraT>
+		void RenderCamera(const Engine& engine, const CameraT& camera);
+
 
 	private:
 		reference_wrapper<ID3D11Device>        device;
@@ -33,3 +36,6 @@ class Renderer final : public System<Renderer> {
 		unique_ptr<SkyPass>     sky_pass;
 		unique_ptr<TextPass>    text_pass;
 };
+
+
+#include "renderer.tpp"

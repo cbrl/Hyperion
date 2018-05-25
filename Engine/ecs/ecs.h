@@ -37,7 +37,7 @@ class ECS final {
 
 		template<typename ComponentT>
 		[[nodiscard]]
-		ComponentT* const GetComponent(Handle64 entity);
+		ComponentT* const GetComponent(Handle64 entity) const;
 
 
 		//----------------------------------------------------------------------------------

@@ -5,21 +5,19 @@
 #include "util\datatypes\datatypes.h"
 #include "shader\hlsl.h"
 #include "shader\shader.h"
+#include "ecs_data\components\rendering\skybox\skybox.h"
 
-class Engine;
-class RenderStateMgr;
+class ECS;
 class Scene;
+class RenderStateMgr;
 
 class SkyPass final {
 	public:
 		SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
 		~SkyPass() = default;
 
-		void Render(const Engine& engine);
-
-
-	private:
-		void BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr);
+		void Render(const SkyBox& skybox) const;
+		void BindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const;
 
 
 	private:

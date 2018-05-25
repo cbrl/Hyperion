@@ -22,44 +22,22 @@ void Renderer::Update(const Engine& engine) {
 	const auto& render_state_mgr = rendering_mgr.GetRenderStateMgr();
 	auto& scene                  = engine.GetScene();
 
-	//----------------------------------------------------------------------------------
-	// Update the camera buffer
-	//----------------------------------------------------------------------------------
 
-	// Update the camera 
-	const auto transform = ecs_engine.GetComponent<CameraTransform>(scene.GetCamera());
-	const auto camera    = ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera());
-	ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera())->UpdateBuffer(device_context, transform->GetObjectToWorldMatrix(), transform->GetWorldOrigin());
+	ecs_engine.ForEachActive<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
+		// Bind the buffer
+		camera.BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
 
-	const auto world_to_camera = transform->GetWorldToObjectMatrix();
-	const auto camera_to_projection = camera->GetProjectionMatrix();
-	const auto world_to_projection = world_to_camera * camera_to_projection;
+		// Render the scene
+		RenderCamera(engine, camera);
+	});
 
-	// Bind the buffer
-	ecs_engine.GetComponent<PerspectiveCamera>(scene.GetCamera())->BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
+	ecs_engine.ForEachActive<OrthographicCamera>([&](const OrthographicCamera& camera) {
+		// Bind the buffer
+		camera.BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
 
-
-	//----------------------------------------------------------------------------------
-	// Process the light buffers
-	//----------------------------------------------------------------------------------
-
-	light_pass->Render(engine, world_to_projection);
-	
-
-	//----------------------------------------------------------------------------------
-	// Render objects with forward shader
-	//----------------------------------------------------------------------------------
-	
-	camera->BindViewport(device_context);
-	rendering_mgr.BindDefaultRenderTarget();
-	forward_pass->Render(engine);
-
-
-	//----------------------------------------------------------------------------------
-	// Render the skybox
-	//----------------------------------------------------------------------------------
-
-	sky_pass->Render(engine);
+		// Render the scene
+		RenderCamera(engine, camera);
+	});
 
 
 	//----------------------------------------------------------------------------------

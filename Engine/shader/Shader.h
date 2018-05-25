@@ -36,7 +36,7 @@ class PixelShader final {
 
 		~PixelShader() = default;
 
-		void Bind(ID3D11DeviceContext& device_context) {
+		void Bind(ID3D11DeviceContext& device_context) const {
 			Pipeline::PS::BindShader(device_context, shader.Get(), nullptr, 0);
 		}
 

@@ -32,8 +32,7 @@ class ModelChild final {
 
 		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context,
 									  FXMMATRIX world,
-									  CXMMATRIX world_inv_transpose,
-									  CXMMATRIX world_view_proj);
+									  CXMMATRIX world_inv_transpose);
 
 		void XM_CALLCONV UpdateBoundingVolumes(FXMMATRIX transform) {
 			aabb.Transform(transform);
@@ -107,10 +106,7 @@ class Model final : public Component<Model> {
 
 
 		// Update model matrix and bounding volumes, as well as those of the child models.
-		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context,
-									  FXMMATRIX world,
-									  CXMMATRIX view,
-									  CXMMATRIX proj);
+		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world);
 
 		void XM_CALLCONV UpdateBoundingVolumes(FXMMATRIX world);
 

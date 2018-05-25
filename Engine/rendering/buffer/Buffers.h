@@ -12,20 +12,26 @@ struct CameraBuffer {
 	CameraBuffer()
 		: position(0.0f, 0.0f, 0.0f)
 		, padding(0.0f)
-		, model_view_proj(XMMatrixIdentity())
+		, world_to_camera(XMMatrixIdentity())
 	{}
-	CameraBuffer(const float3& pos, CXMMATRIX mvp)
+	CameraBuffer(const float3& pos, CXMMATRIX world_to_camera, CXMMATRIX camera_to_projection)
 		: position(pos)
-		, model_view_proj(mvp)
+		, world_to_camera(world_to_camera)
+		, camera_to_projection(camera_to_projection)
 		, padding(0.0f)
 	{}
-	CameraBuffer(FXMVECTOR pos, CXMMATRIX mvp) : model_view_proj(mvp), padding(0.0f) {
+	CameraBuffer(FXMVECTOR pos, CXMMATRIX world_to_camera, CXMMATRIX camera_to_projection)
+		: world_to_camera(world_to_camera)
+		, camera_to_projection(camera_to_projection)
+		, padding(0.0f) {
 		XMStoreFloat3(&position, pos);
 	}
 
 	float3   position;
 	float    padding;
-	XMMATRIX model_view_proj;
+	//XMMATRIX model_view_proj;
+	XMMATRIX world_to_camera;
+	XMMATRIX camera_to_projection;
 };
 
 
@@ -96,13 +102,13 @@ struct ModelBuffer {
 	ModelBuffer()
 		: world(XMMatrixIdentity())
 		, world_inv_transpose(XMMatrixIdentity())
-		, world_view_proj(XMMatrixIdentity())
+		//, world_view_proj(XMMatrixIdentity())
 		, texTransform(XMMatrixIdentity())
 	{}
 
 	XMMATRIX world;
 	XMMATRIX world_inv_transpose;
-	XMMATRIX world_view_proj;
+	//XMMATRIX world_view_proj;
 	XMMATRIX texTransform;
 	MaterialBuffer mat;
 };

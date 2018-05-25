@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "sky_pass.h"
-#include "engine\engine.h"
+#include "rendering\render_state_mgr.h"
+#include "scene\scene.h"
 
 
 SkyPass::SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
@@ -17,20 +18,7 @@ SkyPass::SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 }
 
 
-void SkyPass::Render(const Engine& engine) {
-
-	auto& ecs_engine             = engine.GetECS();
-	const auto& render_state_mgr = engine.GetRenderingMgr().GetRenderStateMgr();
-	auto& scene                  = engine.GetScene();
-
-	// Get the camera's skybox
-	const SkyBox* skybox = ecs_engine.GetComponent<SkyBox>(scene.GetCamera());
-	if (!skybox) return;
-
-
-	// Bind the render states
-	BindRenderStates(scene, render_state_mgr);
-
+void SkyPass::Render(const SkyBox& skybox) const {
 
 	// Bind the shaders
 	vertex_shader->Bind(device_context);
@@ -38,59 +26,23 @@ void SkyPass::Render(const Engine& engine) {
 
 
 	// Bind the texture
-	auto texture = skybox->GetTexture();
+	auto texture = skybox.GetTexture();
 	if (texture) texture->Bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
 
 
 	// Render the skybox
-	skybox->Bind(device_context);
-	skybox->Draw(device_context);
+	skybox.Bind(device_context);
+	skybox.Draw(device_context);
 }
 
 
-void SkyPass::BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr) {
+void SkyPass::BindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const {
 
-	switch (scene.GetRenderStates().blend_state) {
-		case BlendStates::Default:
-		case BlendStates::Opaque:
-			render_state_mgr.BindOpaque(device_context);
-			break;
-		case BlendStates::AlphaBlend:
-			render_state_mgr.BindAlphaBlend(device_context);
-			break;
-		case BlendStates::Additive:
-			render_state_mgr.BindAdditive(device_context);
-			break;
-		case BlendStates::NonPremultiplied:
-			render_state_mgr.BindNonPremultiplied(device_context);
-			break;
-	}
+	Pipeline::DS::BindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::GS::BindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::HS::BindShader(device_context, nullptr, nullptr, 0);
 
-	switch (scene.GetRenderStates().depth_state) {
-		case DepthStates::Default:
-		case DepthStates::DepthDefault:
-			render_state_mgr.BindDepthDefault(device_context);
-			break;
-		case DepthStates::DepthNone:
-			render_state_mgr.BindDepthNone(device_context);
-			break;
-		case DepthStates::DepthRead:
-			render_state_mgr.BindDepthRead(device_context);
-			break;
-	}
-
-	switch (scene.GetRenderStates().raster_state) {
-		case RasterStates::Default:
-		case RasterStates::CullNone:
-			render_state_mgr.BindCullNone(device_context);
-			break;
-		case RasterStates::CullClockwise:
-			render_state_mgr.BindCullClockwise(device_context);
-			break;
-		case RasterStates::CullCounterClockwise:
-			render_state_mgr.BindCullCounterClockwise(device_context);
-			break;
-		case RasterStates::Wireframe:
-			render_state_mgr.BindWireframe(device_context);
-	}
+	render_state_mgr.BindOpaque(device_context);
+	render_state_mgr.BindDepthDefault(device_context);
+	render_state_mgr.BindCullNone(device_context);
 }

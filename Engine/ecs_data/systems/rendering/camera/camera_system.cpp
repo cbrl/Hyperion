@@ -6,33 +6,56 @@
 
 
 void CameraSystem::Update(const Engine& engine) {
-	auto& ecs_engine = engine.GetECS();
+	auto& ecs_engine     = engine.GetECS();
+	auto& device_context = engine.GetRenderingMgr().GetDeviceContext();
 
 	ecs_engine.ForEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-		Handle64 owner = camera.GetOwner();
+		Handle64 owner       = camera.GetOwner();
 		const auto transform = ecs_engine.GetComponent<CameraTransform>(owner);
 
 		if (!transform) return;
 
+
+		// Process movement
 		if (auto movement = ecs_engine.GetComponent<CameraMovement>(owner)) {
 			ProcessMovement(engine, movement, transform);
 		}
 
+
+		// Update the camera's view matrix
 		camera.UpdateViewMatrix(transform->GetPosition(), transform->GetWorldAxisZ(), transform->GetWorldAxisY());
+
+
+		// Update the camera's buffer
+		camera.UpdateBuffer(device_context,
+							transform->GetWorldOrigin(),
+							transform->GetWorldToObjectMatrix(),
+							camera.GetProjectionMatrix());
 	});
 
 
 	ecs_engine.ForEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
-		Handle64 owner = camera.GetOwner();
+		Handle64 owner       = camera.GetOwner();
 		const auto transform = ecs_engine.GetComponent<CameraTransform>(owner);
 
 		if (!transform) return;
 
+
+		// Process movement
 		if (auto movement = ecs_engine.GetComponent<CameraMovement>(owner)) {
 			ProcessMovement(engine, movement, transform);
 		}
 
+
+		// Update the camera's view matrix
 		camera.UpdateViewMatrix(transform->GetPosition(), transform->GetWorldAxisZ(), transform->GetWorldAxisY());
+
+
+		// Update the camera's buffer
+		camera.UpdateBuffer(device_context,
+							transform->GetWorldOrigin(),
+							transform->GetWorldToObjectMatrix(),
+							camera.GetProjectionMatrix());
 	});
 }
 

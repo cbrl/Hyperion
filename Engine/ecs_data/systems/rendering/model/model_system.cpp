@@ -7,6 +7,7 @@
 
 void ModelSystem::Update(const Engine& engine) {
 	auto& ecs_engine = engine.GetECS();
+	auto& device_context = engine.GetRenderingMgr().GetDeviceContext();
 
 	ecs_engine.ForEachActive<Model>([&](Model& model) {
 
@@ -15,8 +16,12 @@ void ModelSystem::Update(const Engine& engine) {
 
 		if (transform) {
 			if (transform->Updated()) {
+				// Update the model's bounding volumes
 				model.UpdateBoundingVolumes(transform->GetObjectToWorldMatrix());
 			}
+
+			// Update the model's buffer
+			model.UpdateBuffer(device_context, transform->GetObjectToWorldMatrix());
 		}
 	});
 }

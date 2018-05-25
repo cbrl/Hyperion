@@ -29,7 +29,7 @@ void ECS::RemoveComponent(Handle64 entity) {
 
 template<typename ComponentT>
 [[nodiscard]]
-ComponentT* const ECS::GetComponent(Handle64 entity) {
+ComponentT* const ECS::GetComponent(Handle64 entity) const {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>,
 				  "Calling ECS::GetComponent() with non-component type.");
 

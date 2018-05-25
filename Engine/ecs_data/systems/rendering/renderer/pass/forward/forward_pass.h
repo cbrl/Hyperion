@@ -3,13 +3,14 @@
 #include <d3d11.h>
 
 #include "util\datatypes\datatypes.h"
+#include "util\math\math.h"
 #include "rendering\pipeline.h"
 #include "rendering\buffer\buffers.h"
 #include "shader\hlsl.h"
 #include "shader\shader.h"
+#include "ecs_data\components\rendering\model\model.h"
 
 class ECS;
-class Engine;
 class Scene;
 class RenderStateMgr;
 
@@ -18,12 +19,11 @@ class ForwardPass final {
 		ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
 		~ForwardPass() = default;
 
-		void Render(const Engine& engine);
+		void XM_CALLCONV Render(ECS& ecs_engine, const FXMMATRIX world_to_projection) const;
 
+		void XM_CALLCONV Render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const;
 
-	private:
-		void BindRenderStates(Scene& scene, const RenderStateMgr& render_state_mgr) const;
-		void RenderModels(ECS& ecs_engine, Scene& scene) const;
+		void BindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const;
 
 
 	private:

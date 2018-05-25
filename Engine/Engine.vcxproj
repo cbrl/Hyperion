@@ -339,6 +339,7 @@
       <FileType>Document</FileType>
     </ClInclude>
     <None Include="ecs_data\systems\geometry\transform\transform_system.tpp" />
+    <None Include="ecs_data\systems\rendering\renderer\renderer.tpp" />
     <None Include="packages.config" />
     <None Include="resource\mesh\mesh.tpp" />
     <ClInclude Include="resource\model\model_blueprint.tpp">

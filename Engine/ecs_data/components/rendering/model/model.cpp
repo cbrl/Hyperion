@@ -7,9 +7,8 @@
 //----------------------------------------------------------------------------------
 
 void XM_CALLCONV ModelChild::UpdateBuffer(ID3D11DeviceContext& device_context,
-									FXMMATRIX world,
-									CXMMATRIX world_inv_transpose,
-									CXMMATRIX world_view_proj) {
+										  FXMMATRIX world,
+										  CXMMATRIX world_inv_transpose) {
 
 	// Create a new ModelBuffer struc with the updated data
 	// and send it to the constant buffer.
@@ -17,7 +16,6 @@ void XM_CALLCONV ModelChild::UpdateBuffer(ID3D11DeviceContext& device_context,
 
 	buffer_data.world               = world;
 	buffer_data.world_inv_transpose = world_inv_transpose;
-	buffer_data.world_view_proj     = world_view_proj;
 	buffer_data.texTransform        = XMMatrixIdentity();
 
 	buffer_data.mat = MaterialBuffer(material.ambient,
@@ -55,10 +53,7 @@ Model::Model(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint)
 }
 
 
-void XM_CALLCONV Model::UpdateBuffer(ID3D11DeviceContext& device_context,
-									 FXMMATRIX world,
-									 CXMMATRIX view,
-									 CXMMATRIX proj) {
+void XM_CALLCONV Model::UpdateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world) {
 
 	// Create the model-to-world matrix. Transposed for HLSL.
 	auto world_t = XMMatrixTranspose(world);
@@ -66,13 +61,10 @@ void XM_CALLCONV Model::UpdateBuffer(ID3D11DeviceContext& device_context,
 	// Create the inverse transpose of the model-to-world matrix
 	auto world_inv_transpose = XMMatrixInverse(NULL, world);
 
-	// Create the world-view-projection matrix
-	auto world_view_proj = XMMatrixTranspose(world * view * proj);
-
 
 	// Update each child model
 	ForEachChild([&](ModelChild& child) {
-		child.UpdateBuffer(device_context, world_t, world_inv_transpose, world_view_proj);
+		child.UpdateBuffer(device_context, world_t, world_inv_transpose);
 	});
 }
 

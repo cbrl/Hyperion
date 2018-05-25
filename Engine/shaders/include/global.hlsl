@@ -36,7 +36,10 @@ CONSTANT_BUFFER(CameraBuffer, SLOT_CBUFFER_CAMERA) {
 	float padding;
 
 	// Camera's world-view-projection matrix
-	matrix camera_wvp;
+	//matrix camera_wvp;
+
+	matrix world_to_camera;
+	matrix camera_to_projection;
 };
 
 

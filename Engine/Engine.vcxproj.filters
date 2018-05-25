@@ -424,6 +424,9 @@
     <None Include="shaders\include\transform.hlsl">
       <Filter>Resource Files\shaders\include</Filter>
     </None>
+    <None Include="ecs_data\systems\rendering\renderer\renderer.tpp">
+      <Filter>Source Files\ecs_data\systems\rendering\renderer</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

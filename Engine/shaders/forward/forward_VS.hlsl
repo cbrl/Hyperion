@@ -13,7 +13,8 @@ PSPositionNormalTexture VS(VSPositionNormalTexture vin) {
 	vout.normal = normalize(vout.normal);
 
 	// Transform to homogeneous clip space
-	vout.position = mul(float4(vin.position, 1.0f), world_view_proj);
+	const float3 p_view = mul(float4(vout.w_position, 1.0f), world_to_camera).xyz;
+	vout.position       = mul(float4(p_view, 1.0f), camera_to_projection);
 
 	// Output vertex attributes for interpolation across triangle
 	vout.tex = mul(float4(vin.tex, 0.0f, 1.0f), tex_transform).xy;

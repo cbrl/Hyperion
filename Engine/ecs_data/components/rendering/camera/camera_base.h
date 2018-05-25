@@ -43,12 +43,12 @@ class CameraBase : public Component<T> {
 		//----------------------------------------------------------------------------------
 
 		// Update the camera's constant buffer
-		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world, FXMVECTOR position) {
-			buffer.UpdateData(device_context, CameraBuffer(position, XMMatrixTranspose(world * view_matrix * projection_matrix)));
+		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context, FXMVECTOR position, FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) {
+			buffer.UpdateData(device_context, CameraBuffer(position, XMMatrixTranspose(world_to_camera), XMMatrixTranspose(camera_to_projection)));
 		}
 
 		// Bind the camera's constant buffer
-		void BindBuffer(ID3D11DeviceContext& device_context, u32 slot) {
+		void BindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
 			buffer.Bind<Pipeline>(device_context, slot);
 		}
 
