@@ -223,14 +223,15 @@ void Engine::OnResize(u32 window_width, u32 window_height) {
 
 	if (!rendering_mgr) return;
 	rendering_mgr->ResizeBuffers(window_width, window_height);
-	
-	if (scene) {
-		if (const auto cam = ecs_engine->GetComponent<PerspectiveCamera>(scene->GetCamera())) {
-			cam->ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
-		}
-		else if (const auto cam = ecs_engine->GetComponent<OrthographicCamera>(scene->GetCamera())) {
-			cam->ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
-		}
+
+	if (ecs_engine) {
+		ecs_engine->ForEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+			camera.ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+		});
+
+		ecs_engine->ForEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
+			camera.ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+		});
 	}
 
 	FILE_LOG(logINFO) << "Viewport resized to " << window_width << "x" << window_height;

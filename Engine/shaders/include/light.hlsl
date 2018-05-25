@@ -140,7 +140,7 @@ TEXTURE_2D_ARRAY(spot_light_smaps, SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS);
 //----------------------------------------------------------------------------------
 // DiffuseFactor
 //----------------------------------------------------------------------------------
-// L: light vector
+// L: light vector (surface to light)
 // N: normal vector
 //----------------------------------------------------------------------------------
 float DiffuseFactor(float3 L, float3 N) {
@@ -153,7 +153,7 @@ float DiffuseFactor(float3 L, float3 N) {
 //----------------------------------------------------------------------------------
 // L:     light vector (surface to light)
 // N:     normal vector
-// V:     view vector
+// V:     view vector (surface to camera)
 // power: specular exponent
 //----------------------------------------------------------------------------------
 float SpecularFactor(float3 L, float3 N, float3 V, float power) {
@@ -228,6 +228,9 @@ float ShadowFactor(ShadowCubeMap shadow_map, float3 p_light, float2 projection_v
 }
 
 
+
+//----------------------------------------------------------------------------------
+// ComputeDirectionalLight
 //----------------------------------------------------------------------------------
 // Computes the ambient, diffuse, and specular terms in the lighting equation
 // from a directional light.  We need to output the terms separately because
@@ -288,6 +291,9 @@ void ComputeShadowedDirectionalLight(ShadowedDirectionalLight L,
 }
 
 
+
+//----------------------------------------------------------------------------------
+// ComputePointLight
 //----------------------------------------------------------------------------------
 // Computes the ambient, diffuse, and specular terms in the lighting equation
 // from a point light.  We need to output the terms separately because
@@ -364,6 +370,9 @@ void ComputeShadowedPointLight(ShadowedPointLight L,
 }
 
 
+
+//----------------------------------------------------------------------------------
+// ComputeSpotLight
 //----------------------------------------------------------------------------------
 // Computes the ambient, diffuse, and specular terms in the lighting equation
 // from a spotlight.  We need to output the terms separately because

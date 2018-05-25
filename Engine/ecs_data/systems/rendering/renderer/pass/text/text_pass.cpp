@@ -9,7 +9,12 @@ TextPass::TextPass(ID3D11DeviceContext& device_context) {
 
 void TextPass::Render(Scene& scene) {
 
-	scene.ForEach<Text>([&](const Text& text) {
+	const auto& texts = scene.GetTexts();
+
+	for (const auto& pair : texts) {
+
+		const auto& text = pair.second;
+
 		// Get the font
 		const auto& font = text.GetFont();
 
@@ -17,5 +22,5 @@ void TextPass::Render(Scene& scene) {
 		sprite_batch->Begin();
 		font.DrawString(sprite_batch.get(), text.GetText().data(), text.GetPosition(), text.GetColor(), text.GetRotation());
 		sprite_batch->End();
-	});
+	}
 }

@@ -44,13 +44,13 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	//----------------------------------------------------------------------------------
 
 	float3 normal_map_sample = normal_map.Sample(linear_wrap, pin.tex);
-	float3 transformed_normal;
+	float3 normal_vec;
 
 	if (normal_map_sample.z) {
-		transformed_normal = TransformNormal(pin.position, pin.normal, pin.tex, normal_map_sample);
+		normal_vec = TransformNormal(pin.position, pin.normal, pin.tex, normal_map_sample);
 	}
 	else {
-		transformed_normal = pin.normal;
+		normal_vec = pin.normal;
 	}
 
 
@@ -64,84 +64,80 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Start with a sum of zero.
 	float4 ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	float4 diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	float4 spec = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 spec    = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
-	if (num_directional_lights > 0) {
-		// Sum the light contribution from each light source
+	// Directional Lights
+	{
 		for (uint i = 0; i < num_directional_lights; ++i) {
 			float4 A, D, S;
-			ComputeDirectionalLight(directional_lights[i], mat, transformed_normal, to_eye,
+			ComputeDirectionalLight(directional_lights[i], mat, normal_vec, to_eye,
 									A, D, S);
 
 			ambient += A;
 			diffuse += D;
-			spec += S;
+			spec    += S;
 		}
-	}
 
-	if (num_shadow_directional_lights > 0) {
 		for (uint i = 0; i < num_shadow_directional_lights; ++i) {
 			float4 A, D, S;
 			ShadowMap shadow_map = { pcf_sampler, directional_light_smaps, i };
 
-			ComputeShadowedDirectionalLight(shadow_directional_lights[i], shadow_map, mat, pin.position_world, transformed_normal, to_eye,
+			ComputeShadowedDirectionalLight(shadow_directional_lights[i], shadow_map, mat, pin.position_world, normal_vec, to_eye,
 											A, D, S);
 
 			ambient += A;
 			diffuse += D;
-			spec += S;
+			spec    += S;
 		}
 	}
 
-	if (num_point_lights > 0) {
+	// Point Lights
+	{
 		for (uint i = 0; i < num_point_lights; ++i) {
 			float4 A, D, S;
-			ComputePointLight(point_lights[i], mat, pin.position_world, transformed_normal, to_eye,
-							  A, D, S);
+			ComputePointLight(point_lights[i], mat, pin.position_world, normal_vec, to_eye,
+								A, D, S);
 
 			ambient += A;
 			diffuse += D;
-			spec += S;
+			spec    += S;
 		}
-	}
 
-	if (num_shadow_point_lights > 0) {
 		for (uint i = 0; i < num_shadow_point_lights; ++i) {
 			float4 A, D, S;
 			ShadowCubeMap cube_map = { pcf_sampler, point_light_smaps, i };
 
-			ComputeShadowedPointLight(shadow_point_lights[i], cube_map, mat, pin.position_world, transformed_normal, to_eye,
-									  A, D, S);
+			ComputeShadowedPointLight(shadow_point_lights[i], cube_map, mat, pin.position_world, normal_vec, to_eye,
+										A, D, S);
 
 			ambient += A;
 			diffuse += D;
-			spec += S;
+			spec    += S;
 		}
 	}
 
-	if (num_spot_lights > 0) {
+	// Spot lights
+	{
 		for (uint i = 0; i < num_spot_lights; ++i) {
 			float4 A, D, S;
-			ComputeSpotLight(spot_lights[i], mat, pin.position_world, transformed_normal, to_eye,
-							 A, D, S);
+			ComputeSpotLight(spot_lights[i], mat, pin.position_world, normal_vec, to_eye,
+								A, D, S);
 
 			ambient += A;
 			diffuse += D;
-			spec += S;
+			spec    += S;
 		}
-	}
 
-	if (num_shadow_spot_lights > 0) {
 		for (uint i = 0; i < num_shadow_spot_lights; ++i) {
 			float4 A, D, S;
 			ShadowMap shadow_map = { pcf_sampler, spot_light_smaps, i };
 
-			ComputeShadowedSpotLight(shadow_spot_lights[i], shadow_map, mat, pin.position_world, transformed_normal, to_eye,
-									 A, D, S);
+			ComputeShadowedSpotLight(shadow_spot_lights[i], shadow_map, mat, pin.position_world, normal_vec, to_eye,
+										A, D, S);
 
 			ambient += A;
 			diffuse += D;
-			spec += S;
+			spec    += S;
 		}
 	}
 
