@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\datatypes">
+      <UniqueIdentifier>{d340d6c5-76f7-49dc-bd21-55919b24d377}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\fps">
+      <UniqueIdentifier>{8e5f21e0-9bd4-4140-ab83-9b54b20596f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\io">
+      <UniqueIdentifier>{105bc6f5-b4c3-443f-832c-61ac3bffdce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\log">
+      <UniqueIdentifier>{b8bd2798-5017-4b75-9ce0-a3c163679911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\math">
+      <UniqueIdentifier>{3a290d76-0189-4002-bb46-b3d999378eff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\memory">
+      <UniqueIdentifier>{7d57ef6a-e1c5-4cea-8cfd-8235357412a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\string">
+      <UniqueIdentifier>{9c468324-5baa-4fca-9fc9-50a57047d98e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\sysmon">
+      <UniqueIdentifier>{f8f725bd-68ce-4b5f-baef-81d64406c2c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\timer">
+      <UniqueIdentifier>{00658588-272d-4982-9711-030afd966cc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\fps">
+      <UniqueIdentifier>{52bd2bde-a7ca-4080-8129-e2a52af1d66f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\memory">
+      <UniqueIdentifier>{7b6f85bf-1701-4bde-a658-24db951bd013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\timer">
+      <UniqueIdentifier>{a768c562-8f61-4724-9da7-c1f62fa64e86}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sysmon">
+      <UniqueIdentifier>{c130fc05-7574-4a91-ae46-09bd2c81c7c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\memory\allocator">
+      <UniqueIdentifier>{6d9e7b73-d2d6-4726-8570-48c719ff0b97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\memory\allocator">
+      <UniqueIdentifier>{41528c5e-c9a2-415b-a77f-f167765edbae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\directx">
+      <UniqueIdentifier>{286f5b4c-c30d-499e-bb63-27dcb519d439}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\directx">
+      <UniqueIdentifier>{796511a8-d4f3-4dc7-ad14-c0dc88296147}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\datatypes\pointer_types.h">
+      <Filter>Header Files\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datatypes\vector_types.h">
+      <Filter>Header Files\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datatypes\container_types.h">
+      <Filter>Header Files\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datatypes\datatypes.h">
+      <Filter>Header Files\datatypes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\fps\fps.h">
+      <Filter>Header Files\fps</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\io.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
+    <ClInclude Include="src\log\log.h">
+      <Filter>Header Files\log</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\math.h">
+      <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\resource_pool.h">
+      <Filter>Header Files\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\allocator\allocator.h">
+      <Filter>Header Files\memory\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\allocator\allocator_util.h">
+      <Filter>Header Files\memory\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\allocator\linear_allocator.h">
+      <Filter>Header Files\memory\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\allocator\pool_allocator.h">
+      <Filter>Header Files\memory\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\allocator\stack_allocator.h">
+      <Filter>Header Files\memory\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\string\string.h">
+      <Filter>Header Files\string</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sysmon\system_monitor.h">
+      <Filter>Header Files\sysmon</Filter>
+    </ClInclude>
+    <ClInclude Include="src\timer\timer.h">
+      <Filter>Header Files\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\vertex_types.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\fps\fps.cpp">
+      <Filter>Source Files\fps</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\allocator\stack_allocator.cpp">
+      <Filter>Source Files\memory\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\allocator\allocator.cpp">
+      <Filter>Source Files\memory\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\memory\allocator\linear_allocator.cpp">
+      <Filter>Source Files\memory\allocator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sysmon\system_monitor.cpp">
+      <Filter>Source Files\sysmon</Filter>
+    </ClCompile>
+    <ClCompile Include="src\timer\timer.cpp">
+      <Filter>Source Files\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directx\vertex_types.cpp">
+      <Filter>Source Files\directx</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\memory\allocator\pool_allocator.tpp">
+      <Filter>Source Files\memory\allocator</Filter>
+    </None>
+    <None Include="src\memory\resource_pool.tpp">
+      <Filter>Source Files\memory</Filter>
+    </None>
+  </ItemGroup>
+</Project>

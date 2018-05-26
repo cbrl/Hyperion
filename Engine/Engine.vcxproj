@@ -23,7 +23,7 @@
     <ProjectGuid>{BB944AD5-FFFE-4907-AD11-A4C3560A2B6A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Engine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -72,11 +72,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\Shaders\src;$(IncludePath)</IncludePath>
+    <SourcePath>$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\Shaders\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\Shaders\src;$(IncludePath)</IncludePath>
     <ExecutablePath>$(WindowsSDK_ExecutablePath_x64);$(ExecutablePath)</ExecutablePath>
+    <SourcePath>$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\Shaders\src;$(SourcePath)</SourcePath>
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -93,6 +100,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -107,7 +115,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ShowIncludes>false</ShowIncludes>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
@@ -157,273 +165,212 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ecs\component\component.h" />
-    <ClInclude Include="ecs\component\component_mgr.h" />
-    <ClInclude Include="ecs\ecs.h" />
-    <ClInclude Include="ecs\entity\entity.h" />
-    <ClInclude Include="ecs\entity\entity_mgr.h" />
-    <ClInclude Include="ecs\handle\handle.h" />
-    <ClInclude Include="ecs\handle\handle_table.h" />
-    <ClInclude Include="ecs\system\system.h" />
-    <ClInclude Include="ecs\system\system_mgr.h" />
-    <ClInclude Include="ecs_data\components\components.h" />
-    <ClInclude Include="ecs_data\components\geometry\transform\camera_transform.h" />
-    <ClInclude Include="ecs_data\components\geometry\transform\transform.h" />
-    <ClInclude Include="ecs_data\components\rendering\camera\camera_base.h" />
-    <ClInclude Include="ecs_data\components\rendering\camera\camera_movement.h" />
-    <ClInclude Include="ecs_data\components\rendering\camera\orthographic_camera.h" />
-    <ClInclude Include="ecs_data\components\rendering\camera\perspective_camera.h" />
-    <ClInclude Include="ecs_data\components\rendering\light\directional_light.h" />
-    <ClInclude Include="ecs_data\components\rendering\light\point_light.h" />
-    <ClInclude Include="ecs_data\components\rendering\light\spot_light.h" />
-    <ClInclude Include="ecs_data\components\rendering\model\model.h" />
-    <ClInclude Include="ecs_data\components\rendering\skybox\skybox.h" />
-    <ClInclude Include="ecs_data\entities\entities.h" />
-    <ClInclude Include="ecs_data\entities\world\basic_directional_light.h" />
-    <ClInclude Include="ecs_data\entities\world\basic_model.h" />
-    <ClInclude Include="ecs_data\entities\world\basic_point_light.h" />
-    <ClInclude Include="ecs_data\entities\world\basic_spot_light.h" />
-    <ClInclude Include="ecs_data\entities\world\player_camera.h" />
-    <ClInclude Include="ecs_data\entities\world\world_object.h" />
-    <ClInclude Include="ecs_data\systems\geometry\transform\transform_system.h" />
-    <ClInclude Include="ecs_data\systems\rendering\camera\camera_system.h" />
-    <ClInclude Include="ecs_data\systems\rendering\model\model_system.h" />
-    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\depth\depth_pass.h" />
-    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\forward\forward_pass.h" />
-    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\light\light_pass.h" />
-    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\sky\sky_pass.h" />
-    <ClInclude Include="ecs_data\systems\rendering\renderer\pass\text\text_pass.h" />
-    <ClInclude Include="ecs_data\systems\rendering\renderer\renderer.h" />
-    <ClInclude Include="ecs_data\systems\systems.h" />
-    <ClInclude Include="engine\engine.h" />
-    <ClInclude Include="engine\main_window.h" />
-    <ClInclude Include="geometry\bounding_volume\bounding_volume.h" />
-    <ClInclude Include="geometry\frustum\frustum.h" />
-    <ClInclude Include="geometry\shapes\bezier.h" />
-    <ClInclude Include="geometry\shapes\shapes.h" />
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_impl_dx11.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\stb_rect_pack.h" />
-    <ClInclude Include="imgui\stb_textedit.h" />
-    <ClInclude Include="imgui\stb_truetype.h" />
-    <ClInclude Include="input\input.h" />
-    <ClInclude Include="loader\model_loader.h" />
-    <ClInclude Include="loader\obj\obj_loader.h" />
-    <ClInclude Include="loader\obj\obj_tokens.h" />
-    <ClInclude Include="loader\texture_loader.h" />
-    <ClInclude Include="rendering\buffer\buffers.h" />
-    <ClInclude Include="rendering\buffer\constant_buffer.h" />
-    <ClInclude Include="rendering\buffer\shadow_map_buffer.h" />
-    <ClInclude Include="rendering\buffer\structured_buffer.h" />
-    <ClInclude Include="rendering\direct3d\direct3d.h" />
-    <ClInclude Include="rendering\pipeline.h" />
-    <ClInclude Include="rendering\rendering_mgr.h" />
-    <ClInclude Include="rendering\render_state_mgr.h" />
-    <ClInclude Include="resource\font\font.h" />
-    <ClInclude Include="resource\mesh\mesh.h" />
-    <ClInclude Include="resource\model\material\material.h" />
-    <ClInclude Include="resource\model\model_blueprint.h" />
-    <ClInclude Include="resource\model\blueprint_factory.h" />
-    <ClInclude Include="resource\model\model_output.h" />
-    <ClInclude Include="resource\resource.h" />
-    <ClInclude Include="resource\resource_mgr.h" />
-    <ClInclude Include="resource\texture\texture.h" />
-    <ClInclude Include="scene\scene.h" />
-    <ClInclude Include="scene\test_scene.h" />
-    <ClInclude Include="scene\text\text.h" />
-    <ClInclude Include="shader\hlsl.h" />
-    <ClInclude Include="shader\shader.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="util\datatypes\container_types.h" />
-    <ClInclude Include="util\datatypes\datatypes.h" />
-    <ClInclude Include="util\datatypes\pointer_types.h" />
-    <ClInclude Include="util\datatypes\vector_types.h" />
-    <ClInclude Include="util\datatypes\vertex_types.h" />
-    <ClInclude Include="util\engine_util.h" />
-    <ClInclude Include="util\fps\fps.h" />
-    <ClInclude Include="util\io\io.h" />
-    <ClInclude Include="util\log\log.h" />
-    <ClInclude Include="util\math\math.h" />
-    <ClInclude Include="util\memory\allocator\allocator.h" />
-    <ClInclude Include="util\memory\allocator\allocator_util.h" />
-    <ClInclude Include="util\memory\allocator\linear_allocator.h" />
-    <ClInclude Include="util\memory\allocator\pool_allocator.h" />
-    <ClInclude Include="util\memory\allocator\stack_allocator.h" />
-    <ClInclude Include="util\memory\resource_pool.h" />
-    <ClInclude Include="util\string\string.h" />
-    <ClInclude Include="util\sysmon\system_monitor.h" />
-    <ClInclude Include="util\timer\timer.h" />
+    <ClInclude Include="src\ecs_data\components\components.h" />
+    <ClInclude Include="src\ecs_data\components\geometry\transform\camera_transform.h" />
+    <ClInclude Include="src\ecs_data\components\geometry\transform\transform.h" />
+    <ClInclude Include="src\ecs_data\components\rendering\camera\camera_base.h" />
+    <ClInclude Include="src\ecs_data\components\rendering\camera\camera_movement.h" />
+    <ClInclude Include="src\ecs_data\components\rendering\camera\orthographic_camera.h" />
+    <ClInclude Include="src\ecs_data\components\rendering\camera\perspective_camera.h" />
+    <ClInclude Include="src\ecs_data\components\rendering\light\directional_light.h" />
+    <ClInclude Include="src\ecs_data\components\rendering\light\point_light.h" />
+    <ClInclude Include="src\ecs_data\components\rendering\light\spot_light.h" />
+    <ClInclude Include="src\ecs_data\components\rendering\model\model.h" />
+    <ClInclude Include="src\ecs_data\components\rendering\skybox\skybox.h" />
+    <ClInclude Include="src\ecs_data\entities\entities.h" />
+    <ClInclude Include="src\ecs_data\entities\world\basic_directional_light.h" />
+    <ClInclude Include="src\ecs_data\entities\world\basic_model.h" />
+    <ClInclude Include="src\ecs_data\entities\world\basic_point_light.h" />
+    <ClInclude Include="src\ecs_data\entities\world\basic_spot_light.h" />
+    <ClInclude Include="src\ecs_data\entities\world\player_camera.h" />
+    <ClInclude Include="src\ecs_data\entities\world\world_object.h" />
+    <ClInclude Include="src\ecs_data\systems\geometry\transform\transform_system.h" />
+    <ClInclude Include="src\ecs_data\systems\rendering\camera\camera_system.h" />
+    <ClInclude Include="src\ecs_data\systems\rendering\model\model_system.h" />
+    <ClInclude Include="src\ecs_data\systems\rendering\renderer\pass\depth\depth_pass.h" />
+    <ClInclude Include="src\ecs_data\systems\rendering\renderer\pass\forward\forward_pass.h" />
+    <ClInclude Include="src\ecs_data\systems\rendering\renderer\pass\light\light_pass.h" />
+    <ClInclude Include="src\ecs_data\systems\rendering\renderer\pass\sky\sky_pass.h" />
+    <ClInclude Include="src\ecs_data\systems\rendering\renderer\pass\text\text_pass.h" />
+    <ClInclude Include="src\ecs_data\systems\rendering\renderer\renderer.h" />
+    <ClInclude Include="src\ecs_data\systems\systems.h" />
+    <ClInclude Include="src\engine\engine.h" />
+    <ClInclude Include="src\engine\main_window.h" />
+    <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h" />
+    <ClInclude Include="src\geometry\frustum\frustum.h" />
+    <ClInclude Include="src\geometry\shapes\bezier.h" />
+    <ClInclude Include="src\geometry\shapes\shapes.h" />
+    <ClInclude Include="src\input\input.h" />
+    <ClInclude Include="src\loader\model_loader.h" />
+    <ClInclude Include="src\loader\obj\obj_loader.h" />
+    <ClInclude Include="src\loader\obj\obj_tokens.h" />
+    <ClInclude Include="src\loader\texture_loader.h" />
+    <ClInclude Include="src\rendering\buffer\buffers.h" />
+    <ClInclude Include="src\rendering\buffer\constant_buffer.h" />
+    <ClInclude Include="src\rendering\buffer\shadow_map_buffer.h" />
+    <ClInclude Include="src\rendering\buffer\structured_buffer.h" />
+    <ClInclude Include="src\rendering\direct3d\direct3d.h" />
+    <ClInclude Include="src\rendering\pipeline.h" />
+    <ClInclude Include="src\rendering\rendering_mgr.h" />
+    <ClInclude Include="src\rendering\render_state_mgr.h" />
+    <ClInclude Include="src\resource\font\font.h" />
+    <ClInclude Include="src\resource\mesh\mesh.h" />
+    <ClInclude Include="src\resource\model\material\material.h" />
+    <ClInclude Include="src\resource\model\model_blueprint.h" />
+    <ClInclude Include="src\resource\model\blueprint_factory.h" />
+    <ClInclude Include="src\resource\model\model_output.h" />
+    <ClInclude Include="src\resource\resource.h" />
+    <ClInclude Include="src\resource\resource_mgr.h" />
+    <ClInclude Include="src\resource\texture\texture.h" />
+    <ClInclude Include="src\scene\scene.h" />
+    <ClInclude Include="src\scene\test_scene.h" />
+    <ClInclude Include="src\scene\text\text.h" />
+    <ClInclude Include="src\shader\shader.h" />
+    <ClInclude Include="src\stdafx.h" />
+    <ClInclude Include="src\targetver.h" />
+    <ClInclude Include="src\util\engine_util.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ecs\ecs.cpp" />
-    <ClCompile Include="ecs\entity\entity.cpp" />
-    <ClCompile Include="ecs\system\system_mgr.cpp" />
-    <ClCompile Include="ecs_data\components\geometry\transform\camera_transform.cpp" />
-    <ClCompile Include="ecs_data\components\geometry\transform\transform.cpp" />
-    <ClCompile Include="ecs_data\components\rendering\camera\orthographic_camera.cpp" />
-    <ClCompile Include="ecs_data\components\rendering\camera\perspective_camera.cpp" />
-    <ClCompile Include="ecs_data\components\rendering\model\model.cpp" />
-    <ClCompile Include="ecs_data\components\rendering\skybox\skybox.cpp" />
-    <ClCompile Include="ecs_data\systems\geometry\transform\transform_system.cpp" />
-    <ClCompile Include="ecs_data\systems\rendering\camera\camera_system.cpp" />
-    <ClCompile Include="ecs_data\systems\rendering\model\model_system.cpp" />
-    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\depth\depth_pass.cpp" />
-    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\forward\forward_pass.cpp" />
-    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\light\light_pass.cpp" />
-    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\sky\sky_pass.cpp" />
-    <ClCompile Include="ecs_data\systems\rendering\renderer\pass\text\text_pass.cpp" />
-    <ClCompile Include="ecs_data\systems\rendering\renderer\renderer.cpp" />
-    <ClCompile Include="engine\engine.cpp" />
-    <ClCompile Include="engine\main_window.cpp" />
-    <ClCompile Include="geometry\bounding_volume\bounding_volume.cpp" />
-    <ClCompile Include="geometry\frustum\frustum.cpp" />
-    <ClCompile Include="geometry\shapes\shapes.tpp" />
-    <ClCompile Include="imgui\imgui.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_demo.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_draw.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_dx11.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="input\input.cpp" />
-    <ClInclude Include="loader\obj\obj_loader.tpp">
+    <ClCompile Include="src\ecs_data\components\geometry\transform\camera_transform.cpp" />
+    <ClCompile Include="src\ecs_data\components\geometry\transform\transform.cpp" />
+    <ClCompile Include="src\ecs_data\components\rendering\camera\orthographic_camera.cpp" />
+    <ClCompile Include="src\ecs_data\components\rendering\camera\perspective_camera.cpp" />
+    <ClCompile Include="src\ecs_data\components\rendering\model\model.cpp" />
+    <ClCompile Include="src\ecs_data\components\rendering\skybox\skybox.cpp" />
+    <ClCompile Include="src\ecs_data\systems\geometry\transform\transform_system.cpp" />
+    <ClCompile Include="src\ecs_data\systems\rendering\camera\camera_system.cpp" />
+    <ClCompile Include="src\ecs_data\systems\rendering\model\model_system.cpp" />
+    <ClCompile Include="src\ecs_data\systems\rendering\renderer\pass\depth\depth_pass.cpp" />
+    <ClCompile Include="src\ecs_data\systems\rendering\renderer\pass\forward\forward_pass.cpp" />
+    <ClCompile Include="src\ecs_data\systems\rendering\renderer\pass\light\light_pass.cpp" />
+    <ClCompile Include="src\ecs_data\systems\rendering\renderer\pass\sky\sky_pass.cpp" />
+    <ClCompile Include="src\ecs_data\systems\rendering\renderer\pass\text\text_pass.cpp" />
+    <ClCompile Include="src\ecs_data\systems\rendering\renderer\renderer.cpp" />
+    <ClCompile Include="src\engine\engine.cpp" />
+    <ClCompile Include="src\engine\main_window.cpp" />
+    <ClCompile Include="src\geometry\bounding_volume\bounding_volume.cpp" />
+    <ClCompile Include="src\geometry\frustum\frustum.cpp" />
+    <ClCompile Include="src\geometry\shapes\shapes.tpp" />
+    <ClCompile Include="src\input\input.cpp" />
+    <ClInclude Include="src\loader\obj\obj_loader.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <ClCompile Include="loader\texture_loader.cpp" />
-    <ClCompile Include="main\main.cpp" />
-    <ClCompile Include="rendering\buffer\shadow_map_buffer.cpp" />
-    <ClCompile Include="rendering\direct3d\direct3d.cpp" />
-    <ClCompile Include="rendering\rendering_mgr.cpp" />
-    <ClCompile Include="rendering\render_state_mgr.cpp" />
-    <ClCompile Include="resource\model\model_blueprint.cpp">
+    <ClCompile Include="src\loader\texture_loader.cpp" />
+    <ClCompile Include="src\main\main.cpp" />
+    <ClCompile Include="src\rendering\buffer\shadow_map_buffer.cpp" />
+    <ClCompile Include="src\rendering\direct3d\direct3d.cpp" />
+    <ClCompile Include="src\rendering\rendering_mgr.cpp" />
+    <ClCompile Include="src\rendering\render_state_mgr.cpp" />
+    <ClCompile Include="src\resource\model\model_blueprint.cpp">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClCompile Include="scene\test_scene.cpp" />
-    <ClCompile Include="scene\text\text.cpp" />
-    <ClCompile Include="shader\shader.cpp" />
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="src\scene\test_scene.cpp" />
+    <ClCompile Include="src\scene\text\text.cpp" />
+    <ClCompile Include="src\shader\shader.cpp" />
+    <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="util\datatypes\vertex_types.cpp" />
-    <ClCompile Include="util\fps\fps.cpp" />
-    <ClCompile Include="util\memory\allocator\allocator.cpp" />
-    <ClCompile Include="util\memory\allocator\linear_allocator.cpp" />
-    <ClCompile Include="util\memory\allocator\stack_allocator.cpp" />
-    <ClCompile Include="util\sysmon\system_monitor.cpp" />
-    <ClCompile Include="util\timer\timer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="loader\model_loader.tpp">
+    <ClInclude Include="src\loader\model_loader.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <ClInclude Include="ecs\ecs.tpp">
-      <FileType>Document</FileType>
-    </ClInclude>
-    <None Include="ecs\entity\entity.tpp" />
-    <None Include="ecs\handle\handle_table.tpp" />
-    <ClInclude Include="rendering\buffer\constant_buffer.tpp">
-      <FileType>Document</FileType>
-    </ClInclude>
-    <ClInclude Include="rendering\buffer\structured_buffer.tpp">
-      <FileType>Document</FileType>
-    </ClInclude>
-    <None Include="ecs_data\systems\geometry\transform\transform_system.tpp" />
-    <None Include="ecs_data\systems\rendering\renderer\renderer.tpp" />
     <None Include="packages.config" />
-    <None Include="resource\mesh\mesh.tpp" />
-    <ClInclude Include="resource\model\model_blueprint.tpp">
+    <ClInclude Include="src\rendering\buffer\constant_buffer.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <None Include="resource\model\blueprint_factory.tpp" />
-    <ClInclude Include="resource\model\model_output.tpp">
+    <ClInclude Include="src\rendering\buffer\structured_buffer.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <ClInclude Include="resource\resource_mgr.tpp">
+    <None Include="src\ecs_data\systems\geometry\transform\transform_system.tpp" />
+    <None Include="src\ecs_data\systems\rendering\renderer\renderer.tpp" />
+    <None Include="src\resource\mesh\mesh.tpp" />
+    <ClInclude Include="src\resource\model\model_blueprint.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <None Include="shaders\include\light.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <ClInclude Include="util\memory\resource_pool.tpp">
+    <None Include="src\resource\model\blueprint_factory.tpp" />
+    <ClInclude Include="src\resource\model\model_output.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <ClInclude Include="util\memory\allocator\pool_allocator.tpp">
+    <ClInclude Include="src\resource\resource_mgr.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="shaders\include\syntax.hlsl">
+    <None Include="src\shaders\include\light.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\include\global.hlsl">
+    <None Include="src\shaders\include\syntax.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\forward\forward.hlsl">
+    <None Include="src\shaders\include\global.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\include\input_structs.hlsl">
+    <None Include="src\shaders\forward\forward.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\skybox\skybox.hlsl">
+    <None Include="src\shaders\include\input_structs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\forward\forward_vs.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="shaders\skybox\skybox_vs.hlsl">
+    <None Include="src\shaders\skybox\skybox.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\include\normal.hlsl">
+    <None Include="src\shaders\forward\forward_vs.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="src\shaders\skybox\skybox_vs.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\depth\depth_include.hlsl">
+    <None Include="src\shaders\include\normal.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\depth\depth_vs.hlsl">
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\depth\depth_include.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\forward\forward_include.hlsl">
+    <None Include="src\shaders\depth\depth_vs.hlsl">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\include\transform.hlsl">
+    <None Include="src\shaders\forward\forward_include.hlsl">
       <FileType>Document</FileType>
     </None>
+    <None Include="src\shaders\include\transform.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ECS\ECS.vcxproj">
+      <Project>{85ea96e9-7ed5-46f5-84e1-9f186a78f89a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
+      <Project>{19aec9aa-3dd9-4908-97c0-f270ae5c0c1a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
+      <Project>{4a7e2159-d052-4c1d-8f94-5188286a09b8}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\directxtk_desktop_2015.2018.4.23.1\build\native\directxtk_desktop_2015.targets" Condition="Exists('..\packages\directxtk_desktop_2015.2018.4.23.1\build\native\directxtk_desktop_2015.targets')" />
+    <Import Project="..\packages\directxtk_desktop_2015.2018.5.14.1\build\native\directxtk_desktop_2015.targets" Condition="Exists('..\packages\directxtk_desktop_2015.2018.5.14.1\build\native\directxtk_desktop_2015.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\directxtk_desktop_2015.2018.4.23.1\build\native\directxtk_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_desktop_2015.2018.4.23.1\build\native\directxtk_desktop_2015.targets'))" />
+    <Error Condition="!Exists('..\packages\directxtk_desktop_2015.2018.5.14.1\build\native\directxtk_desktop_2015.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_desktop_2015.2018.5.14.1\build\native\directxtk_desktop_2015.targets'))" />
   </Target>
 </Project>

@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{af6e63a7-cc7a-46a9-be63-10639d3e0f29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files\forward">
+      <UniqueIdentifier>{d6cf3519-d3a1-450e-8a9f-5b7d7ac87ed9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files\include">
+      <UniqueIdentifier>{367f2abb-03d2-4c72-9b86-24ee81a2ec55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files\depth">
+      <UniqueIdentifier>{207364a6-224c-4023-8262-1406a7e9b8ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files\sky">
+      <UniqueIdentifier>{f083eb07-d635-4290-a456-5e09997cd27e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\compiled_headers">
+      <UniqueIdentifier>{debcb182-f706-4734-94d6-02ee627db117}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\depth\depth_vs.hlsl">
+      <Filter>Shader Files\depth</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\forward\forward.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\skybox\skybox.hlsl">
+      <Filter>Shader Files\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\skybox\skybox_vs.hlsl">
+      <Filter>Shader Files\sky</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\forward\forward_vs.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\compiled_headers\skybox_vs.h">
+      <Filter>Header Files\compiled_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\compiled_headers\depth_vs.h">
+      <Filter>Header Files\compiled_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\compiled_headers\forward.h">
+      <Filter>Header Files\compiled_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\compiled_headers\skybox.h">
+      <Filter>Header Files\compiled_headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hlsl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\compiled_headers\forward_vs.h">
+      <Filter>Header Files\compiled_headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\depth\depth_include.hlsl" />
+    <None Include="shaders\forward\forward_include.hlsl" />
+    <None Include="shaders\include\global.hlsl" />
+    <None Include="shaders\include\input_structs.hlsl" />
+    <None Include="shaders\include\light.hlsl" />
+    <None Include="shaders\include\normal.hlsl" />
+    <None Include="shaders\include\syntax.hlsl" />
+    <None Include="shaders\include\transform.hlsl" />
+  </ItemGroup>
+</Project>
