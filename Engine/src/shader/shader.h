@@ -10,15 +10,15 @@
 class VertexShader final {
 	public:
 		explicit VertexShader(ID3D11Device& device,
-					 const wchar_t* filename,
-					 const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-					 size_t numElements);
+							  const wchar_t* filename,
+							  const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
+							  size_t numElements);
 
 		explicit VertexShader(ID3D11Device& device,
-					 const BYTE* buffer,
-					 size_t size,
-					 const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-					 size_t numElements);
+							  const BYTE* buffer,
+							  size_t size,
+							  const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
+							  size_t numElements);
 
 		~VertexShader() = default;
 
@@ -37,11 +37,11 @@ class VertexShader final {
 class PixelShader final {
 	public:
 		explicit PixelShader(ID3D11Device& device,
-					const wchar_t* filename);
+							 const wchar_t* filename);
 
 		explicit PixelShader(ID3D11Device& device,
-					const BYTE* buffer,
-					size_t size);
+							 const BYTE* buffer,
+							 size_t size);
 
 		~PixelShader() = default;
 

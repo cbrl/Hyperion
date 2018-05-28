@@ -26,7 +26,6 @@ class SpotLight final : public Component<SpotLight> {
 
 		void SetUmbraCosAngle(float cos_angle) {
 			cos_umbra = std::max(cos_angle, 0.001f);
-			UpdateBoundingVolumes();
 		}
 
 		void SetUmbraAngle(float angle) {
@@ -34,7 +33,8 @@ class SpotLight final : public Component<SpotLight> {
 		}
 
 		void SetPenumbraCosAngle(float cos_angle) {
-			cos_penumbra = std::max(cos_angle, cos_umbra + 0.001f);
+			cos_penumbra = std::max(std::min(cos_angle, cos_umbra - 0.001f), 0.001f);
+			UpdateBoundingVolumes();
 		}
 
 		void SetPenumbraAngle(float angle) {
@@ -105,14 +105,14 @@ class SpotLight final : public Component<SpotLight> {
 		}
 
 		const XMMATRIX XM_CALLCONV GetLightToProjectionMatrix() const {
-			const float fov = std::acos(cos_umbra) * 2.0f;
+			const float fov = std::acos(cos_penumbra) * 2.0f;
 			return XMMatrixPerspectiveFovLH(fov, 1.0f, near_plane, range);
 		}
 
 
 	private:
 		void UpdateBoundingVolumes() {
-			const float a   = 1.0f / (cos_umbra * cos_umbra);
+			const float a   = 1.0f / (cos_penumbra * cos_penumbra);
 			const float rxy = range * std::sqrt(a - 1.0f);
 			const float rz  = range * 0.5f;
 			const float r   = std::sqrt((rxy * rxy) + (rz * rz));

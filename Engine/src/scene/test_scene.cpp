@@ -58,15 +58,14 @@ void TestScene::Init(const Engine& engine) {
 	{
 		auto light = ecs_engine.GetComponent<PointLight>(point_light);
 		light->SetAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
-		light->SetDiffuseColor(float4(0.0f, 1.0f, 0.0f, 1.0f));
+		light->SetDiffuseColor(float4(1.0f, 0.9f, 0.5f, 1.0f));
 		light->SetAttenuation(float3(0.0f, 0.15f, 0.0f));
 		light->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
 		light->SetRange(100.0f);
 		light->SetShadows(true);
 
 		auto transform = ecs_engine.GetComponent<Transform>(point_light);
-		transform->SetPosition(float3(5.0f, 6.0f, 5.0f));
-		//transform->SetParent(camera);
+		transform->SetPosition(float3(0.0f, 6.0f, 0.0f));
 
 	}
 
@@ -74,17 +73,18 @@ void TestScene::Init(const Engine& engine) {
 	{
 		auto light = ecs_engine.GetComponent<SpotLight>(spot_light);
 		light->SetAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
-		light->SetDiffuseColor(float4(0.0f, 0.0f, 1.0f, 1.0f));
+		light->SetDiffuseColor(float4(0.8f, 0.8f, 1.0f, 1.0f));
 		light->SetAttenuation(float3(0.05f, 0.15f, 0.0f));
 		light->SetSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
 		light->SetRange(100.0f);
-		light->SetUmbraAngle(XM_PI / 3.0f);
-		light->SetPenumbraAngle(XM_PI / 8.0f);
+		light->SetUmbraAngle(XM_PI / 6.0f);
+		light->SetPenumbraAngle(XM_PI / 3.0f);
 		light->SetShadows(true);
 
 		auto transform = ecs_engine.GetComponent<Transform>(spot_light);
-		transform->SetPosition(float3(-1.0f, 8.0f, -5.0f));
-		transform->SetRotation(float3(XM_PIDIV2, 0.0f, 0.0f));
+		transform->SetPosition(float3(-1.0f, 0.0f, 0.0f));
+		//transform->SetRotation(float3(XM_PIDIV2, 0.0f, 0.0f));
+		transform->SetParent(camera);
 	}
 
 

@@ -27,7 +27,8 @@ class ModelChild final {
 			, index_count(part.index_count)
 			, material(mat)
 			, aabb(part.aabb)
-			, sphere(part.sphere) {
+			, sphere(part.sphere)
+			, shadows(true) {
 		}
 
 		void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context,
@@ -51,6 +52,9 @@ class ModelChild final {
 		const BoundingSphere& GetSphere()   const { return sphere; }
 		const Material&       GetMaterial() const { return material; }
 
+		void SetShadows(bool state) { shadows = state; }
+		bool CastsShadows() const { return shadows; }
+
 		template<typename StageT>
 		void BindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
 			buffer.Bind<StageT>(device_context, slot);
@@ -61,6 +65,12 @@ class ModelChild final {
 		// The name of the model child
 		string name;
 
+		// The cbuffer for this model child
+		ConstantBuffer<ModelBuffer> buffer;
+
+		// The model child's material
+		Material material;
+
 		// Index info
 		u32 index_start;
 		u32 index_count;
@@ -69,11 +79,8 @@ class ModelChild final {
 		AABB aabb;
 		BoundingSphere sphere;
 
-		// Material
-		Material material;
-
-		// The cbuffer for this model child
-		ConstantBuffer<ModelBuffer> buffer;
+		// Flag that decides if the model can cast shadows
+		bool shadows;
 };
 
 
@@ -115,9 +122,9 @@ class Model final : public Component<Model> {
 		// Getters
 		//----------------------------------------------------------------------------------
 
-		const string&         GetName()      const { return name; }
-		const AABB&           GetAABB()      const { return aabb; }
-		const BoundingSphere& GetSphere()    const { return sphere; }
+		const string&         GetName()   const { return name; }
+		const AABB&           GetAABB()   const { return aabb; }
+		const BoundingSphere& GetSphere() const { return sphere; }
 
 
 	private:

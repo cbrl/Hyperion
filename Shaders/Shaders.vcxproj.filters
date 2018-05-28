@@ -46,33 +46,34 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\compiled_headers\skybox_vs.h">
-      <Filter>Header Files\compiled_headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\compiled_headers\depth_vs.h">
-      <Filter>Header Files\compiled_headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\compiled_headers\forward.h">
-      <Filter>Header Files\compiled_headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\compiled_headers\skybox.h">
-      <Filter>Header Files\compiled_headers</Filter>
-    </ClInclude>
     <ClInclude Include="src\hlsl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\compiled_headers\forward_vs.h">
-      <Filter>Header Files\compiled_headers</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\depth\depth_include.hlsl" />
-    <None Include="shaders\forward\forward_include.hlsl" />
-    <None Include="shaders\include\global.hlsl" />
-    <None Include="shaders\include\input_structs.hlsl" />
-    <None Include="shaders\include\light.hlsl" />
-    <None Include="shaders\include\normal.hlsl" />
-    <None Include="shaders\include\syntax.hlsl" />
-    <None Include="shaders\include\transform.hlsl" />
+    <None Include="shaders\depth\depth_include.hlsl">
+      <Filter>Shader Files\depth</Filter>
+    </None>
+    <None Include="shaders\forward\forward_include.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </None>
+    <None Include="shaders\include\global.hlsl">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\input_structs.hlsl">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\light.hlsl">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\normal.hlsl">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\syntax.hlsl">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\transform.hlsl">
+      <Filter>Shader Files\include</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -11,7 +11,6 @@ SkyPass::SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
 	, device_context(device_context)
 {
-
 	vertex_shader = make_unique<VertexShader>(device,
 											  shader_skybox_vs,
 											  sizeof(shader_skybox_vs),

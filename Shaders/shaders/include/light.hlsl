@@ -187,10 +187,10 @@ float Attenuation(float d, float3 att_values) {
 //----------------------------------------------------------------------------------
 // L:         light vector (surface to light)
 // D:         light direction
-// cos_phi:   umbra angle
-// cos_theta: penumbra angle
+// cos_theta: cosine of the umbra angle
+// cos_phi:   cosine of the penumbra angle
 //----------------------------------------------------------------------------------
-float SpotIntensity(float3 L, float3 D, float cos_phi, float cos_theta) {
+float SpotIntensity(float3 L, float3 D, float cos_theta, float cos_phi) {
 	const float alpha = dot(-L, D);
 	return smoothstep(cos_phi, cos_theta, alpha);
 }

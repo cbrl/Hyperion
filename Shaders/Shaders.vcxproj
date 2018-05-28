@@ -171,11 +171,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\compiled_headers\depth_vs.h" />
-    <ClInclude Include="src\compiled_headers\forward.h" />
-    <ClInclude Include="src\compiled_headers\forward_vs.h" />
-    <ClInclude Include="src\compiled_headers\skybox.h" />
-    <ClInclude Include="src\compiled_headers\skybox_vs.h" />
     <ClInclude Include="src\hlsl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

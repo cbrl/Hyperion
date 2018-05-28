@@ -295,7 +295,7 @@ void XM_CALLCONV LightPass::UpdateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 			buffer.specular      = light.GetSpecular();
 			buffer.attenuation   = light.GetAttenuation();
 			buffer.cos_umbra     = light.GetUmbra();
-			buffer.cos_penumbra = light.GetPenumbra();
+			buffer.cos_penumbra  = light.GetPenumbra();
 			buffer.range         = light.GetRange();
 
 			buffers.push_back(std::move(buffer));

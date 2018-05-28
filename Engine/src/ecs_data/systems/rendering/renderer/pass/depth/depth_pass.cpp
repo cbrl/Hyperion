@@ -95,8 +95,7 @@ void XM_CALLCONV DepthPass::RenderShadows(const Engine& engine,
 
 		model.Bind(device_context);
 
-		//if (/*Model casts shadows*/)
-			RenderModel(model, model_to_proj);
+		RenderModel(model, model_to_proj);
 	});
 }
 
@@ -118,6 +117,9 @@ void XM_CALLCONV DepthPass::RenderModel(Model& model, FXMMATRIX model_to_project
 		//if (child.GetMaterial().transparent
 		//	|| child.GetMaterial().dissolve > THRESHOLD)
 		//	return;
+
+		if (!child.CastsShadows())
+			return;
 
 		if (!Frustum(model_to_projection).Contains(child.GetAABB()))
 			return;

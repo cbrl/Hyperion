@@ -296,61 +296,6 @@
     <ClInclude Include="src\resource\resource_mgr.tpp">
       <FileType>Document</FileType>
     </ClInclude>
-    <None Include="src\shaders\include\light.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\shaders\include\syntax.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\shaders\include\global.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\shaders\forward\forward.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\shaders\include\input_structs.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\shaders\skybox\skybox.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\shaders\forward\forward_vs.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="src\shaders\skybox\skybox_vs.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\shaders\include\normal.hlsl">
-      <FileType>Document</FileType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\shaders\depth\depth_include.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="src\shaders\depth\depth_vs.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="src\shaders\forward\forward_include.hlsl">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="src\shaders\include\transform.hlsl">
-      <FileType>Document</FileType>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ECS\ECS.vcxproj">

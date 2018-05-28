@@ -29,7 +29,6 @@ struct CameraBuffer {
 
 	float3   position;
 	float    padding;
-	//XMMATRIX model_view_proj;
 	XMMATRIX world_to_camera;
 	XMMATRIX camera_to_projection;
 };

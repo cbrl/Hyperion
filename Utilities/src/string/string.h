@@ -12,7 +12,7 @@
 #include <cwchar>
 #include <locale>
 #include <codecvt>
-#include <charconv>
+//#include <charconv>
 
 
 using std::string;
@@ -83,11 +83,8 @@ inline StringT TrimWhiteSpace(StringT& in) {
 
 
 // Split a string by a specified token
-template<typename StringT, typename CharT>
-inline std::vector<StringT> Split(StringT& in, const CharT* token) {
-
-	// Ensure the string's char type and token type are the same
-	static_assert(is_same_v<CharT, StringT::value_type>, "Split() string/token type mismatch");
+template<typename StringT>
+inline std::vector<StringT> Split(StringT& in, const typename StringT::value_type* token) {
 
 	std::vector<StringT> out;
 
@@ -105,7 +102,7 @@ inline std::vector<StringT> Split(StringT& in, const CharT* token) {
 				i += sToken.size() - 1;
 			}
 			else {
-				out.push_back((CharT*)"");
+				out.push_back(reinterpret_cast<const typename StringT::value_type*>(""));
 			}
 		}
 		else if ((i + sToken.size()) >= in.size()) {
