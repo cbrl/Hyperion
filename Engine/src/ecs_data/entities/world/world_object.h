@@ -16,20 +16,25 @@
 template<typename T = void>
 class WorldObject : public Entity<WorldObject<T>> {
 	public:
-		WorldObject() = default;
+		WorldObject(Handle64 this_handle, ComponentMgr* component_mgr)
+			: Entity<WorldObject<T>>(this_handle, component_mgr) {
+
+			this->AddComponent<Transform>();
+		}
+
 		virtual ~WorldObject() = default;
 
-		template<typename... ArgsT>
-		void Init(ArgsT&&... args) {
-			this->AddComponent<Transform>();
-			InitImpl(std::is_same<T, void>{}, std::forward<ArgsT>(args)...);
-		}
+	//	template<typename... ArgsT>
+	//	void Init(ArgsT&&... args) {
+	//		this->AddComponent<Transform>();
+	//		InitImpl(std::is_same<T, void>{}, std::forward<ArgsT>(args)...);
+	//	}
 
 
-	protected:
-		template<typename... ArgsT>
-		void InitImpl(std::false_type, ArgsT&&... args) {
-			if (&WorldObject::Init != &T::Init)
-				static_cast<T*>(this)->Init(std::forward<ArgsT>(args)...);
-		}
+	//protected:
+	//	template<typename... ArgsT>
+	//	void InitImpl(std::false_type, ArgsT&&... args) {
+	//		if (&WorldObject::Init != &T::Init)
+	//			static_cast<T*>(this)->Init(std::forward<ArgsT>(args)...);
+	//	}
 };

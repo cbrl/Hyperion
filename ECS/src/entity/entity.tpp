@@ -51,15 +51,15 @@ void IEntity::RemoveComponent() {
 //----------------------------------------------------------------------------------
 
 
-template<typename T>
-template<typename... ArgsT>
-void Entity<T>::Construct(ArgsT&&... args) {
-	static_assert(std::is_base_of_v<Entity, T>, "Entity<T> - Invalid derived class.");
-	Init(std::forward<ArgsT>(args)...);
-}
-
-template<typename T>
-template<typename... ArgsT>
-void Entity<T>::Init(ArgsT&&... args) {
-	static_cast<T*>(this)->Init(std::forward<ArgsT>(args)...);
-}
+//template<typename T>
+//template<typename... ArgsT>
+//void Entity<T>::Construct(ArgsT&&... args) {
+//	static_assert(std::is_base_of_v<Entity, T>, "Entity<T> - Invalid derived class.");
+//	Init(std::forward<ArgsT>(args)...);
+//}
+//
+//template<typename T>
+//template<typename... ArgsT>
+//void Entity<T>::Init(ArgsT&&... args) {
+//	static_cast<T*>(this)->Init(std::forward<ArgsT>(args)...);
+//}

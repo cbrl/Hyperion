@@ -49,11 +49,11 @@ namespace TextureLoader {
 		D3D11_SUBRESOURCE_DATA initData = { &color, sizeof(u32), 0 };
 
 		D3D11_TEXTURE2D_DESC desc = {};
-		desc.Width = desc.Height = desc.MipLevels = desc.ArraySize = 1;
-		desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.Width            = desc.Height = desc.MipLevels = desc.ArraySize = 1;
+		desc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
 		desc.SampleDesc.Count = 1;
-		desc.Usage = D3D11_USAGE_IMMUTABLE;
-		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		desc.Usage            = D3D11_USAGE_IMMUTABLE;
+		desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
 
 		ThrowIfFailed(device.CreateTexture2D(&desc, &initData, texture.GetAddressOf()),
 					  "Failed to create texture");
@@ -129,17 +129,17 @@ namespace TextureLoader {
 
 		// Create the texture array description
 		D3D11_TEXTURE2D_DESC array_desc = {};
-		array_desc.Width = desc.Width;
-		array_desc.Height = desc.Height;
-		array_desc.MipLevels = desc.MipLevels;
-		array_desc.ArraySize = size;
-		array_desc.Format = desc.Format;
-		array_desc.SampleDesc.Count = 1;
+		array_desc.Width              = desc.Width;
+		array_desc.Height             = desc.Height;
+		array_desc.MipLevels          = desc.MipLevels;
+		array_desc.ArraySize          = size;
+		array_desc.Format             = desc.Format;
+		array_desc.SampleDesc.Count   = 1;
 		array_desc.SampleDesc.Quality = 0;
-		array_desc.Usage = D3D11_USAGE_DEFAULT;
-		array_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		array_desc.CPUAccessFlags = 0;
-		array_desc.MiscFlags = 0;
+		array_desc.Usage              = D3D11_USAGE_DEFAULT;
+		array_desc.BindFlags          = D3D11_BIND_SHADER_RESOURCE;
+		array_desc.CPUAccessFlags     = 0;
+		array_desc.MiscFlags          = 0;
 
 		// Create texture array
 		ComPtr<ID3D11Texture2D> tex_array;
@@ -165,12 +165,12 @@ namespace TextureLoader {
 
 		// Create SRV description
 		D3D11_SHADER_RESOURCE_VIEW_DESC viewDesc = {};
-		viewDesc.Format = array_desc.Format;
-		viewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-		viewDesc.Texture2DArray.MipLevels = array_desc.MipLevels;
+		viewDesc.Format                         = array_desc.Format;
+		viewDesc.ViewDimension                  = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+		viewDesc.Texture2DArray.MipLevels       = array_desc.MipLevels;
 		viewDesc.Texture2DArray.MostDetailedMip = 0;
 		viewDesc.Texture2DArray.FirstArraySlice = 0;
-		viewDesc.Texture2DArray.ArraySize = size;
+		viewDesc.Texture2DArray.ArraySize       = size;
 
 		// Create the SRV
 		ThrowIfFailed(device.CreateShaderResourceView(tex_array.Get(), &viewDesc, srv_out),

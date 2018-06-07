@@ -7,7 +7,7 @@
 //----------------------------------------------------------------------------------
 //  Defines
 //----------------------------------------------------------------------------------
-#define SPECULAR_BLINN_PHONG
+#define SPECULAR_FACTOR_FUNC SpecularBlinnPhong
 
 
 //----------------------------------------------------------------------------------
@@ -149,32 +149,30 @@ float DiffuseFactor(float3 L, float3 N) {
 
 
 //----------------------------------------------------------------------------------
-// SpecularFactor
+// Specular Factor Functions
 //----------------------------------------------------------------------------------
-// L:     light vector (surface to light)
-// N:     normal vector
-// V:     view vector (surface to camera)
+//     L: light vector (surface to light)
+//     N: normal vector
+//     V: view vector (surface to camera)
 // power: specular exponent
 //----------------------------------------------------------------------------------
-float SpecularFactor(float3 L, float3 N, float3 V, float power) {
-	#ifndef SPECULAR_BLINN_PHONG
-		// Phong Lighting
-		const float3 R = normalize(reflect(-L, N));
-		const float  R_dot_V = max(dot(R, V), 0.0f);
-		return pow(R_dot_V, power);
-	#else
-		// Blinn-Phong Lighting
-		const float3 H = normalize(L + V);
-		const float  N_dot_H = max(dot(N, H), 0.0f);
-		return pow(N_dot_H, power);
-	#endif //SPECULAR_BLINN_PHONG
+float SpecularPhong(float3 L, float3 N, float3 V, float power) {
+	const float3 H       = normalize(L + V);
+	const float  N_dot_H = max(dot(N, H), 0.0f);
+	return pow(N_dot_H, power);
+}
+
+float SpecularBlinnPhong(float3 L, float3 N, float3 V, float power) {
+	const float3 R       = normalize(reflect(-L, N));
+	const float  R_dot_V = max(dot(R, V), 0.0f);
+	return pow(R_dot_V, power);
 }
 
 
 //----------------------------------------------------------------------------------
 // Attenuation
 //----------------------------------------------------------------------------------
-// d:          distance to light
+//          d: distance to light
 // att_values: constant, linear, and quadratic attenuation values respectively
 //----------------------------------------------------------------------------------
 float Attenuation(float d, float3 att_values) {
@@ -185,10 +183,10 @@ float Attenuation(float d, float3 att_values) {
 //----------------------------------------------------------------------------------
 // SpotIntensity
 //----------------------------------------------------------------------------------
-// L:         light vector (surface to light)
-// D:         light direction
+//         L: light vector (surface to light)
+//         D: light direction
 // cos_theta: cosine of the umbra angle
-// cos_phi:   cosine of the penumbra angle
+//   cos_phi: cosine of the penumbra angle
 //----------------------------------------------------------------------------------
 float SpotIntensity(float3 L, float3 D, float cos_theta, float cos_phi) {
 	const float alpha = dot(-L, D);
@@ -200,7 +198,7 @@ float SpotIntensity(float3 L, float3 D, float cos_theta, float cos_phi) {
 // ShadowFactor
 //----------------------------------------------------------------------------------
 // shadow_map: shadow map for this light
-// p_ndc:      position vector in light NDC space
+//      p_ndc: position vector in light NDC space
 //----------------------------------------------------------------------------------
 float ShadowFactor(ShadowMap shadow_map, float3 p_ndc) {
 	const float2 uv       = float2(0.5f, -0.5f) * p_ndc.xy + 0.5f;
@@ -213,8 +211,8 @@ float ShadowFactor(ShadowMap shadow_map, float3 p_ndc) {
 //----------------------------------------------------------------------------------
 // ShadowFactor
 //----------------------------------------------------------------------------------
-// shadow_map:        shadow cube map for this light
-// p_light:           position vector in light space
+//        shadow_map: shadow cube map for this light
+//           p_light: position vector in light space
 // projection_values: projection values of the light
 //----------------------------------------------------------------------------------
 float ShadowFactor(ShadowCubeMap shadow_map, float3 p_light, float2 projection_values) {
@@ -259,7 +257,7 @@ void ComputeDirectionalLight(DirectionalLight L,
 	diffuse = diffuse_factor * mat.diffuse * L.diffuse;
 
 	// Specular
-	const float specular_factor = SpecularFactor(light_vec, normal, view_vec, mat.specular.w);
+	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.specular.w);
 	specular = specular_factor * L.specular * mat.specular;
 }
 
@@ -334,7 +332,7 @@ void ComputePointLight(PointLight L,
 	diffuse = diffuse_factor * mat.diffuse * L.diffuse;
 
 	// Specular
-	const float specular_factor = SpecularFactor(light_vec, normal, view_vec, mat.specular.w);
+	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.specular.w);
 	specular = specular_factor * L.specular * mat.specular;
 
 	// Attenution
@@ -414,7 +412,7 @@ void ComputeSpotLight(SpotLight L,
 	diffuse = diffuse_factor * mat.diffuse * L.diffuse;
 
 	// Specular
-	const float specular_factor = SpecularFactor(light_vec, normal, view_vec, mat.specular.w);
+	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.specular.w);
 	specular = specular_factor * L.specular * mat.specular;
 
 	// Attenution

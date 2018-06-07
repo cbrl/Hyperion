@@ -4,8 +4,8 @@
 
 
 static constexpr float zNear = 0.1f;
-static constexpr float zFar = 1000.0f;
-static constexpr float FOV = XM_PI / 3.0f;
+static constexpr float zFar  = 1000.0f;
+static constexpr float FOV   = XM_PI / 3.0f;
 
 
 TestScene::TestScene(const Engine& engine) : Scene("Test Scene") {

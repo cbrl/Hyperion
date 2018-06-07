@@ -6,10 +6,14 @@
 
 class BasicModel final : public WorldObject<BasicModel> {
 	public:
-		BasicModel() = default;
-		~BasicModel() = default;
+		BasicModel(Handle64 this_handle,
+		           ComponentMgr* component_mgr,
+		           ID3D11Device& device,
+		           shared_ptr<ModelBlueprint> blueprint)
+			: WorldObject(this_handle, component_mgr) {
 
-		void Init(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint) {
 			this->AddComponent<Model>(device, blueprint);
 		}
+
+		~BasicModel() = default;
 };

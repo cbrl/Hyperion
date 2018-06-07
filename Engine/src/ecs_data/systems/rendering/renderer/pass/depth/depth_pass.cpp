@@ -54,9 +54,9 @@ void XM_CALLCONV DepthPass::Render(const Engine& engine,
 
 	// Draw each model
 	ecs_engine.ForEachActive<Model>([&](Model& model) {
-		const auto transform = ecs_engine.GetComponent<Transform>(model.GetOwner());
+		const auto transform      = ecs_engine.GetComponent<Transform>(model.GetOwner());
 		const auto model_to_world = transform->GetObjectToWorldMatrix();
-		const auto model_to_proj = model_to_world * world_to_proj;
+		const auto model_to_proj  = model_to_world * world_to_proj;
 
 		if (!Frustum(model_to_proj).Contains(model.GetAABB()))
 			return;
@@ -86,7 +86,7 @@ void XM_CALLCONV DepthPass::RenderShadows(const Engine& engine,
 
 	// Draw each model
 	ecs_engine.ForEachActive<Model>([&](Model& model) {
-		const auto transform = ecs_engine.GetComponent<Transform>(model.GetOwner());
+		const auto transform      = ecs_engine.GetComponent<Transform>(model.GetOwner());
 		const auto model_to_world = transform->GetObjectToWorldMatrix();
 		const auto model_to_proj  = model_to_world * world_to_proj;
 

@@ -40,10 +40,7 @@ class EntityMgr final {
 			Handle64 handle = handle_table.CreateHandle(static_cast<IEntity*>(memory));
 
 			// Create the entity
-			EntityT* entity = new(memory) EntityT();
-			entity->SetHandle(handle);
-			entity->SetComponentMgr(component_mgr.get());
-			entity->Construct(std::forward<ArgsT>(args)...);
+			EntityT* entity = new(memory) EntityT(handle, component_mgr.get(), std::forward<ArgsT>(args)...);
 
 			return handle;
 		}

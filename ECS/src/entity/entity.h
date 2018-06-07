@@ -15,24 +15,46 @@ class IEntity {
 	friend class EntityMgr;
 
 	public:
-		IEntity();
+		//----------------------------------------------------------------------------------
+		// Constructors / Destructors
+		//----------------------------------------------------------------------------------
+
+		IEntity() = delete;
+
+		IEntity(const IEntity& entity) = delete;
+
+		IEntity(IEntity&& entity) = default;
+
+		IEntity(Handle64 this_handle, ComponentMgr* component_mgr);
+
 		virtual ~IEntity();
 
+
+		//----------------------------------------------------------------------------------
+		// Member functions
+		//----------------------------------------------------------------------------------
+
+		// Interface function for retrieving the type_index
 		virtual const type_index GetTypeID() const = 0;
 
-		void SetActive(bool state);
-		bool IsActive() const;
-
+		// Get the entity's handle
 		[[nodiscard]]
 		const Handle64 GetHandle() const;
 
+		// Get or set the state of this entity
+		void SetActive(bool state);
+		bool IsActive() const;
+
+		// Add a component to this entity
 		template<typename ComponentT, typename... ArgsT>
 		ComponentT* const AddComponent(ArgsT&&... args);
 
+		// Get a component that's been added to this entity
 		template<typename ComponentT>
 		[[nodiscard]]
 		ComponentT* const GetComponent() const;
 
+		// Remove a component from this entity
 		template<typename ComponentT>
 		void RemoveComponent();
 
@@ -79,16 +101,17 @@ class Entity : public IEntity {
 
 
 	protected:
-		Entity() = default;
-		Entity(const Entity& entity) = default;
-		Entity(Entity&& entity) = delete;
+		Entity() = delete;
+
+		Entity(Handle64 this_handle, ComponentMgr* component_mgr)
+			: IEntity(this_handle, component_mgr)
+		{}
+
+		Entity(const Entity& entity) = delete;
+
+		Entity(Entity&& entity) = default;
+
 		virtual ~Entity() = default;
-
-		template<typename... ArgsT>
-		void Construct(ArgsT&&... args);
-
-		template<typename... ArgsT>
-		void Init(ArgsT&&... args);
 
 
 	public:

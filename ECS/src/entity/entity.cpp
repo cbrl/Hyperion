@@ -2,8 +2,10 @@
 #include "ecs.h"
 
 
-IEntity::IEntity()
-	: active(true) {
+IEntity::IEntity(Handle64 this_handle, ComponentMgr * component_mgr)
+	: active(true)
+	, handle(this_handle)
+	, component_mgr(component_mgr) {
 }
 
 

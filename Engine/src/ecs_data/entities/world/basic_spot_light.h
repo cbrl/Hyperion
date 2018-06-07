@@ -1,17 +1,17 @@
 #pragma once
 
-#include "entity\entity.h"
-#include "ecs_data\components\geometry\transform\transform.h"
+#include "ecs_data\entities\world\world_object.h"
 #include "ecs_data\components\rendering\light\spot_light.h"
 
 
-class BasicSpotLight final : public Entity<BasicSpotLight> {
+class BasicSpotLight final : public WorldObject<BasicSpotLight> {
 	public:
-		BasicSpotLight() = default;
-		~BasicSpotLight() = default;
+		BasicSpotLight(Handle64 this_handle, ComponentMgr* component_mgr)
+			: WorldObject(this_handle, component_mgr) {
 
-		void Init() {
 			this->AddComponent<Transform>();
 			this->AddComponent<SpotLight>();
 		}
+
+		~BasicSpotLight() = default;
 };
