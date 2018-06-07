@@ -28,14 +28,14 @@ void TransformSystem::PostUpdate(const Engine& engine) {
 }
 
 
-XMMATRIX TransformSystem::CalculateWorld(Transform& transform) const {
+const XMMATRIX TransformSystem::CalculateWorld(Transform& transform) const {
 	return XMMatrixScalingFromVector(transform.scale)
 	       * XMMatrixRotationRollPitchYawFromVector(transform.rotation)
 	       * XMMatrixTranslationFromVector(transform.translation);
 }
 
 
-XMMATRIX TransformSystem::CalculateWorld(CameraTransform& transform) const {
+const XMMATRIX TransformSystem::CalculateWorld(CameraTransform& transform) const {
 	XMMATRIX rotation = { transform.GetWorldAxisX(),
 		                  transform.GetWorldAxisY(),
 		                  transform.GetWorldAxisZ(),

@@ -91,12 +91,12 @@ class CameraBase : public Component<T> {
 		//----------------------------------------------------------------------------------
 
 		// Get the camera's view matrix
-		const XMMATRIX GetViewMatrix() const {
+		const XMMATRIX XM_CALLCONV GetViewMatrix() const {
 			return view_matrix;
 		}
 
 		// Get the camera's projection matrix
-		const XMMATRIX GetProjectionMatrix() const {
+		const XMMATRIX XM_CALLCONV GetProjectionMatrix() const {
 			return projection_matrix;
 		}
 

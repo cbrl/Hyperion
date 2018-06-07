@@ -180,7 +180,7 @@ struct Vec3 : public DerivedT {
 
 	Vec3(DataT _x, DataT _y, DataT _z) noexcept : DerivedT(_x, _y, _z) {}
 
-	Vec3(const DerivedT& _xy, DataT _z) noexcept : DerivedT(_xy.x, _xy.y, _z) {}
+	Vec3(const Vec2<DataT, DerivedT>& _xy, DataT _z) noexcept : DerivedT(_xy.x, _xy.y, _z) {}
 
 	Vec3(const Vec3<DataT, DerivedT>& _xyz) noexcept : DerivedT(_xyz.x, _xyz.y, _xyz.z) {}
 
@@ -331,9 +331,9 @@ struct Vec4 : public DerivedT {
 
 	Vec4(DataT _x, DataT _y, DataT _z, DataT _w) noexcept : DerivedT(_x, _y, _z, _w) {}
 
-	Vec4(const DerivedT& _xy, DataT _z, DataT _w) noexcept : DerivedT(_xy.x, _xy.y, _z, _w) {}
+	Vec4(const Vec2<DataT, DerivedT>& _xy, DataT _z, DataT _w) noexcept : DerivedT(_xy.x, _xy.y, _z, _w) {}
 
-	Vec4(const DerivedT& _xyz, DataT _w) noexcept : DerivedT(_xyz.x, _xyz.y, _xyz.z, _w) {}
+	Vec4(const Vec3<DataT, DerivedT>& _xyz, DataT _w) noexcept : DerivedT(_xyz.x, _xyz.y, _xyz.z, _w) {}
 
 	Vec4(const Vec4<DataT, DerivedT>& _xyzw) noexcept : DerivedT(_xyzw.x, _xyzw.y, _xyzw.z, _xyzw.w) {}
 

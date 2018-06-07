@@ -21,8 +21,8 @@ struct AABB final {
 		void XM_CALLCONV Transform(FXMMATRIX M);
 
 
-		const XMVECTOR& Min() const { return min_point; }
-		const XMVECTOR& Max() const { return max_point; }
+		const XMVECTOR XM_CALLCONV Min() const { return min_point; }
+		const XMVECTOR XM_CALLCONV Max() const { return max_point; }
 
 
 	private:

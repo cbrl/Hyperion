@@ -18,8 +18,8 @@ class TransformSystem final : public System<TransformSystem> {
 		template<typename TransformT>
 		void UpdateWorld(ECS& ecs_engine, TransformT& transform);
 
-		XMMATRIX CalculateWorld(Transform& transform) const;
-		XMMATRIX CalculateWorld(CameraTransform& transform) const;
+		const XMMATRIX CalculateWorld(Transform& transform) const;
+		const XMMATRIX CalculateWorld(CameraTransform& transform) const;
 };
 
 
