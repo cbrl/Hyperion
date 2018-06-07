@@ -134,6 +134,8 @@
     <ClInclude Include="src\ecs.h" />
     <ClInclude Include="src\entity\entity.h" />
     <ClInclude Include="src\entity\entity_mgr.h" />
+    <ClInclude Include="src\handle\handle.h" />
+    <ClInclude Include="src\handle\handle_table.h" />
     <ClInclude Include="src\system\system.h" />
     <ClInclude Include="src\system\system_mgr.h" />
   </ItemGroup>
@@ -145,6 +147,7 @@
   <ItemGroup>
     <None Include="src\ecs.tpp" />
     <None Include="src\entity\entity.tpp" />
+    <None Include="src\handle\handle_table.tpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">
