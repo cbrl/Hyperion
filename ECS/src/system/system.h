@@ -10,22 +10,23 @@ class ISystem {
 
 public:
 	ISystem() : active(true) {
-	};
+	}
+
 	virtual ~ISystem() = default;
 
-	virtual type_index GetTypeID() const = 0;
+	virtual type_index getTypeId() const = 0;
 
-	void SetActive(bool state) {
+	void setActive(bool state) {
 		active = state;
 	}
 
-	bool IsActive() const {
+	bool isActive() const {
 		return active;
 	}
 
-	virtual void PreUpdate(const Engine& engine) = 0;
-	virtual void Update(const Engine& engine) = 0;
-	virtual void PostUpdate(const Engine& engine) = 0;
+	virtual void preUpdate(const Engine& engine) = 0;
+	virtual void update(const Engine& engine) = 0;
+	virtual void postUpdate(const Engine& engine) = 0;
 
 protected:
 	// Is this system enabled?
@@ -39,17 +40,17 @@ public:
 	System() = default;
 	virtual ~System() = default;
 
-	type_index GetTypeID() const override {
+	type_index getTypeId() const override {
 		return type_id;
 	}
 
-	void PreUpdate(const Engine& engine) override {
+	void preUpdate(const Engine& engine) override {
 	};
 
-	void Update(const Engine& engine) override {
+	void update(const Engine& engine) override {
 	};
 
-	void PostUpdate(const Engine& engine) override {
+	void postUpdate(const Engine& engine) override {
 	};
 
 

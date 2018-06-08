@@ -6,11 +6,11 @@
 
 class BasicSpotLight final : public WorldObject<BasicSpotLight> {
 	public:
-		BasicSpotLight(Handle64 this_handle, ComponentMgr* component_mgr)
+		BasicSpotLight(handle64 this_handle, ComponentMgr* component_mgr)
 			: WorldObject(this_handle, component_mgr) {
 
-			this->AddComponent<Transform>();
-			this->AddComponent<SpotLight>();
+			this->addComponent<Transform>();
+			this->addComponent<SpotLight>();
 		}
 
 		~BasicSpotLight() = default;

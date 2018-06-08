@@ -9,10 +9,10 @@ public:
 	SystemMgr();
 	~SystemMgr();
 
-	void Update(const Engine& engine);
+	void update(const Engine& engine);
 
 	template<typename SystemT, typename... ArgsT>
-	SystemT* AddSystem(ArgsT&&... args) {
+	SystemT* addSystem(ArgsT&&... args) {
 		const auto& it = systems.find(SystemT::type_id);
 
 		if (it != systems.end() && it->second != nullptr)
@@ -33,7 +33,7 @@ public:
 	}
 
 	template<typename SystemT>
-	SystemT* GetSystem() const {
+	SystemT* getSystem() const {
 		const auto& it = systems.find(SystemT::type_id);
 
 		if (it != systems.end() && it->second != nullptr)

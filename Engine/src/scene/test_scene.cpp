@@ -29,17 +29,17 @@ void TestScene::Init(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera and skybox
-	Handle64 camera = ecs_engine.CreateEntity<PlayerCamera>(device,
+	handle64 camera = ecs_engine.createEntity<PlayerCamera>(device,
 															device_context,
 															engine.GetWindowWidth(),
 															engine.GetWindowHeight(),
 															resource_mgr.GetOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	// Set the parameters
-	auto cam = ecs_engine.GetComponent<PerspectiveCamera>(camera);
+	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
 	cam->SetZDepth(zNear, zFar);
 	cam->SetFOV(FOV);
-	ecs_engine.GetComponent<CameraTransform>(camera)->SetPosition(float3(0.0f, 4.0f, -2.0f));
+	ecs_engine.getComponent<CameraTransform>(camera)->SetPosition(float3(0.0f, 4.0f, -2.0f));
 
 	entities.push_back(camera);
 
@@ -48,15 +48,15 @@ void TestScene::Init(const Engine& engine) {
 	// Create lights
 	//----------------------------------------------------------------------------------
 
-	auto point_light = ecs_engine.CreateEntity<BasicPointLight>();
+	auto point_light = ecs_engine.createEntity<BasicPointLight>();
 	entities.push_back(point_light);
 
-	auto spot_light = ecs_engine.CreateEntity<BasicSpotLight>();
+	auto spot_light = ecs_engine.createEntity<BasicSpotLight>();
 	entities.push_back(spot_light);
 
 	// Point light
 	{
-		auto light = ecs_engine.GetComponent<PointLight>(point_light);
+		auto light = ecs_engine.getComponent<PointLight>(point_light);
 		light->SetAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		light->SetDiffuseColor(float4(1.0f, 0.9f, 0.5f, 1.0f));
 		light->SetAttenuation(float3(0.0f, 0.15f, 0.0f));
@@ -64,14 +64,14 @@ void TestScene::Init(const Engine& engine) {
 		light->SetRange(100.0f);
 		light->SetShadows(true);
 
-		auto transform = ecs_engine.GetComponent<Transform>(point_light);
+		auto transform = ecs_engine.getComponent<Transform>(point_light);
 		transform->SetPosition(float3(0.0f, 6.0f, 0.0f));
 
 	}
 
 	// Spot light
 	{
-		auto light = ecs_engine.GetComponent<SpotLight>(spot_light);
+		auto light = ecs_engine.getComponent<SpotLight>(spot_light);
 		light->SetAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		light->SetDiffuseColor(float4(0.8f, 0.8f, 1.0f, 1.0f));
 		light->SetAttenuation(float3(0.05f, 0.15f, 0.0f));
@@ -81,7 +81,7 @@ void TestScene::Init(const Engine& engine) {
 		light->SetPenumbraAngle(XM_PI / 3.0f);
 		light->SetShadows(true);
 
-		auto transform = ecs_engine.GetComponent<Transform>(spot_light);
+		auto transform = ecs_engine.getComponent<Transform>(spot_light);
 		transform->SetPosition(float3(-1.0f, 0.0f, 0.0f));
 		//transform->SetRotation(float3(XM_PIDIV2, 0.0f, 0.0f));
 		transform->SetParent(camera);
@@ -101,7 +101,7 @@ void TestScene::Init(const Engine& engine) {
 	auto bp     = resource_mgr.GetOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
 	auto sphere = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(device, resource_mgr, 1.0f);
 
-	Handle64 test_model = ecs_engine.CreateEntity<BasicModel>(device, bp);
+	handle64 test_model = ecs_engine.createEntity<BasicModel>(device, bp);
 	entities.push_back(test_model);
 
 

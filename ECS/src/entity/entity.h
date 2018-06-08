@@ -25,7 +25,7 @@ public:
 
 	IEntity(IEntity&& entity) = default;
 
-	IEntity(Handle64 this_handle, ComponentMgr* component_mgr);
+	IEntity(handle64 this_handle, ComponentMgr* component_mgr);
 
 	virtual ~IEntity();
 
@@ -35,33 +35,33 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Interface function for retrieving the type_index
-	virtual type_index GetTypeID() const = 0;
+	virtual type_index getTypeId() const = 0;
 
 	// Get the entity's handle
 	[[nodiscard]]
-	Handle64 GetHandle() const;
+	handle64 getHandle() const;
 
 	// Get or set the state of this entity
-	void SetActive(bool state);
-	bool IsActive() const;
+	void setActive(bool state);
+	bool isActive() const;
 
 	// Add a component to this entity
 	template<typename ComponentT, typename... ArgsT>
-	ComponentT* AddComponent(ArgsT&&... args);
+	ComponentT* addComponent(ArgsT&&... args);
 
 	// Get a component that's been added to this entity
 	template<typename ComponentT>
 	[[nodiscard]]
-	ComponentT* GetComponent() const;
+	ComponentT* getComponent() const;
 
 	// Remove a component from this entity
 	template<typename ComponentT>
-	void RemoveComponent();
+	void removeComponent();
 
 
 private:
-	void SetHandle(Handle64 this_handle);
-	void SetComponentMgr(ComponentMgr* mgr);
+	void setHandle(handle64 this_handle);
+	void setComponentMgr(ComponentMgr* mgr);
 
 
 protected:
@@ -69,7 +69,7 @@ protected:
 	bool active;
 
 	// Handle to this entity. Set on creation in EntityMgr.
-	Handle64 handle;
+	handle64 handle;
 
 	// A pointer to the component manager. The ECS destroys all
 	// entities before the component manager is destroyed, so
@@ -98,13 +98,13 @@ public:
 
 	Entity(const Entity& entity) = delete;
 
-	type_index GetTypeID() const override {
+	type_index getTypeId() const override {
 		return type_id;
 	}
 
 
 protected:
-	Entity(Handle64 this_handle, ComponentMgr* component_mgr)
+	Entity(handle64 this_handle, ComponentMgr* component_mgr)
 		: IEntity(this_handle, component_mgr) {
 	}
 

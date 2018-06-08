@@ -32,9 +32,9 @@ bool Engine::Init() {
 
 	// Initialize the Entity Component System
 	ecs_engine = make_unique<ECS>();
-	ecs_engine->AddSystem<CameraSystem>();
-	ecs_engine->AddSystem<TransformSystem>();
-	ecs_engine->AddSystem<ModelSystem>();
+	ecs_engine->addSystem<CameraSystem>();
+	ecs_engine->addSystem<TransformSystem>();
+	ecs_engine->addSystem<ModelSystem>();
 
 
 	// Initialize system monitor
@@ -55,7 +55,7 @@ bool Engine::Init() {
 
 	// Initialize rendering manager
 	rendering_mgr = make_unique<RenderingMgr>(*this, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
-	ecs_engine->AddSystem<Renderer>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext());
+	ecs_engine->addSystem<Renderer>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext());
 
 
 	// Initialize scene
@@ -117,7 +117,7 @@ void Engine::Tick() {
 	rendering_mgr->BeginFrame();
 
 	// Update the active systems in the ecs engine
-	ecs_engine->Update(*this);
+	ecs_engine->update(*this);
 
 	// Present the frame
 	rendering_mgr->EndFrame();
@@ -225,11 +225,11 @@ void Engine::OnResize(u32 window_width, u32 window_height) {
 	rendering_mgr->ResizeBuffers(window_width, window_height);
 
 	if (ecs_engine) {
-		ecs_engine->ForEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+		ecs_engine->forEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 			camera.ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
 		});
 
-		ecs_engine->ForEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
+		ecs_engine->forEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
 			camera.ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
 		});
 	}

@@ -19,7 +19,7 @@ class Transform final : public Component<Transform> {
 		// Setters
 		//----------------------------------------------------------------------------------
 
-		void SetParent(const Handle64 handle) { parent = handle; }
+		void SetParent(const handle64 handle) { parent = handle; }
 
 		void Move(const float3& move);
 		void SetPosition(const float3& position);
@@ -42,7 +42,7 @@ class Transform final : public Component<Transform> {
 		//----------------------------------------------------------------------------------
 
 		// Get the entity whose transform is a parent of this transform
-		const Handle64 GetParent() const { return parent; }
+		const handle64 GetParent() const { return parent; }
 
 		// Position, Rotation, and Scale (relative to parent, if any)
 		const XMVECTOR XM_CALLCONV GetPosition() const { return translation; }
@@ -71,7 +71,7 @@ class Transform final : public Component<Transform> {
 
 	private:
 		// The parent of the entity this transform is assigned to (optional)
-		Handle64 parent;
+		handle64 parent;
 
 		// The object-to-world matrix
 		XMMATRIX world;

@@ -18,23 +18,23 @@ class IComponent {
 public:
 	IComponent()
 		: active(true)
-		, owner(Handle64::invalid_handle) {
+		, owner(handle64::invalid_handle) {
 	}
 
 	virtual ~IComponent() = default;
 
-	virtual type_index GetTypeID() const = 0;
+	virtual type_index getTypeId() const = 0;
 
 	// Get the handle of the entity that owns this component
-	Handle64 GetOwner() const {
+	handle64 getOwner() const {
 		return owner;
 	}
 
-	void SetActive(bool state) {
+	void setActive(bool state) {
 		active = state;
 	}
 
-	bool IsActive() const {
+	bool isActive() const {
 		return active;
 	}
 
@@ -44,7 +44,7 @@ protected:
 	bool active;
 
 	// Set on creation in IEntity
-	Handle64 owner;
+	handle64 owner;
 };
 
 
@@ -62,7 +62,7 @@ public:
 	Component() = default;
 	virtual ~Component() = default;
 
-	type_index GetTypeID() const override {
+	type_index getTypeId() const override {
 		return type_id;
 	}
 

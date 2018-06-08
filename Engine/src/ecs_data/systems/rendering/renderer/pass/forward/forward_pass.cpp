@@ -36,7 +36,7 @@ void XM_CALLCONV ForwardPass::Render(ECS& ecs_engine, const FXMMATRIX world_to_p
 
 
 	// Render models
-	ecs_engine.ForEachActive<Model>([&](Model& model) {
+	ecs_engine.forEachActive<Model>([&](Model& model) {
 		Render(ecs_engine, model, world_to_projection);
 	});
 }
@@ -56,7 +56,7 @@ void ForwardPass::BindDefaultRenderStates(const RenderStateMgr& render_state_mgr
 
 void XM_CALLCONV ForwardPass::Render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
 
-	const auto transform            = ecs_engine.GetComponent<Transform>(model.GetOwner());
+	const auto transform            = ecs_engine.getComponent<Transform>(model.getOwner());
 	const auto object_to_world      = transform->GetObjectToWorldMatrix();
 	const auto object_to_projection = object_to_world * world_to_projection;
 

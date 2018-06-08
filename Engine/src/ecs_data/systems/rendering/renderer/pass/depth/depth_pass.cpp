@@ -53,8 +53,8 @@ void XM_CALLCONV DepthPass::Render(const Engine& engine,
 	Pipeline::PS::BindShader(device_context, nullptr, nullptr, 0);
 
 	// Draw each model
-	ecs_engine.ForEachActive<Model>([&](Model& model) {
-		const auto transform      = ecs_engine.GetComponent<Transform>(model.GetOwner());
+	ecs_engine.forEachActive<Model>([&](Model& model) {
+		const auto transform      = ecs_engine.getComponent<Transform>(model.getOwner());
 		const auto model_to_world = transform->GetObjectToWorldMatrix();
 		const auto model_to_proj  = model_to_world * world_to_proj;
 
@@ -85,8 +85,8 @@ void XM_CALLCONV DepthPass::RenderShadows(const Engine& engine,
 	Pipeline::PS::BindShader(device_context, nullptr, nullptr, 0);
 
 	// Draw each model
-	ecs_engine.ForEachActive<Model>([&](Model& model) {
-		const auto transform      = ecs_engine.GetComponent<Transform>(model.GetOwner());
+	ecs_engine.forEachActive<Model>([&](Model& model) {
+		const auto transform      = ecs_engine.getComponent<Transform>(model.getOwner());
 		const auto model_to_world = transform->GetObjectToWorldMatrix();
 		const auto model_to_proj  = model_to_world * world_to_proj;
 

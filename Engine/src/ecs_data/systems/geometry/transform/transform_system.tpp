@@ -8,7 +8,7 @@ void TransformSystem::UpdateWorld(ECS& ecs_engine, TransformT& transform) {
 
 	// If the transform has no parent and doesn't need an update,
 	// then nothing needs to be done.
-	if (transform.GetParent() == Handle64::invalid_handle) {
+	if (transform.GetParent() == handle64::invalid_handle) {
 		if (!transform.needs_update) return;
 	}
 
@@ -16,8 +16,8 @@ void TransformSystem::UpdateWorld(ECS& ecs_engine, TransformT& transform) {
 	// If the parent was updated, or if this transform already needs
 	// an update, then get the parent's matrix.
 	else {
-		const auto parent     = ecs_engine.GetComponent<Transform>(transform.GetParent());
-		const auto parent_cam = ecs_engine.GetComponent<CameraTransform>(transform.GetParent());
+		const auto parent     = ecs_engine.getComponent<Transform>(transform.GetParent());
+		const auto parent_cam = ecs_engine.getComponent<CameraTransform>(transform.GetParent());
 
 		if (parent) {
 			UpdateWorld(ecs_engine, *parent);

@@ -20,7 +20,7 @@ public:
 
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
-	ComponentT* CreateComponent(ArgsT&&... args) {
+	ComponentT* createComponent(ArgsT&&... args) {
 
 		static_assert(std::is_base_of_v<IComponent, ComponentT>,
 			"Calling ComponentMgr::CreateComponent() with non-component type.");
@@ -38,22 +38,22 @@ public:
 	}
 
 
-	void DestroyComponent(IComponent* component) {
+	void destroyComponent(IComponent* component) {
 
-		auto pool = component_pools.GetPool(component->GetTypeID());
+		auto pool = component_pools.GetPool(component->getTypeId());
 
 		pool->DestroyObject(reinterpret_cast<void*>(component));
 	}
 
 
 	template<typename ComponentT>
-	size_t CountOf() {
+	size_t countOf() {
 		return component_pools.PoolExists<ComponentT>() ? component_pools.GetPool<ComponentT>()->GetCount() : 0;
 	}
 
 
 	template<typename ComponentT>
-	bool KnowsComponent() const {
+	bool knowsComponent() const {
 		return component_pools.PoolExists<ComponentT>();
 	}
 

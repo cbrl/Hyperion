@@ -15,7 +15,7 @@
 
 class EntityMgr final {
 public:
-	EntityMgr(shared_ptr<ComponentMgr> component_mgr)
+	explicit EntityMgr(shared_ptr<ComponentMgr> component_mgr)
 		: component_mgr(std::move(component_mgr))
 		, num_expired_entities(0) {
 	}
@@ -24,7 +24,7 @@ public:
 
 
 	template<typename EntityT, typename... ArgsT>
-	Handle64 CreateEntity(ArgsT&&... args) {
+	handle64 createEntity(ArgsT&&... args) {
 
 		static_assert(std::is_base_of_v<IEntity, EntityT>,
 			"Calling EntityMgr::CreateEntity() with non-entity type.");
@@ -36,7 +36,7 @@ public:
 		void* memory = pool->AllocateObject();
 
 		// Create a handle
-		Handle64 handle = handle_table.CreateHandle(static_cast<IEntity*>(memory));
+		handle64 handle = handle_table.createHandle(static_cast<IEntity*>(memory));
 
 		// Create the entity
 		EntityT* entity = new(memory) EntityT(handle, component_mgr.get(), std::forward<ArgsT>(args)...);
@@ -47,7 +47,7 @@ public:
 
 	// Add an entity to the list of expired entities. Will be
 	// destroyed at the end of the next ECS update.
-	void DestroyEntity(Handle64 handle) {
+	void destroyEntity(handle64 handle) {
 
 		if (expired_entities.size() > num_expired_entities) {
 			expired_entities[num_expired_entities] = handle;
@@ -62,20 +62,20 @@ public:
 
 	// Remove all the entities marked for deletion. Should be
 	// called once per tick.
-	void RemoveExpiredEntities() {
-		for (const Handle64 handle : expired_entities) {
+	void removeExpiredEntities() {
+		for (const handle64 handle : expired_entities) {
 
 			// Get the entity
 			IEntity* entity = handle_table[handle];
 
 			// Get the entity type_index
-			const auto type = handle_table[handle]->GetTypeID();
+			const auto type = handle_table[handle]->getTypeId();
 
 			// Get the appropriate pool with the type_index
 			auto pool = entity_pools.GetPool(type);
 
 			// Destroy the entity
-			handle_table.ReleaseHandle(handle);
+			handle_table.releaseHandle(handle);
 			pool->DestroyObject(static_cast<void*>(entity));
 		}
 
@@ -83,19 +83,19 @@ public:
 	}
 
 
-	IEntity* GetEntity(Handle64 handle) {
+	IEntity* getEntity(handle64 handle) {
 		return handle_table[handle];
 	}
 
 
 	template<typename EntityT>
-	size_t CountOf() {
+	size_t countOf() {
 		return entity_pools.PoolExists<EntityT>() ? entity_pools.GetPool<EntityT>()->Count() : 0;
 	}
 
 
 	template<typename EntityT>
-	bool KnowsEntity() const {
+	bool knowsEntity() const {
 		return entity_pools.PoolExists<EntityT>();
 	}
 
@@ -123,9 +123,9 @@ private:
 	ResourcePoolFactory entity_pools;
 
 	// Handle table, which maps handles to a pointer to an entity
-	HandleTable<Handle64, IEntity> handle_table;
+	HandleTable<handle64, IEntity> handle_table;
 
 	// Container of entities that need to be deleted
-	vector<Handle64> expired_entities;
+	vector<handle64> expired_entities;
 	u32 num_expired_entities;
 };

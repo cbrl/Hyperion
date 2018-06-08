@@ -8,5 +8,5 @@ class ModelSystem final : public System<ModelSystem> {
 		ModelSystem() = default;
 		~ModelSystem() = default;
 
-		void Update(const Engine& engine) override;
+		void update(const Engine& engine) override;
 };

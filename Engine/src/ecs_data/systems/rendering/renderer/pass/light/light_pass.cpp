@@ -149,9 +149,9 @@ void XM_CALLCONV LightPass::UpdateDirectionalLightData(ECS& ecs_engine, FXMMATRI
 	// Clear the cameras
 	directional_light_cameras.clear();
 
-	ecs_engine.ForEachActive<DirectionalLight>([&](DirectionalLight& light) {
+	ecs_engine.forEachActive<DirectionalLight>([&](DirectionalLight& light) {
 
-		const auto transform = ecs_engine.GetComponent<Transform>(light.GetOwner());
+		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
 
 		if (!light.CastsShadows()) {
 			DirectionalLightBuffer buffer;
@@ -194,9 +194,9 @@ void XM_CALLCONV LightPass::UpdatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 	point_light_cameras.clear();
 
 
-	ecs_engine.ForEachActive<PointLight>([&](PointLight& light) {
+	ecs_engine.forEachActive<PointLight>([&](PointLight& light) {
 
-		const auto transform           = ecs_engine.GetComponent<Transform>(light.GetOwner());
+		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
 		const auto light_to_world      = transform->GetObjectToWorldMatrix();
 		const auto light_to_projection = light_to_world * world_to_projection;
 
@@ -276,9 +276,9 @@ void XM_CALLCONV LightPass::UpdateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 	spot_light_cameras.clear();
 
 
-	ecs_engine.ForEachActive<SpotLight>([&](SpotLight& light) {
+	ecs_engine.forEachActive<SpotLight>([&](SpotLight& light) {
 
-		const auto transform           = ecs_engine.GetComponent<Transform>(light.GetOwner());
+		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
 		const auto light_to_world      = transform->GetObjectToWorldMatrix();
 		const auto light_to_projection = light_to_world * world_to_projection;
 

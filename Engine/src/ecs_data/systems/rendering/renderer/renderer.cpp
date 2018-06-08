@@ -15,7 +15,7 @@ Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
 }
 
 
-void Renderer::Update(const Engine& engine) {
+void Renderer::update(const Engine& engine) {
 
 	auto& ecs_engine             = engine.GetECS();
 	const auto& rendering_mgr    = engine.GetRenderingMgr();
@@ -23,7 +23,7 @@ void Renderer::Update(const Engine& engine) {
 	auto& scene                  = engine.GetScene();
 
 
-	ecs_engine.ForEachActive<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
+	ecs_engine.forEachActive<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
 		// Bind the buffer
 		camera.BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
 
@@ -31,7 +31,7 @@ void Renderer::Update(const Engine& engine) {
 		RenderCamera(engine, camera);
 	});
 
-	ecs_engine.ForEachActive<OrthographicCamera>([&](const OrthographicCamera& camera) {
+	ecs_engine.forEachActive<OrthographicCamera>([&](const OrthographicCamera& camera) {
 		// Bind the buffer
 		camera.BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
 

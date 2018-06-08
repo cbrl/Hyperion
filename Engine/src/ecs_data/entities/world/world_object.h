@@ -16,10 +16,10 @@
 template<typename T = void>
 class WorldObject : public Entity<WorldObject<T>> {
 	public:
-		WorldObject(Handle64 this_handle, ComponentMgr* component_mgr)
+		WorldObject(handle64 this_handle, ComponentMgr* component_mgr)
 			: Entity<WorldObject<T>>(this_handle, component_mgr) {
 
-			this->AddComponent<Transform>();
+			this->addComponent<Transform>();
 		}
 
 		virtual ~WorldObject() = default;

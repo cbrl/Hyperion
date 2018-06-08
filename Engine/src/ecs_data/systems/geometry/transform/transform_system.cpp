@@ -3,26 +3,26 @@
 #include "engine\engine.h"
 
 
-void TransformSystem::Update(const Engine& engine) {
+void TransformSystem::update(const Engine& engine) {
 	auto& ecs_engine = engine.GetECS();
 
-	ecs_engine.ForEachActive<Transform>([&](Transform& transform) {
+	ecs_engine.forEachActive<Transform>([&](Transform& transform) {
 		UpdateWorld(ecs_engine, transform);
 	});
 
-	ecs_engine.ForEachActive<CameraTransform>([&](CameraTransform& transform) {
+	ecs_engine.forEachActive<CameraTransform>([&](CameraTransform& transform) {
 		UpdateWorld(ecs_engine, transform);
 	});
 }
 
 
-void TransformSystem::PostUpdate(const Engine& engine) {
+void TransformSystem::postUpdate(const Engine& engine) {
 	auto& ecs_engine = engine.GetECS();
 
-	ecs_engine.ForEachActive<Transform>([&](Transform& transform) {
+	ecs_engine.forEachActive<Transform>([&](Transform& transform) {
 		transform.updated = false;
 	});
-	ecs_engine.ForEachActive<CameraTransform>([&](CameraTransform& transform) {
+	ecs_engine.forEachActive<CameraTransform>([&](CameraTransform& transform) {
 		transform.updated = false;
 	});
 }

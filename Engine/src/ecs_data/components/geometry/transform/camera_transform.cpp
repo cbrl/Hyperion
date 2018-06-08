@@ -3,7 +3,7 @@
 
 
 CameraTransform::CameraTransform()
-	: parent(Handle64::invalid_handle)
+	: parent(handle64::invalid_handle)
 
 	, world(XMMatrixIdentity())
 	, position(XMVectorZero())

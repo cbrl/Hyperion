@@ -22,26 +22,26 @@ SystemMgr::~SystemMgr() {
 }
 
 
-void SystemMgr::Update(const Engine& engine) {
+void SystemMgr::update(const Engine& engine) {
 
 	// Pre Update
 	for (const auto& pair : systems) {
-		if (pair.second->IsActive()) {
-			pair.second->PreUpdate(engine);
+		if (pair.second->isActive()) {
+			pair.second->preUpdate(engine);
 		}
 	}
 
 	// Update
 	for (const auto& pair : systems) {
-		if (pair.second->IsActive()) {
-			pair.second->Update(engine);
+		if (pair.second->isActive()) {
+			pair.second->update(engine);
 		}
 	}
 
 	// Post Update
 	for (const auto& pair : systems) {
-		if (pair.second->IsActive()) {
-			pair.second->PostUpdate(engine);
+		if (pair.second->isActive()) {
+			pair.second->postUpdate(engine);
 		}
 	}
 }

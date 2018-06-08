@@ -4,10 +4,10 @@
 #include "log/log.h"
 
 
-template<typename HandleT, typename DataT, size_t chunk_size = 512>
+template<typename HandleT, typename DataT, size_t ChunkSize = 512>
 class HandleTable {
 private:
-	using HandleEntry = std::pair<typename HandleT::value_type, DataT*>;
+	using handle_entry = std::pair<typename HandleT::value_type, DataT*>;
 
 	// Potential expansion of HandleEntry
 	/*
@@ -26,13 +26,13 @@ private:
 
 
 public:
-	HandleTable() { AllocateChunk(); }
+	HandleTable() { allocateChunk(); }
 	~HandleTable() = default;
 
-	HandleT CreateHandle(DataT* object);
-	void ReleaseHandle(HandleT handle);
+	HandleT createHandle(DataT* object);
+	void releaseHandle(HandleT handle);
 
-	bool Expired(const HandleT& handle) const {
+	bool expired(const HandleT& handle) const {
 		return handle.counter != handle_table[handle.index].first;
 	}
 
@@ -56,11 +56,11 @@ public:
 
 
 private:
-	void AllocateChunk();
+	void allocateChunk();
 
 
 private:
-	vector<HandleEntry> handle_table;
+	vector<handle_entry> handle_table;
 };
 
 

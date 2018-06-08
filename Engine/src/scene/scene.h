@@ -46,6 +46,6 @@ class Scene {
 		//UserInterface     ui;
 		Fog               fog;
 		map<string, Text> texts;
-		vector<Handle64>  entities;
+		vector<handle64>  entities;
 };
 

@@ -9,7 +9,7 @@
 
 class PlayerCamera final : public Entity<PlayerCamera> {
 	public:
-		PlayerCamera(Handle64 this_handle,
+		PlayerCamera(handle64 this_handle,
 		             ComponentMgr* component_mgr,
 		             ID3D11Device& device,
 		             ID3D11DeviceContext& device_context,
@@ -19,13 +19,13 @@ class PlayerCamera final : public Entity<PlayerCamera> {
 		             const wstring& skybox_texture)
 			: Entity(this_handle, component_mgr) {
 
-				this->AddComponent<PerspectiveCamera>(device, device_context, viewport_width, viewport_height);
-				this->AddComponent<CameraTransform>();
-				this->AddComponent<CameraMovement>();
-				this->AddComponent<SkyBox>(device, resource_mgr, skybox_texture);
+				this->addComponent<PerspectiveCamera>(device, device_context, viewport_width, viewport_height);
+				this->addComponent<CameraTransform>();
+				this->addComponent<CameraMovement>();
+				this->addComponent<SkyBox>(device, resource_mgr, skybox_texture);
 		}
 
-		PlayerCamera(Handle64 this_handle,
+		PlayerCamera(handle64 this_handle,
 		             ComponentMgr* component_mgr,
 		             ID3D11Device& device,
 		             ID3D11DeviceContext& device_context,
@@ -34,10 +34,10 @@ class PlayerCamera final : public Entity<PlayerCamera> {
 		             shared_ptr<Texture> skybox_texture)
 			: Entity(this_handle, component_mgr) {
 
-			this->AddComponent<PerspectiveCamera>(device, device_context, viewport_width, viewport_height);
-			this->AddComponent<CameraTransform>();
-			this->AddComponent<CameraMovement>();
-			this->AddComponent<SkyBox>(device, skybox_texture);
+			this->addComponent<PerspectiveCamera>(device, device_context, viewport_width, viewport_height);
+			this->addComponent<CameraTransform>();
+			this->addComponent<CameraMovement>();
+			this->addComponent<SkyBox>(device, skybox_texture);
 		}
 
 		~PlayerCamera() = default;

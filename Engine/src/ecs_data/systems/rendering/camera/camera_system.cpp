@@ -5,19 +5,19 @@
 #include "ecs_data\components\rendering\camera\orthographic_camera.h"
 
 
-void CameraSystem::Update(const Engine& engine) {
+void CameraSystem::update(const Engine& engine) {
 	auto& ecs_engine     = engine.GetECS();
 	auto& device_context = engine.GetRenderingMgr().GetDeviceContext();
 
-	ecs_engine.ForEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-		Handle64 owner       = camera.GetOwner();
-		const auto transform = ecs_engine.GetComponent<CameraTransform>(owner);
+	ecs_engine.forEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+		handle64 owner       = camera.getOwner();
+		const auto transform = ecs_engine.getComponent<CameraTransform>(owner);
 
 		if (!transform) return;
 
 
 		// Process movement
-		if (auto movement = ecs_engine.GetComponent<CameraMovement>(owner)) {
+		if (auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
 			ProcessMovement(engine, movement, transform);
 		}
 
@@ -34,15 +34,15 @@ void CameraSystem::Update(const Engine& engine) {
 	});
 
 
-	ecs_engine.ForEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
-		Handle64 owner       = camera.GetOwner();
-		const auto transform = ecs_engine.GetComponent<CameraTransform>(owner);
+	ecs_engine.forEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
+		handle64 owner       = camera.getOwner();
+		const auto transform = ecs_engine.getComponent<CameraTransform>(owner);
 
 		if (!transform) return;
 
 
 		// Process movement
-		if (auto movement = ecs_engine.GetComponent<CameraMovement>(owner)) {
+		if (auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
 			ProcessMovement(engine, movement, transform);
 		}
 

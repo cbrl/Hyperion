@@ -10,7 +10,7 @@ public:
 	ECS();
 	~ECS();
 
-	void Update(const Engine& engine) const;
+	void update(const Engine& engine) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -19,9 +19,9 @@ public:
 
 	template<typename EntityT, typename... ArgsT>
 	[[nodiscard]]
-	Handle64 CreateEntity(ArgsT&&... args);
+	handle64 createEntity(ArgsT&&... args);
 
-	void DestroyEntity(Handle64 entity) const;
+	void destroyEntity(handle64 entity) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -29,14 +29,14 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ComponentT, typename... ArgsT>
-	ComponentT* AddComponent(Handle64 entity, ArgsT&&... args);
+	ComponentT* addComponent(handle64 entity, ArgsT&&... args);
 
 	template<typename ComponentT>
-	void RemoveComponent(Handle64 entity) const;
+	void removeComponent(handle64 entity) const;
 
 	template<typename ComponentT>
 	[[nodiscard]]
-	ComponentT* GetComponent(Handle64 entity) const;
+	ComponentT* getComponent(handle64 entity) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename SystemT, typename... ArgsT>
-	SystemT* AddSystem(ArgsT&&... args);
+	SystemT* addSystem(ArgsT&&... args);
 
 
 	//----------------------------------------------------------------------------------
@@ -53,14 +53,14 @@ public:
 
 	// Do something to each active entity or component
 	template<typename T, typename ActionT>
-	void ForEachActive(ActionT act);
+	void forEachActive(ActionT act);
 
 	// Get the number of a specific entity/component
 	template<typename T>
-	size_t CountOf() const;
+	size_t countOf() const;
 
-	EntityMgr* GetEntityMgr() const { return entity_mgr.get(); }
-	ComponentMgr* GetComponentMgr() const { return component_mgr.get(); }
+	EntityMgr* getEntityMgr() const { return entity_mgr.get(); }
+	ComponentMgr* getComponentMgr() const { return component_mgr.get(); }
 
 
 private:

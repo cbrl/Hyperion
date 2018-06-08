@@ -11,7 +11,7 @@ class CameraSystem final : public System<CameraSystem> {
 		CameraSystem() = default;
 		~CameraSystem() = default;
 
-		void Update(const Engine& engine) override;
+		void update(const Engine& engine) override;
 
 
 	private:

@@ -14,12 +14,12 @@ ECS::~ECS() {
 }
 
 
-void ECS::Update(const Engine& engine) const {
-	system_mgr->Update(engine);
-	entity_mgr->RemoveExpiredEntities();
+void ECS::update(const Engine& engine) const {
+	system_mgr->update(engine);
+	entity_mgr->removeExpiredEntities();
 }
 
 
-void ECS::DestroyEntity(Handle64 entity) const {
-	entity_mgr->DestroyEntity(entity);
+void ECS::destroyEntity(handle64 entity) const {
+	entity_mgr->destroyEntity(entity);
 }

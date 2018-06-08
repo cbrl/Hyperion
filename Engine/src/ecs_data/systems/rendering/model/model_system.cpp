@@ -5,14 +5,14 @@
 #include "ecs_data\components\rendering\model\model.h"
 
 
-void ModelSystem::Update(const Engine& engine) {
+void ModelSystem::update(const Engine& engine) {
 	auto& ecs_engine = engine.GetECS();
 	auto& device_context = engine.GetRenderingMgr().GetDeviceContext();
 
-	ecs_engine.ForEachActive<Model>([&](Model& model) {
+	ecs_engine.forEachActive<Model>([&](Model& model) {
 
-		const auto owner = model.GetOwner();
-		const auto transform = ecs_engine.GetComponent<Transform>(owner);
+		const auto owner = model.getOwner();
+		const auto transform = ecs_engine.getComponent<Transform>(owner);
 
 		if (transform) {
 			if (transform->Updated()) {

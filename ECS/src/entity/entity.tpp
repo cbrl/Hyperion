@@ -6,7 +6,7 @@
 //----------------------------------------------------------------------------------
 
 template<typename ComponentT>
-ComponentT* IEntity::GetComponent() const {
+ComponentT* IEntity::getComponent() const {
 
 	auto it = components.find(ComponentT::type_id);
 
@@ -18,7 +18,7 @@ ComponentT* IEntity::GetComponent() const {
 
 
 template<typename ComponentT, typename... ArgsT>
-ComponentT* IEntity::AddComponent(ArgsT&&... args) {
+ComponentT* IEntity::addComponent(ArgsT&&... args) {
 
 	auto it = components.find(ComponentT::type_id);
 
@@ -27,7 +27,7 @@ ComponentT* IEntity::AddComponent(ArgsT&&... args) {
 		return static_cast<ComponentT* const>(it->second);
 	}
 
-	components[ComponentT::type_id] = component_mgr->CreateComponent<ComponentT>(std::forward<ArgsT>(args)...);
+	components[ComponentT::type_id] = component_mgr->createComponent<ComponentT>(std::forward<ArgsT>(args)...);
 	components[ComponentT::type_id]->owner = handle;
 
 	return static_cast<ComponentT* const>(components[ComponentT::type_id]);
@@ -35,10 +35,10 @@ ComponentT* IEntity::AddComponent(ArgsT&&... args) {
 
 
 template<typename ComponentT>
-void IEntity::RemoveComponent() {
+void IEntity::removeComponent() {
 
 	auto it = components.find(ComponentT::type_id);
 
-	component_mgr->DestroyComponent(it->second);
+	component_mgr->destroyComponent(it->second);
 	components.erase(it);
 }

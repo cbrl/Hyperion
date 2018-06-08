@@ -10,8 +10,8 @@ class TransformSystem final : public System<TransformSystem> {
 		TransformSystem() = default;
 		~TransformSystem() = default;
 
-		void Update(const Engine& engine) override;
-		void PostUpdate(const Engine& engine) override;
+		void update(const Engine& engine) override;
+		void postUpdate(const Engine& engine) override;
 
 
 	private:

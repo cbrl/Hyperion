@@ -20,7 +20,7 @@ class Renderer final : public System<Renderer> {
 		Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context);
 		~Renderer() = default;
 
-		void Update(const Engine& engine);
+		void update(const Engine& engine);
 
 		template<typename CameraT>
 		void RenderCamera(const Engine& engine, const CameraT& camera);
