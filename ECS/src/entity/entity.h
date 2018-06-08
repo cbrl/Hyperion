@@ -1,6 +1,6 @@
 #pragma once
 
-#include "component\component_mgr.h"
+#include "component/component_mgr.h"
 
 
 //----------------------------------------------------------------------------------
@@ -14,72 +14,71 @@
 class IEntity {
 	friend class EntityMgr;
 
-	public:
-		//----------------------------------------------------------------------------------
-		// Constructors / Destructors
-		//----------------------------------------------------------------------------------
+public:
+	//----------------------------------------------------------------------------------
+	// Constructors / Destructors
+	//----------------------------------------------------------------------------------
 
-		IEntity() = delete;
+	IEntity() = delete;
 
-		IEntity(const IEntity& entity) = delete;
+	IEntity(const IEntity& entity) = delete;
 
-		IEntity(IEntity&& entity) = default;
+	IEntity(IEntity&& entity) = default;
 
-		IEntity(Handle64 this_handle, ComponentMgr* component_mgr);
+	IEntity(Handle64 this_handle, ComponentMgr* component_mgr);
 
-		virtual ~IEntity();
-
-
-		//----------------------------------------------------------------------------------
-		// Member functions
-		//----------------------------------------------------------------------------------
-
-		// Interface function for retrieving the type_index
-		virtual const type_index GetTypeID() const = 0;
-
-		// Get the entity's handle
-		[[nodiscard]]
-		const Handle64 GetHandle() const;
-
-		// Get or set the state of this entity
-		void SetActive(bool state);
-		bool IsActive() const;
-
-		// Add a component to this entity
-		template<typename ComponentT, typename... ArgsT>
-		ComponentT* const AddComponent(ArgsT&&... args);
-
-		// Get a component that's been added to this entity
-		template<typename ComponentT>
-		[[nodiscard]]
-		ComponentT* const GetComponent() const;
-
-		// Remove a component from this entity
-		template<typename ComponentT>
-		void RemoveComponent();
+	virtual ~IEntity();
 
 
-	private:
-		void SetHandle(Handle64 this_handle);
-		void SetComponentMgr(ComponentMgr* mgr);
+	//----------------------------------------------------------------------------------
+	// Member functions
+	//----------------------------------------------------------------------------------
+
+	// Interface function for retrieving the type_index
+	virtual type_index GetTypeID() const = 0;
+
+	// Get the entity's handle
+	[[nodiscard]]
+	Handle64 GetHandle() const;
+
+	// Get or set the state of this entity
+	void SetActive(bool state);
+	bool IsActive() const;
+
+	// Add a component to this entity
+	template<typename ComponentT, typename... ArgsT>
+	ComponentT* AddComponent(ArgsT&&... args);
+
+	// Get a component that's been added to this entity
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT* GetComponent() const;
+
+	// Remove a component from this entity
+	template<typename ComponentT>
+	void RemoveComponent();
 
 
-	protected:
-		// Is this entity active or should it be ignored?
-		bool active;
+private:
+	void SetHandle(Handle64 this_handle);
+	void SetComponentMgr(ComponentMgr* mgr);
 
-		// Handle to this entity. Set on creation in EntityMgr.
-		Handle64 handle;
 
-		// A pointer to the component manager. The ECS destroys all
-		// entities before the component manager is destroyed, so
-		// this pointer should never be invalid in this context.
-		ComponentMgr* component_mgr;
+protected:
+	// Is this entity active or should it be ignored?
+	bool active;
 
-		// Map of pointers to components. Holds 1 of each unique type.
-		unordered_map<type_index, IComponent*> components;
+	// Handle to this entity. Set on creation in EntityMgr.
+	Handle64 handle;
+
+	// A pointer to the component manager. The ECS destroys all
+	// entities before the component manager is destroyed, so
+	// this pointer should never be invalid in this context.
+	ComponentMgr* component_mgr;
+
+	// Map of pointers to components. Holds 1 of each unique type.
+	unordered_map<type_index, IComponent*> components;
 };
-
 
 
 //----------------------------------------------------------------------------------
@@ -94,29 +93,29 @@ template<typename T>
 class Entity : public IEntity {
 	friend class EntityMgr;
 
-	public:
-		virtual const type_index GetTypeID() const override {
-			return type_id;
-		}
+public:
+	Entity() = delete;
+
+	Entity(const Entity& entity) = delete;
+
+	type_index GetTypeID() const override {
+		return type_id;
+	}
 
 
-	protected:
-		Entity() = delete;
+protected:
+	Entity(Handle64 this_handle, ComponentMgr* component_mgr)
+		: IEntity(this_handle, component_mgr) {
+	}
 
-		Entity(Handle64 this_handle, ComponentMgr* component_mgr)
-			: IEntity(this_handle, component_mgr)
-		{}
+	Entity(Entity&& entity) = default;
 
-		Entity(const Entity& entity) = delete;
-
-		Entity(Entity&& entity) = default;
-
-		virtual ~Entity() = default;
+	virtual ~Entity() = default;
 
 
-	public:
-		// And ID unique to type T
-		static const type_index type_id;
+public:
+	// And ID unique to type T
+	static const type_index type_id;
 };
 
 

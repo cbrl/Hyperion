@@ -6,7 +6,7 @@
 //----------------------------------------------------------------------------------
 
 template<typename ComponentT>
-ComponentT* const IEntity::GetComponent() const {
+ComponentT* IEntity::GetComponent() const {
 
 	auto it = components.find(ComponentT::type_id);
 
@@ -18,7 +18,7 @@ ComponentT* const IEntity::GetComponent() const {
 
 
 template<typename ComponentT, typename... ArgsT>
-ComponentT* const IEntity::AddComponent(ArgsT&&... args) {
+ComponentT* IEntity::AddComponent(ArgsT&&... args) {
 
 	auto it = components.find(ComponentT::type_id);
 
@@ -42,24 +42,3 @@ void IEntity::RemoveComponent() {
 	component_mgr->DestroyComponent(it->second);
 	components.erase(it);
 }
-
-
-
-
-//----------------------------------------------------------------------------------
-// Entity
-//----------------------------------------------------------------------------------
-
-
-//template<typename T>
-//template<typename... ArgsT>
-//void Entity<T>::Construct(ArgsT&&... args) {
-//	static_assert(std::is_base_of_v<Entity, T>, "Entity<T> - Invalid derived class.");
-//	Init(std::forward<ArgsT>(args)...);
-//}
-//
-//template<typename T>
-//template<typename... ArgsT>
-//void Entity<T>::Init(ArgsT&&... args) {
-//	static_cast<T*>(this)->Init(std::forward<ArgsT>(args)...);
-//}

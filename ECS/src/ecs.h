@@ -1,76 +1,72 @@
 #pragma once
 
-#include "entity\entity_mgr.h"
-#include "component\component_mgr.h"
-#include "system\system_mgr.h"
+#include "entity/entity_mgr.h"
+#include "component/component_mgr.h"
+#include "system/system_mgr.h"
 
 
 class ECS final {
-	public:
-		ECS();
-		~ECS();
+public:
+	ECS();
+	~ECS();
 
-		void Update(const Engine& engine);
-
-
-		//----------------------------------------------------------------------------------
-		// Entities
-		//----------------------------------------------------------------------------------
-
-		template<typename EntityT, typename... ArgsT>
-		[[nodiscard]]
-		const Handle64 CreateEntity(ArgsT&&... args);
-
-		void DestroyEntity(Handle64 entity);
+	void Update(const Engine& engine) const;
 
 
-		//----------------------------------------------------------------------------------
-		// Components
-		//----------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------
+	// Entities
+	//----------------------------------------------------------------------------------
 
-		template<typename ComponentT, typename... ArgsT>
-		ComponentT* const AddComponent(Handle64 entity, ArgsT&&... args);
+	template<typename EntityT, typename... ArgsT>
+	[[nodiscard]]
+	Handle64 CreateEntity(ArgsT&&... args);
 
-		template<typename ComponentT>
-		void RemoveComponent(Handle64 entity);
-
-		template<typename ComponentT>
-		[[nodiscard]]
-		ComponentT* const GetComponent(Handle64 entity) const;
+	void DestroyEntity(Handle64 entity) const;
 
 
-		//----------------------------------------------------------------------------------
-		// Systems
-		//----------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------
+	// Components
+	//----------------------------------------------------------------------------------
 
-		template<typename SystemT, typename... ArgsT>
-		SystemT* const AddSystem(ArgsT&&... args);
+	template<typename ComponentT, typename... ArgsT>
+	ComponentT* AddComponent(Handle64 entity, ArgsT&&... args);
 
+	template<typename ComponentT>
+	void RemoveComponent(Handle64 entity) const;
 
-		//----------------------------------------------------------------------------------
-		// Misc
-		//----------------------------------------------------------------------------------
-
-		// Do something to each active entity or component
-		template<typename T, typename ActionT>
-		void ForEachActive(ActionT act);
-
-		// Get the number of a specific entity/component
-		template<typename T>
-		size_t CountOf() const;
-
-		// Get the number of a specific entity/component that are active
-		template<typename T>
-		size_t CountOfActive() const;
-
-		EntityMgr* const    GetEntityMgr()    const { return entity_mgr.get(); }
-		ComponentMgr* const GetComponentMgr() const { return component_mgr.get(); }
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT* GetComponent(Handle64 entity) const;
 
 
-	private:
-		unique_ptr<EntityMgr>    entity_mgr;
-		shared_ptr<ComponentMgr> component_mgr;
-		unique_ptr<SystemMgr>    system_mgr;
+	//----------------------------------------------------------------------------------
+	// Systems
+	//----------------------------------------------------------------------------------
+
+	template<typename SystemT, typename... ArgsT>
+	SystemT* AddSystem(ArgsT&&... args);
+
+
+	//----------------------------------------------------------------------------------
+	// Misc
+	//----------------------------------------------------------------------------------
+
+	// Do something to each active entity or component
+	template<typename T, typename ActionT>
+	void ForEachActive(ActionT act);
+
+	// Get the number of a specific entity/component
+	template<typename T>
+	size_t CountOf() const;
+
+	EntityMgr* GetEntityMgr() const { return entity_mgr.get(); }
+	ComponentMgr* GetComponentMgr() const { return component_mgr.get(); }
+
+
+private:
+	unique_ptr<EntityMgr> entity_mgr;
+	shared_ptr<ComponentMgr> component_mgr;
+	unique_ptr<SystemMgr> system_mgr;
 };
 
 

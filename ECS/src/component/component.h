@@ -1,7 +1,7 @@
 #pragma once
 
-#include "datatypes\datatypes.h"
-#include "handle\handle.h"
+#include "datatypes/datatypes.h"
+#include "handle/handle.h"
 
 
 //----------------------------------------------------------------------------------
@@ -15,39 +15,37 @@
 class IComponent {
 	friend class IEntity;
 
-	public:
-		IComponent()
-			: owner(Handle64::invalid_handle)
-			, active(true)
-		{}
+public:
+	IComponent()
+		: active(true)
+		, owner(Handle64::invalid_handle) {
+	}
 
-		virtual ~IComponent() = default;
+	virtual ~IComponent() = default;
 
-		virtual const type_index GetTypeID() const = 0;
+	virtual type_index GetTypeID() const = 0;
 
-		// Get the handle of the entity that owns this component
-		const Handle64 GetOwner() const {
-			return owner;
-		}
+	// Get the handle of the entity that owns this component
+	Handle64 GetOwner() const {
+		return owner;
+	}
 
-		void SetActive(bool state) {
-			active = state;
-		}
+	void SetActive(bool state) {
+		active = state;
+	}
 
-		bool IsActive() const {
-			return active;
-		}
+	bool IsActive() const {
+		return active;
+	}
 
 
+protected:
+	// Is the component active?
+	bool active;
 
-	protected:
-		// Is the component active?
-		bool active;
-
-		// Set on creation in IEntity
-		Handle64 owner;
+	// Set on creation in IEntity
+	Handle64 owner;
 };
-
 
 
 //----------------------------------------------------------------------------------
@@ -60,18 +58,18 @@ class IComponent {
 
 template<typename T>
 class Component : public IComponent {
-	public:
-		Component() = default;
-		virtual ~Component() = default;
+public:
+	Component() = default;
+	virtual ~Component() = default;
 
-		const type_index GetTypeID() const override {
-			return type_id;
-		}
+	type_index GetTypeID() const override {
+		return type_id;
+	}
 
 
-	public:
-		// An ID unique to type T
-		static const type_index type_id;
+public:
+	// An ID unique to type T
+	static const type_index type_id;
 };
 
 

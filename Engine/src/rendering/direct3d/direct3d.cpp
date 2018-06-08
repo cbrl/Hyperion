@@ -18,8 +18,8 @@ Direct3D::Direct3D(HWND hWnd,
 	, enable_vsync(vSync)
 	, enable_fullscreen(fullscreen)
 	, driver_type(D3D_DRIVER_TYPE_HARDWARE)
-	, MSAA4x_quality(0)
-{
+	, MSAA4x_quality(0) {
+
 	Init();
 }
 

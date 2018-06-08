@@ -2,7 +2,7 @@
 #include "ecs.h"
 
 
-IEntity::IEntity(Handle64 this_handle, ComponentMgr * component_mgr)
+IEntity::IEntity(Handle64 this_handle, ComponentMgr* component_mgr)
 	: active(true)
 	, handle(this_handle)
 	, component_mgr(component_mgr) {
@@ -40,6 +40,6 @@ bool IEntity::IsActive() const {
 }
 
 
-const Handle64 IEntity::GetHandle() const {
+Handle64 IEntity::GetHandle() const {
 	return handle;
 }

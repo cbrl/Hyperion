@@ -1,4 +1,3 @@
-
 template<typename HandleT, typename DataT, size_t chunk_size>
 void HandleTable<HandleT, DataT, chunk_size>::AllocateChunk() {
 
