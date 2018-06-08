@@ -30,10 +30,10 @@ public:
 			"Calling EntityMgr::CreateEntity() with non-entity type.");
 
 		// Get the proper entity pool
-		auto pool = entity_pools.GetOrCreatePool<EntityT>();
+		auto pool = entity_pools.getOrCreatePool<EntityT>();
 
 		// Allocate memory for the entity
-		void* memory = pool->AllocateObject();
+		void* memory = pool->allocateObject();
 
 		// Create a handle
 		handle64 handle = handle_table.createHandle(static_cast<IEntity*>(memory));
@@ -72,11 +72,11 @@ public:
 			const auto type = handle_table[handle]->getTypeId();
 
 			// Get the appropriate pool with the type_index
-			auto pool = entity_pools.GetPool(type);
+			auto pool = entity_pools.getPool(type);
 
 			// Destroy the entity
 			handle_table.releaseHandle(handle);
-			pool->DestroyObject(static_cast<void*>(entity));
+			pool->destroyObject(static_cast<void*>(entity));
 		}
 
 		num_expired_entities = 0;
@@ -90,27 +90,27 @@ public:
 
 	template<typename EntityT>
 	size_t countOf() {
-		return entity_pools.PoolExists<EntityT>() ? entity_pools.GetPool<EntityT>()->Count() : 0;
+		return entity_pools.poolExists<EntityT>() ? entity_pools.getPool<EntityT>()->Count() : 0;
 	}
 
 
 	template<typename EntityT>
 	bool knowsEntity() const {
-		return entity_pools.PoolExists<EntityT>();
+		return entity_pools.poolExists<EntityT>();
 	}
 
 
 	template<typename EntityT>
 	typename ResourcePool<EntityT>::iterator begin() {
 		using pool_t = ResourcePool<EntityT>;
-		auto* pool = static_cast<pool_t*>(entity_pools.GetPool<EntityT>());
+		auto* pool = static_cast<pool_t*>(entity_pools.getPool<EntityT>());
 		return pool->begin();
 	}
 
 	template<typename EntityT>
 	typename ResourcePool<EntityT>::iterator end() {
 		using pool_t = ResourcePool<EntityT>;
-		auto* pool = static_cast<pool_t*>(entity_pools.GetPool<EntityT>());
+		auto* pool = static_cast<pool_t*>(entity_pools.getPool<EntityT>());
 		return pool->end();
 	}
 

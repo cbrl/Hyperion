@@ -1,22 +1,22 @@
 #pragma once
 
-#include "datatypes\datatypes.h"
+#include "datatypes/datatypes.h"
 
 
 namespace AllocatorUtil {
 
 	// Calculate the padding needed to align an address
-	static inline const size_t CalculatePadding(const uintptr address, const size_t alignment) {
+	static size_t CalculatePadding(const uintptr address, const size_t alignment) {
 
-		size_t pad =  alignment - (address & static_cast<uintptr>(alignment - 1));
+		size_t pad = alignment - (address & static_cast<uintptr>(alignment - 1));
 
 		return (pad == alignment) ? 0 : pad;
 	}
 
 
-	static inline const size_t CalculatePadding(const uintptr address,
-												const size_t  alignment,
-												const size_t  header_size) {
+	static size_t CalculatePadding(const uintptr address,
+	                               const size_t alignment,
+	                               const size_t header_size) {
 
 		size_t padding = CalculatePadding(address, alignment);
 

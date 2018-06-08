@@ -19,7 +19,6 @@ using std::wofstream;
 namespace fs = std::experimental::filesystem;
 
 
-
 // Get the parent path of a file/folder
 inline string GetParentPath(const string& in) {
 	return fs::path(in).parent_path().string() + "/";
@@ -68,12 +67,7 @@ inline bool OpenFilePicker(wchar_t* lpstrFile, DWORD nMaxFile) {
 	ofn.nMaxFile = nMaxFile;
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-	if (GetOpenFileName(&ofn)) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return GetOpenFileName(&ofn) != 0;
 }
 
 #endif

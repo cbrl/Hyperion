@@ -45,7 +45,7 @@ namespace Shapes
             std::swap(*it, *(it + 2));
         }
 
-		if constexpr (VertexT::HasTexture())
+		if constexpr (VertexT::hasTexture())
 		{
 			for (auto it = vertices.begin(); it != vertices.end(); ++it)
 			{
@@ -62,7 +62,7 @@ namespace Shapes
 	template<typename VertexT>
     inline void InvertNormals(vector<VertexT>& vertices)
     {
-		if constexpr (VertexT::HasNormal())
+		if constexpr (VertexT::hasNormal())
 		{
 			for (auto it = vertices.begin(); it != vertices.end(); ++it)
 			{
@@ -146,14 +146,14 @@ namespace Shapes
 			XMStoreFloat3(&vertices.rbegin()[1].position, (normal + side1 + side2) * tsize);
 			XMStoreFloat3(&vertices.rbegin()[0].position, (normal + side1 - side2) * tsize);
 
-			if constexpr (VertexT::HasNormal()) {
+			if constexpr (VertexT::hasNormal()) {
 				XMStoreFloat3(&vertices.rbegin()[3].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
-			if constexpr (VertexT::HasTexture()) {
+			if constexpr (VertexT::hasTexture()) {
 				XMStoreFloat2(&vertices.rbegin()[3].texCoord, texCoords[0]);
 				XMStoreFloat2(&vertices.rbegin()[2].texCoord, texCoords[1]);
 				XMStoreFloat2(&vertices.rbegin()[1].texCoord, texCoords[2]);
@@ -215,9 +215,9 @@ namespace Shapes
 
 				vertices.push_back(VertexT());
 				XMStoreFloat3(&vertices.back().position, normal * radius);
-				if constexpr (VertexT::HasNormal())
+				if constexpr (VertexT::hasNormal())
 					XMStoreFloat3(&vertices.back().normal, normal);
-				if constexpr (VertexT::HasTexture())
+				if constexpr (VertexT::hasTexture())
 					XMStoreFloat2(&vertices.back().texCoord, texCoord);
 			}
 		}
@@ -426,9 +426,9 @@ namespace Shapes
 
 			vertices.push_back(VertexT());
 			XMStoreFloat3(&vertices.back().position, pos);
-			if constexpr (VertexT::HasNormal())
+			if constexpr (VertexT::hasNormal())
 				XMStoreFloat3(&vertices.back().normal, normal);
-			if constexpr (VertexT::HasTexture())
+			if constexpr (VertexT::hasTexture())
 				XMStoreFloat2(&vertices.back().texCoord, texcoord);
 		}
 
@@ -442,7 +442,7 @@ namespace Shapes
 		// completed sphere. If you imagine the vertices along that edge, they circumscribe a semicircular arc starting at
 		// y=1 and ending at y=-1, and sweeping across the range of z=0 to z=1. x stays zero. It's along this edge that we
 		// need to duplicate our vertices - and provide the correct texture coordinates.
-		if constexpr (VertexT::HasTexture()) {
+		if constexpr (VertexT::hasTexture()) {
 			size_t preFixupVertexCount = vertices.size();
 			for (size_t i = 0; i < preFixupVertexCount; ++i)
 			{
@@ -515,7 +515,7 @@ namespace Shapes
 		// poles, but reduce stretching.
 		auto fixPole = [&](size_t poleIndex)
 		{
-			if constexpr (VertexT::HasTexture()) {
+			if constexpr (VertexT::hasTexture()) {
 				auto poleVertex = vertices[poleIndex];
 				bool overwrittenPoleVertex = false; // overwriting the original pole vertex saves us one vertex
 
@@ -655,9 +655,9 @@ namespace Shapes
 
 				vertices.push_back(VertexT());
 				XMStoreFloat3(&vertices.back().position, position);
-				if constexpr (VertexT::HasNormal())
+				if constexpr (VertexT::hasNormal())
 					XMStoreFloat3(&vertices.back().normal, normal);
-				if constexpr (VertexT::HasTexture())
+				if constexpr (VertexT::hasTexture())
 					XMStoreFloat2(&vertices.back().texCoord, texCoord);
 			}
 		}
@@ -695,12 +695,12 @@ namespace Shapes
 			XMStoreFloat3(&vertices.rbegin()[1].position, sideOffset + topOffset);
 			XMStoreFloat3(&vertices.rbegin()[0].position, sideOffset - topOffset);
 
-			if constexpr (VertexT::HasNormal()) {
+			if constexpr (VertexT::hasNormal()) {
 				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
-			if constexpr (VertexT::HasTexture()) {
+			if constexpr (VertexT::hasTexture()) {
 				XMStoreFloat2(&vertices.rbegin()[1].texCoord, texCoord);
 				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoord + g_XMIdentityR1);
 			}
@@ -764,12 +764,12 @@ namespace Shapes
 			XMStoreFloat3(&vertices.rbegin()[1].position, topOffset);
 			XMStoreFloat3(&vertices.rbegin()[0].position, pt);
 
-			if constexpr (VertexT::HasNormal()) {
+			if constexpr (VertexT::hasNormal()) {
 				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
-			if constexpr (VertexT::HasTexture()) {
+			if constexpr (VertexT::hasTexture()) {
 				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMZero);
 				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoord + g_XMIdentityR1);
 			}
@@ -833,9 +833,9 @@ namespace Shapes
 
 				vertices.push_back(VertexT());
 				XMStoreFloat3(&vertices.back().position, position);
-				if constexpr (VertexT::HasNormal())
+				if constexpr (VertexT::hasNormal())
 					XMStoreFloat3(&vertices.back().normal, normal);
-				if constexpr (VertexT::HasTexture())
+				if constexpr (VertexT::hasTexture())
 					XMStoreFloat2(&vertices.back().texCoord, texCoord);
 
 				// And create indices for two triangles.
@@ -910,13 +910,13 @@ namespace Shapes
 			position = XMVectorScale(verts[v2], size);
 			XMStoreFloat3(&vertices.rbegin()[0].position, position);
 
-			if constexpr (VertexT::HasNormal()) {
+			if constexpr (VertexT::hasNormal()) {
 				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
-			if constexpr (VertexT::HasTexture()) {
+			if constexpr (VertexT::hasTexture()) {
 				XMStoreFloat2(&vertices.rbegin()[2].texCoord, g_XMZero);
 				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
 				XMStoreFloat2(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
@@ -990,13 +990,13 @@ namespace Shapes
 			position = XMVectorScale(verts[v2], size);
 			XMStoreFloat3(&vertices.rbegin()[0].position, position);
 
-			if constexpr (VertexT::HasNormal()) {
+			if constexpr (VertexT::hasNormal()) {
 				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
-			if constexpr (VertexT::HasTexture()) {
+			if constexpr (VertexT::hasTexture()) {
 				XMStoreFloat2(&vertices.rbegin()[2].texCoord, g_XMZero);
 				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
 				XMStoreFloat2(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
@@ -1135,7 +1135,7 @@ namespace Shapes
 			position = XMVectorScale(verts[v4], size);
 			XMStoreFloat3(&vertices.rbegin()[0].position, position);
 			
-			if constexpr (VertexT::HasNormal()) {
+			if constexpr (VertexT::hasNormal()) {
 				XMStoreFloat3(&vertices.rbegin()[4].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[3].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
@@ -1143,7 +1143,7 @@ namespace Shapes
 				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
-			if constexpr (VertexT::HasTexture()) {
+			if constexpr (VertexT::hasTexture()) {
 				XMStoreFloat2(&vertices.rbegin()[4].texCoord, texCoords[textureIndex[t][0]]);
 				XMStoreFloat2(&vertices.rbegin()[3].texCoord, texCoords[textureIndex[t][1]]);
 				XMStoreFloat2(&vertices.rbegin()[2].texCoord, texCoords[textureIndex[t][2]]);
@@ -1240,13 +1240,13 @@ namespace Shapes
 			position = XMVectorScale(verts[v2], size);
 			XMStoreFloat3(&vertices.rbegin()[0].position, position);
 
-			if constexpr (VertexT::HasNormal()) {
+			if constexpr (VertexT::hasNormal()) {
 				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
 			}
 
-			if constexpr (VertexT::HasTexture()) {
+			if constexpr (VertexT::hasTexture()) {
 				XMStoreFloat2(&vertices.rbegin()[2].texCoord, g_XMZero);
 				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
 				XMStoreFloat2(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);

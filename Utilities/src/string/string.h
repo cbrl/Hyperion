@@ -32,8 +32,6 @@ using std::wistringstream;
 using std::wostringstream;
 
 
-
-
 // Convert a string to a wide string
 inline wstring str2wstr(const string& in) {
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
@@ -51,14 +49,14 @@ inline string wstr2str(const wstring& in) {
 
 // Convert an integer to a hexadecimal string
 template<typename T>
-inline string int2hexstr(T i) {
+string int2hexstr(T i) {
 
 	static_assert(std::is_integral_v<T>, "int2hexstr() input type is not an integral type");
 
 	stringstream stream;
 	stream << "0x"
-	       << std::setfill('0') << std::setw(sizeof(T) * 2)
-	       << std::hex << i;
+		<< std::setfill('0') << std::setw(sizeof(T) * 2)
+		<< std::hex << i;
 
 	return stream.str();
 }
@@ -66,14 +64,14 @@ inline string int2hexstr(T i) {
 
 // Trim whitespace at the beginning and end of a string
 template<typename StringT>
-inline StringT TrimWhiteSpace(StringT& in) {
+StringT TrimWhiteSpace(StringT& in) {
 	size_t text_start = in.find_first_not_of(L" \t");
-	size_t text_end   = in.find_last_not_of(L" \t");
+	size_t text_end = in.find_last_not_of(L" \t");
 
 	if (text_start != StringT::npos && text_end != StringT::npos) {
 		return in.substr(text_start, text_end - text_start + 1);
 	}
-	else if (text_start != StringT::npos) {
+	if (text_start != StringT::npos) {
 		return in.substr(text_start);
 	}
 
@@ -81,32 +79,31 @@ inline StringT TrimWhiteSpace(StringT& in) {
 }
 
 
-
 // Split a string by a specified token
 template<typename StringT>
-inline std::vector<StringT> Split(StringT& in, const typename StringT::value_type* token) {
+std::vector<StringT> Split(StringT& in, const typename StringT::value_type* token) {
 
 	std::vector<StringT> out;
 
-	StringT sToken(token);
+	StringT s_token(token);
 	StringT temp;
 
 	for (typename StringT::size_type i = 0; i < in.size(); ++i) {
 
-		StringT substr = in.substr(i, sToken.size());
+		StringT substr = in.substr(i, s_token.size());
 
 		if (substr == token) {
 			if (!temp.empty()) {
 				out.push_back(temp);
 				temp.clear();
-				i += sToken.size() - 1;
+				i += s_token.size() - 1;
 			}
 			else {
 				out.push_back(reinterpret_cast<const typename StringT::value_type*>(""));
 			}
 		}
-		else if ((i + sToken.size()) >= in.size()) {
-			temp += in.substr(i, sToken.size());
+		else if ((i + s_token.size()) >= in.size()) {
+			temp += in.substr(i, s_token.size());
 			out.push_back(temp);
 			break;
 		}

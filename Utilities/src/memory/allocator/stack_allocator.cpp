@@ -4,7 +4,13 @@
 StackAllocator::StackAllocator(const size_t memory_size)
 	: Allocator(memory_size) {
 
-	Init();
+	if (start_ptr == nullptr) {
+		start_ptr = malloc(memory_size);
+		offset = 0;
+	}
+	else {
+		freeMemory(start_ptr);
+	}
 }
 
 
@@ -14,26 +20,14 @@ StackAllocator::~StackAllocator() {
 }
 
 
-void StackAllocator::Init() {
-
-	if (start_ptr == nullptr) {
-		start_ptr = malloc(memory_size);
-		offset    = 0;
-	}
-	else {
-		free(start_ptr);
-	}
-}
-
-
-void StackAllocator::Reset() {
+void StackAllocator::reset() {
 	memory_used = 0;
-	offset      = 0;
-	peak        = 0;
+	offset = 0;
+	peak = 0;
 }
 
 
-void* StackAllocator::Allocate(const size_t size, const size_t alignment) {
+void* StackAllocator::allocate(const size_t size, const size_t alignment) {
 
 	// Ensure the the allocation size and start pointer are valid
 	assert(size > 0 && "StackAllocator::Allocate() called with 0 size.");
@@ -48,12 +42,12 @@ void* StackAllocator::Allocate(const size_t size, const size_t alignment) {
 	}
 
 
-	this->offset     += (padding + size);
+	this->offset += (padding + size);
 	this->memory_used = offset;
-	this->peak        = std::max(peak, memory_used);
+	this->peak = std::max(peak, memory_used);
 
 
-	const uintptr next_addr   = curr_addr + padding;
+	const uintptr next_addr = curr_addr + padding;
 	const uintptr header_addr = next_addr - sizeof(AllocHeader);
 
 	// Store padding amount in the header
@@ -63,13 +57,13 @@ void* StackAllocator::Allocate(const size_t size, const size_t alignment) {
 }
 
 
-void StackAllocator::Free(void* ptr) {
+void StackAllocator::freeMemory(void* ptr) {
 
-	const uintptr curr_addr   = reinterpret_cast<uintptr>(ptr);
+	const uintptr curr_addr = reinterpret_cast<uintptr>(ptr);
 	const uintptr header_addr = curr_addr - sizeof(AllocHeader);
 
 	const AllocHeader* header = reinterpret_cast<AllocHeader*>(header_addr);
 
-	this->offset      = curr_addr - reinterpret_cast<uintptr>(this->start_ptr) - header->padding;
+	this->offset = curr_addr - reinterpret_cast<uintptr>(this->start_ptr) - header->padding;
 	this->memory_used = offset;
 }

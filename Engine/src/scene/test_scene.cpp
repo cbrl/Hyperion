@@ -136,12 +136,12 @@ void TestScene::Tick(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	const int2   mouse_delta     = engine.GetInput().GetMouseDelta();
-	const u32    fps             = engine.GetFPSCounter().GetFPS();
-	const float  delta_time      = engine.GetTimer().DeltaTime();
-	const u64    total_cpu_usage = engine.GetSysMon().CPU().GetTotalCpuPercentage();
-	const double proc_cpu_usage  = engine.GetSysMon().CPU().GetProcessCpuPercentage();
-	const u64    total_mem_usage = engine.GetSysMon().Memory().GetTotalUsedPhysicalMem();
-	const u64    proc_mem_usage  = engine.GetSysMon().Memory().GetProcessUsedPhysicalMem();
+	const u32    fps             = engine.GetFPSCounter().getFPS();
+	const float  delta_time      = engine.GetTimer().deltaTime();
+	const u64    total_cpu_usage = engine.GetSysMon().cpu().getTotalCpuPercentage();
+	const double proc_cpu_usage  = engine.GetSysMon().cpu().getProcessCpuPercentage();
+	const u64    total_mem_usage = engine.GetSysMon().memory().getTotalUsedPhysicalMem();
+	const u64    proc_mem_usage  = engine.GetSysMon().memory().getProcessUsedPhysicalMem();
 	
 	static wostringstream cpu_str;
 	static wostringstream mem_str;

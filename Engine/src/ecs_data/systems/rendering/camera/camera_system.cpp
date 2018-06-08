@@ -65,7 +65,7 @@ void CameraSystem::ProcessMovement(const Engine& engine, CameraMovement* movemen
 	const auto& input = engine.GetInput();
 
 	int2  mouse_delta = input.GetMouseDelta();
-	float dt = engine.GetTimer().DeltaTime();
+	float dt = engine.GetTimer().deltaTime();
 
 	float3 rotate_units(0.0f, 0.0f, 0.0f);
 	float3 move_units(0.0f, 0.0f, 0.0f);

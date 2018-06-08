@@ -16,7 +16,7 @@ SystemMgr::~SystemMgr() {
 	}
 
 	// Delete the allocator
-	allocator->Reset();
+	allocator->reset();
 	delete allocator;
 	allocator = nullptr;
 }

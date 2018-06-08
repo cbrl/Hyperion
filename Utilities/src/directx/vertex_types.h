@@ -1,9 +1,10 @@
 #pragma once
 
-#include "datatypes\datatypes.h"
+#include "datatypes/datatypes.h"
 
 #include <d3d11.h>
 using namespace DirectX;
+
 
 struct VertexPosition {
 	VertexPosition() = default;
@@ -20,9 +21,9 @@ struct VertexPosition {
 		return !(*this == compare);
 	}
 
-	static constexpr bool HasNormal()  { return false; }
-	static constexpr bool HasColor()   { return false; }
-	static constexpr bool HasTexture() { return false; }
+	static constexpr bool hasNormal() { return false; }
+	static constexpr bool hasColor() { return false; }
+	static constexpr bool hasTexture() { return false; }
 
 
 	//----------------------------------------------------------------------------------
@@ -45,16 +46,16 @@ struct VertexPositionColor {
 
 	bool operator==(const VertexPositionColor& compare) {
 		return (this->position == compare.position &&
-				this->color    == compare.color);
+		        this->color == compare.color);
 	}
 
 	bool operator!=(const VertexPositionColor& compare) {
 		return !(*this == compare);
 	}
 
-	static constexpr bool HasNormal()  { return false; }
-	static constexpr bool HasColor()   { return true; }
-	static constexpr bool HasTexture() { return false; }
+	static constexpr bool hasNormal() { return false; }
+	static constexpr bool hasColor() { return true; }
+	static constexpr bool hasTexture() { return false; }
 
 
 	//----------------------------------------------------------------------------------
@@ -78,16 +79,16 @@ struct VertexPositionTexture {
 
 	bool operator==(const VertexPositionTexture& compare) {
 		return (this->position == compare.position &&
-				this->texCoord == compare.texCoord);
+		        this->texCoord == compare.texCoord);
 	}
 
 	bool operator!=(const VertexPositionTexture& compare) {
 		return !(*this == compare);
 	}
 
-	static constexpr bool HasNormal()  { return false; }
-	static constexpr bool HasColor()   { return false; }
-	static constexpr bool HasTexture() { return true; }
+	static constexpr bool hasNormal() { return false; }
+	static constexpr bool hasColor() { return false; }
+	static constexpr bool hasTexture() { return true; }
 
 
 	//----------------------------------------------------------------------------------
@@ -111,18 +112,18 @@ struct VertexPositionDualTexture {
 	}
 
 	bool operator==(const VertexPositionDualTexture& compare) {
-		return (this->position  == compare.position  &&
-				this->texCoord0 == compare.texCoord0 &&
-				this->texCoord1 == compare.texCoord1);
+		return (this->position == compare.position &&
+		        this->texCoord0 == compare.texCoord0 &&
+		        this->texCoord1 == compare.texCoord1);
 	}
 
 	bool operator!=(const VertexPositionDualTexture& compare) {
 		return !(*this == compare);
 	}
 
-	static constexpr bool HasNormal()  { return false; }
-	static constexpr bool HasColor()   { return false; }
-	static constexpr bool HasTexture() { return true; }
+	static constexpr bool hasNormal() { return false; }
+	static constexpr bool hasColor() { return false; }
+	static constexpr bool hasTexture() { return true; }
 
 
 	//----------------------------------------------------------------------------------
@@ -147,16 +148,16 @@ struct VertexPositionNormal {
 
 	bool operator==(const VertexPositionNormal& compare) {
 		return (this->position == compare.position &&
-				this->normal   == compare.normal);
+		        this->normal == compare.normal);
 	}
 
 	bool operator!=(const VertexPositionNormal& compare) {
 		return !(*this == compare);
 	}
 
-	static constexpr bool HasNormal()  { return true; }
-	static constexpr bool HasColor()   { return false; }
-	static constexpr bool HasTexture() { return false; }
+	static constexpr bool hasNormal() { return true; }
+	static constexpr bool hasColor() { return false; }
+	static constexpr bool hasTexture() { return false; }
 
 
 	//----------------------------------------------------------------------------------
@@ -181,17 +182,17 @@ struct VertexPositionNormalColor {
 
 	bool operator==(const VertexPositionNormalColor& compare) {
 		return (this->position == compare.position &&
-				this->normal   == compare.normal   &&
-				this->color    == compare.color);
+		        this->normal == compare.normal &&
+		        this->color == compare.color);
 	}
 
 	bool operator!=(const VertexPositionNormalColor& compare) {
 		return !(*this == compare);
 	}
 
-	static constexpr bool HasNormal()  { return true; }
-	static constexpr bool HasColor()   { return true; }
-	static constexpr bool HasTexture() { return false; }
+	static constexpr bool hasNormal() { return true; }
+	static constexpr bool hasColor() { return true; }
+	static constexpr bool hasTexture() { return false; }
 
 
 	//----------------------------------------------------------------------------------
@@ -217,17 +218,17 @@ struct VertexPositionNormalTexture {
 
 	bool operator==(const VertexPositionNormalTexture& compare) {
 		return (this->position == compare.position &&
-				this->normal   == compare.normal   &&
-				this->texCoord == compare.texCoord);
+		        this->normal == compare.normal &&
+		        this->texCoord == compare.texCoord);
 	}
 
 	bool operator!=(const VertexPositionNormalTexture& compare) {
 		return !(*this == compare);
 	}
 
-	static constexpr bool HasNormal()  { return true; }
-	static constexpr bool HasColor()   { return false; }
-	static constexpr bool HasTexture() { return true; }
+	static constexpr bool hasNormal() { return true; }
+	static constexpr bool hasColor() { return false; }
+	static constexpr bool hasTexture() { return true; }
 
 
 	//----------------------------------------------------------------------------------

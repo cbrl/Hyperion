@@ -26,10 +26,10 @@ public:
 			"Calling ComponentMgr::CreateComponent() with non-component type.");
 
 		// Get the pool for this component type
-		auto pool = component_pools.GetOrCreatePool<ComponentT>();
+		auto pool = component_pools.getOrCreatePool<ComponentT>();
 
 		// Allocate memory
-		void* memory = pool->AllocateObject();
+		void* memory = pool->allocateObject();
 
 		// Construct the component
 		ComponentT* component = new(memory) ComponentT(std::forward<ArgsT>(args)...);
@@ -40,35 +40,35 @@ public:
 
 	void destroyComponent(IComponent* component) {
 
-		auto pool = component_pools.GetPool(component->getTypeId());
+		auto pool = component_pools.getPool(component->getTypeId());
 
-		pool->DestroyObject(reinterpret_cast<void*>(component));
+		pool->destroyObject(reinterpret_cast<void*>(component));
 	}
 
 
 	template<typename ComponentT>
 	size_t countOf() {
-		return component_pools.PoolExists<ComponentT>() ? component_pools.GetPool<ComponentT>()->GetCount() : 0;
+		return component_pools.poolExists<ComponentT>() ? component_pools.getPool<ComponentT>()->GetCount() : 0;
 	}
 
 
 	template<typename ComponentT>
 	bool knowsComponent() const {
-		return component_pools.PoolExists<ComponentT>();
+		return component_pools.poolExists<ComponentT>();
 	}
 
 
 	template<typename ComponentT>
 	typename ResourcePool<ComponentT>::iterator begin() {
 		using pool_t = ResourcePool<ComponentT>;
-		auto* pool = static_cast<pool_t*>(component_pools.GetPool<ComponentT>());
+		auto* pool = static_cast<pool_t*>(component_pools.getPool<ComponentT>());
 		return pool->begin();
 	}
 
 	template<typename ComponentT>
 	typename ResourcePool<ComponentT>::iterator end() {
 		using pool_t = ResourcePool<ComponentT>;
-		auto* pool = static_cast<pool_t*>(component_pools.GetPool<ComponentT>());
+		auto* pool = static_cast<pool_t*>(component_pools.getPool<ComponentT>());
 		return pool->end();
 	}
 

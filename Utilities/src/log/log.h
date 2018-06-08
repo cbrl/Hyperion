@@ -6,33 +6,36 @@
 
 inline std::string NowTime();
 
+
 enum TLogLevel { logERROR, logWARNING, logINFO, logDEBUG, logDEBUG1, logDEBUG2, logDEBUG3, logDEBUG4 };
 
-template <typename T>
+
+template<typename T>
 class Log {
-	public:
-		Log();
-		virtual ~Log();
-		std::ostringstream& Get(TLogLevel level = logINFO);
+public:
+	Log();
+	virtual ~Log();
+	std::ostringstream& Get(TLogLevel level = logINFO);
 
-	public:
-		static TLogLevel& ReportingLevel();
-		static std::string ToString(TLogLevel level);
-		static TLogLevel FromString(const std::string& level);
+public:
+	static TLogLevel& ReportingLevel();
+	static std::string ToString(TLogLevel level);
+	static TLogLevel FromString(const std::string& level);
 
-	protected:
-		std::ostringstream os;
+protected:
+	std::ostringstream os;
 
-	private:
-		Log(const Log&);
-		Log& operator =(const Log&);
+private:
+	Log(const Log&);
+	Log& operator =(const Log&);
 };
 
-template <typename T>
+
+template<typename T>
 Log<T>::Log() {
 }
 
-template <typename T>
+template<typename T>
 std::ostringstream& Log<T>::Get(TLogLevel level) {
 	os << "- " << NowTime();
 	os << " " << ToString(level) << ": ";
@@ -40,25 +43,25 @@ std::ostringstream& Log<T>::Get(TLogLevel level) {
 	return os;
 }
 
-template <typename T>
+template<typename T>
 Log<T>::~Log() {
 	os << std::endl;
 	T::Output(os.str());
 }
 
-template <typename T>
+template<typename T>
 TLogLevel& Log<T>::ReportingLevel() {
 	static TLogLevel reportingLevel = logDEBUG4;
 	return reportingLevel;
 }
 
-template <typename T>
+template<typename T>
 std::string Log<T>::ToString(TLogLevel level) {
-	static const char* const buffer[] = { "ERROR", "WARNING", "INFO", "DEBUG", "DEBUG1", "DEBUG2", "DEBUG3", "DEBUG4" };
+	static const char* const buffer[] = {"ERROR", "WARNING", "INFO", "DEBUG", "DEBUG1", "DEBUG2", "DEBUG3", "DEBUG4"};
 	return buffer[level];
 }
 
-template <typename T>
+template<typename T>
 TLogLevel Log<T>::FromString(const std::string& level) {
 	if (level == "DEBUG4")
 		return logDEBUG4;
@@ -80,11 +83,13 @@ TLogLevel Log<T>::FromString(const std::string& level) {
 	return logINFO;
 }
 
+
 class Output2FILE {
-	public:
-		static FILE*& Stream();
-		static void Output(const std::string& msg);
+public:
+	static FILE*& Stream();
+	static void Output(const std::string& msg);
 };
+
 
 inline FILE*& Output2FILE::Stream() {
 	static FILE* pStream = stderr;
@@ -111,7 +116,10 @@ inline void Output2FILE::Output(const std::string& msg) {
 #   define FILELOG_DECLSPEC
 #endif // _WIN32
 
-class FILELOG_DECLSPEC FILELog : public Log<Output2FILE> {};
+class FILELOG_DECLSPEC FILELog : public Log<Output2FILE> {
+};
+
+
 //typedef Log<Output2FILE> FILELog;
 
 #ifndef FILELOG_MAX_LEVEL
@@ -130,11 +138,15 @@ class FILELOG_DECLSPEC FILELog : public Log<Output2FILE> {};
 inline std::string NowTime() {
 	const int MAX_LEN = 200;
 	char buffer[MAX_LEN];
-	if (GetTimeFormatA(LOCALE_USER_DEFAULT, 0, 0,
-					   "HH':'mm':'ss", buffer, MAX_LEN) == 0)
+	if (GetTimeFormatA(LOCALE_USER_DEFAULT,
+	                   0,
+	                   nullptr,
+	                   "HH':'mm':'ss",
+	                   buffer,
+	                   MAX_LEN) == 0)
 		return "Error in NowTime()";
 
-	char result[100] = { 0 };
+	char result[100] = {0};
 	static DWORD first = GetTickCount();
 	sprintf_s(result, "%s.%03ld", buffer, (long)(GetTickCount64() - first) % 1000);
 	return result;

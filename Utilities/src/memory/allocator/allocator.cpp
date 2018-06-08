@@ -1,9 +1,10 @@
 #include "allocator.h"
 
 
-Allocator::Allocator(const size_t memory_size)
+Allocator::Allocator(size_t memory_size)
 	: memory_size(memory_size)
-	, memory_used(0) {
+	, memory_used(0)
+	, peak(0) {
 }
 
 
@@ -12,7 +13,7 @@ Allocator::~Allocator() {
 }
 
 
-void* Allocator::GetStartAddr() {
+void* Allocator::getStartAddr() const {
 
 	return start_ptr;
 }

@@ -4,29 +4,28 @@
 
 
 class Timer final {
-	public:
-		Timer();
-		~Timer() = default;
+public:
+	Timer();
+	~Timer() = default;
 
-		void Start();
-		void Stop();
-		void Reset();
-		void Tick();
+	void start();
+	void stop();
+	void reset();
+	void tick();
 
-		float DeltaTime();
-		float TotalTime();
+	float deltaTime() const;
+	float totalTime() const;
 
 
-	private:
-		bool stopped;
+private:
+	bool stopped;
 
-		double ticksPerMS;
-		double deltaTime;
+	double ticks_per_ms;
+	double delta_time;
 
-		INT64 baseTime;
-		INT64 currTime;
-		INT64 prevTime;
-		INT64 pausedTime;
-		INT64 stopTime;
+	INT64 base_time;
+	INT64 curr_time;
+	INT64 prev_time;
+	INT64 paused_time;
+	INT64 stop_time;
 };
-

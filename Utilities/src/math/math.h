@@ -1,6 +1,6 @@
 #pragma once
 
-#include <math.h>
+#include <cmath>
 #include <DirectXMath.h>
 
 
@@ -9,76 +9,70 @@ using namespace DirectX;
 
 // Convert a float4 to a hex color value
 inline uint32_t Float4ColorToU32(const XMFLOAT4& color) {
-	return static_cast<uint32_t>(color.x * 0xff)             //R
-	       | (static_cast<uint32_t>(color.y * 0xff) << 8)    //G
-	       | (static_cast<uint32_t>(color.z * 0xff) << 16)   //B
-	       | (static_cast<uint32_t>(color.w * 0xff) << 24);  //A
+	return static_cast<uint32_t>(color.x * 0xff) //R
+	       | (static_cast<uint32_t>(color.y * 0xff) << 8) //G
+	       | (static_cast<uint32_t>(color.z * 0xff) << 16) //B
+	       | (static_cast<uint32_t>(color.w * 0xff) << 24); //A
 }
 
 
 // Determine if a point is inside a triangle using barycentric coordinates
-inline bool PointInTriangle(const XMFLOAT3& vert1, const XMFLOAT3& vert2,
-							const XMFLOAT3& vert3, const XMFLOAT3& point) {
-	XMVECTOR v0 = XMLoadFloat3(&vert2) - XMLoadFloat3(&vert1);
-	XMVECTOR v1 = XMLoadFloat3(&vert3) - XMLoadFloat3(&vert1);
-	XMVECTOR v2 = XMLoadFloat3(&point) - XMLoadFloat3(&vert1);
+inline bool PointInTriangle(const XMFLOAT3& vert1,
+                            const XMFLOAT3& vert2,
+                            const XMFLOAT3& vert3,
+                            const XMFLOAT3& point) {
+	const XMVECTOR v0 = XMLoadFloat3(&vert2) - XMLoadFloat3(&vert1);
+	const XMVECTOR v1 = XMLoadFloat3(&vert3) - XMLoadFloat3(&vert1);
+	const XMVECTOR v2 = XMLoadFloat3(&point) - XMLoadFloat3(&vert1);
 
-	float d00 = XMVectorGetX(XMVector3Dot(v0, v0));
-	float d01 = XMVectorGetX(XMVector3Dot(v0, v1));
-	float d11 = XMVectorGetX(XMVector3Dot(v1, v1));
-	float d20 = XMVectorGetX(XMVector3Dot(v2, v0));
-	float d21 = XMVectorGetX(XMVector3Dot(v2, v1));
-	float denom = (d00 * d11) - (d01 * d01);
+	const float d00   = XMVectorGetX(XMVector3Dot(v0, v0));
+	const float d01   = XMVectorGetX(XMVector3Dot(v0, v1));
+	const float d11   = XMVectorGetX(XMVector3Dot(v1, v1));
+	const float d20   = XMVectorGetX(XMVector3Dot(v2, v0));
+	const float d21   = XMVectorGetX(XMVector3Dot(v2, v1));
+	const float denom = (d00 * d11) - (d01 * d01);
 
-	float a = ((d11 * d20) - (d01 * d21)) / denom;
-	float b = ((d00 * d21) - (d01 * d20)) / denom;
-	float y = 1.0f - a - b;
+	const float a = ((d11 * d20) - (d01 * d21)) / denom;
+	const float b = ((d00 * d21) - (d01 * d20)) / denom;
+	const float y = 1.0f - a - b;
 
-	if (0 <= a && a <= 1 &&
-		0 <= b && b <= 1 &&
-		0 <= y && y <= 1) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return 0 <= a && a <= 1 &&
+	       0 <= b && b <= 1 &&
+	       0 <= y && y <= 1;
 }
 
 
 // Determine if a point is inside a triangle using barycentric coordinates
-inline bool XM_CALLCONV PointInTriangle(FXMVECTOR vert1, FXMVECTOR vert2,
-										FXMVECTOR vert3, CXMVECTOR point) {
-	XMVECTOR v0 = vert2 - vert1;
-	XMVECTOR v1 = vert3 - vert1;
-	XMVECTOR v2 = point - vert1;
+inline bool XM_CALLCONV PointInTriangle(FXMVECTOR vert1,
+                                        FXMVECTOR vert2,
+                                        FXMVECTOR vert3,
+                                        CXMVECTOR point) {
+	const XMVECTOR v0 = vert2 - vert1;
+	const XMVECTOR v1 = vert3 - vert1;
+	const XMVECTOR v2 = point - vert1;
 
-	float d00 = XMVectorGetX(XMVector3Dot(v0, v0));
-	float d01 = XMVectorGetX(XMVector3Dot(v0, v1));
-	float d11 = XMVectorGetX(XMVector3Dot(v1, v1));
-	float d20 = XMVectorGetX(XMVector3Dot(v2, v0));
-	float d21 = XMVectorGetX(XMVector3Dot(v2, v1));
-	float denom = (d00 * d11) - (d01 * d01);
+	const float d00   = XMVectorGetX(XMVector3Dot(v0, v0));
+	const float d01   = XMVectorGetX(XMVector3Dot(v0, v1));
+	const float d11   = XMVectorGetX(XMVector3Dot(v1, v1));
+	const float d20   = XMVectorGetX(XMVector3Dot(v2, v0));
+	const float d21   = XMVectorGetX(XMVector3Dot(v2, v1));
+	const float denom = (d00 * d11) - (d01 * d01);
 
-	float a = ((d11 * d20) - (d01 * d21)) / denom;
-	float b = ((d00 * d21) - (d01 * d20)) / denom;
-	float y = 1.0f - a - b;
+	const float a = ((d11 * d20) - (d01 * d21)) / denom;
+	const float b = ((d00 * d21) - (d01 * d20)) / denom;
+	const float y = 1.0f - a - b;
 
-	if (0 <= a && a <= 1 &&
-		0 <= b && b <= 1 &&
-		0 <= y && y <= 1) {
-		return true;
-	}
-	else {
-		return false;
-	}
+	return 0 <= a && a <= 1 &&
+	       0 <= b && b <= 1 &&
+	       0 <= y && y <= 1;
 }
 
 
 // Find the minimum and maximum points in a vector of vertices
 template<typename VertexT>
-inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& vertices) {
-	float3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
-	float3 max = { FLT_MIN, FLT_MIN, FLT_MIN };
+std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& vertices) {
+	float3 min = {FLT_MAX, FLT_MAX, FLT_MAX};
+	float3 max = {FLT_MIN, FLT_MIN, FLT_MIN};
 
 	for (const auto& vertex : vertices) {
 		min.x = std::fminf(min.x, vertex.position.x);
@@ -94,8 +88,8 @@ inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& ver
 }
 
 inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<float3>& vertices) {
-	float3 min = { FLT_MAX, FLT_MAX, FLT_MAX };
-	float3 max = { FLT_MIN, FLT_MIN, FLT_MIN };
+	float3 min = {FLT_MAX, FLT_MAX, FLT_MAX};
+	float3 max = {FLT_MIN, FLT_MIN, FLT_MIN};
 
 	for (const float3& vertex : vertices) {
 		min.x = std::fminf(min.x, vertex.x);
@@ -111,8 +105,8 @@ inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<float3>& vert
 }
 
 inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<XMVECTOR>& vertices) {
-	XMVECTOR min = { FLT_MAX, FLT_MAX, FLT_MAX };
-	XMVECTOR max = { FLT_MIN, FLT_MIN, FLT_MIN };
+	XMVECTOR min = {FLT_MAX, FLT_MAX, FLT_MAX};
+	XMVECTOR max = {FLT_MIN, FLT_MIN, FLT_MIN};
 
 	for (const XMVECTOR& vertex : vertices) {
 		min = XMVectorMin(min, vertex);

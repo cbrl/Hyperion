@@ -1,4 +1,3 @@
-
 template<typename DataT, size_t max_objs_per_chunk>
 ResourcePool<DataT, max_objs_per_chunk>::ResourcePool() : count(0) {
 
@@ -36,7 +35,7 @@ ResourcePool<DataT, max_objs_per_chunk>::~ResourcePool() {
 
 
 template<typename DataT, size_t max_objs_per_chunk>
-void* ResourcePool<DataT, max_objs_per_chunk>::AllocateObject() {
+void* ResourcePool<DataT, max_objs_per_chunk>::allocateObject() {
 
 	DataT* object = nullptr;
 
@@ -45,8 +44,8 @@ void* ResourcePool<DataT, max_objs_per_chunk>::AllocateObject() {
 
 		if (chunk->objects.size() >= max_objs_per_chunk) continue;
 
-		object = chunk->allocator->AllocateCast();
-		
+		object = chunk->allocator->allocateCast();
+
 		if (object) {
 			chunk->objects.push_back(object);
 			break;
@@ -61,7 +60,7 @@ void* ResourcePool<DataT, max_objs_per_chunk>::AllocateObject() {
 		chunk->objects.clear();
 		memory_chunks.push_front(chunk);
 
-		object = chunk->allocator->AllocateCast();
+		object = chunk->allocator->allocateCast();
 
 		if (object == nullptr) {
 			FILE_LOG(logERROR) << "ResourcePool::AllocateObject() - Unable to create object.";
@@ -78,19 +77,19 @@ void* ResourcePool<DataT, max_objs_per_chunk>::AllocateObject() {
 
 
 template<typename DataT, size_t max_objs_per_chunk>
-void ResourcePool<DataT, max_objs_per_chunk>::DestroyObject(void* object) {
+void ResourcePool<DataT, max_objs_per_chunk>::destroyObject(void* object) {
 
 	uintptr addr = reinterpret_cast<uintptr>(object);
 
 	for (auto chunk : memory_chunks) {
 
 		if (addr >= chunk->start_addr &&
-			addr < (chunk->start_addr + alloc_size)) {
+		    addr < (chunk->start_addr + alloc_size)) {
 
 			static_cast<DataT*>(object)->~DataT();
 
 			chunk->objects.remove(static_cast<DataT*>(object));
-			chunk->allocator->Free(object);
+			chunk->allocator->freeMemory(object);
 
 			--count;
 			return;

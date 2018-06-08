@@ -7,8 +7,7 @@ FPS::FPS() : fps(0), count(0) {
 }
 
 
-
-void FPS::Tick() {
+void FPS::tick() {
 	// Increment frame count
 	count++;
 
@@ -22,6 +21,6 @@ void FPS::Tick() {
 }
 
 
-u32 FPS::GetFPS() {
+u32 FPS::getFPS() const {
 	return fps;
 }

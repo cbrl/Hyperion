@@ -101,9 +101,9 @@ void Engine::Run() {
 void Engine::Tick() {	
 
 	// Update system metrics
-	system_monitor->Tick();
-	timer->Tick();
-	fps_counter->Tick();
+	system_monitor->tick();
+	timer->tick();
+	fps_counter->tick();
 
 	// Update the input state
 	input->Tick();
