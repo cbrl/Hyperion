@@ -19,36 +19,36 @@ public:
 	~RenderingMgr();
 
 	// Resize the viewport
-	void ResizeBuffers(u32 window_width, u32 window_height) const;
+	void resizeBuffers(u32 window_width, u32 window_height) const;
 
-	void BindDefaultRenderTarget() const {
-		direct3D->BindDefaultRenderTarget();
+	void bindDefaultRenderTarget() const {
+		direct3D->bindDefaultRenderTarget();
 	}
 
 	// Start a new frame
-	void BeginFrame() const;
+	void beginFrame() const;
 
 	// End the current frame
-	void EndFrame() const;
+	void endFrame() const;
 
 
 	//----------------------------------------------------------------------------------
 	// Getters
 	//----------------------------------------------------------------------------------
 
-	ID3D11Device& GetDevice() const {
-		return direct3D->GetDevice();
+	ID3D11Device& getDevice() const {
+		return direct3D->getDevice();
 	}
 
-	ID3D11DeviceContext& GetDeviceContext() const {
-		return direct3D->GetDeviceContext();
+	ID3D11DeviceContext& getDeviceContext() const {
+		return direct3D->getDeviceContext();
 	}
 
-	ResourceMgr& GetResourceMgr() const {
+	ResourceMgr& getResourceMgr() const {
 		return *resource_mgr;
 	}
 
-	const RenderStateMgr& GetRenderStateMgr() const {
+	const RenderStateMgr& getRenderStateMgr() const {
 		return *render_state_mgr;
 	}
 

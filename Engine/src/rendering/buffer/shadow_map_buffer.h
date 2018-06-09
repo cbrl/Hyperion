@@ -21,37 +21,37 @@ public:
 	~ShadowMapBuffer() = default;
 
 	// Bind the viewport and DSVs
-	void BindViewport(ID3D11DeviceContext& device_context) const {
-		Pipeline::RS::BindViewports(device_context, 1, &viewport);
+	void bindViewport(ID3D11DeviceContext& device_context) const {
+		Pipeline::RS::bindViewports(device_context, 1, &viewport);
 	}
 
 	// Bind the raster state for the cube map
-	void BindRasterState(ID3D11DeviceContext& device_context) const {
-		Pipeline::RS::BindState(device_context, raster_state.Get());
+	void bindRasterState(ID3D11DeviceContext& device_context) const {
+		Pipeline::RS::bindState(device_context, raster_state.Get());
 	}
 
 	// Bind the depth stencil view for the cube map
-	void BindDSV(ID3D11DeviceContext& device_context, size_t index) const {
-		Pipeline::OM::BindRTVs(device_context, 1, nullptr, dsvs[index].Get());
+	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
+		Pipeline::OM::bindRTVs(device_context, 1, nullptr, dsvs[index].Get());
 	}
 
 	// Clear the DSVs
-	void Clear(ID3D11DeviceContext& device_context) const {
+	void clear(ID3D11DeviceContext& device_context) const {
 		for (const auto& dsv : dsvs) {
-			Pipeline::OM::ClearDSV(device_context, dsv.Get());
+			Pipeline::OM::clearDSV(device_context, dsv.Get());
 		}
 	}
 
 	// Get the number of shadow maps in this buffer
-	size_t GetMapCount() const {
+	size_t getMapCount() const {
 		return dsvs.size();
 	}
 
-	ID3D11ShaderResourceView& GetSRV() const {
+	ID3D11ShaderResourceView& getSRV() const {
 		return *srv.Get();
 	}
 
-	ID3D11ShaderResourceView* const* GetSRVAddress() const {
+	ID3D11ShaderResourceView* const* getSRVAddress() const {
 		return srv.GetAddressOf();
 	}
 
@@ -75,42 +75,42 @@ public:
 	~ShadowCubeMapBuffer() = default;
 
 	// Bind the viewport and DSVs
-	void BindViewport(ID3D11DeviceContext& device_context) const {
-		Pipeline::RS::BindViewports(device_context, 1, &viewport);
+	void bindViewport(ID3D11DeviceContext& device_context) const {
+		Pipeline::RS::bindViewports(device_context, 1, &viewport);
 	}
 
 	// Bind the raster state for the cube map
-	void BindRasterState(ID3D11DeviceContext& device_context) const {
-		Pipeline::RS::BindState(device_context, raster_state.Get());
+	void bindRasterState(ID3D11DeviceContext& device_context) const {
+		Pipeline::RS::bindState(device_context, raster_state.Get());
 	}
 
 	// Bind the depth stencil view for the cube map
-	void BindDSV(ID3D11DeviceContext& device_context, size_t index) const {
-		Pipeline::OM::BindRTVs(device_context, 1, nullptr, dsvs[index].Get());
+	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
+		Pipeline::OM::bindRTVs(device_context, 1, nullptr, dsvs[index].Get());
 	}
 
 	// Clear the DSVs
-	void Clear(ID3D11DeviceContext& device_context) const {
+	void clear(ID3D11DeviceContext& device_context) const {
 		for (const auto& dsv : dsvs) {
-			Pipeline::OM::ClearDSV(device_context, dsv.Get());
+			Pipeline::OM::clearDSV(device_context, dsv.Get());
 		}
 	}
 
 	// Get the number of individual maps in this buffer
-	size_t GetMapCount() const {
+	size_t getMapCount() const {
 		return dsvs.size();
 	}
 
 	// Get the number of cube maps in this buffer
-	size_t GetCubeMapCount() const {
+	size_t getCubeMapCount() const {
 		return dsvs.size() / 6;
 	}
 
-	ID3D11ShaderResourceView& GetSRV() const {
+	ID3D11ShaderResourceView& getSRV() const {
 		return *srv.Get();
 	}
 
-	ID3D11ShaderResourceView* const* GetSRVAddress() const {
+	ID3D11ShaderResourceView* const* getSRVAddress() const {
 		return srv.GetAddressOf();
 	}
 

@@ -20,11 +20,11 @@ public:
 	ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
 	~ForwardPass() = default;
 
-	void XM_CALLCONV Render(ECS& ecs_engine, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV render(ECS& ecs_engine, FXMMATRIX world_to_projection) const;
 
-	void XM_CALLCONV Render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const;
 
-	void BindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const;
+	void bindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const;
 
 
 private:

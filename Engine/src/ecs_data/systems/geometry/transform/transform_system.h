@@ -16,10 +16,10 @@ public:
 
 private:
 	template<typename TransformT>
-	void UpdateWorld(ECS& ecs_engine, TransformT& transform);
+	void updateWorld(ECS& ecs_engine, TransformT& transform);
 
-	static XMMATRIX CalculateWorld(Transform& transform);
-	static XMMATRIX CalculateWorld(CameraTransform& transform);
+	static XMMATRIX calculateWorld(Transform& transform);
+	static XMMATRIX calculateWorld(CameraTransform& transform);
 };
 
 

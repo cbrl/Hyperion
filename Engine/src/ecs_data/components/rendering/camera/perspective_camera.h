@@ -14,15 +14,15 @@ public:
 	~PerspectiveCamera() = default;
 
 	// Change the FOV
-	void SetFOV(float radians) {
+	void setFOV(float radians) {
 		fov = radians;
-		UpdateProjectionMatrix();
+		updateProjectionMatrix();
 	}
 
 
 protected:
 	// Update the projection matrix after changing depth/width/height/etc...
-	void UpdateProjectionMatrix() override;
+	void updateProjectionMatrix() override;
 
 
 protected:

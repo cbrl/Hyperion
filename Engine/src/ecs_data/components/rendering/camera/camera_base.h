@@ -30,8 +30,8 @@ protected:
 
 public:
 	// Bind the viewport to the pipeline
-	void BindViewport(ID3D11DeviceContext& device_context) const {
-		Pipeline::RS::BindViewports(device_context, 1, &viewport);
+	void bindViewport(ID3D11DeviceContext& device_context) const {
+		Pipeline::RS::bindViewports(device_context, 1, &viewport);
 	}
 
 
@@ -40,19 +40,19 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Update the camera's constant buffer
-	void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context,
+	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context,
 	                              FXMVECTOR position,
 	                              FXMMATRIX world_to_camera,
 	                              CXMMATRIX camera_to_projection) const {
-		buffer.UpdateData(device_context,
+		buffer.updateData(device_context,
 		                  CameraBuffer(position,
 		                               XMMatrixTranspose(world_to_camera),
 		                               XMMatrixTranspose(camera_to_projection)));
 	}
 
 	// Bind the camera's constant buffer
-	void BindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
-		buffer.Bind<Pipeline>(device_context, slot);
+	void bindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
+		buffer.bind<Pipeline>(device_context, slot);
 	}
 
 
@@ -61,31 +61,31 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Set a new viewport
-	void SetViewport(ID3D11DeviceContext& device_context, const D3D11_VIEWPORT& viewport) {
+	void setViewport(ID3D11DeviceContext& device_context, const D3D11_VIEWPORT& viewport) {
 		this->viewport = viewport;
-		BindViewport(device_context);
-		UpdateProjectionMatrix();
+		bindViewport(device_context);
+		updateProjectionMatrix();
 	}
 
 	// Change the viewport size
-	void ResizeViewport(ID3D11DeviceContext& device_context, u32 width, u32 height) {
+	void resizeViewport(ID3D11DeviceContext& device_context, u32 width, u32 height) {
 		viewport.Width = static_cast<float>(width);
 		viewport.Height = static_cast<float>(height);
-		BindViewport(device_context);
-		UpdateProjectionMatrix();
+		bindViewport(device_context);
+		updateProjectionMatrix();
 	}
 
-	void SetViewportTopLeft(u32 top_left_x, u32 top_left_y) {
+	void setViewportTopLeft(u32 top_left_x, u32 top_left_y) {
 		viewport.TopLeftX = static_cast<float>(top_left_x);
 		viewport.TopLeftY = static_cast<float>(top_left_y);
-		UpdateProjectionMatrix();
+		updateProjectionMatrix();
 	}
 
 	// Set the depth range
-	void SetZDepth(float z_near, float z_far) {
+	void setZDepth(float z_near, float z_far) {
 		this->z_near = z_near;
 		this->z_far = z_far;
-		UpdateProjectionMatrix();
+		updateProjectionMatrix();
 	}
 
 
@@ -94,27 +94,27 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the camera's view matrix
-	XMMATRIX XM_CALLCONV GetViewMatrix() const {
+	XMMATRIX XM_CALLCONV getViewMatrix() const {
 		return view_matrix;
 	}
 
 	// Get the camera's projection matrix
-	XMMATRIX XM_CALLCONV GetProjectionMatrix() const {
+	XMMATRIX XM_CALLCONV getProjectionMatrix() const {
 		return projection_matrix;
 	}
 
 	// Get the Frustum for this camera
-	const Frustum& GetFrustum() const {
+	const Frustum& getFrustum() const {
 		return frustum;
 	}
 
 
 protected:
 	// Update the projection matrix after changing depth/width/height/etc...
-	virtual void UpdateProjectionMatrix() = 0;
+	virtual void updateProjectionMatrix() = 0;
 
 	// Update the view matrix. Used after moving/rotating the camera.
-	void XM_CALLCONV UpdateViewMatrix(FXMVECTOR position, FXMVECTOR forward, FXMVECTOR up) {
+	void XM_CALLCONV updateViewMatrix(FXMVECTOR position, FXMVECTOR forward, FXMVECTOR up) {
 		// Create a target vector
 		const XMVECTOR look_at = position + forward;
 
@@ -122,12 +122,12 @@ protected:
 		view_matrix = XMMatrixLookAtLH(position, look_at, up);
 
 		// The frustum needs to be updated when the view matrix changes
-		UpdateFrustum();
+		updateFrustum();
 	}
 
 	// Update the frustum. Used after the projection matrix or view matrix changes.
-	void UpdateFrustum() {
-		frustum.UpdateFrustum(view_matrix * projection_matrix);
+	void updateFrustum() {
+		frustum.updateFrustum(view_matrix * projection_matrix);
 	}
 
 

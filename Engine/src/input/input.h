@@ -10,31 +10,32 @@ public:
 	Input(HWND hWnd);
 	~Input() = default;
 
-	void Tick();
-	void Reset();
+	void tick();
+	void reset();
 
 	// Get mouse movement since last update
-	int2 GetMouseDelta() const;
+	int2 getMouseDelta() const;
 
 	// Get the current mouse mode
-	Mouse::Mode GetMouseMode() const {
+	Mouse::Mode getMouseMode() const {
+
 		return mouse_state.positionMode;
 	}
 
 	// Set mouse to use absolute screen coords.
 	// Allows the mouse to leave the window.
-	void SetMouseAbsolute() const {
+	void setMouseAbsolute() const {
 		mouse->SetMode(Mouse::MODE_ABSOLUTE);
 	}
 
 	// Set mouse to use relative window coords. Prevents
 	// mouse from leaving the window and hides the cursor.
-	void SetMouseRelative() const {
+	void setMouseRelative() const {
 		mouse->SetMode(Mouse::MODE_RELATIVE);
 	}
 
 	// Toggle the mouse mode.
-	void ToggleMouseMode() const {
+	void toggleMouseMode() const {
 		(mouse_state.positionMode == Mouse::MODE_ABSOLUTE)
 			? mouse->SetMode(Mouse::MODE_RELATIVE)
 			: mouse->SetMode(Mouse::MODE_ABSOLUTE);
@@ -42,25 +43,25 @@ public:
 
 
 	// Check if key is currently down
-	bool IsKeyDown(Keyboard::Keys key) const {
+	bool isKeyDown(Keyboard::Keys key) const {
 		return keyboard_state.IsKeyDown(key);
 	}
 
 	// Check if key is currently up
-	bool IsKeyUp(Keyboard::Keys key) const {
+	bool isKeyUp(Keyboard::Keys key) const {
 		return keyboard_state.IsKeyUp(key);
 	}
 
 
 	// Check if key has been pressed. If it has, the function
 	// will only return true for the first query
-	bool IsKeyPressed(Keyboard::Keys key) const {
+	bool isKeyPressed(Keyboard::Keys key) const {
 		return keyboard_tracker.IsKeyPressed(key);
 	}
 
 	// Check if key has been released. If it has, the function
 	// will only return true for the first query
-	bool IsKeyReleased(Keyboard::Keys key) const {
+	bool isKeyReleased(Keyboard::Keys key) const {
 		return keyboard_tracker.IsKeyReleased(key);
 	}
 

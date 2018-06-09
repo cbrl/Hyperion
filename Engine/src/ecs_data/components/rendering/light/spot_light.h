@@ -15,110 +15,110 @@ public:
 
 	~SpotLight() = default;
 
-	void SetAmbientColor(const float4& color) {
+	void setAmbientColor(const float4& color) {
 		ambient_color = color;
 	}
 
-	void SetDiffuseColor(const float4& color) {
+	void setDiffuseColor(const float4& color) {
 		diffuse_color = color;
 	}
 
-	void SetSpecular(const float4& spec) {
+	void setSpecular(const float4& spec) {
 		specular = spec;
 	}
 
-	void SetAttenuation(const float3& atten) {
+	void setAttenuation(const float3& atten) {
 		attenuation = atten;
 	}
 
-	void SetUmbraCosAngle(float cos_angle) {
+	void setUmbraCosAngle(float cos_angle) {
 		cos_umbra = std::max(cos_angle, 0.001f);
 	}
 
-	void SetUmbraAngle(float angle) {
-		SetUmbraCosAngle(std::cos(angle));
+	void setUmbraAngle(float angle) {
+		setUmbraCosAngle(std::cos(angle));
 	}
 
-	void SetPenumbraCosAngle(float cos_angle) {
+	void setPenumbraCosAngle(float cos_angle) {
 		cos_penumbra = std::max(std::min(cos_angle, cos_umbra - 0.001f), 0.001f);
-		UpdateBoundingVolumes();
+		updateBoundingVolumes();
 	}
 
-	void SetPenumbraAngle(float angle) {
-		SetPenumbraCosAngle(std::cos(angle));
+	void setPenumbraAngle(float angle) {
+		setPenumbraCosAngle(std::cos(angle));
 	}
 
-	void SetCutoffAngles(float cos_umbra, float cos_penumbra) {
-		SetUmbraAngle(cos_umbra);
-		SetPenumbraAngle(cos_penumbra);
+	void setCutoffAngles(float cos_umbra, float cos_penumbra) {
+		setUmbraAngle(cos_umbra);
+		setPenumbraAngle(cos_penumbra);
 	}
 
-	void SetRange(float range) {
+	void setRange(float range) {
 		this->range = range;
-		UpdateBoundingVolumes();
+		updateBoundingVolumes();
 	}
 
-	void SetShadows(bool state) {
+	void setShadows(bool state) {
 		shadows = state;
 	}
 
 
-	const float4& GetAmbientColor() const {
+	const float4& getAmbientColor() const {
 		return ambient_color;
 	}
 
-	const float4& GetDiffuseColor() const {
+	const float4& getDiffuseColor() const {
 		return diffuse_color;
 	}
 
-	const float4& GetSpecular() const {
+	const float4& getSpecular() const {
 		return specular;
 	}
 
-	const float3& GetAttenuation() const {
+	const float3& getAttenuation() const {
 		return attenuation;
 	}
 
-	float GetUmbra() const {
+	float getUmbra() const {
 		return cos_umbra;
 	}
 
-	float GetUmbraAngle() const {
+	float getUmbraAngle() const {
 		return std::acos(cos_umbra);
 	}
 
-	float GetPenumbra() const {
+	float getPenumbra() const {
 		return cos_penumbra;
 	}
 
-	float GetPenumbraAngle() const {
+	float getPenumbraAngle() const {
 		return std::acos(cos_penumbra);
 	}
 
-	float GetRange() const {
+	float getRange() const {
 		return range;
 	}
 
-	bool CastsShadows() const {
+	bool castsShadows() const {
 		return shadows;
 	}
 
-	const AABB& GetAABB() const {
+	const AABB& getAabb() const {
 		return aabb;
 	}
 
-	const BoundingSphere& GetBoundingSphere() const {
+	const BoundingSphere& getBoundingSphere() const {
 		return sphere;
 	}
 
-	XMMATRIX XM_CALLCONV GetLightToProjectionMatrix() const {
+	XMMATRIX XM_CALLCONV getLightToProjectionMatrix() const {
 		const float fov = std::acos(cos_penumbra) * 2.0f;
 		return XMMatrixPerspectiveFovLH(fov, 1.0f, near_plane, range);
 	}
 
 
 private:
-	void UpdateBoundingVolumes() {
+	void updateBoundingVolumes() {
 		const float a = 1.0f / (cos_penumbra * cos_penumbra);
 		const float rxy = range * std::sqrt(a - 1.0f);
 		const float rz = range * 0.5f;

@@ -26,9 +26,9 @@ public:
 	~ResourceMap() = default;
 
 	template<typename... ArgsT>
-	shared_ptr<ValueT> GetOrCreateResource(const KeyT& key, ArgsT&&... args);
+	shared_ptr<ValueT> getOrCreateResource(const KeyT& key, ArgsT&&... args);
 
-	shared_ptr<ValueT> GetResource(const KeyT& key);
+	shared_ptr<ValueT> getResource(const KeyT& key);
 
 
 private:
@@ -49,7 +49,7 @@ public:
 	}
 
 	template<typename ResourceT>
-	ResourceMap<ResMapKeyT, ResourceT>* GetOrCreateMap() {
+	ResourceMap<ResMapKeyT, ResourceT>* getOrCreateMap() {
 
 		using map_t = ResourceMap<ResMapKeyT, ResourceT>;
 
@@ -64,7 +64,7 @@ public:
 	}
 
 	template<typename ResourceT>
-	ResourceMap<ResMapKeyT, ResourceT>* GetMap() {
+	ResourceMap<ResMapKeyT, ResourceT>* getMap() {
 
 		using map_t = ResourceMap<ResMapKeyT, ResourceT>;
 
@@ -95,25 +95,25 @@ public:
 
 	// ModelBlueprint
 	template<typename ResourceT>
-	enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> GetOrCreate(const wstring& filename);
+	enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> getOrCreate(const wstring& filename);
 
 	template<typename ResourceT, typename VertexT>
-	enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> GetOrCreate(
+	enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> getOrCreate(
 		const wstring& name,
 		const ModelOutput<VertexT>& model_data);
 
 
 	// Texture
 	template<typename ResourceT>
-	enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> GetOrCreate(const wstring& filename);
+	enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> getOrCreate(const wstring& filename);
 
 	template<typename ResourceT>
-	enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> GetOrCreate(const float4& color);
+	enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> getOrCreate(const float4& color);
 
 
 	// SpriteFont
 	template<typename ResourceT>
-	enable_if_t<is_same_v<Font, ResourceT>, shared_ptr<Font>> GetOrCreate(const wstring& filename);
+	enable_if_t<is_same_v<Font, ResourceT>, shared_ptr<Font>> getOrCreate(const wstring& filename);
 
 
 private:

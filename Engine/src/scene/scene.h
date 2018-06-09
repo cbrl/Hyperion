@@ -18,7 +18,7 @@ public:
 	virtual ~Scene() = default;
 
 	// Update the scene
-	virtual void Tick(const Engine& engine) = 0;
+	virtual void tick(const Engine& engine) = 0;
 
 	// Draw the UI
 	//void DrawUI(Engine& engine) { ui.Draw(engine); }
@@ -28,9 +28,9 @@ public:
 	// Getters
 	//----------------------------------------------------------------------------------
 
-	auto& GetName() const { return name; }
-	auto& GetFog() const { return fog; }
-	auto& GetTexts() const { return texts; }
+	auto& getName() const { return name; }
+	auto& getFog() const { return fog; }
+	auto& getTexts() const;
 
 
 protected:
@@ -40,7 +40,7 @@ protected:
 	Scene(string&& name) : name(std::move(name)) {
 	}
 
-	virtual void Init(const Engine& engine) = 0;
+	virtual void init(const Engine& engine) = 0;
 
 
 protected:
@@ -50,3 +50,6 @@ protected:
 	map<string, Text> texts;
 	vector<handle64> entities;
 };
+
+
+inline auto& Scene::getTexts() const { return texts; }

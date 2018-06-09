@@ -13,21 +13,21 @@ public:
 		: current_size(0)
 		, reserved_size(reserved_size) {
 
-		CreateBuffer(device);
+		createBuffer(device);
 	}
 
 	~StructuredBuffer() = default;
 
 
-	void UpdateData(ID3D11Device& device,
+	void updateData(ID3D11Device& device,
 	                ID3D11DeviceContext& device_context,
 	                const vector<DataT>& data);
 
 
 	// Bind the buffer to the specified pipeline stage
 	template<typename StageT>
-	void Bind(ID3D11DeviceContext& device_context, u32 slot) {
-		StageT::BindSRVs(device_context, slot, 1, srv.GetAddressOf());
+	void bind(ID3D11DeviceContext& device_context, u32 slot) {
+		StageT::bindSRVs(device_context, slot, 1, srv.GetAddressOf());
 	}
 
 
@@ -43,7 +43,7 @@ public:
 
 
 private:
-	void CreateBuffer(ID3D11Device& device);
+	void createBuffer(ID3D11Device& device);
 
 
 private:

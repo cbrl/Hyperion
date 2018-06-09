@@ -13,7 +13,7 @@ public:
 
 	~TestScene() = default;
 
-	void Init(const Engine& engine) override;
+	void init(const Engine& engine) override;
 
-	void Tick(const Engine& engine) override;
+	void tick(const Engine& engine) override;
 };

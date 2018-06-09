@@ -16,16 +16,16 @@ public:
 	~Frustum() = default;
 
 	// Recalculate the frustum
-	void XM_CALLCONV UpdateFrustum(FXMMATRIX M);
+	void XM_CALLCONV updateFrustum(FXMMATRIX M);
 
 
-	bool XM_CALLCONV Encloses(FXMVECTOR point) const;
+	bool XM_CALLCONV encloses(FXMVECTOR point) const;
 
-	bool Encloses(const AABB& aabb) const;
-	bool Contains(const AABB& aabb) const;
+	bool encloses(const AABB& aabb) const;
+	bool contains(const AABB& aabb) const;
 
-	bool Encloses(const BoundingSphere& sphere) const;
-	bool Contains(const BoundingSphere& sphere) const;
+	bool encloses(const BoundingSphere& sphere) const;
+	bool contains(const BoundingSphere& sphere) const;
 
 
 private:

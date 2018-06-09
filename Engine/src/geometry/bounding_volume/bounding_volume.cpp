@@ -69,7 +69,7 @@ AABB::AABB(FXMVECTOR min, FXMVECTOR max)
 }
 
 
-void XM_CALLCONV AABB::Transform(FXMMATRIX M) {
+void XM_CALLCONV AABB::transform(FXMMATRIX M) {
 
 	for (u32 i = 0; i < 8; ++i) {
 		transformed_verts[i] = XMVector3TransformCoord(origin_verts[i], M);
@@ -108,7 +108,7 @@ BoundingSphere::BoundingSphere(FXMVECTOR center, float radius)
 }
 
 
-void XM_CALLCONV BoundingSphere::Transform(FXMMATRIX M) {
+void XM_CALLCONV BoundingSphere::transform(FXMMATRIX M) {
 
 	const float x = XMVectorGetX(XMVector3Length(M.r[0]));
 	const float y = XMVectorGetX(XMVector3Length(M.r[1]));

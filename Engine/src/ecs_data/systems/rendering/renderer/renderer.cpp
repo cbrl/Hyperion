@@ -16,26 +16,26 @@ Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
 
 void Renderer::update(const Engine& engine) {
 
-	auto& ecs_engine = engine.GetECS();
-	const auto& rendering_mgr = engine.GetRenderingMgr();
-	const auto& render_state_mgr = rendering_mgr.GetRenderStateMgr();
-	auto& scene = engine.GetScene();
+	auto& ecs_engine = engine.getECS();
+	const auto& rendering_mgr = engine.getRenderingMgr();
+	const auto& render_state_mgr = rendering_mgr.getRenderStateMgr();
+	auto& scene = engine.getScene();
 
 
 	ecs_engine.forEachActive<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
 		// Bind the buffer
-		camera.BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
+		camera.bindBuffer(device_context, SLOT_CBUFFER_CAMERA);
 
 		// Render the scene
-		RenderCamera(engine, camera);
+		renderCamera(engine, camera);
 	});
 
 	ecs_engine.forEachActive<OrthographicCamera>([&](const OrthographicCamera& camera) {
 		// Bind the buffer
-		camera.BindBuffer(device_context, SLOT_CBUFFER_CAMERA);
+		camera.bindBuffer(device_context, SLOT_CBUFFER_CAMERA);
 
 		// Render the scene
-		RenderCamera(engine, camera);
+		renderCamera(engine, camera);
 	});
 
 
@@ -43,7 +43,7 @@ void Renderer::update(const Engine& engine) {
 	// Render text objects
 	//----------------------------------------------------------------------------------
 
-	text_pass->Render(scene);
+	text_pass->render(scene);
 
 
 	//----------------------------------------------------------------------------------

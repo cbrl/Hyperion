@@ -26,36 +26,36 @@ public:
 	// Getters
 	//----------------------------------------------------------------------------------
 
-	float3 GetVelocity() const { return velocity; }
-	float GetAcceleration() const { return acceleration; }
-	float GetDeceleration() const { return deceleration; }
-	float GetMaxVelocity() const { return max_velocity; }
+	float3 getVelocity() const { return velocity; }
+	float getAcceleration() const { return acceleration; }
+	float getDeceleration() const { return deceleration; }
+	float getMaxVelocity() const { return max_velocity; }
 
-	float GetTurnSensitivity() const { return turn_sensitivity; }
-	float GetRollSensitivity() const { return roll_sensitivity; }
+	float getTurnSensitivity() const { return turn_sensitivity; }
+	float getRollSensitivity() const { return roll_sensitivity; }
 
-	bool IsMovingX() const { return is_moving_x; }
-	bool IsMovingY() const { return is_moving_y; }
-	bool IsMovingZ() const { return is_moving_z; }
+	bool isMovingX() const { return is_moving_x; }
+	bool isMovingY() const { return is_moving_y; }
+	bool isMovingZ() const { return is_moving_z; }
 
 
 	//----------------------------------------------------------------------------------
 	// Setters
 	//----------------------------------------------------------------------------------
 
-	void SetVelocity(const float3& vel) { velocity = vel; }
-	void XM_CALLCONV SetVelocity(FXMVECTOR vel) { XMStoreFloat3(&velocity, vel); }
+	void setVelocity(const float3& vel) { velocity = vel; }
+	void XM_CALLCONV setVelocity(FXMVECTOR vel) { XMStoreFloat3(&velocity, vel); }
 
-	void SetAcceleration(float accel) { acceleration = accel; }
-	void SetDeceleration(float decel) { deceleration = decel; }
-	void SetMaxVelocity(float max_vel) { max_velocity = max_vel; }
+	void setAcceleration(float accel) { acceleration = accel; }
+	void setDeceleration(float decel) { deceleration = decel; }
+	void setMaxVelocity(float max_vel) { max_velocity = max_vel; }
 
-	void SetTurnSensitivity(float sens) { turn_sensitivity = sens; }
-	void SetRollSensitivity(float sens) { roll_sensitivity = sens; }
+	void setTurnSensitivity(float sens) { turn_sensitivity = sens; }
+	void setRollSensitivity(float sens) { roll_sensitivity = sens; }
 
-	void SetMovingX(bool moving) { is_moving_x = moving; }
-	void SetMovingY(bool moving) { is_moving_y = moving; }
-	void SetMovingZ(bool moving) { is_moving_z = moving; }
+	void setMovingX(bool moving) { is_moving_x = moving; }
+	void setMovingY(bool moving) { is_moving_y = moving; }
+	void setMovingZ(bool moving) { is_moving_z = moving; }
 
 
 private:

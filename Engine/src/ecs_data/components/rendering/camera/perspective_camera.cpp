@@ -9,11 +9,11 @@ PerspectiveCamera::PerspectiveCamera(ID3D11Device& device,
 	: CameraBase(device)
 	, fov(XM_PI / 4.0f) {
 
-	ResizeViewport(device_context, viewport_width, viewport_height);
+	resizeViewport(device_context, viewport_width, viewport_height);
 }
 
 
-void PerspectiveCamera::UpdateProjectionMatrix() {
+void PerspectiveCamera::updateProjectionMatrix() {
 	// Recalculate the aspect ratio
 	const float aspect_ratio = viewport.Width / viewport.Height;
 
@@ -21,5 +21,5 @@ void PerspectiveCamera::UpdateProjectionMatrix() {
 	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
 
 	// Update the frustum when the projection matrix changes
-	UpdateFrustum();
+	updateFrustum();
 }

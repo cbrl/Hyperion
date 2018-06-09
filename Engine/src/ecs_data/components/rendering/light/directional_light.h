@@ -10,36 +10,36 @@ public:
 
 	~DirectionalLight() = default;
 
-	void SetAmbientColor(const float4& color) {
+	void setAmbientColor(const float4& color) {
 		this->ambient_color = color;
 	}
 
-	void SetDiffuseColor(const float4& color) {
+	void setDiffuseColor(const float4& color) {
 		this->diffuse_color = color;
 	}
 
-	void SetSpecular(const float4& spec) {
+	void setSpecular(const float4& spec) {
 		this->specular = spec;
 	}
 
-	void SetShadows(bool state) {
+	void setShadows(bool state) {
 		shadows = state;
 	}
 
 
-	const float4& GetAmbientColor() const {
+	const float4& getAmbientColor() const {
 		return ambient_color;
 	}
 
-	const float4& GetDiffuseColor() const {
+	const float4& getDiffuseColor() const {
 		return diffuse_color;
 	}
 
-	const float4& GetSpecular() const {
+	const float4& getSpecular() const {
 		return specular;
 	}
 
-	bool CastsShadows() const {
+	bool castsShadows() const {
 		return shadows;
 	}
 

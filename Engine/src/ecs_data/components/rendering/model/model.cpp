@@ -6,7 +6,7 @@
 // ModelChild
 //----------------------------------------------------------------------------------
 
-void XM_CALLCONV ModelChild::UpdateBuffer(ID3D11DeviceContext& device_context,
+void XM_CALLCONV ModelChild::updateBuffer(ID3D11DeviceContext& device_context,
                                           FXMMATRIX world,
                                           CXMMATRIX world_inv_transpose) const {
 
@@ -28,7 +28,7 @@ void XM_CALLCONV ModelChild::UpdateBuffer(ID3D11DeviceContext& device_context,
 	                                 material.has_texture,
 	                                 material.reflection_enabled);
 
-	buffer.UpdateData(device_context, buffer_data);
+	buffer.updateData(device_context, buffer_data);
 }
 
 
@@ -51,7 +51,7 @@ Model::Model(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint)
 }
 
 
-void XM_CALLCONV Model::UpdateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world) {
+void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world) {
 
 	// Create the model-to-world matrix. Transposed for HLSL.
 	auto world_t = XMMatrixTranspose(world);
@@ -62,7 +62,7 @@ void XM_CALLCONV Model::UpdateBuffer(ID3D11DeviceContext& device_context, FXMMAT
 
 	// Update each child model
 	ForEachChild([&](ModelChild& child) {
-		child.UpdateBuffer(device_context, world_t, world_inv_transpose);
+		child.updateBuffer(device_context, world_t, world_inv_transpose);
 	});
 }
 
@@ -71,10 +71,10 @@ void XM_CALLCONV Model::UpdateBoundingVolumes(FXMMATRIX world) {
 
 	// Update each child model
 	ForEachChild([&](ModelChild& child) {
-		child.UpdateBoundingVolumes(world);
+		child.updateBoundingVolumes(world);
 	});
 
 	// Update the model
-	aabb.Transform(world);
-	sphere.Transform(world);
+	aabb.transform(world);
+	sphere.transform(world);
 }

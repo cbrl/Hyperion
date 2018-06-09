@@ -3,11 +3,11 @@
 
 
 Frustum::Frustum(CXMMATRIX M) : planes() {
-	UpdateFrustum(M);
+	updateFrustum(M);
 }
 
 
-void XM_CALLCONV Frustum::UpdateFrustum(FXMMATRIX M) {
+void XM_CALLCONV Frustum::updateFrustum(FXMMATRIX M) {
 	const XMMATRIX input = XMMatrixTranspose(M);
 
 	// Near plane
@@ -39,7 +39,7 @@ void XM_CALLCONV Frustum::UpdateFrustum(FXMMATRIX M) {
 // Encloses - Object completely contained within frustum
 //----------------------------------------------------------------------------------
 
-bool XM_CALLCONV Frustum::Encloses(FXMVECTOR point) const {
+bool XM_CALLCONV Frustum::encloses(FXMVECTOR point) const {
 	for (auto plane : planes) {
 		const auto result = XMPlaneDotCoord(plane, point);
 		if (XMVectorGetX(result) < 0.0f) {
@@ -51,13 +51,13 @@ bool XM_CALLCONV Frustum::Encloses(FXMVECTOR point) const {
 }
 
 
-bool Frustum::Encloses(const AABB& aabb) const {
+bool Frustum::encloses(const AABB& aabb) const {
 
 	// For each plane, get the minimum point of the AABB along the
 	// plane's normal, then check which side of the plane the point is on.
 	for (auto plane : planes) {
 		const auto control = XMVectorGreaterOrEqual(plane, XMVectorZero());
-		const auto point = XMVectorSelect(aabb.Max(), aabb.Min(), control);
+		const auto point = XMVectorSelect(aabb.maxPoint(), aabb.minPoint(), control);
 
 		const auto result = XMPlaneDotCoord(plane, point);
 
@@ -70,14 +70,14 @@ bool Frustum::Encloses(const AABB& aabb) const {
 }
 
 
-bool Frustum::Encloses(const BoundingSphere& sphere) const {
+bool Frustum::encloses(const BoundingSphere& sphere) const {
 
 	// Calculate the dot product of the plane and the sphere's
 	// center, then check if it's less than the sphere's radius
 	for (auto plane : planes) {
-		const auto result = XMPlaneDotCoord(plane, sphere.Center());
+		const auto result = XMPlaneDotCoord(plane, sphere.center());
 
-		if (XMVectorGetX(result) < sphere.Radius()) {
+		if (XMVectorGetX(result) < sphere.radius()) {
 			return false;
 		}
 	}
@@ -90,13 +90,13 @@ bool Frustum::Encloses(const BoundingSphere& sphere) const {
 // Contains - Object completely or partially contained within frustum
 //----------------------------------------------------------------------------------
 
-bool Frustum::Contains(const AABB& aabb) const {
+bool Frustum::contains(const AABB& aabb) const {
 
 	// For each plane, get the minimum point of the AABB along the
 	// plane's normal, then check which side of the plane the point is on.
 	for (auto plane : planes) {
 		const auto control = XMVectorGreaterOrEqual(plane, XMVectorZero());
-		const auto point = XMVectorSelect(aabb.Min(), aabb.Max(), control);
+		const auto point = XMVectorSelect(aabb.minPoint(), aabb.maxPoint(), control);
 
 		const auto result = XMPlaneDotCoord(plane, point);
 
@@ -109,14 +109,14 @@ bool Frustum::Contains(const AABB& aabb) const {
 }
 
 
-bool Frustum::Contains(const BoundingSphere& sphere) const {
+bool Frustum::contains(const BoundingSphere& sphere) const {
 
 	// Calculate the dot product of the plane and the sphere's
 	// center, then check if it's less than the sphere's negative radius
 	for (auto plane : planes) {
-		const auto result = XMPlaneDotCoord(plane, sphere.Center());
+		const auto result = XMPlaneDotCoord(plane, sphere.center());
 
-		if (XMVectorGetX(result) < -sphere.Radius()) {
+		if (XMVectorGetX(result) < -sphere.radius()) {
 			return false;
 		}
 	}

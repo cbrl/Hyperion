@@ -4,20 +4,20 @@
 
 
 void TransformSystem::update(const Engine& engine) {
-	auto& ecs_engine = engine.GetECS();
+	auto& ecs_engine = engine.getECS();
 
 	ecs_engine.forEachActive<Transform>([&](Transform& transform) {
-		UpdateWorld(ecs_engine, transform);
+		updateWorld(ecs_engine, transform);
 	});
 
 	ecs_engine.forEachActive<CameraTransform>([&](CameraTransform& transform) {
-		UpdateWorld(ecs_engine, transform);
+		updateWorld(ecs_engine, transform);
 	});
 }
 
 
 void TransformSystem::postUpdate(const Engine& engine) {
-	auto& ecs_engine = engine.GetECS();
+	auto& ecs_engine = engine.getECS();
 
 	ecs_engine.forEachActive<Transform>([&](Transform& transform) {
 		transform.updated = false;
@@ -28,20 +28,20 @@ void TransformSystem::postUpdate(const Engine& engine) {
 }
 
 
-XMMATRIX TransformSystem::CalculateWorld(Transform& transform) {
-	return XMMatrixScalingFromVector(transform.scale)
+XMMATRIX TransformSystem::calculateWorld(Transform& transform) {
+	return XMMatrixScalingFromVector(transform.scaling)
 	       * XMMatrixRotationRollPitchYawFromVector(transform.rotation)
 	       * XMMatrixTranslationFromVector(transform.translation);
 }
 
 
-XMMATRIX TransformSystem::CalculateWorld(CameraTransform& transform) {
+XMMATRIX TransformSystem::calculateWorld(CameraTransform& transform) {
 	const XMMATRIX rotation = {
-		transform.GetWorldAxisX(),
-		transform.GetWorldAxisY(),
-		transform.GetWorldAxisZ(),
+		transform.getWorldAxisX(),
+		transform.getWorldAxisY(),
+		transform.getWorldAxisZ(),
 		{0.0f, 0.0f, 0.0f, 1.0f}
 	};
 
-	return rotation * transform.GetObjectToParentPositionMatrix();
+	return rotation * transform.getObjectToParentPositionMatrix();
 }

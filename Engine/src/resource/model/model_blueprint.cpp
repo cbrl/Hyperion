@@ -8,7 +8,7 @@ ModelBlueprint::ModelBlueprint(ID3D11Device& device,
                                ResourceMgr& resource_mgr,
                                const wstring& filename) {
 
-	const auto out = ModelLoader::Load<VertexPositionNormalTexture>(device, resource_mgr, filename);
+	const auto out = ModelLoader::load<VertexPositionNormalTexture>(resource_mgr, filename);
 
-	ConstructBlueprint(device, out);
+	constructBlueprint(device, out);
 }

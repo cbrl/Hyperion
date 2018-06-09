@@ -7,66 +7,66 @@
 
 
 RenderStateMgr::RenderStateMgr(ID3D11Device& device, ID3D11DeviceContext& device_context) {
-	SetupStates(device, device_context);
+	setupStates(device, device_context);
 }
 
 
-void RenderStateMgr::SetupStates(ID3D11Device& device, ID3D11DeviceContext& device_context) {
+void RenderStateMgr::setupStates(ID3D11Device& device, ID3D11DeviceContext& device_context) {
 	// Blend states
-	CreateBlendStates(device);
+	createBlendStates(device);
 
 	// Depth stencil states
-	CreateDepthStencilStates(device);
+	createDepthStencilStates(device);
 
 	// Rasterizer states
-	CreateRasterizerStates(device);
+	createRasterizerStates(device);
 
 	// Sampler states
-	CreateSamplerStates(device);
+	createSamplerStates(device);
 
 	// Bind Sampler states
-	BindLinearClamp(device_context);
-	BindLinearWrap(device_context);
-	BindPointClamp(device_context);
-	BindPointWrap(device_context);
-	BindAnisotropicClamp(device_context);
-	BindAnisotropicWrap(device_context);
-	BindPCFSampler(device_context);
+	bindLinearClamp(device_context);
+	bindLinearWrap(device_context);
+	bindPointClamp(device_context);
+	bindPointWrap(device_context);
+	bindAnisotropicClamp(device_context);
+	bindAnisotropicWrap(device_context);
+	bindPcfSampler(device_context);
 }
 
 
-HRESULT RenderStateMgr::CreateBlendState(ID3D11Device& device,
-                                         D3D11_BLEND srcBlend,
-                                         D3D11_BLEND destBlend,
-                                         ID3D11BlendState** pResult) const {
+HRESULT RenderStateMgr::createBlendState(ID3D11Device& device,
+                                         D3D11_BLEND src_blend,
+                                         D3D11_BLEND dest_blend,
+                                         ID3D11BlendState** p_result) const {
 	D3D11_BLEND_DESC desc = {};
 
-	desc.RenderTarget[0].BlendEnable = (srcBlend != D3D11_BLEND_ONE) || (destBlend != D3D11_BLEND_ZERO);
+	desc.RenderTarget[0].BlendEnable = (src_blend != D3D11_BLEND_ONE) || (dest_blend != D3D11_BLEND_ZERO);
 
-	desc.RenderTarget[0].SrcBlend = desc.RenderTarget[0].SrcBlendAlpha = srcBlend;
-	desc.RenderTarget[0].DestBlend = desc.RenderTarget[0].DestBlendAlpha = destBlend;
+	desc.RenderTarget[0].SrcBlend = desc.RenderTarget[0].SrcBlendAlpha = src_blend;
+	desc.RenderTarget[0].DestBlend = desc.RenderTarget[0].DestBlendAlpha = dest_blend;
 	desc.RenderTarget[0].BlendOp = desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 
 	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-	const HRESULT hr = device.CreateBlendState(&desc, pResult);
+	const HRESULT hr = device.CreateBlendState(&desc, p_result);
 
 	if (SUCCEEDED(hr)) {
-		SetDebugObjectName(*pResult, "RenderStateMgr BlendState");
+		SetDebugObjectName(*p_result, "RenderStateMgr BlendState");
 	}
 
 	return hr;
 }
 
 
-HRESULT RenderStateMgr::CreateDepthStencilState(ID3D11Device& device,
+HRESULT RenderStateMgr::createDepthStencilState(ID3D11Device& device,
                                                 bool enable,
-                                                bool writeEnable,
-                                                ID3D11DepthStencilState** pResult) const {
+                                                bool write_enable,
+                                                ID3D11DepthStencilState** p_result) const {
 	D3D11_DEPTH_STENCIL_DESC desc = {};
 
 	desc.DepthEnable = enable ? TRUE : FALSE;
-	desc.DepthWriteMask = writeEnable ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
+	desc.DepthWriteMask = write_enable ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
 	desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
 	desc.StencilEnable = FALSE;
@@ -80,79 +80,79 @@ HRESULT RenderStateMgr::CreateDepthStencilState(ID3D11Device& device,
 
 	desc.BackFace = desc.FrontFace;
 
-	const HRESULT hr = device.CreateDepthStencilState(&desc, pResult);
+	const HRESULT hr = device.CreateDepthStencilState(&desc, p_result);
 
 	if (SUCCEEDED(hr)) {
-		SetDebugObjectName(*pResult, "RenderStateMgr DepthState");
+		SetDebugObjectName(*p_result, "RenderStateMgr DepthState");
 	}
 
 	return hr;
 }
 
 
-HRESULT RenderStateMgr::CreateRasterizerState(ID3D11Device& device,
-                                              D3D11_CULL_MODE cullMode,
-                                              D3D11_FILL_MODE fillMode,
-                                              ID3D11RasterizerState** pResult) const {
+HRESULT RenderStateMgr::createRasterizerState(ID3D11Device& device,
+                                              D3D11_CULL_MODE cull_mode,
+                                              D3D11_FILL_MODE fill_mode,
+                                              ID3D11RasterizerState** p_result) const {
 	D3D11_RASTERIZER_DESC desc = {};
 
-	desc.CullMode = cullMode;
-	desc.FillMode = fillMode;
+	desc.CullMode = cull_mode;
+	desc.FillMode = fill_mode;
 	desc.DepthClipEnable = TRUE;
 	desc.MultisampleEnable = TRUE;
 
-	const HRESULT hr = device.CreateRasterizerState(&desc, pResult);
+	const HRESULT hr = device.CreateRasterizerState(&desc, p_result);
 
 	if (SUCCEEDED(hr)) {
-		SetDebugObjectName(*pResult, "RenderStateMgr RasterState");
+		SetDebugObjectName(*p_result, "RenderStateMgr RasterState");
 	}
 
 	return hr;
 }
 
 
-HRESULT RenderStateMgr::CreateSamplerState(ID3D11Device& device,
+HRESULT RenderStateMgr::createSamplerState(ID3D11Device& device,
                                            D3D11_FILTER filter,
-                                           D3D11_TEXTURE_ADDRESS_MODE addressMode,
-                                           ID3D11SamplerState** pResult) const {
+                                           D3D11_TEXTURE_ADDRESS_MODE address_mode,
+                                           ID3D11SamplerState** p_result) const {
 	D3D11_SAMPLER_DESC desc = {};
 
 	desc.Filter = filter;
 
-	desc.AddressU = addressMode;
-	desc.AddressV = addressMode;
-	desc.AddressW = addressMode;
+	desc.AddressU = address_mode;
+	desc.AddressV = address_mode;
+	desc.AddressW = address_mode;
 
 	desc.MaxAnisotropy = (device.GetFeatureLevel() > D3D_FEATURE_LEVEL_9_1) ? D3D11_MAX_MAXANISOTROPY : 2;
 
 	desc.MaxLOD = D3D11_FLOAT32_MAX;
 	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 
-	const HRESULT hr = device.CreateSamplerState(&desc, pResult);
+	const HRESULT hr = device.CreateSamplerState(&desc, p_result);
 
 	if (SUCCEEDED(hr)) {
-		SetDebugObjectName(*pResult, "RenderStateMgr SamplerState");
+		SetDebugObjectName(*p_result, "RenderStateMgr SamplerState");
 	}
 
 	return hr;
 }
 
 
-void RenderStateMgr::CreateBlendStates(ID3D11Device& device) {
+void RenderStateMgr::createBlendStates(ID3D11Device& device) {
 	// Opaque
-	ThrowIfFailed(CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, opaque.GetAddressOf()),
+	ThrowIfFailed(createBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, opaque.GetAddressOf()),
 	              "Error creating opaque blend state");
 
 	// Alpha Blend
-	ThrowIfFailed(CreateBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, alpha_blend.GetAddressOf()),
+	ThrowIfFailed(createBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, alpha_blend.GetAddressOf()),
 	              "Error creating alphablend blend state");
 
 	// Additive
-	ThrowIfFailed(CreateBlendState(device, D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_ONE, additive.GetAddressOf()),
+	ThrowIfFailed(createBlendState(device, D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_ONE, additive.GetAddressOf()),
 	              "Error creating additive blend state");
 
 	// Non-Premultiplied
-	ThrowIfFailed(CreateBlendState(device,
+	ThrowIfFailed(createBlendState(device,
 	                               D3D11_BLEND_SRC_ALPHA,
 	                               D3D11_BLEND_INV_SRC_ALPHA,
 	                               non_premultiplied.GetAddressOf()),
@@ -160,81 +160,81 @@ void RenderStateMgr::CreateBlendStates(ID3D11Device& device) {
 }
 
 
-void RenderStateMgr::CreateDepthStencilStates(ID3D11Device& device) {
+void RenderStateMgr::createDepthStencilStates(ID3D11Device& device) {
 	// Depth None
-	ThrowIfFailed(CreateDepthStencilState(device, false, false, depth_none.GetAddressOf()),
+	ThrowIfFailed(createDepthStencilState(device, false, false, depth_none.GetAddressOf()),
 	              "Error creating depthnone depth state");
 
 	// Depth Default
-	ThrowIfFailed(CreateDepthStencilState(device, true, true, depth_default.GetAddressOf()),
+	ThrowIfFailed(createDepthStencilState(device, true, true, depth_default.GetAddressOf()),
 	              "Error creating depthdefault depth state");
 
 	// Depth Read
-	ThrowIfFailed(CreateDepthStencilState(device, true, false, depth_read.GetAddressOf()),
+	ThrowIfFailed(createDepthStencilState(device, true, false, depth_read.GetAddressOf()),
 	              "Error creating depthread depth state");
 }
 
 
-void RenderStateMgr::CreateRasterizerStates(ID3D11Device& device) {
+void RenderStateMgr::createRasterizerStates(ID3D11Device& device) {
 	// Cull None
-	ThrowIfFailed(CreateRasterizerState(device, D3D11_CULL_NONE, D3D11_FILL_SOLID, cull_none.GetAddressOf()),
+	ThrowIfFailed(createRasterizerState(device, D3D11_CULL_NONE, D3D11_FILL_SOLID, cull_none.GetAddressOf()),
 	              "Error creating cullnone raster state");
 
 	// Cull Clockwise
-	ThrowIfFailed(CreateRasterizerState(device, D3D11_CULL_FRONT, D3D11_FILL_SOLID, cull_clockwise.GetAddressOf()),
+	ThrowIfFailed(createRasterizerState(device, D3D11_CULL_FRONT, D3D11_FILL_SOLID, cull_clockwise.GetAddressOf()),
 	              "Error creating cullclockwise raster state");
 
 	// Cull Counterclockwise
-	ThrowIfFailed(CreateRasterizerState(device,
+	ThrowIfFailed(createRasterizerState(device,
 	                                    D3D11_CULL_BACK,
 	                                    D3D11_FILL_SOLID,
 	                                    cull_counter_clockwise.GetAddressOf()),
 	              "Error creating cullcounterclockwise raster state");
 
 	// Wireframe
-	ThrowIfFailed(CreateRasterizerState(device, D3D11_CULL_NONE, D3D11_FILL_WIREFRAME, wireframe.GetAddressOf()),
+	ThrowIfFailed(createRasterizerState(device, D3D11_CULL_NONE, D3D11_FILL_WIREFRAME, wireframe.GetAddressOf()),
 	              "Error creating wireframe raster state");
 }
 
 
-void RenderStateMgr::CreateSamplerStates(ID3D11Device& device) {
+void RenderStateMgr::createSamplerStates(ID3D11Device& device) {
 	// Point Wrap
-	ThrowIfFailed(CreateSamplerState(device,
+	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_MIN_MAG_MIP_POINT,
 	                                 D3D11_TEXTURE_ADDRESS_WRAP,
 	                                 point_wrap.GetAddressOf()),
 	              "Error creating pointwrap sampler state");
 
 	// Point Clamp
-	ThrowIfFailed(CreateSamplerState(device,
+	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_MIN_MAG_MIP_POINT,
 	                                 D3D11_TEXTURE_ADDRESS_CLAMP,
 	                                 point_clamp.GetAddressOf()),
 	              "Error creating pointclamp sampler state");
 
 	// Linear Wrap
-	ThrowIfFailed(CreateSamplerState(device,
+	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_MIN_MAG_MIP_LINEAR,
 	                                 D3D11_TEXTURE_ADDRESS_WRAP,
 	                                 linear_wrap.GetAddressOf()),
 	              "Error creating linearwrap sampler state");
 
 	// Linear Clamp
-	ThrowIfFailed(CreateSamplerState(device,
+	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_MIN_MAG_MIP_LINEAR,
 	                                 D3D11_TEXTURE_ADDRESS_CLAMP,
 	                                 linear_clamp.GetAddressOf()),
 	              "Error creating linearclamp sampler state");
 
 	// Anisotropic Wrap
-	ThrowIfFailed(CreateSamplerState(device,
+	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_ANISOTROPIC,
 	                                 D3D11_TEXTURE_ADDRESS_WRAP,
 	                                 anisotropic_wrap.GetAddressOf()),
 	              "Error creating anisotropicwrap sampler state");
 
 	// Anisotropic Clamp
-	ThrowIfFailed(CreateSamplerState(device,
+	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_ANISOTROPIC,
 	                                 D3D11_TEXTURE_ADDRESS_CLAMP,
 	                                 anisotropic_clamp.GetAddressOf()),
@@ -263,102 +263,102 @@ void RenderStateMgr::CreateSamplerStates(ID3D11Device& device) {
 //----------------------------------------------------------------------------------
 // Bind blend states
 //----------------------------------------------------------------------------------
-void RenderStateMgr::BindOpaque(ID3D11DeviceContext& device_context, float blendFactor[4], u32 sampleMask) const {
-	Pipeline::OM::BindBlendState(device_context, opaque.Get(), blendFactor, sampleMask);
+void RenderStateMgr::bindOpaque(ID3D11DeviceContext& device_context, float blend_factor[4], u32 sample_mask) const {
+	Pipeline::OM::bindBlendState(device_context, opaque.Get(), blend_factor, sample_mask);
 }
 
 
-void RenderStateMgr::BindAlphaBlend(ID3D11DeviceContext& device_context, float blendFactor[4], u32 sampleMask) const {
-	Pipeline::OM::BindBlendState(device_context, alpha_blend.Get(), blendFactor, sampleMask);
+void RenderStateMgr::bindAlphaBlend(ID3D11DeviceContext& device_context, float blend_factor[4], u32 sample_mask) const {
+	Pipeline::OM::bindBlendState(device_context, alpha_blend.Get(), blend_factor, sample_mask);
 }
 
 
-void RenderStateMgr::BindAdditive(ID3D11DeviceContext& device_context, float blendFactor[4], u32 sampleMask) const {
-	Pipeline::OM::BindBlendState(device_context, additive.Get(), blendFactor, sampleMask);
+void RenderStateMgr::bindAdditive(ID3D11DeviceContext& device_context, float blend_factor[4], u32 sample_mask) const {
+	Pipeline::OM::bindBlendState(device_context, additive.Get(), blend_factor, sample_mask);
 }
 
 
-void RenderStateMgr::BindNonPremultiplied(ID3D11DeviceContext& device_context,
-                                          float blendFactor[4],
-                                          u32 sampleMask) const {
-	Pipeline::OM::BindBlendState(device_context, non_premultiplied.Get(), blendFactor, sampleMask);
+void RenderStateMgr::bindNonPremultiplied(ID3D11DeviceContext& device_context,
+                                          float blend_factor[4],
+                                          u32 sample_mask) const {
+	Pipeline::OM::bindBlendState(device_context, non_premultiplied.Get(), blend_factor, sample_mask);
 }
 
 
 //----------------------------------------------------------------------------------
 // Bind depth stencil states
 //----------------------------------------------------------------------------------
-void RenderStateMgr::BindDepthNone(ID3D11DeviceContext& device_context, u32 stencilRef) const {
-	Pipeline::OM::BindDepthStencilState(device_context, depth_none.Get(), stencilRef);
+void RenderStateMgr::bindDepthNone(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
+	Pipeline::OM::bindDepthStencilState(device_context, depth_none.Get(), stencil_ref);
 }
 
 
-void RenderStateMgr::BindDepthDefault(ID3D11DeviceContext& device_context, u32 stencilRef) const {
-	Pipeline::OM::BindDepthStencilState(device_context, depth_default.Get(), stencilRef);
+void RenderStateMgr::bindDepthDefault(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
+	Pipeline::OM::bindDepthStencilState(device_context, depth_default.Get(), stencil_ref);
 }
 
 
-void RenderStateMgr::BindDepthRead(ID3D11DeviceContext& device_context, u32 stencilRef) const {
-	Pipeline::OM::BindDepthStencilState(device_context, depth_read.Get(), stencilRef);
+void RenderStateMgr::bindDepthRead(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
+	Pipeline::OM::bindDepthStencilState(device_context, depth_read.Get(), stencil_ref);
 }
 
 
 //----------------------------------------------------------------------------------
 // Bind rasterizer states
 //----------------------------------------------------------------------------------
-void RenderStateMgr::BindCullNone(ID3D11DeviceContext& device_context) const {
-	Pipeline::RS::BindState(device_context, cull_none.Get());
+void RenderStateMgr::bindCullNone(ID3D11DeviceContext& device_context) const {
+	Pipeline::RS::bindState(device_context, cull_none.Get());
 }
 
 
-void RenderStateMgr::BindCullClockwise(ID3D11DeviceContext& device_context) const {
-	Pipeline::RS::BindState(device_context, cull_clockwise.Get());
+void RenderStateMgr::bindCullClockwise(ID3D11DeviceContext& device_context) const {
+	Pipeline::RS::bindState(device_context, cull_clockwise.Get());
 }
 
 
-void RenderStateMgr::BindCullCounterClockwise(ID3D11DeviceContext& device_context) const {
-	Pipeline::RS::BindState(device_context, cull_counter_clockwise.Get());
+void RenderStateMgr::bindCullCounterClockwise(ID3D11DeviceContext& device_context) const {
+	Pipeline::RS::bindState(device_context, cull_counter_clockwise.Get());
 }
 
 
-void RenderStateMgr::BindWireframe(ID3D11DeviceContext& device_context) const {
-	Pipeline::RS::BindState(device_context, wireframe.Get());
+void RenderStateMgr::bindWireframe(ID3D11DeviceContext& device_context) const {
+	Pipeline::RS::bindState(device_context, wireframe.Get());
 }
 
 
 //----------------------------------------------------------------------------------
 // Bind sampler states
 //----------------------------------------------------------------------------------
-void RenderStateMgr::BindPointWrap(ID3D11DeviceContext& device_context) const {
-	Pipeline::BindSamplers(device_context, SLOT_SAMPLER_POINT_WRAP, 1, point_wrap.GetAddressOf());
+void RenderStateMgr::bindPointWrap(ID3D11DeviceContext& device_context) const {
+	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_POINT_WRAP, 1, point_wrap.GetAddressOf());
 }
 
 
-void RenderStateMgr::BindPointClamp(ID3D11DeviceContext& device_context) const {
-	Pipeline::BindSamplers(device_context, SLOT_SAMPLER_POINT_CLAMP, 1, point_clamp.GetAddressOf());
+void RenderStateMgr::bindPointClamp(ID3D11DeviceContext& device_context) const {
+	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_POINT_CLAMP, 1, point_clamp.GetAddressOf());
 }
 
 
-void RenderStateMgr::BindLinearWrap(ID3D11DeviceContext& device_context) const {
-	Pipeline::BindSamplers(device_context, SLOT_SAMPLER_LINEAR_WRAP, 1, linear_wrap.GetAddressOf());
+void RenderStateMgr::bindLinearWrap(ID3D11DeviceContext& device_context) const {
+	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_LINEAR_WRAP, 1, linear_wrap.GetAddressOf());
 }
 
 
-void RenderStateMgr::BindLinearClamp(ID3D11DeviceContext& device_context) const {
-	Pipeline::BindSamplers(device_context, SLOT_SAMPLER_LINEAR_CLAMP, 1, linear_clamp.GetAddressOf());
+void RenderStateMgr::bindLinearClamp(ID3D11DeviceContext& device_context) const {
+	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_LINEAR_CLAMP, 1, linear_clamp.GetAddressOf());
 }
 
 
-void RenderStateMgr::BindAnisotropicWrap(ID3D11DeviceContext& device_context) const {
-	Pipeline::BindSamplers(device_context, SLOT_SAMPLER_ANISO_WRAP, 1, anisotropic_wrap.GetAddressOf());
+void RenderStateMgr::bindAnisotropicWrap(ID3D11DeviceContext& device_context) const {
+	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_ANISO_WRAP, 1, anisotropic_wrap.GetAddressOf());
 }
 
 
-void RenderStateMgr::BindAnisotropicClamp(ID3D11DeviceContext& device_context) const {
-	Pipeline::BindSamplers(device_context, SLOT_SAMPLER_ANISO_CLAMP, 1, anisotropic_clamp.GetAddressOf());
+void RenderStateMgr::bindAnisotropicClamp(ID3D11DeviceContext& device_context) const {
+	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_ANISO_CLAMP, 1, anisotropic_clamp.GetAddressOf());
 }
 
 
-void RenderStateMgr::BindPCFSampler(ID3D11DeviceContext& device_context) const {
-	Pipeline::BindSamplers(device_context, SLOT_SAMPLER_PCF, 1, pcf_sampler.GetAddressOf());
+void RenderStateMgr::bindPcfSampler(ID3D11DeviceContext& device_context) const {
+	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_PCF, 1, pcf_sampler.GetAddressOf());
 }

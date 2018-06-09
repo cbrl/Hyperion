@@ -7,24 +7,24 @@ TextPass::TextPass(ID3D11DeviceContext& device_context) {
 }
 
 
-void TextPass::Render(Scene& scene) const {
+void TextPass::render(Scene& scene) const {
 
-	const auto& texts = scene.GetTexts();
+	const auto& texts = scene.getTexts();
 
 	for (const auto& pair : texts) {
 
 		const auto& text = pair.second;
 
 		// Get the font
-		const auto& font = text.GetFont();
+		const auto& font = text.getFont();
 
 		// Draw the text
 		sprite_batch->Begin();
 		font.DrawString(sprite_batch.get(),
-		                text.GetText().data(),
-		                text.GetPosition(),
-		                text.GetColor(),
-		                text.GetRotation());
+		                text.getText().data(),
+		                text.getPosition(),
+		                text.getColor(),
+		                text.getRotation());
 		sprite_batch->End();
 	}
 }

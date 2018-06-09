@@ -22,9 +22,9 @@ public:
 
 	~VertexShader() = default;
 
-	void Bind(ID3D11DeviceContext& device_context) const {
-		Pipeline::IA::BindInputLayout(device_context, layout.Get());
-		Pipeline::VS::BindShader(device_context, shader.Get(), nullptr, 0);
+	void bind(ID3D11DeviceContext& device_context) const {
+		Pipeline::IA::bindInputLayout(device_context, layout.Get());
+		Pipeline::VS::bindShader(device_context, shader.Get(), nullptr, 0);
 	}
 
 
@@ -45,8 +45,8 @@ public:
 
 	~PixelShader() = default;
 
-	void Bind(ID3D11DeviceContext& device_context) const {
-		Pipeline::PS::BindShader(device_context, shader.Get(), nullptr, 0);
+	void bind(ID3D11DeviceContext& device_context) const {
+		Pipeline::PS::bindShader(device_context, shader.Get(), nullptr, 0);
 	}
 
 

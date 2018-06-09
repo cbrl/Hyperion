@@ -8,7 +8,7 @@ public:
 	RenderStateMgr(ID3D11Device& device, ID3D11DeviceContext& device_context);
 	~RenderStateMgr() = default;
 
-	void SetupStates(ID3D11Device& device, ID3D11DeviceContext& device_context);
+	void setupStates(ID3D11Device& device, ID3D11DeviceContext& device_context);
 
 
 	//----------------------------------------------------------------------------------
@@ -16,36 +16,36 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Blend states
-	void BindOpaque(ID3D11DeviceContext& device_context, float blendFactor[4] = {}, u32 sampleMask = 0xffffffff) const;
-	void BindAlphaBlend(ID3D11DeviceContext& device_context,
-	                    float blendFactor[4] = {},
-	                    u32 sampleMask = 0xffffffff) const;
-	void BindAdditive(ID3D11DeviceContext& device_context,
-	                  float blendFactor[4] = {},
-	                  u32 sampleMask = 0xffffffff) const;
-	void BindNonPremultiplied(ID3D11DeviceContext& device_context,
-	                          float blendFactor[4] = {},
-	                          u32 sampleMask = 0xffffffff) const;
+	void bindOpaque(ID3D11DeviceContext& device_context, float blend_factor[4] = {}, u32 sample_mask = 0xffffffff) const;
+	void bindAlphaBlend(ID3D11DeviceContext& device_context,
+	                    float blend_factor[4] = {},
+	                    u32 sample_mask = 0xffffffff) const;
+	void bindAdditive(ID3D11DeviceContext& device_context,
+	                  float blend_factor[4] = {},
+	                  u32 sample_mask = 0xffffffff) const;
+	void bindNonPremultiplied(ID3D11DeviceContext& device_context,
+	                          float blend_factor[4] = {},
+	                          u32 sample_mask = 0xffffffff) const;
 
 	// Depth stencil states
-	void BindDepthNone(ID3D11DeviceContext& device_context, u32 stencilRef = 0) const;
-	void BindDepthDefault(ID3D11DeviceContext& device_context, u32 stencilRef = 0) const;
-	void BindDepthRead(ID3D11DeviceContext& device_context, u32 stencilRef = 0) const;
+	void bindDepthNone(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
+	void bindDepthDefault(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
+	void bindDepthRead(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
 
 	// Rasterizer states
-	void BindCullNone(ID3D11DeviceContext& device_context) const;
-	void BindCullClockwise(ID3D11DeviceContext& device_context) const;
-	void BindCullCounterClockwise(ID3D11DeviceContext& device_context) const;
-	void BindWireframe(ID3D11DeviceContext& device_context) const;
+	void bindCullNone(ID3D11DeviceContext& device_context) const;
+	void bindCullClockwise(ID3D11DeviceContext& device_context) const;
+	void bindCullCounterClockwise(ID3D11DeviceContext& device_context) const;
+	void bindWireframe(ID3D11DeviceContext& device_context) const;
 
 	// Sampler states
-	void BindPointWrap(ID3D11DeviceContext& device_context) const;
-	void BindPointClamp(ID3D11DeviceContext& device_context) const;
-	void BindLinearWrap(ID3D11DeviceContext& device_context) const;
-	void BindLinearClamp(ID3D11DeviceContext& device_context) const;
-	void BindAnisotropicWrap(ID3D11DeviceContext& device_context) const;
-	void BindAnisotropicClamp(ID3D11DeviceContext& device_context) const;
-	void BindPCFSampler(ID3D11DeviceContext& device_context) const;
+	void bindPointWrap(ID3D11DeviceContext& device_context) const;
+	void bindPointClamp(ID3D11DeviceContext& device_context) const;
+	void bindLinearWrap(ID3D11DeviceContext& device_context) const;
+	void bindLinearClamp(ID3D11DeviceContext& device_context) const;
+	void bindAnisotropicWrap(ID3D11DeviceContext& device_context) const;
+	void bindAnisotropicClamp(ID3D11DeviceContext& device_context) const;
+	void bindPcfSampler(ID3D11DeviceContext& device_context) const;
 
 
 private:
@@ -53,29 +53,32 @@ private:
 	// Create states
 	//----------------------------------------------------------------------------------
 
-	// Create a render states
-	HRESULT CreateBlendState(ID3D11Device& device,
-	                         D3D11_BLEND srcBlend,
-	                         D3D11_BLEND destBlend,
-	                         _Out_	                         ID3D11BlendState** pResult) const;
-	HRESULT CreateDepthStencilState(ID3D11Device& device,
+	HRESULT createBlendState(ID3D11Device& device,
+	                         D3D11_BLEND src_blend,
+	                         D3D11_BLEND dest_blend,
+	                         _Out_ ID3D11BlendState** p_result) const;
+
+	HRESULT createDepthStencilState(ID3D11Device& device,
 	                                bool enable,
-	                                bool writeEnable,
-	                                _Out_	                                ID3D11DepthStencilState** pResult) const;
-	HRESULT CreateRasterizerState(ID3D11Device& device,
-	                              D3D11_CULL_MODE cullMode,
-	                              D3D11_FILL_MODE fillMode,
-	                              _Out_	                              ID3D11RasterizerState** pResult) const;
-	HRESULT CreateSamplerState(ID3D11Device& device,
+	                                bool write_enable,
+	                                _Out_ ID3D11DepthStencilState** p_result) const;
+
+	HRESULT createRasterizerState(ID3D11Device& device,
+	                              D3D11_CULL_MODE cull_mode,
+	                              D3D11_FILL_MODE fill_mode,
+	                              _Out_	ID3D11RasterizerState** p_result) const;
+
+	HRESULT createSamplerState(ID3D11Device& device,
 	                           D3D11_FILTER filter,
-	                           D3D11_TEXTURE_ADDRESS_MODE addressMode,
-	                           _Out_	                           ID3D11SamplerState** pResult) const;
+	                           D3D11_TEXTURE_ADDRESS_MODE address_mode,
+	                           _Out_ ID3D11SamplerState** p_result) const;
+
 
 	// Create the standard render states
-	void CreateBlendStates(ID3D11Device& device);
-	void CreateDepthStencilStates(ID3D11Device& device);
-	void CreateRasterizerStates(ID3D11Device& device);
-	void CreateSamplerStates(ID3D11Device& device);
+	void createBlendStates(ID3D11Device& device);
+	void createDepthStencilStates(ID3D11Device& device);
+	void createRasterizerStates(ID3D11Device& device);
+	void createSamplerStates(ID3D11Device& device);
 
 
 private:

@@ -15,8 +15,8 @@ public:
 
 
 private:
-	void ProcessMovement(const Engine& engine, CameraMovement* movement, CameraTransform* transform) const;
-	void UpdateMovement(CameraMovement* mv, float3 units) const;
-	void Move(CameraMovement* mv, CameraTransform* transform, float dt) const;
-	void Decelerate(CameraMovement* mv, float delta_time) const;
+	void processMovement(const Engine& engine, CameraMovement* movement, CameraTransform* transform) const;
+	void updateMovement(CameraMovement* mv, float3 units) const;
+	void move(CameraMovement* mv, CameraTransform* transform, float dt) const;
+	void decelerate(CameraMovement* mv, float delta_time) const;
 };

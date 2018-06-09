@@ -18,19 +18,19 @@ public:
 	LightPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
 	~LightPass() = default;
 
-	void XM_CALLCONV Render(const Engine& engine, FXMMATRIX world_to_projection);
+	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection);
 
 
 private:
-	void BindBuffers();
+	void bindBuffers();
 
-	void UpdateShadowMaps();
-	void RenderShadowMaps(const Engine& engine);
+	void updateShadowMaps();
+	void renderShadowMaps(const Engine& engine);
 
-	void UpdateData(Scene& scene) const;
-	void XM_CALLCONV UpdateDirectionalLightData(ECS& ecs_engine);
-	void XM_CALLCONV UpdatePointLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
-	void XM_CALLCONV UpdateSpotLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
+	void updateData(Scene& scene) const;
+	void XM_CALLCONV updateDirectionalLightData(ECS& ecs_engine);
+	void XM_CALLCONV updatePointLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
+	void XM_CALLCONV updateSpotLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
 
 
 private:

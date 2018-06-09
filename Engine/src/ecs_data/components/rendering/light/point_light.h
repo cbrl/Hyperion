@@ -15,65 +15,65 @@ public:
 	~PointLight() = default;
 
 
-	void SetAmbientColor(const float4& color) {
+	void setAmbientColor(const float4& color) {
 		this->ambient_color = color;
 	}
 
-	void SetDiffuseColor(const float4& color) {
+	void setDiffuseColor(const float4& color) {
 		this->diffuse_color = color;
 	}
 
-	void SetSpecular(const float4& spec) {
+	void setSpecular(const float4& spec) {
 		this->specular = spec;
 	}
 
-	void SetRange(const float range) {
+	void setRange(const float range) {
 		this->range = range;
-		UpdateBoundingVolumes();
+		updateBoundingVolumes();
 	}
 
-	void SetAttenuation(const float3& attenuation) {
+	void setAttenuation(const float3& attenuation) {
 		this->attenuation = attenuation;
 	}
 
-	void SetShadows(bool state) {
+	void setShadows(bool state) {
 		this->shadows = state;
 	}
 
 
-	const float4& GetAmbientColor() const {
+	const float4& getAmbientColor() const {
 		return ambient_color;
 	}
 
-	const float4& GetDiffuseColor() const {
+	const float4& getDiffuseColor() const {
 		return diffuse_color;
 	}
 
-	const float4& GetSpecular() const {
+	const float4& getSpecular() const {
 		return specular;
 	}
 
-	const float3& GetAttenuation() const {
+	const float3& getAttenuation() const {
 		return attenuation;
 	}
 
-	float GetRange() const {
+	float getRange() const {
 		return range;
 	}
 
-	bool CastsShadows() const {
+	bool castsShadows() const {
 		return shadows;
 	}
 
-	const AABB& GetAABB() const {
+	const AABB& getAabb() const {
 		return aabb;
 	}
 
-	const BoundingSphere& GetBoundingSphere() const {
+	const BoundingSphere& getBoundingSphere() const {
 		return sphere;
 	}
 
-	XMMATRIX XM_CALLCONV GetLightToProjectionMatrix() const {
+	XMMATRIX XM_CALLCONV getLightToProjectionMatrix() const {
 
 		const float m22 = range / (range - near_plane);
 		const float m32 = -near_plane * m22;
@@ -88,7 +88,7 @@ public:
 
 
 private:
-	void UpdateBoundingVolumes() {
+	void updateBoundingVolumes() {
 		aabb = AABB(float3(-range, -range, -range), float3(range, range, range));
 		sphere = BoundingSphere(float3(0.0f, 0.0f, 0.0f), range);
 	}

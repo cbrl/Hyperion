@@ -11,20 +11,20 @@ public:
 	Text(ResourceMgr& resource_mgr, const wstring& font_filename);
 	~Text() = default;
 
-	const SpriteFont& GetFont() const;
-	const wstring& GetText() const;
-	const float2& GetPosition() const;
-	const XMVECTORF32& GetColor() const;
-	float GetRotation() const;
+	const SpriteFont& getFont() const;
+	const wstring& getText() const;
+	const float2& getPosition() const;
+	const XMVECTORF32& getColor() const;
+	float getRotation() const;
 
-	void SetText(wstring new_text);
-	void SetText(wstring new_text, float2 new_position);
-	void SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color);
-	void SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color, float new_rotation);
+	void setText(wstring new_text);
+	void setText(wstring new_text, float2 new_position);
+	void setText(wstring new_text, float2 new_position, XMVECTORF32 new_color);
+	void setText(wstring new_text, float2 new_position, XMVECTORF32 new_color, float new_rotation);
 
-	void SetPosition(float2 new_position);
-	void SetColor(XMVECTORF32 new_color);
-	void SetRotation(float new_rotation);
+	void setPosition(float2 new_position);
+	void setColor(XMVECTORF32 new_color);
+	void setRotation(float new_rotation);
 
 
 private:

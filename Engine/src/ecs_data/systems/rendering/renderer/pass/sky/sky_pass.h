@@ -17,8 +17,8 @@ public:
 	SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
 	~SkyPass() = default;
 
-	void Render(const SkyBox& skybox) const;
-	void BindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const;
+	void render(const SkyBox& skybox) const;
+	void bindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const;
 
 
 private:

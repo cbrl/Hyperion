@@ -8,14 +8,14 @@ OrthographicCamera::OrthographicCamera(ID3D11Device& device,
                                        u32 viewport_height)
 	: CameraBase(device) {
 
-	ResizeViewport(device_context, viewport_width, viewport_height);
+	resizeViewport(device_context, viewport_width, viewport_height);
 }
 
 
-void OrthographicCamera::UpdateProjectionMatrix() {
+void OrthographicCamera::updateProjectionMatrix() {
 	// Recalculate the projection matrix
 	projection_matrix = XMMatrixOrthographicLH(viewport.Width, viewport.Height, z_near, z_far);
 
 	// Update the frustum when the projection matrix changes
-	UpdateFrustum();
+	updateFrustum();
 }

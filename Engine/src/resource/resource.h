@@ -18,7 +18,7 @@ public:
 
 	virtual ~Resource() = default;
 
-	static type_index GetTypeID() {
+	static type_index getTypeId() {
 		return type_id;
 	}
 

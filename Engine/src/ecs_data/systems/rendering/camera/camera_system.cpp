@@ -6,8 +6,8 @@
 
 
 void CameraSystem::update(const Engine& engine) {
-	auto& ecs_engine = engine.GetECS();
-	auto& device_context = engine.GetRenderingMgr().GetDeviceContext();
+	auto& ecs_engine = engine.getECS();
+	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	ecs_engine.forEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		const handle64 owner = camera.getOwner();
@@ -18,19 +18,19 @@ void CameraSystem::update(const Engine& engine) {
 
 		// Process movement
 		if (const auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
-			ProcessMovement(engine, movement, transform);
+			processMovement(engine, movement, transform);
 		}
 
 
 		// Update the camera's view matrix
-		camera.UpdateViewMatrix(transform->GetPosition(), transform->GetWorldAxisZ(), transform->GetWorldAxisY());
+		camera.updateViewMatrix(transform->getPosition(), transform->getWorldAxisZ(), transform->getWorldAxisY());
 
 
 		// Update the camera's buffer
-		camera.UpdateBuffer(device_context,
-		                    transform->GetWorldOrigin(),
-		                    transform->GetWorldToObjectMatrix(),
-		                    camera.GetProjectionMatrix());
+		camera.updateBuffer(device_context,
+		                    transform->getWorldOrigin(),
+		                    transform->getWorldToObjectMatrix(),
+		                    camera.getProjectionMatrix());
 	});
 
 
@@ -43,29 +43,29 @@ void CameraSystem::update(const Engine& engine) {
 
 		// Process movement
 		if (const auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
-			ProcessMovement(engine, movement, transform);
+			processMovement(engine, movement, transform);
 		}
 
 
 		// Update the camera's view matrix
-		camera.UpdateViewMatrix(transform->GetPosition(), transform->GetWorldAxisZ(), transform->GetWorldAxisY());
+		camera.updateViewMatrix(transform->getPosition(), transform->getWorldAxisZ(), transform->getWorldAxisY());
 
 
 		// Update the camera's buffer
-		camera.UpdateBuffer(device_context,
-		                    transform->GetWorldOrigin(),
-		                    transform->GetWorldToObjectMatrix(),
-		                    camera.GetProjectionMatrix());
+		camera.updateBuffer(device_context,
+		                    transform->getWorldOrigin(),
+		                    transform->getWorldToObjectMatrix(),
+		                    camera.getProjectionMatrix());
 	});
 }
 
 
-void CameraSystem::ProcessMovement(const Engine& engine, CameraMovement* movement, CameraTransform* transform) const {
+void CameraSystem::processMovement(const Engine& engine, CameraMovement* movement, CameraTransform* transform) const {
 
-	const auto& input = engine.GetInput();
+	const auto& input = engine.getInput();
 
-	const int2 mouse_delta = input.GetMouseDelta();
-	const float dt = engine.GetTimer().deltaTime();
+	const int2 mouse_delta = input.getMouseDelta();
+	const float dt = engine.getTimer().deltaTime();
 
 	float3 rotate_units(0.0f, 0.0f, 0.0f);
 	float3 move_units(0.0f, 0.0f, 0.0f);
@@ -77,21 +77,21 @@ void CameraSystem::ProcessMovement(const Engine& engine, CameraMovement* movemen
 
 	{
 		// Set x/y rotation with mouse data
-		rotate_units.x = XMConvertToRadians(static_cast<float>(mouse_delta.y)) * movement->GetTurnSensitivity();
-		rotate_units.y = XMConvertToRadians(static_cast<float>(mouse_delta.x)) * movement->GetTurnSensitivity();
+		rotate_units.x = XMConvertToRadians(static_cast<float>(mouse_delta.y)) * movement->getTurnSensitivity();
+		rotate_units.y = XMConvertToRadians(static_cast<float>(mouse_delta.x)) * movement->getTurnSensitivity();
 
 		// Roll rotation
-		if (input.IsKeyDown(Keyboard::Q)) {
-			rotate_units.z += dt * movement->GetRollSensitivity();
+		if (input.isKeyDown(Keyboard::Q)) {
+			rotate_units.z += dt * movement->getRollSensitivity();
 		}
-		else if (input.IsKeyDown(Keyboard::E)) {
-			rotate_units.z -= dt * movement->GetRollSensitivity();
+		else if (input.isKeyDown(Keyboard::E)) {
+			rotate_units.z -= dt * movement->getRollSensitivity();
 		}
 	}
 
 	// Rotate the camera
 	if (rotate_units.x || rotate_units.y || rotate_units.z) {
-		transform->Rotate(rotate_units);
+		transform->rotate(rotate_units);
 	}
 
 
@@ -101,42 +101,42 @@ void CameraSystem::ProcessMovement(const Engine& engine, CameraMovement* movemen
 
 	{
 		// Forward/Back movement
-		if (input.IsKeyDown(Keyboard::W)) {
+		if (input.isKeyDown(Keyboard::W)) {
 			move_units.z += dt;
 		}
-		else if (input.IsKeyDown(Keyboard::S)) {
+		else if (input.isKeyDown(Keyboard::S)) {
 			move_units.z -= dt;
 		}
 
 		// Left/Right movement
-		if (input.IsKeyDown(Keyboard::A)) {
+		if (input.isKeyDown(Keyboard::A)) {
 			move_units.x -= dt;
 		}
-		else if (input.IsKeyDown(Keyboard::D)) {
+		else if (input.isKeyDown(Keyboard::D)) {
 			move_units.x += dt;
 		}
 
 		// Up/Down movement
-		if (input.IsKeyDown(Keyboard::Space)) {
+		if (input.isKeyDown(Keyboard::Space)) {
 			move_units.y += dt;
 		}
-		else if (input.IsKeyDown(Keyboard::LeftControl)) {
+		else if (input.isKeyDown(Keyboard::LeftControl)) {
 			move_units.y -= dt;
 		}
 	}
 
 
 	// Move the camera
-	UpdateMovement(movement, move_units);
+	updateMovement(movement, move_units);
 
-	Move(movement, transform, dt);
+	move(movement, transform, dt);
 }
 
 
-void CameraSystem::UpdateMovement(CameraMovement* mv, float3 units) const {
+void CameraSystem::updateMovement(CameraMovement* mv, float3 units) const {
 
 	// Get the velocity
-	float3 velocity = mv->GetVelocity();
+	float3 velocity = mv->getVelocity();
 
 	//----------------------------------------------------------------------------------
 	// X movement
@@ -146,13 +146,13 @@ void CameraSystem::UpdateMovement(CameraMovement* mv, float3 units) const {
 	if (units.x) {
 
 		// is_moving determines if the camera will decelerate when Update is called
-		mv->SetMovingX(true);
+		mv->setMovingX(true);
 
 		if (copysign(1.0f, units.x) == copysign(1.0f, velocity.x)) {
-			velocity.x += units.x * mv->GetAcceleration();
+			velocity.x += units.x * mv->getAcceleration();
 		}
 		else {
-			velocity.x = units.x * mv->GetAcceleration();
+			velocity.x = units.x * mv->getAcceleration();
 		}
 	}
 
@@ -161,13 +161,13 @@ void CameraSystem::UpdateMovement(CameraMovement* mv, float3 units) const {
 	// Y movement
 	//----------------------------------------------------------------------------------
 	if (units.y) {
-		mv->SetMovingY(true);
+		mv->setMovingY(true);
 
 		if (copysign(1.0f, units.y) == copysign(1.0f, velocity.y)) {
-			velocity.y += units.y * mv->GetAcceleration();
+			velocity.y += units.y * mv->getAcceleration();
 		}
 		else {
-			velocity.y = units.y * mv->GetAcceleration();
+			velocity.y = units.y * mv->getAcceleration();
 		}
 	}
 
@@ -176,32 +176,32 @@ void CameraSystem::UpdateMovement(CameraMovement* mv, float3 units) const {
 	// Z movement
 	//----------------------------------------------------------------------------------
 	if (units.z) {
-		mv->SetMovingZ(true);
+		mv->setMovingZ(true);
 
 		if (copysign(1.0f, units.z) == copysign(1.0f, velocity.z)) {
-			velocity.z += units.z * mv->GetAcceleration();
+			velocity.z += units.z * mv->getAcceleration();
 		}
 		else {
-			velocity.z = units.z * mv->GetAcceleration();
+			velocity.z = units.z * mv->getAcceleration();
 		}
 	}
 
 	// Set the new velocity
-	mv->SetVelocity(velocity);
+	mv->setVelocity(velocity);
 }
 
 
-void CameraSystem::Move(CameraMovement* mv, CameraTransform* transform, float dt) const {
+void CameraSystem::move(CameraMovement* mv, CameraTransform* transform, float dt) const {
 
-	const float3 velocity    = mv->GetVelocity();
+	const float3 velocity    = mv->getVelocity();
 	XMVECTOR velocity_vec    = XMLoadFloat3(&velocity);
 	const float velocity_mag = XMVectorGetX(XMVector3Length(velocity_vec));
 
 	// Limit veloctiy to maximum
-	if (velocity_mag > mv->GetMaxVelocity()) {
+	if (velocity_mag > mv->getMaxVelocity()) {
 
-		velocity_vec = XMVector3Normalize(velocity_vec) * mv->GetMaxVelocity();
-		mv->SetVelocity(velocity_vec);
+		velocity_vec = XMVector3Normalize(velocity_vec) * mv->getMaxVelocity();
+		mv->setVelocity(velocity_vec);
 	}
 
 
@@ -210,28 +210,28 @@ void CameraSystem::Move(CameraMovement* mv, CameraTransform* transform, float dt
 		// Move the camera
 		XMVECTOR position = XMVectorZero();
 
-		position += transform->GetWorldAxisX() * mv->GetVelocity().x * dt;
-		position += transform->GetWorldAxisY() * mv->GetVelocity().y * dt;
-		position += transform->GetWorldAxisZ() * mv->GetVelocity().z * dt;
+		position += transform->getWorldAxisX() * mv->getVelocity().x * dt;
+		position += transform->getWorldAxisY() * mv->getVelocity().y * dt;
+		position += transform->getWorldAxisZ() * mv->getVelocity().z * dt;
 
-		transform->Move(position);
+		transform->move(position);
 
 		// Decelerate the camera
-		Decelerate(mv, dt);
+		decelerate(mv, dt);
 	}
 }
 
 
-void CameraSystem::Decelerate(CameraMovement* mv, float delta_time) const {
+void CameraSystem::decelerate(CameraMovement* mv, float delta_time) const {
 
 	float decel_amount;
-	float3 velocity = mv->GetVelocity();
+	float3 velocity = mv->getVelocity();
 
 	// Decelerate in each direction if not moving in that
 	// direction and the current velocity isn't 0.
-	if (!mv->IsMovingX() && velocity.x != 0.0f) {
+	if (!mv->isMovingX() && velocity.x != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity.x) * mv->GetDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity.x) * mv->getDeceleration() * delta_time;
 
 		if (abs(decel_amount) > abs(velocity.x)) {
 			velocity.x = 0.0f;
@@ -241,9 +241,9 @@ void CameraSystem::Decelerate(CameraMovement* mv, float delta_time) const {
 		}
 	}
 
-	if (!mv->IsMovingY() && velocity.y != 0.0f) {
+	if (!mv->isMovingY() && velocity.y != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity.y) * mv->GetDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity.y) * mv->getDeceleration() * delta_time;
 
 		if (abs(decel_amount) > abs(velocity.y)) {
 			velocity.y = 0.0f;
@@ -253,9 +253,9 @@ void CameraSystem::Decelerate(CameraMovement* mv, float delta_time) const {
 		}
 	}
 
-	if (!mv->IsMovingZ() && velocity.z != 0.0f) {
+	if (!mv->isMovingZ() && velocity.z != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity.z) * mv->GetDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity.z) * mv->getDeceleration() * delta_time;
 
 		if (abs(decel_amount) > abs(velocity.z)) {
 			velocity.z = 0.0f;
@@ -266,10 +266,10 @@ void CameraSystem::Decelerate(CameraMovement* mv, float delta_time) const {
 	}
 
 	// Set the new velocity
-	mv->SetVelocity(velocity);
+	mv->setVelocity(velocity);
 
 	// Set is_moving to false. Will be set to true if camera moves again before update.
-	mv->SetMovingX(false);
-	mv->SetMovingY(false);
-	mv->SetMovingZ(false);
+	mv->setMovingX(false);
+	mv->setMovingY(false);
+	mv->setMovingZ(false);
 }

@@ -1,15 +1,15 @@
 template<typename DataT>
 ConstantBuffer<DataT>::ConstantBuffer(ID3D11Device& device) {
-	D3D11_BUFFER_DESC bufferDesc = {};
+	D3D11_BUFFER_DESC buffer_desc = {};
 
-	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	bufferDesc.ByteWidth = sizeof(DataT);
-	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	bufferDesc.MiscFlags = NULL;
-	bufferDesc.StructureByteStride = NULL;
+	buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
+	buffer_desc.ByteWidth = sizeof(DataT);
+	buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	buffer_desc.MiscFlags = NULL;
+	buffer_desc.StructureByteStride = NULL;
 
-	ThrowIfFailed(device.CreateBuffer(&bufferDesc, nullptr, buffer.ReleaseAndGetAddressOf()),
+	ThrowIfFailed(device.CreateBuffer(&buffer_desc, nullptr, buffer.ReleaseAndGetAddressOf()),
 	              "Failed to create constant buffer");
 
 	SetDebugObjectName(buffer.Get(), "Constant Buffer");
@@ -17,7 +17,7 @@ ConstantBuffer<DataT>::ConstantBuffer(ID3D11Device& device) {
 
 
 template<typename DataT>
-void ConstantBuffer<DataT>::UpdateData(ID3D11DeviceContext& device_context, const DataT& data) const {
+void ConstantBuffer<DataT>::updateData(ID3D11DeviceContext& device_context, const DataT& data) const {
 	D3D11_MAPPED_SUBRESOURCE mapped_data = {};
 
 	ThrowIfFailed(device_context.Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mapped_data),

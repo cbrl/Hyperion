@@ -1,5 +1,5 @@
 template<typename DataT>
-void StructuredBuffer<DataT>::UpdateData(ID3D11Device& device,
+void StructuredBuffer<DataT>::updateData(ID3D11Device& device,
                                          ID3D11DeviceContext& device_context,
                                          const vector<DataT>& data) {
 	// Set the number of elements used
@@ -9,7 +9,7 @@ void StructuredBuffer<DataT>::UpdateData(ID3D11Device& device,
 
 	// Recreate the buffer if the array of data being fed to it is larger than the buffer
 	if (current_size > reserved_size) {
-		CreateBuffer(device);
+		createBuffer(device);
 	}
 
 	// Map the buffer and update the data
@@ -25,7 +25,7 @@ void StructuredBuffer<DataT>::UpdateData(ID3D11Device& device,
 
 
 template<typename DataT>
-void StructuredBuffer<DataT>::CreateBuffer(ID3D11Device& device) {
+void StructuredBuffer<DataT>::createBuffer(ID3D11Device& device) {
 
 	// Create the buffer
 	D3D11_BUFFER_DESC desc = {};

@@ -18,20 +18,20 @@ public:
 	DepthPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
 	~DepthPass() = default;
 
-	void BindState(const RenderStateMgr& render_state_mgr) const;
+	void bindState(const RenderStateMgr& render_state_mgr) const;
 
-	void XM_CALLCONV Render(const Engine& engine,
+	void XM_CALLCONV render(const Engine& engine,
 	                        FXMMATRIX world_to_camera,
 	                        CXMMATRIX camera_to_projection);
 
-	void XM_CALLCONV RenderShadows(const Engine& engine,
+	void XM_CALLCONV renderShadows(const Engine& engine,
 	                               FXMMATRIX world_to_camera,
 	                               CXMMATRIX camera_to_projection);
 
 
 private:
-	void XM_CALLCONV UpdateCamera(FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) const;
-	void XM_CALLCONV RenderModel(Model& model, FXMMATRIX model_to_projection);
+	void XM_CALLCONV updateCamera(FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) const;
+	void XM_CALLCONV renderModel(Model& model, FXMMATRIX model_to_projection);
 
 
 private:

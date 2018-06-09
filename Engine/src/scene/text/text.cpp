@@ -8,28 +8,28 @@ Text::Text(ResourceMgr& resource_mgr, const wstring& font_filename)
 	, color(Colors::White)
 	, rotation(0.0f) {
 
-	font = resource_mgr.GetOrCreate<Font>(font_filename);
+	font = resource_mgr.getOrCreate<Font>(font_filename);
 }
 
-void Text::SetText(wstring new_text) {
+void Text::setText(wstring new_text) {
 	text = new_text;
 }
 
 
-void Text::SetText(wstring new_text, float2 new_position) {
+void Text::setText(wstring new_text, float2 new_position) {
 	text = new_text;
 	position = new_position;
 }
 
 
-void Text::SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color) {
+void Text::setText(wstring new_text, float2 new_position, XMVECTORF32 new_color) {
 	text = new_text;
 	position = new_position;
 	color = new_color;
 }
 
 
-void Text::SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color, float new_rotation) {
+void Text::setText(wstring new_text, float2 new_position, XMVECTORF32 new_color, float new_rotation) {
 	text = new_text;
 	position = new_position;
 	color = new_color;
@@ -37,41 +37,41 @@ void Text::SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color,
 }
 
 
-void Text::SetPosition(float2 new_position) {
+void Text::setPosition(float2 new_position) {
 	position = new_position;
 }
 
 
-void Text::SetColor(XMVECTORF32 new_color) {
+void Text::setColor(XMVECTORF32 new_color) {
 	color = new_color;
 }
 
 
-void Text::SetRotation(float new_rotation) {
+void Text::setRotation(float new_rotation) {
 	rotation = new_rotation;
 }
 
 
-const SpriteFont& Text::GetFont() const {
+const SpriteFont& Text::getFont() const {
 	return *font.get();
 }
 
 
-const wstring& Text::GetText() const {
+const wstring& Text::getText() const {
 	return text;
 }
 
 
-const float2& Text::GetPosition() const {
+const float2& Text::getPosition() const {
 	return position;
 }
 
 
-const XMVECTORF32& Text::GetColor() const {
+const XMVECTORF32& Text::getColor() const {
 	return color;
 }
 
 
-float Text::GetRotation() const {
+float Text::getRotation() const {
 	return rotation;
 }

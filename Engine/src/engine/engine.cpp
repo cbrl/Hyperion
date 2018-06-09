@@ -16,7 +16,7 @@ Engine::~Engine() {
 }
 
 
-bool Engine::Init() {
+bool Engine::init() {
 
 	// Set width/height variables. Later on this can be read from a config file.
 	window_width = WINDOW_WIDTH;
@@ -24,7 +24,7 @@ bool Engine::Init() {
 
 
 	// Create main window
-	if (!this->InitWindow(L"Engine", window_width, window_height)) {
+	if (!this->initWindow(L"Engine", window_width, window_height)) {
 		return false;
 	}
 	FILE_LOG(logINFO) << "Initialized main window";
@@ -55,7 +55,7 @@ bool Engine::Init() {
 
 	// Initialize rendering manager
 	rendering_mgr = make_unique<RenderingMgr>(*this, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
-	ecs_engine->addSystem<Renderer>(rendering_mgr->GetDevice(), rendering_mgr->GetDeviceContext());
+	ecs_engine->addSystem<Renderer>(rendering_mgr->getDevice(), rendering_mgr->getDeviceContext());
 
 
 	// Initialize scene
@@ -67,7 +67,7 @@ bool Engine::Init() {
 }
 
 
-void Engine::Run() {
+void Engine::run() {
 	MSG msg = {nullptr};
 	bool done = false;
 
@@ -84,13 +84,13 @@ void Engine::Run() {
 		}
 		else {
 			// Process frame
-			Tick();
+			tick();
 
 			// Process input
-			ProcessInput();
+			processInput();
 
 			// Quit if escape is pressed
-			if (input->IsKeyDown(Keyboard::Escape)) {
+			if (input->isKeyDown(Keyboard::Escape)) {
 				done = true;
 			}
 		}
@@ -98,7 +98,7 @@ void Engine::Run() {
 }
 
 
-void Engine::Tick() const {
+void Engine::tick() const {
 
 	// Update system metrics
 	system_monitor->tick();
@@ -106,41 +106,41 @@ void Engine::Tick() const {
 	fps_counter->tick();
 
 	// Update the input state
-	input->Tick();
+	input->tick();
 
 	// Update the scene
-	scene->Tick(*this);
+	scene->tick(*this);
 
 
 	// Begin a new frame
-	rendering_mgr->BeginFrame();
+	rendering_mgr->beginFrame();
 
 	// Update the active systems in the ecs engine
 	ecs_engine->update(*this);
 
 	// Present the frame
-	rendering_mgr->EndFrame();
+	rendering_mgr->endFrame();
 }
 
 
-void Engine::ProcessInput() const {
+void Engine::processInput() const {
 
 	// Toggle mouse mode on F1 press
-	if (input->IsKeyPressed(Keyboard::F1)) {
-		if (input->GetMouseMode() == Mouse::MODE_ABSOLUTE) {
-			input->SetMouseRelative();
+	if (input->isKeyPressed(Keyboard::F1)) {
+		if (input->getMouseMode() == Mouse::MODE_ABSOLUTE) {
+			input->setMouseRelative();
 		}
 		else {
-			input->SetMouseAbsolute();
+			input->setMouseAbsolute();
 		}
 	}
 }
 
 
-LRESULT Engine::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
+LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 
 	// Send events to ImGui handler if the mouse mode is set to absolute
-	if (input && (input->GetMouseMode() == Mouse::MODE_ABSOLUTE)) {
+	if (input && (input->getMouseMode() == Mouse::MODE_ABSOLUTE)) {
 		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam)) {
 			return 0;
 		}
@@ -163,12 +163,12 @@ LRESULT Engine::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 			window_height = HIWORD(lParam);
 
 			if (wParam == SIZE_MAXIMIZED) {
-				OnResize(window_width, window_height);
+				onResize(window_width, window_height);
 			}
 			else if (wParam == SIZE_RESTORED) {
 				// Do nothing if resizing. Constantly calling the resize function would be slow.
 				if (!resizing) {
-					OnResize(window_width, window_height);
+					onResize(window_width, window_height);
 				}
 			}
 			return 0;
@@ -179,7 +179,7 @@ LRESULT Engine::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 
 		case WM_EXITSIZEMOVE:
 			resizing = false;
-			OnResize(window_width, window_height);
+			onResize(window_width, window_height);
 			return 0;
 
 		case WM_GETMINMAXINFO:
@@ -218,18 +218,18 @@ LRESULT Engine::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-void Engine::OnResize(u32 window_width, u32 window_height) {
+void Engine::onResize(u32 window_width, u32 window_height) {
 
 	if (!rendering_mgr) return;
-	rendering_mgr->ResizeBuffers(window_width, window_height);
+	rendering_mgr->resizeBuffers(window_width, window_height);
 
 	if (ecs_engine) {
 		ecs_engine->forEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-			camera.ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+			camera.resizeViewport(rendering_mgr->getDeviceContext(), window_width, window_height);
 		});
 
 		ecs_engine->forEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
-			camera.ResizeViewport(rendering_mgr->GetDeviceContext(), window_width, window_height);
+			camera.resizeViewport(rendering_mgr->getDeviceContext(), window_width, window_height);
 		});
 	}
 

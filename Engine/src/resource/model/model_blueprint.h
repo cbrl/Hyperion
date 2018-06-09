@@ -26,13 +26,13 @@ public:
 	template<typename VertexT>
 	ModelBlueprint(ID3D11Device& device,
 	               const ModelOutput<VertexT>& out) {
-		ConstructBlueprint(device, out);
+		constructBlueprint(device, out);
 	}
 
 
 private:
 	template<typename VertexT>
-	void ConstructBlueprint(ID3D11Device& device, const ModelOutput<VertexT>& out);
+	void constructBlueprint(ID3D11Device& device, const ModelOutput<VertexT>& out);
 
 
 public:

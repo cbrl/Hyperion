@@ -42,7 +42,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -89,7 +89,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -137,7 +137,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -183,7 +183,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -231,7 +231,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -279,7 +279,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -327,7 +327,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -372,7 +372,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -417,7 +417,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -462,7 +462,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
 	template<typename VertexT>
@@ -507,6 +507,6 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.GetOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 }

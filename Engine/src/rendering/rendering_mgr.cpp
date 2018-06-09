@@ -11,9 +11,9 @@ RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msa
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------
 
-	direct3D = make_unique<Direct3D>(engine.GetHWND(),
-	                                 engine.GetWindowWidth(),
-	                                 engine.GetWindowHeight(),
+	direct3D = make_unique<Direct3D>(engine.getHwnd(),
+	                                 engine.getWindowWidth(),
+	                                 engine.getWindowHeight(),
 	                                 fullscreen,
 	                                 vsync,
 	                                 msaa);
@@ -24,14 +24,14 @@ RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msa
 	// Create render state manager and render states
 	//----------------------------------------------------------------------------------
 
-	render_state_mgr = make_unique<RenderStateMgr>(direct3D->GetDevice(), direct3D->GetDeviceContext());
+	render_state_mgr = make_unique<RenderStateMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
 
 
 	//----------------------------------------------------------------------------------
 	// Create texture manager
 	//----------------------------------------------------------------------------------
 
-	resource_mgr = make_unique<ResourceMgr>(direct3D->GetDevice(), direct3D->GetDeviceContext());
+	resource_mgr = make_unique<ResourceMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
 
 
 	//----------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msa
 	//----------------------------------------------------------------------------------
 
 	ImGui::CreateContext();
-	ImGui_ImplDX11_Init(engine.GetHWND(), &direct3D->GetDevice(), &direct3D->GetDeviceContext());
+	ImGui_ImplDX11_Init(engine.getHwnd(), &direct3D->getDevice(), &direct3D->getDeviceContext());
 }
 
 
@@ -51,14 +51,14 @@ RenderingMgr::~RenderingMgr() {
 }
 
 
-void RenderingMgr::ResizeBuffers(u32 window_width, u32 window_height) const {
-	direct3D->ResizeBuffers(window_width, window_height);
+void RenderingMgr::resizeBuffers(u32 window_width, u32 window_height) const {
+	direct3D->resizeBuffers(window_width, window_height);
 	ImGui_ImplDX11_InvalidateDeviceObjects();
 	ImGui_ImplDX11_CreateDeviceObjects();
 }
 
 
-void RenderingMgr::BeginFrame() const {
+void RenderingMgr::beginFrame() const {
 
 	// Start a new ImGui frame
 	ImGui_ImplDX11_NewFrame();
@@ -70,16 +70,16 @@ void RenderingMgr::BeginFrame() const {
 	static float color[4] = {0.39f, 0.39f, 0.39f, 1.0f};
 	//ImGui::ColorEdit4("Clear Color", (float*)&color);
 
-	direct3D->Clear(color);
+	direct3D->clear(color);
 }
 
 
-void RenderingMgr::EndFrame() const {
+void RenderingMgr::endFrame() const {
 
 	// Render the ImGui frame
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	// Present the final frame
-	direct3D->PresentFrame();
+	direct3D->presentFrame();
 }

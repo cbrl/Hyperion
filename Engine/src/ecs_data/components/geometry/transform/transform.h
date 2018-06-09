@@ -12,29 +12,29 @@ public:
 	Transform();
 	~Transform() = default;
 
-	bool Updated() const { return updated; }
+	bool isUpdated() const { return updated; }
 
 
 	//----------------------------------------------------------------------------------
 	// Setters
 	//----------------------------------------------------------------------------------
 
-	void SetParent(const handle64 handle) { parent = handle; }
+	void setParent(const handle64 handle) { parent = handle; }
 
-	void Move(const float3& move);
-	void SetPosition(const float3& position);
-	void XM_CALLCONV Move(FXMVECTOR move);
-	void XM_CALLCONV SetPosition(FXMVECTOR position);
+	void move(const float3& move);
+	void setPosition(const float3& position);
+	void XM_CALLCONV move(FXMVECTOR move);
+	void XM_CALLCONV setPosition(FXMVECTOR position);
 
-	void Rotate(const float3& rotate);
-	void SetRotation(const float3& rotation);
-	void XM_CALLCONV Rotate(FXMVECTOR rotate);
-	void XM_CALLCONV SetRotation(FXMVECTOR rotation);
+	void rotate(const float3& rotate);
+	void setRotation(const float3& rotation);
+	void XM_CALLCONV rotate(FXMVECTOR rotate);
+	void XM_CALLCONV setRotation(FXMVECTOR rotation);
 
-	void Scale(const float3& scale);
-	void SetScale(const float3& scale);
-	void XM_CALLCONV Scale(FXMVECTOR scale);
-	void XM_CALLCONV SetScale(FXMVECTOR scale);
+	void scale(const float3& scale);
+	void setScale(const float3& scale);
+	void XM_CALLCONV scale(FXMVECTOR scale);
+	void XM_CALLCONV setScale(FXMVECTOR scale);
 
 
 	//----------------------------------------------------------------------------------
@@ -42,39 +42,39 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the entity whose transform is a parent of this transform
-	handle64 GetParent() const { return parent; }
+	handle64 getParent() const { return parent; }
 
 	// Position, Rotation, and Scale (relative to parent, if any)
-	XMVECTOR XM_CALLCONV GetPosition() const { return translation; }
-	XMVECTOR XM_CALLCONV GetRotation() const { return rotation; }
-	XMVECTOR XM_CALLCONV GetScale() const { return scale; }
+	XMVECTOR XM_CALLCONV getPosition() const { return translation; }
+	XMVECTOR XM_CALLCONV getRotation() const { return rotation; }
+	XMVECTOR XM_CALLCONV getScale() const { return scaling; }
 
 	// World space data
-	XMVECTOR XM_CALLCONV GetWorldAxisX() const { return XMVector3Normalize(world.r[0]); }
-	XMVECTOR XM_CALLCONV GetWorldAxisY() const { return XMVector3Normalize(world.r[1]); }
-	XMVECTOR XM_CALLCONV GetWorldAxisZ() const { return XMVector3Normalize(world.r[2]); }
-	XMVECTOR XM_CALLCONV GetWorldOrigin() const { return world.r[3]; }
+	XMVECTOR XM_CALLCONV getWorldAxisX() const { return XMVector3Normalize(world.r[0]); }
+	XMVECTOR XM_CALLCONV getWorldAxisY() const { return XMVector3Normalize(world.r[1]); }
+	XMVECTOR XM_CALLCONV getWorldAxisZ() const { return XMVector3Normalize(world.r[2]); }
+	XMVECTOR XM_CALLCONV getWorldOrigin() const { return world.r[3]; }
 
 	// Object space data
-	static XMVECTOR XM_CALLCONV GetObjectAxisX() { return XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f); }
-	static XMVECTOR XM_CALLCONV GetObjectAxisY() { return XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); }
-	static XMVECTOR XM_CALLCONV GetObjectAxisZ() { return XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f); }
-	static XMVECTOR XM_CALLCONV GetObjectOrigin() { return XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); }
+	static XMVECTOR XM_CALLCONV getObjectAxisX() { return XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f); }
+	static XMVECTOR XM_CALLCONV getObjectAxisY() { return XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); }
+	static XMVECTOR XM_CALLCONV getObjectAxisZ() { return XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f); }
+	static XMVECTOR XM_CALLCONV getObjectOrigin() { return XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); }
 
 	// Matrices
-	XMMATRIX XM_CALLCONV GetObjectToWorldMatrix() const { return world; }
-	XMMATRIX XM_CALLCONV GetWorldToObjectMatrix() const { return XMMatrixInverse(nullptr, world); }
+	XMMATRIX XM_CALLCONV getObjectToWorldMatrix() const { return world; }
+	XMMATRIX XM_CALLCONV getWorldToObjectMatrix() const { return XMMatrixInverse(nullptr, world); }
 
-	XMMATRIX XM_CALLCONV GetObjectToParentPositionMatrix() const {
+	XMMATRIX XM_CALLCONV getObjectToParentPositionMatrix() const {
 		return XMMatrixTranslationFromVector(translation);
 	}
 
-	XMMATRIX XM_CALLCONV GetObjectToParentRotationMatrix() const {
+	XMMATRIX XM_CALLCONV getObjectToParentRotationMatrix() const {
 		return XMMatrixRotationRollPitchYawFromVector(rotation);
 	}
 
-	XMMATRIX XM_CALLCONV GetObjectToParentScaleMatrix() const {
-		return XMMatrixScalingFromVector(scale);
+	XMMATRIX XM_CALLCONV getObjectToParentScaleMatrix() const {
+		return XMMatrixScalingFromVector(scaling);
 	}
 
 
@@ -88,7 +88,7 @@ private:
 	// Translation, rotation, and scale vectors
 	XMVECTOR translation;
 	XMVECTOR rotation;
-	XMVECTOR scale;
+	XMVECTOR scaling;
 
 	// Flag that decides if the object-to-world matrix requires an update
 	bool needs_update;

@@ -24,7 +24,7 @@ public:
 	void update(const Engine& engine) override;
 
 	template<typename CameraT>
-	void RenderCamera(const Engine& engine, const CameraT& camera);
+	void renderCamera(const Engine& engine, const CameraT& camera);
 
 
 private:

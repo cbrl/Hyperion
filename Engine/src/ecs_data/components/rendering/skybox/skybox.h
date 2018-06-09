@@ -16,40 +16,40 @@ public:
 	SkyBox(ID3D11Device& device,
 	       ResourceMgr& resource_mgr,
 	       const wstring& filename) {
-		Init(device, resource_mgr.GetOrCreate<Texture>(filename));
+		init(device, resource_mgr.getOrCreate<Texture>(filename));
 	}
 
 	SkyBox(ID3D11Device& device,
 	       shared_ptr<Texture> texture) {
-		Init(device, texture);
+		init(device, texture);
 	}
 
-	void Init(ID3D11Device& device,
+	void init(ID3D11Device& device,
 	          shared_ptr<Texture> tex);
 
 	// Bind the skybox's vertex and index buffers
-	void Bind(ID3D11DeviceContext& device_context) const {
+	void bind(ID3D11DeviceContext& device_context) const {
 		u32 offset = 0;
 
-		Pipeline::IA::BindVertexBuffers(device_context, 0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
-		Pipeline::IA::BindIndexBuffer(device_context, index_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-		Pipeline::IA::BindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		Pipeline::IA::bindVertexBuffers(device_context, 0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
+		Pipeline::IA::bindIndexBuffer(device_context, index_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+		Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
 
 	// Draw the skybox
-	void Draw(ID3D11DeviceContext& device_context) const {
+	void draw(ID3D11DeviceContext& device_context) const {
 		device_context.DrawIndexed(index_count, 0, 0);
 	}
 
-	ID3D11ShaderResourceView* GetSRV() const {
-		return texture->Get();
+	ID3D11ShaderResourceView* getSRV() const {
+		return texture->get();
 	}
 
-	shared_ptr<Texture> GetTexture() const {
+	shared_ptr<Texture> getTexture() const {
 		return texture;
 	}
 
-	void SetTexture(shared_ptr<Texture> tex) {
+	void setTexture(shared_ptr<Texture> tex) {
 		texture = std::move(tex);
 	}
 

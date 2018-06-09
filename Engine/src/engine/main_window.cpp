@@ -6,7 +6,7 @@
 
 LRESULT CALLBACK WndProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 	//Send message to handler in MainWindow (or derived class)
-	return handle->MsgProc(hWnd, msg, wParam, lParam);
+	return handle->msgProc(hWnd, msg, wParam, lParam);
 }
 
 
@@ -18,13 +18,13 @@ MainWindow::MainWindow()
 }
 
 
-bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
+bool MainWindow::initWindow(LPCWSTR name, u32 width, u32 height) {
 	app_name = name;
 	window_width = width;
 	window_height = height;
 
-	const u32 xPos = (GetSystemMetrics(SM_CXSCREEN) - window_width) / 2;
-	const u32 yPos = (GetSystemMetrics(SM_CYSCREEN) - window_height) / 2;
+	const u32 x_pos = (GetSystemMetrics(SM_CXSCREEN) - window_width) / 2;
+	const u32 y_pos = (GetSystemMetrics(SM_CYSCREEN) - window_height) / 2;
 
 	hInstance = GetModuleHandle(nullptr);
 
@@ -59,8 +59,8 @@ bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
 	                      app_name,
 	                      app_name,
 	                      WS_OVERLAPPEDWINDOW,
-	                      xPos,
-	                      yPos,
+	                      x_pos,
+	                      y_pos,
 	                      window_width,
 	                      window_height,
 	                      nullptr,
@@ -81,7 +81,7 @@ bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
 }
 
 
-void MainWindow::Run() {
+void MainWindow::run() {
 	MSG msg = {nullptr};
 	bool done = false;
 
@@ -103,7 +103,7 @@ void MainWindow::Run() {
 }
 
 
-LRESULT MainWindow::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
+LRESULT MainWindow::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 		case WM_DESTROY:
 			PostQuitMessage(0);

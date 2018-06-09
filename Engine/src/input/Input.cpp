@@ -11,7 +11,7 @@ Input::Input(HWND hWnd) {
 }
 
 
-void Input::Tick() {
+void Input::tick() {
 	// Read current keyboard state
 	keyboard_state = keyboard->GetState();
 	keyboard_tracker.Update(keyboard_state);
@@ -22,13 +22,13 @@ void Input::Tick() {
 }
 
 
-void Input::Reset() {
+void Input::reset() {
 	keyboard_tracker.Reset();
 	button_tracker.Reset();
 }
 
 
-int2 Input::GetMouseDelta() const {
+int2 Input::getMouseDelta() const {
 	// Mouse::MODE_ABSOLUTE - x/y are the position
 	// Mouse::MODE_RELATIVE - x/y are the delta
 

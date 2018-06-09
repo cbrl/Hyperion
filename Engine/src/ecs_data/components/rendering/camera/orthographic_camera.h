@@ -15,5 +15,5 @@ public:
 
 protected:
 	// Update the projection matrix after changing depth/width/height/etc...
-	void UpdateProjectionMatrix() override;
+	void updateProjectionMatrix() override;
 };

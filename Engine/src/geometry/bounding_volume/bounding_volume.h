@@ -18,11 +18,11 @@ public:
 
 
 	// Transform the AABB by a matrix
-	void XM_CALLCONV Transform(FXMMATRIX M);
+	void XM_CALLCONV transform(FXMMATRIX M);
 
 
-	XMVECTOR XM_CALLCONV Min() const { return min_point; }
-	XMVECTOR XM_CALLCONV Max() const { return max_point; }
+	XMVECTOR XM_CALLCONV minPoint() const { return min_point; }
+	XMVECTOR XM_CALLCONV maxPoint() const { return max_point; }
 
 
 private:
@@ -50,11 +50,11 @@ public:
 
 
 	// Transform the bounding sphere by a matrix
-	void XM_CALLCONV Transform(FXMMATRIX M);
+	void XM_CALLCONV transform(FXMMATRIX M);
 
 
-	XMVECTOR XM_CALLCONV Center() const { return transformed_center; }
-	float Radius() const { return transformed_radius; }
+	XMVECTOR XM_CALLCONV center() const { return transformed_center; }
+	float radius() const { return transformed_radius; }
 
 
 private:

@@ -9,10 +9,10 @@ public:
 	MainWindow();
 	virtual ~MainWindow() = default;
 
-	bool InitWindow(LPCWSTR name, u32 width, u32 height);
-	virtual void Run();
+	bool initWindow(LPCWSTR name, u32 width, u32 height);
+	virtual void run();
 
-	virtual LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
 
 
 protected:

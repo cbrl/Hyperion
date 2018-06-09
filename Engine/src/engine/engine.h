@@ -30,29 +30,29 @@ public:
 	};
 	~Engine();
 
-	bool Init();
-	void Run() override;
+	bool init();
+	void run() override;
 
-	LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;
+	LRESULT msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;
 
-	void OnResize(u32 window_width, u32 window_height);
+	void onResize(u32 window_width, u32 window_height);
 
-	HWND GetHWND() const { return hWnd; }
-	u32 GetWindowWidth() const { return window_width; }
-	u32 GetWindowHeight() const { return window_height; }
+	HWND getHwnd() const { return hWnd; }
+	u32 getWindowWidth() const { return window_width; }
+	u32 getWindowHeight() const { return window_height; }
 
-	ECS& GetECS() const { return *ecs_engine; }
-	Scene& GetScene() const { return *scene; }
-	Input& GetInput() const { return *input; }
-	Timer& GetTimer() const { return *timer; }
-	FPS& GetFPSCounter() const { return *fps_counter; }
-	SystemMonitor& GetSysMon() const { return *system_monitor; }
-	RenderingMgr& GetRenderingMgr() const { return *rendering_mgr; }
+	ECS& getECS() const { return *ecs_engine; }
+	Scene& getScene() const { return *scene; }
+	Input& getInput() const { return *input; }
+	Timer& getTimer() const { return *timer; }
+	FPS& getFPSCounter() const { return *fps_counter; }
+	SystemMonitor& getSysMon() const { return *system_monitor; }
+	RenderingMgr& getRenderingMgr() const { return *rendering_mgr; }
 
 
 private:
-	void Tick() const;
-	void ProcessInput() const;
+	void tick() const;
+	void processInput() const;
 
 
 private:

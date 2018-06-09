@@ -12,7 +12,7 @@ public:
 	TextPass(ID3D11DeviceContext& device_context);
 	~TextPass() = default;
 
-	void Render(Scene& scene) const;
+	void render(Scene& scene) const;
 
 
 private:

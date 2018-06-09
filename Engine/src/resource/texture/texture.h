@@ -25,15 +25,15 @@ public:
 	}
 
 
-	ID3D11ShaderResourceView* Get() const {
+	ID3D11ShaderResourceView* get() const {
 		return texture.Get();
 	}
 
 	// Bind the texture to the specified pipeline stage
 	template<typename StageT>
-	void Bind(ID3D11DeviceContext& device_context, u32 slot) const {
+	void bind(ID3D11DeviceContext& device_context, u32 slot) const {
 
-		StageT::BindSRVs(device_context, slot, 1, texture.GetAddressOf());
+		StageT::bindSRVs(device_context, slot, 1, texture.GetAddressOf());
 	}
 
 

@@ -10,7 +10,7 @@
 
 template<typename KeyT, typename ValueT>
 template<typename... ArgsT>
-shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetOrCreateResource(const KeyT& key, ArgsT&&... args) {
+shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::getOrCreateResource(const KeyT& key, ArgsT&&... args) {
 
 	// Find the resource
 	const auto it = resource_map.find(key);
@@ -35,7 +35,7 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetOrCreateResource(const KeyT& ke
 
 
 template<typename KeyT, typename ValueT>
-shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetResource(const KeyT& key) {
+shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::getResource(const KeyT& key) {
 
 	const auto n = resource_map.find(key);
 
@@ -57,41 +57,41 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetResource(const KeyT& key) {
 
 // ModelBlueprint
 template<typename ResourceT>
-enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::GetOrCreate(
+enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::getOrCreate(
 	const wstring& filename) {
 
-	return models.GetOrCreateResource(filename, device, *this, filename);
+	return models.getOrCreateResource(filename, device, *this, filename);
 }
 
 // ModelBlueprint
 template<typename ResourceT, typename VertexT>
-enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::GetOrCreate(
+enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::getOrCreate(
 	const wstring& name,
 	const ModelOutput<VertexT>& model_data) {
 
-	return models.GetOrCreateResource(name, device, model_data);
+	return models.getOrCreateResource(name, device, model_data);
 }
 
 
 // Texture
 template<typename ResourceT>
-enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::GetOrCreate(const wstring& filename) {
+enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::getOrCreate(const wstring& filename) {
 
-	return textures.GetOrCreateResource(filename, device, device_context, filename);
+	return textures.getOrCreateResource(filename, device, device_context, filename);
 }
 
 template<typename ResourceT>
-enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::GetOrCreate(const float4& color) {
+enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::getOrCreate(const float4& color) {
 
 	u32 texColor = Float4ColorToU32(color);
 
-	return textures.GetOrCreateResource(to_wstring(texColor), device, texColor);
+	return textures.getOrCreateResource(to_wstring(texColor), device, texColor);
 }
 
 
 // Font
 template<typename ResourceT>
-enable_if_t<is_same_v<Font, ResourceT>, shared_ptr<Font>> ResourceMgr::GetOrCreate(const wstring& filename) {
+enable_if_t<is_same_v<Font, ResourceT>, shared_ptr<Font>> ResourceMgr::getOrCreate(const wstring& filename) {
 
-	return fonts.GetOrCreateResource(filename, device, filename.c_str());
+	return fonts.getOrCreateResource(filename, device, filename.c_str());
 }

@@ -30,33 +30,33 @@ protected:
 		, shadows(true) {
 	}
 
-	void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context,
+	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context,
 	                              FXMMATRIX world,
 	                              CXMMATRIX world_inv_transpose) const;
 
-	void XM_CALLCONV UpdateBoundingVolumes(FXMMATRIX transform) {
-		aabb.Transform(transform);
-		sphere.Transform(transform);
+	void XM_CALLCONV updateBoundingVolumes(FXMMATRIX transform) {
+		aabb.transform(transform);
+		sphere.transform(transform);
 	}
 
 
 public:
 	~ModelChild() = default;
 
-	u32 GetIndexStart() const { return index_start; }
-	u32 GetIndexCount() const { return index_count; }
+	u32 getIndexStart() const { return index_start; }
+	u32 getIndexCount() const { return index_count; }
 
-	const string& GetName() const { return name; }
-	const AABB& GetAABB() const { return aabb; }
-	const BoundingSphere& GetSphere() const { return sphere; }
-	const Material& GetMaterial() const { return material; }
+	const string& getName() const { return name; }
+	const AABB& getAabb() const { return aabb; }
+	const BoundingSphere& getSphere() const { return sphere; }
+	const Material& getMaterial() const { return material; }
 
-	void SetShadows(bool state) { shadows = state; }
-	bool CastsShadows() const { return shadows; }
+	void setShadows(bool state) { shadows = state; }
+	bool castsShadows() const { return shadows; }
 
 	template<typename StageT>
-	void BindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
-		buffer.Bind<StageT>(device_context, slot);
+	void bindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
+		buffer.bind<StageT>(device_context, slot);
 	}
 
 
@@ -91,12 +91,12 @@ public:
 
 	// Bind the model's vertex and index buffers
 	void Bind(ID3D11DeviceContext& device_context) const {
-		mesh->Bind(device_context);
+		mesh->bind(device_context);
 	}
 
 	// Render the model with the given index count and start index
 	void Draw(ID3D11DeviceContext& device_context, u32 index_count, u32 start_index) const {
-		mesh->Draw(device_context, index_count, start_index);
+		mesh->draw(device_context, index_count, start_index);
 	}
 
 
@@ -110,7 +110,7 @@ public:
 
 
 	// Update model matrix and bounding volumes, as well as those of the child models.
-	void XM_CALLCONV UpdateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world);
+	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world);
 
 	void XM_CALLCONV UpdateBoundingVolumes(FXMMATRIX world);
 

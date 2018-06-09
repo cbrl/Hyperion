@@ -6,8 +6,8 @@
 
 
 void ModelSystem::update(const Engine& engine) {
-	auto& ecs_engine = engine.GetECS();
-	auto& device_context = engine.GetRenderingMgr().GetDeviceContext();
+	auto& ecs_engine = engine.getECS();
+	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	ecs_engine.forEachActive<Model>([&](Model& model) {
 
@@ -15,13 +15,13 @@ void ModelSystem::update(const Engine& engine) {
 		const auto transform = ecs_engine.getComponent<Transform>(owner);
 
 		if (transform) {
-			if (transform->Updated()) {
+			if (transform->isUpdated()) {
 				// Update the model's bounding volumes
-				model.UpdateBoundingVolumes(transform->GetObjectToWorldMatrix());
+				model.UpdateBoundingVolumes(transform->getObjectToWorldMatrix());
 			}
 
 			// Update the model's buffer
-			model.UpdateBuffer(device_context, transform->GetObjectToWorldMatrix());
+			model.updateBuffer(device_context, transform->getObjectToWorldMatrix());
 		}
 	});
 }

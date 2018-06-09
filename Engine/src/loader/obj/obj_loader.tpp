@@ -5,7 +5,7 @@
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::Reset() {
+void ObjLoader<VertexT>::reset() {
 	// Reset the local variables
 	rh_coord = false;
 	group_count = 0;
@@ -25,7 +25,7 @@ void OBJLoader<VertexT>::Reset() {
 
 
 template<typename VertexT>
-ModelOutput<VertexT> OBJLoader<VertexT>::Load(ResourceMgr& resource_mgr,
+ModelOutput<VertexT> ObjLoader<VertexT>::load(ResourceMgr& resource_mgr,
                                               const wstring& filename,
                                               bool right_hand_coords) {
 
@@ -41,38 +41,38 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ResourceMgr& resource_mgr,
 	const wstring folder = GetParentPath(filename);
 
 	// Load the model
-	LoadModel(filename);
+	loadModel(filename);
 
 	// Load the materials
-	LoadMaterials(folder);
+	loadMaterials(folder);
 
 
 	// Create the materials
-	vector<Material> mtlVector;
+	vector<Material> mtl_vector;
 	for (u32 i = 0; i < mtl_count; ++i) {
 		Material mtl;
 
 		mtl.name = wstr2str(materials[i].name);
 
 		if (!materials[i].map_Kd.empty())
-			mtl.map_diffuse = resource_mgr.GetOrCreate<Texture>(folder + materials[i].map_Kd);
+			mtl.map_diffuse = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_Kd);
 		else
 			mtl.has_texture = false;
 
 		if (!materials[i].map_Ka.empty())
-			mtl.map_alpha = resource_mgr.GetOrCreate<Texture>(folder + materials[i].map_Ka);
+			mtl.map_alpha = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_Ka);
 
 		if (!materials[i].map_Ks.empty())
-			mtl.map_specular = resource_mgr.GetOrCreate<Texture>(folder + materials[i].map_Ks);
+			mtl.map_specular = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_Ks);
 
 		if (!materials[i].map_Ns.empty())
-			mtl.map_spec_highlight = resource_mgr.GetOrCreate<Texture>(folder + materials[i].map_Ns);
+			mtl.map_spec_highlight = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_Ns);
 
 		if (!materials[i].map_d.empty())
-			mtl.map_alpha = resource_mgr.GetOrCreate<Texture>(folder + materials[i].map_d);
+			mtl.map_alpha = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_d);
 
 		if (!materials[i].map_bump.empty())
-			mtl.map_bump = resource_mgr.GetOrCreate<Texture>(folder + materials[i].map_bump);
+			mtl.map_bump = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_bump);
 
 		mtl.ambient = materials[i].Ka;
 		mtl.diffuse = materials[i].Kd;
@@ -83,16 +83,16 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ResourceMgr& resource_mgr,
 		mtl.illum = materials[i].illum;
 		mtl.transparent = materials[i].transparency;
 
-		mtlVector.push_back(std::move(mtl));
+		mtl_vector.push_back(std::move(mtl));
 	}
 
 	// Create the model
 	string name = wstr2str(GetFilename(filename));
-	ModelOutput<VertexT> out(name, vertices, indices, mtlVector, groups);
+	ModelOutput<VertexT> out(name, vertices, indices, mtl_vector, groups);
 
 
 	// Reset the obj loader
-	Reset();
+	reset();
 
 
 	return out;
@@ -100,7 +100,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ResourceMgr& resource_mgr,
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::LoadModel(wstring filename) {
+void ObjLoader<VertexT>::loadModel(wstring filename) {
 
 	// Open the file
 	wifstream file(filename);
@@ -116,7 +116,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 	wstring line;
 	while (std::getline(file, line)) {
 		line = TrimWhiteSpace(line);
-		if (line[0] == OBJTokens::comment || line == L"") {
+		if (line[0] == ObjTokens::comment || line == L"") {
 			continue;
 		}
 
@@ -132,7 +132,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 
 
 		// Vertex
-		if (token.compare(OBJTokens::vertex) == 0) {
+		if (token.compare(ObjTokens::vertex) == 0) {
 			float3 position;
 			stream >> position.x >> position.y >> position.z;
 
@@ -144,7 +144,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 		}
 
 			// Normal
-		else if (token.compare(OBJTokens::normal) == 0) {
+		else if (token.compare(ObjTokens::normal) == 0) {
 			float3 normal;
 			stream >> normal.x >> normal.y >> normal.z;
 
@@ -156,7 +156,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 		}
 
 			// Texture
-		else if (token.compare(OBJTokens::texture) == 0) {
+		else if (token.compare(ObjTokens::texture) == 0) {
 			float2 texCoord;
 			stream >> texCoord.x >> texCoord.y;
 
@@ -168,7 +168,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 		}
 
 			// Group
-		else if (token.compare(OBJTokens::group) == 0) {
+		else if (token.compare(ObjTokens::group) == 0) {
 			wstring name;
 			stream >> name;
 
@@ -180,17 +180,17 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 		}
 
 			// Face
-		else if (token.compare(OBJTokens::face) == 0) {
-			ReadFace(line);
+		else if (token.compare(ObjTokens::face) == 0) {
+			readFace(line);
 		}
 
 		// Material Library
-		if (token.compare(OBJTokens::mtl_library) == 0) {
+		if (token.compare(ObjTokens::mtl_library) == 0) {
 			mat_lib = TrimWhiteSpace(line);
 		}
 
 			// Group Material
-		else if (token.compare(OBJTokens::use_mtl) == 0) {
+		else if (token.compare(ObjTokens::use_mtl) == 0) {
 			group_mat_names[group_count - 1] = TrimWhiteSpace(line);
 		}
 	}
@@ -211,7 +211,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
+void ObjLoader<VertexT>::loadMaterials(wstring folder) {
 
 	// Open the material file
 	wifstream file(folder + mat_lib);
@@ -227,7 +227,7 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 	wstring line;
 	while (std::getline(file, line)) {
 		line = TrimWhiteSpace(line);
-		if (line[0] == OBJTokens::comment || line == L"") {
+		if (line[0] == ObjTokens::comment || line == L"") {
 			continue;
 		}
 
@@ -243,8 +243,8 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 
 
 		// New Material
-		if (token.compare(OBJTokens::new_mtl) == 0) {
-			OBJMaterial temp;
+		if (token.compare(ObjTokens::new_mtl) == 0) {
+			ObjMaterial temp;
 			temp.name = TrimWhiteSpace(line);
 			materials.push_back(temp);
 
@@ -252,7 +252,7 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 		}
 
 			// Diffuse Color
-		else if (token.compare(OBJTokens::diffuse_color) == 0) {
+		else if (token.compare(ObjTokens::diffuse_color) == 0) {
 			stream >> materials[mtl_count - 1].Kd.x;
 			stream >> materials[mtl_count - 1].Kd.y;
 			stream >> materials[mtl_count - 1].Kd.z;
@@ -260,7 +260,7 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 		}
 
 			// Ambient Color
-		else if (token.compare(OBJTokens::ambient_color) == 0) {
+		else if (token.compare(ObjTokens::ambient_color) == 0) {
 			stream >> materials[mtl_count - 1].Ka.x;
 			stream >> materials[mtl_count - 1].Ka.y;
 			stream >> materials[mtl_count - 1].Ka.z;
@@ -268,14 +268,14 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 		}
 
 			// Specular Color
-		else if (token.compare(OBJTokens::specular_color) == 0) {
+		else if (token.compare(ObjTokens::specular_color) == 0) {
 			stream >> materials[mtl_count - 1].Ks.x;
 			stream >> materials[mtl_count - 1].Ks.y;
 			stream >> materials[mtl_count - 1].Ks.z;
 		}
 
 			// Emissive Color
-		else if (token.compare(OBJTokens::emissive_color) == 0) {
+		else if (token.compare(ObjTokens::emissive_color) == 0) {
 			stream >> materials[mtl_count - 1].Ke.x;
 			stream >> materials[mtl_count - 1].Ke.y;
 			stream >> materials[mtl_count - 1].Ke.z;
@@ -283,58 +283,58 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 		}
 
 			// Specular Expononet
-		else if (token.compare(OBJTokens::specular_exponent) == 0) {
+		else if (token.compare(ObjTokens::specular_exponent) == 0) {
 			stream >> materials[mtl_count - 1].Ks.w;
 		}
 
 			// Optical Density
-		else if (token.compare(OBJTokens::optical_density) == 0) {
+		else if (token.compare(ObjTokens::optical_density) == 0) {
 			stream >> materials[mtl_count - 1].Ni;
 		}
 
 			// Dissolve (transparency)
-		else if (token.compare(OBJTokens::transparency) == 0) {
-			ReadTransparency(line, false);
+		else if (token.compare(ObjTokens::transparency) == 0) {
+			readTransparency(line, false);
 		}
 
 			// Dissolve (transparency inverse)
-		else if (token.compare(OBJTokens::transparency_inv) == 0) {
-			ReadTransparency(line, true);
+		else if (token.compare(ObjTokens::transparency_inv) == 0) {
+			readTransparency(line, true);
 		}
 
 			// Illumination
-		else if (token.compare(OBJTokens::illumination_model) == 0) {
+		else if (token.compare(ObjTokens::illumination_model) == 0) {
 			stream >> materials[mtl_count - 1].illum;
 		}
 
 			// Diffuse Map
-		else if (token.compare(OBJTokens::diffuse_color_map) == 0) {
+		else if (token.compare(ObjTokens::diffuse_color_map) == 0) {
 			materials[mtl_count - 1].map_Kd = TrimWhiteSpace(line);
 		}
 
 			// Alpha Map
-		else if (token.compare(OBJTokens::alpha_texture_map) == 0) {
+		else if (token.compare(ObjTokens::alpha_texture_map) == 0) {
 			materials[mtl_count - 1].map_d = TrimWhiteSpace(line);
 			materials[mtl_count - 1].transparency = true;
 		}
 
 			// Ambient Map
-		else if (token.compare(OBJTokens::ambient_color_map) == 0) {
+		else if (token.compare(ObjTokens::ambient_color_map) == 0) {
 			materials[mtl_count - 1].map_Ka = TrimWhiteSpace(line);
 		}
 
 			// Specular Map
-		else if (token.compare(OBJTokens::specular_color_map) == 0) {
+		else if (token.compare(ObjTokens::specular_color_map) == 0) {
 			materials[mtl_count - 1].map_Ks = TrimWhiteSpace(line);
 		}
 
 			// Specular Highlight Map
-		else if (token.compare(OBJTokens::spec_highlight_map) == 0) {
+		else if (token.compare(ObjTokens::spec_highlight_map) == 0) {
 			materials[mtl_count - 1].map_Ns = TrimWhiteSpace(line);
 		}
 
 			// Bump Map
-		else if (token.compare(OBJTokens::bump_map) == 0 || token.compare(OBJTokens::bump_map2) == 0) {
+		else if (token.compare(ObjTokens::bump_map) == 0 || token.compare(ObjTokens::bump_map2) == 0) {
 			materials[mtl_count - 1].map_bump = TrimWhiteSpace(line);
 		}
 	}
@@ -362,7 +362,7 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::ReadTransparency(wstring& line, bool inverse) {
+void ObjLoader<VertexT>::readTransparency(wstring& line, bool inverse) {
 	wstringstream stream(line);
 
 	float transparency;
@@ -381,7 +381,7 @@ void OBJLoader<VertexT>::ReadTransparency(wstring& line, bool inverse) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::ReadFace(wstring& line) {
+void ObjLoader<VertexT>::readFace(wstring& line) {
 
 	vector<VertexT> verts;
 	VertexT vertex = {};
@@ -522,15 +522,15 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 
 		// Triangulate the face if there were more than 3 points
 	else if (vert_list.size() > 3) {
-		vector<u32> vIndices;
+		vector<u32> v_indices;
 
 		// Triangulate the vertices
-		Triangulate(verts, vIndices);
+		triangulate(verts, v_indices);
 
 		// Add the new indices to the vector
-		for (size_t i = 0; i < vIndices.size(); ++i) {
+		for (size_t i = 0; i < v_indices.size(); ++i) {
 			// Find the index of each vertex and add it to the index vector
-			auto pos = std::find(vertices.begin(), vertices.end(), verts[vIndices[i]]);
+			auto pos = std::find(vertices.begin(), vertices.end(), verts[v_indices[i]]);
 
 			if (pos != vertices.end()) {
 				auto index = std::distance(vertices.begin(), pos);
@@ -543,77 +543,77 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 
 // Converts the input face into triangles. Returns a list of indices that correspond to the input vertex list.
 template<typename VertexT>
-void OBJLoader<VertexT>::Triangulate(vector<VertexT>& inVerts, vector<u32>& outIndices) {
-	vector<VertexT> vVerts = inVerts;
+void ObjLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out_indices) {
+	vector<VertexT> v_verts = in_verts;
 
 	while (true) {
-		for (u32 i = 0; i < vVerts.size(); ++i) {
+		for (u32 i = 0; i < v_verts.size(); ++i) {
 			float3 prev;
 			if (i == 0) {
-				prev = vVerts[vVerts.size() - 1].position;
+				prev = v_verts[v_verts.size() - 1].position;
 			}
 			else {
-				prev = vVerts[i - 1].position;
+				prev = v_verts[i - 1].position;
 			}
 
-			float3 curr = vVerts[i].position;
+			float3 curr = v_verts[i].position;
 
 			float3 next;
-			if (i == vVerts.size() - 1) {
-				next = vVerts[0].position;
+			if (i == v_verts.size() - 1) {
+				next = v_verts[0].position;
 			}
 			else {
-				next = vVerts[i + 1].position;
+				next = v_verts[i + 1].position;
 			}
 
 
 			// Create a triangle from previous, current, and next vertices
-			if (vVerts.size() == 3) {
-				for (u32 j = 0; j < vVerts.size(); ++j) {
-					if (inVerts[j].position == prev)
-						outIndices.push_back(j);
-					if (inVerts[j].position == curr)
-						outIndices.push_back(j);
-					if (inVerts[j].position == next)
-						outIndices.push_back(j);
+			if (v_verts.size() == 3) {
+				for (u32 j = 0; j < v_verts.size(); ++j) {
+					if (in_verts[j].position == prev)
+						out_indices.push_back(j);
+					if (in_verts[j].position == curr)
+						out_indices.push_back(j);
+					if (in_verts[j].position == next)
+						out_indices.push_back(j);
 				}
 
-				vVerts.clear();
+				v_verts.clear();
 				break;
 			}
 
-			if (vVerts.size() == 4) {
+			if (v_verts.size() == 4) {
 				// Create a triangle
-				for (u32 j = 0; j < inVerts.size(); ++j) {
-					if (inVerts[j].position == prev)
-						outIndices.push_back(j);
-					if (inVerts[j].position == curr)
-						outIndices.push_back(j);
-					if (inVerts[j].position == next)
-						outIndices.push_back(j);
+				for (u32 j = 0; j < in_verts.size(); ++j) {
+					if (in_verts[j].position == prev)
+						out_indices.push_back(j);
+					if (in_verts[j].position == curr)
+						out_indices.push_back(j);
+					if (in_verts[j].position == next)
+						out_indices.push_back(j);
 				}
 
 				float3 temp;
-				for (u32 j = 0; j < vVerts.size(); ++j) {
-					if (vVerts[j].position != prev &&
-					    vVerts[j].position != curr &&
-					    vVerts[j].position != next) {
-						temp = vVerts[j].position;
+				for (u32 j = 0; j < v_verts.size(); ++j) {
+					if (v_verts[j].position != prev &&
+					    v_verts[j].position != curr &&
+					    v_verts[j].position != next) {
+						temp = v_verts[j].position;
 						break;
 					}
 				}
 
 				// Create a triangle
-				for (u32 j = 0; j < inVerts.size(); ++j) {
-					if (inVerts[j].position == prev)
-						outIndices.push_back(j);
-					if (inVerts[j].position == next)
-						outIndices.push_back(j);
-					if (inVerts[j].position == temp)
-						outIndices.push_back(j);
+				for (u32 j = 0; j < in_verts.size(); ++j) {
+					if (in_verts[j].position == prev)
+						out_indices.push_back(j);
+					if (in_verts[j].position == next)
+						out_indices.push_back(j);
+					if (in_verts[j].position == temp)
+						out_indices.push_back(j);
 				}
 
-				vVerts.clear();
+				v_verts.clear();
 				break;
 			}
 
@@ -633,34 +633,34 @@ void OBJLoader<VertexT>::Triangulate(vector<VertexT>& inVerts, vector<u32>& outI
 
 
 			// Ensure that no vertices are inside the triangle
-			bool inTriangle = false;
-			for (u32 j = 0; j < inVerts.size(); ++j) {
-				if (PointInTriangle(prev, curr, next, inVerts[j].position)
-				    && inVerts[j].position != prev
-				    && inVerts[j].position != curr
-				    && inVerts[j].position != next) {
-					inTriangle = true;
+			bool in_triangle = false;
+			for (u32 j = 0; j < in_verts.size(); ++j) {
+				if (PointInTriangle(prev, curr, next, in_verts[j].position)
+				    && in_verts[j].position != prev
+				    && in_verts[j].position != curr
+				    && in_verts[j].position != next) {
+					in_triangle = true;
 					break;
 				}
 			}
-			if (inTriangle) {
+			if (in_triangle) {
 				continue;
 			}
 
 			// Create a triangle from previous, current, and next vertices
-			for (u32 j = 0; j < inVerts.size(); ++j) {
-				if (inVerts[j].position == prev)
-					outIndices.push_back(j);
-				if (inVerts[j].position == curr)
-					outIndices.push_back(j);
-				if (inVerts[j].position == next)
-					outIndices.push_back(j);
+			for (u32 j = 0; j < in_verts.size(); ++j) {
+				if (in_verts[j].position == prev)
+					out_indices.push_back(j);
+				if (in_verts[j].position == curr)
+					out_indices.push_back(j);
+				if (in_verts[j].position == next)
+					out_indices.push_back(j);
 			}
 
 			// Delete current vertex from the list
-			for (u32 j = 0; j < vVerts.size(); ++j) {
-				if (vVerts[j].position == curr) {
-					vVerts.erase(vVerts.begin() + j);
+			for (u32 j = 0; j < v_verts.size(); ++j) {
+				if (v_verts[j].position == curr) {
+					v_verts.erase(v_verts.begin() + j);
 					break;
 				}
 			}
@@ -676,7 +676,7 @@ void OBJLoader<VertexT>::Triangulate(vector<VertexT>& inVerts, vector<u32>& outI
 		}
 
 		// If there are no more vertices, then break
-		if (vVerts.size() == 0) {
+		if (v_verts.size() == 0) {
 			break;
 		}
 	}
