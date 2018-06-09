@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "transform_system.h"
-#include "engine\engine.h"
+#include "engine/engine.h"
 
 
 void TransformSystem::update(const Engine& engine) {
@@ -28,18 +28,20 @@ void TransformSystem::postUpdate(const Engine& engine) {
 }
 
 
-const XMMATRIX TransformSystem::CalculateWorld(Transform& transform) const {
+XMMATRIX TransformSystem::CalculateWorld(Transform& transform) {
 	return XMMatrixScalingFromVector(transform.scale)
 	       * XMMatrixRotationRollPitchYawFromVector(transform.rotation)
 	       * XMMatrixTranslationFromVector(transform.translation);
 }
 
 
-const XMMATRIX TransformSystem::CalculateWorld(CameraTransform& transform) const {
-	XMMATRIX rotation = { transform.GetWorldAxisX(),
-		                  transform.GetWorldAxisY(),
-		                  transform.GetWorldAxisZ(),
-		                  {0.0f, 0.0f, 0.0f, 1.0f} };
-	
+XMMATRIX TransformSystem::CalculateWorld(CameraTransform& transform) {
+	const XMMATRIX rotation = {
+		transform.GetWorldAxisX(),
+		transform.GetWorldAxisY(),
+		transform.GetWorldAxisZ(),
+		{0.0f, 0.0f, 0.0f, 1.0f}
+	};
+
 	return rotation * transform.GetObjectToParentPositionMatrix();
 }

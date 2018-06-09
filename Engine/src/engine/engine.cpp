@@ -19,7 +19,7 @@ Engine::~Engine() {
 bool Engine::Init() {
 
 	// Set width/height variables. Later on this can be read from a config file.
-	window_width  = WINDOW_WIDTH;
+	window_width = WINDOW_WIDTH;
 	window_height = WINDOW_HEIGHT;
 
 
@@ -68,13 +68,13 @@ bool Engine::Init() {
 
 
 void Engine::Run() {
-	MSG   msg = { 0 };
+	MSG msg = {nullptr};
 	bool done = false;
-	
+
 	// Main loop
 	while (!done) {
 
-		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)) {
+		if (PeekMessage(&msg, nullptr, NULL, NULL, PM_REMOVE)) {
 
 			if (msg.message == WM_QUIT) {
 				done = true;
@@ -98,7 +98,7 @@ void Engine::Run() {
 }
 
 
-void Engine::Tick() {	
+void Engine::Tick() const {
 
 	// Update system metrics
 	system_monitor->tick();
@@ -112,7 +112,6 @@ void Engine::Tick() {
 	scene->Tick(*this);
 
 
-
 	// Begin a new frame
 	rendering_mgr->BeginFrame();
 
@@ -124,7 +123,7 @@ void Engine::Tick() {
 }
 
 
-void Engine::ProcessInput() {
+void Engine::ProcessInput() const {
 
 	// Toggle mouse mode on F1 press
 	if (input->IsKeyPressed(Keyboard::F1)) {
@@ -158,7 +157,7 @@ LRESULT Engine::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 			Mouse::ProcessMessage(msg, wParam, lParam);
 			return 0;
 
-		// Handle window resize
+			// Handle window resize
 		case WM_SIZE:
 			window_width = LOWORD(lParam);
 			window_height = HIWORD(lParam);
@@ -184,11 +183,11 @@ LRESULT Engine::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 			return 0;
 
 		case WM_GETMINMAXINFO:
-			((MINMAXINFO*)lParam)->ptMinTrackSize.x = 240;
-			((MINMAXINFO*)lParam)->ptMinTrackSize.y = 240;
+			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.x = 240;
+			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.y = 240;
 			return 0;
 
-		// Send keyboard events to keyboard handler
+			// Send keyboard events to keyboard handler
 		case WM_KEYDOWN:
 		case WM_SYSKEYDOWN:
 		case WM_KEYUP:
@@ -196,7 +195,7 @@ LRESULT Engine::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 			Keyboard::ProcessMessage(msg, wParam, lParam);
 			return 0;
 
-		// Send mouse events to mouse handler
+			// Send mouse events to mouse handler
 		case WM_INPUT:
 		case WM_MOUSEMOVE:
 		case WM_LBUTTONDOWN:
@@ -212,7 +211,7 @@ LRESULT Engine::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 			Mouse::ProcessMessage(msg, wParam, lParam);
 			return 0;
 
-		// Send other messages to default message handler
+			// Send other messages to default message handler
 		default:
 			return DefWindowProc(hWnd, msg, wParam, lParam);
 	}

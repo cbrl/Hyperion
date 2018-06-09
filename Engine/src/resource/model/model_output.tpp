@@ -1,24 +1,23 @@
-
 template<typename VertexT>
 ModelOutput<VertexT>::ModelOutput(const string& name,
-								  const vector<VertexT>& vertices,
-								  const vector<u32>& indices,
-								  const vector<Material>& materials,
-								  const vector<Group>& groups)
+                                  const vector<VertexT>& vertices,
+                                  const vector<u32>& indices,
+                                  const vector<Material>& materials,
+                                  const vector<Group>& groups)
 	: name(name)
 	, vertices(vertices)
 	, indices(indices)
 	, materials(materials) {
 
 	// Create the AABB
-	auto pair = MinMaxPoint(vertices);
+	auto minmax = MinMaxPoint(vertices);
 
-	aabb = AABB(pair.first, pair.second);
+	aabb = AABB(minmax.first, minmax.second);
 
 
 	// Create the bounding sphere
-	auto center = (pair.first + pair.second) / 2;
-	auto radius = XMVectorGetX(XMVector3Length(pair.second - pair.first));
+	auto center = (minmax.first + minmax.second) / 2;
+	auto radius = XMVectorGetX(XMVector3Length(minmax.second - minmax.first));
 
 	sphere = BoundingSphere(center, radius);
 
@@ -27,8 +26,8 @@ ModelOutput<VertexT>::ModelOutput(const string& name,
 	for (size_t i = 0; i < groups.size(); ++i) {
 		ModelPart temp;
 
-		temp.name           = groups[i].name;
-		temp.index_start    = groups[i].index_start;
+		temp.name = groups[i].name;
+		temp.index_start = groups[i].index_start;
 		temp.material_index = groups[i].material_index;
 
 		// Index count
@@ -45,8 +44,8 @@ ModelOutput<VertexT>::ModelOutput(const string& name,
 			subvec.push_back(vertices[indices[j]]);
 		}
 
-		auto pair = MinMaxPoint(subvec);
-		temp.aabb = AABB(pair.first, pair.second);
+		auto minmax_part = MinMaxPoint(subvec);
+		temp.aabb = AABB(minmax_part.first, minmax_part.second);
 
 		model_parts.push_back(std::move(temp));
 	}

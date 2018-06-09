@@ -5,13 +5,13 @@
 
 Transform::Transform()
 	: parent(handle64::invalid_handle)
+	, world(XMMatrixIdentity())
 	, translation(XMVectorZero())
 	, rotation(XMVectorZero())
 	, scale(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f))
-	, world(XMMatrixIdentity())
 	, needs_update(false)
-	, updated(false)
-{}
+	, updated(false) {
+}
 
 
 void Transform::Move(const float3& move) {

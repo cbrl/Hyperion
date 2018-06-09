@@ -1,22 +1,21 @@
 #include "stdafx.h"
 #include "forward_pass.h"
-#include "rendering\render_state_mgr.h"
-#include "scene\scene.h"
+#include "rendering/render_state_mgr.h"
+#include "scene/scene.h"
 
-#include "compiled_headers\forward.h"
-#include "compiled_headers\forward_vs.h"
+#include "compiled_headers/forward.h"
+#include "compiled_headers/forward_vs.h"
 
 ForwardPass::ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
-	, device_context(device_context)
-{
+	, device_context(device_context) {
 
 	// Create the vertex shader
 	vertex_shader = make_unique<VertexShader>(device,
-											  shader_forward_vs,
-											  sizeof(shader_forward_vs),
-											  VertexPositionNormalTexture::InputElements,
-											  VertexPositionNormalTexture::InputElementCount);
+	                                          shader_forward_vs,
+	                                          sizeof(shader_forward_vs),
+	                                          VertexPositionNormalTexture::InputElements,
+	                                          VertexPositionNormalTexture::InputElementCount);
 
 	// Create the pixel shader
 	pixel_shader = make_unique<PixelShader>(device, shader_forward, sizeof(shader_forward));
@@ -56,8 +55,8 @@ void ForwardPass::BindDefaultRenderStates(const RenderStateMgr& render_state_mgr
 
 void XM_CALLCONV ForwardPass::Render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
 
-	const auto transform            = ecs_engine.getComponent<Transform>(model.getOwner());
-	const auto object_to_world      = transform->GetObjectToWorldMatrix();
+	const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
+	const auto object_to_world = transform->GetObjectToWorldMatrix();
 	const auto object_to_projection = object_to_world * world_to_projection;
 
 	// Cull the model if it isn't on screen
@@ -80,12 +79,12 @@ void XM_CALLCONV ForwardPass::Render(const ECS& ecs_engine, Model& model, FXMMAT
 		const auto& mat = child.GetMaterial();
 
 		// Bind the SRVs
-		if (mat.map_diffuse)        mat.map_diffuse->Bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
-		if (mat.map_ambient)        mat.map_ambient->Bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
-		if (mat.map_specular)       mat.map_specular->Bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
+		if (mat.map_diffuse) mat.map_diffuse->Bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
+		if (mat.map_ambient) mat.map_ambient->Bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
+		if (mat.map_specular) mat.map_specular->Bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
 		if (mat.map_spec_highlight) mat.map_spec_highlight->Bind<Pipeline::PS>(device_context, SLOT_SRV_SPEC_HIGHLIGHT);
-		if (mat.map_alpha)          mat.map_alpha->Bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
-		if (mat.map_bump)           mat.map_bump->Bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
+		if (mat.map_alpha) mat.map_alpha->Bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
+		if (mat.map_bump) mat.map_bump->Bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
 
 
 		// Draw the child
@@ -95,7 +94,7 @@ void XM_CALLCONV ForwardPass::Render(const ECS& ecs_engine, Model& model, FXMMAT
 		// Unbind the SRVs
 		// Slot definition could be used as a more dynamic way of unbinding any amount of srvs
 		// E.g. null_srv[SLOT_SRV_ALPHA + 1] = { nullptr };
-		ID3D11ShaderResourceView* null_srv[6] = { nullptr };
+		ID3D11ShaderResourceView* null_srv[6] = {nullptr};
 		Pipeline::PS::BindSRVs(device_context, 0, 6, null_srv);
 	});
 }

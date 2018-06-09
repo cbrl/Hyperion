@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math\math.h"
+#include "math/math.h"
 #include "resource_mgr.h"
 
 
@@ -17,19 +17,17 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetOrCreateResource(const KeyT& ke
 
 	// Check if the resource exists
 	if (it != resource_map.end()) {
-		
+
 		// Return the resource if it hasn't expired
 		if (!it->second.expired()) {
 			return it->second.lock();
 		}
 		// If the resource has expired then remove the ptr from the map
-		else {
-			resource_map.erase(it);
-		}
+		resource_map.erase(it);
 	}
 
 	// Create the resource if it doesn't exist or expired
-	const auto resource = shared_ptr<ValueT>(new ValueT(std::forward<ArgsT>(args)...));
+	const auto resource = std::make_shared<ValueT>(std::forward<ArgsT>(args)...);
 	resource_map[key] = resource;
 
 	return resource;
@@ -46,14 +44,11 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetResource(const KeyT& key) {
 		if (!n->second.expired()) {
 			return n->second.lock();
 		}
-		else {
-			resource_map.erase(n);
-		}
+		resource_map.erase(n);
 	}
-	
+
 	return nullptr;
 }
-
 
 
 //----------------------------------------------------------------------------------
@@ -62,14 +57,17 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::GetResource(const KeyT& key) {
 
 // ModelBlueprint
 template<typename ResourceT>
-enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::GetOrCreate(const wstring& filename) {
+enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::GetOrCreate(
+	const wstring& filename) {
 
 	return models.GetOrCreateResource(filename, device, *this, filename);
 }
 
 // ModelBlueprint
 template<typename ResourceT, typename VertexT>
-enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::GetOrCreate(const wstring& name, const ModelOutput<VertexT>& model_data) {
+enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> ResourceMgr::GetOrCreate(
+	const wstring& name,
+	const ModelOutput<VertexT>& model_data) {
 
 	return models.GetOrCreateResource(name, device, model_data);
 }

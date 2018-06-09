@@ -17,22 +17,22 @@ void Text::SetText(wstring new_text) {
 
 
 void Text::SetText(wstring new_text, float2 new_position) {
-	text     = new_text;
-	position = position;
+	text = new_text;
+	position = new_position;
 }
 
 
 void Text::SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color) {
-	text     = new_text;
+	text = new_text;
 	position = new_position;
-	color    = new_color;
+	color = new_color;
 }
 
 
 void Text::SetText(wstring new_text, float2 new_position, XMVECTORF32 new_color, float new_rotation) {
-	text     = new_text;
+	text = new_text;
 	position = new_position;
-	color    = new_color;
+	color = new_color;
 	rotation = new_rotation;
 }
 
@@ -72,6 +72,6 @@ const XMVECTORF32& Text::GetColor() const {
 }
 
 
-const float Text::GetRotation() const {
+float Text::GetRotation() const {
 	return rotation;
 }

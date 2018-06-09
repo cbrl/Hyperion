@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "depth_pass.h"
-#include "engine\engine.h"
+#include "engine/engine.h"
 
 //#include "compiled_headers\depth.h"
-#include "compiled_headers\depth_vs.h"
+#include "compiled_headers/depth_vs.h"
 
 
 DepthPass::DepthPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
@@ -12,10 +12,10 @@ DepthPass::DepthPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	, alt_cam_buffer(device) {
 
 	vertex_shader = make_unique<VertexShader>(device,
-											  shader_depth_vs,
-											  sizeof(shader_depth_vs),
-											  VertexPositionNormalTexture::InputElements,
-											  VertexPositionNormalTexture::InputElementCount);
+	                                          shader_depth_vs,
+	                                          sizeof(shader_depth_vs),
+	                                          VertexPositionNormalTexture::InputElements,
+	                                          VertexPositionNormalTexture::InputElementCount);
 
 	// Pixel shader for transparent objects
 	//pixel_shader = make_unique<PixelShader>(device, "FILENAME");
@@ -37,8 +37,8 @@ void DepthPass::BindState(const RenderStateMgr& render_state_mgr) const {
 
 
 void XM_CALLCONV DepthPass::Render(const Engine& engine,
-								   FXMMATRIX world_to_camera,
-								   CXMMATRIX camera_to_projection) {
+                                   FXMMATRIX world_to_camera,
+                                   CXMMATRIX camera_to_projection) {
 
 	auto& ecs_engine = engine.GetECS();
 
@@ -54,9 +54,9 @@ void XM_CALLCONV DepthPass::Render(const Engine& engine,
 
 	// Draw each model
 	ecs_engine.forEachActive<Model>([&](Model& model) {
-		const auto transform      = ecs_engine.getComponent<Transform>(model.getOwner());
+		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
 		const auto model_to_world = transform->GetObjectToWorldMatrix();
-		const auto model_to_proj  = model_to_world * world_to_proj;
+		const auto model_to_proj = model_to_world * world_to_proj;
 
 		if (!Frustum(model_to_proj).Contains(model.GetAABB()))
 			return;
@@ -69,8 +69,8 @@ void XM_CALLCONV DepthPass::Render(const Engine& engine,
 }
 
 void XM_CALLCONV DepthPass::RenderShadows(const Engine& engine,
-										  FXMMATRIX world_to_camera,
-										  CXMMATRIX camera_to_projection) {
+                                          FXMMATRIX world_to_camera,
+                                          CXMMATRIX camera_to_projection) {
 
 	auto& ecs_engine = engine.GetECS();
 
@@ -86,9 +86,9 @@ void XM_CALLCONV DepthPass::RenderShadows(const Engine& engine,
 
 	// Draw each model
 	ecs_engine.forEachActive<Model>([&](Model& model) {
-		const auto transform      = ecs_engine.getComponent<Transform>(model.getOwner());
+		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
 		const auto model_to_world = transform->GetObjectToWorldMatrix();
-		const auto model_to_proj  = model_to_world * world_to_proj;
+		const auto model_to_proj = model_to_world * world_to_proj;
 
 		if (!Frustum(model_to_proj).Contains(model.GetAABB()))
 			return;
@@ -100,10 +100,10 @@ void XM_CALLCONV DepthPass::RenderShadows(const Engine& engine,
 }
 
 
-void XM_CALLCONV DepthPass::UpdateCamera(FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) {
+void XM_CALLCONV DepthPass::UpdateCamera(FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) const {
 
 	AltCameraBuffer buffer;
-	buffer.world_to_camera      = XMMatrixTranspose(world_to_camera);
+	buffer.world_to_camera = XMMatrixTranspose(world_to_camera);
 	buffer.camera_to_projection = XMMatrixTranspose(camera_to_projection);
 
 	alt_cam_buffer.UpdateData(device_context, buffer);

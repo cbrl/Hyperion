@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include "log\log.h"
+#include "log/log.h"
 
 
 #if defined(DEBUG) || defined(_DEBUG)
@@ -24,20 +24,21 @@ using DirectX::SetDebugObjectName;
 
 // Helper class for COM exceptions
 class com_exception : public std::exception {
-	public:
-		com_exception(HRESULT hr, const char* msg = "") : result(hr), msg(msg) {}
+public:
+	com_exception(HRESULT hr, const char* msg = "") : result(hr), msg(msg) {
+	}
 
-		virtual const char* what() const override {
-			std::ostringstream stream;
+	const char* what() const override {
+		std::ostringstream stream;
 
-			stream << msg << " (Failure with HRESULT of " << std::hex << result << ")";
+		stream << msg << " (Failure with HRESULT of " << std::hex << result << ")";
 
-			return stream.str().c_str();
-		}
+		return stream.str().c_str();
+	}
 
-	private:
-		HRESULT result;
-		std::string msg;
+private:
+	HRESULT result;
+	std::string msg;
 };
 
 
@@ -67,20 +68,20 @@ inline void AlertIfFailed(HRESULT hr, const wchar_t* msg = L"") {
 inline void AlertIfFailed(bool result, const wchar_t* msg = L"") {
 	if (!result) {
 		if (msg != L"") {
-			MessageBox(NULL, msg, L"Error", MB_OK);
+			MessageBox(nullptr, msg, L"Error", MB_OK);
 		}
 		else {
 			LPWSTR output;
 			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
-							FORMAT_MESSAGE_IGNORE_INSERTS |
-							FORMAT_MESSAGE_ALLOCATE_BUFFER,
-							NULL,
-							E_FAIL,
-							MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-							(LPTSTR)&output,
-							0,
-							NULL);
-			MessageBox(NULL, output, L"Error", MB_OK);
+			              FORMAT_MESSAGE_IGNORE_INSERTS |
+			              FORMAT_MESSAGE_ALLOCATE_BUFFER,
+			              nullptr,
+			              E_FAIL,
+			              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			              reinterpret_cast<LPTSTR>(&output),
+			              0,
+			              nullptr);
+			MessageBox(nullptr, output, L"Error", MB_OK);
 		}
 	}
 }

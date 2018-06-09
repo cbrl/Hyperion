@@ -1,12 +1,12 @@
 #pragma once
 
-#include "system\system.h"
+#include "system/system.h"
 
 
 class ModelSystem final : public System<ModelSystem> {
-	public:
-		ModelSystem() = default;
-		~ModelSystem() = default;
+public:
+	ModelSystem() = default;
+	~ModelSystem() = default;
 
-		void update(const Engine& engine) override;
+	void update(const Engine& engine) override;
 };

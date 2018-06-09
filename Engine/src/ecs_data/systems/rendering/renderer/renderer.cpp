@@ -1,26 +1,25 @@
 #include "stdafx.h"
 #include "renderer.h"
-#include "engine\engine.h"
+#include "engine/engine.h"
 
 
 Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
-	, device_context(device_context)
-{
+	, device_context(device_context) {
 	// Create renderers
-	light_pass   = make_unique<LightPass>(device, device_context);
+	light_pass = make_unique<LightPass>(device, device_context);
 	forward_pass = make_unique<ForwardPass>(device, device_context);
-	sky_pass     = make_unique<SkyPass>(device, device_context);
-	text_pass    = make_unique<TextPass>(device_context);
+	sky_pass = make_unique<SkyPass>(device, device_context);
+	text_pass = make_unique<TextPass>(device_context);
 }
 
 
 void Renderer::update(const Engine& engine) {
 
-	auto& ecs_engine             = engine.GetECS();
-	const auto& rendering_mgr    = engine.GetRenderingMgr();
+	auto& ecs_engine = engine.GetECS();
+	const auto& rendering_mgr = engine.GetRenderingMgr();
 	const auto& render_state_mgr = rendering_mgr.GetRenderStateMgr();
-	auto& scene                  = engine.GetScene();
+	auto& scene = engine.GetScene();
 
 
 	ecs_engine.forEachActive<PerspectiveCamera>([&](const PerspectiveCamera& camera) {

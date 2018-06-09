@@ -1,15 +1,15 @@
 #include <algorithm>
-#include "loader\obj\obj_tokens.h"
-#include "io\io.h"
-#include "math\math.h"
+#include "loader/obj/obj_tokens.h"
+#include "io/io.h"
+#include "math/math.h"
 
 
 template<typename VertexT>
 void OBJLoader<VertexT>::Reset() {
 	// Reset the local variables
-	rh_coord    = false;
+	rh_coord = false;
 	group_count = 0;
-	mtl_count   = 0;
+	mtl_count = 0;
 
 	// Clear vectors
 	vertices.clear();
@@ -25,10 +25,9 @@ void OBJLoader<VertexT>::Reset() {
 
 
 template<typename VertexT>
-ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device& device,
-											  ResourceMgr& resource_mgr,
-											  const wstring& filename,
-											  bool right_hand_coords) {
+ModelOutput<VertexT> OBJLoader<VertexT>::Load(ResourceMgr& resource_mgr,
+                                              const wstring& filename,
+                                              bool right_hand_coords) {
 
 	// Make sure the file exists first
 	ThrowIfFailed(fs::exists(filename),
@@ -39,7 +38,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device& device,
 
 
 	// Get the folder that the file is in
-	wstring folder = GetParentPath(filename);
+	const wstring folder = GetParentPath(filename);
 
 	// Load the model
 	LoadModel(filename);
@@ -47,14 +46,14 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device& device,
 	// Load the materials
 	LoadMaterials(folder);
 
-	
+
 	// Create the materials
 	vector<Material> mtlVector;
 	for (u32 i = 0; i < mtl_count; ++i) {
 		Material mtl;
 
 		mtl.name = wstr2str(materials[i].name);
-		
+
 		if (!materials[i].map_Kd.empty())
 			mtl.map_diffuse = resource_mgr.GetOrCreate<Texture>(folder + materials[i].map_Kd);
 		else
@@ -75,14 +74,14 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device& device,
 		if (!materials[i].map_bump.empty())
 			mtl.map_bump = resource_mgr.GetOrCreate<Texture>(folder + materials[i].map_bump);
 
-		mtl.ambient         = materials[i].Ka;
-		mtl.diffuse         = materials[i].Kd;
-		mtl.specular        = materials[i].Ks;
-		mtl.emissive        = materials[i].Ke;
-		mtl.dissolve        = materials[i].d;
+		mtl.ambient = materials[i].Ka;
+		mtl.diffuse = materials[i].Kd;
+		mtl.specular = materials[i].Ks;
+		mtl.emissive = materials[i].Ke;
+		mtl.dissolve = materials[i].d;
 		mtl.optical_density = materials[i].Ni;
-		mtl.illum           = materials[i].illum;
-		mtl.transparent     = materials[i].transparency;
+		mtl.illum = materials[i].illum;
+		mtl.transparent = materials[i].transparency;
 
 		mtlVector.push_back(std::move(mtl));
 	}
@@ -102,7 +101,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::Load(ID3D11Device& device,
 
 template<typename VertexT>
 void OBJLoader<VertexT>::LoadModel(wstring filename) {
-	
+
 	// Open the file
 	wifstream file(filename);
 	if (file.fail()) {
@@ -144,7 +143,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 			vertex_positions.push_back(position);
 		}
 
-		// Normal
+			// Normal
 		else if (token.compare(OBJTokens::normal) == 0) {
 			float3 normal;
 			stream >> normal.x >> normal.y >> normal.z;
@@ -156,7 +155,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 			vertex_normals.push_back(normal);
 		}
 
-		// Texture
+			// Texture
 		else if (token.compare(OBJTokens::texture) == 0) {
 			float2 texCoord;
 			stream >> texCoord.x >> texCoord.y;
@@ -168,7 +167,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 			vertex_texCoords.push_back(texCoord);
 		}
 
-		// Group
+			// Group
 		else if (token.compare(OBJTokens::group) == 0) {
 			wstring name;
 			stream >> name;
@@ -180,7 +179,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 			++group_count;
 		}
 
-		// Face
+			// Face
 		else if (token.compare(OBJTokens::face) == 0) {
 			ReadFace(line);
 		}
@@ -190,7 +189,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 			mat_lib = TrimWhiteSpace(line);
 		}
 
-		// Group Material
+			// Group Material
 		else if (token.compare(OBJTokens::use_mtl) == 0) {
 			group_mat_names[group_count - 1] = TrimWhiteSpace(line);
 		}
@@ -213,7 +212,7 @@ void OBJLoader<VertexT>::LoadModel(wstring filename) {
 
 template<typename VertexT>
 void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
-	
+
 	// Open the material file
 	wifstream file(folder + mat_lib);
 	if (file.fail()) {
@@ -252,7 +251,7 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 			++mtl_count;
 		}
 
-		// Diffuse Color
+			// Diffuse Color
 		else if (token.compare(OBJTokens::diffuse_color) == 0) {
 			stream >> materials[mtl_count - 1].Kd.x;
 			stream >> materials[mtl_count - 1].Kd.y;
@@ -260,7 +259,7 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 			materials[mtl_count - 1].Kd.w = 1.0f;
 		}
 
-		// Ambient Color
+			// Ambient Color
 		else if (token.compare(OBJTokens::ambient_color) == 0) {
 			stream >> materials[mtl_count - 1].Ka.x;
 			stream >> materials[mtl_count - 1].Ka.y;
@@ -268,14 +267,14 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 			materials[mtl_count - 1].Ka.w = 1.0f;
 		}
 
-		// Specular Color
+			// Specular Color
 		else if (token.compare(OBJTokens::specular_color) == 0) {
 			stream >> materials[mtl_count - 1].Ks.x;
 			stream >> materials[mtl_count - 1].Ks.y;
 			stream >> materials[mtl_count - 1].Ks.z;
 		}
 
-		// Emissive Color
+			// Emissive Color
 		else if (token.compare(OBJTokens::emissive_color) == 0) {
 			stream >> materials[mtl_count - 1].Ke.x;
 			stream >> materials[mtl_count - 1].Ke.y;
@@ -283,58 +282,58 @@ void OBJLoader<VertexT>::LoadMaterials(wstring folder) {
 			materials[mtl_count - 1].Ke.w = 1.0f;
 		}
 
-		// Specular Expononet
+			// Specular Expononet
 		else if (token.compare(OBJTokens::specular_exponent) == 0) {
 			stream >> materials[mtl_count - 1].Ks.w;
 		}
 
-		// Optical Density
+			// Optical Density
 		else if (token.compare(OBJTokens::optical_density) == 0) {
 			stream >> materials[mtl_count - 1].Ni;
 		}
 
-		// Dissolve (transparency)
+			// Dissolve (transparency)
 		else if (token.compare(OBJTokens::transparency) == 0) {
 			ReadTransparency(line, false);
 		}
 
-		// Dissolve (transparency inverse)
+			// Dissolve (transparency inverse)
 		else if (token.compare(OBJTokens::transparency_inv) == 0) {
 			ReadTransparency(line, true);
 		}
 
-		// Illumination
+			// Illumination
 		else if (token.compare(OBJTokens::illumination_model) == 0) {
 			stream >> materials[mtl_count - 1].illum;
 		}
 
-		// Diffuse Map
+			// Diffuse Map
 		else if (token.compare(OBJTokens::diffuse_color_map) == 0) {
 			materials[mtl_count - 1].map_Kd = TrimWhiteSpace(line);
 		}
 
-		// Alpha Map
+			// Alpha Map
 		else if (token.compare(OBJTokens::alpha_texture_map) == 0) {
 			materials[mtl_count - 1].map_d = TrimWhiteSpace(line);
 			materials[mtl_count - 1].transparency = true;
 		}
 
-		// Ambient Map
+			// Ambient Map
 		else if (token.compare(OBJTokens::ambient_color_map) == 0) {
 			materials[mtl_count - 1].map_Ka = TrimWhiteSpace(line);
 		}
 
-		// Specular Map
+			// Specular Map
 		else if (token.compare(OBJTokens::specular_color_map) == 0) {
 			materials[mtl_count - 1].map_Ks = TrimWhiteSpace(line);
 		}
 
-		// Specular Highlight Map
+			// Specular Highlight Map
 		else if (token.compare(OBJTokens::spec_highlight_map) == 0) {
 			materials[mtl_count - 1].map_Ns = TrimWhiteSpace(line);
 		}
 
-		// Bump Map
+			// Bump Map
 		else if (token.compare(OBJTokens::bump_map) == 0 || token.compare(OBJTokens::bump_map2) == 0) {
 			materials[mtl_count - 1].map_bump = TrimWhiteSpace(line);
 		}
@@ -383,31 +382,30 @@ void OBJLoader<VertexT>::ReadTransparency(wstring& line, bool inverse) {
 
 template<typename VertexT>
 void OBJLoader<VertexT>::ReadFace(wstring& line) {
-	vector<wstring> vert_list, vert_parts;
 
 	vector<VertexT> verts;
 	VertexT vertex = {};
 
-	bool hasNormal = false;
+	bool has_normal = false;
 
 	// Split the line into separate vertex definitions
-	vert_list = Split(line, L" ");
+	vector<wstring> vert_list = Split(line, L" ");
 
 	for (size_t i = 0; i < vert_list.size(); ++i) {
 		i32 type = 0;
 
 		// Split the vertex definition into separate parts
-		vert_parts = Split(vert_list[i], L"/");
+		vector<wstring> vert_parts = Split(vert_list[i], L"/");
 
 
 		// Determine the vertex type
 		switch (vert_parts.size()) {
-			// Position
+				// Position
 			case 1:
 				type = 1;
 				break;
 
-			// Position/Texture
+				// Position/Texture
 			case 2:
 				type = 2;
 				break;
@@ -415,65 +413,65 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 			case 3:
 				// Position/Normal
 				if (vert_parts[1] == L"") type = 3;
-				// Position/Texture/Normal
+					// Position/Texture/Normal
 				else type = 4;
+				break;
+
+			default:
 				break;
 		}
 
 		// Create the vertex definition and add it to the temporary vector
 		switch (type) {
-			// Position
-			case 1:
-			{
-				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);  //Subtract 1 since arrays start at index 0
+				// Position
+			case 1: {
+				vertex.position = vertex_positions[stoi(vert_parts[0]) - 1];
+				//Subtract 1 since arrays start at index 0
 
 				vertex.texCoord = float2(0.0f, 0.0f);
 
-				hasNormal = false;
+				has_normal = false;
 
 				verts.push_back(vertex);
 				break;
 			}
 
-			// Position/Texture
-			case 2:
-			{
-				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
+				// Position/Texture
+			case 2: {
+				vertex.position = vertex_positions[stoi(vert_parts[0]) - 1];
 
-				vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
+				vertex.texCoord = vertex_texCoords[stoi(vert_parts[1]) - 1];
 
-				hasNormal = false;
+				has_normal = false;
 
 				verts.push_back(vertex);
 				break;
 			}
 
-			// Position/Normal
-			case 3:
-			{
-				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
+				// Position/Normal
+			case 3: {
+				vertex.position = vertex_positions[stoi(vert_parts[0]) - 1];
 
-				vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2]) - 1);
+				vertex.normal = vertex_normals[stoi(vert_parts[2]) - 1];
 
 				vertex.texCoord = float2(0.0f, 0.0f);
 
 
-				hasNormal = true;
+				has_normal = true;
 
 				verts.push_back(vertex);
 				break;
 			}
 
-			// Position/Texture/Normal
-			case 4:
-			{
-				vertex.position = GetElement(vertex_positions, stoi(vert_parts[0])-1);
+				// Position/Texture/Normal
+			case 4: {
+				vertex.position = vertex_positions[stoi(vert_parts[0]) - 1];
 
-				vertex.normal = GetElement(vertex_normals, stoi(vert_parts[2])-1);
+				vertex.normal = vertex_normals[stoi(vert_parts[2]) - 1];
 
-				vertex.texCoord = GetElement(vertex_texCoords, stoi(vert_parts[1])-1);
+				vertex.texCoord = vertex_texCoords[stoi(vert_parts[1]) - 1];
 
-				hasNormal = true;
+				has_normal = true;
 
 				verts.push_back(vertex);
 				break;
@@ -484,12 +482,12 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 		}
 
 		// Generate normals if the vertex type has a normal, but the file doesn't
-		if (!hasNormal && VertexT::HasNormal()) {
-			XMVECTOR a = XMLoadFloat3(&(verts[0].position - verts[1].position));
-			XMVECTOR b = XMLoadFloat3(&(verts[2].position - verts[1].position));
+		if (!has_normal && VertexT::hasNormal()) {
+			const XMVECTOR a = XMLoadFloat3(&(verts[0].position - verts[1].position));
+			const XMVECTOR b = XMLoadFloat3(&(verts[2].position - verts[1].position));
 
-			for (size_t i = 0; i < verts.size(); ++i) {
-				XMStoreFloat3(&verts[i].normal, XMVector3Cross(a, b));
+			for (size_t j = 0; j < verts.size(); ++j) {
+				XMStoreFloat3(&verts[j].normal, XMVector3Cross(a, b));
 			}
 		}
 	}
@@ -522,7 +520,7 @@ void OBJLoader<VertexT>::ReadFace(wstring& line) {
 		}
 	}
 
-	// Triangulate the face if there were more than 3 points
+		// Triangulate the face if there were more than 3 points
 	else if (vert_list.size() > 3) {
 		vector<u32> vIndices;
 
@@ -598,9 +596,8 @@ void OBJLoader<VertexT>::Triangulate(vector<VertexT>& inVerts, vector<u32>& outI
 				float3 temp;
 				for (u32 j = 0; j < vVerts.size(); ++j) {
 					if (vVerts[j].position != prev &&
-						vVerts[j].position != curr &&
-						vVerts[j].position != next)
-					{
+					    vVerts[j].position != curr &&
+					    vVerts[j].position != next) {
 						temp = vVerts[j].position;
 						break;
 					}
@@ -622,8 +619,10 @@ void OBJLoader<VertexT>::Triangulate(vector<VertexT>& inVerts, vector<u32>& outI
 
 
 			// Ensure that the vertex isn't an interior vertex
-			XMVECTOR vec1 = XMLoadFloat3(&(prev - curr));
-			XMVECTOR vec2 = XMLoadFloat3(&(next - curr));
+			const float3 v1 = prev - curr;
+			const float3 v2 = next - curr;
+			const XMVECTOR vec1 = XMLoadFloat3(&v1);
+			const XMVECTOR vec2 = XMLoadFloat3(&v2);
 
 			float angle = XMVectorGetX(XMVector3AngleBetweenVectors(vec1, vec2));
 			angle = XMConvertToDegrees(angle);
@@ -637,10 +636,9 @@ void OBJLoader<VertexT>::Triangulate(vector<VertexT>& inVerts, vector<u32>& outI
 			bool inTriangle = false;
 			for (u32 j = 0; j < inVerts.size(); ++j) {
 				if (PointInTriangle(prev, curr, next, inVerts[j].position)
-					&& inVerts[j].position != prev
-					&& inVerts[j].position != curr
-					&& inVerts[j].position != next)
-				{
+				    && inVerts[j].position != prev
+				    && inVerts[j].position != curr
+				    && inVerts[j].position != next) {
 					inTriangle = true;
 					break;
 				}

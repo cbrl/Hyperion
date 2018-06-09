@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "rendering_mgr.h"
 
-#include "util\engine_util.h"
-#include "engine\engine.h"
+#include "util/engine_util.h"
+#include "engine/engine.h"
 
 
 RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msaa) {
@@ -11,7 +11,12 @@ RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msa
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------
 
-	direct3D = make_unique<Direct3D>(engine.GetHWND(), engine.GetWindowWidth(), engine.GetWindowHeight(), fullscreen, vsync, msaa);
+	direct3D = make_unique<Direct3D>(engine.GetHWND(),
+	                                 engine.GetWindowWidth(),
+	                                 engine.GetWindowHeight(),
+	                                 fullscreen,
+	                                 vsync,
+	                                 msaa);
 	FILE_LOG(logINFO) << "Initialized Direct3D";
 
 
@@ -62,7 +67,7 @@ void RenderingMgr::BeginFrame() const {
 
 
 	// Clear the render target view with a specified color
-	static float color[4] = { 0.39f, 0.39f, 0.39f, 1.0f };
+	static float color[4] = {0.39f, 0.39f, 0.39f, 1.0f};
 	//ImGui::ColorEdit4("Clear Color", (float*)&color);
 
 	direct3D->Clear(color);

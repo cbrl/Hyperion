@@ -10,33 +10,65 @@
 
 #pragma once
 
-#include "datatypes\datatypes.h"
-#include "directx\vertex_types.h"
+#include "datatypes/datatypes.h"
+#include "directx/vertex_types.h"
 
-namespace Shapes
-{
+
+namespace Shapes {
 	template<typename VertexT>
-	void ComputeCube(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false, bool invertn = false);
+	void ComputeCube(vector<VertexT>& vertices,
+	                 vector<u32>& indices,
+	                 float size = 1,
+	                 bool rhcoords = false,
+	                 bool invertn = false);
 	template<typename VertexT>
-    void ComputeBox(vector<VertexT>& vertices, vector<u32>& indices, const float3& size, bool rhcoords = false, bool invertn = false);
+	void ComputeBox(vector<VertexT>& vertices,
+	                vector<u32>& indices,
+	                const float3& size,
+	                bool rhcoords = false,
+	                bool invertn = false);
 	template<typename VertexT>
-    void ComputeSphere(vector<VertexT>& vertices, vector<u32>& indices, float diameter = 1, size_t tessellation = 16, bool rhcoords = false, bool invertn = false);
+	void ComputeSphere(vector<VertexT>& vertices,
+	                   vector<u32>& indices,
+	                   float diameter = 1,
+	                   size_t tessellation = 16,
+	                   bool rhcoords = false,
+	                   bool invertn = false);
 	template<typename VertexT>
-    void ComputeGeoSphere(vector<VertexT>& vertices, vector<u32>& indices, float diameter = 1, size_t tessellation = 3, bool rhcoords = false);
+	void ComputeGeoSphere(vector<VertexT>& vertices,
+	                      vector<u32>& indices,
+	                      float diameter = 1,
+	                      size_t tessellation = 3,
+	                      bool rhcoords = false);
 	template<typename VertexT>
-    void ComputeCylinder(vector<VertexT>& vertices, vector<u32>& indices, float diameter = 1, float height = 1, size_t tessellation = 32, bool rhcoords = false);
+	void ComputeCylinder(vector<VertexT>& vertices,
+	                     vector<u32>& indices,
+	                     float diameter = 1,
+	                     float height = 1,
+	                     size_t tessellation = 32,
+	                     bool rhcoords = false);
 	template<typename VertexT>
-	void ComputeCone(vector<VertexT>& vertices, vector<u32>& indices, float diameter = 1, float height = 1, size_t tessellation = 32, bool rhcoords = false);
+	void ComputeCone(vector<VertexT>& vertices,
+	                 vector<u32>& indices,
+	                 float diameter = 1,
+	                 float height = 1,
+	                 size_t tessellation = 32,
+	                 bool rhcoords = false);
 	template<typename VertexT>
-    void ComputeTorus(vector<VertexT>& vertices, vector<u32>& indices, float diameter = 1, float thickness = 0.333f, size_t tessellation = 32, bool rhcoords = false);
+	void ComputeTorus(vector<VertexT>& vertices,
+	                  vector<u32>& indices,
+	                  float diameter = 1,
+	                  float thickness = 0.333f,
+	                  size_t tessellation = 32,
+	                  bool rhcoords = false);
 	template<typename VertexT>
-    void ComputeTetrahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
+	void ComputeTetrahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
 	template<typename VertexT>
-    void ComputeOctahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
+	void ComputeOctahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
 	template<typename VertexT>
-    void ComputeDodecahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
+	void ComputeDodecahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
 	template<typename VertexT>
-    void ComputeIcosahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
+	void ComputeIcosahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
 }
 
 

@@ -1,19 +1,19 @@
 #pragma once
 
-#include "engine\main_window.h"
+#include "engine/main_window.h"
 
-#include "util\engine_util.h"
-#include "datatypes\datatypes.h"
-#include "sysmon\system_monitor.h"
-#include "timer\timer.h"
-#include "fps\fps.h"
+#include "util/engine_util.h"
+#include "datatypes/datatypes.h"
+#include "sysmon/system_monitor.h"
+#include "timer/timer.h"
+#include "fps/fps.h"
 
 #include "ecs.h"
-#include "ecs_data\systems\systems.h"
-#include "input\input.h"
-#include "rendering\rendering_mgr.h"
-#include "scene\scene.h"
-#include "scene\test_scene.h"
+#include "ecs_data/systems/systems.h"
+#include "input/input.h"
+#include "rendering/rendering_mgr.h"
+#include "scene/scene.h"
+#include "scene/test_scene.h"
 
 
 #define WINDOW_WIDTH  1200
@@ -25,43 +25,44 @@
 
 
 class Engine final : public MainWindow {
-	public:
-		Engine() : resizing(false) {};
-		~Engine();
+public:
+	Engine() : resizing(false) {
+	};
+	~Engine();
 
-		bool Init();
-		void Run();
+	bool Init();
+	void Run() override;
 
-		LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
+	LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;
 
-		void OnResize(u32 window_width, u32 window_height);
+	void OnResize(u32 window_width, u32 window_height);
 
-		HWND GetHWND()         const { return hWnd; }
-		u32  GetWindowWidth()  const { return window_width; }
-		u32  GetWindowHeight() const { return window_height; }
+	HWND GetHWND() const { return hWnd; }
+	u32 GetWindowWidth() const { return window_width; }
+	u32 GetWindowHeight() const { return window_height; }
 
-		ECS&            GetECS()          const { return *ecs_engine; }
-		Scene&          GetScene()        const { return *scene; }
-		Input&          GetInput()        const { return *input; }
-		Timer&          GetTimer()        const { return *timer; }
-		FPS&            GetFPSCounter()   const { return *fps_counter; }
-		SystemMonitor&  GetSysMon()       const { return *system_monitor; }
-		RenderingMgr&   GetRenderingMgr() const { return *rendering_mgr; }
-		
-
-	private:
-		void Tick();
-		void ProcessInput();
+	ECS& GetECS() const { return *ecs_engine; }
+	Scene& GetScene() const { return *scene; }
+	Input& GetInput() const { return *input; }
+	Timer& GetTimer() const { return *timer; }
+	FPS& GetFPSCounter() const { return *fps_counter; }
+	SystemMonitor& GetSysMon() const { return *system_monitor; }
+	RenderingMgr& GetRenderingMgr() const { return *rendering_mgr; }
 
 
-	private:
-		unique_ptr<ECS>           ecs_engine;
-		unique_ptr<Input>         input;
-		unique_ptr<SystemMonitor> system_monitor;
-		unique_ptr<Timer>         timer;
-		unique_ptr<FPS>           fps_counter;
-		unique_ptr<RenderingMgr>  rendering_mgr;
-		unique_ptr<Scene>         scene;
+private:
+	void Tick() const;
+	void ProcessInput() const;
 
-		bool resizing;
+
+private:
+	unique_ptr<ECS> ecs_engine;
+	unique_ptr<Input> input;
+	unique_ptr<SystemMonitor> system_monitor;
+	unique_ptr<Timer> timer;
+	unique_ptr<FPS> fps_counter;
+	unique_ptr<RenderingMgr> rendering_mgr;
+	unique_ptr<Scene> scene;
+
+	bool resizing;
 };

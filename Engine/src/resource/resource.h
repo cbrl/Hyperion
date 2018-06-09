@@ -1,31 +1,31 @@
 #pragma once
 
-#include "datatypes\datatypes.h"
+#include "datatypes/datatypes.h"
 
 
 template<typename ResourceT>
 class Resource {
-	public:
-		Resource() = default;
+public:
+	Resource() = default;
 
-		Resource(const wstring& guid)
-			: guid(guid) {
-		}
+	Resource(const wstring& guid)
+		: guid(guid) {
+	}
 
-		Resource(wstring&& guid)
-			: guid(guid) {
-		}
+	Resource(wstring&& guid)
+		: guid(guid) {
+	}
 
-		virtual ~Resource() = default;
+	virtual ~Resource() = default;
 
-		const type_index GetTypeID() const {
-			return type_id;
-		}
+	static type_index GetTypeID() {
+		return type_id;
+	}
 
 
-	public:
-		wstring guid;
-		static const type_index type_id;
+public:
+	wstring guid;
+	static const type_index type_id;
 };
 
 

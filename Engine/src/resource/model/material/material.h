@@ -1,10 +1,11 @@
 #pragma once
 
-#include "math\math.h"
-#include "datatypes\datatypes.h"
-#include "resource\texture\texture.h"
+#include "math/math.h"
+#include "datatypes/datatypes.h"
+#include "resource/texture/texture.h"
 
 using namespace DirectX;
+
 
 struct Material final {
 	Material()
@@ -19,8 +20,8 @@ struct Material final {
 		, illum(0)
 		, transparent(false)
 		, has_texture(true)
-		, reflection_enabled(false)
-	{}
+		, reflection_enabled(false) {
+	}
 
 
 	// Material name

@@ -35,7 +35,5 @@ int2 Input::GetMouseDelta() const {
 	if (mouse_state.positionMode == Mouse::MODE_ABSOLUTE) {
 		return int2(0, 0);
 	}
-	else {
-		return int2(mouse_state.x, mouse_state.y);
-	}
+	return int2(mouse_state.x, mouse_state.y);
 }

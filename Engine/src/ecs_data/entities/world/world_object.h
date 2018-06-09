@@ -1,7 +1,7 @@
 #pragma once
 
-#include "entity\entity.h"
-#include "ecs_data\components\geometry\transform\transform.h"
+#include "entity/entity.h"
+#include "ecs_data/components/geometry/transform/transform.h"
 
 
 //----------------------------------------------------------------------------------
@@ -15,14 +15,14 @@
 
 template<typename T = void>
 class WorldObject : public Entity<WorldObject<T>> {
-	public:
-		WorldObject(handle64 this_handle, ComponentMgr* component_mgr)
-			: Entity<WorldObject<T>>(this_handle, component_mgr) {
+public:
+	WorldObject(handle64 this_handle, ComponentMgr* component_mgr)
+		: Entity<WorldObject<T>>(this_handle, component_mgr) {
 
-			this->addComponent<Transform>();
-		}
+		this->template addComponent<Transform>();
+	}
 
-		virtual ~WorldObject() = default;
+	virtual ~WorldObject() = default;
 
 	//	template<typename... ArgsT>
 	//	void Init(ArgsT&&... args) {

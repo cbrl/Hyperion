@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "model_system.h"
-#include "engine\engine.h"
-#include "ecs_data\components\geometry\transform\transform.h"
-#include "ecs_data\components\rendering\model\model.h"
+#include "engine/engine.h"
+#include "ecs_data/components/geometry/transform/transform.h"
+#include "ecs_data/components/rendering/model/model.h"
 
 
 void ModelSystem::update(const Engine& engine) {

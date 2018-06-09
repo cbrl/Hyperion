@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "main_window.h"
 
-#include "util\engine_util.h"
+#include "util/engine_util.h"
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
@@ -13,25 +13,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 MainWindow::MainWindow()
 	: hInstance()
 	, hWnd()
-	, app_name()
-{
+	, app_name() {
 	handle = this;
 }
 
 
-MainWindow::~MainWindow() {
-}
-
-
 bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
-	app_name      = name;
-	window_width  = width;
+	app_name = name;
+	window_width = width;
 	window_height = height;
 
-	u32 xPos = (GetSystemMetrics(SM_CXSCREEN) - window_width) / 2;
-	u32	yPos = (GetSystemMetrics(SM_CYSCREEN) - window_height) / 2;
+	const u32 xPos = (GetSystemMetrics(SM_CXSCREEN) - window_width) / 2;
+	const u32 yPos = (GetSystemMetrics(SM_CYSCREEN) - window_height) / 2;
 
-	hInstance = GetModuleHandle(NULL);
+	hInstance = GetModuleHandle(nullptr);
 
 
 	//----------------------------------------------------------------------------------
@@ -44,11 +39,11 @@ bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;
-	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
 	wc.hIconSm = wc.hIcon;
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
-	wc.lpszMenuName = NULL;
+	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
+	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = app_name;
 	wc.cbSize = sizeof(WNDCLASSEX);
 
@@ -60,8 +55,18 @@ bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
 	}
 
 	// Create window and store window handle
-	hWnd = CreateWindowEx(WS_EX_APPWINDOW, app_name, app_name, WS_OVERLAPPEDWINDOW,
-							xPos, yPos, window_width, window_height, NULL, NULL, hInstance, NULL);
+	hWnd = CreateWindowEx(WS_EX_APPWINDOW,
+	                      app_name,
+	                      app_name,
+	                      WS_OVERLAPPEDWINDOW,
+	                      xPos,
+	                      yPos,
+	                      window_width,
+	                      window_height,
+	                      nullptr,
+	                      nullptr,
+	                      hInstance,
+	                      nullptr);
 	if (!hWnd) {
 		OutputDebugString(L"Failed to create main window\n");
 		return false;
@@ -77,13 +82,13 @@ bool MainWindow::InitWindow(LPCWSTR name, u32 width, u32 height) {
 
 
 void MainWindow::Run() {
-	MSG   msg = { 0 };
+	MSG msg = {nullptr};
 	bool done = false;
 
 	// Main loop
 	while (!done) {
 
-		if (PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE)) {
+		if (PeekMessage(&msg, nullptr, NULL, NULL, PM_REMOVE)) {
 
 			if (msg.message == WM_QUIT) {
 				done = true;
@@ -108,7 +113,7 @@ LRESULT MainWindow::MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 			PostQuitMessage(0);
 			return 0;
 
-		// Send other messages to default message handler
+			// Send other messages to default message handler
 		default:
 			return DefWindowProc(hWnd, msg, wParam, lParam);
 	}

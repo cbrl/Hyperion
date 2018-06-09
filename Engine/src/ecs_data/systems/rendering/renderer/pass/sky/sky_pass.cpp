@@ -1,21 +1,20 @@
 #include "stdafx.h"
 #include "sky_pass.h"
-#include "rendering\render_state_mgr.h"
-#include "scene\scene.h"
+#include "rendering/render_state_mgr.h"
+#include "scene/scene.h"
 
-#include "compiled_headers\skybox.h"
-#include "compiled_headers\skybox_vs.h"
+#include "compiled_headers/skybox.h"
+#include "compiled_headers/skybox_vs.h"
 
 
 SkyPass::SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
-	, device_context(device_context)
-{
+	, device_context(device_context) {
 	vertex_shader = make_unique<VertexShader>(device,
-											  shader_skybox_vs,
-											  sizeof(shader_skybox_vs),
-											  VertexPosition::InputElements,
-											  VertexPosition::InputElementCount);
+	                                          shader_skybox_vs,
+	                                          sizeof(shader_skybox_vs),
+	                                          VertexPosition::InputElements,
+	                                          VertexPosition::InputElementCount);
 
 	pixel_shader = make_unique<PixelShader>(device, shader_skybox, sizeof(shader_skybox));
 }
@@ -29,7 +28,7 @@ void SkyPass::Render(const SkyBox& skybox) const {
 
 
 	// Bind the texture
-	auto texture = skybox.GetTexture();
+	const auto texture = skybox.GetTexture();
 	if (texture) texture->Bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
 
 

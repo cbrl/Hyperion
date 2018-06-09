@@ -1,23 +1,23 @@
 #include "stdafx.h"
 #include "camera_system.h"
-#include "engine\engine.h"
-#include "ecs_data\components\rendering\camera\perspective_camera.h"
-#include "ecs_data\components\rendering\camera\orthographic_camera.h"
+#include "engine/engine.h"
+#include "ecs_data/components/rendering/camera/perspective_camera.h"
+#include "ecs_data/components/rendering/camera/orthographic_camera.h"
 
 
 void CameraSystem::update(const Engine& engine) {
-	auto& ecs_engine     = engine.GetECS();
+	auto& ecs_engine = engine.GetECS();
 	auto& device_context = engine.GetRenderingMgr().GetDeviceContext();
 
 	ecs_engine.forEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-		handle64 owner       = camera.getOwner();
+		const handle64 owner = camera.getOwner();
 		const auto transform = ecs_engine.getComponent<CameraTransform>(owner);
 
 		if (!transform) return;
 
 
 		// Process movement
-		if (auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
+		if (const auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
 			ProcessMovement(engine, movement, transform);
 		}
 
@@ -28,21 +28,21 @@ void CameraSystem::update(const Engine& engine) {
 
 		// Update the camera's buffer
 		camera.UpdateBuffer(device_context,
-							transform->GetWorldOrigin(),
-							transform->GetWorldToObjectMatrix(),
-							camera.GetProjectionMatrix());
+		                    transform->GetWorldOrigin(),
+		                    transform->GetWorldToObjectMatrix(),
+		                    camera.GetProjectionMatrix());
 	});
 
 
 	ecs_engine.forEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
-		handle64 owner       = camera.getOwner();
+		const handle64 owner = camera.getOwner();
 		const auto transform = ecs_engine.getComponent<CameraTransform>(owner);
 
 		if (!transform) return;
 
 
 		// Process movement
-		if (auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
+		if (const auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
 			ProcessMovement(engine, movement, transform);
 		}
 
@@ -53,19 +53,19 @@ void CameraSystem::update(const Engine& engine) {
 
 		// Update the camera's buffer
 		camera.UpdateBuffer(device_context,
-							transform->GetWorldOrigin(),
-							transform->GetWorldToObjectMatrix(),
-							camera.GetProjectionMatrix());
+		                    transform->GetWorldOrigin(),
+		                    transform->GetWorldToObjectMatrix(),
+		                    camera.GetProjectionMatrix());
 	});
 }
 
 
-void CameraSystem::ProcessMovement(const Engine& engine, CameraMovement* movement, CameraTransform* transform) {
+void CameraSystem::ProcessMovement(const Engine& engine, CameraMovement* movement, CameraTransform* transform) const {
 
 	const auto& input = engine.GetInput();
 
-	int2  mouse_delta = input.GetMouseDelta();
-	float dt = engine.GetTimer().deltaTime();
+	const int2 mouse_delta = input.GetMouseDelta();
+	const float dt = engine.GetTimer().deltaTime();
 
 	float3 rotate_units(0.0f, 0.0f, 0.0f);
 	float3 move_units(0.0f, 0.0f, 0.0f);
@@ -133,7 +133,7 @@ void CameraSystem::ProcessMovement(const Engine& engine, CameraMovement* movemen
 }
 
 
-void CameraSystem::UpdateMovement(CameraMovement* mv, float3 units) {
+void CameraSystem::UpdateMovement(CameraMovement* mv, float3 units) const {
 
 	// Get the velocity
 	float3 velocity = mv->GetVelocity();
@@ -191,10 +191,11 @@ void CameraSystem::UpdateMovement(CameraMovement* mv, float3 units) {
 }
 
 
-void CameraSystem::Move(CameraMovement* mv, CameraTransform* transform, float dt) {
+void CameraSystem::Move(CameraMovement* mv, CameraTransform* transform, float dt) const {
 
-	XMVECTOR velocity_vec = XMLoadFloat3(&mv->GetVelocity());
-	float velocity_mag    = XMVectorGetX(XMVector3Length(velocity_vec));
+	const float3 velocity    = mv->GetVelocity();
+	XMVECTOR velocity_vec    = XMLoadFloat3(&velocity);
+	const float velocity_mag = XMVectorGetX(XMVector3Length(velocity_vec));
 
 	// Limit veloctiy to maximum
 	if (velocity_mag > mv->GetMaxVelocity()) {
@@ -221,7 +222,7 @@ void CameraSystem::Move(CameraMovement* mv, CameraTransform* transform, float dt
 }
 
 
-void CameraSystem::Decelerate(CameraMovement* mv, float delta_time) {
+void CameraSystem::Decelerate(CameraMovement* mv, float delta_time) const {
 
 	float decel_amount;
 	float3 velocity = mv->GetVelocity();

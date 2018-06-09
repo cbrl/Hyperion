@@ -1,26 +1,27 @@
 #pragma once
 
 #include <Windows.h>
-#include "datatypes\datatypes.h"
+#include "datatypes/datatypes.h"
 
 
 class MainWindow {
-	public:
-		MainWindow();
-		~MainWindow();
+public:
+	MainWindow();
+	virtual ~MainWindow() = default;
 
-		bool InitWindow(LPCWSTR name, u32 width, u32 height);
-		virtual void Run();
+	bool InitWindow(LPCWSTR name, u32 width, u32 height);
+	virtual void Run();
 
-		virtual LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT MsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
 
 
-	protected:
-		HINSTANCE hInstance;
-		HWND      hWnd;
-		LPCWSTR   app_name;
-		u32       window_width;
-		u32       window_height;
+protected:
+	HINSTANCE hInstance;
+	HWND hWnd;
+	LPCWSTR app_name;
+	u32 window_width;
+	u32 window_height;
 };
 
-static MainWindow *handle = nullptr;
+
+static MainWindow* handle = nullptr;

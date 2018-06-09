@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "light_pass.h"
-#include "engine\engine.h"
+#include "engine/engine.h"
 
 
 LightPass::LightPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
@@ -26,11 +26,11 @@ LightPass::LightPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 void XM_CALLCONV LightPass::Render(const Engine& engine, FXMMATRIX world_to_projection) {
 
 	auto& ecs_engine = engine.GetECS();
-	auto& scene      = engine.GetScene();
+	auto& scene = engine.GetScene();
 
 
 	// Update light buffers
-	UpdateDirectionalLightData(ecs_engine, world_to_projection);
+	UpdateDirectionalLightData(ecs_engine);
 	UpdatePointLightData(ecs_engine, world_to_projection);
 	UpdateSpotLightData(ecs_engine, world_to_projection);
 
@@ -40,7 +40,7 @@ void XM_CALLCONV LightPass::Render(const Engine& engine, FXMMATRIX world_to_proj
 	RenderShadowMaps(engine);
 
 	// Update light info buffer
-	UpdateData(ecs_engine, scene);
+	UpdateData(scene);
 
 	// Bind the buffers
 	BindBuffers();
@@ -66,23 +66,26 @@ void LightPass::BindBuffers() {
 
 
 	// Bind the shadow buffer SRVs
-	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, 1, directional_light_smaps->GetSRVAddress());
+	Pipeline::PS::BindSRVs(device_context,
+	                       SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS,
+	                       1,
+	                       directional_light_smaps->GetSRVAddress());
 	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_POINT_LIGHT_SHADOW_MAPS, 1, point_light_smaps->GetSRVAddress());
 	Pipeline::PS::BindSRVs(device_context, SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS, 1, spot_light_smaps->GetSRVAddress());
 }
 
 
-void LightPass::UpdateData(ECS& ecs_engine, Scene& scene) const {
+void LightPass::UpdateData(Scene& scene) const {
 
 	LightBuffer light_data;
 
 	light_data.num_directional_lights = static_cast<u32>(directional_lights.size());
-	light_data.num_point_lights       = static_cast<u32>(point_lights.size());
-	light_data.num_spot_lights        = static_cast<u32>(spot_lights.size());
+	light_data.num_point_lights = static_cast<u32>(point_lights.size());
+	light_data.num_spot_lights = static_cast<u32>(spot_lights.size());
 
 	light_data.num_shadow_directional_lights = static_cast<u32>(shadowed_directional_lights.size());
-	light_data.num_shadow_point_lights       = static_cast<u32>(shadowed_point_lights.size());
-	light_data.num_shadow_spot_lights        = static_cast<u32>(shadowed_spot_lights.size());
+	light_data.num_shadow_point_lights = static_cast<u32>(shadowed_point_lights.size());
+	light_data.num_shadow_spot_lights = static_cast<u32>(shadowed_spot_lights.size());
 
 	light_data.fog_color = scene.GetFog().color;
 	light_data.fog_start = scene.GetFog().start;
@@ -101,7 +104,7 @@ void LightPass::UpdateShadowMaps() {
 
 	// Directional Lights
 	{
-		const size_t size      = shadowed_directional_lights.size();
+		const size_t size = shadowed_directional_lights.size();
 		const size_t available = directional_light_smaps->GetMapCount();
 
 		if (size > available) {
@@ -113,7 +116,7 @@ void LightPass::UpdateShadowMaps() {
 
 	// Point Lights
 	{
-		const size_t size      = shadowed_point_lights.size();
+		const size_t size = shadowed_point_lights.size();
 		const size_t available = point_light_smaps->GetMapCount();
 
 		if (size > available) {
@@ -125,7 +128,7 @@ void LightPass::UpdateShadowMaps() {
 
 	// Spot Lights
 	{
-		const size_t size      = shadowed_spot_lights.size();
+		const size_t size = shadowed_spot_lights.size();
 		const size_t available = spot_light_smaps->GetMapCount();
 
 		if (size > available) {
@@ -137,7 +140,7 @@ void LightPass::UpdateShadowMaps() {
 }
 
 
-void XM_CALLCONV LightPass::UpdateDirectionalLightData(ECS& ecs_engine, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::UpdateDirectionalLightData(ECS& ecs_engine) {
 
 	// Temporary buffers
 	vector<DirectionalLightBuffer> buffers;
@@ -159,7 +162,7 @@ void XM_CALLCONV LightPass::UpdateDirectionalLightData(ECS& ecs_engine, FXMMATRI
 			XMStoreFloat3(&buffer.direction, transform->GetWorldAxisZ());
 			buffer.ambient_color = light.GetAmbientColor();
 			buffer.diffuse_color = light.GetDiffuseColor();
-			buffer.specular      = light.GetSpecular();
+			buffer.specular = light.GetSpecular();
 
 			buffers.push_back(std::move(buffer));
 		}
@@ -169,7 +172,7 @@ void XM_CALLCONV LightPass::UpdateDirectionalLightData(ECS& ecs_engine, FXMMATRI
 			XMStoreFloat3(&buffer.light_buffer.direction, transform->GetWorldAxisZ());
 			buffer.light_buffer.ambient_color = light.GetAmbientColor();
 			buffer.light_buffer.diffuse_color = light.GetDiffuseColor();
-			buffer.light_buffer.specular      = light.GetSpecular();
+			buffer.light_buffer.specular = light.GetSpecular();
 
 			shadow_buffers.push_back(std::move(buffer));
 		}
@@ -196,8 +199,8 @@ void XM_CALLCONV LightPass::UpdatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 
 	ecs_engine.forEachActive<PointLight>([&](PointLight& light) {
 
-		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
-		const auto light_to_world      = transform->GetObjectToWorldMatrix();
+		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
+		const auto light_to_world = transform->GetObjectToWorldMatrix();
 		const auto light_to_projection = light_to_world * world_to_projection;
 
 		// Camera rotations for the cube map
@@ -219,38 +222,38 @@ void XM_CALLCONV LightPass::UpdatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 			XMStoreFloat3(&buffer.position, transform->GetWorldOrigin());
 			buffer.ambient_color = light.GetAmbientColor();
 			buffer.diffuse_color = light.GetDiffuseColor();
-			buffer.specular      = light.GetSpecular();
-			buffer.attenuation   = light.GetAttenuation();
-			buffer.range         = light.GetRange();
+			buffer.specular = light.GetSpecular();
+			buffer.attenuation = light.GetAttenuation();
+			buffer.range = light.GetRange();
 
 			buffers.push_back(std::move(buffer));
 		}
 		else {
-			const auto world_to_light       = transform->GetWorldToObjectMatrix();
+			const auto world_to_light = transform->GetWorldToObjectMatrix();
 			const auto light_to_lprojection = light.GetLightToProjectionMatrix();
 
 			// Create the cameras
 			for (size_t i = 0; i < 6; ++i) {
 				LightCamera cam;
 				cam.world_to_light = world_to_light * rotations[i];
-				cam.light_to_proj  = light_to_lprojection;
+				cam.light_to_proj = light_to_lprojection;
 
 				point_light_cameras.push_back(std::move(cam));
 			}
 
 			// Create the buffer
 			ShadowedPointLightBuffer buffer;
-			
+
 			XMStoreFloat3(&buffer.light_buffer.position, transform->GetWorldOrigin());
 			buffer.light_buffer.ambient_color = light.GetAmbientColor();
 			buffer.light_buffer.diffuse_color = light.GetDiffuseColor();
-			buffer.light_buffer.specular      = light.GetSpecular();
-			buffer.light_buffer.attenuation   = light.GetAttenuation();
-			buffer.light_buffer.range         = light.GetRange();
+			buffer.light_buffer.specular = light.GetSpecular();
+			buffer.light_buffer.attenuation = light.GetAttenuation();
+			buffer.light_buffer.range = light.GetRange();
 
-			buffer.world_to_light    = XMMatrixTranspose(world_to_light);
+			buffer.world_to_light = XMMatrixTranspose(world_to_light);
 
-			float2 proj_values = { XMVectorGetZ(light_to_lprojection.r[2]), XMVectorGetZ(light_to_lprojection.r[3]) };
+			const float2 proj_values = {XMVectorGetZ(light_to_lprojection.r[2]), XMVectorGetZ(light_to_lprojection.r[3])};
 			buffer.projection_values = proj_values;
 
 			shadow_buffers.push_back(std::move(buffer));
@@ -278,8 +281,8 @@ void XM_CALLCONV LightPass::UpdateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 
 	ecs_engine.forEachActive<SpotLight>([&](SpotLight& light) {
 
-		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
-		const auto light_to_world      = transform->GetObjectToWorldMatrix();
+		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
+		const auto light_to_world = transform->GetObjectToWorldMatrix();
 		const auto light_to_projection = light_to_world * world_to_projection;
 
 		if (!Frustum(light_to_projection).Contains(light.GetAABB()))
@@ -292,23 +295,23 @@ void XM_CALLCONV LightPass::UpdateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 			XMStoreFloat3(&buffer.direction, transform->GetWorldAxisZ());
 			buffer.ambient_color = light.GetAmbientColor();
 			buffer.diffuse_color = light.GetDiffuseColor();
-			buffer.specular      = light.GetSpecular();
-			buffer.attenuation   = light.GetAttenuation();
-			buffer.cos_umbra     = light.GetUmbra();
-			buffer.cos_penumbra  = light.GetPenumbra();
-			buffer.range         = light.GetRange();
+			buffer.specular = light.GetSpecular();
+			buffer.attenuation = light.GetAttenuation();
+			buffer.cos_umbra = light.GetUmbra();
+			buffer.cos_penumbra = light.GetPenumbra();
+			buffer.range = light.GetRange();
 
 			buffers.push_back(std::move(buffer));
 		}
 		else {
-			const auto world_to_light       = transform->GetWorldToObjectMatrix();
+			const auto world_to_light = transform->GetWorldToObjectMatrix();
 			const auto light_to_lprojection = light.GetLightToProjectionMatrix();
 			const auto world_to_lprojection = world_to_light * light_to_lprojection;
 
 			// Create the camera
 			LightCamera cam;
 			cam.world_to_light = world_to_light;
-			cam.light_to_proj  = light_to_lprojection;
+			cam.light_to_proj = light_to_lprojection;
 
 			spot_light_cameras.push_back(std::move(cam));
 
@@ -320,11 +323,11 @@ void XM_CALLCONV LightPass::UpdateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 			XMStoreFloat3(&buffer.light_buffer.direction, transform->GetWorldAxisZ());
 			buffer.light_buffer.ambient_color = light.GetAmbientColor();
 			buffer.light_buffer.diffuse_color = light.GetDiffuseColor();
-			buffer.light_buffer.specular      = light.GetSpecular();
-			buffer.light_buffer.attenuation   = light.GetAttenuation();
-			buffer.light_buffer.range         = light.GetRange();
-			buffer.light_buffer.cos_umbra     = light.GetUmbra();
-			buffer.light_buffer.cos_penumbra  = light.GetPenumbra();
+			buffer.light_buffer.specular = light.GetSpecular();
+			buffer.light_buffer.attenuation = light.GetAttenuation();
+			buffer.light_buffer.range = light.GetRange();
+			buffer.light_buffer.cos_umbra = light.GetUmbra();
+			buffer.light_buffer.cos_penumbra = light.GetPenumbra();
 
 			buffer.world_to_projection = XMMatrixTranspose(world_to_lprojection);
 

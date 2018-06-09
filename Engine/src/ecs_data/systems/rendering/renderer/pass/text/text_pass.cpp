@@ -7,7 +7,7 @@ TextPass::TextPass(ID3D11DeviceContext& device_context) {
 }
 
 
-void TextPass::Render(Scene& scene) {
+void TextPass::Render(Scene& scene) const {
 
 	const auto& texts = scene.GetTexts();
 
@@ -20,7 +20,11 @@ void TextPass::Render(Scene& scene) {
 
 		// Draw the text
 		sprite_batch->Begin();
-		font.DrawString(sprite_batch.get(), text.GetText().data(), text.GetPosition(), text.GetColor(), text.GetRotation());
+		font.DrawString(sprite_batch.get(),
+		                text.GetText().data(),
+		                text.GetPosition(),
+		                text.GetColor(),
+		                text.GetRotation());
 		sprite_batch->End();
 	}
 }

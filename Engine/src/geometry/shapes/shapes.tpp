@@ -13,59 +13,50 @@
 
 using namespace DirectX;
 
-namespace Shapes
-{
-    const float SQRT2 = 1.41421356237309504880f;
-    const float SQRT3 = 1.73205080756887729352f;
-    const float SQRT6 = 2.44948974278317809820f;
 
-    inline void CheckIndexOverflow(size_t value)
-    {
-        // Use >=, not > comparison, because D3D level 10_x+ hardware does not support 0xFFFFFFFF index values.
-        if (value >= UINT32_MAX)
-            throw std::exception("Index value out of range: cannot tesselate primitive so finely");
-    }
+namespace Shapes {
+	const float SQRT2 = 1.41421356237309504880f;
+	const float SQRT3 = 1.73205080756887729352f;
+	const float SQRT6 = 2.44948974278317809820f;
 
-
-    // Collection types used when generating the geometry.
-    inline void index_push_back(vector<u32>& indices, size_t value)
-    {
-        CheckIndexOverflow(value);
-        indices.push_back((u32)value);
-    }
+	inline void CheckIndexOverflow(size_t value) {
+		// Use >=, not > comparison, because D3D level 10_x+ hardware does not support 0xFFFFFFFF index values.
+		if (value >= UINT32_MAX)
+			throw std::exception("Index value out of range: cannot tesselate primitive so finely");
+	}
 
 
-    // Helper for flipping winding of geometric primitives for LH vs. RH coords
+	// Collection types used when generating the geometry.
+	inline void index_push_back(vector<u32>& indices, size_t value) {
+		CheckIndexOverflow(value);
+		indices.push_back(static_cast<u32>(value));
+	}
+
+
+	// Helper for flipping winding of geometric primitives for LH vs. RH coords
 	template<typename VertexT>
-    inline void ReverseWinding(vector<u32>& indices, vector<VertexT>& vertices)
-    {
-        assert((indices.size() % 3) == 0);
-        for (auto it = indices.begin(); it != indices.end(); it += 3)
-        {
-            std::swap(*it, *(it + 2));
-        }
+	void ReverseWinding(vector<u32>& indices, vector<VertexT>& vertices) {
+		assert((indices.size() % 3) == 0);
+		for (auto it = indices.begin(); it != indices.end(); it += 3) {
+			std::swap(*it, *(it + 2));
+		}
 
-		if constexpr (VertexT::hasTexture())
-		{
-			for (auto it = vertices.begin(); it != vertices.end(); ++it)
-			{
-			float2 texCoord = it->texCoord;
-			texCoord.x = 1.0f - texCoord.x;
+		if constexpr (VertexT::hasTexture()) {
+			for (auto it = vertices.begin(); it != vertices.end(); ++it) {
+				float2 texCoord = it->texCoord;
+				texCoord.x = 1.0f - texCoord.x;
 
-			it->texCoord = texCoord;
+				it->texCoord = texCoord;
 			}
 		}
-    }
+	}
 
 
-    // Helper for inverting normals of geometric primitives for 'inside' vs. 'outside' viewing
+	// Helper for inverting normals of geometric primitives for 'inside' vs. 'outside' viewing
 	template<typename VertexT>
-    inline void InvertNormals(vector<VertexT>& vertices)
-    {
-		if constexpr (VertexT::hasNormal())
-		{
-			for (auto it = vertices.begin(); it != vertices.end(); ++it)
-			{
+	void InvertNormals(vector<VertexT>& vertices) {
+		if constexpr (VertexT::hasNormal()) {
+			for (auto it = vertices.begin(); it != vertices.end(); ++it) {
 				float3 normal = it->normal;
 				normal.x = -normal.x;
 				normal.y = -normal.y;
@@ -74,22 +65,19 @@ namespace Shapes
 				it->normal = normal;
 			}
 		}
-    }
-
+	}
 
 
 	//--------------------------------------------------------------------------------------
 	// Cube (aka a Hexahedron) or Box
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeCube(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords, bool invertn)
-	{
+	void ComputeCube(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords, bool invertn) {
 		ComputeBox(vertices, indices, float3(size, size, size), rhcoords, invertn);
 	}
 
 	template<typename VertexT>
-	void ComputeBox(vector<VertexT>& vertices, vector<u32>& indices, const float3& size, bool rhcoords, bool invertn)
-	{
+	void ComputeBox(vector<VertexT>& vertices, vector<u32>& indices, const float3& size, bool rhcoords, bool invertn) {
 		vertices.clear();
 		indices.clear();
 
@@ -98,38 +86,37 @@ namespace Shapes
 
 		static const XMVECTORF32 faceNormals[FaceCount] =
 		{
-			{ { {  0,  0,  1, 0 } } },
-			{ { {  0,  0, -1, 0 } } },
-			{ { {  1,  0,  0, 0 } } },
-			{ { { -1,  0,  0, 0 } } },
-			{ { {  0,  1,  0, 0 } } },
-			{ { {  0, -1,  0, 0 } } },
+			{{{0, 0, 1, 0}}},
+			{{{0, 0, -1, 0}}},
+			{{{1, 0, 0, 0}}},
+			{{{-1, 0, 0, 0}}},
+			{{{0, 1, 0, 0}}},
+			{{{0, -1, 0, 0}}},
 		};
 
 		static const XMVECTORF32 texCoords[4] =
 		{
-			{ { { 1, 0, 0, 0 } } },
-			{ { { 1, 1, 0, 0 } } },
-			{ { { 0, 1, 0, 0 } } },
-			{ { { 0, 0, 0, 0 } } },
+			{{{1, 0, 0, 0}}},
+			{{{1, 1, 0, 0}}},
+			{{{0, 1, 0, 0}}},
+			{{{0, 0, 0, 0}}},
 		};
 
 		XMVECTOR tsize = XMLoadFloat3(&size);
 		tsize = XMVectorDivide(tsize, g_XMTwo);
 
 		// Create each face in turn.
-		for (int i = 0; i < FaceCount; i++)
-		{
-			XMVECTOR normal = faceNormals[i];
+		for (int i = 0; i < FaceCount; i++) {
+			const XMVECTOR normal = faceNormals[i];
 
 			// Get two vectors perpendicular both to the face normal and to each other.
-			XMVECTOR basis = (i >= 4) ? g_XMIdentityR2 : g_XMIdentityR1;
+			const XMVECTOR basis = (i >= 4) ? g_XMIdentityR2 : g_XMIdentityR1;
 
-			XMVECTOR side1 = XMVector3Cross(normal, basis);
-			XMVECTOR side2 = XMVector3Cross(normal, side1);
+			const XMVECTOR side1 = XMVector3Cross(normal, basis);
+			const XMVECTOR side2 = XMVector3Cross(normal, side1);
 
 			// Six indices (two triangles) per face.
-			size_t vbase = vertices.size();
+			const size_t vbase = vertices.size();
 			index_push_back(indices, vbase + 0);
 			index_push_back(indices, vbase + 1);
 			index_push_back(indices, vbase + 2);
@@ -174,35 +161,37 @@ namespace Shapes
 	// Sphere
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeSphere(vector<VertexT>& vertices, vector<u32>& indices, float diameter, size_t tessellation, bool rhcoords, bool invertn)
-	{
+	void ComputeSphere(vector<VertexT>& vertices,
+	                   vector<u32>& indices,
+	                   float diameter,
+	                   size_t tessellation,
+	                   bool rhcoords,
+	                   bool invertn) {
 		vertices.clear();
 		indices.clear();
 
 		if (tessellation < 3)
 			throw std::out_of_range("tesselation parameter out of range");
 
-		size_t verticalSegments = tessellation;
-		size_t horizontalSegments = tessellation * 2;
+		const size_t verticalSegments = tessellation;
+		const size_t horizontalSegments = tessellation * 2;
 
-		float radius = diameter / 2;
+		const float radius = diameter / 2;
 
 		// Create rings of vertices at progressively higher latitudes.
-		for (size_t i = 0; i <= verticalSegments; i++)
-		{
-			float v = 1 - (float)i / verticalSegments;
+		for (size_t i = 0; i <= verticalSegments; i++) {
+			const float v = 1 - static_cast<float>(i) / verticalSegments;
 
-			float latitude = (i * XM_PI / verticalSegments) - XM_PIDIV2;
+			const float latitude = (i * XM_PI / verticalSegments) - XM_PIDIV2;
 			float dy, dxz;
 
 			XMScalarSinCos(&dy, &dxz, latitude);
 
 			// Create a single ring of vertices at this latitude.
-			for (size_t j = 0; j <= horizontalSegments; j++)
-			{
-				float u = (float)j / horizontalSegments;
+			for (size_t j = 0; j <= horizontalSegments; j++) {
+				const float u = static_cast<float>(j) / horizontalSegments;
 
-				float longitude = j * XM_2PI / horizontalSegments;
+				const float longitude = j * XM_2PI / horizontalSegments;
 				float dx, dz;
 
 				XMScalarSinCos(&dx, &dz, longitude);
@@ -210,8 +199,8 @@ namespace Shapes
 				dx *= dxz;
 				dz *= dxz;
 
-				XMVECTOR normal = XMVectorSet(dx, dy, dz, 0);
-				XMVECTOR texCoord = XMVectorSet(u, v, 0, 0);
+				const XMVECTOR normal = XMVectorSet(dx, dy, dz, 0);
+				const XMVECTOR texCoord = XMVectorSet(u, v, 0, 0);
 
 				vertices.push_back(VertexT());
 				XMStoreFloat3(&vertices.back().position, normal * radius);
@@ -223,14 +212,12 @@ namespace Shapes
 		}
 
 		// Fill the index buffer with triangles joining each pair of latitude rings.
-		size_t stride = horizontalSegments + 1;
+		const size_t stride = horizontalSegments + 1;
 
-		for (size_t i = 0; i < verticalSegments; i++)
-		{
-			for (size_t j = 0; j <= horizontalSegments; j++)
-			{
-				size_t nextI = i + 1;
-				size_t nextJ = (j + 1) % stride;
+		for (size_t i = 0; i < verticalSegments; i++) {
+			for (size_t j = 0; j <= horizontalSegments; j++) {
+				const size_t nextI = i + 1;
+				const size_t nextJ = (j + 1) % stride;
 
 				index_push_back(indices, i * stride + j);
 				index_push_back(indices, nextI * stride + j);
@@ -255,8 +242,11 @@ namespace Shapes
 	// Geodesic sphere
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeGeoSphere(vector<VertexT>& vertices, vector<u32>& indices, float diameter, size_t tessellation, bool rhcoords)
-	{
+	void ComputeGeoSphere(vector<VertexT>& vertices,
+	                      vector<u32>& indices,
+	                      float diameter,
+	                      size_t tessellation,
+	                      bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
@@ -266,8 +256,7 @@ namespace Shapes
 
 		// Makes an undirected edge. Rather than overloading comparison operators to give us the (a,b)==(b,a) property,
 		// we'll just ensure that the larger of the two goes first. This'll simplify things greatly.
-		auto makeUndirectedEdge = [](u32 a, u32 b)
-		{
+		auto makeUndirectedEdge = [](u32 a, u32 b) {
 			return std::make_pair(std::max(a, b), std::min(a, b));
 		};
 
@@ -280,12 +269,12 @@ namespace Shapes
 		static const float3 OctahedronVertices[] =
 		{
 			// when looking down the negative z-axis (into the screen)
-			float3(0,  1,  0), // 0 top
-			float3(0,  0, -1), // 1 front
-			float3(1,  0,  0), // 2 right
-			float3(0,  0,  1), // 3 back
-			float3(-1,  0,  0), // 4 left
-			float3(0, -1,  0), // 5 bottom
+			float3(0, 1, 0), // 0 top
+			float3(0, 0, -1), // 1 front
+			float3(1, 0, 0), // 2 right
+			float3(0, 0, 1), // 3 back
+			float3(-1, 0, 0), // 4 left
+			float3(0, -1, 0), // 5 bottom
 		};
 		static const u32 OctahedronIndices[] =
 		{
@@ -313,8 +302,7 @@ namespace Shapes
 		const u32 northPoleIndex = 0;
 		const u32 southPoleIndex = 5;
 
-		for (size_t iSubdivision = 0; iSubdivision < tessellation; ++iSubdivision)
-		{
+		for (size_t iSubdivision = 0; iSubdivision < tessellation; ++iSubdivision) {
 			assert(indices.size() % 3 == 0); // sanity
 
 			// We use this to keep track of which edges have already been subdivided.
@@ -324,8 +312,7 @@ namespace Shapes
 			vector<u32> newIndices;
 
 			const size_t triangleCount = indices.size() / 3;
-			for (size_t iTriangle = 0; iTriangle < triangleCount; ++iTriangle)
-			{
+			for (size_t iTriangle = 0; iTriangle < triangleCount; ++iTriangle) {
 				// For each edge on this triangle, create a new vertex in the middle of that edge.
 				// The winding order of the triangles we output are the same as the winding order of the inputs.
 
@@ -343,30 +330,28 @@ namespace Shapes
 				u32 iv20; // index of v20
 
 				// Function that, when given the index of two vertices, creates a new vertex at the midpoint of those vertices.
-				auto divideEdge = [&](u32 i0, u32 i1, float3& outVertex, u32& outIndex)
-				{
+				auto divideEdge = [&](u32 i0, u32 i1, float3& outVertex, u32& outIndex) {
 					const UndirectedEdge edge = makeUndirectedEdge(i0, i1);
 
 					// Check to see if we've already generated this vertex
-					auto it = subdividedEdges.find(edge);
-					if (it != subdividedEdges.end())
-					{
+					const auto it = subdividedEdges.find(edge);
+					if (it != subdividedEdges.end()) {
 						// We've already generated this vertex before
 						outIndex = it->second; // the index of this vertex
 						outVertex = vertexPositions[outIndex]; // and the vertex itself
 					}
-					else
-					{
+					else {
 						// Haven't generated this vertex before: so add it now
 
 						// outVertex = (vertices[i0] + vertices[i1]) / 2
 						XMStoreFloat3(
-							&outVertex,
-							XMVectorScale(
-							XMVectorAdd(XMLoadFloat3(&vertexPositions[i0]), XMLoadFloat3(&vertexPositions[i1])),
-							0.5f
-						)
-						);
+						              &outVertex,
+						              XMVectorScale(
+						                            XMVectorAdd(XMLoadFloat3(&vertexPositions[i0]),
+						                                        XMLoadFloat3(&vertexPositions[i1])),
+						                            0.5f
+						                           )
+						             );
 
 						outIndex = static_cast<u32>(vertexPositions.size());
 						CheckIndexOverflow(outIndex);
@@ -392,10 +377,10 @@ namespace Shapes
 				//       v12
 				const u32 indicesToAdd[] =
 				{
-						iv0, iv01, iv20, // a
-					iv20, iv12,  iv2, // b
+					iv0, iv01, iv20, // a
+					iv20, iv12, iv2, // b
 					iv20, iv01, iv12, // c
-					iv01,  iv1, iv12, // d
+					iv01, iv1, iv12, // d
 				};
 				newIndices.insert(newIndices.end(), std::begin(indicesToAdd), std::end(indicesToAdd));
 			}
@@ -405,24 +390,23 @@ namespace Shapes
 
 		// Now that we've completed subdivision, fill in the final vertex collection
 		vertices.reserve(vertexPositions.size());
-		for (auto it = vertexPositions.begin(); it != vertexPositions.end(); ++it)
-		{
+		for (auto it = vertexPositions.begin(); it != vertexPositions.end(); ++it) {
 			auto vertexValue = *it;
 
-			auto normal = XMVector3Normalize(XMLoadFloat3(&vertexValue));
-			auto pos = XMVectorScale(normal, radius);
+			const auto normal = XMVector3Normalize(XMLoadFloat3(&vertexValue));
+			const auto pos = XMVectorScale(normal, radius);
 
 			float3 normalFloat3;
 			XMStoreFloat3(&normalFloat3, normal);
 
 			// calculate texture coordinates for this vertex
-			float longitude = atan2(normalFloat3.x, -normalFloat3.z);
-			float latitude = acos(normalFloat3.y);
+			const float longitude = atan2(normalFloat3.x, -normalFloat3.z);
+			const float latitude = acos(normalFloat3.y);
 
-			float u = longitude / XM_2PI + 0.5f;
-			float v = latitude / XM_PI;
+			const float u = longitude / XM_2PI + 0.5f;
+			const float v = latitude / XM_PI;
 
-			auto texcoord = XMVectorSet(1.0f - u, v, 0.0f, 0.0f);
+			const auto texcoord = XMVectorSet(1.0f - u, v, 0.0f, 0.0f);
 
 			vertices.push_back(VertexT());
 			XMStoreFloat3(&vertices.back().position, pos);
@@ -443,18 +427,19 @@ namespace Shapes
 		// y=1 and ending at y=-1, and sweeping across the range of z=0 to z=1. x stays zero. It's along this edge that we
 		// need to duplicate our vertices - and provide the correct texture coordinates.
 		if constexpr (VertexT::hasTexture()) {
-			size_t preFixupVertexCount = vertices.size();
-			for (size_t i = 0; i < preFixupVertexCount; ++i)
-			{
+			const size_t preFixupVertexCount = vertices.size();
+			for (size_t i = 0; i < preFixupVertexCount; ++i) {
 				// This vertex is on the prime meridian if position.x and texcoord.u are both zero (allowing for small epsilon).
-				bool isOnPrimeMeridian = XMVector2NearEqual(
-					XMVectorSet(vertices[i].position.x, vertices[i].texCoord.x, 0.0f, 0.0f),
-					XMVectorZero(),
-					XMVectorSplatEpsilon());
+				const bool isOnPrimeMeridian = XMVector2NearEqual(
+				                                            XMVectorSet(vertices[i].position.x,
+				                                                        vertices[i].texCoord.x,
+				                                                        0.0f,
+				                                                        0.0f),
+				                                            XMVectorZero(),
+				                                            XMVectorSplatEpsilon());
 
-				if (isOnPrimeMeridian)
-				{
-					size_t newIndex = vertices.size(); // the index of this vertex that we're about to add
+				if (isOnPrimeMeridian) {
+					const size_t newIndex = vertices.size(); // the index of this vertex that we're about to add
 					CheckIndexOverflow(newIndex);
 
 					// copy this vertex, correct the texture coordinate, and add the vertex
@@ -463,26 +448,21 @@ namespace Shapes
 					vertices.push_back(v);
 
 					// Now find all the triangles which contain this vertex and update them if necessary
-					for (size_t j = 0; j < indices.size(); j += 3)
-					{
+					for (size_t j = 0; j < indices.size(); j += 3) {
 						u32* triIndex0 = &indices[j + 0];
 						u32* triIndex1 = &indices[j + 1];
 						u32* triIndex2 = &indices[j + 2];
 
-						if (*triIndex0 == i)
-						{
+						if (*triIndex0 == i) {
 							// nothing; just keep going
 						}
-						else if (*triIndex1 == i)
-						{
+						else if (*triIndex1 == i) {
 							std::swap(triIndex0, triIndex1); // swap the pointers (not the values)
 						}
-						else if (*triIndex2 == i)
-						{
+						else if (*triIndex2 == i) {
 							std::swap(triIndex0, triIndex2); // swap the pointers (not the values)
 						}
-						else
-						{
+						else {
 							// this triangle doesn't use the vertex we're interested in
 							continue;
 						}
@@ -498,8 +478,7 @@ namespace Shapes
 						// check the other two vertices to see if we might need to fix this triangle
 
 						if (abs(v0.texCoord.x - v1.texCoord.x) > 0.5f ||
-							abs(v0.texCoord.x - v2.texCoord.x) > 0.5f)
-						{
+						    abs(v0.texCoord.x - v2.texCoord.x) > 0.5f) {
 							// yep; replace the specified index to point to the new, corrected vertex
 							*triIndex0 = static_cast<u32>(newIndex);
 						}
@@ -513,40 +492,34 @@ namespace Shapes
 		// onto a single point. In general there's no real way to do that right. But to match the behavior of non-geodesic
 		// spheres, we need to duplicate the pole vertex for every triangle that uses it. This will introduce seams near the
 		// poles, but reduce stretching.
-		auto fixPole = [&](size_t poleIndex)
-		{
+		auto fixPole = [&](size_t poleIndex) {
 			if constexpr (VertexT::hasTexture()) {
 				auto poleVertex = vertices[poleIndex];
 				bool overwrittenPoleVertex = false; // overwriting the original pole vertex saves us one vertex
 
-				for (size_t i = 0; i < indices.size(); i += 3)
-				{
+				for (size_t i = 0; i < indices.size(); i += 3) {
 					// These pointers point to the three indices which make up this triangle. pPoleIndex is the pointer to the
 					// entry in the index array which represents the pole index, and the other two pointers point to the other
 					// two indices making up this triangle.
 					u32* pPoleIndex;
 					u32* pOtherIndex0;
 					u32* pOtherIndex1;
-					if (indices[i + 0] == poleIndex)
-					{
+					if (indices[i + 0] == poleIndex) {
 						pPoleIndex = &indices[i + 0];
 						pOtherIndex0 = &indices[i + 1];
 						pOtherIndex1 = &indices[i + 2];
 					}
-					else if (indices[i + 1] == poleIndex)
-					{
+					else if (indices[i + 1] == poleIndex) {
 						pPoleIndex = &indices[i + 1];
 						pOtherIndex0 = &indices[i + 2];
 						pOtherIndex1 = &indices[i + 0];
 					}
-					else if (indices[i + 2] == poleIndex)
-					{
+					else if (indices[i + 2] == poleIndex) {
 						pPoleIndex = &indices[i + 2];
 						pOtherIndex0 = &indices[i + 0];
 						pOtherIndex1 = &indices[i + 1];
 					}
-					else
-					{
+					else {
 						continue;
 					}
 
@@ -558,13 +531,11 @@ namespace Shapes
 					newPoleVertex.texCoord.x = (otherVertex0.texCoord.x + otherVertex1.texCoord.x) / 2;
 					newPoleVertex.texCoord.y = poleVertex.texCoord.y;
 
-					if (!overwrittenPoleVertex)
-					{
+					if (!overwrittenPoleVertex) {
 						vertices[poleIndex] = newPoleVertex;
 						overwrittenPoleVertex = true;
 					}
-					else
-					{
+					else {
 						CheckIndexOverflow(vertices.size());
 
 						*pPoleIndex = static_cast<u32>(vertices.size());
@@ -574,7 +545,7 @@ namespace Shapes
 			}
 		};
 
-		
+
 		fixPole(northPoleIndex);
 		fixPole(southPoleIndex);
 
@@ -587,48 +558,47 @@ namespace Shapes
 	//--------------------------------------------------------------------------------------
 	// Cylinder / Cone
 	//--------------------------------------------------------------------------------------
-	namespace
-	{
+	namespace {
 		// Helper computes a point on a unit circle, aligned to the x/z plane and centered on the origin.
-		inline XMVECTOR GetCircleVector(size_t i, size_t tessellation)
-		{
-			float angle = i * XM_2PI / tessellation;
+		XMVECTOR GetCircleVector(size_t i, size_t tessellation) {
+			const float angle = i * XM_2PI / tessellation;
 			float dx, dz;
 
 			XMScalarSinCos(&dx, &dz, angle);
 
-			XMVECTORF32 v = { { { dx, 0, dz, 0 } } };
+			const XMVECTORF32 v = {{{dx, 0, dz, 0}}};
 			return v;
 		}
 
-		inline XMVECTOR GetCircleTangent(size_t i, size_t tessellation)
-		{
-			float angle = (i * XM_2PI / tessellation) + XM_PIDIV2;
+		XMVECTOR GetCircleTangent(size_t i, size_t tessellation) {
+			const float angle = (i * XM_2PI / tessellation) + XM_PIDIV2;
 			float dx, dz;
 
 			XMScalarSinCos(&dx, &dz, angle);
 
-			XMVECTORF32 v = { { { dx, 0, dz, 0 } } };
+			const XMVECTORF32 v = {{{dx, 0, dz, 0}}};
 			return v;
 		}
 
 
 		// Helper creates a triangle fan to close the end of a cylinder / cone
 		template<typename VertexT>
-		void CreateCylinderCap(vector<VertexT>& vertices, vector<u32>& indices, size_t tessellation, float height, float radius, bool isTop)
-		{
+		void CreateCylinderCap(vector<VertexT>& vertices,
+		                       vector<u32>& indices,
+		                       size_t tessellation,
+		                       float height,
+		                       float radius,
+		                       bool isTop) {
 			// Create cap indices.
-			for (size_t i = 0; i < tessellation - 2; i++)
-			{
+			for (size_t i = 0; i < tessellation - 2; i++) {
 				size_t i1 = (i + 1) % tessellation;
 				size_t i2 = (i + 2) % tessellation;
 
-				if (isTop)
-				{
+				if (isTop) {
 					std::swap(i1, i2);
 				}
 
-				size_t vbase = vertices.size();
+				const size_t vbase = vertices.size();
 				index_push_back(indices, vbase);
 				index_push_back(indices, vbase + i1);
 				index_push_back(indices, vbase + i2);
@@ -638,20 +608,20 @@ namespace Shapes
 			XMVECTOR normal = g_XMIdentityR1;
 			XMVECTOR textureScale = g_XMNegativeOneHalf;
 
-			if (!isTop)
-			{
+			if (!isTop) {
 				normal = -normal;
 				textureScale *= g_XMNegateX;
 			}
 
 			// Create cap vertices.
-			for (size_t i = 0; i < tessellation; i++)
-			{
-				XMVECTOR circleVector = GetCircleVector(i, tessellation);
+			for (size_t i = 0; i < tessellation; i++) {
+				const XMVECTOR circleVector = GetCircleVector(i, tessellation);
 
-				XMVECTOR position = (circleVector * radius) + (normal * height);
+				const XMVECTOR position = (circleVector * radius) + (normal * height);
 
-				XMVECTOR texCoord = XMVectorMultiplyAdd(XMVectorSwizzle<0, 2, 3, 3>(circleVector), textureScale, g_XMOneHalf);
+				const XMVECTOR texCoord = XMVectorMultiplyAdd(XMVectorSwizzle<0, 2, 3, 3>(circleVector),
+				                                        textureScale,
+				                                        g_XMOneHalf);
 
 				vertices.push_back(VertexT());
 				XMStoreFloat3(&vertices.back().position, position);
@@ -663,9 +633,14 @@ namespace Shapes
 		}
 	}
 
+
 	template<typename VertexT>
-	void ComputeCylinder(vector<VertexT>& vertices, vector<u32>& indices, float diameter, float height, size_t tessellation, bool rhcoords)
-	{
+	void ComputeCylinder(vector<VertexT>& vertices,
+	                     vector<u32>& indices,
+	                     float diameter,
+	                     float height,
+	                     size_t tessellation,
+	                     bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
@@ -674,21 +649,20 @@ namespace Shapes
 
 		height /= 2;
 
-		XMVECTOR topOffset = g_XMIdentityR1 * height;
+		const XMVECTOR topOffset = g_XMIdentityR1 * height;
 
 		float radius = diameter / 2;
-		size_t stride = tessellation + 1;
+		const size_t stride = tessellation + 1;
 
 		// Create a ring of triangles around the outside of the cylinder.
-		for (size_t i = 0; i <= tessellation; i++)
-		{
-			XMVECTOR normal = GetCircleVector(i, tessellation);
+		for (size_t i = 0; i <= tessellation; i++) {
+			const XMVECTOR normal = GetCircleVector(i, tessellation);
 
-			XMVECTOR sideOffset = normal * radius;
+			const XMVECTOR sideOffset = normal * radius;
 
-			float u = (float)i / tessellation;
+			float u = static_cast<float>(i) / tessellation;
 
-			XMVECTOR texCoord = XMLoadFloat(&u);
+			const XMVECTOR texCoord = XMLoadFloat(&u);
 
 			vertices.resize(vertices.size() + 2);
 
@@ -727,8 +701,12 @@ namespace Shapes
 
 	// Creates a cone primitive.
 	template<typename VertexT>
-	void ComputeCone(vector<VertexT>& vertices, vector<u32>& indices, float diameter, float height, size_t tessellation, bool rhcoords)
-	{
+	void ComputeCone(vector<VertexT>& vertices,
+	                 vector<u32>& indices,
+	                 float diameter,
+	                 float height,
+	                 size_t tessellation,
+	                 bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
@@ -737,23 +715,22 @@ namespace Shapes
 
 		height /= 2;
 
-		XMVECTOR topOffset = g_XMIdentityR1 * height;
+		const XMVECTOR topOffset = g_XMIdentityR1 * height;
 
 		float radius = diameter / 2;
-		size_t stride = tessellation + 1;
+		const size_t stride = tessellation + 1;
 
 		// Create a ring of triangles around the outside of the cone.
-		for (size_t i = 0; i <= tessellation; i++)
-		{
-			XMVECTOR circlevec = GetCircleVector(i, tessellation);
+		for (size_t i = 0; i <= tessellation; i++) {
+			const XMVECTOR circlevec = GetCircleVector(i, tessellation);
 
-			XMVECTOR sideOffset = circlevec * radius;
+			const XMVECTOR sideOffset = circlevec * radius;
 
-			float u = (float)i / tessellation;
+			float u = static_cast<float>(i) / tessellation;
 
-			XMVECTOR texCoord = XMLoadFloat(&u);
+			const XMVECTOR texCoord = XMLoadFloat(&u);
 
-			XMVECTOR pt = sideOffset - topOffset;
+			const XMVECTOR pt = sideOffset - topOffset;
 
 			XMVECTOR normal = XMVector3Cross(GetCircleTangent(i, tessellation), topOffset - pt);
 			normal = XMVector3Normalize(normal);
@@ -792,33 +769,35 @@ namespace Shapes
 	// Torus
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeTorus(vector<VertexT>& vertices, vector<u32>& indices, float diameter, float thickness, size_t tessellation, bool rhcoords)
-	{
+	void ComputeTorus(vector<VertexT>& vertices,
+	                  vector<u32>& indices,
+	                  float diameter,
+	                  float thickness,
+	                  size_t tessellation,
+	                  bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
 		if (tessellation < 3)
 			throw std::out_of_range("tesselation parameter out of range");
 
-		size_t stride = tessellation + 1;
+		const size_t stride = tessellation + 1;
 
 		// First we loop around the main ring of the torus.
-		for (size_t i = 0; i <= tessellation; i++)
-		{
-			float u = (float)i / tessellation;
+		for (size_t i = 0; i <= tessellation; i++) {
+			const float u = static_cast<float>(i) / tessellation;
 
-			float outerAngle = i * XM_2PI / tessellation - XM_PIDIV2;
+			const float outerAngle = i * XM_2PI / tessellation - XM_PIDIV2;
 
 			// Create a transform matrix that will align geometry to
 			// slice perpendicularly though the current ring position.
-			XMMATRIX transform = XMMatrixTranslation(diameter / 2, 0, 0) * XMMatrixRotationY(outerAngle);
+			const XMMATRIX transform = XMMatrixTranslation(diameter / 2, 0, 0) * XMMatrixRotationY(outerAngle);
 
 			// Now we loop along the other axis, around the side of the tube.
-			for (size_t j = 0; j <= tessellation; j++)
-			{
-				float v = 1 - (float)j / tessellation;
+			for (size_t j = 0; j <= tessellation; j++) {
+				const float v = 1 - static_cast<float>(j) / tessellation;
 
-				float innerAngle = j * XM_2PI / tessellation + XM_PI;
+				const float innerAngle = j * XM_2PI / tessellation + XM_PI;
 				float dx, dy;
 
 				XMScalarSinCos(&dy, &dx, innerAngle);
@@ -826,7 +805,7 @@ namespace Shapes
 				// Create a vertex.
 				XMVECTOR normal = XMVectorSet(dx, dy, 0, 0);
 				XMVECTOR position = normal * thickness / 2;
-				XMVECTOR texCoord = XMVectorSet(u, v, 0, 0);
+				const XMVECTOR texCoord = XMVectorSet(u, v, 0, 0);
 
 				position = XMVector3Transform(position, transform);
 				normal = XMVector3TransformNormal(normal, transform);
@@ -839,8 +818,8 @@ namespace Shapes
 					XMStoreFloat2(&vertices.back().texCoord, texCoord);
 
 				// And create indices for two triangles.
-				size_t nextI = (i + 1) % stride;
-				size_t nextJ = (j + 1) % stride;
+				const size_t nextI = (i + 1) % stride;
+				const size_t nextJ = (j + 1) % stride;
 
 				index_push_back(indices, i * stride + j);
 				index_push_back(indices, i * stride + nextJ);
@@ -862,17 +841,16 @@ namespace Shapes
 	// Tetrahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeTetrahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords)
-	{
+	void ComputeTetrahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
 		static const XMVECTORF32 verts[4] =
 		{
-			{ { {              0.f,          0.f,        1.f, 0 } } },
-			{ { {  2.f*SQRT2 / 3.f,          0.f, -1.f / 3.f, 0 } } },
-			{ { {     -SQRT2 / 3.f,  SQRT6 / 3.f, -1.f / 3.f, 0 } } },
-			{ { {     -SQRT2 / 3.f, -SQRT6 / 3.f, -1.f / 3.f, 0 } } }
+			{{{0.f, 0.f, 1.f, 0}}},
+			{{{2.f * SQRT2 / 3.f, 0.f, -1.f / 3.f, 0}}},
+			{{{-SQRT2 / 3.f, SQRT6 / 3.f, -1.f / 3.f, 0}}},
+			{{{-SQRT2 / 3.f, -SQRT6 / 3.f, -1.f / 3.f, 0}}}
 		};
 
 		static const uint32_t faces[4 * 3] =
@@ -883,17 +861,16 @@ namespace Shapes
 			1, 3, 2,
 		};
 
-		for (size_t j = 0; j < _countof(faces); j += 3)
-		{
-			uint32_t v0 = faces[j];
-			uint32_t v1 = faces[j + 1];
-			uint32_t v2 = faces[j + 2];
+		for (size_t j = 0; j < _countof(faces); j += 3) {
+			const uint32_t v0 = faces[j];
+			const uint32_t v1 = faces[j + 1];
+			const uint32_t v2 = faces[j + 2];
 
 			XMVECTOR normal = XMVector3Cross(verts[v1].v - verts[v0].v,
-												verts[v2].v - verts[v0].v);
+			                                 verts[v2].v - verts[v0].v);
 			normal = XMVector3Normalize(normal);
 
-			size_t base = vertices.size();
+			const size_t base = vertices.size();
 			index_push_back(indices, base);
 			index_push_back(indices, base + 1);
 			index_push_back(indices, base + 2);
@@ -903,7 +880,7 @@ namespace Shapes
 
 			XMVECTOR position = XMVectorScale(verts[v0], size);
 			XMStoreFloat3(&vertices.rbegin()[2].position, position);
-			
+
 			position = XMVectorScale(verts[v1], size);
 			XMStoreFloat3(&vertices.rbegin()[1].position, position);
 
@@ -936,19 +913,18 @@ namespace Shapes
 	// Octahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeOctahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords)
-	{
+	void ComputeOctahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
 		static const XMVECTORF32 verts[6] =
 		{
-			{ { {  1,  0,  0, 0 } } },
-			{ { { -1,  0,  0, 0 } } },
-			{ { {  0,  1,  0, 0 } } },
-			{ { {  0, -1,  0, 0 } } },
-			{ { {  0,  0,  1, 0 } } },
-			{ { {  0,  0, -1, 0 } } }
+			{{{1, 0, 0, 0}}},
+			{{{-1, 0, 0, 0}}},
+			{{{0, 1, 0, 0}}},
+			{{{0, -1, 0, 0}}},
+			{{{0, 0, 1, 0}}},
+			{{{0, 0, -1, 0}}}
 		};
 
 		static const uint32_t faces[8 * 3] =
@@ -963,17 +939,16 @@ namespace Shapes
 			5, 0, 3
 		};
 
-		for (size_t j = 0; j < _countof(faces); j += 3)
-		{
-			uint32_t v0 = faces[j];
-			uint32_t v1 = faces[j + 1];
-			uint32_t v2 = faces[j + 2];
+		for (size_t j = 0; j < _countof(faces); j += 3) {
+			const uint32_t v0 = faces[j];
+			const uint32_t v1 = faces[j + 1];
+			const uint32_t v2 = faces[j + 2];
 
 			XMVECTOR normal = XMVector3Cross(verts[v1].v - verts[v0].v,
-												verts[v2].v - verts[v0].v);
+			                                 verts[v2].v - verts[v0].v);
 			normal = XMVector3Normalize(normal);
 
-			size_t base = vertices.size();
+			const size_t base = vertices.size();
 			index_push_back(indices, base);
 			index_push_back(indices, base + 1);
 			index_push_back(indices, base + 2);
@@ -1016,8 +991,7 @@ namespace Shapes
 	// Dodecahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeDodecahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords)
-	{
+	void ComputeDodecahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
@@ -1027,26 +1001,26 @@ namespace Shapes
 
 		static const XMVECTORF32 verts[20] =
 		{
-			{ { {  a,  a,  a, 0 } } },
-			{ { {  a,  a, -a, 0 } } },
-			{ { {  a, -a,  a, 0 } } },
-			{ { {  a, -a, -a, 0 } } },
-			{ { { -a,  a,  a, 0 } } },
-			{ { { -a,  a, -a, 0 } } },
-			{ { { -a, -a,  a, 0 } } },
-			{ { { -a, -a, -a, 0 } } },
-			{ { {  b,  c,  0, 0 } } },
-			{ { { -b,  c,  0, 0 } } },
-			{ { {  b, -c,  0, 0 } } },
-			{ { { -b, -c,  0, 0 } } },
-			{ { {  c,  0,  b, 0 } } },
-			{ { {  c,  0, -b, 0 } } },
-			{ { { -c,  0,  b, 0 } } },
-			{ { { -c,  0, -b, 0 } } },
-			{ { {  0,  b,  c, 0 } } },
-			{ { {  0, -b,  c, 0 } } },
-			{ { {  0,  b, -c, 0 } } },
-			{ { {  0, -b, -c, 0 } } }
+			{{{a, a, a, 0}}},
+			{{{a, a, -a, 0}}},
+			{{{a, -a, a, 0}}},
+			{{{a, -a, -a, 0}}},
+			{{{-a, a, a, 0}}},
+			{{{-a, a, -a, 0}}},
+			{{{-a, -a, a, 0}}},
+			{{{-a, -a, -a, 0}}},
+			{{{b, c, 0, 0}}},
+			{{{-b, c, 0, 0}}},
+			{{{b, -c, 0, 0}}},
+			{{{-b, -c, 0, 0}}},
+			{{{c, 0, b, 0}}},
+			{{{c, 0, -b, 0}}},
+			{{{-c, 0, b, 0}}},
+			{{{-c, 0, -b, 0}}},
+			{{{0, b, c, 0}}},
+			{{{0, -b, c, 0}}},
+			{{{0, b, -c, 0}}},
+			{{{0, -b, -c, 0}}}
 		};
 
 		static const uint32_t faces[12 * 5] =
@@ -1067,43 +1041,42 @@ namespace Shapes
 
 		static const XMVECTORF32 texCoords[5] =
 		{
-			{ { {  0.654508f, 0.0244717f, 0, 0 } } },
-			{ { { 0.0954915f,  0.206107f, 0, 0 } } },
-			{ { { 0.0954915f,  0.793893f, 0, 0 } } },
-			{ { {  0.654508f,  0.975528f, 0, 0 } } },
-			{ { {        1.f,       0.5f, 0, 0 } } }
+			{{{0.654508f, 0.0244717f, 0, 0}}},
+			{{{0.0954915f, 0.206107f, 0, 0}}},
+			{{{0.0954915f, 0.793893f, 0, 0}}},
+			{{{0.654508f, 0.975528f, 0, 0}}},
+			{{{1.f, 0.5f, 0, 0}}}
 		};
 
 		static const uint32_t textureIndex[12][5] =
 		{
-			{ 0, 1, 2, 3, 4 },
-			{ 2, 3, 4, 0, 1 },
-			{ 4, 0, 1, 2, 3 },
-			{ 1, 2, 3, 4, 0 },
-			{ 2, 3, 4, 0, 1 },
-			{ 0, 1, 2, 3, 4 },
-			{ 1, 2, 3, 4, 0 },
-			{ 4, 0, 1, 2, 3 },
-			{ 4, 0, 1, 2, 3 },
-			{ 1, 2, 3, 4, 0 },
-			{ 0, 1, 2, 3, 4 },
-			{ 2, 3, 4, 0, 1 },
+			{0, 1, 2, 3, 4},
+			{2, 3, 4, 0, 1},
+			{4, 0, 1, 2, 3},
+			{1, 2, 3, 4, 0},
+			{2, 3, 4, 0, 1},
+			{0, 1, 2, 3, 4},
+			{1, 2, 3, 4, 0},
+			{4, 0, 1, 2, 3},
+			{4, 0, 1, 2, 3},
+			{1, 2, 3, 4, 0},
+			{0, 1, 2, 3, 4},
+			{2, 3, 4, 0, 1},
 		};
 
 		size_t t = 0;
-		for (size_t j = 0; j < _countof(faces); j += 5, ++t)
-		{
-			uint32_t v0 = faces[j];
-			uint32_t v1 = faces[j + 1];
-			uint32_t v2 = faces[j + 2];
-			uint32_t v3 = faces[j + 3];
-			uint32_t v4 = faces[j + 4];
+		for (size_t j = 0; j < _countof(faces); j += 5, ++t) {
+			const uint32_t v0 = faces[j];
+			const uint32_t v1 = faces[j + 1];
+			const uint32_t v2 = faces[j + 2];
+			const uint32_t v3 = faces[j + 3];
+			const uint32_t v4 = faces[j + 4];
 
 			XMVECTOR normal = XMVector3Cross(verts[v1].v - verts[v0].v,
-												verts[v2].v - verts[v0].v);
+			                                 verts[v2].v - verts[v0].v);
 			normal = XMVector3Normalize(normal);
 
-			size_t base = vertices.size();
+			const size_t base = vertices.size();
 
 			index_push_back(indices, base);
 			index_push_back(indices, base + 1);
@@ -1122,10 +1095,10 @@ namespace Shapes
 
 			XMVECTOR position = XMVectorScale(verts[v0], size);
 			XMStoreFloat3(&vertices.rbegin()[4].position, position);
-			
+
 			position = XMVectorScale(verts[v1], size);
 			XMStoreFloat3(&vertices.rbegin()[3].position, position);
-			
+
 			position = XMVectorScale(verts[v2], size);
 			XMStoreFloat3(&vertices.rbegin()[2].position, position);
 
@@ -1134,7 +1107,7 @@ namespace Shapes
 
 			position = XMVectorScale(verts[v4], size);
 			XMStoreFloat3(&vertices.rbegin()[0].position, position);
-			
+
 			if constexpr (VertexT::hasNormal()) {
 				XMStoreFloat3(&vertices.rbegin()[4].normal, normal);
 				XMStoreFloat3(&vertices.rbegin()[3].normal, normal);
@@ -1165,28 +1138,27 @@ namespace Shapes
 	// Icosahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeIcosahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords)
-	{
+	void ComputeIcosahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
-		static const float  t = 1.618033988749894848205f; // (1 + sqrt(5)) / 2
+		static const float t = 1.618033988749894848205f; // (1 + sqrt(5)) / 2
 		static const float t2 = 1.519544995837552493271f; // sqrt( 1 + sqr( (1 + sqrt(5)) / 2 ) )
 
 		static const XMVECTORF32 verts[12] =
 		{
-			{ { {    t / t2,  1.f / t2,       0, 0 } } },
-			{ { {   -t / t2,  1.f / t2,       0, 0 } } },
-			{ { {    t / t2, -1.f / t2,       0, 0 } } },
-			{ { {   -t / t2, -1.f / t2,       0, 0 } } },
-			{ { {  1.f / t2,       0,    t / t2, 0 } } },
-			{ { {  1.f / t2,       0,   -t / t2, 0 } } },
-			{ { { -1.f / t2,       0,    t / t2, 0 } } },
-			{ { { -1.f / t2,       0,   -t / t2, 0 } } },
-			{ { {       0,    t / t2,  1.f / t2, 0 }  } },
-			{ { {       0,   -t / t2,  1.f / t2, 0 } } },
-			{ { {       0,    t / t2, -1.f / t2, 0 } } },
-			{ { {       0,   -t / t2, -1.f / t2, 0 } } }
+			{{{t / t2, 1.f / t2, 0, 0}}},
+			{{{-t / t2, 1.f / t2, 0, 0}}},
+			{{{t / t2, -1.f / t2, 0, 0}}},
+			{{{-t / t2, -1.f / t2, 0, 0}}},
+			{{{1.f / t2, 0, t / t2, 0}}},
+			{{{1.f / t2, 0, -t / t2, 0}}},
+			{{{-1.f / t2, 0, t / t2, 0}}},
+			{{{-1.f / t2, 0, -t / t2, 0}}},
+			{{{0, t / t2, 1.f / t2, 0}}},
+			{{{0, -t / t2, 1.f / t2, 0}}},
+			{{{0, t / t2, -1.f / t2, 0}}},
+			{{{0, -t / t2, -1.f / t2, 0}}}
 		};
 
 		static const uint32_t faces[20 * 3] =
@@ -1213,17 +1185,16 @@ namespace Shapes
 			11, 7, 5
 		};
 
-		for (size_t j = 0; j < _countof(faces); j += 3)
-		{
-			uint32_t v0 = faces[j];
-			uint32_t v1 = faces[j + 1];
-			uint32_t v2 = faces[j + 2];
+		for (size_t j = 0; j < _countof(faces); j += 3) {
+			const uint32_t v0 = faces[j];
+			const uint32_t v1 = faces[j + 1];
+			const uint32_t v2 = faces[j + 2];
 
 			XMVECTOR normal = XMVector3Cross(verts[v1].v - verts[v0].v,
-												verts[v2].v - verts[v0].v);
+			                                 verts[v2].v - verts[v0].v);
 			normal = XMVector3Normalize(normal);
 
-			size_t base = vertices.size();
+			const size_t base = vertices.size();
 			index_push_back(indices, base);
 			index_push_back(indices, base + 1);
 			index_push_back(indices, base + 2);

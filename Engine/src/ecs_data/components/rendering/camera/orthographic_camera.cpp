@@ -3,13 +3,10 @@
 
 
 OrthographicCamera::OrthographicCamera(ID3D11Device& device,
-									   ID3D11DeviceContext& device_context,
-									   u32 viewport_width,
-									   u32 viewport_height)
-	: CameraBase(device,
-				 device_context,
-				 viewport_width,
-				 viewport_height) {
+                                       ID3D11DeviceContext& device_context,
+                                       u32 viewport_width,
+                                       u32 viewport_height)
+	: CameraBase(device) {
 
 	ResizeViewport(device_context, viewport_width, viewport_height);
 }

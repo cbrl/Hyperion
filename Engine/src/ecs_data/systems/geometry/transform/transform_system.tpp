@@ -1,10 +1,7 @@
-
 template<typename TransformT>
 void TransformSystem::UpdateWorld(ECS& ecs_engine, TransformT& transform) {
 
-	XMMATRIX this_world   = XMMatrixIdentity();
 	XMMATRIX parent_world = XMMatrixIdentity();
-
 
 	// If the transform has no parent and doesn't need an update,
 	// then nothing needs to be done.
@@ -12,11 +9,11 @@ void TransformSystem::UpdateWorld(ECS& ecs_engine, TransformT& transform) {
 		if (!transform.needs_update) return;
 	}
 
-	// If the transform has a parent, then process that first.
-	// If the parent was updated, or if this transform already needs
-	// an update, then get the parent's matrix.
+		// If the transform has a parent, then process that first.
+		// If the parent was updated, or if this transform already needs
+		// an update, then get the parent's matrix.
 	else {
-		const auto parent     = ecs_engine.getComponent<Transform>(transform.GetParent());
+		const auto parent = ecs_engine.getComponent<Transform>(transform.GetParent());
 		const auto parent_cam = ecs_engine.getComponent<CameraTransform>(transform.GetParent());
 
 		if (parent) {
@@ -42,7 +39,7 @@ void TransformSystem::UpdateWorld(ECS& ecs_engine, TransformT& transform) {
 
 
 	if (transform.needs_update) {
-		this_world = CalculateWorld(transform);
+		const XMMATRIX this_world = CalculateWorld(transform);
 		transform.world = this_world * parent_world;
 
 		transform.needs_update = false;

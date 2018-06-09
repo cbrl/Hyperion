@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "test_scene.h"
-#include "engine\engine.h"
+#include "engine/engine.h"
 
 
 static constexpr float zNear = 0.1f;
-static constexpr float zFar  = 1000.0f;
-static constexpr float FOV   = XM_PI / 3.0f;
+static constexpr float zFar = 1000.0f;
+static constexpr float FOV = XM_PI / 3.0f;
 
 
 TestScene::TestScene(const Engine& engine) : Scene("Test Scene") {
@@ -16,10 +16,10 @@ TestScene::TestScene(const Engine& engine) : Scene("Test Scene") {
 
 void TestScene::Init(const Engine& engine) {
 
-	auto& ecs_engine           = engine.GetECS();
-	const auto& rendering_mgr  = engine.GetRenderingMgr();
-	auto& device               = rendering_mgr.GetDevice();
-	auto& device_context       = rendering_mgr.GetDeviceContext();
+	auto& ecs_engine = engine.GetECS();
+	const auto& rendering_mgr = engine.GetRenderingMgr();
+	auto& device = rendering_mgr.GetDevice();
+	auto& device_context = rendering_mgr.GetDeviceContext();
 
 	auto& resource_mgr = rendering_mgr.GetResourceMgr();
 
@@ -29,11 +29,11 @@ void TestScene::Init(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera and skybox
-	handle64 camera = ecs_engine.createEntity<PlayerCamera>(device,
-															device_context,
-															engine.GetWindowWidth(),
-															engine.GetWindowHeight(),
-															resource_mgr.GetOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	const handle64 camera = ecs_engine.createEntity<PlayerCamera>(device,
+	                                                              device_context,
+	                                                              engine.GetWindowWidth(),
+	                                                              engine.GetWindowHeight(),
+	                                                              resource_mgr.GetOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	// Set the parameters
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
@@ -48,10 +48,10 @@ void TestScene::Init(const Engine& engine) {
 	// Create lights
 	//----------------------------------------------------------------------------------
 
-	auto point_light = ecs_engine.createEntity<BasicPointLight>();
+	const auto point_light = ecs_engine.createEntity<BasicPointLight>();
 	entities.push_back(point_light);
 
-	auto spot_light = ecs_engine.createEntity<BasicSpotLight>();
+	const auto spot_light = ecs_engine.createEntity<BasicSpotLight>();
 	entities.push_back(spot_light);
 
 	// Point light
@@ -66,7 +66,6 @@ void TestScene::Init(const Engine& engine) {
 
 		auto transform = ecs_engine.getComponent<Transform>(point_light);
 		transform->SetPosition(float3(0.0f, 6.0f, 0.0f));
-
 	}
 
 	// Spot light
@@ -98,12 +97,11 @@ void TestScene::Init(const Engine& engine) {
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	auto bp     = resource_mgr.GetOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
-	auto sphere = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(device, resource_mgr, 1.0f);
+	auto bp = resource_mgr.GetOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
+	auto sphere = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
 
-	handle64 test_model = ecs_engine.createEntity<BasicModel>(device, bp);
+	const handle64 test_model = ecs_engine.createEntity<BasicModel>(device, bp);
 	entities.push_back(test_model);
-
 
 
 	//----------------------------------------------------------------------------------
@@ -135,14 +133,14 @@ void TestScene::Tick(const Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const int2   mouse_delta     = engine.GetInput().GetMouseDelta();
-	const u32    fps             = engine.GetFPSCounter().getFPS();
-	const float  delta_time      = engine.GetTimer().deltaTime();
-	const u64    total_cpu_usage = engine.GetSysMon().cpu().getTotalCpuPercentage();
-	const double proc_cpu_usage  = engine.GetSysMon().cpu().getProcessCpuPercentage();
-	const u64    total_mem_usage = engine.GetSysMon().memory().getTotalUsedPhysicalMem();
-	const u64    proc_mem_usage  = engine.GetSysMon().memory().getProcessUsedPhysicalMem();
-	
+	const int2 mouse_delta = engine.GetInput().GetMouseDelta();
+	const u32 fps = engine.GetFPSCounter().getFPS();
+	const float delta_time = engine.GetTimer().deltaTime();
+	const u64 total_cpu_usage = engine.GetSysMon().cpu().getTotalCpuPercentage();
+	const double proc_cpu_usage = engine.GetSysMon().cpu().getProcessCpuPercentage();
+	const u64 total_mem_usage = engine.GetSysMon().memory().getTotalUsedPhysicalMem();
+	const u64 proc_mem_usage = engine.GetSysMon().memory().getProcessUsedPhysicalMem();
+
 	static wostringstream cpu_str;
 	static wostringstream mem_str;
 
@@ -150,13 +148,13 @@ void TestScene::Tick(const Engine& engine) {
 	cpu_str.str(L"");
 	cpu_str.precision(4);
 	cpu_str << L"CPU Usage\nTotal: " << total_cpu_usage << L"%"
-		    << L"\nProcess: " << proc_cpu_usage << L"%";
-	
+		<< L"\nProcess: " << proc_cpu_usage << L"%";
+
 	mem_str.clear();
 	mem_str.str(L"");
 	mem_str.precision(4);
 	mem_str << L"RAM Usage\nTotal: " << static_cast<double>(total_mem_usage) / 1e6 << L"MB"
-	        << L"\nProcess: " << static_cast<double>(proc_mem_usage / 1e6) << L"MB";
+		<< L"\nProcess: " << static_cast<double>(proc_mem_usage / 1e6) << L"MB";
 
 
 	texts.at("FPS").SetText(L"FPS: " + to_wstring(fps));
@@ -168,5 +166,5 @@ void TestScene::Tick(const Engine& engine) {
 	texts.at("RAM").SetText(mem_str.str());
 
 	texts.at("Mouse").SetText(L"Mouse \nX: " + to_wstring(mouse_delta.x)
-							  + L"\nY: " + to_wstring(mouse_delta.y));
+	                          + L"\nY: " + to_wstring(mouse_delta.y));
 }

@@ -1,4 +1,3 @@
-
 template<typename CameraT>
 void Renderer::RenderCamera(const Engine& engine, const CameraT& camera) {
 

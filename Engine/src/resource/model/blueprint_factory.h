@@ -1,88 +1,77 @@
 #pragma once
 
 #include <d3d11.h>
-#include "datatypes\datatypes.h"
-#include "geometry\shapes\shapes.h"
-#include "resource\resource_mgr.h"
+#include "datatypes/datatypes.h"
+#include "geometry/shapes/shapes.h"
+#include "resource/resource_mgr.h"
 
 
 namespace BlueprintFactory {
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateCube(ID3D11Device& device,
-												  ResourceMgr& resource_mgr,
-												  float size = 1,
-												  bool rhcoords = false,
-												  bool invertn = false);
+	static shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
+	                                             float size = 1,
+	                                             bool rhcoords = false,
+	                                             bool invertn = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateBox(ID3D11Device& device,
-												 ResourceMgr& resource_mgr,
-												 const float3& size,
-												 bool rhcoords = false,
-												 bool invertn = false);
+	static shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
+	                                            const float3& size,
+	                                            bool rhcoords = false,
+	                                            bool invertn = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateSphere(ID3D11Device& device,
-													ResourceMgr& resource_mgr,
-													float diameter = 1,
-													size_t tessellation = 16,
-													bool rhcoords = false,
-													bool invertn = false);
+	static shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
+	                                               float diameter = 1,
+	                                               size_t tessellation = 16,
+	                                               bool rhcoords = false,
+	                                               bool invertn = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateGeoSphere(ID3D11Device& device,
-													   ResourceMgr& resource_mgr,
-													   float diameter = 1,
-													   size_t tessellation = 3,
-													   bool rhcoords = false);
+	static shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
+	                                                  float diameter = 1,
+	                                                  size_t tessellation = 3,
+	                                                  bool rhcoords = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateCylinder(ID3D11Device& device,
-													  ResourceMgr& resource_mgr,
-													  float diameter = 1,
-													  float height = 1,
-													  size_t tessellation = 32,
-													  bool rhcoords = false);
+	static shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
+	                                                 float diameter = 1,
+	                                                 float height = 1,
+	                                                 size_t tessellation = 32,
+	                                                 bool rhcoords = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateCone(ID3D11Device& device,
-												  ResourceMgr& resource_mgr,
-												  float diameter = 1,
-												  float height = 1,
-												  size_t tessellation = 32,
-												  bool rhcoords = false);
+	static shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
+	                                             float diameter = 1,
+	                                             float height = 1,
+	                                             size_t tessellation = 32,
+	                                             bool rhcoords = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateTorus(ID3D11Device& device,
-												   ResourceMgr& resource_mgr,
-												   float diameter = 1,
-												   float thickness = 0.333f,
-												   size_t tessellation = 32,
-												   bool rhcoords = false);
+	static shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
+	                                              float diameter = 1,
+	                                              float thickness = 0.333f,
+	                                              size_t tessellation = 32,
+	                                              bool rhcoords = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateTetrahedron(ID3D11Device& device,
-														 ResourceMgr& resource_mgr,
-														 float size = 1,
-														 bool rhcoords = false);
+	static shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
+	                                                    float size = 1,
+	                                                    bool rhcoords = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateOctahedron(ID3D11Device& device,
-														ResourceMgr& resource_mgr,
-														float size = 1,
-														bool rhcoords = false);
+	static shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
+	                                                   float size = 1,
+	                                                   bool rhcoords = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateDodecahedron(ID3D11Device& device,
-														  ResourceMgr& resource_mgr,
-														  float size = 1,
-														  bool rhcoords = false);
+	static shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
+	                                                     float size = 1,
+	                                                     bool rhcoords = false);
 
 	template<typename VertexT>
-	static shared_ptr<ModelBlueprint> CreateIcosahedron(ID3D11Device& device,
-														 ResourceMgr& resource_mgr,
-														 float size = 1,
-														 bool rhcoords = false);
+	static shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
+	                                                    float size = 1,
+	                                                    bool rhcoords = false);
 };
 
 

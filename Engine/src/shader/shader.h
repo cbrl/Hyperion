@@ -3,56 +3,56 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
-#include "datatypes\datatypes.h"
-#include "rendering\pipeline.h"
+#include "datatypes/datatypes.h"
+#include "rendering/pipeline.h"
 
 
 class VertexShader final {
-	public:
-		explicit VertexShader(ID3D11Device& device,
-							  const wchar_t* filename,
-							  const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-							  size_t numElements);
+public:
+	explicit VertexShader(ID3D11Device& device,
+	                      const wchar_t* filename,
+	                      const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
+	                      size_t numElements);
 
-		explicit VertexShader(ID3D11Device& device,
-							  const BYTE* buffer,
-							  size_t size,
-							  const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-							  size_t numElements);
+	explicit VertexShader(ID3D11Device& device,
+	                      const BYTE* buffer,
+	                      size_t size,
+	                      const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
+	                      size_t numElements);
 
-		~VertexShader() = default;
+	~VertexShader() = default;
 
-		void Bind(ID3D11DeviceContext& device_context) {
-			Pipeline::IA::BindInputLayout(device_context, layout.Get());
-			Pipeline::VS::BindShader(device_context, shader.Get(), nullptr, 0);
-		}
+	void Bind(ID3D11DeviceContext& device_context) const {
+		Pipeline::IA::BindInputLayout(device_context, layout.Get());
+		Pipeline::VS::BindShader(device_context, shader.Get(), nullptr, 0);
+	}
 
 
-	private:
-		ComPtr<ID3D11VertexShader> shader;
-		ComPtr<ID3D11InputLayout>  layout;
+private:
+	ComPtr<ID3D11VertexShader> shader;
+	ComPtr<ID3D11InputLayout> layout;
 };
 
 
 class PixelShader final {
-	public:
-		explicit PixelShader(ID3D11Device& device,
-							 const wchar_t* filename);
+public:
+	explicit PixelShader(ID3D11Device& device,
+	                     const wchar_t* filename);
 
-		explicit PixelShader(ID3D11Device& device,
-							 const BYTE* buffer,
-							 size_t size);
+	explicit PixelShader(ID3D11Device& device,
+	                     const BYTE* buffer,
+	                     size_t size);
 
-		~PixelShader() = default;
+	~PixelShader() = default;
 
-		void Bind(ID3D11DeviceContext& device_context) const {
-			Pipeline::PS::BindShader(device_context, shader.Get(), nullptr, 0);
-		}
+	void Bind(ID3D11DeviceContext& device_context) const {
+		Pipeline::PS::BindShader(device_context, shader.Get(), nullptr, 0);
+	}
 
 
-	private:
-		ComPtr<ID3D11PixelShader> shader;
+private:
+	ComPtr<ID3D11PixelShader> shader;
 };
 
 
-static void OutputShaderErrorMessage(ID3D10Blob* errorMessage, const WCHAR* shaderFilename);
+static void OutputShaderErrorMessage(ID3D10Blob* error_message, const WCHAR* shader_filename);
