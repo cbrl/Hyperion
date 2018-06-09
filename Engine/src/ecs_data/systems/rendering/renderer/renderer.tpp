@@ -2,16 +2,16 @@ template<typename CameraT>
 void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 
 	// Get necessary objects
-	auto& ecs_engine = engine.getECS();
-	const auto& rendering_mgr = engine.getRenderingMgr();
+	auto& ecs_engine             = engine.getECS();
+	const auto& rendering_mgr    = engine.getRenderingMgr();
 	const auto& render_state_mgr = rendering_mgr.getRenderStateMgr();
 
 
 	// Camera variables
-	const auto transform = ecs_engine.getComponent<CameraTransform>(camera.getOwner());
-	const auto world_to_camera = transform->getWorldToObjectMatrix();
+	const auto transform            = ecs_engine.getComponent<CameraTransform>(camera.getOwner());
+	const auto world_to_camera      = transform->getWorldToObjectMatrix();
 	const auto camera_to_projection = camera.getProjectionMatrix();
-	const auto world_to_projection = world_to_camera * camera_to_projection;
+	const auto world_to_projection  = world_to_camera * camera_to_projection;
 
 
 	//----------------------------------------------------------------------------------

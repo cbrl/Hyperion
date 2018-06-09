@@ -69,7 +69,7 @@ public:
 
 	// Change the viewport size
 	void resizeViewport(ID3D11DeviceContext& device_context, u32 width, u32 height) {
-		viewport.Width = static_cast<float>(width);
+		viewport.Width  = static_cast<float>(width);
 		viewport.Height = static_cast<float>(height);
 		bindViewport(device_context);
 		updateProjectionMatrix();
@@ -84,7 +84,7 @@ public:
 	// Set the depth range
 	void setZDepth(float z_near, float z_far) {
 		this->z_near = z_near;
-		this->z_far = z_far;
+		this->z_far  = z_far;
 		updateProjectionMatrix();
 	}
 
@@ -149,6 +149,6 @@ protected:
 
 	// Default vectors
 	static constexpr XMVECTOR default_forward = {0.0f, 0.0f, 1.0f, 0.0f};
-	static constexpr XMVECTOR default_right = {1.0f, 0.0f, 0.0f, 0.0f};
-	static constexpr XMVECTOR default_up = {0.0f, 1.0f, 0.0f, 0.0f};
+	static constexpr XMVECTOR default_right   = {1.0f, 0.0f, 0.0f, 0.0f};
+	static constexpr XMVECTOR default_up      = {0.0f, 1.0f, 0.0f, 0.0f};
 };

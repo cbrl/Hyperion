@@ -4,7 +4,7 @@
 
 Input::Input(HWND hWnd) {
 	keyboard = make_unique<Keyboard>();
-	mouse = make_unique<Mouse>();
+	mouse    = make_unique<Mouse>();
 
 	mouse->SetWindow(hWnd);
 	mouse->SetMode(Mouse::MODE_RELATIVE);

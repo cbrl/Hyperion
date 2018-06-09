@@ -119,12 +119,12 @@ public:
 
 private:
 	void updateBoundingVolumes() {
-		const float a = 1.0f / (cos_penumbra * cos_penumbra);
+		const float a   = 1.0f / (cos_penumbra * cos_penumbra);
 		const float rxy = range * std::sqrt(a - 1.0f);
-		const float rz = range * 0.5f;
-		const float r = std::sqrt((rxy * rxy) + (rz * rz));
+		const float rz  = range * 0.5f;
+		const float r   = std::sqrt((rxy * rxy) + (rz * rz));
 
-		aabb = AABB(float3(-rxy, -rxy, 0.0f), float3(rxy, rxy, range));
+		aabb   = AABB(float3(-rxy, -rxy, 0.0f), float3(rxy, rxy, range));
 		sphere = BoundingSphere(float3(0.0f, 0.0f, rz), r);
 	}
 

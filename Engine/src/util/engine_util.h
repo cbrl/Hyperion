@@ -25,7 +25,9 @@ using DirectX::SetDebugObjectName;
 // Helper class for COM exceptions
 class com_exception : public std::exception {
 public:
-	com_exception(HRESULT hr, const char* msg = "") : result(hr), msg(msg) {
+	com_exception(HRESULT hr, const char* msg = "")
+		: result(hr)
+		, msg(msg) {
 	}
 
 	const char* what() const override {

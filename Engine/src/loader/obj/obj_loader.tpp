@@ -7,9 +7,9 @@
 template<typename VertexT>
 void ObjLoader<VertexT>::reset() {
 	// Reset the local variables
-	rh_coord = false;
+	rh_coord    = false;
 	group_count = 0;
-	mtl_count = 0;
+	mtl_count   = 0;
 
 	// Clear vectors
 	vertices.clear();
@@ -74,14 +74,14 @@ ModelOutput<VertexT> ObjLoader<VertexT>::load(ResourceMgr& resource_mgr,
 		if (!materials[i].map_bump.empty())
 			mtl.map_bump = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_bump);
 
-		mtl.ambient = materials[i].Ka;
-		mtl.diffuse = materials[i].Kd;
-		mtl.specular = materials[i].Ks;
-		mtl.emissive = materials[i].Ke;
-		mtl.dissolve = materials[i].d;
+		mtl.ambient         = materials[i].Ka;
+		mtl.diffuse         = materials[i].Kd;
+		mtl.specular        = materials[i].Ks;
+		mtl.emissive        = materials[i].Ke;
+		mtl.dissolve        = materials[i].d;
 		mtl.optical_density = materials[i].Ni;
-		mtl.illum = materials[i].illum;
-		mtl.transparent = materials[i].transparency;
+		mtl.illum           = materials[i].illum;
+		mtl.transparent     = materials[i].transparency;
 
 		mtl_vector.push_back(std::move(mtl));
 	}
@@ -173,7 +173,7 @@ void ObjLoader<VertexT>::loadModel(wstring filename) {
 			stream >> name;
 
 			groups.push_back(Group());
-			groups.back().name = wstr2str(name);
+			groups.back().name        = wstr2str(name);
 			groups.back().index_start = static_cast<u32>(indices.size());
 
 			++group_count;
@@ -314,7 +314,7 @@ void ObjLoader<VertexT>::loadMaterials(wstring folder) {
 
 			// Alpha Map
 		else if (token.compare(ObjTokens::alpha_texture_map) == 0) {
-			materials[mtl_count - 1].map_d = TrimWhiteSpace(line);
+			materials[mtl_count - 1].map_d        = TrimWhiteSpace(line);
 			materials[mtl_count - 1].transparency = true;
 		}
 
@@ -392,7 +392,7 @@ void ObjLoader<VertexT>::readFace(wstring& line) {
 	vector<wstring> vert_list = Split(line, L" ");
 
 	for (size_t i = 0; i < vert_list.size(); ++i) {
-		i32 type = 0;
+		i32 type  = 0;
 
 		// Split the vertex definition into separate parts
 		vector<wstring> vert_parts = Split(vert_list[i], L"/");
@@ -494,7 +494,7 @@ void ObjLoader<VertexT>::readFace(wstring& line) {
 
 	// Add vertices to vector if they're not in it already
 	for (size_t i = 0; i < verts.size(); ++i) {
-		auto pos = std::find(vertices.begin(), vertices.end(), verts[i]);
+		auto pos  = std::find(vertices.begin(), vertices.end(), verts[i]);
 		if (pos == vertices.end()) {
 			vertices.push_back(verts[i]);
 		}
@@ -619,13 +619,13 @@ void ObjLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 
 
 			// Ensure that the vertex isn't an interior vertex
-			const float3 v1 = prev - curr;
-			const float3 v2 = next - curr;
+			const float3 v1     = prev - curr;
+			const float3 v2     = next - curr;
 			const XMVECTOR vec1 = XMLoadFloat3(&v1);
 			const XMVECTOR vec2 = XMLoadFloat3(&v2);
 
 			float angle = XMVectorGetX(XMVector3AngleBetweenVectors(vec1, vec2));
-			angle = XMConvertToDegrees(angle);
+			angle       = XMConvertToDegrees(angle);
 
 			if (angle <= 0 || angle >= 180) {
 				continue;
@@ -634,7 +634,7 @@ void ObjLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 
 			// Ensure that no vertices are inside the triangle
 			bool in_triangle = false;
-			for (u32 j = 0; j < in_verts.size(); ++j) {
+			for (u32 j       = 0; j < in_verts.size(); ++j) {
 				if (PointInTriangle(prev, curr, next, in_verts[j].position)
 				    && in_verts[j].position != prev
 				    && in_verts[j].position != curr

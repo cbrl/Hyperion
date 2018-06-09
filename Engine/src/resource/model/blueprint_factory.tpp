@@ -18,10 +18,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Cube Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Cube Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -30,9 +30,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Cube";
+		grp.name           = "Cube";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -65,10 +65,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Box Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Box Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -77,9 +77,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Box";
+		grp.name           = "Box";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -113,10 +113,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Sphere Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Sphere Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -125,9 +125,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Sphere";
+		grp.name           = "Sphere";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -159,10 +159,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "GeoSphere Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "GeoSphere Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -171,9 +171,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "GeoSphere";
+		grp.name           = "GeoSphere";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -207,10 +207,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Cylinder Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Cylinder Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -219,9 +219,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Cylinder";
+		grp.name           = "Cylinder";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -255,10 +255,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Cone Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Cone Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -267,9 +267,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Cone";
+		grp.name           = "Cone";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -303,10 +303,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Torus Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Torus Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -315,9 +315,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Torus";
+		grp.name           = "Torus";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -348,10 +348,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Tetrahedron Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Tetrahedron Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -360,9 +360,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Tetrahedron";
+		grp.name           = "Tetrahedron";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -393,10 +393,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Octahedron Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Octahedron Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -405,9 +405,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Octahedron";
+		grp.name           = "Octahedron";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -438,10 +438,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Dodecahedron Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Dodecahedron Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -450,9 +450,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Dodecahedron";
+		grp.name           = "Dodecahedron";
 
 		vector<Group> groups;
 		groups.push_back(grp);
@@ -483,10 +483,10 @@ namespace BlueprintFactory {
 
 		// Create the material
 		Material mat;
-		mat.name = "Icosahedron Material";
-		mat.ambient = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.name        = "Icosahedron Material";
+		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -495,9 +495,9 @@ namespace BlueprintFactory {
 
 		// Create the group definition
 		Group grp;
-		grp.index_start = 0;
+		grp.index_start    = 0;
 		grp.material_index = 0;
-		grp.name = "Icosahedron";
+		grp.name           = "Icosahedron";
 
 		vector<Group> groups;
 		groups.push_back(grp);

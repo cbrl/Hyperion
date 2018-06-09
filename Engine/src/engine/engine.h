@@ -26,7 +26,8 @@
 
 class Engine final : public MainWindow {
 public:
-	Engine() : resizing(false) {
+	Engine()
+		: resizing(false) {
 	};
 	~Engine();
 

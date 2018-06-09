@@ -26,8 +26,8 @@ ModelOutput<VertexT>::ModelOutput(const string& name,
 	for (size_t i = 0; i < groups.size(); ++i) {
 		ModelPart temp;
 
-		temp.name = groups[i].name;
-		temp.index_start = groups[i].index_start;
+		temp.name           = groups[i].name;
+		temp.index_start    = groups[i].index_start;
 		temp.material_index = groups[i].material_index;
 
 		// Index count
@@ -45,7 +45,7 @@ ModelOutput<VertexT>::ModelOutput(const string& name,
 		}
 
 		auto minmax_part = MinMaxPoint(subvec);
-		temp.aabb = AABB(minmax_part.first, minmax_part.second);
+		temp.aabb        = AABB(minmax_part.first, minmax_part.second);
 
 		model_parts.push_back(std::move(temp));
 	}

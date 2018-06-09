@@ -2,7 +2,8 @@
 #include "frustum.h"
 
 
-Frustum::Frustum(CXMMATRIX M) : planes() {
+Frustum::Frustum(CXMMATRIX M)
+	: planes() {
 	updateFrustum(M);
 }
 
@@ -57,7 +58,7 @@ bool Frustum::encloses(const AABB& aabb) const {
 	// plane's normal, then check which side of the plane the point is on.
 	for (auto plane : planes) {
 		const auto control = XMVectorGreaterOrEqual(plane, XMVectorZero());
-		const auto point = XMVectorSelect(aabb.maxPoint(), aabb.minPoint(), control);
+		const auto point   = XMVectorSelect(aabb.maxPoint(), aabb.minPoint(), control);
 
 		const auto result = XMPlaneDotCoord(plane, point);
 
@@ -96,7 +97,7 @@ bool Frustum::contains(const AABB& aabb) const {
 	// plane's normal, then check which side of the plane the point is on.
 	for (auto plane : planes) {
 		const auto control = XMVectorGreaterOrEqual(plane, XMVectorZero());
-		const auto point = XMVectorSelect(aabb.minPoint(), aabb.maxPoint(), control);
+		const auto point   = XMVectorSelect(aabb.minPoint(), aabb.maxPoint(), control);
 
 		const auto result = XMPlaneDotCoord(plane, point);
 

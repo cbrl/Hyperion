@@ -6,12 +6,12 @@
 
 
 void ModelSystem::update(const Engine& engine) {
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine     = engine.getECS();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	ecs_engine.forEachActive<Model>([&](Model& model) {
 
-		const auto owner = model.getOwner();
+		const auto owner     = model.getOwner();
 		const auto transform = ecs_engine.getComponent<Transform>(owner);
 
 		if (transform) {

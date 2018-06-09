@@ -28,7 +28,7 @@ shared_ptr<ValueT> ResourceMap<KeyT, ValueT>::getOrCreateResource(const KeyT& ke
 
 	// Create the resource if it doesn't exist or expired
 	const auto resource = std::make_shared<ValueT>(std::forward<ArgsT>(args)...);
-	resource_map[key] = resource;
+	resource_map[key]   = resource;
 
 	return resource;
 }

@@ -55,8 +55,8 @@ void XM_CALLCONV ForwardPass::render(ECS& ecs_engine, FXMMATRIX world_to_project
 
 void XM_CALLCONV ForwardPass::render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
 
-	const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
-	const auto object_to_world = transform->getObjectToWorldMatrix();
+	const auto transform            = ecs_engine.getComponent<Transform>(model.getOwner());
+	const auto object_to_world      = transform->getObjectToWorldMatrix();
 	const auto object_to_projection = object_to_world * world_to_projection;
 
 	// Cull the model if it isn't on screen
@@ -79,12 +79,12 @@ void XM_CALLCONV ForwardPass::render(const ECS& ecs_engine, Model& model, FXMMAT
 		const auto& mat = child.getMaterial();
 
 		// Bind the SRVs
-		if (mat.map_diffuse) mat.map_diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
-		if (mat.map_ambient) mat.map_ambient->bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
-		if (mat.map_specular) mat.map_specular->bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
+		if (mat.map_diffuse)        mat.map_diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
+		if (mat.map_ambient)        mat.map_ambient->bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
+		if (mat.map_specular)       mat.map_specular->bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
 		if (mat.map_spec_highlight) mat.map_spec_highlight->bind<Pipeline::PS>(device_context, SLOT_SRV_SPEC_HIGHLIGHT);
-		if (mat.map_alpha) mat.map_alpha->bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
-		if (mat.map_bump) mat.map_bump->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
+		if (mat.map_alpha)          mat.map_alpha->bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
+		if (mat.map_bump)           mat.map_bump->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
 
 
 		// Draw the child

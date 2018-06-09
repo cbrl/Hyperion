@@ -19,8 +19,8 @@ MainWindow::MainWindow()
 
 
 bool MainWindow::initWindow(LPCWSTR name, u32 width, u32 height) {
-	app_name = name;
-	window_width = width;
+	app_name      = name;
+	window_width  = width;
 	window_height = height;
 
 	const u32 x_pos = (GetSystemMetrics(SM_CXSCREEN) - window_width) / 2;
@@ -34,18 +34,18 @@ bool MainWindow::initWindow(LPCWSTR name, u32 width, u32 height) {
 	//----------------------------------------------------------------------------------
 	WNDCLASSEX wc;
 
-	wc.style = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc = &WndProc;
-	wc.cbClsExtra = 0;
-	wc.cbWndExtra = 0;
-	wc.hInstance = hInstance;
-	wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
-	wc.hIconSm = wc.hIcon;
-	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+	wc.style         = CS_HREDRAW | CS_VREDRAW;
+	wc.lpfnWndProc   = &WndProc;
+	wc.cbClsExtra    = 0;
+	wc.cbWndExtra    = 0;
+	wc.hInstance     = hInstance;
+	wc.hIcon         = LoadIcon(nullptr, IDI_WINLOGO);
+	wc.hIconSm       = wc.hIcon;
+	wc.hCursor       = LoadCursor(nullptr, IDC_ARROW);
 	wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH));
-	wc.lpszMenuName = nullptr;
+	wc.lpszMenuName  = nullptr;
 	wc.lpszClassName = app_name;
-	wc.cbSize = sizeof(WNDCLASSEX);
+	wc.cbSize        = sizeof(WNDCLASSEX);
 
 
 	// Register window class
@@ -82,7 +82,7 @@ bool MainWindow::initWindow(LPCWSTR name, u32 width, u32 height) {
 
 
 void MainWindow::run() {
-	MSG msg = {nullptr};
+	MSG  msg  = {nullptr};
 	bool done = false;
 
 	// Main loop

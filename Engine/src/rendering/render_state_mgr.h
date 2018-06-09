@@ -16,21 +16,26 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Blend states
-	void bindOpaque(ID3D11DeviceContext& device_context, float blend_factor[4] = {}, u32 sample_mask = 0xffffffff) const;
+	void bindOpaque(ID3D11DeviceContext& device_context,
+	                float blend_factor[4] = {},
+	                u32 sample_mask       = 0xffffffff) const;
+
 	void bindAlphaBlend(ID3D11DeviceContext& device_context,
 	                    float blend_factor[4] = {},
-	                    u32 sample_mask = 0xffffffff) const;
+	                    u32 sample_mask       = 0xffffffff) const;
+
 	void bindAdditive(ID3D11DeviceContext& device_context,
 	                  float blend_factor[4] = {},
-	                  u32 sample_mask = 0xffffffff) const;
+	                  u32 sample_mask       = 0xffffffff) const;
+
 	void bindNonPremultiplied(ID3D11DeviceContext& device_context,
 	                          float blend_factor[4] = {},
-	                          u32 sample_mask = 0xffffffff) const;
+	                          u32 sample_mask       = 0xffffffff) const;
 
 	// Depth stencil states
-	void bindDepthNone(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
+	void bindDepthNone(ID3D11DeviceContext& device_context, u32 stencil_ref    = 0) const;
 	void bindDepthDefault(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
-	void bindDepthRead(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
+	void bindDepthRead(ID3D11DeviceContext& device_context, u32 stencil_ref    = 0) const;
 
 	// Rasterizer states
 	void bindCullNone(ID3D11DeviceContext& device_context) const;
@@ -66,7 +71,7 @@ private:
 	HRESULT createRasterizerState(ID3D11Device& device,
 	                              D3D11_CULL_MODE cull_mode,
 	                              D3D11_FILL_MODE fill_mode,
-	                              _Out_	ID3D11RasterizerState** p_result) const;
+	                              _Out_ ID3D11RasterizerState** p_result) const;
 
 	HRESULT createSamplerState(ID3D11Device& device,
 	                           D3D11_FILTER filter,

@@ -81,15 +81,15 @@ public:
 		return XMMATRIX{
 			1.0f, 0.0f, 0.0f, 0.0f,
 			0.0f, 1.0f, 0.0f, 0.0f,
-			0.0f, 0.0f, m22, 1.0f,
-			0.0f, 0.0f, m32, 0.0f
+			0.0f, 0.0f,  m22, 1.0f,
+			0.0f, 0.0f,  m32, 0.0f
 		};
 	}
 
 
 private:
 	void updateBoundingVolumes() {
-		aabb = AABB(float3(-range, -range, -range), float3(range, range, range));
+		aabb   = AABB(float3(-range, -range, -range), float3(range, range, range));
 		sphere = BoundingSphere(float3(0.0f, 0.0f, 0.0f), range);
 	}
 

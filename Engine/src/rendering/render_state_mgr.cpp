@@ -43,9 +43,9 @@ HRESULT RenderStateMgr::createBlendState(ID3D11Device& device,
 
 	desc.RenderTarget[0].BlendEnable = (src_blend != D3D11_BLEND_ONE) || (dest_blend != D3D11_BLEND_ZERO);
 
-	desc.RenderTarget[0].SrcBlend = desc.RenderTarget[0].SrcBlendAlpha = src_blend;
+	desc.RenderTarget[0].SrcBlend  = desc.RenderTarget[0].SrcBlendAlpha  = src_blend;
 	desc.RenderTarget[0].DestBlend = desc.RenderTarget[0].DestBlendAlpha = dest_blend;
-	desc.RenderTarget[0].BlendOp = desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].BlendOp   = desc.RenderTarget[0].BlendOpAlpha   = D3D11_BLEND_OP_ADD;
 
 	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
@@ -65,17 +65,17 @@ HRESULT RenderStateMgr::createDepthStencilState(ID3D11Device& device,
                                                 ID3D11DepthStencilState** p_result) const {
 	D3D11_DEPTH_STENCIL_DESC desc = {};
 
-	desc.DepthEnable = enable ? TRUE : FALSE;
+	desc.DepthEnable    = enable ? TRUE : FALSE;
 	desc.DepthWriteMask = write_enable ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
-	desc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+	desc.DepthFunc      = D3D11_COMPARISON_LESS_EQUAL;
 
-	desc.StencilEnable = FALSE;
-	desc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
+	desc.StencilEnable    = FALSE;
+	desc.StencilReadMask  = D3D11_DEFAULT_STENCIL_READ_MASK;
 	desc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
 
-	desc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-	desc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	desc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	desc.FrontFace.StencilFunc        = D3D11_COMPARISON_ALWAYS;
+	desc.FrontFace.StencilPassOp      = D3D11_STENCIL_OP_KEEP;
+	desc.FrontFace.StencilFailOp      = D3D11_STENCIL_OP_KEEP;
 	desc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
 
 	desc.BackFace = desc.FrontFace;
@@ -96,9 +96,9 @@ HRESULT RenderStateMgr::createRasterizerState(ID3D11Device& device,
                                               ID3D11RasterizerState** p_result) const {
 	D3D11_RASTERIZER_DESC desc = {};
 
-	desc.CullMode = cull_mode;
-	desc.FillMode = fill_mode;
-	desc.DepthClipEnable = TRUE;
+	desc.CullMode          = cull_mode;
+	desc.FillMode          = fill_mode;
+	desc.DepthClipEnable   = TRUE;
 	desc.MultisampleEnable = TRUE;
 
 	const HRESULT hr = device.CreateRasterizerState(&desc, p_result);
@@ -125,7 +125,7 @@ HRESULT RenderStateMgr::createSamplerState(ID3D11Device& device,
 
 	desc.MaxAnisotropy = (device.GetFeatureLevel() > D3D_FEATURE_LEVEL_9_1) ? D3D11_MAX_MAXANISOTROPY : 2;
 
-	desc.MaxLOD = D3D11_FLOAT32_MAX;
+	desc.MaxLOD         = D3D11_FLOAT32_MAX;
 	desc.ComparisonFunc = D3D11_COMPARISON_NEVER;
 
 	const HRESULT hr = device.CreateSamplerState(&desc, p_result);
@@ -244,12 +244,12 @@ void RenderStateMgr::createSamplerStates(ID3D11Device& device) {
 	{
 		D3D11_SAMPLER_DESC desc = {};
 
-		desc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
-		desc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
-		desc.AddressV = D3D11_TEXTURE_ADDRESS_BORDER;
-		desc.AddressW = D3D11_TEXTURE_ADDRESS_BORDER;
-		desc.MaxAnisotropy = (device.GetFeatureLevel() > D3D_FEATURE_LEVEL_9_1) ? D3D11_MAX_MAXANISOTROPY : 2;
-		desc.MaxLOD = D3D11_FLOAT32_MAX;
+		desc.Filter         = D3D11_FILTER_COMPARISON_MIN_MAG_LINEAR_MIP_POINT;
+		desc.AddressU       = D3D11_TEXTURE_ADDRESS_BORDER;
+		desc.AddressV       = D3D11_TEXTURE_ADDRESS_BORDER;
+		desc.AddressW       = D3D11_TEXTURE_ADDRESS_BORDER;
+		desc.MaxAnisotropy  = (device.GetFeatureLevel() > D3D_FEATURE_LEVEL_9_1) ? D3D11_MAX_MAXANISOTROPY : 2;
+		desc.MaxLOD         = D3D11_FLOAT32_MAX;
 		desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
 
 		ThrowIfFailed(device.CreateSamplerState(&desc, pcf_sampler.GetAddressOf()),

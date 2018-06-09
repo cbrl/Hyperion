@@ -19,7 +19,7 @@ Engine::~Engine() {
 bool Engine::init() {
 
 	// Set width/height variables. Later on this can be read from a config file.
-	window_width = WINDOW_WIDTH;
+	window_width  = WINDOW_WIDTH;
 	window_height = WINDOW_HEIGHT;
 
 
@@ -68,7 +68,7 @@ bool Engine::init() {
 
 
 void Engine::run() {
-	MSG msg = {nullptr};
+	MSG  msg  = {nullptr};
 	bool done = false;
 
 	// Main loop
@@ -159,7 +159,7 @@ LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 
 			// Handle window resize
 		case WM_SIZE:
-			window_width = LOWORD(lParam);
+			window_width  = LOWORD(lParam);
 			window_height = HIWORD(lParam);
 
 			if (wParam == SIZE_MAXIMIZED) {

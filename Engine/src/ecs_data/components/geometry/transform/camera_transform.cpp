@@ -24,8 +24,8 @@ CameraTransform::CameraTransform()
 void CameraTransform::setRotation(const float3& rotation) {
 	const XMMATRIX mat = XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z);
 
-	right = mat.r[0];
-	up = mat.r[1];
+	right   = mat.r[0];
+	up      = mat.r[1];
 	forward = mat.r[2];
 
 	needs_update = true;
@@ -35,8 +35,8 @@ void CameraTransform::setRotation(const float3& rotation) {
 void XM_CALLCONV CameraTransform::setRotation(FXMVECTOR rotation) {
 	const XMMATRIX mat = XMMatrixRotationRollPitchYawFromVector(rotation);
 
-	right = mat.r[0];
-	up = mat.r[1];
+	right   = mat.r[0];
+	up      = mat.r[1];
 	forward = mat.r[2];
 
 	needs_update = true;
@@ -57,7 +57,7 @@ void CameraTransform::rotate(const float3& units) {
 
 	const float look_length_xz = sqrtf(powf(forward_f32.x, 2) + powf(forward_f32.z, 2));
 	pitch = atan2f(forward_f32.y, look_length_xz);
-	yaw = atan2f(forward_f32.x, forward_f32.z);
+	yaw   = atan2f(forward_f32.x, forward_f32.z);
 
 	needs_update = true;
 }
@@ -66,7 +66,7 @@ void CameraTransform::rotate(const float3& units) {
 void CameraTransform::rotateX(const float units) {
 	const XMMATRIX x_rotation = XMMatrixRotationAxis(right, units);
 
-	up = XMVector3TransformNormal(up, x_rotation);
+	up      = XMVector3TransformNormal(up, x_rotation);
 	forward = XMVector3TransformNormal(forward, x_rotation);
 }
 
@@ -74,7 +74,7 @@ void CameraTransform::rotateX(const float units) {
 void CameraTransform::rotateY(const float units) {
 	const XMMATRIX y_rotation = XMMatrixRotationAxis(up, units);
 
-	right = XMVector3TransformNormal(right, y_rotation);
+	right   = XMVector3TransformNormal(right, y_rotation);
 	forward = XMVector3TransformNormal(forward, y_rotation);
 }
 
@@ -83,7 +83,7 @@ void CameraTransform::rotateZ(const float units) {
 	const XMMATRIX z_rotation = XMMatrixRotationAxis(forward, units);
 
 	right = XMVector3TransformNormal(right, z_rotation);
-	up = XMVector3TransformNormal(up, z_rotation);
+	up    = XMVector3TransformNormal(up, z_rotation);
 }
 
 

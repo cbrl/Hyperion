@@ -14,9 +14,9 @@ void XM_CALLCONV ModelChild::updateBuffer(ID3D11DeviceContext& device_context,
 	// and send it to the constant buffer.
 	ModelBuffer buffer_data;
 
-	buffer_data.world = world;
+	buffer_data.world               = world;
 	buffer_data.world_inv_transpose = world_inv_transpose;
-	buffer_data.texTransform = XMMatrixIdentity();
+	buffer_data.texTransform        = XMMatrixIdentity();
 
 	buffer_data.mat = MaterialBuffer(material.ambient,
 	                                 material.diffuse,

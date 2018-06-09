@@ -47,19 +47,19 @@ void Direct3D::init() {
 
 	D3D_FEATURE_LEVEL feature_level;
 	const HRESULT hr = D3D11CreateDevice(
-	                               nullptr,
-	                               // default adapter
-	                               driver_type,
-	                               nullptr,
-	                               // no software device
-	                               create_device_flags,
-	                               nullptr,
-	                               0,
-	                               // default feature level array
-	                               D3D11_SDK_VERSION,
-	                               device.GetAddressOf(),
-	                               &feature_level,
-	                               device_context.GetAddressOf());
+	                                     nullptr,
+	                                     // default adapter
+	                                     driver_type,
+	                                     nullptr,
+	                                     // no software device
+	                                     create_device_flags,
+	                                     nullptr,
+	                                     0,
+	                                     // default feature level array
+	                                     D3D11_SDK_VERSION,
+	                                     device.GetAddressOf(),
+	                                     &feature_level,
+	                                     device_context.GetAddressOf());
 
 	ThrowIfFailed(hr, "D3D11CreateDevice Failed");
 
@@ -84,19 +84,19 @@ void Direct3D::init() {
 	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
 	//----------------------------------------------------------------------------------
 	DXGI_SWAP_CHAIN_DESC sd;
-	sd.BufferDesc.Width = window_width;
-	sd.BufferDesc.Height = window_height;
-	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	sd.BufferDesc.Width            = window_width;
+	sd.BufferDesc.Height           = window_height;
+	sd.BufferDesc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+	sd.BufferDesc.Scaling          = DXGI_MODE_SCALING_UNSPECIFIED;
 
 	// 4X MSAA
 	if (enable_4x_msaa) {
-		sd.SampleDesc.Count = 4;
+		sd.SampleDesc.Count   = 4;
 		sd.SampleDesc.Quality = msaa_4x_quality - 1;
 	}
 	else {
-		sd.SampleDesc.Count = 1;
+		sd.SampleDesc.Count   = 1;
 		sd.SampleDesc.Quality = 0;
 	}
 
@@ -107,7 +107,7 @@ void Direct3D::init() {
 		                sd.BufferDesc.RefreshRate.Denominator);
 	}
 	else {
-		sd.BufferDesc.RefreshRate.Numerator = 0;
+		sd.BufferDesc.RefreshRate.Numerator   = 0;
 		sd.BufferDesc.RefreshRate.Denominator = 1;
 	}
 
@@ -119,11 +119,11 @@ void Direct3D::init() {
 		sd.Windowed = true;
 	}
 
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.BufferCount = 1;
+	sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	sd.BufferCount  = 1;
 	sd.OutputWindow = hWnd;
-	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	sd.Flags = 0;
+	sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
+	sd.Flags        = 0;
 
 	// To correctly create the swap chain, we must use the IDXGIFactory that was
 	// used to create the device->  If we tried to use a different IDXGIFactory instance
@@ -171,9 +171,9 @@ void Direct3D::readRefreshRate(UINT& numerator, UINT& denominator) const {
 
 	std::vector<DXGI_MODE_DESC> display_mode_list(modes);
 	adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
-	                               DXGI_ENUM_MODES_INTERLACED,
-	                               &modes,
-	                               display_mode_list.data());
+	                                DXGI_ENUM_MODES_INTERLACED,
+	                                &modes,
+	                                display_mode_list.data());
 
 
 	// Find the mode that matches the screen, then store numerator and denominator for refresh rate
@@ -181,7 +181,7 @@ void Direct3D::readRefreshRate(UINT& numerator, UINT& denominator) const {
 	for (u32 i = 0; i < modes; i++) {
 		if (display_mode_list[i].Width == GetSystemMetrics(SM_CXSCREEN)) {
 			if (display_mode_list[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
-				numerator = display_mode_list[i].RefreshRate.Numerator;
+				numerator   = display_mode_list[i].RefreshRate.Numerator;
 				denominator = display_mode_list[i].RefreshRate.Denominator;
 			}
 		}
@@ -195,7 +195,7 @@ void Direct3D::resizeBuffers(u32 win_width, u32 win_height) {
 	assert(device);
 	assert(swap_chain);
 
-	window_width = win_width;
+	window_width  = win_width;
 	window_height = win_height;
 
 	render_target_view.Reset();
@@ -228,27 +228,27 @@ void Direct3D::resizeBuffers(u32 win_width, u32 win_height) {
 	//----------------------------------------------------------------------------------
 	D3D11_TEXTURE2D_DESC depth_stencil_desc;
 
-	depth_stencil_desc.Width = window_width;
-	depth_stencil_desc.Height = window_height;
+	depth_stencil_desc.Width     = window_width;
+	depth_stencil_desc.Height    = window_height;
 	depth_stencil_desc.MipLevels = 1;
 	depth_stencil_desc.ArraySize = 1;
-	depth_stencil_desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depth_stencil_desc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
 	// Use 4X MSAA? --must match swap chain MSAA values.
 	if (enable_4x_msaa) {
-		depth_stencil_desc.SampleDesc.Count = 4;
+		depth_stencil_desc.SampleDesc.Count   = 4;
 		depth_stencil_desc.SampleDesc.Quality = msaa_4x_quality - 1;
 	}
 		// No MSAA
 	else {
-		depth_stencil_desc.SampleDesc.Count = 1;
+		depth_stencil_desc.SampleDesc.Count   = 1;
 		depth_stencil_desc.SampleDesc.Quality = 0;
 	}
 
-	depth_stencil_desc.Usage = D3D11_USAGE_DEFAULT;
-	depth_stencil_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depth_stencil_desc.Usage          = D3D11_USAGE_DEFAULT;
+	depth_stencil_desc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
 	depth_stencil_desc.CPUAccessFlags = 0;
-	depth_stencil_desc.MiscFlags = 0;
+	depth_stencil_desc.MiscFlags      = 0;
 
 	ThrowIfFailed(device->CreateTexture2D(&depth_stencil_desc, nullptr, &depth_stencil_buffer),
 	              "Failed to create depth stencil buffer");

@@ -5,7 +5,8 @@
 
 class DirectionalLight final : public Component<DirectionalLight> {
 public:
-	DirectionalLight() : shadows(false) {
+	DirectionalLight()
+		: shadows(false) {
 	}
 
 	~DirectionalLight() = default;

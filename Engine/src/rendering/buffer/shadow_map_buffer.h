@@ -15,7 +15,7 @@ class ShadowMapBuffer final {
 public:
 	ShadowMapBuffer(ID3D11Device& device,
 	                u32 map_count,
-	                u32 width = 512,
+	                u32 width  = 512,
 	                u32 height = 512);
 
 	~ShadowMapBuffer() = default;
@@ -69,7 +69,7 @@ class ShadowCubeMapBuffer final {
 public:
 	ShadowCubeMapBuffer(ID3D11Device& device,
 	                    u32 cube_map_count,
-	                    u32 width = 512,
+	                    u32 width  = 512,
 	                    u32 height = 512);
 
 	~ShadowCubeMapBuffer() = default;

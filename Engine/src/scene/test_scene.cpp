@@ -4,11 +4,12 @@
 
 
 static constexpr float z_near = 0.1f;
-static constexpr float z_far = 1000.0f;
-static constexpr float fov = XM_PI / 3.0f;
+static constexpr float z_far  = 1000.0f;
+static constexpr float fov    = XM_PI / 3.0f;
 
 
-TestScene::TestScene(const Engine& engine) : Scene("Test Scene") {
+TestScene::TestScene(const Engine& engine)
+	: Scene("Test Scene") {
 
 	init(engine);
 }
@@ -16,10 +17,10 @@ TestScene::TestScene(const Engine& engine) : Scene("Test Scene") {
 
 void TestScene::init(const Engine& engine) {
 
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine          = engine.getECS();
 	const auto& rendering_mgr = engine.getRenderingMgr();
-	auto& device = rendering_mgr.getDevice();
-	auto& device_context = rendering_mgr.getDeviceContext();
+	auto& device              = rendering_mgr.getDevice();
+	auto& device_context      = rendering_mgr.getDeviceContext();
 
 	auto& resource_mgr = rendering_mgr.getResourceMgr();
 
@@ -33,7 +34,8 @@ void TestScene::init(const Engine& engine) {
 	                                                              device_context,
 	                                                              engine.getWindowWidth(),
 	                                                              engine.getWindowHeight(),
-	                                                              resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	                                                              resource_mgr.getOrCreate<Texture
+	                                                              >(L"../data/Textures/grasscube1024.dds"));
 
 	// Set the parameters
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
@@ -97,7 +99,7 @@ void TestScene::init(const Engine& engine) {
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
+	auto bp     = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
 	auto sphere = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
 
 	const handle64 test_model = ecs_engine.createEntity<BasicModel>(device, bp);
@@ -133,13 +135,13 @@ void TestScene::tick(const Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const int2 mouse_delta = engine.getInput().getMouseDelta();
-	const u32 fps = engine.getFPSCounter().getFPS();
-	const float delta_time = engine.getTimer().deltaTime();
-	const u64 total_cpu_usage = engine.getSysMon().cpu().getTotalCpuPercentage();
+	const int2 mouse_delta      = engine.getInput().getMouseDelta();
+	const u32 fps               = engine.getFPSCounter().getFPS();
+	const float delta_time      = engine.getTimer().deltaTime();
+	const u64 total_cpu_usage   = engine.getSysMon().cpu().getTotalCpuPercentage();
 	const double proc_cpu_usage = engine.getSysMon().cpu().getProcessCpuPercentage();
-	const u64 total_mem_usage = engine.getSysMon().memory().getTotalUsedPhysicalMem();
-	const u64 proc_mem_usage = engine.getSysMon().memory().getProcessUsedPhysicalMem();
+	const u64 total_mem_usage   = engine.getSysMon().memory().getTotalUsedPhysicalMem();
+	const u64 proc_mem_usage    = engine.getSysMon().memory().getProcessUsedPhysicalMem();
 
 	static wostringstream cpu_str;
 	static wostringstream mem_str;

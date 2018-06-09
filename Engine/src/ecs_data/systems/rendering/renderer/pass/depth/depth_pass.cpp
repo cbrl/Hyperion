@@ -54,9 +54,9 @@ void XM_CALLCONV DepthPass::render(const Engine& engine,
 
 	// Draw each model
 	ecs_engine.forEachActive<Model>([&](Model& model) {
-		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
+		const auto transform      = ecs_engine.getComponent<Transform>(model.getOwner());
 		const auto model_to_world = transform->getObjectToWorldMatrix();
-		const auto model_to_proj = model_to_world * world_to_proj;
+		const auto model_to_proj  = model_to_world * world_to_proj;
 
 		if (!Frustum(model_to_proj).contains(model.GetAABB()))
 			return;
@@ -86,9 +86,9 @@ void XM_CALLCONV DepthPass::renderShadows(const Engine& engine,
 
 	// Draw each model
 	ecs_engine.forEachActive<Model>([&](Model& model) {
-		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
+		const auto transform      = ecs_engine.getComponent<Transform>(model.getOwner());
 		const auto model_to_world = transform->getObjectToWorldMatrix();
-		const auto model_to_proj = model_to_world * world_to_proj;
+		const auto model_to_proj  = model_to_world * world_to_proj;
 
 		if (!Frustum(model_to_proj).contains(model.GetAABB()))
 			return;
@@ -103,7 +103,7 @@ void XM_CALLCONV DepthPass::renderShadows(const Engine& engine,
 void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) const {
 
 	AltCameraBuffer buffer;
-	buffer.world_to_camera = XMMatrixTranspose(world_to_camera);
+	buffer.world_to_camera      = XMMatrixTranspose(world_to_camera);
 	buffer.camera_to_projection = XMMatrixTranspose(camera_to_projection);
 
 	alt_cam_buffer.updateData(device_context, buffer);

@@ -106,7 +106,7 @@ struct ModelBuffer {
 	ModelBuffer()
 		: world(XMMatrixIdentity())
 		, world_inv_transpose(XMMatrixIdentity())
-		  //, world_view_proj(XMMatrixIdentity())
+		//, world_view_proj(XMMatrixIdentity())
 		, texTransform(XMMatrixIdentity()) {
 	}
 

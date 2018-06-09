@@ -13,7 +13,7 @@ void TransformSystem::updateWorld(ECS& ecs_engine, TransformT& transform) {
 		// If the parent was updated, or if this transform already needs
 		// an update, then get the parent's matrix.
 	else {
-		const auto parent = ecs_engine.getComponent<Transform>(transform.getParent());
+		const auto parent     = ecs_engine.getComponent<Transform>(transform.getParent());
 		const auto parent_cam = ecs_engine.getComponent<CameraTransform>(transform.getParent());
 
 		if (parent) {
@@ -40,9 +40,9 @@ void TransformSystem::updateWorld(ECS& ecs_engine, TransformT& transform) {
 
 	if (transform.needs_update) {
 		const XMMATRIX this_world = calculateWorld(transform);
-		transform.world = this_world * parent_world;
+		transform.world           = this_world * parent_world;
 
 		transform.needs_update = false;
-		transform.updated = true;
+		transform.updated      = true;
 	}
 }

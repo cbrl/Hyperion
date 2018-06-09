@@ -2,11 +2,11 @@ template<typename DataT>
 ConstantBuffer<DataT>::ConstantBuffer(ID3D11Device& device) {
 	D3D11_BUFFER_DESC buffer_desc = {};
 
-	buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
-	buffer_desc.ByteWidth = sizeof(DataT);
-	buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	buffer_desc.MiscFlags = NULL;
+	buffer_desc.Usage               = D3D11_USAGE_DYNAMIC;
+	buffer_desc.ByteWidth           = sizeof(DataT);
+	buffer_desc.BindFlags           = D3D11_BIND_CONSTANT_BUFFER;
+	buffer_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_WRITE;
+	buffer_desc.MiscFlags           = NULL;
 	buffer_desc.StructureByteStride = NULL;
 
 	ThrowIfFailed(device.CreateBuffer(&buffer_desc, nullptr, buffer.ReleaseAndGetAddressOf()),

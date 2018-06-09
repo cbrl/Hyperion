@@ -34,10 +34,12 @@ public:
 
 
 protected:
-	Scene() : name("Scene") {
+	Scene()
+		: name("Scene") {
 	}
 
-	Scene(string&& name) : name(std::move(name)) {
+	Scene(string&& name)
+		: name(std::move(name)) {
 	}
 
 	virtual void init(const Engine& engine) = 0;
