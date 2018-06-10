@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <DirectXMath.h>
+#include "datatypes/datatypes.h"
 
 
 using namespace DirectX;

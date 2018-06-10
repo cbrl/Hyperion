@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\components">
+      <UniqueIdentifier>{1314263b-2043-47a4-bdf8-cc196d46e808}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\components\rendering">
+      <UniqueIdentifier>{bd5cadbe-9d2a-45f0-b331-b83bb360fd7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\components\rendering\camera">
+      <UniqueIdentifier>{840bddb9-8a5a-4aaa-aaec-f39f441c9099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\components\rendering\light">
+      <UniqueIdentifier>{a8744bc6-d337-4088-acfd-730d990670cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\components\rendering\model">
+      <UniqueIdentifier>{c3a38fdb-38ce-4e4e-baae-893e64e8e087}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\components\rendering\skybox">
+      <UniqueIdentifier>{f8d3af68-0d8d-401f-88b8-097aa63ee1ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\components\geometry">
+      <UniqueIdentifier>{20a1d429-da68-4efa-99b0-300e9f399862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\components\geometry\transform">
+      <UniqueIdentifier>{30c1d015-2ee2-459d-b87b-7e88f54c488e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\components">
+      <UniqueIdentifier>{f6c5fc8b-526c-464e-ac6a-3c75f37a6106}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\components\rendering">
+      <UniqueIdentifier>{3d3d96c5-6a8b-4046-800c-c1e2bd9ec1e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\components\rendering\camera">
+      <UniqueIdentifier>{5e4680ab-9490-4057-b331-1abe09a6e280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\components\rendering\model">
+      <UniqueIdentifier>{20e2440c-f4ee-49c7-a7e0-65eb906ec16e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\components\rendering\skybox">
+      <UniqueIdentifier>{f38bac03-f935-48b4-b7e3-050c8346334e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\components\geometry">
+      <UniqueIdentifier>{accfd685-bce9-4d64-ba33-4e666341e5cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\components\geometry\transform">
+      <UniqueIdentifier>{82aba4ce-c15e-4be8-bf62-c86ab44038f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\entities">
+      <UniqueIdentifier>{1bf67ee2-3af5-4216-815e-7b6d42fad31f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\entities\world">
+      <UniqueIdentifier>{3914d4d5-bd57-475b-9aca-922358e257d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems">
+      <UniqueIdentifier>{0ba1b473-1d18-4e26-ac9e-83759efa3d77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\systems">
+      <UniqueIdentifier>{ead6894d-f978-42e8-a7b6-e5c8201681c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems\geometry">
+      <UniqueIdentifier>{43990438-cb76-4038-b2c5-3cee323daec7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems\rendering">
+      <UniqueIdentifier>{dae1c118-5af2-4609-a45f-8be404de7bf6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\systems\geometry">
+      <UniqueIdentifier>{73c268c9-f839-4b7d-96f9-c9ae2f30749a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems\geometry\transform">
+      <UniqueIdentifier>{33ed6212-9481-46e2-ab6b-df968583da1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\systems\geometry\transform">
+      <UniqueIdentifier>{12955cad-b065-4416-8643-c2bd334c9f3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems\rendering\camera">
+      <UniqueIdentifier>{86be85a1-9b94-4c12-a523-9b18b673ba3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems\rendering\model">
+      <UniqueIdentifier>{c7c35ea4-c8f7-4e45-89e0-86a83664e9bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\systems\rendering">
+      <UniqueIdentifier>{da05e9de-65f8-4e5a-9072-389b18e871e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\systems\rendering\camera">
+      <UniqueIdentifier>{56c7cbfa-be6f-4990-97fd-fe93d84e29a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\systems\rendering\model">
+      <UniqueIdentifier>{7ce3a652-5c05-4f49-ab48-184dedec8379}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\systems\rendering\renderer">
+      <UniqueIdentifier>{4016bd04-a119-4de4-80c8-4c691add1afc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\systems\rendering\renderer\pass">
+      <UniqueIdentifier>{af78516e-201a-4a3a-9161-b72c1e9656ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems\rendering\renderer">
+      <UniqueIdentifier>{0da8d670-5e87-4216-be24-e3665b85348b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems\rendering\renderer\pass">
+      <UniqueIdentifier>{81d8162a-fb41-4860-a147-aade9c8206bc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\components\geometry\transform\camera_transform.h">
+      <Filter>Header Files\components\geometry\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\geometry\transform\transform.h">
+      <Filter>Header Files\components\geometry\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\rendering\camera\camera_movement.h">
+      <Filter>Header Files\components\rendering\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\rendering\camera\orthographic_camera.h">
+      <Filter>Header Files\components\rendering\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\rendering\camera\camera_base.h">
+      <Filter>Header Files\components\rendering\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\rendering\camera\perspective_camera.h">
+      <Filter>Header Files\components\rendering\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\rendering\light\directional_light.h">
+      <Filter>Header Files\components\rendering\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\rendering\light\point_light.h">
+      <Filter>Header Files\components\rendering\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\rendering\light\spot_light.h">
+      <Filter>Header Files\components\rendering\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\rendering\model\model.h">
+      <Filter>Header Files\components\rendering\model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\rendering\skybox\skybox.h">
+      <Filter>Header Files\components\rendering\skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\components.h">
+      <Filter>Header Files\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\entities.h">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\world\basic_directional_light.h">
+      <Filter>Header Files\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\world\basic_model.h">
+      <Filter>Header Files\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\world\basic_point_light.h">
+      <Filter>Header Files\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\world\basic_spot_light.h">
+      <Filter>Header Files\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\world\player_camera.h">
+      <Filter>Header Files\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entities\world\world_object.h">
+      <Filter>Header Files\entities\world</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\systems.h">
+      <Filter>Header Files\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\geometry\transform\transform_system.h">
+      <Filter>Header Files\systems\geometry\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\rendering\camera\camera_system.h">
+      <Filter>Header Files\systems\rendering\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\rendering\model\model_system.h">
+      <Filter>Header Files\systems\rendering\model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\rendering\renderer\pass\depth\depth_pass.h">
+      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\rendering\renderer\pass\forward\forward_pass.h">
+      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\rendering\renderer\pass\light\light_pass.h">
+      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\rendering\renderer\pass\sky\sky_pass.h">
+      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\rendering\renderer\pass\text\text_pass.h">
+      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\rendering\renderer\renderer.h">
+      <Filter>Header Files\systems\rendering\renderer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\components\geometry\transform\camera_transform.cpp">
+      <Filter>Source Files\components\geometry\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\geometry\transform\transform.cpp">
+      <Filter>Source Files\components\geometry\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\rendering\camera\orthographic_camera.cpp">
+      <Filter>Source Files\components\rendering\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\rendering\camera\perspective_camera.cpp">
+      <Filter>Source Files\components\rendering\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\rendering\model\model.cpp">
+      <Filter>Source Files\components\rendering\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\rendering\skybox\skybox.cpp">
+      <Filter>Source Files\components\rendering\skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\geometry\transform\transform_system.cpp">
+      <Filter>Source Files\systems\geometry\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\rendering\model\model_system.cpp">
+      <Filter>Source Files\systems\rendering\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\rendering\camera\camera_system.cpp">
+      <Filter>Source Files\systems\rendering\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\rendering\renderer\pass\depth\depth_pass.cpp">
+      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\rendering\renderer\pass\forward\forward_pass.cpp">
+      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\rendering\renderer\pass\light\light_pass.cpp">
+      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\rendering\renderer\pass\sky\sky_pass.cpp">
+      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\rendering\renderer\pass\text\text_pass.cpp">
+      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\rendering\renderer\renderer.cpp">
+      <Filter>Source Files\systems\rendering\renderer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\systems\geometry\transform\transform_system.tpp">
+      <Filter>Source Files\systems\geometry\transform</Filter>
+    </None>
+    <None Include="packages.config" />
+    <None Include="src\systems\rendering\renderer\renderer.tpp">
+      <Filter>Source Files\systems\rendering\renderer</Filter>
+    </None>
+  </ItemGroup>
+</Project>

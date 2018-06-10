@@ -8,11 +8,10 @@
 #include "timer/timer.h"
 #include "fps/fps.h"
 #include "input/input.h"
-#include "rendering/rendering_mgr.h"
+#include "rendering_mgr.h"
 #include "scene/scene.h"
 
 #include "ecs.h"
-#include "ecs_data/systems/systems.h"
 
 
 #define WINDOW_WIDTH  1200

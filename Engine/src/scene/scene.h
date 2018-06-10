@@ -2,11 +2,11 @@
 
 #include "datatypes/datatypes.h"
 #include "input/input.h"
-#include "rendering/buffer/buffers.h"
+#include "buffer/buffers.h"
 #include "scene/text/text.h"
 //#include "scene\ui\user_interface.h"
-#include "ecs_data/entities/entities.h"
-#include "ecs_data/components/components.h"
+#include "entities/entities.h"
+#include "components/components.h"
 
 class Engine;
 
