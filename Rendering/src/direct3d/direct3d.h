@@ -7,18 +7,14 @@
 #include <d3d11.h>
 #include <dxgi.h>
 #include "datatypes/datatypes.h"
+#include "display_config.h"
 
 using namespace DirectX;
 
 
 class Direct3D final {
 public:
-	Direct3D(HWND hWnd,
-	         u32 window_width,
-	         u32 window_height,
-	         bool fullscreen,
-	         bool v_sync,
-	         bool msaa);
+	Direct3D(HWND window, DisplayConfig config);
 
 	~Direct3D();
 

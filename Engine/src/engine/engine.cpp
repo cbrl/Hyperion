@@ -19,13 +19,8 @@ Engine::~Engine() {
 
 bool Engine::init() {
 
-	// Set width/height variables. Later on this can be read from a config file.
-	window_width  = WINDOW_WIDTH;
-	window_height = WINDOW_HEIGHT;
-
-
 	// Create main window
-	if (!this->initWindow(L"Engine", window_width, window_height)) {
+	if (!this->initWindow(L"Engine", WINDOW_WIDTH, WINDOW_HEIGHT)) {
 		return false;
 	}
 	FILE_LOG(logINFO) << "Initialized main window";
@@ -55,7 +50,8 @@ bool Engine::init() {
 
 
 	// Initialize rendering manager
-	rendering_mgr = make_unique<RenderingMgr>(*this, FULLSCREEN_STATE, VSYNC_STATE, MSAA_STATE);
+	DisplayConfig config(window_width, window_height, 144, AAType::none, FULLSCREEN_STATE, VSYNC_STATE);
+	rendering_mgr = make_unique<RenderingMgr>(hWnd, config);
 	ecs_engine->addSystem<Renderer>(rendering_mgr->getDevice(), rendering_mgr->getDeviceContext());
 
 

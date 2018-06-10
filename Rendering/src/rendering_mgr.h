@@ -8,12 +8,12 @@
 #include "render_state_mgr.h"
 #include "resource/resource_mgr.h"
 #include "imgui_impl_dx11.h"
+#include "display_config.h"
 
-class Engine;
 
 class RenderingMgr final {
 public:
-	RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msaa);
+	RenderingMgr(HWND window, DisplayConfig config);
 	~RenderingMgr();
 
 	// Resize the viewport

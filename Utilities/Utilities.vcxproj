@@ -130,6 +130,7 @@
     <ClInclude Include="src\datatypes\container_types.h" />
     <ClInclude Include="src\datatypes\datatypes.h" />
     <ClInclude Include="src\datatypes\pointer_types.h" />
+    <ClInclude Include="src\datatypes\scalar_types.h" />
     <ClInclude Include="src\datatypes\vector_types.h" />
     <ClInclude Include="src\directx\vertex_types.h" />
     <ClInclude Include="src\fps\fps.h" />

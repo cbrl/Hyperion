@@ -5,19 +5,14 @@
 #include "pipeline.h"
 
 
-Direct3D::Direct3D(HWND hWnd,
-                   u32 window_width,
-                   u32 window_height,
-                   bool fullscreen,
-                   bool v_sync,
-                   bool msaa)
+Direct3D::Direct3D(HWND window, DisplayConfig config)
 	: driver_type(D3D_DRIVER_TYPE_HARDWARE)
-	, hWnd(hWnd)
-	, window_width(window_width)
-	, window_height(window_height)
-	, enable_vsync(v_sync)
-	, enable_fullscreen(fullscreen)
-	, enable_4x_msaa(msaa)
+	, hWnd(window)
+	, window_width(config.getWidth())
+	, window_height(config.getHeight())
+	, enable_vsync(config.isVsync())
+	, enable_fullscreen(config.isFullscreen())
+	, enable_4x_msaa(config.getAAType() == AAType::msaa_4x)
 	, msaa_4x_quality(0) {
 
 	init();

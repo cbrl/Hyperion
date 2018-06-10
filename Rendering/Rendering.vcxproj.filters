@@ -206,6 +206,9 @@
     <ClInclude Include="src\resource\resource.h">
       <Filter>Header Files\resource</Filter>
     </ClInclude>
+    <ClInclude Include="src\display_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

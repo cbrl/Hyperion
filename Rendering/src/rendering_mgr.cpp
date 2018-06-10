@@ -2,21 +2,15 @@
 #include "rendering_mgr.h"
 
 #include "util/engine_util.h"
-#include "engine/engine.h"
 
 
-RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msaa) {
+RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 
 	//----------------------------------------------------------------------------------
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------
 
-	direct3D = make_unique<Direct3D>(engine.getHwnd(),
-	                                 engine.getWindowWidth(),
-	                                 engine.getWindowHeight(),
-	                                 fullscreen,
-	                                 vsync,
-	                                 msaa);
+	direct3D = make_unique<Direct3D>(window, config);
 	FILE_LOG(logINFO) << "Initialized Direct3D";
 
 
@@ -39,7 +33,7 @@ RenderingMgr::RenderingMgr(Engine& engine, bool fullscreen, bool vsync, bool msa
 	//----------------------------------------------------------------------------------
 
 	ImGui::CreateContext();
-	ImGui_ImplDX11_Init(engine.getHwnd(), &direct3D->getDevice(), &direct3D->getDeviceContext());
+	ImGui_ImplDX11_Init(window, &direct3D->getDevice(), &direct3D->getDeviceContext());
 }
 
 
