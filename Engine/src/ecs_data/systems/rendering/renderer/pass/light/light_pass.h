@@ -8,10 +8,9 @@
 #include "ecs_data/components/rendering/light/point_light.h"
 #include "ecs_data/components/rendering/light/spot_light.h"
 #include "ecs_data/systems/rendering/renderer/pass/depth/depth_pass.h"
-#include "scene/scene.h"
 
-class Engine;
-
+class ECS;
+class Scene;
 
 class LightPass final {
 public:

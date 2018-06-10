@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "text_pass.h"
+#include "scene/scene.h"
 
 
 TextPass::TextPass(ID3D11DeviceContext& device_context) {

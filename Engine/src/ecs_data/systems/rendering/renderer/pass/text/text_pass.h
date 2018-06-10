@@ -4,8 +4,8 @@
 #include <SpriteBatch.h>
 
 #include "datatypes/datatypes.h"
-#include "scene/scene.h"
 
+class Scene;
 
 class TextPass final {
 public:

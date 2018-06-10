@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "engine.h"
 #include "imgui.h"
+#include "scene/scene.h"
 
 
 // Declare the ImGui msg handler
@@ -9,8 +10,8 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 Engine::~Engine() {
 	// Explicity delete the scene and entity component system before
-	// the rendering manager. This avoids D3D reporting live resources
-	// that are going to be deleted right after the report.
+	// the rendering manager. This prevents D3D from reporting live
+	// resources that are going to be deleted right after the report.
 	scene.reset();
 	ecs_engine.reset();
 }
@@ -58,12 +59,23 @@ bool Engine::init() {
 	ecs_engine->addSystem<Renderer>(rendering_mgr->getDevice(), rendering_mgr->getDeviceContext());
 
 
-	// Initialize scene
-	scene = make_unique<TestScene>(*this);
-	FILE_LOG(logINFO) << "Loaded scene";
-
-
 	return true;
+}
+
+
+void Engine::loadScene(unique_ptr<Scene>&& new_scene) {
+	
+	if (scene) {
+		scene->unload(*this);
+	}
+
+	scene = std::move(new_scene);
+
+	if (scene) {
+		scene->load(*this);
+		FILE_LOG(logINFO) << "Loaded new scene";
+		timer->reset();
+	}
 }
 
 

@@ -9,11 +9,11 @@
 class TestScene final : public Scene {
 
 public:
-	TestScene(const Engine& engine);
+	TestScene();
 
 	~TestScene() = default;
 
-	void init(const Engine& engine) override;
+	void load(const Engine& engine) override;
 
 	void tick(const Engine& engine) override;
 };

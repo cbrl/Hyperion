@@ -8,14 +8,11 @@ static constexpr float z_far  = 1000.0f;
 static constexpr float fov    = XM_PI / 3.0f;
 
 
-TestScene::TestScene(const Engine& engine)
-	: Scene("Test Scene") {
-
-	init(engine);
+TestScene::TestScene() : Scene("Test Scene") {
 }
 
 
-void TestScene::init(const Engine& engine) {
+void TestScene::load(const Engine& engine) {
 
 	auto& ecs_engine          = engine.getECS();
 	const auto& rendering_mgr = engine.getRenderingMgr();

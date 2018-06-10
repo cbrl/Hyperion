@@ -360,9 +360,6 @@
     <ClInclude Include="src\geometry\shapes\bezier.h">
       <Filter>Header Files\geometry\shapes</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\test_scene.h">
-      <Filter>Header Files\scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\loader\model_loader.tpp">
       <Filter>Source Files\loader</Filter>
     </ClInclude>
@@ -503,9 +500,6 @@
     <ClCompile Include="src\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\main\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\input\Input.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
@@ -529,9 +523,6 @@
     </ClCompile>
     <ClCompile Include="src\geometry\shapes\shapes.tpp">
       <Filter>Source Files\geometry\shapes</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\test_scene.cpp">
-      <Filter>Source Files\scene</Filter>
     </ClCompile>
     <ClCompile Include="src\resource\model\model_blueprint.cpp">
       <Filter>Source Files\resource\model</Filter>
@@ -595,6 +586,9 @@
     </ClCompile>
     <ClCompile Include="src\ecs_data\systems\rendering\renderer\pass\depth\depth_pass.cpp">
       <Filter>Source Files\ecs_data\systems\rendering\renderer\pass\depth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\scene.cpp">
+      <Filter>Source Files\scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

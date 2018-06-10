@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "light_pass.h"
 #include "engine/engine.h"
+#include "scene/scene.h"
 
 
 LightPass::LightPass(ID3D11Device& device, ID3D11DeviceContext& device_context)

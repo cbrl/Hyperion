@@ -7,13 +7,12 @@
 #include "sysmon/system_monitor.h"
 #include "timer/timer.h"
 #include "fps/fps.h"
-
-#include "ecs.h"
-#include "ecs_data/systems/systems.h"
 #include "input/input.h"
 #include "rendering/rendering_mgr.h"
 #include "scene/scene.h"
-#include "scene/test_scene.h"
+
+#include "ecs.h"
+#include "ecs_data/systems/systems.h"
 
 
 #define WINDOW_WIDTH  1200
@@ -32,6 +31,7 @@ public:
 	~Engine();
 
 	bool init();
+	void loadScene(unique_ptr<Scene>&& new_scene);
 	void run() override;
 
 	LRESULT msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;
@@ -57,12 +57,12 @@ private:
 
 
 private:
-	unique_ptr<ECS> ecs_engine;
-	unique_ptr<Input> input;
 	unique_ptr<SystemMonitor> system_monitor;
 	unique_ptr<Timer> timer;
 	unique_ptr<FPS> fps_counter;
+	unique_ptr<Input> input;
 	unique_ptr<RenderingMgr> rendering_mgr;
+	unique_ptr<ECS> ecs_engine;
 	unique_ptr<Scene> scene;
 
 	bool resizing;

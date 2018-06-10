@@ -8,10 +8,8 @@
 #include "rendering/render_state_mgr.h"
 #include "resource/resource_mgr.h"
 #include "imgui_impl_dx11.h"
-#include "scene/scene.h"
 
 class Engine;
-
 
 class RenderingMgr final {
 public:
