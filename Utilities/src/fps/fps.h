@@ -2,7 +2,7 @@
 
 #pragma comment(lib, "winmm.lib")
 
-#include <Windows.h>
+#include "os/windows.h"
 #include <timeapi.h>
 #include "datatypes/datatypes.h"
 

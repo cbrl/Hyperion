@@ -56,7 +56,7 @@ inline wstring GetFileExtension(const wstring& in) {
 #if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_)
 
 #include <Commdlg.h>
-#include <Windows.h>
+#include "os/windows.h"
 
 inline bool OpenFilePicker(wchar_t* lpstrFile, DWORD nMaxFile) {
 

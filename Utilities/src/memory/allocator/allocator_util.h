@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/pointer_types.h"
 
 
 namespace AllocatorUtil {
@@ -8,7 +8,7 @@ namespace AllocatorUtil {
 	// Calculate the padding needed to align an address
 	static size_t CalculatePadding(const uintptr address, const size_t alignment) {
 
-		size_t pad = alignment - (address & static_cast<uintptr>(alignment - 1));
+		const size_t pad = alignment - (address & static_cast<uintptr>(alignment - 1));
 
 		return (pad == alignment) ? 0 : pad;
 	}

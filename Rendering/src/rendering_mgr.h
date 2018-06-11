@@ -1,7 +1,6 @@
 #pragma once
 
-#include <Windows.h>
-#include <d3d11.h>
+#include "os/d3d11.h"
 
 #include "datatypes/datatypes.h"
 #include "direct3d/direct3d.h"

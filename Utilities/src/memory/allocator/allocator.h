@@ -1,8 +1,7 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
 #include "allocator_util.h"
-
+#include "datatypes/datatypes.h"
 
 class Allocator {
 public:

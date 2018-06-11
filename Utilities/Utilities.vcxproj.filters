@@ -64,6 +64,9 @@
     <Filter Include="Source Files\directx">
       <UniqueIdentifier>{796511a8-d4f3-4dc7-ad14-c0dc88296147}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\os">
+      <UniqueIdentifier>{a3360963-fa68-445e-b659-92615321e7c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -125,6 +128,12 @@
     </ClInclude>
     <ClInclude Include="src\engine_util.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\os\windows.h">
+      <Filter>Header Files\os</Filter>
+    </ClInclude>
+    <ClInclude Include="src\os\d3d11.h">
+      <Filter>Header Files\os</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

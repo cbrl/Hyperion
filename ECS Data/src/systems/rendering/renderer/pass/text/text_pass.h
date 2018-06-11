@@ -1,6 +1,6 @@
 #pragma once
 
-#include <d3d11.h>
+#include "os/d3d11.h"
 #include <SpriteBatch.h>
 
 #include "datatypes/datatypes.h"

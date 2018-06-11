@@ -1,8 +1,8 @@
 #pragma once
 
+#include "os/d3d11.h"
 #include "datatypes/datatypes.h"
 
-#include <d3d11.h>
 using namespace DirectX;
 
 
