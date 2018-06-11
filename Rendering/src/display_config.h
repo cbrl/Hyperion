@@ -1,7 +1,8 @@
 #pragma once
 
 #include <d3d11.h>
-#include "datatypes/scalar_types.h"
+#include "datatypes/datatypes.h"
+#include "engine_util.h"
 
 
 enum class AAType {
@@ -15,54 +16,97 @@ enum class AAType {
 class DisplayConfig final {
 public:
 	DisplayConfig()
-		: width(800)
-		, height(600)
-		, refresh_rate(60)
+		: curr_desc(0)
 		, anti_aliasing(AAType::none)
 		, fullscreen(false)
 		, vsync(false) {
+
+		GetAdapter();
 	}
 
-	DisplayConfig(u32 width,
-	              u32 height,
-	              u32 refresh,
-	              AAType aa,
+	DisplayConfig(AAType aa,
 	              bool fullscreen,
 	              bool vsync)
-		: width(width)
-		, height(height)
-		, refresh_rate(refresh)
+		: curr_desc(0)
 		, anti_aliasing(aa)
 		, fullscreen(fullscreen)
 		, vsync(vsync) {
+
+		GetAdapter();
 	}
 
 	DisplayConfig(const DisplayConfig& config) = default;
 	DisplayConfig(DisplayConfig&& config) = default;
 	~DisplayConfig() = default;
 
+	void GetAdapter() {
+		ComPtr<IDXGIFactory> factory;
 
-	void setWidth(u32 value) { width = value; }
-	void setHieght(u32 value) { width = value; }
-	void setRefreshRate(u32 value) { refresh_rate = value; }
+		// Create the DXGI factory
+		ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), static_cast<void**>(&factory)),
+		              "Failed to create dxgiFactory");
+
+		// Get the default adapter and output
+		factory->EnumAdapters(0, &adapter);
+		adapter->EnumOutputs(0, &adapter_out);
+
+		// Get the number of display modes
+		u32 mode_count;
+		adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &mode_count, nullptr);
+
+		// Get the display modes
+		vector<DXGI_MODE_DESC> display_modes(mode_count);
+		adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
+		                                DXGI_ENUM_MODES_INTERLACED,
+		                                &mode_count,
+		                                display_modes.data());
+
+
+		// Store the display modes that are above 800px wide
+		for (u32 i = 0; i < mode_count; i++) {
+			if (display_modes[i].Width <= 800)
+				continue;
+
+			display_desc_list.push_back(display_modes[i]);
+		}
+
+
+		// Get the highest refresh rate display mode for the current resolution
+		for (u32 i = 0; i < display_desc_list.size(); ++i) {
+			//if (display_desc_list[i].Width == GetSystemMetrics(SM_CXSCREEN) &&
+			//	display_desc_list[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
+			if (display_desc_list[i].Width == display_desc_list[curr_desc].Width &&
+				display_desc_list[i].Height == display_desc_list[curr_desc].Height) {
+
+				const u32 new_rr = display_desc_list[i].RefreshRate.Numerator / display_desc_list[i].RefreshRate.Denominator;
+				const u32 old_rr = display_desc_list[curr_desc].RefreshRate.Numerator / display_desc_list[curr_desc].RefreshRate.Denominator;
+
+				if (new_rr > old_rr) curr_desc = i;
+			}
+		}
+	}
+
+
+	void setDisplayDesc(u32 index) { curr_desc = index; }
 	void setAAType(AAType value) { anti_aliasing = value; }
 	void setFullscreen(bool state) { fullscreen = state; }
 	void setVsync(bool state) { vsync = state; }
 
 
-	u32 getWidth() const { return width; }
-	u32 getHeight() const { return height; }
-	u32 getRefreshRate() const { return refresh_rate; }
+	IDXGIAdapter* getAdapter() const { return adapter.Get(); }
+	IDXGIOutput* getOutput() const { return adapter_out.Get(); }
+	const vector<DXGI_MODE_DESC>& getDisplayDescList() const { return display_desc_list; }
+	DXGI_MODE_DESC getDisplayDesc() const { return display_desc_list[curr_desc]; }
 	AAType getAAType() const { return anti_aliasing; }
 	bool isFullscreen() const { return fullscreen; }
 	bool isVsync() const { return vsync; }
 
 
 private:
-	//DXGI_MODE_DESC display_desc;
-	u32    width;
-	u32    height;
-	u32    refresh_rate;
+	ComPtr<IDXGIAdapter> adapter;
+	ComPtr<IDXGIOutput> adapter_out;
+	vector<DXGI_MODE_DESC> display_desc_list;
+	u32 curr_desc;
 	AAType anti_aliasing;
 	bool   fullscreen;
 	bool   vsync;

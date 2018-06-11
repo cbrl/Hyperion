@@ -133,6 +133,7 @@
     <ClInclude Include="src\datatypes\scalar_types.h" />
     <ClInclude Include="src\datatypes\vector_types.h" />
     <ClInclude Include="src\directx\vertex_types.h" />
+    <ClInclude Include="src\engine_util.h" />
     <ClInclude Include="src\fps\fps.h" />
     <ClInclude Include="src\io\io.h" />
     <ClInclude Include="src\log\log.h" />

@@ -1,18 +1,13 @@
-#include "stdafx.h"
 #include "direct3d.h"
 
-#include "util/engine_util.h"
+#include "engine_util.h"
 #include "pipeline.h"
 
 
 Direct3D::Direct3D(HWND window, DisplayConfig config)
-	: driver_type(D3D_DRIVER_TYPE_HARDWARE)
-	, hWnd(window)
-	, window_width(config.getWidth())
-	, window_height(config.getHeight())
-	, enable_vsync(config.isVsync())
-	, enable_fullscreen(config.isFullscreen())
-	, enable_4x_msaa(config.getAAType() == AAType::msaa_4x)
+	: hWnd(window)
+	, display_config(std::move(config))
+	, enable_4x_msaa(display_config.getAAType() == AAType::msaa_4x)
 	, msaa_4x_quality(0) {
 
 	init();
@@ -41,16 +36,12 @@ void Direct3D::init() {
 	#endif
 
 	D3D_FEATURE_LEVEL feature_level;
-	const HRESULT hr = D3D11CreateDevice(
-	                                     nullptr,
-	                                     // default adapter
-	                                     driver_type,
-	                                     nullptr,
-	                                     // no software device
+	const HRESULT hr = D3D11CreateDevice(display_config.getAdapter(),
+	                                     D3D_DRIVER_TYPE_UNKNOWN,
+	                                     nullptr, // no software device
 	                                     create_device_flags,
 	                                     nullptr,
-	                                     0,
-	                                     // default feature level array
+	                                     0, // default feature level array
 	                                     D3D11_SDK_VERSION,
 	                                     device.GetAddressOf(),
 	                                     &feature_level,
@@ -79,8 +70,8 @@ void Direct3D::init() {
 	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
 	//----------------------------------------------------------------------------------
 	DXGI_SWAP_CHAIN_DESC sd;
-	sd.BufferDesc.Width            = window_width;
-	sd.BufferDesc.Height           = window_height;
+	sd.BufferDesc.Width            = display_config.getDisplayDesc().Width;
+	sd.BufferDesc.Height           = display_config.getDisplayDesc().Height;
 	sd.BufferDesc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	sd.BufferDesc.Scaling          = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -96,10 +87,10 @@ void Direct3D::init() {
 	}
 
 	// V-Sync
-	if (enable_vsync) {
+	if (!display_config.isVsync()) {
 		// Read refresh rate into buffer description
-		readRefreshRate(sd.BufferDesc.RefreshRate.Numerator,
-		                sd.BufferDesc.RefreshRate.Denominator);
+		sd.BufferDesc.RefreshRate.Numerator   = display_config.getDisplayDesc().RefreshRate.Numerator;
+		sd.BufferDesc.RefreshRate.Denominator = display_config.getDisplayDesc().RefreshRate.Denominator;
 	}
 	else {
 		sd.BufferDesc.RefreshRate.Numerator   = 0;
@@ -107,7 +98,7 @@ void Direct3D::init() {
 	}
 
 	// Fullscreen
-	if (enable_fullscreen) {
+	if (display_config.isFullscreen()) {
 		sd.Windowed = false;
 	}
 	else {
@@ -121,20 +112,12 @@ void Direct3D::init() {
 	sd.Flags        = 0;
 
 	// To correctly create the swap chain, we must use the IDXGIFactory that was
-	// used to create the device->  If we tried to use a different IDXGIFactory instance
+	// used to create the device. If we tried to use a different IDXGIFactory instance
 	// (by calling CreateDXGIFactory), we get an error: "IDXGIFactory::CreateSwapChain: 
 	// This function is being called with a device from a different IDXGIFactory."
 
-	ComPtr<IDXGIDevice> dxgi_device;
-	ThrowIfFailed(device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(dxgi_device.GetAddressOf())),
-	              "QueryInterface failed on dxgiDevice");
-
-	ComPtr<IDXGIAdapter> dxgi_adapter;
-	ThrowIfFailed(dxgi_device->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(dxgi_adapter.GetAddressOf())),
-	              "Failed to get parent of dxgiDevice");
-
 	ComPtr<IDXGIFactory> dxgi_factory;
-	ThrowIfFailed(dxgi_adapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(dxgi_factory.GetAddressOf())),
+	ThrowIfFailed(display_config.getAdapter()->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(dxgi_factory.GetAddressOf())),
 	              "Failed to get parent of dxgiFactory");
 
 	ThrowIfFailed(dxgi_factory->CreateSwapChain(device.Get(), &sd, swap_chain.GetAddressOf()),
@@ -142,45 +125,7 @@ void Direct3D::init() {
 
 
 	// Call resize function to create the render target view, and world/view/projection matrices
-	resizeBuffers(window_width, window_height);
-}
-
-
-void Direct3D::readRefreshRate(UINT& numerator, UINT& denominator) const {
-
-	// Create graphics interface factory
-	ComPtr<IDXGIFactory> factory;
-	ComPtr<IDXGIAdapter> adapter;
-	ComPtr<IDXGIOutput> adapter_out;
-	u32 modes;
-
-	ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), static_cast<void**>(&factory)),
-	              "Failed to create dxgiFactory");
-
-
-	// Get list of display modes
-
-	factory->EnumAdapters(0, &adapter);
-	adapter->EnumOutputs(0, &adapter_out);
-	adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &modes, nullptr);
-
-	std::vector<DXGI_MODE_DESC> display_mode_list(modes);
-	adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
-	                                DXGI_ENUM_MODES_INTERLACED,
-	                                &modes,
-	                                display_mode_list.data());
-
-
-	// Find the mode that matches the screen, then store numerator and denominator for refresh rate
-
-	for (u32 i = 0; i < modes; i++) {
-		if (display_mode_list[i].Width == GetSystemMetrics(SM_CXSCREEN)) {
-			if (display_mode_list[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
-				numerator   = display_mode_list[i].RefreshRate.Numerator;
-				denominator = display_mode_list[i].RefreshRate.Denominator;
-			}
-		}
-	}
+	resizeBuffers(display_config.getDisplayDesc().Width, display_config.getDisplayDesc().Height);
 }
 
 
@@ -190,16 +135,13 @@ void Direct3D::resizeBuffers(u32 win_width, u32 win_height) {
 	assert(device);
 	assert(swap_chain);
 
-	window_width  = win_width;
-	window_height = win_height;
-
 	render_target_view.Reset();
 	depth_stencil_view.Reset();
 	depth_stencil_buffer.Reset();
 
 	// Resize the swap chain and recreate the render target view
 
-	ThrowIfFailed(swap_chain->ResizeBuffers(1, window_width, window_height, DXGI_FORMAT_R8G8B8A8_UNORM, 0),
+	ThrowIfFailed(swap_chain->ResizeBuffers(1, win_width, win_height, DXGI_FORMAT_R8G8B8A8_UNORM, 0),
 	              "Failed to resize swapchain buffers");
 
 	ComPtr<ID3D11Texture2D> back_buffer;
@@ -223,8 +165,8 @@ void Direct3D::resizeBuffers(u32 win_width, u32 win_height) {
 	//----------------------------------------------------------------------------------
 	D3D11_TEXTURE2D_DESC depth_stencil_desc;
 
-	depth_stencil_desc.Width     = window_width;
-	depth_stencil_desc.Height    = window_height;
+	depth_stencil_desc.Width     = win_width;
+	depth_stencil_desc.Height    = win_height;
 	depth_stencil_desc.MipLevels = 1;
 	depth_stencil_desc.ArraySize = 1;
 	depth_stencil_desc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -274,7 +216,7 @@ void Direct3D::clear(const float color[4]) const {
 
 
 void Direct3D::presentFrame() const {
-	if (enable_vsync) {
+	if (display_config.isVsync()) {
 		// If VSync is enabled, present with next frame
 		ThrowIfFailed(swap_chain->Present(1, 0),
 		              "Failed to present frame");

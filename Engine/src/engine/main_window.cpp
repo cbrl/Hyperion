@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "main_window.h"
 
-#include "util/engine_util.h"
+#include "engine_util.h"
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
@@ -19,9 +19,20 @@ MainWindow::MainWindow()
 
 
 bool MainWindow::initWindow(LPCWSTR name, u32 width, u32 height) {
+
+	// Create a rect for the adjusted window size
+	RECT window_rect;
+	window_rect.top    = 0;
+	window_rect.left   = 0;
+	window_rect.right  = width;
+	window_rect.bottom = height;
+
+	// Calculate the total window size with decorations included
+	AdjustWindowRect(&window_rect, WS_OVERLAPPEDWINDOW, false);
+
 	app_name      = name;
-	window_width  = width;
-	window_height = height;
+	window_width  = window_rect.right - window_rect.left;
+	window_height = window_rect.bottom - window_rect.top;
 
 	const u32 x_pos = (GetSystemMetrics(SM_CXSCREEN) - window_width) / 2;
 	const u32 y_pos = (GetSystemMetrics(SM_CYSCREEN) - window_height) / 2;

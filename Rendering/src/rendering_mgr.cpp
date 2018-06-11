@@ -1,7 +1,6 @@
-#include "stdafx.h"
 #include "rendering_mgr.h"
 
-#include "util/engine_util.h"
+#include "engine_util.h"
 
 
 RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {

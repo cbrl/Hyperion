@@ -2,7 +2,7 @@
 
 #include "engine/main_window.h"
 
-#include "util/engine_util.h"
+#include "engine_util.h"
 #include "datatypes/datatypes.h"
 #include "sysmon/system_monitor.h"
 #include "timer/timer.h"
@@ -13,14 +13,6 @@
 #include "scene/scene.h"
 
 #include "ecs.h"
-
-
-#define WINDOW_WIDTH  1200
-#define WINDOW_HEIGHT 900
-
-#define MSAA_STATE       false
-#define VSYNC_STATE      false
-#define FULLSCREEN_STATE false
 
 
 class Engine final : public MainWindow {

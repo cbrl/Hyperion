@@ -2,7 +2,7 @@
 
 #include <d3d11.h>
 #include "datatypes/datatypes.h"
-#include "util/engine_util.h"
+#include "engine_util.h"
 
 
 namespace TextureLoader {

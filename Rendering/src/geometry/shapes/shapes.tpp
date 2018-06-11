@@ -8,7 +8,6 @@
 // http://go.microsoft.com/fwlink/?LinkID=615561
 //--------------------------------------------------------------------------------------
 
-#include "stdafx.h"
 #include "bezier.h"
 
 using namespace DirectX;

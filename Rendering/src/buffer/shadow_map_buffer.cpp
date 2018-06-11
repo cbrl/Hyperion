@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "shadow_map_buffer.h"
 
 ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,

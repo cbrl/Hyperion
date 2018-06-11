@@ -45,7 +45,6 @@ public:
 
 private:
 	void init();
-	void readRefreshRate(UINT& numerator, UINT& denominator) const;
 
 
 private:
@@ -56,13 +55,9 @@ private:
 	ComPtr<ID3D11Texture2D> depth_stencil_buffer;
 	ComPtr<ID3D11DepthStencilView> depth_stencil_view;
 	ComPtr<ID3D11RenderTargetView> render_target_view;
-	D3D_DRIVER_TYPE driver_type;
 
 	HWND hWnd;
-	u32  window_width;
-	u32  window_height;
-	bool enable_vsync;
-	bool enable_fullscreen;
+	DisplayConfig display_config;
 	bool enable_4x_msaa;
 	u32  msaa_4x_quality;
 };

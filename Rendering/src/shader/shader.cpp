@@ -1,6 +1,6 @@
 #include "shader.h"
 
-#include "util/engine_util.h"
+#include "engine_util.h"
 #include "io/io.h"
 
 

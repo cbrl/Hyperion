@@ -19,8 +19,11 @@ Engine::~Engine() {
 
 bool Engine::init() {
 
+	// Create the display configuration
+	DisplayConfig config(AAType::none, false, false);
+
 	// Create main window
-	if (!this->initWindow(L"Engine", WINDOW_WIDTH, WINDOW_HEIGHT)) {
+	if (!this->initWindow(L"Engine", config.getDisplayDesc().Width, config.getDisplayDesc().Height)) {
 		return false;
 	}
 	FILE_LOG(logINFO) << "Initialized main window";
@@ -49,8 +52,7 @@ bool Engine::init() {
 	fps_counter = make_unique<FPS>();
 
 
-	// Initialize rendering manager
-	DisplayConfig config(window_width, window_height, 144, AAType::none, FULLSCREEN_STATE, VSYNC_STATE);
+	// Initialize rendering manager and rendering system
 	rendering_mgr = make_unique<RenderingMgr>(hWnd, config);
 	ecs_engine->addSystem<Renderer>(rendering_mgr->getDevice(), rendering_mgr->getDeviceContext());
 

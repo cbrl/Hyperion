@@ -43,9 +43,6 @@
     <Filter Include="Source Files\engine">
       <UniqueIdentifier>{97c6cc69-3abd-48cf-aaef-fa88174e6fbf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\util">
-      <UniqueIdentifier>{23646e0a-8e90-4a11-9116-3f95569a9d7d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -71,9 +68,6 @@
     </ClInclude>
     <ClInclude Include="src\engine\engine.h">
       <Filter>Header Files\engine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\util\engine_util.h">
-      <Filter>Header Files\util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

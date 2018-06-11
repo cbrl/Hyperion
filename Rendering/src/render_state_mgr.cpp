@@ -1,7 +1,6 @@
-#include "stdafx.h"
 #include "render_state_mgr.h"
 
-#include "util/engine_util.h"
+#include "engine_util.h"
 #include "hlsl.h"
 #include "pipeline.h"
 

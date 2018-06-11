@@ -1,7 +1,7 @@
 #pragma once
 
+#include <cassert>
 #include <exception>
-#include <fstream>
 #include <sstream>
 #include <string>
 #include "log/log.h"
@@ -69,7 +69,7 @@ inline void AlertIfFailed(HRESULT hr, const wchar_t* msg = L"") {
 
 inline void AlertIfFailed(bool result, const wchar_t* msg = L"") {
 	if (!result) {
-		if (msg != L"") {
+		if (wcsncmp(msg, L"", 1) == 0) {
 			MessageBox(nullptr, msg, L"Error", MB_OK);
 		}
 		else {
