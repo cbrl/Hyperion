@@ -262,7 +262,7 @@ __pycache__/
 
 # User defined files
 *.blend
-shader_error.txt
-imgui.ini
-TODO.txt
-log.txt
+**/shader_error.txt
+**/imgui.ini
+**/TODO.txt
+**/log.txt
