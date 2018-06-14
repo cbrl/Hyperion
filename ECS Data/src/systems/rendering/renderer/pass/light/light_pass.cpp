@@ -66,12 +66,9 @@ void LightPass::bindBuffers() {
 
 
 	// Bind the shadow buffer SRVs
-	Pipeline::PS::bindSRVs(device_context,
-	                       SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS,
-	                       1,
-	                       directional_light_smaps->getSRVAddress());
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_POINT_LIGHT_SHADOW_MAPS, 1, point_light_smaps->getSRVAddress());
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS, 1, spot_light_smaps->getSRVAddress());
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, 1, directional_light_smaps->getSRVAddress());
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_POINT_LIGHT_SHADOW_MAPS,       1, point_light_smaps->getSRVAddress());
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS,        1, spot_light_smaps->getSRVAddress());
 }
 
 
@@ -86,10 +83,6 @@ void LightPass::updateData(Scene& scene) const {
 	light_data.num_shadow_directional_lights = static_cast<u32>(shadowed_directional_lights.size());
 	light_data.num_shadow_point_lights       = static_cast<u32>(shadowed_point_lights.size());
 	light_data.num_shadow_spot_lights        = static_cast<u32>(shadowed_spot_lights.size());
-
-	light_data.fog_color = scene.getFog().color;
-	light_data.fog_start = scene.getFog().start;
-	light_data.fog_range = scene.getFog().range;
 
 	light_buffer.updateData(device_context, light_data);
 }
@@ -288,7 +281,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 		const auto light_to_world      = transform->getObjectToWorldMatrix();
 		const auto light_to_projection = light_to_world * world_to_projection;
 
-		if (!Frustum(light_to_projection).contains(light.getAabb()))
+		if (!Frustum(light_to_projection).contains(light.getAABB()))
 			return;
 
 		if (!light.castsShadows()) {

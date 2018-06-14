@@ -22,9 +22,11 @@ public:
 
 	void XM_CALLCONV render(ECS& ecs_engine, FXMMATRIX world_to_projection) const;
 
-	void XM_CALLCONV render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const;
-
 	void bindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const;
+
+
+private:
+	void XM_CALLCONV render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const;
 
 
 private:

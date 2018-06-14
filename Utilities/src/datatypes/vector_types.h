@@ -81,7 +81,8 @@ struct Vec2 : public DerivedT {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the vector
-	DataT* data() { return &this->x; }
+	constexpr DataT* data() { return &this->x; }
+	constexpr const DataT* data() const { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -104,21 +105,21 @@ struct Vec2 : public DerivedT {
 	}
 
 	// Operator == and !=
-	bool operator==(const Vec2<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator==(const Vec2<DataT, DerivedT>& compare) noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y);
 	}
 
-	bool operator==(const Vec2<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator==(const Vec2<DataT, DerivedT>& compare) const noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y);
 	}
 
-	bool operator!=(const Vec2<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator!=(const Vec2<DataT, DerivedT>& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	bool operator!=(const Vec2<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator!=(const Vec2<DataT, DerivedT>& compare) const noexcept {
 		return !(*this == compare);
 	}
 
@@ -245,7 +246,8 @@ struct Vec3 : public DerivedT {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the vector
-	DataT* data() { return &this->x; }
+	constexpr DataT* data() { return &this->x; }
+	constexpr const DataT* data() const { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -270,23 +272,23 @@ struct Vec3 : public DerivedT {
 	}
 
 	// Operator == and !=
-	bool operator==(const Vec3<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator==(const Vec3<DataT, DerivedT>& compare) noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y &&
 		        this->z == compare.z);
 	}
 
-	bool operator==(const Vec3<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator==(const Vec3<DataT, DerivedT>& compare) const noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y &&
 		        this->z == compare.z);
 	}
 
-	bool operator!=(const Vec3<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator!=(const Vec3<DataT, DerivedT>& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	bool operator!=(const Vec3<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator!=(const Vec3<DataT, DerivedT>& compare) const noexcept {
 		return !(*this == compare);
 	}
 
@@ -433,7 +435,8 @@ struct Vec4 : public DerivedT {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the vector
-	DataT* data() { return &this->x; }
+	constexpr DataT* data() noexcept { return &this->x; }
+	constexpr const DataT* data() const noexcept { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -460,25 +463,25 @@ struct Vec4 : public DerivedT {
 	}
 
 	// Operator == and !=
-	bool operator==(const Vec4<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator==(const Vec4<DataT, DerivedT>& compare) noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y &&
 		        this->z == compare.z &&
 		        this->w == compare.w);
 	}
 
-	bool operator==(const Vec4<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator==(const Vec4<DataT, DerivedT>& compare) const noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y &&
 		        this->z == compare.z &&
 		        this->w == compare.w);
 	}
 
-	bool operator!=(const Vec4<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator!=(const Vec4<DataT, DerivedT>& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	bool operator!=(const Vec4<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator!=(const Vec4<DataT, DerivedT>& compare) const noexcept {
 		return !(*this == compare);
 	}
 

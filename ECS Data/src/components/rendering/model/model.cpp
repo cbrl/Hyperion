@@ -60,16 +60,15 @@ void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMAT
 
 
 	// Update each child model
-	ForEachChild([&](ModelChild& child) {
+	forEachChild([&](ModelChild& child) {
 		child.updateBuffer(device_context, world_t, world_inv_transpose);
 	});
 }
 
-
-void XM_CALLCONV Model::UpdateBoundingVolumes(FXMMATRIX world) {
+void XM_CALLCONV Model::updateBoundingVolumes(FXMMATRIX world) {
 
 	// Update each child model
-	ForEachChild([&](ModelChild& child) {
+	forEachChild([&](ModelChild& child) {
 		child.updateBoundingVolumes(world);
 	});
 

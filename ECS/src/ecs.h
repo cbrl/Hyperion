@@ -51,7 +51,11 @@ public:
 	// Misc
 	//----------------------------------------------------------------------------------
 
-	// Do something to each active entity or component
+	// Do something for each entity or component
+	template<typename T, typename ActionT>
+	void forEach(ActionT act);
+
+	// Do something for each active entity or component
 	template<typename T, typename ActionT>
 	void forEachActive(ActionT act);
 

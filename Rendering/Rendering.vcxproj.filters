@@ -209,9 +209,11 @@
     <ClInclude Include="src\display_config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\loader\obj\obj_loader.tpp">
+      <Filter>Source Files\loader\obj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="src\resource\resource_mgr.tpp">
       <Filter>Source Files\resource</Filter>
     </None>
@@ -230,9 +232,6 @@
     <None Include="src\loader\model_loader.tpp">
       <Filter>Source Files\loader</Filter>
     </None>
-    <None Include="src\loader\obj\obj_loader.tpp">
-      <Filter>Source Files\loader\obj</Filter>
-    </None>
     <None Include="src\geometry\shapes\shapes.tpp">
       <Filter>Source Files\geometry\shapes</Filter>
     </None>
@@ -242,5 +241,6 @@
     <None Include="src\buffer\structured_buffer.tpp">
       <Filter>Source Files\buffer</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

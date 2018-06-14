@@ -55,6 +55,9 @@ public:
 				assert(*chunk_current != nullptr && "ResourcePool - Invalid iterator");
 				object_current = (*chunk_current)->objects.begin();
 			}
+			else {
+				object_current = (*std::prev(chunk_end))->objects.end();
+			}
 		}
 
 		iterator& operator++() {
@@ -73,8 +76,8 @@ public:
 			return *this;
 		}
 
-		bool operator==(const iterator& compare) const { return chunk_current == compare.chunk_current; }
-		bool operator!=(const iterator& compare) const { return chunk_current != compare.chunk_current; }
+		bool operator==(const iterator& compare) const { return (chunk_current == compare.chunk_current) && (object_current == compare.object_current); }
+		bool operator!=(const iterator& compare) const { return (chunk_current != compare.chunk_current) && (object_current != compare.object_current); }
 
 		DataT& operator*() const { return **object_current; }
 		DataT* operator->() const { return *object_current; }

@@ -5,20 +5,20 @@
 Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
 	, device_context(device_context) {
+
 	// Create renderers
 	light_pass   = make_unique<LightPass>(device, device_context);
 	forward_pass = make_unique<ForwardPass>(device, device_context);
 	sky_pass     = make_unique<SkyPass>(device, device_context);
 	text_pass    = make_unique<TextPass>(device_context);
+	ui           = make_unique<UserInterface>();
 }
 
 
 void Renderer::update(const Engine& engine) {
 
-	auto& ecs_engine             = engine.getECS();
-	const auto& rendering_mgr    = engine.getRenderingMgr();
-	const auto& render_state_mgr = rendering_mgr.getRenderStateMgr();
-	auto& scene                  = engine.getScene();
+	auto& ecs_engine = engine.getECS();
+	auto& scene      = engine.getScene();
 
 
 	ecs_engine.forEachActive<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
@@ -49,5 +49,6 @@ void Renderer::update(const Engine& engine) {
 	// Render the ImGui UI
 	//----------------------------------------------------------------------------------
 
-	//scene.DrawUI(engine);
+	ui->draw(engine);
 }
+

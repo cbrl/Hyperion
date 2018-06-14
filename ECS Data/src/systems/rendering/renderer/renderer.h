@@ -12,9 +12,9 @@
 #include "systems/rendering/renderer/pass/forward/forward_pass.h"
 #include "systems/rendering/renderer/pass/sky/sky_pass.h"
 #include "systems/rendering/renderer/pass/text/text_pass.h"
+#include "ui/user_interface.h"
 
 class Engine;
-
 
 class Renderer final : public System<Renderer> {
 public:
@@ -28,14 +28,15 @@ public:
 
 
 private:
-	reference_wrapper<ID3D11Device> device;
+	reference_wrapper<ID3D11Device>        device;
 	reference_wrapper<ID3D11DeviceContext> device_context;
 
 	// Renderers
-	unique_ptr<LightPass> light_pass;
-	unique_ptr<ForwardPass> forward_pass;
-	unique_ptr<SkyPass> sky_pass;
-	unique_ptr<TextPass> text_pass;
+	unique_ptr<LightPass>     light_pass;
+	unique_ptr<ForwardPass>   forward_pass;
+	unique_ptr<SkyPass>       sky_pass;
+	unique_ptr<TextPass>      text_pass;
+	unique_ptr<UserInterface> ui;
 };
 
 

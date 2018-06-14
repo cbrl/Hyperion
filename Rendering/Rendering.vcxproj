@@ -181,7 +181,9 @@
     <None Include="src\buffer\structured_buffer.tpp" />
     <None Include="src\geometry\shapes\shapes.tpp" />
     <None Include="src\loader\model_loader.tpp" />
-    <None Include="src\loader\obj\obj_loader.tpp" />
+    <ClInclude Include="src\loader\obj\obj_loader.tpp">
+      <FileType>Document</FileType>
+    </ClInclude>
     <None Include="src\resource\mesh\mesh.tpp" />
     <None Include="src\resource\model\blueprint_factory.tpp" />
     <None Include="src\resource\model\model_blueprint.tpp" />

@@ -150,6 +150,7 @@
     <ClInclude Include="src\systems\rendering\renderer\pass\sky\sky_pass.h" />
     <ClInclude Include="src\systems\rendering\renderer\pass\text\text_pass.h" />
     <ClInclude Include="src\systems\rendering\renderer\renderer.h" />
+    <ClInclude Include="src\systems\rendering\renderer\ui\user_interface.h" />
     <ClInclude Include="src\systems\systems.h" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +169,7 @@
     <ClCompile Include="src\systems\rendering\renderer\pass\sky\sky_pass.cpp" />
     <ClCompile Include="src\systems\rendering\renderer\pass\text\text_pass.cpp" />
     <ClCompile Include="src\systems\rendering\renderer\renderer.cpp" />
+    <ClCompile Include="src\systems\rendering\renderer\ui\user_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

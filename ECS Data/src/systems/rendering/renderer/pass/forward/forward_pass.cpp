@@ -35,11 +35,6 @@ void ForwardPass::bindDefaultRenderStates(const RenderStateMgr& render_state_mgr
 
 void XM_CALLCONV ForwardPass::render(ECS& ecs_engine, FXMMATRIX world_to_projection) const {
 
-	//auto skybox = ecs_engine.GetComponent<SkyBox>(camera.GetHandle());
-	//if (skybox) {
-	//	skybox->GetTexture()->Bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
-	//}
-
 	// Bind shaders
 	pixel_shader->bind(device_context);
 	vertex_shader->bind(device_context);
@@ -60,13 +55,13 @@ void XM_CALLCONV ForwardPass::render(const ECS& ecs_engine, Model& model, FXMMAT
 
 	// Cull the model if it isn't on screen
 	Frustum frustum(object_to_projection);
-	if (!frustum.contains(model.GetAABB())) return;
+	if (!frustum.contains(model.getAABB())) return;
 
 	// Bind the model's mesh
-	model.Bind(device_context);
+	model.bind(device_context);
 
 	// Render each model part individually
-	model.ForEachChild([&](ModelChild& child) {
+	model.forEachChild([&](ModelChild& child) {
 
 		if (!frustum.contains(child.getAabb())) return;
 
@@ -87,7 +82,7 @@ void XM_CALLCONV ForwardPass::render(const ECS& ecs_engine, Model& model, FXMMAT
 
 
 		// Draw the child
-		model.Draw(device_context, child.getIndexCount(), child.getIndexStart());
+		model.draw(device_context, child.getIndexCount(), child.getIndexStart());
 
 
 		// Unbind the SRVs

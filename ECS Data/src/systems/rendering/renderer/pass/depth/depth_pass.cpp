@@ -57,10 +57,10 @@ void XM_CALLCONV DepthPass::render(const Engine& engine,
 		const auto model_to_world = transform->getObjectToWorldMatrix();
 		const auto model_to_proj  = model_to_world * world_to_proj;
 
-		if (!Frustum(model_to_proj).contains(model.GetAABB()))
+		if (!Frustum(model_to_proj).contains(model.getAABB()))
 			return;
 
-		model.Bind(device_context);
+		model.bind(device_context);
 
 		renderModel(model, model_to_proj);
 	});
@@ -89,10 +89,10 @@ void XM_CALLCONV DepthPass::renderShadows(const Engine& engine,
 		const auto model_to_world = transform->getObjectToWorldMatrix();
 		const auto model_to_proj  = model_to_world * world_to_proj;
 
-		if (!Frustum(model_to_proj).contains(model.GetAABB()))
+		if (!Frustum(model_to_proj).contains(model.getAABB()))
 			return;
 
-		model.Bind(device_context);
+		model.bind(device_context);
 
 		renderModel(model, model_to_proj);
 	});
@@ -112,7 +112,7 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 
 void XM_CALLCONV DepthPass::renderModel(Model& model, FXMMATRIX model_to_projection) {
 
-	model.ForEachChild([&](ModelChild& child) {
+	model.forEachChild([&](ModelChild& child) {
 		//if (child.GetMaterial().transparent
 		//	|| child.GetMaterial().dissolve > THRESHOLD)
 		//	return;
@@ -125,6 +125,6 @@ void XM_CALLCONV DepthPass::renderModel(Model& model, FXMMATRIX model_to_project
 
 		child.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
-		model.Draw(device_context, child.getIndexCount(), child.getIndexStart());
+		model.draw(device_context, child.getIndexCount(), child.getIndexStart());
 	});
 }

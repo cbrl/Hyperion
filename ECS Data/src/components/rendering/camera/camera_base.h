@@ -42,12 +42,12 @@ public:
 	// Update the camera's constant buffer
 	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context,
 	                              FXMVECTOR position,
-	                              FXMMATRIX world_to_camera,
-	                              CXMMATRIX camera_to_projection) const {
+	                              FXMMATRIX world_to_camera) const {
 		buffer.updateData(device_context,
 		                  CameraBuffer(position,
 		                               XMMatrixTranspose(world_to_camera),
-		                               XMMatrixTranspose(camera_to_projection)));
+		                               XMMatrixTranspose(projection_matrix),
+		                               fog));
 	}
 
 	// Bind the camera's constant buffer
@@ -88,6 +88,11 @@ public:
 		updateProjectionMatrix();
 	}
 
+	// Set the fog buffer
+	void setFog(Fog&& fog) {
+		this->fog = std::move(fog);
+	}
+
 
 	//----------------------------------------------------------------------------------
 	// Getters
@@ -106,6 +111,11 @@ public:
 	// Get the Frustum for this camera
 	const Frustum& getFrustum() const {
 		return frustum;
+	}
+
+	// Get the fog buffer
+	const Fog& getFog() const {
+		return fog;
 	}
 
 
@@ -135,13 +145,16 @@ protected:
 	// The camera's constant buffer
 	ConstantBuffer<CameraBuffer> buffer;
 
-	// Camera frustum
-	Frustum frustum;
-
 	// Viewport and z depth
 	D3D11_VIEWPORT viewport;
 	float z_near;
 	float z_far;
+
+	// Camera frustum
+	Frustum frustum;
+
+	// The fog that this camera sees
+	Fog fog;
 
 	// Matrices
 	XMMATRIX view_matrix;

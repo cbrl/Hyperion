@@ -5,55 +5,6 @@
 
 
 //----------------------------------------------------------------------------------
-// Camera Buffer
-//----------------------------------------------------------------------------------
-
-struct CameraBuffer {
-	CameraBuffer()
-		: position(0.0f, 0.0f, 0.0f)
-		, padding(0.0f)
-		, world_to_camera(XMMatrixIdentity())
-		, camera_to_projection(XMMatrixIdentity()) {
-	}
-
-	CameraBuffer(const float3& pos, CXMMATRIX world_to_camera, CXMMATRIX camera_to_projection)
-		: position(pos)
-		, padding(0.0f)
-		, world_to_camera(world_to_camera)
-		, camera_to_projection(camera_to_projection) {
-	}
-
-	CameraBuffer(FXMVECTOR pos, CXMMATRIX world_to_camera, CXMMATRIX camera_to_projection)
-		: padding(0.0f)
-		, world_to_camera(world_to_camera)
-		, camera_to_projection(camera_to_projection) {
-		XMStoreFloat3(&position, pos);
-	}
-
-	float3 position;
-	float padding;
-	XMMATRIX world_to_camera;
-	XMMATRIX camera_to_projection;
-};
-
-
-struct AltCameraBuffer {
-	AltCameraBuffer()
-		: world_to_camera(XMMatrixIdentity())
-		, camera_to_projection(XMMatrixIdentity()) {
-	}
-
-	AltCameraBuffer(CXMMATRIX world_to_cam, CXMMATRIX cam_to_proj)
-		: world_to_camera(world_to_cam)
-		, camera_to_projection(cam_to_proj) {
-	}
-
-	XMMATRIX world_to_camera;
-	XMMATRIX camera_to_projection;
-};
-
-
-//----------------------------------------------------------------------------------
 // Model Buffer
 //----------------------------------------------------------------------------------
 
@@ -95,10 +46,10 @@ struct MaterialBuffer {
 	float4 specular;
 	float4 reflect;
 	float4 emissive;
-	float optical_density;
-	float dissolve;
-	u32 has_texture;
-	u32 reflection_enabled;
+	float  optical_density;
+	float  dissolve;
+	u32    has_texture;
+	u32    reflection_enabled;
 };
 
 
@@ -106,14 +57,12 @@ struct ModelBuffer {
 	ModelBuffer()
 		: world(XMMatrixIdentity())
 		, world_inv_transpose(XMMatrixIdentity())
-		//, world_view_proj(XMMatrixIdentity())
 		, texTransform(XMMatrixIdentity()) {
 	}
 
-	XMMATRIX world;
-	XMMATRIX world_inv_transpose;
-	//XMMATRIX world_view_proj;
-	XMMATRIX texTransform;
+	XMMATRIX       world;
+	XMMATRIX       world_inv_transpose;
+	XMMATRIX       texTransform;
 	MaterialBuffer mat;
 };
 
@@ -124,9 +73,9 @@ struct ModelBuffer {
 
 struct Fog {
 	Fog()
-		: color(0.4f, 0.4f, 0.4f, 1.0f)
-		, start(20.0f)
-		, range(50.0f) {
+		: color(0.0f, 0.0f, 0.0f, 1.0f)
+		, start(0.0f)
+		, range(0.0f) {
 	}
 
 	Fog(const float4& color,
@@ -193,8 +142,8 @@ struct LightBuffer {
 	u32 pad1;
 
 	float4 fog_color;
-	float fog_start;
-	float fog_range;
+	float  fog_start;
+	float  fog_range;
 	float2 pad2;
 };
 
@@ -223,7 +172,7 @@ struct DirectionalLightBuffer {
 	float4 diffuse_color;
 	float4 specular; //specular.w is the specular power
 	float3 direction;
-	float pad;
+	float  pad;
 };
 
 
@@ -267,9 +216,9 @@ struct PointLightBuffer {
 	float4 diffuse_color;
 	float4 specular; //specular.w is the specular power
 	float3 position;
-	float range;
+	float  range;
 	float3 attenuation;
-	float pad;
+	float  pad;
 };
 
 
@@ -324,10 +273,10 @@ struct SpotLightBuffer {
 	float4 diffuse_color;
 	float4 specular; //specular.w is the specular power
 	float3 position;
-	float range;
+	float  range;
 	float3 direction;
-	float cos_umbra;
-	float cos_penumbra;
+	float  cos_umbra;
+	float  cos_penumbra;
 	float3 attenuation;
 };
 
@@ -338,5 +287,65 @@ struct ShadowedSpotLightBuffer {
 	}
 
 	SpotLightBuffer light_buffer;
-	XMMATRIX world_to_projection;
+	XMMATRIX        world_to_projection;
+};
+
+
+
+//----------------------------------------------------------------------------------
+// Camera Buffer
+//----------------------------------------------------------------------------------
+
+struct CameraBuffer {
+	CameraBuffer()
+		: position(0.0f, 0.0f, 0.0f)
+		, padding(0.0f)
+		, world_to_camera(XMMatrixIdentity())
+		, camera_to_projection(XMMatrixIdentity()) {
+	}
+
+	CameraBuffer(const float3& pos,
+		CXMMATRIX world_to_camera,
+		CXMMATRIX camera_to_projection,
+		const Fog& fog)
+		: position(pos)
+		, padding(0.0f)
+		, world_to_camera(world_to_camera)
+		, camera_to_projection(camera_to_projection)
+		, fog(fog) {
+	}
+
+	CameraBuffer(FXMVECTOR pos,
+		CXMMATRIX world_to_camera,
+		CXMMATRIX camera_to_projection,
+		const Fog& fog)
+		: padding(0.0f)
+		, world_to_camera(world_to_camera)
+		, camera_to_projection(camera_to_projection)
+		, fog(fog) {
+
+		XMStoreFloat3(&position, pos);
+	}
+
+	float3   position;
+	float    padding;
+	XMMATRIX world_to_camera;
+	XMMATRIX camera_to_projection;
+	Fog      fog;
+};
+
+
+struct AltCameraBuffer {
+	AltCameraBuffer()
+		: world_to_camera(XMMatrixIdentity())
+		, camera_to_projection(XMMatrixIdentity()) {
+	}
+
+	AltCameraBuffer(CXMMATRIX world_to_cam, CXMMATRIX cam_to_proj)
+		: world_to_camera(world_to_cam)
+		, camera_to_projection(cam_to_proj) {
+	}
+
+	XMMATRIX world_to_camera;
+	XMMATRIX camera_to_projection;
 };

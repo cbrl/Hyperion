@@ -112,6 +112,12 @@
     <Filter Include="Header Files\systems\rendering\renderer\pass">
       <UniqueIdentifier>{81d8162a-fb41-4860-a147-aade9c8206bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\systems\rendering\renderer\ui">
+      <UniqueIdentifier>{4cd28190-ba07-45c7-8809-96b932c5a7e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems\rendering\renderer\ui">
+      <UniqueIdentifier>{a2f5044a-2939-49e5-a274-aae06f495957}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\geometry\transform\camera_transform.h">
@@ -201,6 +207,9 @@
     <ClInclude Include="src\systems\rendering\renderer\renderer.h">
       <Filter>Header Files\systems\rendering\renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\systems\rendering\renderer\ui\user_interface.h">
+      <Filter>Header Files\systems\rendering\renderer\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\components\geometry\transform\camera_transform.cpp">
@@ -248,14 +257,17 @@
     <ClCompile Include="src\systems\rendering\renderer\renderer.cpp">
       <Filter>Source Files\systems\rendering\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\systems\rendering\renderer\ui\user_interface.cpp">
+      <Filter>Source Files\systems\rendering\renderer\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\systems\geometry\transform\transform_system.tpp">
       <Filter>Source Files\systems\geometry\transform</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="src\systems\rendering\renderer\renderer.tpp">
       <Filter>Source Files\systems\rendering\renderer</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -57,9 +57,31 @@ size_t ECS::countOf() const {
 }
 
 
-// Do something to each active entity or component
+// Do something for each entity or component
+template<typename T, typename ActionT>
+void ECS::forEach(ActionT act) {
+	if constexpr (std::is_base_of_v<IEntity, T>) {
+		if (!entity_mgr->knowsEntity<T>()) return;
+
+		for (auto entity = entity_mgr->begin<T>(); entity != entity_mgr->end<T>(); ++entity) {
+			act(*entity);
+		}
+	}
+
+	if constexpr (std::is_base_of_v<IComponent, T>) {
+		if (!component_mgr->knowsComponent<T>()) return;
+
+		for (auto component = component_mgr->begin<T>(); component != component_mgr->end<T>(); ++component) {
+			act(*component);
+		}
+	}
+}
+
+
+// Do something for each active entity or component
 template<typename T, typename ActionT>
 void ECS::forEachActive(ActionT act) {
+
 	if constexpr (std::is_base_of_v<IEntity, T>) {
 		if (!entity_mgr->knowsEntity<T>()) return;
 

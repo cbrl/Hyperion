@@ -16,7 +16,7 @@ void ModelSystem::update(const Engine& engine) {
 		if (transform) {
 			if (transform->isUpdated()) {
 				// Update the model's bounding volumes
-				model.UpdateBoundingVolumes(transform->getObjectToWorldMatrix());
+				model.updateBoundingVolumes(transform->getObjectToWorldMatrix());
 			}
 
 			// Update the model's buffer

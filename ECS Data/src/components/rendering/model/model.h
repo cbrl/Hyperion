@@ -89,19 +89,19 @@ public:
 
 
 	// Bind the model's vertex and index buffers
-	void Bind(ID3D11DeviceContext& device_context) const {
+	void bind(ID3D11DeviceContext& device_context) const {
 		mesh->bind(device_context);
 	}
 
 	// Render the model with the given index count and start index
-	void Draw(ID3D11DeviceContext& device_context, u32 index_count, u32 start_index) const {
+	void draw(ID3D11DeviceContext& device_context, u32 index_count, u32 start_index) const {
 		mesh->draw(device_context, index_count, start_index);
 	}
 
 
 	// Preform an action for each child model
 	template<typename ActionT>
-	void ForEachChild(ActionT act) {
+	void forEachChild(ActionT act) {
 		for (auto& child : child_models) {
 			act(child);
 		}
@@ -111,16 +111,16 @@ public:
 	// Update model matrix and bounding volumes, as well as those of the child models.
 	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world);
 
-	void XM_CALLCONV UpdateBoundingVolumes(FXMMATRIX world);
+	void XM_CALLCONV updateBoundingVolumes(FXMMATRIX world);
 
 
 	//----------------------------------------------------------------------------------
 	// Getters
 	//----------------------------------------------------------------------------------
 
-	const string& GetName() const { return name; }
-	const AABB& GetAABB() const { return aabb; }
-	const BoundingSphere& GetSphere() const { return sphere; }
+	const string& getName() const { return name; }
+	const AABB& getAABB() const { return aabb; }
+	const BoundingSphere& getSphere() const { return sphere; }
 
 
 private:

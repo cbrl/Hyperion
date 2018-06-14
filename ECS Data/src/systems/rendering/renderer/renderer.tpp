@@ -12,6 +12,7 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	const auto world_to_camera      = transform->getWorldToObjectMatrix();
 	const auto camera_to_projection = camera.getProjectionMatrix();
 	const auto world_to_projection  = world_to_camera * camera_to_projection;
+	const auto skybox               = ecs_engine.getComponent<SkyBox>(camera.getOwner());
 
 
 	//----------------------------------------------------------------------------------
@@ -36,7 +37,6 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	// Render the skybox
 	//----------------------------------------------------------------------------------
 
-	const auto skybox = ecs_engine.getComponent<SkyBox>(camera.getOwner());
 	if (skybox) {
 		sky_pass->bindDefaultRenderStates(render_state_mgr);
 		sky_pass->render(*skybox);

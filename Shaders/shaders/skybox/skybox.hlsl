@@ -2,7 +2,7 @@
 #include "include\input_structs.hlsl"
 
 
-TEXTURE_CUBE(skybox, SLOT_SRV_SKYBOX);
+TextureCube skybox : REG_T(SLOT_SRV_SKYBOX);
 
 
 float4 PS(PSPosition pin) : SV_Target {

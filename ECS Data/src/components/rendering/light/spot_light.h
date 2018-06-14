@@ -6,8 +6,8 @@
 class SpotLight final : public Component<SpotLight> {
 public:
 	SpotLight()
-		: cos_umbra(0.1f)
-		, cos_penumbra(1.0f)
+		: cos_umbra(1.0f)
+		, cos_penumbra(0.1f)
 		, near_plane(0.1f)
 		, range(1.0f)
 		, shadows(false) {
@@ -32,7 +32,7 @@ public:
 	}
 
 	void setUmbraCosAngle(float cos_angle) {
-		cos_umbra = std::max(cos_angle, 0.001f);
+		cos_umbra = std::max(std::max(cos_angle, cos_penumbra + 0.001f), 0.001f);
 	}
 
 	void setUmbraAngle(float angle) {
@@ -103,7 +103,7 @@ public:
 		return shadows;
 	}
 
-	const AABB& getAabb() const {
+	const AABB& getAABB() const {
 		return aabb;
 	}
 

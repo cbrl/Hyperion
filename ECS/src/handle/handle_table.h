@@ -43,6 +43,7 @@ public:
 
 	DataT* operator[](HandleT handle) {
 		assert(handle.index != HandleT::invalid_handle && "Invalid handle specified");
+		assert(handle.index < handle_table.size() && "Invalid handle specified. Index out of range.");
 
 		auto pair = handle_table[handle.index];
 

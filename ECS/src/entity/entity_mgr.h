@@ -79,6 +79,7 @@ public:
 			pool->destroyObject(static_cast<void*>(entity));
 		}
 
+		expired_entities.clear();
 		num_expired_entities = 0;
 	}
 

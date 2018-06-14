@@ -94,7 +94,7 @@ struct ShadowCubeMap {
 //  Constant Buffers
 //----------------------------------------------------------------------------------
 
-CONSTANT_BUFFER(LightBuffer, SLOT_CBUFFER_LIGHT) {
+cbuffer LightBuffer : REG_B(SLOT_CBUFFER_LIGHT) {
 	// Lights
 	uint num_directional_lights;
 	uint num_point_lights;
@@ -106,12 +106,6 @@ CONSTANT_BUFFER(LightBuffer, SLOT_CBUFFER_LIGHT) {
 	uint num_shadow_point_lights;
 	uint num_shadow_spot_lights;
 	uint lb_pad1;
-
-	// Fog
-	float4 fog_color;
-	float  fog_start;
-	float  fog_range;
-	float2 lb_pad2;
 };
 
 
@@ -120,20 +114,20 @@ CONSTANT_BUFFER(LightBuffer, SLOT_CBUFFER_LIGHT) {
 //----------------------------------------------------------------------------------
 
 // Lights
-STRUCTURED_BUFFER(directional_lights, DirectionalLight, SLOT_SRV_DIRECTIONAL_LIGHTS);
-STRUCTURED_BUFFER(point_lights,       PointLight,       SLOT_SRV_POINT_LIGHTS);
-STRUCTURED_BUFFER(spot_lights,        SpotLight,        SLOT_SRV_SPOT_LIGHTS);
+StructuredBuffer<DirectionalLight> directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS);
+StructuredBuffer<PointLight>       point_lights       : REG_T(SLOT_SRV_POINT_LIGHTS);
+StructuredBuffer<SpotLight>        spot_lights        : REG_T(SLOT_SRV_SPOT_LIGHTS);
 
 
 // Shadowed Lights
-STRUCTURED_BUFFER(shadow_directional_lights, ShadowedDirectionalLight, SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOWED);
-TEXTURE_2D_ARRAY(directional_light_smaps, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS);
+StructuredBuffer<ShadowedDirectionalLight> shadow_directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOWED);
+Texture2DArray directional_light_smaps : REG_T(SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS);
 
-STRUCTURED_BUFFER(shadow_point_lights, ShadowedPointLight, SLOT_SRV_POINT_LIGHTS_SHADOWED);
-TEXTURE_CUBE_ARRAY(point_light_smaps, SLOT_SRV_POINT_LIGHT_SHADOW_MAPS);
+StructuredBuffer<ShadowedPointLight> shadow_point_lights : REG_T(SLOT_SRV_POINT_LIGHTS_SHADOWED);
+TextureCubeArray point_light_smaps : REG_T(SLOT_SRV_POINT_LIGHT_SHADOW_MAPS);
 
-STRUCTURED_BUFFER(shadow_spot_lights, ShadowedSpotLight, SLOT_SRV_SPOT_LIGHTS_SHADOWED);
-TEXTURE_2D_ARRAY(spot_light_smaps, SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS);
+StructuredBuffer<ShadowedSpotLight> shadow_spot_lights : REG_T(SLOT_SRV_SPOT_LIGHTS_SHADOWED);
+Texture2DArray spot_light_smaps : REG_T(SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS);
 
 
 

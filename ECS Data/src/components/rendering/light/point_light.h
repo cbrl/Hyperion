@@ -65,7 +65,7 @@ public:
 		return shadows;
 	}
 
-	const AABB& getAabb() const {
+	const AABB& getAABB() const {
 		return aabb;
 	}
 

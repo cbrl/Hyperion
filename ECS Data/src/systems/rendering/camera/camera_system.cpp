@@ -8,7 +8,7 @@ void CameraSystem::update(const Engine& engine) {
 	auto& ecs_engine     = engine.getECS();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
-	ecs_engine.forEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	const auto process_cam = [&](auto& camera) {
 		const handle64 owner = camera.getOwner();
 		const auto transform = ecs_engine.getComponent<CameraTransform>(owner);
 
@@ -28,33 +28,16 @@ void CameraSystem::update(const Engine& engine) {
 		// Update the camera's buffer
 		camera.updateBuffer(device_context,
 		                    transform->getWorldOrigin(),
-		                    transform->getWorldToObjectMatrix(),
-		                    camera.getProjectionMatrix());
+		                    transform->getWorldToObjectMatrix());
+	};
+
+	ecs_engine.forEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+		process_cam(camera);
 	});
 
 
 	ecs_engine.forEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
-		const handle64 owner = camera.getOwner();
-		const auto transform = ecs_engine.getComponent<CameraTransform>(owner);
-
-		if (!transform) return;
-
-
-		// Process movement
-		if (const auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
-			processMovement(engine, movement, transform);
-		}
-
-
-		// Update the camera's view matrix
-		camera.updateViewMatrix(transform->getPosition(), transform->getWorldAxisZ(), transform->getWorldAxisY());
-
-
-		// Update the camera's buffer
-		camera.updateBuffer(device_context,
-		                    transform->getWorldOrigin(),
-		                    transform->getWorldToObjectMatrix(),
-		                    camera.getProjectionMatrix());
+		process_cam(camera);
 	});
 }
 

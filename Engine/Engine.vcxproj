@@ -185,9 +185,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\ECS\ECS.vcxproj">
       <Project>{85ea96e9-7ed5-46f5-84e1-9f186a78f89a}</Project>
     </ProjectReference>
@@ -203,6 +200,9 @@
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">
       <Project>{4a7e2159-d052-4c1d-8f94-5188286a09b8}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

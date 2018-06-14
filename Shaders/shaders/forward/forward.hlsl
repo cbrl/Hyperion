@@ -6,10 +6,12 @@
 //  SRVs
 //----------------------------------------------------------------------------------
 
-TEXTURE_CUBE(env_map, SLOT_SRV_SKYBOX);
+// Skybox texture
+TextureCube env_map : REG_T(SLOT_SRV_SKYBOX);
 
-TEXTURE_2D(diffuse_map, SLOT_SRV_DIFFUSE);
-TEXTURE_2D(normal_map,  SLOT_SRV_NORMAL);
+// Model textures
+Texture2D diffuse_map : REG_T(SLOT_SRV_DIFFUSE);
+Texture2D normal_map  : REG_T(SLOT_SRV_NORMAL);
 // ambient, specular, etc...
 
 
@@ -157,10 +159,10 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Fogging
 	//----------------------------------------------------------------------------------
 
-	float fogLerp = saturate((dist_to_eye - fog_start) / fog_range);
+	float fog_lerp = saturate((dist_to_eye - fog.start) / fog.range);
 
 	// Blend the fog color and the lit color
-	lit_color = lerp(lit_color, fog_color, fogLerp);
+	lit_color = lerp(lit_color, fog.color, fog_lerp);
 
 
 	// Common to take alpha from diffuse mat and texture
