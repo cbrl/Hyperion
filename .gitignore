@@ -261,9 +261,8 @@ __pycache__/
 *.pyc
 
 # User defined files
-/Engine/shader_error.txt
 *.blend
-/Engine/imgui.ini
-/Engine/TODO.txt
-/Engine/log.txt
-/data/models/cube/imgui.ini
+shader_error.txt
+imgui.ini
+TODO.txt
+log.txt

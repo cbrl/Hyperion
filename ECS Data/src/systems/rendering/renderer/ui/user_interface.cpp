@@ -228,6 +228,21 @@ void UserInterface::drawObjectLists(ECS& ecs_engine, Scene& scene) {
 					}
 				}
 
+				// Camera Movement
+				if (auto* cam_movement = ecs_engine.getComponent<CameraMovement>(entity)) {
+					bool node_selected = (selected == cam_movement);
+
+					ImGui::Selectable("Camera Movement", &node_selected);
+
+					if (ImGui::IsItemClicked()) {
+						selected = cam_movement;
+					}
+
+					if (node_selected) {
+						drawDetailsPanel(*cam_movement);
+					}
+				}
+
 				// Model
 				if (auto* model = ecs_engine.getComponent<Model>(entity)) {
 					const bool node_selected = (selected == model);
@@ -357,13 +372,13 @@ void UserInterface::drawDetails(Transform& transform) {
 	XMStoreFloat3(&rotation, transform.getRotation());
 	XMStoreFloat3(&scale, transform.getScale());
 
-	if (ImGui::InputFloat3("Position", position.data()))
+	if (ImGui::DragFloat3("Position", position.data(), 0.05f, -FLT_MAX, FLT_MAX))
 		transform.setPosition(position);
 
-	if (ImGui::InputFloat3("Rotation", rotation.data()))
+	if (ImGui::DragFloat3("Rotation", rotation.data(), 0.05f, -FLT_MAX, FLT_MAX))
 		transform.setRotation(rotation);
 
-	if (ImGui::InputFloat3("Scale", scale.data()))
+	if (ImGui::DragFloat3("Scale", scale.data(), 0.05f, -FLT_MAX, FLT_MAX))
 		transform.setScale(scale);
 }
 
