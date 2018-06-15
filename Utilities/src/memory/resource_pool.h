@@ -77,7 +77,7 @@ public:
 		}
 
 		bool operator==(const iterator& compare) const { return (chunk_current == compare.chunk_current) && (object_current == compare.object_current); }
-		bool operator!=(const iterator& compare) const { return (chunk_current != compare.chunk_current) && (object_current != compare.object_current); }
+		bool operator!=(const iterator& compare) const { return (chunk_current == compare.chunk_current) ? (object_current != compare.object_current) : true; }
 
 		DataT& operator*() const { return **object_current; }
 		DataT* operator->() const { return *object_current; }

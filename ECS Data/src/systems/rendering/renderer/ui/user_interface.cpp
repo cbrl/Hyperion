@@ -10,7 +10,7 @@ handle64 UserInterface::selected_entity{ handle64::invalid_handle };
 
 void UserInterface::draw(const Engine& engine) {
 
-	auto& scene         = engine.getScene();
+	auto& scene        = engine.getScene();
 	auto& ecs_engine   = engine.getECS();
 	auto& device       = engine.getRenderingMgr().getDevice();
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
@@ -273,7 +273,6 @@ void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
 
 	ImGui::TreePop();
 }
-
 
 
 
