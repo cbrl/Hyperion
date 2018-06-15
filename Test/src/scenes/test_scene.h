@@ -16,4 +16,8 @@ public:
 	void load(const Engine& engine) override;
 
 	void tick(const Engine& engine) override;
+
+
+private:
+	handle64 sphere;
 };

@@ -22,7 +22,7 @@ void UserInterface::draw(const Engine& engine) {
 	ImGui::Begin("Scene", &open, ImGuiWindowFlags_MenuBar);
 	ImGui::End();
 
-	ImGui::SetNextWindowSize(ImVec2(350, 500), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(375, 425), ImGuiCond_FirstUseEver);
 	ImGui::Begin("Properties", &open);
 	ImGui::End();
 

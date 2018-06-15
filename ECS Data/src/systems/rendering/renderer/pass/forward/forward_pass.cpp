@@ -49,12 +49,8 @@ void XM_CALLCONV ForwardPass::render(ECS& ecs_engine, FXMMATRIX world_to_project
 
 void XM_CALLCONV ForwardPass::render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
 
-	const auto transform            = ecs_engine.getComponent<Transform>(model.getOwner());
-	const auto object_to_world      = transform->getObjectToWorldMatrix();
-	const auto object_to_projection = object_to_world * world_to_projection;
-
 	// Cull the model if it isn't on screen
-	Frustum frustum(object_to_projection);
+	Frustum frustum(world_to_projection);
 	if (!frustum.contains(model.getAABB())) return;
 
 	// Bind the model's mesh

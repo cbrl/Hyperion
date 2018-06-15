@@ -27,11 +27,12 @@ void TestScene::load(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera and skybox
-	const handle64 camera = ecs_engine.createEntity<PlayerCamera>(device,
-	                                                              device_context,
-	                                                              engine.getWindowWidth(),
-	                                                              engine.getWindowHeight(),
-	                                                              resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	const handle64 camera = addEntity<PlayerCamera>(ecs_engine,
+	                                                device,
+	                                                device_context,
+                                                    engine.getWindowWidth(),
+	                                                engine.getWindowHeight(),
+	                                                resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	// Set the parameters
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
@@ -40,35 +41,37 @@ void TestScene::load(const Engine& engine) {
 	cam->setFog(Fog(float4(0.2f, 0.2f, 0.2f, 1.0f), 10.0f, 25.0f));
 	ecs_engine.getComponent<CameraTransform>(camera)->setPosition(float3(0.0f, 4.0f, -2.0f));
 
-	entities.push_back(camera);
+
+	//----------------------------------------------------------------------------------
+	// Create models
+	//----------------------------------------------------------------------------------
+
+	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
+	addEntity<BasicModel>(ecs_engine, device, bp);
+
+	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
+	sphere = addEntity<BasicModel>(ecs_engine, device, sphere_bp);
+	ecs_engine.getComponent<Transform>(sphere)->setPosition(float3(7.0f, 4.0f, 0.0f));
 
 
 	//----------------------------------------------------------------------------------
 	// Create lights
 	//----------------------------------------------------------------------------------
-
-	const auto point_light = ecs_engine.createEntity<BasicPointLight>();
-	entities.push_back(point_light);
-
-	const auto spot_light = ecs_engine.createEntity<BasicSpotLight>();
-	entities.push_back(spot_light);
-
+	
 	// Point light
 	{
-		auto light = ecs_engine.getComponent<PointLight>(point_light);
+		auto light = ecs_engine.addComponent<PointLight>(sphere);
 		light->setAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(float4(1.0f, 0.9f, 0.5f, 1.0f));
 		light->setAttenuation(float3(0.0f, 0.17f, 0.0f));
 		light->setSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
 		light->setRange(100.0f);
 		light->setShadows(true);
-
-		auto transform = ecs_engine.getComponent<Transform>(point_light);
-		transform->setPosition(float3(0.0f, 6.0f, 0.0f));
 	}
 
 	// Spot light
 	{
+		const auto spot_light = addEntity<BasicSpotLight>(ecs_engine);
 		auto light = ecs_engine.getComponent<SpotLight>(spot_light);
 		light->setAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(float4(0.8f, 0.8f, 1.0f, 1.0f));
@@ -84,17 +87,6 @@ void TestScene::load(const Engine& engine) {
 		//transform->SetRotation(float3(XM_PIDIV2, 0.0f, 0.0f));
 		transform->setParent(camera);
 	}
-
-
-	//----------------------------------------------------------------------------------
-	// Create models
-	//----------------------------------------------------------------------------------
-
-	auto bp     = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
-	auto sphere = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
-
-	const handle64 test_model = ecs_engine.createEntity<BasicModel>(device, bp);
-	entities.push_back(test_model);
 
 
 	//----------------------------------------------------------------------------------
@@ -137,27 +129,44 @@ void TestScene::tick(const Engine& engine) {
 	static wostringstream cpu_str;
 	static wostringstream mem_str;
 
+	// Build the CPU usage string
 	cpu_str.clear();
 	cpu_str.str(L"");
 	cpu_str.precision(4);
 	cpu_str << L"CPU Usage\nTotal: " << total_cpu_usage << L"%"
 	        << L"\nProcess: "        << proc_cpu_usage  << L"%";
 
+	// Build the memory usage string
 	mem_str.clear();
 	mem_str.str(L"");
 	mem_str.precision(4);
 	mem_str << L"RAM Usage\nTotal: " << static_cast<double>(total_mem_usage) / 1e6 << L"MB"
 	        << L"\nProcess: "        << static_cast<double>(proc_mem_usage) / 1e6  << L"MB";
 
-
+	// FPS
 	texts.at("FPS").setText(L"FPS: " + to_wstring(fps));
 
+	// Frame Time
 	texts.at("FrameTime").setText(L"Frame Time: " + to_wstring(delta_time));
 
+	// CPU Usage
 	texts.at("CPU").setText(cpu_str.str());
 
+	// RAM Usage
 	texts.at("RAM").setText(mem_str.str());
 
+	// Mouse Activity
 	texts.at("Mouse").setText(L"Mouse \nX: " + to_wstring(mouse_delta.x)
-	                          + L"\nY: " + to_wstring(mouse_delta.y));
+	                          + L"\nY: "     + to_wstring(mouse_delta.y));
+
+
+
+	//----------------------------------------------------------------------------------
+	// Move the sphere
+	//----------------------------------------------------------------------------------
+
+	auto transform = engine.getECS().getComponent<Transform>(sphere);
+	const auto p = transform->getPosition();
+	const auto v = XMVector3Transform(p, XMMatrixRotationY(XM_PI / (delta_time * 200.0f)));
+	transform->setPosition(v);
 }
