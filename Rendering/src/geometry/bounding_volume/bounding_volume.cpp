@@ -74,9 +74,9 @@ void XM_CALLCONV AABB::transform(FXMMATRIX M) {
 		transformed_verts[i] = XMVector3TransformCoord(origin_verts[i], M);
 	}
 
-	const auto pair = MinMaxPoint(transformed_verts);
-	min_point = pair.first;
-	max_point = pair.second;
+	const auto [min, max] = MinMaxPoint(transformed_verts);
+	min_point = min;
+	max_point = max;
 }
 
 

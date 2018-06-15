@@ -54,7 +54,7 @@ void UserInterface::draw(const Engine& engine) {
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::drawMenu(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, Scene& scene, ModelType& add_model_popup) {
+void UserInterface::drawMenu(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, Scene& scene, ModelType& add_model_popup) const {
 
 	if (ImGui::BeginMenuBar()) {
 
@@ -350,7 +350,7 @@ void UserInterface::drawObjectLists(ECS& ecs_engine, Scene& scene) {
 //----------------------------------------------------------------------------------
 
 
-void UserInterface::drawDetails(Scene& scene) {
+void UserInterface::drawDetails(Scene& scene) const {
 
 	ImGui::Text(scene.getName().c_str());
 	ImGui::Separator();
@@ -360,7 +360,7 @@ void UserInterface::drawDetails(Scene& scene) {
 }
 
 
-void UserInterface::drawDetails(Transform& transform) {
+void UserInterface::drawDetails(Transform& transform) const {
 
 	ImGui::Text("Transform");
 	ImGui::Separator();
@@ -383,7 +383,7 @@ void UserInterface::drawDetails(Transform& transform) {
 }
 
 
-void UserInterface::drawDetails(PerspectiveCamera& camera) {
+void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 
 	ImGui::Text("Fog");
 	ImGui::Separator();
@@ -408,7 +408,7 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) {
 		camera.setFog(Fog(color, start, range));
 }
 
-void UserInterface::drawDetails(CameraMovement& movement) {
+void UserInterface::drawDetails(CameraMovement& movement) const {
 
 	ImGui::Text("Movement");
 	ImGui::Separator();
@@ -436,18 +436,18 @@ void UserInterface::drawDetails(CameraMovement& movement) {
 }
 
 
-void UserInterface::drawDetails(OrthographicCamera& camera) {
+void UserInterface::drawDetails(OrthographicCamera& camera) const {
 	
 }
 
 
 
-void UserInterface::drawDetails(Model& model) {
+void UserInterface::drawDetails(Model& model) const {
 	
 }
 
 
-void UserInterface::drawDetails(ModelChild& child) {
+void UserInterface::drawDetails(ModelChild& child) const {
 
 	ImGui::Text(child.getName().c_str());
 	ImGui::Separator();
@@ -465,7 +465,7 @@ void UserInterface::drawDetails(ModelChild& child) {
 }
 
 
-void UserInterface::drawDetails(DirectionalLight& light) {
+void UserInterface::drawDetails(DirectionalLight& light) const {
 
 	ImGui::Text("Directional Light");
 	ImGui::Separator();
@@ -488,7 +488,7 @@ void UserInterface::drawDetails(DirectionalLight& light) {
 }
 
 
-void UserInterface::drawDetails(PointLight& light) {
+void UserInterface::drawDetails(PointLight& light) const {
 
 	ImGui::Text("Point Light");
 	ImGui::Separator();
@@ -519,7 +519,7 @@ void UserInterface::drawDetails(PointLight& light) {
 }
 
 
-void UserInterface::drawDetails(SpotLight& light) {
+void UserInterface::drawDetails(SpotLight& light) const {
 
 	ImGui::Text("Spot Light");
 	ImGui::Separator();
@@ -566,7 +566,7 @@ void UserInterface::drawDetails(SpotLight& light) {
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::procNewModelPopups(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, handle64 entity, ModelType type) {
+void UserInterface::procNewModelPopups(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, handle64 entity, ModelType type) const {
 
 	switch (type) {
 		case ModelType::Cube:

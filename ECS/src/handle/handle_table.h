@@ -45,12 +45,12 @@ public:
 		assert(handle.index != HandleT::invalid_handle && "Invalid handle specified");
 		assert(handle.index < handle_table.size() && "Invalid handle specified. Index out of range.");
 
-		auto pair = handle_table[handle.index];
+		auto [table_counter, data] = handle_table[handle.index];
 
-		assert(handle.counter == pair.first && "Invalid handle specified. Table counter and handle counter differ.");
+		assert(handle.counter == table_counter && "Invalid handle specified. Table counter and handle counter differ.");
 
-		if (pair.first == handle.counter) {
-			return pair.second;
+		if (table_counter == handle.counter) {
+			return data;
 		}
 		return nullptr;
 	}

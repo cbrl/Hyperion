@@ -39,7 +39,7 @@ private:
 
 
 private:
-	void drawMenu(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, Scene& scene, ModelType& add_model_popup);
+	void drawMenu(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, Scene& scene, ModelType& add_model_popup) const;
 	void drawObjectLists(ECS& ecs_engine, Scene& scene);
 
 
@@ -50,16 +50,16 @@ private:
 		ImGui::End();
 	}
 
-	void drawDetails(Scene& scene);
-	void drawDetails(Transform& transform);
-	void drawDetails(PerspectiveCamera& camera);
-	void drawDetails(OrthographicCamera& camera);
-	void drawDetails(CameraMovement& movement);
-	void drawDetails(Model& model);
-	void drawDetails(ModelChild& child);
-	void drawDetails(DirectionalLight& light);
-	void drawDetails(PointLight& light);
-	void drawDetails(SpotLight& light);
+	void drawDetails(Scene& scene) const;
+	void drawDetails(Transform& transform) const;
+	void drawDetails(PerspectiveCamera& camera) const;
+	void drawDetails(OrthographicCamera& camera) const;
+	void drawDetails(CameraMovement& movement) const;
+	void drawDetails(Model& model) const;
+	void drawDetails(ModelChild& child) const;
+	void drawDetails(DirectionalLight& light) const;
+	void drawDetails(PointLight& light) const;
+	void drawDetails(SpotLight& light) const;
 
-	void procNewModelPopups(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, handle64 entity, ModelType type);
+	void procNewModelPopups(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, handle64 entity, ModelType type) const;
 };

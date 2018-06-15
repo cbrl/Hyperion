@@ -9,15 +9,15 @@ ModelOutput<VertexT>::ModelOutput(const string& name,
 	, indices(indices)
 	, materials(materials) {
 
+	// Get min and max vertices
+	auto [min, max] = MinMaxPoint(vertices);
+
 	// Create the AABB
-	auto minmax = MinMaxPoint(vertices);
-
-	aabb = AABB(minmax.first, minmax.second);
-
+	aabb = AABB(min, max);
 
 	// Create the bounding sphere
-	auto center = (minmax.first + minmax.second) / 2;
-	auto radius = XMVectorGetX(XMVector3Length(minmax.second - minmax.first));
+	auto center = (min + max) / 2;
+	auto radius = XMVectorGetX(XMVector3Length(max - min));
 
 	sphere = BoundingSphere(center, radius);
 
@@ -44,8 +44,8 @@ ModelOutput<VertexT>::ModelOutput(const string& name,
 			subvec.push_back(vertices[indices[j]]);
 		}
 
-		auto minmax_part = MinMaxPoint(subvec);
-		temp.aabb        = AABB(minmax_part.first, minmax_part.second);
+		auto [part_min, part_max] = MinMaxPoint(subvec);
+		temp.aabb = AABB(part_min, part_max);
 
 		model_parts.push_back(std::move(temp));
 	}
