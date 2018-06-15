@@ -2,7 +2,7 @@
 
 #include "entity/entity.h"
 #include "component/component_mgr.h"
-#include "handle/handle_table.h"
+#include "memory/handle/handle_table.h"
 
 
 //----------------------------------------------------------------------------------

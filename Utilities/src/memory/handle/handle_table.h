@@ -1,6 +1,6 @@
 #pragma once
 
-#include "handle/handle.h"
+#include "handle.h"
 #include "log/log.h"
 
 
@@ -12,15 +12,15 @@ private:
 	// Potential expansion of HandleEntry
 	/*
 	struct HandleEntry {
-		using ValueT = HandleT::value_type;
+		using value_type = HandleT::value_type;
 	
 		HandleEntry() = default;
 		explicit HandleEntry(ValueT next_index) : next_index(next_index) {}
 
-		ValueT next_index  : HandleT::n_index_bits;
-		ValueT counter     : HandleT::n_counter_bits;
-		ValueT end_of_list : 1;
-		T*     entry;
+		value_type next_index  : HandleT::n_index_bits;
+		value_type counter     : HandleT::n_counter_bits;
+		value_type end_of_list : 1;
+		T*         entry;
 	};
 	*/
 
@@ -32,22 +32,12 @@ public:
 	HandleT createHandle(DataT* object);
 	void releaseHandle(HandleT handle);
 
-	bool expired(const HandleT& handle) const {
-		return handle.counter != handle_table[handle.index].first;
-	}
-
-	HandleT operator[](typename HandleT::value_type idx) const {
-		assert(idx < handle_table.size() && "Invalid handle specified. Index out of range.");
-		return HandleT(idx, handle_table[idx].first);
-	}
+	bool validHandle(const HandleT& handle) const;
 
 	DataT* operator[](HandleT handle) {
-		assert(handle.index != HandleT::invalid_handle && "Invalid handle specified");
-		assert(handle.index < handle_table.size() && "Invalid handle specified. Index out of range.");
+		assert(validHandle(handle) && "HandleTable::operator[](HandleT) - Invalid handle specified");
 
 		auto [table_counter, data] = handle_table[handle.index];
-
-		assert(handle.counter == table_counter && "Invalid handle specified. Table counter and handle counter differ.");
 
 		if (table_counter == handle.counter) {
 			return data;

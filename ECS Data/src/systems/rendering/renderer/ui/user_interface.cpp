@@ -4,16 +4,16 @@
 #include "scene/scene.h"
 
 
-static void* selected = nullptr;
-static handle64 selected_entity(handle64::invalid_handle);
+void* UserInterface::selected = nullptr;
+handle64 UserInterface::selected_entity{ handle64::invalid_handle };
 
 
 void UserInterface::draw(const Engine& engine) {
 
 	auto& scene         = engine.getScene();
-	auto&  ecs_engine   = engine.getECS();
-	auto&  device       = engine.getRenderingMgr().getDevice();
-	auto&  resource_mgr = engine.getRenderingMgr().getResourceMgr();
+	auto& ecs_engine   = engine.getECS();
+	auto& device       = engine.getRenderingMgr().getDevice();
+	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
 
 	bool open = true;
 
@@ -38,7 +38,7 @@ void UserInterface::draw(const Engine& engine) {
 		procNewModelPopups(device, ecs_engine, resource_mgr, selected_entity, add_model_popup);
 
 		// Draw tree
-		drawObjectLists(ecs_engine, scene);
+		drawTree(ecs_engine, scene);
 	}
 	
 	// End window
@@ -151,7 +151,7 @@ void UserInterface::drawMenu(ID3D11Device& device, ECS& ecs_engine, ResourceMgr&
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::drawObjectLists(ECS& ecs_engine, Scene& scene) {
+void UserInterface::drawTree(ECS& ecs_engine, Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
 
@@ -165,172 +165,8 @@ void UserInterface::drawObjectLists(ECS& ecs_engine, Scene& scene) {
 			selected = &scene;
 
 		if (node_open) {
-
-			auto& entities = scene.getEntities();
-
-			for (const auto entity : entities) {
-				
-				string name = "Entity (index: " + to_string(entity.index) + ", counter: " + to_string(entity.counter) + ")";
-
-				const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
-		                                         | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                                         | ((selected_entity == entity) ? ImGuiTreeNodeFlags_Selected : 0);
-				
-				const bool open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
-
-				if (ImGui::IsItemClicked())
-					selected_entity = entity;
-
-				if (!open) continue;
-
-				// Transform
-				if (auto* transform = ecs_engine.getComponent<Transform>(entity)) {
-					bool node_selected = (selected == transform);
-
-					ImGui::Selectable("Transform", &node_selected);
-
-					if (ImGui::IsItemClicked()) {
-						selected = transform;
-					}
-					
-					if (node_selected) {
-						drawDetailsPanel(*transform);
-					}
-				}
-
-				// Perspective Camera
-				if (auto* cam = ecs_engine.getComponent<PerspectiveCamera>(entity)) {
-					bool node_selected = (selected == cam);
-
-					ImGui::Selectable("Perspective Camera", &node_selected);
-
-					if (ImGui::IsItemClicked()) {
-						selected = cam;
-					}
-
-					if (node_selected) {
-						drawDetailsPanel(*cam);
-					}
-				}
-
-				// Orthographic Camera
-				if (auto* cam = ecs_engine.getComponent<OrthographicCamera>(entity)) {
-					bool node_selected = (selected == cam);
-
-					ImGui::Selectable("Orthographic Camera", &node_selected);
-
-					if (ImGui::IsItemClicked()) {
-						selected = cam;
-					}
-
-					if (node_selected) {
-						drawDetailsPanel(*cam);
-					}
-				}
-
-				// Camera Movement
-				if (auto* cam_movement = ecs_engine.getComponent<CameraMovement>(entity)) {
-					bool node_selected = (selected == cam_movement);
-
-					ImGui::Selectable("Camera Movement", &node_selected);
-
-					if (ImGui::IsItemClicked()) {
-						selected = cam_movement;
-					}
-
-					if (node_selected) {
-						drawDetailsPanel(*cam_movement);
-					}
-				}
-
-				// Model
-				if (auto* model = ecs_engine.getComponent<Model>(entity)) {
-					const bool node_selected = (selected == model);
-
-					const ImGuiTreeNodeFlags model_flags = ImGuiTreeNodeFlags_OpenOnArrow
-					                                       | ImGuiTreeNodeFlags_OpenOnDoubleClick
-					                                       | (node_selected ? ImGuiTreeNodeFlags_Selected : 0);
-
-					const bool open = ImGui::TreeNodeEx("Model", model_flags);
-
-					if (ImGui::IsItemClicked()) {
-						selected = model;
-					}
-
-					if (open) {
-						model->forEachChild([&](ModelChild& child) {
-							bool child_selected = (selected == &child);
-
-							ImGui::Selectable(child.getName().c_str(), &child_selected);
-
-							if (ImGui::IsItemClicked()) {
-								selected = &child;
-							}
-
-							if (child_selected) {
-								drawDetailsPanel(child);
-							}
-						});
-
-						ImGui::TreePop();
-					}
-					
-					if (node_selected) {
-						drawDetailsPanel(*model);
-					}
-				}
-
-				// Directional Light
-				if (auto* light = ecs_engine.getComponent<DirectionalLight>(entity)) {
-					bool node_selected = (selected == light);
-
-					ImGui::Selectable("Directional Light", &node_selected);
-
-					if (ImGui::IsItemClicked()) {
-						selected = light;
-					}
-					
-					if (node_selected) {
-						drawDetailsPanel(*light);
-					}
-				}
-
-				// Point Light
-				if (auto* light = ecs_engine.getComponent<PointLight>(entity)) {
-					bool node_selected = (selected == light);
-
-					ImGui::Selectable("Point Light", &node_selected);
-
-					if (ImGui::IsItemClicked()) {
-						selected = light;
-					}
-
-					if (node_selected) {
-						drawDetailsPanel(*light);
-					}
-				}
-
-				// Spot Light
-				if (auto* light = ecs_engine.getComponent<SpotLight>(entity)) {
-					bool node_selected = (selected == light);
-
-					ImGui::Selectable("Spot Light", &node_selected);
-
-					if (ImGui::IsItemClicked()) {
-						selected = light;
-					}
-
-					if (node_selected) {
-						drawDetailsPanel(*light);
-					}
-				}
-
-				ImGui::TreePop();
-			}
-
-			ImGui::TreePop();
+			drawTreeNodes(ecs_engine, scene);
 		}
-
 
 		if (selected == &scene) {
 			drawDetailsPanel(scene);
@@ -339,6 +175,105 @@ void UserInterface::drawObjectLists(ECS& ecs_engine, Scene& scene) {
 
 	ImGui::EndChild();
 }
+
+
+void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
+
+	auto& entities = scene.getEntities();
+
+	for (const auto entity : entities) {
+
+		string name = "Entity (index: " + to_string(entity.index) + ", counter: " + to_string(entity.counter) + ")";
+
+		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
+		                                 | ImGuiTreeNodeFlags_OpenOnDoubleClick
+		                                 | ((selected_entity == entity) ? ImGuiTreeNodeFlags_Selected : 0);
+
+		const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
+
+		if (ImGui::IsItemClicked())
+			selected_entity = entity;
+
+		if (!node_open) continue;
+
+		// Transform
+		if (auto* transform = ecs_engine.getComponent<Transform>(entity)) {
+			drawNode("Transform", *transform);
+		}
+
+		// Perspective Camera
+		if (auto* cam = ecs_engine.getComponent<PerspectiveCamera>(entity)) {
+			drawNode("Perspective Camera", *cam);
+		}
+
+		// Orthographic Camera
+		if (auto* cam = ecs_engine.getComponent<OrthographicCamera>(entity)) {
+			drawNode("Orthographic Camera", *cam);
+		}
+
+		// Camera Movement
+		if (auto* cam_movement = ecs_engine.getComponent<CameraMovement>(entity)) {
+			drawNode("Camera Movement", *cam_movement);
+		}
+
+		// Model
+		if (auto* model = ecs_engine.getComponent<Model>(entity)) {
+			const bool node_selected = (selected == model);
+
+			const ImGuiTreeNodeFlags model_flags = ImGuiTreeNodeFlags_OpenOnArrow
+			                                       | ImGuiTreeNodeFlags_OpenOnDoubleClick
+			                                       | (node_selected ? ImGuiTreeNodeFlags_Selected : 0);
+
+			const bool open = ImGui::TreeNodeEx("Model", model_flags);
+
+			if (ImGui::IsItemClicked()) {
+				selected = model;
+			}
+
+			if (open) {
+				model->forEachChild([&](ModelChild& child) {
+					bool child_selected = (selected == &child);
+
+					ImGui::Selectable(child.getName().c_str(), &child_selected);
+
+					if (ImGui::IsItemClicked()) {
+						selected = &child;
+					}
+
+					if (child_selected) {
+						drawDetailsPanel(child);
+					}
+				});
+
+				ImGui::TreePop();
+			}
+
+			if (node_selected) {
+				drawDetailsPanel(*model);
+			}
+		}
+
+		// Directional Light
+		if (auto* light = ecs_engine.getComponent<DirectionalLight>(entity)) {
+			drawNode("Directional Light", *light);
+		}
+
+		// Point Light
+		if (auto* light = ecs_engine.getComponent<PointLight>(entity)) {
+			drawNode("Point Light", *light);
+		}
+
+		// Spot Light
+		if (auto* light = ecs_engine.getComponent<SpotLight>(entity)) {
+			drawNode("Spot Light", *light);
+		}
+
+		ImGui::TreePop();
+	}
+
+	ImGui::TreePop();
+}
+
 
 
 

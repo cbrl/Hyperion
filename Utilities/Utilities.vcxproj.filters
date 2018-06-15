@@ -67,6 +67,12 @@
     <Filter Include="Header Files\os">
       <UniqueIdentifier>{a3360963-fa68-445e-b659-92615321e7c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\memory\handle">
+      <UniqueIdentifier>{c2dc4a9e-77fe-4652-909c-aca45c3be5db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\memory\handle">
+      <UniqueIdentifier>{96a44e27-2c05-4060-a6bd-d05c40e81f60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -135,6 +141,12 @@
     <ClInclude Include="src\os\d3d11.h">
       <Filter>Header Files\os</Filter>
     </ClInclude>
+    <ClInclude Include="src\memory\handle\handle.h">
+      <Filter>Header Files\memory\handle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\handle\handle_table.h">
+      <Filter>Header Files\memory\handle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fps\fps.cpp">
@@ -165,6 +177,9 @@
     </None>
     <None Include="src\memory\resource_pool.tpp">
       <Filter>Source Files\memory</Filter>
+    </None>
+    <None Include="src\memory\handle\handle_table.tpp">
+      <Filter>Source Files\memory\handle</Filter>
     </None>
   </ItemGroup>
 </Project>

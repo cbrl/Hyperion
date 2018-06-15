@@ -45,10 +45,16 @@ HandleT HandleTable<HandleT, DataT, ChunkSize>::createHandle(DataT* object) {
 
 template<typename HandleT, typename DataT, size_t ChunkSize>
 void HandleTable<HandleT, DataT, ChunkSize>::releaseHandle(HandleT handle) {
-
-	if ((handle.index > handle_table.size()) || (handle.counter != handle_table[handle.index].first)) {
-		FILE_LOG(logERROR) << "Invalid handle specified for release.";
-	}
+	assert(validHandle(handle) && "Invalid handle specified for release");
 
 	handle_table[handle.index].second = nullptr;
+}
+
+
+template<typename HandleT, typename DataT, size_t ChunkSize>
+bool HandleTable<HandleT, DataT, ChunkSize>::validHandle(const HandleT& handle) const {
+	assert(handle != HandleT::invalid_handle && "Invalid handle specified");
+	assert(handle.index < handle_table.size() && "Invalid handle specified. Index out of range.");
+
+	return handle.counter == handle_table[handle.index].first;
 }

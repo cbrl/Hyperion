@@ -147,6 +147,8 @@
     <ClInclude Include="src\memory\allocator\linear_allocator.h" />
     <ClInclude Include="src\memory\allocator\pool_allocator.h" />
     <ClInclude Include="src\memory\allocator\stack_allocator.h" />
+    <ClInclude Include="src\memory\handle\handle.h" />
+    <ClInclude Include="src\memory\handle\handle_table.h" />
     <ClInclude Include="src\memory\resource_pool.h" />
     <ClInclude Include="src\os\d3d11.h" />
     <ClInclude Include="src\os\windows.h" />
@@ -165,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\memory\allocator\pool_allocator.tpp" />
+    <None Include="src\memory\handle\handle_table.tpp" />
     <None Include="src\memory\resource_pool.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

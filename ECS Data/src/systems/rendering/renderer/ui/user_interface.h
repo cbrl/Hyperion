@@ -40,8 +40,21 @@ private:
 
 private:
 	void drawMenu(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, Scene& scene, ModelType& add_model_popup) const;
-	void drawObjectLists(ECS& ecs_engine, Scene& scene);
+	void drawTree(ECS& ecs_engine, Scene& scene);
+	void drawTreeNodes(ECS& ecs_engine, Scene& scene);
 
+	template<typename T>
+	void drawNode(const char* text, T& component) {
+		bool node_selected = (selected == &component);
+		ImGui::Selectable(text, &node_selected);
+
+		if (ImGui::IsItemClicked()) {
+			selected = &component;
+		}
+		if (node_selected) {
+			drawDetailsPanel(component);
+		}
+	}
 
 	template<typename T>
 	void drawDetailsPanel(T& component) {
@@ -62,4 +75,9 @@ private:
 	void drawDetails(SpotLight& light) const;
 
 	void procNewModelPopups(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, handle64 entity, ModelType type) const;
+
+
+private:
+	static void* selected;
+	static handle64 selected_entity;
 };

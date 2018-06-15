@@ -42,7 +42,7 @@ public:
 
 	auto& getName() const { return name; }
 	auto& getTexts() const { return texts; }
-	auto& getEntities() { return entities; }
+	auto& getEntities() const { return entities; }
 
 
 protected:

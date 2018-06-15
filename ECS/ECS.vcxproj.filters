@@ -28,9 +28,6 @@
     <Filter Include="Source Files\system">
       <UniqueIdentifier>{c8310856-1825-4550-a6c2-1bff62e409a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\handle">
-      <UniqueIdentifier>{d8bba005-10e5-4b4b-b247-d52fdde18a04}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\handle">
       <UniqueIdentifier>{46813c06-38e7-4dfb-8c66-8c8986ecf82a}</UniqueIdentifier>
     </Filter>
@@ -56,12 +53,6 @@
     </ClInclude>
     <ClInclude Include="src\ecs.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\handle\handle.h">
-      <Filter>Header Files\handle</Filter>
-    </ClInclude>
-    <ClInclude Include="src\handle\handle_table.h">
-      <Filter>Header Files\handle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
