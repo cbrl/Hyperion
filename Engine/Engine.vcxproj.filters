@@ -25,12 +25,6 @@
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{a3101e3b-e5e3-4452-8a01-db76e2565a79}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\ui">
-      <UniqueIdentifier>{666b8bd1-3500-41f2-8ede-09b17476d93d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\scene\ui">
-      <UniqueIdentifier>{40d0d5d7-2308-4c95-8ee7-ffa4ee811da2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\scene\text">
       <UniqueIdentifier>{b1be935a-51e7-4959-87fd-0b2806d45aa5}</UniqueIdentifier>
     </Filter>

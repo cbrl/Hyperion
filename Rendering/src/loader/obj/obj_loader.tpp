@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "loader/obj/obj_tokens.h"
 #include "io/io.h"
-#include "math/math.h"
+#include "directx/directx_math.h"
 
 
 template<typename VertexT>

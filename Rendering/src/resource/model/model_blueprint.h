@@ -1,9 +1,9 @@
 #pragma once
 
-#include "os/d3d11.h"
+#include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
 #include "directx/vertex_types.h"
-#include "math/math.h"
+#include "directx/directx_math.h"
 #include "resource/resource_mgr.h"
 #include "resource/mesh/mesh.h"
 #include "resource/model/model_output.h"

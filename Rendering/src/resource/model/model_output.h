@@ -1,6 +1,6 @@
 #pragma once
 
-#include "os/d3d11.h"
+#include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
 #include "resource/model/material/material.h"
 #include "geometry/bounding_volume/bounding_volume.h"

@@ -2,7 +2,7 @@
 
 #pragma comment(lib, "d3dcompiler.lib")
 
-#include "os/d3d11.h"
+#include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
 #include "display_config.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
-#include "math/math.h"
+#include "directx/directx_math.h"
 
 
 //----------------------------------------------------------------------------------

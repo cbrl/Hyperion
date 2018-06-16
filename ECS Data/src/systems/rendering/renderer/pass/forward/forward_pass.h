@@ -1,9 +1,9 @@
 #pragma once
 
-#include "os/d3d11.h"
+#include "directx/d3d11.h"
 
 #include "datatypes/datatypes.h"
-#include "math/math.h"
+#include "directx/directx_math.h"
 #include "pipeline.h"
 #include "buffer/buffers.h"
 #include "hlsl.h"

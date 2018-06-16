@@ -1,6 +1,6 @@
 #pragma once
 
-#include "os/d3d11.h"
+#include "directx/d3d11.h"
 #include <DirectXColors.h>
 
 #include "system/system.h"

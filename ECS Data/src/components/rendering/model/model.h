@@ -2,7 +2,7 @@
 
 #include "datatypes/datatypes.h"
 #include "io/io.h"
-#include "math/math.h"
+#include "directx/directx_math.h"
 
 
 #include "component/component.h"

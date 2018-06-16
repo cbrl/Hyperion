@@ -1,7 +1,7 @@
 #pragma once
 
 
-// Windows header
+// Include the Windows header first
 #include "os/windows.h"
 
 

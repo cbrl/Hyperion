@@ -39,29 +39,30 @@ private:
 
 
 private:
-	void drawMenu(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, Scene& scene, ModelType& add_model_popup) const;
+	//----------------------------------------------------------------------------------
+	// Menu
+	//----------------------------------------------------------------------------------
+	void drawMenu(ID3D11Device& device,
+	              ECS& ecs_engine,
+	              ResourceMgr& resource_mgr,
+	              Scene& scene,
+	              ModelType& add_model_popup) const;
+
+	//----------------------------------------------------------------------------------
+	// Scene tree
+	//----------------------------------------------------------------------------------
 	void drawTree(ECS& ecs_engine, Scene& scene);
 	void drawTreeNodes(ECS& ecs_engine, Scene& scene);
 
 	template<typename T>
-	void drawNode(const char* text, T& component) {
-		bool node_selected = (selected == &component);
-		ImGui::Selectable(text, &node_selected);
+	void drawNode(const char* text, T& component) const;
 
-		if (ImGui::IsItemClicked()) {
-			selected = &component;
-		}
-		if (node_selected) {
-			drawDetailsPanel(component);
-		}
-	}
 
+	//----------------------------------------------------------------------------------
+	// Item details
+	//----------------------------------------------------------------------------------
 	template<typename T>
-	void drawDetailsPanel(T& component) {
-		ImGui::Begin("Properties");
-		drawDetails(component);
-		ImGui::End();
-	}
+	void drawDetailsPanel(T& component) const;
 
 	void drawDetails(Scene& scene) const;
 	void drawDetails(Transform& transform) const;
@@ -74,10 +75,40 @@ private:
 	void drawDetails(PointLight& light) const;
 	void drawDetails(SpotLight& light) const;
 
-	void procNewModelPopups(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, handle64 entity, ModelType type) const;
+
+	//----------------------------------------------------------------------------------
+	// Process popups
+	//----------------------------------------------------------------------------------
+	void procNewModelPopups(ID3D11Device& device,
+	                        ECS& ecs_engine,
+	                        ResourceMgr& resource_mgr,
+	                        handle64 entity,
+	                        ModelType type) const;
 
 
 private:
 	static void* selected;
 	static handle64 selected_entity;
 };
+
+
+template<typename T>
+void UserInterface::drawNode(const char* text, T& component) const {
+	bool node_selected = (selected == &component);
+	ImGui::Selectable(text, &node_selected);
+
+	if (ImGui::IsItemClicked()) {
+		selected = &component;
+	}
+	if (node_selected) {
+		drawDetailsPanel(component);
+	}
+}
+
+
+template<typename T>
+void UserInterface::drawDetailsPanel(T& component) const {
+	ImGui::Begin("Properties");
+	drawDetails(component);
+	ImGui::End();
+}

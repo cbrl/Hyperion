@@ -96,9 +96,6 @@
     <ClInclude Include="src\log\log.h">
       <Filter>Header Files\log</Filter>
     </ClInclude>
-    <ClInclude Include="src\math\math.h">
-      <Filter>Header Files\math</Filter>
-    </ClInclude>
     <ClInclude Include="src\memory\resource_pool.h">
       <Filter>Header Files\memory</Filter>
     </ClInclude>
@@ -146,6 +143,15 @@
     </ClInclude>
     <ClInclude Include="src\memory\handle\handle_table.h">
       <Filter>Header Files\memory\handle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\d3d11.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\directx_math.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="src\math\math.h">
+      <Filter>Header Files\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -54,7 +54,11 @@ void UserInterface::draw(const Engine& engine) {
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::drawMenu(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, Scene& scene, ModelType& add_model_popup) const {
+void UserInterface::drawMenu(ID3D11Device& device,
+                             ECS& ecs_engine,
+                             ResourceMgr& resource_mgr,
+                             Scene& scene,
+                             ModelType& add_model_popup) const {
 
 	if (ImGui::BeginMenuBar()) {
 
@@ -500,7 +504,11 @@ void UserInterface::drawDetails(SpotLight& light) const {
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::procNewModelPopups(ID3D11Device& device, ECS& ecs_engine, ResourceMgr& resource_mgr, handle64 entity, ModelType type) const {
+void UserInterface::procNewModelPopups(ID3D11Device& device,
+                                       ECS& ecs_engine,
+                                       ResourceMgr& resource_mgr,
+                                       handle64 entity,
+                                       ModelType type) const {
 
 	switch (type) {
 		case ModelType::Cube:

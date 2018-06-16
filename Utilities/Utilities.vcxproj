@@ -136,6 +136,8 @@
     <ClInclude Include="src\datatypes\pointer_types.h" />
     <ClInclude Include="src\datatypes\scalar_types.h" />
     <ClInclude Include="src\datatypes\vector_types.h" />
+    <ClInclude Include="src\directx\d3d11.h" />
+    <ClInclude Include="src\directx\directx_math.h" />
     <ClInclude Include="src\directx\vertex_types.h" />
     <ClInclude Include="src\engine_util.h" />
     <ClInclude Include="src\fps\fps.h" />

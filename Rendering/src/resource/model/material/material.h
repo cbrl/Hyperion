@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/math.h"
+#include "directx/directx_math.h"
 #include "datatypes/datatypes.h"
 #include "resource/texture/texture.h"
 
