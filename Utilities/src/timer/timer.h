@@ -12,11 +12,11 @@ public:
 	Timer();
 	~Timer() = default;
 
-	// Start the timer (if it's paused)
-	void start();
-
 	// Pause the timer
 	void pause();
+
+	// Start the timer (if it's paused)
+	void resume();
 
 	// Reset the timer
 	void reset();

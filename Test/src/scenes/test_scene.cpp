@@ -166,8 +166,7 @@ void TestScene::tick(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// This could be made into a "rotate" system for use with the ECS.
-	// Maybe register the component(s) to rotate with the system, or
-	// have a rotation component that contains various parameters.
+	// Create a rotation component that contains various parameters (speed, axis, etc)
 	auto transform = engine.getECS().getComponent<Transform>(sphere);
 	const auto p = transform->getPosition();
 	const auto v = XMVector3Transform(p, XMMatrixRotationY(delta_time));

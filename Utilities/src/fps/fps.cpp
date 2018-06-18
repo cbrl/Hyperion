@@ -3,7 +3,7 @@
 
 FPS::FPS() : fps(0), count(0) {
 
-	start_time = timeGetTime();
+	start_time = SteadyClock::now();
 }
 
 
@@ -12,11 +12,11 @@ void FPS::tick() {
 	count++;
 
 	// Update FPS every half second
-	if (timeGetTime() >= (start_time + 500)) {
+	if (SteadyClock::now() >= (start_time + 500ms)) {
 		fps = count * 2;
 		count = 0;
 
-		start_time = timeGetTime();
+		start_time = SteadyClock::now();
 	}
 }
 

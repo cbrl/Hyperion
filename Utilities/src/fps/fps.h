@@ -1,11 +1,9 @@
 #pragma once
 
-#pragma comment(lib, "winmm.lib")
+#include <chrono>
+#include "datatypes/scalar_types.h"
 
-#include "os/windows.h"
-#include <timeapi.h>
-#include "datatypes/datatypes.h"
-
+using namespace std::chrono_literals;
 
 class FPS final {
 public:
@@ -19,7 +17,9 @@ public:
 
 
 private:
+	using SteadyClock = std::chrono::steady_clock;
+
 	u32 fps;
 	u32 count;
-	ULONG start_time;
+	SteadyClock::time_point start_time;
 };

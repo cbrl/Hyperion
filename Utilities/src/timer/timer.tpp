@@ -3,8 +3,18 @@ Timer<ClockT>::Timer() : paused(false) {
 	reset();
 }
 
+
 template<typename ClockT>
-void Timer<ClockT>::start() {
+void Timer<ClockT>::pause() {
+	if (!paused) {
+		pause_time = ClockT::now();
+		paused = true;
+	}
+}
+
+
+template<typename ClockT>
+void Timer<ClockT>::resume() {
 	if (paused) {
 		typename ClockT::time_point start_time = ClockT::now();
 
@@ -14,14 +24,6 @@ void Timer<ClockT>::start() {
 		prev_time = start_time;
 		pause_time = ClockT::duration(0);
 		paused = false;
-	}
-}
-
-template<typename ClockT>
-void Timer<ClockT>::pause() {
-	if (!paused) {
-		pause_time = ClockT::now();
-		paused = true;
 	}
 }
 

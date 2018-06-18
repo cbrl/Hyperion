@@ -33,13 +33,11 @@ void SystemMonitor::CpuMonitor::tick() {
 
 double SystemMonitor::CpuMonitor::getTotalCpuPercentage() const {
 	return sys_usage;
-	//return can_read_cpu ? total_usage : 0;
 }
 
 
 double SystemMonitor::CpuMonitor::getProcessCpuPercentage() const {
 	return proc_usage;
-	//return process_usage * 100.0;
 }
 
 
