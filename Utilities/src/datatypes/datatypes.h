@@ -14,13 +14,13 @@
 #include "vector_types.h"
 #include "string/string.h"
 
-#if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_)
+#if defined(_WIN32)
 
 // Matrix/vector types and related functions
 #include <DirectXMath.h>
 using namespace DirectX;
 
-#endif //defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_)
+#endif //defined(_WIN32)
 
 
 //----------------------------------------------------------------------------------

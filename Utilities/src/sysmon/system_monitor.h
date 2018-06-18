@@ -1,10 +1,59 @@
 #pragma once
 
-#pragma comment(lib, "pdh.lib")
-
-#include <Pdh.h>
+#include "os/windows.h"
 #include <Psapi.h>
 #include "datatypes/datatypes.h"
+#include "timer/timer.h"
+
+
+struct PerCoreClock {
+	using rep        = u64;
+	using period     = std::ratio<1, 10000000>;
+	using duration   = std::chrono::duration<rep, period>;
+	using time_point = std::chrono::time_point<PerCoreClock>;
+
+	static constexpr bool is_steady = true;
+
+	[[nodiscard]]
+	static time_point now() noexcept {
+		static u16 core_count = std::thread::hardware_concurrency();
+		return time_point(duration(GetCPUTime() / core_count));
+	}
+};
+
+struct SystemWorkClock {
+	using rep = u64;
+	using period = std::ratio<1, 10000000>;
+	using duration = std::chrono::duration<rep, period>;
+	using time_point = std::chrono::time_point<SystemWorkClock>;
+
+	static constexpr bool is_steady = true;
+
+	[[nodiscard]]
+	static time_point now() noexcept {
+		static u16 core_count = std::thread::hardware_concurrency();
+		return time_point(duration(GetSystemWorkTime() / core_count));
+	}
+};
+
+struct SystemIdleClock {
+	using rep = u64;
+	using period = std::ratio<1, 10000000>;
+	using duration = std::chrono::duration<rep, period>;
+	using time_point = std::chrono::time_point<SystemIdleClock>;
+
+	static constexpr bool is_steady = true;
+
+	[[nodiscard]]
+	static time_point now() noexcept {
+		static u16 core_count = std::thread::hardware_concurrency();
+		return time_point(duration(GetSystemIdleTime() / core_count));
+	}
+};
+
+using SystemWorkTimer = Timer<SystemWorkClock>;
+using SystemIdleTimer = Timer<SystemIdleClock>;
+using PerCoreTimer = Timer<PerCoreClock>;
 
 
 class SystemMonitor final {
@@ -13,43 +62,32 @@ class SystemMonitor final {
 		friend class SystemMonitor;
 
 	protected:
-		CpuMonitor() = default;
-		~CpuMonitor();
+		CpuMonitor()
+			: dt(0)
+			, sys_usage(0)
+			, proc_usage(0) {
+		}
 
-		void init(HANDLE handle);
+		~CpuMonitor() = default;
+
+		// Update the CPU stats
 		void tick();
 
 
 	public:
-		u64 getTotalCpuPercentage() const;
+		double getTotalCpuPercentage() const;
 		double getProcessCpuPercentage() const;
 
 
 	private:
-		// Variables for total CPU usage
-		bool can_read_cpu;
-		HQUERY query_handle;
-		HCOUNTER counter_handle;
-		u64 last_sample_time;
-		u64 total_usage;
+		double dt;
+		double sys_usage;
+		double proc_usage;
 
-
-		// Variables for process CPU usage
-		HANDLE process_handle;
-		u32 processor_count;
-		double process_usage;
-
-		FILETIME ftime;
-		FILETIME fsys;
-		FILETIME fuser;
-
-		ULARGE_INTEGER now;
-		ULARGE_INTEGER sys;
-		ULARGE_INTEGER user;
-
-		ULARGE_INTEGER last_cpu;
-		ULARGE_INTEGER last_sys_cpu;
-		ULARGE_INTEGER last_user_cpu;
+		SystemWorkTimer sys_work_timer;
+		SystemIdleTimer sys_idle_timer;
+		PerCoreTimer core_timer;
+		HighResTimer wall_timer;
 	};
 
 
@@ -57,10 +95,13 @@ class SystemMonitor final {
 		friend class SystemMonitor;
 
 	protected:
-		MemoryMonitor() = default;
+		MemoryMonitor() {
+			mem_info.dwLength = sizeof(MEMORYSTATUSEX);
+		}
+
 		~MemoryMonitor() = default;
 
-		void init(HANDLE handle);
+		// Update the memory stats
 		void tick();
 
 
@@ -76,21 +117,13 @@ class SystemMonitor final {
 
 
 	private:
-		HANDLE process_handle;
-
 		MEMORYSTATUSEX mem_info;
 		PROCESS_MEMORY_COUNTERS_EX pmc;
 	};
 
 
 public:
-	SystemMonitor() {
-		const auto handle = GetCurrentProcess();
-
-		cpu_mon.init(handle);
-		memory_mon.init(handle);
-	}
-
+	SystemMonitor() = default;
 	~SystemMonitor() = default;
 
 	// Update resource stats

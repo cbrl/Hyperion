@@ -120,9 +120,6 @@
     <ClInclude Include="src\sysmon\system_monitor.h">
       <Filter>Header Files\sysmon</Filter>
     </ClInclude>
-    <ClInclude Include="src\timer\timer.h">
-      <Filter>Header Files\timer</Filter>
-    </ClInclude>
     <ClInclude Include="src\directx\vertex_types.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
@@ -133,9 +130,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\os\windows.h">
-      <Filter>Header Files\os</Filter>
-    </ClInclude>
-    <ClInclude Include="src\os\d3d11.h">
       <Filter>Header Files\os</Filter>
     </ClInclude>
     <ClInclude Include="src\memory\handle\handle.h">
@@ -152,6 +146,9 @@
     </ClInclude>
     <ClInclude Include="src\math\math.h">
       <Filter>Header Files\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\timer\timer.h">
+      <Filter>Header Files\timer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +167,6 @@
     <ClCompile Include="src\sysmon\system_monitor.cpp">
       <Filter>Source Files\sysmon</Filter>
     </ClCompile>
-    <ClCompile Include="src\timer\timer.cpp">
-      <Filter>Source Files\timer</Filter>
-    </ClCompile>
     <ClCompile Include="src\directx\vertex_types.cpp">
       <Filter>Source Files\directx</Filter>
     </ClCompile>
@@ -187,5 +181,9 @@
     <None Include="src\memory\handle\handle_table.tpp">
       <Filter>Source Files\memory\handle</Filter>
     </None>
+    <None Include="src\timer\timer.tpp">
+      <Filter>Source Files\timer</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

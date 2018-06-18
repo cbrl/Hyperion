@@ -45,7 +45,7 @@ bool Engine::init() {
 
 
 	// Create Timer
-	timer = make_unique<Timer>();
+	timer = make_unique<HighResTimer>();
 
 
 	// Create FPS Counter

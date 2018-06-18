@@ -46,8 +46,8 @@ void CameraSystem::processMovement(const Engine& engine, CameraMovement* movemen
 
 	const auto& input = engine.getInput();
 
-	const int2 mouse_delta = input.getMouseDelta();
-	const float dt         = engine.getTimer().deltaTime();
+	const int2  mouse_delta = input.getMouseDelta();
+	const float dt          = static_cast<float>(engine.getTimer().deltaTime());
 
 	float3 rotate_units(0.0f, 0.0f, 0.0f);
 	float3 move_units(0.0f, 0.0f, 0.0f);

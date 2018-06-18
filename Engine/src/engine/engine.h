@@ -37,7 +37,7 @@ public:
 	ECS& getECS() const { return *ecs_engine; }
 	Scene& getScene() const { return *scene; }
 	Input& getInput() const { return *input; }
-	Timer& getTimer() const { return *timer; }
+	Timer<std::chrono::high_resolution_clock>& getTimer() const { return *timer; }
 	FPS& getFPSCounter() const { return *fps_counter; }
 	SystemMonitor& getSysMon() const { return *system_monitor; }
 	RenderingMgr& getRenderingMgr() const { return *rendering_mgr; }
@@ -50,7 +50,7 @@ private:
 
 private:
 	unique_ptr<SystemMonitor> system_monitor;
-	unique_ptr<Timer> timer;
+	unique_ptr<HighResTimer> timer;
 	unique_ptr<FPS> fps_counter;
 	unique_ptr<Input> input;
 	unique_ptr<RenderingMgr> rendering_mgr;

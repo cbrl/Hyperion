@@ -4,14 +4,14 @@
 // Pointer datatypes
 //----------------------------------------------------------------------------------
 
-#if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_)
+#if defined(_WIN32)
 
 // Smart pointer for COM objects
 #include "os/windows.h"
 #include <wrl/client.h>
 using Microsoft::WRL::ComPtr;
 
-#endif //defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_)
+#endif //defined(_WIN32)
 
 
 #include <memory>

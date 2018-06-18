@@ -8,11 +8,11 @@ class CameraMovement : public Component<CameraMovement> {
 public:
 	CameraMovement()
 		: velocity(0.0f, 0.0f, 0.0f)
-		, acceleration(0.00002f)
-		, deceleration(0.00005f)
-		, max_velocity(0.01f)
+		, acceleration(20.0f)
+		, deceleration(50.0f)
+		, max_velocity(10.0f)
 		, turn_sensitivity(0.1f)
-		, roll_sensitivity(0.0015f)
+		, roll_sensitivity(1.5f)
 		, is_moving_x(false)
 
 		, is_moving_y(false)
@@ -61,7 +61,7 @@ public:
 private:
 	weak_ptr<Input> input;
 
-	// Position, veloctiy, acceleration (units per ms)
+	// Position, veloctiy, acceleration (units per second)
 	float3 velocity;
 	float acceleration;
 	float deceleration;

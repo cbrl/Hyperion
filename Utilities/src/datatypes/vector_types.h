@@ -613,7 +613,7 @@ struct Vec4 : public DerivedT {
 // Vector aliases
 //----------------------------------------------------------------------------------
 
-#if defined(_WIN32) || defined(_WIN64) || defined(_WINDOWS_)
+#if defined(_WIN32)
 #include <DirectXMath.h>
 
 using int2 = Vec2<int32_t, DirectX::XMINT2>;
@@ -641,4 +641,4 @@ using float4 = Vec4<float, DirectX::XMFLOAT4>;
 	using float3 = Vec3<float>;
 	using float4 = Vec4<float>;
 
-#endif //defined (_WINDOWS) | defined (_WINDOWS_)
+#endif //defined(_WIN32)

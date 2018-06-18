@@ -118,13 +118,13 @@ void TestScene::tick(const Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const int2 mouse_delta      = engine.getInput().getMouseDelta();
-	const u32 fps               = engine.getFPSCounter().getFPS();
-	const float delta_time      = engine.getTimer().deltaTime();
-	const u64 total_cpu_usage   = engine.getSysMon().cpu().getTotalCpuPercentage();
-	const double proc_cpu_usage = engine.getSysMon().cpu().getProcessCpuPercentage();
-	const u64 total_mem_usage   = engine.getSysMon().memory().getTotalUsedPhysicalMem();
-	const u64 proc_mem_usage    = engine.getSysMon().memory().getProcessUsedPhysicalMem();
+	const int2 mouse_delta       = engine.getInput().getMouseDelta();
+	const u32 fps                = engine.getFPSCounter().getFPS();
+	const float delta_time       = engine.getTimer().deltaTime();
+	const double total_cpu_usage = engine.getSysMon().cpu().getTotalCpuPercentage();
+	const double proc_cpu_usage  = engine.getSysMon().cpu().getProcessCpuPercentage();
+	const u64 total_mem_usage    = engine.getSysMon().memory().getTotalUsedPhysicalMem();
+	const u64 proc_mem_usage     = engine.getSysMon().memory().getProcessUsedPhysicalMem();
 
 	static wostringstream cpu_str;
 	static wostringstream mem_str;
@@ -147,7 +147,7 @@ void TestScene::tick(const Engine& engine) {
 	texts.at("FPS").setText(L"FPS: " + to_wstring(fps));
 
 	// Frame Time
-	texts.at("FrameTime").setText(L"Frame Time: " + to_wstring(delta_time));
+	texts.at("FrameTime").setText(L"Frame Time: " + to_wstring(delta_time * 1000.0) + L"ms");
 
 	// CPU Usage
 	texts.at("CPU").setText(cpu_str.str());
@@ -170,6 +170,6 @@ void TestScene::tick(const Engine& engine) {
 	// have a rotation component that contains various parameters.
 	auto transform = engine.getECS().getComponent<Transform>(sphere);
 	const auto p = transform->getPosition();
-	const auto v = XMVector3Transform(p, XMMatrixRotationY(delta_time / 800.0f));
+	const auto v = XMVector3Transform(p, XMMatrixRotationY(delta_time));
 	transform->setPosition(v);
 }
