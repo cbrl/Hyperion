@@ -33,10 +33,6 @@ struct DirectionalLight {
 	float4 specular;
 	float3 direction;
 	float  pad;
-};
-
-struct ShadowedDirectionalLight {
-	DirectionalLight light;
 	matrix world_to_projection;
 };
 
@@ -120,7 +116,7 @@ StructuredBuffer<SpotLight>        spot_lights        : REG_T(SLOT_SRV_SPOT_LIGH
 
 
 // Shadowed Lights
-StructuredBuffer<ShadowedDirectionalLight> shadow_directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOWED);
+StructuredBuffer<DirectionalLight> shadow_directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOWED);
 Texture2DArray directional_light_smaps : REG_T(SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS);
 
 StructuredBuffer<ShadowedPointLight> shadow_point_lights : REG_T(SLOT_SRV_POINT_LIGHTS_SHADOWED);
@@ -229,26 +225,32 @@ float ShadowFactor(ShadowCubeMap shadow_map, float3 p_light, float2 projection_v
 // later we will modify the individual terms.
 //----------------------------------------------------------------------------------
 void ComputeDirectionalLight(DirectionalLight L,
-							 Material mat,
-							 float3 normal,
-							 float3 view_vec,
-							 out float4 ambient,
-							 out float4 diffuse,
-							 out float4 specular) {
+                             Material mat,
+                             float3 pos,
+                             float3 normal,
+                             float3 view_vec,
+                             out float4 ambient,
+                             out float4 diffuse,
+                             out float4 specular,
+                             out float3 p_ndc) {
 	// Initialize outputs.
 	ambient  = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	diffuse  = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// The light vector aims opposite the direction the light rays travel.
-	float3 light_vec = -L.direction;
+	const float3 light_vec = -L.direction;
+
+	const float4 p_proj = mul(float4(pos, 1.0f), L.world_to_projection);
+	p_ndc = p_proj.xyz / p_proj.w;
 
 	// Add ambient term.
 	ambient = mat.ambient * L.ambient;
 
 	// Diffuse
 	const float diffuse_factor = DiffuseFactor(light_vec, normal);
-	diffuse = diffuse_factor * mat.diffuse * L.diffuse;
+	diffuse = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : (diffuse_factor * mat.diffuse * L.diffuse);
+	//diffuse = diffuse_factor * mat.diffuse * L.diffuse;
 
 	// Specular
 	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.specular.w);
@@ -256,7 +258,21 @@ void ComputeDirectionalLight(DirectionalLight L,
 }
 
 
-void ComputeShadowedDirectionalLight(ShadowedDirectionalLight L,
+void ComputeDirectionalLight(DirectionalLight L,
+                             Material mat,
+                             float3 pos,
+                             float3 normal,
+                             float3 view_vec,
+                             out float4 ambient,
+                             out float4 diffuse,
+                             out float4 specular) {
+
+	float3 p_ndc;
+	ComputeDirectionalLight(L, mat, pos, normal, view_vec, ambient, diffuse, specular, p_ndc);
+}
+
+
+void ComputeShadowedDirectionalLight(DirectionalLight L,
 									 ShadowMap shadow_map,
 									 Material mat,
 									 float3 pos,
@@ -269,11 +285,12 @@ void ComputeShadowedDirectionalLight(ShadowedDirectionalLight L,
 	float4 ambient0;
 	float4 diffuse0;
 	float4 specular0;
+	float3 p_ndc;
 
-	ComputeDirectionalLight(L.light, mat, normal, view_vec, ambient0, diffuse0, specular0);
+	ComputeDirectionalLight(L, mat, pos, normal, view_vec, ambient0, diffuse0, specular0, p_ndc);
 
-	const float4 p_proj = mul(float4(pos, 1.0f), L.world_to_projection);
-	const float3 p_ndc  = p_proj.xyz / p_proj.w;
+	//const float4 p_proj = mul(float4(pos, 1.0f), L.world_to_projection);
+	//const float3 p_ndc = p_proj.xyz / p_proj.w;
 
 	const float shadow_factor = ShadowFactor(shadow_map, p_ndc);
 

@@ -420,6 +420,14 @@ void UserInterface::drawDetails(DirectionalLight& light) const {
 	if (ImGui::ColorEdit3("Specular Color", specular.data()))
 		light.setSpecular(specular);
 
+	auto range = light.getRange();
+	if (ImGui::DragFloat("Range", &range, 0.1f, 0.1f, FLT_MAX))
+		light.setRange(range);
+
+	auto proj_size = light.getSize();
+	if (ImGui::DragFloat2("Size", proj_size.data(), 0.01f, 0.01f, FLT_MAX))
+		light.setSize(proj_size);
+
 	auto shadows = light.castsShadows();
 	if (ImGui::Checkbox("Shadows", &shadows))
 		light.setShadows(shadows);

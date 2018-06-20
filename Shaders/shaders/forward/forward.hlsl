@@ -1,5 +1,4 @@
 #include "forward\forward_include.hlsl"
-#include "include\light.hlsl"
 
 
 //----------------------------------------------------------------------------------
@@ -72,7 +71,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	{
 		for (uint i0 = 0; i0 < num_directional_lights; ++i0) {
 			float4 A, D, S;
-			ComputeDirectionalLight(directional_lights[i0], mat, normal_vec, to_eye,
+			ComputeDirectionalLight(directional_lights[i0], mat, pin.position_world, normal_vec, to_eye,
 									A, D, S);
 
 			ambient += A;

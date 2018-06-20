@@ -51,7 +51,7 @@ void TestScene::load(const Engine& engine) {
 
 	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
 	sphere = addEntity<BasicModel>(ecs_engine, device, sphere_bp);
-	ecs_engine.getComponent<Transform>(sphere)->setPosition(float3(7.0f, 4.0f, 0.0f));
+	ecs_engine.getComponent<Transform>(sphere)->setPosition(float3(7.0f, 3.0f, 0.0f));
 
 
 	//----------------------------------------------------------------------------------
@@ -86,6 +86,19 @@ void TestScene::load(const Engine& engine) {
 		transform->setPosition(float3(-1.0f, 0.0f, 0.0f));
 		//transform->SetRotation(float3(XM_PIDIV2, 0.0f, 0.0f));
 		transform->setParent(camera);
+	}
+
+	// Directional Light
+	{
+		//const auto dir_light = addEntity<BasicDirectionalLight>(ecs_engine);
+		//auto light = ecs_engine.getComponent<DirectionalLight>(dir_light);
+		//light->setDiffuseColor(float4{ 0.0f, 0.0f, 1.0f, 0.0f });
+		//light->setRange(100.0f);
+		//light->setSize(float2{ 30.0f, 30.0f });
+
+		//auto transform = ecs_engine.getComponent<Transform>(dir_light);
+		//transform->setPosition(float3{ 0.0f, 4.0f, 0.0f });
+		//transform->setRotation(float3{ XM_PIDIV4, 0.0f, 0.0f });
 	}
 
 

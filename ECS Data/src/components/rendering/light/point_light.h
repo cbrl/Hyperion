@@ -7,7 +7,11 @@
 class PointLight final : public Component<PointLight> {
 public:
 	PointLight()
-		: near_plane(0.1f)
+		: ambient_color(0.0f, 0.0f, 0.0f, 0.0f)
+		, diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
+		, specular(1.0f, 1.0f, 1.0f, 1.0f)
+		, attenuation(0.0f, 1.0f, 0.0f)
+		, near_plane(0.1f)
 		, range(1.0f)
 		, shadows(false) {
 	}

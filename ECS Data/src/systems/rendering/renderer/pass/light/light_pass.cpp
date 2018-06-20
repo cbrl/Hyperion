@@ -30,7 +30,7 @@ void XM_CALLCONV LightPass::render(const Engine& engine, FXMMATRIX world_to_proj
 
 
 	// Update light buffers
-	updateDirectionalLightData(ecs_engine);
+	updateDirectionalLightData(ecs_engine, world_to_projection);
 	updatePointLightData(ecs_engine, world_to_projection);
 	updateSpotLightData(ecs_engine, world_to_projection);
 
@@ -133,13 +133,13 @@ void LightPass::updateShadowMaps() {
 }
 
 
-void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine) {
+void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine, FXMMATRIX world_to_projection) {
 
 	// Temporary buffers
 	vector<DirectionalLightBuffer> buffers;
 	buffers.reserve(directional_lights.size());
 
-	vector<ShadowedDirectionalLightBuffer> shadow_buffers;
+	vector<DirectionalLightBuffer> shadow_buffers;
 	buffers.reserve(shadowed_directional_lights.size());
 
 	// Clear the cameras
@@ -148,25 +148,34 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine) {
 	ecs_engine.forEachActive<DirectionalLight>([&](DirectionalLight& light) {
 
 		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
+		if (!transform) return;
+
+		const auto light_to_world      = transform->getObjectToWorldMatrix();
+		const auto light_to_projection = light_to_world * world_to_projection;
+
+		if (!Frustum(light_to_projection).contains(light.getAABB()))
+			return;
+
+		const auto world_to_light       = transform->getWorldToObjectMatrix();
+		const auto light_to_lprojection = light.getLightToProjectionMatrix();
+		const auto world_to_lprojection = world_to_light * light_to_lprojection;
+
+		DirectionalLightBuffer buffer;
+		XMStoreFloat3(&buffer.direction, transform->getWorldAxisZ());
+		buffer.ambient_color       = light.getAmbientColor();
+		buffer.diffuse_color       = light.getDiffuseColor();
+		buffer.specular            = light.getSpecular();
+		buffer.world_to_projection = XMMatrixTranspose(world_to_lprojection);
 
 		if (!light.castsShadows()) {
-			DirectionalLightBuffer buffer;
-
-			XMStoreFloat3(&buffer.direction, transform->getWorldAxisZ());
-			buffer.ambient_color = light.getAmbientColor();
-			buffer.diffuse_color = light.getDiffuseColor();
-			buffer.specular      = light.getSpecular();
-
 			buffers.push_back(std::move(buffer));
 		}
 		else {
-			ShadowedDirectionalLightBuffer buffer;
+			LightCamera cam;
+			cam.world_to_light = world_to_light;
+			cam.light_to_proj  = light_to_lprojection;
 
-			XMStoreFloat3(&buffer.light_buffer.direction, transform->getWorldAxisZ());
-			buffer.light_buffer.ambient_color = light.getAmbientColor();
-			buffer.light_buffer.diffuse_color = light.getDiffuseColor();
-			buffer.light_buffer.specular      = light.getSpecular();
-
+			directional_light_cameras.push_back(std::move(cam));
 			shadow_buffers.push_back(std::move(buffer));
 		}
 	});
@@ -193,6 +202,8 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 	ecs_engine.forEachActive<PointLight>([&](PointLight& light) {
 
 		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
+		if (!transform) return;
+
 		const auto light_to_world      = transform->getObjectToWorldMatrix();
 		const auto light_to_projection = light_to_world * world_to_projection;
 
@@ -278,6 +289,8 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 	ecs_engine.forEachActive<SpotLight>([&](SpotLight& light) {
 
 		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
+		if (!transform) return;
+
 		const auto light_to_world      = transform->getObjectToWorldMatrix();
 		const auto light_to_projection = light_to_world * world_to_projection;
 

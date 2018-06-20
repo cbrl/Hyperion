@@ -28,7 +28,7 @@ private:
 	void renderShadowMaps(const Engine& engine);
 
 	void updateData(Scene& scene) const;
-	void XM_CALLCONV updateDirectionalLightData(ECS& ecs_engine);
+	void XM_CALLCONV updateDirectionalLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
 	void XM_CALLCONV updatePointLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
 	void XM_CALLCONV updateSpotLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
 
@@ -56,7 +56,7 @@ private:
 	StructuredBuffer<SpotLightBuffer> spot_lights;
 
 	// Shadowed light buffers
-	StructuredBuffer<ShadowedDirectionalLightBuffer> shadowed_directional_lights;
+	StructuredBuffer<DirectionalLightBuffer> shadowed_directional_lights;
 	StructuredBuffer<ShadowedPointLightBuffer> shadowed_point_lights;
 	StructuredBuffer<ShadowedSpotLightBuffer> shadowed_spot_lights;
 

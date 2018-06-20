@@ -160,12 +160,14 @@ struct DirectionalLightBuffer {
 	DirectionalLightBuffer(const float4& ambient,
 	                       const float4& diffuse,
 	                       const float3& direction,
-	                       const float4& specular)
+	                       const float4& specular,
+	                       CXMMATRIX world_to_proj)
 		: ambient_color(ambient)
 		, diffuse_color(diffuse)
 		, specular(specular)
 		, direction(direction)
-		, pad(0.0f) {
+		, pad(0.0f)
+		, world_to_projection(world_to_proj) {
 	}
 
 	float4 ambient_color;
@@ -173,15 +175,6 @@ struct DirectionalLightBuffer {
 	float4 specular; //specular.w is the specular power
 	float3 direction;
 	float  pad;
-};
-
-
-struct ShadowedDirectionalLightBuffer {
-	ShadowedDirectionalLightBuffer()
-		: world_to_projection(XMMatrixIdentity()) {
-	}
-
-	DirectionalLightBuffer light_buffer;
 	XMMATRIX world_to_projection;
 };
 
