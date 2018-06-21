@@ -148,14 +148,6 @@
     <ClInclude Include="src\systems\geometry\transform\transform_system.h" />
     <ClInclude Include="src\systems\rendering\camera\camera_system.h" />
     <ClInclude Include="src\systems\rendering\model\model_system.h" />
-    <ClInclude Include="src\systems\rendering\renderer\pass\bounding_volume\bounding_volume_pass.h" />
-    <ClInclude Include="src\systems\rendering\renderer\pass\depth\depth_pass.h" />
-    <ClInclude Include="src\systems\rendering\renderer\pass\forward\forward_pass.h" />
-    <ClInclude Include="src\systems\rendering\renderer\pass\light\light_pass.h" />
-    <ClInclude Include="src\systems\rendering\renderer\pass\sky\sky_pass.h" />
-    <ClInclude Include="src\systems\rendering\renderer\pass\text\text_pass.h" />
-    <ClInclude Include="src\systems\rendering\renderer\renderer.h" />
-    <ClInclude Include="src\systems\rendering\renderer\ui\user_interface.h" />
     <ClInclude Include="src\systems\systems.h" />
   </ItemGroup>
   <ItemGroup>
@@ -168,39 +160,10 @@
     <ClCompile Include="src\systems\geometry\transform\transform_system.cpp" />
     <ClCompile Include="src\systems\rendering\camera\camera_system.cpp" />
     <ClCompile Include="src\systems\rendering\model\model_system.cpp" />
-    <ClCompile Include="src\systems\rendering\renderer\pass\bounding_volume\bounding_volume_pass.cpp" />
-    <ClCompile Include="src\systems\rendering\renderer\pass\depth\depth_pass.cpp" />
-    <ClCompile Include="src\systems\rendering\renderer\pass\forward\forward_pass.cpp" />
-    <ClCompile Include="src\systems\rendering\renderer\pass\light\light_pass.cpp" />
-    <ClCompile Include="src\systems\rendering\renderer\pass\sky\sky_pass.cpp" />
-    <ClCompile Include="src\systems\rendering\renderer\pass\text\text_pass.cpp" />
-    <ClCompile Include="src\systems\rendering\renderer\renderer.cpp" />
-    <ClCompile Include="src\systems\rendering\renderer\ui\user_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="src\systems\geometry\transform\transform_system.tpp" />
-    <None Include="src\systems\rendering\renderer\renderer.tpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ECS\ECS.vcxproj">
-      <Project>{85ea96e9-7ed5-46f5-84e1-9f186a78f89a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Engine\Engine.vcxproj">
-      <Project>{bb944ad5-fffe-4907-ad11-a4c3560a2b6a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
-      <Project>{19aec9aa-3dd9-4908-97c0-f270ae5c0c1a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Rendering\Rendering.vcxproj">
-      <Project>{87a2abb8-6dec-4c8b-97a9-ccb14c037516}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Shaders\Shaders.vcxproj">
-      <Project>{066019f4-1d8e-4455-9e16-01e32bc9819b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
-      <Project>{4a7e2159-d052-4c1d-8f94-5188286a09b8}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

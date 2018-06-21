@@ -100,24 +100,6 @@
     <Filter Include="Source Files\systems\rendering\model">
       <UniqueIdentifier>{7ce3a652-5c05-4f49-ab48-184dedec8379}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\systems\rendering\renderer">
-      <UniqueIdentifier>{4016bd04-a119-4de4-80c8-4c691add1afc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\systems\rendering\renderer\pass">
-      <UniqueIdentifier>{af78516e-201a-4a3a-9161-b72c1e9656ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\systems\rendering\renderer">
-      <UniqueIdentifier>{0da8d670-5e87-4216-be24-e3665b85348b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\systems\rendering\renderer\pass">
-      <UniqueIdentifier>{81d8162a-fb41-4860-a147-aade9c8206bc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\systems\rendering\renderer\ui">
-      <UniqueIdentifier>{4cd28190-ba07-45c7-8809-96b932c5a7e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\systems\rendering\renderer\ui">
-      <UniqueIdentifier>{a2f5044a-2939-49e5-a274-aae06f495957}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\geometry\transform\camera_transform.h">
@@ -189,30 +171,6 @@
     <ClInclude Include="src\systems\rendering\model\model_system.h">
       <Filter>Header Files\systems\rendering\model</Filter>
     </ClInclude>
-    <ClInclude Include="src\systems\rendering\renderer\pass\depth\depth_pass.h">
-      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\rendering\renderer\pass\forward\forward_pass.h">
-      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\rendering\renderer\pass\light\light_pass.h">
-      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\rendering\renderer\pass\sky\sky_pass.h">
-      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\rendering\renderer\pass\text\text_pass.h">
-      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\rendering\renderer\renderer.h">
-      <Filter>Header Files\systems\rendering\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\rendering\renderer\ui\user_interface.h">
-      <Filter>Header Files\systems\rendering\renderer\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\rendering\renderer\pass\bounding_volume\bounding_volume_pass.h">
-      <Filter>Header Files\systems\rendering\renderer\pass</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\components\geometry\transform\camera_transform.cpp">
@@ -242,37 +200,10 @@
     <ClCompile Include="src\systems\rendering\camera\camera_system.cpp">
       <Filter>Source Files\systems\rendering\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\systems\rendering\renderer\pass\depth\depth_pass.cpp">
-      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\rendering\renderer\pass\forward\forward_pass.cpp">
-      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\rendering\renderer\pass\light\light_pass.cpp">
-      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\rendering\renderer\pass\sky\sky_pass.cpp">
-      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\rendering\renderer\pass\text\text_pass.cpp">
-      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\rendering\renderer\renderer.cpp">
-      <Filter>Source Files\systems\rendering\renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\rendering\renderer\ui\user_interface.cpp">
-      <Filter>Source Files\systems\rendering\renderer\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\rendering\renderer\pass\bounding_volume\bounding_volume_pass.cpp">
-      <Filter>Source Files\systems\rendering\renderer\pass</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\systems\geometry\transform\transform_system.tpp">
       <Filter>Source Files\systems\geometry\transform</Filter>
-    </None>
-    <None Include="src\systems\rendering\renderer\renderer.tpp">
-      <Filter>Source Files\systems\rendering\renderer</Filter>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

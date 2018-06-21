@@ -72,8 +72,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Shaders\src;$(IncludePath)</IncludePath>
-    <SourcePath>$(SolutionDir)\ImGui\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SourcePath)</SourcePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Shaders\src;$(IncludePath)</IncludePath>
+    <SourcePath>$(SolutionDir)\ImGui\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Shaders\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -131,6 +131,14 @@
     <ClCompile Include="src\geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="src\geometry\frustum\frustum.cpp" />
     <ClCompile Include="src\loader\texture_loader.cpp" />
+    <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.cpp" />
+    <ClCompile Include="src\renderer\pass\depth\depth_pass.cpp" />
+    <ClCompile Include="src\renderer\pass\forward\forward_pass.cpp" />
+    <ClCompile Include="src\renderer\pass\light\light_pass.cpp" />
+    <ClCompile Include="src\renderer\pass\sky\sky_pass.cpp" />
+    <ClCompile Include="src\renderer\pass\text\text_pass.cpp" />
+    <ClCompile Include="src\renderer\renderer.cpp" />
+    <ClCompile Include="src\renderer\ui\user_interface.cpp" />
     <ClCompile Include="src\rendering_mgr.cpp" />
     <ClCompile Include="src\render_state_mgr.cpp" />
     <ClCompile Include="src\resource\model\model_blueprint.cpp" />
@@ -152,6 +160,14 @@
     <ClInclude Include="src\loader\obj\obj_tokens.h" />
     <ClInclude Include="src\loader\texture_loader.h" />
     <ClInclude Include="src\pipeline.h" />
+    <ClInclude Include="src\renderer\pass\bounding_volume\bounding_volume_pass.h" />
+    <ClInclude Include="src\renderer\pass\depth\depth_pass.h" />
+    <ClInclude Include="src\renderer\pass\forward\forward_pass.h" />
+    <ClInclude Include="src\renderer\pass\light\light_pass.h" />
+    <ClInclude Include="src\renderer\pass\sky\sky_pass.h" />
+    <ClInclude Include="src\renderer\pass\text\text_pass.h" />
+    <ClInclude Include="src\renderer\renderer.h" />
+    <ClInclude Include="src\renderer\ui\user_interface.h" />
     <ClInclude Include="src\rendering_mgr.h" />
     <ClInclude Include="src\render_state_mgr.h" />
     <ClInclude Include="src\resource\font\font.h" />
@@ -166,20 +182,6 @@
     <ClInclude Include="src\shader\shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ECS\ECS.vcxproj">
-      <Project>{85ea96e9-7ed5-46f5-84e1-9f186a78f89a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
-      <Project>{19aec9aa-3dd9-4908-97c0-f270ae5c0c1a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Shaders\Shaders.vcxproj">
-      <Project>{066019f4-1d8e-4455-9e16-01e32bc9819b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
-      <Project>{4a7e2159-d052-4c1d-8f94-5188286a09b8}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <None Include="src\buffer\constant_buffer.tpp" />
     <None Include="src\buffer\structured_buffer.tpp" />
@@ -188,6 +190,7 @@
     <ClInclude Include="src\loader\obj\obj_loader.tpp">
       <FileType>Document</FileType>
     </ClInclude>
+    <None Include="src\renderer\renderer.tpp" />
     <None Include="src\resource\mesh\mesh.tpp" />
     <None Include="src\resource\model\blueprint_factory.tpp" />
     <None Include="src\resource\model\model_blueprint.tpp" />

@@ -7,7 +7,7 @@
 #include "components/rendering/light/directional_light.h"
 #include "components/rendering/light/point_light.h"
 #include "components/rendering/light/spot_light.h"
-#include "systems/rendering/renderer/pass/depth/depth_pass.h"
+#include "renderer/pass/depth/depth_pass.h"
 #include "hlsl.h"
 
 class ECS;

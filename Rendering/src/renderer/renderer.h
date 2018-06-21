@@ -8,11 +8,11 @@
 #include "hlsl.h"
 #include "pipeline.h"
 #include "render_state_mgr.h"
-#include "systems/rendering/renderer/pass/light/light_pass.h"
-#include "systems/rendering/renderer/pass/forward/forward_pass.h"
-#include "systems/rendering/renderer/pass/sky/sky_pass.h"
-#include "systems/rendering/renderer/pass/bounding_volume/bounding_volume_pass.h"
-#include "systems/rendering/renderer/pass/text/text_pass.h"
+#include "renderer/pass/light/light_pass.h"
+#include "renderer/pass/forward/forward_pass.h"
+#include "renderer/pass/sky/sky_pass.h"
+#include "renderer/pass/bounding_volume/bounding_volume_pass.h"
+#include "renderer/pass/text/text_pass.h"
 #include "ui/user_interface.h"
 
 class Engine;

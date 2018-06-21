@@ -97,11 +97,26 @@
     <Filter Include="Source Files\geometry\shapes">
       <UniqueIdentifier>{0391e9da-d063-4505-9771-7584f2ad70cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\renderer">
+      <UniqueIdentifier>{2a1c52de-eafb-460e-b9eb-738e495ce11b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer\pass">
+      <UniqueIdentifier>{5e0dbc15-4eef-4bbe-aa7b-ab9d6fd06d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer\ui">
+      <UniqueIdentifier>{6812ac06-7c5f-4972-89ba-e091d1291a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\renderer">
+      <UniqueIdentifier>{2ed68f7e-dd88-460c-9836-bf9101a1e851}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\renderer\pass">
+      <UniqueIdentifier>{643311fd-0fee-4042-911a-ce47ea6cd62e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\renderer\ui">
+      <UniqueIdentifier>{b9404e9e-9946-4e6c-913c-5494b130b231}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\render_state_mgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\rendering_mgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -125,6 +140,33 @@
     </ClCompile>
     <ClCompile Include="src\loader\texture_loader.cpp">
       <Filter>Source Files\resource\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\render_state_mgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\renderer.cpp">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.cpp">
+      <Filter>Source Files\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\depth\depth_pass.cpp">
+      <Filter>Source Files\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\forward\forward_pass.cpp">
+      <Filter>Source Files\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\light\light_pass.cpp">
+      <Filter>Source Files\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\sky\sky_pass.cpp">
+      <Filter>Source Files\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\text\text_pass.cpp">
+      <Filter>Source Files\renderer\pass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\ui\user_interface.cpp">
+      <Filter>Source Files\renderer\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +254,30 @@
     <ClInclude Include="src\loader\obj\obj_loader.tpp">
       <Filter>Source Files\loader\obj</Filter>
     </ClInclude>
+    <ClInclude Include="src\renderer\ui\user_interface.h">
+      <Filter>Header Files\renderer\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\renderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\pass\bounding_volume\bounding_volume_pass.h">
+      <Filter>Header Files\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\pass\depth\depth_pass.h">
+      <Filter>Header Files\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\pass\forward\forward_pass.h">
+      <Filter>Header Files\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\pass\light\light_pass.h">
+      <Filter>Header Files\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\pass\sky\sky_pass.h">
+      <Filter>Header Files\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\pass\text\text_pass.h">
+      <Filter>Header Files\renderer\pass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\resource\resource_mgr.tpp">
@@ -242,5 +308,8 @@
       <Filter>Source Files\buffer</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="src\renderer\renderer.tpp">
+      <Filter>Source Files\renderer</Filter>
+    </None>
   </ItemGroup>
 </Project>
