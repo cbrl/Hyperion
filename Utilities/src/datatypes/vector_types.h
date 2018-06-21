@@ -166,50 +166,6 @@ struct Vec2 : public DerivedT {
 		                             this->y - in.y);
 	}
 
-
-	// Operator *
-	Vec2<DataT, DerivedT> operator*(const DataT& in) noexcept {
-		return Vec2<DataT, DerivedT>(this->x * in,
-		                             this->y * in);
-	}
-
-	Vec2<DataT, DerivedT> operator*(const DataT& in) const noexcept {
-		return Vec2<DataT, DerivedT>(this->x * in,
-		                             this->y * in);
-	}
-
-	Vec2<DataT, DerivedT> operator*(const Vec2<DataT, DerivedT>& in) noexcept {
-		return Vec2<DataT, DerivedT>(this->x * in.x,
-		                             this->y * in.y);
-	}
-
-	Vec2<DataT, DerivedT> operator*(const Vec2<DataT, DerivedT>& in) const noexcept {
-		return Vec2<DataT, DerivedT>(this->x * in.x,
-		                             this->y * in.y);
-	}
-
-
-	// Operator /
-	Vec2<DataT, DerivedT> operator/(const DataT& in) noexcept {
-		return Vec2<DataT, DerivedT>(this->x / in,
-		                             this->y / in);
-	}
-
-	Vec2<DataT, DerivedT> operator/(const DataT& in) const noexcept {
-		return Vec2<DataT, DerivedT>(this->x / in,
-		                             this->y / in);
-	}
-
-	Vec2<DataT, DerivedT> operator/(const Vec2<DataT, DerivedT>& in) noexcept {
-		return Vec2<DataT, DerivedT>(this->x / in.x,
-		                             this->y / in.y);
-	}
-
-	Vec2<DataT, DerivedT> operator/(const Vec2<DataT, DerivedT>& in) const noexcept {
-		return Vec2<DataT, DerivedT>(this->x / in.x,
-		                             this->y / in.y);
-	}
-
 	#pragma endregion operators
 };
 
@@ -342,58 +298,6 @@ struct Vec3 : public DerivedT {
 		return Vec3<DataT, DerivedT>(this->x - in.x,
 		                             this->y - in.y,
 		                             this->z - in.z);
-	}
-
-
-	// Operator *
-	Vec3<DataT, DerivedT> operator*(const DataT& in) noexcept {
-		return Vec3<DataT, DerivedT>(this->x * in,
-		                             this->y * in,
-		                             this->z * in);
-	}
-
-	Vec3<DataT, DerivedT> operator*(const DataT& in) const noexcept {
-		return Vec3<DataT, DerivedT>(this->x * in,
-		                             this->y * in,
-		                             this->z * in);
-	}
-
-	Vec3<DataT, DerivedT> operator*(const Vec3<DataT, DerivedT>& in) noexcept {
-		return Vec3<DataT, DerivedT>(this->x * in.x,
-		                             this->y * in.y,
-		                             this->z * in.z);
-	}
-
-	Vec3<DataT, DerivedT> operator*(const Vec3<DataT, DerivedT>& in) const noexcept {
-		return Vec3<DataT, DerivedT>(this->x * in.x,
-		                             this->y * in.y,
-		                             this->z * in.z);
-	}
-
-
-	// Operator /
-	Vec3<DataT, DerivedT> operator/(const DataT& in) noexcept {
-		return Vec3<DataT, DerivedT>(this->x / in,
-		                             this->y / in,
-		                             this->z / in);
-	}
-
-	Vec3<DataT, DerivedT> operator/(const DataT& in) const noexcept {
-		return Vec3<DataT, DerivedT>(this->x / in,
-		                             this->y / in,
-		                             this->z / in);
-	}
-
-	Vec3<DataT, DerivedT> operator/(const Vec3<DataT, DerivedT>& in) noexcept {
-		return Vec3<DataT, DerivedT>(this->x / in.x,
-		                             this->y / in.y,
-		                             this->z / in.z);
-	}
-
-	Vec3<DataT, DerivedT> operator/(const Vec3<DataT, DerivedT>& in) const noexcept {
-		return Vec3<DataT, DerivedT>(this->x / in.x,
-		                             this->y / in.y,
-		                             this->z / in.z);
 	}
 
 	#pragma endregion operators
@@ -545,66 +449,6 @@ struct Vec4 : public DerivedT {
 		                             this->w - in.w);
 	}
 
-
-	// Operator *
-	Vec4<DataT, DerivedT> operator*(const DataT& in) noexcept {
-		return Vec4<DataT, DerivedT>(this->x * in,
-		                             this->y * in,
-		                             this->z * in,
-		                             this->w * in);
-	}
-
-	Vec4<DataT, DerivedT> operator*(const DataT& in) const noexcept {
-		return Vec4<DataT, DerivedT>(this->x * in,
-		                             this->y * in,
-		                             this->z * in,
-		                             this->w * in);
-	}
-
-	Vec4<DataT, DerivedT> operator*(const Vec4<DataT, DerivedT>& in) noexcept {
-		return Vec4<DataT, DerivedT>(this->x * in.x,
-		                             this->y * in.y,
-		                             this->z * in.z,
-		                             this->w * in.w);
-	}
-
-	Vec4<DataT, DerivedT> operator*(const Vec4<DataT, DerivedT>& in) const noexcept {
-		return Vec4<DataT, DerivedT>(this->x * in.x,
-		                             this->y * in.y,
-		                             this->z * in.z,
-		                             this->w * in.w);
-	}
-
-
-	// Operator /
-	Vec4<DataT, DerivedT> operator/(const DataT& in) noexcept {
-		return Vec4<DataT, DerivedT>(this->x / in,
-		                             this->y / in,
-		                             this->z / in,
-		                             this->w / in);
-	}
-
-	Vec4<DataT, DerivedT> operator/(const DataT& in) const noexcept {
-		return Vec4<DataT, DerivedT>(this->x / in,
-		                             this->y / in,
-		                             this->z / in,
-		                             this->w / in);
-	}
-
-	Vec4<DataT, DerivedT> operator/(const Vec4<DataT, DerivedT>& in) noexcept {
-		return Vec4<DataT, DerivedT>(this->x / in.x,
-		                             this->y / in.y,
-		                             this->z / in.z,
-		                             this->w / in.w);
-	}
-
-	Vec4<DataT, DerivedT> operator/(const Vec4<DataT, DerivedT>& in) const noexcept {
-		return Vec4<DataT, DerivedT>(this->x / in.x,
-		                             this->y / in.y,
-		                             this->z / in.z,
-		                             this->w / in.w);
-	}
-
 	#pragma endregion operators
 };
 
@@ -614,19 +458,19 @@ struct Vec4 : public DerivedT {
 //----------------------------------------------------------------------------------
 
 #if defined(_WIN32)
-#include <DirectXMath.h>
+	#include <DirectXMath.h>
 
-using int2 = Vec2<int32_t, DirectX::XMINT2>;
-using int3 = Vec3<int32_t, DirectX::XMINT3>;
-using int4 = Vec4<int32_t, DirectX::XMINT4>;
+	using int2 = Vec2<int32_t, DirectX::XMINT2>;
+	using int3 = Vec3<int32_t, DirectX::XMINT3>;
+	using int4 = Vec4<int32_t, DirectX::XMINT4>;
 
-using uint2 = Vec2<uint32_t, DirectX::XMUINT2>;
-using uint3 = Vec2<uint32_t, DirectX::XMUINT3>;
-using uint4 = Vec2<uint32_t, DirectX::XMUINT4>;
+	using uint2 = Vec2<uint32_t, DirectX::XMUINT2>;
+	using uint3 = Vec2<uint32_t, DirectX::XMUINT3>;
+	using uint4 = Vec2<uint32_t, DirectX::XMUINT4>;
 
-using float2 = Vec2<float, DirectX::XMFLOAT2>;
-using float3 = Vec3<float, DirectX::XMFLOAT3>;
-using float4 = Vec4<float, DirectX::XMFLOAT4>;
+	using float2 = Vec2<float, DirectX::XMFLOAT2>;
+	using float3 = Vec3<float, DirectX::XMFLOAT3>;
+	using float4 = Vec4<float, DirectX::XMFLOAT4>;
 
 #else
 	using int2 = Vec2<int32_t>;
