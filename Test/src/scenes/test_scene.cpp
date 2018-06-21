@@ -38,7 +38,7 @@ void TestScene::load(const Engine& engine) {
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
-	cam->setFog(Fog(float4(0.2f, 0.2f, 0.2f, 1.0f), 10.0f, 25.0f));
+	cam->setFog(Fog(float4(0.2f, 0.2f, 0.2f, 1.0f), 30.0f, 25.0f));
 	ecs_engine.getComponent<CameraTransform>(camera)->setPosition(float3(0.0f, 4.0f, -2.0f));
 
 
@@ -63,7 +63,7 @@ void TestScene::load(const Engine& engine) {
 		auto light = ecs_engine.addComponent<PointLight>(sphere);
 		light->setAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(float4(1.0f, 0.9f, 0.5f, 1.0f));
-		light->setAttenuation(float3(0.0f, 0.17f, 0.0f));
+		light->setAttenuation(float3(0.1f, 0.15f, 0.0f));
 		light->setSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
 		light->setRange(100.0f);
 		light->setShadows(true);
