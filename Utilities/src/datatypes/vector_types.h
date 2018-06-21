@@ -123,47 +123,84 @@ struct Vec2 : public DerivedT {
 		return !(*this == compare);
 	}
 
-	// Operator +
-	Vec2<DataT, DerivedT> operator+(const DataT& in) noexcept {
-		return Vec2<DataT, DerivedT>(this->x + in,
-		                             this->y + in);
-	}
 
-	Vec2<DataT, DerivedT> operator+(const DataT& in) const noexcept {
-		return Vec2<DataT, DerivedT>(this->x + in,
-		                             this->y + in);
+	// Operator +
+	Vec2<DataT, DerivedT>& operator+=(const Vec2<DataT, DerivedT>& in) noexcept {
+		this->x += in.x;
+		this->y += in.y;
+		return *this;
 	}
 
 	Vec2<DataT, DerivedT> operator+(const Vec2<DataT, DerivedT>& in) noexcept {
-		return Vec2<DataT, DerivedT>(this->x + in.x,
-		                             this->y + in.y);
+		Vec2<DataT, DerivedT> v(*this);
+		v += in;
+		return v;
 	}
 
 	Vec2<DataT, DerivedT> operator+(const Vec2<DataT, DerivedT>& in) const noexcept {
-		return Vec2<DataT, DerivedT>(this->x + in.x,
-		                             this->y + in.y);
+		Vec2<DataT, DerivedT> v(*this);
+		v += in;
+		return v;
 	}
 
 
 	// Operator -
-	Vec2<DataT, DerivedT> operator-(const DataT& in) noexcept {
-		return Vec2<DataT, DerivedT>(this->x - in,
-		                             this->y - in);
-	}
-
-	Vec2<DataT, DerivedT> operator-(const DataT& in) const noexcept {
-		return Vec2<DataT, DerivedT>(this->x - in,
-		                             this->y - in);
+	Vec2<DataT, DerivedT>& operator-=(const Vec2<DataT, DerivedT>& in) noexcept {
+		this->x -= in.x;
+		this->y -= in.y;
+		return *this;
 	}
 
 	Vec2<DataT, DerivedT> operator-(const Vec2<DataT, DerivedT>& in) noexcept {
-		return Vec2<DataT, DerivedT>(this->x - in.x,
-		                             this->y - in.y);
+		Vec2<DataT, DerivedT> v(*this);
+		v -= in;
+		return v;
 	}
 
 	Vec2<DataT, DerivedT> operator-(const Vec2<DataT, DerivedT>& in) const noexcept {
-		return Vec2<DataT, DerivedT>(this->x - in.x,
-		                             this->y - in.y);
+		Vec2<DataT, DerivedT> v(*this);
+		v -= in;
+		return v;
+	}
+
+
+	// Operator *
+	Vec2<DataT, DerivedT>& operator*=(DataT in) noexcept {
+		this->x *= in;
+		this->y *= in;
+		return *this;
+	}
+
+	Vec2<DataT, DerivedT> operator*(DataT in) noexcept {
+		Vec2<DataT, DerivedT> v(*this);
+		v *= in;
+		return v;
+	}
+
+	Vec2<DataT, DerivedT> operator*(DataT in) const noexcept {
+		Vec2<DataT, DerivedT> v(*this);
+		v *= in;
+		return v;
+	}
+
+
+	// Operator /
+	Vec2<DataT, DerivedT>& operator/=(DataT in) noexcept {
+		this->x /= in;
+		this->y /= in;
+		return *this;
+	}
+
+	Vec2<DataT, DerivedT> operator/(DataT in) noexcept {
+		Vec2<DataT, DerivedT> v(*this);
+		v /= in;
+		return v;
+	}
+
+	Vec2<DataT, DerivedT> operator/(DataT in) const noexcept {
+		Vec2<DataT, DerivedT> v(*this);
+		v /= in;
+		return v;
 	}
 
 	#pragma endregion operators
@@ -250,54 +287,86 @@ struct Vec3 : public DerivedT {
 
 
 	// Operator +
-	Vec3<DataT, DerivedT> operator+(const DataT& in) noexcept {
-		return Vec3<DataT, DerivedT>(this->x + in,
-		                             this->y + in,
-		                             this->z + in);
-	}
-
-	Vec3<DataT, DerivedT> operator+(const DataT& in) const noexcept {
-		return Vec3<DataT, DerivedT>(this->x + in,
-		                             this->y + in,
-		                             this->z + in);
+	Vec3<DataT, DerivedT>& operator+=(const Vec3<DataT, DerivedT>& in) noexcept {
+		this->x += in.x;
+		this->y += in.y;
+		this->z += in.z;
+		return *this;
 	}
 
 	Vec3<DataT, DerivedT> operator+(const Vec3<DataT, DerivedT>& in) noexcept {
-		return Vec3<DataT, DerivedT>(this->x + in.x,
-		                             this->y + in.y,
-		                             this->z + in.z);
+		Vec3<DataT, DerivedT> v(*this);
+		v += in;
+		return v;
 	}
 
 	Vec3<DataT, DerivedT> operator+(const Vec3<DataT, DerivedT>& in) const noexcept {
-		return Vec3<DataT, DerivedT>(this->x + in.x,
-		                             this->y + in.y,
-		                             this->z + in.z);
+		Vec3<DataT, DerivedT> v(*this);
+		v += in;
+		return v;
 	}
 
 
 	// Operator -
-	Vec3<DataT, DerivedT> operator-(const DataT& in) noexcept {
-		return Vec3<DataT, DerivedT>(this->x - in,
-		                             this->y - in,
-		                             this->z - in);
-	}
-
-	Vec3<DataT, DerivedT> operator-(const DataT& in) const noexcept {
-		return Vec3<DataT, DerivedT>(this->x - in,
-		                             this->y - in,
-		                             this->z - in);
+	Vec3<DataT, DerivedT>& operator-=(const Vec3<DataT, DerivedT>& in) noexcept {
+		this->x -= in.x;
+		this->y -= in.y;
+		this->z -= in.z;
+		return *this;
 	}
 
 	Vec3<DataT, DerivedT> operator-(const Vec3<DataT, DerivedT>& in) noexcept {
-		return Vec3<DataT, DerivedT>(this->x - in.x,
-		                             this->y - in.y,
-		                             this->z - in.z);
+		Vec3<DataT, DerivedT> v(*this);
+		v -= in;
+		return v;
 	}
 
 	Vec3<DataT, DerivedT> operator-(const Vec3<DataT, DerivedT>& in) const noexcept {
-		return Vec3<DataT, DerivedT>(this->x - in.x,
-		                             this->y - in.y,
-		                             this->z - in.z);
+		Vec3<DataT, DerivedT> v(*this);
+		v -= in;
+		return v;
+	}
+
+
+	// Operator *
+	Vec3<DataT, DerivedT>& operator*=(DataT in) noexcept {
+		this->x *= in;
+		this->y *= in;
+		this->z *= in;
+		return *this;
+	}
+
+	Vec3<DataT, DerivedT> operator*(DataT in) noexcept {
+		Vec3<DataT, DerivedT> v(*this);
+		v *= in;
+		return v;
+	}
+
+	Vec3<DataT, DerivedT> operator*(DataT in) const noexcept {
+		Vec3<DataT, DerivedT> v(*this);
+		v *= in;
+		return v;
+	}
+
+
+	// Operator /
+	Vec3<DataT, DerivedT>& operator/=(DataT in) noexcept {
+		this->x /= in;
+		this->y /= in;
+		this->z /= in;
+		return *this;
+	}
+
+	Vec3<DataT, DerivedT> operator/(DataT in) noexcept {
+		Vec3<DataT, DerivedT> v(*this);
+		v /= in;
+		return v;
+	}
+
+	Vec3<DataT, DerivedT> operator/(DataT in) const noexcept {
+		Vec3<DataT, DerivedT> v(*this);
+		v /= in;
+		return v;
 	}
 
 	#pragma endregion operators
@@ -391,62 +460,90 @@ struct Vec4 : public DerivedT {
 
 
 	// Operator +
-	Vec4<DataT, DerivedT> operator+(const DataT& in) noexcept {
-		return Vec4<DataT, DerivedT>(this->x + in,
-		                             this->y + in,
-		                             this->z + in,
-		                             this->w + in);
-	}
-
-	Vec4<DataT, DerivedT> operator+(const DataT& in) const noexcept {
-		return Vec4<DataT, DerivedT>(this->x + in,
-		                             this->y + in,
-		                             this->z + in,
-		                             this->w + in);
+	Vec4<DataT, DerivedT>& operator+=(const Vec4<DataT, DerivedT>& in) noexcept {
+		this->x += in.x;
+		this->y += in.y;
+		this->z += in.z;
+		this->w += in.w;
+		return *this;
 	}
 
 	Vec4<DataT, DerivedT> operator+(const Vec4<DataT, DerivedT>& in) noexcept {
-		return Vec4<DataT, DerivedT>(this->x + in.x,
-		                             this->y + in.y,
-		                             this->z + in.z,
-		                             this->w + in.w);
+		Vec4<DataT, DerivedT> v(*this);
+		v += in;
+		return v;
 	}
 
 	Vec4<DataT, DerivedT> operator+(const Vec4<DataT, DerivedT>& in) const noexcept {
-		return Vec4<DataT, DerivedT>(this->x + in.x,
-		                             this->y + in.y,
-		                             this->z + in.z,
-		                             this->w + in.w);
+		Vec4<DataT, DerivedT> v(*this);
+		v += in;
+		return v;
 	}
 
 
 	// Operator -
-	Vec4<DataT, DerivedT> operator-(const DataT& in) noexcept {
-		return Vec4<DataT, DerivedT>(this->x - in,
-		                             this->y - in,
-		                             this->z - in,
-		                             this->w - in);
-	}
-
-	Vec4<DataT, DerivedT> operator-(const DataT& in) const noexcept {
-		return Vec4<DataT, DerivedT>(this->x - in,
-		                             this->y - in,
-		                             this->z - in,
-		                             this->w - in);
+	Vec4<DataT, DerivedT>& operator-=(const Vec4<DataT, DerivedT>& in) noexcept {
+		this->x -= in.x;
+		this->y -= in.y;
+		this->z -= in.z;
+		this->w -= in.w;
+		return *this;
 	}
 
 	Vec4<DataT, DerivedT> operator-(const Vec4<DataT, DerivedT>& in) noexcept {
-		return Vec4<DataT, DerivedT>(this->x - in.x,
-		                             this->y - in.y,
-		                             this->z - in.z,
-		                             this->w - in.w);
+		Vec4<DataT, DerivedT> v(*this);
+		v -= in;
+		return v;
 	}
 
 	Vec4<DataT, DerivedT> operator-(const Vec4<DataT, DerivedT>& in) const noexcept {
-		return Vec4<DataT, DerivedT>(this->x - in.x,
-		                             this->y - in.y,
-		                             this->z - in.z,
-		                             this->w - in.w);
+		Vec4<DataT, DerivedT> v(*this);
+		v -= in;
+		return v;
+	}
+
+
+	// Operator *
+	Vec4<DataT, DerivedT>& operator*=(DataT in) noexcept {
+		this->x *= in;
+		this->y *= in;
+		this->z *= in;
+		this->w *= in;
+		return *this;
+	}
+
+	Vec4<DataT, DerivedT> operator*(DataT in) noexcept {
+		Vec4<DataT, DerivedT> v(*this);
+		v *= in;
+		return v;
+	}
+
+	Vec4<DataT, DerivedT> operator*(DataT in) const noexcept {
+		Vec4<DataT, DerivedT> v(*this);
+		v *= in;
+		return v;
+	}
+
+
+	// Operator /
+	Vec4<DataT, DerivedT>& operator/=(DataT in) noexcept {
+		this->x /= in;
+		this->y /= in;
+		this->z /= in;
+		this->w /= in;
+		return *this;
+	}
+
+	Vec4<DataT, DerivedT> operator/(DataT in) noexcept {
+		Vec4<DataT, DerivedT> v(*this);
+		v /= in;
+		return v;
+	}
+
+	Vec4<DataT, DerivedT> operator/(DataT in) const noexcept {
+		Vec4<DataT, DerivedT> v(*this);
+		v /= in;
+		return v;
 	}
 
 	#pragma endregion operators
