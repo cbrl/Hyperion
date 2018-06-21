@@ -1,10 +1,9 @@
 template<typename CameraT>
 void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 
-	// Get necessary objects
-	auto& ecs_engine             = engine.getECS();
-	const auto& rendering_mgr    = engine.getRenderingMgr();
-	const auto& render_state_mgr = rendering_mgr.getRenderStateMgr();
+	// Get the ECS and rendering manager
+	auto& ecs_engine          = engine.getECS();
+	const auto& rendering_mgr = engine.getRenderingMgr();
 
 
 	// Camera variables
@@ -18,27 +17,33 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	// Process the light buffers
 	//----------------------------------------------------------------------------------
-
 	light_pass->render(engine, world_to_projection);
 
 
 	//----------------------------------------------------------------------------------
-	// Render objects with forward shader
+	// Rebind the camera's viewport and the default render target
+	// (The light pass has to bind different ones)
 	//----------------------------------------------------------------------------------
-
 	camera.bindViewport(device_context);
 	rendering_mgr.bindDefaultRenderTarget();
 
-	forward_pass->bindDefaultRenderStates(render_state_mgr);
-	forward_pass->render(ecs_engine, world_to_projection);
+
+	//----------------------------------------------------------------------------------
+	// Render objects with forward shaderaaa
+	//----------------------------------------------------------------------------------
+	forward_pass->render(engine, world_to_projection);
+
+
+	//----------------------------------------------------------------------------------
+	// Render bounding volumes
+	//----------------------------------------------------------------------------------
+	bounding_volume_pass->render(engine, world_to_projection);
 
 
 	//----------------------------------------------------------------------------------
 	// Render the skybox
 	//----------------------------------------------------------------------------------
-
 	if (skybox) {
-		sky_pass->bindDefaultRenderStates(render_state_mgr);
-		sky_pass->render(*skybox);
+		sky_pass->render(engine, *skybox);
 	}
 }

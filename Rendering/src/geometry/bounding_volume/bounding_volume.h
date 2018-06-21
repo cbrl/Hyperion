@@ -7,38 +7,37 @@
 struct AABB final {
 public:
 	AABB();
+	AABB(const AABB& aabb) = default;
+	AABB(AABB&& aabb) = default;
 
-	// Construct an AABB from the min and max points on an object
+	// Construct an AABB from the min and max points of an object
 	AABB(const float3& min, const float3& max);
 
-	// Construct an AABB from the min and max points on an object
+	// Construct an AABB from the min and max points of an object
 	AABB(FXMVECTOR min, FXMVECTOR max);
 
 	~AABB() = default;
 
 
-	// Transform the AABB by a matrix
-	void XM_CALLCONV transform(FXMMATRIX M);
+	AABB& operator=(const AABB& aabb) = default;
+	AABB& operator=(AABB&& aabb) = default;
 
 
-	XMVECTOR XM_CALLCONV minPoint() const { return min_point; }
-	XMVECTOR XM_CALLCONV maxPoint() const { return max_point; }
+	XMVECTOR XM_CALLCONV min() const { return min_point; }
+	XMVECTOR XM_CALLCONV max() const { return max_point; }
 
 
 private:
 	XMVECTOR min_point;
 	XMVECTOR max_point;
-
-	// The non-transformed vertices of the AABB
-	vector<XMVECTOR> origin_verts;
-	// The transformed vertices of the AABB
-	vector<XMVECTOR> transformed_verts;
 };
 
 
 struct BoundingSphere final {
 public:
 	BoundingSphere();
+	BoundingSphere(const BoundingSphere& sphere) = default;
+	BoundingSphere(BoundingSphere&& sphere) = default;
 
 	// Construct a bounding sphere from the center point and radius of an object
 	BoundingSphere(const float3& center, float radius);
@@ -49,20 +48,16 @@ public:
 	~BoundingSphere() = default;
 
 
-	// Transform the bounding sphere by a matrix
-	void XM_CALLCONV transform(FXMMATRIX M);
+	BoundingSphere& operator=(const BoundingSphere& sphere) = default;
+	BoundingSphere& operator=(BoundingSphere&& sphere) = default;
 
 
-	XMVECTOR XM_CALLCONV center() const { return transformed_center; }
-	float radius() const { return transformed_radius; }
+	XMVECTOR XM_CALLCONV center() const { return sphere_center; }
+	float radius() const { return sphere_radius; }
 
 
 private:
 	// The non-transformed center and radius
-	XMVECTOR origin_center;
-	float origin_radius;
-
-	// The transformed center and radius
-	float transformed_radius;
-	XMVECTOR transformed_center;
+	XMVECTOR sphere_center;
+	float sphere_radius;
 };

@@ -8,7 +8,7 @@ Transform::Transform()
 	, translation(XMVectorZero())
 	, rotation(XMVectorZero())
 	, scaling(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f))
-	, needs_update(false)
+	, needs_update(true)
 	, updated(false) {
 }
 

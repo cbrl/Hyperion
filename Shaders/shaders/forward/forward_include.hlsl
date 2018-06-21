@@ -1,7 +1,7 @@
-#include "include\global.hlsl"
-#include "include\input_structs.hlsl"
-#include "include\normal.hlsl"
-#include "include\light.hlsl"
+#include "include/global.hlsl"
+#include "include/input_structs.hlsl"
+#include "include/normal.hlsl"
+#include "include/light.hlsl"
 
 
 cbuffer Model : REG_B(SLOT_CBUFFER_MODEL) {

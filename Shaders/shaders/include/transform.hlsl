@@ -1,7 +1,7 @@
 #ifndef HLSL_TRANSFORM
 #define HLSL_TRANSFORM
 
-#include "include\input_structs.hlsl"
+#include "include/input_structs.hlsl"
 
 
 // Transform a point from object space to projection space
@@ -49,7 +49,7 @@ PSPositionNormalTexture Transform(VSPositionNormalTexture vin,
 	vout.position       = mul(float4(p_view, 1.0f), view_to_projection);
 
 	// Output vertex attributes for interpolation across triangle
-	vout.tex = mul(float4(vin.tex, 0.0f, 1.0f), tex_transform).xy;
+	vout.tex = mul(float4(vin.tex, 0.0f, 1.0f), texture_transform).xy;
 
 	return vout;
 }

@@ -11,6 +11,7 @@
 #include "systems/rendering/renderer/pass/light/light_pass.h"
 #include "systems/rendering/renderer/pass/forward/forward_pass.h"
 #include "systems/rendering/renderer/pass/sky/sky_pass.h"
+#include "systems/rendering/renderer/pass/bounding_volume/bounding_volume_pass.h"
 #include "systems/rendering/renderer/pass/text/text_pass.h"
 #include "ui/user_interface.h"
 
@@ -32,11 +33,12 @@ private:
 	reference_wrapper<ID3D11DeviceContext> device_context;
 
 	// Renderers
-	unique_ptr<LightPass>     light_pass;
-	unique_ptr<ForwardPass>   forward_pass;
-	unique_ptr<SkyPass>       sky_pass;
-	unique_ptr<TextPass>      text_pass;
-	unique_ptr<UserInterface> ui;
+	unique_ptr<LightPass>          light_pass;
+	unique_ptr<ForwardPass>        forward_pass;
+	unique_ptr<SkyPass>            sky_pass;
+	unique_ptr<BoundingVolumePass> bounding_volume_pass;
+	unique_ptr<TextPass>           text_pass;
+	unique_ptr<UserInterface>      ui;
 };
 
 

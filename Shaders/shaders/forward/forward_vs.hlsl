@@ -1,5 +1,5 @@
-#include "forward\forward_include.hlsl"
-#include "include\transform.hlsl"
+#include "forward/forward_include.hlsl"
+#include "include/transform.hlsl"
 
 
 PSPositionNormalTexture VS(VSPositionNormalTexture vin) {

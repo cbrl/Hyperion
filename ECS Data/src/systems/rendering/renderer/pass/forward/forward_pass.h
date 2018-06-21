@@ -1,32 +1,28 @@
 #pragma once
 
-#include "directx/d3d11.h"
 
 #include "datatypes/datatypes.h"
-#include "directx/directx_math.h"
 #include "pipeline.h"
 #include "buffer/buffers.h"
 #include "hlsl.h"
 #include "shader/shader.h"
 #include "components/rendering/model/model.h"
 
-class ECS;
-class Scene;
+class Engine;
 class RenderStateMgr;
-
+class ECS;
 
 class ForwardPass final {
 public:
 	ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
 	~ForwardPass() = default;
 
-	void XM_CALLCONV render(ECS& ecs_engine, FXMMATRIX world_to_projection) const;
-
-	void bindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const;
+	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection) const;
 
 
 private:
-	void XM_CALLCONV render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const;
+	void bindRenderStates(const RenderStateMgr& render_state_mgr) const;
+	void XM_CALLCONV render(ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const;
 
 
 private:

@@ -2,8 +2,8 @@
 #define HLSL_GLOBAL
 
 
-#include "include\syntax.hlsl"
-#include "..\src\hlsl.h"
+#include "include/syntax.hlsl"
+#include "../src/hlsl.h"
 
 
 //----------------------------------------------------------------------------------

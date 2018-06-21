@@ -48,6 +48,47 @@ public:
 		VS::bindSRVs(device_context, start_slot, num_views, srvs);
 	}
 
+	static void draw(ID3D11DeviceContext& device_context,
+	                 u32 vertex_count,
+	                 u32 vertex_start) {
+
+		device_context.Draw(vertex_count, vertex_start);
+	}
+
+	static void drawIndexed(ID3D11DeviceContext& device_context,
+	                        u32 index_count,
+	                        u32 index_start,
+	                        u32 base_vertex = 0) {
+
+		device_context.DrawIndexed(index_count, index_start, base_vertex);
+	}
+
+	static void drawInstanced(ID3D11DeviceContext& device_context,
+	                          u32 vertex_count_per_instance,
+	                          u32 instance_count,
+	                          u32 vertex_start,
+	                          u32 instance_start = 0) {
+
+		device_context.DrawInstanced(vertex_count_per_instance,
+		                             instance_count,
+		                             vertex_start,
+		                             instance_start);
+	}
+
+	static void drawIndexedInstanced(ID3D11DeviceContext& device_context,
+	                                 u32 index_count_per_instance,
+	                                 u32 instance_count,
+	                                 u32 index_start,
+	                                 u32 base_vertex = 0,
+	                                 u32 instance_start = 0) {
+
+		device_context.DrawIndexedInstanced(index_count_per_instance,
+		                                    instance_count,
+		                                    index_start,
+		                                    base_vertex,
+		                                    instance_start);
+	}
+
 
 	//----------------------------------------------------------------------------------
 	// Input Assembler

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
 #include "directx/vertex_types.h"
 #include "pipeline.h"
@@ -12,7 +11,6 @@
 #include "hlsl.h"
 
 class Engine;
-
 
 class DepthPass final {
 public:

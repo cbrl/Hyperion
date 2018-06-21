@@ -23,9 +23,17 @@ public:
 	~VertexShader() = default;
 
 	void bind(ID3D11DeviceContext& device_context) const {
-		Pipeline::IA::bindInputLayout(device_context, layout.Get());
+		if (layout) Pipeline::IA::bindInputLayout(device_context, layout.Get());
 		Pipeline::VS::bindShader(device_context, shader.Get(), nullptr, 0);
 	}
+
+
+private:
+	void createShader(ID3D11Device& device,
+	                  const void* buffer,
+	                  size_t size,
+	                  const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
+	                  size_t numElements);
 
 
 private:
@@ -48,6 +56,12 @@ public:
 	void bind(ID3D11DeviceContext& device_context) const {
 		Pipeline::PS::bindShader(device_context, shader.Get(), nullptr, 0);
 	}
+
+
+private:
+	void createShader(ID3D11Device& device,
+                      const void* buffer,
+                      size_t size);
 
 
 private:

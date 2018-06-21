@@ -27,6 +27,9 @@
     <Filter Include="Header Files\compiled_headers">
       <UniqueIdentifier>{debcb182-f706-4734-94d6-02ee627db117}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader Files\shapes">
+      <UniqueIdentifier>{68a0cbdf-2322-4ee2-8dab-546db170a256}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\depth\depth_vs.hlsl">
@@ -43,6 +46,12 @@
     </FxCompile>
     <FxCompile Include="shaders\forward\forward_vs.hlsl">
       <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\shapes\wireframe_box_ps.hlsl">
+      <Filter>Shader Files\shapes</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\shapes\wireframe_box_vs.hlsl">
+      <Filter>Shader Files\shapes</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +83,9 @@
     </None>
     <None Include="shaders\include\transform.hlsl">
       <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\shapes\wireframe_cube.hlsl">
+      <Filter>Shader Files\shapes</Filter>
     </None>
   </ItemGroup>
 </Project>

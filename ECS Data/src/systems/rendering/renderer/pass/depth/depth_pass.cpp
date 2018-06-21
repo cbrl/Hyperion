@@ -1,7 +1,7 @@
 #include "depth_pass.h"
 #include "engine/engine.h"
 
-//#include "compiled_headers\depth.h"
+//#include "compiled_headers/depth.h"
 #include "compiled_headers/depth_vs.h"
 
 
@@ -53,7 +53,9 @@ void XM_CALLCONV DepthPass::render(const Engine& engine,
 
 	// Draw each model
 	ecs_engine.forEachActive<Model>([&](Model& model) {
-		const auto transform      = ecs_engine.getComponent<Transform>(model.getOwner());
+		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
+		if (!transform) return;
+
 		const auto model_to_world = transform->getObjectToWorldMatrix();
 		const auto model_to_proj  = model_to_world * world_to_proj;
 
@@ -85,7 +87,9 @@ void XM_CALLCONV DepthPass::renderShadows(const Engine& engine,
 
 	// Draw each model
 	ecs_engine.forEachActive<Model>([&](Model& model) {
-		const auto transform      = ecs_engine.getComponent<Transform>(model.getOwner());
+		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
+		if (!transform) return;
+
 		const auto model_to_world = transform->getObjectToWorldMatrix();
 		const auto model_to_proj  = model_to_world * world_to_proj;
 
@@ -120,7 +124,7 @@ void XM_CALLCONV DepthPass::renderModel(Model& model, FXMMATRIX model_to_project
 		if (!child.castsShadows())
 			return;
 
-		if (!Frustum(model_to_projection).contains(child.getAabb()))
+		if (!Frustum(model_to_projection).contains(child.getAABB()))
 			return;
 
 		child.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);

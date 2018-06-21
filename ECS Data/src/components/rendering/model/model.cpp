@@ -40,12 +40,13 @@ Model::Model(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint)
 	, mesh(blueprint->mesh)
 	, aabb(blueprint->aabb)
 	, sphere(blueprint->sphere) {
+
 	// Create each model part
 	for (ModelPart& part : blueprint->model_parts) {
 
 		auto& material = blueprint->materials[part.material_index];
 
-		child_models.push_back(ModelChild(device, part, material));
+		child_models.emplace_back(device, part, material);
 	}
 }
 
@@ -58,21 +59,8 @@ void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMAT
 	// Create the inverse transpose of the model-to-world matrix
 	auto world_inv_transpose = XMMatrixInverse(nullptr, world);
 
-
 	// Update each child model
 	forEachChild([&](ModelChild& child) {
 		child.updateBuffer(device_context, world_t, world_inv_transpose);
 	});
-}
-
-void XM_CALLCONV Model::updateBoundingVolumes(FXMMATRIX world) {
-
-	// Update each child model
-	forEachChild([&](ModelChild& child) {
-		child.updateBoundingVolumes(world);
-	});
-
-	// Update the model
-	aabb.transform(world);
-	sphere.transform(world);
 }

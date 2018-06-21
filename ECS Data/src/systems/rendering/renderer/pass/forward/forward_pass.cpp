@@ -1,9 +1,9 @@
 #include "forward_pass.h"
-#include "render_state_mgr.h"
-#include "scene/scene.h"
+#include "engine/engine.h"
 
 #include "compiled_headers/forward.h"
 #include "compiled_headers/forward_vs.h"
+
 
 ForwardPass::ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
@@ -21,24 +21,34 @@ ForwardPass::ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_conte
 }
 
 
-void ForwardPass::bindDefaultRenderStates(const RenderStateMgr& render_state_mgr) const {
+void ForwardPass::bindRenderStates(const RenderStateMgr& render_state_mgr) const {
+	
+	// Bind topology
+	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	// Bind null shaders
 	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
 	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
 	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
 
+	// Bind shaders
+	pixel_shader->bind(device_context);
+	vertex_shader->bind(device_context);
+
+	// Bind render states
 	render_state_mgr.bindOpaque(device_context);
 	render_state_mgr.bindDepthDefault(device_context);
 	render_state_mgr.bindCullCounterClockwise(device_context);
 }
 
 
-void XM_CALLCONV ForwardPass::render(ECS& ecs_engine, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_projection) const {
 
-	// Bind shaders
-	pixel_shader->bind(device_context);
-	vertex_shader->bind(device_context);
+	auto& ecs_engine             = engine.getECS();
+	const auto& render_state_mgr = engine.getRenderingMgr().getRenderStateMgr();
 
+	// Bind the shaders, render states, etc
+	bindRenderStates(render_state_mgr);
 
 	// Render models
 	ecs_engine.forEachActive<Model>([&](Model& model) {
@@ -47,11 +57,18 @@ void XM_CALLCONV ForwardPass::render(ECS& ecs_engine, FXMMATRIX world_to_project
 }
 
 
-void XM_CALLCONV ForwardPass::render(const ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::render(ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
+
+	const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
+	if (!transform) return;
+
+	const auto model_to_world = transform->getObjectToWorldMatrix();
+	const auto model_to_proj = model_to_world * world_to_projection;
 
 	// Cull the model if it isn't on screen
-	Frustum frustum(world_to_projection);
-	if (!frustum.contains(model.getAABB())) return;
+	Frustum frustum(model_to_proj);
+	if (!Frustum(model_to_proj).contains(model.getAABB()))
+		return;
 
 	// Bind the model's mesh
 	model.bind(device_context);
@@ -59,7 +76,8 @@ void XM_CALLCONV ForwardPass::render(const ECS& ecs_engine, Model& model, FXMMAT
 	// Render each model part individually
 	model.forEachChild([&](ModelChild& child) {
 
-		if (!frustum.contains(child.getAabb())) return;
+		if (!frustum.contains(child.getAABB()))
+			return;
 
 		// Bind the child model's buffer
 		child.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);

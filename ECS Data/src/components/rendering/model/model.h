@@ -15,9 +15,7 @@
 
 
 class ModelChild final {
-	friend class Model;
-
-protected:
+public:
 	ModelChild(ID3D11Device& device, ModelPart& part, Material mat)
 		: name(part.name)
 		, buffer(device)
@@ -29,34 +27,29 @@ protected:
 		, shadows(true) {
 	}
 
-	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context,
-	                              FXMMATRIX world,
-	                              CXMMATRIX world_inv_transpose) const;
+	~ModelChild() = default;
 
-	void XM_CALLCONV updateBoundingVolumes(FXMMATRIX transform) {
-		aabb.transform(transform);
-		sphere.transform(transform);
+	// Bind the child model's buffer to a pipeline stage
+	template<typename StageT>
+	void bindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
+		buffer.bind<StageT>(device_context, slot);
 	}
 
-
-public:
-	~ModelChild() = default;
+	// Update the child model's buffer
+	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context,
+		FXMMATRIX world,
+		CXMMATRIX world_inv_transpose) const;
 
 	u32 getIndexStart() const { return index_start; }
 	u32 getIndexCount() const { return index_count; }
 
 	const string& getName() const { return name; }
-	const AABB& getAabb() const { return aabb; }
+	const AABB& getAABB() const { return aabb; }
 	const BoundingSphere& getSphere() const { return sphere; }
 	const Material& getMaterial() const { return material; }
 
 	void setShadows(bool state) { shadows = state; }
 	bool castsShadows() const { return shadows; }
-
-	template<typename StageT>
-	void bindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
-		buffer.bind<StageT>(device_context, slot);
-	}
 
 
 private:
@@ -107,11 +100,16 @@ public:
 		}
 	}
 
+	template<typename ActionT>
+	void forEachChild(ActionT act) const {
+		for (const auto& child : child_models) {
+			act(child);
+		}
+	}
+
 
 	// Update model matrix and bounding volumes, as well as those of the child models.
 	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world);
-
-	void XM_CALLCONV updateBoundingVolumes(FXMMATRIX world);
 
 
 	//----------------------------------------------------------------------------------

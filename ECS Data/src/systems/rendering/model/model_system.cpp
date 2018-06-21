@@ -10,17 +10,12 @@ void ModelSystem::update(const Engine& engine) {
 
 	ecs_engine.forEachActive<Model>([&](Model& model) {
 
-		const auto owner     = model.getOwner();
-		const auto transform = ecs_engine.getComponent<Transform>(owner);
+		if (const auto transform = ecs_engine.getComponent<Transform>(model.getOwner())) {
 
-		if (transform) {
 			if (transform->isUpdated()) {
-				// Update the model's bounding volumes
-				model.updateBoundingVolumes(transform->getObjectToWorldMatrix());
+				// Update the model's buffer
+				model.updateBuffer(device_context, transform->getObjectToWorldMatrix());
 			}
-
-			// Update the model's buffer
-			model.updateBuffer(device_context, transform->getObjectToWorldMatrix());
 		}
 	});
 }

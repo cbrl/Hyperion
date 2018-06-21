@@ -165,6 +165,17 @@
     <None Include="shaders\include\transform.hlsl">
       <FileType>Document</FileType>
     </None>
+    <FxCompile Include="shaders\shapes\wireframe_box_ps.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="shaders\shapes\wireframe_box_vs.hlsl">
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <None Include="shaders\shapes\wireframe_cube.hlsl">
+      <FileType>Document</FileType>
+    </None>
     <FxCompile Include="shaders\skybox\skybox.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
