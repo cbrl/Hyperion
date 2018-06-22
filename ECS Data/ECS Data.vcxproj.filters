@@ -28,9 +28,6 @@
     <Filter Include="Header Files\components\rendering\model">
       <UniqueIdentifier>{c3a38fdb-38ce-4e4e-baae-893e64e8e087}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\components\rendering\skybox">
-      <UniqueIdentifier>{f8d3af68-0d8d-401f-88b8-097aa63ee1ef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\components\geometry">
       <UniqueIdentifier>{20a1d429-da68-4efa-99b0-300e9f399862}</UniqueIdentifier>
     </Filter>
@@ -48,9 +45,6 @@
     </Filter>
     <Filter Include="Source Files\components\rendering\model">
       <UniqueIdentifier>{20e2440c-f4ee-49c7-a7e0-65eb906ec16e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\components\rendering\skybox">
-      <UniqueIdentifier>{f38bac03-f935-48b4-b7e3-050c8346334e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\components\geometry">
       <UniqueIdentifier>{accfd685-bce9-4d64-ba33-4e666341e5cd}</UniqueIdentifier>
@@ -100,6 +94,12 @@
     <Filter Include="Source Files\systems\rendering\model">
       <UniqueIdentifier>{7ce3a652-5c05-4f49-ab48-184dedec8379}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\components\rendering\camera\skybox">
+      <UniqueIdentifier>{c111897f-aebf-4012-8fcd-40a1e42aea26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\components\rendering\camera\skybox">
+      <UniqueIdentifier>{0a11ac9a-c96c-4d7d-bc1f-4df40083a293}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\geometry\transform\camera_transform.h">
@@ -131,9 +131,6 @@
     </ClInclude>
     <ClInclude Include="src\components\rendering\model\model.h">
       <Filter>Header Files\components\rendering\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\rendering\skybox\skybox.h">
-      <Filter>Header Files\components\rendering\skybox</Filter>
     </ClInclude>
     <ClInclude Include="src\components\components.h">
       <Filter>Header Files\components</Filter>
@@ -171,6 +168,9 @@
     <ClInclude Include="src\systems\rendering\model\model_system.h">
       <Filter>Header Files\systems\rendering\model</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\rendering\camera\skybox\skybox.h">
+      <Filter>Header Files\components\rendering\camera\skybox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\components\geometry\transform\camera_transform.cpp">
@@ -188,9 +188,6 @@
     <ClCompile Include="src\components\rendering\model\model.cpp">
       <Filter>Source Files\components\rendering\model</Filter>
     </ClCompile>
-    <ClCompile Include="src\components\rendering\skybox\skybox.cpp">
-      <Filter>Source Files\components\rendering\skybox</Filter>
-    </ClCompile>
     <ClCompile Include="src\systems\geometry\transform\transform_system.cpp">
       <Filter>Source Files\systems\geometry\transform</Filter>
     </ClCompile>
@@ -199,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="src\systems\rendering\camera\camera_system.cpp">
       <Filter>Source Files\systems\rendering\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\components\rendering\camera\skybox\skybox.cpp">
+      <Filter>Source Files\components\rendering\camera\skybox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	const auto world_to_camera      = transform->getWorldToObjectMatrix();
 	const auto camera_to_projection = camera.getProjectionMatrix();
 	const auto world_to_projection  = world_to_camera * camera_to_projection;
-	const auto skybox               = ecs_engine.getComponent<SkyBox>(camera.getOwner());
+	const auto skybox               = camera.getSkybox();
 
 
 	//----------------------------------------------------------------------------------
@@ -31,7 +31,7 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	// Render objects with forward shaderaaa
 	//----------------------------------------------------------------------------------
-	forward_pass->render(engine, world_to_projection);
+	forward_pass->render(engine, skybox, world_to_projection);
 
 
 	//----------------------------------------------------------------------------------
@@ -43,7 +43,5 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	// Render the skybox
 	//----------------------------------------------------------------------------------
-	if (skybox) {
-		sky_pass->render(engine, *skybox);
-	}
+	sky_pass->render(engine, skybox);
 }

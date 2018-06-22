@@ -1,7 +1,6 @@
 #pragma once
 
 #include "components/rendering/camera/camera_base.h"
-#include "components/rendering/skybox/skybox.h"
 
 
 class PerspectiveCamera final : public CameraBase<PerspectiveCamera> {

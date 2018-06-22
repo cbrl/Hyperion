@@ -140,11 +140,11 @@
     <ClInclude Include="src\components\rendering\camera\camera_movement.h" />
     <ClInclude Include="src\components\rendering\camera\orthographic_camera.h" />
     <ClInclude Include="src\components\rendering\camera\perspective_camera.h" />
+    <ClInclude Include="src\components\rendering\camera\skybox\skybox.h" />
     <ClInclude Include="src\components\rendering\light\directional_light.h" />
     <ClInclude Include="src\components\rendering\light\point_light.h" />
     <ClInclude Include="src\components\rendering\light\spot_light.h" />
     <ClInclude Include="src\components\rendering\model\model.h" />
-    <ClInclude Include="src\components\rendering\skybox\skybox.h" />
     <ClInclude Include="src\entities\entities.h" />
     <ClInclude Include="src\entities\world\basic_directional_light.h" />
     <ClInclude Include="src\entities\world\basic_model.h" />
@@ -162,8 +162,8 @@
     <ClCompile Include="src\components\geometry\transform\transform.cpp" />
     <ClCompile Include="src\components\rendering\camera\orthographic_camera.cpp" />
     <ClCompile Include="src\components\rendering\camera\perspective_camera.cpp" />
+    <ClCompile Include="src\components\rendering\camera\skybox\skybox.cpp" />
     <ClCompile Include="src\components\rendering\model\model.cpp" />
-    <ClCompile Include="src\components\rendering\skybox\skybox.cpp" />
     <ClCompile Include="src\systems\geometry\transform\transform_system.cpp" />
     <ClCompile Include="src\systems\rendering\camera\camera_system.cpp" />
     <ClCompile Include="src\systems\rendering\model\model_system.cpp" />

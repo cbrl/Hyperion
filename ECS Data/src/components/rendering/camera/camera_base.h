@@ -8,6 +8,7 @@
 #include "buffer/constant_buffer.h"
 #include "resource/resource_mgr.h"
 #include "geometry/frustum/frustum.h"
+#include "components/rendering/camera/skybox/skybox.h"
 
 
 template<typename T>
@@ -18,6 +19,7 @@ protected:
 	CameraBase(ID3D11Device& device)
 		: buffer(device)
 		, frustum(XMMatrixIdentity())
+		, sky(device)
 		, viewport({0.0f, 0.0f, 0.0f, 0.f, 0.0f, 1.0f})
 		, z_near(0.1f)
 		, z_far(1000.0f)
@@ -89,8 +91,8 @@ public:
 	}
 
 	// Set the fog buffer
-	void setFog(Fog&& fog) {
-		this->fog = std::move(fog);
+	void setFog(const Fog& fog) {
+		this->fog = fog;
 	}
 
 
@@ -111,6 +113,14 @@ public:
 	// Get the Frustum for this camera
 	const Frustum& getFrustum() const {
 		return frustum;
+	}
+
+	// Get the skybox associated with this camera
+	SkyBox& getSkybox() {
+		return sky;
+	}
+	const SkyBox& getSkybox() const {
+		return sky;
 	}
 
 	// Get the fog buffer
@@ -152,6 +162,9 @@ protected:
 
 	// Camera frustum
 	Frustum frustum;
+
+	// The skybox for this camera
+	SkyBox sky;
 
 	// The fog that this camera sees
 	Fog fog;

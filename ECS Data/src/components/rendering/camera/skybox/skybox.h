@@ -10,22 +10,29 @@
 
 class SkyBox final : public Component<SkyBox> {
 public:
-	SkyBox() = default;
+	SkyBox() = delete;
 	~SkyBox() = default;
+
+	SkyBox(ID3D11Device& device) {
+		init(device);
+	}
 
 	SkyBox(ID3D11Device& device,
 	       ResourceMgr& resource_mgr,
-	       const wstring& filename) {
-		init(device, resource_mgr.getOrCreate<Texture>(filename));
+	       const wstring& filename)
+		: texture(resource_mgr.getOrCreate<Texture>(filename)) {
+
+		init(device);
 	}
 
 	SkyBox(ID3D11Device& device,
-	       shared_ptr<Texture> texture) {
-		init(device, texture);
+	       shared_ptr<Texture> texture)
+		: texture(std::move(texture)) {
+
+		init(device);
 	}
 
-	void init(ID3D11Device& device,
-	          shared_ptr<Texture> tex);
+	void init(ID3D11Device& device);
 
 	// Bind the skybox's vertex and index buffers
 	void bind(ID3D11DeviceContext& device_context) const {

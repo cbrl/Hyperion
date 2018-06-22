@@ -42,10 +42,15 @@ void ForwardPass::bindRenderStates(const RenderStateMgr& render_state_mgr) const
 }
 
 
-void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::render(const Engine& engine, const SkyBox& sky, FXMMATRIX world_to_projection) const {
 
 	auto& ecs_engine             = engine.getECS();
 	const auto& render_state_mgr = engine.getRenderingMgr().getRenderStateMgr();
+
+	// Bind the skybox texture if it has one
+	if (const auto texture = sky.getTexture()) {
+		texture->bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
+	}
 
 	// Bind the shaders, render states, etc
 	bindRenderStates(render_state_mgr);

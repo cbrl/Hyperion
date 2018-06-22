@@ -1,12 +1,12 @@
 #pragma once
 
-
 #include "datatypes/datatypes.h"
 #include "pipeline.h"
 #include "buffer/buffers.h"
 #include "hlsl.h"
 #include "shader/shader.h"
 #include "components/rendering/model/model.h"
+#include "components/rendering/camera/skybox/skybox.h"
 
 class Engine;
 class RenderStateMgr;
@@ -18,6 +18,7 @@ public:
 	~ForwardPass() = default;
 
 	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV render(const Engine& engine, const SkyBox& sky, FXMMATRIX world_to_projection) const;
 
 
 private:

@@ -26,19 +26,19 @@ void TestScene::load(const Engine& engine) {
 	// Create camera
 	//----------------------------------------------------------------------------------
 
-	// Create the camera and skybox
+	// Create the camera
 	const handle64 camera = addEntity<PlayerCamera>(ecs_engine,
 	                                                device,
 	                                                device_context,
                                                     engine.getWindowWidth(),
-	                                                engine.getWindowHeight(),
-	                                                resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	                                                engine.getWindowHeight());
 
 	// Set the parameters
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
 	cam->setFog(Fog(float4(0.2f, 0.2f, 0.2f, 1.0f), 30.0f, 25.0f));
+	cam->getSkybox().setTexture(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 	ecs_engine.getComponent<CameraTransform>(camera)->setPosition(float3(0.0f, 4.0f, -2.0f));
 
 

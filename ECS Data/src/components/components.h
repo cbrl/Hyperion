@@ -5,7 +5,6 @@
 
 
 #include "rendering/model/model.h"
-#include "rendering/skybox/skybox.h"
 
 #include "rendering/camera/camera_base.h"
 #include "rendering/camera/camera_movement.h"

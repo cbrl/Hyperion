@@ -1,14 +1,10 @@
 #include "skybox.h"
 
 
-void SkyBox::init(ID3D11Device& device, shared_ptr<Texture> tex) {
-
-	// Create the texture
-	texture = std::move(tex);
+void SkyBox::init(ID3D11Device& device) {
 
 	// Set the vertex stride
 	stride = sizeof(VertexPosition);
-
 
 	// Create a sphere
 	vector<VertexPosition> vertices;
