@@ -37,42 +37,102 @@ public:
 	void XM_CALLCONV setScale(FXMVECTOR scale);
 
 
-	//----------------------------------------------------------------------------------
-	// Getters
-	//----------------------------------------------------------------------------------
-
 	// Get the entity whose transform is a parent of this transform
+	[[nodiscard]]
 	handle64 getParent() const { return parent; }
 
+
+	//----------------------------------------------------------------------------------
 	// Position, Rotation, and Scale (relative to parent, if any)
-	XMVECTOR XM_CALLCONV getPosition() const { return translation; }
-	XMVECTOR XM_CALLCONV getRotation() const { return rotation; }
-	XMVECTOR XM_CALLCONV getScale() const { return scaling; }
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	XMVECTOR XM_CALLCONV getPosition() const {
+		return translation;
+	}
 
+	[[nodiscard]]
+	XMVECTOR XM_CALLCONV getRotation() const {
+		return rotation;
+	}
+
+	[[nodiscard]]
+	XMVECTOR XM_CALLCONV getScale() const {
+		return scaling;
+	}
+
+
+	//----------------------------------------------------------------------------------
 	// World space data
-	XMVECTOR XM_CALLCONV getWorldAxisX() const { return XMVector3Normalize(world.r[0]); }
-	XMVECTOR XM_CALLCONV getWorldAxisY() const { return XMVector3Normalize(world.r[1]); }
-	XMVECTOR XM_CALLCONV getWorldAxisZ() const { return XMVector3Normalize(world.r[2]); }
-	XMVECTOR XM_CALLCONV getWorldOrigin() const { return world.r[3]; }
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	XMVECTOR XM_CALLCONV getWorldAxisX() const {
+		return XMVector3Normalize(world.r[0]);
+	}
 
+	[[nodiscard]]
+	XMVECTOR XM_CALLCONV getWorldAxisY() const {
+		return XMVector3Normalize(world.r[1]);
+	}
+
+	[[nodiscard]]
+	XMVECTOR XM_CALLCONV getWorldAxisZ() const {
+		return XMVector3Normalize(world.r[2]);
+	}
+
+	[[nodiscard]]
+	XMVECTOR XM_CALLCONV getWorldOrigin() const {
+		return world.r[3];
+	}
+
+
+	//----------------------------------------------------------------------------------
 	// Object space data
-	static XMVECTOR XM_CALLCONV getObjectAxisX() { return XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f); }
-	static XMVECTOR XM_CALLCONV getObjectAxisY() { return XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f); }
-	static XMVECTOR XM_CALLCONV getObjectAxisZ() { return XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f); }
-	static XMVECTOR XM_CALLCONV getObjectOrigin() { return XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f); }
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	static XMVECTOR XM_CALLCONV getObjectAxisX() {
+		return XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+	}
 
+	[[nodiscard]]
+	static XMVECTOR XM_CALLCONV getObjectAxisY() {
+		return XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	}
+
+	[[nodiscard]]
+	static XMVECTOR XM_CALLCONV getObjectAxisZ() {
+		return XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+	}
+
+	[[nodiscard]]
+	static XMVECTOR XM_CALLCONV getObjectOrigin() {
+		return XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+
+
+	//----------------------------------------------------------------------------------
 	// Matrices
-	XMMATRIX XM_CALLCONV getObjectToWorldMatrix() const { return world; }
-	XMMATRIX XM_CALLCONV getWorldToObjectMatrix() const { return XMMatrixInverse(nullptr, world); }
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	XMMATRIX XM_CALLCONV getObjectToWorldMatrix() const {
+		return world;
+	}
 
+	[[nodiscard]]
+	XMMATRIX XM_CALLCONV getWorldToObjectMatrix() const {
+		return XMMatrixInverse(nullptr, world);
+	}
+
+	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getObjectToParentPositionMatrix() const {
 		return XMMatrixTranslationFromVector(translation);
 	}
 
+	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getObjectToParentRotationMatrix() const {
 		return XMMatrixRotationRollPitchYawFromVector(rotation);
 	}
 
+	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getObjectToParentScaleMatrix() const {
 		return XMMatrixScalingFromVector(scaling);
 	}

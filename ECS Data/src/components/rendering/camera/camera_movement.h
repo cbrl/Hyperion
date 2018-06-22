@@ -25,18 +25,50 @@ public:
 	//----------------------------------------------------------------------------------
 	// Getters
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	float3 getVelocity() const {
+		return velocity;
+	}
 
-	float3 getVelocity() const { return velocity; }
-	float getAcceleration() const { return acceleration; }
-	float getDeceleration() const { return deceleration; }
-	float getMaxVelocity() const { return max_velocity; }
+	[[nodiscard]]
+	float getAcceleration() const {
+		return acceleration;
+	}
 
-	float getTurnSensitivity() const { return turn_sensitivity; }
-	float getRollSensitivity() const { return roll_sensitivity; }
+	[[nodiscard]]
+	float getDeceleration() const {
+		return deceleration;
+	}
 
-	bool isMovingX() const { return is_moving_x; }
-	bool isMovingY() const { return is_moving_y; }
-	bool isMovingZ() const { return is_moving_z; }
+	[[nodiscard]]
+	float getMaxVelocity() const {
+		return max_velocity;
+	}
+
+	[[nodiscard]]
+	float getTurnSensitivity() const {
+		return turn_sensitivity;
+	}
+
+	[[nodiscard]]
+	float getRollSensitivity() const {
+		return roll_sensitivity;
+	}
+
+	[[nodiscard]]
+	bool isMovingX() const {
+		return is_moving_x;
+	}
+
+	[[nodiscard]]
+	bool isMovingY() const {
+		return is_moving_y;
+	}
+
+	[[nodiscard]]
+	bool isMovingZ() const {
+		return is_moving_z;
+	}
 
 
 	//----------------------------------------------------------------------------------

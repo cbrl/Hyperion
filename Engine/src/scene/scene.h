@@ -39,9 +39,20 @@ public:
 	// Getters
 	//----------------------------------------------------------------------------------
 
-	auto& getName() const { return name; }
-	auto& getTexts() const { return texts; }
-	auto& getEntities() const { return entities; }
+	[[nodiscard]]
+	const string& getName() const {
+		return name;
+	}
+
+	[[nodiscard]]
+	const map<string, Text>& getTexts() const {
+		return texts;
+	}
+
+	[[nodiscard]]
+	const vector<handle64>& getEntities() const {
+		return entities;
+	}
 
 
 protected:

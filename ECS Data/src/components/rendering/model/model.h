@@ -40,16 +40,64 @@ public:
 		FXMMATRIX world,
 		CXMMATRIX world_inv_transpose) const;
 
-	u32 getIndexStart() const { return index_start; }
-	u32 getIndexCount() const { return index_count; }
 
-	const string& getName() const { return name; }
-	const AABB& getAABB() const { return aabb; }
-	const BoundingSphere& getSphere() const { return sphere; }
-	const Material& getMaterial() const { return material; }
+	//----------------------------------------------------------------------------------
+	// Index info
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	u32 getIndexStart() const {
+		return index_start;
+	}
 
-	void setShadows(bool state) { shadows = state; }
-	bool castsShadows() const { return shadows; }
+	[[nodiscard]]
+	u32 getIndexCount() const {
+		return index_count;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Name
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	const string& getName() const {
+		return name;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Bounding volumes
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	const AABB& getAABB() const {
+		return aabb;
+	}
+
+	[[nodiscard]]
+	const BoundingSphere& getSphere() const {
+		return sphere;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Material
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	const Material& getMaterial() const {
+		return material;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Shadows
+	//----------------------------------------------------------------------------------
+	void setShadows(bool state) {
+		shadows = state;
+	}
+
+	[[nodiscard]]
+	bool castsShadows() const {
+		return shadows;
+	}
 
 
 private:

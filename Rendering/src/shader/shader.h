@@ -22,6 +22,8 @@ public:
 
 	~VertexShader() = default;
 
+
+	// Bind the vertex shader to a pipeline stage
 	void bind(ID3D11DeviceContext& device_context) const {
 		if (layout) Pipeline::IA::bindInputLayout(device_context, layout.Get());
 		Pipeline::VS::bindShader(device_context, shader.Get(), nullptr, 0);
@@ -53,6 +55,8 @@ public:
 
 	~PixelShader() = default;
 
+
+	// Bind the vertex shader to a pipeline stage
 	void bind(ID3D11DeviceContext& device_context) const {
 		Pipeline::PS::bindShader(device_context, shader.Get(), nullptr, 0);
 	}

@@ -23,7 +23,10 @@ public:
 	AABB& operator=(AABB&& aabb) = default;
 
 
+	[[nodiscard]]
 	XMVECTOR XM_CALLCONV min() const { return min_point; }
+
+	[[nodiscard]]
 	XMVECTOR XM_CALLCONV max() const { return max_point; }
 
 
@@ -52,7 +55,10 @@ public:
 	BoundingSphere& operator=(BoundingSphere&& sphere) = default;
 
 
+	[[nodiscard]]
 	XMVECTOR XM_CALLCONV center() const { return sphere_center; }
+
+	[[nodiscard]]
 	float radius() const { return sphere_radius; }
 
 

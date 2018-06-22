@@ -31,11 +31,13 @@ void SystemMonitor::CpuMonitor::tick() {
 }
 
 
+[[nodiscard]]
 double SystemMonitor::CpuMonitor::getTotalCpuPercentage() const {
 	return sys_usage;
 }
 
 
+[[nodiscard]]
 double SystemMonitor::CpuMonitor::getProcessCpuPercentage() const {
 	return proc_usage;
 }
@@ -58,31 +60,37 @@ void SystemMonitor::MemoryMonitor::tick() {
 }
 
 
+[[nodiscard]]
 u64 SystemMonitor::MemoryMonitor::getPhysicalMemSize() const {
 	return mem_info.ullTotalPhys;
 }
 
 
+[[nodiscard]]
 u64 SystemMonitor::MemoryMonitor::getVirtualMemSize() const {
 	return mem_info.ullTotalPageFile;
 }
 
 
+[[nodiscard]]
 u64 SystemMonitor::MemoryMonitor::getTotalUsedPhysicalMem() const {
 	return mem_info.ullTotalPhys - mem_info.ullAvailPhys;
 }
 
 
+[[nodiscard]]
 u64 SystemMonitor::MemoryMonitor::getProcessUsedPhysicalMem() const {
 	return pmc.WorkingSetSize;
 }
 
 
+[[nodiscard]]
 u64 SystemMonitor::MemoryMonitor::getTotalUsedVirtualMem() const {
 	return mem_info.ullTotalPageFile - mem_info.ullAvailPageFile;
 }
 
 
+[[nodiscard]]
 u64 SystemMonitor::MemoryMonitor::getProcessUsedVirtualMem() const {
 	return pmc.PrivateUsage;
 }

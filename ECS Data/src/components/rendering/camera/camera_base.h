@@ -101,29 +101,36 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the camera's view matrix
+	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getViewMatrix() const {
 		return view_matrix;
 	}
 
 	// Get the camera's projection matrix
+	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getProjectionMatrix() const {
 		return projection_matrix;
 	}
 
 	// Get the Frustum for this camera
+	[[nodiscard]]
 	const Frustum& getFrustum() const {
 		return frustum;
 	}
 
 	// Get the skybox associated with this camera
+	[[nodiscard]]
 	SkyBox& getSkybox() {
 		return sky;
 	}
+
+	[[nodiscard]]
 	const SkyBox& getSkybox() const {
 		return sky;
 	}
 
 	// Get the fog buffer
+	[[nodiscard]]
 	const Fog& getFog() const {
 		return fog;
 	}

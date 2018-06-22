@@ -55,10 +55,13 @@ struct ObjMaterial {
 
 
 template<typename VertexT>
-class ObjLoader final {
+class OBJLoader final {
 public:
-	ObjLoader() = delete;
+	OBJLoader() = delete;
+	OBJLoader(const OBJLoader& loader) = delete;
+	OBJLoader(OBJLoader&& loader) = delete;
 
+	[[nodiscard]]
 	static ModelOutput<VertexT> load(ResourceMgr& resource_mgr,
 	                                 const wstring& filename,
 	                                 bool right_hand_coords);
@@ -108,40 +111,40 @@ private:
 //----------------------------------------------------------------------------------
 
 template<typename VertexT>
-bool ObjLoader<VertexT>::rh_coord = false;
+bool OBJLoader<VertexT>::rh_coord = false;
 
 template<typename VertexT>
-u32 ObjLoader<VertexT>::group_count = 0;
+u32 OBJLoader<VertexT>::group_count = 0;
 
 template<typename VertexT>
-u32 ObjLoader<VertexT>::mtl_count = 0;
+u32 OBJLoader<VertexT>::mtl_count = 0;
 
 template<typename VertexT>
-vector<VertexT> ObjLoader<VertexT>::vertices;
+vector<VertexT> OBJLoader<VertexT>::vertices;
 
 template<typename VertexT>
-vector<float3> ObjLoader<VertexT>::vertex_positions;
+vector<float3> OBJLoader<VertexT>::vertex_positions;
 
 template<typename VertexT>
-vector<float3> ObjLoader<VertexT>::vertex_normals;
+vector<float3> OBJLoader<VertexT>::vertex_normals;
 
 template<typename VertexT>
-vector<float2> ObjLoader<VertexT>::vertex_texCoords;
+vector<float2> OBJLoader<VertexT>::vertex_texCoords;
 
 template<typename VertexT>
-vector<u32> ObjLoader<VertexT>::indices;
+vector<u32> OBJLoader<VertexT>::indices;
 
 template<typename VertexT>
-wstring ObjLoader<VertexT>::mat_lib;
+wstring OBJLoader<VertexT>::mat_lib;
 
 template<typename VertexT>
-vector<Group> ObjLoader<VertexT>::groups;
+vector<Group> OBJLoader<VertexT>::groups;
 
 template<typename VertexT>
-map<u32, wstring> ObjLoader<VertexT>::group_mat_names;
+map<u32, wstring> OBJLoader<VertexT>::group_mat_names;
 
 template<typename VertexT>
-vector<ObjMaterial> ObjLoader<VertexT>::materials;
+vector<ObjMaterial> OBJLoader<VertexT>::materials;
 
 
 #include "obj_loader.tpp"

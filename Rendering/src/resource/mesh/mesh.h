@@ -30,7 +30,7 @@ public:
 
 
 	// Draw the mesh with the given start index and index count
-	static void draw(ID3D11DeviceContext& device_context, u32 index_count, u32 start_index) {
+	void draw(ID3D11DeviceContext& device_context, u32 index_count, u32 start_index) {
 		device_context.DrawIndexed(index_count, start_index, 0);
 	}
 

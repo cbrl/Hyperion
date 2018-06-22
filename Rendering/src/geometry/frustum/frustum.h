@@ -19,12 +19,26 @@ public:
 	void XM_CALLCONV updateFrustum(FXMMATRIX M);
 
 
+	//----------------------------------------------------------------------------------
+	// Encloses
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
 	bool XM_CALLCONV encloses(FXMVECTOR point) const;
 
+	[[nodiscard]]
 	bool encloses(const AABB& aabb) const;
+
+	[[nodiscard]]
+	bool encloses(const BoundingSphere& sphere) const;
+
+
+	//----------------------------------------------------------------------------------
+	// Contains
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
 	bool contains(const AABB& aabb) const;
 
-	bool encloses(const BoundingSphere& sphere) const;
+	[[nodiscard]]
 	bool contains(const BoundingSphere& sphere) const;
 
 

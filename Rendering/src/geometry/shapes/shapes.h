@@ -69,16 +69,28 @@ namespace Shapes {
 	                  bool rhcoords       = false);
 
 	template<typename VertexT>
-	void ComputeTetrahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
+	void ComputeTetrahedron(vector<VertexT>& vertices,
+	                        vector<u32>& indices,
+	                        float size = 1,
+	                        bool rhcoords = false);
 	
 	template<typename VertexT>
-	void ComputeOctahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
+	void ComputeOctahedron(vector<VertexT>& vertices,
+	                       vector<u32>& indices,
+	                       float size = 1,
+	                       bool rhcoords = false);
 	
 	template<typename VertexT>
-	void ComputeDodecahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
+	void ComputeDodecahedron(vector<VertexT>& vertices,
+	                         vector<u32>& indices,
+	                         float size = 1,
+	                         bool rhcoords = false);
 	
 	template<typename VertexT>
-	void ComputeIcosahedron(vector<VertexT>& vertices, vector<u32>& indices, float size = 1, bool rhcoords = false);
+	void ComputeIcosahedron(vector<VertexT>& vertices,
+	                        vector<u32>& indices,
+	                        float size = 1,
+	                        bool rhcoords = false);
 }
 
 

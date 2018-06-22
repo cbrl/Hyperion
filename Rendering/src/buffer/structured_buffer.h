@@ -32,11 +32,13 @@ public:
 
 
 	// Get the number of elements this buffer currently holds
+	[[nodiscard]]
 	u32 size() const {
 		return current_size;
 	}
 
 	// Get the max number of elements this buffer can currently hold
+	[[nodiscard]]
 	u32 reserved() const {
 		return reserved_size;
 	}

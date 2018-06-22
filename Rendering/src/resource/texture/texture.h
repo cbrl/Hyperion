@@ -25,6 +25,7 @@ public:
 	}
 
 
+	[[nodiscard]]
 	ID3D11ShaderResourceView* get() const {
 		return texture.Get();
 	}

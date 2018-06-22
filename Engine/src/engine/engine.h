@@ -3,7 +3,7 @@
 #include "engine/main_window.h"
 
 #include "engine_util.h"
-#include "datatypes/datatypes.h"
+#include "ecs.h"
 #include "sysmon/system_monitor.h"
 #include "timer/timer.h"
 #include "fps/fps.h"
@@ -11,8 +11,6 @@
 #include "rendering_mgr.h"
 #include "display_config.h"
 #include "scene/scene.h"
-
-#include "ecs.h"
 
 
 class Engine final : public MainWindow {
@@ -30,17 +28,56 @@ public:
 
 	void onResize(u32 window_width, u32 window_height);
 
-	HWND getHwnd() const { return hWnd; }
-	u32 getWindowWidth() const { return window_width; }
-	u32 getWindowHeight() const { return window_height; }
 
-	ECS& getECS() const { return *ecs_engine; }
-	Scene& getScene() const { return *scene; }
-	Input& getInput() const { return *input; }
-	Timer<std::chrono::high_resolution_clock>& getTimer() const { return *timer; }
-	FPS& getFPSCounter() const { return *fps_counter; }
-	SystemMonitor& getSysMon() const { return *system_monitor; }
-	RenderingMgr& getRenderingMgr() const { return *rendering_mgr; }
+	[[nodiscard]]
+	HWND getHwnd() const {
+		return hWnd;
+	}
+
+	[[nodiscard]]
+	u32 getWindowWidth() const {
+		return window_width;
+	}
+
+	[[nodiscard]]
+	u32 getWindowHeight() const {
+		return window_height;
+	}
+
+	[[nodiscard]]
+	ECS& getECS() const {
+		return *ecs_engine;
+	}
+
+	[[nodiscard]]
+	Scene& getScene() const {
+		return *scene;
+	}
+
+	[[nodiscard]]
+	Input& getInput() const {
+		return *input;
+	}
+
+	[[nodiscard]]
+	HighResTimer& getTimer() const {
+		return *timer;
+	}
+
+	[[nodiscard]]
+	FPS& getFPSCounter() const {
+		return *fps_counter;
+	}
+
+	[[nodiscard]]
+	SystemMonitor& getSysMon() const {
+		return *system_monitor;
+	}
+
+	[[nodiscard]]
+	RenderingMgr& getRenderingMgr() const {
+		return *rendering_mgr;
+	}
 
 
 private:

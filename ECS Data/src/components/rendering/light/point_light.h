@@ -19,64 +19,100 @@ public:
 	~PointLight() = default;
 
 
+	//----------------------------------------------------------------------------------
+	// Ambient Color
+	//----------------------------------------------------------------------------------
 	void setAmbientColor(const float4& color) {
 		this->ambient_color = color;
 	}
 
+	[[nodiscard]]
+	const float4& getAmbientColor() const {
+		return ambient_color;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Diffuse Color
+	//----------------------------------------------------------------------------------
 	void setDiffuseColor(const float4& color) {
 		this->diffuse_color = color;
 	}
 
+	[[nodiscard]]
+	const float4& getDiffuseColor() const {
+		return diffuse_color;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Specular Color/Power
+	//----------------------------------------------------------------------------------
 	void setSpecular(const float4& spec) {
 		this->specular = spec;
 	}
 
+	[[nodiscard]]
+	const float4& getSpecular() const {
+		return specular;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Range
+	//----------------------------------------------------------------------------------
 	void setRange(const float range) {
 		this->range = range;
 		updateBoundingVolumes();
 	}
 
-	void setAttenuation(const float3& attenuation) {
-		this->attenuation = attenuation;
-	}
-
-	void setShadows(bool state) {
-		this->shadows = state;
-	}
-
-
-	const float4& getAmbientColor() const {
-		return ambient_color;
-	}
-
-	const float4& getDiffuseColor() const {
-		return diffuse_color;
-	}
-
-	const float4& getSpecular() const {
-		return specular;
-	}
-
-	const float3& getAttenuation() const {
-		return attenuation;
-	}
-
+	[[nodiscard]]
 	float getRange() const {
 		return range;
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Attenuation
+	//----------------------------------------------------------------------------------
+	void setAttenuation(const float3& attenuation) {
+		this->attenuation = attenuation;
+	}
+
+	[[nodiscard]]
+	const float3& getAttenuation() const {
+		return attenuation;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Shadows
+	//----------------------------------------------------------------------------------
+	void setShadows(bool state) {
+		this->shadows = state;
+	}
+
+	[[nodiscard]]
 	bool castsShadows() const {
 		return shadows;
 	}
 
+
+	// Get the AABB of this light
+	[[nodiscard]]
 	const AABB& getAABB() const {
 		return aabb;
 	}
 
+	// Get the bounding sphere of this light
+	[[nodiscard]]
 	const BoundingSphere& getBoundingSphere() const {
 		return sphere;
 	}
 
+
+	// Get the light-to-projection matrix
+	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getLightToProjectionMatrix() const {
 
 		const float m22 = range / (range - near_plane);

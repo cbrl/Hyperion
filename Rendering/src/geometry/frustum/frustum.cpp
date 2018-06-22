@@ -39,6 +39,7 @@ void XM_CALLCONV Frustum::updateFrustum(FXMMATRIX M) {
 // Encloses - Object completely contained within frustum
 //----------------------------------------------------------------------------------
 
+[[nodiscard]]
 bool XM_CALLCONV Frustum::encloses(FXMVECTOR point) const {
 	for (auto plane : planes) {
 		const auto result = XMPlaneDotCoord(plane, point);
@@ -51,6 +52,7 @@ bool XM_CALLCONV Frustum::encloses(FXMVECTOR point) const {
 }
 
 
+[[nodiscard]]
 bool Frustum::encloses(const AABB& aabb) const {
 
 	// For each plane, get the minimum point of the AABB along the
@@ -70,6 +72,7 @@ bool Frustum::encloses(const AABB& aabb) const {
 }
 
 
+[[nodiscard]]
 bool Frustum::encloses(const BoundingSphere& sphere) const {
 
 	// Calculate the dot product of the plane and the sphere's
@@ -90,6 +93,7 @@ bool Frustum::encloses(const BoundingSphere& sphere) const {
 // Contains - Object completely or partially contained within frustum
 //----------------------------------------------------------------------------------
 
+[[nodiscard]]
 bool Frustum::contains(const AABB& aabb) const {
 
 	// For each plane, get the minimum point of the AABB along the
@@ -109,6 +113,7 @@ bool Frustum::contains(const AABB& aabb) const {
 }
 
 
+[[nodiscard]]
 bool Frustum::contains(const BoundingSphere& sphere) const {
 
 	// Calculate the dot product of the plane and the sphere's

@@ -18,61 +18,94 @@ public:
 
 	~DirectionalLight() = default;
 
+	//----------------------------------------------------------------------------------
+	// Ambient Color
+	//----------------------------------------------------------------------------------
 	void setAmbientColor(const float4& color) {
 		this->ambient_color = color;
 	}
 
+	[[nodiscard]]
+	const float4& getAmbientColor() const {
+		return ambient_color;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Diffuse Color
+	//----------------------------------------------------------------------------------
 	void setDiffuseColor(const float4& color) {
 		this->diffuse_color = color;
 	}
 
+	[[nodiscard]]
+	const float4& getDiffuseColor() const {
+		return diffuse_color;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Specular Color/Power
+	//----------------------------------------------------------------------------------
 	void setSpecular(const float4& spec) {
 		this->specular = spec;
 	}
 
+	[[nodiscard]]
+	const float4& getSpecular() const {
+		return specular;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Shadows
+	//----------------------------------------------------------------------------------
 	void setShadows(bool state) {
 		shadows = state;
 	}
 
+	[[nodiscard]]
+	bool castsShadows() const {
+		return shadows;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Range
+	//----------------------------------------------------------------------------------
 	void setRange(float range) {
 		this->range = range;
 		updateBoundingVolumes();
 	}
 
+	[[nodiscard]]
+	float getRange() const {
+		return range;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Size
+	//----------------------------------------------------------------------------------
 	void setSize(const float2& size) {
 		proj_size = size;
 		updateBoundingVolumes();
 	}
 
-
-	const float4& getAmbientColor() const {
-		return ambient_color;
-	}
-
-	const float4& getDiffuseColor() const {
-		return diffuse_color;
-	}
-
-	const float4& getSpecular() const {
-		return specular;
-	}
-
-	bool castsShadows() const {
-		return shadows;
-	}
-
-	float getRange() const {
-		return range;
-	}
-
+	[[nodiscard]]
 	const float2& getSize() const {
 		return proj_size;
 	}
 
+
+	// Get the AABB of this light
+	[[nodiscard]]
 	const AABB& getAABB() const {
 		return aabb;
 	}
 
+	// Get the light-to-projection matrix
+	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getLightToProjectionMatrix() const {
 		return XMMatrixOrthographicLH(proj_size.x, proj_size.y, start, range);
 	}

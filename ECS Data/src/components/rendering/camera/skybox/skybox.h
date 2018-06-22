@@ -48,10 +48,14 @@ public:
 		device_context.DrawIndexed(index_count, 0, 0);
 	}
 
+	// Get the SRV pointer
+	[[nodiscard]]
 	ID3D11ShaderResourceView* getSRV() const {
 		return texture->get();
 	}
 
+	// Get the shared_ptr to the Texture
+	[[nodiscard]]
 	shared_ptr<Texture> getTexture() const {
 		return texture;
 	}

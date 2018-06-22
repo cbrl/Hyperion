@@ -8,18 +8,21 @@
 
 namespace BlueprintFactory {
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
 	                                             float size    = 1,
 	                                             bool rhcoords = false,
 	                                             bool invertn  = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
 	                                            const float3& size,
 	                                            bool rhcoords = false,
 	                                            bool invertn  = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
 	                                               float diameter      = 1,
 	                                               size_t tessellation = 16,
@@ -27,12 +30,14 @@ namespace BlueprintFactory {
 	                                               bool invertn        = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
 	                                                  float diameter      = 1,
 	                                                  size_t tessellation = 3,
 	                                                  bool rhcoords       = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
 	                                                 float diameter      = 1,
 	                                                 float height        = 1,
@@ -40,6 +45,7 @@ namespace BlueprintFactory {
 	                                                 bool rhcoords       = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
 	                                             float diameter      = 1,
 	                                             float height        = 1,
@@ -47,6 +53,7 @@ namespace BlueprintFactory {
 	                                             bool rhcoords       = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
 	                                              float diameter      = 1,
 	                                              float thickness     = 0.333f,
@@ -54,21 +61,25 @@ namespace BlueprintFactory {
 	                                              bool rhcoords       = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
 	                                                    float size    = 1,
 	                                                    bool rhcoords = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
 	                                                   float size    = 1,
 	                                                   bool rhcoords = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
 	                                                     float size    = 1,
 	                                                     bool rhcoords = false);
 
 	template<typename VertexT>
+	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
 	                                                    float size    = 1,
 	                                                    bool rhcoords = false);

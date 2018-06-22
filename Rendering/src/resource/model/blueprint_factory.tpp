@@ -1,5 +1,7 @@
 namespace BlueprintFactory {
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
 	                                      float size,
 	                                      bool rhcoords,
@@ -45,7 +47,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
 	                                     const float3& size,
 	                                     bool rhcoords,
@@ -92,7 +96,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
 	                                        float diameter,
 	                                        size_t tessellation,
@@ -140,7 +146,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
 	                                           float diameter,
 	                                           size_t tessellation,
@@ -186,7 +194,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
 	                                          float diameter,
 	                                          float height,
@@ -234,7 +244,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
 	                                      float diameter,
 	                                      float height,
@@ -282,7 +294,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
 	                                       float diameter,
 	                                       float thickness,
@@ -330,7 +344,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
 	                                             float size,
 	                                             bool rhcoords) {
@@ -375,7 +391,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
 	                                            float size,
 	                                            bool rhcoords) {
@@ -420,7 +438,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
 	                                              float size,
 	                                              bool rhcoords) {
@@ -465,7 +485,9 @@ namespace BlueprintFactory {
 		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
 	}
 
+
 	template<typename VertexT>
+	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
 	                                             float size,
 	                                             bool rhcoords) {

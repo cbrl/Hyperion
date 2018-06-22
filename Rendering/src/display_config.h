@@ -21,7 +21,7 @@ public:
 		, fullscreen(false)
 		, vsync(false) {
 
-		GetAdapter();
+		init();
 	}
 
 	DisplayConfig(AAType aa,
@@ -32,19 +32,63 @@ public:
 		, fullscreen(fullscreen)
 		, vsync(vsync) {
 
-		GetAdapter();
+		init();
 	}
 
 	DisplayConfig(const DisplayConfig& config) = default;
 	DisplayConfig(DisplayConfig&& config) = default;
 	~DisplayConfig() = default;
 
-	void GetAdapter() {
+
+	void setDisplayDesc(u32 index) { curr_desc = index; }
+	void setAAType(AAType value) { anti_aliasing = value; }
+	void setFullscreen(bool state) { fullscreen = state; }
+	void setVsync(bool state) { vsync = state; }
+
+
+	[[nodiscard]]
+	IDXGIAdapter* getAdapter() const {
+		return adapter.Get();
+	}
+
+	[[nodiscard]]
+	IDXGIOutput* getOutput() const {
+		return adapter_out.Get();
+	}
+
+	[[nodiscard]]
+	const vector<DXGI_MODE_DESC>& getDisplayDescList() const {
+		return display_desc_list;
+	}
+
+	[[nodiscard]]
+	DXGI_MODE_DESC getDisplayDesc() const {
+		return display_desc_list[curr_desc];
+	}
+
+	[[nodiscard]]
+	AAType getAAType() const {
+		return anti_aliasing;
+	}
+
+	[[nodiscard]]
+	bool isFullscreen() const {
+		return fullscreen;
+	}
+
+	[[nodiscard]]
+	bool isVsync() const {
+		return vsync;
+	}
+
+
+private:
+	void init() {
 		ComPtr<IDXGIFactory> factory;
 
 		// Create the DXGI factory
 		ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), static_cast<void**>(&factory)),
-		              "Failed to create dxgiFactory");
+			"Failed to create dxgiFactory");
 
 		// Get the default adapter and output
 		factory->EnumAdapters(0, &adapter);
@@ -57,9 +101,9 @@ public:
 		// Get the display modes
 		vector<DXGI_MODE_DESC> display_modes(mode_count);
 		adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
-		                                DXGI_ENUM_MODES_INTERLACED,
-		                                &mode_count,
-		                                display_modes.data());
+			DXGI_ENUM_MODES_INTERLACED,
+			&mode_count,
+			display_modes.data());
 
 
 		// Store the display modes that are above 800px wide
@@ -85,21 +129,6 @@ public:
 			}
 		}
 	}
-
-
-	void setDisplayDesc(u32 index) { curr_desc = index; }
-	void setAAType(AAType value) { anti_aliasing = value; }
-	void setFullscreen(bool state) { fullscreen = state; }
-	void setVsync(bool state) { vsync = state; }
-
-
-	IDXGIAdapter* getAdapter() const { return adapter.Get(); }
-	IDXGIOutput* getOutput() const { return adapter_out.Get(); }
-	const vector<DXGI_MODE_DESC>& getDisplayDescList() const { return display_desc_list; }
-	DXGI_MODE_DESC getDisplayDesc() const { return display_desc_list[curr_desc]; }
-	AAType getAAType() const { return anti_aliasing; }
-	bool isFullscreen() const { return fullscreen; }
-	bool isVsync() const { return vsync; }
 
 
 private:

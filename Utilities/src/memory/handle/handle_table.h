@@ -29,11 +29,14 @@ public:
 	HandleTable() { allocateChunk(); }
 	~HandleTable() = default;
 
+	[[nodiscard]]
 	HandleT createHandle(DataT* object);
+
 	void releaseHandle(HandleT handle);
 
 	bool validHandle(const HandleT& handle) const;
 
+	[[nodiscard]]
 	DataT* operator[](HandleT handle) {
 		assert(validHandle(handle) && "HandleTable::operator[](HandleT) - Invalid handle specified");
 

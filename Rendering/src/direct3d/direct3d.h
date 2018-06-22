@@ -31,10 +31,12 @@ public:
 		device_context->OMSetRenderTargets(1, render_target_view.GetAddressOf(), depth_stencil_view.Get());
 	}
 
+	[[nodiscard]]
 	ID3D11Device& getDevice() const {
 		return *device.Get();
 	}
 
+	[[nodiscard]]
 	ID3D11DeviceContext& getDeviceContext() const {
 		return *device_context.Get();
 	}

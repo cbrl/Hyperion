@@ -5,7 +5,7 @@
 
 
 template<typename VertexT>
-void ObjLoader<VertexT>::reset() {
+void OBJLoader<VertexT>::reset() {
 	// Reset the local variables
 	rh_coord    = false;
 	group_count = 0;
@@ -25,7 +25,8 @@ void ObjLoader<VertexT>::reset() {
 
 
 template<typename VertexT>
-ModelOutput<VertexT> ObjLoader<VertexT>::load(ResourceMgr& resource_mgr,
+[[nodiscard]]
+ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
                                               const wstring& filename,
                                               bool right_hand_coords) {
 
@@ -100,7 +101,7 @@ ModelOutput<VertexT> ObjLoader<VertexT>::load(ResourceMgr& resource_mgr,
 
 
 template<typename VertexT>
-void ObjLoader<VertexT>::loadModel(wstring filename) {
+void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 	// Open the file
 	wifstream file(filename);
@@ -211,7 +212,7 @@ void ObjLoader<VertexT>::loadModel(wstring filename) {
 
 
 template<typename VertexT>
-void ObjLoader<VertexT>::loadMaterials(wstring folder) {
+void OBJLoader<VertexT>::loadMaterials(wstring folder) {
 
 	// Open the material file
 	wifstream file(folder + mat_lib);
@@ -362,7 +363,7 @@ void ObjLoader<VertexT>::loadMaterials(wstring folder) {
 
 
 template<typename VertexT>
-void ObjLoader<VertexT>::readTransparency(wstring& line, bool inverse) {
+void OBJLoader<VertexT>::readTransparency(wstring& line, bool inverse) {
 	wstringstream stream(line);
 
 	float transparency;
@@ -381,7 +382,7 @@ void ObjLoader<VertexT>::readTransparency(wstring& line, bool inverse) {
 
 
 template<typename VertexT>
-void ObjLoader<VertexT>::readFace(wstring& line) {
+void OBJLoader<VertexT>::readFace(wstring& line) {
 
 	vector<VertexT> verts;
 	VertexT vertex = {};
@@ -543,7 +544,7 @@ void ObjLoader<VertexT>::readFace(wstring& line) {
 
 // Converts the input face into triangles. Returns a list of indices that correspond to the input vertex list.
 template<typename VertexT>
-void ObjLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out_indices) {
+void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out_indices) {
 	vector<VertexT> v_verts = in_verts;
 
 	while (true) {

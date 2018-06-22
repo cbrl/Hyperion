@@ -17,8 +17,13 @@
 class IResourcePool {
 public:
 	virtual ~IResourcePool() = default;
+
+	[[nodiscard]]
 	virtual void* allocateObject() = 0;
+
 	virtual void destroyObject(void* object) = 0;
+
+	[[nodiscard]]
 	virtual size_t getCount() const = 0;
 };
 
@@ -94,12 +99,18 @@ public:
 	ResourcePool();
 	~ResourcePool();
 
+	[[nodiscard]]
 	void* allocateObject() override;
+
 	void destroyObject(void* object) override;
 
+	[[nodiscard]]
 	size_t getCount() const override { return count; }
 
+	[[nodiscard]]
 	iterator begin() { return iterator(memory_chunks.begin(), memory_chunks.end()); }
+
+	[[nodiscard]]
 	iterator end() { return iterator(memory_chunks.end(), memory_chunks.end()); }
 
 
@@ -138,6 +149,7 @@ public:
 	}
 
 	template<typename ResourceT>
+	[[nodiscard]]
 	ResourcePool<ResourceT>* getOrCreatePool() {
 
 		using pool_t = ResourcePool<ResourceT>;
@@ -153,6 +165,7 @@ public:
 	}
 
 	template<typename ResourceT>
+	[[nodiscard]]
 	ResourcePool<ResourceT>* getPool() {
 		const auto& it = pools.find(ResourceT::type_id);
 
@@ -161,6 +174,7 @@ public:
 		return static_cast<ResourcePool<ResourceT>*>(it->second);
 	}
 
+	[[nodiscard]]
 	IResourcePool* getPool(type_index type) {
 		const auto& it = pools.find(type);
 
@@ -174,7 +188,7 @@ public:
 		return pools.find(ResourceT::type_id) != pools.end();
 	}
 
-	bool poosExists(type_index type) const {
+	bool poolExists(type_index type) const {
 		return pools.find(type) != pools.end();
 	}
 

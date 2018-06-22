@@ -52,26 +52,31 @@ void Text::setRotation(float new_rotation) {
 }
 
 
+[[nodiscard]]
 const SpriteFont& Text::getFont() const {
 	return *font.get();
 }
 
 
+[[nodiscard]]
 const wstring& Text::getText() const {
 	return text;
 }
 
 
+[[nodiscard]]
 const float2& Text::getPosition() const {
 	return position;
 }
 
 
+[[nodiscard]]
 const XMVECTORF32& Text::getColor() const {
 	return color;
 }
 
 
+[[nodiscard]]
 float Text::getRotation() const {
 	return rotation;
 }

@@ -75,7 +75,10 @@ class SystemMonitor final {
 
 
 	public:
+		[[nodiscard]]
 		double getTotalCpuPercentage() const;
+
+		[[nodiscard]]
 		double getProcessCpuPercentage() const;
 
 
@@ -106,13 +109,29 @@ class SystemMonitor final {
 
 
 	public:
+		//----------------------------------------------------------------------------------
+		// Physical Memory
+		//----------------------------------------------------------------------------------
+		[[nodiscard]]
 		u64 getPhysicalMemSize() const;
-		u64 getVirtualMemSize() const;
 
+		[[nodiscard]]
 		u64 getTotalUsedPhysicalMem() const;
+
+		[[nodiscard]]
 		u64 getProcessUsedPhysicalMem() const;
 
+
+		//----------------------------------------------------------------------------------
+		// Virtual Memory
+		//----------------------------------------------------------------------------------
+		[[nodiscard]]
+		u64 getVirtualMemSize() const;
+
+		[[nodiscard]]
 		u64 getTotalUsedVirtualMem() const;
+
+		[[nodiscard]]
 		u64 getProcessUsedVirtualMem() const;
 
 

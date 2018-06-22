@@ -63,7 +63,10 @@ public:
 	template<typename T>
 	size_t countOf() const;
 
+	[[nodiscard]]
 	EntityMgr* getEntityMgr() const { return entity_mgr.get(); }
+
+	[[nodiscard]]
 	ComponentMgr* getComponentMgr() const { return component_mgr.get(); }
 
 

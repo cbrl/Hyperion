@@ -33,18 +33,22 @@ public:
 	// Getters
 	//----------------------------------------------------------------------------------
 
+	[[nodiscard]]
 	ID3D11Device& getDevice() const {
 		return direct3D->getDevice();
 	}
 
+	[[nodiscard]]
 	ID3D11DeviceContext& getDeviceContext() const {
 		return direct3D->getDeviceContext();
 	}
 
+	[[nodiscard]]
 	ResourceMgr& getResourceMgr() const {
 		return *resource_mgr;
 	}
 
+	[[nodiscard]]
 	const RenderStateMgr& getRenderStateMgr() const {
 		return *render_state_mgr;
 	}

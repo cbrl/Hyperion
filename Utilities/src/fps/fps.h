@@ -13,6 +13,8 @@ public:
 	~FPS() = default;
 
 	void tick();
+
+	[[nodiscard]]
 	u32 getFPS() const;
 
 

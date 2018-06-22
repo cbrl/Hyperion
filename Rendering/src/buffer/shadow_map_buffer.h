@@ -44,14 +44,17 @@ public:
 	}
 
 	// Get the number of shadow maps in this buffer
+	[[nodiscard]]
 	size_t getMapCount() const {
 		return dsvs.size();
 	}
 
-	ID3D11ShaderResourceView& getSRV() const {
-		return *srv.Get();
+	[[nodiscard]]
+	ID3D11ShaderResourceView* getSRV() const {
+		return srv.Get();
 	}
 
+	[[nodiscard]]
 	ID3D11ShaderResourceView* const* getSRVAddress() const {
 		return srv.GetAddressOf();
 	}

@@ -11,11 +11,22 @@ public:
 	Text(ResourceMgr& resource_mgr, const wstring& font_filename);
 	~Text() = default;
 
+
+	[[nodiscard]]
 	const SpriteFont& getFont() const;
+
+	[[nodiscard]]
 	const wstring& getText() const;
+
+	[[nodiscard]]
 	const float2& getPosition() const;
+
+	[[nodiscard]]
 	const XMVECTORF32& getColor() const;
+
+	[[nodiscard]]
 	float getRotation() const;
+
 
 	void setText(wstring new_text);
 	void setText(wstring new_text, float2 new_position);
