@@ -291,37 +291,22 @@ struct ShadowedSpotLightBuffer {
 
 struct CameraBuffer {
 	CameraBuffer()
-		: position(0.0f, 0.0f, 0.0f)
-		, padding(0.0f)
+		: camera_to_world(XMMatrixIdentity())
 		, world_to_camera(XMMatrixIdentity())
 		, camera_to_projection(XMMatrixIdentity()) {
 	}
 
-	CameraBuffer(const float3& pos,
-		CXMMATRIX world_to_camera,
-		CXMMATRIX camera_to_projection,
-		const Fog& fog)
-		: position(pos)
-		, padding(0.0f)
+	CameraBuffer(CXMMATRIX camera_to_world,
+	             CXMMATRIX world_to_camera,
+	             CXMMATRIX camera_to_projection,
+	             const Fog& fog)
+		: camera_to_world(camera_to_world)
 		, world_to_camera(world_to_camera)
 		, camera_to_projection(camera_to_projection)
 		, fog(fog) {
 	}
 
-	CameraBuffer(FXMVECTOR pos,
-		CXMMATRIX world_to_camera,
-		CXMMATRIX camera_to_projection,
-		const Fog& fog)
-		: padding(0.0f)
-		, world_to_camera(world_to_camera)
-		, camera_to_projection(camera_to_projection)
-		, fog(fog) {
-
-		XMStoreFloat3(&position, pos);
-	}
-
-	float3   position;
-	float    padding;
+	XMMATRIX camera_to_world;
 	XMMATRIX world_to_camera;
 	XMMATRIX camera_to_projection;
 	Fog      fog;

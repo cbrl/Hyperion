@@ -326,7 +326,7 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 	ImGui::Text("Fog");
 	ImGui::Separator();
 
-	auto& fog = camera.getFog();
+	auto& fog = camera.fog();
 	float4 color = fog.color;
 	float  start = fog.start;
 	float  range = fog.range;

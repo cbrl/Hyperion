@@ -18,7 +18,4 @@ void PerspectiveCamera::updateProjectionMatrix() {
 
 	// Recalculate the projection matrix
 	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
-
-	// Update the frustum when the projection matrix changes
-	updateFrustum();
 }

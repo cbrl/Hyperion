@@ -38,11 +38,9 @@ struct Fog {
 };
 
 cbuffer CameraBuffer : REG_B(SLOT_CBUFFER_CAMERA) {
-	// The camera's position
-	float3 camera_position;
 
-	// Padding
-	float cb_pad0;
+	// The camera-to-world matrix
+	matrix camera_to_world;
 
 	// The world-to-camera (world-to-view) matrix
 	matrix world_to_camera;
@@ -54,6 +52,10 @@ cbuffer CameraBuffer : REG_B(SLOT_CBUFFER_CAMERA) {
 	Fog fog;
 };
 
+
+float3 CameraPosition() {
+	return camera_to_world._m30_m31_m32;
+}
 
 
 #endif //HLSL_GLOBAL

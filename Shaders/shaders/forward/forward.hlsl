@@ -17,7 +17,7 @@ Texture2D normal_map  : REG_T(SLOT_SRV_NORMAL);
 
 float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// The to_eye vector is used in lighting
-	float3 to_eye = camera_position - pin.position_world;
+	float3 to_eye = CameraPosition() - pin.position_world;
 
 	// Cache the distance to the eye from this surface point
 	float dist_to_eye = length(to_eye);

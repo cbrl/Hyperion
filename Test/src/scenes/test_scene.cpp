@@ -3,8 +3,8 @@
 #include "engine/engine.h"
 
 
-static constexpr float z_near = 0.1f;
-static constexpr float z_far  = 1000.0f;
+static constexpr float z_near = 0.01f;
+static constexpr float z_far  = 100.0f;
 static constexpr float fov    = XM_PI / 3.0f;
 
 
@@ -38,7 +38,7 @@ void TestScene::load(const Engine& engine) {
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
 	cam->setFog(Fog(float4(0.2f, 0.2f, 0.2f, 1.0f), 30.0f, 25.0f));
-	cam->getSkybox().setTexture(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	cam->skybox().setTexture(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 	ecs_engine.getComponent<CameraTransform>(camera)->setPosition(float3(0.0f, 4.0f, -2.0f));
 
 

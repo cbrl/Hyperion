@@ -9,25 +9,19 @@ void CameraSystem::update(const Engine& engine) {
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	const auto process_cam = [&](auto& camera) {
-		const handle64 owner = camera.getOwner();
+		const auto owner = camera.getOwner();
+
 		const auto transform = ecs_engine.getComponent<CameraTransform>(owner);
-
 		if (!transform) return;
-
 
 		// Process movement
 		if (const auto movement = ecs_engine.getComponent<CameraMovement>(owner)) {
 			processMovement(engine, movement, transform);
 		}
 
-
-		// Update the camera's view matrix
-		camera.updateViewMatrix(transform->getPosition(), transform->getWorldAxisZ(), transform->getWorldAxisY());
-
-
 		// Update the camera's buffer
 		camera.updateBuffer(device_context,
-		                    transform->getWorldOrigin(),
+		                    transform->getObjectToWorldMatrix(),
 		                    transform->getWorldToObjectMatrix());
 	};
 

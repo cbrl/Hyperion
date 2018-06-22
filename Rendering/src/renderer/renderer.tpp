@@ -9,9 +9,9 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	// Camera variables
 	const auto transform            = ecs_engine.getComponent<CameraTransform>(camera.getOwner());
 	const auto world_to_camera      = transform->getWorldToObjectMatrix();
-	const auto camera_to_projection = camera.getProjectionMatrix();
+	const auto camera_to_projection = camera.cameraToProjectionMatrix();
 	const auto world_to_projection  = world_to_camera * camera_to_projection;
-	const auto skybox               = camera.getSkybox();
+	const auto& skybox              = camera.skybox();
 
 
 	//----------------------------------------------------------------------------------

@@ -18,12 +18,10 @@ class CameraBase : public Component<T> {
 protected:
 	CameraBase(ID3D11Device& device)
 		: buffer(device)
-		, frustum(XMMatrixIdentity())
-		, sky(device)
 		, viewport({0.0f, 0.0f, 0.0f, 0.f, 0.0f, 1.0f})
 		, z_near(0.1f)
 		, z_far(1000.0f)
-		, view_matrix(XMMatrixIdentity())
+		, sky(device)
 		, projection_matrix(XMMatrixIdentity()) {
 	}
 
@@ -43,13 +41,14 @@ public:
 
 	// Update the camera's constant buffer
 	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context,
-	                              FXMVECTOR position,
-	                              FXMMATRIX world_to_camera) const {
+	                              FXMMATRIX camera_to_world,
+	                              CXMMATRIX world_to_camera) const {
+
 		buffer.updateData(device_context,
-		                  CameraBuffer(position,
+		                  CameraBuffer(XMMatrixTranspose(camera_to_world),
 		                               XMMatrixTranspose(world_to_camera),
 		                               XMMatrixTranspose(projection_matrix),
-		                               fog));
+		                               camera_fog));
 	}
 
 	// Bind the camera's constant buffer
@@ -59,7 +58,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Setters
+	// Viewport
 	//----------------------------------------------------------------------------------
 
 	// Set a new viewport
@@ -83,6 +82,11 @@ public:
 		updateProjectionMatrix();
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Depth
+	//----------------------------------------------------------------------------------
+
 	// Set the depth range
 	void setZDepth(float z_near, float z_far) {
 		this->z_near = z_near;
@@ -90,72 +94,53 @@ public:
 		updateProjectionMatrix();
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Fog
+	//----------------------------------------------------------------------------------
+
 	// Set the fog buffer
 	void setFog(const Fog& fog) {
-		this->fog = fog;
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Getters
-	//----------------------------------------------------------------------------------
-
-	// Get the camera's view matrix
-	[[nodiscard]]
-	XMMATRIX XM_CALLCONV getViewMatrix() const {
-		return view_matrix;
-	}
-
-	// Get the camera's projection matrix
-	[[nodiscard]]
-	XMMATRIX XM_CALLCONV getProjectionMatrix() const {
-		return projection_matrix;
-	}
-
-	// Get the Frustum for this camera
-	[[nodiscard]]
-	const Frustum& getFrustum() const {
-		return frustum;
-	}
-
-	// Get the skybox associated with this camera
-	[[nodiscard]]
-	SkyBox& getSkybox() {
-		return sky;
-	}
-
-	[[nodiscard]]
-	const SkyBox& getSkybox() const {
-		return sky;
+		this->camera_fog = fog;
 	}
 
 	// Get the fog buffer
 	[[nodiscard]]
-	const Fog& getFog() const {
-		return fog;
+	const Fog& fog() const {
+		return camera_fog;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Projection Matrix
+	//----------------------------------------------------------------------------------
+
+	// Get the camera's projection matrix
+	[[nodiscard]]
+	XMMATRIX XM_CALLCONV cameraToProjectionMatrix() const {
+		return projection_matrix;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Skybox
+	//----------------------------------------------------------------------------------
+
+	// Get the skybox associated with this camera
+	[[nodiscard]]
+	SkyBox& skybox() {
+		return sky;
+	}
+
+	[[nodiscard]]
+	const SkyBox& skybox() const {
+		return sky;
 	}
 
 
 protected:
 	// Update the projection matrix after changing depth/width/height/etc...
 	virtual void updateProjectionMatrix() = 0;
-
-	// Update the view matrix. Used after moving/rotating the camera.
-	void XM_CALLCONV updateViewMatrix(FXMVECTOR position, FXMVECTOR forward, FXMVECTOR up) {
-		// Create a target vector
-		const XMVECTOR look_at = position + forward;
-
-		// Create the new view matrix
-		view_matrix = XMMatrixLookAtLH(position, look_at, up);
-
-		// The frustum needs to be updated when the view matrix changes
-		updateFrustum();
-	}
-
-	// Update the frustum. Used after the projection matrix or view matrix changes.
-	void updateFrustum() {
-		frustum.updateFrustum(view_matrix * projection_matrix);
-	}
 
 
 protected:
@@ -167,21 +152,12 @@ protected:
 	float z_near;
 	float z_far;
 
-	// Camera frustum
-	Frustum frustum;
-
 	// The skybox for this camera
 	SkyBox sky;
 
 	// The fog that this camera sees
-	Fog fog;
+	Fog camera_fog;
 
-	// Matrices
-	XMMATRIX view_matrix;
+	// Camera-to-projection matrix (view-to-projection)
 	XMMATRIX projection_matrix;
-
-	// Default vectors
-	static constexpr XMVECTOR default_forward = {0.0f, 0.0f, 1.0f, 0.0f};
-	static constexpr XMVECTOR default_right   = {1.0f, 0.0f, 0.0f, 0.0f};
-	static constexpr XMVECTOR default_up      = {0.0f, 1.0f, 0.0f, 0.0f};
 };
