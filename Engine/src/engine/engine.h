@@ -21,7 +21,13 @@ public:
 	~Engine();
 
 	bool init();
+
+	void addSystems() const;
+
+	// Unload the active scene (if applicable) and apply a new scene
 	void loadScene(unique_ptr<Scene>&& new_scene);
+
+	// Begin the main loop
 	void run() override;
 
 	LRESULT msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;

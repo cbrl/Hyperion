@@ -42,6 +42,21 @@ void ForwardPass::bindRenderStates(const RenderStateMgr& render_state_mgr) const
 }
 
 
+void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_projection) const {
+
+	auto& ecs_engine = engine.getECS();
+	const auto& render_state_mgr = engine.getRenderingMgr().getRenderStateMgr();
+
+	// Bind the shaders, render states, etc
+	bindRenderStates(render_state_mgr);
+
+	// Render models
+	ecs_engine.forEachActive<Model>([&](Model& model) {
+		render(ecs_engine, model, world_to_projection);
+	});
+}
+
+
 void XM_CALLCONV ForwardPass::render(const Engine& engine, const SkyBox& sky, FXMMATRIX world_to_projection) const {
 
 	auto& ecs_engine             = engine.getECS();

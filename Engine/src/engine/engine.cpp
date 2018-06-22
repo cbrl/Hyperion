@@ -29,22 +29,19 @@ bool Engine::init() {
 	FILE_LOG(logINFO) << "Initialized main window";
 
 
-	// Initialize the Entity Component System
+	// Create the Entity Component System
 	ecs_engine = make_unique<ECS>();
-	ecs_engine->addSystem<CameraSystem>();
-	ecs_engine->addSystem<TransformSystem>();
-	ecs_engine->addSystem<ModelSystem>();
 
 
-	// Initialize system monitor
+	// Create the system monitor
 	system_monitor = make_unique<SystemMonitor>();
 
 
-	// Create input handler
+	// Create the input handler
 	input = make_unique<Input>(hWnd);
 
 
-	// Create Timer
+	// Create the timer
 	timer = make_unique<HighResTimer>();
 
 
@@ -52,12 +49,31 @@ bool Engine::init() {
 	fps_counter = make_unique<FPS>();
 
 
-	// Initialize rendering manager and rendering system
+	// Initialize the rendering manager and rendering system
 	rendering_mgr = make_unique<RenderingMgr>(hWnd, config);
-	ecs_engine->addSystem<Renderer>(rendering_mgr->getDevice(), rendering_mgr->getDeviceContext());
+
+
+	// Add critical systems to the ECS
+	addSystems();
 
 
 	return true;
+}
+
+
+void Engine::addSystems() const {
+
+	// Transform system: updates transforms when they're modified
+	ecs_engine->addSystem<TransformSystem>();
+
+	// Camera system: updates camera buffers and handles movement
+	ecs_engine->addSystem<CameraSystem>();
+
+	// Model system: updates model buffers
+	ecs_engine->addSystem<ModelSystem>();
+
+	// Renderer: renders things
+	ecs_engine->addSystem<Renderer>(rendering_mgr->getDevice(), rendering_mgr->getDeviceContext());
 }
 
 
@@ -65,13 +81,15 @@ void Engine::loadScene(unique_ptr<Scene>&& new_scene) {
 	
 	if (scene) {
 		scene->unload(*this);
+		FILE_LOG(logINFO) << "Unloaded scene: " << scene->getName();
 	}
 
 	scene = std::move(new_scene);
 
 	if (scene) {
+		FILE_LOG(logINFO) << "Loading scene: " << scene->getName();
 		scene->load(*this);
-		FILE_LOG(logINFO) << "Loaded new scene";
+		FILE_LOG(logINFO) << "Finished loading scene: " << scene->getName();
 		timer->reset();
 	}
 }
