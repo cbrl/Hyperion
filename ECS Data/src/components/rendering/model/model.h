@@ -37,8 +37,8 @@ public:
 
 	// Update the child model's buffer
 	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context,
-		FXMMATRIX world,
-		CXMMATRIX world_inv_transpose) const;
+	                              FXMMATRIX object_to_world,
+	                              CXMMATRIX world_inv_transpose) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ public:
 
 
 	// Update model matrix and bounding volumes, as well as those of the child models.
-	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world);
+	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX object_to_world);
 
 
 	//----------------------------------------------------------------------------------

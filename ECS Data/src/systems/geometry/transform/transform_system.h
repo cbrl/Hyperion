@@ -2,7 +2,6 @@
 
 #include "ecs.h"
 #include "components/geometry/transform/transform.h"
-#include "components/geometry/transform/camera_transform.h"
 
 
 class TransformSystem final : public System<TransformSystem> {
@@ -15,12 +14,7 @@ public:
 
 
 private:
-	template<typename TransformT>
-	void updateWorld(ECS& ecs_engine, TransformT& transform);
-
+	static void updateWorld(ECS& ecs_engine, Transform& transform);
 	static XMMATRIX calculateWorld(Transform& transform);
-	static XMMATRIX calculateWorld(CameraTransform& transform);
+
 };
-
-
-#include "transform_system.tpp"

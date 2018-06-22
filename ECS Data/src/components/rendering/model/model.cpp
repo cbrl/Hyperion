@@ -6,14 +6,14 @@
 //----------------------------------------------------------------------------------
 
 void XM_CALLCONV ModelChild::updateBuffer(ID3D11DeviceContext& device_context,
-                                          FXMMATRIX world,
+                                          FXMMATRIX object_to_world,
                                           CXMMATRIX world_inv_transpose) const {
 
 	// Create a new ModelBuffer struc with the updated data
 	// and send it to the constant buffer.
 	ModelBuffer buffer_data;
 
-	buffer_data.world               = world;
+	buffer_data.world               = object_to_world;
 	buffer_data.world_inv_transpose = world_inv_transpose;
 	buffer_data.texTransform        = XMMatrixIdentity();
 
@@ -51,13 +51,13 @@ Model::Model(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint)
 }
 
 
-void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX world) {
+void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX object_to_world) {
 
 	// Create the model-to-world matrix. Transposed for HLSL.
-	auto world_t = XMMatrixTranspose(world);
+	auto world_t = XMMatrixTranspose(object_to_world);
 
 	// Create the inverse transpose of the model-to-world matrix
-	auto world_inv_transpose = XMMatrixInverse(nullptr, world);
+	auto world_inv_transpose = XMMatrixInverse(nullptr, object_to_world);
 
 	// Update each child model
 	forEachChild([&](ModelChild& child) {

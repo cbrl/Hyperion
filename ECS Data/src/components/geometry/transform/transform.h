@@ -9,42 +9,120 @@ class Transform final : public Component<Transform> {
 	friend class TransformSystem;
 
 public:
-	Transform();
+	Transform()
+		: parent(handle64::invalid_handle)
+		, world(XMMatrixIdentity())
+		, translation(XMVectorZero())
+		, rotation(XMVectorZero())
+		, scaling(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f))
+		, needs_update(true)
+		, updated(false) {
+	}
+
 	~Transform() = default;
 
-	bool isUpdated() const { return updated; }
+
+	bool isUpdated() const {
+		return updated;
+	}
 
 
 	//----------------------------------------------------------------------------------
-	// Setters
+	// Parent
 	//----------------------------------------------------------------------------------
 
-	void setParent(const handle64 handle) { parent = handle; }
-
-	void move(const float3& move);
-	void setPosition(const float3& position);
-	void XM_CALLCONV move(FXMVECTOR move);
-	void XM_CALLCONV setPosition(FXMVECTOR position);
-
-	void rotate(const float3& rotate);
-	void setRotation(const float3& rotation);
-	void XM_CALLCONV rotate(FXMVECTOR rotate);
-	void XM_CALLCONV setRotation(FXMVECTOR rotation);
-
-	void scale(const float3& scale);
-	void setScale(const float3& scale);
-	void XM_CALLCONV scale(FXMVECTOR scale);
-	void XM_CALLCONV setScale(FXMVECTOR scale);
-
+	// Set an entity as the parent of this transform. This transform will
+	// now be relative to the parent's transform.
+	void setParent(const handle64 handle) {
+		parent = handle;
+	}
 
 	// Get the entity whose transform is a parent of this transform
 	[[nodiscard]]
-	handle64 getParent() const { return parent; }
+	handle64 getParent() const {
+		return parent;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Position
+	//----------------------------------------------------------------------------------
+
+	void move(const float3& move) {
+		translation += XMLoadFloat3(&move);
+		needs_update = true;
+	}
+
+	void XM_CALLCONV move(FXMVECTOR move) {
+		translation += move;
+		needs_update = true;
+	}
+
+	void setPosition(const float3& position) {
+		translation = XMLoadFloat3(&position);
+		needs_update = true;
+	}
+
+	void XM_CALLCONV setPosition(FXMVECTOR position) {
+		translation = position;
+		needs_update = true;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Rotation
+	//----------------------------------------------------------------------------------
+
+	void rotate(const float3& rotate) {
+		rotation += XMLoadFloat3(&rotate);
+		needs_update = true;
+	}
+
+	void XM_CALLCONV rotate(FXMVECTOR rotate) {
+		rotation += rotate;
+		needs_update = true;
+	}
+
+	void setRotation(const float3& rotation) {
+		this->rotation = XMLoadFloat3(&rotation);
+		needs_update = true;
+	}
+
+	void XM_CALLCONV setRotation(FXMVECTOR rotation) {
+		this->rotation = rotation;
+		needs_update = true;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Scale
+	//----------------------------------------------------------------------------------
+
+	void scale(const float3& scale) {
+		this->scaling *= XMLoadFloat3(&scale);
+		needs_update = true;
+	}
+
+	void XM_CALLCONV scale(FXMVECTOR scale) {
+		this->scaling *= scale;
+		needs_update = true;
+	}
+
+	void setScale(const float3& scale) {
+		this->scaling = XMLoadFloat3(&scale);
+		needs_update = true;
+	}
+
+	void XM_CALLCONV setScale(FXMVECTOR scale) {
+		this->scaling = scale;
+		needs_update = true;
+	}
 
 
 	//----------------------------------------------------------------------------------
 	// Position, Rotation, and Scale (relative to parent, if any)
 	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getPosition() const {
 		return translation;
@@ -64,6 +142,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// World space data
 	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getWorldAxisX() const {
 		return XMVector3Normalize(world.r[0]);
@@ -88,6 +167,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Object space data
 	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	static XMVECTOR XM_CALLCONV getObjectAxisX() {
 		return XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
@@ -112,6 +192,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Matrices
 	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getObjectToWorldMatrix() const {
 		return world;

@@ -11,7 +11,7 @@ void CameraSystem::update(const Engine& engine) {
 	const auto process_cam = [&](auto& camera) {
 		const auto owner = camera.getOwner();
 
-		const auto transform = ecs_engine.getComponent<CameraTransform>(owner);
+		const auto transform = ecs_engine.getComponent<Transform>(owner);
 		if (!transform) return;
 
 		// Process movement
@@ -36,7 +36,7 @@ void CameraSystem::update(const Engine& engine) {
 }
 
 
-void CameraSystem::processMovement(const Engine& engine, CameraMovement* movement, CameraTransform* transform) const {
+void CameraSystem::processMovement(const Engine& engine, CameraMovement* movement, Transform* transform) const {
 
 	const auto& input = engine.getInput();
 
@@ -167,7 +167,7 @@ void CameraSystem::updateMovement(CameraMovement* mv, float3 units) const {
 }
 
 
-void CameraSystem::move(CameraMovement* mv, CameraTransform* transform, float dt) const {
+void CameraSystem::move(CameraMovement* mv, Transform* transform, float dt) const {
 
 	const float3 velocity    = mv->getVelocity();
 	XMVECTOR velocity_vec    = XMLoadFloat3(&velocity);

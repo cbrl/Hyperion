@@ -1,13 +1,11 @@
 #pragma once
 
-#include "entity/entity.h"
-#include "components/geometry/transform/camera_transform.h"
+#include "entities/world/world_object.h"
 #include "components/rendering/camera/perspective_camera.h"
 #include "components/rendering/camera/camera_movement.h"
-#include "resource/resource_mgr.h"
 
 
-class PlayerCamera final : public Entity<PlayerCamera> {
+class PlayerCamera final : public WorldObject<PlayerCamera> {
 public:
 	PlayerCamera(handle64 this_handle,
 	             ComponentMgr* component_mgr,
@@ -15,10 +13,10 @@ public:
 	             ID3D11DeviceContext& device_context,
 	             u32 viewport_width,
 	             u32 viewport_height)
-		: Entity(this_handle, component_mgr) {
+		: WorldObject(this_handle, component_mgr) {
 
 		this->addComponent<PerspectiveCamera>(device, device_context, viewport_width, viewport_height);
-		this->addComponent<CameraTransform>();
+		this->addComponent<Transform>();
 		this->addComponent<CameraMovement>();
 	}
 

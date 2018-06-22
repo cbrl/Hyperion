@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/system.h"
-#include "components/geometry/transform/camera_transform.h"
+#include "components/geometry/transform/transform.h"
 #include "components/rendering/camera/camera_base.h"
 #include "components/rendering/camera/camera_movement.h"
 
@@ -15,8 +15,8 @@ public:
 
 
 private:
-	void processMovement(const Engine& engine, CameraMovement* movement, CameraTransform* transform) const;
+	void processMovement(const Engine& engine, CameraMovement* movement, Transform* transform) const;
 	void updateMovement(CameraMovement* mv, float3 units) const;
-	void move(CameraMovement* mv, CameraTransform* transform, float dt) const;
+	void move(CameraMovement* mv, Transform* transform, float dt) const;
 	void decelerate(CameraMovement* mv, float delta_time) const;
 };

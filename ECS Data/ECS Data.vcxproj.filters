@@ -49,9 +49,6 @@
     <Filter Include="Source Files\components\geometry">
       <UniqueIdentifier>{accfd685-bce9-4d64-ba33-4e666341e5cd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\components\geometry\transform">
-      <UniqueIdentifier>{82aba4ce-c15e-4be8-bf62-c86ab44038f8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\entities">
       <UniqueIdentifier>{1bf67ee2-3af5-4216-815e-7b6d42fad31f}</UniqueIdentifier>
     </Filter>
@@ -102,9 +99,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\components\geometry\transform\camera_transform.h">
-      <Filter>Header Files\components\geometry\transform</Filter>
-    </ClInclude>
     <ClInclude Include="src\components\geometry\transform\transform.h">
       <Filter>Header Files\components\geometry\transform</Filter>
     </ClInclude>
@@ -173,12 +167,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\components\geometry\transform\camera_transform.cpp">
-      <Filter>Source Files\components\geometry\transform</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\geometry\transform\transform.cpp">
-      <Filter>Source Files\components\geometry\transform</Filter>
-    </ClCompile>
     <ClCompile Include="src\components\rendering\camera\orthographic_camera.cpp">
       <Filter>Source Files\components\rendering\camera</Filter>
     </ClCompile>
@@ -202,9 +190,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\systems\geometry\transform\transform_system.tpp">
-      <Filter>Source Files\systems\geometry\transform</Filter>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
 </Project>
