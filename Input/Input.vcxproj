@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{933BED32-740C-4880-804C-FE0C61289AED}</ProjectGuid>
-    <RootNamespace>Test</RootNamespace>
+    <ProjectGuid>{2F60711D-83F1-469E-AD0A-3BAE21B529F9}</ProjectGuid>
+    <RootNamespace>Input</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -39,13 +39,13 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -72,14 +72,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\Input\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\Rendering\src;$(IncludePath)</IncludePath>
-    <SourcePath>$(SolutionDir)\Utilities\src;$(SolutionDir)\Engine\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Input\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\Rendering\src;$(SourcePath)</SourcePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(IncludePath)</IncludePath>
+    <SourcePath>$(SolutionDir)\Utilities\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Rendering\src;$(IncludePath)</IncludePath>
-    <SourcePath>$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Rendering\src;$(SourcePath)</SourcePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(IncludePath)</IncludePath>
+    <SourcePath>$(SolutionDir)\Utilities\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -88,11 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
-    <Bscmake>
-      <PreserveSbr>true</PreserveSbr>
-    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -132,37 +128,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ECS Data\ECS Data.vcxproj">
-      <Project>{4d323972-2854-4a22-9002-d77f5bbda1b2}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ECS\ECS.vcxproj">
-      <Project>{85ea96e9-7ed5-46f5-84e1-9f186a78f89a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Engine\Engine.vcxproj">
-      <Project>{bb944ad5-fffe-4907-ad11-a4c3560a2b6a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
-      <Project>{19aec9aa-3dd9-4908-97c0-f270ae5c0c1a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Input\Input.vcxproj">
-      <Project>{2f60711d-83f1-469e-ad0a-3bae21b529f9}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Rendering\Rendering.vcxproj">
-      <Project>{87a2abb8-6dec-4c8b-97a9-ccb14c037516}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Shaders\Shaders.vcxproj">
-      <Project>{066019f4-1d8e-4455-9e16-01e32bc9819b}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
-      <Project>{4a7e2159-d052-4c1d-8f94-5188286a09b8}</Project>
-    </ProjectReference>
+    <ClInclude Include="src\input.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\scenes\test_scene.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\scenes\test_scene.cpp" />
+    <ClCompile Include="src\input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "directx/directx_math.h"
 #include "datatypes/datatypes.h"
+#include "directx/directx_math.h"
 
 
 struct AABB final {

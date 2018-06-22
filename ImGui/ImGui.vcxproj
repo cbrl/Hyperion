@@ -45,11 +45,11 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -75,6 +75,11 @@
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(ProjectDir)\src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir)\src;$(IncludePath)</IncludePath>
@@ -123,6 +128,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

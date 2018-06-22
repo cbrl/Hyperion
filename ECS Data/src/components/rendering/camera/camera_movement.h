@@ -1,7 +1,7 @@
 #pragma once
 
 #include "component/component.h"
-#include "input/input.h"
+#include "input.h"
 
 
 class CameraMovement : public Component<CameraMovement> {

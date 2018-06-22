@@ -46,7 +46,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -79,9 +79,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\Rendering\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Rendering\src;$(SolutionDir)\Input\src;$(SolutionDir)\Shaders\src;$(IncludePath)</IncludePath>
     <ExecutablePath>$(WindowsSDK_ExecutablePath_x64);$(ExecutablePath)</ExecutablePath>
-    <SourcePath>$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\Rendering\src;$(SourcePath)</SourcePath>
+    <SourcePath>$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Input\src;$(SolutionDir)\Rendering\src;$(SolutionDir)\Shaders\src;$(SourcePath)</SourcePath>
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -90,7 +90,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Rendering\src;$(SolutionDir)\Input\src;$(SolutionDir)\Shaders\src;$(IncludePath)</IncludePath>
+    <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
+    <SourcePath>$(SolutionDir)\Utilities\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Input\src;$(SolutionDir)\Rendering\src;$(SolutionDir)\Shaders\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,7 +158,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -167,7 +170,6 @@
   <ItemGroup>
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="src\engine\main_window.h" />
-    <ClInclude Include="src\input\input.h" />
     <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\scene\text\text.h" />
     <ClInclude Include="src\stdafx.h" />
@@ -176,7 +178,6 @@
   <ItemGroup>
     <ClCompile Include="src\engine\engine.cpp" />
     <ClCompile Include="src\engine\main_window.cpp" />
-    <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\scene\text\text.cpp" />
     <ClCompile Include="src\stdafx.cpp">

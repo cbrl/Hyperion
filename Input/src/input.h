@@ -1,8 +1,9 @@
 #pragma once
 
+#include "os/windows.h"
+#include "datatypes/datatypes.h"
 #include <Keyboard.h>
 #include <Mouse.h>
-#include "datatypes/datatypes.h"
 
 
 class Input final {
