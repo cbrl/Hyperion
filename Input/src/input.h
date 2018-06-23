@@ -36,7 +36,7 @@ public:
 
 	// Get mouse movement since last update
 	[[nodiscard]]
-	int2 getMouseDelta() const;
+	i32_2 getMouseDelta() const;
 
 	// Get the current mouse mode
 	[[nodiscard]]

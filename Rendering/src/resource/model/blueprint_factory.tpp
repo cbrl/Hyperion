@@ -21,9 +21,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Cube Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -51,7 +51,7 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
-	                                     const float3& size,
+	                                     const f32_3& size,
 	                                     bool rhcoords,
 	                                     bool invertn) {
 
@@ -70,9 +70,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Box Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -120,9 +120,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Sphere Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -168,9 +168,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "GeoSphere Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -218,9 +218,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Cylinder Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -268,9 +268,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Cone Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -318,9 +318,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Torus Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -365,9 +365,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Tetrahedron Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -412,9 +412,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Octahedron Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -459,9 +459,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Dodecahedron Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;
@@ -506,9 +506,9 @@ namespace BlueprintFactory {
 		// Create the material
 		Material mat;
 		mat.name        = "Icosahedron Material";
-		mat.ambient     = float4(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = float4(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = float4(1.0f, 1.0f, 1.0f, 20.0f);
+		mat.ambient     = f32_4(0.1f, 0.1f, 0.1f, 1.0f);
+		mat.diffuse     = f32_4(1.0f, 1.0f, 1.0f, 1.0f);
+		mat.specular    = f32_4(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
 		vector<Material> materials;

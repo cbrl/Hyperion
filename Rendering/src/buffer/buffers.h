@@ -21,11 +21,11 @@ struct MaterialBuffer {
 		, reflection_enabled(0) {
 	}
 
-	MaterialBuffer(const float4& ambient,
-	               const float4& diffuse,
-	               const float4& specular,
-	               const float4& reflect,
-	               const float4& emissive,
+	MaterialBuffer(const f32_4& ambient,
+	               const f32_4& diffuse,
+	               const f32_4& specular,
+	               const f32_4& reflect,
+	               const f32_4& emissive,
 	               const float optical_density,
 	               const float dissolve,
 	               const bool has_texture,
@@ -41,11 +41,11 @@ struct MaterialBuffer {
 		, reflection_enabled(reflection_enabled) {
 	}
 
-	float4 ambient;
-	float4 diffuse;
-	float4 specular;
-	float4 reflect;
-	float4 emissive;
+	f32_4 ambient;
+	f32_4 diffuse;
+	f32_4 specular;
+	f32_4 reflect;
+	f32_4 emissive;
 	float  optical_density;
 	float  dissolve;
 	u32    has_texture;
@@ -78,7 +78,7 @@ struct Fog {
 		, range(0.0f) {
 	}
 
-	Fog(const float4& color,
+	Fog(const f32_4& color,
 	    const float start,
 	    const float range)
 		: color(color)
@@ -86,7 +86,7 @@ struct Fog {
 		, range(range) {
 	}
 
-	float4 color;
+	f32_4 color;
 	float start;
 	float range;
 };
@@ -114,7 +114,7 @@ struct LightBuffer {
 	            const u32 shadowed_directional_lights,
 	            const u32 shadowed_point_lights,
 	            const u32 shadowed_spot_lights,
-	            const float4& fog_color,
+	            const f32_4& fog_color,
 	            const float fog_start,
 	            const float fog_range)
 		: num_directional_lights(directional_lights)
@@ -141,10 +141,10 @@ struct LightBuffer {
 	u32 num_shadow_spot_lights;
 	u32 pad1;
 
-	float4 fog_color;
+	f32_4 fog_color;
 	float  fog_start;
 	float  fog_range;
-	float2 pad2;
+	f32_2 pad2;
 };
 
 
@@ -157,10 +157,10 @@ struct DirectionalLightBuffer {
 		, pad(0.0f) {
 	}
 
-	DirectionalLightBuffer(const float4& ambient,
-	                       const float4& diffuse,
-	                       const float3& direction,
-	                       const float4& specular,
+	DirectionalLightBuffer(const f32_4& ambient,
+	                       const f32_4& diffuse,
+	                       const f32_3& direction,
+	                       const f32_4& specular,
 	                       CXMMATRIX world_to_proj)
 		: ambient_color(ambient)
 		, diffuse_color(diffuse)
@@ -170,10 +170,10 @@ struct DirectionalLightBuffer {
 		, world_to_projection(world_to_proj) {
 	}
 
-	float4 ambient_color;
-	float4 diffuse_color;
-	float4 specular; //specular.w is the specular power
-	float3 direction;
+	f32_4 ambient_color;
+	f32_4 diffuse_color;
+	f32_4 specular; //specular.w is the specular power
+	f32_3 direction;
 	float  pad;
 	XMMATRIX world_to_projection;
 };
@@ -190,12 +190,12 @@ struct PointLightBuffer {
 		, pad(0.0f) {
 	}
 
-	PointLightBuffer(const float4& ambient_color,
-	                 const float4& diffuse_color,
-	                 const float4& specular,
-	                 const float3& position,
+	PointLightBuffer(const f32_4& ambient_color,
+	                 const f32_4& diffuse_color,
+	                 const f32_4& specular,
+	                 const f32_3& position,
 	                 const float range,
-	                 const float3& attenuation)
+	                 const f32_3& attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)
@@ -205,12 +205,12 @@ struct PointLightBuffer {
 		, pad(0.0f) {
 	}
 
-	float4 ambient_color;
-	float4 diffuse_color;
-	float4 specular; //specular.w is the specular power
-	float3 position;
+	f32_4 ambient_color;
+	f32_4 diffuse_color;
+	f32_4 specular; //specular.w is the specular power
+	f32_3 position;
 	float  range;
-	float3 attenuation;
+	f32_3 attenuation;
 	float  pad;
 };
 
@@ -224,8 +224,8 @@ struct ShadowedPointLightBuffer {
 
 	PointLightBuffer light_buffer;
 	XMMATRIX world_to_light;
-	float2 projection_values;
-	float2 pad;
+	f32_2 projection_values;
+	f32_2 pad;
 };
 
 
@@ -242,15 +242,15 @@ struct SpotLightBuffer {
 		, attenuation(0.0f, 0.0f, 0.0f) {
 	}
 
-	SpotLightBuffer(const float4& ambient_color,
-	                const float4& diffuse_color,
-	                const float4& specular,
-	                const float3& position,
+	SpotLightBuffer(const f32_4& ambient_color,
+	                const f32_4& diffuse_color,
+	                const f32_4& specular,
+	                const f32_3& position,
 	                const float range,
-	                const float3& direction,
+	                const f32_3& direction,
 	                const float cos_umbra,
 	                const float cos_penumbra,
-	                const float3& attenuation)
+	                const f32_3& attenuation)
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)
@@ -262,15 +262,15 @@ struct SpotLightBuffer {
 		, attenuation(attenuation) {
 	}
 
-	float4 ambient_color;
-	float4 diffuse_color;
-	float4 specular; //specular.w is the specular power
-	float3 position;
+	f32_4 ambient_color;
+	f32_4 diffuse_color;
+	f32_4 specular; //specular.w is the specular power
+	f32_3 position;
 	float  range;
-	float3 direction;
+	f32_3 direction;
 	float  cos_umbra;
 	float  cos_penumbra;
-	float3 attenuation;
+	f32_3 attenuation;
 };
 
 

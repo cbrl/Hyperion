@@ -1,6 +1,6 @@
 #pragma once
 
-#include "directx/d3d11.h"
+#include "directx/directx_math.h"
 #include "datatypes/datatypes.h"
 #include "component/component.h"
 
@@ -63,8 +63,8 @@ public:
 		needs_update = true;
 	}
 
-	void move(const float3& units) {
-		translation += XMLoadFloat3(&units);
+	void move(const f32_3& units) {
+		translation += XMLoad(&units);
 		needs_update = true;
 	}
 
@@ -73,8 +73,8 @@ public:
 		needs_update = true;
 	}
 
-	void setPosition(const float3& position) {
-		translation = XMLoadFloat3(&position);
+	void setPosition(const f32_3& position) {
+		translation = XMLoad(&position);
 		needs_update = true;
 	}
 
@@ -103,8 +103,8 @@ public:
 		needs_update = true;
 	}
 
-	void rotate(const float3& units) {
-		rotation += XMLoadFloat3(&units);
+	void rotate(const f32_3& units) {
+		rotation += XMLoad(&units);
 		needs_update = true;
 	}
 
@@ -113,8 +113,8 @@ public:
 		needs_update = true;
 	}
 
-	void setRotation(const float3& rotation) {
-		this->rotation = XMLoadFloat3(&rotation);
+	void setRotation(const f32_3& rotation) {
+		this->rotation = XMLoad(&rotation);
 		needs_update = true;
 	}
 
@@ -143,8 +143,8 @@ public:
 		needs_update = true;
 	}
 
-	void scale(const float3& units) {
-		scaling *= XMLoadFloat3(&units);
+	void scale(const f32_3& units) {
+		scaling *= XMLoad(&units);
 		needs_update = true;
 	}
 
@@ -153,8 +153,8 @@ public:
 		needs_update = true;
 	}
 
-	void setScale(const float3& scale) {
-		scaling = XMLoadFloat3(&scale);
+	void setScale(const f32_3& scale) {
+		scaling = XMLoad(&scale);
 		needs_update = true;
 	}
 

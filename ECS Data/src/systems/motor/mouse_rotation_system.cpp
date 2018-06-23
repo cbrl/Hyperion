@@ -9,14 +9,14 @@ void MouseRotationSystem::update(const Engine& engine) {
 	auto& ecs_engine        = engine.getECS();
 	const auto& input       = engine.getInput();
 	const float dt          = static_cast<float>(engine.getTimer().deltaTime());
-	const int2  mouse_delta = input.getMouseDelta();
+	const i32_2  mouse_delta = input.getMouseDelta();
 
 	ecs_engine.forEachActive<MouseRotation>([&](MouseRotation& rotation) {
 
 		auto transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
 		if (!transform) return;
 
-		float3 rotate_units{ 0.0f, 0.0f, 0.0f };
+		f32_3 rotate_units{ 0.0f, 0.0f, 0.0f };
 
 		// Set x/y rotation with mouse data
 		rotate_units.x = static_cast<float>(mouse_delta.y) * rotation.sensitivity();

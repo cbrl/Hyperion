@@ -52,7 +52,7 @@ public:
 	// Speed
 	//----------------------------------------------------------------------------------
 
-	void setSpeeds(float3 speeds) {
+	void setSpeeds(f32_3 speeds) {
 		rotation_speeds = std::move(speeds);
 	}
 
@@ -69,7 +69,7 @@ public:
 	}
 
 	[[nodiscard]]
-	float3 speeds() const {
+	f32_3 speeds() const {
 		return rotation_speeds;
 	}
 
@@ -88,5 +88,5 @@ public:
 
 private:
 	u8     rotation_axis;
-	float3 rotation_speeds;
+	f32_3 rotation_speeds;
 };

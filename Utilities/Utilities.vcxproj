@@ -144,6 +144,8 @@
     <ClInclude Include="src\datatypes\vector_types.h" />
     <ClInclude Include="src\directx\d3d11.h" />
     <ClInclude Include="src\directx\directx_math.h" />
+    <ClInclude Include="src\directx\directx_math_wrapper.h" />
+    <ClInclude Include="src\directx\directx_math_extensions.h" />
     <ClInclude Include="src\directx\vertex_types.h" />
     <ClInclude Include="src\engine_util.h" />
     <ClInclude Include="src\fps\fps.h" />
@@ -172,7 +174,6 @@
     <ClCompile Include="src\sysmon\system_monitor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram.cd" />
     <None Include="src\memory\allocator\pool_allocator.tpp" />
     <None Include="src\memory\handle\handle_table.tpp" />
     <None Include="src\memory\resource_pool.tpp" />

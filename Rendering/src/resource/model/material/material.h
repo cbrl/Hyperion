@@ -41,15 +41,15 @@ struct Material final {
 	shared_ptr<Texture> map_bump;
 
 	// Ambient Color
-	float4 ambient;
+	f32_4 ambient;
 	// Diffuse Color
-	float4 diffuse;
+	f32_4 diffuse;
 	// Specular Color, w = spec exponent
-	float4 specular;
+	f32_4 specular;
 	// Reflective color
-	float4 reflect;
+	f32_4 reflect;
 	// Emissive Color
-	float4 emissive;
+	f32_4 emissive;
 
 	// Optical Density (index of refraction)
 	float optical_density;

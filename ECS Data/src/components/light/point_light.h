@@ -22,12 +22,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Ambient Color
 	//----------------------------------------------------------------------------------
-	void setAmbientColor(const float4& color) {
+	void setAmbientColor(const f32_4& color) {
 		this->ambient_color = color;
 	}
 
 	[[nodiscard]]
-	const float4& getAmbientColor() const {
+	const f32_4& getAmbientColor() const {
 		return ambient_color;
 	}
 
@@ -35,12 +35,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Diffuse Color
 	//----------------------------------------------------------------------------------
-	void setDiffuseColor(const float4& color) {
+	void setDiffuseColor(const f32_4& color) {
 		this->diffuse_color = color;
 	}
 
 	[[nodiscard]]
-	const float4& getDiffuseColor() const {
+	const f32_4& getDiffuseColor() const {
 		return diffuse_color;
 	}
 
@@ -48,12 +48,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Specular Color/Power
 	//----------------------------------------------------------------------------------
-	void setSpecular(const float4& spec) {
+	void setSpecular(const f32_4& spec) {
 		this->specular = spec;
 	}
 
 	[[nodiscard]]
-	const float4& getSpecular() const {
+	const f32_4& getSpecular() const {
 		return specular;
 	}
 
@@ -75,12 +75,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Attenuation
 	//----------------------------------------------------------------------------------
-	void setAttenuation(const float3& attenuation) {
+	void setAttenuation(const f32_3& attenuation) {
 		this->attenuation = attenuation;
 	}
 
 	[[nodiscard]]
-	const float3& getAttenuation() const {
+	const f32_3& getAttenuation() const {
 		return attenuation;
 	}
 
@@ -129,17 +129,17 @@ public:
 
 private:
 	void updateBoundingVolumes() {
-		aabb   = AABB(float3(-range, -range, -range), float3(range, range, range));
-		sphere = BoundingSphere(float3(0.0f, 0.0f, 0.0f), range);
+		aabb   = AABB(f32_3(-range, -range, -range), f32_3(range, range, range));
+		sphere = BoundingSphere(f32_3(0.0f, 0.0f, 0.0f), range);
 	}
 
 
 private:
 	// Lighting parameters
-	float4 ambient_color;
-	float4 diffuse_color;
-	float4 specular;
-	float3 attenuation;
+	f32_4 ambient_color;
+	f32_4 diffuse_color;
+	f32_4 specular;
+	f32_3 attenuation;
 
 	// Near clipping plane and range (far plane)
 	float near_plane;

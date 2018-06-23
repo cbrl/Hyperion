@@ -141,14 +141,20 @@
     <ClInclude Include="src\directx\d3d11.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
-    <ClInclude Include="src\directx\directx_math.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
     <ClInclude Include="src\math\math.h">
       <Filter>Header Files\math</Filter>
     </ClInclude>
     <ClInclude Include="src\timer\timer.h">
       <Filter>Header Files\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\directx_math_extensions.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\directx_math_wrapper.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\directx_math.h">
+      <Filter>Header Files\directx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +190,5 @@
     <None Include="src\timer\timer.tpp">
       <Filter>Source Files\timer</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

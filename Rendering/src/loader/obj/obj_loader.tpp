@@ -134,7 +134,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 		// Vertex
 		if (token.compare(ObjTokens::vertex) == 0) {
-			float3 position;
+			f32_3 position;
 			stream >> position.x >> position.y >> position.z;
 
 			if (rh_coord) {
@@ -146,7 +146,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 		// Normal
 		else if (token.compare(ObjTokens::normal) == 0) {
-			float3 normal;
+			f32_3 normal;
 			stream >> normal.x >> normal.y >> normal.z;
 
 			if (rh_coord) {
@@ -158,7 +158,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 		// Texture
 		else if (token.compare(ObjTokens::texture) == 0) {
-			float2 texCoord;
+			f32_2 texCoord;
 			stream >> texCoord.x >> texCoord.y;
 
 			if (rh_coord) {
@@ -429,7 +429,7 @@ void OBJLoader<VertexT>::readFace(wstring& line) {
 				vertex.position = vertex_positions[stoi(vert_parts[0]) - 1];
 				//Subtract 1 since arrays start at index 0
 
-				vertex.texCoord = float2(0.0f, 0.0f);
+				vertex.texCoord = f32_2(0.0f, 0.0f);
 
 				has_normal = false;
 
@@ -455,7 +455,7 @@ void OBJLoader<VertexT>::readFace(wstring& line) {
 
 				vertex.normal = vertex_normals[stoi(vert_parts[2]) - 1];
 
-				vertex.texCoord = float2(0.0f, 0.0f);
+				vertex.texCoord = f32_2(0.0f, 0.0f);
 
 
 				has_normal = true;
@@ -485,11 +485,14 @@ void OBJLoader<VertexT>::readFace(wstring& line) {
 
 	// Generate normals if the vertex type has a normal, but the file doesn't
 	if (!has_normal && VertexT::hasNormal()) {
-		const XMVECTOR a = XMLoadFloat3(&(verts[0].position - verts[1].position));
-		const XMVECTOR b = XMLoadFloat3(&(verts[2].position - verts[1].position));
+		const f32_3 p1 = verts[0].position - verts[1].position;
+		const f32_3 p2 = verts[2].position - verts[1].position;
+
+		const XMVECTOR a = XMLoad(&p1);
+		const XMVECTOR b = XMLoad(&p2);
 
 		for (size_t j = 0; j < verts.size(); ++j) {
-			XMStoreFloat3(&verts[j].normal, XMVector3Cross(a, b));
+			XMStore(&verts[j].normal, XMVector3Cross(a, b));
 		}
 	}
 
@@ -549,7 +552,7 @@ void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 
 	while (true) {
 		for (u32 i = 0; i < v_verts.size(); ++i) {
-			float3 prev;
+			f32_3 prev;
 			if (i == 0) {
 				prev = v_verts[v_verts.size() - 1].position;
 			}
@@ -557,9 +560,9 @@ void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 				prev = v_verts[i - 1].position;
 			}
 
-			float3 curr = v_verts[i].position;
+			f32_3 curr = v_verts[i].position;
 
-			float3 next;
+			f32_3 next;
 			if (i == v_verts.size() - 1) {
 				next = v_verts[0].position;
 			}
@@ -594,7 +597,7 @@ void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 						out_indices.push_back(j);
 				}
 
-				float3 temp;
+				f32_3 temp;
 				for (u32 j = 0; j < v_verts.size(); ++j) {
 					if (v_verts[j].position != prev &&
 					    v_verts[j].position != curr &&
@@ -620,10 +623,10 @@ void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 
 
 			// Ensure that the vertex isn't an interior vertex
-			const float3 v1     = prev - curr;
-			const float3 v2     = next - curr;
-			const XMVECTOR vec1 = XMLoadFloat3(&v1);
-			const XMVECTOR vec2 = XMLoadFloat3(&v2);
+			const f32_3 v1     = prev - curr;
+			const f32_3 v2     = next - curr;
+			const XMVECTOR vec1 = XMLoad(&v1);
+			const XMVECTOR vec2 = XMLoad(&v2);
 
 			float angle = XMVectorGetX(XMVector3AngleBetweenVectors(vec1, vec2));
 			angle       = XMConvertToDegrees(angle);

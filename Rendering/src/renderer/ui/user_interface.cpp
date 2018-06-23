@@ -307,12 +307,12 @@ void UserInterface::drawDetails(Transform& transform) const {
 	ImGui::Text("Transform");
 	ImGui::Separator();
 
-	float3 position;
-	float3 rotation;
-	float3 scale;
-	XMStoreFloat3(&position, transform.getPosition());
-	XMStoreFloat3(&rotation, transform.getRotation());
-	XMStoreFloat3(&scale, transform.getScale());
+	f32_3 position;
+	f32_3 rotation;
+	f32_3 scale;
+	XMStore(&position, transform.getPosition());
+	XMStore(&rotation, transform.getRotation());
+	XMStore(&scale, transform.getScale());
 
 	if (ImGui::DragFloat3("Position", position.data(), 0.05f, -FLT_MAX, FLT_MAX))
 		transform.setPosition(position);
@@ -331,7 +331,7 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 	ImGui::Separator();
 
 	auto& fog = camera.fog();
-	float4 color = fog.color;
+	f32_4 color = fog.color;
 	float  start = fog.start;
 	float  range = fog.range;
 
@@ -357,7 +357,7 @@ void UserInterface::drawDetails(OrthographicCamera& camera) const {
 	ImGui::Separator();
 
 	auto& fog = camera.fog();
-	float4 color = fog.color;
+	f32_4 color = fog.color;
 	float  start = fog.start;
 	float  range = fog.range;
 
@@ -616,7 +616,7 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Box", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float3 size = { 1.0f, 1.0f, 1.0f };
+		static f32_3 size = { 1.0f, 1.0f, 1.0f };
 		static bool   rhcoords = false;
 		static bool   invertn = false;
 

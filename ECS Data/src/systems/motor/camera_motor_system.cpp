@@ -33,11 +33,11 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movem
 
 	const auto& input = engine.getInput();
 
-	const int2  mouse_delta = input.getMouseDelta();
+	const i32_2  mouse_delta = input.getMouseDelta();
 	const float dt          = static_cast<float>(engine.getTimer().deltaTime());
 
 	float  roll_units = 0.0f;
-	float3 move_units{ 0.0f, 0.0f, 0.0f };
+	f32_3 move_units{ 0.0f, 0.0f, 0.0f };
 
 
 	//----------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movem
 	}
 
 	if (roll_units) {
-		transform->rotate(float3{ 0.0f, 0.0f, roll_units });
+		transform->rotate(f32_3{ 0.0f, 0.0f, roll_units });
 	}
 
 
@@ -96,10 +96,10 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movem
 }
 
 
-void CameraMotorSystem::updateMovement(CameraMovement* mv, float3 units) const {
+void CameraMotorSystem::updateMovement(CameraMovement* mv, f32_3 units) const {
 
 	// Get the velocity
-	float3 velocity = mv->getVelocity();
+	f32_3 velocity = mv->getVelocity();
 
 	//----------------------------------------------------------------------------------
 	// X movement
@@ -156,8 +156,8 @@ void CameraMotorSystem::updateMovement(CameraMovement* mv, float3 units) const {
 
 void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, float dt) const {
 
-	const float3 velocity = mv->getVelocity();
-	XMVECTOR velocity_vec = XMLoadFloat3(&velocity);
+	const f32_3 velocity = mv->getVelocity();
+	XMVECTOR velocity_vec = XMLoad(&velocity);
 	const float velocity_mag = XMVectorGetX(XMVector3Length(velocity_vec));
 
 	// Limit veloctiy to maximum
@@ -188,7 +188,7 @@ void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, float dt)
 void CameraMotorSystem::decelerate(CameraMovement* mv, float delta_time) const {
 
 	float decel_amount;
-	float3 velocity = mv->getVelocity();
+	f32_3 velocity = mv->getVelocity();
 
 	// Decelerate in each direction if not moving in that
 	// direction and the current velocity isn't 0.

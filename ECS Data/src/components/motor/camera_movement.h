@@ -1,7 +1,7 @@
 #pragma once
 
 #include "component/component.h"
-#include "input.h"
+#include "directx/directx_math.h"
 
 
 class CameraMovement final : public Component<CameraMovement> {
@@ -25,7 +25,7 @@ public:
 	// Getters
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	float3 getVelocity() const {
+	f32_3 getVelocity() const {
 		return velocity;
 	}
 
@@ -69,8 +69,8 @@ public:
 	// Setters
 	//----------------------------------------------------------------------------------
 
-	void setVelocity(const float3& vel) { velocity = vel; }
-	void XM_CALLCONV setVelocity(FXMVECTOR vel) { XMStoreFloat3(&velocity, vel); }
+	void setVelocity(const f32_3& vel) { velocity = vel; }
+	void XM_CALLCONV setVelocity(FXMVECTOR vel) { XMStore(&velocity, vel); }
 
 	void setAcceleration(float accel) { acceleration = accel; }
 	void setDeceleration(float decel) { deceleration = decel; }
@@ -85,7 +85,7 @@ public:
 
 private:
 	// Position, veloctiy, acceleration (units per second)
-	float3 velocity;
+	f32_3 velocity;
 	float acceleration;
 	float deceleration;
 	float max_velocity;

@@ -1,35 +1,42 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "datatypes/datatypes.h"
-
-using namespace DirectX;
+#include "datatypes/vector_types.h"
 
 
 struct VertexPosition {
-	VertexPosition() = default;
+	constexpr VertexPosition() noexcept = default;
+	constexpr VertexPosition(const VertexPosition& vertex) noexcept = default;
+	constexpr VertexPosition(VertexPosition&& vertex) noexcept = default;
 
-	VertexPosition(const float3& position)
+	constexpr VertexPosition(const f32_3& position) noexcept
 		: position(position) {
 	}
 
-	bool operator==(const VertexPosition& compare) {
+	~VertexPosition() = default;
+
+	constexpr VertexPosition& operator=(const VertexPosition& vertex) noexcept = default;
+	constexpr VertexPosition& operator=(VertexPosition&& vertex) noexcept = default;
+
+	[[nodiscard]]
+	constexpr bool operator==(const VertexPosition& compare) noexcept {
 		return (this->position == compare.position);
 	}
 
-	bool operator!=(const VertexPosition& compare) {
+	[[nodiscard]]
+	constexpr bool operator!=(const VertexPosition& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	static constexpr bool hasNormal() { return false; }
-	static constexpr bool hasColor() { return false; }
-	static constexpr bool hasTexture() { return false; }
+	static constexpr bool hasNormal() noexcept { return false; }
+	static constexpr bool hasColor() noexcept { return false; }
+	static constexpr bool hasTexture() noexcept { return false; }
 
 
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	float3 position;
+	f32_3 position;
 
 	static const u32 InputElementCount = 1;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
@@ -37,32 +44,41 @@ struct VertexPosition {
 
 
 struct VertexPositionColor {
-	VertexPositionColor() = default;
+	constexpr VertexPositionColor() noexcept = default;
+	constexpr VertexPositionColor(const VertexPositionColor& vertex) noexcept = default;
+	constexpr VertexPositionColor(VertexPositionColor&& vertex) noexcept = default;
 
-	VertexPositionColor(const float3& position, const float4& color)
+	constexpr VertexPositionColor(const f32_3& position, const f32_4& color) noexcept
 		: position(position)
 		, color(color) {
 	}
 
-	bool operator==(const VertexPositionColor& compare) {
+	~VertexPositionColor() = default;
+
+	constexpr VertexPositionColor& operator=(const VertexPositionColor& vertex) noexcept = default;
+	constexpr VertexPositionColor& operator=(VertexPositionColor&& vertex) noexcept = default;
+
+	[[nodiscard]]
+	constexpr bool operator==(const VertexPositionColor& compare) noexcept {
 		return (this->position == compare.position &&
-		        this->color == compare.color);
+		        this->color    == compare.color);
 	}
 
-	bool operator!=(const VertexPositionColor& compare) {
+	[[nodiscard]]
+	constexpr bool operator!=(const VertexPositionColor& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	static constexpr bool hasNormal() { return false; }
-	static constexpr bool hasColor() { return true; }
-	static constexpr bool hasTexture() { return false; }
+	static constexpr bool hasNormal() noexcept { return false; }
+	static constexpr bool hasColor() noexcept { return true; }
+	static constexpr bool hasTexture() noexcept { return false; }
 
 
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	float3 position;
-	float4 color;
+	f32_3 position;
+	f32_4 color;
 
 	static const u32 InputElementCount = 2;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
@@ -70,32 +86,41 @@ struct VertexPositionColor {
 
 
 struct VertexPositionTexture {
-	VertexPositionTexture() = default;
+	constexpr VertexPositionTexture() noexcept = default;
+	constexpr VertexPositionTexture(const VertexPositionTexture& vertex) noexcept = default;
+	constexpr VertexPositionTexture(VertexPositionTexture&& vertex) noexcept = default;
 
-	VertexPositionTexture(const float3& position, const float2& texCoord)
+	constexpr VertexPositionTexture(const f32_3& position, const f32_2& texCoord) noexcept
 		: position(position)
 		, texCoord(texCoord) {
 	}
 
-	bool operator==(const VertexPositionTexture& compare) {
+	~VertexPositionTexture() = default;
+
+	constexpr VertexPositionTexture& operator=(const VertexPositionTexture& vertex) noexcept = default;
+	constexpr VertexPositionTexture& operator=(VertexPositionTexture&& vertex) noexcept = default;
+
+	[[nodiscard]]
+	constexpr bool operator==(const VertexPositionTexture& compare) noexcept {
 		return (this->position == compare.position &&
 		        this->texCoord == compare.texCoord);
 	}
 
-	bool operator!=(const VertexPositionTexture& compare) {
+	[[nodiscard]]
+	constexpr bool operator!=(const VertexPositionTexture& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	static constexpr bool hasNormal() { return false; }
-	static constexpr bool hasColor() { return false; }
-	static constexpr bool hasTexture() { return true; }
+	static constexpr bool hasNormal() noexcept { return false; }
+	static constexpr bool hasColor() noexcept { return false; }
+	static constexpr bool hasTexture() noexcept { return true; }
 
 
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	float3 position;
-	float2 texCoord;
+	f32_3 position;
+	f32_2 texCoord;
 
 	static const u32 InputElementCount = 2;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
@@ -103,35 +128,44 @@ struct VertexPositionTexture {
 
 
 struct VertexPositionDualTexture {
-	VertexPositionDualTexture() = default;
+	constexpr VertexPositionDualTexture() noexcept = default;
+	constexpr VertexPositionDualTexture(const VertexPositionDualTexture& vertex) noexcept = default;
+	constexpr VertexPositionDualTexture(VertexPositionDualTexture&& vertex) noexcept = default;
 
-	VertexPositionDualTexture(const float3& position, const float2& texCoord0, const float2& texCoord1)
+	constexpr VertexPositionDualTexture(const f32_3& position, const f32_2& texCoord0, const f32_2& texCoord1) noexcept
 		: position(position)
 		, texCoord0(texCoord0)
 		, texCoord1(texCoord1) {
 	}
 
-	bool operator==(const VertexPositionDualTexture& compare) {
-		return (this->position == compare.position &&
+	~VertexPositionDualTexture() = default;
+
+	constexpr VertexPositionDualTexture& operator=(const VertexPositionDualTexture& vertex) noexcept = default;
+	constexpr VertexPositionDualTexture& operator=(VertexPositionDualTexture&& vertex) noexcept = default;
+
+	[[nodiscard]]
+	constexpr bool operator==(const VertexPositionDualTexture& compare) noexcept {
+		return (this->position  == compare.position &&
 		        this->texCoord0 == compare.texCoord0 &&
 		        this->texCoord1 == compare.texCoord1);
 	}
 
-	bool operator!=(const VertexPositionDualTexture& compare) {
+	[[nodiscard]]
+	constexpr bool operator!=(const VertexPositionDualTexture& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	static constexpr bool hasNormal() { return false; }
-	static constexpr bool hasColor() { return false; }
-	static constexpr bool hasTexture() { return true; }
+	static constexpr bool hasNormal() noexcept { return false; }
+	static constexpr bool hasColor() noexcept { return false; }
+	static constexpr bool hasTexture() noexcept { return true; }
 
 
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	float3 position;
-	float2 texCoord0;
-	float2 texCoord1;
+	f32_3 position;
+	f32_2 texCoord0;
+	f32_2 texCoord1;
 
 	static const u32 InputElementCount = 3;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
@@ -139,32 +173,41 @@ struct VertexPositionDualTexture {
 
 
 struct VertexPositionNormal {
-	VertexPositionNormal() = default;
+	constexpr VertexPositionNormal() noexcept = default;
+	constexpr VertexPositionNormal(const VertexPositionNormal& vertex) noexcept = default;
+	constexpr VertexPositionNormal(VertexPositionNormal&& vertex) noexcept = default;
 
-	VertexPositionNormal(const float3& position, const float3& normal)
+	constexpr VertexPositionNormal(const f32_3& position, const f32_3& normal) noexcept
 		: position(position)
 		, normal(normal) {
 	}
 
-	bool operator==(const VertexPositionNormal& compare) {
+	~VertexPositionNormal() = default;
+
+	constexpr VertexPositionNormal& operator=(const VertexPositionNormal& vertex) noexcept = default;
+	constexpr VertexPositionNormal& operator=(VertexPositionNormal&& vertex) noexcept = default;
+
+	[[nodiscard]]
+	constexpr bool operator==(const VertexPositionNormal& compare) noexcept {
 		return (this->position == compare.position &&
-		        this->normal == compare.normal);
+		        this->normal   == compare.normal);
 	}
 
-	bool operator!=(const VertexPositionNormal& compare) {
+	[[nodiscard]]
+	constexpr bool operator!=(const VertexPositionNormal& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	static constexpr bool hasNormal() { return true; }
-	static constexpr bool hasColor() { return false; }
-	static constexpr bool hasTexture() { return false; }
+	static constexpr bool hasNormal() noexcept { return true; }
+	static constexpr bool hasColor() noexcept { return false; }
+	static constexpr bool hasTexture() noexcept { return false; }
 
 
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	float3 position;
-	float3 normal;
+	f32_3 position;
+	f32_3 normal;
 
 	static const u32 InputElementCount = 2;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
@@ -172,35 +215,44 @@ struct VertexPositionNormal {
 
 
 struct VertexPositionNormalColor {
-	VertexPositionNormalColor() = default;
+	constexpr VertexPositionNormalColor() noexcept = default;
+	constexpr VertexPositionNormalColor(const VertexPositionNormalColor& vertex) noexcept = default;
+	constexpr VertexPositionNormalColor(VertexPositionNormalColor&& vertex) noexcept = default;
 
-	VertexPositionNormalColor(const float3& position, const float3& normal, const float4& color)
+	constexpr VertexPositionNormalColor(const f32_3& position, const f32_3& normal, const f32_4& color) noexcept
 		: position(position)
 		, normal(normal)
 		, color(color) {
 	}
 
-	bool operator==(const VertexPositionNormalColor& compare) {
+	~VertexPositionNormalColor() = default;
+
+	constexpr VertexPositionNormalColor& operator=(const VertexPositionNormalColor& vertex) noexcept = default;
+	constexpr VertexPositionNormalColor& operator=(VertexPositionNormalColor&& vertex) noexcept = default;
+
+	[[nodiscard]]
+	constexpr bool operator==(const VertexPositionNormalColor& compare) noexcept {
 		return (this->position == compare.position &&
-		        this->normal == compare.normal &&
-		        this->color == compare.color);
+		        this->normal   == compare.normal &&
+		        this->color    == compare.color);
 	}
 
-	bool operator!=(const VertexPositionNormalColor& compare) {
+	[[nodiscard]]
+	constexpr bool operator!=(const VertexPositionNormalColor& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	static constexpr bool hasNormal() { return true; }
-	static constexpr bool hasColor() { return true; }
-	static constexpr bool hasTexture() { return false; }
+	static constexpr bool hasNormal() noexcept { return true; }
+	static constexpr bool hasColor() noexcept { return true; }
+	static constexpr bool hasTexture() noexcept { return false; }
 
 
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	float3 position;
-	float3 normal;
-	float4 color;
+	f32_3 position;
+	f32_3 normal;
+	f32_4 color;
 
 	static const u32 InputElementCount = 3;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];
@@ -208,35 +260,44 @@ struct VertexPositionNormalColor {
 
 
 struct VertexPositionNormalTexture {
-	VertexPositionNormalTexture() = default;
+	constexpr VertexPositionNormalTexture() noexcept = default;
+	constexpr VertexPositionNormalTexture(const VertexPositionNormalTexture& vertex) noexcept = default;
+	constexpr VertexPositionNormalTexture(VertexPositionNormalTexture&& vertex) noexcept = default;
 
-	VertexPositionNormalTexture(const float3& position, const float3& normal, const float2& texCoord)
+	constexpr VertexPositionNormalTexture(const f32_3& position, const f32_3& normal, const f32_2& texCoord) noexcept
 		: position(position)
 		, normal(normal)
 		, texCoord(texCoord) {
 	}
 
-	bool operator==(const VertexPositionNormalTexture& compare) {
+	~VertexPositionNormalTexture() = default;
+
+	constexpr VertexPositionNormalTexture& operator=(const VertexPositionNormalTexture& vertex) noexcept = default;
+	constexpr VertexPositionNormalTexture& operator=(VertexPositionNormalTexture&& vertex) noexcept = default;
+
+	[[nodiscard]]
+	constexpr bool operator==(const VertexPositionNormalTexture& compare) noexcept {
 		return (this->position == compare.position &&
-		        this->normal == compare.normal &&
+		        this->normal   == compare.normal &&
 		        this->texCoord == compare.texCoord);
 	}
 
-	bool operator!=(const VertexPositionNormalTexture& compare) {
+	[[nodiscard]]
+	constexpr bool operator!=(const VertexPositionNormalTexture& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	static constexpr bool hasNormal() { return true; }
-	static constexpr bool hasColor() { return false; }
-	static constexpr bool hasTexture() { return true; }
+	static constexpr bool hasNormal() noexcept { return true; }
+	static constexpr bool hasColor() noexcept { return false; }
+	static constexpr bool hasTexture() noexcept { return true; }
 
 
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	float3 position;
-	float3 normal;
-	float2 texCoord;
+	f32_3 position;
+	f32_3 normal;
+	f32_2 texCoord;
 
 	static const u32 InputElementCount = 3;
 	static const D3D11_INPUT_ELEMENT_DESC InputElements[InputElementCount];

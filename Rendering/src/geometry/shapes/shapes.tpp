@@ -42,7 +42,7 @@ namespace Shapes {
 
 		if constexpr (VertexT::hasTexture()) {
 			for (auto it = vertices.begin(); it != vertices.end(); ++it) {
-				float2 texCoord = it->texCoord;
+				f32_2 texCoord = it->texCoord;
 				texCoord.x = 1.0f - texCoord.x;
 
 				it->texCoord = texCoord;
@@ -56,7 +56,7 @@ namespace Shapes {
 	void InvertNormals(vector<VertexT>& vertices) {
 		if constexpr (VertexT::hasNormal()) {
 			for (auto it = vertices.begin(); it != vertices.end(); ++it) {
-				float3 normal = it->normal;
+				f32_3 normal = it->normal;
 				normal.x = -normal.x;
 				normal.y = -normal.y;
 				normal.z = -normal.z;
@@ -72,11 +72,11 @@ namespace Shapes {
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
 	void ComputeCube(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords, bool invertn) {
-		ComputeBox(vertices, indices, float3(size, size, size), rhcoords, invertn);
+		ComputeBox(vertices, indices, f32_3(size, size, size), rhcoords, invertn);
 	}
 
 	template<typename VertexT>
-	void ComputeBox(vector<VertexT>& vertices, vector<u32>& indices, const float3& size, bool rhcoords, bool invertn) {
+	void ComputeBox(vector<VertexT>& vertices, vector<u32>& indices, const f32_3& size, bool rhcoords, bool invertn) {
 		vertices.clear();
 		indices.clear();
 
@@ -101,7 +101,7 @@ namespace Shapes {
 			{{{0, 0, 0, 0}}},
 		};
 
-		XMVECTOR tsize = XMLoadFloat3(&size);
+		XMVECTOR tsize = XMLoad(&size);
 		tsize = XMVectorDivide(tsize, g_XMTwo);
 
 		// Create each face in turn.
@@ -127,23 +127,23 @@ namespace Shapes {
 			// Four vertices per face.
 			vertices.resize(vertices.size() + 4);
 
-			XMStoreFloat3(&vertices.rbegin()[3].position, (normal - side1 - side2) * tsize);
-			XMStoreFloat3(&vertices.rbegin()[2].position, (normal - side1 + side2) * tsize);
-			XMStoreFloat3(&vertices.rbegin()[1].position, (normal + side1 + side2) * tsize);
-			XMStoreFloat3(&vertices.rbegin()[0].position, (normal + side1 - side2) * tsize);
+			XMStore(&vertices.rbegin()[3].position, (normal - side1 - side2) * tsize);
+			XMStore(&vertices.rbegin()[2].position, (normal - side1 + side2) * tsize);
+			XMStore(&vertices.rbegin()[1].position, (normal + side1 + side2) * tsize);
+			XMStore(&vertices.rbegin()[0].position, (normal + side1 - side2) * tsize);
 
 			if constexpr (VertexT::hasNormal()) {
-				XMStoreFloat3(&vertices.rbegin()[3].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+				XMStore(&vertices.rbegin()[3].normal, normal);
+				XMStore(&vertices.rbegin()[2].normal, normal);
+				XMStore(&vertices.rbegin()[1].normal, normal);
+				XMStore(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::hasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[3].texCoord, texCoords[0]);
-				XMStoreFloat2(&vertices.rbegin()[2].texCoord, texCoords[1]);
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, texCoords[2]);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoords[3]);
+				XMStore(&vertices.rbegin()[3].texCoord, texCoords[0]);
+				XMStore(&vertices.rbegin()[2].texCoord, texCoords[1]);
+				XMStore(&vertices.rbegin()[1].texCoord, texCoords[2]);
+				XMStore(&vertices.rbegin()[0].texCoord, texCoords[3]);
 			}
 		}
 
@@ -202,11 +202,11 @@ namespace Shapes {
 				const XMVECTOR texCoord = XMVectorSet(u, v, 0, 0);
 
 				vertices.push_back(VertexT());
-				XMStoreFloat3(&vertices.back().position, normal * radius);
+				XMStore(&vertices.back().position, normal * radius);
 				if constexpr (VertexT::hasNormal())
-					XMStoreFloat3(&vertices.back().normal, normal);
+					XMStore(&vertices.back().normal, normal);
 				if constexpr (VertexT::hasTexture())
-					XMStoreFloat2(&vertices.back().texCoord, texCoord);
+					XMStore(&vertices.back().texCoord, texCoord);
 			}
 		}
 
@@ -265,15 +265,15 @@ namespace Shapes {
 		typedef std::map<UndirectedEdge, u32> EdgeSubdivisionMap;
 
 
-		static const float3 OctahedronVertices[] =
+		static const f32_3 OctahedronVertices[] =
 		{
 			// when looking down the negative z-axis (into the screen)
-			float3(0, 1, 0), // 0 top
-			float3(0, 0, -1), // 1 front
-			float3(1, 0, 0), // 2 right
-			float3(0, 0, 1), // 3 back
-			float3(-1, 0, 0), // 4 left
-			float3(0, -1, 0), // 5 bottom
+			f32_3(0, 1, 0), // 0 top
+			f32_3(0, 0, -1), // 1 front
+			f32_3(1, 0, 0), // 2 right
+			f32_3(0, 0, 1), // 3 back
+			f32_3(-1, 0, 0), // 4 left
+			f32_3(0, -1, 0), // 5 bottom
 		};
 		static const u32 OctahedronIndices[] =
 		{
@@ -291,7 +291,7 @@ namespace Shapes {
 
 		// Start with an octahedron; copy the data into the vertex/index collection.
 
-		std::vector<float3> vertexPositions(std::begin(OctahedronVertices), std::end(OctahedronVertices));
+		std::vector<f32_3> vertexPositions(std::begin(OctahedronVertices), std::end(OctahedronVertices));
 
 		indices.insert(indices.begin(), std::begin(OctahedronIndices), std::end(OctahedronIndices));
 
@@ -321,15 +321,15 @@ namespace Shapes {
 				u32 iv2 = indices[iTriangle * 3 + 2];
 
 				// Get the new vertices
-				float3 v01; // vertex on the midpoint of v0 and v1
-				float3 v12; // ditto v1 and v2
-				float3 v20; // ditto v2 and v0
+				f32_3 v01; // vertex on the midpoint of v0 and v1
+				f32_3 v12; // ditto v1 and v2
+				f32_3 v20; // ditto v2 and v0
 				u32 iv01; // index of v01
 				u32 iv12; // index of v12
 				u32 iv20; // index of v20
 
 				// Function that, when given the index of two vertices, creates a new vertex at the midpoint of those vertices.
-				auto divideEdge = [&](u32 i0, u32 i1, float3& outVertex, u32& outIndex) {
+				auto divideEdge = [&](u32 i0, u32 i1, f32_3& outVertex, u32& outIndex) {
 					const UndirectedEdge edge = makeUndirectedEdge(i0, i1);
 
 					// Check to see if we've already generated this vertex
@@ -343,11 +343,11 @@ namespace Shapes {
 						// Haven't generated this vertex before: so add it now
 
 						// outVertex = (vertices[i0] + vertices[i1]) / 2
-						XMStoreFloat3(
+						XMStore(
 						              &outVertex,
 						              XMVectorScale(
-						                            XMVectorAdd(XMLoadFloat3(&vertexPositions[i0]),
-						                                        XMLoadFloat3(&vertexPositions[i1])),
+						                            XMVectorAdd(XMLoad(&vertexPositions[i0]),
+						                                        XMLoad(&vertexPositions[i1])),
 						                            0.5f
 						                           )
 						             );
@@ -392,11 +392,11 @@ namespace Shapes {
 		for (auto it = vertexPositions.begin(); it != vertexPositions.end(); ++it) {
 			auto vertexValue = *it;
 
-			const auto normal = XMVector3Normalize(XMLoadFloat3(&vertexValue));
+			const auto normal = XMVector3Normalize(XMLoad(&vertexValue));
 			const auto pos = XMVectorScale(normal, radius);
 
-			float3 normalFloat3;
-			XMStoreFloat3(&normalFloat3, normal);
+			f32_3 normalFloat3;
+			XMStore(&normalFloat3, normal);
 
 			// calculate texture coordinates for this vertex
 			const float longitude = atan2(normalFloat3.x, -normalFloat3.z);
@@ -408,11 +408,11 @@ namespace Shapes {
 			const auto texcoord = XMVectorSet(1.0f - u, v, 0.0f, 0.0f);
 
 			vertices.push_back(VertexT());
-			XMStoreFloat3(&vertices.back().position, pos);
+			XMStore(&vertices.back().position, pos);
 			if constexpr (VertexT::hasNormal())
-				XMStoreFloat3(&vertices.back().normal, normal);
+				XMStore(&vertices.back().normal, normal);
 			if constexpr (VertexT::hasTexture())
-				XMStoreFloat2(&vertices.back().texCoord, texcoord);
+				XMStore(&vertices.back().texCoord, texcoord);
 		}
 
 		// There are a couple of fixes to do. One is a texture coordinate wraparound fixup. At some point, there will be
@@ -623,11 +623,11 @@ namespace Shapes {
 				                                        g_XMOneHalf);
 
 				vertices.push_back(VertexT());
-				XMStoreFloat3(&vertices.back().position, position);
+				XMStore(&vertices.back().position, position);
 				if constexpr (VertexT::hasNormal())
-					XMStoreFloat3(&vertices.back().normal, normal);
+					XMStore(&vertices.back().normal, normal);
 				if constexpr (VertexT::hasTexture())
-					XMStoreFloat2(&vertices.back().texCoord, texCoord);
+					XMStore(&vertices.back().texCoord, texCoord);
 			}
 		}
 	}
@@ -661,21 +661,21 @@ namespace Shapes {
 
 			float u = static_cast<float>(i) / tessellation;
 
-			const XMVECTOR texCoord = XMLoadFloat(&u);
+			const XMVECTOR texCoord = XMLoad(&u);
 
 			vertices.resize(vertices.size() + 2);
 
-			XMStoreFloat3(&vertices.rbegin()[1].position, sideOffset + topOffset);
-			XMStoreFloat3(&vertices.rbegin()[0].position, sideOffset - topOffset);
+			XMStore(&vertices.rbegin()[1].position, sideOffset + topOffset);
+			XMStore(&vertices.rbegin()[0].position, sideOffset - topOffset);
 
 			if constexpr (VertexT::hasNormal()) {
-				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+				XMStore(&vertices.rbegin()[1].normal, normal);
+				XMStore(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::hasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, texCoord);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoord + g_XMIdentityR1);
+				XMStore(&vertices.rbegin()[1].texCoord, texCoord);
+				XMStore(&vertices.rbegin()[0].texCoord, texCoord + g_XMIdentityR1);
 			}
 
 
@@ -727,7 +727,7 @@ namespace Shapes {
 
 			float u = static_cast<float>(i) / tessellation;
 
-			const XMVECTOR texCoord = XMLoadFloat(&u);
+			const XMVECTOR texCoord = XMLoad(&u);
 
 			const XMVECTOR pt = sideOffset - topOffset;
 
@@ -737,17 +737,17 @@ namespace Shapes {
 			// Duplicate the top vertex for distinct normals
 			vertices.resize(vertices.size() + 2);
 
-			XMStoreFloat3(&vertices.rbegin()[1].position, topOffset);
-			XMStoreFloat3(&vertices.rbegin()[0].position, pt);
+			XMStore(&vertices.rbegin()[1].position, topOffset);
+			XMStore(&vertices.rbegin()[0].position, pt);
 
 			if constexpr (VertexT::hasNormal()) {
-				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+				XMStore(&vertices.rbegin()[1].normal, normal);
+				XMStore(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::hasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMZero);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoord + g_XMIdentityR1);
+				XMStore(&vertices.rbegin()[1].texCoord, g_XMZero);
+				XMStore(&vertices.rbegin()[0].texCoord, texCoord + g_XMIdentityR1);
 			}
 
 			index_push_back(indices, i * 2);
@@ -810,11 +810,11 @@ namespace Shapes {
 				normal = XMVector3TransformNormal(normal, transform);
 
 				vertices.push_back(VertexT());
-				XMStoreFloat3(&vertices.back().position, position);
+				XMStore(&vertices.back().position, position);
 				if constexpr (VertexT::hasNormal())
-					XMStoreFloat3(&vertices.back().normal, normal);
+					XMStore(&vertices.back().normal, normal);
 				if constexpr (VertexT::hasTexture())
-					XMStoreFloat2(&vertices.back().texCoord, texCoord);
+					XMStore(&vertices.back().texCoord, texCoord);
 
 				// And create indices for two triangles.
 				const size_t nextI = (i + 1) % stride;
@@ -878,24 +878,24 @@ namespace Shapes {
 			vertices.resize(vertices.size() + 3);
 
 			XMVECTOR position = XMVectorScale(verts[v0], size);
-			XMStoreFloat3(&vertices.rbegin()[2].position, position);
+			XMStore(&vertices.rbegin()[2].position, position);
 
 			position = XMVectorScale(verts[v1], size);
-			XMStoreFloat3(&vertices.rbegin()[1].position, position);
+			XMStore(&vertices.rbegin()[1].position, position);
 
 			position = XMVectorScale(verts[v2], size);
-			XMStoreFloat3(&vertices.rbegin()[0].position, position);
+			XMStore(&vertices.rbegin()[0].position, position);
 
 			if constexpr (VertexT::hasNormal()) {
-				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+				XMStore(&vertices.rbegin()[2].normal, normal);
+				XMStore(&vertices.rbegin()[1].normal, normal);
+				XMStore(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::hasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[2].texCoord, g_XMZero);
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
+				XMStore(&vertices.rbegin()[2].texCoord, g_XMZero);
+				XMStore(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
+				XMStore(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
 			}
 		}
 
@@ -956,24 +956,24 @@ namespace Shapes {
 			vertices.resize(vertices.size() + 3);
 
 			XMVECTOR position = XMVectorScale(verts[v0], size);
-			XMStoreFloat3(&vertices.rbegin()[2].position, position);
+			XMStore(&vertices.rbegin()[2].position, position);
 
 			position = XMVectorScale(verts[v1], size);
-			XMStoreFloat3(&vertices.rbegin()[1].position, position);
+			XMStore(&vertices.rbegin()[1].position, position);
 
 			position = XMVectorScale(verts[v2], size);
-			XMStoreFloat3(&vertices.rbegin()[0].position, position);
+			XMStore(&vertices.rbegin()[0].position, position);
 
 			if constexpr (VertexT::hasNormal()) {
-				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+				XMStore(&vertices.rbegin()[2].normal, normal);
+				XMStore(&vertices.rbegin()[1].normal, normal);
+				XMStore(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::hasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[2].texCoord, g_XMZero);
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
+				XMStore(&vertices.rbegin()[2].texCoord, g_XMZero);
+				XMStore(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
+				XMStore(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
 			}
 		}
 
@@ -1093,34 +1093,34 @@ namespace Shapes {
 			vertices.resize(vertices.size() + 5);
 
 			XMVECTOR position = XMVectorScale(verts[v0], size);
-			XMStoreFloat3(&vertices.rbegin()[4].position, position);
+			XMStore(&vertices.rbegin()[4].position, position);
 
 			position = XMVectorScale(verts[v1], size);
-			XMStoreFloat3(&vertices.rbegin()[3].position, position);
+			XMStore(&vertices.rbegin()[3].position, position);
 
 			position = XMVectorScale(verts[v2], size);
-			XMStoreFloat3(&vertices.rbegin()[2].position, position);
+			XMStore(&vertices.rbegin()[2].position, position);
 
 			position = XMVectorScale(verts[v3], size);
-			XMStoreFloat3(&vertices.rbegin()[1].position, position);
+			XMStore(&vertices.rbegin()[1].position, position);
 
 			position = XMVectorScale(verts[v4], size);
-			XMStoreFloat3(&vertices.rbegin()[0].position, position);
+			XMStore(&vertices.rbegin()[0].position, position);
 
 			if constexpr (VertexT::hasNormal()) {
-				XMStoreFloat3(&vertices.rbegin()[4].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[3].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+				XMStore(&vertices.rbegin()[4].normal, normal);
+				XMStore(&vertices.rbegin()[3].normal, normal);
+				XMStore(&vertices.rbegin()[2].normal, normal);
+				XMStore(&vertices.rbegin()[1].normal, normal);
+				XMStore(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::hasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[4].texCoord, texCoords[textureIndex[t][0]]);
-				XMStoreFloat2(&vertices.rbegin()[3].texCoord, texCoords[textureIndex[t][1]]);
-				XMStoreFloat2(&vertices.rbegin()[2].texCoord, texCoords[textureIndex[t][2]]);
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, texCoords[textureIndex[t][3]]);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, texCoords[textureIndex[t][4]]);
+				XMStore(&vertices.rbegin()[4].texCoord, texCoords[textureIndex[t][0]]);
+				XMStore(&vertices.rbegin()[3].texCoord, texCoords[textureIndex[t][1]]);
+				XMStore(&vertices.rbegin()[2].texCoord, texCoords[textureIndex[t][2]]);
+				XMStore(&vertices.rbegin()[1].texCoord, texCoords[textureIndex[t][3]]);
+				XMStore(&vertices.rbegin()[0].texCoord, texCoords[textureIndex[t][4]]);
 			}
 		}
 
@@ -1202,24 +1202,24 @@ namespace Shapes {
 			vertices.resize(vertices.size() + 3);
 
 			XMVECTOR position = XMVectorScale(verts[v0], size);
-			XMStoreFloat3(&vertices.rbegin()[2].position, position);
+			XMStore(&vertices.rbegin()[2].position, position);
 
 			position = XMVectorScale(verts[v1], size);
-			XMStoreFloat3(&vertices.rbegin()[1].position, position);
+			XMStore(&vertices.rbegin()[1].position, position);
 
 			position = XMVectorScale(verts[v2], size);
-			XMStoreFloat3(&vertices.rbegin()[0].position, position);
+			XMStore(&vertices.rbegin()[0].position, position);
 
 			if constexpr (VertexT::hasNormal()) {
-				XMStoreFloat3(&vertices.rbegin()[2].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[1].normal, normal);
-				XMStoreFloat3(&vertices.rbegin()[0].normal, normal);
+				XMStore(&vertices.rbegin()[2].normal, normal);
+				XMStore(&vertices.rbegin()[1].normal, normal);
+				XMStore(&vertices.rbegin()[0].normal, normal);
 			}
 
 			if constexpr (VertexT::hasTexture()) {
-				XMStoreFloat2(&vertices.rbegin()[2].texCoord, g_XMZero);
-				XMStoreFloat2(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
-				XMStoreFloat2(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
+				XMStore(&vertices.rbegin()[2].texCoord, g_XMZero);
+				XMStore(&vertices.rbegin()[1].texCoord, g_XMIdentityR0);
+				XMStore(&vertices.rbegin()[0].texCoord, g_XMIdentityR1);
 			}
 		}
 

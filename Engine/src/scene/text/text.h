@@ -19,7 +19,7 @@ public:
 	const wstring& getText() const;
 
 	[[nodiscard]]
-	const float2& getPosition() const;
+	XMVECTOR XM_CALLCONV getPosition() const;
 
 	[[nodiscard]]
 	const XMVECTORF32& getColor() const;
@@ -29,11 +29,11 @@ public:
 
 
 	void setText(wstring new_text);
-	void setText(wstring new_text, float2 new_position);
-	void setText(wstring new_text, float2 new_position, XMVECTORF32 new_color);
-	void setText(wstring new_text, float2 new_position, XMVECTORF32 new_color, float new_rotation);
+	void setText(wstring new_text, f32_2 new_position);
+	void setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color);
+	void setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color, float new_rotation);
 
-	void setPosition(float2 new_position);
+	void setPosition(f32_2 new_position);
 	void setColor(XMVECTORF32 new_color);
 	void setRotation(float new_rotation);
 
@@ -42,7 +42,7 @@ private:
 	shared_ptr<Font> font;
 
 	wstring text;
-	float2 position;
+	XMVECTOR position;
 	XMVECTORF32 color;
 	float rotation;
 };

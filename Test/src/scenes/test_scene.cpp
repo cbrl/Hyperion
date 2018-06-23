@@ -37,9 +37,9 @@ void TestScene::load(const Engine& engine) {
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
-	cam->setFog(Fog(float4(0.2f, 0.2f, 0.2f, 1.0f), 30.0f, 25.0f));
+	cam->setFog(Fog(f32_4(0.2f, 0.2f, 0.2f, 1.0f), 30.0f, 25.0f));
 	cam->skybox().setTexture(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
-	ecs_engine.getComponent<Transform>(camera)->setPosition(float3(0.0f, 4.0f, -2.0f));
+	ecs_engine.getComponent<Transform>(camera)->setPosition(f32_3(0.0f, 4.0f, -2.0f));
 
 	ecs_engine.getComponent<MouseRotation>(camera)->setSensitivity(0.01f);
 
@@ -60,8 +60,8 @@ void TestScene::load(const Engine& engine) {
 	rotation->setAxis(AxisRotation::Axis::Y);
 	rotation->setSpeedY(0.5f);
 
-	ecs_engine.getComponent<Transform>(sphere)->setPosition(float3{ 0.0f, 2.0f, 0.0f });
-	//ecs_engine.getComponent<Transform>(sphere)->setPosition(float3(7.0f, 3.0f, 0.0f));
+	ecs_engine.getComponent<Transform>(sphere)->setPosition(f32_3{ 0.0f, 2.0f, 0.0f });
+	//ecs_engine.getComponent<Transform>(sphere)->setPosition(f32_3(7.0f, 3.0f, 0.0f));
 
 
 	//----------------------------------------------------------------------------------
@@ -71,10 +71,10 @@ void TestScene::load(const Engine& engine) {
 	// Sphere light
 	{
 		auto light = ecs_engine.addComponent<SpotLight>(sphere);
-		light->setAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
-		light->setDiffuseColor(float4(1.0f, 0.9f, 0.5f, 1.0f));
-		light->setAttenuation(float3(0.1f, 0.15f, 0.0f));
-		light->setSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
+		light->setAmbientColor(f32_4(0.15f, 0.15f, 0.15f, 1.0f));
+		light->setDiffuseColor(f32_4(1.0f, 0.9f, 0.5f, 1.0f));
+		light->setAttenuation(f32_3(0.1f, 0.15f, 0.0f));
+		light->setSpecular(f32_4(1.0f, 1.0f, 1.0f, 1.0f));
 		light->setRange(100.0f);
 		light->setUmbraAngle(XM_PI / 6.0f);
 		light->setPenumbraAngle(XM_PI / 3.0f);
@@ -85,18 +85,18 @@ void TestScene::load(const Engine& engine) {
 	{
 		const auto spot_light = addEntity<BasicSpotLight>(ecs_engine);
 		auto light = ecs_engine.getComponent<SpotLight>(spot_light);
-		light->setAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
-		light->setDiffuseColor(float4(0.8f, 0.8f, 1.0f, 1.0f));
-		light->setAttenuation(float3(0.05f, 0.2f, 0.0f));
-		light->setSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
+		light->setAmbientColor(f32_4(0.15f, 0.15f, 0.15f, 1.0f));
+		light->setDiffuseColor(f32_4(0.8f, 0.8f, 1.0f, 1.0f));
+		light->setAttenuation(f32_3(0.05f, 0.2f, 0.0f));
+		light->setSpecular(f32_4(1.0f, 1.0f, 1.0f, 1.0f));
 		light->setRange(100.0f);
 		light->setUmbraAngle(XM_PI / 6.0f);
 		light->setPenumbraAngle(XM_PI / 3.0f);
 		light->setShadows(true);
 
 		auto transform = ecs_engine.getComponent<Transform>(spot_light);
-		transform->setPosition(float3(-1.0f, 0.0f, 0.0f));
-		//transform->SetRotation(float3(XM_PIDIV2, 0.0f, 0.0f));
+		transform->setPosition(f32_3(-1.0f, 0.0f, 0.0f));
+		//transform->SetRotation(f32_3(XM_PIDIV2, 0.0f, 0.0f));
 		transform->setParent(camera);
 	}
 
@@ -104,13 +104,13 @@ void TestScene::load(const Engine& engine) {
 	{
 		//const auto dir_light = addEntity<BasicDirectionalLight>(ecs_engine);
 		//auto light = ecs_engine.getComponent<DirectionalLight>(dir_light);
-		//light->setDiffuseColor(float4{ 0.0f, 0.0f, 1.0f, 0.0f });
+		//light->setDiffuseColor(f32_4{ 0.0f, 0.0f, 1.0f, 0.0f });
 		//light->setRange(100.0f);
-		//light->setSize(float2{ 30.0f, 30.0f });
+		//light->setSize(f32_2{ 30.0f, 30.0f });
 
 		//auto transform = ecs_engine.getComponent<Transform>(dir_light);
-		//transform->setPosition(float3{ 0.0f, 4.0f, 0.0f });
-		//transform->setRotation(float3{ XM_PIDIV4, 0.0f, 0.0f });
+		//transform->setPosition(f32_3{ 0.0f, 4.0f, 0.0f });
+		//transform->setRotation(f32_3{ XM_PIDIV4, 0.0f, 0.0f });
 	}
 
 
@@ -121,19 +121,19 @@ void TestScene::load(const Engine& engine) {
 	const wstring font(L"../data/fonts/courier-12.spritefont");
 
 	texts.try_emplace("FPS", resource_mgr, font);
-	texts.at("FPS").setPosition(float2(10, 10));
+	texts.at("FPS").setPosition(f32_2(10, 10));
 
 	texts.try_emplace("FrameTime", resource_mgr, font);
-	texts.at("FrameTime").setPosition(float2(10, 40));
+	texts.at("FrameTime").setPosition(f32_2(10, 40));
 
 	texts.try_emplace("CPU", resource_mgr, font);
-	texts.at("CPU").setPosition(float2(10, 70));
+	texts.at("CPU").setPosition(f32_2(10, 70));
 
 	texts.try_emplace("RAM", resource_mgr, font);
-	texts.at("RAM").setPosition(float2(10, 140));
+	texts.at("RAM").setPosition(f32_2(10, 140));
 
 	texts.try_emplace("Mouse", resource_mgr, font);
-	texts.at("Mouse").setPosition(float2(10, 210));
+	texts.at("Mouse").setPosition(f32_2(10, 210));
 }
 
 
@@ -143,7 +143,7 @@ void TestScene::tick(const Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const int2 mouse_delta       = engine.getInput().getMouseDelta();
+	const i32_2 mouse_delta       = engine.getInput().getMouseDelta();
 	const u32 fps                = engine.getFPSCounter().getFPS();
 	const float delta_time       = engine.getTimer().deltaTime();
 	const double total_cpu_usage = engine.getSysMon().cpu().getTotalCpuPercentage();

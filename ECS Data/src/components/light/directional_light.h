@@ -21,12 +21,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Ambient Color
 	//----------------------------------------------------------------------------------
-	void setAmbientColor(const float4& color) {
+	void setAmbientColor(const f32_4& color) {
 		this->ambient_color = color;
 	}
 
 	[[nodiscard]]
-	const float4& getAmbientColor() const {
+	const f32_4& getAmbientColor() const {
 		return ambient_color;
 	}
 
@@ -34,12 +34,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Diffuse Color
 	//----------------------------------------------------------------------------------
-	void setDiffuseColor(const float4& color) {
+	void setDiffuseColor(const f32_4& color) {
 		this->diffuse_color = color;
 	}
 
 	[[nodiscard]]
-	const float4& getDiffuseColor() const {
+	const f32_4& getDiffuseColor() const {
 		return diffuse_color;
 	}
 
@@ -47,12 +47,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Specular Color/Power
 	//----------------------------------------------------------------------------------
-	void setSpecular(const float4& spec) {
+	void setSpecular(const f32_4& spec) {
 		this->specular = spec;
 	}
 
 	[[nodiscard]]
-	const float4& getSpecular() const {
+	const f32_4& getSpecular() const {
 		return specular;
 	}
 
@@ -87,13 +87,13 @@ public:
 	//----------------------------------------------------------------------------------
 	// Size
 	//----------------------------------------------------------------------------------
-	void setSize(const float2& size) {
+	void setSize(const f32_2& size) {
 		proj_size = size;
 		updateBoundingVolumes();
 	}
 
 	[[nodiscard]]
-	const float2& getSize() const {
+	const f32_2& getSize() const {
 		return proj_size;
 	}
 
@@ -113,18 +113,18 @@ public:
 
 private:
 	void updateBoundingVolumes() {
-		aabb = AABB{ float3{-0.5f * proj_size.x, -0.5f * proj_size.y, 0.0f},
-					 float3{ 0.5f * proj_size.x,  0.5f * proj_size.y, range} };
+		aabb = AABB{ f32_3{-0.5f * proj_size.x, -0.5f * proj_size.y, 0.0f},
+					 f32_3{ 0.5f * proj_size.x,  0.5f * proj_size.y, range} };
 	}
 
 
 private:
-	float4 ambient_color;
-	float4 diffuse_color;
-	float4 specular;
+	f32_4 ambient_color;
+	f32_4 diffuse_color;
+	f32_4 specular;
 	float start;
 	float range;
-	float2 proj_size;
+	f32_2 proj_size;
 	AABB aabb;
 
 	bool shadows;

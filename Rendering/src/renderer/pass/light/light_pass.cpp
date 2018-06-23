@@ -160,7 +160,7 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine, FXMMATRI
 		const auto world_to_lprojection = world_to_light * light_to_lprojection;
 
 		DirectionalLightBuffer buffer;
-		XMStoreFloat3(&buffer.direction, transform->getWorldAxisZ());
+		XMStore(&buffer.direction, transform->getWorldAxisZ());
 		buffer.ambient_color       = light.getAmbientColor();
 		buffer.diffuse_color       = light.getDiffuseColor();
 		buffer.specular            = light.getSpecular();
@@ -222,7 +222,7 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 		if (!light.castsShadows()) {
 			PointLightBuffer buffer;
 
-			XMStoreFloat3(&buffer.position, transform->getWorldOrigin());
+			XMStore(&buffer.position, transform->getWorldOrigin());
 			buffer.ambient_color = light.getAmbientColor();
 			buffer.diffuse_color = light.getDiffuseColor();
 			buffer.specular      = light.getSpecular();
@@ -247,7 +247,7 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 			// Create the buffer
 			ShadowedPointLightBuffer buffer;
 
-			XMStoreFloat3(&buffer.light_buffer.position, transform->getWorldOrigin());
+			XMStore(&buffer.light_buffer.position, transform->getWorldOrigin());
 			buffer.light_buffer.ambient_color = light.getAmbientColor();
 			buffer.light_buffer.diffuse_color = light.getDiffuseColor();
 			buffer.light_buffer.specular      = light.getSpecular();
@@ -256,7 +256,7 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 
 			buffer.world_to_light = XMMatrixTranspose(world_to_light);
 
-			const float2 proj_values = {
+			const f32_2 proj_values = {
 				XMVectorGetZ(light_to_lprojection.r[2]),
 				XMVectorGetZ(light_to_lprojection.r[3])
 			};
@@ -299,8 +299,8 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 		if (!light.castsShadows()) {
 			SpotLightBuffer buffer;
 
-			XMStoreFloat3(&buffer.position, transform->getWorldOrigin());
-			XMStoreFloat3(&buffer.direction, transform->getWorldAxisZ());
+			XMStore(&buffer.position, transform->getWorldOrigin());
+			XMStore(&buffer.direction, transform->getWorldAxisZ());
 			buffer.ambient_color = light.getAmbientColor();
 			buffer.diffuse_color = light.getDiffuseColor();
 			buffer.specular      = light.getSpecular();
@@ -327,8 +327,8 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 			// Create the buffer
 			ShadowedSpotLightBuffer buffer;
 
-			XMStoreFloat3(&buffer.light_buffer.position, transform->getWorldOrigin());
-			XMStoreFloat3(&buffer.light_buffer.direction, transform->getWorldAxisZ());
+			XMStore(&buffer.light_buffer.position, transform->getWorldOrigin());
+			XMStore(&buffer.light_buffer.direction, transform->getWorldAxisZ());
 			buffer.light_buffer.ambient_color = light.getAmbientColor();
 			buffer.light_buffer.diffuse_color = light.getDiffuseColor();
 			buffer.light_buffer.specular      = light.getSpecular();

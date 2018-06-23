@@ -11,7 +11,7 @@ public:
 	AABB(AABB&& aabb) = default;
 
 	// Construct an AABB from the min and max points of an object
-	AABB(const float3& min, const float3& max);
+	AABB(const f32_3& min, const f32_3& max);
 
 	// Construct an AABB from the min and max points of an object
 	AABB(FXMVECTOR min, FXMVECTOR max);
@@ -43,7 +43,7 @@ public:
 	BoundingSphere(BoundingSphere&& sphere) = default;
 
 	// Construct a bounding sphere from the center point and radius of an object
-	BoundingSphere(const float3& center, float radius);
+	BoundingSphere(const f32_3& center, float radius);
 
 	// Construct a bounding sphere from the center point and radius of an object
 	BoundingSphere(FXMVECTOR center, float radius);

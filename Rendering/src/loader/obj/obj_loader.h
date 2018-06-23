@@ -35,13 +35,13 @@ struct ObjMaterial {
 	// Bump map
 	wstring map_bump;
 	// Ambient Color
-	float4 Ka;
+	f32_4 Ka;
 	// Diffuse Color
-	float4 Kd;
+	f32_4 Kd;
 	// Specular Color, w = spec exponent
-	float4 Ks;
+	f32_4 Ks;
 	// Emissive Color
-	float4 Ke;
+	f32_4 Ke;
 	// Optical Density
 	float Ni;
 	// Dissolve
@@ -87,9 +87,9 @@ private:
 	static vector<VertexT> vertices;
 
 	// Vectors for position/normal/texCoord/index
-	static vector<float3> vertex_positions;
-	static vector<float3> vertex_normals;
-	static vector<float2> vertex_texCoords;
+	static vector<f32_3> vertex_positions;
+	static vector<f32_3> vertex_normals;
+	static vector<f32_2> vertex_texCoords;
 	static vector<u32> indices;
 
 	// Material library name
@@ -123,13 +123,13 @@ template<typename VertexT>
 vector<VertexT> OBJLoader<VertexT>::vertices;
 
 template<typename VertexT>
-vector<float3> OBJLoader<VertexT>::vertex_positions;
+vector<f32_3> OBJLoader<VertexT>::vertex_positions;
 
 template<typename VertexT>
-vector<float3> OBJLoader<VertexT>::vertex_normals;
+vector<f32_3> OBJLoader<VertexT>::vertex_normals;
 
 template<typename VertexT>
-vector<float2> OBJLoader<VertexT>::vertex_texCoords;
+vector<f32_2> OBJLoader<VertexT>::vertex_texCoords;
 
 template<typename VertexT>
 vector<u32> OBJLoader<VertexT>::indices;

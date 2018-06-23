@@ -4,7 +4,7 @@
 
 Text::Text(ResourceMgr& resource_mgr, const wstring& font_filename)
 	: text(L"Default Text")
-	, position(float2(0, 0))
+	, position(XMVectorZero())
 	, color(Colors::White)
 	, rotation(0.0f) {
 
@@ -16,29 +16,29 @@ void Text::setText(wstring new_text) {
 }
 
 
-void Text::setText(wstring new_text, float2 new_position) {
+void Text::setText(wstring new_text, f32_2 new_position) {
 	text     = new_text;
-	position = new_position;
+	position = XMLoad(&new_position);
 }
 
 
-void Text::setText(wstring new_text, float2 new_position, XMVECTORF32 new_color) {
+void Text::setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color) {
 	text     = new_text;
-	position = new_position;
+	position = XMLoad(&new_position);
 	color    = new_color;
 }
 
 
-void Text::setText(wstring new_text, float2 new_position, XMVECTORF32 new_color, float new_rotation) {
+void Text::setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color, float new_rotation) {
 	text     = new_text;
-	position = new_position;
+	position = XMLoad(&new_position);
 	color    = new_color;
 	rotation = new_rotation;
 }
 
 
-void Text::setPosition(float2 new_position) {
-	position = new_position;
+void Text::setPosition(f32_2 new_position) {
+	position = XMLoad(&new_position);
 }
 
 
@@ -65,7 +65,7 @@ const wstring& Text::getText() const {
 
 
 [[nodiscard]]
-const float2& Text::getPosition() const {
+XMVECTOR XM_CALLCONV Text::getPosition() const {
 	return position;
 }
 

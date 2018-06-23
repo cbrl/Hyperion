@@ -473,12 +473,12 @@ void UserInterface::DrawModelDetails(Model& model) {
 
 	auto& t = model.GetTransform();
 
-	float3 position;
-	float3 rotation;
-	float3 scale;
-	XMStoreFloat3(&position, t.GetPosition());
-	XMStoreFloat3(&rotation, t.GetRotation());
-	XMStoreFloat3(&scale, t.GetScale());
+	f32_3 position;
+	f32_3 rotation;
+	f32_3 scale;
+	XMStore(&position, t.GetPosition());
+	XMStore(&rotation, t.GetRotation());
+	XMStore(&scale, t.GetScale());
 
 	if (ImGui::DragFloat3("Position", position.Data(), 0.01f, -FLT_MAX, FLT_MAX))
 		model.SetPosition(position);
@@ -665,7 +665,7 @@ void UserInterface::DrawPopups(ID3D11Device* device, ResourceMgr& resource_mgr, 
 	}
 
 	if (ImGui::BeginPopupModal("New Box", NULL, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float3 size = { 1.0f, 1.0f, 1.0f };
+		static f32_3 size = { 1.0f, 1.0f, 1.0f };
 		static bool   rhcoords = false;
 		static bool   invertn = false;
 

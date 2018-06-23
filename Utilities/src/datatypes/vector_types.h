@@ -1,79 +1,27 @@
 #pragma once
 
-
-//----------------------------------------------------------------------------------
-// Default base vectors
-//----------------------------------------------------------------------------------
-template<typename T>
-struct BaseVec2 {
-	BaseVec2() noexcept = default;
-
-	BaseVec2(T _x, T _y) noexcept
-		: x(_x)
-		, y(_y) {
-	}
-
-	T x;
-	T y;
-};
+#include <type_traits>
 
 
 template<typename T>
-struct BaseVec3 {
-	BaseVec3() noexcept = default;
+struct Vector2 {
 
-	BaseVec3(T _x, T _y, T _z) noexcept
-		: x(_x)
-		, y(_y)
-		, z(_z) {
-	}
-
-	T x;
-	T y;
-	T z;
-};
-
-
-template<typename T>
-struct BaseVec4 {
-	BaseVec4() noexcept = default;
-
-	BaseVec4(T _x, T _y, T _z, T _w) noexcept
-		: x(_x)
-		, y(_y)
-		, z(_z)
-		, w(_w) {
-	}
-
-	T x;
-	T y;
-	T z;
-	T w;
-};
-
-
-//----------------------------------------------------------------------------------
-// Vec2
-//----------------------------------------------------------------------------------
-template<typename DataT, typename DerivedT = BaseVec2<DataT>>
-struct Vec2 : public DerivedT {
-
-	static_assert(std::is_arithmetic_v<DataT>, "Vec2 data type is not an arithmetic type");
-	static_assert((sizeof(DerivedT) / sizeof(DataT)) == 2, "Vec2 base class does not have 2 members");
+	static_assert(std::is_arithmetic_v<T>, "Vec2 data type is not an arithmetic type");
 
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Vec2() noexcept = default;
-	Vec2(Vec2<DataT, DerivedT>&& vec) noexcept = default;
-	~Vec2() noexcept = default;
+	constexpr Vector2() noexcept = default;
+	constexpr Vector2(const Vector2<T>& vec) noexcept = default;
+	constexpr Vector2(Vector2<T>&& vec) noexcept = default;
 
-	Vec2(DataT _x, DataT _y) noexcept : DerivedT(_x, _y) {
+	constexpr Vector2(T _x, T _y) noexcept
+		: x(_x)
+		, y(_y){
 	}
 
-	Vec2(const Vec2<DataT, DerivedT>& _xy) noexcept : DerivedT(_xy) {
-	}
+	~Vector2() noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -81,8 +29,8 @@ struct Vec2 : public DerivedT {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the vector
-	constexpr DataT* data() { return &this->x; }
-	constexpr const DataT* data() const { return &this->x; }
+	constexpr T* data() { return &this->x; }
+	constexpr const T* data() const { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -92,146 +40,148 @@ struct Vec2 : public DerivedT {
 	#pragma region operators
 
 	// Operator =
-	Vec2<DataT, DerivedT>& operator=(const Vec2<DataT, DerivedT>& copy) noexcept {
-		this->x = copy.x;
-		this->y = copy.y;
-		return *this;
-	}
+	constexpr Vector2<T>& operator=(const Vector2<T>& copy) noexcept = default;
+	constexpr Vector2<T>& operator=(Vector2<T>&& move) noexcept = default;
 
-	Vec2<DataT, DerivedT>& operator=(Vec2<DataT, DerivedT>&& move) noexcept {
-		this->x = std::move(move.x);
-		this->y = std::move(move.y);
-		return *this;
-	}
 
 	// Operator == and !=
-	constexpr bool operator==(const Vec2<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator==(const Vector2<T>& compare) noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y);
 	}
 
-	constexpr bool operator==(const Vec2<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator==(const Vector2<T>& compare) const noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y);
 	}
 
-	constexpr bool operator!=(const Vec2<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator!=(const Vector2<T>& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	constexpr bool operator!=(const Vec2<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator!=(const Vector2<T>& compare) const noexcept {
 		return !(*this == compare);
 	}
 
 
 	// Operator +
-	Vec2<DataT, DerivedT>& operator+=(const Vec2<DataT, DerivedT>& in) noexcept {
+	constexpr Vector2<T>& operator+=(const Vector2<T>& in) noexcept {
 		this->x += in.x;
 		this->y += in.y;
 		return *this;
 	}
 
-	Vec2<DataT, DerivedT> operator+(const Vec2<DataT, DerivedT>& in) noexcept {
-		Vec2<DataT, DerivedT> v(*this);
+	constexpr Vector2<T> operator+(const Vector2<T>& in) noexcept {
+		Vector2<T> v(*this);
 		v += in;
 		return v;
 	}
 
-	Vec2<DataT, DerivedT> operator+(const Vec2<DataT, DerivedT>& in) const noexcept {
-		Vec2<DataT, DerivedT> v(*this);
+	constexpr Vector2<T> operator+(const Vector2<T>& in) const noexcept {
+		Vector2<T> v(*this);
 		v += in;
 		return v;
 	}
 
 
 	// Operator -
-	Vec2<DataT, DerivedT>& operator-=(const Vec2<DataT, DerivedT>& in) noexcept {
+	constexpr Vector2<T>& operator-=(const Vector2<T>& in) noexcept {
 		this->x -= in.x;
 		this->y -= in.y;
 		return *this;
 	}
 
-	Vec2<DataT, DerivedT> operator-(const Vec2<DataT, DerivedT>& in) noexcept {
-		Vec2<DataT, DerivedT> v(*this);
+	constexpr Vector2<T> operator-(const Vector2<T>& in) noexcept {
+		Vector2<T> v(*this);
 		v -= in;
 		return v;
 	}
 
-	Vec2<DataT, DerivedT> operator-(const Vec2<DataT, DerivedT>& in) const noexcept {
-		Vec2<DataT, DerivedT> v(*this);
+	constexpr Vector2<T> operator-(const Vector2<T>& in) const noexcept {
+		Vector2<T> v(*this);
 		v -= in;
 		return v;
 	}
 
 
 	// Operator *
-	Vec2<DataT, DerivedT>& operator*=(DataT in) noexcept {
+	constexpr Vector2<T>& operator*=(T in) noexcept {
 		this->x *= in;
 		this->y *= in;
 		return *this;
 	}
 
-	Vec2<DataT, DerivedT> operator*(DataT in) noexcept {
-		Vec2<DataT, DerivedT> v(*this);
+	constexpr Vector2<T> operator*(T in) noexcept {
+		Vector2<T> v(*this);
 		v *= in;
 		return v;
 	}
 
-	Vec2<DataT, DerivedT> operator*(DataT in) const noexcept {
-		Vec2<DataT, DerivedT> v(*this);
+	constexpr Vector2<T> operator*(T in) const noexcept {
+		Vector2<T> v(*this);
 		v *= in;
 		return v;
 	}
 
 
 	// Operator /
-	Vec2<DataT, DerivedT>& operator/=(DataT in) noexcept {
+	constexpr Vector2<T>& operator/=(T in) noexcept {
 		this->x /= in;
 		this->y /= in;
 		return *this;
 	}
 
-	Vec2<DataT, DerivedT> operator/(DataT in) noexcept {
-		Vec2<DataT, DerivedT> v(*this);
+	constexpr Vector2<T> operator/(T in) noexcept {
+		Vector2<T> v(*this);
 		v /= in;
 		return v;
 	}
 
-	Vec2<DataT, DerivedT> operator/(DataT in) const noexcept {
-		Vec2<DataT, DerivedT> v(*this);
+	constexpr Vector2<T> operator/(T in) const noexcept {
+		Vector2<T> v(*this);
 		v /= in;
 		return v;
 	}
 
 	#pragma endregion operators
+
+
+	//----------------------------------------------------------------------------------
+	// Members
+	//----------------------------------------------------------------------------------
+	T x{};
+	T y{};
 };
 
 
-//----------------------------------------------------------------------------------
-// Vec3
-//----------------------------------------------------------------------------------
-template<typename DataT, typename DerivedT = BaseVec3<DataT>>
-struct Vec3 : public DerivedT {
 
-	static_assert(std::is_arithmetic_v<DataT>, "Vec3 data type is not an arithmetic type");
-	static_assert((sizeof(DerivedT) / sizeof(DataT)) == 3, "Vec3 base class does not have 3 members");
+
+template<typename T>
+struct Vector3 {
+
+	static_assert(std::is_arithmetic_v<T>, "Vec3 data type is not an arithmetic type");
 
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Vec3() noexcept = default;
-	Vec3(Vec3<DataT, DerivedT>&& vec) noexcept = default;
-	~Vec3() noexcept = default;
+	constexpr Vector3() noexcept = default;
+	constexpr Vector3(const Vector3<T>& vec) noexcept = default;
+	constexpr Vector3(Vector3<T>&& vec) noexcept = default;
 
-	Vec3(DataT _x, DataT _y, DataT _z) noexcept : DerivedT(_x, _y, _z) {
+	constexpr Vector3(T _x, T _y, T _z) noexcept
+		: x(_x)
+		, y(_y)
+		, z(_z) {
 	}
 
-	Vec3(const Vec2<DataT, DerivedT>& _xy, DataT _z) noexcept : DerivedT(_xy.x, _xy.y, _z) {
+	constexpr Vector3(const Vector2<T>& _xy, T _z) noexcept
+		: x(_xy.x)
+		, y(_xy.y)
+		, z(_z) {
 	}
 
-	Vec3(const Vec3<DataT, DerivedT>& _xyz) noexcept : DerivedT(_xyz.x, _xyz.y, _xyz.z) {
-	}
+	~Vector3() noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -239,8 +189,8 @@ struct Vec3 : public DerivedT {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the vector
-	constexpr DataT* data() { return &this->x; }
-	constexpr const DataT* data() const { return &this->x; }
+	constexpr T* data() { return &this->x; }
+	constexpr const T* data() const { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -250,157 +200,164 @@ struct Vec3 : public DerivedT {
 	#pragma region operators
 
 	// Operator =
-	Vec3<DataT, DerivedT>& operator=(const Vec3<DataT, DerivedT>& copy) noexcept {
-		this->x = copy.x;
-		this->y = copy.y;
-		this->z = copy.z;
-		return *this;
-	}
+	constexpr Vector3<T>& operator=(const Vector3<T>& copy) noexcept = default;
+	constexpr Vector3<T>& operator=(Vector3<T>&& move) noexcept = default;
 
-	Vec3<DataT, DerivedT>& operator=(Vec3<DataT, DerivedT>&& move) noexcept {
-		this->x = std::move(move.x);
-		this->y = std::move(move.y);
-		this->z = std::move(move.z);
-		return *this;
-	}
 
 	// Operator == and !=
-	constexpr bool operator==(const Vec3<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator==(const Vector3<T>& compare) noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y &&
 		        this->z == compare.z);
 	}
 
-	constexpr bool operator==(const Vec3<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator==(const Vector3<T>& compare) const noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y &&
 		        this->z == compare.z);
 	}
 
-	constexpr bool operator!=(const Vec3<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator!=(const Vector3<T>& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	constexpr bool operator!=(const Vec3<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator!=(const Vector3<T>& compare) const noexcept {
 		return !(*this == compare);
 	}
 
 
 	// Operator +
-	Vec3<DataT, DerivedT>& operator+=(const Vec3<DataT, DerivedT>& in) noexcept {
+	constexpr Vector3<T>& operator+=(const Vector3<T>& in) noexcept {
 		this->x += in.x;
 		this->y += in.y;
 		this->z += in.z;
 		return *this;
 	}
 
-	Vec3<DataT, DerivedT> operator+(const Vec3<DataT, DerivedT>& in) noexcept {
-		Vec3<DataT, DerivedT> v(*this);
+	constexpr Vector3<T> operator+(const Vector3<T>& in) noexcept {
+		Vector3<T> v(*this);
 		v += in;
 		return v;
 	}
 
-	Vec3<DataT, DerivedT> operator+(const Vec3<DataT, DerivedT>& in) const noexcept {
-		Vec3<DataT, DerivedT> v(*this);
+	constexpr Vector3<T> operator+(const Vector3<T>& in) const noexcept {
+		Vector3<T> v(*this);
 		v += in;
 		return v;
 	}
 
 
 	// Operator -
-	Vec3<DataT, DerivedT>& operator-=(const Vec3<DataT, DerivedT>& in) noexcept {
+	constexpr Vector3<T>& operator-=(const Vector3<T>& in) noexcept {
 		this->x -= in.x;
 		this->y -= in.y;
 		this->z -= in.z;
 		return *this;
 	}
 
-	Vec3<DataT, DerivedT> operator-(const Vec3<DataT, DerivedT>& in) noexcept {
-		Vec3<DataT, DerivedT> v(*this);
+	constexpr Vector3<T> operator-(const Vector3<T>& in) noexcept {
+		Vector3<T> v(*this);
 		v -= in;
 		return v;
 	}
 
-	Vec3<DataT, DerivedT> operator-(const Vec3<DataT, DerivedT>& in) const noexcept {
-		Vec3<DataT, DerivedT> v(*this);
+	constexpr Vector3<T> operator-(const Vector3<T>& in) const noexcept {
+		Vector3<T> v(*this);
 		v -= in;
 		return v;
 	}
 
 
 	// Operator *
-	Vec3<DataT, DerivedT>& operator*=(DataT in) noexcept {
+	constexpr Vector3<T>& operator*=(T in) noexcept {
 		this->x *= in;
 		this->y *= in;
 		this->z *= in;
 		return *this;
 	}
 
-	Vec3<DataT, DerivedT> operator*(DataT in) noexcept {
-		Vec3<DataT, DerivedT> v(*this);
+	constexpr Vector3<T> operator*(T in) noexcept {
+		Vector3<T> v(*this);
 		v *= in;
 		return v;
 	}
 
-	Vec3<DataT, DerivedT> operator*(DataT in) const noexcept {
-		Vec3<DataT, DerivedT> v(*this);
+	constexpr Vector3<T> operator*(T in) const noexcept {
+		Vector3<T> v(*this);
 		v *= in;
 		return v;
 	}
 
 
 	// Operator /
-	Vec3<DataT, DerivedT>& operator/=(DataT in) noexcept {
+	constexpr Vector3<T>& operator/=(T in) noexcept {
 		this->x /= in;
 		this->y /= in;
 		this->z /= in;
 		return *this;
 	}
 
-	Vec3<DataT, DerivedT> operator/(DataT in) noexcept {
-		Vec3<DataT, DerivedT> v(*this);
+	constexpr Vector3<T> operator/(T in) noexcept {
+		Vector3<T> v(*this);
 		v /= in;
 		return v;
 	}
 
-	Vec3<DataT, DerivedT> operator/(DataT in) const noexcept {
-		Vec3<DataT, DerivedT> v(*this);
+	constexpr Vector3<T> operator/(T in) const noexcept {
+		Vector3<T> v(*this);
 		v /= in;
 		return v;
 	}
 
 	#pragma endregion operators
+
+
+	//----------------------------------------------------------------------------------
+	// Members
+	//----------------------------------------------------------------------------------
+	T x{};
+	T y{};
+	T z{};
 };
 
 
-//----------------------------------------------------------------------------------
-// Vec4
-//----------------------------------------------------------------------------------
-template<typename DataT, typename DerivedT = BaseVec4<DataT>>
-struct Vec4 : public DerivedT {
 
-	static_assert(std::is_arithmetic_v<DataT>, "Vec4 data type is not an arithetic type");
-	static_assert((sizeof(DerivedT) / sizeof(DataT)) == 4, "Vec4 base class does not have 4 members");
+
+template<typename T>
+struct Vector4 {
+
+	static_assert(std::is_arithmetic_v<T>, "Vec4 data type is not an arithetic type");
 
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Vec4() noexcept = default;
-	Vec4(Vec4&& vec) noexcept = default;
-	~Vec4() noexcept = default;
+	constexpr Vector4() noexcept = default;
+	constexpr Vector4(const Vector4<T>& _xyzw) noexcept = default;
+	constexpr Vector4(Vector4<T>&& vec) noexcept = default;
 
-	Vec4(DataT _x, DataT _y, DataT _z, DataT _w) noexcept : DerivedT(_x, _y, _z, _w) {
+	constexpr Vector4(T _x, T _y, T _z, T _w) noexcept
+		: x(_x)
+		, y(_y)
+		, z(_z)
+		, w(_w) {
 	}
 
-	Vec4(const Vec2<DataT, DerivedT>& _xy, DataT _z, DataT _w) noexcept : DerivedT(_xy.x, _xy.y, _z, _w) {
+	constexpr Vector4(const Vector2<T>& _xy, T _z, T _w) noexcept
+		: x(_xy.x)
+		, y(_xy.y)
+		, z(_z)
+		, w(_w) {
 	}
 
-	Vec4(const Vec3<DataT, DerivedT>& _xyz, DataT _w) noexcept : DerivedT(_xyz.x, _xyz.y, _xyz.z, _w) {
+	constexpr Vector4(const Vector3<T>& _xyz, T _w) noexcept
+		: x(_xyz.x)
+		, y(_xyz.y)
+		, z(_xyz.z)
+		, w(_w) {
 	}
 
-	Vec4(const Vec4<DataT, DerivedT>& _xyzw) noexcept : DerivedT(_xyzw.x, _xyzw.y, _xyzw.z, _xyzw.w) {
-	}
+	~Vector4() noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -408,8 +365,8 @@ struct Vec4 : public DerivedT {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the vector
-	constexpr DataT* data() noexcept { return &this->x; }
-	constexpr const DataT* data() const noexcept { return &this->x; }
+	constexpr T* data() noexcept { return &this->x; }
+	constexpr const T* data() const noexcept { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -419,48 +376,36 @@ struct Vec4 : public DerivedT {
 	#pragma region operators
 
 	// Operator =
-	Vec4<DataT, DerivedT>& operator=(const Vec4<DataT, DerivedT>& copy) noexcept {
-		this->x = copy.x;
-		this->y = copy.y;
-		this->z = copy.z;
-		this->w = copy.w;
-		return *this;
-	}
+	constexpr Vector4<T>& operator=(const Vector4<T>& copy) noexcept = default;
+	constexpr Vector4<T>& operator=(Vector4<T>&& move) noexcept = default;
 
-	Vec4<DataT, DerivedT>& operator=(Vec4<DataT, DerivedT>&& move) noexcept {
-		this->x = std::move(move.x);
-		this->y = std::move(move.y);
-		this->z = std::move(move.z);
-		this->w = std::move(move.w);
-		return *this;
-	}
 
 	// Operator == and !=
-	constexpr bool operator==(const Vec4<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator==(const Vector4<T>& compare) noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y &&
 		        this->z == compare.z &&
 		        this->w == compare.w);
 	}
 
-	constexpr bool operator==(const Vec4<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator==(const Vector4<T>& compare) const noexcept {
 		return (this->x == compare.x &&
 		        this->y == compare.y &&
 		        this->z == compare.z &&
 		        this->w == compare.w);
 	}
 
-	constexpr bool operator!=(const Vec4<DataT, DerivedT>& compare) noexcept {
+	constexpr bool operator!=(const Vector4<T>& compare) noexcept {
 		return !(*this == compare);
 	}
 
-	constexpr bool operator!=(const Vec4<DataT, DerivedT>& compare) const noexcept {
+	constexpr bool operator!=(const Vector4<T>& compare) const noexcept {
 		return !(*this == compare);
 	}
 
 
 	// Operator +
-	Vec4<DataT, DerivedT>& operator+=(const Vec4<DataT, DerivedT>& in) noexcept {
+	constexpr Vector4<T>& operator+=(const Vector4<T>& in) noexcept {
 		this->x += in.x;
 		this->y += in.y;
 		this->z += in.z;
@@ -468,21 +413,21 @@ struct Vec4 : public DerivedT {
 		return *this;
 	}
 
-	Vec4<DataT, DerivedT> operator+(const Vec4<DataT, DerivedT>& in) noexcept {
-		Vec4<DataT, DerivedT> v(*this);
+	constexpr Vector4<T> operator+(const Vector4<T>& in) noexcept {
+		Vector4<T> v(*this);
 		v += in;
 		return v;
 	}
 
-	Vec4<DataT, DerivedT> operator+(const Vec4<DataT, DerivedT>& in) const noexcept {
-		Vec4<DataT, DerivedT> v(*this);
+	constexpr Vector4<T> operator+(const Vector4<T>& in) const noexcept {
+		Vector4<T> v(*this);
 		v += in;
 		return v;
 	}
 
 
 	// Operator -
-	Vec4<DataT, DerivedT>& operator-=(const Vec4<DataT, DerivedT>& in) noexcept {
+	constexpr Vector4<T>& operator-=(const Vector4<T>& in) noexcept {
 		this->x -= in.x;
 		this->y -= in.y;
 		this->z -= in.z;
@@ -490,21 +435,21 @@ struct Vec4 : public DerivedT {
 		return *this;
 	}
 
-	Vec4<DataT, DerivedT> operator-(const Vec4<DataT, DerivedT>& in) noexcept {
-		Vec4<DataT, DerivedT> v(*this);
+	constexpr Vector4<T> operator-(const Vector4<T>& in) noexcept {
+		Vector4<T> v(*this);
 		v -= in;
 		return v;
 	}
 
-	Vec4<DataT, DerivedT> operator-(const Vec4<DataT, DerivedT>& in) const noexcept {
-		Vec4<DataT, DerivedT> v(*this);
+	constexpr Vector4<T> operator-(const Vector4<T>& in) const noexcept {
+		Vector4<T> v(*this);
 		v -= in;
 		return v;
 	}
 
 
 	// Operator *
-	Vec4<DataT, DerivedT>& operator*=(DataT in) noexcept {
+	constexpr Vector4<T>& operator*=(T in) noexcept {
 		this->x *= in;
 		this->y *= in;
 		this->z *= in;
@@ -512,21 +457,21 @@ struct Vec4 : public DerivedT {
 		return *this;
 	}
 
-	Vec4<DataT, DerivedT> operator*(DataT in) noexcept {
-		Vec4<DataT, DerivedT> v(*this);
+	constexpr Vector4<T> operator*(T in) noexcept {
+		Vector4<T> v(*this);
 		v *= in;
 		return v;
 	}
 
-	Vec4<DataT, DerivedT> operator*(DataT in) const noexcept {
-		Vec4<DataT, DerivedT> v(*this);
+	constexpr Vector4<T> operator*(T in) const noexcept {
+		Vector4<T> v(*this);
 		v *= in;
 		return v;
 	}
 
 
 	// Operator /
-	Vec4<DataT, DerivedT>& operator/=(DataT in) noexcept {
+	constexpr Vector4<T>& operator/=(T in) noexcept {
 		this->x /= in;
 		this->y /= in;
 		this->z /= in;
@@ -534,78 +479,98 @@ struct Vec4 : public DerivedT {
 		return *this;
 	}
 
-	Vec4<DataT, DerivedT> operator/(DataT in) noexcept {
-		Vec4<DataT, DerivedT> v(*this);
+	constexpr Vector4<T> operator/(T in) noexcept {
+		Vector4<T> v(*this);
 		v /= in;
 		return v;
 	}
 
-	Vec4<DataT, DerivedT> operator/(DataT in) const noexcept {
-		Vec4<DataT, DerivedT> v(*this);
+	constexpr Vector4<T> operator/(T in) const noexcept {
+		Vector4<T> v(*this);
 		v /= in;
 		return v;
 	}
 
 	#pragma endregion operators
+
+
+	//----------------------------------------------------------------------------------
+	// Members
+	//----------------------------------------------------------------------------------
+	T x{};
+	T y{};
+	T z{};
+	T w{};
 };
 
 
+
+
 //----------------------------------------------------------------------------------
-// Vector aliases
+// Signed Integer Vectors
 //----------------------------------------------------------------------------------
 
-#if defined(_WIN32)
-	#include <DirectXMath.h>
+using i32_2 = Vector2<int32_t>;
+using i32_3 = Vector3<int32_t>;
+using i32_4 = Vector4<int32_t>;
 
-	using int2 = Vec2<int32_t, DirectX::XMINT2>;
-	using int3 = Vec3<int32_t, DirectX::XMINT3>;
-	using int4 = Vec4<int32_t, DirectX::XMINT4>;
-
-	using uint2 = Vec2<uint32_t, DirectX::XMUINT2>;
-	using uint3 = Vec3<uint32_t, DirectX::XMUINT3>;
-	using uint4 = Vec4<uint32_t, DirectX::XMUINT4>;
-
-	using float2 = Vec2<float, DirectX::XMFLOAT2>;
-	using float3 = Vec3<float, DirectX::XMFLOAT3>;
-	using float4 = Vec4<float, DirectX::XMFLOAT4>;
+static_assert(sizeof(i32_2) == 8);
+static_assert(sizeof(i32_3) == 12);
+static_assert(sizeof(i32_4) == 16);
 
 
-	static_assert(sizeof(int2) == sizeof(DirectX::XMINT2));
-	static_assert(sizeof(int3) == sizeof(DirectX::XMINT3));
-	static_assert(sizeof(int4) == sizeof(DirectX::XMINT4));
+using i64_2 = Vector2<int64_t>;
+using i64_3 = Vector3<int64_t>;
+using i64_4 = Vector4<int64_t>;
 
-	static_assert(sizeof(uint2) == sizeof(DirectX::XMUINT2));
-	static_assert(sizeof(uint3) == sizeof(DirectX::XMUINT3));
-	static_assert(sizeof(uint4) == sizeof(DirectX::XMUINT4));
-
-	static_assert(sizeof(float2) == sizeof(DirectX::XMFLOAT2));
-	static_assert(sizeof(float3) == sizeof(DirectX::XMFLOAT3));
-	static_assert(sizeof(float4) == sizeof(DirectX::XMFLOAT4));
-
-#else
-	using int2 = Vec2<int32_t>;
-	using int3 = Vec3<int32_t>;
-	using int4 = Vec4<int32_t>;
-
-	using uint2 = Vec2<uint32_t>;
-	using uint3 = Vec3<uint32_t>;
-	using uint4 = Vec4<uint32_t>;
-
-	using float2 = Vec2<float>;
-	using float3 = Vec3<float>;
-	using float4 = Vec4<float>;
+static_assert(sizeof(i64_2) == 16);
+static_assert(sizeof(i64_3) == 24);
+static_assert(sizeof(i64_4) == 32);
 
 
-	static_assert(sizeof(int2) == sizeof(int32_t) * 2);
-	static_assert(sizeof(int3) == sizeof(int32_t) * 3);
-	static_assert(sizeof(int4) == sizeof(int32_t) * 4);
 
-	static_assert(sizeof(uint2) == sizeof(uint32_t) * 2);
-	static_assert(sizeof(uint3) == sizeof(uint32_t) * 3);
-	static_assert(sizeof(uint4) == sizeof(uint32_t) * 4);
 
-	static_assert(sizeof(float2) == sizeof(float) * 2);
-	static_assert(sizeof(float3) == sizeof(float) * 3);
-	static_assert(sizeof(float4) == sizeof(float) * 4);
+//----------------------------------------------------------------------------------
+// Unsigned Integer Vectors
+//----------------------------------------------------------------------------------
 
-#endif //defined(_WIN32)
+using u32_2 = Vector2<uint32_t>;
+using u32_3 = Vector3<uint32_t>;
+using u32_4 = Vector4<uint32_t>;
+
+static_assert(sizeof(u32_2) == 8);
+static_assert(sizeof(u32_3) == 12);
+static_assert(sizeof(u32_4) == 16);
+
+
+using u64_2 = Vector2<uint64_t>;
+using u64_3 = Vector3<uint64_t>;
+using u64_4 = Vector4<uint64_t>;
+
+static_assert(sizeof(u64_2) == 16);
+static_assert(sizeof(u64_3) == 24);
+static_assert(sizeof(u64_4) == 32);
+
+
+
+
+//----------------------------------------------------------------------------------
+// Floating Point Vectors
+//----------------------------------------------------------------------------------
+
+using f32_2 = Vector2<float>;
+using f32_3 = Vector3<float>;
+using f32_4 = Vector4<float>;
+
+static_assert(sizeof(f32_2) == 8);
+static_assert(sizeof(f32_3) == 12);
+static_assert(sizeof(f32_4) == 16);
+
+
+using f64_2 = Vector2<double>;
+using f64_3 = Vector3<double>;
+using f64_4 = Vector4<double>;
+
+static_assert(sizeof(f64_2) == 16);
+static_assert(sizeof(f64_3) == 24);
+static_assert(sizeof(f64_4) == 32);
