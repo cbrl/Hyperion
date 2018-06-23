@@ -7,6 +7,7 @@
 #include "render_state_mgr.h"
 #include "resource/resource_mgr.h"
 #include "imgui_impl_dx11.h"
+#include "renderer/renderer.h"
 #include "display_config.h"
 
 
@@ -18,15 +19,13 @@ public:
 	// Resize the viewport
 	void resizeBuffers(u32 window_width, u32 window_height) const;
 
+	// Bind the default RTV and DSV
 	void bindDefaultRenderTarget() const {
 		direct3D->bindDefaultRenderTarget();
 	}
 
-	// Start a new frame
-	void beginFrame() const;
-
-	// End the current frame
-	void endFrame() const;
+	// Render the current scene
+	void render(const Engine& engine);
 
 
 	//----------------------------------------------------------------------------------
@@ -55,7 +54,16 @@ public:
 
 
 private:
+	// Start a new frame
+	void beginFrame() const;
+
+	// End the current frame
+	void endFrame() const;
+
+
+private:
 	unique_ptr<Direct3D> direct3D;
 	unique_ptr<RenderStateMgr> render_state_mgr;
 	unique_ptr<ResourceMgr> resource_mgr;
+	unique_ptr<Renderer> renderer;
 };

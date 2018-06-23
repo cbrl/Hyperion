@@ -16,7 +16,7 @@ Renderer::Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context)
 }
 
 
-void Renderer::update(const Engine& engine) {
+void Renderer::render(const Engine& engine) {
 
 	auto& ecs_engine = engine.getECS();
 	auto& scene      = engine.getScene();

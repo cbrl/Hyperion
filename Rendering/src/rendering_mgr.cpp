@@ -8,29 +8,31 @@ RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 	//----------------------------------------------------------------------------------
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------
-
 	direct3D = make_unique<Direct3D>(window, config);
 	FILE_LOG(logINFO) << "Initialized Direct3D";
 
 
 	//----------------------------------------------------------------------------------
-	// Create render state manager and render states
+	// Create the renderer
 	//----------------------------------------------------------------------------------
+	renderer = make_unique<Renderer>(direct3D->getDevice(), direct3D->getDeviceContext());
 
+
+	//----------------------------------------------------------------------------------
+	// Create the render state manager and render states
+	//----------------------------------------------------------------------------------
 	render_state_mgr = make_unique<RenderStateMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
 
 
 	//----------------------------------------------------------------------------------
-	// Create texture manager
+	// Create the resource manager
 	//----------------------------------------------------------------------------------
-
 	resource_mgr = make_unique<ResourceMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
 
 
 	//----------------------------------------------------------------------------------
 	// Initialize ImGui
 	//----------------------------------------------------------------------------------
-
 	ImGui::CreateContext();
 	ImGui_ImplDX11_Init(window, &direct3D->getDevice(), &direct3D->getDeviceContext());
 }
@@ -48,6 +50,16 @@ void RenderingMgr::resizeBuffers(u32 window_width, u32 window_height) const {
 	direct3D->resizeBuffers(window_width, window_height);
 	ImGui_ImplDX11_InvalidateDeviceObjects();
 	ImGui_ImplDX11_CreateDeviceObjects();
+}
+
+
+void RenderingMgr::render(const Engine& engine) {
+	
+	beginFrame();
+
+	renderer->render(engine);
+
+	endFrame();
 }
 
 

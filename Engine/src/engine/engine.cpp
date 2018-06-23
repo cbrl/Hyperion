@@ -71,9 +71,6 @@ void Engine::addSystems() const {
 
 	// Model system: updates model buffers
 	ecs_engine->addSystem<ModelSystem>();
-
-	// Renderer: renders things
-	ecs_engine->addSystem<Renderer>(rendering_mgr->getDevice(), rendering_mgr->getDeviceContext());
 }
 
 
@@ -128,6 +125,9 @@ void Engine::run() {
 
 void Engine::tick() const {
 
+	// Update the active systems in the ecs engine
+	ecs_engine->update(*this);
+
 	// Update system metrics
 	system_monitor->tick();
 	timer->tick();
@@ -139,15 +139,8 @@ void Engine::tick() const {
 	// Update the scene
 	scene->tick(*this);
 
-
-	// Begin a new frame
-	rendering_mgr->beginFrame();
-
-	// Update the active systems in the ecs engine
-	ecs_engine->update(*this);
-
-	// Present the frame
-	rendering_mgr->endFrame();
+	// Render the scene
+	rendering_mgr->render(*this);
 }
 
 

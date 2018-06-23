@@ -1,9 +1,7 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include <DirectXColors.h>
 
-#include "system/system.h"
 #include "engine_util.h"
 #include "hlsl.h"
 #include "pipeline.h"
@@ -17,12 +15,12 @@
 
 class Engine;
 
-class Renderer final : public System<Renderer> {
+class Renderer final {
 public:
 	Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context);
 	~Renderer() = default;
 
-	void update(const Engine& engine) override;
+	void render(const Engine& engine);
 
 
 private:
