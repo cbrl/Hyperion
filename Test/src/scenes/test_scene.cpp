@@ -41,35 +41,47 @@ void TestScene::load(const Engine& engine) {
 	cam->skybox().setTexture(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 	ecs_engine.getComponent<Transform>(camera)->setPosition(float3(0.0f, 4.0f, -2.0f));
 
+	ecs_engine.getComponent<MouseRotation>(camera)->setSensitivity(0.01f);
+
 
 	//----------------------------------------------------------------------------------
 	// Create models
 	//----------------------------------------------------------------------------------
 
+	// Scene model
 	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
 	addEntity<BasicModel>(ecs_engine, device, bp);
 
+	// Sphere
 	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
 	sphere = addEntity<BasicModel>(ecs_engine, device, sphere_bp);
-	ecs_engine.getComponent<Transform>(sphere)->setPosition(float3(7.0f, 3.0f, 0.0f));
+
+	auto rotation = ecs_engine.addComponent<AxisRotation>(sphere);
+	rotation->setAxis(Axis::Y);
+	rotation->setSpeed(0.5f);
+
+	ecs_engine.getComponent<Transform>(sphere)->setPosition(float3{ 0.0f, 2.0f, 0.0f });
+	//ecs_engine.getComponent<Transform>(sphere)->setPosition(float3(7.0f, 3.0f, 0.0f));
 
 
 	//----------------------------------------------------------------------------------
 	// Create lights
 	//----------------------------------------------------------------------------------
 	
-	// Point light
+	// Sphere light
 	{
-		auto light = ecs_engine.addComponent<PointLight>(sphere);
+		auto light = ecs_engine.addComponent<SpotLight>(sphere);
 		light->setAmbientColor(float4(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(float4(1.0f, 0.9f, 0.5f, 1.0f));
 		light->setAttenuation(float3(0.1f, 0.15f, 0.0f));
 		light->setSpecular(float4(1.0f, 1.0f, 1.0f, 1.0f));
 		light->setRange(100.0f);
+		light->setUmbraAngle(XM_PI / 6.0f);
+		light->setPenumbraAngle(XM_PI / 3.0f);
 		light->setShadows(true);
 	}
 
-	// Spot light
+	// Camera light
 	{
 		const auto spot_light = addEntity<BasicSpotLight>(ecs_engine);
 		auto light = ecs_engine.getComponent<SpotLight>(spot_light);
@@ -180,8 +192,8 @@ void TestScene::tick(const Engine& engine) {
 
 	// This could be made into a "rotate" system for use with the ECS.
 	// Create a rotation component that contains various parameters (speed, axis, etc)
-	auto transform = engine.getECS().getComponent<Transform>(sphere);
-	const auto p = transform->getPosition();
-	const auto v = XMVector3Transform(p, XMMatrixRotationY(delta_time));
-	transform->setPosition(v);
+	//auto transform = engine.getECS().getComponent<Transform>(sphere);
+	//const auto p = transform->getPosition();
+	//const auto v = XMVector3Transform(p, XMMatrixRotationY(delta_time));
+	//transform->setPosition(v);
 }

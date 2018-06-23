@@ -32,6 +32,7 @@ template<typename ClockT>
 void Timer<ClockT>::reset() {
 	base_time = ClockT::now();
 	prev_time = ClockT::now();
+	delta_time = ClockT::duration(0);
 	pause_duration = ClockT::duration(0);
 	paused = false;
 }

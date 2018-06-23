@@ -73,6 +73,15 @@
     <Filter Include="Source Files\systems\transform">
       <UniqueIdentifier>{12955cad-b065-4416-8643-c2bd334c9f3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\systems\motor">
+      <UniqueIdentifier>{f5105d09-d2fd-4321-ac7a-dce7ec38cb75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\systems\motor">
+      <UniqueIdentifier>{de84a7a0-487d-46a2-b560-0410de6b5ce1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\components\motor">
+      <UniqueIdentifier>{3ad642d2-57a1-4912-ac84-798ef2163c29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\components.h">
@@ -101,9 +110,6 @@
     </ClInclude>
     <ClInclude Include="src\entities\world_object.h">
       <Filter>Header Files\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\camera\camera_movement.h">
-      <Filter>Header Files\components\camera</Filter>
     </ClInclude>
     <ClInclude Include="src\components\camera\orthographic_camera.h">
       <Filter>Header Files\components\camera</Filter>
@@ -141,6 +147,24 @@
     <ClInclude Include="src\systems\transform\transform_system.h">
       <Filter>Header Files\systems\transform</Filter>
     </ClInclude>
+    <ClInclude Include="src\systems\motor\camera_motor_system.h">
+      <Filter>Header Files\systems\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\motor\camera_movement.h">
+      <Filter>Header Files\components\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\motor\mouse_rotation.h">
+      <Filter>Header Files\components\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\motor\mouse_rotation_system.h">
+      <Filter>Header Files\systems\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\motor\axis_rotation_system.h">
+      <Filter>Header Files\systems\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\motor\axis_rotation.h">
+      <Filter>Header Files\components\motor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -166,6 +190,15 @@
     </ClCompile>
     <ClCompile Include="src\components\model\model.cpp">
       <Filter>Source Files\components\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\motor\camera_motor_system.cpp">
+      <Filter>Source Files\systems\motor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\motor\mouse_rotation_system.cpp">
+      <Filter>Source Files\systems\motor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\motor\axis_rotation_system.cpp">
+      <Filter>Source Files\systems\motor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -48,13 +48,28 @@ public:
 	// Position
 	//----------------------------------------------------------------------------------
 
-	void move(const float3& move) {
-		translation += XMLoadFloat3(&move);
+	void moveX(float units) {
+		translation += {units, 0.0f, 0.0f};
 		needs_update = true;
 	}
 
-	void XM_CALLCONV move(FXMVECTOR move) {
-		translation += move;
+	void moveY(float units) {
+		translation += {0.0f, units, 0.0f};
+		needs_update = true;
+	}
+
+	void moveZ(float units) {
+		translation += {0.0f, 0.0f, units};
+		needs_update = true;
+	}
+
+	void move(const float3& units) {
+		translation += XMLoadFloat3(&units);
+		needs_update = true;
+	}
+
+	void XM_CALLCONV move(FXMVECTOR units) {
+		translation += units;
 		needs_update = true;
 	}
 
@@ -73,13 +88,28 @@ public:
 	// Rotation
 	//----------------------------------------------------------------------------------
 
-	void rotate(const float3& rotate) {
-		rotation += XMLoadFloat3(&rotate);
+	void rotateX(float units) {
+		rotation += {units, 0.0f, 0.0f};
 		needs_update = true;
 	}
 
-	void XM_CALLCONV rotate(FXMVECTOR rotate) {
-		rotation += rotate;
+	void rotateY(float units) {
+		rotation += {0.0f, units, 0.0f};
+		needs_update = true;
+	}
+
+	void rotateZ(float units) {
+		rotation += {0.0f, 0.0f, units};
+		needs_update = true;
+	}
+
+	void rotate(const float3& units) {
+		rotation += XMLoadFloat3(&units);
+		needs_update = true;
+	}
+
+	void XM_CALLCONV rotate(FXMVECTOR units) {
+		rotation += units;
 		needs_update = true;
 	}
 
@@ -98,23 +128,38 @@ public:
 	// Scale
 	//----------------------------------------------------------------------------------
 
-	void scale(const float3& scale) {
-		this->scaling *= XMLoadFloat3(&scale);
+	void scaleX(float units) {
+		scaling += {units, 0.0f, 0.0f};
 		needs_update = true;
 	}
 
-	void XM_CALLCONV scale(FXMVECTOR scale) {
-		this->scaling *= scale;
+	void scaleY(float units) {
+		scaling += {0.0f, units, 0.0f};
+		needs_update = true;
+	}
+
+	void scaleZ(float units) {
+		scaling += {0.0f, 0.0f, units};
+		needs_update = true;
+	}
+
+	void scale(const float3& units) {
+		scaling *= XMLoadFloat3(&units);
+		needs_update = true;
+	}
+
+	void XM_CALLCONV scale(FXMVECTOR units) {
+		scaling *= units;
 		needs_update = true;
 	}
 
 	void setScale(const float3& scale) {
-		this->scaling = XMLoadFloat3(&scale);
+		scaling = XMLoadFloat3(&scale);
 		needs_update = true;
 	}
 
 	void XM_CALLCONV setScale(FXMVECTOR scale) {
-		this->scaling = scale;
+		scaling = scale;
 		needs_update = true;
 	}
 

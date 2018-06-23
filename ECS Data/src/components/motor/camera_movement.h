@@ -4,14 +4,13 @@
 #include "input.h"
 
 
-class CameraMovement : public Component<CameraMovement> {
+class CameraMovement final : public Component<CameraMovement> {
 public:
 	CameraMovement()
 		: velocity(0.0f, 0.0f, 0.0f)
 		, acceleration(20.0f)
 		, deceleration(50.0f)
 		, max_velocity(10.0f)
-		, turn_sensitivity(0.1f)
 		, roll_sensitivity(1.5f)
 		, is_moving_x(false)
 
@@ -46,11 +45,6 @@ public:
 	}
 
 	[[nodiscard]]
-	float getTurnSensitivity() const {
-		return turn_sensitivity;
-	}
-
-	[[nodiscard]]
 	float getRollSensitivity() const {
 		return roll_sensitivity;
 	}
@@ -82,7 +76,6 @@ public:
 	void setDeceleration(float decel) { deceleration = decel; }
 	void setMaxVelocity(float max_vel) { max_velocity = max_vel; }
 
-	void setTurnSensitivity(float sens) { turn_sensitivity = sens; }
 	void setRollSensitivity(float sens) { roll_sensitivity = sens; }
 
 	void setMovingX(bool moving) { is_moving_x = moving; }
@@ -91,19 +84,16 @@ public:
 
 
 private:
-	weak_ptr<Input> input;
-
 	// Position, veloctiy, acceleration (units per second)
 	float3 velocity;
 	float acceleration;
 	float deceleration;
 	float max_velocity;
 
-	// Turning related variables
-	float turn_sensitivity;
+	// Roll speed multiplier
 	float roll_sensitivity;
 
-	// Booleans
+	// Movement booleans
 	bool is_moving_x;
 	bool is_moving_y;
 	bool is_moving_z;

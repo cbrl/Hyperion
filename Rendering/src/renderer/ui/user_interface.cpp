@@ -220,6 +220,10 @@ void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
 			drawNode("Camera Movement", *cam_movement);
 		}
 
+		if (auto* mouse_rotation = ecs_engine.getComponent<MouseRotation>(entity)) {
+			drawNode("Mouse Rotation", *mouse_rotation);
+		}
+
 		// Model
 		if (auto* model = ecs_engine.getComponent<Model>(entity)) {
 			const bool node_selected = (selected == model);
@@ -346,15 +350,41 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 		camera.setFog(Fog(color, start, range));
 }
 
+
+void UserInterface::drawDetails(OrthographicCamera& camera) const {
+
+	ImGui::Text("Fog");
+	ImGui::Separator();
+
+	auto& fog = camera.fog();
+	float4 color = fog.color;
+	float  start = fog.start;
+	float  range = fog.range;
+
+	bool update = false;
+
+	if (ImGui::ColorEdit4("Color", color.data()))
+		update = true;
+
+	if (ImGui::InputFloat("Start", &start))
+		update = true;
+
+	if (ImGui::InputFloat("Range", &range))
+		update = true;
+
+	if (update)
+		camera.setFog(Fog(color, start, range));
+}
+
+
 void UserInterface::drawDetails(CameraMovement& movement) const {
 
-	ImGui::Text("Movement");
+	ImGui::Text("Camera Movement");
 	ImGui::Separator();
 
 	float max_velocity = movement.getMaxVelocity();
 	float acceleration = movement.getAcceleration();
 	float deceleration = movement.getDeceleration();
-	float turn_sensitivity = movement.getTurnSensitivity();
 	float roll_sensitivity = movement.getRollSensitivity();
 
 	if (ImGui::InputFloat("Max Velocity", &max_velocity))
@@ -366,18 +396,22 @@ void UserInterface::drawDetails(CameraMovement& movement) const {
 	if (ImGui::InputFloat("Deceleration", &deceleration))
 		movement.setDeceleration(deceleration);
 
-	if (ImGui::InputFloat("Turn Sensitivity", &turn_sensitivity))
-		movement.setTurnSensitivity(turn_sensitivity);
-
-	if (ImGui::InputFloat("Sensitivity", &roll_sensitivity))
+	if (ImGui::InputFloat("Roll Sensitivity", &roll_sensitivity))
 		movement.setRollSensitivity(roll_sensitivity);
 }
 
 
-void UserInterface::drawDetails(OrthographicCamera& camera) const {
+void UserInterface::drawDetails(MouseRotation& rotation) const {
 	
-}
+	ImGui::Text("Mouse Rotation");
+	ImGui::Separator();
 
+	float sensitivity = rotation.sensitivity();
+
+	if (ImGui::DragFloat("Sensitivity", &sensitivity, 0.01f, 0.0f, FLT_MAX)) {
+		rotation.setSensitivity(sensitivity);
+	}
+}
 
 
 void UserInterface::drawDetails(Model& model) const {

@@ -2,7 +2,8 @@
 
 #include "entities/world_object.h"
 #include "components/camera/perspective_camera.h"
-#include "components/camera/camera_movement.h"
+#include "components/motor/camera_movement.h"
+#include "components/motor/mouse_rotation.h"
 
 
 class PlayerCamera final : public WorldObject<PlayerCamera> {
@@ -18,6 +19,7 @@ public:
 		this->addComponent<PerspectiveCamera>(device, device_context, viewport_width, viewport_height);
 		this->addComponent<Transform>();
 		this->addComponent<CameraMovement>();
+		this->addComponent<MouseRotation>();
 	}
 
 	~PlayerCamera() = default;

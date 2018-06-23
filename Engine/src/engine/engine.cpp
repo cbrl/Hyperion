@@ -53,7 +53,7 @@ bool Engine::init() {
 	rendering_mgr = make_unique<RenderingMgr>(hWnd, config);
 
 
-	// Add critical systems to the ECS
+	// Add systems to the ECS
 	addSystems();
 
 
@@ -66,11 +66,19 @@ void Engine::addSystems() const {
 	// Transform system: updates transforms when they're modified
 	ecs_engine->addSystem<TransformSystem>();
 
-	// Camera system: updates camera buffers and handles movement
+	// Camera system: updates camera buffers
 	ecs_engine->addSystem<CameraSystem>();
 
 	// Model system: updates model buffers
 	ecs_engine->addSystem<ModelSystem>();
+
+	// Camera motor system: moves an entity with a camera and camera movement component
+	ecs_engine->addSystem<CameraMotorSystem>();
+
+	// Mouse rotation system: uses mouse input to rotate an entity's transform
+	ecs_engine->addSystem<MouseRotationSystem>();
+
+	ecs_engine->addSystem<AxisRotationSystem>();
 }
 
 
