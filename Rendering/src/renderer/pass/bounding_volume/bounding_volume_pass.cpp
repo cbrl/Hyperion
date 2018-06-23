@@ -1,5 +1,8 @@
 #include "bounding_volume_pass.h"
 #include "engine/engine.h"
+#include "hlsl.h"
+#include "geometry/frustum/frustum.h"
+
 #include "compiled_headers/wireframe_box_vs.h"
 #include "compiled_headers/wireframe_box_ps.h"
 

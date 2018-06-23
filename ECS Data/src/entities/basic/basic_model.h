@@ -1,7 +1,7 @@
 #pragma once
 
-#include "world_object.h"
-#include "components/rendering/model/model.h"
+#include "entities/world_object.h"
+#include "components/model/model.h"
 
 
 class BasicModel final : public WorldObject<BasicModel> {

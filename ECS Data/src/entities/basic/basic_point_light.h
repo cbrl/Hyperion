@@ -1,7 +1,7 @@
 #pragma once
 
-#include "entities/world/world_object.h"
-#include "components/rendering/light/point_light.h"
+#include "entities/world_object.h"
+#include "components/light/point_light.h"
 
 
 class BasicPointLight final : public WorldObject<BasicPointLight> {

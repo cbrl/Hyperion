@@ -4,7 +4,6 @@
 #include "io/io.h"
 #include "directx/directx_math.h"
 
-
 #include "component/component.h"
 #include "buffer/buffers.h"
 #include "buffer/constant_buffer.h"

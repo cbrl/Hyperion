@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entity/entity.h"
-#include "components/geometry/transform/transform.h"
+#include "components/transform/transform.h"
 
 
 //----------------------------------------------------------------------------------

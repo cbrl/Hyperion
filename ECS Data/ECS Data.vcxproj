@@ -133,40 +133,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\components\camera\camera_base.h" />
+    <ClInclude Include="src\components\camera\camera_movement.h" />
+    <ClInclude Include="src\components\camera\orthographic_camera.h" />
+    <ClInclude Include="src\components\camera\perspective_camera.h" />
+    <ClInclude Include="src\components\camera\skybox\skybox.h" />
     <ClInclude Include="src\components\components.h" />
-    <ClInclude Include="src\components\geometry\transform\transform.h" />
-    <ClInclude Include="src\components\rendering\camera\camera_base.h" />
-    <ClInclude Include="src\components\rendering\camera\camera_movement.h" />
-    <ClInclude Include="src\components\rendering\camera\orthographic_camera.h" />
-    <ClInclude Include="src\components\rendering\camera\perspective_camera.h" />
-    <ClInclude Include="src\components\rendering\camera\skybox\skybox.h" />
-    <ClInclude Include="src\components\rendering\light\directional_light.h" />
-    <ClInclude Include="src\components\rendering\light\point_light.h" />
-    <ClInclude Include="src\components\rendering\light\spot_light.h" />
-    <ClInclude Include="src\components\rendering\model\model.h" />
+    <ClInclude Include="src\components\light\directional_light.h" />
+    <ClInclude Include="src\components\light\point_light.h" />
+    <ClInclude Include="src\components\light\spot_light.h" />
+    <ClInclude Include="src\components\model\model.h" />
+    <ClInclude Include="src\components\transform\transform.h" />
+    <ClInclude Include="src\entities\basic\basic_directional_light.h" />
+    <ClInclude Include="src\entities\basic\basic_model.h" />
+    <ClInclude Include="src\entities\basic\basic_point_light.h" />
+    <ClInclude Include="src\entities\basic\basic_spot_light.h" />
+    <ClInclude Include="src\entities\basic\player_camera.h" />
     <ClInclude Include="src\entities\entities.h" />
-    <ClInclude Include="src\entities\world\basic_directional_light.h" />
-    <ClInclude Include="src\entities\world\basic_model.h" />
-    <ClInclude Include="src\entities\world\basic_point_light.h" />
-    <ClInclude Include="src\entities\world\basic_spot_light.h" />
-    <ClInclude Include="src\entities\world\player_camera.h" />
-    <ClInclude Include="src\entities\world\world_object.h" />
-    <ClInclude Include="src\systems\geometry\transform\transform_system.h" />
-    <ClInclude Include="src\systems\rendering\camera\camera_system.h" />
-    <ClInclude Include="src\systems\rendering\model\model_system.h" />
+    <ClInclude Include="src\entities\world_object.h" />
+    <ClInclude Include="src\systems\camera\camera_system.h" />
+    <ClInclude Include="src\systems\model\model_system.h" />
     <ClInclude Include="src\systems\systems.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\components\rendering\camera\orthographic_camera.cpp" />
-    <ClCompile Include="src\components\rendering\camera\perspective_camera.cpp" />
-    <ClCompile Include="src\components\rendering\camera\skybox\skybox.cpp" />
-    <ClCompile Include="src\components\rendering\model\model.cpp" />
-    <ClCompile Include="src\systems\geometry\transform\transform_system.cpp" />
-    <ClCompile Include="src\systems\rendering\camera\camera_system.cpp" />
-    <ClCompile Include="src\systems\rendering\model\model_system.cpp" />
+    <ClInclude Include="src\systems\transform\transform_system.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\components\camera\orthographic_camera.cpp" />
+    <ClCompile Include="src\components\camera\perspective_camera.cpp" />
+    <ClCompile Include="src\components\camera\skybox\skybox.cpp" />
+    <ClCompile Include="src\components\model\model.cpp" />
+    <ClCompile Include="src\systems\camera\camera_system.cpp" />
+    <ClCompile Include="src\systems\model\model_system.cpp" />
+    <ClCompile Include="src\systems\transform\transform_system.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

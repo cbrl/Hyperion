@@ -1,9 +1,8 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
-#include "hlsl.h"
 #include "shader/shader.h"
-#include "components/rendering/camera/skybox/skybox.h"
+#include "components/camera/skybox/skybox.h"
 
 class Engine;
 class RenderStateMgr;

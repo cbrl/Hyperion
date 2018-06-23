@@ -6,9 +6,7 @@
 #include "pipeline.h"
 #include "buffer/buffers.h"
 #include "buffer/constant_buffer.h"
-#include "resource/resource_mgr.h"
-#include "geometry/frustum/frustum.h"
-#include "components/rendering/camera/skybox/skybox.h"
+#include "components/camera/skybox/skybox.h"
 
 
 template<typename T>

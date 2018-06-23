@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/rendering/camera/camera_base.h"
+#include "components/camera/camera_base.h"
 
 
 class OrthographicCamera final : public CameraBase<OrthographicCamera> {

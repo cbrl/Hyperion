@@ -1,16 +1,13 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
-#include "directx/vertex_types.h"
-#include "pipeline.h"
-#include "render_state_mgr.h"
 #include "buffer/buffers.h"
 #include "buffer/constant_buffer.h"
 #include "shader/shader.h"
-#include "components/rendering/model/model.h"
-#include "hlsl.h"
+#include "components/model/model.h"
 
 class Engine;
+class RenderStateMgr;
 
 class DepthPass final {
 public:
@@ -21,16 +18,16 @@ public:
 
 	void XM_CALLCONV render(const Engine& engine,
 	                        FXMMATRIX world_to_camera,
-	                        CXMMATRIX camera_to_projection);
+	                        CXMMATRIX camera_to_projection) const;
 
 	void XM_CALLCONV renderShadows(const Engine& engine,
 	                               FXMMATRIX world_to_camera,
-	                               CXMMATRIX camera_to_projection);
+	                               CXMMATRIX camera_to_projection) const;
 
 
 private:
 	void XM_CALLCONV updateCamera(FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) const;
-	void XM_CALLCONV renderModel(Model& model, FXMMATRIX model_to_projection);
+	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX model_to_projection) const;
 
 
 private:

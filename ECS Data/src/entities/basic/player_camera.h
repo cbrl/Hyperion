@@ -1,8 +1,8 @@
 #pragma once
 
-#include "entities/world/world_object.h"
-#include "components/rendering/camera/perspective_camera.h"
-#include "components/rendering/camera/camera_movement.h"
+#include "entities/world_object.h"
+#include "components/camera/perspective_camera.h"
+#include "components/camera/camera_movement.h"
 
 
 class PlayerCamera final : public WorldObject<PlayerCamera> {

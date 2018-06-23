@@ -1,9 +1,8 @@
 #pragma once
 
 #include "system/system.h"
-#include "components/geometry/transform/transform.h"
-#include "components/rendering/camera/camera_base.h"
-#include "components/rendering/camera/camera_movement.h"
+#include "components/transform/transform.h"
+#include "components/camera/camera_movement.h"
 
 
 class CameraSystem final : public System<CameraSystem> {

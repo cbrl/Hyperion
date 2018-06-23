@@ -1,6 +1,7 @@
 #include "light_pass.h"
 #include "engine/engine.h"
-#include "scene/scene.h"
+#include "hlsl.h"
+#include "geometry/frustum/frustum.h"
 
 
 LightPass::LightPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
@@ -26,8 +27,6 @@ LightPass::LightPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 void XM_CALLCONV LightPass::render(const Engine& engine, FXMMATRIX world_to_projection) {
 
 	auto& ecs_engine = engine.getECS();
-	auto& scene      = engine.getScene();
-
 
 	// Update light buffers
 	updateDirectionalLightData(ecs_engine, world_to_projection);
@@ -40,7 +39,7 @@ void XM_CALLCONV LightPass::render(const Engine& engine, FXMMATRIX world_to_proj
 	renderShadowMaps(engine);
 
 	// Update light info buffer
-	updateData(scene);
+	updateData();
 
 	// Bind the buffers
 	bindBuffers();
@@ -72,7 +71,7 @@ void LightPass::bindBuffers() {
 }
 
 
-void LightPass::updateData(Scene& scene) const {
+void LightPass::updateData() const {
 
 	LightBuffer light_data;
 

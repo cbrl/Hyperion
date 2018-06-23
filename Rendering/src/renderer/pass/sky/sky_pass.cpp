@@ -1,5 +1,6 @@
 #include "sky_pass.h"
 #include "engine/engine.h"
+#include "hlsl.h"
 
 #include "compiled_headers/skybox.h"
 #include "compiled_headers/skybox_vs.h"

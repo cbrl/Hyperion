@@ -1,5 +1,8 @@
 #include "forward_pass.h"
 #include "engine/engine.h"
+#include "pipeline.h"
+#include "hlsl.h"
+#include "geometry/frustum/frustum.h"
 
 #include "compiled_headers/forward.h"
 #include "compiled_headers/forward_vs.h"
@@ -52,7 +55,7 @@ void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_pr
 
 	// Render models
 	ecs_engine.forEachActive<Model>([&](Model& model) {
-		render(ecs_engine, model, world_to_projection);
+		renderModel(ecs_engine, model, world_to_projection);
 	});
 }
 
@@ -72,12 +75,12 @@ void XM_CALLCONV ForwardPass::render(const Engine& engine, const SkyBox& sky, FX
 
 	// Render models
 	ecs_engine.forEachActive<Model>([&](Model& model) {
-		render(ecs_engine, model, world_to_projection);
+		renderModel(ecs_engine, model, world_to_projection);
 	});
 }
 
 
-void XM_CALLCONV ForwardPass::render(ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::renderModel(ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
 
 	const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
 	if (!transform) return;

@@ -4,11 +4,7 @@
 #include "buffer/constant_buffer.h"
 #include "buffer/structured_buffer.h"
 #include "buffer/shadow_map_buffer.h"
-#include "components/rendering/light/directional_light.h"
-#include "components/rendering/light/point_light.h"
-#include "components/rendering/light/spot_light.h"
 #include "renderer/pass/depth/depth_pass.h"
-#include "hlsl.h"
 
 class ECS;
 class Scene;
@@ -27,7 +23,7 @@ private:
 	void updateShadowMaps();
 	void renderShadowMaps(const Engine& engine);
 
-	void updateData(Scene& scene) const;
+	void updateData() const;
 	void XM_CALLCONV updateDirectionalLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
 	void XM_CALLCONV updatePointLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
 	void XM_CALLCONV updateSpotLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);

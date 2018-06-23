@@ -1,5 +1,10 @@
 #include "depth_pass.h"
 #include "engine/engine.h"
+#include "pipeline.h"
+#include "hlsl.h"
+
+#include "directx/vertex_types.h"
+#include "geometry/frustum/frustum.h"
 
 //#include "compiled_headers/depth.h"
 #include "compiled_headers/depth_vs.h"
@@ -37,7 +42,7 @@ void DepthPass::bindState(const RenderStateMgr& render_state_mgr) const {
 
 void XM_CALLCONV DepthPass::render(const Engine& engine,
                                    FXMMATRIX world_to_camera,
-                                   CXMMATRIX camera_to_projection) {
+                                   CXMMATRIX camera_to_projection) const {
 
 	auto& ecs_engine = engine.getECS();
 
@@ -52,7 +57,7 @@ void XM_CALLCONV DepthPass::render(const Engine& engine,
 	Pipeline::PS::bindShader(device_context, nullptr, nullptr, 0);
 
 	// Draw each model
-	ecs_engine.forEachActive<Model>([&](Model& model) {
+	ecs_engine.forEachActive<Model>([&](const Model& model) {
 		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
 		if (!transform) return;
 
@@ -71,7 +76,7 @@ void XM_CALLCONV DepthPass::render(const Engine& engine,
 
 void XM_CALLCONV DepthPass::renderShadows(const Engine& engine,
                                           FXMMATRIX world_to_camera,
-                                          CXMMATRIX camera_to_projection) {
+                                          CXMMATRIX camera_to_projection) const {
 
 	auto& ecs_engine = engine.getECS();
 
@@ -114,9 +119,9 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 }
 
 
-void XM_CALLCONV DepthPass::renderModel(Model& model, FXMMATRIX model_to_projection) {
+void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX model_to_projection) const {
 
-	model.forEachChild([&](ModelChild& child) {
+	model.forEachChild([&](const ModelChild& child) {
 		//if (child.GetMaterial().transparent
 		//	|| child.GetMaterial().dissolve > THRESHOLD)
 		//	return;

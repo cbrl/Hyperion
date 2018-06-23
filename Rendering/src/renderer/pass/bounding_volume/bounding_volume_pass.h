@@ -1,7 +1,6 @@
 #pragma once
 
 #include "buffer/constant_buffer.h"
-#include "hlsl.h"
 #include "shader/shader.h"
 #include "geometry/bounding_volume/bounding_volume.h"
 
