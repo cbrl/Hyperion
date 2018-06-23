@@ -14,25 +14,14 @@ void AxisRotationSystem::update(const Engine& engine) {
 		auto transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
 		if (!transform) return;
 
-		const auto axis = rotation.axis();
-
-		if (axis == Axis::X  ||
-			axis == Axis::XY ||
-			axis == Axis::XZ ||
-			axis == Axis::XYZ) {
-			transform->rotateX(dt * rotation.speed());
+		if (rotation.hasAxis(AxisRotation::Axis::X)) {
+			transform->rotateX(dt * rotation.speedX());
 		}
-		if (axis == Axis::Y  ||
-		    axis == Axis::XY ||
-		    axis == Axis::YZ ||
-		    axis == Axis::XYZ) {
-			transform->rotateY(dt * rotation.speed());
+		if (rotation.hasAxis(AxisRotation::Axis::Y)) {
+			transform->rotateY(dt * rotation.speedY());
 		}
-		if (axis == Axis::Z  ||
-		    axis == Axis::XZ ||
-		    axis == Axis::YZ ||
-		    axis == Axis::XYZ) {
-			transform->rotateZ(dt * rotation.speed());
+		if (rotation.hasAxis(AxisRotation::Axis::Z)) {
+			transform->rotateZ(dt * rotation.speedZ());
 		}
 	});
 }

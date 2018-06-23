@@ -562,12 +562,25 @@ struct Vec4 : public DerivedT {
 	using int4 = Vec4<int32_t, DirectX::XMINT4>;
 
 	using uint2 = Vec2<uint32_t, DirectX::XMUINT2>;
-	using uint3 = Vec2<uint32_t, DirectX::XMUINT3>;
-	using uint4 = Vec2<uint32_t, DirectX::XMUINT4>;
+	using uint3 = Vec3<uint32_t, DirectX::XMUINT3>;
+	using uint4 = Vec4<uint32_t, DirectX::XMUINT4>;
 
 	using float2 = Vec2<float, DirectX::XMFLOAT2>;
 	using float3 = Vec3<float, DirectX::XMFLOAT3>;
 	using float4 = Vec4<float, DirectX::XMFLOAT4>;
+
+
+	static_assert(sizeof(int2) == sizeof(DirectX::XMINT2));
+	static_assert(sizeof(int3) == sizeof(DirectX::XMINT3));
+	static_assert(sizeof(int4) == sizeof(DirectX::XMINT4));
+
+	static_assert(sizeof(uint2) == sizeof(DirectX::XMUINT2));
+	static_assert(sizeof(uint3) == sizeof(DirectX::XMUINT3));
+	static_assert(sizeof(uint4) == sizeof(DirectX::XMUINT4));
+
+	static_assert(sizeof(float2) == sizeof(DirectX::XMFLOAT2));
+	static_assert(sizeof(float3) == sizeof(DirectX::XMFLOAT3));
+	static_assert(sizeof(float4) == sizeof(DirectX::XMFLOAT4));
 
 #else
 	using int2 = Vec2<int32_t>;
@@ -575,11 +588,24 @@ struct Vec4 : public DerivedT {
 	using int4 = Vec4<int32_t>;
 
 	using uint2 = Vec2<uint32_t>;
-	using uint3 = Vec2<uint32_t>;
-	using uint4 = Vec2<uint32_t>;
+	using uint3 = Vec3<uint32_t>;
+	using uint4 = Vec4<uint32_t>;
 
 	using float2 = Vec2<float>;
 	using float3 = Vec3<float>;
 	using float4 = Vec4<float>;
+
+
+	static_assert(sizeof(int2) == sizeof(int32_t) * 2);
+	static_assert(sizeof(int3) == sizeof(int32_t) * 3);
+	static_assert(sizeof(int4) == sizeof(int32_t) * 4);
+
+	static_assert(sizeof(uint2) == sizeof(uint32_t) * 2);
+	static_assert(sizeof(uint3) == sizeof(uint32_t) * 3);
+	static_assert(sizeof(uint4) == sizeof(uint32_t) * 4);
+
+	static_assert(sizeof(float2) == sizeof(float) * 2);
+	static_assert(sizeof(float3) == sizeof(float) * 3);
+	static_assert(sizeof(float4) == sizeof(float) * 4);
 
 #endif //defined(_WIN32)

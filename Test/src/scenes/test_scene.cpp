@@ -54,11 +54,11 @@ void TestScene::load(const Engine& engine) {
 
 	// Sphere
 	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
-	sphere = addEntity<BasicModel>(ecs_engine, device, sphere_bp);
+	const handle64 sphere = addEntity<BasicModel>(ecs_engine, device, sphere_bp);
 
 	auto rotation = ecs_engine.addComponent<AxisRotation>(sphere);
-	rotation->setAxis(Axis::Y);
-	rotation->setSpeed(0.5f);
+	rotation->setAxis(AxisRotation::Axis::Y);
+	rotation->setSpeedY(0.5f);
 
 	ecs_engine.getComponent<Transform>(sphere)->setPosition(float3{ 0.0f, 2.0f, 0.0f });
 	//ecs_engine.getComponent<Transform>(sphere)->setPosition(float3(7.0f, 3.0f, 0.0f));
