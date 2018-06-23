@@ -9,6 +9,7 @@ void StructuredBuffer<DataT>::updateData(ID3D11Device& device,
 
 	// Recreate the buffer if the array of data being fed to it is larger than the buffer
 	if (current_size > reserved_size) {
+		reserved_size = current_size;
 		createBuffer(device);
 	}
 
