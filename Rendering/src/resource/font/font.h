@@ -22,7 +22,7 @@ public:
 	Font(_In_ ID3D11ShaderResourceView* texture,
 	          _In_reads_(glyphCount)	          Glyph const* glyphs,
 	          _In_	          size_t glyphCount,
-	          _In_	          float lineSpacing)
+	          _In_	          f32 lineSpacing)
 		: SpriteFont(texture, glyphs, glyphCount, lineSpacing) {
 	}
 

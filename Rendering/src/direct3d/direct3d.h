@@ -19,7 +19,7 @@ public:
 	void clear() const;
 
 	// Clear the backbuffer with a specified color
-	void clear(const float color[4]) const;
+	void clear(const f32 color[4]) const;
 
 	// Present the current frame
 	void presentFrame() const;

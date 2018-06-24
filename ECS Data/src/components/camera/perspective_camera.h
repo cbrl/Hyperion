@@ -13,7 +13,7 @@ public:
 	~PerspectiveCamera() = default;
 
 	// Change the FOV
-	void setFOV(float radians) {
+	void setFOV(f32 radians) {
 		fov = radians;
 		updateProjectionMatrix();
 	}
@@ -26,5 +26,5 @@ protected:
 
 protected:
 	// Camera FOV
-	float fov;
+	f32 fov;
 };

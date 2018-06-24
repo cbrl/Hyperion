@@ -2,7 +2,7 @@
 
 #include "os/windows.h"
 #include <Psapi.h>
-#include "datatypes/datatypes.h"
+#include "datatypes/scalar_types.h"
 #include "timer/timer.h"
 
 
@@ -76,16 +76,16 @@ class SystemMonitor final {
 
 	public:
 		[[nodiscard]]
-		double getTotalCpuPercentage() const;
+		f64 getTotalCpuPercentage() const;
 
 		[[nodiscard]]
-		double getProcessCpuPercentage() const;
+		f64 getProcessCpuPercentage() const;
 
 
 	private:
-		double dt;
-		double sys_usage;
-		double proc_usage;
+		f64 dt;
+		f64 sys_usage;
+		f64 proc_usage;
 
 		SystemWorkTimer sys_work_timer;
 		SystemIdleTimer sys_idle_timer;

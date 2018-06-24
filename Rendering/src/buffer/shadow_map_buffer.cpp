@@ -19,8 +19,8 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 
 
 	// Define the viewport
-	viewport.Width    = static_cast<float>(width);
-	viewport.Height   = static_cast<float>(height);
+	viewport.Width    = static_cast<f32>(width);
+	viewport.Height   = static_cast<f32>(height);
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
 	viewport.MinDepth = 0.0f;
@@ -97,8 +97,8 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 
 
 	// Define the viewport
-	viewport.Width    = static_cast<float>(width);
-	viewport.Height   = static_cast<float>(height);
+	viewport.Width    = static_cast<f32>(width);
+	viewport.Height   = static_cast<f32>(height);
 	viewport.TopLeftX = 0.0f;
 	viewport.TopLeftY = 0.0f;
 	viewport.MinDepth = 0.0f;

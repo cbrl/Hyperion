@@ -43,10 +43,10 @@ public:
 	BoundingSphere(BoundingSphere&& sphere) = default;
 
 	// Construct a bounding sphere from the center point and radius of an object
-	BoundingSphere(const f32_3& center, float radius);
+	BoundingSphere(const f32_3& center, f32 radius);
 
 	// Construct a bounding sphere from the center point and radius of an object
-	BoundingSphere(FXMVECTOR center, float radius);
+	BoundingSphere(FXMVECTOR center, f32 radius);
 
 	~BoundingSphere() = default;
 
@@ -59,11 +59,11 @@ public:
 	XMVECTOR XM_CALLCONV center() const { return sphere_center; }
 
 	[[nodiscard]]
-	float radius() const { return sphere_radius; }
+	f32 radius() const { return sphere_radius; }
 
 
 private:
 	// The non-transformed center and radius
 	XMVECTOR sphere_center;
-	float sphere_radius;
+	f32 sphere_radius;
 };

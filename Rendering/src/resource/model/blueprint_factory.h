@@ -10,7 +10,7 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
-	                                             float size    = 1,
+	                                             f32  size     = 1,
 	                                             bool rhcoords = false,
 	                                             bool invertn  = false);
 
@@ -24,64 +24,64 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
-	                                               float diameter      = 1,
+	                                               f32    diameter     = 1,
 	                                               size_t tessellation = 16,
-	                                               bool rhcoords       = false,
-	                                               bool invertn        = false);
+	                                               bool   rhcoords     = false,
+	                                               bool   invertn      = false);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
-	                                                  float diameter      = 1,
+	                                                  f32    diameter     = 1,
 	                                                  size_t tessellation = 3,
-	                                                  bool rhcoords       = false);
+	                                                  bool   rhcoords     = false);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
-	                                                 float diameter      = 1,
-	                                                 float height        = 1,
+	                                                 f32    diameter     = 1,
+	                                                 f32    height       = 1,
 	                                                 size_t tessellation = 32,
-	                                                 bool rhcoords       = false);
+	                                                 bool   rhcoords     = false);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
-	                                             float diameter      = 1,
-	                                             float height        = 1,
+	                                             f32    diameter     = 1,
+	                                             f32    height       = 1,
 	                                             size_t tessellation = 32,
-	                                             bool rhcoords       = false);
+	                                             bool   rhcoords     = false);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
-	                                              float diameter      = 1,
-	                                              float thickness     = 0.333f,
+	                                              f32    diameter     = 1,
+	                                              f32    thickness    = 0.333f,
 	                                              size_t tessellation = 32,
-	                                              bool rhcoords       = false);
+	                                              bool   rhcoords     = false);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
-	                                                    float size    = 1,
+	                                                    f32  size     = 1,
 	                                                    bool rhcoords = false);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
-	                                                   float size    = 1,
+	                                                   f32  size     = 1,
 	                                                   bool rhcoords = false);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
-	                                                     float size    = 1,
+	                                                     f32  size     = 1,
 	                                                     bool rhcoords = false);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
-	                                                    float size    = 1,
+	                                                    f32  size     = 1,
 	                                                    bool rhcoords = false);
 };
 

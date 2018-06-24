@@ -68,15 +68,15 @@ public:
 
 	// Change the viewport size
 	void resizeViewport(ID3D11DeviceContext& device_context, u32 width, u32 height) {
-		viewport.Width  = static_cast<float>(width);
-		viewport.Height = static_cast<float>(height);
+		viewport.Width  = static_cast<f32>(width);
+		viewport.Height = static_cast<f32>(height);
 		bindViewport(device_context);
 		updateProjectionMatrix();
 	}
 
 	void setViewportTopLeft(u32 top_left_x, u32 top_left_y) {
-		viewport.TopLeftX = static_cast<float>(top_left_x);
-		viewport.TopLeftY = static_cast<float>(top_left_y);
+		viewport.TopLeftX = static_cast<f32>(top_left_x);
+		viewport.TopLeftY = static_cast<f32>(top_left_y);
 		updateProjectionMatrix();
 	}
 
@@ -86,7 +86,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Set the depth range
-	void setZDepth(float z_near, float z_far) {
+	void setZDepth(f32 z_near, f32 z_far) {
 		this->z_near = z_near;
 		this->z_far  = z_far;
 		updateProjectionMatrix();
@@ -147,8 +147,8 @@ protected:
 
 	// Viewport and z depth
 	D3D11_VIEWPORT viewport;
-	float z_near;
-	float z_far;
+	f32 z_near;
+	f32 z_far;
 
 	// The skybox for this camera
 	SkyBox sky;

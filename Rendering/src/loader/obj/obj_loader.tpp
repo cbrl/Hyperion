@@ -366,7 +366,7 @@ template<typename VertexT>
 void OBJLoader<VertexT>::readTransparency(wstring& line, bool inverse) {
 	wstringstream stream(line);
 
-	float transparency;
+	f32 transparency;
 	stream >> transparency;
 
 	if (inverse) {
@@ -628,7 +628,7 @@ void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 			const XMVECTOR vec1 = XMLoad(&v1);
 			const XMVECTOR vec2 = XMLoad(&v2);
 
-			float angle = XMVectorGetX(XMVector3AngleBetweenVectors(vec1, vec2));
+			f32 angle = XMVectorGetX(XMVector3AngleBetweenVectors(vec1, vec2));
 			angle       = XMConvertToDegrees(angle);
 
 			if (angle <= 0 || angle >= 180) {

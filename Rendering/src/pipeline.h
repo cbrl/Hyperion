@@ -130,7 +130,7 @@ public:
 	struct OM {
 		static void bindBlendState(ID3D11DeviceContext& device_context,
 		                           ID3D11BlendState* state,
-		                           const float blend_factor[4],
+		                           const f32 blend_factor[4],
 		                           u32 sample_mask) {
 
 			device_context.OMSetBlendState(state, blend_factor, sample_mask);
@@ -177,13 +177,13 @@ public:
 		static void clearRTV(ID3D11DeviceContext& device_context,
 		                     ID3D11RenderTargetView* rtv) {
 
-			float color[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+			f32 color[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 			clearRTV(device_context, rtv, color);
 		}
 
 		static void clearRTV(ID3D11DeviceContext& device_context,
 		                     ID3D11RenderTargetView* rtv,
-		                     const float color[4]) {
+		                     const f32 color[4]) {
 
 			device_context.ClearRenderTargetView(rtv, color);
 		}

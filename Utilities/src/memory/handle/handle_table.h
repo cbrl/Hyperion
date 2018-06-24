@@ -1,7 +1,6 @@
 #pragma once
 
 #include "handle.h"
-#include "log/log.h"
 
 
 template<typename HandleT, typename DataT, size_t ChunkSize = 512>

@@ -7,7 +7,7 @@
 void AxisRotationSystem::update(const Engine& engine) {
 
 	auto& ecs_engine = engine.getECS();
-	const float dt   = static_cast<float>(engine.getTimer().deltaTime());
+	const f32 dt     = static_cast<f32>(engine.getTimer().deltaTime());
 
 	ecs_engine.forEachActive<AxisRotation>([&](AxisRotation& rotation) {
 		

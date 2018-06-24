@@ -56,15 +56,15 @@ public:
 		rotation_speeds = std::move(speeds);
 	}
 
-	void setSpeedX(float speed) {
+	void setSpeedX(f32 speed) {
 		rotation_speeds.x = speed;
 	}
 
-	void setSpeedY(float speed) {
+	void setSpeedY(f32 speed) {
 		rotation_speeds.y = speed;
 	}
 
-	void setSpeedZ(float speed) {
+	void setSpeedZ(f32 speed) {
 		rotation_speeds.z = speed;
 	}
 
@@ -73,20 +73,20 @@ public:
 		return rotation_speeds;
 	}
 
-	float getSpeedX() const {
+	f32 getSpeedX() const {
 		return rotation_speeds.x;
 	}
 
-	float getSpeedY() const {
+	f32 getSpeedY() const {
 		return rotation_speeds.y;
 	}
 
-	float getSpeedZ() const {
+	f32 getSpeedZ() const {
 		return rotation_speeds.z;
 	}
 
 
 private:
-	u8     rotation_axis;
+	u8    rotation_axis;
 	f32_3 rotation_speeds;
 };

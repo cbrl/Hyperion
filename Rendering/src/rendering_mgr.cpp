@@ -72,8 +72,8 @@ void RenderingMgr::beginFrame() const {
 
 
 	// Clear the render target view with a specified color
-	static float color[4] = {0.39f, 0.39f, 0.39f, 1.0f};
-	//ImGui::ColorEdit4("Clear Color", (float*)&color);
+	static f32 color[4] = {0.39f, 0.39f, 0.39f, 1.0f};
+	//ImGui::ColorEdit4("Clear Color", (f32*)&color);
 
 	direct3D->clear(color);
 }

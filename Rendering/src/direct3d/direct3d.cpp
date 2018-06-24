@@ -209,7 +209,7 @@ void Direct3D::clear() const {
 }
 
 
-void Direct3D::clear(const float color[4]) const {
+void Direct3D::clear(const f32 color[4]) const {
 	Pipeline::OM::clearRTV(*device_context.Get(), render_target_view.Get(), color);
 	Pipeline::OM::clearDSV(*device_context.Get(), depth_stencil_view.Get());
 }

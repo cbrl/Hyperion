@@ -3,9 +3,9 @@
 #include "engine/engine.h"
 
 
-static constexpr float z_near = 0.01f;
-static constexpr float z_far  = 100.0f;
-static constexpr float fov    = XM_PI / 3.0f;
+static constexpr f32 z_near = 0.01f;
+static constexpr f32 z_far  = 100.0f;
+static constexpr f32 fov    = XM_PI / 3.0f;
 
 
 TestScene::TestScene() : Scene("Test Scene") {
@@ -143,13 +143,13 @@ void TestScene::tick(const Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const i32_2 mouse_delta      = engine.getInput().getMouseDelta();
-	const u32 fps                = engine.getFPSCounter().getFPS();
-	const double delta_time      = engine.getTimer().deltaTime();
-	const double total_cpu_usage = engine.getSysMon().cpu().getTotalCpuPercentage();
-	const double proc_cpu_usage  = engine.getSysMon().cpu().getProcessCpuPercentage();
-	const u64 total_mem_usage    = engine.getSysMon().memory().getTotalUsedPhysicalMem();
-	const u64 proc_mem_usage     = engine.getSysMon().memory().getProcessUsedPhysicalMem();
+	const i32_2 mouse_delta   = engine.getInput().getMouseDelta();
+	const u32 fps             = engine.getFPSCounter().getFPS();
+	const f64 delta_time      = engine.getTimer().deltaTime();
+	const f64 total_cpu_usage = engine.getSysMon().cpu().getTotalCpuPercentage();
+	const f64 proc_cpu_usage  = engine.getSysMon().cpu().getProcessCpuPercentage();
+	const u64 total_mem_usage = engine.getSysMon().memory().getTotalUsedPhysicalMem();
+	const u64 proc_mem_usage  = engine.getSysMon().memory().getProcessUsedPhysicalMem();
 
 	static wostringstream cpu_str;
 	static wostringstream mem_str;
@@ -165,8 +165,8 @@ void TestScene::tick(const Engine& engine) {
 	mem_str.clear();
 	mem_str.str(L"");
 	mem_str.precision(4);
-	mem_str << L"RAM Usage\nTotal: " << static_cast<double>(total_mem_usage) / 1e6 << L"MB"
-	        << L"\nProcess: "        << static_cast<double>(proc_mem_usage) / 1e6  << L"MB";
+	mem_str << L"RAM Usage\nTotal: " << static_cast<f64>(total_mem_usage) / 1e6 << L"MB"
+	        << L"\nProcess: "        << static_cast<f64>(proc_mem_usage) / 1e6  << L"MB";
 
 	// FPS
 	texts.at("FPS").setText(L"FPS: " + to_wstring(fps));

@@ -73,13 +73,13 @@ public:
 	//----------------------------------------------------------------------------------
 	// Range
 	//----------------------------------------------------------------------------------
-	void setRange(float range) {
+	void setRange(f32 range) {
 		this->range = range;
 		updateBoundingVolumes();
 	}
 
 	[[nodiscard]]
-	float getRange() const {
+	f32 getRange() const {
 		return range;
 	}
 
@@ -122,10 +122,10 @@ private:
 	f32_4 ambient_color;
 	f32_4 diffuse_color;
 	f32_4 specular;
-	float start;
-	float range;
+	f32   start;
+	f32   range;
 	f32_2 proj_size;
-	AABB aabb;
+	AABB  aabb;
 
 	bool shadows;
 };

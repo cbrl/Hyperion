@@ -3,7 +3,7 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
-	                                      float size,
+	                                      f32 size,
 	                                      bool rhcoords,
 	                                      bool invertn) {
 
@@ -100,7 +100,7 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
-	                                        float diameter,
+	                                        f32 diameter,
 	                                        size_t tessellation,
 	                                        bool rhcoords,
 	                                        bool invertn) {
@@ -150,7 +150,7 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
-	                                           float diameter,
+	                                           f32 diameter,
 	                                           size_t tessellation,
 	                                           bool rhcoords) {
 
@@ -198,8 +198,8 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
-	                                          float diameter,
-	                                          float height,
+	                                          f32 diameter,
+	                                          f32 height,
 	                                          size_t tessellation,
 	                                          bool rhcoords) {
 
@@ -248,8 +248,8 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
-	                                      float diameter,
-	                                      float height,
+	                                      f32 diameter,
+	                                      f32 height,
 	                                      size_t tessellation,
 	                                      bool rhcoords) {
 
@@ -298,8 +298,8 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
-	                                       float diameter,
-	                                       float thickness,
+	                                       f32 diameter,
+	                                       f32 thickness,
 	                                       size_t tessellation,
 	                                       bool rhcoords) {
 
@@ -348,7 +348,7 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
-	                                             float size,
+	                                             f32 size,
 	                                             bool rhcoords) {
 
 		// Model name
@@ -395,7 +395,7 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
-	                                            float size,
+	                                            f32 size,
 	                                            bool rhcoords) {
 
 		// Model name
@@ -442,7 +442,7 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
-	                                              float size,
+	                                              f32 size,
 	                                              bool rhcoords) {
 
 		// Model name
@@ -489,7 +489,7 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
-	                                             float size,
+	                                             f32 size,
 	                                             bool rhcoords) {
 
 		// Model name

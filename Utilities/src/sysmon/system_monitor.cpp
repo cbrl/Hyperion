@@ -32,13 +32,13 @@ void SystemMonitor::CpuMonitor::tick() {
 
 
 [[nodiscard]]
-double SystemMonitor::CpuMonitor::getTotalCpuPercentage() const {
+f64 SystemMonitor::CpuMonitor::getTotalCpuPercentage() const {
 	return sys_usage;
 }
 
 
 [[nodiscard]]
-double SystemMonitor::CpuMonitor::getProcessCpuPercentage() const {
+f64 SystemMonitor::CpuMonitor::getProcessCpuPercentage() const {
 	return proc_usage;
 }
 

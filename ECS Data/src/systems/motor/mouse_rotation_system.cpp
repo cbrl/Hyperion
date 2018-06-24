@@ -8,8 +8,8 @@ void MouseRotationSystem::update(const Engine& engine) {
 
 	auto& ecs_engine        = engine.getECS();
 	const auto& input       = engine.getInput();
-	const float dt          = static_cast<float>(engine.getTimer().deltaTime());
-	const i32_2  mouse_delta = input.getMouseDelta();
+	const f32   dt          = static_cast<f32>(engine.getTimer().deltaTime());
+	const i32_2 mouse_delta = input.getMouseDelta();
 
 	ecs_engine.forEachActive<MouseRotation>([&](MouseRotation& rotation) {
 
@@ -19,8 +19,8 @@ void MouseRotationSystem::update(const Engine& engine) {
 		f32_3 rotate_units{ 0.0f, 0.0f, 0.0f };
 
 		// Set x/y rotation with mouse data
-		rotate_units.x = static_cast<float>(mouse_delta.y) * rotation.getSensitivity();
-		rotate_units.y = static_cast<float>(mouse_delta.x) * rotation.getSensitivity();
+		rotate_units.x = static_cast<f32>(mouse_delta.y) * rotation.getSensitivity();
+		rotate_units.y = static_cast<f32>(mouse_delta.x) * rotation.getSensitivity();
 
 		// Rotate the camera
 		if (rotate_units.x || rotate_units.y || rotate_units.z) {

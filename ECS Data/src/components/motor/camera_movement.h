@@ -30,22 +30,22 @@ public:
 	}
 
 	[[nodiscard]]
-	float getAcceleration() const {
+	f32 getAcceleration() const {
 		return acceleration;
 	}
 
 	[[nodiscard]]
-	float getDeceleration() const {
+	f32 getDeceleration() const {
 		return deceleration;
 	}
 
 	[[nodiscard]]
-	float getMaxVelocity() const {
+	f32 getMaxVelocity() const {
 		return max_velocity;
 	}
 
 	[[nodiscard]]
-	float getRollSensitivity() const {
+	f32 getRollSensitivity() const {
 		return roll_sensitivity;
 	}
 
@@ -72,11 +72,11 @@ public:
 	void setVelocity(const f32_3& vel) { velocity = vel; }
 	void XM_CALLCONV setVelocity(FXMVECTOR vel) { XMStore(&velocity, vel); }
 
-	void setAcceleration(float accel) { acceleration = accel; }
-	void setDeceleration(float decel) { deceleration = decel; }
-	void setMaxVelocity(float max_vel) { max_velocity = max_vel; }
+	void setAcceleration(f32 accel) { acceleration = accel; }
+	void setDeceleration(f32 decel) { deceleration = decel; }
+	void setMaxVelocity(f32 max_vel) { max_velocity = max_vel; }
 
-	void setRollSensitivity(float sens) { roll_sensitivity = sens; }
+	void setRollSensitivity(f32 sens) { roll_sensitivity = sens; }
 
 	void setMovingX(bool moving) { is_moving_x = moving; }
 	void setMovingY(bool moving) { is_moving_y = moving; }
@@ -86,12 +86,12 @@ public:
 private:
 	// Position, veloctiy, acceleration (units per second)
 	f32_3 velocity;
-	float acceleration;
-	float deceleration;
-	float max_velocity;
+	f32 acceleration;
+	f32 deceleration;
+	f32 max_velocity;
 
 	// Roll speed multiplier
-	float roll_sensitivity;
+	f32 roll_sensitivity;
 
 	// Movement booleans
 	bool is_moving_x;

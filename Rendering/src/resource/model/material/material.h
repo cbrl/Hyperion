@@ -52,9 +52,9 @@ struct Material final {
 	f32_4 emissive;
 
 	// Optical Density (index of refraction)
-	float optical_density;
+	f32 optical_density;
 	// Dissolve (alpha)
-	float dissolve;
+	f32 dissolve;
 	// Illumination model
 	i32 illum;
 

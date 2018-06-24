@@ -14,9 +14,9 @@ using namespace DirectX;
 
 
 namespace Shapes {
-	const float SQRT2 = 1.41421356237309504880f;
-	const float SQRT3 = 1.73205080756887729352f;
-	const float SQRT6 = 2.44948974278317809820f;
+	const f32 SQRT2 = 1.41421356237309504880f;
+	const f32 SQRT3 = 1.73205080756887729352f;
+	const f32 SQRT6 = 2.44948974278317809820f;
 
 	inline void CheckIndexOverflow(size_t value) {
 		// Use >=, not > comparison, because D3D level 10_x+ hardware does not support 0xFFFFFFFF index values.
@@ -71,7 +71,7 @@ namespace Shapes {
 	// Cube (aka a Hexahedron) or Box
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeCube(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords, bool invertn) {
+	void ComputeCube(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords, bool invertn) {
 		ComputeBox(vertices, indices, f32_3(size, size, size), rhcoords, invertn);
 	}
 
@@ -162,7 +162,7 @@ namespace Shapes {
 	template<typename VertexT>
 	void ComputeSphere(vector<VertexT>& vertices,
 	                   vector<u32>& indices,
-	                   float diameter,
+	                   f32 diameter,
 	                   size_t tessellation,
 	                   bool rhcoords,
 	                   bool invertn) {
@@ -175,23 +175,23 @@ namespace Shapes {
 		const size_t verticalSegments = tessellation;
 		const size_t horizontalSegments = tessellation * 2;
 
-		const float radius = diameter / 2;
+		const f32 radius = diameter / 2;
 
 		// Create rings of vertices at progressively higher latitudes.
 		for (size_t i = 0; i <= verticalSegments; i++) {
-			const float v = 1 - static_cast<float>(i) / verticalSegments;
+			const f32 v = 1 - static_cast<f32>(i) / verticalSegments;
 
-			const float latitude = (i * XM_PI / verticalSegments) - XM_PIDIV2;
-			float dy, dxz;
+			const f32 latitude = (i * XM_PI / verticalSegments) - XM_PIDIV2;
+			f32 dy, dxz;
 
 			XMScalarSinCos(&dy, &dxz, latitude);
 
 			// Create a single ring of vertices at this latitude.
 			for (size_t j = 0; j <= horizontalSegments; j++) {
-				const float u = static_cast<float>(j) / horizontalSegments;
+				const f32 u = static_cast<f32>(j) / horizontalSegments;
 
-				const float longitude = j * XM_2PI / horizontalSegments;
-				float dx, dz;
+				const f32 longitude = j * XM_2PI / horizontalSegments;
+				f32 dx, dz;
 
 				XMScalarSinCos(&dx, &dz, longitude);
 
@@ -243,7 +243,7 @@ namespace Shapes {
 	template<typename VertexT>
 	void ComputeGeoSphere(vector<VertexT>& vertices,
 	                      vector<u32>& indices,
-	                      float diameter,
+	                      f32 diameter,
 	                      size_t tessellation,
 	                      bool rhcoords) {
 		vertices.clear();
@@ -287,7 +287,7 @@ namespace Shapes {
 			5, 2, 1, // bottom front-right face
 		};
 
-		const float radius = diameter / 2.0f;
+		const f32 radius = diameter / 2.0f;
 
 		// Start with an octahedron; copy the data into the vertex/index collection.
 
@@ -399,11 +399,11 @@ namespace Shapes {
 			XMStore(&normalFloat3, normal);
 
 			// calculate texture coordinates for this vertex
-			const float longitude = atan2(normalFloat3.x, -normalFloat3.z);
-			const float latitude = acos(normalFloat3.y);
+			const f32 longitude = atan2(normalFloat3.x, -normalFloat3.z);
+			const f32 latitude = acos(normalFloat3.y);
 
-			const float u = longitude / XM_2PI + 0.5f;
-			const float v = latitude / XM_PI;
+			const f32 u = longitude / XM_2PI + 0.5f;
+			const f32 v = latitude / XM_PI;
 
 			const auto texcoord = XMVectorSet(1.0f - u, v, 0.0f, 0.0f);
 
@@ -560,8 +560,8 @@ namespace Shapes {
 	namespace {
 		// Helper computes a point on a unit circle, aligned to the x/z plane and centered on the origin.
 		XMVECTOR GetCircleVector(size_t i, size_t tessellation) {
-			const float angle = i * XM_2PI / tessellation;
-			float dx, dz;
+			const f32 angle = i * XM_2PI / tessellation;
+			f32 dx, dz;
 
 			XMScalarSinCos(&dx, &dz, angle);
 
@@ -570,8 +570,8 @@ namespace Shapes {
 		}
 
 		XMVECTOR GetCircleTangent(size_t i, size_t tessellation) {
-			const float angle = (i * XM_2PI / tessellation) + XM_PIDIV2;
-			float dx, dz;
+			const f32 angle = (i * XM_2PI / tessellation) + XM_PIDIV2;
+			f32 dx, dz;
 
 			XMScalarSinCos(&dx, &dz, angle);
 
@@ -585,8 +585,8 @@ namespace Shapes {
 		void CreateCylinderCap(vector<VertexT>& vertices,
 		                       vector<u32>& indices,
 		                       size_t tessellation,
-		                       float height,
-		                       float radius,
+		                       f32 height,
+		                       f32 radius,
 		                       bool isTop) {
 			// Create cap indices.
 			for (size_t i = 0; i < tessellation - 2; i++) {
@@ -636,8 +636,8 @@ namespace Shapes {
 	template<typename VertexT>
 	void ComputeCylinder(vector<VertexT>& vertices,
 	                     vector<u32>& indices,
-	                     float diameter,
-	                     float height,
+	                     f32 diameter,
+	                     f32 height,
 	                     size_t tessellation,
 	                     bool rhcoords) {
 		vertices.clear();
@@ -650,7 +650,7 @@ namespace Shapes {
 
 		const XMVECTOR topOffset = g_XMIdentityR1 * height;
 
-		float radius = diameter / 2;
+		f32 radius = diameter / 2;
 		const size_t stride = tessellation + 1;
 
 		// Create a ring of triangles around the outside of the cylinder.
@@ -659,7 +659,7 @@ namespace Shapes {
 
 			const XMVECTOR sideOffset = normal * radius;
 
-			float u = static_cast<float>(i) / tessellation;
+			f32 u = static_cast<f32>(i) / tessellation;
 
 			const XMVECTOR texCoord = XMLoad(&u);
 
@@ -702,8 +702,8 @@ namespace Shapes {
 	template<typename VertexT>
 	void ComputeCone(vector<VertexT>& vertices,
 	                 vector<u32>& indices,
-	                 float diameter,
-	                 float height,
+	                 f32 diameter,
+	                 f32 height,
 	                 size_t tessellation,
 	                 bool rhcoords) {
 		vertices.clear();
@@ -716,7 +716,7 @@ namespace Shapes {
 
 		const XMVECTOR topOffset = g_XMIdentityR1 * height;
 
-		float radius = diameter / 2;
+		f32 radius = diameter / 2;
 		const size_t stride = tessellation + 1;
 
 		// Create a ring of triangles around the outside of the cone.
@@ -725,7 +725,7 @@ namespace Shapes {
 
 			const XMVECTOR sideOffset = circlevec * radius;
 
-			float u = static_cast<float>(i) / tessellation;
+			f32 u = static_cast<f32>(i) / tessellation;
 
 			const XMVECTOR texCoord = XMLoad(&u);
 
@@ -770,8 +770,8 @@ namespace Shapes {
 	template<typename VertexT>
 	void ComputeTorus(vector<VertexT>& vertices,
 	                  vector<u32>& indices,
-	                  float diameter,
-	                  float thickness,
+	                  f32 diameter,
+	                  f32 thickness,
 	                  size_t tessellation,
 	                  bool rhcoords) {
 		vertices.clear();
@@ -784,9 +784,9 @@ namespace Shapes {
 
 		// First we loop around the main ring of the torus.
 		for (size_t i = 0; i <= tessellation; i++) {
-			const float u = static_cast<float>(i) / tessellation;
+			const f32 u = static_cast<f32>(i) / tessellation;
 
-			const float outerAngle = i * XM_2PI / tessellation - XM_PIDIV2;
+			const f32 outerAngle = i * XM_2PI / tessellation - XM_PIDIV2;
 
 			// Create a transform matrix that will align geometry to
 			// slice perpendicularly though the current ring position.
@@ -794,10 +794,10 @@ namespace Shapes {
 
 			// Now we loop along the other axis, around the side of the tube.
 			for (size_t j = 0; j <= tessellation; j++) {
-				const float v = 1 - static_cast<float>(j) / tessellation;
+				const f32 v = 1 - static_cast<f32>(j) / tessellation;
 
-				const float innerAngle = j * XM_2PI / tessellation + XM_PI;
-				float dx, dy;
+				const f32 innerAngle = j * XM_2PI / tessellation + XM_PI;
+				f32 dx, dy;
 
 				XMScalarSinCos(&dy, &dx, innerAngle);
 
@@ -840,7 +840,7 @@ namespace Shapes {
 	// Tetrahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeTetrahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords) {
+	void ComputeTetrahedron(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
@@ -912,7 +912,7 @@ namespace Shapes {
 	// Octahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeOctahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords) {
+	void ComputeOctahedron(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
@@ -990,13 +990,13 @@ namespace Shapes {
 	// Dodecahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeDodecahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords) {
+	void ComputeDodecahedron(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
-		static const float a = 1.f / SQRT3;
-		static const float b = 0.356822089773089931942f; // sqrt( ( 3 - sqrt(5) ) / 6 )
-		static const float c = 0.934172358962715696451f; // sqrt( ( 3 + sqrt(5) ) / 6 );
+		static const f32 a = 1.f / SQRT3;
+		static const f32 b = 0.356822089773089931942f; // sqrt( ( 3 - sqrt(5) ) / 6 )
+		static const f32 c = 0.934172358962715696451f; // sqrt( ( 3 + sqrt(5) ) / 6 );
 
 		static const XMVECTORF32 verts[20] =
 		{
@@ -1137,12 +1137,12 @@ namespace Shapes {
 	// Icosahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeIcosahedron(vector<VertexT>& vertices, vector<u32>& indices, float size, bool rhcoords) {
+	void ComputeIcosahedron(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
-		static const float t = 1.618033988749894848205f; // (1 + sqrt(5)) / 2
-		static const float t2 = 1.519544995837552493271f; // sqrt( 1 + sqr( (1 + sqrt(5)) / 2 ) )
+		static const f32 t = 1.618033988749894848205f; // (1 + sqrt(5)) / 2
+		static const f32 t2 = 1.519544995837552493271f; // sqrt( 1 + sqr( (1 + sqrt(5)) / 2 ) )
 
 		static const XMVECTORF32 verts[12] =
 		{

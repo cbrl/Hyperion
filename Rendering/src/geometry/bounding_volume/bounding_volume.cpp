@@ -32,13 +32,13 @@ BoundingSphere::BoundingSphere()
 }
 
 
-BoundingSphere::BoundingSphere(const f32_3& center, float radius)
+BoundingSphere::BoundingSphere(const f32_3& center, f32 radius)
 	: sphere_center(XMLoad(&center))
 	, sphere_radius(radius) {
 }
 
 
-BoundingSphere::BoundingSphere(FXMVECTOR center, float radius)
+BoundingSphere::BoundingSphere(FXMVECTOR center, f32 radius)
 	: sphere_center(center)
 	, sphere_radius(radius) {
 }

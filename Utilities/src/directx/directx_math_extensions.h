@@ -28,16 +28,16 @@ inline bool PointInTriangle(const f32_3& vert1,
 	const XMVECTOR v1 = XMLoad(&vert3) - XMLoad(&vert1);
 	const XMVECTOR v2 = XMLoad(&point) - XMLoad(&vert1);
 
-	const float d00   = XMVectorGetX(XMVector3Dot(v0, v0));
-	const float d01   = XMVectorGetX(XMVector3Dot(v0, v1));
-	const float d11   = XMVectorGetX(XMVector3Dot(v1, v1));
-	const float d20   = XMVectorGetX(XMVector3Dot(v2, v0));
-	const float d21   = XMVectorGetX(XMVector3Dot(v2, v1));
-	const float denom = (d00 * d11) - (d01 * d01);
+	const f32 d00   = XMVectorGetX(XMVector3Dot(v0, v0));
+	const f32 d01   = XMVectorGetX(XMVector3Dot(v0, v1));
+	const f32 d11   = XMVectorGetX(XMVector3Dot(v1, v1));
+	const f32 d20   = XMVectorGetX(XMVector3Dot(v2, v0));
+	const f32 d21   = XMVectorGetX(XMVector3Dot(v2, v1));
+	const f32 denom = (d00 * d11) - (d01 * d01);
 
-	const float a = ((d11 * d20) - (d01 * d21)) / denom;
-	const float b = ((d00 * d21) - (d01 * d20)) / denom;
-	const float y = 1.0f - a - b;
+	const f32 a = ((d11 * d20) - (d01 * d21)) / denom;
+	const f32 b = ((d00 * d21) - (d01 * d20)) / denom;
+	const f32 y = 1.0f - a - b;
 
 	return 0 <= a && a <= 1 &&
 	       0 <= b && b <= 1 &&
@@ -54,16 +54,16 @@ inline bool XM_CALLCONV PointInTriangle(FXMVECTOR vert1,
 	const XMVECTOR v1 = vert3 - vert1;
 	const XMVECTOR v2 = point - vert1;
 
-	const float d00   = XMVectorGetX(XMVector3Dot(v0, v0));
-	const float d01   = XMVectorGetX(XMVector3Dot(v0, v1));
-	const float d11   = XMVectorGetX(XMVector3Dot(v1, v1));
-	const float d20   = XMVectorGetX(XMVector3Dot(v2, v0));
-	const float d21   = XMVectorGetX(XMVector3Dot(v2, v1));
-	const float denom = (d00 * d11) - (d01 * d01);
+	const f32 d00   = XMVectorGetX(XMVector3Dot(v0, v0));
+	const f32 d01   = XMVectorGetX(XMVector3Dot(v0, v1));
+	const f32 d11   = XMVectorGetX(XMVector3Dot(v1, v1));
+	const f32 d20   = XMVectorGetX(XMVector3Dot(v2, v0));
+	const f32 d21   = XMVectorGetX(XMVector3Dot(v2, v1));
+	const f32 denom = (d00 * d11) - (d01 * d01);
 
-	const float a = ((d11 * d20) - (d01 * d21)) / denom;
-	const float b = ((d00 * d21) - (d01 * d20)) / denom;
-	const float y = 1.0f - a - b;
+	const f32 a = ((d11 * d20) - (d01 * d21)) / denom;
+	const f32 b = ((d00 * d21) - (d01 * d20)) / denom;
+	const f32 y = 1.0f - a - b;
 
 	return 0 <= a && a <= 1 &&
 	       0 <= b && b <= 1 &&

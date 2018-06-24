@@ -48,17 +48,17 @@ public:
 	// Position
 	//----------------------------------------------------------------------------------
 
-	void moveX(float units) {
+	void moveX(f32 units) {
 		translation += {units, 0.0f, 0.0f};
 		needs_update = true;
 	}
 
-	void moveY(float units) {
+	void moveY(f32 units) {
 		translation += {0.0f, units, 0.0f};
 		needs_update = true;
 	}
 
-	void moveZ(float units) {
+	void moveZ(f32 units) {
 		translation += {0.0f, 0.0f, units};
 		needs_update = true;
 	}
@@ -88,17 +88,17 @@ public:
 	// Rotation
 	//----------------------------------------------------------------------------------
 
-	void rotateX(float units) {
+	void rotateX(f32 units) {
 		rotation += {units, 0.0f, 0.0f};
 		needs_update = true;
 	}
 
-	void rotateY(float units) {
+	void rotateY(f32 units) {
 		rotation += {0.0f, units, 0.0f};
 		needs_update = true;
 	}
 
-	void rotateZ(float units) {
+	void rotateZ(f32 units) {
 		rotation += {0.0f, 0.0f, units};
 		needs_update = true;
 	}
@@ -128,17 +128,17 @@ public:
 	// Scale
 	//----------------------------------------------------------------------------------
 
-	void scaleX(float units) {
+	void scaleX(f32 units) {
 		scaling += {units, 0.0f, 0.0f};
 		needs_update = true;
 	}
 
-	void scaleY(float units) {
+	void scaleY(f32 units) {
 		scaling += {0.0f, units, 0.0f};
 		needs_update = true;
 	}
 
-	void scaleZ(float units) {
+	void scaleZ(f32 units) {
 		scaling += {0.0f, 0.0f, units};
 		needs_update = true;
 	}

@@ -26,11 +26,11 @@ public:
 
 	// Get the time elapsed since the last update (in seconds)
 	[[nodiscard]]
-	double deltaTime() const;
+	f64 deltaTime() const;
 
 	// Get the time elapsed since the timer was created or reset (in seconds)
 	[[nodiscard]]
-	double totalTime() const;
+	f64 totalTime() const;
 
 
 private:

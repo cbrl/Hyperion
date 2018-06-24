@@ -54,7 +54,7 @@ inline XMVECTOR XM_CALLCONV XMLoad(const u32_4* val) noexcept {
 // XMLoad: float
 //----------------------------------------------------------------------------------
 [[nodiscard]]
-inline XMVECTOR XM_CALLCONV XMLoad(const float* val) noexcept {
+inline XMVECTOR XM_CALLCONV XMLoad(const f32* val) noexcept {
 	return XMLoadFloat(val);
 }
 
@@ -198,14 +198,14 @@ inline void XM_CALLCONV XMStore<u32_4>(u32_4* store, FXMVECTOR val) noexcept {
 //----------------------------------------------------------------------------------
 template<>
 [[nodiscard]]
-inline float XM_CALLCONV XMStore<float>(FXMVECTOR val) noexcept {
-	float out;
+inline f32 XM_CALLCONV XMStore<f32>(FXMVECTOR val) noexcept {
+	f32 out;
 	XMStoreFloat(&out, val);
 	return out;
 }
 
 template<>
-inline void XM_CALLCONV XMStore<float>(float* store, FXMVECTOR val) noexcept {
+inline void XM_CALLCONV XMStore<f32>(f32* store, FXMVECTOR val) noexcept {
 	XMStoreFloat(store, val);
 }
 

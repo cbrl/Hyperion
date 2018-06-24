@@ -9,15 +9,15 @@ public:
 	~MouseRotation() = default;
 
 	[[nodiscard]]
-	float getSensitivity() const {
+	f32 getSensitivity() const {
 		return sensitivity;
 	}
 
-	void setSensitivity(float value) {
+	void setSensitivity(f32 value) {
 		sensitivity = value;
 	}
 
 
 private:
-	float sensitivity;
+	f32 sensitivity;
 };

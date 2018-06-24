@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/scalar_types.h"
 
 
 // Handle template that can be specialized for any given data size,

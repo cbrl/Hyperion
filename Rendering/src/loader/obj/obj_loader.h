@@ -43,9 +43,9 @@ struct ObjMaterial {
 	// Emissive Color
 	f32_4 Ke;
 	// Optical Density
-	float Ni;
+	f32 Ni;
 	// Dissolve
-	float d;
+	f32 d;
 	// Illumination
 	i32 illum;
 

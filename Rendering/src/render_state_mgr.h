@@ -18,20 +18,20 @@ public:
 
 	// Blend states
 	void bindOpaque(ID3D11DeviceContext& device_context,
-	                float blend_factor[4] = {},
-	                u32 sample_mask       = 0xffffffff) const;
+	                f32 blend_factor[4] = {},
+	                u32 sample_mask     = 0xffffffff) const;
 
 	void bindAlphaBlend(ID3D11DeviceContext& device_context,
-	                    float blend_factor[4] = {},
-	                    u32 sample_mask       = 0xffffffff) const;
+	                    f32 blend_factor[4] = {},
+	                    u32 sample_mask     = 0xffffffff) const;
 
 	void bindAdditive(ID3D11DeviceContext& device_context,
-	                  float blend_factor[4] = {},
-	                  u32 sample_mask       = 0xffffffff) const;
+	                  f32 blend_factor[4] = {},
+	                  u32 sample_mask     = 0xffffffff) const;
 
 	void bindNonPremultiplied(ID3D11DeviceContext& device_context,
-	                          float blend_factor[4] = {},
-	                          u32 sample_mask       = 0xffffffff) const;
+	                          f32 blend_factor[4] = {},
+	                          u32 sample_mask     = 0xffffffff) const;
 
 	// Depth stencil states
 	void bindDepthNone(ID3D11DeviceContext& device_context, u32 stencil_ref    = 0) const;

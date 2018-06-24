@@ -25,17 +25,17 @@ public:
 	const XMVECTORF32& getColor() const;
 
 	[[nodiscard]]
-	float getRotation() const;
+	f32 getRotation() const;
 
 
 	void setText(wstring new_text);
 	void setText(wstring new_text, f32_2 new_position);
 	void setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color);
-	void setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color, float new_rotation);
+	void setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color, f32 new_rotation);
 
 	void setPosition(f32_2 new_position);
 	void setColor(XMVECTORF32 new_color);
-	void setRotation(float new_rotation);
+	void setRotation(f32 new_rotation);
 
 
 private:
@@ -44,5 +44,5 @@ private:
 	wstring text;
 	XMVECTOR position;
 	XMVECTORF32 color;
-	float rotation;
+	f32 rotation;
 };

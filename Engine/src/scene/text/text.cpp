@@ -29,7 +29,7 @@ void Text::setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color) 
 }
 
 
-void Text::setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color, float new_rotation) {
+void Text::setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color, f32 new_rotation) {
 	text     = new_text;
 	position = XMLoad(&new_position);
 	color    = new_color;
@@ -47,7 +47,7 @@ void Text::setColor(XMVECTORF32 new_color) {
 }
 
 
-void Text::setRotation(float new_rotation) {
+void Text::setRotation(f32 new_rotation) {
 	rotation = new_rotation;
 }
 
@@ -77,6 +77,6 @@ const XMVECTORF32& Text::getColor() const {
 
 
 [[nodiscard]]
-float Text::getRotation() const {
+f32 Text::getRotation() const {
 	return rotation;
 }

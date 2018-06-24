@@ -330,10 +330,10 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 	ImGui::Text("Fog");
 	ImGui::Separator();
 
-	auto& fog = camera.getFog();
+	auto& fog   = camera.getFog();
 	f32_4 color = fog.color;
-	float  start = fog.start;
-	float  range = fog.range;
+	f32   start = fog.start;
+	f32   range = fog.range;
 
 	bool update = false;
 
@@ -356,10 +356,10 @@ void UserInterface::drawDetails(OrthographicCamera& camera) const {
 	ImGui::Text("Fog");
 	ImGui::Separator();
 
-	auto& fog = camera.getFog();
+	auto& fog   = camera.getFog();
 	f32_4 color = fog.color;
-	float  start = fog.start;
-	float  range = fog.range;
+	f32   start = fog.start;
+	f32   range = fog.range;
 
 	bool update = false;
 
@@ -382,10 +382,10 @@ void UserInterface::drawDetails(CameraMovement& movement) const {
 	ImGui::Text("Camera Movement");
 	ImGui::Separator();
 
-	float max_velocity = movement.getMaxVelocity();
-	float acceleration = movement.getAcceleration();
-	float deceleration = movement.getDeceleration();
-	float roll_sensitivity = movement.getRollSensitivity();
+	f32 max_velocity     = movement.getMaxVelocity();
+	f32 acceleration     = movement.getAcceleration();
+	f32 deceleration     = movement.getDeceleration();
+	f32 roll_sensitivity = movement.getRollSensitivity();
 
 	if (ImGui::InputFloat("Max Velocity", &max_velocity))
 		movement.setMaxVelocity(max_velocity);
@@ -406,7 +406,7 @@ void UserInterface::drawDetails(MouseRotation& rotation) const {
 	ImGui::Text("Mouse Rotation");
 	ImGui::Separator();
 
-	float sensitivity = rotation.getSensitivity();
+	f32 sensitivity = rotation.getSensitivity();
 
 	if (ImGui::DragFloat("Sensitivity", &sensitivity, 0.01f, 0.0f, FLT_MAX)) {
 		rotation.setSensitivity(sensitivity);
@@ -428,11 +428,11 @@ void UserInterface::drawDetails(ModelChild& child) const {
 	string name = "Material - " + child.getMaterial().name;
 	ImGui::Text(name.c_str());
 
-	ImGui::ColorEdit3("Diffuse Color",      (float*)child.getMaterial().diffuse.data());
-	ImGui::ColorEdit3("Ambient Color",      (float*)child.getMaterial().ambient.data());
-	ImGui::ColorEdit3("Specular Color",     (float*)child.getMaterial().specular.data());
-	ImGui::DragFloat( "Specular Exponent",  (float*)&child.getMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
-	ImGui::ColorEdit3("Reflective Color",   (float*)child.getMaterial().reflect.data());
+	ImGui::ColorEdit3("Diffuse Color",      (f32*)child.getMaterial().diffuse.data());
+	ImGui::ColorEdit3("Ambient Color",      (f32*)child.getMaterial().ambient.data());
+	ImGui::ColorEdit3("Specular Color",     (f32*)child.getMaterial().specular.data());
+	ImGui::DragFloat( "Specular Exponent",  (f32*)&child.getMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
+	ImGui::ColorEdit3("Reflective Color",   (f32*)child.getMaterial().reflect.data());
 	ImGui::Checkbox(  "Reflection",         (bool*)&child.getMaterial().reflection_enabled);
 }
 
@@ -473,7 +473,7 @@ void UserInterface::drawDetails(PointLight& light) const {
 	ImGui::Text("Point Light");
 	ImGui::Separator();
 
-	float range = light.getRange();
+	f32 range = light.getRange();
 	if (ImGui::DragFloat( "Range", &range, 0.1f,  0.0f, FLT_MAX))
 		light.setRange(range);
 
@@ -592,9 +592,9 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 
 
 	if (ImGui::BeginPopupModal("New Cube", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float size = 1.0f;
-		static bool  rhcoords = false;
-		static bool  invertn = false;
+		static f32  size     = 1.0f;
+		static bool rhcoords = false;
+		static bool invertn  = false;
 
 		ImGui::InputFloat("Size", &size);
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
@@ -640,10 +640,10 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Sphere", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float  diameter = 1.0f;
+		static f32    diameter     = 1.0f;
 		static size_t tessellation = 16;
-		static bool   rhcoords = false;
-		static bool   invertn = false;
+		static bool   rhcoords     = false;
+		static bool   invertn      = false;
 
 		ImGui::InputFloat("Diameter", &diameter);
 		ImGui::InputInt("Tessellation", (int*)&tessellation);
@@ -675,9 +675,9 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New GeoSphere", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float  diameter = 1.0f;
+		static f32    diameter     = 1.0f;
 		static size_t tessellation = 3;
-		static bool   rhcoords = false;
+		static bool   rhcoords     = false;
 
 		ImGui::InputFloat("Diameter", &diameter);
 		ImGui::InputInt("Tessellation", (int*)&tessellation);
@@ -708,10 +708,10 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Cylinder", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float  height = 1.0f;
-		static float  diameter = 1.0f;
+		static f32    height       = 1.0f;
+		static f32    diameter     = 1.0f;
 		static size_t tessellation = 32;
-		static bool   rhcoords = false;
+		static bool   rhcoords     = false;
 
 		ImGui::InputFloat("Height", &height);
 		ImGui::InputFloat("Diameter", &diameter);
@@ -743,10 +743,10 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Cone", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float  height = 1.0f;
-		static float  diameter = 1.0f;
+		static f32    height       = 1.0f;
+		static f32    diameter     = 1.0f;
 		static size_t tessellation = 32;
-		static bool   rhcoords = false;
+		static bool   rhcoords     = false;
 
 		ImGui::InputFloat("Height", &height);
 		ImGui::InputFloat("Diameter", &diameter);
@@ -778,8 +778,8 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Torus", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float  thickness = 0.333f;
-		static float  diameter = 1.0f;
+		static f32  thickness = 0.333f;
+		static f32  diameter = 1.0f;
 		static size_t tessellation = 32;
 		static bool   rhcoords = false;
 
@@ -813,8 +813,8 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Tetrahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float size = 1.0f;
-		static bool  rhcoords = false;
+		static f32  size     = 1.0f;
+		static bool rhcoords = false;
 
 		ImGui::InputFloat("Size", &size);
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
@@ -835,8 +835,8 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Octahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float size = 1.0f;
-		static bool  rhcoords = false;
+		static f32  size     = 1.0f;
+		static bool rhcoords = false;
 
 		ImGui::InputFloat("Size", &size);
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
@@ -857,8 +857,8 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Dodecahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float size = 1.0f;
-		static bool  rhcoords = false;
+		static f32  size     = 1.0f;
+		static bool rhcoords = false;
 
 		ImGui::InputFloat("Size", &size);
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
@@ -879,8 +879,8 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Icosahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static float size = 1.0f;
-		static bool  rhcoords = false;
+		static f32  size     = 1.0f;
+		static bool rhcoords = false;
 
 		ImGui::InputFloat("Size", &size);
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);

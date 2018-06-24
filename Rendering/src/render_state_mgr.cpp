@@ -262,23 +262,23 @@ void RenderStateMgr::createSamplerStates(ID3D11Device& device) {
 //----------------------------------------------------------------------------------
 // Bind blend states
 //----------------------------------------------------------------------------------
-void RenderStateMgr::bindOpaque(ID3D11DeviceContext& device_context, float blend_factor[4], u32 sample_mask) const {
+void RenderStateMgr::bindOpaque(ID3D11DeviceContext& device_context, f32 blend_factor[4], u32 sample_mask) const {
 	Pipeline::OM::bindBlendState(device_context, opaque.Get(), blend_factor, sample_mask);
 }
 
 
-void RenderStateMgr::bindAlphaBlend(ID3D11DeviceContext& device_context, float blend_factor[4], u32 sample_mask) const {
+void RenderStateMgr::bindAlphaBlend(ID3D11DeviceContext& device_context, f32 blend_factor[4], u32 sample_mask) const {
 	Pipeline::OM::bindBlendState(device_context, alpha_blend.Get(), blend_factor, sample_mask);
 }
 
 
-void RenderStateMgr::bindAdditive(ID3D11DeviceContext& device_context, float blend_factor[4], u32 sample_mask) const {
+void RenderStateMgr::bindAdditive(ID3D11DeviceContext& device_context, f32 blend_factor[4], u32 sample_mask) const {
 	Pipeline::OM::bindBlendState(device_context, additive.Get(), blend_factor, sample_mask);
 }
 
 
 void RenderStateMgr::bindNonPremultiplied(ID3D11DeviceContext& device_context,
-                                          float blend_factor[4],
+                                          f32 blend_factor[4],
                                           u32 sample_mask) const {
 	Pipeline::OM::bindBlendState(device_context, non_premultiplied.Get(), blend_factor, sample_mask);
 }

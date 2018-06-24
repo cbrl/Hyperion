@@ -61,13 +61,13 @@ public:
 	//----------------------------------------------------------------------------------
 	// Range
 	//----------------------------------------------------------------------------------
-	void setRange(const float range) {
+	void setRange(const f32 range) {
 		this->range = range;
 		updateBoundingVolumes();
 	}
 
 	[[nodiscard]]
-	float getRange() const {
+	f32 getRange() const {
 		return range;
 	}
 
@@ -115,8 +115,8 @@ public:
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getLightToProjectionMatrix() const {
 
-		const float m22 = range / (range - near_plane);
-		const float m32 = -near_plane * m22;
+		const f32 m22 = range / (range - near_plane);
+		const f32 m32 = -near_plane * m22;
 
 		return XMMATRIX{
 			1.0f, 0.0f, 0.0f, 0.0f,
@@ -142,8 +142,8 @@ private:
 	f32_3 attenuation;
 
 	// Near clipping plane and range (far plane)
-	float near_plane;
-	float range;
+	f32 near_plane;
+	f32 range;
 
 	// Flag that decides if the light should cast shadows
 	bool shadows;

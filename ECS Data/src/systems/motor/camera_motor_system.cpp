@@ -34,9 +34,9 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movem
 	const auto& input = engine.getInput();
 
 	const i32_2  mouse_delta = input.getMouseDelta();
-	const float dt          = static_cast<float>(engine.getTimer().deltaTime());
+	const f32    dt          = static_cast<f32>(engine.getTimer().deltaTime());
 
-	float  roll_units = 0.0f;
+	f32  roll_units = 0.0f;
 	f32_3 move_units{ 0.0f, 0.0f, 0.0f };
 
 
@@ -154,11 +154,11 @@ void CameraMotorSystem::updateMovement(CameraMovement* mv, f32_3 units) const {
 }
 
 
-void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, float dt) const {
+void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, f32 dt) const {
 
 	const f32_3 velocity = mv->getVelocity();
 	XMVECTOR velocity_vec = XMLoad(&velocity);
-	const float velocity_mag = XMVectorGetX(XMVector3Length(velocity_vec));
+	const f32 velocity_mag = XMVectorGetX(XMVector3Length(velocity_vec));
 
 	// Limit veloctiy to maximum
 	if (velocity_mag > mv->getMaxVelocity()) {
@@ -185,9 +185,9 @@ void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, float dt)
 }
 
 
-void CameraMotorSystem::decelerate(CameraMovement* mv, float delta_time) const {
+void CameraMotorSystem::decelerate(CameraMovement* mv, f32 delta_time) const {
 
-	float decel_amount;
+	f32 decel_amount;
 	f32_3 velocity = mv->getVelocity();
 
 	// Decelerate in each direction if not moving in that

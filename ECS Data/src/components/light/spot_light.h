@@ -75,21 +75,21 @@ public:
 	//----------------------------------------------------------------------------------
 	// Umbra
 	//----------------------------------------------------------------------------------
-	void setUmbraCosAngle(float cos_angle) {
+	void setUmbraCosAngle(f32 cos_angle) {
 		cos_umbra = std::max(std::max(cos_angle, cos_penumbra + 0.001f), 0.001f);
 	}
 
-	void setUmbraAngle(float angle) {
+	void setUmbraAngle(f32 angle) {
 		setUmbraCosAngle(std::cos(angle));
 	}
 
 	[[nodiscard]]
-	float getUmbra() const {
+	f32 getUmbra() const {
 		return cos_umbra;
 	}
 
 	[[nodiscard]]
-	float getUmbraAngle() const {
+	f32 getUmbraAngle() const {
 		return std::acos(cos_umbra);
 	}
 
@@ -97,22 +97,22 @@ public:
 	//----------------------------------------------------------------------------------
 	// Penumbra
 	//----------------------------------------------------------------------------------
-	void setPenumbraCosAngle(float cos_angle) {
+	void setPenumbraCosAngle(f32 cos_angle) {
 		cos_penumbra = std::max(std::min(cos_angle, cos_umbra - 0.001f), 0.001f);
 		updateBoundingVolumes();
 	}
 
-	void setPenumbraAngle(float angle) {
+	void setPenumbraAngle(f32 angle) {
 		setPenumbraCosAngle(std::cos(angle));
 	}
 
 	[[nodiscard]]
-	float getPenumbra() const {
+	f32 getPenumbra() const {
 		return cos_penumbra;
 	}
 
 	[[nodiscard]]
-	float getPenumbraAngle() const {
+	f32 getPenumbraAngle() const {
 		return std::acos(cos_penumbra);
 	}
 
@@ -120,7 +120,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Umbra/Penumbra
 	//----------------------------------------------------------------------------------
-	void setCutoffAngles(float cos_umbra, float cos_penumbra) {
+	void setCutoffAngles(f32 cos_umbra, f32 cos_penumbra) {
 		setUmbraAngle(cos_umbra);
 		setPenumbraAngle(cos_penumbra);
 	}
@@ -129,13 +129,13 @@ public:
 	//----------------------------------------------------------------------------------
 	// Range
 	//----------------------------------------------------------------------------------
-	void setRange(float range) {
+	void setRange(f32 range) {
 		this->range = range;
 		updateBoundingVolumes();
 	}
 
 	[[nodiscard]]
-	float getRange() const {
+	f32 getRange() const {
 		return range;
 	}
 
@@ -169,17 +169,17 @@ public:
 	// Get the light-to-projection matrix
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getLightToProjectionMatrix() const {
-		const float fov = std::acos(cos_penumbra) * 2.0f;
+		const f32 fov = std::acos(cos_penumbra) * 2.0f;
 		return XMMatrixPerspectiveFovLH(fov, 1.0f, near_plane, range);
 	}
 
 
 private:
 	void updateBoundingVolumes() {
-		const float a   = 1.0f / (cos_penumbra * cos_penumbra);
-		const float rxy = range * std::sqrt(a - 1.0f);
-		const float rz  = range * 0.5f;
-		const float r   = std::sqrt((rxy * rxy) + (rz * rz));
+		const f32 a   = 1.0f / (cos_penumbra * cos_penumbra);
+		const f32 rxy = range * std::sqrt(a - 1.0f);
+		const f32 rz  = range * 0.5f;
+		const f32 r   = std::sqrt((rxy * rxy) + (rz * rz));
 
 		aabb   = AABB(f32_3(-rxy, -rxy, 0.0f), f32_3(rxy, rxy, range));
 		sphere = BoundingSphere(f32_3(0.0f, 0.0f, rz), r);
@@ -192,12 +192,12 @@ private:
 	f32_4 diffuse_color;
 	f32_4 specular;
 	f32_3 attenuation;
-	float cos_umbra;
-	float cos_penumbra;
+	f32 cos_umbra;
+	f32 cos_penumbra;
 
 	// Near clipping plane and range (far plane)
-	float near_plane;
-	float range;
+	f32 near_plane;
+	f32 range;
 
 	// Flag that decides if the light should cast shadows
 	bool shadows;
