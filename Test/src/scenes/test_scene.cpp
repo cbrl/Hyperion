@@ -38,7 +38,7 @@ void TestScene::load(const Engine& engine) {
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
 	cam->setFog(Fog(f32_4(0.2f, 0.2f, 0.2f, 1.0f), 30.0f, 25.0f));
-	cam->skybox().setTexture(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	cam->getSkybox().setTexture(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 	ecs_engine.getComponent<Transform>(camera)->setPosition(f32_3(0.0f, 4.0f, -2.0f));
 
 	ecs_engine.getComponent<MouseRotation>(camera)->setSensitivity(0.01f);
@@ -143,9 +143,9 @@ void TestScene::tick(const Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const i32_2 mouse_delta       = engine.getInput().getMouseDelta();
+	const i32_2 mouse_delta      = engine.getInput().getMouseDelta();
 	const u32 fps                = engine.getFPSCounter().getFPS();
-	const float delta_time       = engine.getTimer().deltaTime();
+	const double delta_time      = engine.getTimer().deltaTime();
 	const double total_cpu_usage = engine.getSysMon().cpu().getTotalCpuPercentage();
 	const double proc_cpu_usage  = engine.getSysMon().cpu().getProcessCpuPercentage();
 	const u64 total_mem_usage    = engine.getSysMon().memory().getTotalUsedPhysicalMem();

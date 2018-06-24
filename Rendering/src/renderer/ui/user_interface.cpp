@@ -330,7 +330,7 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 	ImGui::Text("Fog");
 	ImGui::Separator();
 
-	auto& fog = camera.fog();
+	auto& fog = camera.getFog();
 	f32_4 color = fog.color;
 	float  start = fog.start;
 	float  range = fog.range;
@@ -356,7 +356,7 @@ void UserInterface::drawDetails(OrthographicCamera& camera) const {
 	ImGui::Text("Fog");
 	ImGui::Separator();
 
-	auto& fog = camera.fog();
+	auto& fog = camera.getFog();
 	f32_4 color = fog.color;
 	float  start = fog.start;
 	float  range = fog.range;
@@ -406,7 +406,7 @@ void UserInterface::drawDetails(MouseRotation& rotation) const {
 	ImGui::Text("Mouse Rotation");
 	ImGui::Separator();
 
-	float sensitivity = rotation.sensitivity();
+	float sensitivity = rotation.getSensitivity();
 
 	if (ImGui::DragFloat("Sensitivity", &sensitivity, 0.01f, 0.0f, FLT_MAX)) {
 		rotation.setSensitivity(sensitivity);

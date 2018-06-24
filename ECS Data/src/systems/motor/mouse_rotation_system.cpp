@@ -19,8 +19,8 @@ void MouseRotationSystem::update(const Engine& engine) {
 		f32_3 rotate_units{ 0.0f, 0.0f, 0.0f };
 
 		// Set x/y rotation with mouse data
-		rotate_units.x = static_cast<float>(mouse_delta.y) * rotation.sensitivity();
-		rotate_units.y = static_cast<float>(mouse_delta.x) * rotation.sensitivity();
+		rotate_units.x = static_cast<float>(mouse_delta.y) * rotation.getSensitivity();
+		rotate_units.y = static_cast<float>(mouse_delta.x) * rotation.getSensitivity();
 
 		// Rotate the camera
 		if (rotate_units.x || rotate_units.y || rotate_units.z) {

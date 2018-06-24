@@ -5,19 +5,19 @@
 
 class MouseRotation final : public Component<MouseRotation> {
 public:
-	MouseRotation() : rotate_sensitivity(0.1f) {}
+	MouseRotation() : sensitivity(0.1f) {}
 	~MouseRotation() = default;
 
 	[[nodiscard]]
-	float sensitivity() const {
-		return rotate_sensitivity;
+	float getSensitivity() const {
+		return sensitivity;
 	}
 
-	void setSensitivity(float sensitivity) {
-		rotate_sensitivity = sensitivity;
+	void setSensitivity(float value) {
+		sensitivity = value;
 	}
 
 
 private:
-	float rotate_sensitivity;
+	float sensitivity;
 };

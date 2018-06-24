@@ -104,7 +104,7 @@ public:
 
 	// Get the fog buffer
 	[[nodiscard]]
-	const Fog& fog() const {
+	const Fog& getFog() const {
 		return camera_fog;
 	}
 
@@ -115,7 +115,7 @@ public:
 
 	// Get the camera's projection matrix
 	[[nodiscard]]
-	XMMATRIX XM_CALLCONV cameraToProjectionMatrix() const {
+	XMMATRIX XM_CALLCONV getCameraToProjectionMatrix() const {
 		return projection_matrix;
 	}
 
@@ -126,12 +126,12 @@ public:
 
 	// Get the skybox associated with this camera
 	[[nodiscard]]
-	SkyBox& skybox() {
+	SkyBox& getSkybox() {
 		return sky;
 	}
 
 	[[nodiscard]]
-	const SkyBox& skybox() const {
+	const SkyBox& getSkybox() const {
 		return sky;
 	}
 

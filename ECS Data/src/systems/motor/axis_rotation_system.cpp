@@ -15,13 +15,13 @@ void AxisRotationSystem::update(const Engine& engine) {
 		if (!transform) return;
 
 		if (rotation.hasAxis(AxisRotation::Axis::X)) {
-			transform->rotateX(dt * rotation.speedX());
+			transform->rotateX(dt * rotation.getSpeedX());
 		}
 		if (rotation.hasAxis(AxisRotation::Axis::Y)) {
-			transform->rotateY(dt * rotation.speedY());
+			transform->rotateY(dt * rotation.getSpeedY());
 		}
 		if (rotation.hasAxis(AxisRotation::Axis::Z)) {
-			transform->rotateZ(dt * rotation.speedZ());
+			transform->rotateZ(dt * rotation.getSpeedZ());
 		}
 	});
 }

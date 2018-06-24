@@ -37,7 +37,7 @@ public:
 
 	// Get the rotation axes
 	[[nodiscard]]
-	u8 axis() const {
+	u8 getAxis() const {
 		return rotation_axis;
 	}
 
@@ -73,15 +73,15 @@ public:
 		return rotation_speeds;
 	}
 
-	float speedX() const {
+	float getSpeedX() const {
 		return rotation_speeds.x;
 	}
 
-	float speedY() const {
+	float getSpeedY() const {
 		return rotation_speeds.y;
 	}
 
-	float speedZ() const {
+	float getSpeedZ() const {
 		return rotation_speeds.z;
 	}
 

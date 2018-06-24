@@ -1,10 +1,9 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
-#include "buffer/buffers.h"
-#include "scene/text/text.h"
+#include "ecs.h"
 #include "entities/entities.h"
 #include "components/components.h"
+#include "scene/text/text.h"
 
 class Engine;
 
