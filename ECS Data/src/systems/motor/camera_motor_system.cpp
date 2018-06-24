@@ -33,11 +33,11 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movem
 
 	const auto& input = engine.getInput();
 
-	const i32_2  mouse_delta = input.getMouseDelta();
-	const f32    dt          = static_cast<f32>(engine.getTimer().deltaTime());
+	const vec2_i32 mouse_delta = input.getMouseDelta();
+	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());
 
 	f32  roll_units = 0.0f;
-	f32_3 move_units{ 0.0f, 0.0f, 0.0f };
+	vec3_f32 move_units{ 0.0f, 0.0f, 0.0f };
 
 
 	//----------------------------------------------------------------------------------
@@ -53,7 +53,7 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movem
 	}
 
 	if (roll_units) {
-		transform->rotate(f32_3{ 0.0f, 0.0f, roll_units });
+		transform->rotate(vec3_f32{ 0.0f, 0.0f, roll_units });
 	}
 
 
@@ -96,10 +96,10 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movem
 }
 
 
-void CameraMotorSystem::updateMovement(CameraMovement* mv, f32_3 units) const {
+void CameraMotorSystem::updateMovement(CameraMovement* mv, vec3_f32 units) const {
 
 	// Get the velocity
-	f32_3 velocity = mv->getVelocity();
+	vec3_f32 velocity = mv->getVelocity();
 
 	//----------------------------------------------------------------------------------
 	// X movement
@@ -156,7 +156,7 @@ void CameraMotorSystem::updateMovement(CameraMovement* mv, f32_3 units) const {
 
 void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, f32 dt) const {
 
-	const f32_3 velocity = mv->getVelocity();
+	const vec3_f32 velocity = mv->getVelocity();
 	XMVECTOR velocity_vec = XMLoad(&velocity);
 	const f32 velocity_mag = XMVectorGetX(XMVector3Length(velocity_vec));
 
@@ -188,7 +188,7 @@ void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, f32 dt) c
 void CameraMotorSystem::decelerate(CameraMovement* mv, f32 delta_time) const {
 
 	f32 decel_amount;
-	f32_3 velocity = mv->getVelocity();
+	vec3_f32 velocity = mv->getVelocity();
 
 	// Decelerate in each direction if not moving in that
 	// direction and the current velocity isn't 0.

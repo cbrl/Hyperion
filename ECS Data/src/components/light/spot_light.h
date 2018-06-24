@@ -23,12 +23,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Ambient Color
 	//----------------------------------------------------------------------------------
-	void setAmbientColor(const f32_4& color) {
+	void setAmbientColor(const vec4_f32& color) {
 		ambient_color = color;
 	}
 
 	[[nodiscard]]
-	const f32_4& getAmbientColor() const {
+	const vec4_f32& getAmbientColor() const {
 		return ambient_color;
 	}
 
@@ -36,12 +36,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Diffuse Color
 	//----------------------------------------------------------------------------------
-	void setDiffuseColor(const f32_4& color) {
+	void setDiffuseColor(const vec4_f32& color) {
 		diffuse_color = color;
 	}
 
 	[[nodiscard]]
-	const f32_4& getDiffuseColor() const {
+	const vec4_f32& getDiffuseColor() const {
 		return diffuse_color;
 	}
 
@@ -49,12 +49,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Specular Color/Power
 	//----------------------------------------------------------------------------------
-	void setSpecular(const f32_4& spec) {
+	void setSpecular(const vec4_f32& spec) {
 		specular = spec;
 	}
 
 	[[nodiscard]]
-	const f32_4& getSpecular() const {
+	const vec4_f32& getSpecular() const {
 		return specular;
 	}
 
@@ -62,12 +62,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Attenuation
 	//----------------------------------------------------------------------------------
-	void setAttenuation(const f32_3& atten) {
+	void setAttenuation(const vec3_f32& atten) {
 		attenuation = atten;
 	}
 
 	[[nodiscard]]
-	const f32_3& getAttenuation() const {
+	const vec3_f32& getAttenuation() const {
 		return attenuation;
 	}
 
@@ -181,17 +181,17 @@ private:
 		const f32 rz  = range * 0.5f;
 		const f32 r   = std::sqrt((rxy * rxy) + (rz * rz));
 
-		aabb   = AABB(f32_3(-rxy, -rxy, 0.0f), f32_3(rxy, rxy, range));
-		sphere = BoundingSphere(f32_3(0.0f, 0.0f, rz), r);
+		aabb   = AABB(vec3_f32(-rxy, -rxy, 0.0f), vec3_f32(rxy, rxy, range));
+		sphere = BoundingSphere(vec3_f32(0.0f, 0.0f, rz), r);
 	}
 
 
 private:
 	// Lighting parameters
-	f32_4 ambient_color;
-	f32_4 diffuse_color;
-	f32_4 specular;
-	f32_3 attenuation;
+	vec4_f32 ambient_color;
+	vec4_f32 diffuse_color;
+	vec4_f32 specular;
+	vec3_f32 attenuation;
 	f32 cos_umbra;
 	f32 cos_penumbra;
 

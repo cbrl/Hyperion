@@ -6,17 +6,18 @@
 
 void MouseRotationSystem::update(const Engine& engine) {
 
-	auto& ecs_engine        = engine.getECS();
-	const auto& input       = engine.getInput();
-	const f32   dt          = static_cast<f32>(engine.getTimer().deltaTime());
-	const i32_2 mouse_delta = input.getMouseDelta();
+	auto& ecs_engine  = engine.getECS();
+	const auto& input = engine.getInput();
+
+	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());
+	const vec2_i32 mouse_delta = input.getMouseDelta();
 
 	ecs_engine.forEachActive<MouseRotation>([&](MouseRotation& rotation) {
 
 		auto transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
 		if (!transform) return;
 
-		f32_3 rotate_units{ 0.0f, 0.0f, 0.0f };
+		vec3_f32 rotate_units{ 0.0f, 0.0f, 0.0f };
 
 		// Set x/y rotation with mouse data
 		rotate_units.x = static_cast<f32>(mouse_delta.y) * rotation.getSensitivity();

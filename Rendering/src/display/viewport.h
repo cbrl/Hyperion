@@ -17,7 +17,7 @@ public:
 		viewport.Height = height;
 	}
 
-	explicit Viewport(f32_2 size) noexcept
+	explicit Viewport(vec2_f32 size) noexcept
 		: viewport{} {
 		viewport.Width  = size.x;
 		viewport.Height = size.y;
@@ -56,8 +56,8 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	u32_2 getTopLeft() const noexcept {
-		return u32_2{ static_cast<u32>(viewport.TopLeftX),
+	vec2_u32 getTopLeft() const noexcept {
+		return vec2_u32{ static_cast<u32>(viewport.TopLeftX),
 		              static_cast<u32>(viewport.TopLeftY) };
 	}
 
@@ -66,7 +66,7 @@ public:
 		viewport.TopLeftY = static_cast<f32>(y);
 	}
 
-	void setTopLeft(u32_2 top_left) noexcept {
+	void setTopLeft(vec2_u32 top_left) noexcept {
 		viewport.TopLeftX = static_cast<f32>(top_left.x);
 		viewport.TopLeftY = static_cast<f32>(top_left.y);
 	}
@@ -77,8 +77,8 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	u32_2 getSize() const noexcept {
-		return u32_2{ static_cast<u32>(viewport.Width),
+	vec2_u32 getSize() const noexcept {
+		return vec2_u32{ static_cast<u32>(viewport.Width),
 		              static_cast<u32>(viewport.Height) };
 	}
 
@@ -87,7 +87,7 @@ public:
 		viewport.Height = static_cast<f32>(height);
 	}
 
-	void setSize(u32_2 size) noexcept {
+	void setSize(vec2_u32 size) noexcept {
 		viewport.Width  = static_cast<f32>(size.x);
 		viewport.Height = static_cast<f32>(size.y);
 	}
@@ -98,8 +98,8 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	f32_2 getDepth() const noexcept {
-		return f32_2{ viewport.MinDepth, viewport.MaxDepth };
+	vec2_f32 getDepth() const noexcept {
+		return vec2_f32{ viewport.MinDepth, viewport.MaxDepth };
 	}
 
 	void setDepth(f32 min, f32 max) noexcept {
@@ -107,7 +107,7 @@ public:
 		viewport.MaxDepth = max;
 	}
 
-	void setDepth(f32_2 depth_range) noexcept {
+	void setDepth(vec2_f32 depth_range) noexcept {
 		viewport.MinDepth = depth_range.x;
 		viewport.MaxDepth = depth_range.y;
 	}

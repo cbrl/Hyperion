@@ -10,8 +10,8 @@
 using namespace DirectX;
 
 
-// Convert a f32_4 to a hex color value
-inline uint32_t Float4ColorToU32(const f32_4& color) {
+// Convert a vec4_f32 to a hex color value
+inline uint32_t Float4ColorToU32(const vec4_f32& color) {
 	return static_cast<uint32_t>(color.x * 0xff)            //R
 	       | (static_cast<uint32_t>(color.y * 0xff) << 8)   //G
 	       | (static_cast<uint32_t>(color.z * 0xff) << 16)  //B
@@ -20,10 +20,10 @@ inline uint32_t Float4ColorToU32(const f32_4& color) {
 
 
 // Determine if a point is inside a triangle using barycentric coordinates
-inline bool PointInTriangle(const f32_3& vert1,
-                            const f32_3& vert2,
-                            const f32_3& vert3,
-                            const f32_3& point) {
+inline bool PointInTriangle(const vec3_f32& vert1,
+                            const vec3_f32& vert2,
+                            const vec3_f32& vert3,
+                            const vec3_f32& point) {
 	const XMVECTOR v0 = XMLoad(&vert2) - XMLoad(&vert1);
 	const XMVECTOR v1 = XMLoad(&vert3) - XMLoad(&vert1);
 	const XMVECTOR v2 = XMLoad(&point) - XMLoad(&vert1);
@@ -74,8 +74,8 @@ inline bool XM_CALLCONV PointInTriangle(FXMVECTOR vert1,
 // Find the minimum and maximum points in a vector of vertices
 template<typename VertexT>
 std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& vertices) {
-	f32_3 min{FLT_MAX, FLT_MAX, FLT_MAX};
-	f32_3 max{FLT_MIN, FLT_MIN, FLT_MIN};
+	vec3_f32 min{FLT_MAX, FLT_MAX, FLT_MAX};
+	vec3_f32 max{FLT_MIN, FLT_MIN, FLT_MIN};
 
 	for (const auto& vertex : vertices) {
 		min.x = std::fminf(min.x, vertex.position.x);
@@ -90,11 +90,11 @@ std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& vertices) 
 	return std::pair<XMVECTOR, XMVECTOR>(XMLoad(&min), XMLoad(&max));
 }
 
-inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<f32_3>& vertices) {
-	f32_3 min{FLT_MAX, FLT_MAX, FLT_MAX};
-	f32_3 max{FLT_MIN, FLT_MIN, FLT_MIN};
+inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<vec3_f32>& vertices) {
+	vec3_f32 min{FLT_MAX, FLT_MAX, FLT_MAX};
+	vec3_f32 max{FLT_MIN, FLT_MIN, FLT_MIN};
 
-	for (const f32_3& vertex : vertices) {
+	for (const vec3_f32& vertex : vertices) {
 		min.x = std::fminf(min.x, vertex.x);
 		min.y = std::fminf(min.y, vertex.y);
 		min.z = std::fminf(min.z, vertex.z);

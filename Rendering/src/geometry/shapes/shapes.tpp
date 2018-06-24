@@ -42,7 +42,7 @@ namespace Shapes {
 
 		if constexpr (VertexT::hasTexture()) {
 			for (auto it = vertices.begin(); it != vertices.end(); ++it) {
-				f32_2 texCoord = it->texCoord;
+				vec2_f32 texCoord = it->texCoord;
 				texCoord.x = 1.0f - texCoord.x;
 
 				it->texCoord = texCoord;
@@ -56,7 +56,7 @@ namespace Shapes {
 	void InvertNormals(vector<VertexT>& vertices) {
 		if constexpr (VertexT::hasNormal()) {
 			for (auto it = vertices.begin(); it != vertices.end(); ++it) {
-				f32_3 normal = it->normal;
+				vec3_f32 normal = it->normal;
 				normal.x = -normal.x;
 				normal.y = -normal.y;
 				normal.z = -normal.z;
@@ -72,11 +72,11 @@ namespace Shapes {
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
 	void ComputeCube(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords, bool invertn) {
-		ComputeBox(vertices, indices, f32_3(size, size, size), rhcoords, invertn);
+		ComputeBox(vertices, indices, vec3_f32(size, size, size), rhcoords, invertn);
 	}
 
 	template<typename VertexT>
-	void ComputeBox(vector<VertexT>& vertices, vector<u32>& indices, const f32_3& size, bool rhcoords, bool invertn) {
+	void ComputeBox(vector<VertexT>& vertices, vector<u32>& indices, const vec3_f32& size, bool rhcoords, bool invertn) {
 		vertices.clear();
 		indices.clear();
 
@@ -265,15 +265,15 @@ namespace Shapes {
 		typedef std::map<UndirectedEdge, u32> EdgeSubdivisionMap;
 
 
-		static const f32_3 OctahedronVertices[] =
+		static const vec3_f32 OctahedronVertices[] =
 		{
 			// when looking down the negative z-axis (into the screen)
-			f32_3(0, 1, 0), // 0 top
-			f32_3(0, 0, -1), // 1 front
-			f32_3(1, 0, 0), // 2 right
-			f32_3(0, 0, 1), // 3 back
-			f32_3(-1, 0, 0), // 4 left
-			f32_3(0, -1, 0), // 5 bottom
+			vec3_f32(0, 1, 0), // 0 top
+			vec3_f32(0, 0, -1), // 1 front
+			vec3_f32(1, 0, 0), // 2 right
+			vec3_f32(0, 0, 1), // 3 back
+			vec3_f32(-1, 0, 0), // 4 left
+			vec3_f32(0, -1, 0), // 5 bottom
 		};
 		static const u32 OctahedronIndices[] =
 		{
@@ -291,7 +291,7 @@ namespace Shapes {
 
 		// Start with an octahedron; copy the data into the vertex/index collection.
 
-		std::vector<f32_3> vertexPositions(std::begin(OctahedronVertices), std::end(OctahedronVertices));
+		std::vector<vec3_f32> vertexPositions(std::begin(OctahedronVertices), std::end(OctahedronVertices));
 
 		indices.insert(indices.begin(), std::begin(OctahedronIndices), std::end(OctahedronIndices));
 
@@ -321,15 +321,15 @@ namespace Shapes {
 				u32 iv2 = indices[iTriangle * 3 + 2];
 
 				// Get the new vertices
-				f32_3 v01; // vertex on the midpoint of v0 and v1
-				f32_3 v12; // ditto v1 and v2
-				f32_3 v20; // ditto v2 and v0
+				vec3_f32 v01; // vertex on the midpoint of v0 and v1
+				vec3_f32 v12; // ditto v1 and v2
+				vec3_f32 v20; // ditto v2 and v0
 				u32 iv01; // index of v01
 				u32 iv12; // index of v12
 				u32 iv20; // index of v20
 
 				// Function that, when given the index of two vertices, creates a new vertex at the midpoint of those vertices.
-				auto divideEdge = [&](u32 i0, u32 i1, f32_3& outVertex, u32& outIndex) {
+				auto divideEdge = [&](u32 i0, u32 i1, vec3_f32& outVertex, u32& outIndex) {
 					const UndirectedEdge edge = makeUndirectedEdge(i0, i1);
 
 					// Check to see if we've already generated this vertex
@@ -395,7 +395,7 @@ namespace Shapes {
 			const auto normal = XMVector3Normalize(XMLoad(&vertexValue));
 			const auto pos = XMVectorScale(normal, radius);
 
-			f32_3 normalFloat3;
+			vec3_f32 normalFloat3;
 			XMStore(&normalFloat3, normal);
 
 			// calculate texture coordinates for this vertex

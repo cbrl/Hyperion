@@ -256,7 +256,7 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 
 			buffer.world_to_light = XMMatrixTranspose(world_to_light);
 
-			const f32_2 proj_values = {
+			const vec2_f32 proj_values = {
 				XMVectorGetZ(light_to_lprojection.r[2]),
 				XMVectorGetZ(light_to_lprojection.r[3])
 			};

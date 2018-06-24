@@ -510,22 +510,22 @@ struct Vector4 {
 // Signed Integer Vectors
 //----------------------------------------------------------------------------------
 
-using i32_2 = Vector2<int32_t>;
-using i32_3 = Vector3<int32_t>;
-using i32_4 = Vector4<int32_t>;
+using vec2_i32 = Vector2<int32_t>;
+using vec3_i32 = Vector3<int32_t>;
+using vec4_i32 = Vector4<int32_t>;
 
-static_assert(sizeof(i32_2) == 8);
-static_assert(sizeof(i32_3) == 12);
-static_assert(sizeof(i32_4) == 16);
+static_assert(sizeof(vec2_i32) == 8);
+static_assert(sizeof(vec3_i32) == 12);
+static_assert(sizeof(vec4_i32) == 16);
 
 
-using i64_2 = Vector2<int64_t>;
-using i64_3 = Vector3<int64_t>;
-using i64_4 = Vector4<int64_t>;
+using vec2_i64 = Vector2<int64_t>;
+using vec3_i64 = Vector3<int64_t>;
+using vec4_i64 = Vector4<int64_t>;
 
-static_assert(sizeof(i64_2) == 16);
-static_assert(sizeof(i64_3) == 24);
-static_assert(sizeof(i64_4) == 32);
+static_assert(sizeof(vec2_i64) == 16);
+static_assert(sizeof(vec3_i64) == 24);
+static_assert(sizeof(vec4_i64) == 32);
 
 
 
@@ -534,22 +534,22 @@ static_assert(sizeof(i64_4) == 32);
 // Unsigned Integer Vectors
 //----------------------------------------------------------------------------------
 
-using u32_2 = Vector2<uint32_t>;
-using u32_3 = Vector3<uint32_t>;
-using u32_4 = Vector4<uint32_t>;
+using vec2_u32 = Vector2<uint32_t>;
+using vec3_u32 = Vector3<uint32_t>;
+using vec4_u32 = Vector4<uint32_t>;
 
-static_assert(sizeof(u32_2) == 8);
-static_assert(sizeof(u32_3) == 12);
-static_assert(sizeof(u32_4) == 16);
+static_assert(sizeof(vec2_u32) == 8);
+static_assert(sizeof(vec3_u32) == 12);
+static_assert(sizeof(vec4_u32) == 16);
 
 
-using u64_2 = Vector2<uint64_t>;
-using u64_3 = Vector3<uint64_t>;
-using u64_4 = Vector4<uint64_t>;
+using vec2_u64 = Vector2<uint64_t>;
+using vec3_u64 = Vector3<uint64_t>;
+using vec4_u64 = Vector4<uint64_t>;
 
-static_assert(sizeof(u64_2) == 16);
-static_assert(sizeof(u64_3) == 24);
-static_assert(sizeof(u64_4) == 32);
+static_assert(sizeof(vec2_u64) == 16);
+static_assert(sizeof(vec3_u64) == 24);
+static_assert(sizeof(vec4_u64) == 32);
 
 
 
@@ -558,19 +558,19 @@ static_assert(sizeof(u64_4) == 32);
 // Floating Point Vectors
 //----------------------------------------------------------------------------------
 
-using f32_2 = Vector2<float>;
-using f32_3 = Vector3<float>;
-using f32_4 = Vector4<float>;
+using vec2_f32 = Vector2<float>;
+using vec3_f32 = Vector3<float>;
+using vec4_f32 = Vector4<float>;
 
-static_assert(sizeof(f32_2) == 8);
-static_assert(sizeof(f32_3) == 12);
-static_assert(sizeof(f32_4) == 16);
+static_assert(sizeof(vec2_f32) == 8);
+static_assert(sizeof(vec3_f32) == 12);
+static_assert(sizeof(vec4_f32) == 16);
 
 
-using f64_2 = Vector2<double>;
-using f64_3 = Vector3<double>;
-using f64_4 = Vector4<double>;
+using vec2_f64 = Vector2<double>;
+using vec3_f64 = Vector3<double>;
+using vec4_f64 = Vector4<double>;
 
-static_assert(sizeof(f64_2) == 16);
-static_assert(sizeof(f64_3) == 24);
-static_assert(sizeof(f64_4) == 32);
+static_assert(sizeof(vec2_f64) == 16);
+static_assert(sizeof(vec3_f64) == 24);
+static_assert(sizeof(vec4_f64) == 32);

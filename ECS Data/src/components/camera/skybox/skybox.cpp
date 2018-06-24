@@ -16,7 +16,7 @@ void SkyBox::init(ID3D11Device& device) {
 	// Create the vertex buffer
 	D3D11_BUFFER_DESC vb_desc = {};
 	vb_desc.Usage               = D3D11_USAGE_IMMUTABLE;
-	vb_desc.ByteWidth           = static_cast<u32>(sizeof(f32_3) * vertices.size());
+	vb_desc.ByteWidth           = static_cast<u32>(sizeof(vec3_f32) * vertices.size());
 	vb_desc.BindFlags           = D3D11_BIND_VERTEX_BUFFER;
 	vb_desc.CPUAccessFlags      = 0;
 	vb_desc.MiscFlags           = 0;

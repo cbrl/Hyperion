@@ -10,7 +10,7 @@ AABB::AABB()
 }
 
 
-AABB::AABB(const f32_3& min, const f32_3& max)
+AABB::AABB(const vec3_f32& min, const vec3_f32& max)
 	: min_point(XMLoad(&min))
 	, max_point(XMLoad(&max)) {
 }
@@ -32,7 +32,7 @@ BoundingSphere::BoundingSphere()
 }
 
 
-BoundingSphere::BoundingSphere(const f32_3& center, f32 radius)
+BoundingSphere::BoundingSphere(const vec3_f32& center, f32 radius)
 	: sphere_center(XMLoad(&center))
 	, sphere_radius(radius) {
 }

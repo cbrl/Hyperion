@@ -25,7 +25,7 @@ public:
 	// Getters
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	f32_3 getVelocity() const {
+	vec3_f32 getVelocity() const {
 		return velocity;
 	}
 
@@ -69,7 +69,7 @@ public:
 	// Setters
 	//----------------------------------------------------------------------------------
 
-	void setVelocity(const f32_3& vel) { velocity = vel; }
+	void setVelocity(const vec3_f32& vel) { velocity = vel; }
 	void XM_CALLCONV setVelocity(FXMVECTOR vel) { XMStore(&velocity, vel); }
 
 	void setAcceleration(f32 accel) { acceleration = accel; }
@@ -85,7 +85,7 @@ public:
 
 private:
 	// Position, veloctiy, acceleration (units per second)
-	f32_3 velocity;
+	vec3_f32 velocity;
 	f32 acceleration;
 	f32 deceleration;
 	f32 max_velocity;

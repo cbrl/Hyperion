@@ -13,7 +13,7 @@ PerspectiveCamera::PerspectiveCamera(ID3D11Device& device,
 
 void PerspectiveCamera::updateProjectionMatrix() {
 	// Recalculate the aspect ratio
-	const u32_2 size = viewport.getSize();
+	const vec2_u32 size    = viewport.getSize();
 	const f32 aspect_ratio = static_cast<f32>(size.x) / static_cast<f32>(size.y);
 
 	// Recalculate the projection matrix

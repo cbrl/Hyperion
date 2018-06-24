@@ -17,12 +17,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the size of the camera's viewing volume {width, height}
-	f32_2 size() const {
+	vec2_f32 size() const {
 		return ortho_size;
 	}
 
 	// Set the size of the camera's viewing volume {width, height}
-	void setSize(f32_2 size) {
+	void setSize(vec2_f32 size) {
 		ortho_size = std::move(size);
 		updateProjectionMatrix();
 	}
@@ -35,5 +35,5 @@ private:
 
 private:
 	// The width and height of the camera's viewing volume
-	f32_2 ortho_size;
+	vec2_f32 ortho_size;
 };

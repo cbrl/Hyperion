@@ -29,11 +29,11 @@ public:
 
 
 	void setText(wstring new_text);
-	void setText(wstring new_text, f32_2 new_position);
-	void setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color);
-	void setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color, f32 new_rotation);
+	void setText(wstring new_text, vec2_f32 new_position);
+	void setText(wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color);
+	void setText(wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color, f32 new_rotation);
 
-	void setPosition(f32_2 new_position);
+	void setPosition(vec2_f32 new_position);
 	void setColor(XMVECTORF32 new_color);
 	void setRotation(f32 new_rotation);
 

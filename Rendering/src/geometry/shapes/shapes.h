@@ -25,7 +25,7 @@ namespace Shapes {
 	template<typename VertexT>
 	void ComputeBox(vector<VertexT>& vertices,
 	                vector<u32>& indices,
-	                const f32_3& size,
+	                const vec3_f32& size,
 	                bool rhcoords = false,
 	                bool invertn  = false);
 

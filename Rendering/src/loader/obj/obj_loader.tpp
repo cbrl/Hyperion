@@ -134,7 +134,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 		// Vertex
 		if (token.compare(ObjTokens::vertex) == 0) {
-			f32_3 position;
+			vec3_f32 position;
 			stream >> position.x >> position.y >> position.z;
 
 			if (rh_coord) {
@@ -146,7 +146,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 		// Normal
 		else if (token.compare(ObjTokens::normal) == 0) {
-			f32_3 normal;
+			vec3_f32 normal;
 			stream >> normal.x >> normal.y >> normal.z;
 
 			if (rh_coord) {
@@ -158,7 +158,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 		// Texture
 		else if (token.compare(ObjTokens::texture) == 0) {
-			f32_2 texCoord;
+			vec2_f32 texCoord;
 			stream >> texCoord.x >> texCoord.y;
 
 			if (rh_coord) {
@@ -429,7 +429,7 @@ void OBJLoader<VertexT>::readFace(wstring& line) {
 				vertex.position = vertex_positions[stoi(vert_parts[0]) - 1];
 				//Subtract 1 since arrays start at index 0
 
-				vertex.texCoord = f32_2(0.0f, 0.0f);
+				vertex.texCoord = vec2_f32(0.0f, 0.0f);
 
 				has_normal = false;
 
@@ -455,7 +455,7 @@ void OBJLoader<VertexT>::readFace(wstring& line) {
 
 				vertex.normal = vertex_normals[stoi(vert_parts[2]) - 1];
 
-				vertex.texCoord = f32_2(0.0f, 0.0f);
+				vertex.texCoord = vec2_f32(0.0f, 0.0f);
 
 
 				has_normal = true;
@@ -485,8 +485,8 @@ void OBJLoader<VertexT>::readFace(wstring& line) {
 
 	// Generate normals if the vertex type has a normal, but the file doesn't
 	if (!has_normal && VertexT::hasNormal()) {
-		const f32_3 p1 = verts[0].position - verts[1].position;
-		const f32_3 p2 = verts[2].position - verts[1].position;
+		const vec3_f32 p1 = verts[0].position - verts[1].position;
+		const vec3_f32 p2 = verts[2].position - verts[1].position;
 
 		const XMVECTOR a = XMLoad(&p1);
 		const XMVECTOR b = XMLoad(&p2);
@@ -552,7 +552,7 @@ void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 
 	while (true) {
 		for (u32 i = 0; i < v_verts.size(); ++i) {
-			f32_3 prev;
+			vec3_f32 prev;
 			if (i == 0) {
 				prev = v_verts[v_verts.size() - 1].position;
 			}
@@ -560,9 +560,9 @@ void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 				prev = v_verts[i - 1].position;
 			}
 
-			f32_3 curr = v_verts[i].position;
+			vec3_f32 curr = v_verts[i].position;
 
-			f32_3 next;
+			vec3_f32 next;
 			if (i == v_verts.size() - 1) {
 				next = v_verts[0].position;
 			}
@@ -597,7 +597,7 @@ void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 						out_indices.push_back(j);
 				}
 
-				f32_3 temp;
+				vec3_f32 temp;
 				for (u32 j = 0; j < v_verts.size(); ++j) {
 					if (v_verts[j].position != prev &&
 					    v_verts[j].position != curr &&
@@ -623,8 +623,8 @@ void OBJLoader<VertexT>::triangulate(vector<VertexT>& in_verts, vector<u32>& out
 
 
 			// Ensure that the vertex isn't an interior vertex
-			const f32_3 v1     = prev - curr;
-			const f32_3 v2     = next - curr;
+			const vec3_f32 v1     = prev - curr;
+			const vec3_f32 v2     = next - curr;
 			const XMVECTOR vec1 = XMLoad(&v1);
 			const XMVECTOR vec2 = XMLoad(&v2);
 

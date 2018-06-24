@@ -63,7 +63,7 @@ public:
 		needs_update = true;
 	}
 
-	void move(const f32_3& units) {
+	void move(const vec3_f32& units) {
 		translation += XMLoad(&units);
 		needs_update = true;
 	}
@@ -73,7 +73,7 @@ public:
 		needs_update = true;
 	}
 
-	void setPosition(const f32_3& position) {
+	void setPosition(const vec3_f32& position) {
 		translation = XMLoad(&position);
 		needs_update = true;
 	}
@@ -103,7 +103,7 @@ public:
 		needs_update = true;
 	}
 
-	void rotate(const f32_3& units) {
+	void rotate(const vec3_f32& units) {
 		rotation += XMLoad(&units);
 		needs_update = true;
 	}
@@ -113,7 +113,7 @@ public:
 		needs_update = true;
 	}
 
-	void setRotation(const f32_3& rotation) {
+	void setRotation(const vec3_f32& rotation) {
 		this->rotation = XMLoad(&rotation);
 		needs_update = true;
 	}
@@ -143,7 +143,7 @@ public:
 		needs_update = true;
 	}
 
-	void scale(const f32_3& units) {
+	void scale(const vec3_f32& units) {
 		scaling *= XMLoad(&units);
 		needs_update = true;
 	}
@@ -153,7 +153,7 @@ public:
 		needs_update = true;
 	}
 
-	void setScale(const f32_3& scale) {
+	void setScale(const vec3_f32& scale) {
 		scaling = XMLoad(&scale);
 		needs_update = true;
 	}

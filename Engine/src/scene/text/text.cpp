@@ -16,20 +16,20 @@ void Text::setText(wstring new_text) {
 }
 
 
-void Text::setText(wstring new_text, f32_2 new_position) {
+void Text::setText(wstring new_text, vec2_f32 new_position) {
 	text     = new_text;
 	position = XMLoad(&new_position);
 }
 
 
-void Text::setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color) {
+void Text::setText(wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color) {
 	text     = new_text;
 	position = XMLoad(&new_position);
 	color    = new_color;
 }
 
 
-void Text::setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color, f32 new_rotation) {
+void Text::setText(wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color, f32 new_rotation) {
 	text     = new_text;
 	position = XMLoad(&new_position);
 	color    = new_color;
@@ -37,7 +37,7 @@ void Text::setText(wstring new_text, f32_2 new_position, XMVECTORF32 new_color, 
 }
 
 
-void Text::setPosition(f32_2 new_position) {
+void Text::setPosition(vec2_f32 new_position) {
 	position = XMLoad(&new_position);
 }
 

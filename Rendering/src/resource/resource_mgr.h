@@ -108,7 +108,7 @@ public:
 	enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> getOrCreate(const wstring& filename);
 
 	template<typename ResourceT>
-	enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> getOrCreate(const f32_4& color);
+	enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> getOrCreate(const vec4_f32& color);
 
 
 	// SpriteFont

@@ -81,7 +81,7 @@ enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::get
 }
 
 template<typename ResourceT>
-enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::getOrCreate(const f32_4& color) {
+enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> ResourceMgr::getOrCreate(const vec4_f32& color) {
 
 	u32 texColor = Float4ColorToU32(color);
 

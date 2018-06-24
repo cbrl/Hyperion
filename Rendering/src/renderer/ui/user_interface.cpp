@@ -307,9 +307,9 @@ void UserInterface::drawDetails(Transform& transform) const {
 	ImGui::Text("Transform");
 	ImGui::Separator();
 
-	f32_3 position;
-	f32_3 rotation;
-	f32_3 scale;
+	vec3_f32 position;
+	vec3_f32 rotation;
+	vec3_f32 scale;
 	XMStore(&position, transform.getPosition());
 	XMStore(&rotation, transform.getRotation());
 	XMStore(&scale, transform.getScale());
@@ -330,10 +330,10 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 	ImGui::Text("Fog");
 	ImGui::Separator();
 
-	auto& fog   = camera.getFog();
-	f32_4 color = fog.color;
-	f32   start = fog.start;
-	f32   range = fog.range;
+	auto&    fog   = camera.getFog();
+	vec4_f32 color = fog.color;
+	f32      start = fog.start;
+	f32      range = fog.range;
 
 	bool update = false;
 
@@ -356,10 +356,10 @@ void UserInterface::drawDetails(OrthographicCamera& camera) const {
 	ImGui::Text("Fog");
 	ImGui::Separator();
 
-	auto& fog   = camera.getFog();
-	f32_4 color = fog.color;
-	f32   start = fog.start;
-	f32   range = fog.range;
+	auto&    fog   = camera.getFog();
+	vec4_f32 color = fog.color;
+	f32      start = fog.start;
+	f32      range = fog.range;
 
 	bool update = false;
 
@@ -616,9 +616,9 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Box", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32_3 size = { 1.0f, 1.0f, 1.0f };
-		static bool   rhcoords = false;
-		static bool   invertn = false;
+		static vec3_f32 size     = { 1.0f, 1.0f, 1.0f };
+		static bool     rhcoords = false;
+		static bool     invertn  = false;
 
 		ImGui::InputFloat3("Size", size.data());
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
