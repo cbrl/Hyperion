@@ -6,6 +6,7 @@
 #include "pipeline.h"
 #include "buffer/buffers.h"
 #include "buffer/constant_buffer.h"
+#include "display/viewport.h"
 #include "components/camera/skybox/skybox.h"
 
 
@@ -16,11 +17,12 @@ class CameraBase : public Component<T> {
 protected:
 	CameraBase(ID3D11Device& device)
 		: buffer(device)
-		, viewport({0.0f, 0.0f, 0.0f, 0.f, 0.0f, 1.0f})
 		, z_near(0.1f)
 		, z_far(1000.0f)
 		, sky(device)
 		, projection_matrix(XMMatrixIdentity()) {
+
+		viewport.setDepth(0.0f, 1.0f);
 	}
 
 	~CameraBase() = default;
@@ -29,7 +31,7 @@ protected:
 public:
 	// Bind the viewport to the pipeline
 	void bindViewport(ID3D11DeviceContext& device_context) const {
-		Pipeline::RS::bindViewports(device_context, 1, &viewport);
+		viewport.bind(device_context);
 	}
 
 
@@ -60,24 +62,23 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Set a new viewport
-	void setViewport(ID3D11DeviceContext& device_context, const D3D11_VIEWPORT& viewport) {
-		this->viewport = viewport;
-		bindViewport(device_context);
+	void setViewport(D3D11_VIEWPORT vp) noexcept {
+		viewport.setViewport(std::move(vp));
 		updateProjectionMatrix();
 	}
 
 	// Change the viewport size
-	void resizeViewport(ID3D11DeviceContext& device_context, u32 width, u32 height) {
-		viewport.Width  = static_cast<f32>(width);
-		viewport.Height = static_cast<f32>(height);
-		bindViewport(device_context);
+	void resizeViewport(u32 width, u32 height) noexcept {
+		viewport.setSize(width, height);
 		updateProjectionMatrix();
 	}
 
-	void setViewportTopLeft(u32 top_left_x, u32 top_left_y) {
-		viewport.TopLeftX = static_cast<f32>(top_left_x);
-		viewport.TopLeftY = static_cast<f32>(top_left_y);
-		updateProjectionMatrix();
+	void setViewportTopLeft(u32 x, u32 y) noexcept {
+		viewport.setTopLeft(x, y);
+	}
+
+	void setViewportDepth(f32 min, f32 max) noexcept {
+		viewport.setDepth(min, max);
 	}
 
 
@@ -146,7 +147,7 @@ protected:
 	ConstantBuffer<CameraBuffer> buffer;
 
 	// Viewport and z depth
-	D3D11_VIEWPORT viewport;
+	Viewport viewport;
 	f32 z_near;
 	f32 z_far;
 

@@ -8,7 +8,7 @@
 #include "resource/resource_mgr.h"
 #include "imgui_impl_dx11.h"
 #include "renderer/renderer.h"
-#include "display_config.h"
+#include "display/display_config.h"
 
 
 class RenderingMgr final {

@@ -6,7 +6,6 @@
 class OrthographicCamera final : public CameraBase<OrthographicCamera> {
 public:
 	OrthographicCamera(ID3D11Device& device,
-	                   ID3D11DeviceContext& device_context,
 	                   u32 viewport_width,
 	                   u32 viewport_height);
 

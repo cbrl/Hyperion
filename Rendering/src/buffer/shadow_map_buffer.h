@@ -4,6 +4,7 @@
 #include "engine_util.h"
 #include "datatypes/datatypes.h"
 #include "pipeline.h"
+#include "display/viewport.h"
 
 
 // Rasterizer depth bias values
@@ -23,7 +24,7 @@ public:
 
 	// Bind the viewport and DSVs
 	void bindViewport(ID3D11DeviceContext& device_context) const {
-		Pipeline::RS::bindViewports(device_context, 1, &viewport);
+		viewport.bind(device_context);
 	}
 
 	// Bind the raster state for the cube map
@@ -61,7 +62,7 @@ public:
 
 
 private:
-	D3D11_VIEWPORT viewport;
+	Viewport viewport;
 	ComPtr<ID3D11RasterizerState> raster_state;
 
 	vector<ComPtr<ID3D11DepthStencilView>> dsvs;
@@ -80,7 +81,7 @@ public:
 
 	// Bind the viewport and DSVs
 	void bindViewport(ID3D11DeviceContext& device_context) const {
-		Pipeline::RS::bindViewports(device_context, 1, &viewport);
+		viewport.bind(device_context);
 	}
 
 	// Bind the raster state for the cube map
@@ -120,7 +121,7 @@ public:
 
 
 private:
-	D3D11_VIEWPORT viewport;
+	Viewport viewport;
 	ComPtr<ID3D11RasterizerState> raster_state;
 
 	vector<ComPtr<ID3D11DepthStencilView>> dsvs;

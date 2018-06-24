@@ -254,11 +254,11 @@ void Engine::onResize(u32 window_width, u32 window_height) {
 
 	if (ecs_engine) {
 		ecs_engine->forEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-			camera.resizeViewport(rendering_mgr->getDeviceContext(), window_width, window_height);
+			camera.resizeViewport(window_width, window_height);
 		});
 
 		ecs_engine->forEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
-			camera.resizeViewport(rendering_mgr->getDeviceContext(), window_width, window_height);
+			camera.resizeViewport(window_width, window_height);
 		});
 	}
 

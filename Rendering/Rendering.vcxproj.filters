@@ -115,6 +115,9 @@
     <Filter Include="Header Files\renderer\ui">
       <UniqueIdentifier>{b9404e9e-9946-4e6c-913c-5494b130b231}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\display">
+      <UniqueIdentifier>{30717c3a-bd23-46ff-b422-7756e12f787c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -248,9 +251,6 @@
     <ClInclude Include="src\resource\resource.h">
       <Filter>Header Files\resource</Filter>
     </ClInclude>
-    <ClInclude Include="src\display_config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\loader\obj\obj_loader.tpp">
       <Filter>Source Files\loader\obj</Filter>
     </ClInclude>
@@ -277,6 +277,12 @@
     </ClInclude>
     <ClInclude Include="src\renderer\pass\text\text_pass.h">
       <Filter>Header Files\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\display\display_config.h">
+      <Filter>Header Files\display</Filter>
+    </ClInclude>
+    <ClInclude Include="src\display\viewport.h">
+      <Filter>Header Files\display</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

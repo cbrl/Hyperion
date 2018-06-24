@@ -21,8 +21,8 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 
 
 	//----------------------------------------------------------------------------------
-	// Rebind the camera's viewport and the default render target
-	// (The light pass has to bind different ones)
+	// Bind the camera's viewport and the rebind default render target
+	// (The light pass has to bind a different one)
 	//----------------------------------------------------------------------------------
 	camera.bindViewport(device_context);
 	rendering_mgr.bindDefaultRenderTarget();

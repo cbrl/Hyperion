@@ -29,12 +29,12 @@ void TestScene::load(const Engine& engine) {
 	// Create the camera
 	const handle64 camera = addEntity<PlayerCamera>(ecs_engine,
 	                                                device,
-	                                                device_context,
                                                     engine.getWindowWidth(),
 	                                                engine.getWindowHeight());
 
 	// Set the parameters
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
+	cam->setViewportDepth(0.0f, 1.0f);
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
 	cam->setFog(Fog(f32_4(0.2f, 0.2f, 0.2f, 1.0f), 30.0f, 25.0f));

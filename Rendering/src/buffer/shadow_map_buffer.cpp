@@ -19,12 +19,9 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 
 
 	// Define the viewport
-	viewport.Width    = static_cast<f32>(width);
-	viewport.Height   = static_cast<f32>(height);
-	viewport.TopLeftX = 0.0f;
-	viewport.TopLeftY = 0.0f;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
+	viewport.setTopLeft(0.0f, 0.0f);
+	viewport.setSize(width, height);
+	viewport.setDepth(0.0f, 1.0f);
 
 
 	// Create the depth map texture
@@ -97,12 +94,9 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 
 
 	// Define the viewport
-	viewport.Width    = static_cast<f32>(width);
-	viewport.Height   = static_cast<f32>(height);
-	viewport.TopLeftX = 0.0f;
-	viewport.TopLeftY = 0.0f;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
+	viewport.setTopLeft(0.0f, 0.0f);
+	viewport.setSize(width, height);
+	viewport.setDepth(0.0f, 1.0f);
 
 
 	// Create the depth map texture

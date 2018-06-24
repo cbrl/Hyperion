@@ -4,7 +4,7 @@
 
 #include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
-#include "display_config.h"
+#include "display/display_config.h"
 
 using namespace DirectX;
 

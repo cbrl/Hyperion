@@ -9,7 +9,7 @@
 #include "fps/fps.h"
 #include "input.h"
 #include "rendering_mgr.h"
-#include "display_config.h"
+#include "display/display_config.h"
 #include "scene/scene.h"
 
 

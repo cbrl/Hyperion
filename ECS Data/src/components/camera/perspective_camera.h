@@ -6,7 +6,6 @@
 class PerspectiveCamera final : public CameraBase<PerspectiveCamera> {
 public:
 	PerspectiveCamera(ID3D11Device& device,
-	                  ID3D11DeviceContext& device_context,
 	                  u32 viewport_width,
 	                  u32 viewport_height);
 
