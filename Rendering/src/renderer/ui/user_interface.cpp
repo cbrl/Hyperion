@@ -215,15 +215,6 @@ void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
 			drawNode("Orthographic Camera", *cam);
 		}
 
-		// Camera Movement
-		if (auto* cam_movement = ecs_engine.getComponent<CameraMovement>(entity)) {
-			drawNode("Camera Movement", *cam_movement);
-		}
-
-		if (auto* mouse_rotation = ecs_engine.getComponent<MouseRotation>(entity)) {
-			drawNode("Mouse Rotation", *mouse_rotation);
-		}
-
 		// Model
 		if (auto* model = ecs_engine.getComponent<Model>(entity)) {
 			const bool node_selected = (selected == model);
@@ -274,6 +265,21 @@ void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
 		// Spot Light
 		if (auto* light = ecs_engine.getComponent<SpotLight>(entity)) {
 			drawNode("Spot Light", *light);
+		}
+
+		// Camera Movement
+		if (auto* cam_movement = ecs_engine.getComponent<CameraMovement>(entity)) {
+			drawNode("Camera Movement", *cam_movement);
+		}
+
+		// Mouse Rotation
+		if (auto* mouse_rotation = ecs_engine.getComponent<MouseRotation>(entity)) {
+			drawNode("Mouse Rotation", *mouse_rotation);
+		}
+
+		// Axis Rotation
+		if (auto* axis_rotation = ecs_engine.getComponent<AxisRotation>(entity)) {
+			drawNode("Axis Rotation", *axis_rotation);
 		}
 
 		ImGui::TreePop();
@@ -385,7 +391,6 @@ void UserInterface::drawDetails(CameraMovement& movement) const {
 	f32 max_velocity     = movement.getMaxVelocity();
 	f32 acceleration     = movement.getAcceleration();
 	f32 deceleration     = movement.getDeceleration();
-	f32 roll_sensitivity = movement.getRollSensitivity();
 
 	if (ImGui::InputFloat("Max Velocity", &max_velocity))
 		movement.setMaxVelocity(max_velocity);
@@ -395,9 +400,6 @@ void UserInterface::drawDetails(CameraMovement& movement) const {
 
 	if (ImGui::InputFloat("Deceleration", &deceleration))
 		movement.setDeceleration(deceleration);
-
-	if (ImGui::InputFloat("Roll Sensitivity", &roll_sensitivity))
-		movement.setRollSensitivity(roll_sensitivity);
 }
 
 
@@ -535,6 +537,58 @@ void UserInterface::drawDetails(SpotLight& light) const {
 	auto shadows = light.castsShadows();
 	if (ImGui::Checkbox("Shadows", &shadows))
 		light.setShadows(shadows);
+}
+
+
+void UserInterface::drawDetails(AxisRotation& rotation) const {
+	
+	ImGui::Text("Axis Rotation");
+	ImGui::Separator();
+
+
+	// X Rotation
+	static bool x_enable = rotation.hasAxis(AxisRotation::Axis::X);
+
+	if (ImGui::Checkbox("X Axis", &x_enable)) {
+		if (x_enable) rotation.addAxis(AxisRotation::Axis::X);
+		else rotation.removeAxis(AxisRotation::Axis::X);
+	}
+	if (x_enable) {
+		f32 speed_x = rotation.getSpeedX();
+		if (ImGui::DragFloat("X Speed", &speed_x, 0.05f, -FLT_MAX, FLT_MAX)) {
+			rotation.setSpeedX(speed_x);
+		}
+	}
+
+
+	// Y Rotation
+	static bool y_enable = rotation.hasAxis(AxisRotation::Axis::Y);
+
+	if (ImGui::Checkbox("Y Axis", &y_enable)) {
+		if (y_enable) rotation.addAxis(AxisRotation::Axis::Y);
+		else rotation.removeAxis(AxisRotation::Axis::Y);
+	}
+	if (y_enable) {
+		f32 speed_y = rotation.getSpeedY();
+		if (ImGui::DragFloat("Y Speed", &speed_y, 0.05f, -FLT_MAX, FLT_MAX)) {
+			rotation.setSpeedY(speed_y);
+		}
+	}
+
+
+	// Z Rotation
+	static bool z_enable = rotation.hasAxis(AxisRotation::Axis::Z);
+
+	if (ImGui::Checkbox("Z Axis", &z_enable)) {
+		if (z_enable) rotation.addAxis(AxisRotation::Axis::Z);
+		else rotation.removeAxis(AxisRotation::Axis::Z);
+	}
+	if (z_enable) {
+		f32 speed_z = rotation.getSpeedZ();
+		if (ImGui::DragFloat("Z Speed", &speed_z, 0.05f, -FLT_MAX, FLT_MAX)) {
+			rotation.setSpeedZ(speed_z);
+		}
+	}
 }
 
 

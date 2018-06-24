@@ -6,9 +6,12 @@
 class AxisRotation final : public Component<AxisRotation> {
 public:
 	enum Axis : u8 {
-		X = 1 << 0,
-		Y = 1 << 1,
-		Z = 1 << 2
+		X   = 1 << 0,
+		Y   = 1 << 1,
+		Z   = 1 << 2,
+		XY  = X | Y,
+		YZ  = Y | Z,
+		XYZ = X | Y | Z,
 	};
 
 
@@ -33,6 +36,11 @@ public:
 	// Add a rotation axis
 	void addAxis(Axis axis) {
 		rotation_axis |= axis;
+	}
+
+	// Remove a rotation axis
+	void removeAxis(Axis axis) {
+		rotation_axis &= ~axis;
 	}
 
 	// Get the rotation axes

@@ -36,56 +36,31 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movem
 	const vec2_i32 mouse_delta = input.getMouseDelta();
 	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());
 
-	f32  roll_units = 0.0f;
 	vec3_f32 move_units{ 0.0f, 0.0f, 0.0f };
 
 
-	//----------------------------------------------------------------------------------
-	// Rotation
-	//----------------------------------------------------------------------------------
-
-	// Roll rotation
-	if (input.isKeyDown(Keyboard::Q)) {
-		roll_units += dt * movement->getRollSensitivity();
+	// Forward/Back movement
+	if (input.isKeyDown(Keyboard::W)) {
+		move_units.z += dt;
 	}
-	else if (input.isKeyDown(Keyboard::E)) {
-		roll_units -= dt * movement->getRollSensitivity();
+	else if (input.isKeyDown(Keyboard::S)) {
+		move_units.z -= dt;
 	}
 
-	if (roll_units) {
-		transform->rotate(vec3_f32{ 0.0f, 0.0f, roll_units });
+	// Left/Right movement
+	if (input.isKeyDown(Keyboard::A)) {
+		move_units.x -= dt;
+	}
+	else if (input.isKeyDown(Keyboard::D)) {
+		move_units.x += dt;
 	}
 
-
-
-	//----------------------------------------------------------------------------------
-	// Movement
-	//----------------------------------------------------------------------------------
-
-	{
-		// Forward/Back movement
-		if (input.isKeyDown(Keyboard::W)) {
-			move_units.z += dt;
-		}
-		else if (input.isKeyDown(Keyboard::S)) {
-			move_units.z -= dt;
-		}
-
-		// Left/Right movement
-		if (input.isKeyDown(Keyboard::A)) {
-			move_units.x -= dt;
-		}
-		else if (input.isKeyDown(Keyboard::D)) {
-			move_units.x += dt;
-		}
-
-		// Up/Down movement
-		if (input.isKeyDown(Keyboard::Space)) {
-			move_units.y += dt;
-		}
-		else if (input.isKeyDown(Keyboard::LeftControl)) {
-			move_units.y -= dt;
-		}
+	// Up/Down movement
+	if (input.isKeyDown(Keyboard::Space)) {
+		move_units.y += dt;
+	}
+	else if (input.isKeyDown(Keyboard::LeftControl)) {
+		move_units.y -= dt;
 	}
 
 

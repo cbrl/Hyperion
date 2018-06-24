@@ -11,9 +11,7 @@ public:
 		, acceleration(20.0f)
 		, deceleration(50.0f)
 		, max_velocity(10.0f)
-		, roll_sensitivity(1.5f)
 		, is_moving_x(false)
-
 		, is_moving_y(false)
 		, is_moving_z(false) {
 	}
@@ -45,11 +43,6 @@ public:
 	}
 
 	[[nodiscard]]
-	f32 getRollSensitivity() const {
-		return roll_sensitivity;
-	}
-
-	[[nodiscard]]
 	bool isMovingX() const {
 		return is_moving_x;
 	}
@@ -76,8 +69,6 @@ public:
 	void setDeceleration(f32 decel) { deceleration = decel; }
 	void setMaxVelocity(f32 max_vel) { max_velocity = max_vel; }
 
-	void setRollSensitivity(f32 sens) { roll_sensitivity = sens; }
-
 	void setMovingX(bool moving) { is_moving_x = moving; }
 	void setMovingY(bool moving) { is_moving_y = moving; }
 	void setMovingZ(bool moving) { is_moving_z = moving; }
@@ -89,9 +80,6 @@ private:
 	f32 acceleration;
 	f32 deceleration;
 	f32 max_velocity;
-
-	// Roll speed multiplier
-	f32 roll_sensitivity;
 
 	// Movement booleans
 	bool is_moving_x;

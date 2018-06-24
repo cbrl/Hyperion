@@ -68,13 +68,14 @@ private:
 	void drawDetails(Transform& transform) const;
 	void drawDetails(PerspectiveCamera& camera) const;
 	void drawDetails(OrthographicCamera& camera) const;
-	void drawDetails(CameraMovement& movement) const;
-	void drawDetails(MouseRotation& rotation) const;
 	void drawDetails(Model& model) const;
 	void drawDetails(ModelChild& child) const;
 	void drawDetails(DirectionalLight& light) const;
 	void drawDetails(PointLight& light) const;
 	void drawDetails(SpotLight& light) const;
+	void drawDetails(CameraMovement& movement) const;
+	void drawDetails(MouseRotation& rotation) const;
+	void drawDetails(AxisRotation& rotation) const;
 
 
 	//----------------------------------------------------------------------------------

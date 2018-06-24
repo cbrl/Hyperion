@@ -17,15 +17,19 @@ void MouseRotationSystem::update(const Engine& engine) {
 		auto transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
 		if (!transform) return;
 
-		vec3_f32 rotate_units{ 0.0f, 0.0f, 0.0f };
+		const vec2_f32 max = rotation.getMaxRotation();
+		vec2_f32 units{ 0.0f, 0.0f };
 
 		// Set x/y rotation with mouse data
-		rotate_units.x = static_cast<f32>(mouse_delta.y) * rotation.getSensitivity();
-		rotate_units.y = static_cast<f32>(mouse_delta.x) * rotation.getSensitivity();
+		units.x = static_cast<f32>(mouse_delta.y) * rotation.getSensitivity();
+		units.y = static_cast<f32>(mouse_delta.x) * rotation.getSensitivity();
 
 		// Rotate the camera
-		if (rotate_units.x || rotate_units.y || rotate_units.z) {
-			transform->rotate(rotate_units);
+		if (units.x) {
+			transform->rotateXClamped(units.x, -max.x, max.x);
+		}
+		if (units.y) { 
+			transform->rotateYClamped(units.y, -max.y, max.y);
 		}
 	});
 }

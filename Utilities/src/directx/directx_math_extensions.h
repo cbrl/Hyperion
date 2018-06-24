@@ -11,6 +11,7 @@ using namespace DirectX;
 
 
 // Convert a vec4_f32 to a hex color value
+[[nodiscard]]
 inline uint32_t Float4ColorToU32(const vec4_f32& color) {
 	return static_cast<uint32_t>(color.x * 0xff)            //R
 	       | (static_cast<uint32_t>(color.y * 0xff) << 8)   //G
@@ -20,6 +21,7 @@ inline uint32_t Float4ColorToU32(const vec4_f32& color) {
 
 
 // Determine if a point is inside a triangle using barycentric coordinates
+[[nodiscard]]
 inline bool PointInTriangle(const vec3_f32& vert1,
                             const vec3_f32& vert2,
                             const vec3_f32& vert3,
@@ -46,6 +48,7 @@ inline bool PointInTriangle(const vec3_f32& vert1,
 
 
 // Determine if a point is inside a triangle using barycentric coordinates
+[[nodiscard]]
 inline bool XM_CALLCONV PointInTriangle(FXMVECTOR vert1,
                                         FXMVECTOR vert2,
                                         FXMVECTOR vert3,
@@ -73,6 +76,7 @@ inline bool XM_CALLCONV PointInTriangle(FXMVECTOR vert1,
 
 // Find the minimum and maximum points in a vector of vertices
 template<typename VertexT>
+[[nodiscard]]
 std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& vertices) {
 	vec3_f32 min{FLT_MAX, FLT_MAX, FLT_MAX};
 	vec3_f32 max{FLT_MIN, FLT_MIN, FLT_MIN};
@@ -90,6 +94,7 @@ std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& vertices) 
 	return std::pair<XMVECTOR, XMVECTOR>(XMLoad(&min), XMLoad(&max));
 }
 
+[[nodiscard]]
 inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<vec3_f32>& vertices) {
 	vec3_f32 min{FLT_MAX, FLT_MAX, FLT_MAX};
 	vec3_f32 max{FLT_MIN, FLT_MIN, FLT_MIN};
@@ -107,6 +112,7 @@ inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<vec3_f32>& ve
 	return std::pair<XMVECTOR, XMVECTOR>(XMLoad(&min), XMLoad(&max));
 }
 
+[[nodiscard]]
 inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<XMVECTOR>& vertices) {
 	XMVECTOR min{FLT_MAX, FLT_MAX, FLT_MAX};
 	XMVECTOR max{FLT_MIN, FLT_MIN, FLT_MIN};
@@ -117,4 +123,15 @@ inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<XMVECTOR>& ve
 	}
 
 	return std::pair<XMVECTOR, XMVECTOR>(min, max);
+}
+
+
+// Clamp an angle (radians) to a min and max range (min & max cannot exceed +/-pi)
+[[nodiscard]]
+inline f32 ClampAngle(f32 angle, f32 min, f32 max) {
+	assert(min <= max);
+	assert(min >= -XM_PI && min <= XM_PI);
+	assert(max >= -XM_PI && max <= XM_PI);
+
+	return std::clamp(std::remainder(angle, XM_2PI), min, max);
 }

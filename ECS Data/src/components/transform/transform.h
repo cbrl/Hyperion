@@ -49,17 +49,17 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void moveX(f32 units) {
-		translation += {units, 0.0f, 0.0f};
+		translation += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
 		needs_update = true;
 	}
 
 	void moveY(f32 units) {
-		translation += {0.0f, units, 0.0f};
+		translation += XMVectorSet(0.0f, units, 0.0f, 0.0f);
 		needs_update = true;
 	}
 
 	void moveZ(f32 units) {
-		translation += {0.0f, 0.0f, units};
+		translation += XMVectorSet(0.0f, 0.0f, units, 0.0f);
 		needs_update = true;
 	}
 
@@ -89,17 +89,35 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void rotateX(f32 units) {
-		rotation += {units, 0.0f, 0.0f};
+		rotation += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
 		needs_update = true;
 	}
 
 	void rotateY(f32 units) {
-		rotation += {0.0f, units, 0.0f};
+		rotation += XMVectorSet(0.0f, units, 0.0f, 0.0f);
 		needs_update = true;
 	}
 
 	void rotateZ(f32 units) {
-		rotation += {0.0f, 0.0f, units};
+		rotation += XMVectorSet(0.0f, 0.0f, units, 0.0f);
+		needs_update = true;
+	}
+
+	void rotateXClamped(f32 units, f32 min, f32 max) {
+		const f32 amount = ClampAngle(XMVectorGetX(rotation) + units, min, max);
+		rotation = XMVectorSetX(rotation, amount);
+		needs_update = true;
+	}
+
+	void rotateYClamped(f32 units, f32 min, f32 max) {
+		const f32 amount = ClampAngle(XMVectorGetY(rotation) + units, min, max);
+		rotation = XMVectorSetY(rotation, amount);
+		needs_update = true;
+	}
+
+	void rotateZClamped(f32 units, f32 min, f32 max) {
+		const f32 amount = ClampAngle(XMVectorGetZ(rotation) + units, min, max);
+		rotation = XMVectorSetZ(rotation, amount);
 		needs_update = true;
 	}
 
@@ -111,6 +129,18 @@ public:
 	void XM_CALLCONV rotate(FXMVECTOR units) {
 		rotation += units;
 		needs_update = true;
+	}
+
+	void rotateClamped(const vec3_f32& units, f32 min, f32 max) {
+		rotateXClamped(units.x, min, max);
+		rotateYClamped(units.y, min, max);
+		rotateZClamped(units.z, min, max);
+	}
+
+	void XM_CALLCONV rotateClamped(FXMVECTOR units, f32 min, f32 max) {
+		rotateXClamped(XMVectorGetX(units), min, max);
+		rotateYClamped(XMVectorGetY(units), min, max);
+		rotateZClamped(XMVectorGetZ(units), min, max);
 	}
 
 	void setRotation(const vec3_f32& rotation) {
@@ -129,17 +159,17 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void scaleX(f32 units) {
-		scaling += {units, 0.0f, 0.0f};
+		scaling += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
 		needs_update = true;
 	}
 
 	void scaleY(f32 units) {
-		scaling += {0.0f, units, 0.0f};
+		scaling += XMVectorSet(0.0f, units, 0.0f, 0.0f);
 		needs_update = true;
 	}
 
 	void scaleZ(f32 units) {
-		scaling += {0.0f, 0.0f, units};
+		scaling += XMVectorSet(0.0f, 0.0f, units, 0.0f);
 		needs_update = true;
 	}
 
