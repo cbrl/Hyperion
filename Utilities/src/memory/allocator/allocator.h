@@ -8,7 +8,7 @@ public:
 	Allocator(size_t memory_size);
 	virtual ~Allocator();
 
-	virtual void* allocate(const size_t size, const size_t alignment = 0) = 0;
+	virtual void* allocate(const size_t size, const size_t alignment) = 0;
 	virtual void freeMemory(void* ptr) = 0;
 
 	void* getStartAddr() const;

@@ -28,7 +28,7 @@ protected:
 		}
 
 	public:
-		Node * first;
+		Node* first;
 	};
 
 

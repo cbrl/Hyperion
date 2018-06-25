@@ -225,9 +225,8 @@ void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
 
 			const bool open = ImGui::TreeNodeEx("Model", model_flags);
 
-			if (ImGui::IsItemClicked()) {
+			if (ImGui::IsItemClicked())
 				selected = model;
-			}
 
 			if (open) {
 				model->forEachChild([&](ModelChild& child) {
@@ -235,13 +234,11 @@ void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
 
 					ImGui::Selectable(child.getName().c_str(), &child_selected);
 
-					if (ImGui::IsItemClicked()) {
+					if (ImGui::IsItemClicked())
 						selected = &child;
-					}
 
-					if (child_selected) {
+					if (child_selected)
 						drawDetailsPanel(child);
-					}
 				});
 
 				ImGui::TreePop();

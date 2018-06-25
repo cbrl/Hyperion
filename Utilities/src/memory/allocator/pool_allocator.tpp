@@ -42,8 +42,7 @@ void* PoolAllocator<DataT>::allocate(const size_t size, const size_t alignment) 
 
 	// Ensure the the arguments are valid.
 	assert(size == chunk_size && "PoolAllocator allocation size is not equal to chunk size.");
-	assert(alignment == this->align &&
-		"PoolAllocator allocation alignment is not equal to alignment specified on creation.");
+	assert(alignment == this->align && "PoolAllocator allocation alignment is not equal to alignment specified on creation.");
 
 	node* free_addr = free_list.pop_front();
 

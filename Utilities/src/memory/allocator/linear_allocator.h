@@ -3,13 +3,13 @@
 #include "allocator.h"
 
 
-class LinearAllocator : public Allocator {
+class LinearAllocator final : public Allocator {
 public:
 	LinearAllocator(size_t memory_size);
-	virtual ~LinearAllocator();
+	~LinearAllocator();
 
-	virtual void reset();
-	void* allocate(size_t size, size_t alignment = 0) override;
+	void reset();
+	void* allocate(size_t size, size_t alignment) override;
 	void freeMemory(void* ptr) override;
 
 

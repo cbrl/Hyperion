@@ -19,7 +19,7 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 
 
 	// Define the viewport
-	viewport.setTopLeft(0.0f, 0.0f);
+	viewport.setTopLeft(0, 0);
 	viewport.setSize(width, height);
 	viewport.setDepth(0.0f, 1.0f);
 
@@ -94,7 +94,7 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 
 
 	// Define the viewport
-	viewport.setTopLeft(0.0f, 0.0f);
+	viewport.setTopLeft(0, 0);
 	viewport.setSize(width, height);
 	viewport.setDepth(0.0f, 1.0f);
 

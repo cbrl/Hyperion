@@ -3,12 +3,12 @@
 #include "allocator.h"
 
 
-class StackAllocator : public Allocator {
+class StackAllocator final : public Allocator {
 public:
 	StackAllocator(size_t memory_size);
-	virtual ~StackAllocator();
+	~StackAllocator();
 
-	virtual void reset();
+	void reset();
 	void* allocate(size_t size, size_t alignment = 0) override;
 	void freeMemory(void* ptr) override;
 
