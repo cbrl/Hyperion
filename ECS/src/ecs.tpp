@@ -63,38 +63,12 @@ void ECS::forEach(ActionT act) {
 	if constexpr (std::is_base_of_v<IEntity, T>) {
 		if (!entity_mgr->knowsEntity<T>()) return;
 
-		for (auto entity = entity_mgr->begin<T>(); entity != entity_mgr->end<T>(); ++entity) {
-			act(*entity);
-		}
+		entity_mgr->forEach<T>(act);
 	}
 
 	if constexpr (std::is_base_of_v<IComponent, T>) {
 		if (!component_mgr->knowsComponent<T>()) return;
 
-		for (auto component = component_mgr->begin<T>(); component != component_mgr->end<T>(); ++component) {
-			act(*component);
-		}
-	}
-}
-
-
-// Do something for each active entity or component
-template<typename T, typename ActionT>
-void ECS::forEachActive(ActionT act) {
-
-	if constexpr (std::is_base_of_v<IEntity, T>) {
-		if (!entity_mgr->knowsEntity<T>()) return;
-
-		for (auto entity = entity_mgr->begin<T>(); entity != entity_mgr->end<T>(); ++entity) {
-			if (entity->isActive()) act(*entity);
-		}
-	}
-
-	if constexpr (std::is_base_of_v<IComponent, T>) {
-		if (!component_mgr->knowsComponent<T>()) return;
-
-		for (auto component = component_mgr->begin<T>(); component != component_mgr->end<T>(); ++component) {
-			if (component->isActive()) act(*component);
-		}
+		component_mgr->forEach<T>(act);
 	}
 }

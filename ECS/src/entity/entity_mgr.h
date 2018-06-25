@@ -95,24 +95,19 @@ public:
 	}
 
 
+	// Check if the entity manager has created an entity of the specified type
 	template<typename EntityT>
 	bool knowsEntity() const {
 		return entity_pools.poolExists<EntityT>();
 	}
 
 
-	template<typename EntityT>
-	typename ResourcePool<EntityT>::iterator begin() {
+	// Apply an action to each entity
+	template<typename EntityT, typename ActionT>
+	void forEach(ActionT act) {
 		using pool_t = ResourcePool<EntityT>;
 		auto* pool = static_cast<pool_t*>(entity_pools.getPool<EntityT>());
-		return pool->begin();
-	}
-
-	template<typename EntityT>
-	typename ResourcePool<EntityT>::iterator end() {
-		using pool_t = ResourcePool<EntityT>;
-		auto* pool = static_cast<pool_t*>(entity_pools.getPool<EntityT>());
-		return pool->end();
+		pool->forEach(act);
 	}
 
 

@@ -144,7 +144,9 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine, FXMMATRI
 	// Clear the cameras
 	directional_light_cameras.clear();
 
-	ecs_engine.forEachActive<DirectionalLight>([&](DirectionalLight& light) {
+	ecs_engine.forEach<DirectionalLight>([&](DirectionalLight& light) {
+
+		if (!light.isActive()) return;
 
 		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
 		if (!transform) return;
@@ -198,7 +200,9 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 	point_light_cameras.clear();
 
 
-	ecs_engine.forEachActive<PointLight>([&](PointLight& light) {
+	ecs_engine.forEach<PointLight>([&](PointLight& light) {
+
+		if (!light.isActive()) return;
 
 		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
 		if (!transform) return;
@@ -285,7 +289,9 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 	spot_light_cameras.clear();
 
 
-	ecs_engine.forEachActive<SpotLight>([&](SpotLight& light) {
+	ecs_engine.forEach<SpotLight>([&](SpotLight& light) {
+
+		if (!light.isActive()) return;
 
 		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
 		if (!transform) return;

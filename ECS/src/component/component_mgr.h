@@ -52,24 +52,19 @@ public:
 	}
 
 
+	// Check if the component manager has created a component of this type
 	template<typename ComponentT>
 	bool knowsComponent() const {
 		return component_pools.poolExists<ComponentT>();
 	}
 
 
-	template<typename ComponentT>
-	typename ResourcePool<ComponentT>::iterator begin() {
+	// Apply an action to each component
+	template<typename ComponentT, typename ActionT>
+	void forEach(ActionT act) {
 		using pool_t = ResourcePool<ComponentT>;
 		auto* pool = static_cast<pool_t*>(component_pools.getPool<ComponentT>());
-		return pool->begin();
-	}
-
-	template<typename ComponentT>
-	typename ResourcePool<ComponentT>::iterator end() {
-		using pool_t = ResourcePool<ComponentT>;
-		auto* pool = static_cast<pool_t*>(component_pools.getPool<ComponentT>());
-		return pool->end();
+		pool->forEach(act);
 	}
 
 

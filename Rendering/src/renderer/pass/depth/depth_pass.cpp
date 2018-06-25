@@ -57,7 +57,10 @@ void XM_CALLCONV DepthPass::render(const Engine& engine,
 	Pipeline::PS::bindShader(device_context, nullptr, nullptr, 0);
 
 	// Draw each model
-	ecs_engine.forEachActive<Model>([&](const Model& model) {
+	ecs_engine.forEach<Model>([&](const Model& model) {
+
+		if (!model.isActive()) return;
+
 		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
 		if (!transform) return;
 
@@ -91,7 +94,10 @@ void XM_CALLCONV DepthPass::renderShadows(const Engine& engine,
 	Pipeline::PS::bindShader(device_context, nullptr, nullptr, 0);
 
 	// Draw each model
-	ecs_engine.forEachActive<Model>([&](Model& model) {
+	ecs_engine.forEach<Model>([&](Model& model) {
+
+		if (!model.isActive()) return;
+
 		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
 		if (!transform) return;
 

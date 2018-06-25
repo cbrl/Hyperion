@@ -9,7 +9,9 @@ void AxisRotationSystem::update(const Engine& engine) {
 	auto& ecs_engine = engine.getECS();
 	const f32 dt     = static_cast<f32>(engine.getTimer().deltaTime());
 
-	ecs_engine.forEachActive<AxisRotation>([&](AxisRotation& rotation) {
+	ecs_engine.forEach<AxisRotation>([&](AxisRotation& rotation) {
+
+		if (!rotation.isActive()) return;
 		
 		auto transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
 		if (!transform) return;

@@ -18,12 +18,14 @@ void CameraSystem::update(const Engine& engine) {
 		                    transform->getWorldToObjectMatrix());
 	};
 
-	ecs_engine.forEachActive<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-		process_cam(camera);
+	ecs_engine.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+		if (camera.isActive())
+			process_cam(camera);
 	});
 
 
-	ecs_engine.forEachActive<OrthographicCamera>([&](OrthographicCamera& camera) {
-		process_cam(camera);
+	ecs_engine.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+		if (camera.isActive())
+			process_cam(camera);
 	});
 }

@@ -8,7 +8,9 @@ void ModelSystem::update(const Engine& engine) {
 	auto& ecs_engine     = engine.getECS();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
-	ecs_engine.forEachActive<Model>([&](Model& model) {
+	ecs_engine.forEach<Model>([&](Model& model) {
+
+		if (!model.isActive()) return;
 
 		if (const auto transform = ecs_engine.getComponent<Transform>(model.getOwner())) {
 

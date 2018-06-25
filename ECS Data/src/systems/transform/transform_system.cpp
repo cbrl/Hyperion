@@ -5,8 +5,9 @@
 void TransformSystem::update(const Engine& engine) {
 	auto& ecs_engine = engine.getECS();
 
-	ecs_engine.forEachActive<Transform>([&](Transform& transform) {
-		updateWorld(ecs_engine, transform);
+	ecs_engine.forEach<Transform>([&](Transform& transform) {
+		if (transform.isActive())
+			updateWorld(ecs_engine, transform);
 	});
 }
 
@@ -14,8 +15,9 @@ void TransformSystem::update(const Engine& engine) {
 void TransformSystem::postUpdate(const Engine& engine) {
 	auto& ecs_engine = engine.getECS();
 
-	ecs_engine.forEachActive<Transform>([&](Transform& transform) {
-		transform.updated = false;
+	ecs_engine.forEach<Transform>([&](Transform& transform) {
+		if (transform.isActive())
+			transform.updated = false;
 	});
 }
 

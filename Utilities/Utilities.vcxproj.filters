@@ -156,6 +156,9 @@
     <ClInclude Include="src\directx\directx_math.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
+    <ClInclude Include="src\memory\managed_resource_map.h">
+      <Filter>Header Files\memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fps\fps.cpp">
@@ -189,6 +192,9 @@
     </None>
     <None Include="src\timer\timer.tpp">
       <Filter>Source Files\timer</Filter>
+    </None>
+    <None Include="src\memory\managed_resource_map.tpp">
+      <Filter>Source Files\memory</Filter>
     </None>
   </ItemGroup>
 </Project>

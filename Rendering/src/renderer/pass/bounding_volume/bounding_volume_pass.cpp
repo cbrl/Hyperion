@@ -52,7 +52,9 @@ void XM_CALLCONV BoundingVolumePass::render(const Engine& engine, FXMMATRIX worl
 	bindRenderStates(rendering_mgr);
 
 
-	ecs_engine.forEachActive<DirectionalLight>([&](const DirectionalLight& light) {
+	ecs_engine.forEach<DirectionalLight>([&](const DirectionalLight& light) {
+
+		if (!light.isActive()) return;
 		
 		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
 		if (!transform) return;
@@ -66,7 +68,9 @@ void XM_CALLCONV BoundingVolumePass::render(const Engine& engine, FXMMATRIX worl
 		renderAABB(light.getAABB(), object_to_world);
 	});
 
-	ecs_engine.forEachActive<PointLight>([&](const PointLight& light) {
+	ecs_engine.forEach<PointLight>([&](const PointLight& light) {
+
+		if (!light.isActive()) return;
 
 		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
 		if (!transform) return;
@@ -80,7 +84,9 @@ void XM_CALLCONV BoundingVolumePass::render(const Engine& engine, FXMMATRIX worl
 		renderAABB(light.getAABB(), object_to_world);
 	});
 
-	ecs_engine.forEachActive<SpotLight>([&](const SpotLight& light) {
+	ecs_engine.forEach<SpotLight>([&](const SpotLight& light) {
+
+		if (!light.isActive()) return;
 
 		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
 		if (!transform) return;
@@ -94,7 +100,9 @@ void XM_CALLCONV BoundingVolumePass::render(const Engine& engine, FXMMATRIX worl
 		renderAABB(light.getAABB(), object_to_world);
 	});
 
-	ecs_engine.forEachActive<Model>([&](const Model& model) {
+	ecs_engine.forEach<Model>([&](const Model& model) {
+
+		if (!model.isActive()) return;
 
 		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
 		if (!transform) return;

@@ -54,8 +54,9 @@ void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_pr
 	bindRenderStates(render_state_mgr);
 
 	// Render models
-	ecs_engine.forEachActive<Model>([&](Model& model) {
-		renderModel(ecs_engine, model, world_to_projection);
+	ecs_engine.forEach<Model>([&](Model& model) {
+		if (model.isActive())
+			renderModel(ecs_engine, model, world_to_projection);
 	});
 }
 
@@ -74,8 +75,9 @@ void XM_CALLCONV ForwardPass::render(const Engine& engine, const SkyBox& sky, FX
 	bindRenderStates(render_state_mgr);
 
 	// Render models
-	ecs_engine.forEachActive<Model>([&](Model& model) {
-		renderModel(ecs_engine, model, world_to_projection);
+	ecs_engine.forEach<Model>([&](Model& model) {
+		if (model.isActive())
+			renderModel(ecs_engine, model, world_to_projection);
 	});
 }
 

@@ -47,55 +47,6 @@ private:
 
 
 public:
-	class iterator : public std::iterator<std::forward_iterator_tag, DataT> {
-		using chunk_iter = typename std::list<Chunk*>::iterator;
-		using object_iter = typename std::list<DataT*>::iterator;
-
-	public:
-		iterator(chunk_iter begin, chunk_iter end)
-			: chunk_current(begin)
-			, chunk_end(end) {
-
-			if (begin != end) {
-				assert(*chunk_current != nullptr && "ResourcePool - Invalid iterator");
-				object_current = (*chunk_current)->objects.begin();
-			}
-			else {
-				object_current = (*std::prev(chunk_end))->objects.end();
-			}
-		}
-
-		iterator& operator++() {
-
-			++object_current;
-
-			if (object_current == (*chunk_current)->objects.end()) {
-				++chunk_current;
-
-				if (chunk_current != chunk_end) {
-					assert(*chunk_current != nullptr && "ResourcePool - Invalid iterator");
-					object_current = (*chunk_current)->objects.begin();
-				}
-			}
-
-			return *this;
-		}
-
-		bool operator==(const iterator& compare) const { return (chunk_current == compare.chunk_current) && (object_current == compare.object_current); }
-		bool operator!=(const iterator& compare) const { return (chunk_current == compare.chunk_current) ? (object_current != compare.object_current) : true; }
-
-		DataT& operator*() const { return **object_current; }
-		DataT* operator->() const { return *object_current; }
-
-
-	private:
-		chunk_iter chunk_current;
-		chunk_iter chunk_end;
-		object_iter object_current;
-	};
-
-
-public:
 	ResourcePool();
 	~ResourcePool();
 
@@ -107,11 +58,15 @@ public:
 	[[nodiscard]]
 	size_t getCount() const override { return count; }
 
-	[[nodiscard]]
-	iterator begin() { return iterator(memory_chunks.begin(), memory_chunks.end()); }
-
-	[[nodiscard]]
-	iterator end() { return iterator(memory_chunks.end(), memory_chunks.end()); }
+	// Apply an action to each resource
+	template<typename ActionT>
+	void forEach(ActionT act) {
+		for (auto& chunk : memory_chunks) {
+			for (auto& object : chunk->objects) {
+				act(*object);
+			}
+		}
+	}
 
 
 private:
@@ -119,6 +74,8 @@ private:
 	static constexpr size_t alloc_size = MaxObjsPerChunk * sizeof(DataT);
 	size_t count;
 };
+
+
 
 
 //----------------------------------------------------------------------------------

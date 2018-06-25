@@ -12,7 +12,9 @@ void MouseRotationSystem::update(const Engine& engine) {
 	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());
 	const vec2_i32 mouse_delta = input.getMouseDelta();
 
-	ecs_engine.forEachActive<MouseRotation>([&](MouseRotation& rotation) {
+	ecs_engine.forEach<MouseRotation>([&](MouseRotation& rotation) {
+
+		if (!rotation.isActive()) return;
 
 		auto transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
 		if (!transform) return;

@@ -22,17 +22,29 @@ void Renderer::render(const Engine& engine) {
 	auto& scene      = engine.getScene();
 
 
-	ecs_engine.forEachActive<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
+	ecs_engine.forEach<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
+
+		if (!camera.isActive()) return;
+
 		// Bind the buffer
 		camera.bindBuffer(device_context, SLOT_CBUFFER_CAMERA);
+
+		// Bind the viewport
+		camera.bindViewport(device_context);
 
 		// Render the scene
 		renderCamera(engine, camera);
 	});
 
-	ecs_engine.forEachActive<OrthographicCamera>([&](const OrthographicCamera& camera) {
+	ecs_engine.forEach<OrthographicCamera>([&](const OrthographicCamera& camera) {
+
+		if (!camera.isActive()) return;
+
 		// Bind the buffer
 		camera.bindBuffer(device_context, SLOT_CBUFFER_CAMERA);
+
+		// Bind the viewport
+		camera.bindViewport(device_context);
 
 		// Render the scene
 		renderCamera(engine, camera);

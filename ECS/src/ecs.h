@@ -55,10 +55,6 @@ public:
 	template<typename T, typename ActionT>
 	void forEach(ActionT act);
 
-	// Do something for each active entity or component
-	template<typename T, typename ActionT>
-	void forEachActive(ActionT act);
-
 	// Get the number of a specific entity/component
 	template<typename T>
 	size_t countOf() const;
