@@ -44,7 +44,7 @@ void* ResourcePool<DataT, max_objs_per_chunk>::allocateObject() {
 
 		if (chunk->objects.size() >= max_objs_per_chunk) continue;
 
-		object = chunk->allocator->allocateCast();
+		object = chunk->allocator->allocate();
 
 		if (object) {
 			chunk->objects.push_back(object);
@@ -60,13 +60,13 @@ void* ResourcePool<DataT, max_objs_per_chunk>::allocateObject() {
 		chunk->objects.clear();
 		memory_chunks.push_front(chunk);
 
-		object = chunk->allocator->allocateCast();
+		object = chunk->allocator->allocate();
 
 		if (object == nullptr) {
-			FILE_LOG(logERROR) << "ResourcePool::AllocateObject() - Unable to create object.";
+			FILE_LOG(logERROR) << "ResourcePool::allocateObject() - Unable to create object.";
 		}
 
-		assert(object != nullptr && "ResourcePool::AllocateObject() - Unable to create object.");
+		assert(object != nullptr && "ResourcePool::allocateObject() - Unable to create object.");
 
 		chunk->objects.push_back(object);
 	}
@@ -89,7 +89,7 @@ void ResourcePool<DataT, max_objs_per_chunk>::destroyObject(void* object) {
 			static_cast<DataT*>(object)->~DataT();
 
 			chunk->objects.remove(static_cast<DataT*>(object));
-			chunk->allocator->freeMemory(object);
+			chunk->allocator->deallocate(object);
 
 			--count;
 			return;

@@ -99,9 +99,6 @@
     <ClInclude Include="src\memory\resource_pool.h">
       <Filter>Header Files\memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\memory\allocator\allocator.h">
-      <Filter>Header Files\memory\allocator</Filter>
-    </ClInclude>
     <ClInclude Include="src\memory\allocator\allocator_util.h">
       <Filter>Header Files\memory\allocator</Filter>
     </ClInclude>
@@ -159,15 +156,15 @@
     <ClInclude Include="src\memory\managed_resource_map.h">
       <Filter>Header Files\memory</Filter>
     </ClInclude>
+    <ClInclude Include="src\memory\allocator\block_allocator.h">
+      <Filter>Header Files\memory\allocator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\fps\fps.cpp">
       <Filter>Source Files\fps</Filter>
     </ClCompile>
     <ClCompile Include="src\memory\allocator\stack_allocator.cpp">
-      <Filter>Source Files\memory\allocator</Filter>
-    </ClCompile>
-    <ClCompile Include="src\memory\allocator\allocator.cpp">
       <Filter>Source Files\memory\allocator</Filter>
     </ClCompile>
     <ClCompile Include="src\memory\allocator\linear_allocator.cpp">

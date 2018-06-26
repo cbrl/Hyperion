@@ -152,7 +152,7 @@
     <ClInclude Include="src\io\io.h" />
     <ClInclude Include="src\log\log.h" />
     <ClInclude Include="src\math\math.h" />
-    <ClInclude Include="src\memory\allocator\allocator.h" />
+    <ClInclude Include="src\memory\allocator\block_allocator.h" />
     <ClInclude Include="src\memory\allocator\allocator_util.h" />
     <ClInclude Include="src\memory\allocator\linear_allocator.h" />
     <ClInclude Include="src\memory\allocator\pool_allocator.h" />
@@ -169,7 +169,6 @@
   <ItemGroup>
     <ClCompile Include="src\directx\vertex_types.cpp" />
     <ClCompile Include="src\fps\fps.cpp" />
-    <ClCompile Include="src\memory\allocator\allocator.cpp" />
     <ClCompile Include="src\memory\allocator\linear_allocator.cpp" />
     <ClCompile Include="src\memory\allocator\stack_allocator.cpp" />
     <ClCompile Include="src\sysmon\system_monitor.cpp" />

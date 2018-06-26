@@ -81,6 +81,11 @@ public:
 	// Material
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
+	Material& getMaterial() {
+		return material;
+	}
+
+	[[nodiscard]]
 	const Material& getMaterial() const {
 		return material;
 	}

@@ -18,7 +18,7 @@ public:
 		if (it != systems.end() && it->second != nullptr)
 			return static_cast<SystemT*>(it->second);
 
-		void* memory = allocator->allocate(sizeof(SystemT), alignof(SystemT));
+		void* memory = allocator->allocate<SystemT>();
 
 		if (memory != nullptr) {
 			SystemT* sys = new(memory) SystemT(std::forward<ArgsT>(args)...);
