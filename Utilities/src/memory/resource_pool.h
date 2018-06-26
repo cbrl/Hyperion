@@ -31,13 +31,23 @@ template<typename DataT, size_t MaxObjsPerChunk = 128>
 class ResourcePool : public IResourcePool {
 private:
 	struct Chunk {
-		Chunk(PoolAllocator<DataT>* alloc) : allocator(alloc) {
+		Chunk(size_t pool_size) {
 
-			start_addr = reinterpret_cast<uintptr>(allocator->getStartAddr());
-			memory_size = alloc_size;
+			allocator   = make_unique<PoolAllocator<DataT>>(pool_size);
+			start_addr  = reinterpret_cast<uintptr>(allocator->getStartAddr());
+			memory_size = pool_size;
 		}
 
-		PoolAllocator<DataT>* allocator;
+		~Chunk() {
+			// Destroy the objects (allocator will free the
+			// memory when the unique_ptr is deleted)
+			for (auto* object : objects) {
+				object->~DataT();
+			}
+			objects.clear();
+		}
+
+		unique_ptr<PoolAllocator<DataT>> allocator;
 		std::list<DataT*> objects;
 
 		uintptr start_addr;
@@ -47,7 +57,7 @@ private:
 
 public:
 	ResourcePool();
-	~ResourcePool();
+	~ResourcePool() = default;
 
 	[[nodiscard]]
 	void* allocateObject() override;
@@ -60,7 +70,7 @@ public:
 	// Apply an action to each resource
 	template<typename ActionT>
 	void forEach(ActionT act) {
-		for (auto* chunk : memory_chunks) {
+		for (auto& chunk : memory_chunks) {
 			for (auto* object : chunk->objects) {
 				act(*object);
 			}
@@ -69,7 +79,7 @@ public:
 
 
 private:
-	std::list<Chunk*> memory_chunks;
+	std::list<unique_ptr<Chunk>> memory_chunks;
 	static constexpr size_t alloc_size = MaxObjsPerChunk * sizeof(DataT);
 	size_t count;
 };

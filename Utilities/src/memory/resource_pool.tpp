@@ -1,36 +1,8 @@
 template<typename DataT, size_t max_objs_per_chunk>
 ResourcePool<DataT, max_objs_per_chunk>::ResourcePool() : count(0) {
 
-	PoolAllocator<DataT>* alloc = new PoolAllocator<DataT>(alloc_size);
-
 	// Create the first chunk
-	memory_chunks.push_front(new Chunk(alloc));
-}
-
-
-template<typename DataT, size_t max_objs_per_chunk>
-ResourcePool<DataT, max_objs_per_chunk>::~ResourcePool() {
-
-	for (auto chunk : memory_chunks) {
-
-		// Delete every object in the list
-		for (auto obj : chunk->objects) {
-			static_cast<DataT*>(obj)->~DataT();
-		}
-
-		// Clear the list
-		chunk->objects.clear();
-
-		// Delete the allocator
-		delete chunk->allocator;
-		chunk->allocator = nullptr;
-
-		// Delete the chunk
-		delete chunk;
-		chunk = nullptr;
-	}
-
-	count = 0;
+	memory_chunks.push_front(make_unique<Chunk>(alloc_size));
 }
 
 
@@ -40,7 +12,7 @@ void* ResourcePool<DataT, max_objs_per_chunk>::allocateObject() {
 	DataT* object = nullptr;
 
 	// Find a chunk with free space and create the object
-	for (auto chunk : memory_chunks) {
+	for (auto& chunk : memory_chunks) {
 
 		if (chunk->objects.size() >= max_objs_per_chunk) continue;
 
@@ -54,11 +26,9 @@ void* ResourcePool<DataT, max_objs_per_chunk>::allocateObject() {
 
 	// Create a new chunk if the others are full
 	if (!object) {
-		PoolAllocator<DataT>* alloc = new PoolAllocator<DataT>(alloc_size);
+		memory_chunks.push_front(make_unique<Chunk>(alloc_size));
 
-		Chunk* chunk = new Chunk(alloc);
-		chunk->objects.clear();
-		memory_chunks.push_front(chunk);
+		auto& chunk = memory_chunks.front();
 
 		object = chunk->allocator->allocate();
 
@@ -75,9 +45,9 @@ void* ResourcePool<DataT, max_objs_per_chunk>::allocateObject() {
 template<typename DataT, size_t max_objs_per_chunk>
 void ResourcePool<DataT, max_objs_per_chunk>::destroyObject(void* object) {
 
-	uintptr addr = reinterpret_cast<uintptr>(object);
+	const uintptr addr = reinterpret_cast<uintptr>(object);
 
-	for (auto chunk : memory_chunks) {
+	for (auto& chunk : memory_chunks) {
 
 		if (addr >= chunk->start_addr &&
 		    addr < (chunk->start_addr + alloc_size)) {
