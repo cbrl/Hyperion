@@ -1,4 +1,6 @@
 #include "forward/forward_include.hlsl"
+#include "include/normal.hlsl"
+#include "include/light.hlsl"
 
 
 //----------------------------------------------------------------------------------

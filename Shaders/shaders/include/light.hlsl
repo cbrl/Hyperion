@@ -2,6 +2,7 @@
 #define HLSL_LIGHT
 
 #include "include/global.hlsl"
+#include "include/material.hlsl"
 
 
 //----------------------------------------------------------------------------------
@@ -13,19 +14,6 @@
 //----------------------------------------------------------------------------------
 //  Structs
 //----------------------------------------------------------------------------------
-
-struct Material {
-	float4 ambient;
-	float4 diffuse;
-	float4 specular; //specular.w = specular power
-	float4 reflect;
-	float4 emissive;
-	float  optical_density;
-	float  dissolve;
-	bool   has_texture;
-	bool   reflection_enabled;
-};
-
 
 struct DirectionalLight {
 	float4 ambient;
@@ -288,9 +276,6 @@ void ComputeShadowedDirectionalLight(DirectionalLight L,
 	float3 p_ndc;
 
 	ComputeDirectionalLight(L, mat, pos, normal, view_vec, ambient0, diffuse0, specular0, p_ndc);
-
-	//const float4 p_proj = mul(float4(pos, 1.0f), L.world_to_projection);
-	//const float3 p_ndc = p_proj.xyz / p_proj.w;
 
 	const float shadow_factor = ShadowFactor(shadow_map, p_ndc);
 

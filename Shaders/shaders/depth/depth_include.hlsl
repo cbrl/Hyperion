@@ -1,5 +1,4 @@
-#include "forward\forward_include.hlsl"
-#include "include\transform.hlsl"
+#include "include/model.hlsl"
 
 
 cbuffer AltCamera : REG_B(SLOT_CBUFFER_CAMERA_ALT) {

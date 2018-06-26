@@ -89,7 +89,7 @@
     </ClCompile>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)\shaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\shaders;$(ProjectDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <VariableName>shader_%(Filename)</VariableName>
       <HeaderFileOutput>$(ProjectDir)\src\compiled_headers\%(Filename).h</HeaderFileOutput>
     </FxCompile>
@@ -133,7 +133,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <FxCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\shaders;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\shaders;$(ProjectDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ShaderModel>5.0</ShaderModel>
       <VariableName>shader_%(Filename)</VariableName>
       <HeaderFileOutput>$(ProjectDir)\src\compiled_headers\%(Filename).h</HeaderFileOutput>
@@ -180,6 +180,12 @@
       <FileType>Document</FileType>
     </None>
     <None Include="shaders\include\transform.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="shaders\include\model.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="shaders\include\material.hlsl">
       <FileType>Document</FileType>
     </None>
     <FxCompile Include="shaders\shapes\wireframe_box_ps.hlsl">

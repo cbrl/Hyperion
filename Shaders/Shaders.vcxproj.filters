@@ -53,6 +53,12 @@
     <FxCompile Include="shaders\shapes\wireframe_box_vs.hlsl">
       <Filter>Shader Files\shapes</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\include\model.hlsl">
+      <Filter>Shader Files\include</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\include\material.hlsl">
+      <Filter>Shader Files\include</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\hlsl.h">

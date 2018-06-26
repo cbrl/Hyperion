@@ -9,8 +9,8 @@
 #define SLOT_CBUFFER_ENGINE     1
 #define SLOT_CBUFFER_CAMERA     2
 #define SLOT_CBUFFER_CAMERA_ALT 3
-#define SLOT_CBUFFER_LIGHT      4
-#define SLOT_CBUFFER_MODEL      5
+#define SLOT_CBUFFER_MODEL      4
+#define SLOT_CBUFFER_LIGHT      5
 
 
 //----------------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 
 
 #include "include/syntax.hlsl"
-#include "../src/hlsl.h"
+#include "hlsl.h"
 
 
 //----------------------------------------------------------------------------------

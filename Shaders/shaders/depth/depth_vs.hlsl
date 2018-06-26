@@ -1,4 +1,5 @@
-#include "depth\depth_include.hlsl"
+#include "depth/depth_include.hlsl"
+#include "include/transform.hlsl"
 
 
 float4 VS(VSPositionNormalTexture vin) : SV_POSITION {
