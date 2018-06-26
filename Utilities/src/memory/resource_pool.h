@@ -1,7 +1,6 @@
 #pragma once
 
 #include "memory/allocator/pool_allocator.h"
-#include "log/log.h"
 
 
 //----------------------------------------------------------------------------------
@@ -61,8 +60,8 @@ public:
 	// Apply an action to each resource
 	template<typename ActionT>
 	void forEach(ActionT act) {
-		for (auto& chunk : memory_chunks) {
-			for (auto& object : chunk->objects) {
+		for (auto* chunk : memory_chunks) {
+			for (auto* object : chunk->objects) {
 				act(*object);
 			}
 		}

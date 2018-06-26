@@ -62,10 +62,6 @@ void* ResourcePool<DataT, max_objs_per_chunk>::allocateObject() {
 
 		object = chunk->allocator->allocate();
 
-		if (object == nullptr) {
-			FILE_LOG(logERROR) << "ResourcePool::allocateObject() - Unable to create object.";
-		}
-
 		assert(object != nullptr && "ResourcePool::allocateObject() - Unable to create object.");
 
 		chunk->objects.push_back(object);
@@ -96,6 +92,5 @@ void ResourcePool<DataT, max_objs_per_chunk>::destroyObject(void* object) {
 		}
 	}
 
-	FILE_LOG(logERROR) << "Failed to delete object. Possible corrupted memory.";
 	assert(false && "Failed to delete object. Possible corrupted memory.");
 }
