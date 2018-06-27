@@ -90,7 +90,7 @@ public:
 
 
 private:
-	void createChunk();
+	unique_ptr<Chunk>& createChunk();
 
 
 private:

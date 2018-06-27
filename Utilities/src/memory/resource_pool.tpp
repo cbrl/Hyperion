@@ -27,9 +27,7 @@ void* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::allocateObject(
 
 	// Create a new chunk if the others are full
 	if (!object) {
-		createChunk();
-
-		auto& chunk = memory_chunks.front();
+		auto& chunk = createChunk();
 		object = chunk->allocator->allocate();
 
 		assert(object != nullptr && "ResourcePool::allocateObject() - Unable to create object.");
@@ -67,11 +65,15 @@ void ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::destroyObject(vo
 
 
 template<typename DataT, size_t InitialChunkObjects, size_t MaxChunkObjects>
-void ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::createChunk() {
+unique_ptr<typename ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::Chunk>&
+ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>
+::createChunk() {
 	
 	// Increase the allocation size, capped at MaxChunkObjects
 	chunk_objects = std::min(MaxChunkObjects, chunk_objects << 1);
 
 	// Create a new chunk with the new allocation size
 	memory_chunks.push_front(make_unique<Chunk>(chunk_objects * sizeof(DataT)));
+
+	return memory_chunks.front();
 }
