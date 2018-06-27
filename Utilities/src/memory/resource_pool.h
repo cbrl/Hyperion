@@ -4,12 +4,10 @@
 
 
 //----------------------------------------------------------------------------------
-// Resource Pool
+// IResourcePool
 //----------------------------------------------------------------------------------
 //
-// The resource pool allocates memory for objects in chunks using the pool
-// allocator. The iterator provided allows the objects to be iterated over
-// without worrying about the underlying chunks.
+// Interface class for the ResourcePool.
 //
 //----------------------------------------------------------------------------------
 
@@ -27,11 +25,24 @@ public:
 };
 
 
-template<typename DataT, size_t MaxObjsPerChunk = 128>
+//----------------------------------------------------------------------------------
+// ResourcePool
+//----------------------------------------------------------------------------------
+//
+// The resource pool allocates memory for objects in chunks using the pool
+// allocator. The size of each new chunk is twice that of the last (up to a maximum)
+//
+//               DataT: The datatype this pool holds
+// InitialChunkObjects: The number of objects the initial chunk holds
+//     MaxChunkObjects: The maximum size of the chunks
+//
+//----------------------------------------------------------------------------------
+
+template<typename DataT, size_t InitialChunkObjects = 16, size_t MaxChunkObjects = 1024>
 class ResourcePool : public IResourcePool {
 private:
 	struct Chunk {
-		Chunk(size_t pool_size) {
+		explicit Chunk(size_t pool_size) {
 
 			allocator   = make_unique<PoolAllocator<DataT>>(pool_size);
 			start_addr  = reinterpret_cast<uintptr>(allocator->getStartAddr());
@@ -79,8 +90,12 @@ public:
 
 
 private:
+	void createChunk();
+
+
+private:
 	std::list<unique_ptr<Chunk>> memory_chunks;
-	static constexpr size_t alloc_size = MaxObjsPerChunk * sizeof(DataT);
+	size_t chunk_objects = InitialChunkObjects;
 	size_t count;
 };
 
