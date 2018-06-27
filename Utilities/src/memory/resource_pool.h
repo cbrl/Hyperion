@@ -122,12 +122,7 @@ class ResourcePoolFactory final {
 public:
 	ResourcePoolFactory() = default;
 
-	~ResourcePoolFactory() {
-		for (auto& pair : pools) {
-			delete pair.second;
-			pair.second = nullptr;
-		}
-	}
+	~ResourcePoolFactory() = default;
 
 	template<typename ResourceT>
 	[[nodiscard]]
@@ -135,14 +130,9 @@ public:
 
 		using pool_t = ResourcePool<ResourceT>;
 
-		const auto& it = pools.find(ResourceT::type_id);
-
-		if (it == pools.end()) {
-			pools[ResourceT::type_id] = new pool_t();
-			return static_cast<pool_t*>(pools[ResourceT::type_id]);
-		}
-
-		return static_cast<pool_t*>(it->second);
+		// pair = std::pair<iterator, bool>
+		const auto pair = pools.try_emplace(ResourceT::type_id, make_unique<pool_t>());
+		return static_cast<pool_t*>(pair.first->second.get());
 	}
 
 	template<typename ResourceT>
@@ -152,7 +142,7 @@ public:
 
 		assert(it != pools.end() && "Invalid resource pool type requested");
 
-		return static_cast<ResourcePool<ResourceT>*>(it->second);
+		return static_cast<ResourcePool<ResourceT>*>(it->second.get());
 	}
 
 	[[nodiscard]]
@@ -161,7 +151,7 @@ public:
 
 		assert(it != pools.end() && "Invalid resource pool type requested");
 
-		return it->second;
+		return it->second.get();
 	}
 
 	template<typename ResourceT>
@@ -175,7 +165,7 @@ public:
 
 
 private:
-	unordered_map<type_index, IResourcePool*> pools;
+	unordered_map<type_index, unique_ptr<IResourcePool>> pools;
 };
 
 
