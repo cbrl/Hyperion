@@ -3,7 +3,7 @@
 
 SystemMgr::SystemMgr() {
 
-	allocator = new LinearAllocator(alloc_memory_size);
+	allocator = make_unique<LinearAllocator>(alloc_memory_size);
 }
 
 
@@ -14,11 +14,6 @@ SystemMgr::~SystemMgr() {
 		pair.second->~ISystem();
 		pair.second = nullptr;
 	}
-
-	// Delete the allocator
-	allocator->reset();
-	delete allocator;
-	allocator = nullptr;
 }
 
 
