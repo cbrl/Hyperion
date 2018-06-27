@@ -2,6 +2,7 @@
 
 #include "memory/allocator/linear_allocator.h"
 #include "system/system.h"
+#include "exception/exception.h"
 
 
 class SystemMgr final {

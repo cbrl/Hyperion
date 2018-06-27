@@ -1,7 +1,6 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "engine_util.h"
 #include "datatypes/datatypes.h"
 #include "pipeline.h"
 #include "display/viewport.h"

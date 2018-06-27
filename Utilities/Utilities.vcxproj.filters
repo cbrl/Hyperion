@@ -73,6 +73,9 @@
     <Filter Include="Source Files\memory\handle">
       <UniqueIdentifier>{96a44e27-2c05-4060-a6bd-d05c40e81f60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\exception">
+      <UniqueIdentifier>{9b13a388-1e01-4a76-b0d2-90b6d1d89485}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -123,12 +126,6 @@
     <ClInclude Include="src\datatypes\scalar_types.h">
       <Filter>Header Files\datatypes</Filter>
     </ClInclude>
-    <ClInclude Include="src\engine_util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\os\windows.h">
-      <Filter>Header Files\os</Filter>
-    </ClInclude>
     <ClInclude Include="src\memory\handle\handle.h">
       <Filter>Header Files\memory\handle</Filter>
     </ClInclude>
@@ -158,6 +155,15 @@
     </ClInclude>
     <ClInclude Include="src\memory\allocator\block_allocator.h">
       <Filter>Header Files\memory\allocator</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\directxtk.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="src\exception\exception.h">
+      <Filter>Header Files\exception</Filter>
+    </ClInclude>
+    <ClInclude Include="src\os\windows.h">
+      <Filter>Header Files\os</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -193,5 +199,6 @@
     <None Include="src\memory\managed_resource_map.tpp">
       <Filter>Source Files\memory</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

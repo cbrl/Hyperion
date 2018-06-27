@@ -1,8 +1,9 @@
 #pragma once
 
+#include "directx/d3d11.h"
+#include "directx/directx_math.h"
 #include "datatypes/datatypes.h"
 #include "io/io.h"
-#include "directx/directx_math.h"
 
 #include "component/component.h"
 #include "buffer/buffers.h"

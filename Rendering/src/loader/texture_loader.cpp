@@ -1,9 +1,4 @@
 #include "texture_loader.h"
-
-#include <WICTextureLoader.h>
-#include <DDSTextureLoader.h>
-#include <DirectXHelpers.h>
-#include "engine_util.h"
 #include "io/io.h"
 
 

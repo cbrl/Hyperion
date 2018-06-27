@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "main_window.h"
 
-#include "engine_util.h"
-
 
 LRESULT CALLBACK WndProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 	//Send message to handler in MainWindow (or derived class)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/pointer_types.h"
+#include "datatypes/datatypes.h"
 
 
 namespace AllocatorUtil {

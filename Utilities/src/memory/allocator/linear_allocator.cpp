@@ -1,4 +1,5 @@
 #include "linear_allocator.h"
+#include "exception/exception.h"
 
 
 LinearAllocator::LinearAllocator(size_t memory_size)

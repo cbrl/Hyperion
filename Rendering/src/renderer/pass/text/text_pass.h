@@ -1,8 +1,7 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include <SpriteBatch.h>
-
+#include "directx/directxtk.h"
 #include "datatypes/datatypes.h"
 
 class Scene;

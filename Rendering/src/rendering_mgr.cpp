@@ -1,7 +1,5 @@
 #include "rendering_mgr.h"
 
-#include "engine_util.h"
-
 
 RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 

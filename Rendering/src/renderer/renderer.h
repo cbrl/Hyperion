@@ -1,11 +1,10 @@
 #pragma once
 
 #include "directx/d3d11.h"
-
-#include "engine_util.h"
 #include "hlsl.h"
 #include "pipeline.h"
 #include "render_state_mgr.h"
+
 #include "renderer/pass/light/light_pass.h"
 #include "renderer/pass/forward/forward_pass.h"
 #include "renderer/pass/sky/sky_pass.h"

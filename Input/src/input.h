@@ -2,8 +2,7 @@
 
 #include "os/windows.h"
 #include "datatypes/datatypes.h"
-#include <Keyboard.h>
-#include <Mouse.h>
+#include "directx/directxtk.h"
 
 
 class Input final {

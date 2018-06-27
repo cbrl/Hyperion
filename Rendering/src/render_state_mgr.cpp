@@ -1,6 +1,6 @@
 #include "render_state_mgr.h"
 
-#include "engine_util.h"
+#include "directx/directxtk.h"
 #include "hlsl.h"
 #include "pipeline.h"
 
