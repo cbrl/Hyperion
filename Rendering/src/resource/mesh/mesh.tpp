@@ -1,6 +1,3 @@
-#pragma once
-
-
 template<typename VertexT>
 Mesh::Mesh(ID3D11Device& device, const vector<VertexT>& vertices, const vector<u32>& indices) {
 

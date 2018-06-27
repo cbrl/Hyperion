@@ -3,6 +3,7 @@
 #include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
 #include "pipeline.h"
+#include "engine_util.h"
 
 
 class Mesh final {

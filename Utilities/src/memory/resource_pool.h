@@ -13,6 +13,7 @@
 
 class IResourcePool {
 public:
+	IResourcePool() = default;
 	virtual ~IResourcePool() = default;
 
 	[[nodiscard]]
@@ -68,7 +69,13 @@ private:
 
 public:
 	ResourcePool();
+	ResourcePool(const ResourcePool& pool) = delete;
+	ResourcePool(ResourcePool&& pool) noexcept = default;
 	~ResourcePool() = default;
+
+	ResourcePool& operator=(const ResourcePool& pool) = delete;
+	ResourcePool& operator=(ResourcePool&& pool) noexcept = default;
+
 
 	[[nodiscard]]
 	void* allocateObject() override;
@@ -121,8 +128,13 @@ private:
 class ResourcePoolFactory final {
 public:
 	ResourcePoolFactory() = default;
-
+	ResourcePoolFactory(const ResourcePoolFactory& factory) = delete;
+	ResourcePoolFactory(ResourcePoolFactory&& factory) = default;
 	~ResourcePoolFactory() = default;
+
+	ResourcePoolFactory& operator=(const ResourcePoolFactory& factory) = delete;
+	ResourcePoolFactory& operator=(ResourcePoolFactory&& factory) noexcept = default;
+
 
 	template<typename ResourceT>
 	[[nodiscard]]
