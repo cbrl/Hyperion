@@ -169,7 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\directx\vertex_types.cpp" />
-    <ClCompile Include="src\fps\fps.cpp" />
     <ClCompile Include="src\memory\allocator\linear_allocator.cpp" />
     <ClCompile Include="src\memory\allocator\stack_allocator.cpp" />
     <ClCompile Include="src\sysmon\system_monitor.cpp" />

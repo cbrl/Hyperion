@@ -40,9 +40,6 @@
     <Filter Include="Header Files\timer">
       <UniqueIdentifier>{00658588-272d-4982-9711-030afd966cc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\fps">
-      <UniqueIdentifier>{52bd2bde-a7ca-4080-8129-e2a52af1d66f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\memory">
       <UniqueIdentifier>{7b6f85bf-1701-4bde-a658-24db951bd013}</UniqueIdentifier>
     </Filter>
@@ -167,9 +164,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\fps\fps.cpp">
-      <Filter>Source Files\fps</Filter>
-    </ClCompile>
     <ClCompile Include="src\memory\allocator\stack_allocator.cpp">
       <Filter>Source Files\memory\allocator</Filter>
     </ClCompile>

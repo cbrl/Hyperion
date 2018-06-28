@@ -6,7 +6,7 @@
 template<typename T>
 struct Vector2 {
 
-	static_assert(std::is_arithmetic_v<T>, "Vec2 data type is not an arithmetic type");
+	static_assert(std::is_arithmetic_v<T>, "Vector2 template parameter is not an arithmetic type");
 
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -159,7 +159,7 @@ struct Vector2 {
 template<typename T>
 struct Vector3 {
 
-	static_assert(std::is_arithmetic_v<T>, "Vec3 data type is not an arithmetic type");
+	static_assert(std::is_arithmetic_v<T>, "Vector3 template parameter is not an arithmetic type");
 
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -326,7 +326,7 @@ struct Vector3 {
 template<typename T>
 struct Vector4 {
 
-	static_assert(std::is_arithmetic_v<T>, "Vec4 data type is not an arithetic type");
+	static_assert(std::is_arithmetic_v<T>, "Vector4 template parameter is not an arithetic type");
 
 	//----------------------------------------------------------------------------------
 	// Constructors
