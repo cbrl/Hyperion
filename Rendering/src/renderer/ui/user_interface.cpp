@@ -230,15 +230,7 @@ void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
 
 			if (open) {
 				model->forEachChild([&](ModelChild& child) {
-					bool child_selected = (selected == &child);
-
-					ImGui::Selectable(child.getName().c_str(), &child_selected);
-
-					if (ImGui::IsItemClicked())
-						selected = &child;
-
-					if (child_selected)
-						drawDetailsPanel(child);
+					drawNode(child.getName().c_str(), child);
 				});
 
 				ImGui::TreePop();
@@ -307,6 +299,8 @@ void UserInterface::drawDetails(Scene& scene) const {
 
 void UserInterface::drawDetails(Transform& transform) const {
 
+	drawComponentState(transform);
+
 	ImGui::Text("Transform");
 	ImGui::Separator();
 
@@ -356,6 +350,8 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 
 void UserInterface::drawDetails(OrthographicCamera& camera) const {
 
+	drawComponentState(camera);
+
 	ImGui::Text("Fog");
 	ImGui::Separator();
 
@@ -382,6 +378,8 @@ void UserInterface::drawDetails(OrthographicCamera& camera) const {
 
 void UserInterface::drawDetails(CameraMovement& movement) const {
 
+	drawComponentState(movement);
+
 	ImGui::Text("Camera Movement");
 	ImGui::Separator();
 
@@ -401,6 +399,8 @@ void UserInterface::drawDetails(CameraMovement& movement) const {
 
 
 void UserInterface::drawDetails(MouseRotation& rotation) const {
+
+	drawComponentState(rotation);
 	
 	ImGui::Text("Mouse Rotation");
 	ImGui::Separator();
@@ -414,7 +414,8 @@ void UserInterface::drawDetails(MouseRotation& rotation) const {
 
 
 void UserInterface::drawDetails(Model& model) const {
-	
+
+	drawComponentState(model);
 }
 
 
@@ -437,6 +438,8 @@ void UserInterface::drawDetails(ModelChild& child) const {
 
 
 void UserInterface::drawDetails(DirectionalLight& light) const {
+
+	drawComponentState(light);
 
 	ImGui::Text("Directional Light");
 	ImGui::Separator();
@@ -469,6 +472,8 @@ void UserInterface::drawDetails(DirectionalLight& light) const {
 
 void UserInterface::drawDetails(PointLight& light) const {
 
+	drawComponentState(light);
+
 	ImGui::Text("Point Light");
 	ImGui::Separator();
 
@@ -499,6 +504,8 @@ void UserInterface::drawDetails(PointLight& light) const {
 
 
 void UserInterface::drawDetails(SpotLight& light) const {
+
+	drawComponentState(light);
 
 	ImGui::Text("Spot Light");
 	ImGui::Separator();
@@ -538,6 +545,8 @@ void UserInterface::drawDetails(SpotLight& light) const {
 
 
 void UserInterface::drawDetails(AxisRotation& rotation) const {
+
+	drawComponentState(rotation);
 	
 	ImGui::Text("Axis Rotation");
 	ImGui::Separator();

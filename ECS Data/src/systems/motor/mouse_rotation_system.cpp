@@ -16,8 +16,9 @@ void MouseRotationSystem::update(const Engine& engine) {
 
 		if (!rotation.isActive()) return;
 
-		auto transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
+		auto* transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
 		if (!transform) return;
+		if (!transform->isActive()) return;
 
 		const vec2_f32 max = rotation.getMaxRotation();
 		vec2_f32 units{ 0.0f, 0.0f };

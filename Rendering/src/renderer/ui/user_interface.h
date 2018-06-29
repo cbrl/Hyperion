@@ -55,14 +55,17 @@ private:
 	void drawTreeNodes(ECS& ecs_engine, Scene& scene);
 
 	template<typename T>
-	void drawNode(const char* text, T& component) const;
+	void drawNode(const char* text, T& item) const;
 
 
 	//----------------------------------------------------------------------------------
 	// Item details
 	//----------------------------------------------------------------------------------
 	template<typename T>
-	void drawDetailsPanel(T& component) const;
+	void drawDetailsPanel(T& item) const;
+
+	template<typename T>
+	void drawComponentState(T& component) const;
 
 	void drawDetails(Scene& scene) const;
 	void drawDetails(Transform& transform) const;
@@ -95,22 +98,33 @@ private:
 
 
 template<typename T>
-void UserInterface::drawNode(const char* text, T& component) const {
-	bool node_selected = (selected == &component);
+void UserInterface::drawNode(const char* text, T& item) const {
+	bool node_selected = (selected == &item);
 	ImGui::Selectable(text, &node_selected);
 
 	if (ImGui::IsItemClicked()) {
-		selected = &component;
+		selected = &item;
 	}
 	if (node_selected) {
-		drawDetailsPanel(component);
+		drawDetailsPanel(item);
 	}
 }
 
 
 template<typename T>
-void UserInterface::drawDetailsPanel(T& component) const {
+void UserInterface::drawDetailsPanel(T& item) const {
 	ImGui::Begin("Properties");
-	drawDetails(component);
+	drawDetails(item);
 	ImGui::End();
+}
+
+
+template<typename T>
+void UserInterface::drawComponentState(T& component) const {
+	ImGui::Text("State");
+	ImGui::Separator();
+	bool state = component.isActive();
+	if (ImGui::Checkbox("Active", &state))
+		component.setActive(state);
+	ImGui::Spacing();
 }

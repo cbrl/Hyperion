@@ -13,8 +13,9 @@ void AxisRotationSystem::update(const Engine& engine) {
 
 		if (!rotation.isActive()) return;
 		
-		auto transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
+		auto* transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
 		if (!transform) return;
+		if (!transform->isActive()) return;
 
 		if (rotation.hasAxis(AxisRotation::Axis::X)) {
 			transform->rotateXClamped(dt * rotation.getSpeedX(), -XM_PI, XM_PI);
