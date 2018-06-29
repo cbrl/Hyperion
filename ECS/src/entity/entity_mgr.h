@@ -76,7 +76,7 @@ public:
 
 			// Destroy the entity
 			handle_table.releaseHandle(handle);
-			pool->destroyObject(static_cast<void*>(entity));
+			pool->destroyObject(entity);
 		}
 
 		expired_entities.clear();

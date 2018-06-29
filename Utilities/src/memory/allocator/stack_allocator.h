@@ -36,6 +36,11 @@ public:
 
 	void deallocate(void* ptr) override;
 
+	template<typename T>
+	void deallocate(T* ptr) {
+		deallocate(reinterpret_cast<void*>(ptr));
+	}
+
 	void* allocate() override {
 		static_assert(true, "StackAllocator::allocate() called without template parameter");
 		return nullptr;

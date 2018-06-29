@@ -17,11 +17,14 @@ public:
 	IResourcePool() = default;
 	virtual ~IResourcePool() = default;
 
+	// Allocate an unitialized object
 	[[nodiscard]]
 	virtual void* allocateObject() = 0;
 
+	// Destroy and deallocate an object
 	virtual void destroyObject(void* object) = 0;
 
+	// Get the number of objects created
 	[[nodiscard]]
 	virtual size_t getCount() const = 0;
 };
@@ -69,22 +72,67 @@ private:
 
 
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	ResourcePool();
 	ResourcePool(const ResourcePool& pool) = delete;
 	ResourcePool(ResourcePool&& pool) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~ResourcePool() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
 
 	ResourcePool& operator=(const ResourcePool& pool) = delete;
 	ResourcePool& operator=(ResourcePool&& pool) noexcept = default;
 
 
+	//----------------------------------------------------------------------------------
+	// Allocation
+	//----------------------------------------------------------------------------------
+
+	// Allocate memory for an object
 	[[nodiscard]]
 	void* allocateObject() override;
 
-	void destroyObject(void* object) override;
 
+	// Allocate and initialize an object
+	template<typename... ArgsT>
+	[[nodiscard]]
+	DataT* constructObject(ArgsT&&... args);
+
+
+	//----------------------------------------------------------------------------------
+	// Deallocation
+	//----------------------------------------------------------------------------------
+
+	// Destroy and deallocate an object
+	void destroyObject(DataT* object);
+
+
+	// Destroy and deallocate an object
+	void destroyObject(void* object) override {
+		destroyObject(static_cast<DataT*>(object));
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Miscellaneous
+	//----------------------------------------------------------------------------------
+
+	// Get the number of objects contained in this pool
 	[[nodiscard]]
 	size_t getCount() const override { return count; }
+
 
 	// Apply an action to each resource
 	template<typename ActionT>
@@ -107,6 +155,8 @@ private:
 	size_t count;
 };
 
+#include "resource_pool.tpp"
+
 
 
 
@@ -128,15 +178,34 @@ private:
 
 class ResourcePoolFactory final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	ResourcePoolFactory() = default;
 	ResourcePoolFactory(const ResourcePoolFactory& factory) = delete;
 	ResourcePoolFactory(ResourcePoolFactory&& factory) = default;
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~ResourcePoolFactory() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
 
 	ResourcePoolFactory& operator=(const ResourcePoolFactory& factory) = delete;
 	ResourcePoolFactory& operator=(ResourcePoolFactory&& factory) noexcept = default;
 
 
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+
+	// Get an existing pool or create it if it doesn't exist
 	template<typename ResourceT>
 	[[nodiscard]]
 	ResourcePool<ResourceT>* getOrCreatePool() {
@@ -148,6 +217,8 @@ public:
 		return static_cast<pool_t*>(pair.first->second.get());
 	}
 
+
+	// Get an existing pool using the resource type
 	template<typename ResourceT>
 	[[nodiscard]]
 	ResourcePool<ResourceT>* getPool() {
@@ -158,6 +229,8 @@ public:
 		return static_cast<ResourcePool<ResourceT>*>(it->second.get());
 	}
 
+
+	// Get an existing pool using the resource index
 	[[nodiscard]]
 	IResourcePool* getPool(type_index type) {
 		const auto& it = pools.find(type);
@@ -167,11 +240,15 @@ public:
 		return it->second.get();
 	}
 
+
+	// Check if a pool exists for the specified type
 	template<typename ResourceT>
 	bool poolExists() const {
 		return pools.find(ResourceT::type_id) != pools.end();
 	}
 
+
+	// Check if a pool exists for the specified index
 	bool poolExists(type_index type) const {
 		return pools.find(type) != pools.end();
 	}
@@ -180,6 +257,3 @@ public:
 private:
 	unordered_map<type_index, unique_ptr<IResourcePool>> pools;
 };
-
-
-#include "resource_pool.tpp"

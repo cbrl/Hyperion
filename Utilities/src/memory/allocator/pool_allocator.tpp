@@ -41,9 +41,15 @@ T* PoolAllocator<T>::allocate() {
 
 
 template<typename T>
-void PoolAllocator<T>::deallocate(void* ptr) {
+void PoolAllocator<T>::deallocate(T* ptr) {
 
-	free_list.push_front(static_cast<node*>(ptr));
+	const uintptr addr = reinterpret_cast<uintptr>(ptr);
+
+	assert(addr >= reinterpret_cast<uintptr>(this->start_ptr) &&
+	       addr <= (reinterpret_cast<uintptr>(this->start_ptr) + this->memory_size) &&
+	       "PoolAllocator::deallocate() - Invalid address specified for deallocation");
+
+	free_list.push_front(reinterpret_cast<node*>(ptr));
 
 	this->memory_used -= sizeof(T);
 }

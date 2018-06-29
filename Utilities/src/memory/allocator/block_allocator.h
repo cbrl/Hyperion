@@ -52,15 +52,7 @@ public:
 	virtual T* allocate() = 0;
 
 	// Deallocate an object
-	virtual void deallocate(void* prt) = 0;
-
-	// This and the above deallocate(void*) allow objects to be deleted
-	// with or without type information. The SFINAE condition disables
-	// this function when T is already void.
-	template<typename = std::enable_if_t<!std::is_same_v<void, T>>>
-	void deallocate(T* ptr) {
-		deallocate(reinterpret_cast<void*>(ptr));
-	}
+	virtual void deallocate(T* ptr) = 0;
 
 	// Get the beginning of the memory block
 	void* getStartAddr() const {

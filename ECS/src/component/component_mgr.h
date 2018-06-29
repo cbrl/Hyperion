@@ -29,10 +29,7 @@ public:
 		auto pool = component_pools.getOrCreatePool<ComponentT>();
 
 		// Allocate memory
-		void* memory = pool->allocateObject();
-
-		// Construct the component
-		ComponentT* component = new(memory) ComponentT(std::forward<ArgsT>(args)...);
+		ComponentT* component = pool->constructObject(std::forward<ArgsT>(args)...);
 
 		return component;
 	}
@@ -42,7 +39,7 @@ public:
 
 		auto pool = component_pools.getPool(component->getTypeId());
 
-		pool->destroyObject(reinterpret_cast<void*>(component));
+		pool->destroyObject(component);
 	}
 
 

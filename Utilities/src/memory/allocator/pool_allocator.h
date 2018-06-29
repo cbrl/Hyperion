@@ -62,7 +62,7 @@ public:
 
 	void reset() override;
 	T* allocate() override;
-	void deallocate(void* ptr) override;
+	void deallocate(T* ptr) override;
 
 
 private:

@@ -41,7 +41,19 @@ void* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::allocateObject(
 
 
 template<typename DataT, size_t InitialChunkObjects, size_t MaxChunkObjects>
-void ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::destroyObject(void* object) {
+template<typename... ArgsT>
+DataT* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::constructObject(ArgsT&&... args) {
+
+	void* memory = allocateObject();
+
+	DataT* object = new(memory) DataT(std::forward<ArgsT>(args)...);
+
+	return object;
+}
+
+
+template<typename DataT, size_t InitialChunkObjects, size_t MaxChunkObjects>
+void ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::destroyObject(DataT* object) {
 
 	const uintptr addr = reinterpret_cast<uintptr>(object);
 
@@ -50,9 +62,9 @@ void ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::destroyObject(vo
 		if (addr >= chunk->start_addr &&
 		    addr < (chunk->start_addr + chunk->memory_size)) {
 
-			static_cast<DataT*>(object)->~DataT();
+			object->~DataT();
 
-			chunk->objects.remove(static_cast<DataT*>(object));
+			chunk->objects.remove(object);
 			chunk->allocator->deallocate(object);
 
 			--count;

@@ -34,10 +34,16 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void reset() override;
+
 	void deallocate(void* ptr) override;
 
+	template<typename T>
+	void deallocate(T* ptr) {
+		deallocate(reinterpret_cast<void*>(ptr));
+	}
+
 	void* allocate() override {
-		static_assert(true, "Calling LinearAllocator::allocate() without template parameter");
+		static_assert(true, "Calling LinearAllocator::allocate() without object type template parameter");
 		return nullptr;
 	}
 

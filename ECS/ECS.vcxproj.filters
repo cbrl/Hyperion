@@ -28,9 +28,6 @@
     <Filter Include="Source Files\system">
       <UniqueIdentifier>{c8310856-1825-4550-a6c2-1bff62e409a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\handle">
-      <UniqueIdentifier>{46813c06-38e7-4dfb-8c66-8c8986ecf82a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entity\entity.h">
@@ -72,9 +69,6 @@
     </None>
     <None Include="src\ecs.tpp">
       <Filter>Source Files</Filter>
-    </None>
-    <None Include="src\handle\handle_table.tpp">
-      <Filter>Source Files\handle</Filter>
     </None>
   </ItemGroup>
 </Project>
