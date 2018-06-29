@@ -11,7 +11,6 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 Engine::~Engine() {
 
 	Logger::log(LogLevel::info, "<==========================END==========================>\n");
-	//Logger::reset();
 
 	// Explicity delete the scene and entity component system before
 	// the rendering manager. This prevents D3D from reporting live
@@ -22,9 +21,6 @@ Engine::~Engine() {
 
 
 bool Engine::init() {
-
-	// Initialize the logger
-	//Logger::init(true, true);
 	Logger::log(LogLevel::info, "<=========================START=========================>");
 
 	// Create the display configuration
