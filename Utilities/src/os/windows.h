@@ -25,20 +25,20 @@
 // Headers
 //----------------------------------------------------------------------------------
 
+#if defined(DEBUG) || defined(_DEBUG)
+#define _CRTDBG_MAP_ALLOC
+#include <cstdlib>
+#include <crtdbg.h>
+#endif
+
 #include <Windows.h>
 
 #include <wrl/client.h>
 using Microsoft::WRL::ComPtr;
 
-#if defined(DEBUG) || defined(_DEBUG)
-#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#endif
-
 #include "exception/exception.h"
 #include "datatypes/scalar_types.h"
 #include "string/string.h"
-
 
 
 
@@ -156,7 +156,7 @@ private:
 // Throw
 inline void ThrowIfFailed(HRESULT hr, const char* msg = "") {
 	if (FAILED(hr)) {
-		FILE_LOG(logERROR) << msg << " (Failure with HRESULT of " << std::hex << hr << ")";
+		std::cerr << msg << " (Failure with HRESULT of " << std::hex << hr << std::dec << ")" << std::endl;
 		throw com_exception(hr, msg);
 	}
 }

@@ -1,5 +1,6 @@
 #include "texture_loader.h"
 #include "io/io.h"
+#include "log/log.h"
 
 
 namespace TextureLoader {
@@ -12,7 +13,7 @@ namespace TextureLoader {
 
 		// Return white texture if the file is missing
 		if (!fs::exists(filename)) {
-			FILE_LOG(logWARNING) << "Error loading texture (file not found): " << wstr2str(filename);
+			Logger::log(LogLevel::err, "Error loading texture (file not found): {}", wstr2str(filename));
 			return LoadTexture(device, 0xFFFFFFFF, srv_out);
 		}
 
@@ -28,7 +29,7 @@ namespace TextureLoader {
 
 		SetDebugObjectName(*srv_out, "TextureLoader Texture");
 
-		FILE_LOG(logDEBUG) << "Loaded texture: " << wstr2str(filename);
+		Logger::log(LogLevel::debug, "Loaded texture: {}", wstr2str(filename));
 	}
 
 
@@ -64,7 +65,7 @@ namespace TextureLoader {
 
 		SetDebugObjectName(*srv_out, "TextureLoader ColorTexture");
 
-		FILE_LOG(logDEBUG) << "Created single color texture (color: 0x" << std::hex << color << ")" << std::dec;
+		Logger::log(LogLevel::debug, "Created single color texture (color: {x})", color);
 	}
 
 
@@ -77,7 +78,7 @@ namespace TextureLoader {
 		// Return white texture if a file is missing
 		for (const wstring& fn : filenames) {
 			if (!fs::exists(fn)) {
-				FILE_LOG(logWARNING) << "Error loading texture (file not found): " << wstr2str(fn);
+				Logger::log(LogLevel::err, "Error loading texture (file not found): {}", wstr2str(fn));
 				return LoadTexture(device, 0xFFFFFFFF, srv_out);
 			}
 		}

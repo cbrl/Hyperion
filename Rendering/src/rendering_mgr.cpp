@@ -7,7 +7,7 @@ RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------
 	direct3D = make_unique<Direct3D>(window, config);
-	FILE_LOG(logINFO) << "Initialized Direct3D";
+	Logger::log(LogLevel::info, "Initialized Direct3D");
 
 
 	//----------------------------------------------------------------------------------

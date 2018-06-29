@@ -82,7 +82,7 @@ void UserInterface::drawMenu(ID3D11Device& device,
 								ecs_engine.addComponent<Model>(selected_entity, device, bp);
 							}
 							else {
-								FILE_LOG(logWARNING) << "Failed to open file dialog";
+								Logger::log(LogLevel::err, "Failed to open file dialog");
 							}
 						}
 

@@ -9,6 +9,10 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 
 Engine::~Engine() {
+
+	Logger::log(LogLevel::info, "<==========================END==========================>\n");
+	//Logger::reset();
+
 	// Explicity delete the scene and entity component system before
 	// the rendering manager. This prevents D3D from reporting live
 	// resources that are going to be deleted right after the report.
@@ -19,6 +23,10 @@ Engine::~Engine() {
 
 bool Engine::init() {
 
+	// Initialize the logger
+	//Logger::init(true, true);
+	Logger::log(LogLevel::info, "<=========================START=========================>");
+
 	// Create the display configuration
 	DisplayConfig config(AAType::none, false, false);
 
@@ -26,7 +34,7 @@ bool Engine::init() {
 	if (!this->initWindow(L"Engine", config.getDisplayDesc().Width, config.getDisplayDesc().Height)) {
 		return false;
 	}
-	FILE_LOG(logINFO) << "Initialized main window";
+	Logger::log(LogLevel::info, "Initialized main window");
 
 
 	// Create the Entity Component System
@@ -86,15 +94,15 @@ void Engine::loadScene(unique_ptr<Scene>&& new_scene) {
 	
 	if (scene) {
 		scene->unload(*this);
-		FILE_LOG(logINFO) << "Unloaded scene: " << scene->getName();
+		Logger::log(LogLevel::info, "Unloaded scene: {}", scene->getName());
 	}
 
 	scene = std::move(new_scene);
 
 	if (scene) {
-		FILE_LOG(logINFO) << "Loading scene: " << scene->getName();
+		Logger::log(LogLevel::info, "Loading scene: {}", scene->getName());
 		scene->load(*this);
-		FILE_LOG(logINFO) << "Finished loading scene: " << scene->getName();
+		Logger::log(LogLevel::info, "Finished loading scene: {}", scene->getName());
 		timer->reset();
 	}
 }
@@ -262,5 +270,5 @@ void Engine::onResize(u32 window_width, u32 window_height) {
 		});
 	}
 
-	FILE_LOG(logINFO) << "Viewport resized to " << window_width << "x" << window_height;
+	Logger::log(LogLevel::info, "Viewport resized to {}x{}", window_width, window_height);
 }

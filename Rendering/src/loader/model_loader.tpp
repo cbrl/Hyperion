@@ -1,3 +1,5 @@
+#include "log/log.h"
+
 namespace ModelLoader {
 
 	template<typename VertexT>
@@ -11,7 +13,7 @@ namespace ModelLoader {
 
 		// Create a model blueprint from an obj file
 		ModelOutput<VertexT> out = OBJLoader<VertexT>::load(resource_mgr, filename, false);
-		FILE_LOG(logDEBUG) << "Loaded OBJ file: " << wstr2str(filename);
+		Logger::log(LogLevel::info, "Loaded OBJ file: {}", wstr2str(filename));
 
 		return out;
 	}

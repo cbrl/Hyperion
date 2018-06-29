@@ -152,6 +152,38 @@
     <ClInclude Include="src\fps\fps.h" />
     <ClInclude Include="src\io\io.h" />
     <ClInclude Include="src\log\log.h" />
+    <ClInclude Include="src\log\spdlog\contrib\sinks\step_file_sink.h" />
+    <ClInclude Include="src\log\spdlog\details\async_logger_impl.h" />
+    <ClInclude Include="src\log\spdlog\details\async_log_helper.h" />
+    <ClInclude Include="src\log\spdlog\details\file_helper.h" />
+    <ClInclude Include="src\log\spdlog\details\logger_impl.h" />
+    <ClInclude Include="src\log\spdlog\details\log_msg.h" />
+    <ClInclude Include="src\log\spdlog\details\mpmc_blocking_q.h" />
+    <ClInclude Include="src\log\spdlog\details\null_mutex.h" />
+    <ClInclude Include="src\log\spdlog\details\os.h" />
+    <ClInclude Include="src\log\spdlog\details\pattern_formatter_impl.h" />
+    <ClInclude Include="src\log\spdlog\details\registry.h" />
+    <ClInclude Include="src\log\spdlog\details\spdlog_impl.h" />
+    <ClInclude Include="src\log\spdlog\fmt\bundled\format.h" />
+    <ClInclude Include="src\log\spdlog\fmt\bundled\ostream.h" />
+    <ClInclude Include="src\log\spdlog\fmt\bundled\posix.h" />
+    <ClInclude Include="src\log\spdlog\fmt\bundled\printf.h" />
+    <ClInclude Include="src\log\spdlog\fmt\bundled\time.h" />
+    <ClInclude Include="src\log\spdlog\fmt\fmt.h" />
+    <ClInclude Include="src\log\spdlog\fmt\ostr.h" />
+    <ClInclude Include="src\log\spdlog\sinks\android_sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\ansicolor_sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\base_sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\dist_sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\file_sinks.h" />
+    <ClInclude Include="src\log\spdlog\sinks\msvc_sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\null_sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\ostream_sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\stdout_sinks.h" />
+    <ClInclude Include="src\log\spdlog\sinks\syslog_sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\wincolor_sink.h" />
+    <ClInclude Include="src\log\spdlog\sinks\windebug_sink.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\memory\allocator\block_allocator.h" />
     <ClInclude Include="src\memory\allocator\allocator_util.h" />
@@ -169,12 +201,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\directx\vertex_types.cpp" />
+    <ClCompile Include="src\log\spdlog\fmt\bundled\format.cc" />
+    <ClCompile Include="src\log\spdlog\fmt\bundled\ostream.cc" />
+    <ClCompile Include="src\log\spdlog\fmt\bundled\posix.cc" />
+    <ClCompile Include="src\log\spdlog\fmt\bundled\printf.cc" />
     <ClCompile Include="src\memory\allocator\linear_allocator.cpp" />
     <ClCompile Include="src\memory\allocator\stack_allocator.cpp" />
     <ClCompile Include="src\sysmon\system_monitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="src\log\spdlog\fmt\bundled\LICENSE.rst" />
     <None Include="src\memory\allocator\pool_allocator.tpp" />
     <None Include="src\memory\handle\handle_table.tpp" />
     <None Include="src\memory\managed_resource_map.tpp" />
