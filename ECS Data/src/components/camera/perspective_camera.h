@@ -5,11 +5,36 @@
 
 class PerspectiveCamera final : public CameraBase<PerspectiveCamera> {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	PerspectiveCamera(ID3D11Device& device,
 	                  u32 viewport_width,
 	                  u32 viewport_height);
 
+	PerspectiveCamera(const PerspectiveCamera& camera) = delete;
+	PerspectiveCamera(PerspectiveCamera&& camera) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~PerspectiveCamera() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	PerspectiveCamera& operator=(const PerspectiveCamera& camera) = delete;
+	PerspectiveCamera& operator=(PerspectiveCamera&& caemra) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// Change the FOV
 	void setFOV(f32 radians) {

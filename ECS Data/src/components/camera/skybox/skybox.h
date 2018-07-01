@@ -10,8 +10,9 @@
 
 class SkyBox final : public Component<SkyBox> {
 public:
-	SkyBox() = delete;
-	~SkyBox() = default;
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 
 	SkyBox(ID3D11Device& device) {
 		init(device);
@@ -25,6 +26,9 @@ public:
 		init(device);
 	}
 
+	SkyBox(const SkyBox& skybox) noexcept = default;
+	SkyBox(SkyBox&& skybox) noexcept = default;
+
 	SkyBox(ID3D11Device& device,
 	       shared_ptr<Texture> texture)
 		: texture(std::move(texture)) {
@@ -32,12 +36,29 @@ public:
 		init(device);
 	}
 
-	void init(ID3D11Device& device);
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
+	~SkyBox() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	SkyBox& operator=(const SkyBox& skybox) noexcept = default;
+	SkyBox& operator=(SkyBox&& skybox) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// Bind the skybox's vertex and index buffers
 	void bind(ID3D11DeviceContext& device_context) const {
 		u32 offset = 0;
-
 		Pipeline::IA::bindVertexBuffers(device_context, 0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
 		Pipeline::IA::bindIndexBuffer(device_context, index_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 		Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -63,6 +84,10 @@ public:
 	void setTexture(shared_ptr<Texture> tex) {
 		texture = std::move(tex);
 	}
+
+
+private:
+	void init(ID3D11Device& device);
 
 
 private:

@@ -5,6 +5,9 @@
 
 class AxisRotation final : public Component<AxisRotation> {
 public:
+	//----------------------------------------------------------------------------------
+	// Axis Enum
+	//----------------------------------------------------------------------------------
 	enum Axis : u8 {
 		X   = 1 << 0,
 		Y   = 1 << 1,
@@ -16,16 +19,36 @@ public:
 
 
 public:
-	AxisRotation()
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
+	AxisRotation() noexcept
 		: rotation_axis(0)
 		, rotation_speeds(1.0f, 1.0f, 1.0f) {
 	}
+
+	AxisRotation(const AxisRotation& rotation) = delete;
+	AxisRotation(AxisRotation&& rotation) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructors
+	//----------------------------------------------------------------------------------
 
 	~AxisRotation() = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Axis
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	AxisRotation& operator=(const AxisRotation& rotation) = delete;
+	AxisRotation& operator=(AxisRotation&& rotation) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Axis
 	//----------------------------------------------------------------------------------
 
 	// Set the axis to rotate on
@@ -57,11 +80,11 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Speed
+	// Member Functions - Speed
 	//----------------------------------------------------------------------------------
 
 	void setSpeeds(vec3_f32 speeds) {
-		rotation_speeds = std::move(speeds);
+		rotation_speeds = speeds;
 	}
 
 	void setSpeedX(f32 speed) {

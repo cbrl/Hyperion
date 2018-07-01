@@ -6,7 +6,10 @@
 
 class PointLight final : public Component<PointLight> {
 public:
-	PointLight()
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	PointLight() noexcept
 		: ambient_color(0.0f, 0.0f, 0.0f, 0.0f)
 		, diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
 		, specular(1.0f, 1.0f, 1.0f, 1.0f)
@@ -16,11 +19,25 @@ public:
 		, shadows(false) {
 	}
 
+	PointLight(const PointLight& light) = delete;
+	PointLight(PointLight&& light) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 	~PointLight() = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Ambient Color
+	// Operators
+	//----------------------------------------------------------------------------------
+	PointLight& operator=(const PointLight& light) = delete;
+	PointLight& operator=(PointLight&& light) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Ambient Color
 	//----------------------------------------------------------------------------------
 	void setAmbientColor(const vec4_f32& color) {
 		this->ambient_color = color;
@@ -33,7 +50,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Diffuse Color
+	// Member Functions - Diffuse Color
 	//----------------------------------------------------------------------------------
 	void setDiffuseColor(const vec4_f32& color) {
 		this->diffuse_color = color;
@@ -46,7 +63,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Specular Color/Power
+	// Member Functions - Specular Color/Power
 	//----------------------------------------------------------------------------------
 	void setSpecular(const vec4_f32& spec) {
 		this->specular = spec;
@@ -59,7 +76,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Range
+	// Member Functions - Range
 	//----------------------------------------------------------------------------------
 	void setRange(const f32 range) {
 		this->range = range;
@@ -73,7 +90,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Attenuation
+	// Member Functions - Attenuation
 	//----------------------------------------------------------------------------------
 	void setAttenuation(const vec3_f32& attenuation) {
 		this->attenuation = attenuation;
@@ -86,7 +103,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Shadows
+	// Member Functions - Shadows
 	//----------------------------------------------------------------------------------
 	void setShadows(bool state) {
 		this->shadows = state;

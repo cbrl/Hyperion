@@ -20,9 +20,9 @@ public:
 	//----------------------------------------------------------------------------------
 
 	IEntity() = delete;
+	IEntity(handle64 this_handle, ComponentMgr* component_mgr);
 	IEntity(const IEntity& entity) = delete;
 	IEntity(IEntity&& entity) = default;
-	IEntity(handle64 this_handle, ComponentMgr* component_mgr);
 
 
 	//----------------------------------------------------------------------------------
@@ -30,6 +30,14 @@ public:
 	//----------------------------------------------------------------------------------
 
 	virtual ~IEntity();
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	IEntity& operator=(const IEntity& entity) = delete;
+	IEntity& operator=(IEntity&& entity) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------

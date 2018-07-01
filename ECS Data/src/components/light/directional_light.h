@@ -6,7 +6,10 @@
 
 class DirectionalLight final : public Component<DirectionalLight> {
 public:
-	DirectionalLight()
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	DirectionalLight() noexcept
 		: ambient_color(0.0f, 0.0f, 0.0f, 0.0f)
 		, diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
 		, specular(1.0f, 1.0f, 1.0f, 1.0f)
@@ -16,10 +19,25 @@ public:
 		, shadows(false) {
 	}
 
-	~DirectionalLight() = default;
+	DirectionalLight(const DirectionalLight& light) = delete;
+	DirectionalLight(DirectionalLight&& light) noexcept = default;
+
 
 	//----------------------------------------------------------------------------------
-	// Ambient Color
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~DirectionalLight() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	DirectionalLight& operator=(const DirectionalLight& light) = delete;
+	DirectionalLight& operator=(DirectionalLight&& light) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Ambient Color
 	//----------------------------------------------------------------------------------
 	void setAmbientColor(const vec4_f32& color) {
 		this->ambient_color = color;
@@ -32,7 +50,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Diffuse Color
+	// Member Functions - Diffuse Color
 	//----------------------------------------------------------------------------------
 	void setDiffuseColor(const vec4_f32& color) {
 		this->diffuse_color = color;
@@ -45,7 +63,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Specular Color/Power
+	// Member Functions - Specular Color/Power
 	//----------------------------------------------------------------------------------
 	void setSpecular(const vec4_f32& spec) {
 		this->specular = spec;
@@ -58,7 +76,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Shadows
+	// Member Functions - Shadows
 	//----------------------------------------------------------------------------------
 	void setShadows(bool state) {
 		shadows = state;
@@ -71,7 +89,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Range
+	// Member Functions - Range
 	//----------------------------------------------------------------------------------
 	void setRange(f32 range) {
 		this->range = range;
@@ -85,7 +103,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Size
+	// Member Functions - Size
 	//----------------------------------------------------------------------------------
 	void setSize(const vec2_f32& size) {
 		proj_size = size;

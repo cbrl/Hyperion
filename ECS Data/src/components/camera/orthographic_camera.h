@@ -5,15 +5,35 @@
 
 class OrthographicCamera final : public CameraBase<OrthographicCamera> {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	OrthographicCamera(ID3D11Device& device,
 	                   u32 viewport_width,
 	                   u32 viewport_height);
+
+	OrthographicCamera(const OrthographicCamera& camera) = delete;
+	OrthographicCamera(OrthographicCamera&& camera) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 
 	~OrthographicCamera() = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Orthographic Size
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	OrthographicCamera& operator=(const OrthographicCamera& camera) = delete;
+	OrthographicCamera& operator=(OrthographicCamera&& camera) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Orthographic Size
 	//----------------------------------------------------------------------------------
 
 	// Get the size of the camera's viewing volume {width, height}

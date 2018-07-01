@@ -25,7 +25,7 @@ public:
 		, owner(handle64::invalid_handle) {
 	}
 
-	IComponent(const IComponent& component) noexcept = default;
+	IComponent(const IComponent& component) = delete;
 	IComponent(IComponent&& component) noexcept = default;
 
 
@@ -40,7 +40,7 @@ public:
 	// Operators
 	//----------------------------------------------------------------------------------
 
-	IComponent& operator=(const IComponent& component) noexcept = default;
+	IComponent& operator=(const IComponent& component) = delete;
 	IComponent& operator=(IComponent&& component) noexcept = default;
 
 
@@ -90,7 +90,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	Component() noexcept = default;
-	Component(const Component& component) noexcept = default;
+	Component(const Component& component) = delete;
 	Component(Component&& component) noexcept = default;
 
 
@@ -103,7 +103,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	Component& operator=(const Component& component) noexcept = default;
+	Component& operator=(const Component& component) = delete;
 	Component& operator=(Component&& component) noexcept = default;
 
 

@@ -25,7 +25,8 @@ void SkyBox::init(ID3D11Device& device) {
 	D3D11_SUBRESOURCE_DATA vb_data = {};
 	vb_data.pSysMem = &vertices[0];
 
-	device.CreateBuffer(&vb_desc, &vb_data, vertex_buffer.GetAddressOf());
+	ThrowIfFailed(device.CreateBuffer(&vb_desc, &vb_data, vertex_buffer.GetAddressOf()),
+	              "Failed to create skybox vertex buffer");
 
 
 	// Create the index buffer
@@ -42,5 +43,6 @@ void SkyBox::init(ID3D11Device& device) {
 	D3D11_SUBRESOURCE_DATA ib_data = {};
 	ib_data.pSysMem = &indices[0];
 
-	device.CreateBuffer(&ib_desc, &ib_data, index_buffer.GetAddressOf());
+	ThrowIfFailed(device.CreateBuffer(&ib_desc, &ib_data, index_buffer.GetAddressOf()),
+	              "Failed to create skybox index buffer");
 }

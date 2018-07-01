@@ -5,16 +5,36 @@
 
 class MouseRotation final : public Component<MouseRotation> {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	MouseRotation() noexcept
 		: sensitivity(0.1f)
 		, max_rotation(XMConvertToRadians(89.0f), XM_PI) {
 	}
 
+	MouseRotation(const MouseRotation& rotation) = delete;
+	MouseRotation(MouseRotation&& rotation) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructors
+	//----------------------------------------------------------------------------------
+
 	~MouseRotation() = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Sensitivity
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	MouseRotation& operator=(const MouseRotation& rotation) = delete;
+	MouseRotation& operator=(MouseRotation&& rotation) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Sensitivity
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
@@ -28,7 +48,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Max Rotation
+	// Member Functions - Max Rotation
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]

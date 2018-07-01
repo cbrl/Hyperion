@@ -16,10 +16,14 @@
 
 class ModelChild final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	ModelChild(ID3D11Device& device, ModelPart& part, Material mat)
 		: name(part.name)
 		, buffer(device)
-		, material(mat)
+		, material(std::move(mat))
 		, index_start(part.index_start)
 		, index_count(part.index_count)
 		, aabb(part.aabb)
@@ -27,7 +31,28 @@ public:
 		, shadows(true) {
 	}
 
+	ModelChild(const ModelChild& child) = delete;
+	ModelChild(ModelChild&& child) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~ModelChild() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	ModelChild& operator=(const ModelChild& child) = delete;
+	ModelChild& operator=(ModelChild&& child) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Buffer
+	//----------------------------------------------------------------------------------
 
 	// Bind the child model's buffer to a pipeline stage
 	template<typename StageT>
@@ -42,8 +67,9 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Index info
+	// Member Functions - Index info
 	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	u32 getIndexStart() const {
 		return index_start;
@@ -56,8 +82,9 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Name
+	// Member Functions - Name
 	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	const string& getName() const {
 		return name;
@@ -65,8 +92,9 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Bounding volumes
+	// Member Functions - Bounding volumes
 	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	const AABB& getAABB() const {
 		return aabb;
@@ -79,8 +107,9 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Material
+	// Member Functions - Material
 	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	Material& getMaterial() {
 		return material;
@@ -93,8 +122,9 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Shadows
+	// Member Functions - Shadows
 	//----------------------------------------------------------------------------------
+
 	void setShadows(bool state) {
 		shadows = state;
 	}
@@ -130,9 +160,33 @@ private:
 
 class Model final : public Component<Model> {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	Model(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint);
+	Model(const Model& model) = delete;
+	Model(Model&& mode) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~Model() = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	Model& operator=(const Model& model) = delete;
+	Model& operator=(Model&& model) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Mesh
+	//----------------------------------------------------------------------------------
 
 	// Bind the model's vertex and index buffers
 	void bind(ID3D11DeviceContext& device_context) const {
@@ -144,6 +198,10 @@ public:
 		mesh->draw(device_context, index_count, start_index);
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Iteration
+	//----------------------------------------------------------------------------------
 
 	// Preform an action for each child model
 	template<typename ActionT>
@@ -161,12 +219,16 @@ public:
 	}
 
 
+	//----------------------------------------------------------------------------------
+	// Member Functions - Buffer
+	//----------------------------------------------------------------------------------
+
 	// Update model matrix and bounding volumes, as well as those of the child models.
 	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX object_to_world);
 
 
 	//----------------------------------------------------------------------------------
-	// Getters
+	// Member Functions - Misc
 	//----------------------------------------------------------------------------------
 
 	const string& getName() const { return name; }

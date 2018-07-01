@@ -5,8 +5,14 @@
 
 
 class CameraMovement final : public Component<CameraMovement> {
+	friend class CameraMotorSystem;
+
 public:
-	CameraMovement()
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
+	CameraMovement() noexcept
 		: velocity(0.0f, 0.0f, 0.0f)
 		, acceleration(20.0f)
 		, deceleration(50.0f)
@@ -16,25 +22,40 @@ public:
 		, is_moving_z(false) {
 	}
 
+	CameraMovement(const CameraMovement& movement) = delete;
+	CameraMovement(CameraMovement&& movement) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~CameraMovement() = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Getters
+	// Operators
 	//----------------------------------------------------------------------------------
+
+	CameraMovement& operator=(const CameraMovement& movement) = delete;
+	CameraMovement& operator=(CameraMovement&& movement) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Velocity
+	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	vec3_f32 getVelocity() const {
 		return velocity;
 	}
 
-	[[nodiscard]]
-	f32 getAcceleration() const {
-		return acceleration;
+	void setVelocity(const vec3_f32& vel) {
+		velocity = vel;
 	}
 
-	[[nodiscard]]
-	f32 getDeceleration() const {
-		return deceleration;
+	void XM_CALLCONV setVelocity(FXMVECTOR vel) {
+		XMStore(&velocity, vel);
 	}
 
 	[[nodiscard]]
@@ -42,36 +63,70 @@ public:
 		return max_velocity;
 	}
 
+	void setMaxVelocity(f32 max_vel) {
+		max_velocity = max_vel;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Acceleration
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	f32 getAcceleration() const {
+		return acceleration;
+	}
+
+	void setAcceleration(f32 accel) {
+		acceleration = accel;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Deceleration
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	f32 getDeceleration() const {
+		return deceleration;
+	}
+
+	void setDeceleration(f32 decel) {
+		deceleration = decel;
+	}
+
+
+private:
+	//----------------------------------------------------------------------------------
+	// Member Functions - In Motion
+	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	bool isMovingX() const {
 		return is_moving_x;
 	}
+
+	void setMovingX(bool moving) {
+		is_moving_x = moving;
+	}
+
 
 	[[nodiscard]]
 	bool isMovingY() const {
 		return is_moving_y;
 	}
 
+	void setMovingY(bool moving) {
+		is_moving_y = moving;
+	}
+
+
 	[[nodiscard]]
 	bool isMovingZ() const {
 		return is_moving_z;
 	}
-
-
-	//----------------------------------------------------------------------------------
-	// Setters
-	//----------------------------------------------------------------------------------
-
-	void setVelocity(const vec3_f32& vel) { velocity = vel; }
-	void XM_CALLCONV setVelocity(FXMVECTOR vel) { XMStore(&velocity, vel); }
-
-	void setAcceleration(f32 accel) { acceleration = accel; }
-	void setDeceleration(f32 decel) { deceleration = decel; }
-	void setMaxVelocity(f32 max_vel) { max_velocity = max_vel; }
-
-	void setMovingX(bool moving) { is_moving_x = moving; }
-	void setMovingY(bool moving) { is_moving_y = moving; }
-	void setMovingZ(bool moving) { is_moving_z = moving; }
+	void setMovingZ(bool moving) {
+		is_moving_z = moving;
+	}
 
 
 private:

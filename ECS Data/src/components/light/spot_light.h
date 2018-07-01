@@ -5,7 +5,10 @@
 
 class SpotLight final : public Component<SpotLight> {
 public:
-	SpotLight()
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	SpotLight() noexcept
 		: ambient_color(0.0f, 0.0f, 0.0f, 0.0f)
 		, diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
 		, specular(1.0f, 1.0f, 1.0f, 1.0f)
@@ -17,11 +20,25 @@ public:
 		, shadows(false) {
 	}
 
+	SpotLight(const SpotLight& light) = delete;
+	SpotLight(SpotLight&& light) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 	~SpotLight() = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Ambient Color
+	// Operators
+	//----------------------------------------------------------------------------------
+	SpotLight& operator=(const SpotLight& light) = delete;
+	SpotLight& operator=(SpotLight&& light) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Ambient Color
 	//----------------------------------------------------------------------------------
 	void setAmbientColor(const vec4_f32& color) {
 		ambient_color = color;
@@ -34,7 +51,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Diffuse Color
+	// Member Functions - Diffuse Color
 	//----------------------------------------------------------------------------------
 	void setDiffuseColor(const vec4_f32& color) {
 		diffuse_color = color;
@@ -47,7 +64,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Specular Color/Power
+	// Member Functions - Specular Color/Power
 	//----------------------------------------------------------------------------------
 	void setSpecular(const vec4_f32& spec) {
 		specular = spec;
@@ -60,7 +77,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Attenuation
+	// Member Functions - Attenuation
 	//----------------------------------------------------------------------------------
 	void setAttenuation(const vec3_f32& atten) {
 		attenuation = atten;
@@ -73,7 +90,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Umbra
+	// Member Functions - Umbra
 	//----------------------------------------------------------------------------------
 	void setUmbraCosAngle(f32 cos_angle) {
 		cos_umbra = std::max(std::max(cos_angle, cos_penumbra + 0.001f), 0.001f);
@@ -95,7 +112,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Penumbra
+	// Member Functions - Penumbra
 	//----------------------------------------------------------------------------------
 	void setPenumbraCosAngle(f32 cos_angle) {
 		cos_penumbra = std::max(std::min(cos_angle, cos_umbra - 0.001f), 0.001f);
@@ -118,7 +135,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Umbra/Penumbra
+	// Member Functions - Umbra/Penumbra
 	//----------------------------------------------------------------------------------
 	void setCutoffAngles(f32 cos_umbra, f32 cos_penumbra) {
 		setUmbraAngle(cos_umbra);
@@ -127,7 +144,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Range
+	// Member Functions - Range
 	//----------------------------------------------------------------------------------
 	void setRange(f32 range) {
 		this->range = range;
@@ -141,7 +158,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Shadows
+	// Member Functions - Shadows
 	//----------------------------------------------------------------------------------
 	void setShadows(bool state) {
 		shadows = state;

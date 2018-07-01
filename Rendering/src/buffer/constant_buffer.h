@@ -7,11 +7,35 @@
 
 
 template<typename DataT>
-struct ConstantBuffer final {
+class ConstantBuffer final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	ConstantBuffer(ID3D11Device& device);
+	ConstantBuffer(const ConstantBuffer& buffer) = delete;
+	ConstantBuffer(ConstantBuffer&& buffer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 
 	~ConstantBuffer() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	ConstantBuffer& operator=(const ConstantBuffer& buffer) = delete;
+	ConstantBuffer& operator=(ConstantBuffer&& buffer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// Map the buffer and copy the new data into it
 	void updateData(ID3D11DeviceContext& device_context, const DataT& data) const;
