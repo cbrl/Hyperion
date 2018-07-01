@@ -15,13 +15,37 @@
 
 class EntityMgr final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	explicit EntityMgr(shared_ptr<ComponentMgr> component_mgr)
 		: component_mgr(std::move(component_mgr))
 		, num_expired_entities(0) {
 	}
 
+	EntityMgr(const EntityMgr& manager) = delete;
+	EntityMgr(EntityMgr&& manager) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~EntityMgr() = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	EntityMgr& operator=(const EntityMgr& manager) = delete;
+	EntityMgr& operator=(EntityMgr&& manager) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	template<typename EntityT, typename... ArgsT>
 	handle64 createEntity(ArgsT&&... args) {

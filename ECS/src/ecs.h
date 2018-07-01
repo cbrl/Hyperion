@@ -7,14 +7,32 @@
 
 class ECS final {
 public:
-	ECS();
-	~ECS();
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 
-	void update(const Engine& engine) const;
+	ECS();
+	ECS(const ECS& ecs) = delete;
+	ECS(ECS&& ecs) = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Entities
+	// Destructor
+	//----------------------------------------------------------------------------------
+
+	~ECS();
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	ECS& operator=(const ECS& ecs) = delete;
+	ECS& operator=(ECS&& ecs) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Entities
 	//----------------------------------------------------------------------------------
 
 	template<typename EntityT, typename... ArgsT>
@@ -25,7 +43,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Components
+	// Member Functions - Components
 	//----------------------------------------------------------------------------------
 
 	template<typename ComponentT, typename... ArgsT>
@@ -40,18 +58,21 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Systems
+	// Member Functions - Systems
 	//----------------------------------------------------------------------------------
 
 	template<typename SystemT, typename... ArgsT>
 	SystemT* addSystem(ArgsT&&... args);
 
+	// Update the systems
+	void update(const Engine& engine) const;
+
 
 	//----------------------------------------------------------------------------------
-	// Misc
+	// Member Functions - Misc
 	//----------------------------------------------------------------------------------
 
-	// Do something for each entity or component
+	// Do something with each entity or component of type T
 	template<typename T, typename ActionT>
 	void forEach(ActionT act);
 

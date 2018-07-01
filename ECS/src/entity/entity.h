@@ -16,16 +16,18 @@ class IEntity {
 
 public:
 	//----------------------------------------------------------------------------------
-	// Constructors / Destructors
+	// Constructors
 	//----------------------------------------------------------------------------------
 
 	IEntity() = delete;
-
 	IEntity(const IEntity& entity) = delete;
-
 	IEntity(IEntity&& entity) = default;
-
 	IEntity(handle64 this_handle, ComponentMgr* component_mgr);
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 
 	virtual ~IEntity();
 

@@ -16,12 +16,37 @@ class IComponent {
 	friend class IEntity;
 
 public:
-	IComponent()
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
+	IComponent() noexcept
 		: active(true)
 		, owner(handle64::invalid_handle) {
 	}
 
+	IComponent(const IComponent& component) noexcept = default;
+	IComponent(IComponent&& component) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	virtual ~IComponent() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	IComponent& operator=(const IComponent& component) noexcept = default;
+	IComponent& operator=(IComponent&& component) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	virtual type_index getTypeId() const = 0;
 
@@ -48,6 +73,8 @@ protected:
 };
 
 
+
+
 //----------------------------------------------------------------------------------
 // Component
 //----------------------------------------------------------------------------------
@@ -59,9 +86,30 @@ protected:
 template<typename T>
 class Component : public IComponent {
 public:
-	Component() = default;
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	Component() noexcept = default;
+	Component(const Component& component) noexcept = default;
+	Component(Component&& component) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 	virtual ~Component() = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	Component& operator=(const Component& component) noexcept = default;
+	Component& operator=(Component&& component) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 	type_index getTypeId() const override {
 		return type_id;
 	}

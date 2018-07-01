@@ -14,10 +14,30 @@
 
 class ComponentMgr final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 	ComponentMgr() = default;
+	ComponentMgr(const ComponentMgr& manager) = delete;
+	ComponentMgr(ComponentMgr&& manager) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 	~ComponentMgr() = default;
 
 
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	ComponentMgr& operator=(const ComponentMgr& manager) = delete;
+	ComponentMgr& operator=(ComponentMgr&& manager) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
 	ComponentT* createComponent(ArgsT&&... args) {
