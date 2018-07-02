@@ -16,8 +16,33 @@ class Engine;
 
 class Renderer final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context);
+	Renderer(const Renderer& renderer) = delete;
+	Renderer(Renderer&& renderer) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~Renderer() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	Renderer& operator=(const Renderer& renderer) = delete;
+	Renderer& operator=(Renderer&& renderer) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	void render(const Engine& engine);
 
@@ -28,6 +53,10 @@ private:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	reference_wrapper<ID3D11Device>        device;
 	reference_wrapper<ID3D11DeviceContext> device_context;
 

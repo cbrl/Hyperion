@@ -14,12 +14,37 @@
 
 class ShadowMapBuffer final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	ShadowMapBuffer(ID3D11Device& device,
 	                u32 map_count,
 	                u32 width  = 512,
 	                u32 height = 512);
 
+	ShadowMapBuffer(const ShadowMapBuffer& buffer) = delete;
+	ShadowMapBuffer(ShadowMapBuffer&& buffer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~ShadowMapBuffer() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	ShadowMapBuffer& operator=(const ShadowMapBuffer& buffer) = delete;
+	ShadowMapBuffer& operator=(ShadowMapBuffer&& buffer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// Bind the viewport and DSVs
 	void bindViewport(ID3D11DeviceContext& device_context) const {
@@ -71,12 +96,37 @@ private:
 
 class ShadowCubeMapBuffer final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	ShadowCubeMapBuffer(ID3D11Device& device,
 	                    u32 cube_map_count,
 	                    u32 width  = 512,
 	                    u32 height = 512);
 
+	ShadowCubeMapBuffer(const ShadowCubeMapBuffer& buffer) = delete;
+	ShadowCubeMapBuffer(ShadowCubeMapBuffer&& buffer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~ShadowCubeMapBuffer() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	ShadowCubeMapBuffer& operator=(const ShadowCubeMapBuffer& buffer) = delete;
+	ShadowCubeMapBuffer& operator=(ShadowCubeMapBuffer&& buffer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// Bind the viewport and DSVs
 	void bindViewport(ID3D11DeviceContext& device_context) const {

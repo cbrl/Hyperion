@@ -15,22 +15,45 @@ class ModelBlueprint;
 
 class ResourceMgr final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	ResourceMgr(ID3D11Device& device, ID3D11DeviceContext& device_context)
 		: device(device)
 		, device_context(device_context) {
 	}
 
+	ResourceMgr(const ResourceMgr& mgr) = delete;
+	ResourceMgr(ResourceMgr&& mgr) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~ResourceMgr() = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	ResourceMgr& operator=(const ResourceMgr& mgr) = delete;
+	ResourceMgr& operator=(ResourceMgr&& mgr) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// ModelBlueprint
 	template<typename ResourceT>
 	enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> getOrCreate(const wstring& filename);
 
 	template<typename ResourceT, typename VertexT>
-	enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> getOrCreate(
-		const wstring& name,
-		const ModelOutput<VertexT>& model_data);
+	enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> getOrCreate(const wstring& name,
+	                                                                                          const ModelOutput<VertexT>& model_data);
 
 
 	// Texture
@@ -47,6 +70,10 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// Device and device context
 	reference_wrapper<ID3D11Device> device;
 	reference_wrapper<ID3D11DeviceContext> device_context;

@@ -16,8 +16,9 @@ class ResourceMgr;
 
 class ModelBlueprint final : public Resource<ModelBlueprint> {
 public:
-	ModelBlueprint() = default;
-	~ModelBlueprint() = default;
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 
 	ModelBlueprint(ID3D11Device& device,
 	               ResourceMgr& resource_mgr,
@@ -25,17 +26,45 @@ public:
 
 	template<typename VertexT>
 	ModelBlueprint(ID3D11Device& device,
-	               const ModelOutput<VertexT>& out) {
+	               const ModelOutput<VertexT>& out)
+		: Resource(str2wstr(out.name)) {
+
 		constructBlueprint(device, out);
 	}
 
+	ModelBlueprint(const ModelBlueprint& blueprint) = delete;
+	ModelBlueprint(ModelBlueprint&& blueprint) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
+	~ModelBlueprint() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	ModelBlueprint& operator=(const ModelBlueprint& blueprint) = delete;
+	ModelBlueprint& operator=(ModelBlueprint&& blueprint) noexcept = default;
+
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+
 	template<typename VertexT>
 	void constructBlueprint(ID3D11Device& device, const ModelOutput<VertexT>& out);
 
 
 public:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	string name;
 
 	AABB aabb;

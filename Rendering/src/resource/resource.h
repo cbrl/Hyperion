@@ -1,12 +1,15 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
+#include "io/io.h"
 
 
 template<typename ResourceT>
 class Resource {
 public:
-	Resource() = default;
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 
 	Resource(const wstring& guid)
 		: guid(guid) {
@@ -16,18 +19,44 @@ public:
 		: guid(guid) {
 	}
 
+	Resource(const Resource& resource) = delete;
+	Resource(Resource&& resource) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	virtual ~Resource() = default;
 
-	static type_index getTypeId() {
-		return type_id;
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	Resource& operator=(const Resource& resource) = delete;
+	Resource& operator=(Resource&& resource) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	const wstring& getGUID() const {
+		return guid;
+	}
+
+	[[nodiscard]]
+	bool isFileGUID() const {
+		return fs::is_regular_file(guid);
 	}
 
 
 public:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	wstring guid;
-	static const type_index type_id;
 };
-
-
-template<typename ResourceT>
-const type_index Resource<ResourceT>::type_id = type_index(typeid(ResourceT));

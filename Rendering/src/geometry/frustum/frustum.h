@@ -8,19 +8,34 @@ using namespace DirectX;
 
 class Frustum final {
 public:
-	Frustum() = default;
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 
 	// Construct a frustum from a given matrix
 	Frustum(CXMMATRIX M);
 
-	~Frustum() = default;
-
-	// Recalculate the frustum
-	void XM_CALLCONV updateFrustum(FXMMATRIX M);
+	Frustum(const Frustum& frustum) noexcept = default;
+	Frustum(Frustum&& frustum) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Encloses
+	// Destructor
+	//----------------------------------------------------------------------------------
+
+	~Frustum() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	Frustum& operator=(const Frustum& frustum) noexcept = default;
+	Frustum& operator=(Frustum&& frustum) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Encloses
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	bool XM_CALLCONV encloses(FXMVECTOR point) const;
@@ -33,7 +48,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Contains
+	// Member Functions - Contains
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	bool contains(const AABB& aabb) const;
@@ -43,5 +58,9 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	XMVECTOR planes[6];
 };

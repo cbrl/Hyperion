@@ -16,7 +16,7 @@ using std::wofstream;
 
 
 // filesystem namespace
-namespace fs = std::experimental::filesystem;
+namespace fs = std::filesystem;
 
 
 // Get the parent path of a file/folder
@@ -55,8 +55,8 @@ inline wstring GetFileExtension(const wstring& in) {
 // Get a file path through the Windows file picker
 #if defined(_WIN32)
 
-#include <Commdlg.h>
 #include "os/windows.h"
+#include <Commdlg.h>
 
 inline bool OpenFilePicker(wchar_t* lpstrFile, DWORD nMaxFile) {
 

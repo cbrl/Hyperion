@@ -6,9 +6,11 @@
 
 struct AABB final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	AABB();
-	AABB(const AABB& aabb) = default;
-	AABB(AABB&& aabb) = default;
 
 	// Construct an AABB from the min and max points of an object
 	AABB(const vec3_f32& min, const vec3_f32& max);
@@ -16,12 +18,28 @@ public:
 	// Construct an AABB from the min and max points of an object
 	AABB(FXMVECTOR min, FXMVECTOR max);
 
+	AABB(const AABB& aabb) = default;
+	AABB(AABB&& aabb) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~AABB() = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
 
 	AABB& operator=(const AABB& aabb) = default;
 	AABB& operator=(AABB&& aabb) = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV min() const { return min_point; }
@@ -31,6 +49,10 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	XMVECTOR min_point;
 	XMVECTOR max_point;
 };
@@ -38,9 +60,11 @@ private:
 
 struct BoundingSphere final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	BoundingSphere();
-	BoundingSphere(const BoundingSphere& sphere) = default;
-	BoundingSphere(BoundingSphere&& sphere) = default;
 
 	// Construct a bounding sphere from the center point and radius of an object
 	BoundingSphere(const vec3_f32& center, f32 radius);
@@ -48,12 +72,28 @@ public:
 	// Construct a bounding sphere from the center point and radius of an object
 	BoundingSphere(FXMVECTOR center, f32 radius);
 
+	BoundingSphere(const BoundingSphere& sphere) = default;
+	BoundingSphere(BoundingSphere&& sphere) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~BoundingSphere() = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
 
 	BoundingSphere& operator=(const BoundingSphere& sphere) = default;
 	BoundingSphere& operator=(BoundingSphere&& sphere) = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV center() const { return sphere_center; }
@@ -63,7 +103,10 @@ public:
 
 
 private:
-	// The non-transformed center and radius
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	XMVECTOR sphere_center;
 	f32 sphere_radius;
 };

@@ -8,6 +8,10 @@
 template<typename DataT>
 class StructuredBuffer final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	StructuredBuffer(ID3D11Device& device, u32 reserved_size)
 		: current_size(0)
 		, reserved_size(reserved_size) {
@@ -15,8 +19,28 @@ public:
 		createBuffer(device);
 	}
 
+	StructuredBuffer(const StructuredBuffer& buffer) = delete;
+	StructuredBuffer(StructuredBuffer&& buffer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~StructuredBuffer() = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	StructuredBuffer& operator=(const StructuredBuffer& buffer) = delete;
+	StructuredBuffer& operator=(StructuredBuffer&& buffer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	void updateData(ID3D11Device& device,
 	                ID3D11DeviceContext& device_context,

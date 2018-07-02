@@ -7,23 +7,40 @@
 
 class Viewport final {
 public:
-	Viewport() noexcept : viewport{} {}
-	Viewport(const Viewport& copy) noexcept = default;
-	Viewport(Viewport&& move) noexcept = default;
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
+	Viewport() noexcept
+		: viewport{} {
+	}
 
 	explicit Viewport(f32 width, f32 height) noexcept
 		: viewport{} {
-		viewport.Width  = width;
+		viewport.Width = width;
 		viewport.Height = height;
 	}
 
 	explicit Viewport(vec2_f32 size) noexcept
 		: viewport{} {
-		viewport.Width  = size.x;
+		viewport.Width = size.x;
 		viewport.Height = size.y;
 	}
 
+	Viewport(const Viewport& copy) noexcept = default;
+	Viewport(Viewport&& move) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~Viewport() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
 
 	Viewport& operator=(const Viewport& copy) noexcept = default;
 	Viewport& operator=(Viewport&& move) noexcept = default;
@@ -114,5 +131,9 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	D3D11_VIEWPORT viewport;
 };

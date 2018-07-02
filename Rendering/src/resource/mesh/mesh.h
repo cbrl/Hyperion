@@ -7,12 +7,35 @@
 
 class Mesh final {
 public:
-	Mesh() = default;
-	~Mesh() = default;
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 
 	template<typename VertexT>
 	Mesh(ID3D11Device& device, const vector<VertexT>& vertices, const vector<u32>& indices);
 
+	Mesh(const Mesh& mesh) = delete;
+	Mesh(Mesh&& mesh) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
+	~Mesh() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	Mesh& operator=(const Mesh& mesh) = delete;
+	Mesh& operator=(Mesh&& mesh) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// Bind the vertex buffer and index buffer
 	void bind(ID3D11DeviceContext& device_context) const {
@@ -36,6 +59,10 @@ public:
 
 
 public:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	ComPtr<ID3D11Buffer> vertex_buffer;
 	ComPtr<ID3D11Buffer> index_buffer;
 

@@ -320,7 +320,7 @@ public:
 
 
 private:
-	// The parent of the entity this transform is assigned to (optional)
+	// The entity whose transform is a parent of this one (optional)
 	handle64 parent;
 
 	// The object-to-world matrix

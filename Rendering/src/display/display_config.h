@@ -15,6 +15,10 @@ enum class AAType {
 
 class DisplayConfig final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	DisplayConfig()
 		: curr_desc(0)
 		, anti_aliasing(AAType::none)
@@ -37,23 +41,29 @@ public:
 
 	DisplayConfig(const DisplayConfig& config) = default;
 	DisplayConfig(DisplayConfig&& config) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~DisplayConfig() = default;
 
 
-	void setDisplayDesc(u32 index) { curr_desc = index; }
-	void setAAType(AAType value) { anti_aliasing = value; }
-	void setFullscreen(bool state) { fullscreen = state; }
-	void setVsync(bool state) { vsync = state; }
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	DisplayConfig& operator=(const DisplayConfig& config) = default;
+	DisplayConfig& operator=(DisplayConfig&& config) noexcept = default;
 
 
-	[[nodiscard]]
-	IDXGIAdapter* getAdapter() const {
-		return adapter.Get();
-	}
+	//----------------------------------------------------------------------------------
+	// Member Functions - Display Desc
+	//----------------------------------------------------------------------------------
 
-	[[nodiscard]]
-	IDXGIOutput* getOutput() const {
-		return adapter_out.Get();
+	void setDisplayDesc(u32 index) {
+		curr_desc = index;
 	}
 
 	[[nodiscard]]
@@ -66,9 +76,27 @@ public:
 		return display_desc_list[curr_desc];
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Anti Aliasing
+	//----------------------------------------------------------------------------------
+
+	void setAAType(AAType value) {
+		anti_aliasing = value;
+	}
+
 	[[nodiscard]]
 	AAType getAAType() const {
 		return anti_aliasing;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Fullscreen
+	//----------------------------------------------------------------------------------
+
+	void setFullscreen(bool state) {
+		fullscreen = state;
 	}
 
 	[[nodiscard]]
@@ -76,10 +104,35 @@ public:
 		return fullscreen;
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - VSync
+	//----------------------------------------------------------------------------------
+
+	void setVsync(bool state) {
+		vsync = state;
+	}
+
 	[[nodiscard]]
 	bool isVsync() const {
 		return vsync;
 	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Adapter/Output
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	IDXGIAdapter* getAdapter() const {
+		return adapter.Get();
+	}
+
+	[[nodiscard]]
+	IDXGIOutput* getOutput() const {
+		return adapter_out.Get();
+	}
+
 
 
 private:
@@ -132,6 +185,10 @@ private:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	ComPtr<IDXGIAdapter> adapter;
 	ComPtr<IDXGIOutput> adapter_out;
 	vector<DXGI_MODE_DESC> display_desc_list;

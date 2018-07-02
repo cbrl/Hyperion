@@ -9,21 +9,46 @@
 
 struct Texture final : public Resource<Texture> {
 public:
-	Texture() = default;
-	~Texture() = default;
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 
 	Texture(ID3D11Device& device,
 	        ID3D11DeviceContext& device_context,
-	        wstring filename) {
+	        const wstring& filename)
+		: Resource(filename) {
 
 		TextureLoader::LoadTexture(device, device_context, filename, texture.GetAddressOf());
 	}
 
-	Texture(ID3D11Device& device, u32 color) {
+	Texture(ID3D11Device& device, u32 color)
+		: Resource(to_wstring(color)) {
 
 		TextureLoader::LoadTexture(device, color, texture.GetAddressOf());
 	}
 
+	Texture(const Texture& texture) = delete;
+	Texture(Texture&& texture) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
+	~Texture() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	Texture& operator=(const Texture& texture) = delete;
+	Texture& operator=(Texture&& texture) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
 	ID3D11ShaderResourceView* get() const {
@@ -39,5 +64,9 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	ComPtr<ID3D11ShaderResourceView> texture;
 };

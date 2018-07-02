@@ -3,11 +3,7 @@
 
 Frustum::Frustum(CXMMATRIX M)
 	: planes() {
-	updateFrustum(M);
-}
-
-
-void XM_CALLCONV Frustum::updateFrustum(FXMMATRIX M) {
+	
 	const XMMATRIX input = XMMatrixTranspose(M);
 
 	// Near plane
