@@ -119,7 +119,7 @@ void XM_CALLCONV ForwardPass::renderModel(ECS& ecs_engine, Model& model, FXMMATR
 
 
 		// Draw the child
-		model.draw(device_context, child.getIndexCount(), child.getIndexStart());
+		Pipeline::drawIndexed(device_context, child.getIndexCount(), child.getIndexStart());
 
 
 		// Unbind the SRVs

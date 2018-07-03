@@ -2,6 +2,8 @@
 #define HLSL_GEOSPHERE
 
 
+// D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+
 static const float3 geosphere[384] = {
 
 	{ 0.000000,  0.500000,  0.000000 },

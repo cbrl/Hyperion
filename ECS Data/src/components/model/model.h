@@ -193,11 +193,6 @@ public:
 		mesh->bind(device_context);
 	}
 
-	// Render the model with the given index count and start index
-	void draw(ID3D11DeviceContext& device_context, u32 index_count, u32 start_index) const {
-		mesh->draw(device_context, index_count, start_index);
-	}
-
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Iteration

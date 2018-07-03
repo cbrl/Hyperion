@@ -140,6 +140,6 @@ void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX model_to_p
 
 		child.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
-		model.draw(device_context, child.getIndexCount(), child.getIndexStart());
+		Pipeline::drawIndexed(device_context, child.getIndexCount(), child.getIndexStart());
 	});
 }
