@@ -34,9 +34,6 @@
     <Filter Include="Header Files\components\camera">
       <UniqueIdentifier>{840bddb9-8a5a-4aaa-aaec-f39f441c9099}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\components\camera\skybox">
-      <UniqueIdentifier>{c111897f-aebf-4012-8fcd-40a1e42aea26}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\components\light">
       <UniqueIdentifier>{a8744bc6-d337-4088-acfd-730d990670cc}</UniqueIdentifier>
     </Filter>
@@ -60,9 +57,6 @@
     </Filter>
     <Filter Include="Source Files\components\camera">
       <UniqueIdentifier>{5e4680ab-9490-4057-b331-1abe09a6e280}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\components\camera\skybox">
-      <UniqueIdentifier>{0a11ac9a-c96c-4d7d-bc1f-4df40083a293}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\systems\model">
       <UniqueIdentifier>{7ce3a652-5c05-4f49-ab48-184dedec8379}</UniqueIdentifier>
@@ -119,9 +113,6 @@
     </ClInclude>
     <ClInclude Include="src\components\camera\camera_base.h">
       <Filter>Header Files\components\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\camera\skybox\skybox.h">
-      <Filter>Header Files\components\camera\skybox</Filter>
     </ClInclude>
     <ClInclude Include="src\components\light\directional_light.h">
       <Filter>Header Files\components\light</Filter>
@@ -184,9 +175,6 @@
     </ClCompile>
     <ClCompile Include="src\components\camera\perspective_camera.cpp">
       <Filter>Source Files\components\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\camera\skybox\skybox.cpp">
-      <Filter>Source Files\components\camera\skybox</Filter>
     </ClCompile>
     <ClCompile Include="src\components\model\model.cpp">
       <Filter>Source Files\components\model</Filter>

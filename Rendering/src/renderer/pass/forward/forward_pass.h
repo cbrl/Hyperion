@@ -3,7 +3,6 @@
 #include "datatypes/datatypes.h"
 #include "shader/shader.h"
 #include "components/model/model.h"
-#include "components/camera/skybox/skybox.h"
 
 class ECS;
 class Engine;
@@ -15,7 +14,7 @@ public:
 	~ForwardPass() = default;
 
 	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection) const;
-	void XM_CALLCONV render(const Engine& engine, const SkyBox& sky, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV render(const Engine& engine, const Texture* sky, FXMMATRIX world_to_projection) const;
 
 
 private:

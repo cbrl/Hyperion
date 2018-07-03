@@ -200,6 +200,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
+    <None Include="shaders\shapes\geosphere.hlsli" />
     <None Include="shaders\shapes\wireframe_cube.hlsl">
       <FileType>Document</FileType>
     </None>

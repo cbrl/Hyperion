@@ -7,7 +7,7 @@
 #include "buffer/buffers.h"
 #include "buffer/constant_buffer.h"
 #include "display/viewport.h"
-#include "components/camera/skybox/skybox.h"
+#include "resource/texture/texture.h"
 
 
 template<typename T>
@@ -23,7 +23,6 @@ protected:
 		: buffer(device)
 		, z_near(0.1f)
 		, z_far(1000.0f)
-		, sky(device)
 		, projection_matrix(XMMatrixIdentity()) {
 
 		viewport.setDepth(0.0f, 1.0f);
@@ -72,9 +71,9 @@ public:
 	                              CXMMATRIX world_to_camera) const {
 
 		buffer.updateData(device_context,
-		                  CameraBuffer(XMMatrixTranspose(camera_to_world),
-		                               XMMatrixTranspose(world_to_camera),
-		                               XMMatrixTranspose(projection_matrix),
+						  CameraBuffer(XMMatrixTranspose(camera_to_world),
+									   XMMatrixTranspose(world_to_camera),
+									   XMMatrixTranspose(projection_matrix),
 		                               camera_fog));
 	}
 
@@ -152,15 +151,15 @@ public:
 	// Member Functions - Skybox
 	//----------------------------------------------------------------------------------
 
-	// Get the skybox associated with this camera
-	[[nodiscard]]
-	SkyBox& getSkybox() {
-		return sky;
+	// Set the skybox texture
+	void setSkybox(shared_ptr<Texture> skybox) {
+		sky = std::move(skybox);
 	}
 
+	// Get the skybox texture
 	[[nodiscard]]
-	const SkyBox& getSkybox() const {
-		return sky;
+	Texture* getSkybox() const {
+		return sky.get();
 	}
 
 
@@ -179,7 +178,7 @@ protected:
 	f32 z_far;
 
 	// The skybox for this camera
-	SkyBox sky;
+	shared_ptr<Texture> sky;
 
 	// The fog that this camera sees
 	Fog camera_fog;

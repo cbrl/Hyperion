@@ -38,8 +38,8 @@ void TestScene::load(const Engine& engine) {
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
 	cam->setFog(Fog(vec4_f32(0.2f, 0.2f, 0.2f, 1.0f), 30.0f, 25.0f));
-	cam->getSkybox().setTexture(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
-	ecs_engine.getComponent<Transform>(camera)->setPosition(vec3_f32(0.0f, 4.0f, -2.0f));
+	cam->setSkybox(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	ecs_engine.getComponent<Transform>(camera)->setPosition(vec3_f32(0.0f, 2.0f, 0.0f));
 
 	ecs_engine.getComponent<MouseRotation>(camera)->setSensitivity(0.01f);
 

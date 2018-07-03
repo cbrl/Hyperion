@@ -4,12 +4,12 @@
 #include "datatypes/vector_types.h"
 
 
-struct VertexPosition {
+struct VertexPosition final {
 	constexpr VertexPosition() noexcept = default;
 	constexpr VertexPosition(const VertexPosition& vertex) noexcept = default;
 	constexpr VertexPosition(VertexPosition&& vertex) noexcept = default;
 
-	constexpr VertexPosition(const vec3_f32& position) noexcept
+	constexpr VertexPosition(vec3_f32 position) noexcept
 		: position(position) {
 	}
 
@@ -43,12 +43,12 @@ struct VertexPosition {
 };
 
 
-struct VertexPositionColor {
+struct VertexPositionColor final {
 	constexpr VertexPositionColor() noexcept = default;
 	constexpr VertexPositionColor(const VertexPositionColor& vertex) noexcept = default;
 	constexpr VertexPositionColor(VertexPositionColor&& vertex) noexcept = default;
 
-	constexpr VertexPositionColor(const vec3_f32& position, const vec4_f32& color) noexcept
+	constexpr VertexPositionColor(vec3_f32 position, vec4_f32 color) noexcept
 		: position(position)
 		, color(color) {
 	}
@@ -85,12 +85,12 @@ struct VertexPositionColor {
 };
 
 
-struct VertexPositionTexture {
+struct VertexPositionTexture final {
 	constexpr VertexPositionTexture() noexcept = default;
 	constexpr VertexPositionTexture(const VertexPositionTexture& vertex) noexcept = default;
 	constexpr VertexPositionTexture(VertexPositionTexture&& vertex) noexcept = default;
 
-	constexpr VertexPositionTexture(const vec3_f32& position, const vec2_f32& texCoord) noexcept
+	constexpr VertexPositionTexture(vec3_f32 position, vec2_f32 texCoord) noexcept
 		: position(position)
 		, texCoord(texCoord) {
 	}
@@ -127,12 +127,12 @@ struct VertexPositionTexture {
 };
 
 
-struct VertexPositionDualTexture {
+struct VertexPositionDualTexture final {
 	constexpr VertexPositionDualTexture() noexcept = default;
 	constexpr VertexPositionDualTexture(const VertexPositionDualTexture& vertex) noexcept = default;
 	constexpr VertexPositionDualTexture(VertexPositionDualTexture&& vertex) noexcept = default;
 
-	constexpr VertexPositionDualTexture(const vec3_f32& position, const vec2_f32& texCoord0, const vec2_f32& texCoord1) noexcept
+	constexpr VertexPositionDualTexture(vec3_f32 position, vec2_f32 texCoord0, vec2_f32 texCoord1) noexcept
 		: position(position)
 		, texCoord0(texCoord0)
 		, texCoord1(texCoord1) {
@@ -172,12 +172,12 @@ struct VertexPositionDualTexture {
 };
 
 
-struct VertexPositionNormal {
+struct VertexPositionNormal final {
 	constexpr VertexPositionNormal() noexcept = default;
 	constexpr VertexPositionNormal(const VertexPositionNormal& vertex) noexcept = default;
 	constexpr VertexPositionNormal(VertexPositionNormal&& vertex) noexcept = default;
 
-	constexpr VertexPositionNormal(const vec3_f32& position, const vec3_f32& normal) noexcept
+	constexpr VertexPositionNormal(vec3_f32 position, vec3_f32 normal) noexcept
 		: position(position)
 		, normal(normal) {
 	}
@@ -214,12 +214,12 @@ struct VertexPositionNormal {
 };
 
 
-struct VertexPositionNormalColor {
+struct VertexPositionNormalColor final {
 	constexpr VertexPositionNormalColor() noexcept = default;
 	constexpr VertexPositionNormalColor(const VertexPositionNormalColor& vertex) noexcept = default;
 	constexpr VertexPositionNormalColor(VertexPositionNormalColor&& vertex) noexcept = default;
 
-	constexpr VertexPositionNormalColor(const vec3_f32& position, const vec3_f32& normal, const vec4_f32& color) noexcept
+	constexpr VertexPositionNormalColor(vec3_f32 position, vec3_f32 normal, vec4_f32 color) noexcept
 		: position(position)
 		, normal(normal)
 		, color(color) {
@@ -259,12 +259,12 @@ struct VertexPositionNormalColor {
 };
 
 
-struct VertexPositionNormalTexture {
+struct VertexPositionNormalTexture final {
 	constexpr VertexPositionNormalTexture() noexcept = default;
 	constexpr VertexPositionNormalTexture(const VertexPositionNormalTexture& vertex) noexcept = default;
 	constexpr VertexPositionNormalTexture(VertexPositionNormalTexture&& vertex) noexcept = default;
 
-	constexpr VertexPositionNormalTexture(const vec3_f32& position, const vec3_f32& normal, const vec2_f32& texCoord) noexcept
+	constexpr VertexPositionNormalTexture(vec3_f32 position, vec3_f32 normal, vec2_f32 texCoord) noexcept
 		: position(position)
 		, normal(normal)
 		, texCoord(texCoord) {

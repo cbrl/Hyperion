@@ -2,7 +2,7 @@
 
 #include "datatypes/datatypes.h"
 #include "shader/shader.h"
-#include "components/camera/skybox/skybox.h"
+#include "resource/texture/texture.h"
 
 class Engine;
 class RenderStateMgr;
@@ -12,7 +12,7 @@ public:
 	SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
 	~SkyPass() = default;
 
-	void render(const Engine& engine, const SkyBox& skybox) const;
+	void render(const Engine& engine, const Texture* sky) const;
 
 
 private:

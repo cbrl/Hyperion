@@ -1,13 +1,14 @@
-#include "include\global.hlsl"
-#include "include\input_structs.hlsl"
+#include "include/global.hlsl"
+#include "include/input_structs.hlsl"
+#include "shapes/geosphere.hlsli"
 
 
-PSPosition VS(VSPosition vin) {
+PSPosition VS(uint vertex : SV_VertexID) {
 	PSPosition vout;
 
-	const float3 p      = mul(float4(vin.position, 1.0f), world_to_camera).xyz;
+	vout.position_world = geosphere[vertex];
+	const float3 p      = mul(float4(vout.position_world, 1.0f), (float3x3)world_to_camera);
 	vout.position       = mul(float4(p, 1.0f), camera_to_projection).xyww;
-	vout.position_world = vin.position;
 
 	return vout;
 }

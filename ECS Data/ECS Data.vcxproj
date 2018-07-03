@@ -136,7 +136,6 @@
     <ClInclude Include="src\components\camera\camera_base.h" />
     <ClInclude Include="src\components\camera\orthographic_camera.h" />
     <ClInclude Include="src\components\camera\perspective_camera.h" />
-    <ClInclude Include="src\components\camera\skybox\skybox.h" />
     <ClInclude Include="src\components\components.h" />
     <ClInclude Include="src\components\light\directional_light.h" />
     <ClInclude Include="src\components\light\point_light.h" />
@@ -167,7 +166,6 @@
   <ItemGroup>
     <ClCompile Include="src\components\camera\orthographic_camera.cpp" />
     <ClCompile Include="src\components\camera\perspective_camera.cpp" />
-    <ClCompile Include="src\components\camera\skybox\skybox.cpp" />
     <ClCompile Include="src\components\model\model.cpp" />
     <ClCompile Include="src\systems\camera\camera_system.cpp" />
     <ClCompile Include="src\systems\model\model_system.cpp" />

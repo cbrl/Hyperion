@@ -34,7 +34,7 @@ struct Fog {
 	float4 color;
 	float  start;
 	float  range;
-	float4 pad0;
+	float2 pad0;
 };
 
 cbuffer CameraBuffer : REG_B(SLOT_CBUFFER_CAMERA) {
