@@ -83,6 +83,7 @@ void Engine::addSystems() const {
 	ecs_engine->addSystem<MouseRotationSystem>();
 
 	ecs_engine->addSystem<AxisRotationSystem>();
+	ecs_engine->addSystem<AxisOrbitSystem>();
 }
 
 

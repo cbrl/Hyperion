@@ -57,12 +57,14 @@ void TestScene::load(const Engine& engine) {
 	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
 	const handle64 sphere = addEntity<BasicModel>(ecs_engine, device, sphere_bp);
 
+	ecs_engine.getComponent<Transform>(sphere)->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });
+
 	auto rotation = ecs_engine.addComponent<AxisRotation>(sphere);
 	rotation->setAxis(AxisRotation::Axis::Y);
 	rotation->setSpeedY(0.5f);
 
-	ecs_engine.getComponent<Transform>(sphere)->setPosition(vec3_f32{ 0.0f, 2.0f, 0.0f });
-	//ecs_engine.getComponent<Transform>(sphere)->setPosition(vec3_f32(7.0f, 3.0f, 0.0f));
+	auto orbit = ecs_engine.addComponent<AxisOrbit>(sphere);
+	orbit->setSpeed(1.5f);
 
 
 	//----------------------------------------------------------------------------------
@@ -144,13 +146,13 @@ void TestScene::tick(const Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const vec2_i32 mouse_delta   = engine.getInput().getMouseDelta();
-	const u32 fps             = engine.getFPSCounter().getFPS();
-	const f64 delta_time      = engine.getTimer().deltaTime();
-	const f64 total_cpu_usage = engine.getSysMon().cpu().getTotalCpuPercentage();
-	const f64 proc_cpu_usage  = engine.getSysMon().cpu().getProcessCpuPercentage();
-	const u64 total_mem_usage = engine.getSysMon().memory().getTotalUsedPhysicalMem();
-	const u64 proc_mem_usage  = engine.getSysMon().memory().getProcessUsedPhysicalMem();
+	const vec2_i32 mouse_delta = engine.getInput().getMouseDelta();
+	const u32 fps              = engine.getFPSCounter().getFPS();
+	const f64 delta_time       = engine.getTimer().deltaTime();
+	const f64 total_cpu_usage  = engine.getSysMon().cpu().getTotalCpuPercentage();
+	const f64 proc_cpu_usage   = engine.getSysMon().cpu().getProcessCpuPercentage();
+	const u64 total_mem_usage  = engine.getSysMon().memory().getTotalUsedPhysicalMem();
+	const u64 proc_mem_usage   = engine.getSysMon().memory().getProcessUsedPhysicalMem();
 
 	static wostringstream cpu_str;
 	static wostringstream mem_str;
@@ -184,17 +186,4 @@ void TestScene::tick(const Engine& engine) {
 	// Mouse Activity
 	texts.at("Mouse").setText(L"Mouse \nX: " + to_wstring(mouse_delta.x)
 	                          + L"\nY: "     + to_wstring(mouse_delta.y));
-
-
-
-	//----------------------------------------------------------------------------------
-	// Move the sphere
-	//----------------------------------------------------------------------------------
-
-	// This could be made into a "rotate" system for use with the ECS.
-	// Create a rotation component that contains various parameters (speed, axis, etc)
-	//auto transform = engine.getECS().getComponent<Transform>(sphere);
-	//const auto p = transform->getPosition();
-	//const auto v = XMVector3Transform(p, XMMatrixRotationY(delta_time));
-	//transform->setPosition(v);
 }

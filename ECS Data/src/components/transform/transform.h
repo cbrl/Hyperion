@@ -168,6 +168,15 @@ public:
 		rotateZClamped(XMVectorGetZ(units), min, max);
 	}
 
+	void rotateAround(vec3_f32 axis, f32 units) {
+		rotateAround(XMLoad(&axis), units);
+	}
+
+	void XM_CALLCONV rotateAround(FXMVECTOR axis, f32 units) {
+		translation = XMVector3Transform(translation, XMMatrixRotationAxis(axis, units));
+		needs_update = true;
+	}
+
 	void setRotation(const vec3_f32& rotation) {
 		this->rotation = XMLoad(&rotation);
 		needs_update = true;

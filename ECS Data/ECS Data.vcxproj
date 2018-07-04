@@ -141,6 +141,7 @@
     <ClInclude Include="src\components\light\point_light.h" />
     <ClInclude Include="src\components\light\spot_light.h" />
     <ClInclude Include="src\components\model\model.h" />
+    <ClInclude Include="src\components\motor\axis_orbit.h" />
     <ClInclude Include="src\components\motor\axis_rotation.h" />
     <ClInclude Include="src\components\motor\camera_movement.h" />
     <ClInclude Include="src\components\motor\mouse_rotation.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="src\entities\world_object.h" />
     <ClInclude Include="src\systems\camera\camera_system.h" />
     <ClInclude Include="src\systems\model\model_system.h" />
+    <ClInclude Include="src\systems\motor\axis_orbit_system.h" />
     <ClInclude Include="src\systems\motor\axis_rotation_system.h" />
     <ClInclude Include="src\systems\motor\camera_motor_system.h" />
     <ClInclude Include="src\systems\motor\mouse_rotation_system.h" />
@@ -169,6 +171,7 @@
     <ClCompile Include="src\components\model\model.cpp" />
     <ClCompile Include="src\systems\camera\camera_system.cpp" />
     <ClCompile Include="src\systems\model\model_system.cpp" />
+    <ClCompile Include="src\systems\motor\axis_orbit_system.cpp" />
     <ClCompile Include="src\systems\motor\axis_rotation_system.cpp" />
     <ClCompile Include="src\systems\motor\camera_motor_system.cpp" />
     <ClCompile Include="src\systems\motor\mouse_rotation_system.cpp" />

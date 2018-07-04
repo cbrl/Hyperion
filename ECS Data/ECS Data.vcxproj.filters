@@ -156,6 +156,12 @@
     <ClInclude Include="src\components\motor\axis_rotation.h">
       <Filter>Header Files\components\motor</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\motor\axis_orbit.h">
+      <Filter>Header Files\components\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\motor\axis_orbit_system.h">
+      <Filter>Header Files\systems\motor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -186,6 +192,9 @@
       <Filter>Source Files\systems\motor</Filter>
     </ClCompile>
     <ClCompile Include="src\systems\motor\axis_rotation_system.cpp">
+      <Filter>Source Files\systems\motor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\motor\axis_orbit_system.cpp">
       <Filter>Source Files\systems\motor</Filter>
     </ClCompile>
   </ItemGroup>
