@@ -42,6 +42,11 @@ public:
 		updateProjectionMatrix();
 	}
 
+	[[nodiscard]]
+	f32 getFOV() const {
+		return fov;
+	}
+
 
 protected:
 	// Update the projection matrix after changing depth/width/height/etc...

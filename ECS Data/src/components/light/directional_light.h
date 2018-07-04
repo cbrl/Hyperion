@@ -92,7 +92,7 @@ public:
 	// Member Functions - Range
 	//----------------------------------------------------------------------------------
 	void setRange(f32 range) {
-		this->range = range;
+		this->range = std::max(0.01f, range);
 		updateBoundingVolumes();
 	}
 

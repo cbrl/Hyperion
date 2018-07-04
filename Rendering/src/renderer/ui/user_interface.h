@@ -79,6 +79,7 @@ private:
 	void drawDetails(CameraMovement& movement) const;
 	void drawDetails(MouseRotation& rotation) const;
 	void drawDetails(AxisRotation& rotation) const;
+	void drawDetails(AxisOrbit& orbit) const;
 
 
 	//----------------------------------------------------------------------------------

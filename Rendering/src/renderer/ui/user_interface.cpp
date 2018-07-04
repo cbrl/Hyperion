@@ -271,6 +271,11 @@ void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
 			drawNode("Axis Rotation", *axis_rotation);
 		}
 
+		// Axis Orbit
+		if (auto* axis_orbit = ecs_engine.getComponent<AxisOrbit>(entity)) {
+			drawNode("Axis Orbit", *axis_orbit);
+		}
+
 		ImGui::TreePop();
 	}
 
@@ -324,6 +329,18 @@ void UserInterface::drawDetails(Transform& transform) const {
 
 void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 
+	drawComponentState(camera);
+
+
+	ImGui::Text("Camera");
+	ImGui::Separator();
+
+	f32 fov = camera.getFOV();
+	if (ImGui::DragFloat("FOV", &fov, 0.01f, XM_PI/8.0f, XM_2PI/3.0f)) {
+		camera.setFOV(fov);
+	}
+
+
 	ImGui::Text("Fog");
 	ImGui::Separator();
 
@@ -351,6 +368,16 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 void UserInterface::drawDetails(OrthographicCamera& camera) const {
 
 	drawComponentState(camera);
+
+
+	ImGui::Text("Camera");
+	ImGui::Separator();
+
+	auto ortho_size = camera.getSize();
+	if (ImGui::DragFloat2("Orthographic Size", ortho_size.data(), 0.01f, 1.0f, 100.0f)) {
+		camera.setSize(ortho_size);
+	}
+
 
 	ImGui::Text("Fog");
 	ImGui::Separator();
@@ -594,6 +621,20 @@ void UserInterface::drawDetails(AxisRotation& rotation) const {
 		if (ImGui::DragFloat("Z Speed", &speed_z, 0.05f, -FLT_MAX, FLT_MAX)) {
 			rotation.setSpeedZ(speed_z);
 		}
+	}
+}
+
+
+void UserInterface::drawDetails(AxisOrbit& orbit) const {
+	
+	drawComponentState(orbit);
+
+	ImGui::Text("Axis Orbit");
+	ImGui::Separator();
+
+	auto axis = XMStore<vec3_f32>(orbit.getAxis());
+	if (ImGui::InputFloat3("Axis", axis.data())) {
+		orbit.setAxis(axis);
 	}
 }
 
