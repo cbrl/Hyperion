@@ -31,7 +31,7 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 
 
 	//----------------------------------------------------------------------------------
-	// Render objects with forward shaderaaa
+	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
 	forward_pass->render(engine, skybox, world_to_projection);
 

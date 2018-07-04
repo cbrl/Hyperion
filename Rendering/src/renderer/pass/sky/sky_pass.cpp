@@ -45,7 +45,7 @@ void SkyPass::bindRenderStates(const RenderStateMgr& render_state_mgr) const {
 
 	render_state_mgr.bindOpaque(device_context);
 	render_state_mgr.bindDepthRead(device_context);
-	render_state_mgr.bindCullNone(device_context);
+	render_state_mgr.bindCullCounterClockwise(device_context);
 
 	vertex_shader->bind(device_context);
 	pixel_shader->bind(device_context);

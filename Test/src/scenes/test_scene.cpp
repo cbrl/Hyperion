@@ -4,7 +4,7 @@
 
 
 static constexpr f32 z_near = 0.01f;
-static constexpr f32 z_far  = 100.0f;
+static constexpr f32 z_far  = 1000.0f;
 static constexpr f32 fov    = XM_PI / 3.0f;
 
 
