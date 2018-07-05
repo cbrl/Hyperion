@@ -82,9 +82,6 @@
     <Filter Include="Source Files\buffer">
       <UniqueIdentifier>{2be99d4f-977e-4da5-81af-189bbd49072c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\resource\texture">
-      <UniqueIdentifier>{8d9a8613-c9f3-4493-889b-595f8c6b82fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\resource\mesh">
       <UniqueIdentifier>{7aec67e8-4e14-4253-9faa-07d9c27610a7}</UniqueIdentifier>
     </Filter>
@@ -141,9 +138,6 @@
     <ClCompile Include="src\buffer\shadow_map_buffer.cpp">
       <Filter>Source Files\buffer</Filter>
     </ClCompile>
-    <ClCompile Include="src\loader\texture_loader.cpp">
-      <Filter>Source Files\resource\texture</Filter>
-    </ClCompile>
     <ClCompile Include="src\render_state_mgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -170,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="src\renderer\ui\user_interface.cpp">
       <Filter>Source Files\renderer\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\texture_loader.cpp">
+      <Filter>Source Files\loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 #include "texture_loader.h"
+#include <DirectXTex.h>
 #include "io/io.h"
 #include "log/log.h"
 
@@ -17,10 +18,28 @@ namespace TextureLoader {
 			return LoadTexture(device, 0xFFFFFFFF, srv_out);
 		}
 
+		const wstring ext = GetFileExtension(filename);
+
 		// Load the texture into the shader resource view
-		if (GetFileExtension(filename) == L".dds") {
+		if (ext == L".dds") {
 			ThrowIfFailed(CreateDDSTextureFromFile(&device, filename.c_str(), nullptr, srv_out),
 			              "Failed to create DDS texture");
+		}
+		else if (ext == L".tga") {
+			ScratchImage image;
+			LoadFromTGAFile(filename.c_str(), nullptr, image);
+
+			ComPtr<ID3D11Resource> texture;
+			ThrowIfFailed(CreateTexture(&device, image.GetImages(), image.GetImageCount(), image.GetMetadata(), texture.GetAddressOf()),
+			              "Failed to create TGA texture");
+
+			D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
+			srv_desc.Format              = DXGI_FORMAT_R8G8B8A8_UNORM;
+			srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_TEXTURE2D;
+			srv_desc.Texture2D.MipLevels = image.GetMetadata().mipLevels;
+
+			ThrowIfFailed(device.CreateShaderResourceView(texture.Get(), &srv_desc, srv_out),
+						  "Failed to create SRV");
 		}
 		else {
 			ThrowIfFailed(CreateWICTextureFromFile(&device, &device_context, filename.c_str(), nullptr, srv_out),
