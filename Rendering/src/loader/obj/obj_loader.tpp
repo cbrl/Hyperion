@@ -8,19 +8,37 @@ template<typename VertexT>
 void OBJLoader<VertexT>::reset() {
 	// Reset the local variables
 	rh_coord    = false;
-	group_count = 0;
-	mtl_count   = 0;
 
 	// Clear vectors
 	vertices.clear();
+	vertices.shrink_to_fit();
+
+	index_map.clear();
+	index_map.shrink_to_fit();
+
 	indices.clear();
+	indices.shrink_to_fit();
+
 	vertex_positions.clear();
+	vertex_positions.shrink_to_fit();
+
 	vertex_normals.clear();
+	vertex_normals.shrink_to_fit();
+
 	vertex_texCoords.clear();
+	vertex_texCoords.shrink_to_fit();
+
 	mat_lib.clear();
+	mat_lib.shrink_to_fit();
+
 	materials.clear();
+	materials.shrink_to_fit();
+
 	groups.clear();
+	groups.shrink_to_fit();
+
 	group_mat_names.clear();
+	group_mat_names.shrink_to_fit();
 }
 
 
@@ -52,7 +70,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 
 	// Create the materials
 	vector<Material> mtl_vector;
-	for (u32 i = 0; i < mtl_count; ++i) {
+	for (u32 i = 0; i < materials.size(); ++i) {
 		Material mtl;
 
 		mtl.name = wstr2str(materials[i].name);
@@ -179,8 +197,6 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 			groups.push_back(Group());
 			groups.back().name        = wstr2str(name);
 			groups.back().index_start = static_cast<u32>(indices.size());
-
-			++group_count;
 		}
 
 		// Face
@@ -195,7 +211,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 		// Group Material
 		else if (token == ObjTokens::use_mtl) {
-			group_mat_names[group_count - 1] = TrimWhiteSpace(line);
+			group_mat_names[groups.size() - 1] = TrimWhiteSpace(line);
 		}
 	}
 
@@ -208,7 +224,6 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 	if (groups.size() > 1) {
 		if (groups[1].index_start == 0) {
 			groups.erase(groups.begin() + 1);
-			--group_count;
 		}
 	}
 }
@@ -252,49 +267,47 @@ void OBJLoader<VertexT>::loadMaterials(wstring folder) {
 			OBJMaterial temp;
 			temp.name = line;
 			materials.push_back(temp);
-
-			++mtl_count;
 		}
 
 		// Diffuse Color
 		else if (token == ObjTokens::diffuse_color) {
-			stream >> materials[mtl_count - 1].Kd.x;
-			stream >> materials[mtl_count - 1].Kd.y;
-			stream >> materials[mtl_count - 1].Kd.z;
-			materials[mtl_count - 1].Kd.w = 1.0f;
+			stream >> materials.back().Kd.x;
+			stream >> materials.back().Kd.y;
+			stream >> materials.back().Kd.z;
+			materials.back().Kd.w = 1.0f;
 		}
 
 		// Ambient Color
 		else if (token == ObjTokens::ambient_color) {
-			stream >> materials[mtl_count - 1].Ka.x;
-			stream >> materials[mtl_count - 1].Ka.y;
-			stream >> materials[mtl_count - 1].Ka.z;
-			materials[mtl_count - 1].Ka.w = 1.0f;
+			stream >> materials.back().Ka.x;
+			stream >> materials.back().Ka.y;
+			stream >> materials.back().Ka.z;
+			materials.back().Ka.w = 1.0f;
 		}
 
 		// Specular Color
 		else if (token == ObjTokens::specular_color) {
-			stream >> materials[mtl_count - 1].Ks.x;
-			stream >> materials[mtl_count - 1].Ks.y;
-			stream >> materials[mtl_count - 1].Ks.z;
+			stream >> materials.back().Ks.x;
+			stream >> materials.back().Ks.y;
+			stream >> materials.back().Ks.z;
 		}
 
 		// Emissive Color
 		else if (token == ObjTokens::emissive_color) {
-			stream >> materials[mtl_count - 1].Ke.x;
-			stream >> materials[mtl_count - 1].Ke.y;
-			stream >> materials[mtl_count - 1].Ke.z;
-			materials[mtl_count - 1].Ke.w = 1.0f;
+			stream >> materials.back().Ke.x;
+			stream >> materials.back().Ke.y;
+			stream >> materials.back().Ke.z;
+			materials.back().Ke.w = 1.0f;
 		}
 
 		// Specular Expononet
 		else if (token == ObjTokens::specular_exponent) {
-			stream >> materials[mtl_count - 1].Ks.w;
+			stream >> materials.back().Ks.w;
 		}
 
 		// Optical Density
 		else if (token == ObjTokens::optical_density) {
-			stream >> materials[mtl_count - 1].Ni;
+			stream >> materials.back().Ni;
 		}
 
 		// Dissolve (transparency)
@@ -309,38 +322,38 @@ void OBJLoader<VertexT>::loadMaterials(wstring folder) {
 
 		// Illumination
 		else if (token == ObjTokens::illumination_model) {
-			stream >> materials[mtl_count - 1].illum;
+			stream >> materials.back().illum;
 		}
 
 		// Diffuse Map
 		else if (token == ObjTokens::diffuse_color_map) {
-			materials[mtl_count - 1].map_Kd = line;
+			materials.back().map_Kd = line;
 		}
 
 		// Alpha Map
 		else if (token == ObjTokens::alpha_texture_map) {
-			materials[mtl_count - 1].map_d        = line;
-			materials[mtl_count - 1].transparency = true;
+			materials.back().map_d        = line;
+			materials.back().transparency = true;
 		}
 
 		// Ambient Map
 		else if (token == ObjTokens::ambient_color_map) {
-			materials[mtl_count - 1].map_Ka = line;
+			materials.back().map_Ka = line;
 		}
 
 		// Specular Map
 		else if (token == ObjTokens::specular_color_map) {
-			materials[mtl_count - 1].map_Ks = line;
+			materials.back().map_Ks = line;
 		}
 
 		// Specular Highlight Map
 		else if (token == ObjTokens::spec_highlight_map) {
-			materials[mtl_count - 1].map_Ns = line;
+			materials.back().map_Ns = line;
 		}
 
 		// Bump Map
 		else if (token == ObjTokens::bump_map || token == ObjTokens::bump_map2) {
-			materials[mtl_count - 1].map_bump = line;
+			materials.back().map_bump = line;
 		}
 	}
 
@@ -350,7 +363,7 @@ void OBJLoader<VertexT>::loadMaterials(wstring folder) {
 
 	// Set the group's material to the index value of its
 	// material in the material vector.
-	for (u32 i = 0; i < group_count; ++i) {
+	for (u32 i = 0; i < groups.size(); ++i) {
 
 		// Use the first material if the group has no material assigned
 		if (group_mat_names[i].empty()) {
@@ -377,10 +390,10 @@ void OBJLoader<VertexT>::readTransparency(wstring& line, bool inverse) {
 		transparency = 1.0f - transparency;
 	}
 
-	materials[mtl_count - 1].d = transparency;
+	materials.back().d = transparency;
 
 	if (transparency > 0.0f) {
-		materials[mtl_count - 1].transparency = true;
+		materials.back().transparency = true;
 	}
 }
 
@@ -438,10 +451,9 @@ void OBJLoader<VertexT>::readFace(wstring& line) {
 
 
 	// If no group has been defined, then create one manually
-	if (group_count == 0) {
+	if (groups.size() == 0) {
 		groups.emplace_back();
 		groups.back().index_start = static_cast<u32>(indices.size());
-		++group_count;
 	}
 
 	// Triangulate the face if there were more than 3 points

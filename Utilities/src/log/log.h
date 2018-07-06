@@ -12,6 +12,11 @@ private:
 		try {
 			file    = spdlog::rotating_logger_mt("file_log", "log.txt", 1024 * 1024, 1);
 			console = spdlog::stdout_color_mt("console_log");
+
+			#ifdef _DEBUG
+			file->set_level(LogLevel::debug);
+			console->set_level(LogLevel::debug);
+			#endif
 		}
 		catch (const spdlog::spdlog_ex& ex) {
 			std::cout << "Log initialization failed: " << ex.what() << std::endl;
@@ -34,7 +39,7 @@ public:
 
 public:
 	//----------------------------------------------------------------------------------
-	// Log all
+	// All Loggers
 	//----------------------------------------------------------------------------------
 
 	// Log a message with both loggers
@@ -53,19 +58,27 @@ public:
 	                Args&&... args) {
 
 		auto& instance = get();
-		instance.file->log(level, fmt, arg1, std::forward<Args>(args)...);
-		instance.console->log(level, fmt, arg1, std::forward<Args>(args)...);
+		if (instance.file) instance.file->log(level, fmt, arg1, std::forward<Args>(args)...);
+		if (instance.console) instance.console->log(level, fmt, arg1, std::forward<Args>(args)...);
+	}
+
+	// Set the level of both loggers
+	static void setLevel(LogLevel level) {
+		auto& instance = get();
+		if (instance.file) instance.file->set_level(level);
+		if (instance.console) instance.console->set_level(level);
 	}
 
 
 	//----------------------------------------------------------------------------------
-	// Console Log
+	// Console Log (std::cout)
 	//----------------------------------------------------------------------------------
 
 	// Log a message with the default console logger
 	template<typename T>
 	static void logConsole(LogLevel level, const T& msg) {
-		get().console->log(level, msg);
+		auto& instance = get();
+		if (instance.console) instance.console->log(level, msg);
 	}
 
 	// Log a message with the default console logger
@@ -75,7 +88,14 @@ public:
 	                       const Arg1& arg1,
 	                       ArgsT&&... args) {
 
-		get().console->log(level, fmt, arg1, std::forward<ArgsT>(args)...);
+		auto& instance = get();
+		if (instance.console) instance.console->log(level, fmt, arg1, std::forward<ArgsT>(args)...);
+	}
+
+	// Set the level of the console logger
+	static void setConsoleLevel(LogLevel level) {
+		auto& instance = get();
+		if (instance.console) instance.console->set_level(level);
 	}
 
 
@@ -86,7 +106,8 @@ public:
 	// Log a message with the default file logger
 	template<typename T>
 	static void logFile(LogLevel level, const T& msg) {
-		get().file->log(level, msg);
+		auto& instance = get();
+		if (instance.file) instance.file->log(level, msg);
 	}
 
 	// Log a message with the default file logger
@@ -96,7 +117,14 @@ public:
 	                    const Arg1& arg1,
 	                    ArgsT&&... args) {
 
-		get().file->log(level, fmt, arg1, std::forward<ArgsT>(args)...);
+		auto& instance = get();
+		if (instance.file) instance.file->log(level, fmt, arg1, std::forward<ArgsT>(args)...);
+	}
+
+	// Set the level of the file logger
+	static void setFileLevel(LogLevel level) {
+		auto& instance = get();
+		if (instance.file) instance.file->set_level(level);
 	}
 
 

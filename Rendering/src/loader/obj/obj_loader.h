@@ -91,8 +91,9 @@ private:
 
 private:
 	static bool rh_coord;
-	static u32 group_count;
-	static u32 mtl_count;
+
+	// Vector of group definitions
+	static vector<Group> groups;
 
 	// Vector of complete vertex definitions
 	static vector<VertexT> vertices;
@@ -109,9 +110,6 @@ private:
 	// Material library name
 	static wstring mat_lib;
 
-	// Vector of group definitions
-	static vector<Group> groups;
-
 	// Material names for each group <grp number, mat name>
 	static map<u32, wstring> group_mat_names;
 
@@ -126,12 +124,6 @@ private:
 
 template<typename VertexT>
 bool OBJLoader<VertexT>::rh_coord = false;
-
-template<typename VertexT>
-u32 OBJLoader<VertexT>::group_count = 0;
-
-template<typename VertexT>
-u32 OBJLoader<VertexT>::mtl_count = 0;
 
 template<typename VertexT>
 vector<VertexT> OBJLoader<VertexT>::vertices;
