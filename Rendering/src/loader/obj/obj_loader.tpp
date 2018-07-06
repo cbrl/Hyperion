@@ -408,7 +408,7 @@ void OBJLoader<VertexT>::readFace(wstring& line) {
 				face_def.push_back(vertex);
 				break;
 
-				// Position/Texture
+			// Position/Texture
 			case 2:
 				vertex.x = stoi(vert_parts[0]);
 				vertex.y = stoi(vert_parts[1]);

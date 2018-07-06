@@ -322,9 +322,9 @@
     <None Include="src\memory\managed_resource_map.tpp">
       <Filter>Source Files\memory</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="src\log\spdlog\fmt\bundled\LICENSE.rst">
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

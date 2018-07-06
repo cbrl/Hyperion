@@ -18,16 +18,6 @@ struct VertexPosition final {
 	constexpr VertexPosition& operator=(const VertexPosition& vertex) noexcept = default;
 	constexpr VertexPosition& operator=(VertexPosition&& vertex) noexcept = default;
 
-	[[nodiscard]]
-	constexpr bool operator==(const VertexPosition& compare) noexcept {
-		return (this->position == compare.position);
-	}
-
-	[[nodiscard]]
-	constexpr bool operator!=(const VertexPosition& compare) noexcept {
-		return !(*this == compare);
-	}
-
 	static constexpr bool hasNormal() noexcept { return false; }
 	static constexpr bool hasColor() noexcept { return false; }
 	static constexpr bool hasTexture() noexcept { return false; }
@@ -57,17 +47,6 @@ struct VertexPositionColor final {
 
 	constexpr VertexPositionColor& operator=(const VertexPositionColor& vertex) noexcept = default;
 	constexpr VertexPositionColor& operator=(VertexPositionColor&& vertex) noexcept = default;
-
-	[[nodiscard]]
-	constexpr bool operator==(const VertexPositionColor& compare) noexcept {
-		return (this->position == compare.position &&
-		        this->color    == compare.color);
-	}
-
-	[[nodiscard]]
-	constexpr bool operator!=(const VertexPositionColor& compare) noexcept {
-		return !(*this == compare);
-	}
 
 	static constexpr bool hasNormal() noexcept { return false; }
 	static constexpr bool hasColor() noexcept { return true; }
@@ -99,17 +78,6 @@ struct VertexPositionTexture final {
 
 	constexpr VertexPositionTexture& operator=(const VertexPositionTexture& vertex) noexcept = default;
 	constexpr VertexPositionTexture& operator=(VertexPositionTexture&& vertex) noexcept = default;
-
-	[[nodiscard]]
-	constexpr bool operator==(const VertexPositionTexture& compare) noexcept {
-		return (this->position == compare.position &&
-		        this->texCoord == compare.texCoord);
-	}
-
-	[[nodiscard]]
-	constexpr bool operator!=(const VertexPositionTexture& compare) noexcept {
-		return !(*this == compare);
-	}
 
 	static constexpr bool hasNormal() noexcept { return false; }
 	static constexpr bool hasColor() noexcept { return false; }
@@ -143,18 +111,6 @@ struct VertexPositionDualTexture final {
 	constexpr VertexPositionDualTexture& operator=(const VertexPositionDualTexture& vertex) noexcept = default;
 	constexpr VertexPositionDualTexture& operator=(VertexPositionDualTexture&& vertex) noexcept = default;
 
-	[[nodiscard]]
-	constexpr bool operator==(const VertexPositionDualTexture& compare) noexcept {
-		return (this->position  == compare.position &&
-		        this->texCoord0 == compare.texCoord0 &&
-		        this->texCoord1 == compare.texCoord1);
-	}
-
-	[[nodiscard]]
-	constexpr bool operator!=(const VertexPositionDualTexture& compare) noexcept {
-		return !(*this == compare);
-	}
-
 	static constexpr bool hasNormal() noexcept { return false; }
 	static constexpr bool hasColor() noexcept { return false; }
 	static constexpr bool hasTexture() noexcept { return true; }
@@ -186,17 +142,6 @@ struct VertexPositionNormal final {
 
 	constexpr VertexPositionNormal& operator=(const VertexPositionNormal& vertex) noexcept = default;
 	constexpr VertexPositionNormal& operator=(VertexPositionNormal&& vertex) noexcept = default;
-
-	[[nodiscard]]
-	constexpr bool operator==(const VertexPositionNormal& compare) noexcept {
-		return (this->position == compare.position &&
-		        this->normal   == compare.normal);
-	}
-
-	[[nodiscard]]
-	constexpr bool operator!=(const VertexPositionNormal& compare) noexcept {
-		return !(*this == compare);
-	}
 
 	static constexpr bool hasNormal() noexcept { return true; }
 	static constexpr bool hasColor() noexcept { return false; }
@@ -230,18 +175,6 @@ struct VertexPositionNormalColor final {
 	constexpr VertexPositionNormalColor& operator=(const VertexPositionNormalColor& vertex) noexcept = default;
 	constexpr VertexPositionNormalColor& operator=(VertexPositionNormalColor&& vertex) noexcept = default;
 
-	[[nodiscard]]
-	constexpr bool operator==(const VertexPositionNormalColor& compare) noexcept {
-		return (this->position == compare.position &&
-		        this->normal   == compare.normal &&
-		        this->color    == compare.color);
-	}
-
-	[[nodiscard]]
-	constexpr bool operator!=(const VertexPositionNormalColor& compare) noexcept {
-		return !(*this == compare);
-	}
-
 	static constexpr bool hasNormal() noexcept { return true; }
 	static constexpr bool hasColor() noexcept { return true; }
 	static constexpr bool hasTexture() noexcept { return false; }
@@ -274,18 +207,6 @@ struct VertexPositionNormalTexture final {
 
 	constexpr VertexPositionNormalTexture& operator=(const VertexPositionNormalTexture& vertex) noexcept = default;
 	constexpr VertexPositionNormalTexture& operator=(VertexPositionNormalTexture&& vertex) noexcept = default;
-
-	[[nodiscard]]
-	constexpr bool operator==(const VertexPositionNormalTexture& compare) noexcept {
-		return (this->position == compare.position &&
-		        this->normal   == compare.normal &&
-		        this->texCoord == compare.texCoord);
-	}
-
-	[[nodiscard]]
-	constexpr bool operator!=(const VertexPositionNormalTexture& compare) noexcept {
-		return !(*this == compare);
-	}
 
 	static constexpr bool hasNormal() noexcept { return true; }
 	static constexpr bool hasColor() noexcept { return false; }
