@@ -17,7 +17,7 @@ ModelOutput<VertexT>::ModelOutput(const string& name,
 
 	// Create the bounding sphere
 	auto center = (min + max) / 2;
-	auto radius = XMVectorGetX(XMVector3Length(max - min));
+	auto radius = XMVectorGetX(XMVector3Length(XMLoad(&max) - XMLoad(&min)));
 
 	sphere = BoundingSphere(center, radius);
 

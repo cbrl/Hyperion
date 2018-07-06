@@ -14,7 +14,6 @@ void OBJLoader<VertexT>::reset() {
 	vertices.shrink_to_fit();
 
 	index_map.clear();
-	index_map.shrink_to_fit();
 
 	indices.clear();
 	indices.shrink_to_fit();
@@ -38,7 +37,6 @@ void OBJLoader<VertexT>::reset() {
 	groups.shrink_to_fit();
 
 	group_mat_names.clear();
-	group_mat_names.shrink_to_fit();
 }
 
 
@@ -206,12 +204,12 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 		// Material Library
 		if (token == ObjTokens::mtl_library) {
-			mat_lib = TrimWhiteSpace(line);
+			mat_lib = line;
 		}
 
 		// Group Material
 		else if (token == ObjTokens::use_mtl) {
-			group_mat_names[groups.size() - 1] = TrimWhiteSpace(line);
+			group_mat_names[static_cast<u32>(groups.size()) - 1] = line;
 		}
 	}
 

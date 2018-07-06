@@ -41,7 +41,7 @@ void LoadTexture(ID3D11Device& device,
 		D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
 		srv_desc.Format              = image.GetMetadata().format;
 		srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_TEXTURE2D;
-		srv_desc.Texture2D.MipLevels = image.GetMetadata().mipLevels;
+		srv_desc.Texture2D.MipLevels = static_cast<u32>(image.GetMetadata().mipLevels);
 
 		ThrowIfFailed(device.CreateShaderResourceView(texture.Get(), &srv_desc, srv_out),
 					  "Failed to create SRV");

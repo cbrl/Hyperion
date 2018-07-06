@@ -79,7 +79,6 @@ private:
 private:
 	static void reset();
 
-
 	static void loadModel(wstring filename);
 	static void readFace(wstring& line);
 	static VertexT createVertex(vec3_u32 vert_def);

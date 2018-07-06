@@ -1,8 +1,8 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
-#include "directx/directx_math_wrapper.h"
-#include <utility>
+#include "math/math.h"
+#include <utility> //std::pair
 
 
 // Include the DirectX namespace, which contains
@@ -77,9 +77,9 @@ inline bool XM_CALLCONV PointInTriangle(FXMVECTOR vert1,
 // Find the minimum and maximum points in a vector of vertices
 template<typename VertexT>
 [[nodiscard]]
-std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& vertices) {
-	vec3_f32 min{FLT_MAX, FLT_MAX, FLT_MAX};
-	vec3_f32 max{FLT_MIN, FLT_MIN, FLT_MIN};
+std::pair<vec3_f32, vec3_f32> MinMaxPoint(const std::vector<VertexT>& vertices) {
+	vec3_f32 min{ std::numeric_limits<float>::max() };
+	vec3_f32 max{ std::numeric_limits<float>::lowest() };
 
 	for (const auto& vertex : vertices) {
 		min.x = std::fminf(min.x, vertex.position.x);
@@ -91,13 +91,13 @@ std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<VertexT>& vertices) 
 		max.z = std::fmaxf(max.z, vertex.position.z);
 	}
 
-	return std::pair<XMVECTOR, XMVECTOR>(XMLoad(&min), XMLoad(&max));
+	return {min, max};
 }
 
 [[nodiscard]]
-inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<vec3_f32>& vertices) {
-	vec3_f32 min{FLT_MAX, FLT_MAX, FLT_MAX};
-	vec3_f32 max{FLT_MIN, FLT_MIN, FLT_MIN};
+inline std::pair<vec3_f32, vec3_f32> MinMaxPoint(const std::vector<vec3_f32>& vertices) {
+	vec3_f32 min{ std::numeric_limits<float>::max() };
+	vec3_f32 max{ std::numeric_limits<float>::lowest() };
 
 	for (const vec3_f32& vertex : vertices) {
 		min.x = std::fminf(min.x, vertex.x);
@@ -109,20 +109,20 @@ inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<vec3_f32>& ve
 		max.z = std::fmaxf(max.z, vertex.z);
 	}
 
-	return std::pair<XMVECTOR, XMVECTOR>(XMLoad(&min), XMLoad(&max));
+	return {min, max};
 }
 
 [[nodiscard]]
 inline std::pair<XMVECTOR, XMVECTOR> MinMaxPoint(const std::vector<XMVECTOR>& vertices) {
 	XMVECTOR min{FLT_MAX, FLT_MAX, FLT_MAX};
-	XMVECTOR max{FLT_MIN, FLT_MIN, FLT_MIN};
+	XMVECTOR max{-FLT_MAX, -FLT_MAX, -FLT_MAX};
 
 	for (const XMVECTOR& vertex : vertices) {
 		min = XMVectorMin(min, vertex);
 		max = XMVectorMax(max, vertex);
 	}
 
-	return std::pair<XMVECTOR, XMVECTOR>(min, max);
+	return {min, max};
 }
 
 

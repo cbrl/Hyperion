@@ -16,9 +16,14 @@ struct Vector2 {
 	constexpr Vector2(const Vector2<T>& vec) noexcept = default;
 	constexpr Vector2(Vector2<T>&& vec) noexcept = default;
 
-	constexpr Vector2(T _x, T _y) noexcept
-		: x(_x)
-		, y(_y){
+	constexpr Vector2(T n) noexcept
+		: x(n)
+		, y(n) {
+	}
+
+	constexpr Vector2(T x, T y) noexcept
+		: x(x)
+		, y(y){
 	}
 
 	~Vector2() noexcept = default;
@@ -169,16 +174,22 @@ struct Vector3 {
 	constexpr Vector3(const Vector3<T>& vec) noexcept = default;
 	constexpr Vector3(Vector3<T>&& vec) noexcept = default;
 
-	constexpr Vector3(T _x, T _y, T _z) noexcept
-		: x(_x)
-		, y(_y)
-		, z(_z) {
+	constexpr Vector3(T n) noexcept
+		: x(n)
+		, y(n)
+		, z(n) {
 	}
 
-	constexpr Vector3(const Vector2<T>& _xy, T _z) noexcept
-		: x(_xy.x)
-		, y(_xy.y)
-		, z(_z) {
+	constexpr Vector3(T x, T y, T z) noexcept
+		: x(x)
+		, y(y)
+		, z(z) {
+	}
+
+	constexpr Vector3(const Vector2<T>& xy, T z) noexcept
+		: x(xy.x)
+		, y(xy.y)
+		, z(z) {
 	}
 
 	~Vector3() noexcept = default;
@@ -336,25 +347,32 @@ struct Vector4 {
 	constexpr Vector4(const Vector4<T>& _xyzw) noexcept = default;
 	constexpr Vector4(Vector4<T>&& vec) noexcept = default;
 
-	constexpr Vector4(T _x, T _y, T _z, T _w) noexcept
-		: x(_x)
-		, y(_y)
-		, z(_z)
-		, w(_w) {
+	constexpr Vector4(T n) noexcept
+		: x(n)
+		, y(n)
+		, z(n)
+		, w(n) {
 	}
 
-	constexpr Vector4(const Vector2<T>& _xy, T _z, T _w) noexcept
-		: x(_xy.x)
-		, y(_xy.y)
-		, z(_z)
-		, w(_w) {
+	constexpr Vector4(T x, T y, T z, T w) noexcept
+		: x(x)
+		, y(y)
+		, z(z)
+		, w(w) {
 	}
 
-	constexpr Vector4(const Vector3<T>& _xyz, T _w) noexcept
-		: x(_xyz.x)
-		, y(_xyz.y)
-		, z(_xyz.z)
-		, w(_w) {
+	constexpr Vector4(const Vector2<T>& xy, T z, T w) noexcept
+		: x(xy.x)
+		, y(xy.y)
+		, z(z)
+		, w(w) {
+	}
+
+	constexpr Vector4(const Vector3<T>& xyz, T w) noexcept
+		: x(xyz.x)
+		, y(xyz.y)
+		, z(xyz.z)
+		, w(w) {
 	}
 
 	~Vector4() noexcept = default;
