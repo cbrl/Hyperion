@@ -5,7 +5,7 @@
 void AxisOrbitSystem::update(const Engine& engine) {
 	
 	auto& ecs_engine = engine.getECS();
-	f64   delta_time = engine.getTimer().deltaTime();
+	f32   delta_time = static_cast<f32>(engine.getTimer().deltaTime());
 
 	ecs_engine.forEach<AxisOrbit>([&] (AxisOrbit& orbit) {
 	

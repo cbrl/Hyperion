@@ -10,13 +10,13 @@
 using namespace DirectX;
 
 
-// Convert a vec4_f32 to a hex color value
+// Convert an rgba vector [0.0f, 1.0f] to a hex color value
 [[nodiscard]]
-inline uint32_t Float4ColorToU32(const vec4_f32& color) {
-	return static_cast<uint32_t>(color.x * 0xff)            //R
-	       | (static_cast<uint32_t>(color.y * 0xff) << 8)   //G
-	       | (static_cast<uint32_t>(color.z * 0xff) << 16)  //B
-	       | (static_cast<uint32_t>(color.w * 0xff) << 24); //A
+inline u32 Float4ColorToU32(const vec4_f32& color) {
+	return static_cast<u32>(color.x * 0xff)            //R
+	       | (static_cast<u32>(color.y * 0xff) << 8)   //G
+	       | (static_cast<u32>(color.z * 0xff) << 16)  //B
+	       | (static_cast<u32>(color.w * 0xff) << 24); //A
 }
 
 
