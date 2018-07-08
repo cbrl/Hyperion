@@ -62,7 +62,7 @@ class SystemMonitor final {
 		friend class SystemMonitor;
 
 	protected:
-		CpuMonitor()
+		CpuMonitor() noexcept
 			: dt(0)
 			, sys_usage(0)
 			, proc_usage(0) {
@@ -98,7 +98,7 @@ class SystemMonitor final {
 		friend class SystemMonitor;
 
 	protected:
-		MemoryMonitor() {
+		MemoryMonitor() noexcept {
 			mem_info.dwLength = sizeof(MEMORYSTATUSEX);
 		}
 

@@ -14,14 +14,39 @@
 
 class Engine final : public MainWindow {
 public:
-	Engine()
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
+	Engine() noexcept
 		: resizing(false) {
-	};
+	}
+
+	Engine(const Engine& engine) = delete;
+	Engine(Engine&& engine) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~Engine();
 
-	bool init();
 
-	void addSystems() const;
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	Engine& operator=(const Engine& engine) = delete;
+	Engine& operator=(Engine&& engine) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+
+	// Initialize the engine
+	bool init();
 
 	// Unload the active scene (if applicable) and apply a new scene
 	void loadScene(unique_ptr<Scene>&& new_scene);
@@ -29,10 +54,8 @@ public:
 	// Begin the main loop
 	void run() override;
 
+	// Message handler
 	LRESULT msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;
-
-	void onResize(u32 window_width, u32 window_height);
-
 
 	[[nodiscard]]
 	HWND getHwnd() const {
@@ -86,11 +109,18 @@ public:
 
 
 private:
+	void addSystems() const;
+
 	void tick() const;
 	void processInput() const;
+	void onResize(u32 window_width, u32 window_height);
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	unique_ptr<SystemMonitor> system_monitor;
 	unique_ptr<HighResTimer> timer;
 	unique_ptr<FPS> fps_counter;

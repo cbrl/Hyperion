@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------------
 
 struct MaterialBuffer {
-	MaterialBuffer()
+	MaterialBuffer() noexcept
 		: ambient(0.0f, 0.0f, 0.0f, 1.0f)
 		, diffuse(0.0f, 0.0f, 0.0f, 1.0f)
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
@@ -29,7 +29,7 @@ struct MaterialBuffer {
 	               const f32 optical_density,
 	               const f32 dissolve,
 	               const bool has_texture,
-	               const bool reflection_enabled)
+	               const bool reflection_enabled) noexcept
 		: ambient(ambient)
 		, diffuse(diffuse)
 		, specular(specular)
@@ -54,7 +54,7 @@ struct MaterialBuffer {
 
 
 struct ModelBuffer {
-	ModelBuffer()
+	ModelBuffer() noexcept
 		: world(XMMatrixIdentity())
 		, world_inv_transpose(XMMatrixIdentity())
 		, texTransform(XMMatrixIdentity()) {
@@ -72,7 +72,7 @@ struct ModelBuffer {
 //----------------------------------------------------------------------------------
 
 struct Fog {
-	Fog()
+	Fog() noexcept
 		: color(0.0f, 0.0f, 0.0f, 1.0f)
 		, start(0.0f)
 		, range(0.0f) {
@@ -80,7 +80,7 @@ struct Fog {
 
 	Fog(const vec4_f32& color,
 	    const f32 start,
-	    const f32 range)
+	    const f32 range) noexcept
 		: color(color)
 		, start(start)
 		, range(range) {
@@ -93,7 +93,7 @@ struct Fog {
 
 
 struct LightBuffer {
-	LightBuffer()
+	LightBuffer() noexcept
 		: num_directional_lights(0)
 		, num_point_lights(0)
 		, num_spot_lights(0)
@@ -116,7 +116,7 @@ struct LightBuffer {
 	            const u32 shadowed_spot_lights,
 	            const vec4_f32& fog_color,
 	            const f32 fog_start,
-	            const f32 fog_range)
+	            const f32 fog_range) noexcept
 		: num_directional_lights(directional_lights)
 		, num_point_lights(point_lights)
 		, num_spot_lights(spot_lights)
@@ -149,19 +149,20 @@ struct LightBuffer {
 
 
 struct DirectionalLightBuffer {
-	DirectionalLightBuffer()
+	DirectionalLightBuffer() noexcept
 		: ambient_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, diffuse_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
 		, direction(0.0f, 0.0f, 0.0f)
-		, pad(0.0f) {
+		, pad(0.0f)
+		, world_to_projection(XMMatrixIdentity()) {
 	}
 
 	DirectionalLightBuffer(const vec4_f32& ambient,
 	                       const vec4_f32& diffuse,
 	                       const vec3_f32& direction,
 	                       const vec4_f32& specular,
-	                       CXMMATRIX world_to_proj)
+	                       CXMMATRIX world_to_proj) noexcept
 		: ambient_color(ambient)
 		, diffuse_color(diffuse)
 		, specular(specular)
@@ -180,7 +181,7 @@ struct DirectionalLightBuffer {
 
 
 struct PointLightBuffer {
-	PointLightBuffer()
+	PointLightBuffer() noexcept
 		: ambient_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, diffuse_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
@@ -195,7 +196,7 @@ struct PointLightBuffer {
 	                 const vec4_f32& specular,
 	                 const vec3_f32& position,
 	                 const f32 range,
-	                 const vec3_f32& attenuation)
+	                 const vec3_f32& attenuation) noexcept
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)
@@ -216,7 +217,7 @@ struct PointLightBuffer {
 
 
 struct ShadowedPointLightBuffer {
-	ShadowedPointLightBuffer()
+	ShadowedPointLightBuffer() noexcept
 		: world_to_light(XMMatrixIdentity())
 		, projection_values(0.0f, 0.0f)
 		, pad(0.0f, 0.0f) {
@@ -230,7 +231,7 @@ struct ShadowedPointLightBuffer {
 
 
 struct SpotLightBuffer {
-	SpotLightBuffer()
+	SpotLightBuffer() noexcept
 		: ambient_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, diffuse_color(0.0f, 0.0f, 0.0f, 1.0f)
 		, specular(0.0f, 0.0f, 0.0f, 1.0f)
@@ -250,7 +251,7 @@ struct SpotLightBuffer {
 	                const vec3_f32& direction,
 	                const f32 cos_umbra,
 	                const f32 cos_penumbra,
-	                const vec3_f32& attenuation)
+	                const vec3_f32& attenuation) noexcept
 		: ambient_color(ambient_color)
 		, diffuse_color(diffuse_color)
 		, specular(specular)
@@ -275,7 +276,7 @@ struct SpotLightBuffer {
 
 
 struct ShadowedSpotLightBuffer {
-	ShadowedSpotLightBuffer()
+	ShadowedSpotLightBuffer() noexcept
 		: world_to_projection(XMMatrixIdentity()) {
 	}
 
@@ -290,7 +291,7 @@ struct ShadowedSpotLightBuffer {
 //----------------------------------------------------------------------------------
 
 struct CameraBuffer {
-	CameraBuffer()
+	CameraBuffer() noexcept
 		: camera_to_world(XMMatrixIdentity())
 		, world_to_camera(XMMatrixIdentity())
 		, camera_to_projection(XMMatrixIdentity()) {
@@ -299,7 +300,7 @@ struct CameraBuffer {
 	CameraBuffer(CXMMATRIX camera_to_world,
 	             CXMMATRIX world_to_camera,
 	             CXMMATRIX camera_to_projection,
-	             const Fog& fog)
+	             const Fog& fog) noexcept
 		: camera_to_world(camera_to_world)
 		, world_to_camera(world_to_camera)
 		, camera_to_projection(camera_to_projection)
@@ -314,12 +315,12 @@ struct CameraBuffer {
 
 
 struct AltCameraBuffer {
-	AltCameraBuffer()
+	AltCameraBuffer() noexcept
 		: world_to_camera(XMMatrixIdentity())
 		, camera_to_projection(XMMatrixIdentity()) {
 	}
 
-	AltCameraBuffer(CXMMATRIX world_to_cam, CXMMATRIX cam_to_proj)
+	AltCameraBuffer(CXMMATRIX world_to_cam, CXMMATRIX cam_to_proj) noexcept
 		: world_to_camera(world_to_cam)
 		, camera_to_projection(cam_to_proj) {
 	}

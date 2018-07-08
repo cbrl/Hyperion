@@ -3,7 +3,7 @@
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
-	//Send message to handler in MainWindow (or derived class)
+	// Send message to handler in MainWindow (or derived class)
 	return handle->msgProc(hWnd, msg, wParam, lParam);
 }
 
@@ -122,7 +122,7 @@ LRESULT MainWindow::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 			PostQuitMessage(0);
 			return 0;
 
-			// Send other messages to default message handler
+		// Send other messages to the default message handler
 		default:
 			return DefWindowProc(hWnd, msg, wParam, lParam);
 	}

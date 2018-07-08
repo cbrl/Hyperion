@@ -19,7 +19,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	DisplayConfig()
+	DisplayConfig() noexcept
 		: curr_desc(0)
 		, anti_aliasing(AAType::none)
 		, fullscreen(false)

@@ -43,7 +43,7 @@ namespace ShaderFactory {
 
 	//shared_ptr<PixelShader> createDepthPS(ResourceMgr& resource_mgr) {
 
-	//	return resource_mgr.getOrCreate<PixelShader>(L"shader_depth_ps", BYTECODE(shader_depth_ps));
+	//	return resource_mgr.getOrCreate<PixelShader>(L"shader_depth_ps", ShaderBytecodeBuffer(shader_depth_ps, sizeof(shader_depth_ps)));
 	//}
 
 	shared_ptr<VertexShader> createDepthVS(ResourceMgr& resource_mgr) {

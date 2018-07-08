@@ -8,7 +8,7 @@ using LogLevel = spdlog::level::level_enum;
 
 class Logger final {
 private:
-	Logger() {
+	Logger() noexcept {
 		try {
 			file    = spdlog::rotating_logger_mt("file_log", "log.txt", 1024 * 1024, 1);
 			console = spdlog::stdout_color_mt("console_log");

@@ -10,7 +10,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	AxisOrbit()
+	AxisOrbit() noexcept
 		: axis(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f))
 		, speed(1.0f) {
 	}

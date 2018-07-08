@@ -25,7 +25,10 @@ private:
 
 
 public:
-	HandleTable() { allocateChunk(); }
+	HandleTable() noexcept {
+		allocateChunk();
+	}
+
 	~HandleTable() = default;
 
 	[[nodiscard]]
