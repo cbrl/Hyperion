@@ -1,6 +1,43 @@
 #include "input.h"
 
 
+void inputMsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
+	switch (msg) {
+		case WM_ACTIVATEAPP:
+			Keyboard::ProcessMessage(msg, wParam, lParam);
+			Mouse::ProcessMessage(msg, wParam, lParam);
+			return;
+
+		// Send keyboard events to keyboard handler
+		case WM_KEYDOWN:
+		case WM_SYSKEYDOWN:
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+			Keyboard::ProcessMessage(msg, wParam, lParam);
+			return;
+
+		// Send mouse events to mouse handler
+		case WM_INPUT:
+		case WM_MOUSEMOVE:
+		case WM_LBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONDOWN:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONDOWN:
+		case WM_MBUTTONUP:
+		case WM_MOUSEWHEEL:
+		case WM_XBUTTONDOWN:
+		case WM_XBUTTONUP:
+		case WM_MOUSEHOVER:
+			Mouse::ProcessMessage(msg, wParam, lParam);
+			return;
+
+		default:
+			return;
+	}
+}
+
+
 Input::Input(HWND hWnd) {
 	keyboard = make_unique<Keyboard>();
 	mouse    = make_unique<Mouse>();

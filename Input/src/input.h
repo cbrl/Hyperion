@@ -5,6 +5,10 @@
 #include "directx/directxtk.h"
 
 
+// Updates DirectXTK mouse and keyboard state
+void inputMsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
+
+
 class Input final {
 public:
 	Input(HWND hWnd);

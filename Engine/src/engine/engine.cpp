@@ -175,10 +175,11 @@ LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 
 	// Send events to ImGui handler if the mouse mode is set to absolute
 	if (input && (input->getMouseMode() == Mouse::MODE_ABSOLUTE)) {
-		if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam)) {
-			return 0;
-		}
+		ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
 	}
+
+	// Send events to the Input message handler
+	inputMsgProc(hWnd, msg, wParam, lParam);
 
 	switch (msg) {
 		case WM_DESTROY:
@@ -186,14 +187,10 @@ LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 			PostQuitMessage(0);
 			return 0;
 
-		case WM_ACTIVATEAPP:
-			Keyboard::ProcessMessage(msg, wParam, lParam);
-			Mouse::ProcessMessage(msg, wParam, lParam);
-			return 0;
-
 		// Handle window resize
 		case WM_SIZE:
-			window_width  = LOWORD(lParam);
+		{
+			window_width = LOWORD(lParam);
 			window_height = HIWORD(lParam);
 
 			if (wParam == SIZE_MAXIMIZED) {
@@ -205,7 +202,9 @@ LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 					onResize(window_width, window_height);
 				}
 			}
+
 			return 0;
+		}
 
 		case WM_ENTERSIZEMOVE:
 			resizing = true;
@@ -219,30 +218,6 @@ LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 		case WM_GETMINMAXINFO:
 			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.x = 240;
 			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.y = 240;
-			return 0;
-
-		// Send keyboard events to keyboard handler
-		case WM_KEYDOWN:
-		case WM_SYSKEYDOWN:
-		case WM_KEYUP:
-		case WM_SYSKEYUP:
-			Keyboard::ProcessMessage(msg, wParam, lParam);
-			return 0;
-
-		// Send mouse events to mouse handler
-		case WM_INPUT:
-		case WM_MOUSEMOVE:
-		case WM_LBUTTONDOWN:
-		case WM_LBUTTONUP:
-		case WM_RBUTTONDOWN:
-		case WM_RBUTTONUP:
-		case WM_MBUTTONDOWN:
-		case WM_MBUTTONUP:
-		case WM_MOUSEWHEEL:
-		case WM_XBUTTONDOWN:
-		case WM_XBUTTONUP:
-		case WM_MOUSEHOVER:
-			Mouse::ProcessMessage(msg, wParam, lParam);
 			return 0;
 
 		// Send other messages to default message handler
