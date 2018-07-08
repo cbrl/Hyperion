@@ -1,7 +1,5 @@
 #include "shader_factory.h"
 
-#define BYTECODE(x) ShaderBytecodeBuffer(x, sizeof(x))
-
 // Forward
 #include "compiled_headers/forward.h"
 #include "compiled_headers/forward_vs.h"
@@ -27,13 +25,13 @@ namespace ShaderFactory {
 
 	shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr) {
 
-		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_ps", BYTECODE(shader_forward));
+		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_ps", ShaderBytecodeBuffer(shader_forward, sizeof(shader_forward)));
 	}
 
 	shared_ptr<VertexShader> createForwardVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_forward_vs",
-		                                              BYTECODE(shader_forward_vs),
+													  ShaderBytecodeBuffer(shader_forward_vs, sizeof(shader_forward_vs)),
 		                                              VertexPositionNormalTexture::InputElements,
 		                                              VertexPositionNormalTexture::InputElementCount);
 	}
@@ -51,7 +49,7 @@ namespace ShaderFactory {
 	shared_ptr<VertexShader> createDepthVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_vs",
-		                                              BYTECODE(shader_depth_vs),
+													  ShaderBytecodeBuffer(shader_depth_vs, sizeof(shader_depth_vs)),
 		                                              VertexPositionNormalTexture::InputElements,
 		                                              VertexPositionNormalTexture::InputElementCount);
 	}
@@ -63,15 +61,15 @@ namespace ShaderFactory {
 
 	shared_ptr<PixelShader> createSkyPS(ResourceMgr& resource_mgr) {
 
-		return resource_mgr.getOrCreate<PixelShader>(L"shader_skybox_ps", BYTECODE(shader_skybox));
+		return resource_mgr.getOrCreate<PixelShader>(L"shader_skybox_ps", ShaderBytecodeBuffer(shader_skybox, sizeof(shader_skybox)));
 	}
 
 	shared_ptr<VertexShader> createSkyVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_skybox_vs",
-		                                              BYTECODE(shader_skybox_vs),
-		                                              VertexPositionNormalTexture::InputElements,
-		                                              VertexPositionNormalTexture::InputElementCount);
+													  ShaderBytecodeBuffer(shader_skybox_vs, sizeof(shader_skybox_vs)),
+		                                              VertexPositionTexture::InputElements,
+		                                              VertexPositionTexture::InputElementCount);
 	}
 
 
@@ -81,14 +79,15 @@ namespace ShaderFactory {
 
 	shared_ptr<PixelShader> createWireframeBoxPS(ResourceMgr& resource_mgr) {
 
-		return resource_mgr.getOrCreate<PixelShader>(L"shader_wireframe_box_ps", BYTECODE(shader_wireframe_box_ps));
+		return resource_mgr.getOrCreate<PixelShader>(L"shader_wireframe_box_ps",
+		                                             ShaderBytecodeBuffer(shader_wireframe_box_ps, sizeof(shader_wireframe_box_ps)));
 	}
 
 	shared_ptr<VertexShader> createWireframeBoxVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_wireframe_box_vs",
-		                                              BYTECODE(shader_wireframe_box_vs),
-		                                              VertexPositionNormalTexture::InputElements,
-		                                              VertexPositionNormalTexture::InputElementCount);
+													  ShaderBytecodeBuffer(shader_wireframe_box_vs, sizeof(shader_wireframe_box_vs)),
+		                                              VertexPosition::InputElements,
+		                                              VertexPosition::InputElementCount);
 	}
 }
