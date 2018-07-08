@@ -173,9 +173,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\pipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\render_state_mgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>

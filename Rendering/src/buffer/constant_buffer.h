@@ -3,7 +3,6 @@
 #include "directx/d3d11.h"
 #include "directx/directxtk.h"
 #include "datatypes/datatypes.h"
-#include "pipeline.h"
 
 
 template<typename DataT>

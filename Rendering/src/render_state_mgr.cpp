@@ -2,7 +2,6 @@
 
 #include "directx/directxtk.h"
 #include "hlsl.h"
-#include "pipeline.h"
 
 
 RenderStateMgr::RenderStateMgr(ID3D11Device& device, ID3D11DeviceContext& device_context) {

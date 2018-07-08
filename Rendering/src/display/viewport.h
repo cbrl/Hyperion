@@ -1,7 +1,6 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "pipeline.h"
 #include "datatypes/vector_types.h"
 
 

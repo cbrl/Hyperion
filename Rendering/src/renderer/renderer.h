@@ -2,7 +2,6 @@
 
 #include "directx/d3d11.h"
 #include "hlsl.h"
-#include "pipeline.h"
 #include "render_state_mgr.h"
 
 #include "renderer/pass/light/light_pass.h"

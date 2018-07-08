@@ -168,7 +168,6 @@
     <ClInclude Include="src\loader\obj\obj_loader.h" />
     <ClInclude Include="src\loader\obj\obj_tokens.h" />
     <ClInclude Include="src\loader\texture_loader.h" />
-    <ClInclude Include="src\pipeline.h" />
     <ClInclude Include="src\renderer\pass\bounding_volume\bounding_volume_pass.h" />
     <ClInclude Include="src\renderer\pass\depth\depth_pass.h" />
     <ClInclude Include="src\renderer\pass\forward\forward_pass.h" />

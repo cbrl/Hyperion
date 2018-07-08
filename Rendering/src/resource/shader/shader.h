@@ -1,7 +1,6 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "pipeline.h"
 #include "resource/resource.h"
 #include "resource/shader/shader_bytecode.h"
 

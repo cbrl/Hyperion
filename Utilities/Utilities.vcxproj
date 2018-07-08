@@ -147,6 +147,7 @@
     <ClInclude Include="src\directx\directx_math.h" />
     <ClInclude Include="src\directx\directx_math_wrapper.h" />
     <ClInclude Include="src\directx\directx_math_extensions.h" />
+    <ClInclude Include="src\directx\pipeline.h" />
     <ClInclude Include="src\directx\vertex_types.h" />
     <ClInclude Include="src\exception\exception.h" />
     <ClInclude Include="src\fps\fps.h" />

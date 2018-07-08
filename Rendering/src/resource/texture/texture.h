@@ -3,7 +3,6 @@
 #include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
 #include "resource/resource.h"
-#include "pipeline.h"
 #include "loader/texture_loader.h"
 
 

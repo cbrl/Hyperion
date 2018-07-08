@@ -3,7 +3,6 @@
 #include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
 #include "component/component.h"
-#include "pipeline.h"
 #include "buffer/buffers.h"
 #include "buffer/constant_buffer.h"
 #include "display/viewport.h"

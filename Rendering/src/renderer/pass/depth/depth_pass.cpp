@@ -1,6 +1,5 @@
 #include "depth_pass.h"
 #include "engine/engine.h"
-#include "pipeline.h"
 #include "hlsl.h"
 
 #include "directx/vertex_types.h"

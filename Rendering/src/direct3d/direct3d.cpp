@@ -1,7 +1,6 @@
 #include "direct3d.h"
 
 #include "directx/directxtk.h"
-#include "pipeline.h"
 
 
 Direct3D::Direct3D(HWND window, DisplayConfig config)

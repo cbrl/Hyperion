@@ -279,6 +279,9 @@
     <ClInclude Include="src\log\spdlog\contrib\sinks\step_file_sink.h">
       <Filter>Header Files\log\spdlog\contrib\sinks</Filter>
     </ClInclude>
+    <ClInclude Include="src\directx\pipeline.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\memory\allocator\stack_allocator.cpp">

@@ -1,6 +1,5 @@
 #include "forward_pass.h"
 #include "engine/engine.h"
-#include "pipeline.h"
 #include "hlsl.h"
 #include "geometry/frustum/frustum.h"
 
