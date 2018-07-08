@@ -10,7 +10,10 @@ class RenderStateMgr;
 
 class ForwardPass final {
 public:
-	ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
+	ForwardPass(ID3D11Device& device,
+	            ID3D11DeviceContext& device_context,
+	            RenderStateMgr& render_state_mgr,
+	            ResourceMgr& resource_mgr);
 	~ForwardPass() = default;
 
 	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection) const;
@@ -18,14 +21,15 @@ public:
 
 
 private:
-	void bindRenderStates(const RenderStateMgr& render_state_mgr) const;
+	void bindRenderStates() const;
 	void XM_CALLCONV renderModel(ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const;
 
 
 private:
 	reference_wrapper<ID3D11Device> device;
 	reference_wrapper<ID3D11DeviceContext> device_context;
+	reference_wrapper<RenderStateMgr> render_state_mgr;
 
-	unique_ptr<PixelShader> pixel_shader;
-	unique_ptr<VertexShader> vertex_shader;
+	shared_ptr<PixelShader> pixel_shader;
+	shared_ptr<VertexShader> vertex_shader;
 };

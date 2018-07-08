@@ -11,12 +11,6 @@ RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 
 
 	//----------------------------------------------------------------------------------
-	// Create the renderer
-	//----------------------------------------------------------------------------------
-	renderer = make_unique<Renderer>(direct3D->getDevice(), direct3D->getDeviceContext());
-
-
-	//----------------------------------------------------------------------------------
 	// Create the render state manager and render states
 	//----------------------------------------------------------------------------------
 	render_state_mgr = make_unique<RenderStateMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
@@ -26,6 +20,12 @@ RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 	// Create the resource manager
 	//----------------------------------------------------------------------------------
 	resource_mgr = make_unique<ResourceMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
+
+
+	//----------------------------------------------------------------------------------
+	// Create the renderer
+	//----------------------------------------------------------------------------------
+	renderer = make_unique<Renderer>(direct3D->getDevice(), direct3D->getDeviceContext(), *render_state_mgr, *resource_mgr);
 
 
 	//----------------------------------------------------------------------------------

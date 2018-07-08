@@ -6,13 +6,17 @@
 
 class Engine;
 class RenderStateMgr;
+class ResourceMgr;
 
 class BoundingVolumePass final {
 public:
-	BoundingVolumePass(ID3D11Device& device, ID3D11DeviceContext& device_context);
+	BoundingVolumePass(ID3D11Device& device,
+	                   ID3D11DeviceContext& device_context,
+	                   RenderStateMgr& render_state_mgr,
+	                   ResourceMgr& resource_mgr);
 	~BoundingVolumePass() = default;
 
-	void bindRenderStates(const RenderStateMgr& render_state_mgr) const;
+	void bindRenderStates() const;
 	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection) const;
 
 
@@ -23,9 +27,10 @@ private:
 private:
 	reference_wrapper<ID3D11Device> device;
 	reference_wrapper<ID3D11DeviceContext> device_context;
+	reference_wrapper<RenderStateMgr> render_state_mgr;
 
-	unique_ptr<VertexShader> vertex_shader;
-	unique_ptr<PixelShader>  pixel_shader;
+	shared_ptr<VertexShader> vertex_shader;
+	shared_ptr<PixelShader>  pixel_shader;
 
 	ConstantBuffer<XMMATRIX> model_matrix_buffer;
 };

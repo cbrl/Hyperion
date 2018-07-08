@@ -1,42 +1,38 @@
 #include "depth_pass.h"
+
 #include "engine/engine.h"
 #include "hlsl.h"
-
-#include "directx/vertex_types.h"
+#include "resource/shader/shader_factory.h"
 #include "geometry/frustum/frustum.h"
 
-//#include "compiled_headers/depth.h"
-#include "compiled_headers/depth_vs.h"
 
-
-DepthPass::DepthPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
+DepthPass::DepthPass(ID3D11Device& device,
+                     ID3D11DeviceContext& device_context,
+                     RenderStateMgr& render_state_mgr,
+                     ResourceMgr& resource_mgr)
 	: device(device)
 	, device_context(device_context)
+	, render_state_mgr(render_state_mgr)
 	, alt_cam_buffer(device) {
 
-	vertex_shader = make_unique<VertexShader>(L"shader_depth_vs",
-	                                          device,
-	                                          ShaderBytecodeBuffer(shader_depth_vs,
-	                                                               sizeof(shader_depth_vs)),
-	                                          VertexPositionNormalTexture::InputElements,
-	                                          VertexPositionNormalTexture::InputElementCount);
+	vertex_shader = ShaderFactory::createDepthVS(resource_mgr);
 
 	// Pixel shader for transparent objects
-	//pixel_shader = make_unique<PixelShader>(device, "FILENAME");
+	//pixel_shader = ShaderFactory::createDepthPS(resource_mgr);
 }
 
 
-void DepthPass::bindState(const RenderStateMgr& render_state_mgr) const {
+void DepthPass::bindState() const {
 	// Bind null shaders
 	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
 	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
 	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
 
 	// Raster state
-	render_state_mgr.bindCullCounterClockwise(device_context);
+	render_state_mgr.get().bindCullCounterClockwise(device_context);
 
 	// Depth state
-	render_state_mgr.bindDepthDefault(device_context);
+	render_state_mgr.get().bindDepthDefault(device_context);
 }
 
 

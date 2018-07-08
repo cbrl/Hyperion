@@ -1,33 +1,25 @@
 #include "forward_pass.h"
+
 #include "engine/engine.h"
 #include "hlsl.h"
+#include "resource/shader/shader_factory.h"
 #include "geometry/frustum/frustum.h"
 
-#include "compiled_headers/forward.h"
-#include "compiled_headers/forward_vs.h"
 
-
-ForwardPass::ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
+ForwardPass::ForwardPass(ID3D11Device& device,
+                         ID3D11DeviceContext& device_context,
+                         RenderStateMgr& render_state_mgr,
+                         ResourceMgr& resource_mgr)
 	: device(device)
-	, device_context(device_context) {
+	, device_context(device_context)
+	, render_state_mgr(render_state_mgr) {
 
-	// Create the vertex shader
-	vertex_shader = make_unique<VertexShader>(L"shader_forward_vs",
-	                                          device,
-	                                          ShaderBytecodeBuffer(shader_forward_vs,
-	                                                               sizeof(shader_forward_vs)),
-	                                          VertexPositionNormalTexture::InputElements,
-	                                          VertexPositionNormalTexture::InputElementCount);
-
-	// Create the pixel shader
-	pixel_shader = make_unique<PixelShader>(L"shader_forward_ps",
-	                                        device,
-	                                        ShaderBytecodeBuffer(shader_forward,
-	                                                             sizeof(shader_forward)));
+	vertex_shader = ShaderFactory::createForwardVS(resource_mgr);
+	pixel_shader  = ShaderFactory::createForwardPS(resource_mgr);
 }
 
 
-void ForwardPass::bindRenderStates(const RenderStateMgr& render_state_mgr) const {
+void ForwardPass::bindRenderStates() const {
 	
 	// Bind topology
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -42,19 +34,18 @@ void ForwardPass::bindRenderStates(const RenderStateMgr& render_state_mgr) const
 	vertex_shader->bind(device_context);
 
 	// Bind render states
-	render_state_mgr.bindOpaque(device_context);
-	render_state_mgr.bindDepthDefault(device_context);
-	render_state_mgr.bindCullCounterClockwise(device_context);
+	render_state_mgr.get().bindOpaque(device_context);
+	render_state_mgr.get().bindDepthDefault(device_context);
+	render_state_mgr.get().bindCullCounterClockwise(device_context);
 }
 
 
 void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_projection) const {
 
 	auto& ecs_engine = engine.getECS();
-	const auto& render_state_mgr = engine.getRenderingMgr().getRenderStateMgr();
 
 	// Bind the shaders, render states, etc
-	bindRenderStates(render_state_mgr);
+	bindRenderStates();
 
 	// Render models
 	ecs_engine.forEach<Model>([&](Model& model) {
@@ -66,14 +57,13 @@ void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_pr
 
 void XM_CALLCONV ForwardPass::render(const Engine& engine, const Texture* sky, FXMMATRIX world_to_projection) const {
 
-	auto& ecs_engine             = engine.getECS();
-	const auto& render_state_mgr = engine.getRenderingMgr().getRenderStateMgr();
+	auto& ecs_engine = engine.getECS();
 
 	// Bind the skybox texture if it has one
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
 
 	// Bind the shaders, render states, etc
-	bindRenderStates(render_state_mgr);
+	bindRenderStates();
 
 	// Render models
 	ecs_engine.forEach<Model>([&](Model& model) {

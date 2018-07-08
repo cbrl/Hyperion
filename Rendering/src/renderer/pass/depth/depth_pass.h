@@ -11,10 +11,13 @@ class RenderStateMgr;
 
 class DepthPass final {
 public:
-	DepthPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
+	DepthPass(ID3D11Device& device,
+	          ID3D11DeviceContext& device_context,
+	          RenderStateMgr& render_state_mgr,
+	          ResourceMgr& resource_mgr);
 	~DepthPass() = default;
 
-	void bindState(const RenderStateMgr& render_state_mgr) const;
+	void bindState() const;
 
 	void XM_CALLCONV render(const Engine& engine,
 	                        FXMMATRIX world_to_camera,
@@ -33,9 +36,10 @@ private:
 private:
 	reference_wrapper<ID3D11Device> device;
 	reference_wrapper<ID3D11DeviceContext> device_context;
+	reference_wrapper<RenderStateMgr> render_state_mgr;
 
-	unique_ptr<VertexShader> vertex_shader;
-	unique_ptr<PixelShader> pixel_shader;
+	shared_ptr<VertexShader> vertex_shader;
+	shared_ptr<PixelShader> pixel_shader;
 
 	ConstantBuffer<AltCameraBuffer> alt_cam_buffer;
 };

@@ -151,6 +151,7 @@
     <ClCompile Include="src\resource\model\model_blueprint.cpp" />
     <ClCompile Include="src\resource\shader\shader.cpp" />
     <ClCompile Include="src\resource\shader\shader_bytecode.cpp" />
+    <ClCompile Include="src\resource\shader\shader_factory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\buffer\buffers.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="src\resource\resource_mgr.h" />
     <ClInclude Include="src\resource\shader\shader.h" />
     <ClInclude Include="src\resource\shader\shader_bytecode.h" />
+    <ClInclude Include="src\resource\shader\shader_factory.h" />
     <ClInclude Include="src\resource\texture\texture.h" />
   </ItemGroup>
   <ItemGroup>

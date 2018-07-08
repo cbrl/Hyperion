@@ -4,10 +4,13 @@
 #include "geometry/frustum/frustum.h"
 
 
-LightPass::LightPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
+LightPass::LightPass(ID3D11Device& device,
+	                 ID3D11DeviceContext& device_context,
+	                 RenderStateMgr& render_state_mgr,
+	                 ResourceMgr& resource_mgr)
 	: device(device)
 	, device_context(device_context)
-	, depth_pass(make_unique<DepthPass>(device, device_context))
+	, depth_pass(make_unique<DepthPass>(device, device_context, render_state_mgr, resource_mgr))
 
 	, light_buffer(device)
 	, directional_lights(device, 16)
@@ -357,8 +360,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 
 void LightPass::renderShadowMaps(const Engine& engine) {
 
-	depth_pass->bindState(engine.getRenderingMgr().getRenderStateMgr());
-
+	depth_pass->bindState();
 
 	// Directional Lights
 	{

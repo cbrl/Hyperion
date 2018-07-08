@@ -171,6 +171,9 @@
     <ClCompile Include="src\resource\shader\shader.cpp">
       <Filter>Source Files\resource\shader</Filter>
     </ClCompile>
+    <ClCompile Include="src\resource\shader\shader_factory.cpp">
+      <Filter>Source Files\resource\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\render_state_mgr.h">
@@ -282,6 +285,9 @@
       <Filter>Header Files\resource\shader</Filter>
     </ClInclude>
     <ClInclude Include="src\resource\shader\shader.h">
+      <Filter>Header Files\resource\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resource\shader\shader_factory.h">
       <Filter>Header Files\resource\shader</Filter>
     </ClInclude>
   </ItemGroup>

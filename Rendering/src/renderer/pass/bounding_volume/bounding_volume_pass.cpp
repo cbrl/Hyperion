@@ -1,32 +1,26 @@
 #include "bounding_volume_pass.h"
+
 #include "engine/engine.h"
 #include "hlsl.h"
+#include "resource/shader/shader_factory.h"
 #include "geometry/frustum/frustum.h"
 
-#include "compiled_headers/wireframe_box_vs.h"
-#include "compiled_headers/wireframe_box_ps.h"
 
-
-BoundingVolumePass::BoundingVolumePass(ID3D11Device& device, ID3D11DeviceContext& device_context)
+BoundingVolumePass::BoundingVolumePass(ID3D11Device& device,
+									   ID3D11DeviceContext& device_context,
+									   RenderStateMgr& render_state_mgr,
+									   ResourceMgr& resource_mgr)
 	: device(device)
 	, device_context(device_context)
+	, render_state_mgr(render_state_mgr)
 	, model_matrix_buffer(device) {
 
-	vertex_shader = make_unique<VertexShader>(L"shader_wireframe_box_vs",
-	                                          device,
-	                                          ShaderBytecodeBuffer(shader_wireframe_box_vs,
-	                                                               sizeof(shader_wireframe_box_vs)),
-	                                          nullptr,
-	                                          0);
-
-	pixel_shader = make_unique<PixelShader>(L"shader_wireframe_box_ps",
-	                                        device, 
-	                                        ShaderBytecodeBuffer(shader_wireframe_box_ps,
-	                                                             sizeof(shader_wireframe_box_ps)));
+	vertex_shader = ShaderFactory::createWireframeBoxVS(resource_mgr);
+	pixel_shader  = ShaderFactory::createWireframeBoxPS(resource_mgr);
 }
 
 
-void BoundingVolumePass::bindRenderStates(const RenderStateMgr& render_state_mgr) const {
+void BoundingVolumePass::bindRenderStates() const {
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	// Unbind shaders
@@ -42,19 +36,17 @@ void BoundingVolumePass::bindRenderStates(const RenderStateMgr& render_state_mgr
 	model_matrix_buffer.bind<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
 	// Bind the render states
-	render_state_mgr.bindDepthDefault(device_context);
-	render_state_mgr.bindOpaque(device_context);
+	render_state_mgr.get().bindDepthDefault(device_context);
+	render_state_mgr.get().bindOpaque(device_context);
 }
 
 
 void XM_CALLCONV BoundingVolumePass::render(const Engine& engine, FXMMATRIX world_to_projection) const {
 	
-	auto& ecs_engine          = engine.getECS();
-	const auto& rendering_mgr = engine.getRenderingMgr().getRenderStateMgr();
+	auto& ecs_engine = engine.getECS();
 
 	// Bind the render states
-	bindRenderStates(rendering_mgr);
-
+	bindRenderStates();
 
 	ecs_engine.forEach<DirectionalLight>([&](const DirectionalLight& light) {
 

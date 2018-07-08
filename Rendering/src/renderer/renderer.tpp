@@ -45,5 +45,5 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	// Render the skybox
 	//----------------------------------------------------------------------------------
-	sky_pass->render(engine, skybox);
+	sky_pass->render(skybox);
 }

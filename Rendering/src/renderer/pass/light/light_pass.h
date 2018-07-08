@@ -11,7 +11,10 @@ class Scene;
 
 class LightPass final {
 public:
-	LightPass(ID3D11Device& device, ID3D11DeviceContext& device_context);
+	LightPass(ID3D11Device& device,
+	          ID3D11DeviceContext& device_context,
+	          RenderStateMgr& render_state_mgr,
+	          ResourceMgr& resource_mgr);
 	~LightPass() = default;
 
 	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection);

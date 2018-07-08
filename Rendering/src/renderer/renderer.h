@@ -19,7 +19,10 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Renderer(ID3D11Device& device, ID3D11DeviceContext& device_context);
+	Renderer(ID3D11Device& device,
+	         ID3D11DeviceContext& device_context,
+	         RenderStateMgr& render_state_mgr,
+	         ResourceMgr& resource_mgr);
 	Renderer(const Renderer& renderer) = delete;
 	Renderer(Renderer&& renderer) = default;
 
