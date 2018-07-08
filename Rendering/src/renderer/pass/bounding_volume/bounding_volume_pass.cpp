@@ -12,13 +12,17 @@ BoundingVolumePass::BoundingVolumePass(ID3D11Device& device, ID3D11DeviceContext
 	, device_context(device_context)
 	, model_matrix_buffer(device) {
 
-	vertex_shader = make_unique<VertexShader>(device,
-	                                          shader_wireframe_box_vs,
-	                                          sizeof(shader_wireframe_box_vs),
+	vertex_shader = make_unique<VertexShader>(L"shader_wireframe_box_vs",
+	                                          device,
+	                                          ShaderBytecodeBuffer(shader_wireframe_box_vs,
+	                                                               sizeof(shader_wireframe_box_vs)),
 	                                          nullptr,
 	                                          0);
 
-	pixel_shader = make_unique<PixelShader>(device, shader_wireframe_box_ps, sizeof(shader_wireframe_box_ps));
+	pixel_shader = make_unique<PixelShader>(L"shader_wireframe_box_ps",
+	                                        device, 
+	                                        ShaderBytecodeBuffer(shader_wireframe_box_ps,
+	                                                             sizeof(shader_wireframe_box_ps)));
 }
 
 

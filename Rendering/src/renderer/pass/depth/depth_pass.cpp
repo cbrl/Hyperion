@@ -15,9 +15,10 @@ DepthPass::DepthPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	, device_context(device_context)
 	, alt_cam_buffer(device) {
 
-	vertex_shader = make_unique<VertexShader>(device,
-	                                          shader_depth_vs,
-	                                          sizeof(shader_depth_vs),
+	vertex_shader = make_unique<VertexShader>(L"shader_depth_vs",
+	                                          device,
+	                                          ShaderBytecodeBuffer(shader_depth_vs,
+	                                                               sizeof(shader_depth_vs)),
 	                                          VertexPositionNormalTexture::InputElements,
 	                                          VertexPositionNormalTexture::InputElementCount);
 

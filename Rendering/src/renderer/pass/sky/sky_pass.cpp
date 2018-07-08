@@ -10,13 +10,17 @@ SkyPass::SkyPass(ID3D11Device& device, ID3D11DeviceContext& device_context)
 	: device(device)
 	, device_context(device_context) {
 
-	vertex_shader = make_unique<VertexShader>(device,
-	                                          shader_skybox_vs,
-	                                          sizeof(shader_skybox_vs),
+	vertex_shader = make_unique<VertexShader>(L"shader_skybox_vs",
+	                                          device,
+	                                          ShaderBytecodeBuffer(shader_skybox_vs,
+	                                                               sizeof(shader_skybox_vs)),
 	                                          VertexPosition::InputElements,
 	                                          VertexPosition::InputElementCount);
 
-	pixel_shader = make_unique<PixelShader>(device, shader_skybox, sizeof(shader_skybox));
+	pixel_shader = make_unique<PixelShader>(L"shader_skybox_ps",
+	                                        device,
+	                                        ShaderBytecodeBuffer(shader_skybox,
+	                                                             sizeof(shader_skybox)));
 }
 
 

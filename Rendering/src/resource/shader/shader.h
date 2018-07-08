@@ -1,24 +1,20 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "datatypes/datatypes.h"
 #include "pipeline.h"
+#include "resource/resource.h"
+#include "resource/shader/shader_bytecode.h"
 
 
-class VertexShader final {
+class VertexShader final : public Resource<VertexShader> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	VertexShader(ID3D11Device& device,
-	             const wchar_t* filename,
-	             const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-	             size_t numElements);
-
-	VertexShader(ID3D11Device& device,
-	             const BYTE* buffer,
-	             size_t size,
+	VertexShader(const wstring& guid,
+	             ID3D11Device& device,
+	             const ShaderBytecode& bytecode,
 	             const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
 	             size_t numElements);
 
@@ -54,10 +50,9 @@ public:
 
 private:
 	void createShader(ID3D11Device& device,
-	                  const void* buffer,
-	                  size_t size,
-	                  const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-	                  size_t numElements);
+					  const ShaderBytecode& bytecode,
+					  const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
+					  size_t numElements);
 
 
 private:
@@ -70,36 +65,36 @@ private:
 };
 
 
-class PixelShader final {
+
+
+template<typename ShaderT, typename StageT>
+class Shader final : public Resource<Shader<ShaderT, StageT>> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	PixelShader(ID3D11Device& device,
-	            const wchar_t* filename);
+	Shader(const wstring& guid,
+		   ID3D11Device& device,
+		   const ShaderBytecode& bytecode);
 
-	PixelShader(ID3D11Device& device,
-	            const BYTE* buffer,
-	            size_t size);
-
-	PixelShader(const PixelShader& shader) = delete;
-	PixelShader(PixelShader&& shader) noexcept = default;
+	Shader(const Shader& shader) = delete;
+	Shader(Shader&& shader) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
 
-	~PixelShader() = default;
+	~Shader() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
 
-	PixelShader& operator=(const PixelShader& shader) = delete;
-	PixelShader& operator=(PixelShader&& shader) noexcept = default;
+	Shader& operator=(const Shader& shader) = delete;
+	Shader& operator=(Shader&& shader) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -108,14 +103,12 @@ public:
 
 	// Bind the vertex shader to a pipeline stage
 	void bind(ID3D11DeviceContext& device_context) const {
-		Pipeline::PS::bindShader(device_context, shader.Get(), nullptr, 0);
+		StageT::bindShader(device_context, shader.Get(), nullptr, 0);
 	}
 
 
 private:
-	void createShader(ID3D11Device& device,
-                      const void* buffer,
-                      size_t size);
+	void createShader(ID3D11Device& device, const ShaderBytecode& bytecode);
 
 
 private:
@@ -123,8 +116,14 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	ComPtr<ID3D11PixelShader> shader;
+	ComPtr<ShaderT> shader;
 };
 
+using ComputeShader  = Shader<ID3D11ComputeShader, Pipeline::CS>;
+using DomainShader   = Shader<ID3D11DomainShader, Pipeline::DS>;
+using GeometryShader = Shader<ID3D11GeometryShader, Pipeline::GS>;
+using HullShader     = Shader<ID3D11HullShader, Pipeline::HS>;
+using PixelShader    = Shader<ID3D11PixelShader, Pipeline::PS>;
 
-static void OutputShaderErrorMessage(ID3D10Blob* error_message, const WCHAR* shader_filename);
+
+#include "shader.tpp"

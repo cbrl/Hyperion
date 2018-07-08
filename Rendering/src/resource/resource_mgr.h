@@ -3,6 +3,7 @@
 #include "datatypes/datatypes.h"
 #include "memory/managed_resource_map.h"
 #include "resource/resource.h"
+#include "shader/shader.h"
 #include "resource/mesh/mesh.h"
 #include "resource/model/model_blueprint.h"
 #include "resource/model/model_output.h"
@@ -44,29 +45,71 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - ModelBlueprint
 	//----------------------------------------------------------------------------------
 
-	// ModelBlueprint
 	template<typename ResourceT>
-	enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> getOrCreate(const wstring& filename);
+	enable_if_t<is_same_v<ModelBlueprint, ResourceT>,
+		shared_ptr<ModelBlueprint>> getOrCreate(const wstring& filename);
 
 	template<typename ResourceT, typename VertexT>
-	enable_if_t<is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>> getOrCreate(const wstring& name,
-	                                                                                          const ModelOutput<VertexT>& model_data);
+	enable_if_t<is_same_v<ModelBlueprint, ResourceT>,
+		shared_ptr<ModelBlueprint>> getOrCreate(const wstring& name,
+		                                        const ModelOutput<VertexT>& model_data);
 
 
-	// Texture
+	//----------------------------------------------------------------------------------
+	// Member Functions - Texture
+	//----------------------------------------------------------------------------------
+
 	template<typename ResourceT>
-	enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> getOrCreate(const wstring& filename);
+	enable_if_t<is_same_v<Texture, ResourceT>,
+		shared_ptr<Texture>> getOrCreate(const wstring& filename);
 
 	template<typename ResourceT>
-	enable_if_t<is_same_v<Texture, ResourceT>, shared_ptr<Texture>> getOrCreate(const vec4_f32& color);
+	enable_if_t<is_same_v<Texture, ResourceT>,
+		shared_ptr<Texture>> getOrCreate(const vec4_f32& color);
 
 
-	// SpriteFont
+	//----------------------------------------------------------------------------------
+	// Member Functions - Font
+	//----------------------------------------------------------------------------------
+
 	template<typename ResourceT>
-	enable_if_t<is_same_v<Font, ResourceT>, shared_ptr<Font>> getOrCreate(const wstring& filename);
+	enable_if_t<is_same_v<Font, ResourceT>,
+		shared_ptr<Font>> getOrCreate(const wstring& filename);
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Shader
+	//----------------------------------------------------------------------------------
+
+	template<typename ResourceT>
+	enable_if_t<is_same_v<ComputeShader, ResourceT>,
+		shared_ptr<ComputeShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+
+	template<typename ResourceT>
+	enable_if_t<is_same_v<DomainShader, ResourceT>,
+		shared_ptr<DomainShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+
+	template<typename ResourceT>
+	enable_if_t<is_same_v<GeometryShader, ResourceT>,
+		shared_ptr<GeometryShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+
+	template<typename ResourceT>
+	enable_if_t<is_same_v<HullShader, ResourceT>,
+		shared_ptr<HullShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+
+	template<typename ResourceT>
+	enable_if_t<is_same_v<PixelShader, ResourceT>,
+		shared_ptr<PixelShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+
+	template<typename ResourceT>
+	enable_if_t<is_same_v<VertexShader, ResourceT>,
+		shared_ptr<VertexShader>> getOrCreate(const wstring& guid,
+		                                      const ShaderBytecode& bytecode,
+		                                      const D3D11_INPUT_ELEMENT_DESC* input_element_descs,
+		                                      u32 input_element_count);
 
 
 private:
@@ -82,6 +125,13 @@ private:
 	ManagedResourceMap<wstring, ModelBlueprint> models;
 	ManagedResourceMap<wstring, Texture> textures;
 	ManagedResourceMap<wstring, Font> fonts;
+
+	ManagedResourceMap<wstring, ComputeShader>  compute_shaders;
+	ManagedResourceMap<wstring, DomainShader>   domain_shaders;
+	ManagedResourceMap<wstring, GeometryShader> geometry_shaders;
+	ManagedResourceMap<wstring, HullShader>     hull_shaders;
+	ManagedResourceMap<wstring, PixelShader>    pixel_shaders;
+	ManagedResourceMap<wstring, VertexShader>   vertex_shaders;
 };
 
 

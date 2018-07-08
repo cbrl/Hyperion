@@ -13,14 +13,18 @@ ForwardPass::ForwardPass(ID3D11Device& device, ID3D11DeviceContext& device_conte
 	, device_context(device_context) {
 
 	// Create the vertex shader
-	vertex_shader = make_unique<VertexShader>(device,
-	                                          shader_forward_vs,
-	                                          sizeof(shader_forward_vs),
+	vertex_shader = make_unique<VertexShader>(L"shader_forward_vs",
+	                                          device,
+	                                          ShaderBytecodeBuffer(shader_forward_vs,
+	                                                               sizeof(shader_forward_vs)),
 	                                          VertexPositionNormalTexture::InputElements,
 	                                          VertexPositionNormalTexture::InputElementCount);
 
 	// Create the pixel shader
-	pixel_shader = make_unique<PixelShader>(device, shader_forward, sizeof(shader_forward));
+	pixel_shader = make_unique<PixelShader>(L"shader_forward_ps",
+	                                        device,
+	                                        ShaderBytecodeBuffer(shader_forward,
+	                                                             sizeof(shader_forward)));
 }
 
 

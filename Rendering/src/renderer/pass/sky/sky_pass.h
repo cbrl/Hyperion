@@ -1,7 +1,7 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
-#include "shader/shader.h"
+#include "resource/shader/shader.h"
 #include "resource/texture/texture.h"
 
 class Engine;

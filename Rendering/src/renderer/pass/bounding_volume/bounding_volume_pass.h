@@ -1,7 +1,7 @@
 #pragma once
 
 #include "buffer/constant_buffer.h"
-#include "shader/shader.h"
+#include "resource/shader/shader.h"
 #include "geometry/bounding_volume/bounding_volume.h"
 
 class Engine;

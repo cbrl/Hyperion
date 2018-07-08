@@ -28,9 +28,6 @@
     <Filter Include="Header Files\resource">
       <UniqueIdentifier>{bc1fca6c-1753-457f-9f43-0744744b759e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\shader">
-      <UniqueIdentifier>{9282d9d4-1ecb-4fd8-be6b-313424756125}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\geometry\bounding_volume">
       <UniqueIdentifier>{09db4461-9ec3-4509-9663-c7a22703ade5}</UniqueIdentifier>
     </Filter>
@@ -76,9 +73,6 @@
     <Filter Include="Source Files\resource\model">
       <UniqueIdentifier>{581a639f-74f4-446b-a6f4-48d2cca6af34}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\shader">
-      <UniqueIdentifier>{8b6131fa-a4da-47de-9b76-17fe74a805ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\buffer">
       <UniqueIdentifier>{2be99d4f-977e-4da5-81af-189bbd49072c}</UniqueIdentifier>
     </Filter>
@@ -115,6 +109,12 @@
     <Filter Include="Header Files\display">
       <UniqueIdentifier>{30717c3a-bd23-46ff-b422-7756e12f787c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resource\shader">
+      <UniqueIdentifier>{5bc37418-5d7e-45c0-8dad-2c14d75874f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource\shader">
+      <UniqueIdentifier>{5f6d5e08-406c-4a6b-b31b-dc572fe67ee3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -131,9 +131,6 @@
     </ClCompile>
     <ClCompile Include="src\resource\model\model_blueprint.cpp">
       <Filter>Source Files\resource\model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\shader\shader.cpp">
-      <Filter>Source Files\shader</Filter>
     </ClCompile>
     <ClCompile Include="src\buffer\shadow_map_buffer.cpp">
       <Filter>Source Files\buffer</Filter>
@@ -167,6 +164,12 @@
     </ClCompile>
     <ClCompile Include="src\loader\texture_loader.cpp">
       <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\shader\shader_bytecode.cpp">
+      <Filter>Source Files\resource\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\shader\shader.cpp">
+      <Filter>Source Files\resource\shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -236,9 +239,6 @@
     <ClInclude Include="src\resource\model\blueprint_factory.h">
       <Filter>Header Files\resource\model</Filter>
     </ClInclude>
-    <ClInclude Include="src\shader\shader.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
     <ClInclude Include="src\resource\model\material\material.h">
       <Filter>Header Files\resource\model\material</Filter>
     </ClInclude>
@@ -281,6 +281,12 @@
     <ClInclude Include="src\display\viewport.h">
       <Filter>Header Files\display</Filter>
     </ClInclude>
+    <ClInclude Include="src\resource\shader\shader_bytecode.h">
+      <Filter>Header Files\resource\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resource\shader\shader.h">
+      <Filter>Header Files\resource\shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\resource\resource_mgr.tpp">
@@ -313,6 +319,9 @@
     <None Include="packages.config" />
     <None Include="src\renderer\renderer.tpp">
       <Filter>Source Files\renderer</Filter>
+    </None>
+    <None Include="src\resource\shader\shader.tpp">
+      <Filter>Source Files\resource\shader</Filter>
     </None>
   </ItemGroup>
 </Project>
