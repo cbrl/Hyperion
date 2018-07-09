@@ -1,286 +1,37 @@
 #include "stdafx.h"
 #include "user_interface.h"
+
+#include "ecs.h"
+#include "entities/entities.h"
+#include "components/components.h"
+
+#include "imgui.h"
 #include "engine/engine.h"
 #include "scene/scene.h"
-
-
-void* UserInterface::selected = nullptr;
-handle64 UserInterface::selected_entity{ handle64::invalid_handle };
-
-
-void UserInterface::draw(const Engine& engine) {
-
-	auto& scene        = engine.getScene();
-	auto& ecs_engine   = engine.getECS();
-	auto& device       = engine.getRenderingMgr().getDevice();
-	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
-
-	bool open = true;
-
-	// Setup window layout
-	ImGui::SetNextWindowSize(ImVec2(275, 600), ImGuiCond_FirstUseEver);
-	ImGui::Begin("Scene", &open, ImGuiWindowFlags_MenuBar);
-	ImGui::End();
-
-	ImGui::SetNextWindowSize(ImVec2(375, 425), ImGuiCond_FirstUseEver);
-	ImGui::Begin("Properties", &open);
-	ImGui::End();
-
-	// Draw window contents
-	if (ImGui::Begin("Scene")) {
-
-		ModelType add_model_popup = ModelType::None;
-
-		// Draw menu
-		drawMenu(device, ecs_engine, resource_mgr, scene, add_model_popup);
-
-		// Process model popup
-		procNewModelPopups(device, ecs_engine, resource_mgr, selected_entity, add_model_popup);
-
-		// Draw tree
-		drawTree(ecs_engine, scene);
-	}
-	
-	// End window
-	ImGui::End();
-}
-
-
-
-
-//----------------------------------------------------------------------------------
-//
-//   Menu
-//
-//----------------------------------------------------------------------------------
-
-void UserInterface::drawMenu(ID3D11Device& device,
-                             ECS& ecs_engine,
-                             ResourceMgr& resource_mgr,
-                             Scene& scene,
-                             ModelType& add_model_popup) const {
-
-	if (ImGui::BeginMenuBar()) {
-
-		if (ImGui::BeginMenu("Entity")) {
-
-			if (ImGui::MenuItem("New")) {
-				scene.addEntity<WorldObject<>>(ecs_engine);
-			}
-
-			if (ImGui::BeginMenu("Selected")) {
-
-				if (ImGui::BeginMenu("Add Component")) {
-
-					if (ImGui::BeginMenu("Model")) {
-
-						if (ImGui::MenuItem("From file")) {
-							wchar_t szFile[512] = {};
-
-							if (OpenFilePicker(szFile, sizeof(szFile))) {
-								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
-								ecs_engine.addComponent<Model>(selected_entity, device, bp);
-							}
-							else {
-								Logger::log(LogLevel::err, "Failed to open file dialog");
-							}
-						}
-
-						if (ImGui::BeginMenu("Geometric Shape")) {
-							if (ImGui::MenuItem("Cube"))
-								add_model_popup = ModelType::Cube;
-							if (ImGui::MenuItem("Box"))
-								add_model_popup = ModelType::Box;
-							if (ImGui::MenuItem("Sphere"))
-								add_model_popup = ModelType::Sphere;
-							if (ImGui::MenuItem("GeoSphere"))
-								add_model_popup = ModelType::GeoSphere;
-							if (ImGui::MenuItem("Cylinder"))
-								add_model_popup = ModelType::Cylinder;
-							if (ImGui::MenuItem("Cone"))
-								add_model_popup = ModelType::Cone;
-							if (ImGui::MenuItem("Torus"))
-								add_model_popup = ModelType::Torus;
-							if (ImGui::MenuItem("Tetrahedron"))
-								add_model_popup = ModelType::Tetrahedron;
-							if (ImGui::MenuItem("Octahedron"))
-								add_model_popup = ModelType::Octahedron;
-							if (ImGui::MenuItem("Dodecahedron"))
-								add_model_popup = ModelType::Dodecahedron;
-							if (ImGui::MenuItem("Icosahedron"))
-								add_model_popup = ModelType::Icosahedron;
-
-							ImGui::EndMenu();
-						}
-
-						ImGui::EndMenu();
-					}
-
-					if (ImGui::MenuItem("Directional Light")) {
-						ecs_engine.addComponent<DirectionalLight>(selected_entity);
-					}
-
-					if (ImGui::MenuItem("Point Light")) {
-						ecs_engine.addComponent<PointLight>(selected_entity);
-					}
-
-					if (ImGui::MenuItem("Spot Light")) {
-						ecs_engine.addComponent<SpotLight>(selected_entity);
-					}
-
-					ImGui::EndMenu();
-				}
-
-				if (ImGui::MenuItem("Delete")) {
-					if (selected_entity != handle64::invalid_handle)
-						scene.removeEntity(ecs_engine, selected_entity);
-				}
-
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenu();
-		}
-
-		ImGui::EndMenuBar();
-	}
-}
-
-
-
-
-//----------------------------------------------------------------------------------
-//
-//   Object Tree
-//
-//----------------------------------------------------------------------------------
-
-void UserInterface::drawTree(ECS& ecs_engine, Scene& scene) {
-
-	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
-
-		const ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow
-		                                      | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                                      | ((selected == &scene) ? ImGuiTreeNodeFlags_Selected : 0);
-
-		const bool node_open = ImGui::TreeNodeEx(&scene, node_flags, scene.getName().c_str());
-
-		if (ImGui::IsItemClicked())
-			selected = &scene;
-
-		if (node_open) {
-			drawTreeNodes(ecs_engine, scene);
-		}
-
-		if (selected == &scene) {
-			drawDetailsPanel(scene);
-		}
-	}
-
-	ImGui::EndChild();
-}
-
-
-void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
-
-	auto& entities = scene.getEntities();
-
-	for (const auto entity : entities) {
-
-		string name = "Entity (index: " + to_string(entity.index) + ", counter: " + to_string(entity.counter) + ")";
-
-		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
-		                                 | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                                 | ((selected_entity == entity) ? ImGuiTreeNodeFlags_Selected : 0);
-
-		const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
-
-		if (ImGui::IsItemClicked())
-			selected_entity = entity;
-
-		if (!node_open) continue;
-
-		// Transform
-		if (auto* transform = ecs_engine.getComponent<Transform>(entity)) {
-			drawNode("Transform", *transform);
-		}
-
-		// Perspective Camera
-		if (auto* cam = ecs_engine.getComponent<PerspectiveCamera>(entity)) {
-			drawNode("Perspective Camera", *cam);
-		}
-
-		// Orthographic Camera
-		if (auto* cam = ecs_engine.getComponent<OrthographicCamera>(entity)) {
-			drawNode("Orthographic Camera", *cam);
-		}
-
-		// Model
-		if (auto* model = ecs_engine.getComponent<Model>(entity)) {
-			const bool node_selected = (selected == model);
-
-			const ImGuiTreeNodeFlags model_flags = ImGuiTreeNodeFlags_OpenOnArrow
-			                                       | ImGuiTreeNodeFlags_OpenOnDoubleClick
-			                                       | (node_selected ? ImGuiTreeNodeFlags_Selected : 0);
-
-			const bool open = ImGui::TreeNodeEx("Model", model_flags);
-
-			if (ImGui::IsItemClicked())
-				selected = model;
-
-			if (open) {
-				model->forEachChild([&](ModelChild& child) {
-					drawNode(child.getName().c_str(), child);
-				});
-
-				ImGui::TreePop();
-			}
-
-			if (node_selected) {
-				drawDetailsPanel(*model);
-			}
-		}
-
-		// Directional Light
-		if (auto* light = ecs_engine.getComponent<DirectionalLight>(entity)) {
-			drawNode("Directional Light", *light);
-		}
-
-		// Point Light
-		if (auto* light = ecs_engine.getComponent<PointLight>(entity)) {
-			drawNode("Point Light", *light);
-		}
-
-		// Spot Light
-		if (auto* light = ecs_engine.getComponent<SpotLight>(entity)) {
-			drawNode("Spot Light", *light);
-		}
-
-		// Camera Movement
-		if (auto* cam_movement = ecs_engine.getComponent<CameraMovement>(entity)) {
-			drawNode("Camera Movement", *cam_movement);
-		}
-
-		// Mouse Rotation
-		if (auto* mouse_rotation = ecs_engine.getComponent<MouseRotation>(entity)) {
-			drawNode("Mouse Rotation", *mouse_rotation);
-		}
-
-		// Axis Rotation
-		if (auto* axis_rotation = ecs_engine.getComponent<AxisRotation>(entity)) {
-			drawNode("Axis Rotation", *axis_rotation);
-		}
-
-		// Axis Orbit
-		if (auto* axis_orbit = ecs_engine.getComponent<AxisOrbit>(entity)) {
-			drawNode("Axis Orbit", *axis_orbit);
-		}
-
-		ImGui::TreePop();
-	}
-
-	ImGui::TreePop();
-}
+#include "io/io.h"
+#include "log/log.h"
+#include "buffer/buffers.h"
+#include "resource/model/blueprint_factory.h"
+
+
+void* selected = nullptr;
+handle64 selected_entity{ handle64::invalid_handle };
+
+
+enum class ModelType {
+	None,
+	Cube,
+	Box,
+	Sphere,
+	GeoSphere,
+	Cylinder,
+	Torus,
+	Cone,
+	Tetrahedron,
+	Octahedron,
+	Dodecahedron,
+	Icosahedron
+};
 
 
 
@@ -291,8 +42,18 @@ void UserInterface::drawTreeNodes(ECS& ecs_engine, Scene& scene) {
 //
 //----------------------------------------------------------------------------------
 
+template<typename T>
+void DrawComponentState(T& component) {
+	ImGui::Text("State");
+	ImGui::Separator();
+	bool state = component.isActive();
+	if (ImGui::Checkbox("Active", &state))
+		component.setActive(state);
+	ImGui::Spacing();
+}
 
-void UserInterface::drawDetails(Scene& scene) const {
+
+void DrawDetails(Scene& scene) {
 
 	ImGui::Text(scene.getName().c_str());
 	ImGui::Separator();
@@ -302,9 +63,9 @@ void UserInterface::drawDetails(Scene& scene) const {
 }
 
 
-void UserInterface::drawDetails(Transform& transform) const {
+void DrawDetails(Transform& transform) {
 
-	drawComponentState(transform);
+	DrawComponentState(transform);
 
 	ImGui::Text("Transform");
 	ImGui::Separator();
@@ -402,16 +163,16 @@ void DrawCameraSettings(CameraSettings& settings) {
 }
 
 
-void UserInterface::drawDetails(PerspectiveCamera& camera) const {
+void DrawDetails(PerspectiveCamera& camera) {
 
-	drawComponentState(camera);
+	DrawComponentState(camera);
 
 
 	ImGui::Text("Camera");
 	ImGui::Separator();
 
 	f32 fov = camera.getFOV();
-	if (ImGui::DragFloat("FOV", &fov, 0.01f, XM_PI/8.0f, XM_2PI/3.0f)) {
+	if (ImGui::DragFloat("FOV", &fov, 0.01f, XM_PI / 8.0f, XM_2PI / 3.0f)) {
 		camera.setFOV(fov);
 	}
 
@@ -419,9 +180,9 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 }
 
 
-void UserInterface::drawDetails(OrthographicCamera& camera) const {
+void DrawDetails(OrthographicCamera& camera) {
 
-	drawComponentState(camera);
+	DrawComponentState(camera);
 
 
 	ImGui::Text("Camera");
@@ -437,16 +198,16 @@ void UserInterface::drawDetails(OrthographicCamera& camera) const {
 }
 
 
-void UserInterface::drawDetails(CameraMovement& movement) const {
+void DrawDetails(CameraMovement& movement) {
 
-	drawComponentState(movement);
+	DrawComponentState(movement);
 
 	ImGui::Text("Camera Movement");
 	ImGui::Separator();
 
-	f32 max_velocity     = movement.getMaxVelocity();
-	f32 acceleration     = movement.getAcceleration();
-	f32 deceleration     = movement.getDeceleration();
+	f32 max_velocity = movement.getMaxVelocity();
+	f32 acceleration = movement.getAcceleration();
+	f32 deceleration = movement.getDeceleration();
 
 	if (ImGui::InputFloat("Max Velocity", &max_velocity))
 		movement.setMaxVelocity(max_velocity);
@@ -459,10 +220,10 @@ void UserInterface::drawDetails(CameraMovement& movement) const {
 }
 
 
-void UserInterface::drawDetails(MouseRotation& rotation) const {
+void DrawDetails(MouseRotation& rotation) {
 
-	drawComponentState(rotation);
-	
+	DrawComponentState(rotation);
+
 	ImGui::Text("Mouse Rotation");
 	ImGui::Separator();
 
@@ -474,13 +235,13 @@ void UserInterface::drawDetails(MouseRotation& rotation) const {
 }
 
 
-void UserInterface::drawDetails(Model& model) const {
+void DrawDetails(Model& model) {
 
-	drawComponentState(model);
+	DrawComponentState(model);
 }
 
 
-void UserInterface::drawDetails(ModelChild& child) const {
+void DrawDetails(ModelChild& child) {
 
 	ImGui::Text(child.getName().c_str());
 	ImGui::Separator();
@@ -489,18 +250,18 @@ void UserInterface::drawDetails(ModelChild& child) const {
 	string name = "Material - " + child.getMaterial().name;
 	ImGui::Text(name.c_str());
 
-	ImGui::ColorEdit3("Diffuse Color",      (f32*)child.getMaterial().diffuse.data());
-	ImGui::ColorEdit3("Ambient Color",      (f32*)child.getMaterial().ambient.data());
-	ImGui::ColorEdit3("Specular Color",     (f32*)child.getMaterial().specular.data());
-	ImGui::DragFloat( "Specular Exponent",  (f32*)&child.getMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
-	ImGui::ColorEdit3("Reflective Color",   (f32*)child.getMaterial().reflect.data());
-	ImGui::Checkbox(  "Reflection",         (bool*)&child.getMaterial().reflection_enabled);
+	ImGui::ColorEdit3("Diffuse Color", (f32*)child.getMaterial().diffuse.data());
+	ImGui::ColorEdit3("Ambient Color", (f32*)child.getMaterial().ambient.data());
+	ImGui::ColorEdit3("Specular Color", (f32*)child.getMaterial().specular.data());
+	ImGui::DragFloat("Specular Exponent", (f32*)&child.getMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
+	ImGui::ColorEdit3("Reflective Color", (f32*)child.getMaterial().reflect.data());
+	ImGui::Checkbox("Reflection", (bool*)&child.getMaterial().reflection_enabled);
 }
 
 
-void UserInterface::drawDetails(DirectionalLight& light) const {
+void DrawDetails(DirectionalLight& light) {
 
-	drawComponentState(light);
+	DrawComponentState(light);
 
 	ImGui::Text("Directional Light");
 	ImGui::Separator();
@@ -531,15 +292,15 @@ void UserInterface::drawDetails(DirectionalLight& light) const {
 }
 
 
-void UserInterface::drawDetails(PointLight& light) const {
+void DrawDetails(PointLight& light) {
 
-	drawComponentState(light);
+	DrawComponentState(light);
 
 	ImGui::Text("Point Light");
 	ImGui::Separator();
 
 	f32 range = light.getRange();
-	if (ImGui::DragFloat( "Range", &range, 0.1f,  0.0f, FLT_MAX))
+	if (ImGui::DragFloat("Range", &range, 0.1f, 0.0f, FLT_MAX))
 		light.setRange(range);
 
 	auto attenuation = light.getAttenuation();
@@ -564,9 +325,9 @@ void UserInterface::drawDetails(PointLight& light) const {
 }
 
 
-void UserInterface::drawDetails(SpotLight& light) const {
+void DrawDetails(SpotLight& light) {
 
-	drawComponentState(light);
+	DrawComponentState(light);
 
 	ImGui::Text("Spot Light");
 	ImGui::Separator();
@@ -605,10 +366,10 @@ void UserInterface::drawDetails(SpotLight& light) const {
 }
 
 
-void UserInterface::drawDetails(AxisRotation& rotation) const {
+void DrawDetails(AxisRotation& rotation) {
 
-	drawComponentState(rotation);
-	
+	DrawComponentState(rotation);
+
 	ImGui::Text("Axis Rotation");
 	ImGui::Separator();
 
@@ -659,9 +420,9 @@ void UserInterface::drawDetails(AxisRotation& rotation) const {
 }
 
 
-void UserInterface::drawDetails(AxisOrbit& orbit) const {
-	
-	drawComponentState(orbit);
+void DrawDetails(AxisOrbit& orbit) {
+
+	DrawComponentState(orbit);
 
 	ImGui::Text("Axis Orbit");
 	ImGui::Separator();
@@ -677,15 +438,173 @@ void UserInterface::drawDetails(AxisOrbit& orbit) const {
 
 //----------------------------------------------------------------------------------
 //
+//   Object Tree
+//
+//----------------------------------------------------------------------------------
+
+template<typename T>
+void DrawDetailsPanel(T& item) {
+	ImGui::Begin("Properties");
+	DrawDetails(item);
+	ImGui::End();
+}
+
+
+template<typename T>
+void DrawNode(const char* text, T& item) {
+	bool node_selected = (selected == &item);
+	ImGui::Selectable(text, &node_selected);
+
+	if (ImGui::IsItemClicked()) {
+		selected = &item;
+	}
+	if (node_selected) {
+		DrawDetailsPanel(item);
+	}
+}
+
+
+void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
+
+	auto& entities = scene.getEntities();
+
+	for (const auto entity : entities) {
+
+		string name = "Entity (index: " + to_string(entity.index) + ", counter: " + to_string(entity.counter) + ")";
+
+		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
+			| ImGuiTreeNodeFlags_OpenOnDoubleClick
+			| ((selected_entity == entity) ? ImGuiTreeNodeFlags_Selected : 0);
+
+		const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
+
+		if (ImGui::IsItemClicked())
+			selected_entity = entity;
+
+		if (!node_open) continue;
+
+		// Transform
+		if (auto* transform = ecs_engine.getComponent<Transform>(entity)) {
+			DrawNode("Transform", *transform);
+		}
+
+		// Perspective Camera
+		if (auto* cam = ecs_engine.getComponent<PerspectiveCamera>(entity)) {
+			DrawNode("Perspective Camera", *cam);
+		}
+
+		// Orthographic Camera
+		if (auto* cam = ecs_engine.getComponent<OrthographicCamera>(entity)) {
+			DrawNode("Orthographic Camera", *cam);
+		}
+
+		// Model
+		if (auto* model = ecs_engine.getComponent<Model>(entity)) {
+			const bool node_selected = (selected == model);
+
+			const ImGuiTreeNodeFlags model_flags = ImGuiTreeNodeFlags_OpenOnArrow
+				| ImGuiTreeNodeFlags_OpenOnDoubleClick
+				| (node_selected ? ImGuiTreeNodeFlags_Selected : 0);
+
+			const bool open = ImGui::TreeNodeEx("Model", model_flags);
+
+			if (ImGui::IsItemClicked())
+				selected = model;
+
+			if (open) {
+				model->forEachChild([&](ModelChild& child) {
+					DrawNode(child.getName().c_str(), child);
+				});
+
+				ImGui::TreePop();
+			}
+
+			if (node_selected) {
+				DrawDetailsPanel(*model);
+			}
+		}
+
+		// Directional Light
+		if (auto* light = ecs_engine.getComponent<DirectionalLight>(entity)) {
+			DrawNode("Directional Light", *light);
+		}
+
+		// Point Light
+		if (auto* light = ecs_engine.getComponent<PointLight>(entity)) {
+			DrawNode("Point Light", *light);
+		}
+
+		// Spot Light
+		if (auto* light = ecs_engine.getComponent<SpotLight>(entity)) {
+			DrawNode("Spot Light", *light);
+		}
+
+		// Camera Movement
+		if (auto* cam_movement = ecs_engine.getComponent<CameraMovement>(entity)) {
+			DrawNode("Camera Movement", *cam_movement);
+		}
+
+		// Mouse Rotation
+		if (auto* mouse_rotation = ecs_engine.getComponent<MouseRotation>(entity)) {
+			DrawNode("Mouse Rotation", *mouse_rotation);
+		}
+
+		// Axis Rotation
+		if (auto* axis_rotation = ecs_engine.getComponent<AxisRotation>(entity)) {
+			DrawNode("Axis Rotation", *axis_rotation);
+		}
+
+		// Axis Orbit
+		if (auto* axis_orbit = ecs_engine.getComponent<AxisOrbit>(entity)) {
+			DrawNode("Axis Orbit", *axis_orbit);
+		}
+
+		ImGui::TreePop();
+	}
+
+	ImGui::TreePop();
+}
+
+
+void DrawTree(ECS& ecs_engine, Scene& scene) {
+
+	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
+
+		const ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow
+		                                      | ImGuiTreeNodeFlags_OpenOnDoubleClick
+		                                      | ((selected == &scene) ? ImGuiTreeNodeFlags_Selected : 0);
+
+		const bool node_open = ImGui::TreeNodeEx(&scene, node_flags, scene.getName().c_str());
+
+		if (ImGui::IsItemClicked())
+			selected = &scene;
+
+		if (node_open) {
+			DrawTreeNodes(ecs_engine, scene);
+		}
+
+		if (selected == &scene) {
+			DrawDetailsPanel(scene);
+		}
+	}
+
+	ImGui::EndChild();
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+//
 //   Popup Windows
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::procNewModelPopups(ID3D11Device& device,
-                                       ECS& ecs_engine,
-                                       ResourceMgr& resource_mgr,
-                                       handle64 entity,
-                                       ModelType type) const {
+void ProcNewModelPopups(ID3D11Device& device,
+                        ECS& ecs_engine,
+                        ResourceMgr& resource_mgr,
+                        handle64 entity,
+                        ModelType type) {
 
 	switch (type) {
 		case ModelType::Cube:
@@ -1034,4 +953,152 @@ void UserInterface::procNewModelPopups(ID3D11Device& device,
 
 		ImGui::EndPopup();
 	}
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+//
+//   Menu
+//
+//----------------------------------------------------------------------------------
+
+void DrawMenu(ID3D11Device& device,
+              ECS& ecs_engine,
+              ResourceMgr& resource_mgr,
+              Scene& scene,
+              ModelType& add_model_popup) {
+
+	if (ImGui::BeginMenuBar()) {
+
+		if (ImGui::BeginMenu("Entity")) {
+
+			if (ImGui::MenuItem("New")) {
+				scene.addEntity<WorldObject<>>(ecs_engine);
+			}
+
+			if (ImGui::BeginMenu("Selected")) {
+
+				if (ImGui::BeginMenu("Add Component")) {
+
+					if (ImGui::BeginMenu("Model")) {
+
+						if (ImGui::MenuItem("From file")) {
+							wchar_t szFile[512] = {};
+
+							if (OpenFilePicker(szFile, sizeof(szFile))) {
+								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
+								ecs_engine.addComponent<Model>(selected_entity, device, bp);
+							}
+							else {
+								Logger::log(LogLevel::err, "Failed to open file dialog");
+							}
+						}
+
+						if (ImGui::BeginMenu("Geometric Shape")) {
+							if (ImGui::MenuItem("Cube"))
+								add_model_popup = ModelType::Cube;
+							if (ImGui::MenuItem("Box"))
+								add_model_popup = ModelType::Box;
+							if (ImGui::MenuItem("Sphere"))
+								add_model_popup = ModelType::Sphere;
+							if (ImGui::MenuItem("GeoSphere"))
+								add_model_popup = ModelType::GeoSphere;
+							if (ImGui::MenuItem("Cylinder"))
+								add_model_popup = ModelType::Cylinder;
+							if (ImGui::MenuItem("Cone"))
+								add_model_popup = ModelType::Cone;
+							if (ImGui::MenuItem("Torus"))
+								add_model_popup = ModelType::Torus;
+							if (ImGui::MenuItem("Tetrahedron"))
+								add_model_popup = ModelType::Tetrahedron;
+							if (ImGui::MenuItem("Octahedron"))
+								add_model_popup = ModelType::Octahedron;
+							if (ImGui::MenuItem("Dodecahedron"))
+								add_model_popup = ModelType::Dodecahedron;
+							if (ImGui::MenuItem("Icosahedron"))
+								add_model_popup = ModelType::Icosahedron;
+
+							ImGui::EndMenu();
+						}
+
+						ImGui::EndMenu();
+					}
+
+					if (ImGui::MenuItem("Directional Light")) {
+						ecs_engine.addComponent<DirectionalLight>(selected_entity);
+					}
+
+					if (ImGui::MenuItem("Point Light")) {
+						ecs_engine.addComponent<PointLight>(selected_entity);
+					}
+
+					if (ImGui::MenuItem("Spot Light")) {
+						ecs_engine.addComponent<SpotLight>(selected_entity);
+					}
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::MenuItem("Delete")) {
+					if (selected_entity != handle64::invalid_handle)
+						scene.removeEntity(ecs_engine, selected_entity);
+				}
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
+}
+
+
+
+
+
+//----------------------------------------------------------------------------------
+//
+//   Draw
+//
+//----------------------------------------------------------------------------------
+
+void UserInterface::draw(const Engine& engine) {
+
+	auto& scene = engine.getScene();
+	auto& ecs_engine = engine.getECS();
+	auto& device = engine.getRenderingMgr().getDevice();
+	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
+
+	bool open = true;
+
+	// Setup window layout
+	ImGui::SetNextWindowSize(ImVec2(275, 600), ImGuiCond_FirstUseEver);
+	ImGui::Begin("Scene", &open, ImGuiWindowFlags_MenuBar);
+	ImGui::End();
+
+	ImGui::SetNextWindowSize(ImVec2(375, 425), ImGuiCond_FirstUseEver);
+	ImGui::Begin("Properties", &open);
+	ImGui::End();
+
+	// Draw window contents
+	if (ImGui::Begin("Scene")) {
+
+		ModelType add_model_popup = ModelType::None;
+
+		// Draw menu
+		DrawMenu(device, ecs_engine, resource_mgr, scene, add_model_popup);
+
+		// Process model popup
+		ProcNewModelPopups(device, ecs_engine, resource_mgr, selected_entity, add_model_popup);
+
+		// Draw tree
+		DrawTree(ecs_engine, scene);
+	}
+
+	// End window
+	ImGui::End();
 }
