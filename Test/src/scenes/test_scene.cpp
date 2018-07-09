@@ -18,8 +18,7 @@ void TestScene::load(const Engine& engine) {
 	const auto& rendering_mgr = engine.getRenderingMgr();
 	auto& device              = rendering_mgr.getDevice();
 	auto& device_context      = rendering_mgr.getDeviceContext();
-
-	auto& resource_mgr = rendering_mgr.getResourceMgr();
+	auto& resource_mgr        = rendering_mgr.getResourceMgr();
 
 
 	//----------------------------------------------------------------------------------
@@ -38,10 +37,15 @@ void TestScene::load(const Engine& engine) {
 	cam->setViewportDepth(0.0f, 1.0f);
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
-	cam->setFog(Fog(vec4_f32(0.2f, 0.2f, 0.2f, 1.0f), 30.0f, 25.0f));
-	cam->setSkybox(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	cam->getSettings().setSkybox(
+		resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
-	ecs_engine.getComponent<Transform>(camera)->setPosition(vec3_f32(0.0f, 6.0f, -2.0f));
+	auto& fog = cam->getSettings().getFog();
+	fog.color = vec4_f32{0.2f, 0.2f, 0.2f, 1.0f};
+	fog.start = 30.0f;
+	fog.range = 25.0f;
+
+	ecs_engine.getComponent<Transform>(camera)->setPosition(vec3_f32{0.0f, 6.0f, -2.0f});
 	ecs_engine.getComponent<MouseRotation>(camera)->setSensitivity(0.01f);
 
 

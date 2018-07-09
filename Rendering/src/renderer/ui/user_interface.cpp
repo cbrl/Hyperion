@@ -327,6 +327,81 @@ void UserInterface::drawDetails(Transform& transform) const {
 }
 
 
+void DrawCameraSettings(CameraSettings& settings) {
+
+	ImGui::Text("Settings");
+	ImGui::Separator();
+
+	//----------------------------------------------------------------------------------
+	// Render Mode
+	//----------------------------------------------------------------------------------
+	static constexpr const char* render_mode_names[] = {
+		"Forward",
+		"Forward+",
+		"Deferred"
+	};
+	static constexpr RenderMode render_modes[] = {
+		RenderMode::Forward,
+		RenderMode::ForwardPlus,
+		RenderMode::Deferred
+	};
+	static_assert(std::size(render_mode_names) == std::size(render_modes));
+
+	auto render_mode = static_cast<int>(settings.getRenderMode());
+	if (ImGui::Combo("Render Mode", &render_mode, render_mode_names, std::size(render_mode_names)))
+		settings.setRenderMode(static_cast<RenderMode>(render_mode));
+
+
+	//----------------------------------------------------------------------------------
+	// Lighting Mode
+	//----------------------------------------------------------------------------------
+	static constexpr const char* light_mode_names[] = {
+		"Default",
+		"Unlint",
+		"FalseColorPosition",
+		"FalseColorNormal",
+		"FalseColorDepth"
+	};
+	static constexpr LightingMode light_modes[] = {
+		LightingMode::Default,
+		LightingMode::Unlit,
+		LightingMode::FalseColorPosition,
+		LightingMode::FalseColorNormal,
+		LightingMode::FalseColorDepth
+	};
+	static_assert(std::size(light_mode_names) == std::size(light_modes));
+
+	auto light_mode = static_cast<int>(settings.getLightingMode());
+	if (ImGui::Combo("Lighting Mode", &light_mode, light_mode_names, std::size(light_mode_names)))
+		settings.setLightingMode(static_cast<LightingMode>(light_mode));
+
+
+	//----------------------------------------------------------------------------------
+	// Render Options
+	//----------------------------------------------------------------------------------
+	ImGui::Spacing();
+
+	auto bounding_volumes = settings.hasRenderOption(RenderOptions::BoundingVolume);
+	if (ImGui::Checkbox("Bounding Volumes", &bounding_volumes))
+		settings.toggleRenderOption(RenderOptions::BoundingVolume);
+
+	auto wireframe = settings.hasRenderOption(RenderOptions::Wireframe);
+	if (ImGui::Checkbox("Wireframe", &wireframe))
+		settings.toggleRenderOption(RenderOptions::Wireframe);
+
+
+	//----------------------------------------------------------------------------------
+	// Fog
+	//----------------------------------------------------------------------------------
+	ImGui::Spacing();
+
+	auto& fog = settings.getFog();
+	ImGui::ColorEdit3("Fog Color", fog.color.data());
+	ImGui::DragFloat("Fog Start", &fog.start, 0.1f);
+	ImGui::DragFloat("Fog Range", &fog.range, 0.1f);
+}
+
+
 void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 
 	drawComponentState(camera);
@@ -340,28 +415,7 @@ void UserInterface::drawDetails(PerspectiveCamera& camera) const {
 		camera.setFOV(fov);
 	}
 
-
-	ImGui::Text("Fog");
-	ImGui::Separator();
-
-	auto&    fog   = camera.getFog();
-	vec4_f32 color = fog.color;
-	f32      start = fog.start;
-	f32      range = fog.range;
-
-	bool update = false;
-
-	if (ImGui::ColorEdit4("Color", color.data()))
-		update = true;
-	
-	if (ImGui::InputFloat("Start", &start))
-		update = true;
-
-	if (ImGui::InputFloat("Range", &range))
-		update = true;
-
-	if (update)
-		camera.setFog(Fog(color, start, range));
+	DrawCameraSettings(camera.getSettings());
 }
 
 
@@ -379,27 +433,7 @@ void UserInterface::drawDetails(OrthographicCamera& camera) const {
 	}
 
 
-	ImGui::Text("Fog");
-	ImGui::Separator();
-
-	auto&    fog   = camera.getFog();
-	vec4_f32 color = fog.color;
-	f32      start = fog.start;
-	f32      range = fog.range;
-
-	bool update = false;
-
-	if (ImGui::ColorEdit4("Color", color.data()))
-		update = true;
-
-	if (ImGui::InputFloat("Start", &start))
-		update = true;
-
-	if (ImGui::InputFloat("Range", &range))
-		update = true;
-
-	if (update)
-		camera.setFog(Fog(color, start, range));
+	DrawCameraSettings(camera.getSettings());
 }
 
 

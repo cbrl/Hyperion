@@ -13,7 +13,7 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	const auto world_to_camera      = transform->getWorldToObjectMatrix();
 	const auto camera_to_projection = camera.getCameraToProjectionMatrix();
 	const auto world_to_projection  = world_to_camera * camera_to_projection;
-	const auto* skybox              = camera.getSkybox();
+	const auto* skybox              = camera.getSettings().getSkybox();
 
 
 	//----------------------------------------------------------------------------------
