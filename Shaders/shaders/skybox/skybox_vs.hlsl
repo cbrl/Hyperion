@@ -1,5 +1,4 @@
 #include "include/global.hlsl"
-#include "include/input_structs.hlsl"
 #include "shapes/geosphere.hlsli"
 
 

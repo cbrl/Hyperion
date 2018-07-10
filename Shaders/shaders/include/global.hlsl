@@ -1,9 +1,9 @@
 #ifndef HLSL_GLOBAL
 #define HLSL_GLOBAL
 
-
-#include "include/syntax.hlsl"
 #include "hlsl.h"
+#include "include/syntax.hlsl"
+#include "include/input_structs.hlsl"
 
 
 //----------------------------------------------------------------------------------

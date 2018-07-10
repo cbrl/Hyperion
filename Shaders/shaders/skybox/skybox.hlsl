@@ -1,5 +1,4 @@
-#include "include\global.hlsl"
-#include "include\input_structs.hlsl"
+#include "include/global.hlsl"
 
 
 TextureCube skybox : REG_T(SLOT_SRV_SKYBOX);

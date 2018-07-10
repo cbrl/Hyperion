@@ -1,20 +1,5 @@
 #include "forward/forward_include.hlsl"
-#include "include/normal.hlsl"
 #include "include/light.hlsl"
-
-
-//----------------------------------------------------------------------------------
-//  SRVs
-//----------------------------------------------------------------------------------
-
-// Skybox texture
-TextureCube env_map : REG_T(SLOT_SRV_SKYBOX);
-
-// Model textures
-Texture2D diffuse_map : REG_T(SLOT_SRV_DIFFUSE);
-Texture2D normal_map  : REG_T(SLOT_SRV_NORMAL);
-// ambient, specular, etc...
-
 
 
 float4 PS(PSPositionNormalTexture pin) : SV_Target {
@@ -46,16 +31,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Normal Mapping
 	//----------------------------------------------------------------------------------
 
-	float3 normal_map_sample = normal_map.Sample(linear_wrap, pin.tex).xyz;
-	float3 normal_vec;
-
-	if (normal_map_sample.z) {
-		normal_vec = TransformNormal(pin.position, pin.normal, pin.tex, normal_map_sample);
-	}
-	else {
-		normal_vec = pin.normal;
-	}
-
+	float3 normal_vec = GetNormal(pin.position, pin.normal, pin.tex);
 
 
 	//----------------------------------------------------------------------------------
