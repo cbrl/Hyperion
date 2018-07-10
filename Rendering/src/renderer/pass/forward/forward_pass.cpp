@@ -2,7 +2,6 @@
 
 #include "engine/engine.h"
 #include "hlsl.h"
-#include "resource/shader/shader_factory.h"
 #include "geometry/frustum/frustum.h"
 
 
@@ -10,16 +9,16 @@ ForwardPass::ForwardPass(ID3D11Device& device,
                          ID3D11DeviceContext& device_context,
                          RenderStateMgr& render_state_mgr,
                          ResourceMgr& resource_mgr)
-	: device(device)
-	, device_context(device_context)
-	, render_state_mgr(render_state_mgr) {
+	: device_context(device_context)
+	, render_state_mgr(render_state_mgr)
+	, resource_mgr(resource_mgr)
+	, color_buffer(device) {
 
 	vertex_shader = ShaderFactory::createForwardVS(resource_mgr);
-	pixel_shader  = ShaderFactory::createForwardPS(resource_mgr);
 }
 
 
-void ForwardPass::bindRenderStates() const {
+void ForwardPass::bindDefaultState() const {
 	
 	// Bind topology
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -30,22 +29,50 @@ void ForwardPass::bindRenderStates() const {
 	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
 
 	// Bind shaders
-	pixel_shader->bind(device_context);
 	vertex_shader->bind(device_context);
 
 	// Bind render states
 	render_state_mgr.get().bindOpaque(device_context);
-	render_state_mgr.get().bindDepthDefault(device_context);
+	render_state_mgr.get().bindDepthLessEqRW(device_context);
 	render_state_mgr.get().bindCullCounterClockwise(device_context);
 }
 
 
-void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_projection) const {
+void ForwardPass::bindWireframeState() const {
+
+	// Bind topology
+	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// Bind null shaders
+	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
+
+	color_buffer.bind<Pipeline::PS>(device_context, SLOT_CBUFFER_COLOR);
+
+	// Bind shaders
+	vertex_shader->bind(device_context);
+
+	// Bind render states
+	render_state_mgr.get().bindOpaque(device_context);
+	render_state_mgr.get().bindDepthLessEqRW(device_context);
+	render_state_mgr.get().bindWireframe(device_context);
+}
+
+
+void XM_CALLCONV ForwardPass::render(const Engine& engine, const Texture* sky, FXMMATRIX world_to_projection) const {
 
 	auto& ecs_engine = engine.getECS();
 
+	// Bind the skybox texture as the environment map
+	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
+
 	// Bind the shaders, render states, etc
-	bindRenderStates();
+	bindDefaultState();
+
+	// Create the apporopriate pixel shader and bind it
+	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr);
+	pixel_shader->bind(device_context);
 
 	// Render models
 	ecs_engine.forEach<Model>([&](Model& model) {
@@ -55,17 +82,33 @@ void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_pr
 }
 
 
-void XM_CALLCONV ForwardPass::render(const Engine& engine, const Texture* sky, FXMMATRIX world_to_projection) const {
+void ForwardPass::renderFalseColor(const Engine& engine, FXMMATRIX world_to_projection, FalseColor color) {
 
 	auto& ecs_engine = engine.getECS();
 
-	// Bind the skybox texture if it has one
-	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
+	bindDefaultState();
 
-	// Bind the shaders, render states, etc
-	bindRenderStates();
+	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
+	pixel_shader->bind(device_context);
 
-	// Render models
+	ecs_engine.forEach<Model>([&](Model& model) {
+		if (model.isActive())
+			renderModel(ecs_engine, model, world_to_projection);
+	});
+}
+
+
+void ForwardPass::renderWireframe(const Engine& engine, FXMMATRIX world_to_projection) const {
+
+	auto& ecs_engine = engine.getECS();
+
+	bindWireframeState();
+
+	color_buffer.updateData(device_context, vec4_f32{0.0f, 1.0f, 0.0f, 1.0f});
+
+	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, FalseColor::Static);
+	pixel_shader->bind(device_context);
+
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
 			renderModel(ecs_engine, model, world_to_projection);

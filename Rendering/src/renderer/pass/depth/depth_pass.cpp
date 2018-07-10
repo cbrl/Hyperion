@@ -32,7 +32,7 @@ void DepthPass::bindState() const {
 	render_state_mgr.get().bindCullCounterClockwise(device_context);
 
 	// Depth state
-	render_state_mgr.get().bindDepthDefault(device_context);
+	render_state_mgr.get().bindDepthLessEqRW(device_context);
 }
 
 

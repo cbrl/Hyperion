@@ -30,6 +30,9 @@
     <Filter Include="Shader Files\shapes">
       <UniqueIdentifier>{68a0cbdf-2322-4ee2-8dab-546db170a256}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader Files\false_color">
+      <UniqueIdentifier>{752e2e52-b938-4b94-a9df-a1c437cc3db2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\depth\depth_vs.hlsl">
@@ -52,6 +55,18 @@
     </FxCompile>
     <FxCompile Include="shaders\shapes\wireframe_box_vs.hlsl">
       <Filter>Shader Files\shapes</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\false_color\static_color.hlsl">
+      <Filter>Shader Files\false_color</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\false_color\position_color.hlsl">
+      <Filter>Shader Files\false_color</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\false_color\normal_color.hlsl">
+      <Filter>Shader Files\false_color</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\false_color\depth_color.hlsl">
+      <Filter>Shader Files\false_color</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

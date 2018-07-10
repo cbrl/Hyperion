@@ -4,6 +4,14 @@
 #include "resource/shader/shader.h"
 
 
+enum class FalseColor {
+	Static,
+	Position,
+	Normal,
+	Depth
+};
+
+
 namespace ShaderFactory {
 	
 	// Forward
@@ -21,4 +29,7 @@ namespace ShaderFactory {
 	// Bounding Volume
 	shared_ptr<PixelShader> createWireframeBoxPS(ResourceMgr& resource_mgr);
 	shared_ptr<VertexShader> createWireframeBoxVS(ResourceMgr& resource_mgr);
+
+	// False Color
+	shared_ptr<PixelShader> createFalseColorPS(ResourceMgr& resource_mgr, FalseColor color);
 }

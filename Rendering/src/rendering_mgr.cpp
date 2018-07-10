@@ -1,4 +1,5 @@
 #include "rendering_mgr.h"
+#include "log/log.h"
 
 
 RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {

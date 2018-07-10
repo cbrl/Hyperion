@@ -242,11 +242,13 @@ public:
 	// Set a new viewport
 	void setViewport(D3D11_VIEWPORT vp) noexcept {
 		viewport.setViewport(std::move(vp));
+		updateProjectionMatrix();
 	}
 
 	// Change the viewport size
 	void resizeViewport(u32 width, u32 height) noexcept {
 		viewport.setSize(width, height);
+		updateProjectionMatrix();
 	}
 
 	void setViewportTopLeft(u32 x, u32 y) noexcept {

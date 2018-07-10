@@ -7,6 +7,7 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 
 
 	// Camera variables
+	const auto& settings  = camera.getSettings();
 	const auto* transform = ecs_engine.getComponent<Transform>(camera.getOwner());
 	assert(transform != nullptr);
 
@@ -33,13 +34,37 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
-	forward_pass->render(engine, skybox, world_to_projection);
+	switch (settings.getLightingMode()) {
+		case LightingMode::Default:
+			forward_pass->render(engine, skybox, world_to_projection);
+			break;
+
+		case LightingMode::Unlit:
+			//forward_pass->renderUnlit(engine, world_to_projection);
+			break;
+
+		case LightingMode::FalseColorPosition:
+			forward_pass->renderFalseColor(engine, world_to_projection, FalseColor::Position);
+			break;
+
+		case LightingMode::FalseColorNormal:
+			forward_pass->renderFalseColor(engine, world_to_projection, FalseColor::Normal);
+			break;
+
+		case LightingMode::FalseColorDepth:
+			forward_pass->renderFalseColor(engine, world_to_projection, FalseColor::Depth);
+			break;
+	}
+
+	if (settings.hasRenderOption(RenderOptions::Wireframe))
+		forward_pass->renderWireframe(engine, world_to_projection);
 
 
 	//----------------------------------------------------------------------------------
 	// Render bounding volumes
 	//----------------------------------------------------------------------------------
-	bounding_volume_pass->render(engine, world_to_projection);
+	if (settings.hasRenderOption(RenderOptions::BoundingVolume))
+		bounding_volume_pass->render(engine, world_to_projection);
 
 
 	//----------------------------------------------------------------------------------

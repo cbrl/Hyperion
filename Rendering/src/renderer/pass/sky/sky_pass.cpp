@@ -42,7 +42,7 @@ void SkyPass::bindRenderStates() const {
 	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
 
 	render_state_mgr.get().bindOpaque(device_context);
-	render_state_mgr.get().bindDepthRead(device_context);
+	render_state_mgr.get().bindDepthLessEqRead(device_context);
 	render_state_mgr.get().bindCullCounterClockwise(device_context);
 
 	vertex_shader->bind(device_context);

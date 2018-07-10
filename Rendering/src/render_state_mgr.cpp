@@ -60,12 +60,13 @@ HRESULT RenderStateMgr::createBlendState(ID3D11Device& device,
 HRESULT RenderStateMgr::createDepthStencilState(ID3D11Device& device,
                                                 bool enable,
                                                 bool write_enable,
+                                                bool depth_greater,
                                                 ID3D11DepthStencilState** p_result) const {
 	D3D11_DEPTH_STENCIL_DESC desc = {};
 
 	desc.DepthEnable    = enable ? TRUE : FALSE;
 	desc.DepthWriteMask = write_enable ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
-	desc.DepthFunc      = D3D11_COMPARISON_LESS_EQUAL;
+	desc.DepthFunc      = depth_greater ? D3D11_COMPARISON_GREATER_EQUAL : D3D11_COMPARISON_LESS_EQUAL;
 
 	desc.StencilEnable    = FALSE;
 	desc.StencilReadMask  = D3D11_DEFAULT_STENCIL_READ_MASK;
@@ -160,16 +161,20 @@ void RenderStateMgr::createBlendStates(ID3D11Device& device) {
 
 void RenderStateMgr::createDepthStencilStates(ID3D11Device& device) {
 	// Depth None
-	ThrowIfFailed(createDepthStencilState(device, false, false, depth_none.GetAddressOf()),
-	              "Error creating depthnone depth state");
+	ThrowIfFailed(createDepthStencilState(device, false, false, false, depth_none.GetAddressOf()),
+	              "Error creating depth stencil state");
 
-	// Depth Default
-	ThrowIfFailed(createDepthStencilState(device, true, true, depth_default.GetAddressOf()),
-	              "Error creating depthdefault depth state");
+	// Depth Less/Equal Read/Write
+	ThrowIfFailed(createDepthStencilState(device, true, true, false, depth_less_equal_readwrite.GetAddressOf()),
+	              "Error creating depth stencil state");
 
-	// Depth Read
-	ThrowIfFailed(createDepthStencilState(device, true, false, depth_read.GetAddressOf()),
-	              "Error creating depthread depth state");
+	// Depth Greater/Equal Read/Write
+	ThrowIfFailed(createDepthStencilState(device, true, true, true, depth_greater_equal_readwrite.GetAddressOf()),
+				  "Error creating depth stencil state");
+
+	// Depth Less/Equal Read
+	ThrowIfFailed(createDepthStencilState(device, true, false, false, depth_less_equal_read.GetAddressOf()),
+	              "Error creating depth stencil state");
 }
 
 
@@ -276,9 +281,7 @@ void RenderStateMgr::bindAdditive(ID3D11DeviceContext& device_context, f32 blend
 }
 
 
-void RenderStateMgr::bindNonPremultiplied(ID3D11DeviceContext& device_context,
-                                          f32 blend_factor[4],
-                                          u32 sample_mask) const {
+void RenderStateMgr::bindNonPremultiplied(ID3D11DeviceContext& device_context, f32 blend_factor[4], u32 sample_mask) const {
 	Pipeline::OM::bindBlendState(device_context, non_premultiplied.Get(), blend_factor, sample_mask);
 }
 
@@ -291,13 +294,18 @@ void RenderStateMgr::bindDepthNone(ID3D11DeviceContext& device_context, u32 sten
 }
 
 
-void RenderStateMgr::bindDepthDefault(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
-	Pipeline::OM::bindDepthStencilState(device_context, depth_default.Get(), stencil_ref);
+void RenderStateMgr::bindDepthLessEqRW(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
+	Pipeline::OM::bindDepthStencilState(device_context, depth_less_equal_readwrite.Get(), stencil_ref);
 }
 
 
-void RenderStateMgr::bindDepthRead(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
-	Pipeline::OM::bindDepthStencilState(device_context, depth_read.Get(), stencil_ref);
+void RenderStateMgr::bindDepthGreaterEqRW(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
+	Pipeline::OM::bindDepthStencilState(device_context, depth_greater_equal_readwrite.Get(), stencil_ref);
+}
+
+
+void RenderStateMgr::bindDepthLessEqRead(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
+	Pipeline::OM::bindDepthStencilState(device_context, depth_less_equal_read.Get(), stencil_ref);
 }
 
 

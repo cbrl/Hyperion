@@ -34,9 +34,10 @@ public:
 	                          u32 sample_mask     = 0xffffffff) const;
 
 	// Depth stencil states
-	void bindDepthNone(ID3D11DeviceContext& device_context, u32 stencil_ref    = 0) const;
-	void bindDepthDefault(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
-	void bindDepthRead(ID3D11DeviceContext& device_context, u32 stencil_ref    = 0) const;
+	void bindDepthNone(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
+	void bindDepthLessEqRW(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
+	void bindDepthGreaterEqRW(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
+	void bindDepthLessEqRead(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
 
 	// Rasterizer states
 	void bindCullNone(ID3D11DeviceContext& device_context) const;
@@ -67,6 +68,7 @@ private:
 	HRESULT createDepthStencilState(ID3D11Device& device,
 	                                bool enable,
 	                                bool write_enable,
+	                                bool depth_greater,
 	                                _Out_ ID3D11DepthStencilState** p_result) const;
 
 	HRESULT createRasterizerState(ID3D11Device& device,
@@ -96,8 +98,9 @@ private:
 
 	// Depth stencil states
 	ComPtr<ID3D11DepthStencilState> depth_none;
-	ComPtr<ID3D11DepthStencilState> depth_default;
-	ComPtr<ID3D11DepthStencilState> depth_read;
+	ComPtr<ID3D11DepthStencilState> depth_less_equal_read;
+	ComPtr<ID3D11DepthStencilState> depth_less_equal_readwrite;
+	ComPtr<ID3D11DepthStencilState> depth_greater_equal_readwrite;
 
 	// Rasterizer states
 	ComPtr<ID3D11RasterizerState> cull_none;

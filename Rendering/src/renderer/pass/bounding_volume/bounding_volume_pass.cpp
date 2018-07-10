@@ -36,8 +36,9 @@ void BoundingVolumePass::bindRenderStates() const {
 	model_matrix_buffer.bind<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
 	// Bind the render states
-	render_state_mgr.get().bindDepthDefault(device_context);
+	render_state_mgr.get().bindDepthLessEqRW(device_context);
 	render_state_mgr.get().bindOpaque(device_context);
+	render_state_mgr.get().bindCullCounterClockwise(device_context);
 }
 
 
