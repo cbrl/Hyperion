@@ -6,7 +6,11 @@
 
 float4 PS(PSPositionNormalTexture input) : SV_Target {
 
-	return float4(input.position.z, input.position.z, input.position.z, 1.0f);
+	float3 color = { input.position.z, input.position.z, input.position.z };
+	color = (color * 100.0f) - 99.0f;
+	color = saturate(color);
+
+	return float4(color, 1.0f);
 }
 
 

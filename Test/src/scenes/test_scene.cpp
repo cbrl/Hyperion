@@ -90,7 +90,7 @@ void TestScene::load(const Engine& engine) {
 
 	// Camera light
 	{
-		const auto spot_light = addEntity<BasicSpotLight>(ecs_engine);
+		const auto spot_light = addEntity<BasicSpotLight>(ecs_engine); 
 		auto light = ecs_engine.getComponent<SpotLight>(spot_light);
 		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(vec4_f32(0.8f, 0.8f, 1.0f, 1.0f));
