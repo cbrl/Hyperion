@@ -65,7 +65,7 @@ void XM_CALLCONV ForwardPass::render(const Engine& engine, const Texture* sky, F
 	auto& ecs_engine = engine.getECS();
 
 	// Bind the skybox texture as the environment map
-	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_SKYBOX);
+	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Bind the shaders, render states, etc
 	bindDefaultState();

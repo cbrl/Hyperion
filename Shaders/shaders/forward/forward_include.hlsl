@@ -8,7 +8,7 @@
 //----------------------------------------------------------------------------------
 
 // Environment map texture
-TextureCube env_map : REG_T(SLOT_SRV_SKYBOX);
+TextureCube env_map : REG_T(SLOT_SRV_ENV_MAP);
 
 // Model textures
 Texture2D diffuse_map : REG_T(SLOT_SRV_DIFFUSE);
