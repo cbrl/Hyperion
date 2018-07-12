@@ -10,6 +10,7 @@ RenderStateMgr::RenderStateMgr(ID3D11Device& device, ID3D11DeviceContext& device
 
 
 void RenderStateMgr::setupStates(ID3D11Device& device, ID3D11DeviceContext& device_context) {
+
 	// Blend states
 	createBlendStates(device);
 
@@ -23,13 +24,13 @@ void RenderStateMgr::setupStates(ID3D11Device& device, ID3D11DeviceContext& devi
 	createSamplerStates(device);
 
 	// Bind Sampler states
-	bindLinearClamp(device_context);
-	bindLinearWrap(device_context);
-	bindPointClamp(device_context);
-	bindPointWrap(device_context);
-	bindAnisotropicClamp(device_context);
-	bindAnisotropicWrap(device_context);
-	bindPcfSampler(device_context);
+	bind(device_context, SamplerStates::PointClamp, SLOT_SAMPLER_POINT_CLAMP);
+	bind(device_context, SamplerStates::PointWrap, SLOT_SAMPLER_POINT_WRAP);
+	bind(device_context, SamplerStates::LinearClamp, SLOT_SAMPLER_LINEAR_CLAMP);
+	bind(device_context, SamplerStates::LinearWrap, SLOT_SAMPLER_LINEAR_WRAP);
+	bind(device_context, SamplerStates::AnisotropicClamp, SLOT_SAMPLER_ANISO_CLAMP);
+	bind(device_context, SamplerStates::AnisotropicWrap, SLOT_SAMPLER_ANISO_WRAP);
+	bind(device_context, SamplerStates::PCF, SLOT_SAMPLER_PCF);
 }
 
 
@@ -138,110 +139,156 @@ HRESULT RenderStateMgr::createSamplerState(ID3D11Device& device,
 
 
 void RenderStateMgr::createBlendStates(ID3D11Device& device) {
+
 	// Opaque
-	ThrowIfFailed(createBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, opaque.GetAddressOf()),
-	              "Error creating opaque blend state");
+	ThrowIfFailed(createBlendState(device,
+	                               D3D11_BLEND_ONE,
+	                               D3D11_BLEND_INV_SRC_ALPHA,
+	                               getAddressOf(BlendStates::Opaque)),
+	              "Error creating Opaque blend state");
 
 	// Alpha Blend
-	ThrowIfFailed(createBlendState(device, D3D11_BLEND_ONE, D3D11_BLEND_INV_SRC_ALPHA, alpha_blend.GetAddressOf()),
-	              "Error creating alphablend blend state");
+	ThrowIfFailed(createBlendState(device,
+	                               D3D11_BLEND_ONE,
+	                               D3D11_BLEND_INV_SRC_ALPHA,
+	                               getAddressOf(BlendStates::AlphaBlend)),
+	              "Error creating AlphaBlend blend state");
 
 	// Additive
-	ThrowIfFailed(createBlendState(device, D3D11_BLEND_SRC_ALPHA, D3D11_BLEND_ONE, additive.GetAddressOf()),
-	              "Error creating additive blend state");
+	ThrowIfFailed(createBlendState(device,
+	                               D3D11_BLEND_SRC_ALPHA,
+	                               D3D11_BLEND_ONE,
+	                               getAddressOf(BlendStates::Additive)),
+	              "Error creating Additive blend state");
 
 	// Non-Premultiplied
 	ThrowIfFailed(createBlendState(device,
 	                               D3D11_BLEND_SRC_ALPHA,
 	                               D3D11_BLEND_INV_SRC_ALPHA,
-	                               non_premultiplied.GetAddressOf()),
-	              "Error creating nonpremultiplied blend state");
+	                               getAddressOf(BlendStates::NonPremultiplied)),
+	              "Error creating NonPremultiplied blend state");
 }
 
 
 void RenderStateMgr::createDepthStencilStates(ID3D11Device& device) {
-	// Depth None
-	ThrowIfFailed(createDepthStencilState(device, false, false, false, depth_none.GetAddressOf()),
-	              "Error creating depth stencil state");
 
-	// Depth Less/Equal Read/Write
-	ThrowIfFailed(createDepthStencilState(device, true, true, false, depth_less_equal_readwrite.GetAddressOf()),
-	              "Error creating depth stencil state");
+	// None
+	ThrowIfFailed(createDepthStencilState(device,
+	                                      false,
+	                                      false,
+	                                      false,
+	                                      getAddressOf(DepthStencilStates::None)),
+	              "Error creating None depth stencil state");
 
-	// Depth Greater/Equal Read/Write
-	ThrowIfFailed(createDepthStencilState(device, true, true, true, depth_greater_equal_readwrite.GetAddressOf()),
-				  "Error creating depth stencil state");
+	// Less Equal R
+	ThrowIfFailed(createDepthStencilState(device,
+	                                      true,
+	                                      false,
+	                                      false,
+	                                      getAddressOf(DepthStencilStates::LessEqR)),
+				  "Error creating LessEqR depth stencil state");
 
-	// Depth Less/Equal Read
-	ThrowIfFailed(createDepthStencilState(device, true, false, false, depth_less_equal_read.GetAddressOf()),
-	              "Error creating depth stencil state");
+	// Less Equal R/W
+	ThrowIfFailed(createDepthStencilState(device,
+	                                      true,
+	                                      true,
+	                                      false,
+	                                      getAddressOf(DepthStencilStates::LessEqRW)),
+	              "Error creating LessEqRW depth stencil state");
+
+	// Greater Equal R
+	ThrowIfFailed(createDepthStencilState(device,
+	                                      true,
+	                                      false,
+	                                      true,
+	                                      getAddressOf(DepthStencilStates::GreaterEqR)),
+				  "Error creating GreaterEqR depth stencil state");
+
+	// Greater Equal R/W
+	ThrowIfFailed(createDepthStencilState(device,
+	                                      true,
+	                                      true,
+	                                      true,
+	                                      getAddressOf(DepthStencilStates::GreaterEqRW)),
+				  "Error creating GreaterEqRW depth stencil state");
 }
 
 
 void RenderStateMgr::createRasterizerStates(ID3D11Device& device) {
+
 	// Cull None
-	ThrowIfFailed(createRasterizerState(device, D3D11_CULL_NONE, D3D11_FILL_SOLID, cull_none.GetAddressOf()),
-	              "Error creating cullnone raster state");
+	ThrowIfFailed(createRasterizerState(device,
+	                                    D3D11_CULL_NONE,
+	                                    D3D11_FILL_SOLID,
+	                                    getAddressOf(RasterStates::CullNone)),
+	              "Error creating CullNone raster state");
 
 	// Cull Clockwise
-	ThrowIfFailed(createRasterizerState(device, D3D11_CULL_FRONT, D3D11_FILL_SOLID, cull_clockwise.GetAddressOf()),
-	              "Error creating cullclockwise raster state");
+	ThrowIfFailed(createRasterizerState(device,
+	                                    D3D11_CULL_FRONT,
+	                                    D3D11_FILL_SOLID,
+	                                    getAddressOf(RasterStates::CullClockwise)),
+	              "Error creating CullClockwise raster state");
 
 	// Cull Counterclockwise
 	ThrowIfFailed(createRasterizerState(device,
 	                                    D3D11_CULL_BACK,
 	                                    D3D11_FILL_SOLID,
-	                                    cull_counter_clockwise.GetAddressOf()),
-	              "Error creating cullcounterclockwise raster state");
+	                                    getAddressOf(RasterStates::CullCounterClockwise)),
+	              "Error creating CullCounterClockwise raster state");
 
 	// Wireframe
-	ThrowIfFailed(createRasterizerState(device, D3D11_CULL_NONE, D3D11_FILL_WIREFRAME, wireframe.GetAddressOf()),
-	              "Error creating wireframe raster state");
+	ThrowIfFailed(createRasterizerState(device,
+	                                    D3D11_CULL_NONE,
+	                                    D3D11_FILL_WIREFRAME,
+	                                    getAddressOf(RasterStates::Wireframe)),
+	              "Error creating Wireframe raster state");
 }
 
 
 void RenderStateMgr::createSamplerStates(ID3D11Device& device) {
+
 	// Point Wrap
 	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_MIN_MAG_MIP_POINT,
 	                                 D3D11_TEXTURE_ADDRESS_WRAP,
-	                                 point_wrap.GetAddressOf()),
-	              "Error creating pointwrap sampler state");
+	                                 getAddressOf(SamplerStates::PointWrap)),
+	              "Error creating PointWrap sampler state");
 
 	// Point Clamp
 	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_MIN_MAG_MIP_POINT,
 	                                 D3D11_TEXTURE_ADDRESS_CLAMP,
-	                                 point_clamp.GetAddressOf()),
-	              "Error creating pointclamp sampler state");
+	                                 getAddressOf(SamplerStates::PointClamp)),
+	              "Error creating PointClamp sampler state");
 
 	// Linear Wrap
 	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_MIN_MAG_MIP_LINEAR,
 	                                 D3D11_TEXTURE_ADDRESS_WRAP,
-	                                 linear_wrap.GetAddressOf()),
-	              "Error creating linearwrap sampler state");
+	                                 getAddressOf(SamplerStates::LinearWrap)),
+	              "Error creating LinearWrap sampler state");
 
 	// Linear Clamp
 	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_MIN_MAG_MIP_LINEAR,
 	                                 D3D11_TEXTURE_ADDRESS_CLAMP,
-	                                 linear_clamp.GetAddressOf()),
-	              "Error creating linearclamp sampler state");
+	                                 getAddressOf(SamplerStates::LinearClamp)),
+	              "Error creating LinearClamp sampler state");
 
 	// Anisotropic Wrap
 	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_ANISOTROPIC,
 	                                 D3D11_TEXTURE_ADDRESS_WRAP,
-	                                 anisotropic_wrap.GetAddressOf()),
-	              "Error creating anisotropicwrap sampler state");
+	                                 getAddressOf(SamplerStates::AnisotropicWrap)),
+	              "Error creating AnisotropicWrap sampler state");
 
 	// Anisotropic Clamp
 	ThrowIfFailed(createSamplerState(device,
 	                                 D3D11_FILTER_ANISOTROPIC,
 	                                 D3D11_TEXTURE_ADDRESS_CLAMP,
-	                                 anisotropic_clamp.GetAddressOf()),
-	              "Error creating anisotropicclamp sampler state");
+	                                 getAddressOf(SamplerStates::AnisotropicClamp)),
+	              "Error creating AnisotropicClamp sampler state");
 
 	// PCF Sampler
 	{
@@ -255,116 +302,33 @@ void RenderStateMgr::createSamplerStates(ID3D11Device& device) {
 		desc.MaxLOD         = D3D11_FLOAT32_MAX;
 		desc.ComparisonFunc = D3D11_COMPARISON_LESS_EQUAL;
 
-		ThrowIfFailed(device.CreateSamplerState(&desc, pcf_sampler.GetAddressOf()),
+		ThrowIfFailed(device.CreateSamplerState(&desc, getAddressOf(SamplerStates::PCF)),
 		              "Error creating pcf sampler state");
 
-		SetDebugObjectName(pcf_sampler.Get(), "RenderStateMgr SamplerState");
+		SetDebugObjectName(get(SamplerStates::PCF), "RenderStateMgr SamplerState");
 	}
 }
 
 
-//----------------------------------------------------------------------------------
-// Bind blend states
-//----------------------------------------------------------------------------------
-void RenderStateMgr::bindOpaque(ID3D11DeviceContext& device_context, f32 blend_factor[4], u32 sample_mask) const {
-	Pipeline::OM::bindBlendState(device_context, opaque.Get(), blend_factor, sample_mask);
+void RenderStateMgr::bind(ID3D11DeviceContext& device_context,
+                          BlendStates state,
+                          f32 blend_factor[4],
+                          u32 sample_mask) const {
+	
+	Pipeline::OM::bindBlendState(device_context, get(state), blend_factor, sample_mask);
 }
 
-
-void RenderStateMgr::bindAlphaBlend(ID3D11DeviceContext& device_context, f32 blend_factor[4], u32 sample_mask) const {
-	Pipeline::OM::bindBlendState(device_context, alpha_blend.Get(), blend_factor, sample_mask);
+void RenderStateMgr::bind(ID3D11DeviceContext& device_context, DepthStencilStates state, u32 stencil_ref) const {
+	
+	Pipeline::OM::bindDepthStencilState(device_context, get(state), stencil_ref);
 }
 
-
-void RenderStateMgr::bindAdditive(ID3D11DeviceContext& device_context, f32 blend_factor[4], u32 sample_mask) const {
-	Pipeline::OM::bindBlendState(device_context, additive.Get(), blend_factor, sample_mask);
+void RenderStateMgr::bind(ID3D11DeviceContext& device_context, RasterStates state) const {
+	
+	Pipeline::RS::bindState(device_context, get(state));
 }
 
-
-void RenderStateMgr::bindNonPremultiplied(ID3D11DeviceContext& device_context, f32 blend_factor[4], u32 sample_mask) const {
-	Pipeline::OM::bindBlendState(device_context, non_premultiplied.Get(), blend_factor, sample_mask);
-}
-
-
-//----------------------------------------------------------------------------------
-// Bind depth stencil states
-//----------------------------------------------------------------------------------
-void RenderStateMgr::bindDepthNone(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
-	Pipeline::OM::bindDepthStencilState(device_context, depth_none.Get(), stencil_ref);
-}
-
-
-void RenderStateMgr::bindDepthLessEqRW(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
-	Pipeline::OM::bindDepthStencilState(device_context, depth_less_equal_readwrite.Get(), stencil_ref);
-}
-
-
-void RenderStateMgr::bindDepthGreaterEqRW(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
-	Pipeline::OM::bindDepthStencilState(device_context, depth_greater_equal_readwrite.Get(), stencil_ref);
-}
-
-
-void RenderStateMgr::bindDepthLessEqRead(ID3D11DeviceContext& device_context, u32 stencil_ref) const {
-	Pipeline::OM::bindDepthStencilState(device_context, depth_less_equal_read.Get(), stencil_ref);
-}
-
-
-//----------------------------------------------------------------------------------
-// Bind rasterizer states
-//----------------------------------------------------------------------------------
-void RenderStateMgr::bindCullNone(ID3D11DeviceContext& device_context) const {
-	Pipeline::RS::bindState(device_context, cull_none.Get());
-}
-
-
-void RenderStateMgr::bindCullClockwise(ID3D11DeviceContext& device_context) const {
-	Pipeline::RS::bindState(device_context, cull_clockwise.Get());
-}
-
-
-void RenderStateMgr::bindCullCounterClockwise(ID3D11DeviceContext& device_context) const {
-	Pipeline::RS::bindState(device_context, cull_counter_clockwise.Get());
-}
-
-
-void RenderStateMgr::bindWireframe(ID3D11DeviceContext& device_context) const {
-	Pipeline::RS::bindState(device_context, wireframe.Get());
-}
-
-
-//----------------------------------------------------------------------------------
-// Bind sampler states
-//----------------------------------------------------------------------------------
-void RenderStateMgr::bindPointWrap(ID3D11DeviceContext& device_context) const {
-	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_POINT_WRAP, 1, point_wrap.GetAddressOf());
-}
-
-
-void RenderStateMgr::bindPointClamp(ID3D11DeviceContext& device_context) const {
-	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_POINT_CLAMP, 1, point_clamp.GetAddressOf());
-}
-
-
-void RenderStateMgr::bindLinearWrap(ID3D11DeviceContext& device_context) const {
-	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_LINEAR_WRAP, 1, linear_wrap.GetAddressOf());
-}
-
-
-void RenderStateMgr::bindLinearClamp(ID3D11DeviceContext& device_context) const {
-	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_LINEAR_CLAMP, 1, linear_clamp.GetAddressOf());
-}
-
-
-void RenderStateMgr::bindAnisotropicWrap(ID3D11DeviceContext& device_context) const {
-	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_ANISO_WRAP, 1, anisotropic_wrap.GetAddressOf());
-}
-
-
-void RenderStateMgr::bindAnisotropicClamp(ID3D11DeviceContext& device_context) const {
-	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_ANISO_CLAMP, 1, anisotropic_clamp.GetAddressOf());
-}
-
-
-void RenderStateMgr::bindPcfSampler(ID3D11DeviceContext& device_context) const {
-	Pipeline::bindSamplers(device_context, SLOT_SAMPLER_PCF, 1, pcf_sampler.GetAddressOf());
+void RenderStateMgr::bind(ID3D11DeviceContext& device_context, SamplerStates state, u32 slot) const {
+	
+	Pipeline::bindSamplers(device_context, slot, 1, getAddressOf(state));
 }

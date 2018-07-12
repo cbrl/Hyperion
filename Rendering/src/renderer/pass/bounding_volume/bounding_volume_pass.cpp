@@ -21,6 +21,7 @@ BoundingVolumePass::BoundingVolumePass(ID3D11Device& device,
 
 
 void BoundingVolumePass::bindRenderStates() const {
+
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	// Unbind shaders
@@ -36,9 +37,9 @@ void BoundingVolumePass::bindRenderStates() const {
 	model_matrix_buffer.bind<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
 	// Bind the render states
-	render_state_mgr.get().bindDepthLessEqRW(device_context);
-	render_state_mgr.get().bindOpaque(device_context);
-	render_state_mgr.get().bindCullCounterClockwise(device_context);
+	render_state_mgr.get().bind(device_context, DepthStencilStates::LessEqRW);
+	render_state_mgr.get().bind(device_context, BlendStates::Opaque);
+	render_state_mgr.get().bind(device_context, RasterStates::CullCounterClockwise);
 }
 
 

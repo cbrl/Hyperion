@@ -23,16 +23,15 @@ DepthPass::DepthPass(ID3D11Device& device,
 
 
 void DepthPass::bindState() const {
+
 	// Bind null shaders
 	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
 	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
 	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
 
-	// Raster state
-	render_state_mgr.get().bindCullCounterClockwise(device_context);
-
-	// Depth state
-	render_state_mgr.get().bindDepthLessEqRW(device_context);
+	// Render States
+	render_state_mgr.get().bind(device_context, RasterStates::CullCounterClockwise);
+	render_state_mgr.get().bind(device_context, DepthStencilStates::LessEqRW);
 }
 
 

@@ -4,61 +4,97 @@
 #include "datatypes/datatypes.h"
 
 
+enum class BlendStates : u8 {
+	Opaque,
+	AlphaBlend,
+	Additive,
+	NonPremultiplied,
+	StateCount
+};
+
+enum class DepthStencilStates : u8 {
+	None,
+	LessEqR,
+	LessEqRW,
+	GreaterEqR,
+	GreaterEqRW,
+	StateCount
+};
+
+enum class RasterStates : u8 {
+	CullNone,
+	CullClockwise,
+	CullCounterClockwise,
+	Wireframe,
+	StateCount
+};
+
+enum class SamplerStates : u8 {
+	PointClamp,
+	PointWrap,
+	LinearClamp,
+	LinearWrap,
+	AnisotropicClamp,
+	AnisotropicWrap,
+	PCF,
+	StateCount
+};
+
+
 class RenderStateMgr final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	RenderStateMgr(ID3D11Device& device, ID3D11DeviceContext& device_context);
+	RenderStateMgr(const RenderStateMgr& mgr) = delete;
+	RenderStateMgr(RenderStateMgr&& mgr) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~RenderStateMgr() = default;
 
-	void setupStates(ID3D11Device& device, ID3D11DeviceContext& device_context);
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	RenderStateMgr& operator=(const RenderStateMgr& mgr) = delete;
+	RenderStateMgr& operator=(RenderStateMgr&& mgr) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Bind states
+	// Member Functions - Bind states
 	//----------------------------------------------------------------------------------
 
-	// Blend states
-	void bindOpaque(ID3D11DeviceContext& device_context,
-	                f32 blend_factor[4] = {},
-	                u32 sample_mask     = 0xffffffff) const;
+	void bind(ID3D11DeviceContext& device_context,
+	          BlendStates state,
+	          f32 blend_factor[4] = {},
+	          u32 sample_mask = 0xFFFFFFFF) const;
 
-	void bindAlphaBlend(ID3D11DeviceContext& device_context,
-	                    f32 blend_factor[4] = {},
-	                    u32 sample_mask     = 0xffffffff) const;
+	void bind(ID3D11DeviceContext& device_context, DepthStencilStates state, u32 stencil_ref = 0) const;
 
-	void bindAdditive(ID3D11DeviceContext& device_context,
-	                  f32 blend_factor[4] = {},
-	                  u32 sample_mask     = 0xffffffff) const;
+	void bind(ID3D11DeviceContext& device_context, RasterStates state) const;
 
-	void bindNonPremultiplied(ID3D11DeviceContext& device_context,
-	                          f32 blend_factor[4] = {},
-	                          u32 sample_mask     = 0xffffffff) const;
-
-	// Depth stencil states
-	void bindDepthNone(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
-	void bindDepthLessEqRW(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
-	void bindDepthGreaterEqRW(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
-	void bindDepthLessEqRead(ID3D11DeviceContext& device_context, u32 stencil_ref = 0) const;
-
-	// Rasterizer states
-	void bindCullNone(ID3D11DeviceContext& device_context) const;
-	void bindCullClockwise(ID3D11DeviceContext& device_context) const;
-	void bindCullCounterClockwise(ID3D11DeviceContext& device_context) const;
-	void bindWireframe(ID3D11DeviceContext& device_context) const;
-
-	// Sampler states
-	void bindPointWrap(ID3D11DeviceContext& device_context) const;
-	void bindPointClamp(ID3D11DeviceContext& device_context) const;
-	void bindLinearWrap(ID3D11DeviceContext& device_context) const;
-	void bindLinearClamp(ID3D11DeviceContext& device_context) const;
-	void bindAnisotropicWrap(ID3D11DeviceContext& device_context) const;
-	void bindAnisotropicClamp(ID3D11DeviceContext& device_context) const;
-	void bindPcfSampler(ID3D11DeviceContext& device_context) const;
+	void bind(ID3D11DeviceContext& device_context, SamplerStates state, u32 slot) const;
 
 
 private:
 	//----------------------------------------------------------------------------------
 	// Create states
 	//----------------------------------------------------------------------------------
+
+	void setupStates(ID3D11Device& device, ID3D11DeviceContext& device_context);
+
+	// Create the standard render states
+	void createBlendStates(ID3D11Device& device);
+	void createDepthStencilStates(ID3D11Device& device);
+	void createRasterizerStates(ID3D11Device& device);
+	void createSamplerStates(ID3D11Device& device);
 
 	HRESULT createBlendState(ID3D11Device& device,
 	                         D3D11_BLEND src_blend,
@@ -82,38 +118,68 @@ private:
 	                           _Out_ ID3D11SamplerState** p_result) const;
 
 
-	// Create the standard render states
-	void createBlendStates(ID3D11Device& device);
-	void createDepthStencilStates(ID3D11Device& device);
-	void createRasterizerStates(ID3D11Device& device);
-	void createSamplerStates(ID3D11Device& device);
+	//----------------------------------------------------------------------------------
+	// Member Fucntions - Get
+	//----------------------------------------------------------------------------------
+
+	ID3D11BlendState* get(BlendStates state) const {
+		return blend_states[static_cast<u8>(state)].Get();
+	}
+	ID3D11DepthStencilState* get(DepthStencilStates state) const {
+		return depth_states[static_cast<u8>(state)].Get();
+	}
+	ID3D11RasterizerState* get(RasterStates state) const {
+		return raster_states[static_cast<u8>(state)].Get();
+	}
+	ID3D11SamplerState* get(SamplerStates state) const {
+		return sampler_states[static_cast<u8>(state)].Get();
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Get Address Of
+	//----------------------------------------------------------------------------------
+
+	// Blend States
+	ID3D11BlendState** getAddressOf(BlendStates state) {
+		return blend_states[static_cast<u8>(state)].GetAddressOf();
+	}
+	ID3D11BlendState* const* getAddressOf(BlendStates state) const {
+		return blend_states[static_cast<u8>(state)].GetAddressOf();
+	}
+
+	// Depth States
+	ID3D11DepthStencilState** getAddressOf(DepthStencilStates state) {
+		return depth_states[static_cast<u8>(state)].GetAddressOf();
+	}
+	ID3D11DepthStencilState* const* getAddressOf(DepthStencilStates state) const {
+		return depth_states[static_cast<u8>(state)].GetAddressOf();
+	}
+
+	// Raster Staes
+	ID3D11RasterizerState** getAddressOf(RasterStates state) {
+		return raster_states[static_cast<u8>(state)].GetAddressOf();
+	}
+	ID3D11RasterizerState* const* getAddressOf(RasterStates state) const {
+		return raster_states[static_cast<u8>(state)].GetAddressOf();
+	}
+
+	// Sampler States
+	ID3D11SamplerState** getAddressOf(SamplerStates state) {
+		return sampler_states[static_cast<u8>(state)].GetAddressOf();
+	}
+	ID3D11SamplerState* const* getAddressOf(SamplerStates state) const {
+		return sampler_states[static_cast<u8>(state)].GetAddressOf();
+	}
 
 
 private:
-	// Blend states
-	ComPtr<ID3D11BlendState> opaque;
-	ComPtr<ID3D11BlendState> alpha_blend;
-	ComPtr<ID3D11BlendState> additive;
-	ComPtr<ID3D11BlendState> non_premultiplied;
-
-	// Depth stencil states
-	ComPtr<ID3D11DepthStencilState> depth_none;
-	ComPtr<ID3D11DepthStencilState> depth_less_equal_read;
-	ComPtr<ID3D11DepthStencilState> depth_less_equal_readwrite;
-	ComPtr<ID3D11DepthStencilState> depth_greater_equal_readwrite;
-
-	// Rasterizer states
-	ComPtr<ID3D11RasterizerState> cull_none;
-	ComPtr<ID3D11RasterizerState> cull_clockwise;
-	ComPtr<ID3D11RasterizerState> cull_counter_clockwise;
-	ComPtr<ID3D11RasterizerState> wireframe;
-
-	// Sampler states
-	ComPtr<ID3D11SamplerState> point_wrap;
-	ComPtr<ID3D11SamplerState> point_clamp;
-	ComPtr<ID3D11SamplerState> linear_wrap;
-	ComPtr<ID3D11SamplerState> linear_clamp;
-	ComPtr<ID3D11SamplerState> anisotropic_wrap;
-	ComPtr<ID3D11SamplerState> anisotropic_clamp;
-	ComPtr<ID3D11SamplerState> pcf_sampler;
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+	
+	ComPtr<ID3D11BlendState>        blend_states[static_cast<u8>(BlendStates::StateCount)];
+	ComPtr<ID3D11DepthStencilState> depth_states[static_cast<u8>(DepthStencilStates::StateCount)];
+	ComPtr<ID3D11RasterizerState>   raster_states[static_cast<u8>(RasterStates::StateCount)];
+	ComPtr<ID3D11SamplerState>      sampler_states[static_cast<u8>(SamplerStates::StateCount)];
 };

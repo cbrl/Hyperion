@@ -32,9 +32,9 @@ void ForwardPass::bindDefaultState() const {
 	vertex_shader->bind(device_context);
 
 	// Bind render states
-	render_state_mgr.get().bindOpaque(device_context);
-	render_state_mgr.get().bindDepthLessEqRW(device_context);
-	render_state_mgr.get().bindCullCounterClockwise(device_context);
+	render_state_mgr.get().bind(device_context, BlendStates::Opaque);
+	render_state_mgr.get().bind(device_context, DepthStencilStates::LessEqRW);
+	render_state_mgr.get().bind(device_context, RasterStates::CullCounterClockwise);
 }
 
 
@@ -54,9 +54,9 @@ void ForwardPass::bindWireframeState() const {
 	vertex_shader->bind(device_context);
 
 	// Bind render states
-	render_state_mgr.get().bindOpaque(device_context);
-	render_state_mgr.get().bindDepthLessEqRW(device_context);
-	render_state_mgr.get().bindWireframe(device_context);
+	render_state_mgr.get().bind(device_context, BlendStates::Opaque);
+	render_state_mgr.get().bind(device_context, DepthStencilStates::LessEqRW);
+	render_state_mgr.get().bind(device_context, RasterStates::Wireframe);
 }
 
 

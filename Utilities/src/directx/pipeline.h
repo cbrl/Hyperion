@@ -232,7 +232,7 @@ public:
 			device_context.CSSetShaderResources(start_slot, num_views, srvs);
 		}
 
-		static void bindUaVs(ID3D11DeviceContext& device_context,
+		static void bindUAVs(ID3D11DeviceContext& device_context,
 		                     u32 start_slot,
 		                     u32 num_uavs,
 		                     ID3D11UnorderedAccessView* const* uavs,
