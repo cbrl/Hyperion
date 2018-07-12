@@ -158,21 +158,21 @@ void Engine::tick() const {
 
 void Engine::processInput() const {
 
-	// Toggle mouse mode on F1 press
+	// F1: Toggle mouse mode
 	if (input->isKeyPressed(Keyboard::F1)) {
-		if (input->getMouseMode() == Mouse::MODE_ABSOLUTE) {
-			input->setMouseRelative();
-		}
-		else {
-			input->setMouseAbsolute();
-		}
+		input->toggleMouseMode();
+	}
+
+	// F2: Toggle mouse visibility (absolute mode only)
+	if (input->isKeyPressed(Keyboard::F2)) {
+		input->toggleMouseVisible();
 	}
 }
 
 
 LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
 
-	// Send events to ImGui handler if the mouse mode is set to absolute
+	// Send events to ImGui message handler if the mouse mode is set to absolute
 	if (input && (input->getMouseMode() == Mouse::MODE_ABSOLUTE)) {
 		ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
 	}

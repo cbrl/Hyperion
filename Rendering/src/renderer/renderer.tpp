@@ -36,7 +36,7 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	switch (settings.getLightingMode()) {
 		case LightingMode::Default:
-			forward_pass->render(engine, skybox, world_to_projection);
+			forward_pass->render(engine, world_to_projection, skybox);
 			break;
 
 		case LightingMode::Unlit:

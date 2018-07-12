@@ -32,10 +32,19 @@ public:
 	// Toggle the mouse mode.
 	void toggleMouseMode() const {
 		mouse_state.positionMode == Mouse::MODE_ABSOLUTE
-			? mouse->SetMode(Mouse::MODE_RELATIVE)
-			: mouse->SetMode(Mouse::MODE_ABSOLUTE);
+			? setMouseRelative()
+			: setMouseAbsolute();
 	}
 
+	// Set the mouse visibility (absolute mode only)
+	void setMouseVisible(bool state) {
+		mouse->SetVisible(state);
+	}
+
+	// Toggle the mouse visibility (absolute mode only)
+	void toggleMouseVisible() {
+		mouse->IsVisible() ? mouse->SetVisible(false) : mouse->SetVisible(true);
+	}
 
 	// Get mouse movement since last update
 	[[nodiscard]]

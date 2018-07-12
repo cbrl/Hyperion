@@ -17,7 +17,7 @@ public:
 	            ResourceMgr& resource_mgr);
 	~ForwardPass() = default;
 
-	void XM_CALLCONV render(const Engine& engine, const Texture* sky, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection, const Texture* sky) const;
 	void XM_CALLCONV renderFalseColor(const Engine& engine, FXMMATRIX world_to_projection, FalseColor color);
 	void XM_CALLCONV renderWireframe(const Engine& engine, FXMMATRIX world_to_projection) const;
 

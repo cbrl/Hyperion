@@ -60,7 +60,7 @@ void ForwardPass::bindWireframeState() const {
 }
 
 
-void XM_CALLCONV ForwardPass::render(const Engine& engine, const Texture* sky, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_projection, const Texture* sky) const {
 
 	auto& ecs_engine = engine.getECS();
 
