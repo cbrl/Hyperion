@@ -12,52 +12,72 @@
 template<typename T, size_t CounterBits, size_t IndexBits>
 struct Handle {
 
+	//----------------------------------------------------------------------------------
+	// Assertions
+	//----------------------------------------------------------------------------------
+
+	// Ensure the template parameter is an integral type
+	static_assert(std::is_integral_v<T>, "Handle template parameter is not an integral type");
+
 	// Ensure the Handle can hold the specified number of bits
 	static_assert((CounterBits + IndexBits) <= (sizeof(T) * 8),
 		"Size of handle type is smaller than number of bits specified");
 
 public:
-	Handle() {
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
+	constexpr Handle() noexcept
+		: Handle(invalid_handle) {
 	}
 
-	explicit Handle(T value)
+	constexpr explicit Handle(T value) noexcept
 		: index(value & index_bitmask)
 		, counter((value & (counter_bitmask << CounterBits)) >> CounterBits) {
 	}
 
-	explicit Handle(T index, T counter)
+	constexpr explicit Handle(T index, T counter) noexcept
 		: index(index)
 		, counter(counter) {
 	}
 
 
-	operator T() const {
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+
+	constexpr operator T() const noexcept {
 		return (counter << (sizeof(T) * 8 - CounterBits)) | index;
 	}
 
 
 public:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	T index : IndexBits;
 	T counter : CounterBits;
 
-
-private:
-	static constexpr T index_bitmask = (1Ui64 << IndexBits) - 1Ui64;
-	static constexpr T counter_bitmask = (1Ui64 << CounterBits) - 1Ui64;
-
-
-public:
+	// Type
 	using value_type = T;
 
 	// Max values
 	static constexpr T index_max = (1Ui64 << IndexBits) - 2Ui64;
 	static constexpr T counter_max = (1Ui64 << CounterBits) - 2Ui64;
 
-	// Number of bits
-	static constexpr size_t n_counter_bits = CounterBits;
-	static constexpr size_t n_index_bits = IndexBits;
-
+	// Invalid value
 	static constexpr T invalid_handle = std::numeric_limits<T>::max();
+
+	// Number of bits
+	static constexpr size_t n_index_bits = IndexBits;
+	static constexpr size_t n_counter_bits = CounterBits;
+
+
+private:
+	static constexpr T index_bitmask = (1Ui64 << IndexBits) - 1Ui64;
+	static constexpr T counter_bitmask = (1Ui64 << CounterBits) - 1Ui64;
 };
 
 #pragma warning (pop)

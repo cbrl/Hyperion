@@ -15,7 +15,7 @@
 
 
 void* selected = nullptr;
-handle64 selected_entity{ handle64::invalid_handle };
+handle64 selected_entity{};
 
 
 enum class ModelType {
