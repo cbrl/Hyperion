@@ -176,6 +176,17 @@ void DrawDetails(PerspectiveCamera& camera) {
 		camera.setFOV(fov);
 	}
 
+	auto& vp = camera.getViewport();
+	vec2_u32 size = vp.getSize();
+	vec2_u32 pos  = vp.getTopLeft();
+
+	if (ImGui::DragInt2("Viewport Size", reinterpret_cast<int*>(size.data()), 1.0f, 1, 30720))
+		vp.setSize(size);
+
+	if (ImGui::DragInt2("Viewport Top-Left", reinterpret_cast<int*>(pos.data()), 1.0f, 0, 30720))
+		vp.setTopLeft(pos);
+
+
 	DrawCameraSettings(camera.getSettings());
 }
 

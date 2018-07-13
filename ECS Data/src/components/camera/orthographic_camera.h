@@ -33,7 +33,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Orthographic Size
+	// Member Functions
 	//----------------------------------------------------------------------------------
 
 	// Get the size of the camera's viewing volume {width, height}
@@ -45,13 +45,10 @@ public:
 	// Set the size of the camera's viewing volume {width, height}
 	void setSize(vec2_f32 size) {
 		ortho_size = size;
-		updateProjectionMatrix();
 	}
 
-
-private:
 	// Update the projection matrix after changing depth/width/height/etc...
-	void updateProjectionMatrix() override;
+	XMMATRIX XM_CALLCONV getCameraToProjectionMatrix() const override;
 
 
 private:

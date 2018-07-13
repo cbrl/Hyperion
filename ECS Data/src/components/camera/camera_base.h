@@ -174,8 +174,7 @@ protected:
 	CameraBase(ID3D11Device& device)
 		: buffer(device)
 		, z_near(0.1f)
-		, z_far(1000.0f)
-		, projection_matrix(XMMatrixIdentity()) {
+		, z_far(1000.0f) {
 
 		viewport.setDepth(0.0f, 1.0f);
 	}
@@ -189,11 +188,13 @@ public:
 	CameraBase(const CameraBase& camera) = delete;
 	CameraBase(CameraBase&& camera) noexcept = default;
 
+
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
 
 	~CameraBase() = default;
+
 
 	//----------------------------------------------------------------------------------
 	// Operators
@@ -225,7 +226,7 @@ public:
 		buffer.updateData(device_context,
 						  CameraBuffer{XMMatrixTranspose(camera_to_world),
 									   XMMatrixTranspose(world_to_camera),
-									   XMMatrixTranspose(projection_matrix),
+									   XMMatrixTranspose(getCameraToProjectionMatrix()),
 		                               settings.getFog()});
 	}
 
@@ -239,24 +240,12 @@ public:
 	// Member Functions - Viewport
 	//----------------------------------------------------------------------------------
 
-	// Set a new viewport
-	void setViewport(D3D11_VIEWPORT vp) noexcept {
-		viewport.setViewport(std::move(vp));
-		updateProjectionMatrix();
+	Viewport& getViewport() {
+		return viewport;
 	}
 
-	// Change the viewport size
-	void resizeViewport(u32 width, u32 height) noexcept {
-		viewport.setSize(width, height);
-		updateProjectionMatrix();
-	}
-
-	void setViewportTopLeft(u32 x, u32 y) noexcept {
-		viewport.setTopLeft(x, y);
-	}
-
-	void setViewportDepth(f32 min, f32 max) noexcept {
-		viewport.setDepth(min, max);
+	const Viewport& getViewport() const {
+		return viewport;
 	}
 
 
@@ -268,17 +257,14 @@ public:
 	void setZDepth(f32 z_near, f32 z_far) {
 		this->z_near = z_near;
 		this->z_far  = z_far;
-		updateProjectionMatrix();
 	}
 
 	void setZNear(f32 z_near) {
 		this->z_near = z_near;
-		updateProjectionMatrix();
 	}
 
 	void setZFar(f32 z_far) {
 		this->z_far = z_far;
-		updateProjectionMatrix();
 	}
 
 
@@ -288,9 +274,7 @@ public:
 
 	// Get the camera's projection matrix
 	[[nodiscard]]
-	XMMATRIX XM_CALLCONV getCameraToProjectionMatrix() const {
-		return projection_matrix;
-	}
+	virtual XMMATRIX XM_CALLCONV getCameraToProjectionMatrix() const = 0;
 
 
 	//----------------------------------------------------------------------------------
@@ -307,11 +291,6 @@ public:
 
 
 protected:
-	// Update the projection matrix after changing depth/width/height/etc...
-	virtual void updateProjectionMatrix() = 0;
-
-
-protected:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
@@ -325,9 +304,6 @@ protected:
 	// Z Depth
 	f32 z_near;
 	f32 z_far;
-
-	// Camera-to-projection matrix (view-to-projection)
-	XMMATRIX projection_matrix;
 
 	// Camera settings (render settings, fog, skybox)
 	CameraSettings settings;

@@ -36,10 +36,9 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// Change the FOV
+	// Change the field of view
 	void setFOV(f32 radians) {
 		fov = radians;
-		updateProjectionMatrix();
 	}
 
 	[[nodiscard]]
@@ -47,10 +46,8 @@ public:
 		return fov;
 	}
 
-
-protected:
 	// Update the projection matrix after changing depth/width/height/etc...
-	void updateProjectionMatrix() override;
+	XMMATRIX XM_CALLCONV getCameraToProjectionMatrix() const override;
 
 
 protected:

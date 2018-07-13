@@ -74,7 +74,7 @@ public:
 	[[nodiscard]]
 	vec2_u32 getTopLeft() const noexcept {
 		return vec2_u32{ static_cast<u32>(viewport.TopLeftX),
-		              static_cast<u32>(viewport.TopLeftY) };
+		                 static_cast<u32>(viewport.TopLeftY) };
 	}
 
 	void setTopLeft(u32 x, u32 y) noexcept {

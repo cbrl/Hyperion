@@ -7,15 +7,14 @@ PerspectiveCamera::PerspectiveCamera(ID3D11Device& device,
 	: CameraBase(device)
 	, fov(XM_PI / 4.0f) {
 
-	resizeViewport(viewport_width, viewport_height);
+	viewport.setSize(viewport_width, viewport_height);
 }
 
 
-void PerspectiveCamera::updateProjectionMatrix() {
-	// Recalculate the aspect ratio
+XMMATRIX XM_CALLCONV PerspectiveCamera::getCameraToProjectionMatrix() const {
+
 	const vec2_u32 size    = viewport.getSize();
 	const f32 aspect_ratio = static_cast<f32>(size.x) / static_cast<f32>(size.y);
 
-	// Recalculate the projection matrix
-	projection_matrix = XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
+	return XMMatrixPerspectiveFovLH(fov, aspect_ratio, z_near, z_far);
 }

@@ -7,11 +7,11 @@ OrthographicCamera::OrthographicCamera(ID3D11Device& device,
 	: CameraBase(device)
 	, ortho_size(1.0f, 1.0f) {
 
-	resizeViewport(viewport_width, viewport_height);
+	viewport.setSize(viewport_width, viewport_height);
 }
 
 
-void OrthographicCamera::updateProjectionMatrix() {
+XMMATRIX XM_CALLCONV OrthographicCamera::getCameraToProjectionMatrix() const {
 	// Recalculate the projection matrix
-	projection_matrix = XMMatrixOrthographicLH(ortho_size.x, ortho_size.y, z_near, z_far);
+	return XMMatrixOrthographicLH(ortho_size.x, ortho_size.y, z_near, z_far);
 }
