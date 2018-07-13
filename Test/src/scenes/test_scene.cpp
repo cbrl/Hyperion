@@ -35,7 +35,6 @@ void TestScene::load(const Engine& engine) {
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
 
 	cam->getViewport().setDepth(0.0f, 1.0f);
-	cam->getViewport().setSize(400, 400);
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
 	cam->getSettings().setSkybox(
