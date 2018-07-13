@@ -1,6 +1,10 @@
 #include "rendering_mgr.h"
 #include "log/log.h"
 
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+
 
 RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 
@@ -33,7 +37,9 @@ RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 	// Initialize ImGui
 	//----------------------------------------------------------------------------------
 	ImGui::CreateContext();
-	ImGui_ImplDX11_Init(window, &direct3D->getDevice(), &direct3D->getDeviceContext());
+	ImGui_ImplWin32_Init(window);
+	ImGui_ImplDX11_Init(&direct3D->getDevice(), &direct3D->getDeviceContext());
+	ImGui::StyleColorsClassic();
 }
 
 
@@ -41,13 +47,14 @@ RenderingMgr::~RenderingMgr() {
 
 	// Shutdown ImGui
 	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 }
 
 
 void RenderingMgr::resizeBuffers(u32 window_width, u32 window_height) const {
-	direct3D->resizeBuffers(window_width, window_height);
 	ImGui_ImplDX11_InvalidateDeviceObjects();
+	direct3D->resizeBuffers(window_width, window_height);
 	ImGui_ImplDX11_CreateDeviceObjects();
 }
 
@@ -66,6 +73,8 @@ void RenderingMgr::beginFrame() const {
 
 	// Start a new ImGui frame
 	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
 
 	ImGui::ShowDemoWindow();
 

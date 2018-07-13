@@ -1,14 +1,9 @@
 #pragma once
 
-#include "directx/d3d11.h"
-
-#include "datatypes/datatypes.h"
 #include "direct3d/direct3d.h"
 #include "render_state_mgr.h"
 #include "resource/resource_mgr.h"
-#include "imgui_impl_dx11.h"
 #include "renderer/renderer.h"
-#include "display/display_config.h"
 
 
 class RenderingMgr final {

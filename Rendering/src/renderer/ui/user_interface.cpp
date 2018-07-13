@@ -180,10 +180,13 @@ void DrawDetails(PerspectiveCamera& camera) {
 	vec2_u32 size = vp.getSize();
 	vec2_u32 pos  = vp.getTopLeft();
 
-	if (ImGui::DragInt2("Viewport Size", reinterpret_cast<int*>(size.data()), 1.0f, 1, 30720))
-		vp.setSize(size);
+	static constexpr u32 v_min_size = 1;
+	static constexpr u32 v_min_pos  = 0;
+	static constexpr u32 v_max      = 15360;
 
-	if (ImGui::DragInt2("Viewport Top-Left", reinterpret_cast<int*>(pos.data()), 1.0f, 0, 30720))
+	if (ImGui::DragScalarN("Viewport Size", ImGuiDataType_U32, size.data(), 2, 1.0f, &v_min_size, &v_max))
+		vp.setSize(size);
+	if (ImGui::DragScalarN("Viewport Top-Left", ImGuiDataType_U32, pos.data(), 2, 1.0f, &v_min_pos, &v_max))
 		vp.setTopLeft(pos);
 
 
