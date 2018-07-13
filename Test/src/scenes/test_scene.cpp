@@ -4,7 +4,7 @@
 
 
 static constexpr f32 z_near = 0.01f;
-static constexpr f32 z_far  = 1000.0f;
+static constexpr f32 z_far  = 100.0f;
 static constexpr f32 fov    = XM_PI / 3.0f;
 
 
@@ -35,6 +35,7 @@ void TestScene::load(const Engine& engine) {
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
 
 	cam->getViewport().setDepth(0.0f, 1.0f);
+	cam->getViewport().setSize(400, 400);
 	cam->setZDepth(z_near, z_far);
 	cam->setFOV(fov);
 	cam->getSettings().setSkybox(

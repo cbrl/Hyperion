@@ -167,15 +167,16 @@ void DrawDetails(PerspectiveCamera& camera) {
 
 	DrawComponentState(camera);
 
-
 	ImGui::Text("Camera");
 	ImGui::Separator();
 
+	// FOV
 	f32 fov = camera.getFOV();
 	if (ImGui::DragFloat("FOV", &fov, 0.01f, XM_PI / 8.0f, XM_2PI / 3.0f)) {
 		camera.setFOV(fov);
 	}
 
+	// Viewport
 	auto& vp = camera.getViewport();
 	vec2_u32 size = vp.getSize();
 	vec2_u32 pos  = vp.getTopLeft();
@@ -184,10 +185,18 @@ void DrawDetails(PerspectiveCamera& camera) {
 	static constexpr u32 v_min_pos  = 0;
 	static constexpr u32 v_max      = 15360;
 
-	if (ImGui::DragScalarN("Viewport Size", ImGuiDataType_U32, size.data(), 2, 1.0f, &v_min_size, &v_max))
+	if (ImGui::DragScalarN("Viewport Size", ImGuiDataType_U32, size.data(), 2, 1.0f, &v_min_size, &v_max)) {
 		vp.setSize(size);
-	if (ImGui::DragScalarN("Viewport Top-Left", ImGuiDataType_U32, pos.data(), 2, 1.0f, &v_min_pos, &v_max))
+	}
+	if (ImGui::DragScalarN("Viewport Top-Left", ImGuiDataType_U32, pos.data(), 2, 1.0f, &v_min_pos, &v_max)) {
 		vp.setTopLeft(pos);
+	}
+
+	// Depth
+	vec2_f32 depth = camera.getZDepth();
+	if (ImGui::DragFloat2("Depth Range", depth.data(), 1.0f, 0.01f, FLT_MAX)) {
+		camera.setZDepth(depth);
+	}
 
 
 	DrawCameraSettings(camera.getSettings());
@@ -198,14 +207,35 @@ void DrawDetails(OrthographicCamera& camera) {
 
 	DrawComponentState(camera);
 
-
 	ImGui::Text("Camera");
 	ImGui::Separator();
-
+	
+	// Ortho Size
 	auto ortho_size = camera.getSize();
 	if (ImGui::DragFloat2("Orthographic Size", ortho_size.data(), 0.01f, 1.0f, 100.0f)) {
 		camera.setSize(ortho_size);
 	}
+
+	// Viewport
+	auto& vp = camera.getViewport();
+	vec2_u32 size = vp.getSize();
+	vec2_u32 pos = vp.getTopLeft();
+
+	static constexpr u32 v_min_size = 1;
+	static constexpr u32 v_min_pos = 0;
+	static constexpr u32 v_max = 15360;
+
+	if (ImGui::DragScalarN("Viewport Size", ImGuiDataType_U32, size.data(), 2, 1.0f, &v_min_size, &v_max)) {
+		vp.setSize(size);
+	}
+	if (ImGui::DragScalarN("Viewport Top-Left", ImGuiDataType_U32, pos.data(), 2, 1.0f, &v_min_pos, &v_max)) {
+		vp.setTopLeft(pos);
+	}
+
+	// Depth
+	vec2_f32 depth = camera.getZDepth();
+	if (ImGui::DragFloat2("Depth Range", depth.data(), 1.0f, 0.01f, FLT_MAX))
+		camera.setZDepth(depth);
 
 
 	DrawCameraSettings(camera.getSettings());
@@ -487,8 +517,8 @@ void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
 		string name = "Entity (index: " + to_string(entity.index) + ", counter: " + to_string(entity.counter) + ")";
 
 		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
-			| ImGuiTreeNodeFlags_OpenOnDoubleClick
-			| ((selected_entity == entity) ? ImGuiTreeNodeFlags_Selected : 0);
+		                                 | ImGuiTreeNodeFlags_OpenOnDoubleClick
+		                                 | ((selected_entity == entity) ? ImGuiTreeNodeFlags_Selected : 0);
 
 		const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
 
@@ -517,8 +547,8 @@ void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
 			const bool node_selected = (selected == model);
 
 			const ImGuiTreeNodeFlags model_flags = ImGuiTreeNodeFlags_OpenOnArrow
-				| ImGuiTreeNodeFlags_OpenOnDoubleClick
-				| (node_selected ? ImGuiTreeNodeFlags_Selected : 0);
+			                                       | ImGuiTreeNodeFlags_OpenOnDoubleClick
+			                                       | (node_selected ? ImGuiTreeNodeFlags_Selected : 0);
 
 			const bool open = ImGui::TreeNodeEx("Model", model_flags);
 
@@ -996,48 +1026,12 @@ void DrawMenu(ID3D11Device& device,
 
 				if (ImGui::BeginMenu("Add Component")) {
 
-					if (ImGui::BeginMenu("Model")) {
+					if (ImGui::MenuItem("Orthographic Camera")) {
+						ecs_engine.addComponent<OrthographicCamera>(selected_entity, device, 480, 480);
+					}
 
-						if (ImGui::MenuItem("From file")) {
-							wchar_t szFile[512] = {};
-
-							if (OpenFilePicker(szFile, sizeof(szFile))) {
-								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
-								ecs_engine.addComponent<Model>(selected_entity, device, bp);
-							}
-							else {
-								Logger::log(LogLevel::err, "Failed to open file dialog");
-							}
-						}
-
-						if (ImGui::BeginMenu("Geometric Shape")) {
-							if (ImGui::MenuItem("Cube"))
-								add_model_popup = ModelType::Cube;
-							if (ImGui::MenuItem("Box"))
-								add_model_popup = ModelType::Box;
-							if (ImGui::MenuItem("Sphere"))
-								add_model_popup = ModelType::Sphere;
-							if (ImGui::MenuItem("GeoSphere"))
-								add_model_popup = ModelType::GeoSphere;
-							if (ImGui::MenuItem("Cylinder"))
-								add_model_popup = ModelType::Cylinder;
-							if (ImGui::MenuItem("Cone"))
-								add_model_popup = ModelType::Cone;
-							if (ImGui::MenuItem("Torus"))
-								add_model_popup = ModelType::Torus;
-							if (ImGui::MenuItem("Tetrahedron"))
-								add_model_popup = ModelType::Tetrahedron;
-							if (ImGui::MenuItem("Octahedron"))
-								add_model_popup = ModelType::Octahedron;
-							if (ImGui::MenuItem("Dodecahedron"))
-								add_model_popup = ModelType::Dodecahedron;
-							if (ImGui::MenuItem("Icosahedron"))
-								add_model_popup = ModelType::Icosahedron;
-
-							ImGui::EndMenu();
-						}
-
-						ImGui::EndMenu();
+					if (ImGui::MenuItem("Perspective Camera")) {
+						ecs_engine.addComponent<PerspectiveCamera>(selected_entity, device, 480, 480);
 					}
 
 					if (ImGui::MenuItem("Directional Light")) {
@@ -1050,6 +1044,37 @@ void DrawMenu(ID3D11Device& device,
 
 					if (ImGui::MenuItem("Spot Light")) {
 						ecs_engine.addComponent<SpotLight>(selected_entity);
+					}
+
+					if (ImGui::BeginMenu("Model")) {
+
+						if (ImGui::MenuItem("From file")) {
+							wchar_t szFile[512] = {};
+
+							if (OpenFilePicker(szFile, sizeof(szFile))) {
+								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
+								ecs_engine.addComponent<Model>(selected_entity, device, bp);
+							}
+							else Logger::log(LogLevel::err, "Failed to open file dialog");
+						}
+
+						if (ImGui::BeginMenu("Geometric Shape")) {
+							if (ImGui::MenuItem("Cube")) add_model_popup = ModelType::Cube;
+							if (ImGui::MenuItem("Box")) add_model_popup = ModelType::Box;
+							if (ImGui::MenuItem("Sphere")) add_model_popup = ModelType::Sphere;
+							if (ImGui::MenuItem("GeoSphere")) add_model_popup = ModelType::GeoSphere;
+							if (ImGui::MenuItem("Cylinder")) add_model_popup = ModelType::Cylinder;
+							if (ImGui::MenuItem("Cone")) add_model_popup = ModelType::Cone;
+							if (ImGui::MenuItem("Torus")) add_model_popup = ModelType::Torus;
+							if (ImGui::MenuItem("Tetrahedron")) add_model_popup = ModelType::Tetrahedron;
+							if (ImGui::MenuItem("Octahedron")) add_model_popup = ModelType::Octahedron;
+							if (ImGui::MenuItem("Dodecahedron")) add_model_popup = ModelType::Dodecahedron;
+							if (ImGui::MenuItem("Icosahedron")) add_model_popup = ModelType::Icosahedron;
+
+							ImGui::EndMenu();
+						}
+
+						ImGui::EndMenu();
 					}
 
 					ImGui::EndMenu();

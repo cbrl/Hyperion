@@ -29,10 +29,8 @@ void Renderer::render(const Engine& engine) {
 
 		if (!camera.isActive()) return;
 
-		// Bind the buffer
+		// Bind the buffer and viewport
 		camera.bindBuffer(device_context, SLOT_CBUFFER_CAMERA);
-
-		// Bind the viewport
 		camera.bindViewport(device_context);
 
 		// Render the scene
@@ -43,10 +41,8 @@ void Renderer::render(const Engine& engine) {
 
 		if (!camera.isActive()) return;
 
-		// Bind the buffer
+		// Bind the buffer and viewport
 		camera.bindBuffer(device_context, SLOT_CBUFFER_CAMERA);
-
-		// Bind the viewport
 		camera.bindViewport(device_context);
 
 		// Render the scene

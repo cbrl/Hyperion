@@ -173,8 +173,7 @@ protected:
 
 	CameraBase(ID3D11Device& device)
 		: buffer(device)
-		, z_near(0.1f)
-		, z_far(1000.0f) {
+		, depth(0.01f, 100.0f) {
 
 		viewport.setDepth(0.0f, 1.0f);
 	}
@@ -253,18 +252,25 @@ public:
 	// Member Functions - Z Depth
 	//----------------------------------------------------------------------------------
 
-	// Set the depth range
+	vec2_f32 getZDepth() const {
+		return depth;
+	}
+
 	void setZDepth(f32 z_near, f32 z_far) {
-		this->z_near = z_near;
-		this->z_far  = z_far;
+		depth.x = std::min(z_near, z_far - 0.001f);
+		depth.y = std::max(z_far, z_near + 0.001f);
+	}
+
+	void setZDepth(vec2_f32 depth) {
+		setZDepth(depth.x, depth.y);
 	}
 
 	void setZNear(f32 z_near) {
-		this->z_near = z_near;
+		depth.x = std::min(z_near, depth.y - 0.001f);
 	}
 
 	void setZFar(f32 z_far) {
-		this->z_far = z_far;
+		depth.y = std::max(z_far, depth.x + 0.001f);
 	}
 
 
@@ -272,7 +278,7 @@ public:
 	// Member Functions - Projection Matrix
 	//----------------------------------------------------------------------------------
 
-	// Get the camera's projection matrix
+	// Get the camera's view-to-projection matrix
 	[[nodiscard]]
 	virtual XMMATRIX XM_CALLCONV getCameraToProjectionMatrix() const = 0;
 
@@ -302,8 +308,7 @@ protected:
 	Viewport viewport;
 
 	// Z Depth
-	f32 z_near;
-	f32 z_far;
+	vec2_f32 depth;
 
 	// Camera settings (render settings, fog, skybox)
 	CameraSettings settings;
