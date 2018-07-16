@@ -94,6 +94,9 @@
     <Filter Include="Header Files\log\spdlog\contrib\sinks">
       <UniqueIdentifier>{877655f6-8c56-463c-8bbe-86150d691fbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\os\windows">
+      <UniqueIdentifier>{17dadc17-6fae-431d-9dc8-9512f27ecf09}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -179,9 +182,6 @@
     </ClInclude>
     <ClInclude Include="src\exception\exception.h">
       <Filter>Header Files\exception</Filter>
-    </ClInclude>
-    <ClInclude Include="src\os\windows.h">
-      <Filter>Header Files\os</Filter>
     </ClInclude>
     <ClInclude Include="src\log\spdlog\sinks\android_sink.h">
       <Filter>Header Files\log\spdlog\sinks</Filter>
@@ -281,6 +281,12 @@
     </ClInclude>
     <ClInclude Include="src\directx\pipeline.h">
       <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="src\os\windows\win_utils.h">
+      <Filter>Header Files\os\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\os\windows\windows.h">
+      <Filter>Header Files\os\windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

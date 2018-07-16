@@ -55,10 +55,21 @@ private:
 };
 
 
-// Throw and log if the condition fails
+
+
 inline void ThrowIfFailed(bool result, const char* msg = "") {
 	if (!result) {
 		std::cerr << msg << std::endl;
 		throw Exception(msg);
 	}
 }
+
+
+#ifdef WIN32
+inline void ThrowIfFailed(HRESULT hr, const char* msg = "") {
+	if (FAILED(hr)) {
+		std::cerr << msg << " (Failure with HRESULT of 0x" << std::hex << hr << std::dec << ")\n";
+		throw Exception(msg);
+	}
+}
+#endif

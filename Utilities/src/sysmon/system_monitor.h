@@ -1,7 +1,9 @@
 #pragma once
 
-#include "os/windows.h"
+#include "os/windows/windows.h"
+#include "os/windows/win_utils.h"
 #include <Psapi.h>
+
 #include "datatypes/scalar_types.h"
 #include "timer/timer.h"
 

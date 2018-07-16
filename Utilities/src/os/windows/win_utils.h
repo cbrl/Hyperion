@@ -2,49 +2,16 @@
 
 
 //----------------------------------------------------------------------------------
-// Defines
+// Includes
 //----------------------------------------------------------------------------------
 
-// Exclude rarely used stuff from windows headers
-#define WIN32_LEAN_AND_MEAN
-
-// Don't define the windows min/max macros
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
-
-// Silence warning for codecvt deprecation
-#ifndef _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
-#endif
+#include <Commdlg.h>
 
 
 
 
 //----------------------------------------------------------------------------------
-// Headers
-//----------------------------------------------------------------------------------
-
-#if defined(DEBUG) || defined(_DEBUG)
-#define _CRTDBG_MAP_ALLOC
-#include <cstdlib>
-#include <crtdbg.h>
-#endif
-
-#include <Windows.h>
-
-#include <wrl/client.h>
-using Microsoft::WRL::ComPtr;
-
-#include "exception/exception.h"
-#include "datatypes/scalar_types.h"
-#include "string/string.h"
-
-
-
-
-//----------------------------------------------------------------------------------
-// Functions
+// Functions - System Time
 //----------------------------------------------------------------------------------
 
 // Convert a time represetned by a FILETIME struct
@@ -128,42 +95,18 @@ inline u64 GetCPUTime() {
 
 
 //----------------------------------------------------------------------------------
-// Error handling
+// Functions - I/O
 //----------------------------------------------------------------------------------
 
-// Throw
-inline void ThrowIfFailed(HRESULT hr, const char* msg = "") {
-	if (FAILED(hr)) {
-		std::cerr << msg << " (Failure with HRESULT of 0x" << std::hex << hr << std::dec << ")\n";
-		throw Exception(msg);
-	}
-}
+// Get a file path through the Windows file picker
+inline bool OpenFilePicker(wchar_t* lpstrFile, DWORD nMaxFile) {
 
+	OPENFILENAME ofn = {};
+	ofn.lStructSize = sizeof(ofn);
+	ofn.lpstrFile = lpstrFile;
+	ofn.lpstrFile[0] = '\0';
+	ofn.nMaxFile = nMaxFile;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-// Alert Window
-inline void AlertIfFailed(HRESULT hr, const wchar_t* msg = L"") {
-	if (FAILED(hr)) {
-		AlertIfFailed(false, msg);
-	}
-}
-
-inline void AlertIfFailed(bool result, const wchar_t* msg = L"") {
-	if (!result) {
-		if (wcsncmp(msg, L"", 1) == 0) {
-			MessageBox(nullptr, msg, L"Error", MB_OK);
-		}
-		else {
-			LPWSTR output;
-			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
-						  FORMAT_MESSAGE_IGNORE_INSERTS |
-						  FORMAT_MESSAGE_ALLOCATE_BUFFER,
-						  nullptr,
-						  E_FAIL,
-						  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-						  reinterpret_cast<LPTSTR>(&output),
-						  0,
-						  nullptr);
-			MessageBox(nullptr, output, L"Error", MB_OK);
-		}
-	}
+	return GetOpenFileName(&ofn) != 0;
 }

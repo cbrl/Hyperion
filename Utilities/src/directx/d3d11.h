@@ -2,7 +2,7 @@
 
 
 // Include the Windows header first
-#include "os/windows.h"
+#include "os/windows/windows.h"
 
 
 // DirectX headers

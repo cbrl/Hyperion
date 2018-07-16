@@ -50,24 +50,3 @@ inline string GetFileExtension(const string& in) {
 inline wstring GetFileExtension(const wstring& in) {
 	return fs::path(in).extension().wstring();
 }
-
-
-// Get a file path through the Windows file picker
-#if defined(_WIN32)
-
-#include "os/windows.h"
-#include <Commdlg.h>
-
-inline bool OpenFilePicker(wchar_t* lpstrFile, DWORD nMaxFile) {
-
-	OPENFILENAME ofn = {};
-	ofn.lStructSize = sizeof(ofn);
-	ofn.lpstrFile = lpstrFile;
-	ofn.lpstrFile[0] = '\0';
-	ofn.nMaxFile = nMaxFile;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-	return GetOpenFileName(&ofn) != 0;
-}
-
-#endif //defined(_WIN32)

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "os/windows.h"
 #include "datatypes/datatypes.h"
 #include "directx/directxtk.h"
 
