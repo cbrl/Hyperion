@@ -3,11 +3,6 @@
 #include "engine/engine.h"
 
 
-static constexpr f32 z_near = 0.01f;
-static constexpr f32 z_far  = 100.0f;
-static constexpr f32 fov    = XM_PI / 3.0f;
-
-
 TestScene::TestScene() : Scene("Test Scene") {
 }
 
@@ -35,8 +30,8 @@ void TestScene::load(const Engine& engine) {
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
 
 	cam->getViewport().setDepth(0.0f, 1.0f);
-	cam->setZDepth(z_near, z_far);
-	cam->setFOV(fov);
+	cam->setZDepth(0.01f, 100.0f);
+	cam->setFOV(XM_PI / 3.0f);
 	cam->getSettings().setSkybox(
 		resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 

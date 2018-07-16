@@ -9,13 +9,13 @@
 #include "resource/texture/texture.h"
 
 
-enum class RenderMode {
+enum class RenderMode : u8 {
 	Forward,
 	ForwardPlus,
 	Deferred
 };
 
-enum class LightingMode {
+enum class LightingMode : u8 {
 	Default,
 	Unlit,
 	FalseColorPosition,

@@ -131,33 +131,11 @@ inline u64 GetCPUTime() {
 // Error handling
 //----------------------------------------------------------------------------------
 
-// Helper class for COM exceptions
-class com_exception : public std::exception {
-public:
-	com_exception(HRESULT hr, const char* msg = "")
-		: result(hr)
-		, msg(msg) {
-	}
-
-	const char* what() const override {
-		std::ostringstream stream;
-
-		stream << msg << " (Failure with HRESULT of " << std::hex << result << ")";
-
-		return stream.str().c_str();
-	}
-
-private:
-	HRESULT result;
-	std::string msg;
-};
-
-
 // Throw
 inline void ThrowIfFailed(HRESULT hr, const char* msg = "") {
 	if (FAILED(hr)) {
-		std::cerr << msg << " (Failure with HRESULT of " << std::hex << hr << std::dec << ")" << std::endl;
-		throw com_exception(hr, msg);
+		std::cerr << msg << " (Failure with HRESULT of 0x" << std::hex << hr << std::dec << ")\n";
+		throw Exception(msg);
 	}
 }
 
