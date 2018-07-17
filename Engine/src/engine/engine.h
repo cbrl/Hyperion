@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/main_window.h"
+#include "os/windows/window.h"
 
 #include "ecs.h"
 #include "log/log.h"
@@ -12,7 +12,7 @@
 #include "scene/scene.h"
 
 
-class Engine final : public MainWindow {
+class Engine final /*: public MainWindow*/ {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -52,24 +52,24 @@ public:
 	void loadScene(unique_ptr<Scene>&& new_scene);
 
 	// Begin the main loop
-	void run() override;
+	void run();
 
 	// Message handler
-	LRESULT msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;
+	//LRESULT msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;
 
 	[[nodiscard]]
 	HWND getHwnd() const {
-		return hWnd;
+		return window->getWindow();
 	}
 
 	[[nodiscard]]
 	u32 getWindowWidth() const {
-		return window_width;
+		return 800;
 	}
 
 	[[nodiscard]]
 	u32 getWindowHeight() const {
-		return window_height;
+		return 600;
 	}
 
 	[[nodiscard]]
@@ -121,6 +121,7 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
+	unique_ptr<Window> window;
 	unique_ptr<SystemMonitor> system_monitor;
 	unique_ptr<HighResTimer> timer;
 	unique_ptr<FPS> fps_counter;

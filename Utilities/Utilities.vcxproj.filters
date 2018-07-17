@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Header Files\datatypes">
       <UniqueIdentifier>{d340d6c5-76f7-49dc-bd21-55919b24d377}</UniqueIdentifier>
     </Filter>
@@ -96,6 +92,12 @@
     </Filter>
     <Filter Include="Header Files\os\windows">
       <UniqueIdentifier>{17dadc17-6fae-431d-9dc8-9512f27ecf09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\os">
+      <UniqueIdentifier>{c8ec018d-e8f1-461d-ae1f-a1ec3bd423d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\os\windows">
+      <UniqueIdentifier>{7bf52c0a-f820-4c43-ae22-e5cccf02d1c5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -288,6 +290,9 @@
     <ClInclude Include="src\os\windows\windows.h">
       <Filter>Header Files\os\windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\os\windows\window.h">
+      <Filter>Header Files\os\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\memory\allocator\stack_allocator.cpp">
@@ -313,6 +318,9 @@
     </ClCompile>
     <ClCompile Include="src\log\spdlog\fmt\bundled\format.cc">
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
+    </ClCompile>
+    <ClCompile Include="src\os\windows\window.cpp">
+      <Filter>Source Files\os\windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

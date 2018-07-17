@@ -195,6 +195,7 @@
     <ClInclude Include="src\memory\handle\handle_table.h" />
     <ClInclude Include="src\memory\managed_resource_map.h" />
     <ClInclude Include="src\memory\resource_pool.h" />
+    <ClInclude Include="src\os\windows\window.h" />
     <ClInclude Include="src\os\windows\windows.h" />
     <ClInclude Include="src\os\windows\win_utils.h" />
     <ClInclude Include="src\string\string.h" />
@@ -209,6 +210,7 @@
     <ClCompile Include="src\log\spdlog\fmt\bundled\printf.cc" />
     <ClCompile Include="src\memory\allocator\linear_allocator.cpp" />
     <ClCompile Include="src\memory\allocator\stack_allocator.cpp" />
+    <ClCompile Include="src\os\windows\window.cpp" />
     <ClCompile Include="src\sysmon\system_monitor.cpp" />
   </ItemGroup>
   <ItemGroup>

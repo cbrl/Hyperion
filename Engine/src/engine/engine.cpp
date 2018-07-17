@@ -23,12 +23,15 @@ bool Engine::init() {
 	Logger::log(LogLevel::info, "<=========================START=========================>");
 
 	// Create the display configuration
-	DisplayConfig config(AAType::none, false, false);
+	DisplayConfig display_config(AAType::none, false, false);
 
-	// Create main window
-	if (!this->initWindow(L"Engine", config.getDisplayDesc().Width, config.getDisplayDesc().Height)) {
-		return false;
-	}
+	// Create the main window
+	auto win_config = make_shared<WindowConfig>(GetModuleHandle(nullptr), L"Engine");
+	window = make_unique<Window>(win_config,
+	                             L"Engine",
+	                             display_config.getDisplayDesc().Width,
+	                             display_config.getDisplayDesc().Height);
+
 	Logger::log(LogLevel::info, "Initialized main window");
 
 
@@ -41,7 +44,7 @@ bool Engine::init() {
 
 
 	// Create the input handler
-	input = make_unique<Input>(hWnd);
+	input = make_unique<Input>(window->getWindow());
 
 
 	// Create the timer
@@ -53,7 +56,7 @@ bool Engine::init() {
 
 
 	// Initialize the rendering manager and rendering system
-	rendering_mgr = make_unique<RenderingMgr>(hWnd, config);
+	rendering_mgr = make_unique<RenderingMgr>(window->getWindow(), display_config);
 
 
 	// Add systems to the ECS
@@ -105,7 +108,9 @@ void Engine::loadScene(unique_ptr<Scene>&& new_scene) {
 
 
 void Engine::run() {
-	MSG  msg  = {nullptr};
+	window->show(SW_SHOWNORMAL);
+
+	MSG  msg  = {};
 	bool done = false;
 
 	// Main loop
@@ -170,60 +175,60 @@ void Engine::processInput() const {
 }
 
 
-LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
-
-	// Send events to ImGui message handler if the mouse mode is set to absolute
-	if (input && (input->getMouseMode() == Mouse::MODE_ABSOLUTE)) {
-		ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
-	}
-
-	// Send events to the Input message handler
-	inputMsgProc(hWnd, msg, wParam, lParam);
-
-	switch (msg) {
-		case WM_DESTROY:
-		case WM_CLOSE:
-			PostQuitMessage(0);
-			return 0;
-
-		// Handle window resize
-		case WM_SIZE:
-		{
-			window_width = LOWORD(lParam);
-			window_height = HIWORD(lParam);
-
-			if (wParam == SIZE_MAXIMIZED) {
-				onResize(window_width, window_height);
-			}
-			else if (wParam == SIZE_RESTORED) {
-				// Do nothing if resizing. Constantly calling the resize function would be slow.
-				if (!resizing) {
-					onResize(window_width, window_height);
-				}
-			}
-
-			return 0;
-		}
-
-		case WM_ENTERSIZEMOVE:
-			resizing = true;
-			return 0;
-
-		case WM_EXITSIZEMOVE:
-			resizing = false;
-			onResize(window_width, window_height);
-			return 0;
-
-		case WM_GETMINMAXINFO:
-			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.x = 240;
-			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.y = 240;
-			return 0;
-
-		// Send other messages to default message handler
-		default:
-			return DefWindowProc(hWnd, msg, wParam, lParam);
-	}
-}
+//LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
+//
+//	// Send events to ImGui message handler if the mouse mode is set to absolute
+//	if (input && (input->getMouseMode() == Mouse::MODE_ABSOLUTE)) {
+//		ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
+//	}
+//
+//	// Send events to the Input message handler
+//	inputMsgProc(hWnd, msg, wParam, lParam);
+//
+//	switch (msg) {
+//		case WM_DESTROY:
+//		case WM_CLOSE:
+//			PostQuitMessage(0);
+//			return 0;
+//
+//		// Handle window resize
+//		case WM_SIZE:
+//		{
+//			window_width = LOWORD(lParam);
+//			window_height = HIWORD(lParam);
+//
+//			if (wParam == SIZE_MAXIMIZED) {
+//				onResize(window_width, window_height);
+//			}
+//			else if (wParam == SIZE_RESTORED) {
+//				// Do nothing if resizing. Constantly calling the resize function would be slow.
+//				if (!resizing) {
+//					onResize(window_width, window_height);
+//				}
+//			}
+//
+//			return 0;
+//		}
+//
+//		case WM_ENTERSIZEMOVE:
+//			resizing = true;
+//			return 0;
+//
+//		case WM_EXITSIZEMOVE:
+//			resizing = false;
+//			onResize(window_width, window_height);
+//			return 0;
+//
+//		case WM_GETMINMAXINFO:
+//			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.x = 240;
+//			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.y = 240;
+//			return 0;
+//
+//		// Send other messages to default message handler
+//		default:
+//			return DefWindowProc(hWnd, msg, wParam, lParam);
+//	}
+//}
 
 
 void Engine::onResize(u32 window_width, u32 window_height) {

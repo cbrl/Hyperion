@@ -169,7 +169,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\engine.h" />
-    <ClInclude Include="src\engine\main_window.h" />
     <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\scene\text\text.h" />
     <ClInclude Include="src\stdafx.h" />
@@ -177,7 +176,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\engine.cpp" />
-    <ClCompile Include="src\engine\main_window.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\scene\text\text.cpp" />
     <ClCompile Include="src\stdafx.cpp">
