@@ -64,10 +64,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Engine() noexcept
-		: resizing(false) {
-	}
-
+	Engine() = default;
 	Engine(const Engine& engine) = delete;
 	Engine(Engine&& engine) = default;
 
@@ -99,9 +96,6 @@ public:
 
 	// Begin the main loop
 	void run();
-
-	// Message handler
-	//LRESULT msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;
 
 	[[nodiscard]]
 	HWND getWindow() const {
@@ -171,6 +165,4 @@ private:
 	unique_ptr<RenderingMgr> rendering_mgr;
 	unique_ptr<ECS> ecs_engine;
 	unique_ptr<Scene> scene;
-
-	bool resizing;
 };
