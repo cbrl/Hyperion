@@ -9,9 +9,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	OrthographicCamera(ID3D11Device& device,
-	                   u32 viewport_width,
-	                   u32 viewport_height);
+	OrthographicCamera(ID3D11Device& device, vec2_u32 viewport_size);
 
 	OrthographicCamera(const OrthographicCamera& camera) = delete;
 	OrthographicCamera(OrthographicCamera&& camera) noexcept = default;

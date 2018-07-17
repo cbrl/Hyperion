@@ -1,6 +1,7 @@
 #pragma once
 
 #include "os/windows/windows.h"
+#include "datatypes/vector_types.h"
 #include <algorithm>
 
 
@@ -138,8 +139,7 @@ public:
 	//----------------------------------------------------------------------------------
 	Window(std::shared_ptr<WindowConfig> window_config,
 	       const std::wstring& title,
-	       u32 width,
-	       u32 height,
+	       vec2_u32 resolution,
 	       DWORD style = WS_OVERLAPPEDWINDOW);
 
 	Window(const Window& window) = delete;
@@ -176,6 +176,14 @@ public:
 		return window;
 	}
 
+	[[nodiscard]]
+	vec2_u32 getClientSize() const noexcept {
+		RECT client;
+		GetClientRect(window, &client);
+		return { static_cast<u32>(client.right),
+		         static_cast<u32>(client.bottom) };
+	}
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Forwarders
@@ -206,7 +214,7 @@ public:
 
 
 private:
-	void init(const std::wstring& title, u32 width, u32 height, DWORD style);
+	void init(const std::wstring& title, vec2_u32 resolution, DWORD style);
 
 	[[nodiscard]]
 	LRESULT msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);

@@ -4,6 +4,48 @@
 #include "imgui_message_forwarder.h"
 
 
+LRESULT EngineMessageHandler::msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
+
+	switch(msg) {
+
+		// Handle window resize
+		case WM_SIZE: {
+			if (wParam == SIZE_MAXIMIZED) {
+				on_resize();
+			}
+			else if (wParam == SIZE_RESTORED) {
+				// Do nothing if resizing. Constantly calling the resize function would be slow.
+				if (!resizing) {
+					on_resize();
+				}
+			}
+
+			return 0;
+		}
+
+		case WM_ENTERSIZEMOVE:
+			resizing = true;
+			return 0;
+
+		case WM_EXITSIZEMOVE: {
+			resizing = false;
+			on_resize();
+			return 0;
+		}
+
+		// Limit min window size
+		case WM_GETMINMAXINFO:
+			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.x = 480;
+			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.y = 480;
+			return 0;
+
+		default:
+			return 0;
+	}
+}	
+
+
+
 Engine::~Engine() {
 
 	Logger::log(LogLevel::info, "<==========================END==========================>\n");
@@ -23,39 +65,56 @@ bool Engine::init() {
 	DisplayConfig display_config(AAType::none, false, false);
 
 	// Create the main window
-	auto win_config = make_shared<WindowConfig>(GetModuleHandle(nullptr), L"Engine");
-	window = make_unique<Window>(win_config,
-	                             L"Engine",
-	                             display_config.getDisplayDesc().Width,
-	                             display_config.getDisplayDesc().Height);
+	{
+		auto win_config = make_shared<WindowConfig>(GetModuleHandle(nullptr), L"Engine");
+		window = make_unique<Window>(win_config,
+									 L"Engine",
+									 vec2_u32{ display_config.getDisplayDesc().Width,
+									           display_config.getDisplayDesc().Height });
 
-	window->addHandler(&InputMessageHandler::handler);
-	window->addForwarder(&ImGuiMessageForwarder::forwarder);
+		msg_handler.on_resize = [this]() {
+			if (!rendering_mgr) return;
 
-	Logger::log(LogLevel::info, "Initialized main window");
+			const vec2_u32 size = window->getClientSize();
+			rendering_mgr->resizeBuffers(size.x, size.y);
+
+			if (ecs_engine) {
+				ecs_engine->forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+					camera.getViewport().setSize(size);
+				});
+
+				ecs_engine->forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+					camera.getViewport().setSize(size);
+				});
+			}
+
+			Logger::log(LogLevel::info, "Viewport resized to {}x{}", size.x, size.y);
+		};
+
+		window->addHandler(&msg_handler);
+		window->addHandler(&InputMessageHandler::handler);
+		window->addForwarder(&ImGuiMessageForwarder::forwarder);
+
+		Logger::log(LogLevel::info, "Initialized main window");
+	}
 
 
-	// Create the Entity Component System
+	// Entity Component System
 	ecs_engine = make_unique<ECS>();
 
-
-	// Create the system monitor
+	// System Monitor
 	system_monitor = make_unique<SystemMonitor>();
 
-
-	// Create the input handler
+	// Input Handler
 	input = make_unique<Input>(window->getWindow());
 
-
-	// Create the timer
+	// Timer
 	timer = make_unique<HighResTimer>();
 
-
-	// Create FPS Counter
+	// FPS Counter
 	fps_counter = make_unique<FPS>();
 
-
-	// Initialize the rendering manager and rendering system
+	// Rendering Manager
 	rendering_mgr = make_unique<RenderingMgr>(window->getWindow(), display_config);
 
 
@@ -179,81 +238,4 @@ void Engine::processInput() const {
 	if (input->isKeyPressed(Keyboard::F2)) {
 		input->toggleMouseVisible();
 	}
-}
-
-
-//LRESULT Engine::msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) {
-//
-//	// Send events to ImGui message handler if the mouse mode is set to absolute
-//	if (input && (input->getMouseMode() == Mouse::MODE_ABSOLUTE)) {
-//		ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
-//	}
-//
-//	// Send events to the Input message handler
-//	inputMsgProc(hWnd, msg, wParam, lParam);
-//
-//	switch (msg) {
-//		case WM_DESTROY:
-//		case WM_CLOSE:
-//			PostQuitMessage(0);
-//			return 0;
-//
-//		// Handle window resize
-//		case WM_SIZE:
-//		{
-//			window_width = LOWORD(lParam);
-//			window_height = HIWORD(lParam);
-//
-//			if (wParam == SIZE_MAXIMIZED) {
-//				onResize(window_width, window_height);
-//			}
-//			else if (wParam == SIZE_RESTORED) {
-//				// Do nothing if resizing. Constantly calling the resize function would be slow.
-//				if (!resizing) {
-//					onResize(window_width, window_height);
-//				}
-//			}
-//
-//			return 0;
-//		}
-//
-//		case WM_ENTERSIZEMOVE:
-//			resizing = true;
-//			return 0;
-//
-//		case WM_EXITSIZEMOVE:
-//			resizing = false;
-//			onResize(window_width, window_height);
-//			return 0;
-//
-//		case WM_GETMINMAXINFO:
-//			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.x = 240;
-//			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.y = 240;
-//			return 0;
-//
-//		// Send other messages to default message handler
-//		default:
-//			return DefWindowProc(hWnd, msg, wParam, lParam);
-//	}
-//}
-
-
-void Engine::onResize(u32 window_width, u32 window_height) {
-
-	// const auto size = window->getSize() (GetClientRect)
-
-	if (!rendering_mgr) return;
-	rendering_mgr->resizeBuffers(window_width, window_height);
-
-	if (ecs_engine) {
-		ecs_engine->forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-			camera.getViewport().setSize(window_width, window_height);
-		});
-
-		ecs_engine->forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
-			camera.getViewport().setSize(window_width, window_height);
-		});
-	}
-
-	Logger::log(LogLevel::info, "Viewport resized to {}x{}", window_width, window_height);
 }

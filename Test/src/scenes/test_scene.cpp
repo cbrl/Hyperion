@@ -21,10 +21,7 @@ void TestScene::load(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera
-	const handle64 camera = addEntity<PlayerCamera>(ecs_engine,
-	                                                device,
-                                                    engine.getWindowWidth(),
-	                                                engine.getWindowHeight());
+	const handle64 camera = addEntity<PlayerCamera>(ecs_engine, device, engine.getWindowSize());
 
 	// Set the parameters
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);

@@ -12,7 +12,53 @@
 #include "scene/scene.h"
 
 
-class Engine final /*: public MainWindow*/ {
+//----------------------------------------------------------------------------------
+// EngineMessageHandler
+//----------------------------------------------------------------------------------
+class EngineMessageHandler final : public MessageHandler {
+public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	EngineMessageHandler() noexcept = default;
+	EngineMessageHandler(const EngineMessageHandler& handler) = default;
+	EngineMessageHandler(EngineMessageHandler&& handler) = default;
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~EngineMessageHandler() = default;
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	EngineMessageHandler& operator=(const EngineMessageHandler& handler) = default;
+	EngineMessageHandler& operator=(EngineMessageHandler&& handler) = default;
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	LRESULT msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) override;
+
+
+public:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+	std::function<void()> on_resize;
+
+private:
+	bool resizing = false;
+};
+
+
+
+
+//----------------------------------------------------------------------------------
+// Engine
+//----------------------------------------------------------------------------------
+class Engine final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -23,7 +69,7 @@ public:
 	}
 
 	Engine(const Engine& engine) = delete;
-	Engine(Engine&& engine) noexcept = default;
+	Engine(Engine&& engine) = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -38,7 +84,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	Engine& operator=(const Engine& engine) = delete;
-	Engine& operator=(Engine&& engine) noexcept = default;
+	Engine& operator=(Engine&& engine) = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -58,18 +104,13 @@ public:
 	//LRESULT msgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam) override;
 
 	[[nodiscard]]
-	HWND getHwnd() const {
+	HWND getWindow() const {
 		return window->getWindow();
 	}
 
 	[[nodiscard]]
-	u32 getWindowWidth() const {
-		return 800;
-	}
-
-	[[nodiscard]]
-	u32 getWindowHeight() const {
-		return 600;
+	vec2_u32 getWindowSize() const {
+		return window->getClientSize();
 	}
 
 	[[nodiscard]]
@@ -113,13 +154,14 @@ private:
 
 	void tick() const;
 	void processInput() const;
-	void onResize(u32 window_width, u32 window_height);
 
 
 private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
+
+	EngineMessageHandler msg_handler;
 
 	unique_ptr<Window> window;
 	unique_ptr<SystemMonitor> system_monitor;

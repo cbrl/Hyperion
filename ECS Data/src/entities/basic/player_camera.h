@@ -11,11 +11,10 @@ public:
 	PlayerCamera(handle64 this_handle,
 	             ComponentMgr* component_mgr,
 	             ID3D11Device& device,
-	             u32 viewport_width,
-	             u32 viewport_height)
+				 vec2_u32 viewport_size)
 		: WorldObject(this_handle, component_mgr) {
 
-		this->addComponent<PerspectiveCamera>(device, viewport_width, viewport_height);
+		this->addComponent<PerspectiveCamera>(device, viewport_size);
 		this->addComponent<Transform>();
 		this->addComponent<CameraMovement>();
 		this->addComponent<MouseRotation>();

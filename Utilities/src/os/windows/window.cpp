@@ -65,24 +65,25 @@ WindowConfig::~WindowConfig() {
 
 Window::Window(std::shared_ptr<WindowConfig> window_config,
                const std::wstring& title,
-               u32 width,
-               u32 height,
+			   vec2_u32 resolution,
                DWORD style)
 	: config(std::move(window_config))
 	, window(nullptr) {
 
 	assert(config);
-	init(title, width, height, style);
+	init(title, resolution, style);
 }
 
 
 void Window::init(const std::wstring& title,
-                  u32 width,
-                  u32 height,
+				  vec2_u32 resolution,
                   DWORD style) {
 
 	// Create a rect for the adjusted window size
-	RECT window_rect = { 0, 0, width, height };
+	RECT window_rect = { 0,
+	                     0,
+	                     static_cast<LONG>(resolution.x),
+	                     static_cast<LONG>(resolution.y) };
 
 	// Calculate the total window size with decorations included
 	AdjustWindowRect(&window_rect, style, false);

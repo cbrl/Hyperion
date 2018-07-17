@@ -1027,11 +1027,11 @@ void DrawMenu(ID3D11Device& device,
 				if (ImGui::BeginMenu("Add Component")) {
 
 					if (ImGui::MenuItem("Orthographic Camera")) {
-						ecs_engine.addComponent<OrthographicCamera>(selected_entity, device, 480, 480);
+						ecs_engine.addComponent<OrthographicCamera>(selected_entity, device, vec2_u32{480, 480});
 					}
 
 					if (ImGui::MenuItem("Perspective Camera")) {
-						ecs_engine.addComponent<PerspectiveCamera>(selected_entity, device, 480, 480);
+						ecs_engine.addComponent<PerspectiveCamera>(selected_entity, device, vec2_u32{480, 480});
 					}
 
 					if (ImGui::MenuItem("Directional Light")) {
