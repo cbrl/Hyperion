@@ -2,12 +2,49 @@
 
 #include "datatypes/datatypes.h"
 #include "directx/directxtk.h"
+#include "os/windows/window.h"
 
 
-// Updates DirectXTK mouse and keyboard state
-void inputMsgProc(HWND hWnd, u32 msg, WPARAM wParam, LPARAM lParam);
+//----------------------------------------------------------------------------------
+// InputMessageHandler
+//----------------------------------------------------------------------------------
+class InputMessageHandler final : public MessageHandler {
+public:
+	static InputMessageHandler handler;
+
+public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	InputMessageHandler() = default;
+	InputMessageHandler(const InputMessageHandler& handler) noexcept = default;
+	InputMessageHandler(InputMessageHandler&& handler) noexcept = default;
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~InputMessageHandler() = default;
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	InputMessageHandler& operator=(const InputMessageHandler& handler) noexcept = default;
+	InputMessageHandler& operator=(InputMessageHandler&& handler) noexcept = default;
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+	// Updates DirectXTK mouse and keyboard state
+	[[nodiscard]]
+	LRESULT msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) override;
+};
 
 
+
+
+//----------------------------------------------------------------------------------
+// Input
+//----------------------------------------------------------------------------------
 class Input final {
 public:
 	Input(HWND hWnd);

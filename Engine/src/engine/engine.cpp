@@ -32,6 +32,8 @@ bool Engine::init() {
 	                             display_config.getDisplayDesc().Width,
 	                             display_config.getDisplayDesc().Height);
 
+	window->addHandler(&InputMessageHandler::handler);
+
 	Logger::log(LogLevel::info, "Initialized main window");
 
 
