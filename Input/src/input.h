@@ -16,7 +16,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	InputMessageHandler() = default;
+	InputMessageHandler() noexcept = default;
 	InputMessageHandler(const InputMessageHandler& handler) noexcept = default;
 	InputMessageHandler(InputMessageHandler&& handler) noexcept = default;
 

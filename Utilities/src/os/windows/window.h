@@ -12,7 +12,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	MessageForwarder() = default;
+	MessageForwarder() noexcept = default;
 	MessageForwarder(const MessageForwarder& forwarder) noexcept = default;
 	MessageForwarder(MessageForwarder&& forwarder) noexcept = default;
 
@@ -42,7 +42,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	MessageHandler() = default;
+	MessageHandler() noexcept = default;
 	MessageHandler(const MessageHandler& forwarder) noexcept = default;
 	MessageHandler(MessageHandler&& forwarder) noexcept = default;
 

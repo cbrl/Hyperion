@@ -1,10 +1,7 @@
 #include "stdafx.h"
 #include "engine.h"
 #include "systems/systems.h"
-
-
-// Declare the ImGui msg handler
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+#include "imgui_message_forwarder.h"
 
 
 Engine::~Engine() {
@@ -33,6 +30,7 @@ bool Engine::init() {
 	                             display_config.getDisplayDesc().Height);
 
 	window->addHandler(&InputMessageHandler::handler);
+	window->addForwarder(&ImGuiMessageForwarder::forwarder);
 
 	Logger::log(LogLevel::info, "Initialized main window");
 
@@ -167,6 +165,13 @@ void Engine::processInput() const {
 
 	// F1: Toggle mouse mode
 	if (input->isKeyPressed(Keyboard::F1)) {
+		if (input->getMouseMode() == Mouse::MODE_ABSOLUTE) {
+			window->removeForwarder(&ImGuiMessageForwarder::forwarder);
+		}
+		if (input->getMouseMode() == Mouse::MODE_RELATIVE) {
+			window->removeForwarder(&ImGuiMessageForwarder::forwarder);
+			window->addForwarder(&ImGuiMessageForwarder::forwarder);
+		}
 		input->toggleMouseMode();
 	}
 
@@ -234,6 +239,8 @@ void Engine::processInput() const {
 
 
 void Engine::onResize(u32 window_width, u32 window_height) {
+
+	// const auto size = window->getSize() (GetClientRect)
 
 	if (!rendering_mgr) return;
 	rendering_mgr->resizeBuffers(window_width, window_height);
