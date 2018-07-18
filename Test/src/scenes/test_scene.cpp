@@ -46,7 +46,7 @@ void TestScene::load(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Scene model
-	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
+	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/sponza/sponza.obj");
 	addEntity<BasicModel>(ecs_engine, device, bp);
 
 	// Sphere
@@ -57,10 +57,10 @@ void TestScene::load(const Engine& engine) {
 
 	auto rotation = ecs_engine.addComponent<AxisRotation>(sphere);
 	rotation->setAxis(AxisRotation::Axis::Y);
-	rotation->setSpeedY(0.5f);
+	rotation->setSpeedY(1.5f);
 
 	auto orbit = ecs_engine.addComponent<AxisOrbit>(sphere);
-	orbit->setSpeed(1.5f);
+	orbit->setSpeed(0.5f);
 
 
 	//----------------------------------------------------------------------------------
@@ -95,7 +95,6 @@ void TestScene::load(const Engine& engine) {
 
 		auto transform = ecs_engine.getComponent<Transform>(spot_light);
 		transform->setPosition(vec3_f32(-1.0f, 0.0f, 0.0f));
-		//transform->SetRotation(vec3_f32(XM_PIDIV2, 0.0f, 0.0f));
 		transform->setParent(camera);
 	}
 

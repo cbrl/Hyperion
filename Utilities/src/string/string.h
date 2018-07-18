@@ -63,54 +63,53 @@ string int2hexstr(T i) {
 
 
 // Trim whitespace at the beginning and end of a string
-template<typename StringT>
-StringT TrimWhiteSpace(StringT& in) {
-	size_t text_start = in.find_first_not_of(L" \t");
-	size_t text_end = in.find_last_not_of(L" \t");
+inline std::string TrimWhiteSpace(const std::string& in) {
+	const size_t text_start = in.find_first_not_of(" \t");
+	const size_t text_end = in.find_last_not_of(" \t");
 
-	if (text_start != StringT::npos && text_end != StringT::npos) {
+	if (text_start != std::string::npos && text_end != std::string::npos) {
 		return in.substr(text_start, text_end - text_start + 1);
 	}
-	if (text_start != StringT::npos) {
+	if (text_start != std::string::npos) {
 		return in.substr(text_start);
 	}
 
-	return StringT();
+	return std::string();
+}
+
+// Trim whitespace at the beginning and end of a string
+inline std::wstring TrimWhiteSpace(const std::wstring& in) {
+	const size_t text_start = in.find_first_not_of(L" \t");
+	const size_t text_end   = in.find_last_not_of(L" \t");
+
+	if (text_start != std::wstring::npos && text_end != std::wstring::npos) {
+		return in.substr(text_start, text_end - text_start + 1);
+	}
+	if (text_start != std::wstring::npos) {
+		return in.substr(text_start);
+	}
+
+	return std::wstring();
 }
 
 
 // Split a string by a specified token
 template<typename StringT>
-std::vector<StringT> Split(StringT& in, const typename StringT::value_type* token) {
+std::vector<StringT> Split(const StringT& in, const typename StringT::value_type* token) {
 
 	std::vector<StringT> out;
+	StringT token_s(token);
 
-	StringT s_token(token);
-	StringT temp;
+	size_t start = 0;
+	size_t end   = in.find(token_s);
 
-	for (typename StringT::size_type i = 0; i < in.size(); ++i) {
-
-		StringT substr = in.substr(i, s_token.size());
-
-		if (substr == token) {
-			if (!temp.empty()) {
-				out.push_back(temp);
-				temp.clear();
-				i += s_token.size() - 1;
-			}
-			else {
-				out.push_back(reinterpret_cast<const typename StringT::value_type*>(""));
-			}
-		}
-		else if ((i + s_token.size()) >= in.size()) {
-			temp += in.substr(i, s_token.size());
-			out.push_back(temp);
-			break;
-		}
-		else {
-			temp += in[i];
-		}
+	while (end != std::string::npos) {
+		out.push_back(in.substr(start, end - start));
+		start = end + token_s.length();
+		end = in.find(token_s, start);
 	}
+
+	out.push_back(in.substr(start, end));
 
 	return out;
 }
