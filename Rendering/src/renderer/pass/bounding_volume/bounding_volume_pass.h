@@ -4,9 +4,9 @@
 #include "resource/shader/shader.h"
 #include "geometry/bounding_volume/bounding_volume.h"
 
-class Engine;
 class RenderStateMgr;
 class ResourceMgr;
+class Scene;
 
 class BoundingVolumePass final {
 public:
@@ -17,7 +17,7 @@ public:
 	~BoundingVolumePass() = default;
 
 	void bindRenderStates() const;
-	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV render(Scene& scene, FXMMATRIX world_to_projection) const;
 
 
 private:

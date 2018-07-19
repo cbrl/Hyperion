@@ -6,6 +6,8 @@
 #include "buffer/shadow_map_buffer.h"
 #include "renderer/pass/depth/depth_pass.h"
 
+class RenderStateMgr;
+class ResourceMgr;
 class ECS;
 class Scene;
 
@@ -17,14 +19,14 @@ public:
 	          ResourceMgr& resource_mgr);
 	~LightPass() = default;
 
-	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection);
+	void XM_CALLCONV render(Scene& scene, FXMMATRIX world_to_projection);
 
 
 private:
 	void bindBuffers();
 
 	void updateShadowMaps();
-	void renderShadowMaps(const Engine& engine);
+	void renderShadowMaps(Scene& scene);
 
 	void updateData() const;
 	void XM_CALLCONV updateDirectionalLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);

@@ -1019,7 +1019,7 @@ void DrawMenu(ID3D11Device& device,
 		if (ImGui::BeginMenu("Entity")) {
 
 			if (ImGui::MenuItem("New")) {
-				scene.addEntity<WorldObject<>>(ecs_engine);
+				scene.addEntity<WorldObject<>>();
 			}
 
 			if (ImGui::BeginMenu("Selected")) {
@@ -1082,7 +1082,7 @@ void DrawMenu(ID3D11Device& device,
 
 				if (ImGui::MenuItem("Delete")) {
 					if (selected_entity != handle64::invalid_handle)
-						scene.removeEntity(ecs_engine, selected_entity);
+						scene.removeEntity(selected_entity);
 				}
 
 				ImGui::EndMenu();
@@ -1108,7 +1108,7 @@ void DrawMenu(ID3D11Device& device,
 void UserInterface::draw(const Engine& engine) {
 
 	auto& scene = engine.getScene();
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = engine.getScene().getECS();
 	auto& device = engine.getRenderingMgr().getDevice();
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
 

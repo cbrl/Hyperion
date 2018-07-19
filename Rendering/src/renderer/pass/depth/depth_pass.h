@@ -6,8 +6,9 @@
 #include "buffer/constant_buffer.h"
 #include "components/model/model.h"
 
-class Engine;
 class RenderStateMgr;
+class ResourceMgr;
+class Scene;
 
 class DepthPass final {
 public:
@@ -19,11 +20,11 @@ public:
 
 	void bindState() const;
 
-	void XM_CALLCONV render(const Engine& engine,
+	void XM_CALLCONV render(Scene& scene,
 	                        FXMMATRIX world_to_camera,
 	                        CXMMATRIX camera_to_projection) const;
 
-	void XM_CALLCONV renderShadows(const Engine& engine,
+	void XM_CALLCONV renderShadows(Scene& scene,
 	                               FXMMATRIX world_to_camera,
 	                               CXMMATRIX camera_to_projection) const;
 

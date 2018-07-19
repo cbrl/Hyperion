@@ -5,7 +5,7 @@
 
 
 void ModelSystem::update(const Engine& engine) {
-	auto& ecs_engine     = engine.getECS();
+	auto& ecs_engine     = engine.getScene().getECS();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	ecs_engine.forEach<Model>([&](Model& model) {

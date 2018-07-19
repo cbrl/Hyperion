@@ -1,7 +1,9 @@
 #include "forward_pass.h"
 
-#include "engine/engine.h"
 #include "hlsl.h"
+#include "scene/scene.h"
+#include "render_state_mgr.h"
+#include "resource/resource_mgr.h"
 #include "geometry/frustum/frustum.h"
 
 
@@ -60,9 +62,9 @@ void ForwardPass::bindWireframeState() const {
 }
 
 
-void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_projection, const Texture* sky) const {
+void XM_CALLCONV ForwardPass::render(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const {
 
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = scene.getECS();
 
 	// Bind the skybox texture as the environment map
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
@@ -82,9 +84,9 @@ void XM_CALLCONV ForwardPass::render(const Engine& engine, FXMMATRIX world_to_pr
 }
 
 
-void ForwardPass::renderFalseColor(const Engine& engine, FXMMATRIX world_to_projection, FalseColor color) {
+void ForwardPass::renderFalseColor(Scene& scene, FXMMATRIX world_to_projection, FalseColor color) {
 
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = scene.getECS();
 
 	bindDefaultState();
 
@@ -98,9 +100,9 @@ void ForwardPass::renderFalseColor(const Engine& engine, FXMMATRIX world_to_proj
 }
 
 
-void ForwardPass::renderWireframe(const Engine& engine, FXMMATRIX world_to_projection) const {
+void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection) const {
 
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = scene.getECS();
 
 	bindWireframeState();
 

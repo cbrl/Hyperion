@@ -9,7 +9,6 @@ TestScene::TestScene() : Scene("Test Scene") {
 
 void TestScene::load(const Engine& engine) {
 
-	auto& ecs_engine          = engine.getECS();
 	const auto& rendering_mgr = engine.getRenderingMgr();
 	auto& device              = rendering_mgr.getDevice();
 	auto& device_context      = rendering_mgr.getDeviceContext();
@@ -17,14 +16,37 @@ void TestScene::load(const Engine& engine) {
 
 
 	//----------------------------------------------------------------------------------
+	// Add systems
+	//----------------------------------------------------------------------------------
+
+	// Transform system: updates transforms when they're modified
+	ecs->addSystem<TransformSystem>();
+
+	// Camera system: updates camera buffers
+	ecs->addSystem<CameraSystem>();
+
+	// Model system: updates model buffers
+	ecs->addSystem<ModelSystem>();
+
+	// Camera motor system: moves an entity with a camera and camera movement component
+	ecs->addSystem<CameraMotorSystem>();
+
+	// Mouse rotation system: uses mouse input to rotate an entity's transform
+	ecs->addSystem<MouseRotationSystem>();
+
+	ecs->addSystem<AxisRotationSystem>();
+	ecs->addSystem<AxisOrbitSystem>();
+
+
+	//----------------------------------------------------------------------------------
 	// Create camera
 	//----------------------------------------------------------------------------------
 
 	// Create the camera
-	const handle64 camera = addEntity<PlayerCamera>(ecs_engine, device, engine.getWindowSize());
+	const handle64 camera = addEntity<PlayerCamera>(device, engine.getWindowSize());
 
 	// Set the parameters
-	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
+	auto cam = ecs->getComponent<PerspectiveCamera>(camera);
 
 	cam->getViewport().setDepth(0.0f, 1.0f);
 	cam->setZDepth(0.01f, 1000.0f);
@@ -37,8 +59,8 @@ void TestScene::load(const Engine& engine) {
 	fog.start = 150.0f;
 	fog.range = 100.0f;
 
-	ecs_engine.getComponent<Transform>(camera)->setPosition(vec3_f32{0.0f, 6.0f, -2.0f});
-	ecs_engine.getComponent<MouseRotation>(camera)->setSensitivity(0.01f);
+	ecs->getComponent<Transform>(camera)->setPosition(vec3_f32{0.0f, 6.0f, -2.0f});
+	ecs->getComponent<MouseRotation>(camera)->setSensitivity(0.01f);
 
 
 	//----------------------------------------------------------------------------------
@@ -47,19 +69,19 @@ void TestScene::load(const Engine& engine) {
 
 	// Scene model
 	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
-	addEntity<BasicModel>(ecs_engine, device, bp);
+	addEntity<BasicModel>(device, bp);
 
 	// Sphere
 	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
-	const handle64 sphere = addEntity<BasicModel>(ecs_engine, device, sphere_bp);
+	const handle64 sphere = addEntity<BasicModel>(device, sphere_bp);
 
-	ecs_engine.getComponent<Transform>(sphere)->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });
+	ecs->getComponent<Transform>(sphere)->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });
 
-	auto rotation = ecs_engine.addComponent<AxisRotation>(sphere);
+	auto rotation = ecs->addComponent<AxisRotation>(sphere);
 	rotation->setAxis(AxisRotation::Axis::Y);
 	rotation->setSpeedY(1.5f);
 
-	auto orbit = ecs_engine.addComponent<AxisOrbit>(sphere);
+	auto orbit = ecs->addComponent<AxisOrbit>(sphere);
 	orbit->setSpeed(0.5f);
 
 
@@ -69,7 +91,7 @@ void TestScene::load(const Engine& engine) {
 	
 	// Sphere light
 	{
-		auto light = ecs_engine.addComponent<SpotLight>(sphere);
+		auto light = ecs->addComponent<SpotLight>(sphere);
 		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(vec4_f32(1.0f, 0.9f, 0.5f, 1.0f));
 		light->setAttenuation(vec3_f32(0.1f, 0.15f, 0.0f));
@@ -82,8 +104,8 @@ void TestScene::load(const Engine& engine) {
 
 	// Camera light
 	{
-		const auto spot_light = addEntity<BasicSpotLight>(ecs_engine); 
-		auto light = ecs_engine.getComponent<SpotLight>(spot_light);
+		const auto spot_light = addEntity<BasicSpotLight>(); 
+		auto light = ecs->getComponent<SpotLight>(spot_light);
 		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(vec4_f32(0.8f, 0.8f, 1.0f, 1.0f));
 		light->setAttenuation(vec3_f32(0.05f, 0.2f, 0.0f));
@@ -93,7 +115,7 @@ void TestScene::load(const Engine& engine) {
 		light->setPenumbraAngle(XM_PI / 3.0f);
 		light->setShadows(true);
 
-		auto transform = ecs_engine.getComponent<Transform>(spot_light);
+		auto transform = ecs->getComponent<Transform>(spot_light);
 		transform->setPosition(vec3_f32(-1.0f, 0.0f, 0.0f));
 		transform->setParent(camera);
 	}
@@ -136,6 +158,10 @@ void TestScene::load(const Engine& engine) {
 
 
 void TestScene::tick(const Engine& engine) {
+
+	// Update the active systems in the ECS
+	ecs->update(engine);
+
 
 	//----------------------------------------------------------------------------------
 	// Update FPS, CPU usage, memory usage, mouse position, etc...

@@ -6,7 +6,7 @@
 
 void MouseRotationSystem::update(const Engine& engine) {
 
-	auto& ecs_engine  = engine.getECS();
+	auto& ecs_engine  = engine.getScene().getECS();
 	const auto& input = engine.getInput();
 
 	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());

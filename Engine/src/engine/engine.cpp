@@ -54,7 +54,7 @@ Engine::~Engine() {
 	// the rendering manager. This prevents D3D from reporting live
 	// resources that are going to be deleted right after the report.
 	scene.reset();
-	ecs_engine.reset();
+	//ecs_engine.reset();
 }
 
 
@@ -78,14 +78,8 @@ bool Engine::init() {
 			const vec2_u32 size = window->getClientSize();
 			rendering_mgr->resizeBuffers(size.x, size.y);
 
-			if (ecs_engine) {
-				ecs_engine->forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-					camera.getViewport().setSize(size);
-				});
-
-				ecs_engine->forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
-					camera.getViewport().setSize(size);
-				});
+			if (scene) {
+				scene->onResize(size);
 			}
 
 			Logger::log(LogLevel::info, "Viewport resized to {}x{}", size.x, size.y);
@@ -98,9 +92,6 @@ bool Engine::init() {
 		Logger::log(LogLevel::info, "Initialized main window");
 	}
 
-
-	// Entity Component System
-	ecs_engine = make_unique<ECS>();
 
 	// System Monitor
 	system_monitor = make_unique<SystemMonitor>();
@@ -118,40 +109,14 @@ bool Engine::init() {
 	rendering_mgr = make_unique<RenderingMgr>(window->getWindow(), display_config);
 
 
-	// Add systems to the ECS
-	addSystems();
-
-
 	return true;
-}
-
-
-void Engine::addSystems() const {
-
-	// Transform system: updates transforms when they're modified
-	ecs_engine->addSystem<TransformSystem>();
-
-	// Camera system: updates camera buffers
-	ecs_engine->addSystem<CameraSystem>();
-
-	// Model system: updates model buffers
-	ecs_engine->addSystem<ModelSystem>();
-
-	// Camera motor system: moves an entity with a camera and camera movement component
-	ecs_engine->addSystem<CameraMotorSystem>();
-
-	// Mouse rotation system: uses mouse input to rotate an entity's transform
-	ecs_engine->addSystem<MouseRotationSystem>();
-
-	ecs_engine->addSystem<AxisRotationSystem>();
-	ecs_engine->addSystem<AxisOrbitSystem>();
 }
 
 
 void Engine::loadScene(unique_ptr<Scene>&& new_scene) {
 	
 	if (scene) {
-		scene->unload(*this);
+		scene.reset();
 		Logger::log(LogLevel::info, "Unloaded scene: {}", scene->getName());
 	}
 
@@ -200,9 +165,6 @@ void Engine::run() {
 
 
 void Engine::tick() const {
-
-	// Update the active systems in the ecs engine
-	ecs_engine->update(*this);
 
 	// Update system metrics
 	system_monitor->tick();

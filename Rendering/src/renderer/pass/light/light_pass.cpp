@@ -1,6 +1,9 @@
 #include "light_pass.h"
-#include "engine/engine.h"
+
 #include "hlsl.h"
+#include "scene/scene.h"
+#include "render_state_mgr.h"
+#include "resource/resource_mgr.h"
 #include "geometry/frustum/frustum.h"
 
 
@@ -27,9 +30,9 @@ LightPass::LightPass(ID3D11Device& device,
 }
 
 
-void XM_CALLCONV LightPass::render(const Engine& engine, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::render(Scene& scene, FXMMATRIX world_to_projection) {
 
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = scene.getECS();
 
 	// Update light buffers
 	updateDirectionalLightData(ecs_engine, world_to_projection);
@@ -39,7 +42,7 @@ void XM_CALLCONV LightPass::render(const Engine& engine, FXMMATRIX world_to_proj
 	// Update the shadow map sizes
 	updateShadowMaps();
 	// Render the shadow maps
-	renderShadowMaps(engine);
+	renderShadowMaps(scene);
 
 	// Update light info buffer
 	updateData();
@@ -296,7 +299,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 
 		if (!light.isActive()) return;
 
-		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
+		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
 		if (!transform) return;
 
 		const auto light_to_world      = transform->getObjectToWorldMatrix();
@@ -358,7 +361,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 }
 
 
-void LightPass::renderShadowMaps(const Engine& engine) {
+void LightPass::renderShadowMaps(Scene& scene) {
 
 	depth_pass->bindState();
 
@@ -370,7 +373,7 @@ void LightPass::renderShadowMaps(const Engine& engine) {
 		size_t i = 0;
 		for (const auto& camera : directional_light_cameras) {
 			directional_light_smaps->bindDSV(device_context, i++);
-			depth_pass->renderShadows(engine, camera.world_to_light, camera.light_to_proj);
+			depth_pass->renderShadows(scene, camera.world_to_light, camera.light_to_proj);
 		}
 	}
 
@@ -383,7 +386,7 @@ void LightPass::renderShadowMaps(const Engine& engine) {
 		size_t i = 0;
 		for (const auto& camera : point_light_cameras) {
 			point_light_smaps->bindDSV(device_context, i++);
-			depth_pass->renderShadows(engine, camera.world_to_light, camera.light_to_proj);
+			depth_pass->renderShadows(scene, camera.world_to_light, camera.light_to_proj);
 		}
 	}
 
@@ -396,7 +399,7 @@ void LightPass::renderShadowMaps(const Engine& engine) {
 		size_t i = 0;
 		for (const auto& camera : spot_light_cameras) {
 			spot_light_smaps->bindDSV(device_context, i++);
-			depth_pass->renderShadows(engine, camera.world_to_light, camera.light_to_proj);
+			depth_pass->renderShadows(scene, camera.world_to_light, camera.light_to_proj);
 		}
 	}
 }

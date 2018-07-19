@@ -2,7 +2,6 @@
 
 #include "os/windows/window.h"
 
-#include "ecs.h"
 #include "log/log.h"
 #include "sysmon/system_monitor.h"
 #include "timer/timer.h"
@@ -108,11 +107,6 @@ public:
 	}
 
 	[[nodiscard]]
-	ECS& getECS() const {
-		return *ecs_engine;
-	}
-
-	[[nodiscard]]
 	Scene& getScene() const {
 		return *scene;
 	}
@@ -144,8 +138,6 @@ public:
 
 
 private:
-	void addSystems() const;
-
 	void tick() const;
 	void processInput() const;
 
@@ -163,6 +155,5 @@ private:
 	unique_ptr<FPS> fps_counter;
 	unique_ptr<Input> input;
 	unique_ptr<RenderingMgr> rendering_mgr;
-	unique_ptr<ECS> ecs_engine;
 	unique_ptr<Scene> scene;
 };

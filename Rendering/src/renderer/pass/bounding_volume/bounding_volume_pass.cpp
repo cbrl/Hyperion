@@ -1,7 +1,9 @@
 #include "bounding_volume_pass.h"
 
-#include "engine/engine.h"
 #include "hlsl.h"
+#include "scene/scene.h"
+#include "render_state_mgr.h"
+#include "resource/resource_mgr.h"
 #include "resource/shader/shader_factory.h"
 #include "geometry/frustum/frustum.h"
 
@@ -43,9 +45,9 @@ void BoundingVolumePass::bindRenderStates() const {
 }
 
 
-void XM_CALLCONV BoundingVolumePass::render(const Engine& engine, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_projection) const {
 	
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = scene.getECS();
 
 	// Bind the render states
 	bindRenderStates();

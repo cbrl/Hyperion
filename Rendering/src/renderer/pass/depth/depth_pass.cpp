@@ -1,7 +1,9 @@
 #include "depth_pass.h"
 
-#include "engine/engine.h"
 #include "hlsl.h"
+#include "scene/scene.h"
+#include "render_state_mgr.h"
+#include "resource/resource_mgr.h"
 #include "resource/shader/shader_factory.h"
 #include "geometry/frustum/frustum.h"
 
@@ -35,11 +37,11 @@ void DepthPass::bindState() const {
 }
 
 
-void XM_CALLCONV DepthPass::render(const Engine& engine,
+void XM_CALLCONV DepthPass::render(Scene& scene,
                                    FXMMATRIX world_to_camera,
                                    CXMMATRIX camera_to_projection) const {
 
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = scene.getECS();
 
 	// Update and bind the camera buffer
 	updateCamera(world_to_camera, camera_to_projection);
@@ -72,11 +74,11 @@ void XM_CALLCONV DepthPass::render(const Engine& engine,
 
 }
 
-void XM_CALLCONV DepthPass::renderShadows(const Engine& engine,
+void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
                                           FXMMATRIX world_to_camera,
                                           CXMMATRIX camera_to_projection) const {
 
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = scene.getECS();
 
 	// Update and bind the camera buffer
 	updateCamera(world_to_camera, camera_to_projection);

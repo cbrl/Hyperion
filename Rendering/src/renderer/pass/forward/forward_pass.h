@@ -5,9 +5,10 @@
 #include "components/model/model.h"
 #include "resource/shader/shader_factory.h"
 
-class ECS;
-class Engine;
 class RenderStateMgr;
+class ResourceMgr;
+class ECS;
+class Scene;
 
 class ForwardPass final {
 public:
@@ -17,9 +18,9 @@ public:
 	            ResourceMgr& resource_mgr);
 	~ForwardPass() = default;
 
-	void XM_CALLCONV render(const Engine& engine, FXMMATRIX world_to_projection, const Texture* sky) const;
-	void XM_CALLCONV renderFalseColor(const Engine& engine, FXMMATRIX world_to_projection, FalseColor color);
-	void XM_CALLCONV renderWireframe(const Engine& engine, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV render(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const;
+	void XM_CALLCONV renderFalseColor(Scene& scene, FXMMATRIX world_to_projection, FalseColor color);
+	void XM_CALLCONV renderWireframe(Scene& scene, FXMMATRIX world_to_projection) const;
 
 
 private:

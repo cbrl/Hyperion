@@ -2,7 +2,8 @@ template<typename CameraT>
 void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 
 	// Get the ECS and rendering manager
-	auto& ecs_engine          = engine.getECS();
+	auto& scene               = engine.getScene();
+	auto& ecs_engine          = scene.getECS();
 	const auto& rendering_mgr = engine.getRenderingMgr();
 
 
@@ -20,7 +21,7 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	// Process the light buffers
 	//----------------------------------------------------------------------------------
-	light_pass->render(engine, world_to_projection);
+	light_pass->render(scene, world_to_projection);
 
 
 	//----------------------------------------------------------------------------------
@@ -36,35 +37,35 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	switch (settings.getLightingMode()) {
 		case LightingMode::Default:
-			forward_pass->render(engine, world_to_projection, skybox);
+			forward_pass->render(scene, world_to_projection, skybox);
 			break;
 
 		case LightingMode::Unlit:
-			//forward_pass->renderUnlit(engine, world_to_projection);
+			//forward_pass->renderUnlit(scene, world_to_projection);
 			break;
 
 		case LightingMode::FalseColorPosition:
-			forward_pass->renderFalseColor(engine, world_to_projection, FalseColor::Position);
+			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Position);
 			break;
 
 		case LightingMode::FalseColorNormal:
-			forward_pass->renderFalseColor(engine, world_to_projection, FalseColor::Normal);
+			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Normal);
 			break;
 
 		case LightingMode::FalseColorDepth:
-			forward_pass->renderFalseColor(engine, world_to_projection, FalseColor::Depth);
+			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Depth);
 			break;
 	}
 
 	if (settings.hasRenderOption(RenderOptions::Wireframe))
-		forward_pass->renderWireframe(engine, world_to_projection);
+		forward_pass->renderWireframe(scene, world_to_projection);
 
 
 	//----------------------------------------------------------------------------------
 	// Render bounding volumes
 	//----------------------------------------------------------------------------------
 	if (settings.hasRenderOption(RenderOptions::BoundingVolume))
-		bounding_volume_pass->render(engine, world_to_projection);
+		bounding_volume_pass->render(scene, world_to_projection);
 
 
 	//----------------------------------------------------------------------------------

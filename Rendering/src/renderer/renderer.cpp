@@ -21,7 +21,7 @@ Renderer::Renderer(ID3D11Device& device,
 
 void Renderer::render(const Engine& engine) {
 
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = engine.getScene().getECS();
 	auto& scene      = engine.getScene();
 
 

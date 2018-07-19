@@ -3,7 +3,7 @@
 
 
 void TransformSystem::update(const Engine& engine) {
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = engine.getScene().getECS();
 
 	ecs_engine.forEach<Transform>([&](Transform& transform) {
 		if (transform.isActive())
@@ -13,7 +13,7 @@ void TransformSystem::update(const Engine& engine) {
 
 
 void TransformSystem::postUpdate(const Engine& engine) {
-	auto& ecs_engine = engine.getECS();
+	auto& ecs_engine = engine.getScene().getECS();
 
 	ecs_engine.forEach<Transform>([&](Transform& transform) {
 		if (transform.isActive())

@@ -5,7 +5,7 @@
 
 
 void CameraSystem::update(const Engine& engine) {
-	auto& ecs_engine     = engine.getECS();
+	auto& ecs_engine     = engine.getScene().getECS();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	const auto process_cam = [&](auto& camera) {
