@@ -27,15 +27,15 @@ void TestScene::load(const Engine& engine) {
 	auto cam = ecs_engine.getComponent<PerspectiveCamera>(camera);
 
 	cam->getViewport().setDepth(0.0f, 1.0f);
-	cam->setZDepth(0.01f, 100.0f);
+	cam->setZDepth(0.01f, 1000.0f);
 	cam->setFOV(XM_PI / 3.0f);
 	cam->getSettings().setSkybox(
 		resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	auto& fog = cam->getSettings().getFog();
 	fog.color = vec4_f32{0.2f, 0.2f, 0.2f, 1.0f};
-	fog.start = 30.0f;
-	fog.range = 25.0f;
+	fog.start = 150.0f;
+	fog.range = 100.0f;
 
 	ecs_engine.getComponent<Transform>(camera)->setPosition(vec3_f32{0.0f, 6.0f, -2.0f});
 	ecs_engine.getComponent<MouseRotation>(camera)->setSensitivity(0.01f);
@@ -46,7 +46,7 @@ void TestScene::load(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Scene model
-	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/sponza/sponza.obj");
+	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
 	addEntity<BasicModel>(ecs_engine, device, bp);
 
 	// Sphere
