@@ -38,9 +38,6 @@
     <FxCompile Include="shaders\depth\depth_vs.hlsl">
       <Filter>Shader Files\depth</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\forward\forward.hlsl">
-      <Filter>Shader Files\forward</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\skybox\skybox.hlsl">
       <Filter>Shader Files\sky</Filter>
     </FxCompile>
@@ -68,6 +65,12 @@
     <FxCompile Include="shaders\false_color\depth_color.hlsl">
       <Filter>Shader Files\false_color</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\forward\forward_unlit.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\forward\forward_lit.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\hlsl.h">
@@ -77,9 +80,6 @@
   <ItemGroup>
     <None Include="shaders\depth\depth_include.hlsl">
       <Filter>Shader Files\depth</Filter>
-    </None>
-    <None Include="shaders\forward\forward_include.hlsl">
-      <Filter>Shader Files\forward</Filter>
     </None>
     <None Include="shaders\include\global.hlsl">
       <Filter>Shader Files\include</Filter>
@@ -110,6 +110,15 @@
     </None>
     <None Include="shaders\include\model.hlsl">
       <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\lighting.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\forward\forward_include.hlsli">
+      <Filter>Shader Files\forward</Filter>
+    </None>
+    <None Include="shaders\forward\forward.hlsli">
+      <Filter>Shader Files\forward</Filter>
     </None>
   </ItemGroup>
 </Project>

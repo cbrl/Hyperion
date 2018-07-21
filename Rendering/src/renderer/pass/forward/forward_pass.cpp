@@ -84,7 +84,29 @@ void XM_CALLCONV ForwardPass::render(Scene& scene, FXMMATRIX world_to_projection
 }
 
 
-void ForwardPass::renderFalseColor(Scene& scene, FXMMATRIX world_to_projection, FalseColor color) {
+void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const {
+
+	auto& ecs_engine = scene.getECS();
+
+	// Bind the skybox texture as the environment map
+	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
+
+	// Bind the shaders, render states, etc
+	bindDefaultState();
+
+	// Create the apporopriate pixel shader and bind it
+	const auto pixel_shader = ShaderFactory::createForwardUnlitPS(resource_mgr);
+	pixel_shader->bind(device_context);
+
+	// Render models
+	ecs_engine.forEach<Model>([&](Model& model) {
+		if (model.isActive())
+			renderModel(ecs_engine, model, world_to_projection);
+	});
+}
+
+
+void ForwardPass::renderFalseColor(Scene& scene, FXMMATRIX world_to_projection, FalseColor color) const {
 
 	auto& ecs_engine = scene.getECS();
 

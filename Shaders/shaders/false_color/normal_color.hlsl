@@ -2,7 +2,7 @@
 #define HLSL_FALSE_COLOR_NORMAL
 
 #include "include/input_structs.hlsl"
-#include "forward/forward_include.hlsl"
+#include "forward/forward_include.hlsli"
 
 
 float4 PS(PSPositionNormalTexture input) : SV_Target {

@@ -16,6 +16,7 @@ namespace ShaderFactory {
 	
 	// Forward
 	shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr);
+	shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr);
 	shared_ptr<VertexShader> createForwardVS(ResourceMgr& resource_mgr);
 
 	// Depth

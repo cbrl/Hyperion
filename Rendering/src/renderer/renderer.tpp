@@ -41,7 +41,7 @@ void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
 			break;
 
 		case LightingMode::Unlit:
-			//forward_pass->renderUnlit(scene, world_to_projection);
+			forward_pass->renderUnlit(scene, world_to_projection, skybox);
 			break;
 
 		case LightingMode::FalseColorPosition:

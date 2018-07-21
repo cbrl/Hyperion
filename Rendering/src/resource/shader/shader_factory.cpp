@@ -4,7 +4,8 @@
 //#define BYTECODE(x) ShaderBytecodeBlob("./shaders/"#x)
 
 // Forward
-#include "compiled_headers/forward.h"
+#include "compiled_headers/forward_lit.h"
+#include "compiled_headers/forward_unlit.h"
 #include "compiled_headers/forward_vs.h"
 
 // Depth
@@ -34,7 +35,12 @@ namespace ShaderFactory {
 
 	shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr) {
 
-		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_ps", BYTECODE(shader_forward));
+		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_lit_ps", BYTECODE(shader_forward_lit));
+	}
+
+	shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr) {
+
+		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_unlit_ps", BYTECODE(shader_forward_unlit));
 	}
 
 	shared_ptr<VertexShader> createForwardVS(ResourceMgr& resource_mgr) {

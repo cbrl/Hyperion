@@ -19,7 +19,8 @@ public:
 	~ForwardPass() = default;
 
 	void XM_CALLCONV render(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const;
-	void XM_CALLCONV renderFalseColor(Scene& scene, FXMMATRIX world_to_projection, FalseColor color);
+	void XM_CALLCONV renderUnlit(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const;
+	void XM_CALLCONV renderFalseColor(Scene& scene, FXMMATRIX world_to_projection, FalseColor color) const;
 	void XM_CALLCONV renderWireframe(Scene& scene, FXMMATRIX world_to_projection) const;
 
 
