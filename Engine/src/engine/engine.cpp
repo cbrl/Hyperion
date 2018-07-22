@@ -48,7 +48,7 @@ LRESULT EngineMessageHandler::msgProc(HWND window, UINT msg, WPARAM wParam, LPAR
 
 Engine::~Engine() {
 
-	Logger::log(LogLevel::info, "<==========================END==========================>\n");
+	Logger::logFile(LogLevel::info, "<==========================END==========================>\n");
 
 	// Explicity delete the scene and entity component system before
 	// the rendering manager. This prevents D3D from reporting live
@@ -59,7 +59,12 @@ Engine::~Engine() {
 
 
 bool Engine::init() {
-	Logger::log(LogLevel::info, "<=========================START=========================>");
+
+	// Create the console
+	AllocateConsole();
+
+	Logger::logFile(LogLevel::info, "<=========================START=========================>");
+
 
 	// Create the display configuration
 	DisplayConfig display_config(AAType::none, false, false);

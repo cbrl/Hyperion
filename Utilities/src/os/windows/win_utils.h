@@ -110,3 +110,32 @@ inline bool OpenFilePicker(wchar_t* lpstrFile, DWORD nMaxFile) {
 
 	return GetOpenFileName(&ofn) != 0;
 }
+
+
+
+inline void AllocateConsole() {
+
+	ThrowIfFailed(AllocConsole() != 0, "Failed to create console");
+
+	// Direct stdin to the console
+	{
+		FILE* stream;
+		const auto result = freopen_s(&stream, "CONIN$", "r", stdin);
+		ThrowIfFailed(result == 0, "Failed to redirect stdin");
+	}
+
+	// Direct stdout to the console
+	{
+		FILE* stream;
+		const auto result = freopen_s(&stream, "CONOUT$", "w", stdout);
+		ThrowIfFailed(result == 0, "Failed to redirect stdout");
+	}
+
+	// Direct stderr to the console
+	{
+		FILE* stream;
+		const auto result = freopen_s(&stream, "CONOUT$", "w", stderr);
+		ThrowIfFailed(result == 0, "Failed to redirect stderr");
+	}
+	
+}

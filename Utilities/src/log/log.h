@@ -11,7 +11,7 @@ private:
 	Logger() noexcept {
 		try {
 			file    = spdlog::rotating_logger_mt("file_log", "log.txt", 1024 * 1024, 1);
-			console = spdlog::stdout_color_mt("console_log");
+			console = spdlog::stdout_logger_mt("console_log");
 
 			#ifdef _DEBUG
 			file->set_level(LogLevel::debug);
@@ -46,8 +46,8 @@ public:
 	template<typename T>
 	static void log(LogLevel level, const T& msg) {
 		auto& instance = get();
-		instance.file->log(level, msg);
-		instance.console->log(level, msg);
+		if (instance.file) instance.file->log(level, msg);
+		if (instance.console) instance.console->log(level, msg);
 	}
 
 	// Log a message with both loggers
@@ -71,17 +71,17 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Console Log (std::cout)
+	// Console Log (stdout)
 	//----------------------------------------------------------------------------------
 
-	// Log a message with the default console logger
+	// Log a message with the console logger
 	template<typename T>
 	static void logConsole(LogLevel level, const T& msg) {
 		auto& instance = get();
 		if (instance.console) instance.console->log(level, msg);
 	}
 
-	// Log a message with the default console logger
+	// Log a message with the console logger
 	template<typename Arg1, typename... ArgsT>
 	static void logConsole(LogLevel level,
 	                       const char* fmt,
@@ -103,14 +103,14 @@ public:
 	// File Log
 	//----------------------------------------------------------------------------------
 
-	// Log a message with the default file logger
+	// Log a message with the file logger
 	template<typename T>
 	static void logFile(LogLevel level, const T& msg) {
 		auto& instance = get();
 		if (instance.file) instance.file->log(level, msg);
 	}
 
-	// Log a message with the default file logger
+	// Log a message with the file logger
 	template<typename Arg1, typename... ArgsT>
 	static void logFile(LogLevel level,
 	                    const char* fmt,
