@@ -102,17 +102,19 @@ inline u64 GetCPUTime() {
 inline bool OpenFilePicker(wchar_t* lpstrFile, DWORD nMaxFile) {
 
 	OPENFILENAME ofn = {};
-	ofn.lStructSize = sizeof(ofn);
-	ofn.lpstrFile = lpstrFile;
+	ofn.lStructSize  = sizeof(ofn);
+	ofn.lpstrFile    = lpstrFile;
 	ofn.lpstrFile[0] = '\0';
-	ofn.nMaxFile = nMaxFile;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	ofn.nMaxFile     = nMaxFile;
+	ofn.Flags        = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-	return GetOpenFileName(&ofn) != 0;
+	const bool result = GetOpenFileName(&ofn);
+
+	return result != 0;
 }
 
 
-
+// Create a console window that redirects stdin, stdout, and stderr
 inline void AllocateConsole() {
 
 	ThrowIfFailed(AllocConsole() != 0, "Failed to create console");
