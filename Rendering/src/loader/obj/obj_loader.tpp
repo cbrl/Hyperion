@@ -43,7 +43,7 @@ void OBJLoader<VertexT>::reset() {
 template<typename VertexT>
 [[nodiscard]]
 ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
-                                              const wstring& filename,
+                                              const std::wstring& filename,
                                               bool right_hand_coords) {
 
 	// Make sure the file exists first
@@ -57,7 +57,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 
 
 	// Get the folder that the file is in
-	const wstring folder = GetParentPath(filename);
+	const std::wstring folder = GetParentPath(filename);
 
 	// Load the model
 	loadModel(filename);
@@ -106,7 +106,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 	}
 
 	// Create the model
-	string name = wstr2str(GetFilename(filename));
+	std::string name = wstr2str(GetFilename(filename));
 	ModelOutput<VertexT> out(name, vertices, indices, mtl_vector, groups);
 
 
@@ -119,7 +119,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::loadModel(wstring filename) {
+void OBJLoader<VertexT>::loadModel(std::wstring filename) {
 
 	// Open the file
 	wifstream file(filename);
@@ -133,7 +133,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 	// Read file contents
 	//----------------------------------------------------------------------------------
 
-	wstring line;
+	std::wstring line;
 	while (std::getline(file, line)) {
 		line = TrimWhiteSpace(line);
 		if (line[0] == ObjTokens::comment || line.empty()) {
@@ -141,14 +141,14 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 		}
 
 		// Copy the first token from the line
-		wstring token = line.substr(0, line.find_first_of(L' '));
+		std::wstring token = line.substr(0, line.find_first_of(L' '));
 
 		// Remove the token from the line
 		line = line.substr(token.size());
 		line = TrimWhiteSpace(line);
 
 		// Create a stringstream to easily read data into variables
-		wstringstream stream(line);
+		std::wstringstream stream(line);
 
 
 		// Vertex
@@ -189,7 +189,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 		// Group
 		else if (token == ObjTokens::group) {
-			wstring name;
+			std::wstring name;
 			stream >> name;
 
 			groups.push_back(Group());
@@ -228,7 +228,7 @@ void OBJLoader<VertexT>::loadModel(wstring filename) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::loadMaterials(wstring folder) {
+void OBJLoader<VertexT>::loadMaterials(std::wstring folder) {
 
 	// Open the material file
 	wifstream file(folder + mat_lib);
@@ -242,7 +242,7 @@ void OBJLoader<VertexT>::loadMaterials(wstring folder) {
 	// Read file contents
 	//----------------------------------------------------------------------------------
 
-	wstring line;
+	std::wstring line;
 	while (std::getline(file, line)) {
 		line = TrimWhiteSpace(line);
 		if (line[0] == ObjTokens::comment || line.empty()) {
@@ -250,14 +250,14 @@ void OBJLoader<VertexT>::loadMaterials(wstring folder) {
 		}
 
 		// Copy the first token from the line
-		wstring token = line.substr(0, line.find_first_of(L' '));
+		std::wstring token = line.substr(0, line.find_first_of(L' '));
 
 		// Remove the token from the line
 		line = line.substr(token.size());
 		line = TrimWhiteSpace(line);
 
 		// Create a stringstream to easily read data into variables
-		wstringstream stream(line);
+		std::wstringstream stream(line);
 
 
 		// New Material
@@ -378,8 +378,8 @@ void OBJLoader<VertexT>::loadMaterials(wstring folder) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::readTransparency(wstring& line, bool inverse) {
-	wstringstream stream(line);
+void OBJLoader<VertexT>::readTransparency(std::wstring& line, bool inverse) {
+	std::wstringstream stream(line);
 
 	f32 transparency;
 	stream >> transparency;
@@ -397,17 +397,17 @@ void OBJLoader<VertexT>::readTransparency(wstring& line, bool inverse) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::readFace(wstring& line) {
+void OBJLoader<VertexT>::readFace(std::wstring& line) {
 
 	vector<vec3_u32> face_def;
 
 	// Split the line into separate vertex definitions
-	vector<wstring> vert_strings = Split(line, L" ");
+	vector<std::wstring> vert_strings = Split(line, L" ");
 
 	for (size_t i = 0; i < vert_strings.size(); ++i) {
 
 		// Split the vertex definition into separate parts
-		vector<wstring> vert_parts = Split(vert_strings[i], L"/");
+		vector<std::wstring> vert_parts = Split(vert_strings[i], L"/");
 
 		vec3_u32 vertex{ 0, 0, 0 };
 

@@ -4,9 +4,9 @@
 
 
 // Compile a shader file to bytecode
-HRESULT CompileShaderToBytecode(const wstring& file,
-                                const string& entry_point,
-                                const string& target_ver,
+HRESULT CompileShaderToBytecode(const std::wstring& file,
+                                const std::string& entry_point,
+                                const std::string& target_ver,
                                 ID3DBlob** out);
 
 
@@ -97,7 +97,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	ShaderBytecodeBlob(const wstring& file) {
+	ShaderBytecodeBlob(const std::wstring& file) {
 		D3DReadFileToBlob(file.c_str(), blob.GetAddressOf());
 	}
 	ShaderBytecodeBlob(const ShaderBytecodeBlob& buffer) noexcept = default;

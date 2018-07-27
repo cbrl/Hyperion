@@ -1,5 +1,5 @@
 template<typename VertexT>
-ModelOutput<VertexT>::ModelOutput(const string& name,
+ModelOutput<VertexT>::ModelOutput(const std::string& name,
                                   const vector<VertexT>& vertices,
                                   const vector<u32>& indices,
                                   const vector<Material>& materials,

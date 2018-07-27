@@ -8,7 +8,7 @@
 
 class Text final {
 public:
-	Text(ResourceMgr& resource_mgr, const wstring& font_filename);
+	Text(ResourceMgr& resource_mgr, const std::wstring& font_filename);
 	~Text() = default;
 
 
@@ -16,7 +16,7 @@ public:
 	const SpriteFont& getFont() const;
 
 	[[nodiscard]]
-	const wstring& getText() const;
+	const std::wstring& getText() const;
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getPosition() const;
@@ -28,10 +28,10 @@ public:
 	f32 getRotation() const;
 
 
-	void setText(wstring new_text);
-	void setText(wstring new_text, vec2_f32 new_position);
-	void setText(wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color);
-	void setText(wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color, f32 new_rotation);
+	void setText(std::wstring new_text);
+	void setText(std::wstring new_text, vec2_f32 new_position);
+	void setText(std::wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color);
+	void setText(std::wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color, f32 new_rotation);
 
 	void setPosition(vec2_f32 new_position);
 	void setColor(XMVECTORF32 new_color);
@@ -41,7 +41,7 @@ public:
 private:
 	shared_ptr<Font> font;
 
-	wstring text;
+	std::wstring text;
 	XMVECTOR position;
 	XMVECTORF32 color;
 	f32 rotation;

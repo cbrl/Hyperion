@@ -138,7 +138,7 @@ void TestScene::load(const Engine& engine) {
 	// Create text objects
 	//----------------------------------------------------------------------------------
 
-	const wstring font(L"../data/fonts/courier-12.spritefont");
+	const std::wstring font(L"../data/fonts/courier-12.spritefont");
 
 	texts.try_emplace("FPS", resource_mgr, font);
 	texts.at("FPS").setPosition(vec2_f32(10, 10));
@@ -175,17 +175,17 @@ void TestScene::tick(const Engine& engine) {
 	const u64 total_mem_usage  = engine.getSysMon().memory().getTotalUsedPhysicalMem();
 	const u64 proc_mem_usage   = engine.getSysMon().memory().getProcessUsedPhysicalMem();
 
-	static wostringstream cpu_str;
-	static wostringstream mem_str;
+	static std::wostringstream cpu_str;
+	static std::wostringstream mem_str;
 
-	// Build the CPU usage string
+	// Build the CPU usage std::string
 	cpu_str.clear();
 	cpu_str.str(L"");
 	cpu_str.precision(4);
 	cpu_str << L"CPU Usage\nTotal: " << total_cpu_usage << L"%"
 	        << L"\nProcess: "        << proc_cpu_usage  << L"%";
 
-	// Build the memory usage string
+	// Build the memory usage std::string
 	mem_str.clear();
 	mem_str.str(L"");
 	mem_str.precision(4);
@@ -193,10 +193,10 @@ void TestScene::tick(const Engine& engine) {
 	        << L"\nProcess: "        << static_cast<f64>(proc_mem_usage) / 1e6  << L"MB";
 
 	// FPS
-	texts.at("FPS").setText(L"FPS: " + to_wstring(fps));
+	texts.at("FPS").setText(L"FPS: " + std::to_wstring(fps));
 
 	// Frame Time
-	texts.at("FrameTime").setText(L"Frame Time: " + to_wstring(delta_time * 1000.0) + L"ms");
+	texts.at("FrameTime").setText(L"Frame Time: " + std::to_wstring(delta_time * 1000.0) + L"ms");
 
 	// CPU Usage
 	texts.at("CPU").setText(cpu_str.str());
@@ -205,6 +205,6 @@ void TestScene::tick(const Engine& engine) {
 	texts.at("RAM").setText(mem_str.str());
 
 	// Mouse Activity
-	texts.at("Mouse").setText(L"Mouse \nX: " + to_wstring(mouse_delta.x)
-	                          + L"\nY: "     + to_wstring(mouse_delta.y));
+	texts.at("Mouse").setText(L"Mouse \nX: " + std::to_wstring(mouse_delta.x)
+	                          + L"\nY: "     + std::to_wstring(mouse_delta.y));
 }

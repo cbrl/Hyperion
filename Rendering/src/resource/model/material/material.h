@@ -25,7 +25,7 @@ struct Material final {
 
 
 	// Material name
-	string name;
+	std::string name;
 
 	// Ambient map
 	shared_ptr<Texture> map_ambient;

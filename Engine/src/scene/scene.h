@@ -49,7 +49,7 @@ public:
 	}
 
 	[[nodiscard]]
-	const string& getName() const {
+	const std::string& getName() const {
 		return name;
 	}
 
@@ -59,7 +59,7 @@ public:
 	}
 
 	[[nodiscard]]
-	const map<string, Text>& getTexts() const {
+	const map<std::string, Text>& getTexts() const {
 		return texts;
 	}
 
@@ -99,7 +99,7 @@ protected:
 		, ecs(make_unique<ECS>()) {
 	}
 
-	Scene(string name)
+	Scene(std::string name)
 		: name(std::move(name))
 		, ecs(make_unique<ECS>()) {
 	}
@@ -119,7 +119,7 @@ protected:
 	//----------------------------------------------------------------------------------
 
 	// The name of the scene
-	string name;
+	std::string name;
 
 	// The ECS engine for this scene
 	unique_ptr<ECS> ecs;
@@ -128,5 +128,5 @@ protected:
 	vector<handle64> entities;
 
 	// Text objects in this scene
-	map<string, Text> texts;
+	map<std::string, Text> texts;
 };

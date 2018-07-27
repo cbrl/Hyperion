@@ -14,14 +14,14 @@ public:
 
 	Texture(ID3D11Device& device,
 	        ID3D11DeviceContext& device_context,
-	        const wstring& filename)
+	        const std::wstring& filename)
 		: Resource(filename) {
 
 		TextureLoader::LoadTexture(device, device_context, filename, texture.GetAddressOf());
 	}
 
 	Texture(ID3D11Device& device, u32 color)
-		: Resource(to_wstring(color)) {
+		: Resource(std::to_wstring(color)) {
 
 		TextureLoader::LoadTexture(device, color, texture.GetAddressOf());
 	}

@@ -2,7 +2,7 @@
 #include "text.h"
 
 
-Text::Text(ResourceMgr& resource_mgr, const wstring& font_filename)
+Text::Text(ResourceMgr& resource_mgr, const std::wstring& font_filename)
 	: text(L"Default Text")
 	, position(XMVectorZero())
 	, color(Colors::White)
@@ -11,25 +11,25 @@ Text::Text(ResourceMgr& resource_mgr, const wstring& font_filename)
 	font = resource_mgr.getOrCreate<Font>(font_filename);
 }
 
-void Text::setText(wstring new_text) {
+void Text::setText(std::wstring new_text) {
 	text = new_text;
 }
 
 
-void Text::setText(wstring new_text, vec2_f32 new_position) {
+void Text::setText(std::wstring new_text, vec2_f32 new_position) {
 	text     = new_text;
 	position = XMLoad(&new_position);
 }
 
 
-void Text::setText(wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color) {
+void Text::setText(std::wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color) {
 	text     = new_text;
 	position = XMLoad(&new_position);
 	color    = new_color;
 }
 
 
-void Text::setText(wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color, f32 new_rotation) {
+void Text::setText(std::wstring new_text, vec2_f32 new_position, XMVECTORF32 new_color, f32 new_rotation) {
 	text     = new_text;
 	position = XMLoad(&new_position);
 	color    = new_color;
@@ -59,7 +59,7 @@ const SpriteFont& Text::getFont() const {
 
 
 [[nodiscard]]
-const wstring& Text::getText() const {
+const std::wstring& Text::getText() const {
 	return text;
 }
 

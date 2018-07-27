@@ -10,14 +10,14 @@
 // transformed into complete model parts by the
 // ModelOuptut constructor.
 struct Group {
-	string name;
+	std::string name;
 	u32 index_start;
 	u32 material_index;
 };
 
 
 struct ModelPart {
-	string name;
+	std::string name;
 	u32 index_start;
 	u32 index_count;
 	u32 material_index;
@@ -34,7 +34,7 @@ public:
 	ModelOutput() = default;
 	~ModelOutput() = default;
 
-	ModelOutput(const string& name,
+	ModelOutput(const std::string& name,
 	            const vector<VertexT>& vertices,
 	            const vector<u32>& indices,
 	            const vector<Material>& materials,
@@ -42,7 +42,7 @@ public:
 
 
 public:
-	string name;
+	std::string name;
 	vector<VertexT> vertices;
 	vector<u32> indices;
 	vector<Material> materials;

@@ -1,6 +1,6 @@
 
 template<typename ShaderT, typename StageT>
-Shader<ShaderT, StageT>::Shader(const wstring& guid,
+Shader<ShaderT, StageT>::Shader(const std::wstring& guid,
                                 ID3D11Device& device,
                                 const ShaderBytecode& bytecode)
 	: Resource<Shader>(guid) {

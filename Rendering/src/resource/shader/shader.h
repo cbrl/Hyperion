@@ -11,7 +11,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	VertexShader(const wstring& guid,
+	VertexShader(const std::wstring& guid,
 	             ID3D11Device& device,
 	             const ShaderBytecode& bytecode,
 	             const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
@@ -73,7 +73,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Shader(const wstring& guid,
+	Shader(const std::wstring& guid,
 		   ID3D11Device& device,
 		   const ShaderBytecode& bytecode);
 

@@ -8,7 +8,7 @@ namespace TextureLoader {
 
 void LoadTexture(ID3D11Device& device,
                  ID3D11DeviceContext& device_context,
-                 const wstring& filename,
+                 const std::wstring& filename,
                  ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if the file is missing
@@ -17,7 +17,7 @@ void LoadTexture(ID3D11Device& device,
 		return LoadTexture(device, 0xFFFFFFFF, srv_out);
 	}
 
-	const wstring ext = GetFileExtension(filename);
+	const std::wstring ext = GetFileExtension(filename);
 
 	// DDS
 	if (ext == L".dds") {
@@ -97,11 +97,11 @@ void LoadTexture(ID3D11Device& device,
 
 void LoadTexture(ID3D11Device& device,
                  ID3D11DeviceContext& device_context,
-                 const vector<wstring>& filenames,
+                 const vector<std::wstring>& filenames,
                  ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if a file is missing
-	for (const wstring& fn : filenames) {
+	for (const std::wstring& fn : filenames) {
 		if (!fs::exists(fn)) {
 			Logger::log(LogLevel::err, "Error loading texture (file not found): {}", wstr2str(fn));
 			return LoadTexture(device, 0xFFFFFFFF, srv_out);

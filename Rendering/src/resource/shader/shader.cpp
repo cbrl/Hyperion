@@ -1,7 +1,7 @@
 #include "shader.h"
 
 
-VertexShader::VertexShader(const wstring& guid,
+VertexShader::VertexShader(const std::wstring& guid,
                            ID3D11Device& device,
                            const ShaderBytecode& bytecode,
                            const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,

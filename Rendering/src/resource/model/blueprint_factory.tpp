@@ -8,7 +8,7 @@ namespace BlueprintFactory {
 	                                      bool invertn) {
 
 		// Model name
-		string name = "Cube " + to_string(size) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
+		std::string name = "Cube " + std::to_string(size) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
 
 
 		// Compute the vertices and indices
@@ -56,7 +56,7 @@ namespace BlueprintFactory {
 	                                     bool invertn) {
 
 		// Model name
-		string name = "Box " + to_string(size.x) + to_string(size.y) + to_string(size.z) + (rhcoords ? " RH" : "") + (
+		std::string name = "Box " + std::to_string(size.x) + std::to_string(size.y) + std::to_string(size.z) + (rhcoords ? " RH" : "") + (
 			              invertn ? " InvertN" : "");
 
 
@@ -106,7 +106,7 @@ namespace BlueprintFactory {
 	                                        bool invertn) {
 
 		// Model name
-		string name = "Sphere " + to_string(diameter) + to_string(tessellation) + (rhcoords ? " RH" : "") + (
+		std::string name = "Sphere " + std::to_string(diameter) + std::to_string(tessellation) + (rhcoords ? " RH" : "") + (
 			              invertn ? " InvertN" : "");
 
 
@@ -155,7 +155,7 @@ namespace BlueprintFactory {
 	                                           bool rhcoords) {
 
 		// Model name
-		string name = "GeoSphere " + to_string(diameter) + to_string(tessellation) + (rhcoords ? " RH" : "");
+		std::string name = "GeoSphere " + std::to_string(diameter) + std::to_string(tessellation) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices
@@ -204,7 +204,7 @@ namespace BlueprintFactory {
 	                                          bool rhcoords) {
 
 		// Model name
-		string name = "Cylinder " + to_string(height) + to_string(diameter) + to_string(tessellation) + (
+		std::string name = "Cylinder " + std::to_string(height) + std::to_string(diameter) + std::to_string(tessellation) + (
 			              rhcoords ? " RH" : "");
 
 
@@ -254,7 +254,7 @@ namespace BlueprintFactory {
 	                                      bool rhcoords) {
 
 		// Model name
-		string name = "Cone " + to_string(diameter) + to_string(height) + to_string(tessellation) + (
+		std::string name = "Cone " + std::to_string(diameter) + std::to_string(height) + std::to_string(tessellation) + (
 			              rhcoords ? " RH" : "");
 
 
@@ -304,7 +304,7 @@ namespace BlueprintFactory {
 	                                       bool rhcoords) {
 
 		// Model name
-		string name = "Torus " + to_string(diameter) + to_string(thickness) + to_string(tessellation) + (
+		std::string name = "Torus " + std::to_string(diameter) + std::to_string(thickness) + std::to_string(tessellation) + (
 			              rhcoords ? " RH" : "");
 
 
@@ -352,7 +352,7 @@ namespace BlueprintFactory {
 	                                             bool rhcoords) {
 
 		// Model name
-		string name = "Tetrahedron " + to_string(size) + (rhcoords ? " RH" : "");
+		std::string name = "Tetrahedron " + std::to_string(size) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices
@@ -399,7 +399,7 @@ namespace BlueprintFactory {
 	                                            bool rhcoords) {
 
 		// Model name
-		string name = "Octahedron " + to_string(size) + (rhcoords ? " RH" : "");
+		std::string name = "Octahedron " + std::to_string(size) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices
@@ -446,7 +446,7 @@ namespace BlueprintFactory {
 	                                              bool rhcoords) {
 
 		// Model name
-		string name = "Dodecahedron " + to_string(size) + (rhcoords ? " RH" : "");
+		std::string name = "Dodecahedron " + std::to_string(size) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices
@@ -493,7 +493,7 @@ namespace BlueprintFactory {
 	                                             bool rhcoords) {
 
 		// Model name
-		string name = "Icosahedron " + to_string(size) + (rhcoords ? " RH" : "");
+		std::string name = "Icosahedron " + std::to_string(size) + (rhcoords ? " RH" : "");
 
 
 		// Compute the vertices and indices

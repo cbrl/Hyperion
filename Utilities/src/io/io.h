@@ -20,33 +20,33 @@ namespace fs = std::filesystem;
 
 
 // Get the parent path of a file/folder
-inline string GetParentPath(const string& in) {
+inline std::string GetParentPath(const std::string& in) {
 	return fs::path(in).parent_path().string() + "/";
 }
 
 // Get the parent path of a file/folder
-inline wstring GetParentPath(const wstring& in) {
+inline std::wstring GetParentPath(const std::wstring& in) {
 	return fs::path(in).parent_path().wstring() + L"/";
 }
 
 
 // Get the name of a file
-inline string GetFilename(const string& in) {
+inline std::string GetFilename(const std::string& in) {
 	return fs::path(in).filename().string();
 }
 
 // Get the name of a file
-inline wstring GetFilename(const wstring& in) {
+inline std::wstring GetFilename(const std::wstring& in) {
 	return fs::path(in).filename().wstring();
 }
 
 
 // Get the extension of a file
-inline string GetFileExtension(const string& in) {
+inline std::string GetFileExtension(const std::string& in) {
 	return fs::path(in).extension().string();
 }
 
 // Get the extension of a file
-inline wstring GetFileExtension(const wstring& in) {
+inline std::wstring GetFileExtension(const std::wstring& in) {
 	return fs::path(in).extension().wstring();
 }

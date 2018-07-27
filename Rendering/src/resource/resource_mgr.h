@@ -50,11 +50,11 @@ public:
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<ModelBlueprint, ResourceT>,
-		shared_ptr<ModelBlueprint>> getOrCreate(const wstring& filename);
+		shared_ptr<ModelBlueprint>> getOrCreate(const std::wstring& filename);
 
 	template<typename ResourceT, typename VertexT>
 	enable_if_t<is_same_v<ModelBlueprint, ResourceT>,
-		shared_ptr<ModelBlueprint>> getOrCreate(const wstring& name,
+		shared_ptr<ModelBlueprint>> getOrCreate(const std::wstring& name,
 		                                        const ModelOutput<VertexT>& model_data);
 
 
@@ -64,7 +64,7 @@ public:
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<Texture, ResourceT>,
-		shared_ptr<Texture>> getOrCreate(const wstring& filename);
+		shared_ptr<Texture>> getOrCreate(const std::wstring& filename);
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<Texture, ResourceT>,
@@ -77,7 +77,7 @@ public:
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<Font, ResourceT>,
-		shared_ptr<Font>> getOrCreate(const wstring& filename);
+		shared_ptr<Font>> getOrCreate(const std::wstring& filename);
 
 
 	//----------------------------------------------------------------------------------
@@ -86,27 +86,27 @@ public:
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<ComputeShader, ResourceT>,
-		shared_ptr<ComputeShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+		shared_ptr<ComputeShader>> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<DomainShader, ResourceT>,
-		shared_ptr<DomainShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+		shared_ptr<DomainShader>> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<GeometryShader, ResourceT>,
-		shared_ptr<GeometryShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+		shared_ptr<GeometryShader>> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<HullShader, ResourceT>,
-		shared_ptr<HullShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+		shared_ptr<HullShader>> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<PixelShader, ResourceT>,
-		shared_ptr<PixelShader>> getOrCreate(const wstring& guid, const ShaderBytecode& bytecode);
+		shared_ptr<PixelShader>> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
 	enable_if_t<is_same_v<VertexShader, ResourceT>,
-		shared_ptr<VertexShader>> getOrCreate(const wstring& guid,
+		shared_ptr<VertexShader>> getOrCreate(const std::wstring& guid,
 		                                      const ShaderBytecode& bytecode,
 		                                      const D3D11_INPUT_ELEMENT_DESC* input_element_descs,
 		                                      u32 input_element_count);
@@ -122,16 +122,16 @@ private:
 	reference_wrapper<ID3D11DeviceContext> device_context;
 
 	// Resources
-	ManagedResourceMap<wstring, ModelBlueprint> models;
-	ManagedResourceMap<wstring, Texture> textures;
-	ManagedResourceMap<wstring, Font> fonts;
+	ManagedResourceMap<std::wstring, ModelBlueprint> models;
+	ManagedResourceMap<std::wstring, Texture> textures;
+	ManagedResourceMap<std::wstring, Font> fonts;
 
-	ManagedResourceMap<wstring, ComputeShader>  compute_shaders;
-	ManagedResourceMap<wstring, DomainShader>   domain_shaders;
-	ManagedResourceMap<wstring, GeometryShader> geometry_shaders;
-	ManagedResourceMap<wstring, HullShader>     hull_shaders;
-	ManagedResourceMap<wstring, PixelShader>    pixel_shaders;
-	ManagedResourceMap<wstring, VertexShader>   vertex_shaders;
+	ManagedResourceMap<std::wstring, ComputeShader>  compute_shaders;
+	ManagedResourceMap<std::wstring, DomainShader>   domain_shaders;
+	ManagedResourceMap<std::wstring, GeometryShader> geometry_shaders;
+	ManagedResourceMap<std::wstring, HullShader>     hull_shaders;
+	ManagedResourceMap<std::wstring, PixelShader>    pixel_shaders;
+	ManagedResourceMap<std::wstring, VertexShader>   vertex_shaders;
 };
 
 

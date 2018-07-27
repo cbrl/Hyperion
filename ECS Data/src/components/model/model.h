@@ -86,7 +86,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	const string& getName() const {
+	const std::string& getName() const {
 		return name;
 	}
 
@@ -137,7 +137,7 @@ public:
 
 private:
 	// The name of the model child
-	string name;
+	std::string name;
 
 	// The cbuffer for this model child
 	ConstantBuffer<ModelBuffer> buffer;
@@ -226,14 +226,14 @@ public:
 	// Member Functions - Misc
 	//----------------------------------------------------------------------------------
 
-	const string& getName() const { return name; }
+	const std::string& getName() const { return name; }
 	const AABB& getAABB() const { return aabb; }
 	const BoundingSphere& getSphere() const { return sphere; }
 
 
 private:
 	// The model's name
-	string name;
+	std::string name;
 
 	// The vertex and index buffer of the model
 	shared_ptr<Mesh> mesh;

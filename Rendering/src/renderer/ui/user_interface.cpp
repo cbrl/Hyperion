@@ -58,7 +58,7 @@ void DrawDetails(Scene& scene) {
 	ImGui::Text(scene.getName().c_str());
 	ImGui::Separator();
 
-	string entity_count = "Entities: " + to_string(scene.getEntities().size());
+	std::string entity_count = "Entities: " + std::to_string(scene.getEntities().size());
 	ImGui::Text(entity_count.c_str());
 }
 
@@ -291,7 +291,7 @@ void DrawDetails(ModelChild& child) {
 	ImGui::Separator();
 
 	// Change material properties, textures
-	string name = "Material - " + child.getMaterial().name;
+	std::string name = "Material - " + child.getMaterial().name;
 	ImGui::Text(name.c_str());
 
 	ImGui::ColorEdit3("Diffuse Color", (f32*)child.getMaterial().diffuse.data());
@@ -514,7 +514,7 @@ void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
 
 	for (const auto entity : entities) {
 
-		string name = "Entity (index: " + to_string(entity.index) + ", counter: " + to_string(entity.counter) + ")";
+		std::string name = "Entity (index: " + std::to_string(entity.index) + ", counter: " + std::to_string(entity.counter) + ")";
 
 		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
 		                                 | ImGuiTreeNodeFlags_OpenOnDoubleClick

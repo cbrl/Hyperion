@@ -4,7 +4,7 @@ namespace ModelLoader {
 
 	template<typename VertexT>
 	[[nodiscard]]
-	static ModelOutput<VertexT> load(ResourceMgr& resource_mgr, const wstring& filename) {
+	static ModelOutput<VertexT> load(ResourceMgr& resource_mgr, const std::wstring& filename) {
 
 		// TODO:
 		// Check file extension, then use the appropriate loader. For

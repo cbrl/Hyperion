@@ -11,11 +11,11 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Resource(const wstring& guid)
+	Resource(const std::wstring& guid)
 		: guid(guid) {
 	}
 
-	Resource(wstring&& guid)
+	Resource(std::wstring&& guid)
 		: guid(guid) {
 	}
 
@@ -43,7 +43,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	const wstring& getGUID() const {
+	const std::wstring& getGUID() const {
 		return guid;
 	}
 
@@ -58,5 +58,5 @@ public:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	wstring guid;
+	std::wstring guid;
 };

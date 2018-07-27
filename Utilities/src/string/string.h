@@ -1,9 +1,19 @@
 #pragma once
 
+//----------------------------------------------------------------------------------
+// Defines
+//----------------------------------------------------------------------------------
+
 // Silence codecvt deprecation warning
 #ifndef _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #endif
+
+
+
+//----------------------------------------------------------------------------------
+// Includes
+//----------------------------------------------------------------------------------
 
 #include <string>
 #include <sstream>
@@ -15,45 +25,33 @@
 //#include <charconv>
 
 
-using std::string;
-using std::wstring;
 
-using std::to_string;
-using std::to_wstring;
+//----------------------------------------------------------------------------------
+// Functions
+//----------------------------------------------------------------------------------
 
-// stringstream
-using std::stringstream;
-using std::istringstream;
-using std::ostringstream;
-
-// wstringstream
-using std::wstringstream;
-using std::wistringstream;
-using std::wostringstream;
-
-
-// Convert a string to a wide string
-inline wstring str2wstr(const string& in) {
+// Convert a std::string to a wide std::string
+inline std::wstring str2wstr(const std::string& in) {
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
 
 	return wstring_converter.from_bytes(in);
 }
 
-// Convert a wide string to a string
-inline string wstr2str(const wstring& in) {
+// Convert a wide std::string to a std::string
+inline std::string wstr2str(const std::wstring& in) {
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
 
 	return wstring_converter.to_bytes(in);
 }
 
 
-// Convert an integer to a hexadecimal string
+// Convert an integer to a hexadecimal std::string
 template<typename T>
-string int2hexstr(T i) {
+std::string int2hexstr(T i) {
 
 	static_assert(std::is_integral_v<T>, "int2hexstr() input type is not an integral type");
 
-	stringstream stream;
+	std::stringstream stream;
 	stream << "0x"
 	       << std::setfill('0') << std::setw(sizeof(T) * 2)
 	       << std::hex << i;
@@ -62,7 +60,7 @@ string int2hexstr(T i) {
 }
 
 
-// Trim whitespace at the beginning and end of a string
+// Trim whitespace at the beginning and end of a std::string
 inline std::string TrimWhiteSpace(const std::string& in) {
 	const size_t text_start = in.find_first_not_of(" \t");
 	const size_t text_end = in.find_last_not_of(" \t");
@@ -77,7 +75,7 @@ inline std::string TrimWhiteSpace(const std::string& in) {
 	return std::string();
 }
 
-// Trim whitespace at the beginning and end of a string
+// Trim whitespace at the beginning and end of a std::string
 inline std::wstring TrimWhiteSpace(const std::wstring& in) {
 	const size_t text_start = in.find_first_not_of(L" \t");
 	const size_t text_end   = in.find_last_not_of(L" \t");
@@ -93,7 +91,7 @@ inline std::wstring TrimWhiteSpace(const std::wstring& in) {
 }
 
 
-// Split a string by a specified token
+// Split a std::string by a specified token
 template<typename StringT>
 std::vector<StringT> Split(const StringT& in, const typename StringT::value_type* token) {
 

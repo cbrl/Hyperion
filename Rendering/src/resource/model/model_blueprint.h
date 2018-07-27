@@ -22,7 +22,7 @@ public:
 
 	ModelBlueprint(ID3D11Device& device,
 	               ResourceMgr& resource_mgr,
-	               const wstring& filename);
+	               const std::wstring& filename);
 
 	template<typename VertexT>
 	ModelBlueprint(ID3D11Device& device,
@@ -65,7 +65,7 @@ public:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	string name;
+	std::string name;
 
 	AABB aabb;
 	BoundingSphere sphere;

@@ -497,7 +497,7 @@ void UserInterface::DrawChildModelDetails(ModelChild& child) {
 	ImGui::Separator();
 
 	// Change material properties, textures
-	string name = "Material - " + child.GetMaterial().name;
+	std::string name = "Material - " + child.GetMaterial().name;
 	ImGui::Text(name.c_str());
 
 	ImGui::ColorEdit3("Diffuse Color",      (f32*)child.GetMaterial().diffuse.Data());
