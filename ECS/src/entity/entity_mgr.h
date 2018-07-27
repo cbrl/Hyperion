@@ -92,10 +92,10 @@ public:
 			// Get the entity
 			IEntity* entity = handle_table[handle];
 
-			// Get the entity type_index
+			// Get the entity std::type_index
 			const auto type = handle_table[handle]->getTypeId();
 
-			// Get the appropriate pool with the type_index
+			// Get the appropriate pool with the std::type_index
 			auto pool = entity_pools.getPool(type);
 
 			// Destroy the entity

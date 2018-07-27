@@ -48,7 +48,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	virtual type_index getTypeId() const = 0;
+	virtual std::type_index getTypeId() const = 0;
 
 	// Get the handle of the entity that owns this component
 	handle64 getOwner() const {
@@ -110,16 +110,16 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	type_index getTypeId() const override {
+	std::type_index getTypeId() const override {
 		return type_id;
 	}
 
 
 public:
 	// An ID unique to type T
-	static const type_index type_id;
+	static const std::type_index type_id;
 };
 
 
 template<typename T>
-const type_index Component<T>::type_id = type_index(typeid(T));
+const std::type_index Component<T>::type_id = std::type_index(typeid(T));

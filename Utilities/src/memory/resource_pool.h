@@ -232,7 +232,7 @@ public:
 
 	// Get an existing pool using the resource index
 	[[nodiscard]]
-	IResourcePool* getPool(type_index type) {
+	IResourcePool* getPool(std::type_index type) {
 		const auto& it = pools.find(type);
 
 		assert(it != pools.end() && "Invalid resource pool type requested");
@@ -249,11 +249,11 @@ public:
 
 
 	// Check if a pool exists for the specified index
-	bool poolExists(type_index type) const {
+	bool poolExists(std::type_index type) const {
 		return pools.find(type) != pools.end();
 	}
 
 
 private:
-	std::unordered_map<type_index, unique_ptr<IResourcePool>> pools;
+	std::unordered_map<std::type_index, unique_ptr<IResourcePool>> pools;
 };

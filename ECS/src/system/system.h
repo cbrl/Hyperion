@@ -40,7 +40,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	virtual type_index getTypeId() const = 0;
+	virtual std::type_index getTypeId() const = 0;
 
 	void setActive(bool state) {
 		active = state;
@@ -93,7 +93,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	type_index getTypeId() const override {
+	std::type_index getTypeId() const override {
 		return type_id;
 	}
 
@@ -109,9 +109,9 @@ public:
 
 public:
 	// An ID unique to type T
-	static const type_index type_id;
+	static const std::type_index type_id;
 };
 
 
 template<typename T>
-const type_index System<T>::type_id = type_index(typeid(T));
+const std::type_index System<T>::type_id = std::type_index(typeid(T));

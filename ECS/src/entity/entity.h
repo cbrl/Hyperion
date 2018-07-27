@@ -44,8 +44,8 @@ public:
 	// Member functions
 	//----------------------------------------------------------------------------------
 
-	// Interface function for retrieving the type_index
-	virtual type_index getTypeId() const = 0;
+	// Interface function for retrieving the std::type_index
+	virtual std::type_index getTypeId() const = 0;
 
 	// Get the entity's handle
 	[[nodiscard]]
@@ -87,7 +87,7 @@ protected:
 	ComponentMgr* component_mgr;
 
 	// Map of pointers to components. Holds 1 of each unique type.
-	std::unordered_map<type_index, IComponent*> components;
+	std::unordered_map<std::type_index, IComponent*> components;
 };
 
 
@@ -108,7 +108,7 @@ public:
 
 	Entity(const Entity& entity) = delete;
 
-	type_index getTypeId() const override {
+	std::type_index getTypeId() const override {
 		return type_id;
 	}
 
@@ -125,12 +125,12 @@ protected:
 
 public:
 	// And ID unique to type T
-	static const type_index type_id;
+	static const std::type_index type_id;
 };
 
 
 template<typename T>
-const type_index Entity<T>::type_id = type_index(typeid(T));
+const std::type_index Entity<T>::type_id = std::type_index(typeid(T));
 
 
 #include "entity.tpp"
