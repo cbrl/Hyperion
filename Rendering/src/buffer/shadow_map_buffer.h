@@ -50,12 +50,12 @@ public:
 		viewport.bind(device_context);
 	}
 
-	// Bind the raster state for the cube map
+	// Bind the raster state for the cube std::map
 	void bindRasterState(ID3D11DeviceContext& device_context) const {
 		Pipeline::RS::bindState(device_context, raster_state.Get());
 	}
 
-	// Bind the depth stencil view for the cube map
+	// Bind the depth stencil view for the cube std::map
 	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
 		Pipeline::OM::bindRTVs(device_context, 1, nullptr, dsvs[index].Get());
 	}
@@ -88,7 +88,7 @@ private:
 	Viewport viewport;
 	ComPtr<ID3D11RasterizerState> raster_state;
 
-	vector<ComPtr<ID3D11DepthStencilView>> dsvs;
+	std::vector<ComPtr<ID3D11DepthStencilView>> dsvs;
 	ComPtr<ID3D11ShaderResourceView> srv;
 };
 
@@ -132,12 +132,12 @@ public:
 		viewport.bind(device_context);
 	}
 
-	// Bind the raster state for the cube map
+	// Bind the raster state for the cube std::map
 	void bindRasterState(ID3D11DeviceContext& device_context) const {
 		Pipeline::RS::bindState(device_context, raster_state.Get());
 	}
 
-	// Bind the depth stencil view for the cube map
+	// Bind the depth stencil view for the cube std::map
 	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
 		Pipeline::OM::bindRTVs(device_context, 1, nullptr, dsvs[index].Get());
 	}
@@ -172,6 +172,6 @@ private:
 	Viewport viewport;
 	ComPtr<ID3D11RasterizerState> raster_state;
 
-	vector<ComPtr<ID3D11DepthStencilView>> dsvs;
+	std::vector<ComPtr<ID3D11DepthStencilView>> dsvs;
 	ComPtr<ID3D11ShaderResourceView> srv;
 };

@@ -146,6 +146,6 @@ private:
 	HandleTable<handle64, IEntity> handle_table;
 
 	// Container of entities that need to be deleted
-	vector<handle64> expired_entities;
+	std::vector<handle64> expired_entities;
 	u32 num_expired_entities;
 };

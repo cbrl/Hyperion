@@ -16,79 +16,79 @@
 
 namespace Shapes {
 	template<typename VertexT>
-	void ComputeCube(vector<VertexT>& vertices,
-	                 vector<u32>& indices,
+	void ComputeCube(std::vector<VertexT>& vertices,
+	                 std::vector<u32>& indices,
 	                 f32  size     = 1,
 	                 bool rhcoords = false,
 	                 bool invertn  = false);
 
 	template<typename VertexT>
-	void ComputeBox(vector<VertexT>& vertices,
-	                vector<u32>& indices,
+	void ComputeBox(std::vector<VertexT>& vertices,
+	                std::vector<u32>& indices,
 	                const vec3_f32& size,
 	                bool rhcoords = false,
 	                bool invertn  = false);
 
 	template<typename VertexT>
-	void ComputeSphere(vector<VertexT>& vertices,
-	                   vector<u32>& indices,
+	void ComputeSphere(std::vector<VertexT>& vertices,
+	                   std::vector<u32>& indices,
 	                   f32    diameter     = 1,
 	                   size_t tessellation = 16,
 	                   bool   rhcoords     = false,
 	                   bool   invertn      = false);
 
 	template<typename VertexT>
-	void ComputeGeoSphere(vector<VertexT>& vertices,
-	                      vector<u32>& indices,
+	void ComputeGeoSphere(std::vector<VertexT>& vertices,
+	                      std::vector<u32>& indices,
 	                      f32    diameter     = 1,
 	                      size_t tessellation = 3,
 	                      bool   rhcoords     = false);
 
 	template<typename VertexT>
-	void ComputeCylinder(vector<VertexT>& vertices,
-	                     vector<u32>& indices,
+	void ComputeCylinder(std::vector<VertexT>& vertices,
+	                     std::vector<u32>& indices,
 	                     f32    diameter     = 1,
 	                     f32    height       = 1,
 	                     size_t tessellation = 32,
 	                     bool   rhcoords     = false);
 
 	template<typename VertexT>
-	void ComputeCone(vector<VertexT>& vertices,
-	                 vector<u32>& indices,
+	void ComputeCone(std::vector<VertexT>& vertices,
+	                 std::vector<u32>& indices,
 	                 f32    diameter     = 1,
 	                 f32    height       = 1,
 	                 size_t tessellation = 32,
 	                 bool   rhcoords     = false);
 
 	template<typename VertexT>
-	void ComputeTorus(vector<VertexT>& vertices,
-	                  vector<u32>& indices,
+	void ComputeTorus(std::vector<VertexT>& vertices,
+	                  std::vector<u32>& indices,
 	                  f32    diameter     = 1,
 	                  f32    thickness    = 0.333f,
 	                  size_t tessellation = 32,
 	                  bool   rhcoords     = false);
 
 	template<typename VertexT>
-	void ComputeTetrahedron(vector<VertexT>& vertices,
-	                        vector<u32>& indices,
+	void ComputeTetrahedron(std::vector<VertexT>& vertices,
+	                        std::vector<u32>& indices,
 	                        f32  size     = 1,
 	                        bool rhcoords = false);
 	
 	template<typename VertexT>
-	void ComputeOctahedron(vector<VertexT>& vertices,
-	                       vector<u32>& indices,
+	void ComputeOctahedron(std::vector<VertexT>& vertices,
+	                       std::vector<u32>& indices,
 	                       f32  size     = 1,
 	                       bool rhcoords = false);
 	
 	template<typename VertexT>
-	void ComputeDodecahedron(vector<VertexT>& vertices,
-	                         vector<u32>& indices,
+	void ComputeDodecahedron(std::vector<VertexT>& vertices,
+	                         std::vector<u32>& indices,
 	                         f32  size     = 1,
 	                         bool rhcoords = false);
 	
 	template<typename VertexT>
-	void ComputeIcosahedron(vector<VertexT>& vertices,
-	                        vector<u32>& indices,
+	void ComputeIcosahedron(std::vector<VertexT>& vertices,
+	                        std::vector<u32>& indices,
 	                        f32  size     = 1,
 	                        bool rhcoords = false);
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 //----------------------------------------------------------------------------------
-// Container datatypes
+// Includes
 //----------------------------------------------------------------------------------
 
 #include <array>
@@ -10,10 +10,3 @@
 #include <map>
 #include <unordered_map>
 #include <type_traits>
-
-
-using std::vector;
-using std::map;
-using std::unordered_map;
-
-using std::reference_wrapper;

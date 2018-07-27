@@ -25,9 +25,9 @@ private:
 
 
 private:
-	reference_wrapper<ID3D11Device> device;
-	reference_wrapper<ID3D11DeviceContext> device_context;
-	reference_wrapper<RenderStateMgr> render_state_mgr;
+	std::reference_wrapper<ID3D11Device> device;
+	std::reference_wrapper<ID3D11DeviceContext> device_context;
+	std::reference_wrapper<RenderStateMgr> render_state_mgr;
 
 	shared_ptr<VertexShader> vertex_shader;
 	shared_ptr<PixelShader>  pixel_shader;

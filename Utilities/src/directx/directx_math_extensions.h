@@ -10,7 +10,7 @@
 using namespace DirectX;
 
 
-// Convert an rgba vector [0.0f, 1.0f] to a hex color value
+// Convert an rgba std::vector [0.0f, 1.0f] to a hex color value
 [[nodiscard]]
 inline u32 Float4ColorToU32(const vec4_f32& color) {
 	return static_cast<u32>(color.x * 0xff)            //R

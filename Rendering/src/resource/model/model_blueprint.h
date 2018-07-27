@@ -72,9 +72,9 @@ public:
 
 	shared_ptr<Mesh> mesh;
 
-	vector<Material> materials;
+	std::vector<Material> materials;
 
-	vector<ModelPart> model_parts;
+	std::vector<ModelPart> model_parts;
 };
 
 

@@ -87,7 +87,7 @@ protected:
 	ComponentMgr* component_mgr;
 
 	// Map of pointers to components. Holds 1 of each unique type.
-	unordered_map<type_index, IComponent*> components;
+	std::unordered_map<type_index, IComponent*> components;
 };
 
 

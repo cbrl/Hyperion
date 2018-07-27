@@ -59,7 +59,7 @@ public:
 	}
 
 	[[nodiscard]]
-	const map<std::string, Text>& getTexts() const {
+	const std::map<std::string, Text>& getTexts() const {
 		return texts;
 	}
 
@@ -84,7 +84,7 @@ public:
 	}
 
 	[[nodiscard]]
-	const vector<handle64>& getEntities() const {
+	const std::vector<handle64>& getEntities() const {
 		return entities;
 	}
 
@@ -125,8 +125,8 @@ protected:
 	unique_ptr<ECS> ecs;
 
 	// Entitites that currently exist in this scene
-	vector<handle64> entities;
+	std::vector<handle64> entities;
 
 	// Text objects in this scene
-	map<std::string, Text> texts;
+	std::map<std::string, Text> texts;
 };

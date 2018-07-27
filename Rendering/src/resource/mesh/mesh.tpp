@@ -1,5 +1,5 @@
 template<typename VertexT>
-Mesh::Mesh(ID3D11Device& device, const vector<VertexT>& vertices, const vector<u32>& indices) {
+Mesh::Mesh(ID3D11Device& device, const std::vector<VertexT>& vertices, const std::vector<u32>& indices) {
 
 	vertex_count = static_cast<u32>(vertices.size());
 	index_count  = static_cast<u32>(indices.size());

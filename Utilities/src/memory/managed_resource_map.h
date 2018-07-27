@@ -27,7 +27,7 @@ public:
 
 
 private:
-	unordered_map<KeyT, weak_ptr<ValueT>> resource_map;
+	std::unordered_map<KeyT, weak_ptr<ValueT>> resource_map;
 };
 
 

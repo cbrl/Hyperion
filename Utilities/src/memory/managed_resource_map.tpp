@@ -13,7 +13,7 @@ shared_ptr<ValueT> ManagedResourceMap<KeyT, ValueT>::getOrCreateResource(const K
 			return it->second.lock();
 		}
 
-		// If the resource has expired then remove the ptr from the map
+		// If the resource has expired then remove the ptr from the std::map
 		resource_map.erase(it);
 	}
 

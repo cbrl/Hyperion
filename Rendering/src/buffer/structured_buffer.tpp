@@ -1,7 +1,7 @@
 template<typename DataT>
 void StructuredBuffer<DataT>::updateData(ID3D11Device& device,
                                          ID3D11DeviceContext& device_context,
-                                         const vector<DataT>& data) {
+                                         const std::vector<DataT>& data) {
 	// Set the number of elements used
 	current_size = static_cast<u32>(data.size());
 
@@ -17,7 +17,7 @@ void StructuredBuffer<DataT>::updateData(ID3D11Device& device,
 	D3D11_MAPPED_SUBRESOURCE mapped_data = {};
 
 	ThrowIfFailed(device_context.Map(buffer.Get(), NULL, D3D11_MAP_WRITE_DISCARD, NULL, &mapped_data),
-	              "Failed to map structured buffer");
+	              "Failed to std::map structured buffer");
 
 	memcpy(mapped_data.pData, data.data(), sizeof(DataT) * current_size);
 

@@ -35,17 +35,17 @@ private:
 		}
 
 		std::wstring name;
-		// Ambient map
+		// Ambient std::map
 		std::wstring map_Ka;
-		// Diffuse map
+		// Diffuse std::map
 		std::wstring map_Kd;
-		// Specular map
+		// Specular std::map
 		std::wstring map_Ks;
-		// Specular Highlight map
+		// Specular Highlight std::map
 		std::wstring map_Ns;
-		// Alpha map
+		// Alpha std::map
 		std::wstring map_d;
-		// Bump map
+		// Bump std::map
 		std::wstring map_bump;
 		// Ambient Color
 		vec4_f32 Ka;
@@ -82,7 +82,7 @@ private:
 	static void loadModel(std::wstring filename);
 	static void readFace(std::wstring& line);
 	static VertexT createVertex(vec3_u32 vert_def);
-	static void triangulate(vector<vec3_u32>& face_def);
+	static void triangulate(std::vector<vec3_u32>& face_def);
 
 	static void loadMaterials(std::wstring folder);
 	static void readTransparency(std::wstring& line, bool inverse);
@@ -92,28 +92,28 @@ private:
 	static bool rh_coord;
 
 	// Vector of group definitions
-	static vector<Group> groups;
+	static std::vector<Group> groups;
 
 	// Vector of complete vertex definitions
-	static vector<VertexT> vertices;
+	static std::vector<VertexT> vertices;
 
 	// Maps face definitions to an index
-	static map<vec3_u32, u32, OBJLess> index_map;
+	static std::map<vec3_u32, u32, OBJLess> index_map;
 
 	// Vectors for position/normal/texCoord/index
-	static vector<vec3_f32> vertex_positions;
-	static vector<vec3_f32> vertex_normals;
-	static vector<vec2_f32> vertex_texCoords;
-	static vector<u32> indices;
+	static std::vector<vec3_f32> vertex_positions;
+	static std::vector<vec3_f32> vertex_normals;
+	static std::vector<vec2_f32> vertex_texCoords;
+	static std::vector<u32> indices;
 
 	// Material library name
 	static std::wstring mat_lib;
 
 	// Material names for each group <grp number, mat name>
-	static map<u32, std::wstring> group_mat_names;
+	static std::map<u32, std::wstring> group_mat_names;
 
 	// Vector of material definitions
-	static vector<OBJMaterial> materials;
+	static std::vector<OBJMaterial> materials;
 };
 
 
@@ -125,34 +125,34 @@ template<typename VertexT>
 bool OBJLoader<VertexT>::rh_coord = false;
 
 template<typename VertexT>
-vector<VertexT> OBJLoader<VertexT>::vertices;
+std::vector<VertexT> OBJLoader<VertexT>::vertices;
 
 template<typename VertexT>
-vector<vec3_f32> OBJLoader<VertexT>::vertex_positions;
+std::vector<vec3_f32> OBJLoader<VertexT>::vertex_positions;
 
 template<typename VertexT>
-vector<vec3_f32> OBJLoader<VertexT>::vertex_normals;
+std::vector<vec3_f32> OBJLoader<VertexT>::vertex_normals;
 
 template<typename VertexT>
-vector<vec2_f32> OBJLoader<VertexT>::vertex_texCoords;
+std::vector<vec2_f32> OBJLoader<VertexT>::vertex_texCoords;
 
 template<typename VertexT>
-map<vec3_u32, u32, typename OBJLoader<VertexT>::OBJLess> OBJLoader<VertexT>::index_map;
+std::map<vec3_u32, u32, typename OBJLoader<VertexT>::OBJLess> OBJLoader<VertexT>::index_map;
 
 template<typename VertexT>
-vector<u32> OBJLoader<VertexT>::indices;
+std::vector<u32> OBJLoader<VertexT>::indices;
 
 template<typename VertexT>
 std::wstring OBJLoader<VertexT>::mat_lib;
 
 template<typename VertexT>
-vector<Group> OBJLoader<VertexT>::groups;
+std::vector<Group> OBJLoader<VertexT>::groups;
 
 template<typename VertexT>
-map<u32, std::wstring> OBJLoader<VertexT>::group_mat_names;
+std::map<u32, std::wstring> OBJLoader<VertexT>::group_mat_names;
 
 template<typename VertexT>
-vector<typename OBJLoader<VertexT>::OBJMaterial> OBJLoader<VertexT>::materials;
+std::vector<typename OBJLoader<VertexT>::OBJMaterial> OBJLoader<VertexT>::materials;
 
 
 #include "obj_loader.tpp"

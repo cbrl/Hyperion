@@ -35,18 +35,18 @@ public:
 	~ModelOutput() = default;
 
 	ModelOutput(const std::string& name,
-	            const vector<VertexT>& vertices,
-	            const vector<u32>& indices,
-	            const vector<Material>& materials,
-	            const vector<Group>& groups);
+	            const std::vector<VertexT>& vertices,
+	            const std::vector<u32>& indices,
+	            const std::vector<Material>& materials,
+	            const std::vector<Group>& groups);
 
 
 public:
 	std::string name;
-	vector<VertexT> vertices;
-	vector<u32> indices;
-	vector<Material> materials;
-	vector<ModelPart> model_parts;
+	std::vector<VertexT> vertices;
+	std::vector<u32> indices;
+	std::vector<Material> materials;
+	std::vector<ModelPart> model_parts;
 	AABB aabb;
 	BoundingSphere sphere;
 };

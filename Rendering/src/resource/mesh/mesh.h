@@ -11,7 +11,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename VertexT>
-	Mesh(ID3D11Device& device, const vector<VertexT>& vertices, const vector<u32>& indices);
+	Mesh(ID3D11Device& device, const std::vector<VertexT>& vertices, const std::vector<u32>& indices);
 
 	Mesh(const Mesh& mesh) = delete;
 	Mesh(Mesh&& mesh) noexcept = default;

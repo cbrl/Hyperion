@@ -27,17 +27,17 @@ struct Material final {
 	// Material name
 	std::string name;
 
-	// Ambient map
+	// Ambient std::map
 	shared_ptr<Texture> map_ambient;
-	// Diffuse map
+	// Diffuse std::map
 	shared_ptr<Texture> map_diffuse;
-	// Specular map
+	// Specular std::map
 	shared_ptr<Texture> map_specular;
-	// Specular Highlight map
+	// Specular Highlight std::map
 	shared_ptr<Texture> map_spec_highlight;
-	// Alpha map
+	// Alpha std::map
 	shared_ptr<Texture> map_alpha;
-	// Bump map
+	// Bump std::map
 	shared_ptr<Texture> map_bump;
 
 	// Ambient Color

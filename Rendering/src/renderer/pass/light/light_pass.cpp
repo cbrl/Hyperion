@@ -39,7 +39,7 @@ void XM_CALLCONV LightPass::render(Scene& scene, FXMMATRIX world_to_projection) 
 	updatePointLightData(ecs_engine, world_to_projection);
 	updateSpotLightData(ecs_engine, world_to_projection);
 
-	// Update the shadow map sizes
+	// Update the shadow std::map sizes
 	updateShadowMaps();
 	// Render the shadow maps
 	renderShadowMaps(scene);
@@ -141,10 +141,10 @@ void LightPass::updateShadowMaps() {
 void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine, FXMMATRIX world_to_projection) {
 
 	// Temporary buffers
-	vector<DirectionalLightBuffer> buffers;
+	std::vector<DirectionalLightBuffer> buffers;
 	buffers.reserve(directional_lights.size());
 
-	vector<DirectionalLightBuffer> shadow_buffers;
+	std::vector<DirectionalLightBuffer> shadow_buffers;
 	buffers.reserve(shadowed_directional_lights.size());
 
 	// Clear the cameras
@@ -196,10 +196,10 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine, FXMMATRI
 void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX world_to_projection) {
 
 	// Temporary buffers
-	vector<PointLightBuffer> buffers;
+	std::vector<PointLightBuffer> buffers;
 	buffers.reserve(point_lights.size());
 
-	vector<ShadowedPointLightBuffer> shadow_buffers;
+	std::vector<ShadowedPointLightBuffer> shadow_buffers;
 	shadow_buffers.reserve(shadowed_point_lights.size());
 
 	// Clear the point light cameras
@@ -216,7 +216,7 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 		const auto light_to_world      = transform->getObjectToWorldMatrix();
 		const auto light_to_projection = light_to_world * world_to_projection;
 
-		// Camera rotations for the cube map
+		// Camera rotations for the cube std::map
 		static const XMMATRIX rotations[6] = {
 			XMMatrixRotationY(-XM_PIDIV2),
 			XMMatrixRotationY(XM_PIDIV2),
@@ -285,10 +285,10 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world_to_projection) {
 
 	// Temporary buffer vectors
-	vector<SpotLightBuffer> buffers;
+	std::vector<SpotLightBuffer> buffers;
 	buffers.reserve(spot_lights.size());
 
-	vector<ShadowedSpotLightBuffer> shadow_buffers;
+	std::vector<ShadowedSpotLightBuffer> shadow_buffers;
 	shadow_buffers.reserve(spot_lights.size());
 
 	// Clear the spot light cameras

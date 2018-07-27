@@ -26,7 +26,7 @@ namespace Shapes {
 
 
 	// Collection types used when generating the geometry.
-	inline void index_push_back(vector<u32>& indices, size_t value) {
+	inline void index_push_back(std::vector<u32>& indices, size_t value) {
 		CheckIndexOverflow(value);
 		indices.push_back(static_cast<u32>(value));
 	}
@@ -34,7 +34,7 @@ namespace Shapes {
 
 	// Helper for flipping winding of geometric primitives for LH vs. RH coords
 	template<typename VertexT>
-	void ReverseWinding(vector<u32>& indices, vector<VertexT>& vertices) {
+	void ReverseWinding(std::vector<u32>& indices, std::vector<VertexT>& vertices) {
 		assert((indices.size() % 3) == 0);
 		for (auto it = indices.begin(); it != indices.end(); it += 3) {
 			std::swap(*it, *(it + 2));
@@ -53,7 +53,7 @@ namespace Shapes {
 
 	// Helper for inverting normals of geometric primitives for 'inside' vs. 'outside' viewing
 	template<typename VertexT>
-	void InvertNormals(vector<VertexT>& vertices) {
+	void InvertNormals(std::vector<VertexT>& vertices) {
 		if constexpr (VertexT::hasNormal()) {
 			for (auto it = vertices.begin(); it != vertices.end(); ++it) {
 				vec3_f32 normal = it->normal;
@@ -71,12 +71,12 @@ namespace Shapes {
 	// Cube (aka a Hexahedron) or Box
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeCube(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords, bool invertn) {
+	void ComputeCube(std::vector<VertexT>& vertices, std::vector<u32>& indices, f32 size, bool rhcoords, bool invertn) {
 		ComputeBox(vertices, indices, vec3_f32(size, size, size), rhcoords, invertn);
 	}
 
 	template<typename VertexT>
-	void ComputeBox(vector<VertexT>& vertices, vector<u32>& indices, const vec3_f32& size, bool rhcoords, bool invertn) {
+	void ComputeBox(std::vector<VertexT>& vertices, std::vector<u32>& indices, const vec3_f32& size, bool rhcoords, bool invertn) {
 		vertices.clear();
 		indices.clear();
 
@@ -160,8 +160,8 @@ namespace Shapes {
 	// Sphere
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeSphere(vector<VertexT>& vertices,
-	                   vector<u32>& indices,
+	void ComputeSphere(std::vector<VertexT>& vertices,
+	                   std::vector<u32>& indices,
 	                   f32 diameter,
 	                   size_t tessellation,
 	                   bool rhcoords,
@@ -241,8 +241,8 @@ namespace Shapes {
 	// Geodesic sphere
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeGeoSphere(vector<VertexT>& vertices,
-	                      vector<u32>& indices,
+	void ComputeGeoSphere(std::vector<VertexT>& vertices,
+	                      std::vector<u32>& indices,
 	                      f32 diameter,
 	                      size_t tessellation,
 	                      bool rhcoords) {
@@ -261,7 +261,7 @@ namespace Shapes {
 
 		// Key: an edge
 		// Value: the index of the vertex which lies midway between the two vertices pointed to by the key value
-		// This map is used to avoid duplicating vertices when subdividing triangles along edges.
+		// This std::map is used to avoid duplicating vertices when subdividing triangles along edges.
 		typedef std::map<UndirectedEdge, u32> EdgeSubdivisionMap;
 
 
@@ -308,7 +308,7 @@ namespace Shapes {
 			EdgeSubdivisionMap subdividedEdges;
 
 			// The new index collection after subdivision.
-			vector<u32> newIndices;
+			std::vector<u32> newIndices;
 
 			const size_t triangleCount = indices.size() / 3;
 			for (size_t iTriangle = 0; iTriangle < triangleCount; ++iTriangle) {
@@ -356,7 +356,7 @@ namespace Shapes {
 						CheckIndexOverflow(outIndex);
 						vertexPositions.push_back(outVertex);
 
-						// Now add it to the map.
+						// Now add it to the std::map.
 						subdividedEdges.insert(std::make_pair(edge, outIndex));
 					}
 				};
@@ -486,8 +486,8 @@ namespace Shapes {
 			}
 		}
 
-		// And one last fix we need to do: the poles. A common use-case of a sphere mesh is to map a rectangular texture onto
-		// it. If that happens, then the poles become singularities which map the entire top and bottom rows of the texture
+		// And one last fix we need to do: the poles. A common use-case of a sphere mesh is to std::map a rectangular texture onto
+		// it. If that happens, then the poles become singularities which std::map the entire top and bottom rows of the texture
 		// onto a single point. In general there's no real way to do that right. But to match the behavior of non-geodesic
 		// spheres, we need to duplicate the pole vertex for every triangle that uses it. This will introduce seams near the
 		// poles, but reduce stretching.
@@ -582,8 +582,8 @@ namespace Shapes {
 
 		// Helper creates a triangle fan to close the end of a cylinder / cone
 		template<typename VertexT>
-		void CreateCylinderCap(vector<VertexT>& vertices,
-		                       vector<u32>& indices,
+		void CreateCylinderCap(std::vector<VertexT>& vertices,
+		                       std::vector<u32>& indices,
 		                       size_t tessellation,
 		                       f32 height,
 		                       f32 radius,
@@ -634,8 +634,8 @@ namespace Shapes {
 
 
 	template<typename VertexT>
-	void ComputeCylinder(vector<VertexT>& vertices,
-	                     vector<u32>& indices,
+	void ComputeCylinder(std::vector<VertexT>& vertices,
+	                     std::vector<u32>& indices,
 	                     f32 diameter,
 	                     f32 height,
 	                     size_t tessellation,
@@ -700,8 +700,8 @@ namespace Shapes {
 
 	// Creates a cone primitive.
 	template<typename VertexT>
-	void ComputeCone(vector<VertexT>& vertices,
-	                 vector<u32>& indices,
+	void ComputeCone(std::vector<VertexT>& vertices,
+	                 std::vector<u32>& indices,
 	                 f32 diameter,
 	                 f32 height,
 	                 size_t tessellation,
@@ -768,8 +768,8 @@ namespace Shapes {
 	// Torus
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeTorus(vector<VertexT>& vertices,
-	                  vector<u32>& indices,
+	void ComputeTorus(std::vector<VertexT>& vertices,
+	                  std::vector<u32>& indices,
 	                  f32 diameter,
 	                  f32 thickness,
 	                  size_t tessellation,
@@ -840,7 +840,7 @@ namespace Shapes {
 	// Tetrahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeTetrahedron(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords) {
+	void ComputeTetrahedron(std::vector<VertexT>& vertices, std::vector<u32>& indices, f32 size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
@@ -912,7 +912,7 @@ namespace Shapes {
 	// Octahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeOctahedron(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords) {
+	void ComputeOctahedron(std::vector<VertexT>& vertices, std::vector<u32>& indices, f32 size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
@@ -990,7 +990,7 @@ namespace Shapes {
 	// Dodecahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeDodecahedron(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords) {
+	void ComputeDodecahedron(std::vector<VertexT>& vertices, std::vector<u32>& indices, f32 size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 
@@ -1137,7 +1137,7 @@ namespace Shapes {
 	// Icosahedron
 	//--------------------------------------------------------------------------------------
 	template<typename VertexT>
-	void ComputeIcosahedron(vector<VertexT>& vertices, vector<u32>& indices, f32 size, bool rhcoords) {
+	void ComputeIcosahedron(std::vector<VertexT>& vertices, std::vector<u32>& indices, f32 size, bool rhcoords) {
 		vertices.clear();
 		indices.clear();
 

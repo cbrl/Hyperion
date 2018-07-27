@@ -33,7 +33,7 @@ struct Vector2 {
 	// Functions
 	//----------------------------------------------------------------------------------
 
-	// Return a pointer to the first element of the vector
+	// Return a pointer to the first element of the std::vector
 	constexpr T* data() { return &this->x; }
 	constexpr const T* data() const { return &this->x; }
 
@@ -199,7 +199,7 @@ struct Vector3 {
 	// Functions
 	//----------------------------------------------------------------------------------
 
-	// Return a pointer to the first element of the vector
+	// Return a pointer to the first element of the std::vector
 	constexpr T* data() { return &this->x; }
 	constexpr const T* data() const { return &this->x; }
 
@@ -382,7 +382,7 @@ struct Vector4 {
 	// Functions
 	//----------------------------------------------------------------------------------
 
-	// Return a pointer to the first element of the vector
+	// Return a pointer to the first element of the std::vector
 	constexpr T* data() noexcept { return &this->x; }
 	constexpr const T* data() const noexcept { return &this->x; }
 

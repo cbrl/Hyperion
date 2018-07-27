@@ -59,8 +59,8 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	reference_wrapper<ID3D11Device>        device;
-	reference_wrapper<ID3D11DeviceContext> device_context;
+	std::reference_wrapper<ID3D11Device>        device;
+	std::reference_wrapper<ID3D11DeviceContext> device_context;
 
 	// Renderers
 	unique_ptr<LightPass>          light_pass;

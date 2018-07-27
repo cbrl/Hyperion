@@ -243,5 +243,5 @@ private:
 	BoundingSphere sphere;
 
 	// The child models that make up this model
-	vector<ModelChild> child_models;
+	std::vector<ModelChild> child_models;
 };

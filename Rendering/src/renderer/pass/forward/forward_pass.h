@@ -31,9 +31,9 @@ private:
 
 
 private:
-	reference_wrapper<ID3D11DeviceContext> device_context;
-	reference_wrapper<RenderStateMgr>      render_state_mgr;
-	reference_wrapper<ResourceMgr>         resource_mgr;
+	std::reference_wrapper<ID3D11DeviceContext> device_context;
+	std::reference_wrapper<RenderStateMgr>      render_state_mgr;
+	std::reference_wrapper<ResourceMgr>         resource_mgr;
 
 	ConstantBuffer<vec4_f32> color_buffer;
 	shared_ptr<VertexShader> vertex_shader;

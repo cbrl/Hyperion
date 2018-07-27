@@ -67,7 +67,7 @@ public:
 	}
 
 	[[nodiscard]]
-	const vector<DXGI_MODE_DESC>& getDisplayDescList() const {
+	const std::vector<DXGI_MODE_DESC>& getDisplayDescList() const {
 		return display_desc_list;
 	}
 
@@ -152,7 +152,7 @@ private:
 		adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &mode_count, nullptr);
 
 		// Get the display modes
-		vector<DXGI_MODE_DESC> display_modes(mode_count);
+		std::vector<DXGI_MODE_DESC> display_modes(mode_count);
 		adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
 			DXGI_ENUM_MODES_INTERLACED,
 			&mode_count,
@@ -191,7 +191,7 @@ private:
 
 	ComPtr<IDXGIAdapter> adapter;
 	ComPtr<IDXGIOutput> adapter_out;
-	vector<DXGI_MODE_DESC> display_desc_list;
+	std::vector<DXGI_MODE_DESC> display_desc_list;
 	u32 curr_desc;
 	AAType anti_aliasing;
 	bool   fullscreen;

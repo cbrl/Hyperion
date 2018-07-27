@@ -118,8 +118,8 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// Device and device context
-	reference_wrapper<ID3D11Device> device;
-	reference_wrapper<ID3D11DeviceContext> device_context;
+	std::reference_wrapper<ID3D11Device> device;
+	std::reference_wrapper<ID3D11DeviceContext> device_context;
 
 	// Resources
 	ManagedResourceMap<std::wstring, ModelBlueprint> models;

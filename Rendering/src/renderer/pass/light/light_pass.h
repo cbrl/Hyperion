@@ -42,8 +42,8 @@ private:
 
 
 private:
-	reference_wrapper<ID3D11Device> device;
-	reference_wrapper<ID3D11DeviceContext> device_context;
+	std::reference_wrapper<ID3D11Device> device;
+	std::reference_wrapper<ID3D11DeviceContext> device_context;
 
 	// Depth rendering pass
 	unique_ptr<DepthPass> depth_pass;
@@ -62,9 +62,9 @@ private:
 	StructuredBuffer<ShadowedSpotLightBuffer> shadowed_spot_lights;
 
 	// Light cameras
-	vector<LightCamera> directional_light_cameras;
-	vector<LightCamera> point_light_cameras;
-	vector<LightCamera> spot_light_cameras;
+	std::vector<LightCamera> directional_light_cameras;
+	std::vector<LightCamera> point_light_cameras;
+	std::vector<LightCamera> spot_light_cameras;
 
 	// Shadow maps
 	unique_ptr<ShadowMapBuffer> directional_light_smaps;

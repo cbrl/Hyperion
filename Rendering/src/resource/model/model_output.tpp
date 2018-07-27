@@ -1,9 +1,9 @@
 template<typename VertexT>
 ModelOutput<VertexT>::ModelOutput(const std::string& name,
-                                  const vector<VertexT>& vertices,
-                                  const vector<u32>& indices,
-                                  const vector<Material>& materials,
-                                  const vector<Group>& groups)
+                                  const std::vector<VertexT>& vertices,
+                                  const std::vector<u32>& indices,
+                                  const std::vector<Material>& materials,
+                                  const std::vector<Group>& groups)
 	: name(name)
 	, vertices(vertices)
 	, indices(indices)
@@ -38,7 +38,7 @@ ModelOutput<VertexT>::ModelOutput(const std::string& name,
 
 
 		// Create the AABB for the model part
-		vector<VertexT> subvec;
+		std::vector<VertexT> subvec;
 
 		for (size_t j = temp.index_start; j < (temp.index_start + temp.index_count); ++j) {
 			subvec.push_back(vertices[indices[j]]);

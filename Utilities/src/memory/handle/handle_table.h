@@ -56,7 +56,7 @@ private:
 
 
 private:
-	vector<handle_entry> handle_table;
+	std::vector<handle_entry> handle_table;
 };
 
 

@@ -618,9 +618,9 @@ void UserInterface::DrawPopups(ID3D11Device* device, ResourceMgr& resource_mgr, 
 		static int selected_combo = NULL;
 
 		static auto getter = [](void* vec, int idx, const char** out_text) {
-			auto& vector = *static_cast<std::vector<Model>*>(vec);
-			if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-			*out_text = vector.at(idx).GetName().c_str();
+			auto& std::vector = *static_cast<std::vector<Model>*>(vec);
+			if (idx < 0 || idx >= static_cast<int>(std::vector.size())) { return false; }
+			*out_text = std::vector.at(idx).GetName().c_str();
 			return true;
 		};
 

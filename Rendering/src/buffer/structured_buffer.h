@@ -43,7 +43,7 @@ public:
 
 	void updateData(ID3D11Device& device,
 	                ID3D11DeviceContext& device_context,
-	                const vector<DataT>& data);
+	                const std::vector<DataT>& data);
 
 
 	// Bind the buffer to the specified pipeline stage

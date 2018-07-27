@@ -66,7 +66,7 @@ void XM_CALLCONV ForwardPass::render(Scene& scene, FXMMATRIX world_to_projection
 
 	auto& ecs_engine = scene.getECS();
 
-	// Bind the skybox texture as the environment map
+	// Bind the skybox texture as the environment std::map
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Bind the shaders, render states, etc
@@ -88,7 +88,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene, FXMMATRIX world_to_proje
 
 	auto& ecs_engine = scene.getECS();
 
-	// Bind the skybox texture as the environment map
+	// Bind the skybox texture as the environment std::map
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Bind the shaders, render states, etc

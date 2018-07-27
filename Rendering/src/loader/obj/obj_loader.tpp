@@ -67,7 +67,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 
 
 	// Create the materials
-	vector<Material> mtl_vector;
+	std::vector<Material> mtl_vector;
 	for (u32 i = 0; i < materials.size(); ++i) {
 		Material mtl;
 
@@ -360,7 +360,7 @@ void OBJLoader<VertexT>::loadMaterials(std::wstring folder) {
 
 
 	// Set the group's material to the index value of its
-	// material in the material vector.
+	// material in the material std::vector.
 	for (u32 i = 0; i < groups.size(); ++i) {
 
 		// Use the first material if the group has no material assigned
@@ -399,15 +399,15 @@ void OBJLoader<VertexT>::readTransparency(std::wstring& line, bool inverse) {
 template<typename VertexT>
 void OBJLoader<VertexT>::readFace(std::wstring& line) {
 
-	vector<vec3_u32> face_def;
+	std::vector<vec3_u32> face_def;
 
 	// Split the line into separate vertex definitions
-	vector<std::wstring> vert_strings = Split(line, L" ");
+	std::vector<std::wstring> vert_strings = Split(line, L" ");
 
 	for (size_t i = 0; i < vert_strings.size(); ++i) {
 
 		// Split the vertex definition into separate parts
-		vector<std::wstring> vert_parts = Split(vert_strings[i], L"/");
+		std::vector<std::wstring> vert_parts = Split(vert_strings[i], L"/");
 
 		vec3_u32 vertex{ 0, 0, 0 };
 
@@ -502,11 +502,11 @@ VertexT OBJLoader<VertexT>::createVertex(vec3_u32 vert_def) {
 
 // Converts the input face into triangles
 template<typename VertexT>
-void OBJLoader<VertexT>::triangulate(vector<vec3_u32>& face_def) {
+void OBJLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 
 	// Create the vertices from the input faces
-	vector<VertexT> in_verts;
-	vector<VertexT> v_verts;
+	std::vector<VertexT> in_verts;
+	std::vector<VertexT> v_verts;
 	for (const auto& vert_def : face_def) {
 		auto vertex = createVertex(vert_def);
 		in_verts.push_back(vertex);
@@ -514,7 +514,7 @@ void OBJLoader<VertexT>::triangulate(vector<vec3_u32>& face_def) {
 	}
 
 	// Indices of new triangles
-	vector<u32> tri_indices;
+	std::vector<u32> tri_indices;
 
 	while (true) {
 		for (u32 i = 0; i < v_verts.size(); ++i) {
@@ -657,7 +657,7 @@ void OBJLoader<VertexT>::triangulate(vector<vec3_u32>& face_def) {
 
 
 	// Rebuild the face definition in terms of triangles
-	vector<vec3_u32> temp_face = face_def;
+	std::vector<vec3_u32> temp_face = face_def;
 	face_def.clear();
 	for (const auto& index : tri_indices) {
 		face_def.push_back(temp_face[index]);

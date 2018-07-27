@@ -12,8 +12,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeCube(vertices, indices, size, rhcoords, invertn);
 
@@ -26,7 +26,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -36,7 +36,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Cube";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -61,8 +61,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeBox(vertices, indices, size, rhcoords, invertn);
 
@@ -75,7 +75,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -85,7 +85,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Box";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -111,8 +111,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeSphere(vertices, indices, diameter, tessellation, rhcoords, invertn);
 
@@ -125,7 +125,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -135,7 +135,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Sphere";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -159,8 +159,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeGeoSphere(vertices, indices, diameter, tessellation, rhcoords);
 
@@ -173,7 +173,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -183,7 +183,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "GeoSphere";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -209,8 +209,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeCylinder(vertices, indices, diameter, height, tessellation, rhcoords);
 
@@ -223,7 +223,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -233,7 +233,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Cylinder";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -259,8 +259,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeCone(vertices, indices, diameter, height, tessellation, rhcoords);
 
@@ -273,7 +273,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -283,7 +283,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Cone";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -309,8 +309,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeTorus(vertices, indices, diameter, thickness, tessellation, rhcoords);
 
@@ -323,7 +323,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -333,7 +333,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Torus";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -356,8 +356,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeTetrahedron(vertices, indices, size, rhcoords);
 
@@ -370,7 +370,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -380,7 +380,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Tetrahedron";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -403,8 +403,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeOctahedron(vertices, indices, size, rhcoords);
 
@@ -417,7 +417,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -427,7 +427,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Octahedron";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -450,8 +450,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeDodecahedron(vertices, indices, size, rhcoords);
 
@@ -464,7 +464,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -474,7 +474,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Dodecahedron";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 
@@ -497,8 +497,8 @@ namespace BlueprintFactory {
 
 
 		// Compute the vertices and indices
-		vector<VertexT> vertices;
-		vector<u32> indices;
+		std::vector<VertexT> vertices;
+		std::vector<u32> indices;
 
 		Shapes::ComputeIcosahedron(vertices, indices, size, rhcoords);
 
@@ -511,7 +511,7 @@ namespace BlueprintFactory {
 		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
 		mat.has_texture = false;
 
-		vector<Material> materials;
+		std::vector<Material> materials;
 		materials.push_back(mat);
 
 
@@ -521,7 +521,7 @@ namespace BlueprintFactory {
 		grp.material_index = 0;
 		grp.name           = "Icosahedron";
 
-		vector<Group> groups;
+		std::vector<Group> groups;
 		groups.push_back(grp);
 
 

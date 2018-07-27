@@ -97,7 +97,7 @@ void LoadTexture(ID3D11Device& device,
 
 void LoadTexture(ID3D11Device& device,
                  ID3D11DeviceContext& device_context,
-                 const vector<std::wstring>& filenames,
+                 const std::vector<std::wstring>& filenames,
                  ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if a file is missing
@@ -110,7 +110,7 @@ void LoadTexture(ID3D11Device& device,
 
 	// Create a vector of textures
 	const u32 size = static_cast<u32>(filenames.size());
-	vector<ComPtr<ID3D11Texture2D>> srcTex(size);
+	std::vector<ComPtr<ID3D11Texture2D>> srcTex(size);
 
 	for (u32 i = 0; i < size; i++) {
 		if (GetFileExtension(filenames[i]) == L".dds") {
@@ -173,7 +173,7 @@ void LoadTexture(ID3D11Device& device,
 			D3D11_MAPPED_SUBRESOURCE mappedTex = {};
 
 			ThrowIfFailed(device_context.Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex),
-			              "Failed to map texture element");
+			              "Failed to std::map texture element");
 
 			device_context.UpdateSubresource(tex_array.Get(),
 			                                 D3D11CalcSubresource(mipLevel, texElement, desc.MipLevels),

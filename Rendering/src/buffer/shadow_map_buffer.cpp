@@ -15,7 +15,7 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 	raster_desc.MultisampleEnable     = TRUE;
 
 	ThrowIfFailed(device.CreateRasterizerState(&raster_desc, raster_state.GetAddressOf()),
-	              "Failed to create the raster state for a shadow map buffer");
+	              "Failed to create the raster state for a shadow std::map buffer");
 
 
 	// Define the viewport
@@ -24,7 +24,7 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 	viewport.setDepth(0.0f, 1.0f);
 
 
-	// Create the depth map texture
+	// Create the depth std::map texture
 	D3D11_TEXTURE2D_DESC tex_desc = {};
 	tex_desc.Width                = width;
 	tex_desc.Height               = height;
@@ -40,7 +40,7 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 
 	ComPtr<ID3D11Texture2D> depth_map;
 	ThrowIfFailed(device.CreateTexture2D(&tex_desc, nullptr, depth_map.GetAddressOf()),
-	              "Failed to create the depth map texture for a shadow map buffer");
+	              "Failed to create the depth std::map texture for a shadow std::map buffer");
 
 
 	// Create the depth stencil views
@@ -58,7 +58,7 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 		dsv_desc.Texture2DArray.FirstArraySlice = static_cast<u32>(i);
 
 		ThrowIfFailed(device.CreateDepthStencilView(depth_map.Get(), &dsv_desc, dsvs[i].GetAddressOf()),
-		              "Failed to create a depth stencil view for a shadow map buffer");
+		              "Failed to create a depth stencil view for a shadow std::map buffer");
 	}
 
 
@@ -71,7 +71,7 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 	srv_desc.Texture2DArray.ArraySize        = tex_desc.ArraySize;
 
 	ThrowIfFailed(device.CreateShaderResourceView(depth_map.Get(), &srv_desc, srv.GetAddressOf()),
-	              "Failed to create the shader resource view for a shadow map buffer");
+	              "Failed to create the shader resource view for a shadow std::map buffer");
 }
 
 
@@ -90,7 +90,7 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 	raster_desc.MultisampleEnable     = TRUE;
 
 	ThrowIfFailed(device.CreateRasterizerState(&raster_desc, raster_state.GetAddressOf()),
-	              "Failed to create the raster state for a shadow map buffer");
+	              "Failed to create the raster state for a shadow std::map buffer");
 
 
 	// Define the viewport
@@ -99,7 +99,7 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 	viewport.setDepth(0.0f, 1.0f);
 
 
-	// Create the depth map texture
+	// Create the depth std::map texture
 	D3D11_TEXTURE2D_DESC tex_desc = {};
 	tex_desc.Width                = width;
 	tex_desc.Height               = height;
@@ -115,7 +115,7 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 
 	ComPtr<ID3D11Texture2D> depth_map;
 	ThrowIfFailed(device.CreateTexture2D(&tex_desc, nullptr, depth_map.GetAddressOf()),
-	              "Failed to create the depth map texture for a shadow map buffer");
+	              "Failed to create the depth std::map texture for a shadow std::map buffer");
 
 
 	// Create the depth stencil views
@@ -133,7 +133,7 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 		dsv_desc.Texture2DArray.FirstArraySlice = static_cast<u32>(i);
 
 		ThrowIfFailed(device.CreateDepthStencilView(depth_map.Get(), &dsv_desc, dsvs[i].GetAddressOf()),
-		              "Failed to create a depth stencil view for a shadow map buffer");
+		              "Failed to create a depth stencil view for a shadow std::map buffer");
 	}
 
 
@@ -146,5 +146,5 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 	srv_desc.TextureCubeArray.NumCubes        = cube_map_count;
 
 	ThrowIfFailed(device.CreateShaderResourceView(depth_map.Get(), &srv_desc, srv.GetAddressOf()),
-	              "Failed to create the shader resource view for a shadow map buffer");
+	              "Failed to create the shader resource view for a shadow std::map buffer");
 }

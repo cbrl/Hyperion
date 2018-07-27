@@ -20,6 +20,6 @@ namespace TextureLoader {
 	// Load a Texture2DArray from multiple files
 	void LoadTexture(ID3D11Device& device,
 	                 ID3D11DeviceContext& device_context,
-	                 const vector<std::wstring>& filenames,
+	                 const std::vector<std::wstring>& filenames,
 	                 ID3D11ShaderResourceView** srv_out);
 };
