@@ -120,7 +120,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::loadModel(std::wstring filename) {
+void OBJLoader<VertexT>::loadModel(const std::wstring& filename) {
 
 	// Open the file
 	wifstream file(filename);
@@ -193,7 +193,7 @@ void OBJLoader<VertexT>::loadModel(std::wstring filename) {
 			std::wstring name;
 			stream >> name;
 
-			groups.push_back(Group());
+			groups.emplace_back();
 			groups.back().name        = wstr2str(name);
 			groups.back().index_start = static_cast<u32>(indices.size());
 		}
@@ -229,7 +229,7 @@ void OBJLoader<VertexT>::loadModel(std::wstring filename) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::loadMaterials(std::wstring folder) {
+void OBJLoader<VertexT>::loadMaterials(const std::wstring& folder) {
 
 	// Open the material file
 	wifstream file(folder + mat_lib);
@@ -379,7 +379,7 @@ void OBJLoader<VertexT>::loadMaterials(std::wstring folder) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::readTransparency(std::wstring& line, bool inverse) {
+void OBJLoader<VertexT>::readTransparency(const std::wstring& line, bool inverse) {
 	std::wstringstream stream(line);
 
 	f32 transparency;
@@ -398,17 +398,17 @@ void OBJLoader<VertexT>::readTransparency(std::wstring& line, bool inverse) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::readFace(std::wstring& line) {
+void OBJLoader<VertexT>::readFace(const std::wstring& line) {
 
 	std::vector<vec3_u32> face_def;
 
 	// Split the line into separate vertex definitions
 	std::vector<std::wstring> vert_strings = Split(line, L" ");
 
-	for (size_t i = 0; i < vert_strings.size(); ++i) {
+	for (const auto& vert_string : vert_strings) {
 
 		// Split the vertex definition into separate parts
-		std::vector<std::wstring> vert_parts = Split(vert_strings[i], L"/");
+		std::vector<std::wstring> vert_parts = Split(vert_string, L"/");
 
 		vec3_u32 vertex{ 0, 0, 0 };
 
@@ -450,7 +450,7 @@ void OBJLoader<VertexT>::readFace(std::wstring& line) {
 
 
 	// If no group has been defined, then create one manually
-	if (groups.size() == 0) {
+	if (groups.empty()) {
 		groups.emplace_back();
 		groups.back().index_start = static_cast<u32>(indices.size());
 	}
@@ -467,7 +467,7 @@ void OBJLoader<VertexT>::readFace(std::wstring& line) {
 			indices.push_back(it->second);
 		}
 		else {
-			u32 index = static_cast<u32>(vertices.size());
+			const auto index = static_cast<u32>(vertices.size());
 			indices.push_back(index);
 			vertices.push_back(createVertex(vertex));
 			index_map[vertex] = index;

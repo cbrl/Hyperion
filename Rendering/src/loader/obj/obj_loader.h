@@ -79,13 +79,13 @@ private:
 private:
 	static void reset();
 
-	static void loadModel(std::wstring filename);
-	static void readFace(std::wstring& line);
+	static void loadModel(const std::wstring& filename);
+	static void readFace(const std::wstring& line);
 	static VertexT createVertex(vec3_u32 vert_def);
 	static void triangulate(std::vector<vec3_u32>& face_def);
 
-	static void loadMaterials(std::wstring folder);
-	static void readTransparency(std::wstring& line, bool inverse);
+	static void loadMaterials(const std::wstring& folder);
+	static void readTransparency(const std::wstring& line, bool inverse);
 
 
 private:
