@@ -49,7 +49,7 @@ private:
 	struct Chunk {
 		explicit Chunk(size_t pool_size) {
 
-			allocator   = make_unique<PoolAllocator<DataT>>(pool_size);
+			allocator   = std::make_unique<PoolAllocator<DataT>>(pool_size);
 			start_addr  = reinterpret_cast<uintptr>(allocator->getStartAddr());
 			memory_size = pool_size;
 		}
@@ -213,7 +213,7 @@ public:
 		using pool_t = ResourcePool<ResourceT>;
 
 		// pair = std::pair<iterator, bool>
-		const auto pair = pools.try_emplace(ResourceT::type_id, make_unique<pool_t>());
+		const auto pair = pools.try_emplace(ResourceT::type_id, std::make_unique<pool_t>());
 		return static_cast<pool_t*>(pair.first->second.get());
 	}
 

@@ -10,5 +10,5 @@ void ModelBlueprint::constructBlueprint(ID3D11Device& device, const ModelOutput<
 
 
 	// Create the mesh
-	mesh = make_shared<Mesh>(device, out.vertices, out.indices);
+	mesh = std::make_shared<Mesh>(device, out.vertices, out.indices);
 }

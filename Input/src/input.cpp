@@ -52,8 +52,8 @@ LRESULT InputMessageHandler::msgProc(HWND window, u32 msg, WPARAM wParam, LPARAM
 //----------------------------------------------------------------------------------
 
 Input::Input(HWND hWnd) {
-	keyboard = make_unique<Keyboard>();
-	mouse    = make_unique<Mouse>();
+	keyboard = std::make_unique<Keyboard>();
+	mouse    = std::make_unique<Mouse>();
 
 	mouse->SetWindow(hWnd);
 	mouse->SetMode(Mouse::MODE_RELATIVE);

@@ -10,12 +10,12 @@ Renderer::Renderer(ID3D11Device& device,
 	, device_context(device_context) {
 
 	// Create renderers
-	light_pass           = make_unique<LightPass>(device, device_context, render_state_mgr, resource_mgr);
-	forward_pass         = make_unique<ForwardPass>(device, device_context, render_state_mgr, resource_mgr);
-	sky_pass             = make_unique<SkyPass>(device, device_context, render_state_mgr, resource_mgr);
-	bounding_volume_pass = make_unique<BoundingVolumePass>(device, device_context, render_state_mgr, resource_mgr);
-	text_pass            = make_unique<TextPass>(device_context);
-	ui                   = make_unique<UserInterface>();
+	light_pass           = std::make_unique<LightPass>(device, device_context, render_state_mgr, resource_mgr);
+	forward_pass         = std::make_unique<ForwardPass>(device, device_context, render_state_mgr, resource_mgr);
+	sky_pass             = std::make_unique<SkyPass>(device, device_context, render_state_mgr, resource_mgr);
+	bounding_volume_pass = std::make_unique<BoundingVolumePass>(device, device_context, render_state_mgr, resource_mgr);
+	text_pass            = std::make_unique<TextPass>(device_context);
+	ui                   = std::make_unique<UserInterface>();
 }
 
 

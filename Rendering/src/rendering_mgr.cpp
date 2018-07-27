@@ -11,26 +11,26 @@ RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 	//----------------------------------------------------------------------------------
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------
-	direct3D = make_unique<Direct3D>(window, config);
+	direct3D = std::make_unique<Direct3D>(window, config);
 	Logger::log(LogLevel::info, "Initialized Direct3D");
 
 
 	//----------------------------------------------------------------------------------
 	// Create the render state manager and render states
 	//----------------------------------------------------------------------------------
-	render_state_mgr = make_unique<RenderStateMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
+	render_state_mgr = std::make_unique<RenderStateMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
 
 
 	//----------------------------------------------------------------------------------
 	// Create the resource manager
 	//----------------------------------------------------------------------------------
-	resource_mgr = make_unique<ResourceMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
+	resource_mgr = std::make_unique<ResourceMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
 
 
 	//----------------------------------------------------------------------------------
 	// Create the renderer
 	//----------------------------------------------------------------------------------
-	renderer = make_unique<Renderer>(direct3D->getDevice(), direct3D->getDeviceContext(), *render_state_mgr, *resource_mgr);
+	renderer = std::make_unique<Renderer>(direct3D->getDevice(), direct3D->getDeviceContext(), *render_state_mgr, *resource_mgr);
 
 
 	//----------------------------------------------------------------------------------

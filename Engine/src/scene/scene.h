@@ -96,12 +96,12 @@ protected:
 	//----------------------------------------------------------------------------------
 	Scene()
 		: name("Scene")
-		, ecs(make_unique<ECS>()) {
+		, ecs(std::make_unique<ECS>()) {
 	}
 
 	Scene(std::string name)
 		: name(std::move(name))
-		, ecs(make_unique<ECS>()) {
+		, ecs(std::make_unique<ECS>()) {
 	}
 
 	Scene(Scene&& scene) = default;

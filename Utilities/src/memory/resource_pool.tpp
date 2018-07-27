@@ -2,7 +2,7 @@ template<typename DataT, size_t InitialChunkObjects, size_t MaxChunkObjects>
 ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::ResourcePool() : count(0) {
 
 	// Create the first chunk
-	memory_chunks.push_front(make_unique<Chunk>(chunk_objects * sizeof(DataT)));
+	memory_chunks.push_front(std::make_unique<Chunk>(chunk_objects * sizeof(DataT)));
 }
 
 
@@ -85,7 +85,7 @@ ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>
 	chunk_objects = std::min(MaxChunkObjects, chunk_objects << 1);
 
 	// Create a new chunk with the new allocation size
-	memory_chunks.push_front(make_unique<Chunk>(chunk_objects * sizeof(DataT)));
+	memory_chunks.push_front(std::make_unique<Chunk>(chunk_objects * sizeof(DataT)));
 
 	return memory_chunks.front();
 }

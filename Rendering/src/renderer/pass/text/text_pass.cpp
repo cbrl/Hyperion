@@ -3,7 +3,7 @@
 
 
 TextPass::TextPass(ID3D11DeviceContext& device_context) {
-	sprite_batch = make_unique<SpriteBatch>(&device_context);
+	sprite_batch = std::make_unique<SpriteBatch>(&device_context);
 }
 
 

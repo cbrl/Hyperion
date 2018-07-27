@@ -3,7 +3,7 @@
 
 SystemMgr::SystemMgr() {
 
-	allocator = make_unique<LinearAllocator>(alloc_memory_size);
+	allocator = std::make_unique<LinearAllocator>(alloc_memory_size);
 }
 
 

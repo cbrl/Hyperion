@@ -2,9 +2,9 @@
 
 
 ECS::ECS() {
-	component_mgr = make_unique<ComponentMgr>();
-	entity_mgr = make_unique<EntityMgr>(component_mgr);
-	system_mgr = make_unique<SystemMgr>();
+	component_mgr = std::make_unique<ComponentMgr>();
+	entity_mgr = std::make_unique<EntityMgr>(component_mgr);
+	system_mgr = std::make_unique<SystemMgr>();
 }
 
 

@@ -13,7 +13,7 @@ LightPass::LightPass(ID3D11Device& device,
 	                 ResourceMgr& resource_mgr)
 	: device(device)
 	, device_context(device_context)
-	, depth_pass(make_unique<DepthPass>(device, device_context, render_state_mgr, resource_mgr))
+	, depth_pass(std::make_unique<DepthPass>(device, device_context, render_state_mgr, resource_mgr))
 
 	, light_buffer(device)
 	, directional_lights(device, 16)
@@ -24,9 +24,9 @@ LightPass::LightPass(ID3D11Device& device,
 	, shadowed_point_lights(device, 1)
 	, shadowed_spot_lights(device, 1)
 
-	, directional_light_smaps(make_unique<ShadowMapBuffer>(device, 1))
-	, point_light_smaps(make_unique<ShadowCubeMapBuffer>(device, 1))
-	, spot_light_smaps(make_unique<ShadowMapBuffer>(device, 1)) {
+	, directional_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1))
+	, point_light_smaps(std::make_unique<ShadowCubeMapBuffer>(device, 1))
+	, spot_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1)) {
 }
 
 
@@ -106,7 +106,7 @@ void LightPass::updateShadowMaps() {
 		const size_t available = directional_light_smaps->getMapCount();
 
 		if (size > available) {
-			directional_light_smaps = make_unique<ShadowMapBuffer>(device, static_cast<u32>(size));
+			directional_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size));
 		}
 
 		directional_light_smaps->clear(device_context);
@@ -118,7 +118,7 @@ void LightPass::updateShadowMaps() {
 		const size_t available = point_light_smaps->getMapCount();
 
 		if (size > available) {
-			point_light_smaps = make_unique<ShadowCubeMapBuffer>(device, static_cast<u32>(size));
+			point_light_smaps = std::make_unique<ShadowCubeMapBuffer>(device, static_cast<u32>(size));
 		}
 
 		point_light_smaps->clear(device_context);
@@ -130,7 +130,7 @@ void LightPass::updateShadowMaps() {
 		const size_t available = spot_light_smaps->getMapCount();
 
 		if (size > available) {
-			spot_light_smaps = make_unique<ShadowMapBuffer>(device, static_cast<u32>(size));
+			spot_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size));
 		}
 
 		spot_light_smaps->clear(device_context);

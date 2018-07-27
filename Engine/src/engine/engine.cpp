@@ -71,8 +71,8 @@ bool Engine::init() {
 
 	// Create the main window
 	{
-		auto win_config = make_shared<WindowConfig>(GetModuleHandle(nullptr), L"Engine");
-		window = make_unique<Window>(win_config,
+		auto win_config = std::make_shared<WindowConfig>(GetModuleHandle(nullptr), L"Engine");
+		window = std::make_unique<Window>(win_config,
 									 L"Engine",
 									 vec2_u32{ display_config.getDisplayDesc().Width,
 									           display_config.getDisplayDesc().Height });
@@ -99,19 +99,19 @@ bool Engine::init() {
 
 
 	// System Monitor
-	system_monitor = make_unique<SystemMonitor>();
+	system_monitor = std::make_unique<SystemMonitor>();
 
 	// Input Handler
-	input = make_unique<Input>(window->getWindow());
+	input = std::make_unique<Input>(window->getWindow());
 
 	// Timer
-	timer = make_unique<HighResTimer>();
+	timer = std::make_unique<HighResTimer>();
 
 	// FPS Counter
-	fps_counter = make_unique<FPS>();
+	fps_counter = std::make_unique<FPS>();
 
 	// Rendering Manager
-	rendering_mgr = make_unique<RenderingMgr>(window->getWindow(), display_config);
+	rendering_mgr = std::make_unique<RenderingMgr>(window->getWindow(), display_config);
 
 
 	return true;
