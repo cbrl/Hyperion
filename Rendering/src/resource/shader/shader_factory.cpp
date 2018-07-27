@@ -125,6 +125,9 @@ namespace ShaderFactory {
 
 			case FalseColor::Depth:
 				return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_depth", BYTECODE(shader_depth_color));
+
+			default:
+				return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_static", BYTECODE(shader_static_color));
 		}
 	}
 }
