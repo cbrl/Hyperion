@@ -39,3 +39,17 @@ using Microsoft::WRL::ComPtr;
 #include "exception/exception.h"
 #include "datatypes/scalar_types.h"
 #include "string/string.h"
+
+
+
+
+//----------------------------------------------------------------------------------
+// Functions
+//----------------------------------------------------------------------------------
+
+inline void ThrowIfFailed(HRESULT hr, const char* msg = "") {
+	if (FAILED(hr)) {
+		std::cerr << msg << " (Failure with HRESULT of 0x" << std::hex << hr << std::dec << ")\n";
+		throw Exception(msg);
+	}
+}

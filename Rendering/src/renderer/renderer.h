@@ -4,6 +4,7 @@
 #include "hlsl.h"
 #include "render_state_mgr.h"
 
+#include "scene/scene.h"
 #include "renderer/pass/light/light_pass.h"
 #include "renderer/pass/forward/forward_pass.h"
 #include "renderer/pass/sky/sky_pass.h"
@@ -11,7 +12,9 @@
 #include "renderer/pass/text/text_pass.h"
 #include "ui/user_interface.h"
 
-class Engine;
+
+class RenderingMgr;
+
 
 class Renderer final {
 public:
@@ -46,12 +49,12 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void render(const Engine& engine);
+	void render(const RenderingMgr& rendering_mgr, Scene& scene);
 
 
 private:
 	template<typename CameraT>
-	void renderCamera(const Engine& engine, const CameraT& camera);
+	void renderCamera(const RenderingMgr& rendering_mgr, Scene& scene, const CameraT& camera);
 
 
 private:

@@ -59,11 +59,11 @@ void RenderingMgr::resizeBuffers(u32 window_width, u32 window_height) const {
 }
 
 
-void RenderingMgr::render(const Engine& engine) {
+void RenderingMgr::render(Scene& scene) {
 	
 	beginFrame();
 
-	renderer->render(engine);
+	renderer->render(*this, scene);
 
 	endFrame();
 }

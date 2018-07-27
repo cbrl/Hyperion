@@ -20,7 +20,7 @@ public:
 	}
 
 	// Render the current scene
-	void render(const Engine& engine);
+	void render(Scene& scene);
 
 
 	//----------------------------------------------------------------------------------

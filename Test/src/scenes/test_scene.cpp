@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "test_scene.h"
 #include "engine/engine.h"
 

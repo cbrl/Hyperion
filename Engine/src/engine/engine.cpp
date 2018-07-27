@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "targetver.h"
 #include "engine.h"
 #include "systems/systems.h"
 #include "imgui_message_forwarder.h"
@@ -183,7 +183,7 @@ void Engine::tick() const {
 	scene->tick(*this);
 
 	// Render the scene
-	rendering_mgr->render(*this);
+	rendering_mgr->render(*scene);
 }
 
 

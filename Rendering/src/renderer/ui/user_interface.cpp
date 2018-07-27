@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "user_interface.h"
 
 #include "ecs.h"
@@ -6,12 +5,11 @@
 #include "components/components.h"
 
 #include "imgui.h"
-#include "engine/engine.h"
-#include "scene/scene.h"
-#include "io/io.h"
-#include "log/log.h"
-#include "buffer/buffers.h"
+#include "resource/resource_mgr.h"
 #include "resource/model/blueprint_factory.h"
+#include "scene/scene.h"
+#include "log/log.h"
+#include "os/windows/win_utils.h"
 
 
 void* selected = nullptr;
@@ -1105,12 +1103,9 @@ void DrawMenu(ID3D11Device& device,
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::draw(const Engine& engine) {
+void UserInterface::draw(Scene& scene) const {
 
-	auto& scene = engine.getScene();
-	auto& ecs_engine = engine.getScene().getECS();
-	auto& device = engine.getRenderingMgr().getDevice();
-	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
+	auto& ecs_engine = scene.getECS();
 
 	bool open = true;
 

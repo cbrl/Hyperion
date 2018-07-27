@@ -8,7 +8,6 @@
 #include "fps/fps.h"
 #include "input.h"
 #include "rendering_mgr.h"
-#include "scene/scene.h"
 
 
 //----------------------------------------------------------------------------------

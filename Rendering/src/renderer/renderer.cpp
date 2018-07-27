@@ -1,5 +1,5 @@
 #include "renderer.h"
-#include "engine/engine.h"
+#include "rendering_mgr.h"
 
 
 Renderer::Renderer(ID3D11Device& device,
@@ -15,15 +15,13 @@ Renderer::Renderer(ID3D11Device& device,
 	sky_pass             = std::make_unique<SkyPass>(device, device_context, render_state_mgr, resource_mgr);
 	bounding_volume_pass = std::make_unique<BoundingVolumePass>(device, device_context, render_state_mgr, resource_mgr);
 	text_pass            = std::make_unique<TextPass>(device_context);
-	ui                   = std::make_unique<UserInterface>();
+	ui                   = std::make_unique<UserInterface>(device, resource_mgr);
 }
 
 
-void Renderer::render(const Engine& engine) {
+void Renderer::render(const RenderingMgr& rendering_mgr, Scene& scene) {
 
-	auto& ecs_engine = engine.getScene().getECS();
-	auto& scene      = engine.getScene();
-
+	auto& ecs_engine = scene.getECS();
 
 	ecs_engine.forEach<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
 
@@ -34,7 +32,7 @@ void Renderer::render(const Engine& engine) {
 		camera.bindViewport(device_context);
 
 		// Render the scene
-		renderCamera(engine, camera);
+		renderCamera(rendering_mgr, scene, camera);
 	});
 
 	ecs_engine.forEach<OrthographicCamera>([&](const OrthographicCamera& camera) {
@@ -46,7 +44,7 @@ void Renderer::render(const Engine& engine) {
 		camera.bindViewport(device_context);
 
 		// Render the scene
-		renderCamera(engine, camera);
+		renderCamera(rendering_mgr, scene, camera);
 	});
 
 
@@ -61,6 +59,6 @@ void Renderer::render(const Engine& engine) {
 	// Render the ImGui UI
 	//----------------------------------------------------------------------------------
 
-	ui->draw(engine);
+	ui->draw(scene);
 }
 

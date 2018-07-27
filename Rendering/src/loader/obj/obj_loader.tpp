@@ -1,13 +1,14 @@
 #include <algorithm>
-#include "loader/obj/obj_tokens.h"
-#include "io/io.h"
 #include "directx/directx_math.h"
+#include "loader/obj/obj_tokens.h"
+#include "log/log.h"
+#include "io/io.h"
 
 
 template<typename VertexT>
 void OBJLoader<VertexT>::reset() {
 	// Reset the local variables
-	rh_coord    = false;
+	rh_coord = false;
 
 	// Clear vectors
 	vertices.clear();

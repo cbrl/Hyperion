@@ -1,11 +1,8 @@
 template<typename CameraT>
-void Renderer::renderCamera(const Engine& engine, const CameraT& camera) {
+void Renderer::renderCamera(const RenderingMgr& rendering_mgr, Scene& scene, const CameraT& camera) {
 
-	// Get the ECS and rendering manager
-	auto& scene               = engine.getScene();
+	// Get the ECS
 	auto& ecs_engine          = scene.getECS();
-	const auto& rendering_mgr = engine.getRenderingMgr();
-
 
 	// Camera variables
 	const auto& settings  = camera.getSettings();
