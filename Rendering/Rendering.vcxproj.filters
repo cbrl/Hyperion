@@ -111,6 +111,18 @@
     <Filter Include="Source Files\resource\shader">
       <UniqueIdentifier>{5f6d5e08-406c-4a6b-b31b-dc572fe67ee3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\scene">
+      <UniqueIdentifier>{dcd629f9-be31-495d-ba19-d2505100b270}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene">
+      <UniqueIdentifier>{d0ea8214-70af-4ff4-9ad1-2828bd1070d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\text">
+      <UniqueIdentifier>{4b75801e-290c-4787-99f8-290bdaee5bcd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\text">
+      <UniqueIdentifier>{6d08b3e0-811f-4af8-98a1-0743676ceb32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -169,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="src\resource\shader\shader_factory.cpp">
       <Filter>Source Files\resource\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\text\text.cpp">
+      <Filter>Source Files\scene\text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,6 +300,12 @@
     </ClInclude>
     <ClInclude Include="src\resource\shader\shader_factory.h">
       <Filter>Header Files\resource\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\scene.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\text\text.h">
+      <Filter>Header Files\scene\text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
