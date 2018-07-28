@@ -9,30 +9,20 @@ handle64 ECS::createEntity(ArgsT&&... args) {
 
 
 template<typename ComponentT, typename... ArgsT>
-ComponentT* ECS::addComponent(handle64 entity, ArgsT&&... args) {
+ComponentT* ECS::addComponent(handle64 handle, ArgsT&&... args) {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>,
 		"Calling ECS::AddComponent() with non-component type.");
 
-	return entity_mgr->getEntity(entity)->addComponent<ComponentT>(std::forward<ArgsT>(args)...);
+	return entity_mgr->getEntity(handle)->addComponent<ComponentT>(std::forward<ArgsT>(args)...);
 }
 
 
 template<typename ComponentT>
-void ECS::removeComponent(handle64 entity) const {
+void ECS::removeComponent(handle64 handle) {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>,
 		"Calling ECS::RemoveComponent() with non-component type.");
 
-	entity_mgr->getEntity(entity)->removeComponent<ComponentT>();
-}
-
-
-template<typename ComponentT>
-[[nodiscard]]
-ComponentT* ECS::getComponent(handle64 entity) const {
-	static_assert(std::is_base_of_v<IComponent, ComponentT>,
-		"Calling ECS::GetComponent() with non-component type.");
-
-	return entity_mgr->getEntity(entity)->getComponent<ComponentT>();
+	entity_mgr->getEntity(handle)->removeComponent<ComponentT>();
 }
 
 

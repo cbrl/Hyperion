@@ -16,7 +16,7 @@ void MouseRotationSystem::update(const Engine& engine) {
 
 		if (!rotation.isActive()) return;
 
-		auto* transform = ecs_engine.getComponent<Transform>(rotation.getOwner());
+		auto* transform = ecs_engine.getEntity(rotation.getOwner())->getComponent<Transform>();
 		if (!transform) return;
 		if (!transform->isActive()) return;
 

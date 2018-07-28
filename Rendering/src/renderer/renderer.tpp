@@ -6,7 +6,7 @@ void Renderer::renderCamera(const RenderingMgr& rendering_mgr, Scene& scene, con
 
 	// Camera variables
 	const auto& settings  = camera.getSettings();
-	const auto* transform = ecs_engine.getComponent<Transform>(camera.getOwner());
+	const auto* transform = ecs_engine.getEntity(camera.getOwner())->getComponent<Transform>();
 	assert(transform != nullptr);
 
 	const auto world_to_camera      = transform->getWorldToObjectMatrix();

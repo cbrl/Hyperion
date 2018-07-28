@@ -9,7 +9,7 @@ void CameraSystem::update(const Engine& engine) {
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	const auto process_cam = [&](auto& camera) {
-		const auto* transform = ecs_engine.getComponent<Transform>(camera.getOwner());
+		const auto* transform = ecs_engine.getEntity(camera.getOwner())->getComponent<Transform>();
 		if (!transform) return;
 
 		// Update the camera's buffer

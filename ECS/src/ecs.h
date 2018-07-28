@@ -35,26 +35,30 @@ public:
 	// Member Functions - Entities
 	//----------------------------------------------------------------------------------
 
+	// Create a new entity
 	template<typename EntityT, typename... ArgsT>
 	[[nodiscard]]
 	handle64 createEntity(ArgsT&&... args);
 
-	void destroyEntity(handle64 entity) const;
+	// Destroy an entity
+	void destroyEntity(handle64 handle);
+
+	// Get an existing entity
+	IEntity* getEntity(handle64 handle);
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Components
 	//----------------------------------------------------------------------------------
 
+	// Add a component to an entity
 	template<typename ComponentT, typename... ArgsT>
-	ComponentT* addComponent(handle64 entity, ArgsT&&... args);
+	ComponentT* addComponent(handle64 handle, ArgsT&&... args);
 
+	// Remove a component from an entity
 	template<typename ComponentT>
-	void removeComponent(handle64 entity) const;
+	void removeComponent(handle64 handle);
 
-	template<typename ComponentT>
-	[[nodiscard]]
-	ComponentT* getComponent(handle64 entity) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -65,7 +69,7 @@ public:
 	SystemT* addSystem(ArgsT&&... args);
 
 	// Update the systems
-	void update(const Engine& engine) const;
+	void update(const Engine& engine);
 
 
 	//----------------------------------------------------------------------------------

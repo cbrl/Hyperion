@@ -36,7 +36,7 @@ void TransformSystem::updateWorld(ECS& ecs_engine, Transform& transform) {
 	// If the parent was updated, or if this transform already needs
 	// an update, then get the parent's matrix.
 	else {
-		auto* parent = ecs_engine.getComponent<Transform>(transform.getParent());
+		auto* parent = ecs_engine.getEntity(transform.getParent())->getComponent<Transform>();
 
 		if (parent) {
 			updateWorld(ecs_engine, *parent);

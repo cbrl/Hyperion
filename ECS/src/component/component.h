@@ -64,6 +64,12 @@ public:
 	}
 
 
+private:
+	void setOwner(handle64 handle) {
+		owner = handle;
+	}
+
+
 protected:
 	// Is the component active?
 	bool active;

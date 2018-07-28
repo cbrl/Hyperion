@@ -142,7 +142,7 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection) c
 
 void XM_CALLCONV ForwardPass::renderModel(ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
 
-	const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
+	const auto* transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world = transform->getObjectToWorldMatrix();

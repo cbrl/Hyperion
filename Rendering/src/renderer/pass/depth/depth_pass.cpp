@@ -58,7 +58,7 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 
 		if (!model.isActive()) return;
 
-		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
+		const auto transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto model_to_world = transform->getObjectToWorldMatrix();
@@ -95,7 +95,7 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 
 		if (!model.isActive()) return;
 
-		const auto transform = ecs_engine.getComponent<Transform>(model.getOwner());
+		const auto transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto model_to_world = transform->getObjectToWorldMatrix();

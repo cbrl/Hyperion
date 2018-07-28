@@ -51,22 +51,42 @@ public:
 	[[nodiscard]]
 	handle64 getHandle() const;
 
-	// Get or set the state of this entity
+	// Set the entity's state
 	void setActive(bool state);
+
+	// Get the entity's state
 	bool isActive() const;
 
 	// Add a component to this entity
 	template<typename ComponentT, typename... ArgsT>
 	ComponentT* addComponent(ArgsT&&... args);
 
-	// Get a component that's been added to this entity
+	// Remove a specific component from this entity
+	template<typename ComponentT>
+	void removeComponent(ComponentT* component);
+
+	// Remove all components of the specified type from this entity
+	template<typename ComponentT>
+	void removeAll();
+
+	// Check if this entity contains the specified component
 	template<typename ComponentT>
 	[[nodiscard]]
-	ComponentT* getComponent() const;
+	bool hasComponent() const;
 
-	// Remove a component from this entity
+	// Get the number of components of the specified type
 	template<typename ComponentT>
-	void removeComponent();
+	[[nodiscard]]
+	size_t countOf() const;
+
+	// Get the first component of the specified type
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT* getComponent();
+
+	// Get all components of the specified type
+	template<typename ComponentT>
+	std::vector<ComponentT*> getAll();
 
 
 private:
@@ -86,9 +106,11 @@ protected:
 	// this pointer should never be invalid in this context.
 	ComponentMgr* component_mgr;
 
-	// Map of pointers to components. Holds 1 of each unique type.
-	std::unordered_map<std::type_index, IComponent*> components;
+	// Map of pointers to components
+	std::unordered_multimap<std::type_index, IComponent*> components;
 };
+
+
 
 
 //----------------------------------------------------------------------------------
@@ -104,9 +126,33 @@ class Entity : public IEntity {
 	friend class EntityMgr;
 
 public:
-	Entity() = delete;
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 
+	Entity() = delete;
 	Entity(const Entity& entity) = delete;
+	Entity(Entity&& entity) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
+	virtual ~Entity() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	Entity& operator=(const Entity& entity) = delete;
+	Entity& operator=(Entity&& entity) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	std::type_index getTypeId() const override {
 		return type_id;
@@ -114,16 +160,20 @@ public:
 
 
 protected:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	Entity(handle64 this_handle, ComponentMgr* component_mgr)
 		: IEntity(this_handle, component_mgr) {
 	}
 
-	Entity(Entity&& entity) = default;
-
-	virtual ~Entity() = default;
-
 
 public:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// And ID unique to type T
 	static const std::type_index type_id;
 };

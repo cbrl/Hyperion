@@ -154,7 +154,7 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine, FXMMATRI
 
 		if (!light.isActive()) return;
 
-		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
+		const auto transform = ecs_engine.getEntity(light.getOwner())->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto light_to_world      = transform->getObjectToWorldMatrix();
@@ -210,7 +210,7 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 
 		if (!light.isActive()) return;
 
-		const auto transform           = ecs_engine.getComponent<Transform>(light.getOwner());
+		const auto transform = ecs_engine.getEntity(light.getOwner())->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto light_to_world      = transform->getObjectToWorldMatrix();
@@ -299,7 +299,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 
 		if (!light.isActive()) return;
 
-		const auto transform = ecs_engine.getComponent<Transform>(light.getOwner());
+		const auto transform = ecs_engine.getEntity(light.getOwner())->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto light_to_world      = transform->getObjectToWorldMatrix();

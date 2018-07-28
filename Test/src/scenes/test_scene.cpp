@@ -42,10 +42,11 @@ void TestScene::load(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera
-	const handle64 camera = addEntity<PlayerCamera>(device, engine.getWindowSize());
+	const handle64 camera_handle = addEntity<PlayerCamera>(device, engine.getWindowSize());
+	auto* camera = ecs->getEntity(camera_handle);
 
 	// Set the parameters
-	auto cam = ecs->getComponent<PerspectiveCamera>(camera);
+	auto cam = camera->getComponent<PerspectiveCamera>();
 
 	cam->getViewport().setDepth(0.0f, 1.0f);
 	cam->setZDepth(0.01f, 1000.0f);
@@ -58,8 +59,8 @@ void TestScene::load(const Engine& engine) {
 	fog.start = 150.0f;
 	fog.range = 100.0f;
 
-	ecs->getComponent<Transform>(camera)->setPosition(vec3_f32{0.0f, 6.0f, -2.0f});
-	ecs->getComponent<MouseRotation>(camera)->setSensitivity(0.01f);
+	camera->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 6.0f, -2.0f});
+	camera->getComponent<MouseRotation>()->setSensitivity(0.01f);
 
 
 	//----------------------------------------------------------------------------------
@@ -72,15 +73,16 @@ void TestScene::load(const Engine& engine) {
 
 	// Sphere
 	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
-	const handle64 sphere = addEntity<BasicModel>(device, sphere_bp);
+	const handle64 sphere_handle = addEntity<BasicModel>(device, sphere_bp);
+	auto* sphere = ecs->getEntity(sphere_handle);
 
-	ecs->getComponent<Transform>(sphere)->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });
+	sphere->getComponent<Transform>()->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });
 
-	auto rotation = ecs->addComponent<AxisRotation>(sphere);
+	auto rotation = sphere->addComponent<AxisRotation>();
 	rotation->setAxis(AxisRotation::Axis::Y);
 	rotation->setSpeedY(1.5f);
 
-	auto orbit = ecs->addComponent<AxisOrbit>(sphere);
+	auto orbit = sphere->addComponent<AxisOrbit>();
 	orbit->setSpeed(0.5f);
 
 
@@ -90,7 +92,7 @@ void TestScene::load(const Engine& engine) {
 	
 	// Sphere light
 	{
-		auto light = ecs->addComponent<SpotLight>(sphere);
+		auto light = sphere->addComponent<SpotLight>();
 		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(vec4_f32(1.0f, 0.9f, 0.5f, 1.0f));
 		light->setAttenuation(vec3_f32(0.1f, 0.15f, 0.0f));
@@ -103,8 +105,8 @@ void TestScene::load(const Engine& engine) {
 
 	// Camera light
 	{
-		const auto spot_light = addEntity<BasicSpotLight>(); 
-		auto light = ecs->getComponent<SpotLight>(spot_light);
+		const auto light_handle = addEntity<BasicSpotLight>();
+		auto* light = ecs->getEntity(light_handle)->getComponent<SpotLight>();
 		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(vec4_f32(0.8f, 0.8f, 1.0f, 1.0f));
 		light->setAttenuation(vec3_f32(0.05f, 0.2f, 0.0f));
@@ -114,9 +116,9 @@ void TestScene::load(const Engine& engine) {
 		light->setPenumbraAngle(XM_PI / 3.0f);
 		light->setShadows(true);
 
-		auto transform = ecs->getComponent<Transform>(spot_light);
+		auto transform = ecs->getEntity(light_handle)->getComponent<Transform>();
 		transform->setPosition(vec3_f32(-1.0f, 0.0f, 0.0f));
-		transform->setParent(camera);
+		transform->setParent(camera_handle);
 	}
 
 	// Directional Light

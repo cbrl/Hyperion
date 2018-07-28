@@ -11,7 +11,7 @@ void AxisOrbitSystem::update(const Engine& engine) {
 	
 		if (!orbit.isActive()) return;
 
-		auto* transform = ecs_engine.getComponent<Transform>(orbit.getOwner());
+		auto* transform = ecs_engine.getEntity(orbit.getOwner())->getComponent<Transform>();
 		if (!transform) return;
 
 		transform->rotateAround(orbit.getAxis(), delta_time * orbit.getSpeed());

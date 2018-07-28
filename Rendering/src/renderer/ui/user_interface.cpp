@@ -510,95 +510,127 @@ void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
 
 	auto& entities = scene.getEntities();
 
-	for (const auto entity : entities) {
+	for (const auto handle : entities) {
 
-		std::string name = "Entity (index: " + std::to_string(entity.index) + ", counter: " + std::to_string(entity.counter) + ")";
+		auto* entity = ecs_engine.getEntity(handle);
+
+		std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
 
 		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
 		                                 | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                                 | ((selected_entity == entity) ? ImGuiTreeNodeFlags_Selected : 0);
+		                                 | ((selected_entity == handle) ? ImGuiTreeNodeFlags_Selected : 0);
 
 		const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
 
 		if (ImGui::IsItemClicked())
-			selected_entity = entity;
+			selected_entity = handle;
 
 		if (!node_open) continue;
 
 		// Transform
-		if (auto* transform = ecs_engine.getComponent<Transform>(entity)) {
+		if (auto* transform = ecs_engine.getEntity(handle)->getComponent<Transform>()) {
 			DrawNode("Transform", *transform);
 		}
 
 		// Perspective Camera
-		if (auto* cam = ecs_engine.getComponent<PerspectiveCamera>(entity)) {
-			DrawNode("Perspective Camera", *cam);
+		if (entity->hasComponent<PerspectiveCamera>()) {
+			auto cams = entity->getAll<PerspectiveCamera>();
+			for (auto* cam : cams) {
+				DrawNode("Perspective Camera", *cam);
+			}
 		}
 
 		// Orthographic Camera
-		if (auto* cam = ecs_engine.getComponent<OrthographicCamera>(entity)) {
-			DrawNode("Orthographic Camera", *cam);
+		if (entity->hasComponent<OrthographicCamera>()) {
+			auto cams = entity->getAll<OrthographicCamera>();
+			for (auto* cam : cams) {
+				DrawNode("Orthographic Camera", *cam);
+			}
 		}
 
 		// Model
-		if (auto* model = ecs_engine.getComponent<Model>(entity)) {
-			const bool node_selected = (selected == model);
+		if (entity->hasComponent<Model>()) {
+			auto models = entity->getAll<Model>();
 
-			const ImGuiTreeNodeFlags model_flags = ImGuiTreeNodeFlags_OpenOnArrow
-			                                       | ImGuiTreeNodeFlags_OpenOnDoubleClick
-			                                       | (node_selected ? ImGuiTreeNodeFlags_Selected : 0);
+			for (auto* model : models) {
+				const bool node_selected = (selected == model);
 
-			const bool open = ImGui::TreeNodeEx("Model", model_flags);
+				const ImGuiTreeNodeFlags model_flags = ImGuiTreeNodeFlags_OpenOnArrow
+				                                       | ImGuiTreeNodeFlags_OpenOnDoubleClick
+				                                       | (node_selected ? ImGuiTreeNodeFlags_Selected : 0);
 
-			if (ImGui::IsItemClicked())
-				selected = model;
+				const bool open = ImGui::TreeNodeEx("Model", model_flags);
 
-			if (open) {
-				model->forEachChild([&](ModelChild& child) {
-					DrawNode(child.getName().c_str(), child);
-				});
+				if (ImGui::IsItemClicked())
+					selected = model;
 
-				ImGui::TreePop();
-			}
+				if (open) {
+					model->forEachChild([&](ModelChild& child) {
+						DrawNode(child.getName().c_str(), child);
+					});
 
-			if (node_selected) {
-				DrawDetailsPanel(*model);
+					ImGui::TreePop();
+				}
+
+				if (node_selected)
+					DrawDetailsPanel(*model);
 			}
 		}
 
 		// Directional Light
-		if (auto* light = ecs_engine.getComponent<DirectionalLight>(entity)) {
-			DrawNode("Directional Light", *light);
+		if (entity->hasComponent<DirectionalLight>()) {
+			auto lights = entity->getAll<DirectionalLight>();
+			for (auto* light : lights) {
+				DrawNode("Directional Light", *light);
+			}
 		}
 
 		// Point Light
-		if (auto* light = ecs_engine.getComponent<PointLight>(entity)) {
-			DrawNode("Point Light", *light);
+		if (entity->hasComponent<PointLight>()) {
+			auto lights = entity->getAll<PointLight>();
+			for (auto* light : lights) {
+				DrawNode("Point Light", *light);
+			}
 		}
 
 		// Spot Light
-		if (auto* light = ecs_engine.getComponent<SpotLight>(entity)) {
-			DrawNode("Spot Light", *light);
+		if (entity->hasComponent<SpotLight>()) {
+			auto lights = entity->getAll<SpotLight>();
+			for (auto* light : lights) {
+				DrawNode("Spot Light", *light);
+			}
 		}
 
 		// Camera Movement
-		if (auto* cam_movement = ecs_engine.getComponent<CameraMovement>(entity)) {
-			DrawNode("Camera Movement", *cam_movement);
+		if (entity->hasComponent<CameraMovement>()) {
+			auto components = entity->getAll<CameraMovement>();
+			for (auto* comp : components) {
+				DrawNode("Camera Movement", *comp);
+			}
 		}
 
 		// Mouse Rotation
-		if (auto* mouse_rotation = ecs_engine.getComponent<MouseRotation>(entity)) {
-			DrawNode("Mouse Rotation", *mouse_rotation);
+		if (entity->hasComponent<MouseRotation>()) {
+			auto components = entity->getAll<MouseRotation>();
+			for (auto* comp : components) {
+				DrawNode("Mouse Rotation", *comp);
+			}
 		}
 
 		// Axis Rotation
-		if (auto* axis_rotation = ecs_engine.getComponent<AxisRotation>(entity)) {
-			DrawNode("Axis Rotation", *axis_rotation);
+		if (entity->hasComponent<AxisRotation>()) {
+			auto components = entity->getAll<AxisRotation>();
+			for (auto* comp : components) {
+				DrawNode("Axis Rotation", *comp);
+			}
 		}
 
 		// Axis Orbit
-		if (auto* axis_orbit = ecs_engine.getComponent<AxisOrbit>(entity)) {
-			DrawNode("Axis Orbit", *axis_orbit);
+		if (entity->hasComponent<AxisOrbit>()) {
+			auto components = entity->getAll<AxisOrbit>();
+			for (auto* comp : components) {
+				DrawNode("Axis Orbit", *comp);
+			}
 		}
 
 		ImGui::TreePop();
