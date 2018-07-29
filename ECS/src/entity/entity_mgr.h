@@ -82,11 +82,7 @@ public:
 
 	// Apply an action to each entity
 	template<typename EntityT, typename ActionT>
-	void forEach(ActionT act) {
-		using pool_t = ResourcePool<EntityT>;
-		auto* pool = static_cast<pool_t*>(entity_pools.getPool<EntityT>());
-		pool->forEach(act);
-	}
+	void forEach(ActionT act);
 
 
 private:

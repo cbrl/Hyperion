@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClCompile Include="src\ecs.cpp" />
     <ClCompile Include="src\entity\entity.cpp" />
+    <ClCompile Include="src\entity\entity_mgr.cpp" />
     <ClCompile Include="src\system\system_mgr.cpp" />
   </ItemGroup>
   <ItemGroup>

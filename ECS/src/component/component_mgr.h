@@ -45,14 +45,10 @@ public:
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
 	ComponentT* createComponent(ArgsT&&... args) {
-
 		static_assert(std::is_base_of_v<IComponent, ComponentT>,
 			"Calling ComponentMgr::CreateComponent() with non-component type.");
 
-		// Get the pool for this component type
 		auto pool = component_pools.getOrCreatePool<ComponentT>();
-
-		// Allocate memory
 		ComponentT* component = pool->constructObject(std::forward<ArgsT>(args)...);
 
 		return component;
