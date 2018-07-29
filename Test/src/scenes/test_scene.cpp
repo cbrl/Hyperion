@@ -94,7 +94,7 @@ void TestScene::load(const Engine& engine) {
 	{
 		auto light = sphere->addComponent<SpotLight>();
 		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
-		light->setDiffuseColor(vec4_f32(1.0f, 0.9f, 0.5f, 1.0f));
+		light->setDiffuseColor(vec4_f32(0.0f, 0.9f, 0.6f, 1.0f));
 		light->setAttenuation(vec3_f32(0.1f, 0.15f, 0.0f));
 		light->setSpecular(vec4_f32(1.0f, 1.0f, 1.0f, 1.0f));
 		light->setRange(100.0f);
@@ -108,12 +108,12 @@ void TestScene::load(const Engine& engine) {
 		const auto light_handle = addEntity<BasicSpotLight>();
 		auto* light = ecs->getEntity(light_handle)->getComponent<SpotLight>();
 		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
-		light->setDiffuseColor(vec4_f32(0.8f, 0.8f, 1.0f, 1.0f));
+		light->setDiffuseColor(vec4_f32(0.85f, 0.85f, 0.9f, 1.0f));
 		light->setAttenuation(vec3_f32(0.05f, 0.2f, 0.0f));
 		light->setSpecular(vec4_f32(1.0f, 1.0f, 1.0f, 1.0f));
 		light->setRange(100.0f);
 		light->setUmbraAngle(XM_PI / 6.0f);
-		light->setPenumbraAngle(XM_PI / 3.0f);
+		light->setPenumbraAngle(XM_PI / 4.0f);
 		light->setShadows(true);
 
 		auto transform = ecs->getEntity(light_handle)->getComponent<Transform>();

@@ -34,7 +34,7 @@ public:
 
 	constexpr explicit Handle(T value) noexcept
 		: index(value & index_bitmask)
-		, counter((value & (counter_bitmask << CounterBits)) >> CounterBits) {
+		, counter((value & counter_bitmask) >> CounterBits) {
 	}
 
 	constexpr explicit Handle(T index, T counter) noexcept
@@ -60,12 +60,17 @@ public:
 	T index : IndexBits;
 	T counter : CounterBits;
 
+
+	//----------------------------------------------------------------------------------
+	// Static Member Variables
+	//----------------------------------------------------------------------------------
+
 	// Type
 	using value_type = T;
 
 	// Max values
-	static constexpr T index_max = (1Ui64 << IndexBits) - 2Ui64;
-	static constexpr T counter_max = (1Ui64 << CounterBits) - 2Ui64;
+	static constexpr T index_max = (T(1) << IndexBits) - T(2);
+	static constexpr T counter_max = (T(1) << CounterBits) - T(2);
 
 	// Invalid value
 	static constexpr T invalid_handle = std::numeric_limits<T>::max();
@@ -76,8 +81,8 @@ public:
 
 
 private:
-	static constexpr T index_bitmask = (1Ui64 << IndexBits) - 1Ui64;
-	static constexpr T counter_bitmask = (1Ui64 << CounterBits) - 1Ui64;
+	static constexpr T index_bitmask = (T(1) << IndexBits) - T(1);
+	static constexpr T counter_bitmask = ((T(1) << CounterBits) - T(1)) << CounterBits;
 };
 
 #pragma warning (pop)
