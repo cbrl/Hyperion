@@ -66,5 +66,8 @@
     <None Include="src\ecs.tpp">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="src\entity\entity_mgr.tpp">
+      <Filter>Source Files\entity</Filter>
+    </None>
   </ItemGroup>
 </Project>

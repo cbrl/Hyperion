@@ -17,6 +17,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
+
 	ComponentMgr() = default;
 	ComponentMgr(const ComponentMgr& manager) = delete;
 	ComponentMgr(ComponentMgr&& manager) = default;
@@ -25,12 +26,14 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
+
 	~ComponentMgr() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
+
 	ComponentMgr& operator=(const ComponentMgr& manager) = delete;
 	ComponentMgr& operator=(ComponentMgr&& manager) = default;
 
@@ -38,6 +41,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
 	ComponentT* createComponent(ArgsT&&... args) {
@@ -56,13 +60,12 @@ public:
 
 
 	void destroyComponent(IComponent* component) {
-
 		auto pool = component_pools.getPool(component->getTypeId());
-
 		pool->destroyObject(component);
 	}
 
 
+	// Get the number of the specified component
 	template<typename ComponentT>
 	size_t countOf() {
 		return component_pools.poolExists<ComponentT>() ? component_pools.getPool<ComponentT>()->GetCount() : 0;

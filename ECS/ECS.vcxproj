@@ -156,6 +156,7 @@
   <ItemGroup>
     <None Include="src\ecs.tpp" />
     <None Include="src\entity\entity.tpp" />
+    <None Include="src\entity\entity_mgr.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

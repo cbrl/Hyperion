@@ -14,9 +14,11 @@ void* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::allocateObject(
 	// Find a chunk with free space and create the object
 	for (auto& chunk : memory_chunks) {
 
-		// Check if the number of objects allocated is less than the max
-		if (chunk->objects.size() >= (chunk->memory_size / sizeof(DataT))) continue;
+		// Skip this chunk if it is full
+		if (chunk->objects.size() >= (chunk->memory_size / sizeof(DataT)))
+			continue;
 
+		// Create the object
 		object = chunk->allocator->allocate();
 
 		if (object) {
@@ -25,7 +27,7 @@ void* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::allocateObject(
 		}
 	}
 
-	// Create a new chunk if the others are full
+	// Create a new chunk if all others are full
 	if (!object) {
 		auto& chunk = createChunk();
 		object = chunk->allocator->allocate();
@@ -44,8 +46,7 @@ template<typename DataT, size_t InitialChunkObjects, size_t MaxChunkObjects>
 template<typename... ArgsT>
 DataT* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::constructObject(ArgsT&&... args) {
 
-	void* memory = allocateObject();
-
+	void*  memory = allocateObject();
 	DataT* object = new(memory) DataT(std::forward<ArgsT>(args)...);
 
 	return object;

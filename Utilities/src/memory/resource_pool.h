@@ -47,22 +47,22 @@ template<typename DataT, size_t InitialChunkObjects = 16, size_t MaxChunkObjects
 class ResourcePool : public IResourcePool {
 private:
 	struct Chunk {
+	public:
 		explicit Chunk(size_t pool_size) {
-
 			allocator   = std::make_unique<PoolAllocator<DataT>>(pool_size);
 			start_addr  = reinterpret_cast<uintptr>(allocator->getStartAddr());
 			memory_size = pool_size;
 		}
 
 		~Chunk() {
-			// Destroy the objects (allocator will free the
-			// memory when the unique_ptr is deleted)
+			// Destroy the objects (allocator will free the memory upon deletion)
 			for (auto* object : objects) {
 				object->~DataT();
 			}
 			objects.clear();
 		}
 
+	public:
 		unique_ptr<PoolAllocator<DataT>> allocator;
 		std::list<DataT*> objects;
 
@@ -97,7 +97,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Allocation
+	// Member Functions - Allocation
 	//----------------------------------------------------------------------------------
 
 	// Allocate memory for an object
@@ -112,7 +112,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Deallocation
+	// Member Functions -  Deallocation
 	//----------------------------------------------------------------------------------
 
 	// Destroy and deallocate an object
@@ -126,7 +126,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Miscellaneous
+	// Member Functions - Miscellaneous
 	//----------------------------------------------------------------------------------
 
 	// Get the number of objects contained in this pool
@@ -150,6 +150,10 @@ private:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	std::list<unique_ptr<Chunk>> memory_chunks;
 	size_t chunk_objects = InitialChunkObjects;
 	size_t count;
@@ -225,7 +229,6 @@ public:
 		const auto& it = pools.find(ResourceT::type_id);
 
 		assert(it != pools.end() && "Invalid resource pool type requested");
-
 		return static_cast<ResourcePool<ResourceT>*>(it->second.get());
 	}
 
@@ -236,7 +239,6 @@ public:
 		const auto& it = pools.find(type);
 
 		assert(it != pools.end() && "Invalid resource pool type requested");
-
 		return it->second.get();
 	}
 

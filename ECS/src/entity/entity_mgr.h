@@ -48,71 +48,25 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename EntityT, typename... ArgsT>
-	handle64 createEntity(ArgsT&&... args) {
-
-		static_assert(std::is_base_of_v<IEntity, EntityT>,
-			"Calling EntityMgr::CreateEntity() with non-entity type.");
-
-		// Get the proper entity pool
-		auto pool = entity_pools.getOrCreatePool<EntityT>();
-
-		// Allocate memory for the entity
-		void* memory = pool->allocateObject();
-
-		// Create a handle
-		handle64 handle = handle_table.createHandle(static_cast<IEntity*>(memory));
-
-		// Create the entity
-		EntityT* entity = new(memory) EntityT(handle, component_mgr.get(), std::forward<ArgsT>(args)...);
-
-		return handle;
-	}
+	handle64 createEntity(ArgsT&&... args);
 
 
 	// Add an entity to the list of expired entities. Will be
 	// destroyed at the end of the next ECS update.
-	void destroyEntity(handle64 handle) {
-
-		if (expired_entities.size() > num_expired_entities) {
-			expired_entities[num_expired_entities] = handle;
-			++num_expired_entities;
-		}
-		else {
-			expired_entities.push_back(handle);
-			++num_expired_entities;
-		}
-	}
+	void destroyEntity(handle64 handle);
 
 
-	// Remove all the entities marked for deletion. Should be
-	// called once per tick.
-	void removeExpiredEntities() {
-		for (const handle64 handle : expired_entities) {
-
-			// Get the entity
-			IEntity* entity = handle_table[handle];
-
-			// Get the entity std::type_index
-			const auto type = handle_table[handle]->getTypeId();
-
-			// Get the appropriate pool with the std::type_index
-			auto pool = entity_pools.getPool(type);
-
-			// Destroy the entity
-			handle_table.releaseHandle(handle);
-			pool->destroyObject(entity);
-		}
-
-		expired_entities.clear();
-		num_expired_entities = 0;
-	}
+	// Remove all the entities marked for deletion. Should be called once per tick.
+	void removeExpiredEntities();
 
 
+	// Get an entity from the handle
 	IEntity* getEntity(handle64 handle) {
 		return handle_table[handle];
 	}
 
 
+	// Get the number of the specified entity type
 	template<typename EntityT>
 	size_t countOf() {
 		return entity_pools.poolExists<EntityT>() ? entity_pools.getPool<EntityT>()->Count() : 0;
@@ -149,3 +103,6 @@ private:
 	std::vector<handle64> expired_entities;
 	u32 num_expired_entities;
 };
+
+
+#include "entity_mgr.tpp"
