@@ -41,7 +41,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Normal Mapping
 	//----------------------------------------------------------------------------------
 
-	float3 normal_vec = GetNormal(pin.position, pin.normal, pin.tex);
+	float3 normal_vec = GetNormal(pin.position.xyz, pin.normal, pin.tex);
 
 
 	//----------------------------------------------------------------------------------

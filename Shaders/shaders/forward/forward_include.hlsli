@@ -19,7 +19,7 @@ Texture2D normal_map  : REG_T(SLOT_SRV_NORMAL);
 
 float3 GetNormal(float3 position, float3 normal, float2 tex) {
 
-	float3 sam = normal_map.Sample(linear_wrap, tex);
+	float3 sam = normal_map.Sample(linear_wrap, tex).xyz;
 	
 	return sam.z ? TransformNormal(position, normal, tex, sam) : normalize(normal);
 }

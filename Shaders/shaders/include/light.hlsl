@@ -74,24 +74,6 @@ struct ShadowCubeMap {
 };
 
 
-//----------------------------------------------------------------------------------
-//  Constant Buffers
-//----------------------------------------------------------------------------------
-
-cbuffer LightBuffer : REG_B(SLOT_CBUFFER_LIGHT) {
-	// Lights
-	uint num_directional_lights;
-	uint num_point_lights;
-	uint num_spot_lights;
-	uint lb_pad0;
-
-	// Shadowed Lights
-	uint num_shadow_directional_lights;
-	uint num_shadow_point_lights;
-	uint num_shadow_spot_lights;
-	uint lb_pad1;
-};
-
 
 //----------------------------------------------------------------------------------
 //  Structured Buffers
