@@ -35,7 +35,6 @@ private:
 
 
 private:
-	std::reference_wrapper<ID3D11Device> device;
 	std::reference_wrapper<ID3D11DeviceContext> device_context;
 	std::reference_wrapper<RenderStateMgr> render_state_mgr;
 

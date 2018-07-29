@@ -5,12 +5,10 @@
 #include "resource/shader/shader_factory.h"
 
 
-SkyPass::SkyPass(ID3D11Device& device,
-                 ID3D11DeviceContext& device_context,
+SkyPass::SkyPass(ID3D11DeviceContext& device_context,
                  RenderStateMgr& render_state_mgr,
                  ResourceMgr& resource_mgr)
-	: device(device)
-	, device_context(device_context)
+	: device_context(device_context)
 	, render_state_mgr(render_state_mgr) {
 
 	vertex_shader = ShaderFactory::createSkyVS(resource_mgr);

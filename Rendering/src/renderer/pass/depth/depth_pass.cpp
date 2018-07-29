@@ -12,8 +12,7 @@ DepthPass::DepthPass(ID3D11Device& device,
                      ID3D11DeviceContext& device_context,
                      RenderStateMgr& render_state_mgr,
                      ResourceMgr& resource_mgr)
-	: device(device)
-	, device_context(device_context)
+	: device_context(device_context)
 	, render_state_mgr(render_state_mgr)
 	, alt_cam_buffer(device) {
 

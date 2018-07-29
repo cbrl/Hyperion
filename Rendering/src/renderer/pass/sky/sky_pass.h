@@ -10,8 +10,7 @@ class ResourceMgr;
 
 class SkyPass final {
 public:
-	SkyPass(ID3D11Device& device,
-	        ID3D11DeviceContext& device_context,
+	SkyPass(ID3D11DeviceContext& device_context,
 	        RenderStateMgr& render_state_mgr,
 	        ResourceMgr& resource_mgr);
 	~SkyPass() = default;
@@ -24,7 +23,6 @@ private:
 
 
 private:
-	std::reference_wrapper<ID3D11Device> device;
 	std::reference_wrapper<ID3D11DeviceContext> device_context;
 	std::reference_wrapper<RenderStateMgr> render_state_mgr;
 
