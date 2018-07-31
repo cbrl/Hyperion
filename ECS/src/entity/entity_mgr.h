@@ -86,6 +86,10 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// A pointer to the component manager
 	shared_ptr<ComponentMgr> component_mgr;
 

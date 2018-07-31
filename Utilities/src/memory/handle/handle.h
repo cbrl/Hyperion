@@ -16,10 +16,14 @@ struct Handle {
 	// Assertions
 	//----------------------------------------------------------------------------------
 
-	// Ensure the template parameter is an integral type
 	static_assert(std::is_integral_v<T>, "Handle template parameter is not an integral type");
 
-	// Ensure the Handle can hold the specified number of bits
+	static_assert(CounterBits > 0 && CounterBits < sizeof(T) * 8,
+		"Invalid counter bits specified for Handle");
+
+	static_assert(IndexBits > 0 && IndexBits < sizeof(T) * 8,
+		"Invalid index bits specified for Handle");
+
 	static_assert((CounterBits + IndexBits) <= (sizeof(T) * 8),
 		"Size of handle type is smaller than number of bits specified");
 
@@ -69,19 +73,20 @@ public:
 	using value_type = T;
 
 	// Max values
-	static constexpr T index_max = (T(1) << IndexBits) - T(2);
+	static constexpr T index_max   = (T(1) << IndexBits) - T(2);
 	static constexpr T counter_max = (T(1) << CounterBits) - T(2);
 
 	// Invalid value
 	static constexpr T invalid_handle = std::numeric_limits<T>::max();
 
 	// Number of bits
-	static constexpr size_t n_index_bits = IndexBits;
+	static constexpr size_t n_index_bits   = IndexBits;
 	static constexpr size_t n_counter_bits = CounterBits;
 
 
 private:
-	static constexpr T index_bitmask = (T(1) << IndexBits) - T(1);
+	// Bitmasks
+	static constexpr T index_bitmask   = (T(1) << IndexBits) - T(1);
 	static constexpr T counter_bitmask = ((T(1) << CounterBits) - T(1)) << CounterBits;
 };
 
