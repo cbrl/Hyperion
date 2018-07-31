@@ -177,7 +177,7 @@ public:
 		static void clearRTV(ID3D11DeviceContext& device_context,
 		                     ID3D11RenderTargetView* rtv) {
 
-			f32 color[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+			static const f32 color[4] = {0.0f, 0.0f, 0.0f, 1.0f};
 			clearRTV(device_context, rtv, color);
 		}
 

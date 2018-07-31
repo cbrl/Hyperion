@@ -185,6 +185,9 @@
     <ClCompile Include="src\scene\text\text.cpp">
       <Filter>Source Files\scene\text</Filter>
     </ClCompile>
+    <ClCompile Include="src\direct3d\swapchain.cpp">
+      <Filter>Source Files\direct3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\render_state_mgr.h">
@@ -306,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\text\text.h">
       <Filter>Header Files\scene\text</Filter>
+    </ClInclude>
+    <ClInclude Include="src\direct3d\swapchain.h">
+      <Filter>Header Files\direct3d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

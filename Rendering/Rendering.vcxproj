@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="src\buffer\shadow_map_buffer.cpp" />
     <ClCompile Include="src\direct3d\direct3d.cpp" />
+    <ClCompile Include="src\direct3d\swapchain.cpp" />
     <ClCompile Include="src\geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="src\geometry\frustum\frustum.cpp" />
     <ClCompile Include="src\loader\texture_loader.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="src\buffer\shadow_map_buffer.h" />
     <ClInclude Include="src\buffer\structured_buffer.h" />
     <ClInclude Include="src\direct3d\direct3d.h" />
+    <ClInclude Include="src\direct3d\swapchain.h" />
     <ClInclude Include="src\display\display_config.h" />
     <ClInclude Include="src\display\viewport.h" />
     <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h" />
