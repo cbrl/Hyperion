@@ -42,8 +42,9 @@ private:
 
 
 private:
-	std::reference_wrapper<ID3D11Device> device;
-	std::reference_wrapper<ID3D11DeviceContext> device_context;
+	// Dependency References
+	ID3D11Device&        device;
+	ID3D11DeviceContext& device_context;
 
 	// Depth rendering pass
 	unique_ptr<DepthPass> depth_pass;

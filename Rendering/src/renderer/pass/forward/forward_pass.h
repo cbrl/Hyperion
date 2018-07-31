@@ -31,10 +31,14 @@ private:
 
 
 private:
-	std::reference_wrapper<ID3D11DeviceContext> device_context;
-	std::reference_wrapper<RenderStateMgr>      render_state_mgr;
-	std::reference_wrapper<ResourceMgr>         resource_mgr;
+	// Dependency References
+	ID3D11DeviceContext& device_context;
+	RenderStateMgr& render_state_mgr;
+	ResourceMgr& resource_mgr;
 
-	ConstantBuffer<vec4_f32> color_buffer;
+	// Shaders
 	shared_ptr<VertexShader> vertex_shader;
+
+	// Buffers
+	ConstantBuffer<vec4_f32> color_buffer;
 };

@@ -39,9 +39,9 @@ void SkyPass::bindRenderStates() const {
 	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
 	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
 
-	render_state_mgr.get().bind(device_context, BlendStates::Opaque);
-	render_state_mgr.get().bind(device_context, DepthStencilStates::LessEqR);
-	render_state_mgr.get().bind(device_context, RasterStates::CullCounterClockwise);
+	render_state_mgr.bind(device_context, BlendStates::Opaque);
+	render_state_mgr.bind(device_context, DepthStencilStates::LessEqR);
+	render_state_mgr.bind(device_context, RasterStates::CullCounterClockwise);
 
 	vertex_shader->bind(device_context);
 	pixel_shader->bind(device_context);

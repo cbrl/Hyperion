@@ -38,9 +38,9 @@ void BoundingVolumePass::bindRenderStates() const {
 	model_matrix_buffer.bind<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
 	// Bind the render states
-	render_state_mgr.get().bind(device_context, DepthStencilStates::LessEqRW);
-	render_state_mgr.get().bind(device_context, BlendStates::Opaque);
-	render_state_mgr.get().bind(device_context, RasterStates::CullCounterClockwise);
+	render_state_mgr.bind(device_context, DepthStencilStates::LessEqRW);
+	render_state_mgr.bind(device_context, BlendStates::Opaque);
+	render_state_mgr.bind(device_context, RasterStates::CullCounterClockwise);
 }
 
 

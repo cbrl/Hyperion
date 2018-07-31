@@ -25,11 +25,14 @@ private:
 
 
 private:
-	std::reference_wrapper<ID3D11DeviceContext> device_context;
-	std::reference_wrapper<RenderStateMgr> render_state_mgr;
+	// Dependency References
+	ID3D11DeviceContext& device_context;
+	RenderStateMgr&      render_state_mgr;
 
+	// Shaders
 	shared_ptr<VertexShader> vertex_shader;
 	shared_ptr<PixelShader>  pixel_shader;
 
+	// Buffers
 	ConstantBuffer<XMMATRIX> model_matrix_buffer;
 };
