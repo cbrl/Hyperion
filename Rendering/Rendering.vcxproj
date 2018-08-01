@@ -139,6 +139,7 @@
     <ClCompile Include="src\geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="src\geometry\frustum\frustum.cpp" />
     <ClCompile Include="src\loader\texture_loader.cpp" />
+    <ClCompile Include="src\renderer\output_mgr\output_mgr.cpp" />
     <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.cpp" />
     <ClCompile Include="src\renderer\pass\depth\depth_pass.cpp" />
     <ClCompile Include="src\renderer\pass\forward\forward_pass.cpp" />
@@ -146,9 +147,9 @@
     <ClCompile Include="src\renderer\pass\sky\sky_pass.cpp" />
     <ClCompile Include="src\renderer\pass\text\text_pass.cpp" />
     <ClCompile Include="src\renderer\renderer.cpp" />
+    <ClCompile Include="src\renderer\render_state_mgr\render_state_mgr.cpp" />
     <ClCompile Include="src\renderer\ui\user_interface.cpp" />
     <ClCompile Include="src\rendering_mgr.cpp" />
-    <ClCompile Include="src\render_state_mgr.cpp" />
     <ClCompile Include="src\resource\model\model_blueprint.cpp" />
     <ClCompile Include="src\resource\shader\shader.cpp" />
     <ClCompile Include="src\resource\shader\shader_bytecode.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="src\loader\obj\obj_loader.h" />
     <ClInclude Include="src\loader\obj\obj_tokens.h" />
     <ClInclude Include="src\loader\texture_loader.h" />
+    <ClInclude Include="src\renderer\output_mgr\output_mgr.h" />
     <ClInclude Include="src\renderer\pass\bounding_volume\bounding_volume_pass.h" />
     <ClInclude Include="src\renderer\pass\depth\depth_pass.h" />
     <ClInclude Include="src\renderer\pass\forward\forward_pass.h" />
@@ -179,9 +181,9 @@
     <ClInclude Include="src\renderer\pass\sky\sky_pass.h" />
     <ClInclude Include="src\renderer\pass\text\text_pass.h" />
     <ClInclude Include="src\renderer\renderer.h" />
+    <ClInclude Include="src\renderer\render_state_mgr\render_state_mgr.h" />
     <ClInclude Include="src\renderer\ui\user_interface.h" />
     <ClInclude Include="src\rendering_mgr.h" />
-    <ClInclude Include="src\render_state_mgr.h" />
     <ClInclude Include="src\resource\font\font.h" />
     <ClInclude Include="src\resource\mesh\mesh.h" />
     <ClInclude Include="src\resource\model\blueprint_factory.h" />

@@ -57,7 +57,7 @@ public:
 
 	// Bind the depth stencil view for the cube std::map
 	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
-		Pipeline::OM::bindRTVs(device_context, 1, nullptr, dsvs[index].Get());
+		Pipeline::OM::bindRTVsAndDSV(device_context, 0, nullptr, dsvs[index].Get());
 	}
 
 	// Clear the DSVs
@@ -139,7 +139,7 @@ public:
 
 	// Bind the depth stencil view for the cube std::map
 	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
-		Pipeline::OM::bindRTVs(device_context, 1, nullptr, dsvs[index].Get());
+		Pipeline::OM::bindRTVsAndDSV(device_context, 1, nullptr, dsvs[index].Get());
 	}
 
 	// Clear the DSVs

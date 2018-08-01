@@ -140,7 +140,7 @@ public:
 	Window(std::shared_ptr<WindowConfig> window_config,
 	       const std::wstring& title,
 	       vec2_u32 resolution,
-	       DWORD style = WS_OVERLAPPEDWINDOW);
+	       DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
 
 	Window(const Window& window) = delete;
 	Window(Window&& window) noexcept = default;

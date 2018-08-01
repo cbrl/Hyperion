@@ -1,8 +1,8 @@
 template<typename CameraT>
-void Renderer::renderCamera(const RenderingMgr& rendering_mgr, Scene& scene, const CameraT& camera) {
+void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 
 	// Get the ECS
-	auto& ecs_engine          = scene.getECS();
+	auto& ecs_engine = scene.getECS();
 
 	// Camera variables
 	const auto& settings  = camera.getSettings();
@@ -22,11 +22,10 @@ void Renderer::renderCamera(const RenderingMgr& rendering_mgr, Scene& scene, con
 
 
 	//----------------------------------------------------------------------------------
-	// Bind the camera's viewport and the rebind default render target
-	// (The light pass has to bind a different one)
+	// Bind the camera's viewport and the forward output state
 	//----------------------------------------------------------------------------------
 	camera.bindViewport(device_context);
-	rendering_mgr.bindDefaultRenderTarget();
+	output_mgr->bindBeginForward(device_context);
 
 
 	//----------------------------------------------------------------------------------
@@ -69,4 +68,8 @@ void Renderer::renderCamera(const RenderingMgr& rendering_mgr, Scene& scene, con
 	// Render the skybox
 	//----------------------------------------------------------------------------------
 	sky_pass->render(skybox);
+
+
+	// Clear the bound forward state
+	output_mgr->bindEndForward(device_context);
 }

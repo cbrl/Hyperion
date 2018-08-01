@@ -8,17 +8,22 @@
 
 RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 
+	// Display Configuration
+	display_config = std::make_unique<DisplayConfig>(std::move(config));
+
 	//----------------------------------------------------------------------------------
 	// Initialize Direct3D
 	//----------------------------------------------------------------------------------
-	direct3D = std::make_unique<Direct3D>(window, config);
+	direct3D = std::make_unique<Direct3D>(*display_config);
 	Logger::log(LogLevel::info, "Initialized Direct3D");
 
+	swap_chain = std::make_unique<SwapChain>(window,
+	                                         *display_config,
+	                                         direct3D->getDevice(),
+	                                         direct3D->getDeviceContext());
 
-	//----------------------------------------------------------------------------------
-	// Create the render state manager and render states
-	//----------------------------------------------------------------------------------
-	render_state_mgr = std::make_unique<RenderStateMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
+	swap_chain->setFullscreen(display_config->isFullscreen());
+	Logger::log(LogLevel::info, "Initialized swap chain");
 
 
 	//----------------------------------------------------------------------------------
@@ -30,7 +35,11 @@ RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 	//----------------------------------------------------------------------------------
 	// Create the renderer
 	//----------------------------------------------------------------------------------
-	renderer = std::make_unique<Renderer>(direct3D->getDevice(), direct3D->getDeviceContext(), *render_state_mgr, *resource_mgr);
+	renderer = std::make_unique<Renderer>(*display_config,
+	                                      direct3D->getDevice(),
+	                                      direct3D->getDeviceContext(),
+	                                      *swap_chain,
+	                                      *resource_mgr);
 
 
 	//----------------------------------------------------------------------------------
@@ -54,7 +63,6 @@ RenderingMgr::~RenderingMgr() {
 
 void RenderingMgr::resizeBuffers(u32 window_width, u32 window_height) const {
 	ImGui_ImplDX11_InvalidateDeviceObjects();
-	direct3D->resizeBuffers(window_width, window_height);
 	ImGui_ImplDX11_CreateDeviceObjects();
 }
 
@@ -63,7 +71,7 @@ void RenderingMgr::render(Scene& scene) {
 	
 	beginFrame();
 
-	renderer->render(*this, scene);
+	renderer->render(scene);
 
 	endFrame();
 }
@@ -83,7 +91,7 @@ void RenderingMgr::beginFrame() const {
 	static f32 color[4] = {0.39f, 0.39f, 0.39f, 1.0f};
 	//ImGui::ColorEdit4("Clear Color", (f32*)&color);
 
-	direct3D->clear(color);
+	swap_chain->clear(color);
 }
 
 
@@ -94,5 +102,5 @@ void RenderingMgr::endFrame() const {
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	// Present the final frame
-	direct3D->presentFrame();
+	swap_chain->present();
 }

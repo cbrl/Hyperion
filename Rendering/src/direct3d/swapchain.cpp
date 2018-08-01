@@ -1,5 +1,5 @@
 #include "swapchain.h"
-#include "directx/pipeline.h"
+#include "directx/directxtk.h"
 
 
 SwapChain::SwapChain(HWND window,
@@ -84,6 +84,8 @@ void SwapChain::createSwapChain() {
 	ThrowIfFailed(display_config.getAdapter()->GetParent(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(dxgi_factory.GetAddressOf())),
 	              "Failed to get parent of dxgiFactory");
 
+	dxgi_factory->MakeWindowAssociation(window, DXGI_MWA_NO_WINDOW_CHANGES | DXGI_MWA_NO_ALT_ENTER);
+
 	// Create the swap chain
 	ThrowIfFailed(dxgi_factory->CreateSwapChainForHwnd(&device, window, &desc, &fullscreen_desc, nullptr, swap_chain.ReleaseAndGetAddressOf()),
 	              "Failed to create swapchain");
@@ -100,14 +102,16 @@ void SwapChain::createRenderTargetView() {
 	ThrowIfFailed(swap_chain->GetBuffer(0u,
 	                                    __uuidof(ID3D11Texture2D),
 	                                    (void**)back_buffer.GetAddressOf()),
-				  "Failed to get back buffer texture");
+	              "Failed to get back buffer texture");
 
 
 	// Create the RTV
 	ThrowIfFailed(device.CreateRenderTargetView(back_buffer.Get(),
-										  nullptr,
-										  render_target_view.ReleaseAndGetAddressOf()),
-				  "Failed to create back buffer render target view");
+	                                            nullptr,
+	                                            render_target_view.ReleaseAndGetAddressOf()),
+	              "Failed to create back buffer render target view");
+
+	SetDebugObjectName(render_target_view.Get(), "SwapChain RenderTargetView");
 }
 
 void SwapChain::resetSwapChain() {

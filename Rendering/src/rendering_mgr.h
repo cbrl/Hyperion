@@ -1,31 +1,46 @@
 #pragma once
 
 #include "direct3d/direct3d.h"
-#include "render_state_mgr.h"
+#include "direct3d/swapchain.h"
 #include "resource/resource_mgr.h"
 #include "renderer/renderer.h"
 
 
 class RenderingMgr final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	RenderingMgr(HWND window, DisplayConfig config);
+	RenderingMgr(const RenderingMgr& mgr) = delete;
+	RenderingMgr(RenderingMgr&& mgr) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~RenderingMgr();
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	RenderingMgr& operator=(const RenderingMgr& mgr) = delete;
+	RenderingMgr& operator=(RenderingMgr&& mgr) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// Resize the viewport
 	void resizeBuffers(u32 window_width, u32 window_height) const;
 
-	// Bind the default RTV and DSV
-	void bindDefaultRenderTarget() const {
-		direct3D->bindDefaultRenderTarget();
-	}
-
 	// Render the current scene
 	void render(Scene& scene);
-
-
-	//----------------------------------------------------------------------------------
-	// Getters
-	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
 	ID3D11Device& getDevice() const {
@@ -42,11 +57,6 @@ public:
 		return *resource_mgr;
 	}
 
-	[[nodiscard]]
-	const RenderStateMgr& getRenderStateMgr() const {
-		return *render_state_mgr;
-	}
-
 
 private:
 	// Start a new frame
@@ -57,8 +67,13 @@ private:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
+	unique_ptr<DisplayConfig> display_config;
 	unique_ptr<Direct3D> direct3D;
-	unique_ptr<RenderStateMgr> render_state_mgr;
+	unique_ptr<SwapChain> swap_chain;
 	unique_ptr<ResourceMgr> resource_mgr;
 	unique_ptr<Renderer> renderer;
 };

@@ -2,7 +2,8 @@
 
 #include "directx/d3d11.h"
 #include "hlsl.h"
-#include "render_state_mgr.h"
+#include "renderer/output_mgr/output_mgr.h"
+#include "renderer/render_state_mgr/render_state_mgr.h"
 
 #include "scene/scene.h"
 #include "renderer/pass/light/light_pass.h"
@@ -22,10 +23,12 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Renderer(ID3D11Device& device,
+	Renderer(DisplayConfig& display_config,
+	         ID3D11Device& device,
 	         ID3D11DeviceContext& device_context,
-	         RenderStateMgr& render_state_mgr,
+	         SwapChain& swap_chain,
 	         ResourceMgr& resource_mgr);
+
 	Renderer(const Renderer& renderer) = delete;
 	Renderer(Renderer&& renderer) = default;
 
@@ -49,12 +52,12 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void render(const RenderingMgr& rendering_mgr, Scene& scene);
+	void render(Scene& scene);
 
 
 private:
 	template<typename CameraT>
-	void renderCamera(const RenderingMgr& rendering_mgr, Scene& scene, const CameraT& camera);
+	void renderCamera(Scene& scene, const CameraT& camera);
 
 
 private:
@@ -64,6 +67,9 @@ private:
 
 	std::reference_wrapper<ID3D11Device>        device;
 	std::reference_wrapper<ID3D11DeviceContext> device_context;
+
+	unique_ptr<OutputMgr> output_mgr;
+	unique_ptr<RenderStateMgr> render_state_mgr;
 
 	// Renderers
 	unique_ptr<LightPass>          light_pass;

@@ -2,7 +2,7 @@
 
 #include "hlsl.h"
 #include "scene/scene.h"
-#include "render_state_mgr.h"
+#include "renderer/render_state_mgr/render_state_mgr.h"
 #include "resource/resource_mgr.h"
 #include "geometry/frustum/frustum.h"
 
@@ -54,7 +54,7 @@ void XM_CALLCONV LightPass::render(Scene& scene, FXMMATRIX world_to_projection) 
 
 void LightPass::bindBuffers() {
 	// Bind null RTV and DSV
-	Pipeline::OM::bindRTVs(device_context, 1, nullptr, nullptr);
+	Pipeline::OM::bindRTVsAndDSV(device_context, 0, nullptr, nullptr);
 
 	// Bind light info buffer
 	light_buffer.bind<Pipeline::PS>(device_context, SLOT_CBUFFER_LIGHT);

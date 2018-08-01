@@ -42,7 +42,7 @@ public:
 	// Bind the cbuffer to the specified pipeline stage
 	template<typename StageT>
 	void bind(ID3D11DeviceContext& device_context, u32 slot) const {
-		StageT::bindConstantBuffers(device_context, slot, 1, buffer.GetAddressOf());
+		StageT::bindConstantBuffer(device_context, slot, buffer.Get());
 	}
 
 
