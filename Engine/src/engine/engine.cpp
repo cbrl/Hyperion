@@ -57,7 +57,7 @@ Engine::~Engine() {
 }
 
 
-bool Engine::init() {
+void Engine::init() {
 
 	// Create the console
 	AllocateConsole();
@@ -124,9 +124,6 @@ bool Engine::init() {
 
 	// Rendering Manager
 	rendering_mgr = std::make_unique<RenderingMgr>(window->getWindow(), display_config);
-
-
-	return true;
 }
 
 

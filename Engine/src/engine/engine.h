@@ -87,7 +87,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Initialize the engine
-	bool init();
+	void init();
 
 	// Unload the active scene (if applicable) and apply a new scene
 	void loadScene(unique_ptr<Scene>&& new_scene);
