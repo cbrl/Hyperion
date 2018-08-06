@@ -22,7 +22,6 @@ RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
 	                                         direct3D->getDevice(),
 	                                         direct3D->getDeviceContext());
 
-	swap_chain->setFullscreen(display_config->isFullscreen());
 	Logger::log(LogLevel::info, "Initialized swap chain");
 
 

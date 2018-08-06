@@ -203,7 +203,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	IDXGIAdapter* getAdapter() const noexcept {
+	IDXGIAdapter1* getAdapter() const noexcept {
 		return adapter.Get();
 	}
 

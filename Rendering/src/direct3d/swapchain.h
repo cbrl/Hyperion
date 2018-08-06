@@ -35,23 +35,51 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - Render Target View
 	//----------------------------------------------------------------------------------
 
 	// Clear the render target view
 	void clear() const noexcept;
 	void clear(const f32 color[4]) const noexcept;
 
+	// Get a pointer to the render target view
+	ID3D11RenderTargetView* getRTV() const noexcept {
+		return render_target_view.Get();
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Frame
+	//----------------------------------------------------------------------------------
+
 	// Present the frame
 	void present() const;
 
-	// Set the fullscreen state
-	void setFullscreen(bool state);
 
-	// Get a pointer to the render target view
-	ID3D11RenderTargetView* getRTV() const {
-		return render_target_view.Get();
+	//----------------------------------------------------------------------------------
+	// Member Functions - Fullscreen
+	//----------------------------------------------------------------------------------
+
+	// Switch the fullscreen state. toggle_state determines if the
+	// swap chain's fullscreen state also needs to be changed.
+	void switchMode(bool toggle_state);
+
+	[[nodiscard]]
+	bool isFullscreen() const noexcept {
+		BOOL fullscreen = FALSE;
+		swap_chain->GetFullscreenState(&fullscreen, nullptr);
+		return fullscreen == TRUE;
 	}
+
+	[[nodiscard]]
+	bool lostMode() const noexcept {
+		return display_config.isFullscreen() != this->isFullscreen();
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Reset
+	//----------------------------------------------------------------------------------
 
 	// Recreate the swap chain and render target view
 	void reset();

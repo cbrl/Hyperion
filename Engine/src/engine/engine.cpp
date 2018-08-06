@@ -8,36 +8,12 @@ LRESULT EngineMessageHandler::msgProc(HWND window, UINT msg, WPARAM wParam, LPAR
 
 	switch(msg) {
 
-		// Handle window resize
-		case WM_SIZE: {
-			if (wParam == SIZE_MAXIMIZED) {
-				on_resize();
+		// Handle Alt-Enter keypress
+		case WM_SYSKEYDOWN: {
+			if (wParam == VK_RETURN) {
+				on_fullscreen_toggle();
 			}
-			else if (wParam == SIZE_RESTORED) {
-				// Do nothing if resizing. Constantly calling the resize function would be slow.
-				if (!resizing) {
-					on_resize();
-				}
-			}
-
-			return 0;
 		}
-
-		case WM_ENTERSIZEMOVE:
-			resizing = true;
-			return 0;
-
-		case WM_EXITSIZEMOVE: {
-			resizing = false;
-			on_resize();
-			return 0;
-		}
-
-		// Limit min window size
-		case WM_GETMINMAXINFO:
-			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.x = 480;
-			reinterpret_cast<MINMAXINFO*>(lParam)->ptMinTrackSize.y = 480;
-			return 0;
 
 		default:
 			return 0;
@@ -72,7 +48,7 @@ void Engine::init() {
 	{
 		size_t i = 0;
 		for (const auto& mode : display_config.getDisplayDescList()) {
-			const f32 rr = mode.RefreshRate.Numerator / mode.RefreshRate.Denominator;
+			const f32 rr = static_cast<f32>(mode.RefreshRate.Numerator) / static_cast<f32>(mode.RefreshRate.Denominator);
 			std::cout << i++ << ": " << mode.Width << "x" << mode.Height << " " << rr << "Hz\n";
 		}
 
@@ -90,16 +66,8 @@ void Engine::init() {
 		                                  vec2_u32{ display_config.getDisplayWidth(),
 		                                            display_config.getDisplayHeight() });
 
-		msg_handler.on_resize = [this]() {
-			if (!rendering_mgr) return;
-			const vec2_u32 size = window->getClientSize();
-
-			rendering_mgr->onResize();
-			if (scene) {
-				scene->onResize(size);
-			}
-
-			Logger::log(LogLevel::info, "Viewport resized to {}x{}", size.x, size.y);
+		msg_handler.on_fullscreen_toggle = [this]() {
+			toggle_fullscreen = true;
 		};
 
 		window->addHandler(&msg_handler);
@@ -178,7 +146,16 @@ void Engine::run() {
 }
 
 
-void Engine::tick() const {
+void Engine::tick() {
+
+	auto& swap_chain = rendering_mgr->getSwapChain();
+	const bool lost_mode = swap_chain.lostMode();
+
+	if (lost_mode || toggle_fullscreen) {
+		swap_chain.switchMode(!lost_mode);
+		toggle_fullscreen = false;
+		Logger::log(LogLevel::info, "Fullscreen: {}", swap_chain.isFullscreen());
+	}
 
 	// Update system metrics
 	system_monitor->tick();

@@ -43,17 +43,22 @@ public:
 	void render(Scene& scene);
 
 	[[nodiscard]]
-	ID3D11Device& getDevice() const {
+	ID3D11Device& getDevice() const noexcept {
 		return direct3D->getDevice();
 	}
 
 	[[nodiscard]]
-	ID3D11DeviceContext& getDeviceContext() const {
+	ID3D11DeviceContext& getDeviceContext() const noexcept {
 		return direct3D->getDeviceContext();
 	}
 
 	[[nodiscard]]
-	ResourceMgr& getResourceMgr() const {
+	SwapChain& getSwapChain() const noexcept {
+		return *swap_chain;
+	}
+
+	[[nodiscard]]
+	ResourceMgr& getResourceMgr() const noexcept {
 		return *resource_mgr;
 	}
 

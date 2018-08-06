@@ -36,19 +36,21 @@ void SwapChain::present() const {
 }
 
 
-void SwapChain::setFullscreen(bool state) {
+void SwapChain::switchMode(bool toggle_state) {
 	render_target_view.Reset();
 
-	if (state) {
-		swap_chain->SetFullscreenState(TRUE, nullptr);
-	}
-	else {
-		swap_chain->SetFullscreenState(FALSE, nullptr);
+	BOOL fullscreen = FALSE;
+
+	if (toggle_state) {
+		swap_chain->GetFullscreenState(&fullscreen, nullptr);
+		fullscreen = (fullscreen == TRUE) ? FALSE : TRUE;
+		swap_chain->SetFullscreenState(fullscreen, nullptr);
 	}
 
 	reset();
 
-	display_config.setFullscreen(state);
+	swap_chain->GetFullscreenState(&fullscreen, nullptr);
+	display_config.setFullscreen(fullscreen == TRUE);
 }
 
 

@@ -44,10 +44,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	std::function<void()> on_resize;
-
-private:
-	bool resizing = false;
+	std::function<void()> on_fullscreen_toggle;
 };
 
 
@@ -137,7 +134,7 @@ public:
 
 
 private:
-	void tick() const;
+	void tick();
 	void processInput() const;
 
 
@@ -155,4 +152,6 @@ private:
 	unique_ptr<Input> input;
 	unique_ptr<RenderingMgr> rendering_mgr;
 	unique_ptr<Scene> scene;
+
+	bool toggle_fullscreen;
 };
