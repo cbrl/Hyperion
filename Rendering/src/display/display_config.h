@@ -6,10 +6,10 @@
 
 
 enum class AAType {
-	none,
-	msaa_2x,
-	msaa_4x,
-	msaa_8x,
+	None,
+	MSAA_2x,
+	MSAA_4x,
+	MSAA_8x,
 };
 
 
@@ -21,7 +21,7 @@ public:
 
 	DisplayConfig() noexcept
 		: curr_desc(0)
-		, anti_aliasing(AAType::none)
+		, anti_aliasing(AAType::None)
 		, fullscreen(false)
 		, vsync(false) {
 
@@ -62,18 +62,85 @@ public:
 	// Member Functions - Display Desc
 	//----------------------------------------------------------------------------------
 
-	void setDisplayDesc(u32 index) {
+	void setDisplayDesc(size_t index) noexcept {
 		curr_desc = index;
 	}
 
 	[[nodiscard]]
-	const std::vector<DXGI_MODE_DESC>& getDisplayDescList() const {
+	const std::vector<DXGI_MODE_DESC>& getDisplayDescList() const noexcept {
 		return display_desc_list;
 	}
 
 	[[nodiscard]]
-	DXGI_MODE_DESC getDisplayDesc() const {
+	DXGI_MODE_DESC getDisplayDesc() const noexcept {
 		return display_desc_list[curr_desc];
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Resolution
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	u32 getDisplayWidth() const noexcept {
+		return getDisplayDesc().Width;
+	}
+
+	[[nodiscard]]
+	u32 getDisplayHeight() const noexcept {
+		return getDisplayDesc().Height;
+	}
+
+	[[nodiscard]]
+	vec2_u32 getDisplayResolution() const noexcept {
+		return { getDisplayWidth(), getDisplayHeight() };
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Refresh Rate
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	u32 getRoundedDisplayRefreshRate() const noexcept {
+		const auto numerator   = static_cast<f32>(getDisplayDesc().RefreshRate.Numerator);
+		const auto denominator = static_cast<f32>(getDisplayDesc().RefreshRate.Denominator);
+		return static_cast<u32>(round(numerator / denominator));
+	}
+
+	[[nodiscard]]
+	DXGI_RATIONAL getDisplayRefreshRate() const noexcept {
+		return getDisplayDesc().RefreshRate;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Display Format
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	DXGI_FORMAT getDisplayFormat() const noexcept {
+		return getDisplayDesc().Format;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Scaling
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	DXGI_MODE_SCALING getDisplayScaling() const noexcept {
+		return getDisplayDesc().Scaling;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Scanline Ordering
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	DXGI_MODE_SCANLINE_ORDER getDisplayScanlineOrdering() const noexcept {
+		return getDisplayDesc().ScanlineOrdering;
 	}
 
 
@@ -81,13 +148,25 @@ public:
 	// Member Functions - Anti Aliasing
 	//----------------------------------------------------------------------------------
 
-	void setAAType(AAType value) {
+	void setAAType(AAType value) noexcept {
 		anti_aliasing = value;
 	}
 
 	[[nodiscard]]
-	AAType getAAType() const {
+	AAType getAAType() const noexcept {
 		return anti_aliasing;
+	}
+
+	[[nodiscard]]
+	bool hasAA() const noexcept {
+		switch (anti_aliasing) {
+			case AAType::MSAA_2x:
+			case AAType::MSAA_4x:
+			case AAType::MSAA_8x:
+				return true;
+			default:
+				return false;
+		}
 	}
 
 
@@ -95,12 +174,12 @@ public:
 	// Member Functions - Fullscreen
 	//----------------------------------------------------------------------------------
 
-	void setFullscreen(bool state) {
+	void setFullscreen(bool state) noexcept {
 		fullscreen = state;
 	}
 
 	[[nodiscard]]
-	bool isFullscreen() const {
+	bool isFullscreen() const noexcept {
 		return fullscreen;
 	}
 
@@ -109,12 +188,12 @@ public:
 	// Member Functions - VSync
 	//----------------------------------------------------------------------------------
 
-	void setVsync(bool state) {
+	void setVsync(bool state) noexcept {
 		vsync = state;
 	}
 
 	[[nodiscard]]
-	bool isVsync() const {
+	bool isVsync() const noexcept {
 		return vsync;
 	}
 
@@ -124,12 +203,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	IDXGIAdapter* getAdapter() const {
+	IDXGIAdapter* getAdapter() const noexcept {
 		return adapter.Get();
 	}
 
 	[[nodiscard]]
-	IDXGIOutput* getOutput() const {
+	IDXGIOutput* getOutput() const noexcept {
 		return adapter_out.Get();
 	}
 
@@ -137,15 +216,17 @@ public:
 
 private:
 	void init() {
-		ComPtr<IDXGIFactory> factory;
+		ComPtr<IDXGIFactory2> factory;
 
 		// Create the DXGI factory
-		ThrowIfFailed(CreateDXGIFactory(__uuidof(IDXGIFactory), static_cast<void**>(&factory)),
+		ThrowIfFailed(CreateDXGIFactory1(__uuidof(IDXGIFactory1), static_cast<void**>(&factory)),
 			"Failed to create dxgiFactory");
 
 		// Get the default adapter and output
-		factory->EnumAdapters(0, &adapter);
-		adapter->EnumOutputs(0, &adapter_out);
+		ComPtr<IDXGIOutput> output;
+		factory->EnumAdapters1(0, adapter.ReleaseAndGetAddressOf());
+		adapter->EnumOutputs(0, output.GetAddressOf());
+		output.As(&adapter_out);
 
 		// Get the number of display modes
 		u32 mode_count;
@@ -159,9 +240,12 @@ private:
 			display_modes.data());
 
 
-		// Store the display modes that are above 800px wide
+		// Discard the display modes that are below 800px wide or
+		// have a scaling mode of DXGI_MODE_SCALING_STRETCHED
 		for (u32 i = 0; i < mode_count; i++) {
 			if (display_modes[i].Width <= 800)
+				continue;
+			if (display_modes[i].Scaling == DXGI_MODE_SCALING_STRETCHED)
 				continue;
 
 			display_desc_list.push_back(display_modes[i]);
@@ -189,10 +273,10 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	ComPtr<IDXGIAdapter> adapter;
-	ComPtr<IDXGIOutput> adapter_out;
+	ComPtr<IDXGIAdapter1> adapter;
+	ComPtr<IDXGIOutput1> adapter_out;
 	std::vector<DXGI_MODE_DESC> display_desc_list;
-	u32 curr_desc;
+	size_t curr_desc;
 	AAType anti_aliasing;
 	bool   fullscreen;
 	bool   vsync;

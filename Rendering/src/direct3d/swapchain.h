@@ -53,11 +53,13 @@ public:
 		return render_target_view.Get();
 	}
 
+	// Recreate the swap chain and render target view
+	void reset();
+
 
 private:
 	void createSwapChain();
 	void createRenderTargetView();
-	void resetSwapChain();
 
 
 private:

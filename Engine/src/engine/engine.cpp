@@ -50,11 +50,10 @@ Engine::~Engine() {
 
 	Logger::logFile(LogLevel::info, "<==========================END==========================>\n");
 
-	// Explicity delete the scene and entity component system before
-	// the rendering manager. This prevents D3D from reporting live
-	// resources that are going to be deleted right after the report.
+	// Explicity delete the scene before the rendering manager.
+	// This prevents D3D from potentially reporting live resources
+	// that are going to be deleted right after the report.
 	scene.reset();
-	//ecs_engine.reset();
 }
 
 
@@ -67,22 +66,35 @@ bool Engine::init() {
 
 
 	// Create the display configuration
-	DisplayConfig display_config(AAType::none, false, false);
+	DisplayConfig display_config(AAType::None, false, false);
+
+	// Get the display resolution
+	{
+		size_t i = 0;
+		for (const auto& mode : display_config.getDisplayDescList()) {
+			const f32 rr = mode.RefreshRate.Numerator / mode.RefreshRate.Denominator;
+			std::cout << i++ << ": " << mode.Width << "x" << mode.Height << " " << rr << "Hz\n";
+		}
+
+		std::cout << "Select desired resolution:\n";
+		size_t select = 0;
+		std::cin >> select;
+		display_config.setDisplayDesc(select);
+	}
 
 	// Create the main window
 	{
 		auto win_config = std::make_shared<WindowConfig>(GetModuleHandle(nullptr), L"Engine");
 		window = std::make_unique<Window>(win_config,
-									 L"Engine",
-									 vec2_u32{ display_config.getDisplayDesc().Width,
-									           display_config.getDisplayDesc().Height });
+		                                  L"Engine",
+		                                  vec2_u32{ display_config.getDisplayWidth(),
+		                                            display_config.getDisplayHeight() });
 
 		msg_handler.on_resize = [this]() {
 			if (!rendering_mgr) return;
-
 			const vec2_u32 size = window->getClientSize();
-			rendering_mgr->resizeBuffers(size.x, size.y);
 
+			rendering_mgr->onResize();
 			if (scene) {
 				scene->onResize(size);
 			}

@@ -17,8 +17,8 @@ void OutputMgr::createDepthBuffer() {
 
 	// Texture desc
 	D3D11_TEXTURE2D_DESC texture_desc = {};
-	texture_desc.Width            = display_config.getDisplayDesc().Width;
-	texture_desc.Height           = display_config.getDisplayDesc().Height;
+	texture_desc.Width            = display_config.getDisplayWidth();
+	texture_desc.Height           = display_config.getDisplayHeight();
 	texture_desc.MipLevels        = 1;
 	texture_desc.ArraySize        = 1;
 	texture_desc.Format           = DXGI_FORMAT_R32_TYPELESS;

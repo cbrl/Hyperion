@@ -7,6 +7,10 @@
 
 class OutputMgr final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	OutputMgr(DisplayConfig& config,
 	          ID3D11Device& device,
 	          SwapChain& swap_chain);
@@ -14,10 +18,29 @@ public:
 	OutputMgr(const OutputMgr& mgr) = delete;
 	OutputMgr(OutputMgr&& mgr) noexcept = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~OutputMgr() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
 
 	OutputMgr& operator=(const OutputMgr& mgr) = delete;
 	OutputMgr& operator=(OutputMgr&& mgr) = delete;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+
+	void resizeBuffers() {
+		createDepthBuffer();
+	}
 
 	void bindBegin(ID3D11DeviceContext& device_context) const noexcept;
 	void bindEnd(ID3D11DeviceContext& device_context) const noexcept;
@@ -31,6 +54,10 @@ private:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// Dependency References
 	DisplayConfig& display_config;
 	ID3D11Device& device;

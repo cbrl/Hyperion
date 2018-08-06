@@ -61,9 +61,12 @@ RenderingMgr::~RenderingMgr() {
 }
 
 
-void RenderingMgr::resizeBuffers(u32 window_width, u32 window_height) const {
+void RenderingMgr::onResize() const {
 	ImGui_ImplDX11_InvalidateDeviceObjects();
 	ImGui_ImplDX11_CreateDeviceObjects();
+
+	swap_chain->reset();
+	renderer->onResize();
 }
 
 

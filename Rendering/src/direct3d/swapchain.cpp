@@ -46,7 +46,7 @@ void SwapChain::setFullscreen(bool state) {
 		swap_chain->SetFullscreenState(FALSE, nullptr);
 	}
 
-	resetSwapChain();
+	reset();
 
 	display_config.setFullscreen(state);
 }
@@ -56,9 +56,9 @@ void SwapChain::createSwapChain() {
 
 	// Swap chain desc
 	DXGI_SWAP_CHAIN_DESC1 desc = {};
-	desc.Width            = display_config.getDisplayDesc().Width;
-	desc.Height           = display_config.getDisplayDesc().Height;
-	desc.Format           = display_config.getDisplayDesc().Format;
+	desc.Width            = display_config.getDisplayWidth();
+	desc.Height           = display_config.getDisplayHeight();
+	desc.Format           = display_config.getDisplayFormat();
 	desc.SampleDesc.Count = 1;
 	desc.BufferUsage      = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	desc.BufferCount      = 2;
@@ -73,9 +73,9 @@ void SwapChain::createSwapChain() {
 
 	// Swap chain fullscreen desc
 	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fullscreen_desc = {};
-	fullscreen_desc.ScanlineOrdering = display_config.getDisplayDesc().ScanlineOrdering;
-	fullscreen_desc.Scaling          = display_config.getDisplayDesc().Scaling;
-	fullscreen_desc.RefreshRate      = display_config.getDisplayDesc().RefreshRate;
+	fullscreen_desc.ScanlineOrdering = display_config.getDisplayScanlineOrdering();
+	fullscreen_desc.Scaling          = display_config.getDisplayScaling();
+	fullscreen_desc.RefreshRate      = display_config.getDisplayRefreshRate();
 	fullscreen_desc.Windowed         = TRUE;
 
 
@@ -114,7 +114,8 @@ void SwapChain::createRenderTargetView() {
 	SetDebugObjectName(render_target_view.Get(), "SwapChain RenderTargetView");
 }
 
-void SwapChain::resetSwapChain() {
+
+void SwapChain::reset() {
 
 	// Swap chain flags
 	UINT flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;

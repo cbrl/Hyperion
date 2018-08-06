@@ -36,8 +36,8 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// Resize the viewport
-	void resizeBuffers(u32 window_width, u32 window_height) const;
+	// Resize the buffers
+	void onResize() const;
 
 	// Render the current scene
 	void render(Scene& scene);

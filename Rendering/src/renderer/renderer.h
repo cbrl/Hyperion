@@ -52,6 +52,10 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
+	void onResize() {
+		output_mgr->resizeBuffers();
+	}
+
 	void render(Scene& scene);
 
 
