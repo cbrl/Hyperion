@@ -142,19 +142,20 @@ void XM_CALLCONV DepthPass::renderModel(ECS& ecs_engine,
 
 	model.forEachChild([&](const ModelChild& child) {
 
+		const auto& mat = child.getMaterial();
+
 		if (shadows) {
 			if (!child.castsShadows()) return;
 		}
 
 		if (render_transparent) {
-			if (!child.getMaterial().transparent
-			    || child.getMaterial().diffuse.w < ALPHA_MIN
-			    || child.getMaterial().diffuse.w > ALPHA_MAX)
+			if (!mat.transparent
+			    || mat.diffuse.w < ALPHA_MIN
+			    || mat.diffuse.w > ALPHA_MAX)
 				return;
 		}
 		else {
-			if (child.getMaterial().transparent
-				&& child.getMaterial().diffuse.w <= ALPHA_MAX)
+			if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
 				return;
 		}
 
@@ -167,6 +168,11 @@ void XM_CALLCONV DepthPass::renderModel(ECS& ecs_engine,
 		child.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
 		child.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
+		if (mat.map_diffuse)
+			mat.map_diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
+
 		Pipeline::drawIndexed(device_context, child.getIndexCount(), child.getIndexStart());
+
+		Pipeline::PS::bindSRV(device_context, SLOT_SRV_DIFFUSE, nullptr);
 	});
 }
