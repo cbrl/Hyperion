@@ -1,7 +1,7 @@
 #ifndef HLSL_TRANSFORM
 #define HLSL_TRANSFORM
 
-#include "include/input_structs.hlsl"
+#include "include/input_structs.hlsli"
 
 
 // Transform a point from object space to projection space

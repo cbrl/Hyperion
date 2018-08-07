@@ -1,8 +1,8 @@
 #ifndef HLSL_LIGHT
 #define HLSL_LIGHT
 
-#include "include/global.hlsl"
-#include "include/material.hlsl"
+#include "include/global.hlsli"
+#include "include/material.hlsli"
 
 
 //----------------------------------------------------------------------------------

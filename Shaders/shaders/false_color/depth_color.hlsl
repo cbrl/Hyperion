@@ -1,7 +1,7 @@
 #ifndef HLSL_FALSE_COLOR_DEPTH
 #define HLSL_FALSE_COLOR_DEPTH
 
-#include "include/input_structs.hlsl"
+#include "include/input_structs.hlsli"
 
 
 float4 PS(PSPositionNormalTexture input) : SV_Target {

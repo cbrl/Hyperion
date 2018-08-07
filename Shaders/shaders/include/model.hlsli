@@ -2,8 +2,8 @@
 #define HLSL_MODEL
 
 #include "hlsl.h"
-#include "include/syntax.hlsl"
-#include "include/material.hlsl"
+#include "include/syntax.hlsli"
+#include "include/material.hlsli"
 
 cbuffer Model : REG_B(SLOT_CBUFFER_MODEL) {
 

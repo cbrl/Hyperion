@@ -1,4 +1,4 @@
 #define ENABLE_LIGHTING
 #define ENABLE_SHADOW_MAPPING
 
-#include "forward/forward.hlsli"
+#include "forward/forward_ps.hlsli"

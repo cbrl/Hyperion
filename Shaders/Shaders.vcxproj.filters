@@ -38,9 +38,6 @@
     <FxCompile Include="shaders\depth\depth_vs.hlsl">
       <Filter>Shader Files\depth</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\skybox\skybox.hlsl">
-      <Filter>Shader Files\sky</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\skybox\skybox_vs.hlsl">
       <Filter>Shader Files\sky</Filter>
     </FxCompile>
@@ -71,6 +68,9 @@
     <FxCompile Include="shaders\forward\forward_lit.hlsl">
       <Filter>Shader Files\forward</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\skybox\skybox_ps.hlsl">
+      <Filter>Shader Files\sky</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\hlsl.h">
@@ -78,38 +78,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\depth\depth_include.hlsl">
-      <Filter>Shader Files\depth</Filter>
-    </None>
-    <None Include="shaders\include\global.hlsl">
-      <Filter>Shader Files\include</Filter>
-    </None>
-    <None Include="shaders\include\input_structs.hlsl">
-      <Filter>Shader Files\include</Filter>
-    </None>
-    <None Include="shaders\include\light.hlsl">
-      <Filter>Shader Files\include</Filter>
-    </None>
-    <None Include="shaders\include\normal.hlsl">
-      <Filter>Shader Files\include</Filter>
-    </None>
-    <None Include="shaders\include\syntax.hlsl">
-      <Filter>Shader Files\include</Filter>
-    </None>
-    <None Include="shaders\include\transform.hlsl">
-      <Filter>Shader Files\include</Filter>
-    </None>
-    <None Include="shaders\shapes\wireframe_cube.hlsl">
-      <Filter>Shader Files\shapes</Filter>
-    </None>
     <None Include="shaders\shapes\geosphere.hlsli">
       <Filter>Shader Files\shapes</Filter>
-    </None>
-    <None Include="shaders\include\material.hlsl">
-      <Filter>Shader Files\include</Filter>
-    </None>
-    <None Include="shaders\include\model.hlsl">
-      <Filter>Shader Files\include</Filter>
     </None>
     <None Include="shaders\include\lighting.hlsli">
       <Filter>Shader Files\include</Filter>
@@ -117,7 +87,37 @@
     <None Include="shaders\forward\forward_include.hlsli">
       <Filter>Shader Files\forward</Filter>
     </None>
-    <None Include="shaders\forward\forward.hlsli">
+    <None Include="shaders\depth\depth_include.hlsli">
+      <Filter>Shader Files\depth</Filter>
+    </None>
+    <None Include="shaders\include\global.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\input_structs.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\light.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\material.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\model.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\normal.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\syntax.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\include\transform.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
+    <None Include="shaders\shapes\wireframe_cube.hlsli">
+      <Filter>Shader Files\shapes</Filter>
+    </None>
+    <None Include="shaders\forward\forward_ps.hlsli">
       <Filter>Shader Files\forward</Filter>
     </None>
   </ItemGroup>

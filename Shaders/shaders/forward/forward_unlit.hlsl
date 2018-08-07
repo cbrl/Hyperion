@@ -1,3 +1,3 @@
 #undef ENABLE_LIGHTING
 
-#include "forward/forward.hlsli"
+#include "forward/forward_ps.hlsli"

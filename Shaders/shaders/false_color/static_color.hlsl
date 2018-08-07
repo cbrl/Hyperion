@@ -1,8 +1,8 @@
 #ifndef HLSL_FALSE_COLOR_STATIC
 #define HLSL_FALSE_COLOR_STATIC
 
-#include "include/input_structs.hlsl"
-#include "include/syntax.hlsl"
+#include "include/input_structs.hlsli"
+#include "include/syntax.hlsli"
 #include "hlsl.h"
 
 cbuffer Color : REG_B(SLOT_CBUFFER_COLOR) {

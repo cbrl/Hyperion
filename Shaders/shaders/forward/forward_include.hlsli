@@ -1,6 +1,6 @@
-#include "include/global.hlsl"
-#include "include/model.hlsl"
-#include "include/normal.hlsl"
+#include "include/global.hlsli"
+#include "include/model.hlsli"
+#include "include/normal.hlsli"
 
 
 //----------------------------------------------------------------------------------

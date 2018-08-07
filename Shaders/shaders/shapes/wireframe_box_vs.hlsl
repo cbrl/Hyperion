@@ -1,6 +1,6 @@
-#include "include/global.hlsl"
-#include "include/transform.hlsl"
-#include "shapes/wireframe_cube.hlsl"
+#include "include/global.hlsli"
+#include "include/transform.hlsli"
+#include "shapes/wireframe_cube.hlsli"
 
 
 cbuffer Model : REG_B(SLOT_CBUFFER_MODEL) {

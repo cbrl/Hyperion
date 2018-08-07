@@ -2,8 +2,8 @@
 #define HLSL_GLOBAL
 
 #include "hlsl.h"
-#include "include/syntax.hlsl"
-#include "include/input_structs.hlsl"
+#include "include/syntax.hlsli"
+#include "include/input_structs.hlsli"
 
 
 //----------------------------------------------------------------------------------

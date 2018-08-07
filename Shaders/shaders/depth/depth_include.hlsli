@@ -1,4 +1,4 @@
-#include "include/model.hlsl"
+#include "include/model.hlsli"
 
 
 cbuffer AltCamera : REG_B(SLOT_CBUFFER_CAMERA_ALT) {

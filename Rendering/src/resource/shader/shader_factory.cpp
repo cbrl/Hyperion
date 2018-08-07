@@ -9,11 +9,11 @@
 #include "compiled_headers/forward_vs.h"
 
 // Depth
-//#include "compiled_headers/depth.h"
+//#include "compiled_headers/depth_ps.h"
 #include "compiled_headers/depth_vs.h"
 
 // Sky
-#include "compiled_headers/skybox.h"
+#include "compiled_headers/skybox_ps.h"
 #include "compiled_headers/skybox_vs.h"
 
 // Bounding Volume
@@ -76,7 +76,7 @@ namespace ShaderFactory {
 
 	shared_ptr<PixelShader> createSkyPS(ResourceMgr& resource_mgr) {
 
-		return resource_mgr.getOrCreate<PixelShader>(L"shader_skybox_ps", BYTECODE(shader_skybox));
+		return resource_mgr.getOrCreate<PixelShader>(L"shader_skybox_ps", BYTECODE(shader_skybox_ps));
 	}
 
 	shared_ptr<VertexShader> createSkyVS(ResourceMgr& resource_mgr) {

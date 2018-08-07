@@ -1,4 +1,4 @@
-#include "include/global.hlsl"
+#include "include/global.hlsli"
 #include "shapes/geosphere.hlsli"
 
 

@@ -1,7 +1,7 @@
 #ifndef HLSL_FALSE_COLOR_NORMAL
 #define HLSL_FALSE_COLOR_NORMAL
 
-#include "include/input_structs.hlsl"
+#include "include/input_structs.hlsli"
 #include "forward/forward_include.hlsli"
 
 

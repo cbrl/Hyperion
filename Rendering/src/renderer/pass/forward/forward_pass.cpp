@@ -20,7 +20,7 @@ ForwardPass::ForwardPass(ID3D11Device& device,
 }
 
 
-void ForwardPass::bindDefaultState() const {
+void ForwardPass::bindOpaqueState() const {
 	
 	// Bind topology
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -35,6 +35,26 @@ void ForwardPass::bindDefaultState() const {
 
 	// Bind render states
 	render_state_mgr.bind(device_context, BlendStates::Opaque);
+	render_state_mgr.bind(device_context, DepthStencilStates::LessEqRW);
+	render_state_mgr.bind(device_context, RasterStates::CullCounterClockwise);
+}
+
+
+void ForwardPass::bindTransparentState() const {
+
+	// Bind topology
+	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// Bind null shaders
+	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
+
+	// Bind shaders
+	vertex_shader->bind(device_context);
+
+	// Bind render states
+	render_state_mgr.bind(device_context, BlendStates::AlphaBlend);
 	render_state_mgr.bind(device_context, DepthStencilStates::LessEqRW);
 	render_state_mgr.bind(device_context, RasterStates::CullCounterClockwise);
 }
@@ -62,15 +82,37 @@ void ForwardPass::bindWireframeState() const {
 }
 
 
-void XM_CALLCONV ForwardPass::render(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const {
+void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const {
 
 	auto& ecs_engine = scene.getECS();
+
+	// Bind the shaders, render states, etc
+	bindOpaqueState();
 
 	// Bind the skybox texture as the environment std::map
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
+	// Create the apporopriate pixel shader and bind it
+	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr);
+	pixel_shader->bind(device_context);
+
+	// Render models
+	ecs_engine.forEach<Model>([&](Model& model) {
+		if (model.isActive())
+			renderModel(ecs_engine, model, world_to_projection);
+	});
+}
+
+
+void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const {
+
+	auto& ecs_engine = scene.getECS();
+
 	// Bind the shaders, render states, etc
-	bindDefaultState();
+	bindTransparentState();
+
+	// Bind the skybox texture as the environment std::map
+	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
 	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr);
@@ -88,11 +130,11 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene, FXMMATRIX world_to_proje
 
 	auto& ecs_engine = scene.getECS();
 
+	// Bind the shaders, render states, etc
+	bindOpaqueState();
+
 	// Bind the skybox texture as the environment std::map
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
-
-	// Bind the shaders, render states, etc
-	bindDefaultState();
 
 	// Create the apporopriate pixel shader and bind it
 	const auto pixel_shader = ShaderFactory::createForwardUnlitPS(resource_mgr);
@@ -110,7 +152,7 @@ void ForwardPass::renderFalseColor(Scene& scene, FXMMATRIX world_to_projection, 
 
 	auto& ecs_engine = scene.getECS();
 
-	bindDefaultState();
+	bindOpaqueState();
 
 	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);

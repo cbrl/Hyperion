@@ -140,7 +140,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="shaders\depth\depth_include.hlsl">
+    <None Include="shaders\depth\depth_include.hlsli">
       <FileType>Document</FileType>
     </None>
     <FxCompile Include="shaders\depth\depth_vs.hlsl">
@@ -173,7 +173,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <None Include="shaders\forward\forward.hlsli">
+    <None Include="shaders\forward\forward_ps.hlsli">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PS</EntryPointName>
@@ -201,29 +201,29 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
-    <None Include="shaders\include\global.hlsl">
+    <None Include="shaders\include\global.hlsli">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\include\input_structs.hlsl">
+    <None Include="shaders\include\input_structs.hlsli">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\include\light.hlsl">
+    <None Include="shaders\include\light.hlsli">
       <FileType>Document</FileType>
     </None>
     <None Include="shaders\include\lighting.hlsli" />
-    <None Include="shaders\include\normal.hlsl">
+    <None Include="shaders\include\normal.hlsli">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\include\syntax.hlsl">
+    <None Include="shaders\include\syntax.hlsli">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\include\transform.hlsl">
+    <None Include="shaders\include\transform.hlsli">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\include\model.hlsl">
+    <None Include="shaders\include\model.hlsli">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\include\material.hlsl">
+    <None Include="shaders\include\material.hlsli">
       <FileType>Document</FileType>
     </None>
     <FxCompile Include="shaders\shapes\wireframe_box_ps.hlsl">
@@ -239,10 +239,10 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <None Include="shaders\shapes\geosphere.hlsli" />
-    <None Include="shaders\shapes\wireframe_cube.hlsl">
+    <None Include="shaders\shapes\wireframe_cube.hlsli">
       <FileType>Document</FileType>
     </None>
-    <FxCompile Include="shaders\skybox\skybox.hlsl">
+    <FxCompile Include="shaders\skybox\skybox_ps.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PS</EntryPointName>
