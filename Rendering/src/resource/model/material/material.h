@@ -16,7 +16,6 @@ struct Material final {
 		, reflect(0.0f, 0.0f, 0.0f, 1.0f)
 		, emissive(0.0f, 0.0f, 0.0f, 1.0f)
 		, optical_density(0.0f)
-		, dissolve(0.0f)
 		, illum(0)
 		, transparent(false)
 		, has_texture(true)
@@ -53,8 +52,6 @@ struct Material final {
 
 	// Optical Density (index of refraction)
 	f32 optical_density;
-	// Dissolve (alpha)
-	f32 dissolve;
 	// Illumination model
 	i32 illum;
 

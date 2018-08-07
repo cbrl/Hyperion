@@ -2,6 +2,16 @@
 #define HLSL_DEFINES
 
 
+// The maximum alpha value before the material is considered opaque
+#define ALPHA_MAX 0.9568627f
+
+// The minimum alpha value before the material is considered invisible
+#define ALPHA_MIN 0.0039212f
+
+// The minimum alpha value at which a shadow will still be cast
+#define ALPHA_SHADOW_THRESHOLD 0.25f
+
+
 //----------------------------------------------------------------------------------
 // Constant Buffers
 //----------------------------------------------------------------------------------

@@ -9,7 +9,6 @@ struct Material {
 	float4 reflect;
 	float4 emissive;
 	float  optical_density;
-	float  dissolve;
 	bool   has_texture;
 	bool   reflection_enabled;
 };

@@ -2,8 +2,8 @@
 #include "shapes/geosphere.hlsli"
 
 
-PSPosition VS(uint vertex : SV_VertexID) {
-	PSPosition vout;
+PSWorldPosition VS(uint vertex : SV_VertexID) {
+	PSWorldPosition vout;
 
 	vout.position_world = geosphere[vertex];
 	const float3 p      = mul(vout.position_world, (float3x3)world_to_camera);

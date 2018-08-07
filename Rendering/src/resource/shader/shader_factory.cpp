@@ -5,12 +5,15 @@
 
 // Forward
 #include "compiled_headers/forward_lit.h"
+#include "compiled_headers/forward_transparent_lit.h"
 #include "compiled_headers/forward_unlit.h"
+#include "compiled_headers/forward_transparent_unlit.h"
 #include "compiled_headers/forward_vs.h"
 
 // Depth
-//#include "compiled_headers/depth_ps.h"
 #include "compiled_headers/depth_vs.h"
+#include "compiled_headers/depth_transparent_ps.h"
+#include "compiled_headers/depth_transparent_vs.h"
 
 // Sky
 #include "compiled_headers/skybox_ps.h"
@@ -33,12 +36,20 @@ namespace ShaderFactory {
 	// Forward
 	//----------------------------------------------------------------------------------
 
-	shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr) {
+	shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr, bool transparency) {
+
+		if (transparency) {
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_lit_ps", BYTECODE(shader_forward_transparent_lit));
+		}
 
 		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_lit_ps", BYTECODE(shader_forward_lit));
 	}
 
-	shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr) {
+	shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr, bool transparency) {
+
+		if (transparency) {
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_unlit_ps", BYTECODE(shader_forward_transparent_unlit));
+		}
 
 		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_unlit_ps", BYTECODE(shader_forward_unlit));
 	}
@@ -56,17 +67,25 @@ namespace ShaderFactory {
 	// Depth
 	//----------------------------------------------------------------------------------
 
-	//shared_ptr<PixelShader> createDepthPS(ResourceMgr& resource_mgr) {
-
-	//	return resource_mgr.getOrCreate<PixelShader>(L"shader_depth_ps", BYTECODE(shader_depth_ps));
-	//}
-
 	shared_ptr<VertexShader> createDepthVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_vs",
 													  BYTECODE(shader_depth_vs),
-		                                              VertexPositionNormalTexture::InputElements,
-		                                              VertexPositionNormalTexture::InputElementCount);
+													  VertexPositionNormalTexture::InputElements,
+													  VertexPositionNormalTexture::InputElementCount);
+	}
+
+	shared_ptr<PixelShader> createDepthTransparentPS(ResourceMgr& resource_mgr) {
+
+		return resource_mgr.getOrCreate<PixelShader>(L"shader_depth_transparent_ps", BYTECODE(shader_depth_transparent_ps));
+	}
+
+	shared_ptr<VertexShader> createDepthTransparentVS(ResourceMgr& resource_mgr) {
+
+		return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_transparent_vs",
+													  BYTECODE(shader_depth_transparent_vs),
+													  VertexPositionNormalTexture::InputElements,
+													  VertexPositionNormalTexture::InputElementCount);
 	}
 
 

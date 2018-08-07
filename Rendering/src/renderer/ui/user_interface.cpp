@@ -288,16 +288,21 @@ void DrawDetails(ModelChild& child) {
 	ImGui::Text(child.getName().c_str());
 	ImGui::Separator();
 
+	bool shadows = child.castsShadows();
+	if (ImGui::Checkbox("Casts Shadows", &shadows))
+		child.setShadows(shadows);
+
 	// Change material properties, textures
 	std::string name = "Material - " + child.getMaterial().name;
 	ImGui::Text(name.c_str());
 
-	ImGui::ColorEdit3("Diffuse Color", (f32*)child.getMaterial().diffuse.data());
-	ImGui::ColorEdit3("Ambient Color", (f32*)child.getMaterial().ambient.data());
-	ImGui::ColorEdit3("Specular Color", (f32*)child.getMaterial().specular.data());
-	ImGui::DragFloat("Specular Exponent", (f32*)&child.getMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
-	ImGui::ColorEdit3("Reflective Color", (f32*)child.getMaterial().reflect.data());
-	ImGui::Checkbox("Reflection", (bool*)&child.getMaterial().reflection_enabled);
+	ImGui::ColorEdit4("Diffuse Color", child.getMaterial().diffuse.data());
+	ImGui::ColorEdit3("Ambient Color", child.getMaterial().ambient.data());
+	ImGui::ColorEdit3("Specular Color", child.getMaterial().specular.data());
+	ImGui::DragFloat("Specular Exponent", &child.getMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
+	ImGui::ColorEdit3("Reflective Color", child.getMaterial().reflect.data());
+	ImGui::Checkbox("Transparent", &child.getMaterial().transparent);
+	ImGui::Checkbox("Reflection", &child.getMaterial().reflection_enabled);
 }
 
 

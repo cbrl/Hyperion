@@ -29,7 +29,7 @@ private:
 			, Ks(0.0f, 0.0f, 0.0f, 1.0f)
 			, Ke(0.0f, 0.0f, 0.0f, 1.0f)
 			, Ni(0.0f)
-			, d(0.0f)
+			, d(1.0f)
 			, illum(0)
 			, transparency(false) {
 		}
@@ -85,7 +85,6 @@ private:
 	static void triangulate(std::vector<vec3_u32>& face_def);
 
 	static void loadMaterials(const std::wstring& folder);
-	static void readTransparency(const std::wstring& line, bool inverse);
 
 
 private:

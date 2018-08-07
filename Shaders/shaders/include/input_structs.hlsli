@@ -29,15 +29,15 @@ struct VSPositionNormalTexture {
 //  Pixel Shader input structs
 //----------------------------------------------------------------------------------
 
-struct PSPosition {
+struct PSWorldPosition {
 	float4 position       : SV_POSITION;
 	float3 position_world : POSITION0;
 };
 
 
-struct PSPositionNormal {
+struct PSTexture {
 	float4 position : SV_POSITION;
-	float3 normal   : NORMAL0;
+	float2 tex      : TEXCOORD0;
 };
 
 

@@ -1,6 +1,7 @@
 //----------------------------------------------------------------------------------
 // Settings
 //----------------------------------------------------------------------------------
+// ENABLE_TRANSPARENCY
 // ENABLE_LIGHTING
 
 //----------------------------------------------------------------------------------
@@ -13,6 +14,7 @@
 
 
 float4 PS(PSPositionNormalTexture pin) : SV_Target {
+
 	// The to_eye vector is used in lighting
 	float3 to_eye = CameraPosition() - pin.position_world;
 
@@ -31,17 +33,19 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 		tex_color = mat.diffuse;
 	}
 
-	// Discard pixel if texture alpha < 0.1.  Note that we do this
-	// test as soon as possible so that we can potentially exit the shader 
-	// early, thereby skipping the rest of the shader code.
-	clip(tex_color.a - 0.1f);
-
+	// Clip if texture alpha is less than threshold
+	#ifdef ENABLE_TRANSPARENCY
+	clip(tex_color.w - ALPHA_MIN);
+	#else 
+	tex_color.w = 1.0f;
+	#endif
+	
 
 	//----------------------------------------------------------------------------------
 	// Normal Mapping
 	//----------------------------------------------------------------------------------
 
-	float3 normal_vec = GetNormal(pin.position.xyz, pin.normal, pin.tex);
+	const float3 normal_vec = GetNormal(pin.position.xyz, pin.normal, pin.tex);
 
 
 	//----------------------------------------------------------------------------------
@@ -52,11 +56,11 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	float4 out_color = CalculateLighting(pin.position_world, normal_vec, to_eye, tex_color, mat);
 
 	if (mat.reflection_enabled) {
-		float3 incident = -to_eye;
-		float3 reflection_vec = reflect(incident, pin.normal);
-		float4 reflection_color = env_map.Sample(aniso_wrap, reflection_vec);
+		const float3 incident         = -to_eye;
+		const float3 reflection_vec   = reflect(incident, pin.normal);
+		const float3 reflection_color = env_map.Sample(aniso_wrap, reflection_vec).xyz;
 
-		out_color += mat.reflect * reflection_color;
+		out_color.xyz += mat.reflect.xyz * reflection_color;
 	}
 	#else
 	float4 out_color = tex_color;

@@ -98,7 +98,6 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 		mtl.diffuse         = materials[i].Kd;
 		mtl.specular        = materials[i].Ks;
 		mtl.emissive        = materials[i].Ke;
-		mtl.dissolve        = materials[i].d;
 		mtl.optical_density = materials[i].Ni;
 		mtl.illum           = materials[i].illum;
 		mtl.transparent     = materials[i].transparency;
@@ -311,12 +310,11 @@ void OBJLoader<VertexT>::loadMaterials(const std::wstring& folder) {
 
 		// Dissolve (transparency)
 		else if (token == ObjTokens::transparency) {
-			readTransparency(line, false);
-		}
+			stream >> materials.back().Kd.w;
 
-		// Dissolve (transparency inverse)
-		else if (token == ObjTokens::transparency_inv) {
-			readTransparency(line, true);
+			if (materials.back().Kd.w < 1.0f) {
+				materials.back().transparency = true;
+			}
 		}
 
 		// Illumination
@@ -374,25 +372,6 @@ void OBJLoader<VertexT>::loadMaterials(const std::wstring& folder) {
 				groups[i].material_index = j;
 			}
 		}
-	}
-}
-
-
-template<typename VertexT>
-void OBJLoader<VertexT>::readTransparency(const std::wstring& line, bool inverse) {
-	std::wstringstream stream(line);
-
-	f32 transparency;
-	stream >> transparency;
-
-	if (inverse) {
-		transparency = 1.0f - transparency;
-	}
-
-	materials.back().d = transparency;
-
-	if (transparency > 0.0f) {
-		materials.back().transparency = true;
 	}
 }
 

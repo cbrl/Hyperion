@@ -15,13 +15,14 @@ enum class FalseColor {
 namespace ShaderFactory {
 	
 	// Forward
-	shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr);
-	shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr);
+	shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr, bool transparency);
+	shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr, bool transparency);
 	shared_ptr<VertexShader> createForwardVS(ResourceMgr& resource_mgr);
 
 	// Depth
-	//shared_ptr<PixelShader> createDepthPS(ResourceMgr& resource_mgr);
 	shared_ptr<VertexShader> createDepthVS(ResourceMgr& resource_mgr);
+	shared_ptr<PixelShader> createDepthTransparentPS(ResourceMgr& resource_mgr);
+	shared_ptr<VertexShader> createDepthTransparentVS(ResourceMgr& resource_mgr);
 
 	// Sky
 	shared_ptr<PixelShader> createSkyPS(ResourceMgr& resource_mgr);

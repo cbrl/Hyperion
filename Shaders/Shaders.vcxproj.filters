@@ -71,6 +71,18 @@
     <FxCompile Include="shaders\skybox\skybox_ps.hlsl">
       <Filter>Shader Files\sky</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\depth\depth_transparent_ps.hlsl">
+      <Filter>Shader Files\depth</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\depth\depth_transparent_vs.hlsl">
+      <Filter>Shader Files\depth</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\forward\forward_transparent_lit.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\forward\forward_transparent_unlit.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\hlsl.h">

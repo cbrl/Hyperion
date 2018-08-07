@@ -33,7 +33,8 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	switch (settings.getLightingMode()) {
 		case LightingMode::Default:
-			forward_pass->render(scene, world_to_projection, skybox);
+			forward_pass->renderOpaque(scene, world_to_projection, skybox);
+			forward_pass->renderTransparent(scene, world_to_projection, skybox);
 			break;
 
 		case LightingMode::Unlit:
@@ -50,6 +51,9 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 
 		case LightingMode::FalseColorDepth:
 			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Depth);
+			break;
+
+		default:
 			break;
 	}
 

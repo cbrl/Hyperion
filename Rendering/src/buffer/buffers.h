@@ -16,7 +16,6 @@ struct MaterialBuffer {
 		, reflect(0.0f, 0.0f, 0.0f, 1.0f)
 		, emissive(0.0f, 0.0f, 0.0f, 1.0f)
 		, optical_density(0.0f)
-		, dissolve(0.0f)
 		, has_texture(0)
 		, reflection_enabled(0) {
 	}
@@ -27,7 +26,6 @@ struct MaterialBuffer {
 	               const vec4_f32& reflect,
 	               const vec4_f32& emissive,
 	               const f32 optical_density,
-	               const f32 dissolve,
 	               const bool has_texture,
 	               const bool reflection_enabled) noexcept
 		: ambient(ambient)
@@ -36,7 +34,6 @@ struct MaterialBuffer {
 		, reflect(reflect)
 		, emissive(emissive)
 		, optical_density(optical_density)
-		, dissolve(dissolve)
 		, has_texture(has_texture)
 		, reflection_enabled(reflection_enabled) {
 	}
@@ -47,7 +44,6 @@ struct MaterialBuffer {
 	vec4_f32 reflect;
 	vec4_f32 emissive;
 	f32 optical_density;
-	f32 dissolve;
 	u32 has_texture;
 	u32 reflection_enabled;
 };

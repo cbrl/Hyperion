@@ -17,15 +17,14 @@ void XM_CALLCONV ModelChild::updateBuffer(ID3D11DeviceContext& device_context,
 	buffer_data.world_inv_transpose = world_inv_transpose;
 	buffer_data.texTransform        = XMMatrixIdentity();
 
-	buffer_data.mat = MaterialBuffer(material.ambient,
-	                                 material.diffuse,
-	                                 material.specular,
-	                                 material.reflect,
-	                                 material.emissive,
-	                                 material.optical_density,
-	                                 material.dissolve,
-	                                 material.has_texture,
-	                                 material.reflection_enabled);
+	buffer_data.mat = MaterialBuffer{ material.ambient,
+	                                  material.diffuse,
+	                                  material.specular,
+	                                  material.reflect,
+	                                  material.emissive,
+	                                  material.optical_density,
+	                                  material.has_texture,
+	                                  material.reflection_enabled };
 
 	buffer.updateData(device_context, buffer_data);
 }

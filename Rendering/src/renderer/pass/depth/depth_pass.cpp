@@ -16,10 +16,9 @@ DepthPass::DepthPass(ID3D11Device& device,
 	, render_state_mgr(render_state_mgr)
 	, alt_cam_buffer(device) {
 
-	vertex_shader = ShaderFactory::createDepthVS(resource_mgr);
-
-	// Pixel shader for transparent objects
-	//pixel_shader = ShaderFactory::createDepthPS(resource_mgr);
+	opaque_vs      = ShaderFactory::createDepthVS(resource_mgr);
+	transparent_vs = ShaderFactory::createDepthTransparentVS(resource_mgr);
+	transparent_ps = ShaderFactory::createDepthTransparentPS(resource_mgr);
 }
 
 
@@ -36,6 +35,18 @@ void DepthPass::bindState() const {
 }
 
 
+void DepthPass::bindOpaqueShaders() const {
+	opaque_vs->bind(device_context);
+	Pipeline::PS::bindShader(device_context, nullptr, nullptr, 0);
+}
+
+
+void DepthPass::bindTransparentShaders() const {
+	transparent_vs->bind(device_context);
+	transparent_ps->bind(device_context);
+}
+
+
 void XM_CALLCONV DepthPass::render(Scene& scene,
                                    FXMMATRIX world_to_camera,
                                    CXMMATRIX camera_to_projection) const {
@@ -48,29 +59,23 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 	// Create the world_to_projection matrix
 	const auto world_to_proj = world_to_camera * camera_to_projection;
 
-	// Bind the vertex shader
-	vertex_shader->bind(device_context);
-	Pipeline::PS::bindShader(device_context, nullptr, nullptr, 0);
 
-	// Draw each model
-	ecs_engine.forEach<Model>([&](const Model& model) {
+	//----------------------------------------------------------------------------------
+	// Draw each opaque model
+	//----------------------------------------------------------------------------------
 
-		if (!model.isActive()) return;
-
-		const auto transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
-		if (!transform) return;
-
-		const auto model_to_world = transform->getObjectToWorldMatrix();
-		const auto model_to_proj  = model_to_world * world_to_proj;
-
-		if (!Frustum(model_to_proj).contains(model.getAABB()))
-			return;
-
-		model.bind(device_context);
-
-		renderModel(model, model_to_proj);
+	ecs_engine.forEach<Model>([&](Model& model) {
+		renderModel(ecs_engine, model, world_to_proj, false, false);
 	});
 
+
+	//----------------------------------------------------------------------------------
+	// Draw each transparent model
+	//----------------------------------------------------------------------------------
+
+	ecs_engine.forEach<Model>([&](Model& model) {
+		renderModel(ecs_engine, model, world_to_proj, false, true);
+	});
 }
 
 void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
@@ -79,33 +84,27 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 
 	auto& ecs_engine = scene.getECS();
 
-	// Update and bind the camera buffer
 	updateCamera(world_to_camera, camera_to_projection);
 
-	// Create the world_to_projection matrix
 	const auto world_to_proj = world_to_camera * camera_to_projection;
 
-	// Bind the vertex shader and a null pixel shader
-	vertex_shader->bind(device_context);
-	Pipeline::PS::bindShader(device_context, nullptr, nullptr, 0);
+	//----------------------------------------------------------------------------------
+	// Draw each opaque model
+	//----------------------------------------------------------------------------------
 
-	// Draw each model
+	bindOpaqueShaders();
 	ecs_engine.forEach<Model>([&](Model& model) {
+		renderModel(ecs_engine, model, world_to_proj, true, false);
+	});
 
-		if (!model.isActive()) return;
 
-		const auto transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
-		if (!transform) return;
+	//----------------------------------------------------------------------------------
+	// Draw each transparent model
+	//----------------------------------------------------------------------------------
 
-		const auto model_to_world = transform->getObjectToWorldMatrix();
-		const auto model_to_proj  = model_to_world * world_to_proj;
-
-		if (!Frustum(model_to_proj).contains(model.getAABB()))
-			return;
-
-		model.bind(device_context);
-
-		renderModel(model, model_to_proj);
+	bindTransparentShaders();
+	ecs_engine.forEach<Model>([&](Model& model) {
+		renderModel(ecs_engine, model, world_to_proj, true, true);
 	});
 }
 
@@ -121,19 +120,51 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 }
 
 
-void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX model_to_projection) const {
+void XM_CALLCONV DepthPass::renderModel(ECS& ecs_engine,
+                                        const Model& model,
+                                        FXMMATRIX world_to_projection,
+                                        bool shadows,
+                                        bool render_transparent) const {
+
+	if (!model.isActive()) return;
+
+	const auto transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
+	if (!transform) return;
+
+	const auto model_to_world      = transform->getObjectToWorldMatrix();
+	const auto model_to_projection = model_to_world * world_to_projection;
+
+	Frustum frustum{model_to_projection};
+	if (!frustum.contains(model.getAABB()))
+		return;
+
+	model.bind(device_context);
 
 	model.forEachChild([&](const ModelChild& child) {
-		//if (child.GetMaterial().transparent
-		//	|| child.GetMaterial().dissolve > THRESHOLD)
-		//	return;
+
+		if (shadows) {
+			if (!child.castsShadows()) return;
+		}
+
+		if (render_transparent) {
+			if (!child.getMaterial().transparent
+			    || child.getMaterial().diffuse.w < ALPHA_MIN
+			    || child.getMaterial().diffuse.w > ALPHA_MAX)
+				return;
+		}
+		else {
+			if (child.getMaterial().transparent
+				&& child.getMaterial().diffuse.w <= ALPHA_MAX)
+				return;
+		}
 
 		if (!child.castsShadows())
 			return;
 
-		if (!Frustum(model_to_projection).contains(child.getAABB()))
+		if (!frustum.contains(child.getAABB()))
 			return;
 
+		child.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
 		child.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
 		Pipeline::drawIndexed(device_context, child.getIndexCount(), child.getIndexStart());

@@ -8,6 +8,7 @@
 
 class RenderStateMgr;
 class ResourceMgr;
+class ECS;
 class Scene;
 
 class DepthPass final {
@@ -30,8 +31,16 @@ public:
 
 
 private:
+	void bindOpaqueShaders() const;
+	void bindTransparentShaders() const;
+
 	void XM_CALLCONV updateCamera(FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) const;
-	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX model_to_projection) const;
+
+	void XM_CALLCONV renderModel(ECS& ecs_engine,
+	                             const Model& model,
+	                             FXMMATRIX world_to_projection,
+	                             bool shadows,
+	                             bool render_transparent) const;
 
 
 private:
@@ -40,8 +49,9 @@ private:
 	RenderStateMgr&      render_state_mgr;
 
 	// Shaders
-	shared_ptr<VertexShader> vertex_shader;
-	shared_ptr<PixelShader> pixel_shader;
+	shared_ptr<VertexShader> opaque_vs;
+	shared_ptr<VertexShader> transparent_vs;
+	shared_ptr<PixelShader>  transparent_ps;
 
 	// Buffers
 	ConstantBuffer<AltCameraBuffer> alt_cam_buffer;

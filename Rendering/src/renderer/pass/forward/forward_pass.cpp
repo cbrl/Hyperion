@@ -82,73 +82,90 @@ void ForwardPass::bindWireframeState() const {
 }
 
 
-void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const {
+void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
+                                           FXMMATRIX world_to_projection,
+                                           const Texture* sky) const {
 
 	auto& ecs_engine = scene.getECS();
 
 	// Bind the shaders, render states, etc
 	bindOpaqueState();
 
-	// Bind the skybox texture as the environment std::map
+	// Bind the skybox texture as the environment map
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr);
+	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, false);
 	pixel_shader->bind(device_context);
 
 	// Render models
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(ecs_engine, model, world_to_projection, true, true);
 	});
 }
 
 
-void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const {
+void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
+                                                FXMMATRIX world_to_projection,
+                                                const Texture* sky) const {
 
 	auto& ecs_engine = scene.getECS();
 
 	// Bind the shaders, render states, etc
 	bindTransparentState();
 
-	// Bind the skybox texture as the environment std::map
+	// Bind the skybox texture as the environment map
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr);
+	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, true);
 	pixel_shader->bind(device_context);
 
 	// Render models
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(ecs_engine, model, world_to_projection, true, false);
 	});
 }
 
 
-void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene, FXMMATRIX world_to_projection, const Texture* sky) const {
+void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
+                                          FXMMATRIX world_to_projection,
+                                          const Texture* sky) const {
 
 	auto& ecs_engine = scene.getECS();
 
-	// Bind the shaders, render states, etc
-	bindOpaqueState();
-
-	// Bind the skybox texture as the environment std::map
+	// Bind the skybox texture as the environment map
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
-	// Create the apporopriate pixel shader and bind it
-	const auto pixel_shader = ShaderFactory::createForwardUnlitPS(resource_mgr);
-	pixel_shader->bind(device_context);
 
-	// Render models
+	// Opaque models
+	bindTransparentState();
+	const auto opaque_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, false);
+	opaque_ps->bind(device_context);
+
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(ecs_engine, model, world_to_projection, true, true);
+	});
+
+
+	// Transparent Models
+	bindTransparentState();
+	const auto transparent_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, true);
+	transparent_ps->bind(device_context);
+
+	ecs_engine.forEach<Model>([&](Model& model) {
+		if (model.isActive())
+			renderModel(ecs_engine, model, world_to_projection, true, false);
 	});
 }
 
 
-void ForwardPass::renderFalseColor(Scene& scene, FXMMATRIX world_to_projection, FalseColor color) const {
+void ForwardPass::renderFalseColor(Scene& scene,
+                                   FXMMATRIX world_to_projection,
+                                   FalseColor color) const {
 
 	auto& ecs_engine = scene.getECS();
 
@@ -159,7 +176,7 @@ void ForwardPass::renderFalseColor(Scene& scene, FXMMATRIX world_to_projection, 
 
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(ecs_engine, model, world_to_projection, false, false);
 	});
 }
 
@@ -177,18 +194,22 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection) c
 
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(ecs_engine, model, world_to_projection, false, false);
 	});
 }
 
 
-void XM_CALLCONV ForwardPass::renderModel(ECS& ecs_engine, Model& model, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::renderModel(ECS& ecs_engine,
+                                          Model& model,
+                                          FXMMATRIX world_to_projection,
+                                          bool transparency_test,
+                                          bool skip_transparent) const {
 
 	const auto* transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world = transform->getObjectToWorldMatrix();
-	const auto model_to_proj = model_to_world * world_to_projection;
+	const auto model_to_proj  = model_to_world * world_to_projection;
 
 	// Cull the model if it isn't on screen
 	Frustum frustum(model_to_proj);
@@ -201,15 +222,31 @@ void XM_CALLCONV ForwardPass::renderModel(ECS& ecs_engine, Model& model, FXMMATR
 	// Render each model part individually
 	model.forEachChild([&](ModelChild& child) {
 
+		// Get the child model's material
+		const auto& mat = child.getMaterial();
+
+		// Handle transparency
+		if (transparency_test) {
+			if (skip_transparent) {
+				if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
+					return;
+			}
+			else {
+				if (!mat.transparent
+				    || mat.diffuse.w < ALPHA_MIN
+				    || mat.diffuse.w > ALPHA_MAX)
+					return;
+			}
+		}
+		
+
+		// Cull the model child
 		if (!frustum.contains(child.getAABB()))
 			return;
 
 		// Bind the child model's buffer
 		child.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 		child.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
-
-		// Get the child model's material
-		const auto& mat = child.getMaterial();
 
 		// Bind the SRVs
 		if (mat.map_diffuse)        mat.map_diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);

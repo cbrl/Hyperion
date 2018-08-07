@@ -4,6 +4,12 @@
 #include "include/input_structs.hlsli"
 
 
+// Transform a texture
+float2 Transform(float2 tex, matrix tex_transform) {
+	return mul(float4(tex, 0.0f, 1.0f), tex_transform).xy;
+}
+
+
 // Transform a point from object space to projection space
 float4 Transform(float3 position,
 				 matrix object_to_world,
