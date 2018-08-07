@@ -24,21 +24,27 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Normalize
 	to_eye /= dist_to_eye;
 
+
 	// Sample texture
 	float4 tex_color;
-	if (mat.has_texture) {
-		tex_color = diffuse_map.Sample(aniso_wrap, pin.tex);
-	}
-	else {
-		tex_color = mat.diffuse;
-	}
+	float  alpha;
+	{
+		if (mat.has_texture) {
+			tex_color = diffuse_map.Sample(aniso_wrap, pin.tex);
+			alpha     = tex_color.w * mat.diffuse.w;
+		}
+		else {
+			tex_color = mat.diffuse;
+			alpha     = tex_color.w;
+		}
 
-	// Clip if texture alpha is less than threshold
-	#ifdef ENABLE_TRANSPARENCY
-	clip(tex_color.w - ALPHA_MIN);
-	#else 
-	tex_color.w = 1.0f;
-	#endif
+		// Test alpha if transparency is enabled, or set it to 1 if not.
+		#ifdef ENABLE_TRANSPARENCY
+		clip(alpha - ALPHA_MIN);
+		#else 
+		alpha = 1.0f;
+		#endif
+	}
 	
 
 	//----------------------------------------------------------------------------------
@@ -77,5 +83,6 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	out_color = lerp(out_color, fog.color, fog_lerp);
 
 
+	out_color.w = alpha;
 	return saturate(out_color);
 }
