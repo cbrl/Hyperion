@@ -70,6 +70,17 @@ void Engine::init() {
 			toggle_fullscreen = true;
 		};
 
+		msg_handler.on_resize = [this]() {
+			if (!rendering_mgr) return;
+			rendering_mgr->onResize();
+
+			const vec2_u32 size = window->getClientSize();
+			if (scene) {
+				scene->onResize(size);
+			}
+			Logger::log(LogLevel::info, "Viewport resized to {}x{}", size.x, size.y);
+		};
+
 		window->addHandler(&msg_handler);
 		window->addHandler(&InputMessageHandler::handler);
 		window->addForwarder(&ImGuiMessageForwarder::forwarder);

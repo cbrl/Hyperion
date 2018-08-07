@@ -45,6 +45,7 @@ public:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 	std::function<void()> on_fullscreen_toggle;
+	std::function<void()> on_resize;
 };
 
 
