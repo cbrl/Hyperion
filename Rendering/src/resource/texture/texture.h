@@ -58,7 +58,7 @@ public:
 	template<typename StageT>
 	void bind(ID3D11DeviceContext& device_context, u32 slot) const {
 
-		StageT::bindSRVs(device_context, slot, 1, texture.GetAddressOf());
+		StageT::bindSRV(device_context, slot, texture.Get());
 	}
 
 

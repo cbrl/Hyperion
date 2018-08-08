@@ -141,6 +141,17 @@ public:
 			device_context.IASetIndexBuffer(buffer, format, offset);
 		}
 
+
+		static void bindVertexBuffer(ID3D11DeviceContext& device_context,
+		                             u32 slot,
+		                             ID3D11Buffer* buffer,
+		                             u32 stride,
+		                             u32 offset) {
+
+			ID3D11Buffer* buffers[] = { buffer };
+			bindVertexBuffers(device_context, slot, 1, buffers, &stride, &offset);
+		}
+
 		static void bindVertexBuffers(ID3D11DeviceContext& device_context,
 		                              u32 start_slot,
 		                              u32 num_buffers,

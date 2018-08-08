@@ -38,10 +38,8 @@ public:
 
 	// Bind the vertex buffer and index buffer
 	void bind(ID3D11DeviceContext& device_context) const {
-		u32 offset = 0;
-
 		// Set vertex buffer to active in the input assembler so it can be rendered
-		Pipeline::IA::bindVertexBuffers(device_context, 0, 1, vertex_buffer.GetAddressOf(), &stride, &offset);
+		Pipeline::IA::bindVertexBuffer(device_context, 0, vertex_buffer.Get(), stride, 0);
 
 		// Set index buffer to active in the input assembler so it can be rendered
 		Pipeline::IA::bindIndexBuffer(device_context, index_buffer.Get(), DXGI_FORMAT_R32_UINT, 0);
