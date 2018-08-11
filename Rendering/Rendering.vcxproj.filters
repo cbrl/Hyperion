@@ -90,17 +90,11 @@
     <Filter Include="Source Files\renderer\pass">
       <UniqueIdentifier>{5e0dbc15-4eef-4bbe-aa7b-ab9d6fd06d69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\renderer\ui">
-      <UniqueIdentifier>{6812ac06-7c5f-4972-89ba-e091d1291a44}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\renderer">
       <UniqueIdentifier>{2ed68f7e-dd88-460c-9836-bf9101a1e851}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\renderer\pass">
       <UniqueIdentifier>{643311fd-0fee-4042-911a-ce47ea6cd62e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\renderer\ui">
-      <UniqueIdentifier>{b9404e9e-9946-4e6c-913c-5494b130b231}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\display">
       <UniqueIdentifier>{30717c3a-bd23-46ff-b422-7756e12f787c}</UniqueIdentifier>
@@ -123,17 +117,17 @@
     <Filter Include="Header Files\scene\text">
       <UniqueIdentifier>{6d08b3e0-811f-4af8-98a1-0743676ceb32}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\renderer\output_mgr">
+    <Filter Include="Source Files\renderer\output">
       <UniqueIdentifier>{3888d37e-5840-4527-87be-7cffee13effd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\renderer\output_mgr">
+    <Filter Include="Source Files\renderer\state">
+      <UniqueIdentifier>{85c6ad31-0237-4233-ac0e-611ef928fad1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\renderer\output">
       <UniqueIdentifier>{64d4949f-deaf-493b-a5bf-bd58b80efc09}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\renderer\render_state_mgr">
+    <Filter Include="Header Files\renderer\state">
       <UniqueIdentifier>{e48fa1f5-d47c-4769-b06e-7e6a622afc99}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\renderer\render_state_mgr">
-      <UniqueIdentifier>{85c6ad31-0237-4233-ac0e-611ef928fad1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -176,9 +170,6 @@
     <ClCompile Include="src\renderer\pass\text\text_pass.cpp">
       <Filter>Source Files\renderer\pass</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\ui\user_interface.cpp">
-      <Filter>Source Files\renderer\ui</Filter>
-    </ClCompile>
     <ClCompile Include="src\loader\texture_loader.cpp">
       <Filter>Source Files\loader</Filter>
     </ClCompile>
@@ -197,11 +188,11 @@
     <ClCompile Include="src\direct3d\swapchain.cpp">
       <Filter>Source Files\direct3d</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\output_mgr\output_mgr.cpp">
-      <Filter>Source Files\renderer\output_mgr</Filter>
+    <ClCompile Include="src\renderer\state\render_state_mgr.cpp">
+      <Filter>Source Files\renderer\state</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\render_state_mgr\render_state_mgr.cpp">
-      <Filter>Source Files\renderer\render_state_mgr</Filter>
+    <ClCompile Include="src\renderer\output\output_mgr.cpp">
+      <Filter>Source Files\renderer\output</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -277,9 +268,6 @@
     <ClInclude Include="src\loader\obj\obj_loader.tpp">
       <Filter>Source Files\loader\obj</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\ui\user_interface.h">
-      <Filter>Header Files\renderer\ui</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\renderer.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
@@ -325,11 +313,11 @@
     <ClInclude Include="src\direct3d\swapchain.h">
       <Filter>Header Files\direct3d</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\output_mgr\output_mgr.h">
-      <Filter>Header Files\renderer\output_mgr</Filter>
+    <ClInclude Include="src\renderer\state\render_state_mgr.h">
+      <Filter>Header Files\renderer\state</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\render_state_mgr\render_state_mgr.h">
-      <Filter>Header Files\renderer\render_state_mgr</Filter>
+    <ClInclude Include="src\renderer\output\output_mgr.h">
+      <Filter>Header Files\renderer\output</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

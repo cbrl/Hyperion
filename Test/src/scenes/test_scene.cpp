@@ -18,6 +18,9 @@ void TestScene::load(const Engine& engine) {
 	// Add systems
 	//----------------------------------------------------------------------------------
 
+	// User Interface
+	ecs->addSystem<UserInterface>(device, resource_mgr);
+
 	// Transform system: updates transforms when they're modified
 	ecs->addSystem<TransformSystem>();
 

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "system/system.h"
 #include "direct3d/direct3d.h"
 
 class ResourceMgr;
 class Scene;
 
-class UserInterface final {
+class UserInterface final : public System<UserInterface> {
 public:
 	UserInterface(ID3D11Device& device, ResourceMgr& resource_mgr)
 		: device(device)
@@ -15,7 +15,7 @@ public:
 
 	~UserInterface() = default;
 
-	void draw(Scene& scene) const;
+	void update(const Engine& engine) override;
 
 
 private:

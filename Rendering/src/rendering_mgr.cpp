@@ -69,13 +69,9 @@ void RenderingMgr::onResize() const {
 }
 
 
-void RenderingMgr::render(Scene& scene) {
-	
-	beginFrame();
+void RenderingMgr::render(Scene& scene) const {
 
 	renderer->render(scene);
-
-	endFrame();
 }
 
 

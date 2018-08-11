@@ -2,8 +2,8 @@
 
 #include "directx/d3d11.h"
 #include "hlsl.h"
-#include "renderer/output_mgr/output_mgr.h"
-#include "renderer/render_state_mgr/render_state_mgr.h"
+#include "renderer/output/output_mgr.h"
+#include "renderer/state/render_state_mgr.h"
 
 #include "scene/scene.h"
 #include "renderer/pass/light/light_pass.h"
@@ -11,7 +11,6 @@
 #include "renderer/pass/sky/sky_pass.h"
 #include "renderer/pass/bounding_volume/bounding_volume_pass.h"
 #include "renderer/pass/text/text_pass.h"
-#include "ui/user_interface.h"
 
 
 class RenderingMgr;
@@ -81,7 +80,6 @@ private:
 	unique_ptr<SkyPass>            sky_pass;
 	unique_ptr<BoundingVolumePass> bounding_volume_pass;
 	unique_ptr<TextPass>           text_pass;
-	unique_ptr<UserInterface>      ui;
 };
 
 

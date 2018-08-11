@@ -33,14 +33,30 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - Resizing
 	//----------------------------------------------------------------------------------
 
 	// Resize the buffers
 	void onResize() const;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Rendering
+	//----------------------------------------------------------------------------------
+
+	// Start a new frame
+	void beginFrame() const;
+
+	// End the current frame
+	void endFrame() const;
+
 	// Render the current scene
-	void render(Scene& scene);
+	void render(Scene& scene) const;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Getters
+	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
 	ID3D11Device& getDevice() const noexcept {
@@ -61,14 +77,6 @@ public:
 	ResourceMgr& getResourceMgr() const noexcept {
 		return *resource_mgr;
 	}
-
-
-private:
-	// Start a new frame
-	void beginFrame() const;
-
-	// End the current frame
-	void endFrame() const;
 
 
 private:

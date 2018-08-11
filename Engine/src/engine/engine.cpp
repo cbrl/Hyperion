@@ -159,14 +159,13 @@ void Engine::run() {
 
 void Engine::tick() {
 
-	auto& swap_chain = rendering_mgr->getSwapChain();
-	const bool lost_mode = swap_chain.lostMode();
+	updateSystem();
+	updateRendering();
+	renderFrame();
+}
 
-	if (lost_mode || toggle_fullscreen) {
-		swap_chain.switchMode(!lost_mode);
-		toggle_fullscreen = false;
-		Logger::log(LogLevel::info, "Fullscreen: {}", swap_chain.isFullscreen());
-	}
+
+void Engine::updateSystem() {
 
 	// Update system metrics
 	system_monitor->tick();
@@ -175,12 +174,35 @@ void Engine::tick() {
 
 	// Update the input state
 	input->tick();
+}
 
-	// Update the scene
-	scene->tick(*this);
 
-	// Render the scene
-	rendering_mgr->render(*scene);
+void Engine::renderFrame() {
+
+	// Begin a new frame
+	rendering_mgr->beginFrame();
+
+	// Draw a frame
+	{
+		scene->tick(*this);
+		rendering_mgr->render(*scene);
+	}
+
+	// Present the frame
+	rendering_mgr->endFrame();
+}
+
+
+void Engine::updateRendering() {
+
+	auto& swap_chain = rendering_mgr->getSwapChain();
+	const bool lost_mode = swap_chain.lostMode();
+
+	if (lost_mode || toggle_fullscreen) {
+		swap_chain.switchMode(!lost_mode);
+		toggle_fullscreen = false;
+		Logger::log(LogLevel::info, "Fullscreen: {}", swap_chain.isFullscreen());
+	}
 }
 
 

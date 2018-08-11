@@ -19,7 +19,6 @@ Renderer::Renderer(DisplayConfig& display_config,
 	sky_pass             = std::make_unique<SkyPass>(device_context, *render_state_mgr, resource_mgr);
 	bounding_volume_pass = std::make_unique<BoundingVolumePass>(device, device_context, *render_state_mgr, resource_mgr);
 	text_pass            = std::make_unique<TextPass>(device_context);
-	ui                   = std::make_unique<UserInterface>(device, resource_mgr);
 }
 
 
@@ -61,12 +60,5 @@ void Renderer::render(Scene& scene) {
 	//----------------------------------------------------------------------------------
 
 	text_pass->render(scene);
-
-
-	//----------------------------------------------------------------------------------
-	// Render the ImGui UI
-	//----------------------------------------------------------------------------------
-
-	ui->draw(scene);
 }
 

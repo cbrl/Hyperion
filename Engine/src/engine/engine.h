@@ -136,6 +136,9 @@ public:
 
 private:
 	void tick();
+	void updateSystem();
+	void updateRendering();
+	void renderFrame();
 	void processInput() const;
 
 

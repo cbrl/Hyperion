@@ -72,6 +72,12 @@
     <Filter Include="Header Files\components\motor">
       <UniqueIdentifier>{3ad642d2-57a1-4912-ac84-798ef2163c29}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\systems\ui">
+      <UniqueIdentifier>{d5dd726c-5e23-492a-b66c-3a697d241a44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\systems\ui">
+      <UniqueIdentifier>{b12f08b3-698c-4d71-9719-c36303bf1bba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\components.h">
@@ -158,6 +164,9 @@
     <ClInclude Include="src\systems\motor\axis_orbit_system.h">
       <Filter>Header Files\systems\motor</Filter>
     </ClInclude>
+    <ClInclude Include="src\systems\ui\user_interface.h">
+      <Filter>Header Files\systems\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -192,6 +201,9 @@
     </ClCompile>
     <ClCompile Include="src\systems\motor\axis_orbit_system.cpp">
       <Filter>Source Files\systems\motor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\ui\user_interface.cpp">
+      <Filter>Source Files\systems\ui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

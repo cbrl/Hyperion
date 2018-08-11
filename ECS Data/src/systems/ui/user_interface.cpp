@@ -1,4 +1,5 @@
 #include "user_interface.h"
+#include "engine/engine.h"
 
 #include "ecs.h"
 #include "entities/entities.h"
@@ -1140,8 +1141,9 @@ void DrawMenu(ID3D11Device& device,
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::draw(Scene& scene) const {
+void UserInterface::update(const Engine& engine)  {
 
+	auto& scene      = engine.getScene();
 	auto& ecs_engine = scene.getECS();
 
 	bool open = true;
