@@ -4,7 +4,7 @@
 #include "components/model/model.h"
 
 
-void ModelSystem::update(const Engine& engine) {
+void ModelSystem::update(Engine& engine) {
 	auto& ecs_engine     = engine.getScene().getECS();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 

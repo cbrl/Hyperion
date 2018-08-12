@@ -161,7 +161,7 @@ void TestScene::load(const Engine& engine) {
 }
 
 
-void TestScene::tick(const Engine& engine) {
+void TestScene::tick(Engine& engine) {
 
 	// Update the active systems in the ECS
 	ecs->update(engine);

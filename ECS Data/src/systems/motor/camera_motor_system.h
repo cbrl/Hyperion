@@ -10,7 +10,7 @@ public:
 	CameraMotorSystem() = default;
 	~CameraMotorSystem() = default;
 
-	void update(const Engine& engine) override;
+	void update(Engine& engine) override;
 	void processInput(const Engine& engine, CameraMovement* movement, Transform* transform) const;
 	void updateMovement(CameraMovement* mv, vec3_f32 units) const;
 	void move(CameraMovement* mv, Transform* transform, f32 dt) const;

@@ -17,7 +17,7 @@ SystemMgr::~SystemMgr() {
 }
 
 
-void SystemMgr::update(const Engine& engine) {
+void SystemMgr::update(Engine& engine) {
 
 	// Pre Update
 	for (const auto& pair : systems) {

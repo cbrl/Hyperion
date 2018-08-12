@@ -36,7 +36,7 @@ public:
 	virtual void load(const Engine& engine) = 0;
 
 	// Update the scene
-	virtual void tick(const Engine& engine) = 0;
+	virtual void tick(Engine& engine) = 0;
 
 	// Handle a window resize event
 	virtual void onResize(vec2_u32 size) {

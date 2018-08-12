@@ -4,7 +4,7 @@
 #include "components/transform/transform.h"
 
 
-void AxisRotationSystem::update(const Engine& engine) {
+void AxisRotationSystem::update(Engine& engine) {
 
 	auto& ecs_engine = engine.getScene().getECS();
 	const f32 dt     = static_cast<f32>(engine.getTimer().deltaTime());

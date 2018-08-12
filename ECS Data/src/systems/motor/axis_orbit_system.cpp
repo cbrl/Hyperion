@@ -2,7 +2,7 @@
 #include "engine/engine.h"
 
 
-void AxisOrbitSystem::update(const Engine& engine) {
+void AxisOrbitSystem::update(Engine& engine) {
 	
 	auto& ecs_engine = engine.getScene().getECS();
 	f32   delta_time = static_cast<f32>(engine.getTimer().deltaTime());

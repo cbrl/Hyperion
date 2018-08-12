@@ -2,7 +2,7 @@
 #include "engine/engine.h"
 
 
-void TransformSystem::update(const Engine& engine) {
+void TransformSystem::update(Engine& engine) {
 	auto& ecs_engine = engine.getScene().getECS();
 
 	ecs_engine.forEach<Transform>([&](Transform& transform) {
@@ -12,7 +12,7 @@ void TransformSystem::update(const Engine& engine) {
 }
 
 
-void TransformSystem::postUpdate(const Engine& engine) {
+void TransformSystem::postUpdate(Engine& engine) {
 	auto& ecs_engine = engine.getScene().getECS();
 
 	ecs_engine.forEach<Transform>([&](Transform& transform) {

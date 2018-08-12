@@ -36,12 +36,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	ID3D11Device& getDevice() const {
+	ID3D11Device& getDevice() {
 		return *device.Get();
 	}
 
 	[[nodiscard]]
-	ID3D11DeviceContext& getDeviceContext() const {
+	ID3D11DeviceContext& getDeviceContext() {
 		return *device_context.Get();
 	}
 

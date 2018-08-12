@@ -14,7 +14,7 @@ ECS::~ECS() {
 }
 
 
-void ECS::update(const Engine& engine) {
+void ECS::update(Engine& engine) {
 	system_mgr->update(engine);
 	entity_mgr->removeExpiredEntities();
 }

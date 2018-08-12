@@ -8,5 +8,5 @@ public:
 	MouseRotationSystem() = default;
 	~MouseRotationSystem() = default;
 
-	void update(const Engine& engine) override;
+	void update(Engine& engine) override;
 };

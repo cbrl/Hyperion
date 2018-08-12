@@ -294,7 +294,7 @@ void DrawDetails(ModelChild& child) {
 		child.setShadows(shadows);
 
 	// Change material properties, textures
-	std::string name = "Material - " + child.getMaterial().name;
+	std::string name = "Material: " + child.getMaterial().name;
 	ImGui::Text(name.c_str());
 
 	ImGui::ColorEdit4("Diffuse Color", child.getMaterial().diffuse.data());
@@ -1044,11 +1044,88 @@ void ProcNewModelPopups(ID3D11Device& device,
 //
 //----------------------------------------------------------------------------------
 
-void DrawMenu(ID3D11Device& device,
-              ECS& ecs_engine,
-              ResourceMgr& resource_mgr,
-              Scene& scene,
-              ModelType& add_model_popup) {
+void DrawSystemMenu(Engine& engine) {
+
+	bool display_popup = false;
+
+	// Menu Bar
+	if (ImGui::BeginMainMenuBar()) {
+
+		if (ImGui::BeginMenu("System")) {
+
+			if (ImGui::MenuItem("Display Settings")) {
+				display_popup = true;
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Exit")) {
+				// TODO: exit logic
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMainMenuBar();
+	}
+
+
+	if (display_popup) {
+		ImGui::OpenPopup("Display Settings");
+	}
+
+
+	// Display Settings Popup
+	if (ImGui::BeginPopupModal("Display Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		auto& settings = engine.getRenderingMgr().getDisplayConfig();
+		static auto current = static_cast<int>(settings.getDisplayDescIndex());
+
+		static std::vector<std::string> display_modes;
+		if (display_modes.empty()) {
+			for (const auto& desc : settings.getDisplayDescList()) {
+				const u32 refresh = static_cast<u32>(round(static_cast<f32>(desc.RefreshRate.Numerator) / static_cast<f32>(desc.RefreshRate.Denominator)));
+				display_modes.push_back(std::to_string(desc.Width) + "x" + std::to_string(desc.Height) + " " + std::to_string(refresh) + "Hz");
+			}
+		}
+
+		static auto getter = [](void* data, int idx, const char** out_text) -> bool {
+			using namespace std::string_literals;
+			auto& vector = *static_cast<const std::vector<DXGI_MODE_DESC>*>(data);
+			if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+			*out_text = display_modes[idx].c_str();
+			return true;
+		};
+
+		ImGui::Combo("Display Mode",
+		             &current,
+		             getter,
+		             static_cast<void*>(const_cast<std::vector<DXGI_MODE_DESC>*>(&settings.getDisplayDescList())),
+		             static_cast<int>(settings.getDisplayDescList().size()));
+
+
+		if (ImGui::Button("Apply")) {
+			settings.setDisplayDesc(current);
+
+			// TODO: window resizing logic
+
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+}
+
+
+void DrawSceneMenu(ID3D11Device& device,
+                   ECS& ecs_engine,
+                   ResourceMgr& resource_mgr,
+                   Scene& scene,
+                   ModelType& add_model_popup) {
 
 	if (ImGui::BeginMenuBar()) {
 
@@ -1141,7 +1218,7 @@ void DrawMenu(ID3D11Device& device,
 //
 //----------------------------------------------------------------------------------
 
-void UserInterface::update(const Engine& engine)  {
+void UserInterface::update(Engine& engine)  {
 
 	auto& scene      = engine.getScene();
 	auto& ecs_engine = scene.getECS();
@@ -1157,13 +1234,16 @@ void UserInterface::update(const Engine& engine)  {
 	ImGui::Begin("Properties", &open);
 	ImGui::End();
 
-	// Draw window contents
+	// Draw the system menu
+	//DrawSystemMenu(engine);
+
+	// Draw scene window contents
 	if (ImGui::Begin("Scene")) {
 
 		ModelType add_model_popup = ModelType::None;
 
 		// Draw menu
-		DrawMenu(device, ecs_engine, resource_mgr, scene, add_model_popup);
+		DrawSceneMenu(device, ecs_engine, resource_mgr, scene, add_model_popup);
 
 		// Process model popup
 		ProcNewModelPopups(device, ecs_engine, resource_mgr, selected_entity, add_model_popup);

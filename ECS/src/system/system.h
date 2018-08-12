@@ -50,9 +50,9 @@ public:
 		return active;
 	}
 
-	virtual void preUpdate(const Engine& engine) = 0;
-	virtual void update(const Engine& engine) = 0;
-	virtual void postUpdate(const Engine& engine) = 0;
+	virtual void preUpdate(Engine& engine) = 0;
+	virtual void update(Engine& engine) = 0;
+	virtual void postUpdate(Engine& engine) = 0;
 
 protected:
 	// Is this system enabled?
@@ -97,13 +97,13 @@ public:
 		return type_id;
 	}
 
-	void preUpdate(const Engine& engine) override {
+	void preUpdate(Engine& engine) override {
 	};
 
-	void update(const Engine& engine) override {
+	void update(Engine& engine) override {
 	};
 
-	void postUpdate(const Engine& engine) override {
+	void postUpdate( Engine& engine) override {
 	};
 
 

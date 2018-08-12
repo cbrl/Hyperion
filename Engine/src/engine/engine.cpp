@@ -167,29 +167,10 @@ void Engine::tick() {
 
 void Engine::updateSystem() {
 
-	// Update system metrics
 	system_monitor->tick();
 	timer->tick();
 	fps_counter->tick();
-
-	// Update the input state
 	input->tick();
-}
-
-
-void Engine::renderFrame() {
-
-	// Begin a new frame
-	rendering_mgr->beginFrame();
-
-	// Draw a frame
-	{
-		scene->tick(*this);
-		rendering_mgr->render(*scene);
-	}
-
-	// Present the frame
-	rendering_mgr->endFrame();
 }
 
 
@@ -203,6 +184,22 @@ void Engine::updateRendering() {
 		toggle_fullscreen = false;
 		Logger::log(LogLevel::info, "Fullscreen: {}", swap_chain.isFullscreen());
 	}
+}
+
+
+void Engine::renderFrame() {
+
+	// Begin a new frame
+	rendering_mgr->beginFrame();
+
+	// Draw a frame
+	if (scene) {
+		scene->tick(*this);
+		rendering_mgr->render(*scene);
+	}
+
+	// Present the frame
+	rendering_mgr->endFrame();
 }
 
 

@@ -8,5 +8,5 @@ public:
 	CameraSystem() = default;
 	~CameraSystem() = default;
 
-	void update(const Engine& engine) override;
+	void update(Engine& engine) override;
 };

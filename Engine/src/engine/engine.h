@@ -60,7 +60,10 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Engine() = default;
+	Engine()
+		: toggle_fullscreen(false) {
+	}
+
 	Engine(const Engine& engine) = delete;
 	Engine(Engine&& engine) = default;
 
@@ -81,17 +84,19 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - Initialization
 	//----------------------------------------------------------------------------------
 
 	// Initialize the engine
 	void init();
 
-	// Unload the active scene (if applicable) and apply a new scene
-	void loadScene(unique_ptr<Scene>&& new_scene);
-
 	// Begin the main loop
 	void run();
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Window
+	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
 	HWND getWindow() const {
@@ -103,33 +108,96 @@ public:
 		return window->getClientSize();
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Scene
+	//----------------------------------------------------------------------------------
+
+	// Unload the active scene (if applicable) and apply a new scene
+	void loadScene(unique_ptr<Scene>&& new_scene);
+
 	[[nodiscard]]
-	Scene& getScene() const {
+	Scene& getScene() {
 		return *scene;
 	}
 
 	[[nodiscard]]
-	Input& getInput() const {
+	const Scene& getScene() const {
+		return *scene;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Input
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	Input& getInput() {
 		return *input;
 	}
 
 	[[nodiscard]]
-	HighResTimer& getTimer() const {
+	const Input& getInput() const {
+		return *input;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Timer
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	HighResTimer& getTimer() {
 		return *timer;
 	}
 
 	[[nodiscard]]
-	FPS& getFPSCounter() const {
+	const HighResTimer& getTimer() const {
+		return *timer;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - FPS
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	FPS& getFPSCounter() {
 		return *fps_counter;
 	}
 
 	[[nodiscard]]
-	SystemMonitor& getSysMon() const {
+	const FPS& getFPSCounter() const {
+		return *fps_counter;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - System Monitor
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	SystemMonitor& getSysMon() {
 		return *system_monitor;
 	}
 
 	[[nodiscard]]
-	RenderingMgr& getRenderingMgr() const {
+	const SystemMonitor& getSysMon() const {
+		return *system_monitor;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Rendering Manager
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	RenderingMgr& getRenderingMgr() {
+		return *rendering_mgr;
+	}
+
+	[[nodiscard]]
+	const RenderingMgr& getRenderingMgr() const {
 		return *rendering_mgr;
 	}
 

@@ -6,7 +6,6 @@
 
 
 class TestScene final : public Scene {
-
 public:
 	TestScene();
 
@@ -14,5 +13,5 @@ public:
 
 	void load(const Engine& engine) override;
 
-	void tick(const Engine& engine) override;
+	void tick(Engine& engine) override;
 };

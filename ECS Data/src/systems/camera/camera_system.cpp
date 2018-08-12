@@ -4,7 +4,7 @@
 #include "components/camera/orthographic_camera.h"
 
 
-void CameraSystem::update(const Engine& engine) {
+void CameraSystem::update(Engine& engine) {
 	auto& ecs_engine     = engine.getScene().getECS();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 

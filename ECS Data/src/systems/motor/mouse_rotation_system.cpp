@@ -4,7 +4,7 @@
 #include "components/transform/transform.h"
 
 
-void MouseRotationSystem::update(const Engine& engine) {
+void MouseRotationSystem::update(Engine& engine) {
 
 	auto& ecs_engine  = engine.getScene().getECS();
 	const auto& input = engine.getInput();

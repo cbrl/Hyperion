@@ -69,7 +69,7 @@ public:
 	SystemT* addSystem(ArgsT&&... args);
 
 	// Update the systems
-	void update(const Engine& engine);
+	void update(Engine& engine);
 
 
 	//----------------------------------------------------------------------------------

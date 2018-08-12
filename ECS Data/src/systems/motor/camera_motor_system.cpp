@@ -2,7 +2,7 @@
 #include "engine/engine.h"
 
 
-void CameraMotorSystem::update(const Engine& engine) {
+void CameraMotorSystem::update(Engine& engine) {
 	auto& ecs_engine     = engine.getScene().getECS();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 

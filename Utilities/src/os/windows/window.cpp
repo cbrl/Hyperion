@@ -126,9 +126,10 @@ LRESULT CALLBACK Window::wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
 	}
 
 	switch (msg) {
-		case WM_DESTROY:
+		case WM_DESTROY: {
 			PostQuitMessage(0);
 			return 0;
+		}
 
 		default:
 			return DefWindowProc(window, msg, wParam, lParam);

@@ -35,7 +35,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void update(const Engine& engine);
+	void update(Engine& engine);
 
 	template<typename SystemT, typename... ArgsT>
 	SystemT* addSystem(ArgsT&&... args) {

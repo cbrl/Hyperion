@@ -59,6 +59,11 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
+	DisplayConfig& getDisplayConfig() noexcept {
+		return *display_config;
+	}
+
+	[[nodiscard]]
 	ID3D11Device& getDevice() const noexcept {
 		return direct3D->getDevice();
 	}

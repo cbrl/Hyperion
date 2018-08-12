@@ -67,6 +67,11 @@ public:
 	}
 
 	[[nodiscard]]
+	size_t getDisplayDescIndex() const noexcept {
+		return curr_desc;
+	}
+
+	[[nodiscard]]
 	const std::vector<DXGI_MODE_DESC>& getDisplayDescList() const noexcept {
 		return display_desc_list;
 	}
