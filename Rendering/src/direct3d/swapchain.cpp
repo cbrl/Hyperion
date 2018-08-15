@@ -92,7 +92,6 @@ void SwapChain::createSwapChain() {
 	ThrowIfFailed(dxgi_factory->CreateSwapChainForHwnd(&device, window, &desc, &fullscreen_desc, nullptr, swap_chain.ReleaseAndGetAddressOf()),
 	              "Failed to create swapchain");
 
-
 	swap_chain->SetFullscreenState(FALSE, nullptr);
 }
 
@@ -100,7 +99,7 @@ void SwapChain::createSwapChain() {
 void SwapChain::createRenderTargetView() {
 
 	// Get the RTV back buffer texture
-	ComPtr< ID3D11Texture2D > back_buffer;
+	ComPtr<ID3D11Texture2D> back_buffer;
 	ThrowIfFailed(swap_chain->GetBuffer(0u,
 	                                    __uuidof(ID3D11Texture2D),
 	                                    (void**)back_buffer.GetAddressOf()),
@@ -113,6 +112,8 @@ void SwapChain::createRenderTargetView() {
 	                                            render_target_view.ReleaseAndGetAddressOf()),
 	              "Failed to create back buffer render target view");
 
+
+	SetDebugObjectName(back_buffer.Get(), "SwapChain back buffer texture");
 	SetDebugObjectName(render_target_view.Get(), "SwapChain RenderTargetView");
 }
 
