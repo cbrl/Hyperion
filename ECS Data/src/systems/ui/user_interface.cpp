@@ -1046,7 +1046,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 void DrawSystemMenu(Engine& engine) {
 
-	bool display_popup = false;
+	bool display_settings_popup = false;
 
 	// Menu Bar
 	if (ImGui::BeginMainMenuBar()) {
@@ -1054,13 +1054,13 @@ void DrawSystemMenu(Engine& engine) {
 		if (ImGui::BeginMenu("System")) {
 
 			if (ImGui::MenuItem("Display Settings")) {
-				display_popup = true;
+				display_settings_popup = true;
 			}
 
 			ImGui::Separator();
 
 			if (ImGui::MenuItem("Exit")) {
-				// TODO: exit logic
+				engine.requestExit();
 			}
 
 			ImGui::EndMenu();
@@ -1070,7 +1070,7 @@ void DrawSystemMenu(Engine& engine) {
 	}
 
 
-	if (display_popup) {
+	if (display_settings_popup) {
 		ImGui::OpenPopup("Display Settings");
 	}
 
@@ -1084,7 +1084,7 @@ void DrawSystemMenu(Engine& engine) {
 		static std::vector<std::string> display_modes;
 		if (display_modes.empty()) {
 			for (const auto& desc : settings.getDisplayDescList()) {
-				const u32 refresh = static_cast<u32>(round(static_cast<f32>(desc.RefreshRate.Numerator) / static_cast<f32>(desc.RefreshRate.Denominator)));
+				const auto refresh = static_cast<u32>(round(static_cast<f32>(desc.RefreshRate.Numerator) / static_cast<f32>(desc.RefreshRate.Denominator)));
 				display_modes.push_back(std::to_string(desc.Width) + "x" + std::to_string(desc.Height) + " " + std::to_string(refresh) + "Hz");
 			}
 		}
@@ -1106,10 +1106,7 @@ void DrawSystemMenu(Engine& engine) {
 
 		if (ImGui::Button("Apply")) {
 			settings.setDisplayDesc(current);
-
-			// TODO: window resizing logic
 			engine.requestResize();
-
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SameLine();

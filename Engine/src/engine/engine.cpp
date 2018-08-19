@@ -129,19 +129,15 @@ void Engine::loadScene(unique_ptr<Scene>&& new_scene) {
 
 
 void Engine::run() {
+
+	// Show the window
 	window->show(SW_SHOWNORMAL);
 
-	MSG  msg  = {};
-	bool done = false;
-
 	// Main loop
-	while (!done) {
+	MSG  msg  = {};
+	while (msg.message != WM_QUIT && !exit_requested) {
 
 		if (PeekMessage(&msg, nullptr, NULL, NULL, PM_REMOVE)) {
-
-			if (msg.message == WM_QUIT) {
-				done = true;
-			}
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
@@ -154,7 +150,7 @@ void Engine::run() {
 
 			// Quit if escape is pressed
 			if (input->isKeyDown(Keyboard::Escape)) {
-				done = true;
+				requestExit();
 			}
 		}
 	}

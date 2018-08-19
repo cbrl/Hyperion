@@ -61,8 +61,9 @@ public:
 	//----------------------------------------------------------------------------------
 
 	Engine()
-		: toggle_fullscreen(false)
-		, resize_requested(false) {
+		: exit_requested(false)
+		, resize_requested(false)
+		, toggle_fullscreen(false) {
 	}
 
 	Engine(const Engine& engine) = delete;
@@ -91,8 +92,18 @@ public:
 	// Initialize the engine
 	void init();
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Run
+	//----------------------------------------------------------------------------------
+
 	// Begin the main loop
 	void run();
+
+	// Request that the engine quit upon completion of the current frame
+	void requestExit() {
+		exit_requested = true;
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -109,6 +120,7 @@ public:
 		return window->getClientSize();
 	}
 
+	// Request a resize of the window and renderer
 	void requestResize() {
 		resize_requested = true;
 	}
@@ -230,6 +242,7 @@ private:
 	unique_ptr<RenderingMgr> rendering_mgr;
 	unique_ptr<Scene> scene;
 
-	bool toggle_fullscreen;
+	bool exit_requested;
 	bool resize_requested;
+	bool toggle_fullscreen;
 };
