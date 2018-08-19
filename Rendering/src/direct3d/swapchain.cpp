@@ -16,6 +16,14 @@ SwapChain::SwapChain(HWND window,
 }
 
 
+SwapChain::~SwapChain() {
+	// Ensure the swap chain isn't in fullscreen mode on destruction,
+	// as DirectX will not reset the state itself.
+	if (swap_chain)
+		swap_chain->SetFullscreenState(FALSE, nullptr);
+}
+
+
 void SwapChain::clear() const noexcept {
 	Pipeline::OM::clearRTV(device_context, render_target_view.Get());
 }
@@ -126,8 +134,15 @@ void SwapChain::reset() {
 		flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 	}
 
+	// Release the RTV
+	render_target_view.Reset();
+
 	// Recreate the swap chain buffers
+	BOOL fullscreen = FALSE;
+	swap_chain->GetFullscreenState(&fullscreen, nullptr);
+	swap_chain->SetFullscreenState(FALSE, nullptr);
 	swap_chain->ResizeBuffers(0, 0, 0, DXGI_FORMAT_UNKNOWN, flags);
+	swap_chain->SetFullscreenState(fullscreen, nullptr);
 
 	// Recreate the RTV
 	createRenderTargetView();

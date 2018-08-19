@@ -224,7 +224,7 @@ private:
 		ComPtr<IDXGIFactory2> factory;
 
 		// Create the DXGI factory
-		ThrowIfFailed(CreateDXGIFactory1(__uuidof(IDXGIFactory1), static_cast<void**>(&factory)),
+		ThrowIfFailed(CreateDXGIFactory1(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(factory.GetAddressOf())),
 			"Failed to create dxgiFactory");
 
 		// Get the default adapter and output

@@ -1108,6 +1108,7 @@ void DrawSystemMenu(Engine& engine) {
 			settings.setDisplayDesc(current);
 
 			// TODO: window resizing logic
+			engine.requestResize();
 
 			ImGui::CloseCurrentPopup();
 		}
@@ -1235,7 +1236,7 @@ void UserInterface::update(Engine& engine)  {
 	ImGui::End();
 
 	// Draw the system menu
-	//DrawSystemMenu(engine);
+	DrawSystemMenu(engine);
 
 	// Draw scene window contents
 	if (ImGui::Begin("Scene")) {

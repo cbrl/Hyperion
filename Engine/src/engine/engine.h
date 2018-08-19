@@ -61,7 +61,8 @@ public:
 	//----------------------------------------------------------------------------------
 
 	Engine()
-		: toggle_fullscreen(false) {
+		: toggle_fullscreen(false)
+		, resize_requested(false) {
 	}
 
 	Engine(const Engine& engine) = delete;
@@ -106,6 +107,10 @@ public:
 	[[nodiscard]]
 	vec2_u32 getWindowSize() const {
 		return window->getClientSize();
+	}
+
+	void requestResize() {
+		resize_requested = true;
 	}
 
 
@@ -226,4 +231,5 @@ private:
 	unique_ptr<Scene> scene;
 
 	bool toggle_fullscreen;
+	bool resize_requested;
 };

@@ -15,6 +15,10 @@ LRESULT EngineMessageHandler::msgProc(HWND window, UINT msg, WPARAM wParam, LPAR
 			}
 		}
 
+		case WM_SIZE: {
+			on_resize();
+		}
+
 		default:
 			return 0;
 	}
@@ -178,6 +182,14 @@ void Engine::updateRendering() {
 
 	auto& swap_chain = rendering_mgr->getSwapChain();
 	const bool lost_mode = swap_chain.lostMode();
+
+	if (resize_requested) {
+		const bool fs = swap_chain.isFullscreen();
+		if (fs) swap_chain.switchMode(true);
+		window->resizeWindow(rendering_mgr->getDisplayConfig().getDisplayResolution());
+		if (fs) swap_chain.switchMode(true);
+		resize_requested = false;
+	}
 
 	if (lost_mode || toggle_fullscreen) {
 		swap_chain.switchMode(!lost_mode);
