@@ -676,7 +676,7 @@ void DrawTree(ECS& ecs_engine, Scene& scene) {
 
 //----------------------------------------------------------------------------------
 //
-//   Popup Windows
+//   "Add Model" Popup Windows
 //
 //----------------------------------------------------------------------------------
 
@@ -1040,57 +1040,29 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 //----------------------------------------------------------------------------------
 //
-//   Menu
+//   System Menu
 //
 //----------------------------------------------------------------------------------
 
-void DrawSystemMenu(Engine& engine) {
+void DrawDisplaySettingsPopup(Engine& engine) {
 
-	bool display_settings_popup = false;
-
-	// Menu Bar
-	if (ImGui::BeginMainMenuBar()) {
-
-		if (ImGui::BeginMenu("System")) {
-
-			if (ImGui::MenuItem("Display Settings")) {
-				display_settings_popup = true;
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Exit")) {
-				engine.requestExit();
-			}
-
-			ImGui::EndMenu();
-		}
-
-		ImGui::EndMainMenuBar();
-	}
-
-
-	if (display_settings_popup) {
-		ImGui::OpenPopup("Display Settings");
-	}
-
-
-	// Display Settings Popup
-	if (ImGui::BeginPopupModal("Display Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+		if (ImGui::BeginPopupModal("Display Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 
 		auto& settings = engine.getRenderingMgr().getDisplayConfig();
 		static auto current = static_cast<int>(settings.getDisplayDescIndex());
 
+		// Display mode strings
 		static std::vector<std::string> display_modes;
 		if (display_modes.empty()) {
 			for (const auto& desc : settings.getDisplayDescList()) {
-				const auto refresh = static_cast<u32>(round(static_cast<f32>(desc.RefreshRate.Numerator) / static_cast<f32>(desc.RefreshRate.Denominator)));
+				const auto exact_refresh = static_cast<f32>(desc.RefreshRate.Numerator) / static_cast<f32>(desc.RefreshRate.Denominator);
+				const auto refresh       = static_cast<u32>(round(exact_refresh));
 				display_modes.push_back(std::to_string(desc.Width) + "x" + std::to_string(desc.Height) + " " + std::to_string(refresh) + "Hz");
 			}
 		}
 
+		// Lamda to convert display mode to a string
 		static auto getter = [](void* data, int idx, const char** out_text) -> bool {
-			using namespace std::string_literals;
 			auto& vector = *static_cast<const std::vector<DXGI_MODE_DESC>*>(data);
 			if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
 			*out_text = display_modes[idx].c_str();
@@ -1118,6 +1090,48 @@ void DrawSystemMenu(Engine& engine) {
 	}
 }
 
+
+void DrawSystemMenu(Engine& engine) {
+
+	bool display_settings_popup = false;
+
+	// Menu Bar
+	if (ImGui::BeginMainMenuBar()) {
+		if (ImGui::BeginMenu("System")) {
+
+			if (ImGui::MenuItem("Display Settings")) {
+				display_settings_popup = true;
+			}
+
+			ImGui::Separator();
+
+			if (ImGui::MenuItem("Exit")) {
+				engine.requestExit();
+			}
+
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+
+
+	if (display_settings_popup) {
+		ImGui::OpenPopup("Display Settings");
+	}
+
+
+	// Display Settings Popup
+	DrawDisplaySettingsPopup(engine);
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+//
+//   Scene Menu
+//
+//----------------------------------------------------------------------------------
 
 void DrawSceneMenu(ID3D11Device& device,
                    ECS& ecs_engine,
@@ -1212,7 +1226,7 @@ void DrawSceneMenu(ID3D11Device& device,
 
 //----------------------------------------------------------------------------------
 //
-//   Draw
+//   Update
 //
 //----------------------------------------------------------------------------------
 
@@ -1233,7 +1247,11 @@ void UserInterface::update(Engine& engine)  {
 	ImGui::End();
 
 	// Draw the system menu
-	DrawSystemMenu(engine);
+	static bool system_menu = true;
+	if (engine.getInput().isKeyPressed(Keyboard::F1)) { system_menu = !system_menu; }
+	if (system_menu) {
+		DrawSystemMenu(engine);
+	}
 
 	// Draw scene window contents
 	if (ImGui::Begin("Scene")) {

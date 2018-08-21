@@ -5,9 +5,8 @@
 //----------------------------------------------------------------------------------
 
 // Silence codecvt deprecation warning
-#ifndef _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+#undef _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
-#endif
 
 
 

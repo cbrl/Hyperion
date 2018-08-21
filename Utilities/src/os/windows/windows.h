@@ -9,16 +9,16 @@
 #define WIN32_LEAN_AND_MEAN
 
 // Don't define the windows min/max macros
-#ifndef NOMINMAX
+#undef NOMINMAX
 #define NOMINMAX
-#endif
 
 // Silence warning for codecvt deprecation
-#ifndef _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+#undef _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
-#endif
 
-
+// Declare std::aligned_storage behavior for MSVC
+#undef _ENABLE_EXTENDED_ALIGNED_STORAGE
+#define _ENABLE_EXTENDED_ALIGNED_STORAGE
 
 
 //----------------------------------------------------------------------------------
