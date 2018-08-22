@@ -161,12 +161,10 @@ void XM_CALLCONV DepthPass::renderModel(ECS& ecs_engine,
 		return;
 
 	model.bind(device_context);
-
-	const auto& mat = model.getMaterial();
-
 	model.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
 	model.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
+	const auto& mat = model.getMaterial();
 	if (mat.map_diffuse)
 		mat.map_diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
 
