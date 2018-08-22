@@ -72,11 +72,11 @@ void TestScene::load(const Engine& engine) {
 
 	// Scene model
 	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
-	addEntity<BasicModel>(device, bp);
+	const handle64 test_model = importModel(device, bp);
 
 	// Sphere
 	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
-	const handle64 sphere_handle = addEntity<BasicModel>(device, sphere_bp);
+	const handle64 sphere_handle = importModel(device, sphere_bp);
 	auto* sphere = ecs->getEntity(sphere_handle);
 
 	sphere->getComponent<Transform>()->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });

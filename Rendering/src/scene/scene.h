@@ -89,11 +89,32 @@ public:
 	}
 
 
+	//----------------------------------------------------------------------------------
+	// Member Functions - Import Model
+	//----------------------------------------------------------------------------------
+
+	// Create a new entity and add models described by a model blueprint
+	handle64 importModel(ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint) {
+		handle64 out = addEntity<WorldObject<>>();
+		importModel(out, device, blueprint);
+		return out;
+	}
+
+	// Add models described by a model blueprint to an existing entity
+	void importModel(handle64 entity, ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint) {
+		const auto& materials = blueprint->getMaterials();
+		blueprint->forEachPart([&](ModelPart& part) {
+			ecs->addComponent<Model>(entity, device, blueprint->mesh, part, materials[part.material_index]);
+		});
+	}
+
+
 
 protected:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
+
 	Scene()
 		: name("Scene")
 		, ecs(std::make_unique<ECS>()) {
@@ -111,6 +132,7 @@ protected:
 	// Operators
 	//----------------------------------------------------------------------------------
 	Scene& operator=(Scene&& scene) = default;
+
 
 
 protected:

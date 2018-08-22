@@ -1,7 +1,6 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "datatypes/datatypes.h"
 #include "resource/model/material/material.h"
 #include "geometry/bounding_volume/bounding_volume.h"
 
@@ -31,9 +30,6 @@ struct ModelPart {
 template<typename VertexT>
 struct ModelOutput final {
 public:
-	ModelOutput() = default;
-	~ModelOutput() = default;
-
 	ModelOutput(const std::string& name,
 	            const std::vector<VertexT>& vertices,
 	            const std::vector<u32>& indices,
@@ -47,8 +43,6 @@ public:
 	std::vector<u32> indices;
 	std::vector<Material> materials;
 	std::vector<ModelPart> model_parts;
-	AABB aabb;
-	BoundingSphere sphere;
 };
 
 

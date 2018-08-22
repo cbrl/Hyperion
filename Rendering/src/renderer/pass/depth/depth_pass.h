@@ -38,9 +38,7 @@ private:
 
 	void XM_CALLCONV renderModel(ECS& ecs_engine,
 	                             const Model& model,
-	                             FXMMATRIX world_to_projection,
-	                             bool shadows,
-	                             bool render_transparent) const;
+	                             FXMMATRIX world_to_projection) const;
 
 
 private:

@@ -209,7 +209,6 @@
     <None Include="src\renderer\renderer.tpp" />
     <None Include="src\resource\mesh\mesh.tpp" />
     <None Include="src\resource\model\blueprint_factory.tpp" />
-    <None Include="src\resource\model\model_blueprint.tpp" />
     <None Include="src\resource\model\model_output.tpp" />
     <None Include="src\resource\resource_mgr.tpp" />
     <None Include="src\resource\shader\shader.tpp" />

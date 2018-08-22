@@ -113,10 +113,6 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 			return;
 
 		renderAABB(model.getAABB(), object_to_world);
-
-		model.forEachChild([&](const ModelChild& child) {
-			renderAABB(child.getAABB(), object_to_world);
-		});
 	});
 }
 

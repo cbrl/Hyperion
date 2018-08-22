@@ -14,157 +14,17 @@
 #include "geometry/bounding_volume/bounding_volume.h"
 
 
-class ModelChild final {
-public:
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
-
-	ModelChild(ID3D11Device& device, ModelPart& part, Material mat)
-		: name(part.name)
-		, buffer(device)
-		, material(std::move(mat))
-		, index_start(part.index_start)
-		, index_count(part.index_count)
-		, aabb(part.aabb)
-		, sphere(part.sphere)
-		, shadows(true) {
-	}
-
-	ModelChild(const ModelChild& child) = delete;
-	ModelChild(ModelChild&& child) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Destructor
-	//----------------------------------------------------------------------------------
-
-	~ModelChild() = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-
-	ModelChild& operator=(const ModelChild& child) = delete;
-	ModelChild& operator=(ModelChild&& child) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Buffer
-	//----------------------------------------------------------------------------------
-
-	// Bind the child model's buffer to a pipeline stage
-	template<typename StageT>
-	void bindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
-		buffer.bind<StageT>(device_context, slot);
-	}
-
-	// Update the child model's buffer
-	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context,
-	                              FXMMATRIX object_to_world,
-	                              CXMMATRIX world_inv_transpose) const;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Index info
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	u32 getIndexStart() const {
-		return index_start;
-	}
-
-	[[nodiscard]]
-	u32 getIndexCount() const {
-		return index_count;
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Name
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	const std::string& getName() const {
-		return name;
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Bounding volumes
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	const AABB& getAABB() const {
-		return aabb;
-	}
-
-	[[nodiscard]]
-	const BoundingSphere& getSphere() const {
-		return sphere;
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Material
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	Material& getMaterial() {
-		return material;
-	}
-
-	[[nodiscard]]
-	const Material& getMaterial() const {
-		return material;
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Shadows
-	//----------------------------------------------------------------------------------
-
-	void setShadows(bool state) {
-		shadows = state;
-	}
-
-	[[nodiscard]]
-	bool castsShadows() const {
-		return shadows;
-	}
-
-
-private:
-	// The name of the model child
-	std::string name;
-
-	// The cbuffer for this model child
-	ConstantBuffer<ModelBuffer> buffer;
-
-	// The model child's material
-	Material material;
-
-	// Index info
-	u32 index_start;
-	u32 index_count;
-
-	// Bounding volumes
-	AABB aabb;
-	BoundingSphere sphere;
-
-	// Flag that decides if the model can cast shadows
-	bool shadows;
-};
-
-
 class Model final : public Component<Model> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Model(ID3D11Device& device, shared_ptr<ModelBlueprint> blueprint);
+	Model(ID3D11Device& device,
+	      shared_ptr<Mesh> mesh,
+	      const ModelPart& part,
+	      const Material& mat);
+
 	Model(const Model& model) = delete;
 	Model(Model&& mode) noexcept = default;
 
@@ -185,6 +45,29 @@ public:
 
 
 	//----------------------------------------------------------------------------------
+	// Member Functions - Name
+	//----------------------------------------------------------------------------------
+
+	const std::string& getName() const {
+		return name;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Buffer
+	//----------------------------------------------------------------------------------
+
+	// Bind the model's cbuffer to a pipeline stage
+	template<typename StageT>
+	void bindBuffer(ID3D11DeviceContext& device_context, u32 slot) const {
+		buffer.bind<StageT>(device_context, slot);
+	}
+
+	// Update the model's cbuffer
+	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX object_to_world);
+
+
+	//----------------------------------------------------------------------------------
 	// Member Functions - Mesh
 	//----------------------------------------------------------------------------------
 
@@ -195,53 +78,83 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Iteration
+	// Member Functions - Index info
 	//----------------------------------------------------------------------------------
 
-	// Preform an action for each child model
-	template<typename ActionT>
-	void forEachChild(ActionT act) {
-		for (auto& child : child_models) {
-			act(child);
-		}
+	[[nodiscard]]
+	u32 getIndexStart() const {
+		return index_start;
 	}
 
-	template<typename ActionT>
-	void forEachChild(ActionT act) const {
-		for (const auto& child : child_models) {
-			act(child);
-		}
+	[[nodiscard]]
+	u32 getIndexCount() const {
+		return index_count;
 	}
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Buffer
+	// Member Functions - Material
 	//----------------------------------------------------------------------------------
 
-	// Update model matrix and bounding volumes, as well as those of the child models.
-	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX object_to_world);
+	[[nodiscard]]
+	Material& getMaterial() {
+		return material;
+	}
+
+	[[nodiscard]]
+	const Material& getMaterial() const {
+		return material;
+	}
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Misc
+	// Member Functions - Bounding Volumes
 	//----------------------------------------------------------------------------------
 
-	const std::string& getName() const { return name; }
-	const AABB& getAABB() const { return aabb; }
-	const BoundingSphere& getSphere() const { return sphere; }
+	const AABB& getAABB() const {
+		return aabb;
+	}
+
+	const BoundingSphere& getBoundingSphere() const {
+		return sphere;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Shadows
+	//----------------------------------------------------------------------------------
+
+	void setShadows(bool state) {
+		shadows = state;
+	}
+
+	[[nodiscard]]
+	bool castsShadows() const {
+		return shadows;
+	}
 
 
 private:
 	// The model's name
 	std::string name;
 
+	// The model's cbuffer
+	ConstantBuffer<ModelBuffer> buffer;
+
 	// The vertex and index buffer of the model
 	shared_ptr<Mesh> mesh;
+
+	// The starting index and index count of the model
+	u32 index_start;
+	u32 index_count;
+
+	// The model's material
+	Material material;
 
 	// Bounding volumes
 	AABB aabb;
 	BoundingSphere sphere;
 
-	// The child models that make up this model
-	std::vector<ModelChild> child_models;
+	// Flag that decides if the model can cast shadows
+	bool shadows;
 };

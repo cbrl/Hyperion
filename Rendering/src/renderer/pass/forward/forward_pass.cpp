@@ -100,8 +100,13 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 
 	// Render models
 	ecs_engine.forEach<Model>([&](Model& model) {
-		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection, true, true);
+		if (model.isActive()) {
+			const auto& mat = model.getMaterial();
+			if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
+				return;
+
+			renderModel(ecs_engine, model, world_to_projection);
+		}
 	});
 }
 
@@ -124,8 +129,15 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 
 	// Render models
 	ecs_engine.forEach<Model>([&](Model& model) {
-		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection, true, false);
+		if (model.isActive()) {
+			const auto& mat = model.getMaterial();
+			if (!mat.transparent
+				|| mat.diffuse.w < ALPHA_MIN
+				|| mat.diffuse.w > ALPHA_MAX)
+				return;
+
+			renderModel(ecs_engine, model, world_to_projection);
+		}
 	});
 }
 
@@ -146,8 +158,13 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 	opaque_ps->bind(device_context);
 
 	ecs_engine.forEach<Model>([&](Model& model) {
-		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection, true, true);
+		if (model.isActive()) {
+			const auto& mat = model.getMaterial();
+			if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
+				return;
+
+			renderModel(ecs_engine, model, world_to_projection);
+		}
 	});
 
 
@@ -157,8 +174,15 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 	transparent_ps->bind(device_context);
 
 	ecs_engine.forEach<Model>([&](Model& model) {
-		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection, true, false);
+		if (model.isActive()) {
+			const auto& mat = model.getMaterial();
+			if (!mat.transparent
+				|| mat.diffuse.w < ALPHA_MIN
+				|| mat.diffuse.w > ALPHA_MAX)
+				return;
+
+			renderModel(ecs_engine, model, world_to_projection);
+		}
 	});
 }
 
@@ -176,7 +200,7 @@ void ForwardPass::renderFalseColor(Scene& scene,
 
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection, false, false);
+			renderModel(ecs_engine, model, world_to_projection);
 	});
 }
 
@@ -194,16 +218,14 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection) c
 
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection, false, false);
+			renderModel(ecs_engine, model, world_to_projection);
 	});
 }
 
 
 void XM_CALLCONV ForwardPass::renderModel(ECS& ecs_engine,
                                           Model& model,
-                                          FXMMATRIX world_to_projection,
-                                          bool transparency_test,
-                                          bool skip_transparent) const {
+                                          FXMMATRIX world_to_projection) const {
 
 	const auto* transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
 	if (!transform) return;
@@ -219,52 +241,29 @@ void XM_CALLCONV ForwardPass::renderModel(ECS& ecs_engine,
 	// Bind the model's mesh
 	model.bind(device_context);
 
-	// Render each model part individually
-	model.forEachChild([&](ModelChild& child) {
+	// Get the model's material
+	const auto& mat = model.getMaterial();
 
-		// Get the child model's material
-		const auto& mat = child.getMaterial();
+	// Bind the model's buffer
+	model.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
+	model.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
 
-		// Handle transparency
-		if (transparency_test) {
-			if (skip_transparent) {
-				if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
-					return;
-			}
-			else {
-				if (!mat.transparent
-				    || mat.diffuse.w < ALPHA_MIN
-				    || mat.diffuse.w > ALPHA_MAX)
-					return;
-			}
-		}
-		
-
-		// Cull the model child
-		if (!frustum.contains(child.getAABB()))
-			return;
-
-		// Bind the child model's buffer
-		child.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
-		child.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
-
-		// Bind the SRVs
-		if (mat.map_diffuse)        mat.map_diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
-		if (mat.map_ambient)        mat.map_ambient->bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
-		if (mat.map_specular)       mat.map_specular->bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
-		if (mat.map_spec_highlight) mat.map_spec_highlight->bind<Pipeline::PS>(device_context, SLOT_SRV_SPEC_HIGHLIGHT);
-		if (mat.map_alpha)          mat.map_alpha->bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
-		if (mat.map_bump)           mat.map_bump->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
+	// Bind the SRVs
+	if (mat.map_diffuse)        mat.map_diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
+	if (mat.map_ambient)        mat.map_ambient->bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
+	if (mat.map_specular)       mat.map_specular->bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
+	if (mat.map_spec_highlight) mat.map_spec_highlight->bind<Pipeline::PS>(device_context, SLOT_SRV_SPEC_HIGHLIGHT);
+	if (mat.map_alpha)          mat.map_alpha->bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
+	if (mat.map_bump)           mat.map_bump->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
 
 
-		// Draw the child
-		Pipeline::drawIndexed(device_context, child.getIndexCount(), child.getIndexStart());
+	// Draw the model
+	Pipeline::drawIndexed(device_context, model.getIndexCount(), model.getIndexStart());
 
 
-		// Unbind the SRVs
-		// Slot definition could be used as a more dynamic way of unbinding any amount of srvs
-		// E.g. null_srv[SLOT_SRV_ALPHA + 1] = { nullptr };
-		ID3D11ShaderResourceView* null_srv[6] = {nullptr};
-		Pipeline::PS::bindSRVs(device_context, 0, 6, null_srv);
-	});
+	// Unbind the SRVs
+	// Slot definition could be used as a more dynamic way of unbinding any amount of srvs
+	// E.g. null_srv[SLOT_SRV_ALPHA + 1] = { nullptr };
+	ID3D11ShaderResourceView* null_srv[6] = { nullptr };
+	Pipeline::PS::bindSRVs(device_context, 0, 6, null_srv);
 }

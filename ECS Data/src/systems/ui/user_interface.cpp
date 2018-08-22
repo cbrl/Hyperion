@@ -281,29 +281,25 @@ void DrawDetails(MouseRotation& rotation) {
 void DrawDetails(Model& model) {
 
 	DrawComponentState(model);
-}
 
-
-void DrawDetails(ModelChild& child) {
-
-	ImGui::Text(child.getName().c_str());
+	ImGui::Text(model.getName().c_str());
 	ImGui::Separator();
 
-	bool shadows = child.castsShadows();
+	bool shadows = model.castsShadows();
 	if (ImGui::Checkbox("Casts Shadows", &shadows))
-		child.setShadows(shadows);
+		model.setShadows(shadows);
 
 	// Change material properties, textures
-	std::string name = "Material: " + child.getMaterial().name;
+	std::string name = "Material: " + model.getMaterial().name;
 	ImGui::Text(name.c_str());
 
-	ImGui::ColorEdit4("Diffuse Color", child.getMaterial().diffuse.data());
-	ImGui::ColorEdit3("Ambient Color", child.getMaterial().ambient.data());
-	ImGui::ColorEdit3("Specular Color", child.getMaterial().specular.data());
-	ImGui::DragFloat("Specular Exponent", &child.getMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
-	ImGui::ColorEdit3("Reflective Color", child.getMaterial().reflect.data());
-	ImGui::Checkbox("Transparent", &child.getMaterial().transparent);
-	ImGui::Checkbox("Reflection", &child.getMaterial().reflection_enabled);
+	ImGui::ColorEdit4("Diffuse Color", model.getMaterial().diffuse.data());
+	ImGui::ColorEdit3("Ambient Color", model.getMaterial().ambient.data());
+	ImGui::ColorEdit3("Specular Color", model.getMaterial().specular.data());
+	ImGui::DragFloat("Specular Exponent", &model.getMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
+	ImGui::ColorEdit3("Reflective Color", model.getMaterial().reflect.data());
+	ImGui::Checkbox("Transparent", &model.getMaterial().transparent);
+	ImGui::Checkbox("Reflection", &model.getMaterial().reflection_enabled);
 }
 
 
@@ -557,29 +553,8 @@ void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
 		// Model
 		if (entity->hasComponent<Model>()) {
 			auto models = entity->getAll<Model>();
-
 			for (auto* model : models) {
-				const bool node_selected = (selected == model);
-
-				const ImGuiTreeNodeFlags model_flags = ImGuiTreeNodeFlags_OpenOnArrow
-				                                       | ImGuiTreeNodeFlags_OpenOnDoubleClick
-				                                       | (node_selected ? ImGuiTreeNodeFlags_Selected : 0);
-
-				const bool open = ImGui::TreeNodeEx("Model", model_flags);
-
-				if (ImGui::IsItemClicked())
-					selected = model;
-
-				if (open) {
-					model->forEachChild([&](ModelChild& child) {
-						DrawNode(child.getName().c_str(), child);
-					});
-
-					ImGui::TreePop();
-				}
-
-				if (node_selected)
-					DrawDetailsPanel(*model);
+				DrawNode(model->getName().c_str(), *model);
 			}
 		}
 
@@ -681,7 +656,7 @@ void DrawTree(ECS& ecs_engine, Scene& scene) {
 //----------------------------------------------------------------------------------
 
 void ProcNewModelPopups(ID3D11Device& device,
-                        ECS& ecs_engine,
+                        Scene& scene,
                         ResourceMgr& resource_mgr,
                         handle64 entity,
                         ModelType type) {
@@ -736,7 +711,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::Button("Create")) {
 			auto bp = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(resource_mgr, size, rhcoords, invertn);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -760,7 +735,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::Button("Create")) {
 			auto bp = BlueprintFactory::CreateBox<VertexPositionNormalTexture>(resource_mgr, size, rhcoords, invertn);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -795,7 +770,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, diameter, tessellation, rhcoords, invertn);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -828,7 +803,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateGeoSphere<VertexPositionNormalTexture>(resource_mgr, diameter, tessellation, rhcoords);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -863,7 +838,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCylinder<VertexPositionNormalTexture>(resource_mgr, diameter, height, tessellation, rhcoords);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -898,7 +873,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCone<VertexPositionNormalTexture>(resource_mgr, diameter, height, tessellation, rhcoords);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -933,7 +908,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 		if (ImGui::IsItemClicked()) {
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateTorus<VertexPositionNormalTexture>(resource_mgr, diameter, thickness, tessellation, rhcoords);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -955,7 +930,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::Button("Create")) {
 			auto bp = BlueprintFactory::CreateTetrahedron<VertexPositionNormalTexture>(resource_mgr, size, rhcoords);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -977,7 +952,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::Button("Create")) {
 			auto bp = BlueprintFactory::CreateOctahedron<VertexPositionNormalTexture>(resource_mgr, size, rhcoords);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -999,7 +974,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::Button("Create")) {
 			auto bp = BlueprintFactory::CreateDodecahedron<VertexPositionNormalTexture>(resource_mgr, size, rhcoords);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1021,7 +996,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::Button("Create")) {
 			auto bp = BlueprintFactory::CreateIcosahedron<VertexPositionNormalTexture>(resource_mgr, size, rhcoords);
-			ecs_engine.addComponent<Model>(entity, device, bp);
+			scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1178,7 +1153,7 @@ void DrawSceneMenu(ID3D11Device& device,
 
 							if (OpenFilePicker(szFile, sizeof(szFile))) {
 								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
-								ecs_engine.addComponent<Model>(selected_entity, device, bp);
+								scene.importModel(selected_entity, device, bp);
 							}
 							else Logger::log(LogLevel::err, "Failed to open file dialog");
 						}
@@ -1262,7 +1237,7 @@ void UserInterface::update(Engine& engine)  {
 		DrawSceneMenu(device, ecs_engine, resource_mgr, scene, add_model_popup);
 
 		// Process model popup
-		ProcNewModelPopups(device, ecs_engine, resource_mgr, selected_entity, add_model_popup);
+		ProcNewModelPopups(device, scene, resource_mgr, selected_entity, add_model_popup);
 
 		// Draw tree
 		DrawTree(ecs_engine, scene);

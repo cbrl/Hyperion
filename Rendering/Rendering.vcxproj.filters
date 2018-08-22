@@ -143,9 +143,6 @@
     <ClCompile Include="src\direct3d\direct3d.cpp">
       <Filter>Source Files\direct3d</Filter>
     </ClCompile>
-    <ClCompile Include="src\resource\model\model_blueprint.cpp">
-      <Filter>Source Files\resource\model</Filter>
-    </ClCompile>
     <ClCompile Include="src\buffer\shadow_map_buffer.cpp">
       <Filter>Source Files\buffer</Filter>
     </ClCompile>
@@ -193,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="src\renderer\output\output_mgr.cpp">
       <Filter>Source Files\renderer\output</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\model_blueprint.cpp">
+      <Filter>Source Files\resource\model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,9 +328,6 @@
       <Filter>Source Files\resource\model</Filter>
     </None>
     <None Include="src\resource\model\model_output.tpp">
-      <Filter>Source Files\resource\model</Filter>
-    </None>
-    <None Include="src\resource\model\model_blueprint.tpp">
       <Filter>Source Files\resource\model</Filter>
     </None>
     <None Include="src\resource\mesh\mesh.tpp">

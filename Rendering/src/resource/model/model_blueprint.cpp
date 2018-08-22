@@ -1,5 +1,5 @@
 #include "model_blueprint.h"
-
+#include "resource/resource_mgr.h"
 #include "loader/model_loader.h"
 
 
@@ -9,6 +9,5 @@ ModelBlueprint::ModelBlueprint(ID3D11Device& device,
 	: Resource(filename) {
 
 	const auto out = ModelLoader::load<VertexPositionNormalTexture>(resource_mgr, filename);
-
 	constructBlueprint(device, out);
 }
