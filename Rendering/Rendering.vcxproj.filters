@@ -345,12 +345,12 @@
     <None Include="src\buffer\structured_buffer.tpp">
       <Filter>Source Files\buffer</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="src\renderer\renderer.tpp">
       <Filter>Source Files\renderer</Filter>
     </None>
     <None Include="src\resource\shader\shader.tpp">
       <Filter>Source Files\resource\shader</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -67,8 +67,7 @@ void Engine::init() {
 		auto win_config = std::make_shared<WindowConfig>(GetModuleHandle(nullptr), L"Engine");
 		window = std::make_unique<Window>(win_config,
 		                                  L"Engine",
-		                                  vec2_u32{ display_config.getDisplayWidth(),
-		                                            display_config.getDisplayHeight() });
+		                                  display_config.getDisplayResolution());
 
 		msg_handler.on_fullscreen_toggle = [this]() {
 			toggle_fullscreen = true;

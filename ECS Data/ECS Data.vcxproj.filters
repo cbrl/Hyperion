@@ -169,9 +169,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="src\systems\transform\transform_system.cpp">
       <Filter>Source Files\systems\transform</Filter>
     </ClCompile>
@@ -205,5 +202,8 @@
     <ClCompile Include="src\systems\ui\user_interface.cpp">
       <Filter>Source Files\systems\ui</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
