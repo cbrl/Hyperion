@@ -21,22 +21,25 @@ void TestScene::load(const Engine& engine) {
 	// User Interface
 	ecs->addSystem<UserInterface>(device, resource_mgr);
 
-	// Transform system: updates transforms when they're modified
+	// Transform system: updates transform components when they're modified
 	ecs->addSystem<TransformSystem>();
 
-	// Camera system: updates camera buffers
+	// Camera system: updates the buffers of camera components
 	ecs->addSystem<CameraSystem>();
 
-	// Model system: updates model buffers
+	// Model system: updates the buffers of model components
 	ecs->addSystem<ModelSystem>();
 
-	// Camera motor system: moves an entity with a camera and camera movement component
+	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
 	ecs->addSystem<CameraMotorSystem>();
 
-	// Mouse rotation system: uses mouse input to rotate an entity's transform
+	// Mouse rotation system: reads mouse input to rotate an entity (entity requires MouseRotation component)
 	ecs->addSystem<MouseRotationSystem>();
 
+	// Axis rotation system: rotates an entity on an axis (entity requires AxisRotation component)
 	ecs->addSystem<AxisRotationSystem>();
+
+	// Axis orbit system: orbits an entity around an axis (entity requires AxisOrbit component)
 	ecs->addSystem<AxisOrbitSystem>();
 
 
