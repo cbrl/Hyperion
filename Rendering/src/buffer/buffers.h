@@ -71,7 +71,7 @@ struct Fog {
 	Fog() noexcept
 		: color(0.0f, 0.0f, 0.0f, 1.0f)
 		, start(0.0f)
-		, range(0.0f) {
+		, range(-1.0f) {
 	}
 
 	Fog(const vec4_f32& color,

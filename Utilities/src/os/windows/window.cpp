@@ -115,7 +115,7 @@ void Window::init(const std::wstring& title,
 
 LRESULT CALLBACK Window::wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	const auto caller = GetCaller(window, msg, wParam, lParam);
+	auto* caller = GetCaller(window, msg, wParam, lParam);
 
 	if (caller) {
 		const auto result = caller->msgProc(window, msg, wParam, lParam);

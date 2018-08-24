@@ -2,9 +2,7 @@
 
 
 //----------------------------------------------------------------------------------
-//
 // CPUMonitor
-//
 //----------------------------------------------------------------------------------
 
 void SystemMonitor::CpuMonitor::tick() {
@@ -14,7 +12,7 @@ void SystemMonitor::CpuMonitor::tick() {
 	dt += wall_timer.deltaTime();
 
 	// Update stats only if 1/2 second has passed
-	if (dt > 0.5) {
+	if (dt >= 0.5) {
 
 		// Update system clocks
 		core_timer.tick();
@@ -43,10 +41,10 @@ f64 SystemMonitor::CpuMonitor::getProcessCpuPercentage() const {
 }
 
 
+
+
 //----------------------------------------------------------------------------------
-//
 // MemoryMonitor
-//
 //----------------------------------------------------------------------------------
 
 void SystemMonitor::MemoryMonitor::tick() {
