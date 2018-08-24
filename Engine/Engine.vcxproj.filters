@@ -33,7 +33,4 @@
       <Filter>Source Files\engine</Filter>
     </ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
 </Project>

@@ -29,7 +29,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Misc
+	// Member Functions - Execution
 	//----------------------------------------------------------------------------------
 
 	// Load the scene contents
@@ -38,25 +38,38 @@ public:
 	// Update the scene
 	virtual void tick(Engine& engine) = 0;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Window Resize
+	//----------------------------------------------------------------------------------
+
 	// Handle a window resize event
-	virtual void onResize(vec2_u32 size) {
-		ecs->forEach<PerspectiveCamera>([&size](auto& camera) {
-			camera.getViewport().setSize(size);
-		});
-		ecs->forEach<OrthographicCamera>([&size](auto& camera) {
-			camera.getViewport().setSize(size);
-		});
-	}
+	void onResize(vec2_u32 size);
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Name
+	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
 	const std::string& getName() const {
 		return name;
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - ECS
+	//----------------------------------------------------------------------------------
+
 	[[nodiscard]]
 	ECS& getECS() const {
 		return *ecs;
 	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Texts
+	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
 	const std::map<std::string, Text>& getTexts() const {
@@ -94,20 +107,10 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Create a new entity and add models described by a model blueprint
-	handle64 importModel(ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint) {
-		handle64 out = addEntity<WorldObject<>>();
-		importModel(out, device, blueprint);
-		return out;
-	}
+	handle64 importModel(ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint);
 
 	// Add models described by a model blueprint to an existing entity
-	void importModel(handle64 entity, ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint) {
-		const auto& materials = blueprint->getMaterials();
-		blueprint->forEachPart([&](ModelPart& part) {
-			ecs->addComponent<Model>(entity, device, blueprint->mesh, part, materials[part.material_index]);
-		});
-	}
-
+	void importModel(handle64 entity, ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint);
 
 
 protected:
@@ -118,11 +121,13 @@ protected:
 	Scene()
 		: name("Scene")
 		, ecs(std::make_unique<ECS>()) {
+		addCriticalSystems();
 	}
 
 	Scene(std::string name)
 		: name(std::move(name))
 		, ecs(std::make_unique<ECS>()) {
+		addCriticalSystems();
 	}
 
 	Scene(Scene&& scene) = default;
@@ -132,7 +137,6 @@ protected:
 	// Operators
 	//----------------------------------------------------------------------------------
 	Scene& operator=(Scene&& scene) = default;
-
 
 
 protected:
@@ -151,4 +155,13 @@ protected:
 
 	// Text objects in this scene
 	std::map<std::string, Text> texts;
+
+
+private:
+	//----------------------------------------------------------------------------------
+	// Member Functions - Add Systems
+	//----------------------------------------------------------------------------------
+
+	// Add systems required for normal operation to the ECS
+	void addCriticalSystems();
 };

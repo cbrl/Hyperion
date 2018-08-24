@@ -194,6 +194,9 @@
     <ClCompile Include="src\resource\model\model_blueprint.cpp">
       <Filter>Source Files\resource\model</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\scene.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rendering_mgr.h">

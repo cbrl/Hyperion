@@ -21,15 +21,6 @@ void TestScene::load(const Engine& engine) {
 	// User Interface
 	ecs->addSystem<UserInterface>(device, resource_mgr);
 
-	// Transform system: updates transform components when they're modified
-	ecs->addSystem<TransformSystem>();
-
-	// Camera system: updates the buffers of camera components
-	ecs->addSystem<CameraSystem>();
-
-	// Model system: updates the buffers of model components
-	ecs->addSystem<ModelSystem>();
-
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
 	ecs->addSystem<CameraMotorSystem>();
 
