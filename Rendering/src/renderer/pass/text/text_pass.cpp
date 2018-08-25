@@ -13,6 +13,8 @@ void TextPass::render(Scene& scene) const {
 
 	ecs.forEach<Text>([&](Text& text) {
 
+		if (!text.isActive()) return;
+
 		auto* owner = ecs.getEntity(text.getOwner());
 		const auto* transform = owner->getComponent<Transform>();
 		if (!transform) return;

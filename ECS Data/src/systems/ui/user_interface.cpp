@@ -6,6 +6,8 @@
 #include "components/components.h"
 
 #include "imgui.h"
+#include "misc/stl/imgui_stl.h"
+
 #include "resource/resource_mgr.h"
 #include "resource/model/blueprint_factory.h"
 #include "scene/scene.h"
@@ -278,6 +280,18 @@ void DrawDetails(MouseRotation& rotation) {
 }
 
 
+void DrawDetails(Text& text) {
+
+	DrawComponentState(text);
+
+	std::string str = wstr2str(text.getText());
+
+	if (ImGui::InputTextMultiline("Text", &str)) {
+		text.setText(str2wstr(str));
+	}
+}
+
+
 void DrawDetails(Model& model) {
 
 	DrawComponentState(model);
@@ -419,7 +433,7 @@ void DrawDetails(AxisRotation& rotation) {
 
 
 	// X Rotation
-	static bool x_enable = rotation.hasAxis(AxisRotation::Axis::X);
+	bool x_enable = rotation.hasAxis(AxisRotation::Axis::X);
 
 	if (ImGui::Checkbox("X Axis", &x_enable)) {
 		if (x_enable) rotation.addAxis(AxisRotation::Axis::X);
@@ -434,7 +448,7 @@ void DrawDetails(AxisRotation& rotation) {
 
 
 	// Y Rotation
-	static bool y_enable = rotation.hasAxis(AxisRotation::Axis::Y);
+	bool y_enable = rotation.hasAxis(AxisRotation::Axis::Y);
 
 	if (ImGui::Checkbox("Y Axis", &y_enable)) {
 		if (y_enable) rotation.addAxis(AxisRotation::Axis::Y);
@@ -449,7 +463,7 @@ void DrawDetails(AxisRotation& rotation) {
 
 
 	// Z Rotation
-	static bool z_enable = rotation.hasAxis(AxisRotation::Axis::Z);
+	bool z_enable = rotation.hasAxis(AxisRotation::Axis::Z);
 
 	if (ImGui::Checkbox("Z Axis", &z_enable)) {
 		if (z_enable) rotation.addAxis(AxisRotation::Axis::Z);
@@ -547,6 +561,13 @@ void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
 			auto cams = entity->getAll<OrthographicCamera>();
 			for (auto* cam : cams) {
 				DrawNode("Orthographic Camera", *cam);
+			}
+		}
+
+		if (entity->hasComponent<Text>()) {
+			auto texts = entity->getAll<Text>();
+			for (auto* text : texts) {
+				DrawNode("Text", *text);
 			}
 		}
 
