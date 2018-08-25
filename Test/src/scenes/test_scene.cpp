@@ -102,7 +102,7 @@ void TestScene::load(const Engine& engine) {
 
 	// Camera light
 	{
-		const auto light_handle = addEntity<>();
+		const auto light_handle = addEntity();
 		auto* light = ecs->addComponent<SpotLight>(light_handle);
 		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(vec4_f32(0.85f, 0.85f, 0.9f, 1.0f));
@@ -120,7 +120,7 @@ void TestScene::load(const Engine& engine) {
 
 	// Directional Light
 	{
-		//const auto dir_light = addEntity<>();
+		//const auto dir_light = addEntity();
 		//auto* light = ecs->addComponent<DirectionalLight>(dir_light);
 		//light->setDiffuseColor(vec4_f32{ 0.0f, 0.0f, 1.0f, 0.0f });
 		//light->setRange(100.0f);

@@ -15,7 +15,7 @@ void Scene::onResize(vec2_u32 size) {
 
 handle64 Scene::importModel(ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint) {
 
-	handle64 out = addEntity<WorldObject<>>();
+	handle64 out = addEntity();
 	importModel(out, device, blueprint);
 	return out;
 }
