@@ -78,6 +78,9 @@
     <Filter Include="Header Files\systems\ui">
       <UniqueIdentifier>{b12f08b3-698c-4d71-9719-c36303bf1bba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\components\text">
+      <UniqueIdentifier>{4330ba85-88d1-46ae-b09c-2862139c706f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\components.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="src\systems\ui\user_interface.h">
       <Filter>Header Files\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\components\text\text.h">
+      <Filter>Header Files\components\text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

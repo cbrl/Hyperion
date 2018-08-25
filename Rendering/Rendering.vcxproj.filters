@@ -111,12 +111,6 @@
     <Filter Include="Header Files\scene">
       <UniqueIdentifier>{d0ea8214-70af-4ff4-9ad1-2828bd1070d8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\scene\text">
-      <UniqueIdentifier>{4b75801e-290c-4787-99f8-290bdaee5bcd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\text">
-      <UniqueIdentifier>{6d08b3e0-811f-4af8-98a1-0743676ceb32}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\renderer\output">
       <UniqueIdentifier>{3888d37e-5840-4527-87be-7cffee13effd}</UniqueIdentifier>
     </Filter>
@@ -178,9 +172,6 @@
     </ClCompile>
     <ClCompile Include="src\resource\shader\shader_factory.cpp">
       <Filter>Source Files\resource\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\text\text.cpp">
-      <Filter>Source Files\scene\text</Filter>
     </ClCompile>
     <ClCompile Include="src\direct3d\swapchain.cpp">
       <Filter>Source Files\direct3d</Filter>
@@ -309,9 +300,6 @@
     </ClInclude>
     <ClInclude Include="src\scene\scene.h">
       <Filter>Header Files\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\text\text.h">
-      <Filter>Header Files\scene\text</Filter>
     </ClInclude>
     <ClInclude Include="src\direct3d\swapchain.h">
       <Filter>Header Files\direct3d</Filter>

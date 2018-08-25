@@ -9,22 +9,24 @@ TextPass::TextPass(ID3D11DeviceContext& device_context) {
 
 void TextPass::render(Scene& scene) const {
 
-	const auto& texts = scene.getTexts();
+	auto& ecs = scene.getECS();
 
-	for (const auto& pair : texts) {
+	ecs.forEach<Text>([&](Text& text) {
 
-		const auto& text = pair.second;
+		auto* owner = ecs.getEntity(text.getOwner());
+		const auto* transform = owner->getComponent<Transform>();
+		if (!transform) return;
 
-		// Get the font
 		const auto& font = text.getFont();
 
-		// Draw the text
 		sprite_batch->Begin();
 		font.DrawString(sprite_batch.get(),
-		                text.getText().data(),
-		                text.getPosition(),
+		                text.getText().c_str(),
+		                transform->getPosition(),
 		                text.getColor(),
-		                text.getRotation());
+		                XMVectorGetZ(transform->getRotation()),
+		                transform->getObjectOrigin(),
+		                transform->getScale());
 		sprite_batch->End();
-	}
+	});
 }

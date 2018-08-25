@@ -102,8 +102,8 @@ void TestScene::load(const Engine& engine) {
 
 	// Camera light
 	{
-		const auto light_handle = addEntity<BasicSpotLight>();
-		auto* light = ecs->getEntity(light_handle)->getComponent<SpotLight>();
+		const auto light_handle = addEntity<>();
+		auto* light = ecs->addComponent<SpotLight>(light_handle);
 		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
 		light->setDiffuseColor(vec4_f32(0.85f, 0.85f, 0.9f, 1.0f));
 		light->setAttenuation(vec3_f32(0.05f, 0.2f, 0.0f));
@@ -120,8 +120,8 @@ void TestScene::load(const Engine& engine) {
 
 	// Directional Light
 	{
-		//const auto dir_light = addEntity<BasicDirectionalLight>(ecs_engine);
-		//auto light = ecs_engine.getComponent<DirectionalLight>(dir_light);
+		//const auto dir_light = addEntity<>();
+		//auto* light = ecs->addComponent<DirectionalLight>(dir_light);
 		//light->setDiffuseColor(vec4_f32{ 0.0f, 0.0f, 1.0f, 0.0f });
 		//light->setRange(100.0f);
 		//light->setSize(vec2_f32{ 30.0f, 30.0f });
@@ -136,22 +136,37 @@ void TestScene::load(const Engine& engine) {
 	// Create text objects
 	//----------------------------------------------------------------------------------
 
-	const std::wstring font(L"../data/fonts/courier-12.spritefont");
+	auto font = resource_mgr.getOrCreate<Font>(L"../data/fonts/courier-12.spritefont");
 
-	texts.try_emplace("FPS", resource_mgr, font);
-	texts.at("FPS").setPosition(vec2_f32(10, 10));
+	// FPS
+	text_fps = addEntity<>();
+	ecs->addComponent<Text>(text_fps, font);
+	ecs->getEntity(text_fps)->getComponent<Transform>()->setPosition(
+		vec3_f32{ 10, 10, 0 });
 
-	texts.try_emplace("FrameTime", resource_mgr, font);
-	texts.at("FrameTime").setPosition(vec2_f32(10, 40));
+	// Frame Time
+	text_frame_time = addEntity<>();
+	ecs->addComponent<Text>(text_frame_time, font);
+	ecs->getEntity(text_frame_time)->getComponent<Transform>()->setPosition(
+		vec3_f32{ 10, 40, 0 });
 
-	texts.try_emplace("CPU", resource_mgr, font);
-	texts.at("CPU").setPosition(vec2_f32(10, 70));
+	// CPU Usage
+	text_cpu = addEntity<>();
+	ecs->addComponent<Text>(text_cpu, font);
+	ecs->getEntity(text_cpu)->getComponent<Transform>()->setPosition(
+		vec3_f32{ 10, 70, 0 });
 
-	texts.try_emplace("RAM", resource_mgr, font);
-	texts.at("RAM").setPosition(vec2_f32(10, 140));
+	// RAM Usage
+	text_ram = addEntity<>();
+	ecs->addComponent<Text>(text_ram, font);
+	ecs->getEntity(text_ram)->getComponent<Transform>()->setPosition(
+		vec3_f32{ 10, 140, 0 });
 
-	texts.try_emplace("Mouse", resource_mgr, font);
-	texts.at("Mouse").setPosition(vec2_f32(10, 210));
+	// Mouse Movement
+	text_mouse = addEntity<>();
+	ecs->addComponent<Text>(text_mouse, font);
+	ecs->getEntity(text_mouse)->getComponent<Transform>()->setPosition(
+		vec3_f32{ 10, 210, 0 });
 }
 
 
@@ -191,18 +206,21 @@ void TestScene::tick(Engine& engine) {
 	        << L"\nProcess: "        << static_cast<f64>(proc_mem_usage) / 1e6  << L"MB";
 
 	// FPS
-	texts.at("FPS").setText(L"FPS: " + std::to_wstring(fps));
+	ecs->getEntity(text_fps)->getComponent<Text>()->setText(
+		L"FPS: " + std::to_wstring(fps));
 
 	// Frame Time
-	texts.at("FrameTime").setText(L"Frame Time: " + std::to_wstring(delta_time * 1000.0) + L"ms");
+	ecs->getEntity(text_frame_time)->getComponent<Text>()->setText(
+		L"Frame Time: " + std::to_wstring(delta_time * 1000.0) + L"ms");
 
 	// CPU Usage
-	texts.at("CPU").setText(cpu_str.str());
+	ecs->getEntity(text_cpu)->getComponent<Text>()->setText(cpu_str.str());
 
 	// RAM Usage
-	texts.at("RAM").setText(mem_str.str());
+	ecs->getEntity(text_ram)->getComponent<Text>()->setText(mem_str.str());
 
 	// Mouse Activity
-	texts.at("Mouse").setText(L"Mouse \nX: " + std::to_wstring(mouse_delta.x)
-	                          + L"\nY: "     + std::to_wstring(mouse_delta.y));
+	ecs->getEntity(text_mouse)->getComponent<Text>()->setText(
+		L"Mouse \nX: " + std::to_wstring(mouse_delta.x)
+	    + L"\nY: "     + std::to_wstring(mouse_delta.y));
 }

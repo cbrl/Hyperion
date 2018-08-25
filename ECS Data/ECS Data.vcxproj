@@ -145,6 +145,7 @@
     <ClInclude Include="src\components\motor\axis_rotation.h" />
     <ClInclude Include="src\components\motor\camera_movement.h" />
     <ClInclude Include="src\components\motor\mouse_rotation.h" />
+    <ClInclude Include="src\components\text\text.h" />
     <ClInclude Include="src\components\transform\transform.h" />
     <ClInclude Include="src\entities\basic\basic_directional_light.h" />
     <ClInclude Include="src\entities\basic\basic_model.h" />

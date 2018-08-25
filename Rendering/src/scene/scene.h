@@ -4,7 +4,6 @@
 #include "entities/entities.h"
 #include "components/components.h"
 #include "systems/systems.h"
-#include "scene/text/text.h"
 
 class Engine;
 
@@ -68,21 +67,11 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Texts
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	const std::map<std::string, Text>& getTexts() const {
-		return texts;
-	}
-
-
-	//----------------------------------------------------------------------------------
 	// Member Functions - Entities
 	//----------------------------------------------------------------------------------
 
 	// Add an entity to this scene
-	template<typename EntityT, typename... ArgsT>
+	template<typename EntityT = WorldObject<>, typename... ArgsT>
 	handle64 addEntity(ArgsT&&... args) {
 		auto handle = ecs->createEntity<EntityT>(std::forward<ArgsT>(args)...);
 		entities.push_back(handle);
@@ -152,9 +141,6 @@ protected:
 
 	// Entitites that currently exist in this scene
 	std::vector<handle64> entities;
-
-	// Text objects in this scene
-	std::map<std::string, Text> texts;
 
 
 private:
