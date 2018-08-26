@@ -1,11 +1,11 @@
 template<typename HandleT, typename DataT, size_t ChunkSize>
 void HandleTable<HandleT, DataT, ChunkSize>::allocateChunk() {
 
-	assert((handle_table.size() < HandleT::index_max) && "Max handle table size exceeded.");
+	assert((table.size() < HandleT::index_max) && "Max handle table size exceeded.");
 
-	size_t size = std::min(handle_table.size() + ChunkSize, HandleT::index_max);
+	size_t size = std::min(table.size() + ChunkSize, HandleT::index_max);
 
-	handle_table.resize(size);
+	table.resize(size);
 }
 
 
@@ -15,9 +15,9 @@ HandleT HandleTable<HandleT, DataT, ChunkSize>::createHandle(DataT* object) {
 	size_t i = 0;
 
 	// Find the next free space and create the object/handle
-	for (; i < handle_table.size(); ++i) {
+	for (; i < table.size(); ++i) {
 
-		auto& h = handle_table[i];
+		auto& h = table[i];
 
 		if (h.second == nullptr) {
 			h.second = object;
@@ -36,10 +36,10 @@ HandleT HandleTable<HandleT, DataT, ChunkSize>::createHandle(DataT* object) {
 	allocateChunk();
 
 	// Create the object/handle
-	handle_table[i].first = 1;
-	handle_table[i].second = object;
+	table[i].first = 1;
+	table[i].second = object;
 
-	return HandleT(i, handle_table[i].first);
+	return HandleT(i, table[i].first);
 }
 
 
@@ -47,14 +47,14 @@ template<typename HandleT, typename DataT, size_t ChunkSize>
 void HandleTable<HandleT, DataT, ChunkSize>::releaseHandle(HandleT handle) {
 	assert(validHandle(handle) && "Invalid handle specified for release");
 
-	handle_table[handle.index].second = nullptr;
+	table[handle.index].second = nullptr;
 }
 
 
 template<typename HandleT, typename DataT, size_t ChunkSize>
 bool HandleTable<HandleT, DataT, ChunkSize>::validHandle(const HandleT& handle) const {
 	assert(handle != HandleT::invalid_handle && "Invalid handle specified");
-	assert(handle.index < handle_table.size() && "Invalid handle specified. Index out of range.");
+	assert(handle.index < table.size() && "Invalid handle specified. Index out of range.");
 
-	return handle.counter == handle_table[handle.index].first;
+	return handle.counter == table[handle.index].first;
 }

@@ -25,3 +25,4 @@
 #include "vector_types.h"
 #include "string/string.h"
 #include <typeindex>
+#include <type_traits>

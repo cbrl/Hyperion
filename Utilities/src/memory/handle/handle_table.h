@@ -1,6 +1,8 @@
 #pragma once
 
 #include "handle.h"
+#include "exception/exception.h"
+#include "datatypes/container_types.h"
 
 
 template<typename HandleT, typename DataT, size_t ChunkSize = 512>
@@ -25,24 +27,37 @@ private:
 
 
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
 	HandleTable() noexcept {
 		allocateChunk();
 	}
 
+	HandleTable(const HandleTable& table) = delete;
+	HandleTable(HandleTable&& table) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
 	~HandleTable() = default;
 
-	[[nodiscard]]
-	HandleT createHandle(DataT* object);
 
-	void releaseHandle(HandleT handle);
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
 
-	bool validHandle(const HandleT& handle) const;
+	HandleTable& operator=(const HandleTable& table) = delete;
+	HandleTable& operator=(HandleTable&& table) noexcept = default;
 
 	[[nodiscard]]
 	DataT* operator[](HandleT handle) {
 		assert(validHandle(handle) && "HandleTable::operator[](HandleT) - Invalid handle specified");
 
-		auto [table_counter, data] = handle_table[handle.index];
+		auto[table_counter, data] = table[handle.index];
 
 		if (table_counter == handle.counter) {
 			return data;
@@ -51,12 +66,28 @@ public:
 	}
 
 
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	HandleT createHandle(DataT* object);
+
+	void releaseHandle(HandleT handle);
+
+	bool validHandle(const HandleT& handle) const;
+
+
 private:
 	void allocateChunk();
 
 
 private:
-	std::vector<handle_entry> handle_table;
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
+	std::vector<handle_entry> table;
 };
 
 

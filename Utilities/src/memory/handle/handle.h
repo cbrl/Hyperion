@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/scalar_types.h"
+#include "datatypes/datatypes.h"
 
 
 // Handle template that can be specialized for any given data size,
@@ -9,14 +9,15 @@
 #pragma warning (push)
 #pragma warning (disable: 4293) //disable '<<' undefined behavior warning
 
-template<typename T, size_t CounterBits, size_t IndexBits>
+template<typename T, size_t IndexBits, size_t CounterBits>
 struct Handle {
 
 	//----------------------------------------------------------------------------------
 	// Assertions
 	//----------------------------------------------------------------------------------
 
-	static_assert(std::is_integral_v<T>, "Handle template parameter is not an integral type");
+	static_assert(std::is_integral_v<T>,
+		"Handle template parameter is not an integral type");
 
 	static_assert(CounterBits > 0 && CounterBits < sizeof(T) * 8,
 		"Invalid counter bits specified for Handle");
@@ -36,12 +37,12 @@ public:
 		: Handle(invalid_handle) {
 	}
 
-	constexpr explicit Handle(T value) noexcept
+	constexpr Handle(T value) noexcept
 		: index(value & index_bitmask)
 		, counter((value & counter_bitmask) >> CounterBits) {
 	}
 
-	constexpr explicit Handle(T index, T counter) noexcept
+	constexpr Handle(T index, T counter) noexcept
 		: index(index)
 		, counter(counter) {
 	}
@@ -61,7 +62,7 @@ public:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	T index : IndexBits;
+	T index   : IndexBits;
 	T counter : CounterBits;
 
 
@@ -73,8 +74,8 @@ public:
 	using value_type = T;
 
 	// Max values
-	static constexpr T index_max   = (T(1) << IndexBits) - T(2);
-	static constexpr T counter_max = (T(1) << CounterBits) - T(2);
+	static constexpr T index_max   = (T{1} << IndexBits) - T{2};
+	static constexpr T counter_max = (T{1} << CounterBits) - T{2};
 
 	// Invalid value
 	static constexpr T invalid_handle = std::numeric_limits<T>::max();
@@ -86,11 +87,11 @@ public:
 
 private:
 	// Bitmasks
-	static constexpr T index_bitmask   = (T(1) << IndexBits) - T(1);
-	static constexpr T counter_bitmask = ((T(1) << CounterBits) - T(1)) << CounterBits;
+	static constexpr T index_bitmask   = (T{1} << IndexBits) - T{1};
+	static constexpr T counter_bitmask = ((T{1} << CounterBits) - T{1}) << CounterBits;
 };
 
 #pragma warning (pop)
 
 
-using handle64 = Handle<u64, 24, 40>;
+using handle64 = Handle<u64, 40, 24>;
