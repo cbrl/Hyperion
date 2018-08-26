@@ -171,12 +171,11 @@ private:
 // Creates a new resource pool for each unique resource type.
 //
 // Requirements:
-//  - Base resource class has static member 'type_id' of type std::type_index
+//  - Resource class has a public static member 'index' of type std::type_index
 //
-// type_id is used as an index into the map of resource pools. This requirement
+// 'index' is used as an index into the map of resource pools. This requirement
 // allows the user to retrieve the proper pool even when the specific resource
-// type is unkown (e.g. when a resource needs to be destroyed, but is referred
-// to by its base class).
+// type is unkown (e.g. when a polymorphic type is referred to by its base class).
 //
 //----------------------------------------------------------------------------------
 
@@ -217,7 +216,7 @@ public:
 		using pool_t = ResourcePool<ResourceT>;
 
 		// pair = std::pair<iterator, bool>
-		const auto pair = pools.try_emplace(ResourceT::type_id, std::make_unique<pool_t>());
+		const auto pair = pools.try_emplace(ResourceT::index, std::make_unique<pool_t>());
 		return static_cast<pool_t*>(pair.first->second.get());
 	}
 
@@ -226,7 +225,7 @@ public:
 	template<typename ResourceT>
 	[[nodiscard]]
 	ResourcePool<ResourceT>* getPool() {
-		const auto& it = pools.find(ResourceT::type_id);
+		const auto& it = pools.find(ResourceT::index);
 
 		assert(it != pools.end() && "Invalid resource pool type requested");
 		return static_cast<ResourcePool<ResourceT>*>(it->second.get());
@@ -246,7 +245,7 @@ public:
 	// Check if a pool exists for the specified type
 	template<typename ResourceT>
 	bool poolExists() const {
-		return pools.find(ResourceT::type_id) != pools.end();
+		return pools.find(ResourceT::index) != pools.end();
 	}
 
 

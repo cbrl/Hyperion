@@ -5,6 +5,14 @@
 class Engine;
 
 
+//----------------------------------------------------------------------------------
+// ISystem
+//----------------------------------------------------------------------------------
+//
+// Interface for the System class
+//
+//----------------------------------------------------------------------------------
+
 class ISystem {
 	friend class SystemMgr;
 
@@ -37,30 +45,56 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - Type Index
 	//----------------------------------------------------------------------------------
 
-	virtual std::type_index getTypeId() const = 0;
+	// Get the type index of this system
+	virtual std::type_index getTypeIndex() const = 0;
 
+	// Set the system's state
 	void setActive(bool state) {
 		active = state;
 	}
 
+	// Get the system's state
 	bool isActive() const {
 		return active;
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Update
+	//----------------------------------------------------------------------------------
+
+	// Actions taken before any systems have executed their main update
 	virtual void preUpdate(Engine& engine) = 0;
+
+	// Main update function
 	virtual void update(Engine& engine) = 0;
+
+	// Actions taken after all systems have executed their main update
 	virtual void postUpdate(Engine& engine) = 0;
 
+
 protected:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// Is this system enabled?
 	bool active;
 };
 
 
 
+
+//----------------------------------------------------------------------------------
+// System
+//----------------------------------------------------------------------------------
+//
+// Base class that all unique systems will derive from
+//
+//----------------------------------------------------------------------------------
 
 template<typename T>
 class System : public ISystem {
@@ -90,28 +124,41 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - Type Index
 	//----------------------------------------------------------------------------------
 
-	std::type_index getTypeId() const override {
-		return type_id;
+	// Get the type index of this system
+	std::type_index getTypeIndex() const override {
+		return index;
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Update
+	//----------------------------------------------------------------------------------
+
+	// Actions taken before any systems have executed their main update
 	void preUpdate(Engine& engine) override {
 	};
 
+	// Main update function
 	void update(Engine& engine) override {
 	};
 
+	// Actions taken after all systems have executed their main update
 	void postUpdate( Engine& engine) override {
 	};
 
 
 public:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// An ID unique to type T
-	static const std::type_index type_id;
+	static const std::type_index index;
 };
 
 
 template<typename T>
-const std::type_index System<T>::type_id = std::type_index(typeid(T));
+const std::type_index System<T>::index = std::type_index(typeid(T));

@@ -39,7 +39,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - Components
 	//----------------------------------------------------------------------------------
 
 	template<typename ComponentT, typename... ArgsT>
@@ -56,7 +56,7 @@ public:
 
 
 	void destroyComponent(IComponent* component) {
-		auto pool = component_pools.getPool(component->getTypeId());
+		auto pool = component_pools.getPool(component->getTypeIndex());
 		pool->destroyObject(component);
 	}
 
@@ -75,6 +75,10 @@ public:
 	}
 
 
+	//----------------------------------------------------------------------------------
+	// Member Functions - Iteration
+	//----------------------------------------------------------------------------------
+
 	// Apply an action to each component
 	template<typename ComponentT, typename ActionT>
 	void forEach(ActionT act) {
@@ -85,6 +89,10 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// Map of unique resource pools for each type of component
 	ResourcePoolFactory component_pools;
 };

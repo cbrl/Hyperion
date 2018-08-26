@@ -7,7 +7,7 @@
 // IEntity
 //----------------------------------------------------------------------------------
 //
-// Base class for the Entity class. Only to be used by that class.
+// Interface for the Entity class
 //
 //----------------------------------------------------------------------------------
 
@@ -41,15 +41,20 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member functions
+	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// Interface function for retrieving the std::type_index
-	virtual std::type_index getTypeId() const = 0;
+	// Get the entity's type index
+	virtual std::type_index getTypeIndex() const = 0;
 
 	// Get the entity's handle
 	[[nodiscard]]
 	handle64 getHandle() const;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - State
+	//----------------------------------------------------------------------------------
 
 	// Set the entity's state
 	void setActive(bool state);
@@ -57,36 +62,47 @@ public:
 	// Get the entity's state
 	bool isActive() const;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Components
+	//----------------------------------------------------------------------------------
+
 	// Add a component to this entity
 	template<typename ComponentT, typename... ArgsT>
 	ComponentT* addComponent(ArgsT&&... args);
 
-	// Remove a specific component from this entity
-	template<typename ComponentT>
-	void removeComponent(ComponentT* component);
-
-	// Remove all components of the specified type from this entity
-	template<typename ComponentT>
-	void removeAll();
-
-	// Check if this entity contains the specified component
-	template<typename ComponentT>
-	[[nodiscard]]
-	bool hasComponent() const;
-
-	// Get the number of components of the specified type
-	template<typename ComponentT>
-	[[nodiscard]]
-	size_t countOf() const;
 
 	// Get the first component of the specified type
 	template<typename ComponentT>
 	[[nodiscard]]
 	ComponentT* getComponent();
 
+
 	// Get all components of the specified type
 	template<typename ComponentT>
 	std::vector<ComponentT*> getAll();
+
+
+	// Remove a specific component from this entity
+	template<typename ComponentT>
+	void removeComponent(ComponentT* component);
+
+
+	// Remove all components of the specified type from this entity
+	template<typename ComponentT>
+	void removeAll();
+
+
+	// Check if this entity contains the specified component
+	template<typename ComponentT>
+	[[nodiscard]]
+	bool hasComponent() const;
+
+
+	// Get the number of components of the specified type
+	template<typename ComponentT>
+	[[nodiscard]]
+	size_t countOf() const;
 
 
 private:
@@ -95,15 +111,19 @@ private:
 
 
 protected:
-	// Is this entity active or should it be ignored?
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
+	// Is this entity active?
 	bool active;
 
-	// Handle to this entity. Set on creation in EntityMgr.
+	// This entity's handle. Set on creation in EntityMgr.
 	handle64 handle;
 
 	// A pointer to the component manager. The ECS destroys all
 	// entities before the component manager is destroyed, so
-	// this pointer should never be invalid in this context.
+	// the pointer should never be invalid in this context.
 	ComponentMgr* component_mgr;
 
 	// Map of pointers to components
@@ -154,8 +174,9 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	std::type_index getTypeId() const override {
-		return type_id;
+	// Get the entity's type index
+	std::type_index getTypeIndex() const override {
+		return index;
 	}
 
 
@@ -175,12 +196,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// And ID unique to type T
-	static const std::type_index type_id;
+	static const std::type_index index;
 };
 
 
 template<typename T>
-const std::type_index Entity<T>::type_id = std::type_index(typeid(T));
+const std::type_index Entity<T>::index = std::type_index(typeid(T));
 
 
 #include "entity.tpp"

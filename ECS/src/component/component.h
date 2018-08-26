@@ -8,7 +8,7 @@
 // IComponent
 //----------------------------------------------------------------------------------
 //
-// Base class for the Component class. Only to be used by that class.
+// Interface for the Component class
 //
 //----------------------------------------------------------------------------------
 
@@ -48,17 +48,25 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	virtual std::type_index getTypeId() const = 0;
+	// Get the component's type index
+	virtual std::type_index getTypeIndex() const = 0;
 
 	// Get the handle of the entity that owns this component
 	handle64 getOwner() const {
 		return owner;
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - State
+	//----------------------------------------------------------------------------------
+
+	// Set the component's state
 	void setActive(bool state) {
 		active = state;
 	}
 
+	// Get the component's state
 	bool isActive() const {
 		return active;
 	}
@@ -71,10 +79,14 @@ private:
 
 
 protected:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// Is the component active?
 	bool active;
 
-	// Set on creation in IEntity
+	// The handle of the entity that owns this component. Set on creation in IEntity
 	handle64 owner;
 };
 
@@ -116,16 +128,20 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	std::type_index getTypeId() const override {
-		return type_id;
+	std::type_index getTypeIndex() const override {
+		return index;
 	}
 
 
 public:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// An ID unique to type T
-	static const std::type_index type_id;
+	static const std::type_index index;
 };
 
 
 template<typename T>
-const std::type_index Component<T>::type_id = std::type_index(typeid(T));
+const std::type_index Component<T>::index = std::type_index(typeid(T));

@@ -44,7 +44,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - Entities
 	//----------------------------------------------------------------------------------
 
 	template<typename EntityT, typename... ArgsT>
@@ -79,6 +79,10 @@ public:
 		return entity_pools.poolExists<EntityT>();
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Iteration
+	//----------------------------------------------------------------------------------
 
 	// Apply an action to each entity
 	template<typename EntityT, typename ActionT>

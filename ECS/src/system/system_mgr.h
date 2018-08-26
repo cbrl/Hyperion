@@ -39,7 +39,7 @@ public:
 
 	template<typename SystemT, typename... ArgsT>
 	SystemT* addSystem(ArgsT&&... args) {
-		const auto& it = systems.find(SystemT::type_id);
+		const auto& it = systems.find(SystemT::index);
 
 		if (it != systems.end() && it->second != nullptr)
 			return static_cast<SystemT*>(it->second);
@@ -49,7 +49,7 @@ public:
 		if (memory != nullptr) {
 			SystemT* sys = new(memory) SystemT(std::forward<ArgsT>(args)...);
 
-			systems[SystemT::type_id] = sys;
+			systems[SystemT::index] = sys;
 			return sys;
 		}
 
@@ -60,7 +60,7 @@ public:
 
 	template<typename SystemT>
 	SystemT* getSystem() const {
-		const auto& it = systems.find(SystemT::type_id);
+		const auto& it = systems.find(SystemT::index);
 
 		if (it != systems.end() && it->second != nullptr)
 			return static_cast<SystemT*>(it->second);
@@ -70,8 +70,16 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
+	// The allocator used to allocate new systems
 	unique_ptr<LinearAllocator> allocator;
+
+	// Allocator's maximum memory size (4 MiB)
 	static constexpr size_t alloc_memory_size = 4194304;
 
+	// Map of systems
 	std::unordered_map<std::type_index, ISystem*> systems;
 };

@@ -18,7 +18,7 @@ void EntityMgr::removeExpiredEntities() {
 	for (const handle64 handle : expired_entities) {
 
 		IEntity* entity = getEntity(handle);
-		const auto type = entity->getTypeId();
+		const auto type = entity->getTypeIndex();
 
 		auto pool = entity_pools.getPool(type);
 
