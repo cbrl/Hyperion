@@ -1,10 +1,11 @@
 #include "entity.h"
+#include "component/component_mgr.h"
 #include "ecs.h"
 
 
-IEntity::IEntity(handle64 this_handle, ComponentMgr* component_mgr)
+IEntity::IEntity(EntityPtr this_ptr, ComponentMgr* component_mgr)
 	: active(true)
-	, handle(this_handle)
+	, this_ptr(this_ptr)
 	, component_mgr(component_mgr) {
 }
 
@@ -17,8 +18,8 @@ IEntity::~IEntity() {
 }
 
 
-void IEntity::setHandle(handle64 this_handle) {
-	handle = this_handle;
+void IEntity::setHandle(EntityPtr entity_ptr) {
+	this_ptr = entity_ptr;
 }
 
 
@@ -40,6 +41,6 @@ bool IEntity::isActive() const {
 }
 
 
-handle64 IEntity::getHandle() const {
-	return handle;
+EntityPtr IEntity::getHandle() const {
+	return this_ptr;
 }

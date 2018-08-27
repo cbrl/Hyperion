@@ -150,7 +150,7 @@ void XM_CALLCONV DepthPass::renderModel(ECS& ecs_engine,
 
 	if (!model.isActive()) return;
 
-	const auto transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
+	const auto transform = model.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world      = transform->getObjectToWorldMatrix();

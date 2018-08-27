@@ -15,20 +15,19 @@ void TextPass::render(Scene& scene) const {
 
 		if (!text.isActive()) return;
 
-		auto* owner = ecs.getEntity(text.getOwner());
-		const auto* transform = owner->getComponent<Transform>();
-		if (!transform) return;
+		if (const auto* transform = text.getOwner()->getComponent<Transform>()) {
 
-		const auto& font = text.getFont();
+			const auto& font = text.getFont();
 
-		sprite_batch->Begin();
-		font.DrawString(sprite_batch.get(),
-		                text.getText().c_str(),
-		                transform->getPosition(),
-		                text.getColor(),
-		                XMVectorGetZ(transform->getRotation()),
-		                transform->getObjectOrigin(),
-		                transform->getScale());
-		sprite_batch->End();
+			sprite_batch->Begin();
+			font.DrawString(sprite_batch.get(),
+				text.getText().c_str(),
+				transform->getPosition(),
+				text.getColor(),
+				XMVectorGetZ(transform->getRotation()),
+				transform->getObjectOrigin(),
+				transform->getScale());
+			sprite_batch->End();
+		}
 	});
 }

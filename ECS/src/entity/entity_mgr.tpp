@@ -8,12 +8,13 @@ EntityPtr EntityMgr::createEntity(ArgsT&&... args) {
 	void* memory = pool->allocateObject();
 
 	// Create a handle
-	handle64 handle = handle_table.createHandle(static_cast<IEntity*>(memory));
+	handle64  handle = handle_table.createHandle(static_cast<IEntity*>(memory));
+	EntityPtr ptr    = EntityPtr{this, handle};
 
 	// Create the entity
-	new(memory) EntityT(handle, component_mgr.get(), std::forward<ArgsT>(args)...);
+	new(memory) EntityT(ptr, component_mgr.get(), std::forward<ArgsT>(args)...);
 
-	return EntityPtr(this, handle);
+	return ptr;
 }
 
 

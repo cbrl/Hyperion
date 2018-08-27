@@ -16,25 +16,28 @@
 template<typename T = void>
 class WorldObject : public Entity<WorldObject<T>> {
 public:
-	WorldObject(handle64 this_handle, ComponentMgr* component_mgr)
-		: Entity<WorldObject<T>>(this_handle, component_mgr) {
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	WorldObject(EntityPtr this_ptr, ComponentMgr* component_mgr)
+		: Entity<WorldObject<T>>(this_ptr, component_mgr) {
 
-		this->template addComponent<Transform>();
+		this->addComponent<Transform>();
 	}
 
+	WorldObject(const WorldObject& obj) = delete;
+	WorldObject(WorldObject&& obj) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 	virtual ~WorldObject() = default;
 
-	//	template<typename... ArgsT>
-	//	void Init(ArgsT&&... args) {
-	//		this->AddComponent<Transform>();
-	//		InitImpl(std::is_same<T, void>{}, std::forward<ArgsT>(args)...);
-	//	}
 
-
-	//protected:
-	//	template<typename... ArgsT>
-	//	void InitImpl(std::false_type, ArgsT&&... args) {
-	//		if (&WorldObject::Init != &T::Init)
-	//			static_cast<T*>(this)->Init(std::forward<ArgsT>(args)...);
-	//	}
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	WorldObject& operator=(const WorldObject& obj) = delete;
+	WorldObject& operator=(WorldObject&& obj) noexcept = default;
 };

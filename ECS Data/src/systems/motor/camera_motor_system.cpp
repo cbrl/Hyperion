@@ -7,8 +7,7 @@ void CameraMotorSystem::update(Engine& engine) {
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	const auto process_cam = [&](auto& camera) {
-		const auto owner = camera.getOwner();
-		auto* entity = ecs_engine.getEntity(owner);
+		auto* entity = camera.getOwner().get();
 
 		auto* transform = entity->template getComponent<Transform>();
 		if (!transform) return;

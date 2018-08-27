@@ -1,50 +1,5 @@
 #include "entity_mgr.h"
 
-
-//----------------------------------------------------------------------------------
-// EntityPtr
-//----------------------------------------------------------------------------------
-
-EntityPtr::EntityPtr(EntityMgr* mgr, handle64 entity) noexcept
-	: mgr(mgr)
-	, handle(entity) {
-}
-
-
-IEntity* EntityPtr::operator->() const {
-	return mgr->getEntity(handle);
-}
-
-IEntity& EntityPtr::operator*() const {
-	return *(mgr->getEntity(handle));
-}
-
-
-IEntity* EntityPtr::get() const {
-	return mgr->getEntity(handle);
-}
-
-void EntityPtr::reset() {
-	mgr = nullptr;
-	handle = handle64::invalid_handle;
-}
-
-handle64 EntityPtr::getHandle() const {
-	return handle;
-}
-
-bool EntityPtr::valid() const {
-	if (!mgr) return false;
-	return mgr->validHandle(handle);
-}
-
-
-
-
-//----------------------------------------------------------------------------------
-// EntityMgr
-//----------------------------------------------------------------------------------
-
 void EntityMgr::destroyEntity(handle64 handle) {
 
 	if (expired_entities.size() > num_expired_entities) {

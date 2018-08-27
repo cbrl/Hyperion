@@ -77,9 +77,7 @@ private:
 	// Member Functions - Render Model
 	//----------------------------------------------------------------------------------
 
-	void XM_CALLCONV renderModel(ECS& ecs_engine,
-	                             Model& model,
-	                             FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV renderModel(Model& model, FXMMATRIX world_to_projection) const;
 
 
 private:

@@ -1,6 +1,9 @@
 #pragma once
 
-#include "component/component_mgr.h"
+#include "entity/entity_ptr.h"
+
+class IComponent;
+class ComponentMgr;
 
 //----------------------------------------------------------------------------------
 // IEntity
@@ -19,7 +22,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	IEntity() = delete;
-	IEntity(handle64 this_handle, ComponentMgr* component_mgr);
+	IEntity(EntityPtr this_ptr, ComponentMgr* component_mgr);
 	IEntity(const IEntity& entity) = delete;
 	IEntity(IEntity&& entity) = default;
 
@@ -48,7 +51,7 @@ public:
 
 	// Get the entity's handle
 	[[nodiscard]]
-	handle64 getHandle() const;
+	EntityPtr getHandle() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -105,7 +108,7 @@ public:
 
 
 private:
-	void setHandle(handle64 this_handle);
+	void setHandle(EntityPtr entity_ptr);
 	void setComponentMgr(ComponentMgr* mgr);
 
 
@@ -117,8 +120,8 @@ protected:
 	// Is this entity active?
 	bool active;
 
-	// This entity's handle. Set on creation in EntityMgr.
-	handle64 handle;
+	// This entity's EntityPtr. Set on creation in EntityMgr.
+	EntityPtr this_ptr;
 
 	// A pointer to the component manager. The ECS destroys all
 	// entities before the component manager is destroyed, so
@@ -184,8 +187,8 @@ protected:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Entity(handle64 this_handle, ComponentMgr* component_mgr)
-		: IEntity(this_handle, component_mgr) {
+	Entity(EntityPtr this_ptr, ComponentMgr* component_mgr)
+		: IEntity(this_ptr, component_mgr) {
 	}
 
 

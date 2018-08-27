@@ -6,79 +6,6 @@
 
 
 //----------------------------------------------------------------------------------
-// Entity Pointer
-//----------------------------------------------------------------------------------
-//
-// Holds handle and a pointer to the entity manager. Access operators retrieve
-// the entity from the entity manager.
-//
-//----------------------------------------------------------------------------------
-
-class EntityMgr;
-class EntityPtr final {
-public:
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
-	EntityPtr() noexcept = default;
-
-	EntityPtr(EntityMgr* mgr, handle64 entity) noexcept;
-
-	EntityPtr(const EntityPtr& ptr) noexcept = default;
-	EntityPtr(EntityPtr&& ptr) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Destructor
-	//----------------------------------------------------------------------------------
-	~EntityPtr() = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-	EntityPtr& operator=(const EntityPtr& ptr) noexcept = default;
-	EntityPtr& operator=(EntityPtr&& ptr) noexcept = default;
-
-	[[nodiscard]]
-	bool operator==(const EntityPtr& ptr) const {
-		return handle == ptr.getHandle();
-	}
-
-	[[nodiscard]]
-	IEntity* operator->() const;
-
-	[[nodiscard]]
-	IEntity& operator*() const;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions
-	//----------------------------------------------------------------------------------
-	[[nodiscard]]
-	IEntity* get() const;
-
-	void reset();
-
-	[[nodiscard]]
-	handle64 getHandle() const;
-
-	[[nodiscard]]
-	bool valid() const;
-
-
-private:
-	//----------------------------------------------------------------------------------
-	// Member Variables
-	//----------------------------------------------------------------------------------
-	EntityMgr* mgr;
-	handle64 handle;
-};
-
-
-
-
-//----------------------------------------------------------------------------------
 // Entity Manager
 //----------------------------------------------------------------------------------
 //
@@ -145,7 +72,7 @@ public:
 	template<typename EntityT>
 	[[nodiscard]]
 	size_t countOf() {
-		return entity_pools.poolExists<EntityT>() ? entity_pools.getPool<EntityT>()->Count() : 0;
+		return entity_pools.poolExists<EntityT>() ? entity_pools.getPool<EntityT>()->getCount() : 0;
 	}
 
 

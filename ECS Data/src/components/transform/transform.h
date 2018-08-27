@@ -14,8 +14,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	Transform() noexcept
-		: parent(handle64::invalid_handle)
-		, world(XMMatrixIdentity())
+		: world(XMMatrixIdentity())
 		, translation(XMVectorZero())
 		, rotation(XMVectorZero())
 		, scaling(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f))
@@ -58,16 +57,16 @@ public:
 
 	// Set an entity as the parent of this transform. This transform will
 	// now be relative to the parent's transform.
-	void setParent(const handle64 handle) {
-		if (handle != this->owner
-		    && handle != handle64::invalid_handle) {
-			parent = handle;
+	void setParent(EntityPtr parent_ptr) {
+		if (parent_ptr.valid()
+		    && parent_ptr != owner) {
+			parent = parent_ptr;
 		}
 	}
 
 	// Get the entity whose transform is a parent of this transform
 	[[nodiscard]]
-	handle64 getParent() const {
+	EntityPtr getParent() const {
 		return parent;
 	}
 
@@ -333,7 +332,7 @@ public:
 
 private:
 	// The entity whose transform is a parent of this one (optional)
-	handle64 parent;
+	EntityPtr parent;
 
 	// The object-to-world matrix
 	XMMATRIX world;

@@ -105,7 +105,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 			if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
 				return;
 
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(model, world_to_projection);
 		}
 	});
 }
@@ -136,7 +136,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 				|| mat.diffuse.w > ALPHA_MAX)
 				return;
 
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(model, world_to_projection);
 		}
 	});
 }
@@ -163,7 +163,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 			if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
 				return;
 
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(model, world_to_projection);
 		}
 	});
 
@@ -181,7 +181,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 				|| mat.diffuse.w > ALPHA_MAX)
 				return;
 
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(model, world_to_projection);
 		}
 	});
 }
@@ -200,7 +200,7 @@ void ForwardPass::renderFalseColor(Scene& scene,
 
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(model, world_to_projection);
 	});
 }
 
@@ -218,16 +218,14 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection) c
 
 	ecs_engine.forEach<Model>([&](Model& model) {
 		if (model.isActive())
-			renderModel(ecs_engine, model, world_to_projection);
+			renderModel(model, world_to_projection);
 	});
 }
 
 
-void XM_CALLCONV ForwardPass::renderModel(ECS& ecs_engine,
-                                          Model& model,
-                                          FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::renderModel(Model& model, FXMMATRIX world_to_projection) const {
 
-	const auto* transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
+	const auto* transform = model.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world = transform->getObjectToWorldMatrix();

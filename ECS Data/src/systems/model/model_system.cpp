@@ -12,9 +12,7 @@ void ModelSystem::update(Engine& engine) {
 
 		if (!model.isActive()) return;
 
-		auto* entity = ecs_engine.getEntity(model.getOwner());
-
-		if (const auto* transform = entity->getComponent<Transform>()) {
+		if (const auto* transform = model.getOwner()->getComponent<Transform>()) {
 
 			// Update the model's buffer
 			model.updateBuffer(device_context, transform->getObjectToWorldMatrix());

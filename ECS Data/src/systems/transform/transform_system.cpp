@@ -28,15 +28,16 @@ void TransformSystem::updateWorld(ECS& ecs_engine, Transform& transform) {
 
 	// If the transform has no parent and doesn't need an update,
 	// then nothing needs to be done.
-	if (transform.getParent() == handle64::invalid_handle) {
+	if (!transform.getParent().valid()) {
 		if (!transform.needs_update) return;
 	}
 
 	// If the transform has a parent, then process that first.
 	// If the parent was updated, or if this transform already needs
 	// an update, then get the parent's matrix.
-	else {
-		auto* parent = ecs_engine.getEntity(transform.getParent())->getComponent<Transform>();
+	else if (auto parent_ptr = transform.getParent(); parent_ptr.valid()) {
+
+		auto* parent = parent_ptr->getComponent<Transform>();
 
 		if (parent) {
 			updateWorld(ecs_engine, *parent);

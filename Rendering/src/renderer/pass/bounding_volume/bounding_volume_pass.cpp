@@ -55,7 +55,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 
 		if (!light.isActive()) return;
 		
-		const auto transform = ecs_engine.getEntity(light.getOwner())->getComponent<Transform>();
+		const auto transform = light.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto object_to_world      = transform->getObjectToWorldMatrix();
@@ -71,7 +71,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 
 		if (!light.isActive()) return;
 
-		const auto transform = ecs_engine.getEntity(light.getOwner())->getComponent<Transform>();
+		const auto transform = light.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto object_to_world      = transform->getObjectToWorldMatrix();
@@ -87,7 +87,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 
 		if (!light.isActive()) return;
 
-		const auto transform = ecs_engine.getEntity(light.getOwner())->getComponent<Transform>();
+		const auto transform = light.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto object_to_world      = transform->getObjectToWorldMatrix();
@@ -103,7 +103,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 
 		if (!model.isActive()) return;
 
-		const auto transform = ecs_engine.getEntity(model.getOwner())->getComponent<Transform>();
+		const auto transform = model.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto object_to_world      = transform->getObjectToWorldMatrix();

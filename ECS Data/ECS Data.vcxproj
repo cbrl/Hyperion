@@ -147,10 +147,6 @@
     <ClInclude Include="src\components\motor\mouse_rotation.h" />
     <ClInclude Include="src\components\text\text.h" />
     <ClInclude Include="src\components\transform\transform.h" />
-    <ClInclude Include="src\entities\basic\basic_directional_light.h" />
-    <ClInclude Include="src\entities\basic\basic_model.h" />
-    <ClInclude Include="src\entities\basic\basic_point_light.h" />
-    <ClInclude Include="src\entities\basic\basic_spot_light.h" />
     <ClInclude Include="src\entities\basic\player_camera.h" />
     <ClInclude Include="src\entities\entities.h" />
     <ClInclude Include="src\entities\world_object.h" />

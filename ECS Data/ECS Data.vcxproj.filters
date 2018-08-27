@@ -92,18 +92,6 @@
     <ClInclude Include="src\systems\systems.h">
       <Filter>Header Files\systems</Filter>
     </ClInclude>
-    <ClInclude Include="src\entities\basic\basic_directional_light.h">
-      <Filter>Header Files\entities\basic</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entities\basic\basic_model.h">
-      <Filter>Header Files\entities\basic</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entities\basic\basic_point_light.h">
-      <Filter>Header Files\entities\basic</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entities\basic\basic_spot_light.h">
-      <Filter>Header Files\entities\basic</Filter>
-    </ClInclude>
     <ClInclude Include="src\entities\basic\player_camera.h">
       <Filter>Header Files\entities\basic</Filter>
     </ClInclude>

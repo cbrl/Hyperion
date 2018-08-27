@@ -42,7 +42,7 @@ void TestScene::load(const Engine& engine) {
 	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindowSize());
 
 	// Set the parameters
-	auto cam = camera->getComponent<PerspectiveCamera>();
+	auto* cam = camera->getComponent<PerspectiveCamera>();
 
 	cam->getViewport().setDepth(0.0f, 1.0f);
 	cam->setZDepth(0.01f, 1000.0f);
@@ -113,7 +113,7 @@ void TestScene::load(const Engine& engine) {
 
 		auto* transform = light->getComponent<Transform>();
 		transform->setPosition(vec3_f32(-1.0f, 0.0f, 0.0f));
-		transform->setParent(camera.getHandle());
+		transform->setParent(camera);
 	}
 
 	// Directional Light

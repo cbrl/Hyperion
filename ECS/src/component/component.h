@@ -2,6 +2,7 @@
 
 #include "datatypes/datatypes.h"
 #include "memory/handle/handle.h"
+#include "entity/entity_ptr.h"
 
 
 //----------------------------------------------------------------------------------
@@ -21,8 +22,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	IComponent() noexcept
-		: active(true)
-		, owner(handle64::invalid_handle) {
+		: active(true) {
 	}
 
 	IComponent(const IComponent& component) = delete;
@@ -51,8 +51,8 @@ public:
 	// Get the component's type index
 	virtual std::type_index getTypeIndex() const = 0;
 
-	// Get the handle of the entity that owns this component
-	handle64 getOwner() const {
+	// Get the ptr of the entity that owns this component
+	EntityPtr getOwner() const {
 		return owner;
 	}
 
@@ -73,8 +73,8 @@ public:
 
 
 private:
-	void setOwner(handle64 handle) {
-		owner = handle;
+	void setOwner(EntityPtr owner_ptr) {
+		owner = owner_ptr;
 	}
 
 
@@ -86,8 +86,8 @@ protected:
 	// Is the component active?
 	bool active;
 
-	// The handle of the entity that owns this component. Set on creation in IEntity
-	handle64 owner;
+	// The entity that owns this component. Set on creation in IEntity.
+	EntityPtr owner;
 };
 
 
