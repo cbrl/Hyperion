@@ -40,26 +40,6 @@ public:
 	[[nodiscard]]
 	EntityPtr createEntity(ArgsT&&... args);
 
-	// Destroy an entity
-	void destroyEntity(handle64 handle);
-
-	// Get an existing entity
-	IEntity* getEntity(handle64 handle);
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Components
-	//----------------------------------------------------------------------------------
-
-	// Add a component to an entity
-	template<typename ComponentT, typename... ArgsT>
-	ComponentT* addComponent(handle64 handle, ArgsT&&... args);
-
-	// Remove a component from an entity
-	template<typename ComponentT>
-	void removeComponent(handle64 handle);
-
-
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Systems
