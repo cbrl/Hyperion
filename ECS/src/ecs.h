@@ -53,22 +53,21 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Misc
+	// Member Functions - Iteration
 	//----------------------------------------------------------------------------------
 
 	// Do something with each entity or component of type T
 	template<typename T, typename ActionT>
 	void forEach(ActionT act);
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Count
+	//----------------------------------------------------------------------------------
+
 	// Get the number of a specific entity/component
 	template<typename T>
 	size_t countOf() const;
-
-	[[nodiscard]]
-	EntityMgr* getEntityMgr() const { return entity_mgr.get(); }
-
-	[[nodiscard]]
-	ComponentMgr* getComponentMgr() const { return component_mgr.get(); }
 
 
 private:
