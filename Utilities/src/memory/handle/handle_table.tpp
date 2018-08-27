@@ -56,5 +56,11 @@ bool HandleTable<HandleT, DataT, ChunkSize>::validHandle(const HandleT& handle) 
 	assert(handle != HandleT::invalid_handle && "Invalid handle specified");
 	assert(handle.index < table.size() && "Invalid handle specified. Index out of range.");
 
+	if (handle == HandleT::invalid_handle)
+		return false;
+
+	if (handle.index > table.size())
+		return false;
+
 	return handle.counter == table[handle.index].first;
 }

@@ -55,14 +55,10 @@ public:
 
 	[[nodiscard]]
 	DataT* operator[](HandleT handle) {
-		assert(validHandle(handle) && "HandleTable::operator[](HandleT) - Invalid handle specified");
+		bool valid = validHandle(handle);
+		assert(valid && "HandleTable::operator[](HandleT) - Invalid handle specified");
 
-		auto[table_counter, data] = table[handle.index];
-
-		if (table_counter == handle.counter) {
-			return data;
-		}
-		return nullptr;
+		return valid ? table[handle.index].second : nullptr;
 	}
 
 
