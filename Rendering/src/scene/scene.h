@@ -72,21 +72,21 @@ public:
 
 	// Add an entity to this scene
 	template<typename EntityT = WorldObject<>, typename... ArgsT>
-	handle64 addEntity(ArgsT&&... args) {
-		auto handle = ecs->createEntity<EntityT>(std::forward<ArgsT>(args)...);
-		entities.push_back(handle);
-		return handle;
+	EntityPtr addEntity(ArgsT&&... args) {
+		auto entity = ecs->createEntity<EntityT>(std::forward<ArgsT>(args)...);
+		entities.push_back(entity);
+		return entity;
 	}
 
 	// Remove an entity from this scene
-	void removeEntity(handle64 entity) {
+	void removeEntity(EntityPtr entity) {
+		if (!entity.valid()) return;
 		entities.erase(std::remove(std::begin(entities), std::end(entities), entity),
 		               std::end(entities));
-		ecs->destroyEntity(entity);
 	}
 
 	[[nodiscard]]
-	const std::vector<handle64>& getEntities() const {
+	const std::vector<EntityPtr>& getEntities() const {
 		return entities;
 	}
 
@@ -96,10 +96,10 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Create a new entity and add models described by a model blueprint
-	handle64 importModel(ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint);
+	EntityPtr importModel(ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint);
 
 	// Add models described by a model blueprint to an existing entity
-	void importModel(handle64 entity, ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint);
+	void importModel(EntityPtr entity, ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint);
 
 
 protected:
@@ -140,7 +140,7 @@ protected:
 	unique_ptr<ECS> ecs;
 
 	// Entitites that currently exist in this scene
-	std::vector<handle64> entities;
+	std::vector<EntityPtr> entities;
 
 
 private:

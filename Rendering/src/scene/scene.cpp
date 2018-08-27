@@ -13,20 +13,20 @@ void Scene::onResize(vec2_u32 size) {
 }
 
 
-handle64 Scene::importModel(ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint) {
+EntityPtr Scene::importModel(ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint) {
 
-	handle64 out = addEntity();
+	EntityPtr out = addEntity();
 	importModel(out, device, blueprint);
 	return out;
 }
 
 
-void Scene::importModel(handle64 entity, ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint) {
+void Scene::importModel(EntityPtr entity, ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint) {
 
 	const auto& materials = blueprint->getMaterials();
 
 	blueprint->forEachPart([&](ModelPart& part) {
-		ecs->addComponent<Model>(entity, device, blueprint->mesh, part, materials[part.material_index]);
+		entity->addComponent<Model>(device, blueprint->mesh, part, materials[part.material_index]);
 	});
 }
 

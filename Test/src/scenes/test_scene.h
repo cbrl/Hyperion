@@ -17,9 +17,9 @@ public:
 
 
 private:
-	handle64 text_fps;
-	handle64 text_frame_time;
-	handle64 text_cpu;
-	handle64 text_ram;
-	handle64 text_mouse;
+	EntityPtr text_fps;
+	EntityPtr text_frame_time;
+	EntityPtr text_cpu;
+	EntityPtr text_ram;
+	EntityPtr text_mouse;
 };

@@ -59,7 +59,10 @@ public:
 	// Set an entity as the parent of this transform. This transform will
 	// now be relative to the parent's transform.
 	void setParent(const handle64 handle) {
-		parent = handle;
+		if (handle != this->owner
+		    && handle != handle64::invalid_handle) {
+			parent = handle;
+		}
 	}
 
 	// Get the entity whose transform is a parent of this transform

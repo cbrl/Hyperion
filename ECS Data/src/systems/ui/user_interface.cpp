@@ -16,7 +16,7 @@
 
 
 void* selected = nullptr;
-handle64 selected_entity{};
+EntityPtr selected_entity;
 
 
 enum class ModelType {
@@ -526,25 +526,26 @@ void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
 
 	auto& entities = scene.getEntities();
 
-	for (const auto handle : entities) {
+	for (const auto& entity_ptr : entities) {
 
-		auto* entity = ecs_engine.getEntity(handle);
+		auto* entity = entity_ptr.get();
+		auto  handle = entity_ptr.getHandle();
 
 		std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
 
 		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
 		                                 | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                                 | ((selected_entity == handle) ? ImGuiTreeNodeFlags_Selected : 0);
+		                                 | ((selected_entity.getHandle() == handle) ? ImGuiTreeNodeFlags_Selected : 0);
 
 		const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
 
 		if (ImGui::IsItemClicked())
-			selected_entity = handle;
+			selected_entity = entity_ptr;
 
 		if (!node_open) continue;
 
 		// Transform
-		if (auto* transform = ecs_engine.getEntity(handle)->getComponent<Transform>()) {
+		if (auto* transform = entity->getComponent<Transform>()) {
 			DrawNode("Transform", *transform);
 		}
 
@@ -679,7 +680,7 @@ void DrawTree(ECS& ecs_engine, Scene& scene) {
 void ProcNewModelPopups(ID3D11Device& device,
                         Scene& scene,
                         ResourceMgr& resource_mgr,
-                        handle64 entity,
+                        EntityPtr entity,
                         ModelType type) {
 
 	switch (type) {
@@ -1148,23 +1149,23 @@ void DrawSceneMenu(ID3D11Device& device,
 				if (ImGui::BeginMenu("Add Component")) {
 
 					if (ImGui::MenuItem("Orthographic Camera")) {
-						ecs_engine.addComponent<OrthographicCamera>(selected_entity, device, vec2_u32{480, 480});
+						selected_entity->addComponent<OrthographicCamera>(device, vec2_u32{480, 480});
 					}
 
 					if (ImGui::MenuItem("Perspective Camera")) {
-						ecs_engine.addComponent<PerspectiveCamera>(selected_entity, device, vec2_u32{480, 480});
+						selected_entity->addComponent<PerspectiveCamera>(device, vec2_u32{480, 480});
 					}
 
 					if (ImGui::MenuItem("Directional Light")) {
-						ecs_engine.addComponent<DirectionalLight>(selected_entity);
+						selected_entity->addComponent<DirectionalLight>();
 					}
 
 					if (ImGui::MenuItem("Point Light")) {
-						ecs_engine.addComponent<PointLight>(selected_entity);
+						selected_entity->addComponent<PointLight>();
 					}
 
 					if (ImGui::MenuItem("Spot Light")) {
-						ecs_engine.addComponent<SpotLight>(selected_entity);
+						selected_entity->addComponent<SpotLight>();
 					}
 
 					if (ImGui::BeginMenu("Model")) {
@@ -1202,8 +1203,7 @@ void DrawSceneMenu(ID3D11Device& device,
 				}
 
 				if (ImGui::MenuItem("Delete")) {
-					if (selected_entity != handle64::invalid_handle)
-						scene.removeEntity(selected_entity);
+					scene.removeEntity(selected_entity);
 				}
 
 				ImGui::EndMenu();

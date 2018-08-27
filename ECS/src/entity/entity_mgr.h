@@ -6,6 +6,79 @@
 
 
 //----------------------------------------------------------------------------------
+// Entity Pointer
+//----------------------------------------------------------------------------------
+//
+// Holds handle and a pointer to the entity manager. Access operators retrieve
+// the entity from the entity manager.
+//
+//----------------------------------------------------------------------------------
+
+class EntityMgr;
+class EntityPtr final {
+public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	EntityPtr() noexcept = default;
+
+	EntityPtr(EntityMgr* mgr, handle64 entity) noexcept;
+
+	EntityPtr(const EntityPtr& ptr) noexcept = default;
+	EntityPtr(EntityPtr&& ptr) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~EntityPtr() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	EntityPtr& operator=(const EntityPtr& ptr) noexcept = default;
+	EntityPtr& operator=(EntityPtr&& ptr) noexcept = default;
+
+	[[nodiscard]]
+	bool operator==(const EntityPtr& ptr) const {
+		return handle == ptr.getHandle();
+	}
+
+	[[nodiscard]]
+	IEntity* operator->() const;
+
+	[[nodiscard]]
+	IEntity& operator*() const;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	IEntity* get() const;
+
+	void reset();
+
+	[[nodiscard]]
+	handle64 getHandle() const;
+
+	[[nodiscard]]
+	bool valid() const;
+
+
+private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+	EntityMgr* mgr;
+	handle64 handle;
+};
+
+
+
+
+//----------------------------------------------------------------------------------
 // Entity Manager
 //----------------------------------------------------------------------------------
 //
@@ -48,7 +121,8 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename EntityT, typename... ArgsT>
-	handle64 createEntity(ArgsT&&... args);
+	[[nodiscard]]
+	EntityPtr createEntity(ArgsT&&... args);
 
 
 	// Add an entity to the list of expired entities. Will be
@@ -61,6 +135,7 @@ public:
 
 
 	// Get an entity from the handle
+	[[nodiscard]]
 	IEntity* getEntity(handle64 handle) {
 		return handle_table[handle];
 	}
@@ -68,6 +143,7 @@ public:
 
 	// Get the number of the specified entity type
 	template<typename EntityT>
+	[[nodiscard]]
 	size_t countOf() {
 		return entity_pools.poolExists<EntityT>() ? entity_pools.getPool<EntityT>()->Count() : 0;
 	}
@@ -75,8 +151,15 @@ public:
 
 	// Check if the entity manager has created an entity of the specified type
 	template<typename EntityT>
+	[[nodiscard]]
 	bool knowsEntity() const {
 		return entity_pools.poolExists<EntityT>();
+	}
+
+
+	[[nodiscard]]
+	bool validHandle(handle64 entity) const {
+		return handle_table.validHandle(entity);
 	}
 
 

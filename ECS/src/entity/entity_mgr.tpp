@@ -1,5 +1,5 @@
 template<typename EntityT, typename... ArgsT>
-handle64 EntityMgr::createEntity(ArgsT&&... args) {
+EntityPtr EntityMgr::createEntity(ArgsT&&... args) {
 
 	static_assert(std::is_base_of_v<IEntity, EntityT>,
 				  "Calling EntityMgr::CreateEntity() with non-entity type.");
@@ -13,7 +13,7 @@ handle64 EntityMgr::createEntity(ArgsT&&... args) {
 	// Create the entity
 	new(memory) EntityT(handle, component_mgr.get(), std::forward<ArgsT>(args)...);
 
-	return handle;
+	return EntityPtr(this, handle);
 }
 
 

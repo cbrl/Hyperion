@@ -1,6 +1,6 @@
 template<typename EntityT, typename... ArgsT>
 [[nodiscard]]
-handle64 ECS::createEntity(ArgsT&&... args) {
+EntityPtr ECS::createEntity(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<IEntity, EntityT>,
 		"Calling ECS::CreateEntity() with non-entity type.");
 

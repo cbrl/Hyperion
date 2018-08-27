@@ -53,14 +53,11 @@ void HandleTable<HandleT, DataT, ChunkSize>::releaseHandle(HandleT handle) {
 
 template<typename HandleT, typename DataT, size_t ChunkSize>
 bool HandleTable<HandleT, DataT, ChunkSize>::validHandle(const HandleT& handle) const {
-	assert(handle != HandleT::invalid_handle && "Invalid handle specified");
-	assert(handle.index < table.size() && "Invalid handle specified. Index out of range.");
 
-	if (handle == HandleT::invalid_handle)
+	if (handle == HandleT::invalid_handle
+		|| handle.index > table.size()) {
 		return false;
-
-	if (handle.index > table.size())
-		return false;
+	}
 
 	return handle.counter == table[handle.index].first;
 }

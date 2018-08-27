@@ -38,7 +38,7 @@ public:
 	// Create a new entity
 	template<typename EntityT, typename... ArgsT>
 	[[nodiscard]]
-	handle64 createEntity(ArgsT&&... args);
+	EntityPtr createEntity(ArgsT&&... args);
 
 	// Destroy an entity
 	void destroyEntity(handle64 handle);

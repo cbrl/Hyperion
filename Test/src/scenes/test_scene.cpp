@@ -39,8 +39,7 @@ void TestScene::load(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera
-	const handle64 camera_handle = addEntity<PlayerCamera>(device, engine.getWindowSize());
-	auto* camera = ecs->getEntity(camera_handle);
+	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindowSize());
 
 	// Set the parameters
 	auto cam = camera->getComponent<PerspectiveCamera>();
@@ -66,12 +65,11 @@ void TestScene::load(const Engine& engine) {
 
 	// Scene model
 	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
-	const handle64 test_model = importModel(device, bp);
+	EntityPtr test_model = importModel(device, bp);
 
 	// Sphere
 	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
-	const handle64 sphere_handle = importModel(device, sphere_bp);
-	auto* sphere = ecs->getEntity(sphere_handle);
+	EntityPtr sphere = importModel(device, sphere_bp);
 
 	sphere->getComponent<Transform>()->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });
 
@@ -102,20 +100,20 @@ void TestScene::load(const Engine& engine) {
 
 	// Camera light
 	{
-		const auto light_handle = addEntity();
-		auto* light = ecs->addComponent<SpotLight>(light_handle);
-		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
-		light->setDiffuseColor(vec4_f32(0.85f, 0.85f, 0.9f, 1.0f));
-		light->setAttenuation(vec3_f32(0.05f, 0.2f, 0.0f));
-		light->setSpecular(vec4_f32(1.0f, 1.0f, 1.0f, 1.0f));
-		light->setRange(100.0f);
-		light->setUmbraAngle(XM_PI / 6.0f);
-		light->setPenumbraAngle(XM_PI / 4.0f);
-		light->setShadows(true);
+		const auto light = addEntity();
+		auto* spot_light = light->addComponent<SpotLight>();
+		spot_light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
+		spot_light->setDiffuseColor(vec4_f32(0.85f, 0.85f, 0.9f, 1.0f));
+		spot_light->setAttenuation(vec3_f32(0.05f, 0.2f, 0.0f));
+		spot_light->setSpecular(vec4_f32(1.0f, 1.0f, 1.0f, 1.0f));
+		spot_light->setRange(100.0f);
+		spot_light->setUmbraAngle(XM_PI / 6.0f);
+		spot_light->setPenumbraAngle(XM_PI / 4.0f);
+		spot_light->setShadows(true);
 
-		auto transform = ecs->getEntity(light_handle)->getComponent<Transform>();
+		auto* transform = light->getComponent<Transform>();
 		transform->setPosition(vec3_f32(-1.0f, 0.0f, 0.0f));
-		transform->setParent(camera_handle);
+		transform->setParent(camera.getHandle());
 	}
 
 	// Directional Light
@@ -140,32 +138,32 @@ void TestScene::load(const Engine& engine) {
 
 	// FPS
 	text_fps = addEntity<>();
-	ecs->addComponent<Text>(text_fps, font);
-	ecs->getEntity(text_fps)->getComponent<Transform>()->setPosition(
+	text_fps->addComponent<Text>(font);
+	text_fps->getComponent<Transform>()->setPosition(
 		vec3_f32{ 10, 10, 0 });
 
 	// Frame Time
 	text_frame_time = addEntity<>();
-	ecs->addComponent<Text>(text_frame_time, font);
-	ecs->getEntity(text_frame_time)->getComponent<Transform>()->setPosition(
+	text_frame_time->addComponent<Text>(font);
+	text_frame_time->getComponent<Transform>()->setPosition(
 		vec3_f32{ 10, 40, 0 });
 
 	// CPU Usage
 	text_cpu = addEntity<>();
-	ecs->addComponent<Text>(text_cpu, font);
-	ecs->getEntity(text_cpu)->getComponent<Transform>()->setPosition(
+	text_cpu->addComponent<Text>(font);
+	text_cpu->getComponent<Transform>()->setPosition(
 		vec3_f32{ 10, 70, 0 });
 
 	// RAM Usage
 	text_ram = addEntity<>();
-	ecs->addComponent<Text>(text_ram, font);
-	ecs->getEntity(text_ram)->getComponent<Transform>()->setPosition(
+	text_ram->addComponent<Text>(font);
+	text_ram->getComponent<Transform>()->setPosition(
 		vec3_f32{ 10, 140, 0 });
 
 	// Mouse Movement
 	text_mouse = addEntity<>();
-	ecs->addComponent<Text>(text_mouse, font);
-	ecs->getEntity(text_mouse)->getComponent<Transform>()->setPosition(
+	text_mouse->addComponent<Text>(font);
+	text_mouse->getComponent<Transform>()->setPosition(
 		vec3_f32{ 10, 210, 0 });
 }
 
@@ -206,21 +204,21 @@ void TestScene::tick(Engine& engine) {
 	        << L"\nProcess: "        << static_cast<f64>(proc_mem_usage) / 1e6  << L"MB";
 
 	// FPS
-	ecs->getEntity(text_fps)->getComponent<Text>()->setText(
+	text_fps->getComponent<Text>()->setText(
 		L"FPS: " + std::to_wstring(fps));
 
 	// Frame Time
-	ecs->getEntity(text_frame_time)->getComponent<Text>()->setText(
+	text_frame_time->getComponent<Text>()->setText(
 		L"Frame Time: " + std::to_wstring(delta_time * 1000.0) + L"ms");
 
 	// CPU Usage
-	ecs->getEntity(text_cpu)->getComponent<Text>()->setText(cpu_str.str());
+	text_cpu->getComponent<Text>()->setText(cpu_str.str());
 
 	// RAM Usage
-	ecs->getEntity(text_ram)->getComponent<Text>()->setText(mem_str.str());
+	text_ram->getComponent<Text>()->setText(mem_str.str());
 
 	// Mouse Activity
-	ecs->getEntity(text_mouse)->getComponent<Text>()->setText(
+	text_mouse->getComponent<Text>()->setText(
 		L"Mouse \nX: " + std::to_wstring(mouse_delta.x)
 	    + L"\nY: "     + std::to_wstring(mouse_delta.y));
 }
