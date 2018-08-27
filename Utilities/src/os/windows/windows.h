@@ -47,9 +47,13 @@ using Microsoft::WRL::ComPtr;
 // Functions
 //----------------------------------------------------------------------------------
 
-inline void ThrowIfFailed(HRESULT hr, const char* msg = "") {
+template<typename ExceptionT = std::runtime_error>
+inline void ThrowIfFailed(HRESULT hr, const std::string& msg = "") {
 	if (FAILED(hr)) {
-		std::cerr << msg << " (Failure with HRESULT of 0x" << std::hex << hr << std::dec << ")\n";
-		throw Exception(msg);
+		std::stringstream result;
+		result << msg << " (Failure with HRESULT of 0x" << std::hex << hr << ")\n";
+
+		std::cerr << result.str().c_str();
+		throw ExceptionT(result.str());
 	}
 }
