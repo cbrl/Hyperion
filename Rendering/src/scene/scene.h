@@ -98,10 +98,10 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Create a new entity and add models described by a model blueprint
-	EntityPtr importModel(ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint);
+	EntityPtr importModel(ID3D11Device& device, const shared_ptr<ModelBlueprint>& blueprint);
 
 	// Add models described by a model blueprint to an existing entity
-	void importModel(EntityPtr entity, ID3D11Device& device, shared_ptr<ModelBlueprint>& blueprint);
+	void importModel(EntityPtr entity, ID3D11Device& device, const shared_ptr<ModelBlueprint>& blueprint);
 
 
 protected:
