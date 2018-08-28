@@ -12,6 +12,7 @@ void AxisOrbitSystem::update(Engine& engine) {
 		if (!orbit.isActive()) return;
 
 		if (auto* transform = orbit.getOwner()->getComponent<Transform>()) {
+			if (!transform->isActive()) return;
 			transform->rotateAround(orbit.getAxis(), delta_time * orbit.getSpeed());
 		}
 	});
