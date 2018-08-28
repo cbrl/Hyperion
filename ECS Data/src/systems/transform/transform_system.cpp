@@ -3,26 +3,26 @@
 
 
 void TransformSystem::update(Engine& engine) {
-	auto& ecs_engine = engine.getScene().getECS();
+	auto& scene = engine.getScene();
 
-	ecs_engine.forEach<Transform>([&](Transform& transform) {
+	scene.forEach<Transform>([&](Transform& transform) {
 		if (transform.isActive())
-			updateWorld(ecs_engine, transform);
+			updateWorld(transform);
 	});
 }
 
 
 void TransformSystem::postUpdate(Engine& engine) {
-	auto& ecs_engine = engine.getScene().getECS();
+	auto& scene = engine.getScene();
 
-	ecs_engine.forEach<Transform>([&](Transform& transform) {
+	scene.forEach<Transform>([&](Transform& transform) {
 		if (transform.isActive())
 			transform.updated = false;
 	});
 }
 
 
-void TransformSystem::updateWorld(ECS& ecs_engine, Transform& transform) {
+void TransformSystem::updateWorld(Transform& transform) {
 
 	XMMATRIX parent_world = XMMatrixIdentity();
 
@@ -40,7 +40,7 @@ void TransformSystem::updateWorld(ECS& ecs_engine, Transform& transform) {
 		auto* parent = parent_ptr->getComponent<Transform>();
 
 		if (parent) {
-			updateWorld(ecs_engine, *parent);
+			updateWorld(*parent);
 
 			if (parent->updated)
 				transform.needs_update = true;

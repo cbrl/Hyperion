@@ -5,10 +5,10 @@
 
 
 void ModelSystem::update(Engine& engine) {
-	auto& ecs_engine     = engine.getScene().getECS();
+	auto& scene          = engine.getScene();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 
 		if (!model.isActive()) return;
 

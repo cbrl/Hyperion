@@ -4,10 +4,10 @@
 
 void AxisOrbitSystem::update(Engine& engine) {
 	
-	auto& ecs_engine = engine.getScene().getECS();
+	auto& scene      = engine.getScene();
 	f32   delta_time = static_cast<f32>(engine.getTimer().deltaTime());
 
-	ecs_engine.forEach<AxisOrbit>([&] (AxisOrbit& orbit) {
+	scene.forEach<AxisOrbit>([&] (AxisOrbit& orbit) {
 	
 		if (!orbit.isActive()) return;
 

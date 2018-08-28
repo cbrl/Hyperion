@@ -81,7 +81,7 @@ public:
 
 	// Apply an action to each component
 	template<typename ComponentT, typename ActionT>
-	void forEach(ActionT act) {
+	void forEach(ActionT&& act) {
 		using pool_t = ResourcePool<ComponentT>;
 		auto* pool = static_cast<pool_t*>(component_pools.getPool<ComponentT>());
 		pool->forEach(act);

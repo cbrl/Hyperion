@@ -51,8 +51,6 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
                                    FXMMATRIX world_to_camera,
                                    CXMMATRIX camera_to_projection) const {
 
-	auto& ecs_engine = scene.getECS();
-
 	// Update and bind the camera buffer
 	updateCamera(world_to_camera, camera_to_projection);
 
@@ -64,12 +62,12 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 	// Draw each opaque model
 	//----------------------------------------------------------------------------------
 
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		const auto& mat = model.getMaterial();
 		if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
 			return;
 
-		renderModel(ecs_engine, model, world_to_proj);
+		renderModel(model, world_to_proj);
 	});
 
 
@@ -77,22 +75,20 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 	// Draw each transparent model
 	//----------------------------------------------------------------------------------
 
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		const auto& mat = model.getMaterial();
 		if (!mat.transparent
 			|| mat.diffuse.w < ALPHA_MIN
 			|| mat.diffuse.w > ALPHA_MAX)
 			return;
 
-		renderModel(ecs_engine, model, world_to_proj);
+		renderModel(model, world_to_proj);
 	});
 }
 
 void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
                                           FXMMATRIX world_to_camera,
                                           CXMMATRIX camera_to_projection) const {
-
-	auto& ecs_engine = scene.getECS();
 
 	updateCamera(world_to_camera, camera_to_projection);
 
@@ -103,14 +99,14 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	bindOpaqueShaders();
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		if (!model.castsShadows()) return;
 
 		const auto& mat = model.getMaterial();
 		if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
 			return;
 
-		renderModel(ecs_engine, model, world_to_proj);
+		renderModel(model, world_to_proj);
 	});
 
 
@@ -119,7 +115,7 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	bindTransparentShaders();
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		if (!model.castsShadows()) return;
 
 		const auto& mat = model.getMaterial();
@@ -128,7 +124,7 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 			|| mat.diffuse.w > ALPHA_MAX)
 			return;
 
-		renderModel(ecs_engine, model, world_to_proj);
+		renderModel(model, world_to_proj);
 	});
 }
 
@@ -144,9 +140,7 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 }
 
 
-void XM_CALLCONV DepthPass::renderModel(ECS& ecs_engine,
-                                        const Model& model,
-                                        FXMMATRIX world_to_projection) const {
+void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
 
 	if (!model.isActive()) return;
 

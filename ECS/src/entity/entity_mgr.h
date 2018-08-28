@@ -96,7 +96,7 @@ public:
 
 	// Apply an action to each entity
 	template<typename EntityT, typename ActionT>
-	void forEach(ActionT act);
+	void forEach(ActionT&& act);
 
 
 private:

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "memory/allocator/pool_allocator.h"
+#include "datatypes/datatypes.h"
 #include "exception/exception.h"
+#include "memory/allocator/pool_allocator.h"
 
 
 //----------------------------------------------------------------------------------

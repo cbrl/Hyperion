@@ -19,7 +19,7 @@ EntityPtr EntityMgr::createEntity(ArgsT&&... args) {
 
 
 template<typename EntityT, typename ActionT>
-void EntityMgr::forEach(ActionT act) {
+void EntityMgr::forEach(ActionT&& act) {
 	using pool_t = ResourcePool<EntityT>;
 
 	auto* pool = static_cast<pool_t*>(entity_pools.getPool<EntityT>());

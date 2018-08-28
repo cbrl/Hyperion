@@ -32,12 +32,10 @@ LightPass::LightPass(ID3D11Device& device,
 
 void XM_CALLCONV LightPass::render(Scene& scene, FXMMATRIX world_to_projection) {
 
-	auto& ecs_engine = scene.getECS();
-
 	// Update light buffers
-	updateDirectionalLightData(ecs_engine, world_to_projection);
-	updatePointLightData(ecs_engine, world_to_projection);
-	updateSpotLightData(ecs_engine, world_to_projection);
+	updateDirectionalLightData(scene, world_to_projection);
+	updatePointLightData(scene, world_to_projection);
+	updateSpotLightData(scene, world_to_projection);
 
 	// Update the shadow std::map sizes
 	updateShadowMaps();
@@ -138,7 +136,7 @@ void LightPass::updateShadowMaps() {
 }
 
 
-void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::updateDirectionalLightData(Scene& scene, FXMMATRIX world_to_projection) {
 
 	// Temporary buffers
 	std::vector<DirectionalLightBuffer> buffers;
@@ -150,7 +148,7 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine, FXMMATRI
 	// Clear the cameras
 	directional_light_cameras.clear();
 
-	ecs_engine.forEach<DirectionalLight>([&](DirectionalLight& light) {
+	scene.forEach<DirectionalLight>([&](DirectionalLight& light) {
 
 		if (!light.isActive()) return;
 
@@ -193,7 +191,7 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(ECS& ecs_engine, FXMMATRI
 }
 
 
-void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_to_projection) {
 
 	// Temporary buffers
 	std::vector<PointLightBuffer> buffers;
@@ -206,7 +204,7 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 	point_light_cameras.clear();
 
 
-	ecs_engine.forEach<PointLight>([&](PointLight& light) {
+	scene.forEach<PointLight>([&](PointLight& light) {
 
 		if (!light.isActive()) return;
 
@@ -282,7 +280,7 @@ void XM_CALLCONV LightPass::updatePointLightData(ECS& ecs_engine, FXMMATRIX worl
 }
 
 
-void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to_projection) {
 
 	// Temporary buffer vectors
 	std::vector<SpotLightBuffer> buffers;
@@ -295,7 +293,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(ECS& ecs_engine, FXMMATRIX world
 	spot_light_cameras.clear();
 
 
-	ecs_engine.forEach<SpotLight>([&](SpotLight& light) {
+	scene.forEach<SpotLight>([&](SpotLight& light) {
 
 		if (!light.isActive()) return;
 

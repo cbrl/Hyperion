@@ -6,13 +6,13 @@
 
 void MouseRotationSystem::update(Engine& engine) {
 
-	auto& ecs_engine  = engine.getScene().getECS();
+	auto& scene       = engine.getScene();
 	const auto& input = engine.getInput();
 
 	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());
 	const vec2_i32 mouse_delta = input.getMouseDelta();
 
-	ecs_engine.forEach<MouseRotation>([&](MouseRotation& rotation) {
+	scene.forEach<MouseRotation>([&](MouseRotation& rotation) {
 
 		if (!rotation.isActive()) return;
 

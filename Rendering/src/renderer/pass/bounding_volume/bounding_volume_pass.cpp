@@ -45,13 +45,11 @@ void BoundingVolumePass::bindRenderStates() const {
 
 
 void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_projection) const {
-	
-	auto& ecs_engine = scene.getECS();
 
 	// Bind the render states
 	bindRenderStates();
 
-	ecs_engine.forEach<DirectionalLight>([&](const DirectionalLight& light) {
+	scene.forEach<DirectionalLight>([&](const DirectionalLight& light) {
 
 		if (!light.isActive()) return;
 		
@@ -67,7 +65,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 		renderAABB(light.getAABB(), object_to_world);
 	});
 
-	ecs_engine.forEach<PointLight>([&](const PointLight& light) {
+	scene.forEach<PointLight>([&](const PointLight& light) {
 
 		if (!light.isActive()) return;
 
@@ -83,7 +81,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 		renderAABB(light.getAABB(), object_to_world);
 	});
 
-	ecs_engine.forEach<SpotLight>([&](const SpotLight& light) {
+	scene.forEach<SpotLight>([&](const SpotLight& light) {
 
 		if (!light.isActive()) return;
 
@@ -99,7 +97,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 		renderAABB(light.getAABB(), object_to_world);
 	});
 
-	ecs_engine.forEach<Model>([&](const Model& model) {
+	scene.forEach<Model>([&](const Model& model) {
 
 		if (!model.isActive()) return;
 

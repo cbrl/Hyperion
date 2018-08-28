@@ -1,7 +1,6 @@
 #pragma once
 
 #include "block_allocator.h"
-#include "exception/exception.h"
 
 
 class EmptyLinkedList {

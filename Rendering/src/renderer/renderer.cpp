@@ -24,9 +24,7 @@ Renderer::Renderer(DisplayConfig& display_config,
 
 void Renderer::render(Scene& scene) {
 
-	auto& ecs_engine = scene.getECS();
-
-	ecs_engine.forEach<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
+	scene.forEach<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
 
 		if (!camera.isActive()) return;
 
@@ -38,7 +36,7 @@ void Renderer::render(Scene& scene) {
 		renderCamera(scene, camera);
 	});
 
-	ecs_engine.forEach<OrthographicCamera>([&](const OrthographicCamera& camera) {
+	scene.forEach<OrthographicCamera>([&](const OrthographicCamera& camera) {
 
 		if (!camera.isActive()) return;
 

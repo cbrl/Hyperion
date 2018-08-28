@@ -29,9 +29,9 @@ private:
 	void renderShadowMaps(Scene& scene);
 
 	void updateData() const;
-	void XM_CALLCONV updateDirectionalLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
-	void XM_CALLCONV updatePointLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
-	void XM_CALLCONV updateSpotLightData(ECS& ecs_engine, FXMMATRIX world_to_projection);
+	void XM_CALLCONV updateDirectionalLightData(Scene& scene, FXMMATRIX world_to_projection);
+	void XM_CALLCONV updatePointLightData(Scene& scene, FXMMATRIX world_to_projection);
+	void XM_CALLCONV updateSpotLightData(Scene& scene, FXMMATRIX world_to_projection);
 
 
 private:

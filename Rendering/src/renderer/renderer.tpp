@@ -1,12 +1,9 @@
 template<typename CameraT>
 void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 
-	// Get the ECS
-	auto& ecs_engine = scene.getECS();
-
 	// Camera variables
 	const auto& settings  = camera.getSettings();
-	const auto* transform = camera.getOwner()->getComponent<Transform>();
+	const auto* transform = camera.getOwner()->template getComponent<Transform>();
 	assert(transform != nullptr);
 
 	const auto world_to_camera      = transform->getWorldToObjectMatrix();

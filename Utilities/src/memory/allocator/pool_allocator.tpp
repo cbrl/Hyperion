@@ -1,3 +1,5 @@
+#include "exception/exception.h"
+
 template<typename T>
 PoolAllocator<T>::PoolAllocator(size_t memory_size) : BlockAllocator<T>(memory_size) {
 

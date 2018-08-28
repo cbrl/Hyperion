@@ -3,7 +3,7 @@
 
 
 void CameraMotorSystem::update(Engine& engine) {
-	auto& ecs_engine     = engine.getScene().getECS();
+	auto& scene          = engine.getScene();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	const auto process_cam = [&](auto& camera) {
@@ -18,13 +18,13 @@ void CameraMotorSystem::update(Engine& engine) {
 		}
 	};
 
-	ecs_engine.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
 
 
-	ecs_engine.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+	scene.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});

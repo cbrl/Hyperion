@@ -14,6 +14,6 @@ public:
 
 
 private:
-	static void updateWorld(ECS& ecs_engine, Transform& transform);
+	static void updateWorld(Transform& transform);
 	static XMMATRIX calculateWorld(Transform& transform);
 };

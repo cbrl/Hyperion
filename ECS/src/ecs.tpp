@@ -31,7 +31,7 @@ size_t ECS::countOf() const {
 
 // Do something for each entity or component
 template<typename T, typename ActionT>
-void ECS::forEach(ActionT act) {
+void ECS::forEach(ActionT&& act) {
 	if constexpr (std::is_base_of_v<IEntity, T>) {
 		if (!entity_mgr->knowsEntity<T>()) return;
 

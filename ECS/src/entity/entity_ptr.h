@@ -4,7 +4,7 @@
 
 
 //----------------------------------------------------------------------------------
-// Entity Pointer
+// EntityPtr
 //----------------------------------------------------------------------------------
 //
 // Holds handle and a pointer to the entity manager. Access operators retrieve
@@ -16,11 +16,13 @@ class IEntity;
 class EntityMgr;
 
 class EntityPtr final {
+	//friend class UniqueEntityPtr;
+
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EntityPtr() noexcept = default;
+	EntityPtr() noexcept;
 
 	EntityPtr(EntityMgr* mgr, handle64 entity) noexcept;
 
@@ -41,12 +43,12 @@ public:
 	EntityPtr& operator=(EntityPtr&& ptr) noexcept = default;
 
 	[[nodiscard]]
-	bool operator==(const EntityPtr& ptr) const {
+	bool operator==(const EntityPtr& ptr) const noexcept {
 		return handle == ptr.getHandle();
 	}
 
 	[[nodiscard]]
-	bool operator!=(const EntityPtr& ptr) const {
+	bool operator!=(const EntityPtr& ptr) const noexcept {
 		return !(*this == ptr);
 	}
 
@@ -64,10 +66,10 @@ public:
 	IEntity* get() const;
 
 	[[nodiscard]]
-	handle64 getHandle() const;
+	handle64 getHandle() const noexcept;
 
 	[[nodiscard]]
-	bool valid() const;
+	bool valid() const noexcept;
 
 
 private:
@@ -77,3 +79,87 @@ private:
 	EntityMgr* mgr;
 	handle64 handle;
 };
+
+
+
+/*
+//----------------------------------------------------------------------------------
+// UniqueEntityPtr
+//----------------------------------------------------------------------------------
+//
+// An std::unique_ptr analogue for EntityPtr.
+//
+//----------------------------------------------------------------------------------
+
+class UniqueEntityPtr final {
+public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	UniqueEntityPtr() noexcept = default;
+
+	UniqueEntityPtr(EntityMgr* mgr, handle64 entity) noexcept;
+	UniqueEntityPtr(const EntityPtr& entity) noexcept;
+
+	UniqueEntityPtr(const UniqueEntityPtr& ptr) = delete;
+	UniqueEntityPtr(UniqueEntityPtr&& ptr) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~UniqueEntityPtr();
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	UniqueEntityPtr& operator=(const UniqueEntityPtr& entity_ptr) = delete;
+	UniqueEntityPtr& operator=(UniqueEntityPtr&& entity_ptr) noexcept;
+
+	[[nodiscard]]
+	bool operator==(const UniqueEntityPtr& entity_ptr) const noexcept {
+		return this->ptr == entity_ptr.ptr;
+	}
+
+	[[nodiscard]]
+	bool operator!=(const UniqueEntityPtr& entity_ptr) const noexcept {
+		return !(*this == ptr);
+	}
+
+	[[nodiscard]]
+	bool operator==(const EntityPtr& ptr) const noexcept {
+		return this->ptr == ptr;
+	}
+
+	[[nodiscard]]
+	bool operator!=(const EntityPtr& ptr) const noexcept {
+		return !(*this == ptr);
+	}
+
+	[[nodiscard]]
+	IEntity* operator->() const;
+
+	[[nodiscard]]
+	IEntity& operator*() const;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	IEntity* get() const;
+
+	[[nodiscard]]
+	EntityPtr getPtr() const noexcept;
+
+	[[nodiscard]]
+	handle64 getHandle() const noexcept;
+
+	void reset();
+
+
+private:
+	EntityPtr ptr;
+};
+*/

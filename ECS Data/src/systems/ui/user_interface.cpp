@@ -1,7 +1,6 @@
 #include "user_interface.h"
 #include "engine/engine.h"
 
-#include "ecs.h"
 #include "entities/entities.h"
 #include "components/components.h"
 
@@ -522,7 +521,7 @@ void DrawNode(const char* text, T& item) {
 }
 
 
-void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
+void DrawTreeNodes(Scene& scene) {
 
 	auto& entities = scene.getEntities();
 
@@ -643,7 +642,7 @@ void DrawTreeNodes(ECS& ecs_engine, Scene& scene) {
 }
 
 
-void DrawTree(ECS& ecs_engine, Scene& scene) {
+void DrawTree(Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
 
@@ -657,7 +656,7 @@ void DrawTree(ECS& ecs_engine, Scene& scene) {
 			selected = &scene;
 
 		if (node_open) {
-			DrawTreeNodes(ecs_engine, scene);
+			DrawTreeNodes(scene);
 		}
 
 		if (selected == &scene) {
@@ -1131,7 +1130,6 @@ void DrawSystemMenu(Engine& engine) {
 //----------------------------------------------------------------------------------
 
 void DrawSceneMenu(ID3D11Device& device,
-                   ECS& ecs_engine,
                    ResourceMgr& resource_mgr,
                    Scene& scene,
                    ModelType& add_model_popup) {
@@ -1228,8 +1226,7 @@ void DrawSceneMenu(ID3D11Device& device,
 
 void UserInterface::update(Engine& engine)  {
 
-	auto& scene      = engine.getScene();
-	auto& ecs_engine = scene.getECS();
+	auto& scene = engine.getScene();
 
 	bool open = true;
 
@@ -1255,13 +1252,13 @@ void UserInterface::update(Engine& engine)  {
 		ModelType add_model_popup = ModelType::None;
 
 		// Draw menu
-		DrawSceneMenu(device, ecs_engine, resource_mgr, scene, add_model_popup);
+		DrawSceneMenu(device, resource_mgr, scene, add_model_popup);
 
 		// Process model popup
 		ProcNewModelPopups(device, scene, resource_mgr, selected_entity, add_model_popup);
 
 		// Draw tree
-		DrawTree(ecs_engine, scene);
+		DrawTree(scene);
 	}
 
 	// End window

@@ -86,8 +86,6 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
                                            FXMMATRIX world_to_projection,
                                            const Texture* sky) const {
 
-	auto& ecs_engine = scene.getECS();
-
 	// Bind the shaders, render states, etc
 	bindOpaqueState();
 
@@ -99,7 +97,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		if (model.isActive()) {
 			const auto& mat = model.getMaterial();
 			if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
@@ -115,8 +113,6 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
                                                 FXMMATRIX world_to_projection,
                                                 const Texture* sky) const {
 
-	auto& ecs_engine = scene.getECS();
-
 	// Bind the shaders, render states, etc
 	bindTransparentState();
 
@@ -128,7 +124,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		if (model.isActive()) {
 			const auto& mat = model.getMaterial();
 			if (!mat.transparent
@@ -146,8 +142,6 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
                                           FXMMATRIX world_to_projection,
                                           const Texture* sky) const {
 
-	auto& ecs_engine = scene.getECS();
-
 	// Bind the skybox texture as the environment map
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
@@ -157,7 +151,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 	const auto opaque_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, false);
 	opaque_ps->bind(device_context);
 
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		if (model.isActive()) {
 			const auto& mat = model.getMaterial();
 			if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
@@ -173,7 +167,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 	const auto transparent_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, true);
 	transparent_ps->bind(device_context);
 
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		if (model.isActive()) {
 			const auto& mat = model.getMaterial();
 			if (!mat.transparent
@@ -191,14 +185,12 @@ void ForwardPass::renderFalseColor(Scene& scene,
                                    FXMMATRIX world_to_projection,
                                    FalseColor color) const {
 
-	auto& ecs_engine = scene.getECS();
-
 	bindOpaqueState();
 
 	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		if (model.isActive())
 			renderModel(model, world_to_projection);
 	});
@@ -207,8 +199,6 @@ void ForwardPass::renderFalseColor(Scene& scene,
 
 void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection) const {
 
-	auto& ecs_engine = scene.getECS();
-
 	bindWireframeState();
 
 	color_buffer.updateData(device_context, vec4_f32{0.0f, 1.0f, 0.0f, 1.0f});
@@ -216,14 +206,14 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection) c
 	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, FalseColor::Static);
 	pixel_shader->bind(device_context);
 
-	ecs_engine.forEach<Model>([&](Model& model) {
+	scene.forEach<Model>([&](Model& model) {
 		if (model.isActive())
 			renderModel(model, world_to_projection);
 	});
 }
 
 
-void XM_CALLCONV ForwardPass::renderModel(Model& model, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
 
 	const auto* transform = model.getOwner()->getComponent<Transform>();
 	if (!transform) return;

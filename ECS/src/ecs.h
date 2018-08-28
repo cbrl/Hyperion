@@ -40,6 +40,9 @@ public:
 	[[nodiscard]]
 	EntityPtr createEntity(ArgsT&&... args);
 
+	// Destroy an existing entity
+	void destroyEntity(handle64 entity);
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Systems
@@ -58,7 +61,7 @@ public:
 
 	// Do something with each entity or component of type T
 	template<typename T, typename ActionT>
-	void forEach(ActionT act);
+	void forEach(ActionT&& act);
 
 
 	//----------------------------------------------------------------------------------
@@ -67,6 +70,7 @@ public:
 
 	// Get the number of a specific entity/component
 	template<typename T>
+	[[nodiscard]]
 	size_t countOf() const;
 
 

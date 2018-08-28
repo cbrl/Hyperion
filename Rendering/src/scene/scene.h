@@ -57,16 +57,6 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - ECS
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	ECS& getECS() const {
-		return *ecs;
-	}
-
-
-	//----------------------------------------------------------------------------------
 	// Member Functions - Entities
 	//----------------------------------------------------------------------------------
 
@@ -80,7 +70,9 @@ public:
 
 	// Remove an entity from this scene
 	void removeEntity(EntityPtr entity) {
-		if (!entity.valid()) return;
+		if (entity.valid()) {
+			ecs->destroyEntity(entity.getHandle());
+		}
 		entities.erase(std::remove(std::begin(entities), std::end(entities), entity),
 		               std::end(entities));
 	}
@@ -88,6 +80,16 @@ public:
 	[[nodiscard]]
 	const std::vector<EntityPtr>& getEntities() const {
 		return entities;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Iteration
+	//----------------------------------------------------------------------------------
+
+	template<typename T, typename ActionT>
+	void forEach(ActionT&& act) {
+		ecs->forEach<T>(act);
 	}
 
 

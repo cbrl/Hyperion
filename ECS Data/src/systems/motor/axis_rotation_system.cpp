@@ -6,10 +6,10 @@
 
 void AxisRotationSystem::update(Engine& engine) {
 
-	auto& ecs_engine = engine.getScene().getECS();
-	const f32 dt     = static_cast<f32>(engine.getTimer().deltaTime());
+	auto& scene  = engine.getScene();
+	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());
 
-	ecs_engine.forEach<AxisRotation>([&](AxisRotation& rotation) {
+	scene.forEach<AxisRotation>([&](AxisRotation& rotation) {
 
 		if (!rotation.isActive()) return;
 		

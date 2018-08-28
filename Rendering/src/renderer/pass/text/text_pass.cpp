@@ -9,9 +9,7 @@ TextPass::TextPass(ID3D11DeviceContext& device_context) {
 
 void TextPass::render(Scene& scene) const {
 
-	auto& ecs = scene.getECS();
-
-	ecs.forEach<Text>([&](Text& text) {
+	scene.forEach<Text>([&](Text& text) {
 
 		if (!text.isActive()) return;
 

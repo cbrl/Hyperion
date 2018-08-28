@@ -5,11 +5,11 @@
 
 
 void CameraSystem::update(Engine& engine) {
-	auto& ecs_engine     = engine.getScene().getECS();
+	auto& scene          = engine.getScene();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	const auto process_cam = [&](auto& camera) {
-		const auto* transform = camera.getOwner()->getComponent<Transform>();
+		const auto* transform = camera.getOwner()->template getComponent<Transform>();
 		if (!transform) return;
 
 		// Update the camera's buffer
@@ -18,13 +18,13 @@ void CameraSystem::update(Engine& engine) {
 		                    transform->getWorldToObjectMatrix());
 	};
 
-	ecs_engine.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
 
 
-	ecs_engine.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+	scene.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
