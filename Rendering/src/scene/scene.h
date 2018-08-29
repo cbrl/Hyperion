@@ -70,8 +70,12 @@ public:
 
 	// Remove an entity from this scene
 	void removeEntity(EntityPtr entity) {
-		if (entity.valid()) {
+		if (entity) {
 			ecs->destroyEntity(entity.getHandle());
+
+			if (auto parent = entity->getParent()) {
+				parent->removeChild(entity);
+			}
 		}
 		entities.erase(std::remove(std::begin(entities), std::end(entities), entity),
 		               std::end(entities));

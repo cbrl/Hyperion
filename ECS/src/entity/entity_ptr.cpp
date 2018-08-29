@@ -24,6 +24,10 @@ IEntity& EntityPtr::operator*() const {
 	return *(mgr->getEntity(handle));
 }
 
+EntityPtr::operator bool() const {
+	return valid();
+}
+
 IEntity* EntityPtr::get() const {
 	return mgr->getEntity(handle);
 }
@@ -68,6 +72,10 @@ IEntity* UniqueEntityPtr::operator->() const {
 
 IEntity& UniqueEntityPtr::operator*() const {
 	return ptr.operator*();
+}
+
+UniqueEntityPtr::operator bool() const {
+	return ptr.operator bool();
 }
 
 IEntity* UniqueEntityPtr::get() const {

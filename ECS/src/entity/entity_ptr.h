@@ -58,6 +58,9 @@ public:
 	[[nodiscard]]
 	IEntity& operator*() const;
 
+	[[nodiscard]]
+	operator bool() const;
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
@@ -142,6 +145,9 @@ public:
 
 	[[nodiscard]]
 	IEntity& operator*() const;
+
+	[[nodiscard]]
+	operator bool() const;
 
 
 	//----------------------------------------------------------------------------------

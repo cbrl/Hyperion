@@ -35,7 +35,7 @@ void TransformSystem::updateWorld(Transform& transform) {
 	// If the transform has a parent, then process that first.
 	// If the parent was updated, or if this transform already needs
 	// an update, then get the parent's matrix.
-	else if (auto parent_ptr = transform.getOwner()->getParent(); parent_ptr.valid()) {
+	else if (auto parent_ptr = transform.getOwner()->getParent()) {
 
 		auto* parent = parent_ptr->getComponent<Transform>();
 

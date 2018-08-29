@@ -101,6 +101,8 @@ void TestScene::load(const Engine& engine) {
 	// Camera light
 	{
 		const auto light = addEntity();
+		camera->addChild(light);
+
 		auto* spot_light = light->addComponent<SpotLight>();
 		spot_light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
 		spot_light->setDiffuseColor(vec4_f32(0.85f, 0.85f, 0.9f, 1.0f));
@@ -113,8 +115,6 @@ void TestScene::load(const Engine& engine) {
 
 		auto* transform = light->getComponent<Transform>();
 		transform->setPosition(vec3_f32(-1.0f, 0.0f, 0.0f));
-		//transform->setParent(camera);
-		camera->addChild(light);
 	}
 
 	// Directional Light

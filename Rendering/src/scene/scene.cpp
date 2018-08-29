@@ -25,9 +25,12 @@ void Scene::importModel(EntityPtr entity, ID3D11Device& device, const shared_ptr
 
 	const auto& materials = blueprint->getMaterials();
 
+	EntityPtr root = ecs->createEntity<WorldObject<>>();
 	blueprint->forEachPart([&](ModelPart& part) {
-		entity->addComponent<Model>(device, blueprint->mesh, part, materials[part.material_index]);
+		root->addComponent<Model>(device, blueprint->mesh, part, materials[part.material_index]);
 	});
+
+	entity->addChild(root);
 }
 
 
