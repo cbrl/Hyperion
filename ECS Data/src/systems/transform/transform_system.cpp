@@ -28,14 +28,14 @@ void TransformSystem::updateWorld(Transform& transform) {
 
 	// If the transform has no parent and doesn't need an update,
 	// then nothing needs to be done.
-	if (!transform.getParent().valid()) {
+	if (!transform.getOwner()->getParent().valid()) {
 		if (!transform.needs_update) return;
 	}
 
 	// If the transform has a parent, then process that first.
 	// If the parent was updated, or if this transform already needs
 	// an update, then get the parent's matrix.
-	else if (auto parent_ptr = transform.getParent(); parent_ptr.valid()) {
+	else if (auto parent_ptr = transform.getOwner()->getParent(); parent_ptr.valid()) {
 
 		auto* parent = parent_ptr->getComponent<Transform>();
 

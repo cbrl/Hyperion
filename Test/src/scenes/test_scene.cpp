@@ -113,7 +113,8 @@ void TestScene::load(const Engine& engine) {
 
 		auto* transform = light->getComponent<Transform>();
 		transform->setPosition(vec3_f32(-1.0f, 0.0f, 0.0f));
-		transform->setParent(camera);
+		//transform->setParent(camera);
+		camera->addChild(light);
 	}
 
 	// Directional Light

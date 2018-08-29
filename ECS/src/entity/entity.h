@@ -73,43 +73,63 @@ public:
 	template<typename ComponentT, typename... ArgsT>
 	ComponentT* addComponent(ArgsT&&... args);
 
-
 	// Get the first component of the specified type
 	template<typename ComponentT>
 	[[nodiscard]]
 	ComponentT* getComponent();
 
-
 	// Get all components of the specified type
 	template<typename ComponentT>
 	std::vector<ComponentT*> getAll();
-
 
 	// Remove a specific component from this entity
 	template<typename ComponentT>
 	void removeComponent(ComponentT* component);
 
-
 	// Remove all components of the specified type from this entity
 	template<typename ComponentT>
 	void removeAll();
-
 
 	// Check if this entity contains the specified component
 	template<typename ComponentT>
 	[[nodiscard]]
 	bool hasComponent() const;
 
-
 	// Get the number of components of the specified type
 	template<typename ComponentT>
 	[[nodiscard]]
 	size_t countOf() const;
 
+	// Get the entity that is a parent of this entity
+	[[nodiscard]]
+	EntityPtr getParent() const;
+
+	// Make the specified entity a child of this entity
+	void addChild(EntityPtr child);
+
+	// Remove the specified entity from this entity's children
+	void removeChild(EntityPtr child);
+
+	// Remove all children from this entity
+	void removeAllChildren();
+
+	// Apply an action to each child of this entity
+	template<typename ActionT>
+	void forEachChild(const ActionT& act);
+
+	// Apply an action to each child of this entity, and each child of each child, etc...
+	template<typename ActionT>
+	void forEachChildRecursive(const ActionT& act);
+
 
 private:
 	void setHandle(EntityPtr entity_ptr);
 	void setComponentMgr(ComponentMgr* mgr);
+
+	void setParent(EntityPtr parent);
+
+	[[nodiscard]]
+	bool hasChild(EntityPtr child) const;
 
 
 protected:
@@ -130,6 +150,12 @@ protected:
 
 	// Map of pointers to components
 	std::unordered_multimap<std::type_index, IComponent*> components;
+
+	// The parent of this entity
+	EntityPtr parent_ptr;
+
+	// The children of this entity
+	std::vector<EntityPtr> children;
 };
 
 

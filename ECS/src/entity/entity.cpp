@@ -44,3 +44,52 @@ bool IEntity::isActive() const {
 EntityPtr IEntity::getHandle() const {
 	return this_ptr;
 }
+
+
+EntityPtr IEntity::getParent() const {
+	return parent_ptr;
+}
+
+
+void IEntity::setParent(EntityPtr parent) {
+	parent_ptr = parent;
+}
+
+
+void IEntity::addChild(EntityPtr child) {
+	if (child != this_ptr
+	    && child.valid()
+	    && child->getParent() != this_ptr
+		&& !child->hasChild(this_ptr)) {
+
+		child->setParent(this_ptr);
+		children.push_back(child);
+	}
+}
+
+
+void IEntity::removeChild(EntityPtr child) {
+	if (child == this_ptr
+		|| !child.valid()
+		|| child->getParent() != this_ptr) {
+		return;
+	}
+
+	const auto it = std::find(children.cbegin(), children.cend(), child);
+	if (it != children.cend()) {
+		child->setParent(EntityPtr{});
+		children.erase(it);
+	}
+}
+
+
+void IEntity::removeAllChildren() {
+	forEachChild([this](EntityPtr& child) {
+		removeChild(child);
+	});
+}
+
+
+bool IEntity::hasChild(EntityPtr child) const {
+	return std::find(children.cbegin(), children.cend(), child) != children.cend();
+}

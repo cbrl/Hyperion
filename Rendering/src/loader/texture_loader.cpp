@@ -34,18 +34,20 @@ void LoadTexture(ID3D11Device& device,
 
 	// TGA
 	else if (ext == L".tga") {
+		HRESULT hr;
+
 		ScratchImage image;
-		HRESULT hr = LoadFromTGAFile(filename.c_str(), nullptr, image);
+		hr = LoadFromTGAFile(filename.c_str(), nullptr, image);
 		if (FAILED(hr)) {
 			HandleLoaderError(device, "Failed to load TGA texture: " + wstr2str(filename), srv_out);
 		}
 
 		ComPtr<ID3D11Resource> texture;
-		HRESULT hr = CreateTexture(&device,
-		                           image.GetImages(),
-		                           image.GetImageCount(),
-		                           image.GetMetadata(),
-		                           texture.GetAddressOf());
+		hr = CreateTexture(&device,
+		                   image.GetImages(),
+		                   image.GetImageCount(),
+		                   image.GetMetadata(),
+		                   texture.GetAddressOf());
 		if (FAILED(hr)) {
 			HandleLoaderError(device, "Failed to create ID3D11Resource: " + wstr2str(filename), srv_out);
 		}
@@ -55,7 +57,7 @@ void LoadTexture(ID3D11Device& device,
 		srv_desc.ViewDimension       = D3D11_SRV_DIMENSION_TEXTURE2D;
 		srv_desc.Texture2D.MipLevels = static_cast<u32>(image.GetMetadata().mipLevels);
 
-		HRESULT hr = device.CreateShaderResourceView(texture.Get(), &srv_desc, srv_out);
+		hr = device.CreateShaderResourceView(texture.Get(), &srv_desc, srv_out);
 		if (FAILED(hr)) {
 			HandleLoaderError(device, "Failed to create SRV: " + wstr2str(filename), srv_out);
 		}
@@ -119,7 +121,7 @@ void LoadTexture(ID3D11Device& device,
 	// Return white texture if a file is missing
 	for (const std::wstring& fn : filenames) {
 		if (!fs::exists(fn)) {
-			HandleLoaderError(device, "Error loading texture (file not found): " + wstr2str(filename), srv_out);
+			HandleLoaderError(device, "Error loading texture (file not found): " + wstr2str(fn), srv_out);
 		}
 	}
 
@@ -182,8 +184,8 @@ void LoadTexture(ID3D11Device& device,
 
 	// Create texture array
 	ComPtr<ID3D11Texture2D> tex_array;
-	HRESULT hr = device.CreateTexture2D(&array_desc, nullptr, tex_array.GetAddressOf());
-	if (FAILED(hr)) {
+	HRESULT hr_tex2d = device.CreateTexture2D(&array_desc, nullptr, tex_array.GetAddressOf());
+	if (FAILED(hr_tex2d)) {
 		HandleLoaderError(device, "Failed to create Texture2DArray", srv_out);
 	}
 
@@ -220,8 +222,8 @@ void LoadTexture(ID3D11Device& device,
 	view_desc.Texture2DArray.ArraySize        = size;
 
 	// Create the SRV
-	HRESULT hr = device.CreateShaderResourceView(tex_array.Get(), &view_desc, srv_out);
-	if (FAILED(hr)) {
+	HRESULT hr_srv = device.CreateShaderResourceView(tex_array.Get(), &view_desc, srv_out);
+	if (FAILED(hr_srv)) {
 		HandleLoaderError(device, "Failed to create Texture2DArray SRV", srv_out);
 	}
 
