@@ -22,9 +22,15 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EntityPtr() noexcept;
+	EntityPtr() noexcept
+		: mgr(nullptr)
+		, handle(handle64::invalid_handle) {
+	}
 
-	EntityPtr(EntityMgr* mgr, handle64 entity) noexcept;
+	EntityPtr(EntityMgr* mgr, handle64 entity) noexcept
+		: mgr(mgr)
+		, handle(entity) {
+	}
 
 	EntityPtr(const EntityPtr& ptr) noexcept = default;
 	EntityPtr(EntityPtr&& ptr) noexcept = default;
@@ -59,7 +65,9 @@ public:
 	IEntity& operator*() const;
 
 	[[nodiscard]]
-	operator bool() const;
+	operator bool() const {
+		return valid();
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -85,6 +93,7 @@ private:
 
 
 
+
 /*
 //----------------------------------------------------------------------------------
 // UniqueEntityPtr
@@ -101,8 +110,13 @@ public:
 	//----------------------------------------------------------------------------------
 	UniqueEntityPtr() noexcept = default;
 
-	UniqueEntityPtr(EntityMgr* mgr, handle64 entity) noexcept;
-	UniqueEntityPtr(const EntityPtr& entity) noexcept;
+	UniqueEntityPtr(EntityMgr* mgr, handle64 entity) noexcept
+		: ptr(mgr, entity) {
+	}
+
+	UniqueEntityPtr(const EntityPtr& entity) noexcept
+		: ptr(entity) {
+	}
 
 	UniqueEntityPtr(const UniqueEntityPtr& ptr) = delete;
 	UniqueEntityPtr(UniqueEntityPtr&& ptr) noexcept = default;
@@ -111,14 +125,21 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~UniqueEntityPtr();
+	~UniqueEntityPtr() {
+		reset();
+	}
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
 	UniqueEntityPtr& operator=(const UniqueEntityPtr& entity_ptr) = delete;
-	UniqueEntityPtr& operator=(UniqueEntityPtr&& entity_ptr) noexcept;
+	
+	UniqueEntityPtr& operator=(UniqueEntityPtr&& entity_ptr) noexcept {
+		if (ptr.valid()) reset();
+		this->ptr = std::move(entity_ptr.ptr);
+		return *this;
+	}
 
 	[[nodiscard]]
 	bool operator==(const UniqueEntityPtr& entity_ptr) const noexcept {
@@ -141,26 +162,38 @@ public:
 	}
 
 	[[nodiscard]]
-	IEntity* operator->() const;
+	IEntity* operator->() const {
+		return ptr.operator->();
+	}
 
 	[[nodiscard]]
-	IEntity& operator*() const;
+	IEntity& operator*() const {
+		return ptr.operator*();
+	}
 
 	[[nodiscard]]
-	operator bool() const;
+	operator bool() const {
+		return ptr.operator bool();
+	}
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	IEntity* get() const;
+	IEntity* get() const {
+		return ptr.get();
+	}
 
 	[[nodiscard]]
-	EntityPtr getPtr() const noexcept;
+	EntityPtr getPtr() const noexcept {
+		return ptr;
+	}
 
 	[[nodiscard]]
-	handle64 getHandle() const noexcept;
+	handle64 getHandle() const noexcept {
+		return ptr.getHandle();
+	}
 
 	void reset();
 

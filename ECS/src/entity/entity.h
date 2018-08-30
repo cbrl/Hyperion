@@ -51,7 +51,9 @@ public:
 
 	// Get the entity's handle
 	[[nodiscard]]
-	EntityPtr getHandle() const;
+	EntityPtr getPtr() const {
+		return this_ptr;
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -62,7 +64,9 @@ public:
 	void setActive(bool state);
 
 	// Get the entity's state
-	bool isActive() const;
+	bool isActive() const {
+		return active;
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -100,9 +104,27 @@ public:
 	[[nodiscard]]
 	size_t countOf() const;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Parent
+	//----------------------------------------------------------------------------------
+
 	// Get the entity that is a parent of this entity
 	[[nodiscard]]
-	EntityPtr getParent() const;
+	EntityPtr getParent() const {
+		return parent_ptr;
+	}
+
+	// Determine if this entity has a valid parent
+	[[nodiscard]]
+	bool hasParent() const {
+		return bool(parent_ptr);
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Children
+	//----------------------------------------------------------------------------------
 
 	// Make the specified entity a child of this entity
 	void addChild(EntityPtr child);
@@ -113,20 +135,32 @@ public:
 	// Remove all children from this entity
 	void removeAllChildren();
 
+	[[nodiscard]]
+	bool hasChildren() const {
+		return !children.empty();
+	}
+
 	// Apply an action to each child of this entity
 	template<typename ActionT>
-	void forEachChild(const ActionT& act);
+	void forEachChild(ActionT&& act);
 
 	// Apply an action to each child of this entity, and each child of each child, etc...
 	template<typename ActionT>
-	void forEachChildRecursive(const ActionT& act);
+	void forEachChildRecursive(ActionT&& act);
 
 
 private:
-	void setHandle(EntityPtr entity_ptr);
-	void setComponentMgr(ComponentMgr* mgr);
+	void setPtr(EntityPtr entity_ptr) {
+		this_ptr = entity_ptr;
+	}
 
-	void setParent(EntityPtr parent);
+	void setComponentMgr(ComponentMgr* mgr) {
+		component_mgr = mgr;
+	}
+
+	void setParent(EntityPtr parent) {
+		parent_ptr = parent;
+	}
 
 	[[nodiscard]]
 	bool hasChild(EntityPtr child) const;

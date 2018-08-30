@@ -28,7 +28,7 @@ void TransformSystem::updateWorld(Transform& transform) {
 
 	// If the transform has no parent and doesn't need an update,
 	// then nothing needs to be done.
-	if (!transform.getOwner()->getParent().valid()) {
+	if (!transform.getOwner()->hasParent()) {
 		if (!transform.needs_update) return;
 	}
 

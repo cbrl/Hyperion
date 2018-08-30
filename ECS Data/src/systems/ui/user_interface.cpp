@@ -109,7 +109,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static_assert(std::size(render_mode_names) == std::size(render_modes));
 
 	auto render_mode = static_cast<int>(settings.getRenderMode());
-	if (ImGui::Combo("Render Mode", &render_mode, render_mode_names, std::size(render_mode_names)))
+	if (ImGui::Combo("Render Mode", &render_mode, render_mode_names, static_cast<int>(std::size(render_mode_names))))
 		settings.setRenderMode(static_cast<RenderMode>(render_mode));
 
 
@@ -133,7 +133,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static_assert(std::size(light_mode_names) == std::size(light_modes));
 
 	auto light_mode = static_cast<int>(settings.getLightingMode());
-	if (ImGui::Combo("Lighting Mode", &light_mode, light_mode_names, std::size(light_mode_names)))
+	if (ImGui::Combo("Lighting Mode", &light_mode, light_mode_names, static_cast<int>(std::size(light_mode_names))))
 		settings.setLightingMode(static_cast<LightingMode>(light_mode));
 
 
@@ -521,124 +521,139 @@ void DrawNode(const char* text, T& item) {
 }
 
 
+void DrawEntityNode(EntityPtr entity_ptr) {
+
+	auto* entity = entity_ptr.get();
+	auto  handle = entity_ptr.getHandle();
+
+	std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
+
+	const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
+		                             | ImGuiTreeNodeFlags_OpenOnDoubleClick
+		                             | ((selected_entity.getHandle() == handle) ? ImGuiTreeNodeFlags_Selected : 0);
+
+	const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
+
+	if (ImGui::IsItemClicked())
+		selected_entity = entity_ptr;
+
+	if (!node_open) return;
+
+	// Transform
+	if (auto* transform = entity->getComponent<Transform>()) {
+		DrawNode("Transform", *transform);
+	}
+
+	// Perspective Camera
+	if (entity->hasComponent<PerspectiveCamera>()) {
+		auto cams = entity->getAll<PerspectiveCamera>();
+		for (auto* cam : cams) {
+			DrawNode("Perspective Camera", *cam);
+		}
+	}
+
+	// Orthographic Camera
+	if (entity->hasComponent<OrthographicCamera>()) {
+		auto cams = entity->getAll<OrthographicCamera>();
+		for (auto* cam : cams) {
+			DrawNode("Orthographic Camera", *cam);
+		}
+	}
+
+	if (entity->hasComponent<Text>()) {
+		auto texts = entity->getAll<Text>();
+		for (auto* text : texts) {
+			DrawNode("Text", *text);
+		}
+	}
+
+	// Model
+	if (entity->hasComponent<Model>()) {
+		auto models = entity->getAll<Model>();
+		for (auto* model : models) {
+			DrawNode(model->getName().c_str(), *model);
+		}
+	}
+
+	// Directional Light
+	if (entity->hasComponent<DirectionalLight>()) {
+		auto lights = entity->getAll<DirectionalLight>();
+		for (auto* light : lights) {
+			DrawNode("Directional Light", *light);
+		}
+	}
+
+	// Point Light
+	if (entity->hasComponent<PointLight>()) {
+		auto lights = entity->getAll<PointLight>();
+		for (auto* light : lights) {
+			DrawNode("Point Light", *light);
+		}
+	}
+
+	// Spot Light
+	if (entity->hasComponent<SpotLight>()) {
+		auto lights = entity->getAll<SpotLight>();
+		for (auto* light : lights) {
+			DrawNode("Spot Light", *light);
+		}
+	}
+
+	// Camera Movement
+	if (entity->hasComponent<CameraMovement>()) {
+		auto components = entity->getAll<CameraMovement>();
+		for (auto* comp : components) {
+			DrawNode("Camera Movement", *comp);
+		}
+	}
+
+	// Mouse Rotation
+	if (entity->hasComponent<MouseRotation>()) {
+		auto components = entity->getAll<MouseRotation>();
+		for (auto* comp : components) {
+			DrawNode("Mouse Rotation", *comp);
+		}
+	}
+
+	// Axis Rotation
+	if (entity->hasComponent<AxisRotation>()) {
+		auto components = entity->getAll<AxisRotation>();
+		for (auto* comp : components) {
+			DrawNode("Axis Rotation", *comp);
+		}
+	}
+
+	// Axis Orbit
+	if (entity->hasComponent<AxisOrbit>()) {
+		auto components = entity->getAll<AxisOrbit>();
+		for (auto* comp : components) {
+			DrawNode("Axis Orbit", *comp);
+		}
+	}
+
+
+	// Draw any child entities in this node
+	if (entity_ptr->hasChildren()) {
+		entity_ptr->forEachChildRecursive([](EntityPtr& child) {
+			DrawEntityNode(child);
+		});
+	}
+
+	ImGui::TreePop();
+}
+
+
 void DrawTreeNodes(Scene& scene) {
 
 	auto& entities = scene.getEntities();
 
 	for (const auto& entity_ptr : entities) {
 
-		auto* entity = entity_ptr.get();
-		auto  handle = entity_ptr.getHandle();
+		// Skip this entity if it's a child
+		if (entity_ptr->hasParent()) continue;
 
-		std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
-
-		const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
-		                                 | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                                 | ((selected_entity.getHandle() == handle) ? ImGuiTreeNodeFlags_Selected : 0);
-
-		const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
-
-		if (ImGui::IsItemClicked())
-			selected_entity = entity_ptr;
-
-		if (!node_open) continue;
-
-		// Transform
-		if (auto* transform = entity->getComponent<Transform>()) {
-			DrawNode("Transform", *transform);
-		}
-
-		// Perspective Camera
-		if (entity->hasComponent<PerspectiveCamera>()) {
-			auto cams = entity->getAll<PerspectiveCamera>();
-			for (auto* cam : cams) {
-				DrawNode("Perspective Camera", *cam);
-			}
-		}
-
-		// Orthographic Camera
-		if (entity->hasComponent<OrthographicCamera>()) {
-			auto cams = entity->getAll<OrthographicCamera>();
-			for (auto* cam : cams) {
-				DrawNode("Orthographic Camera", *cam);
-			}
-		}
-
-		if (entity->hasComponent<Text>()) {
-			auto texts = entity->getAll<Text>();
-			for (auto* text : texts) {
-				DrawNode("Text", *text);
-			}
-		}
-
-		// Model
-		if (entity->hasComponent<Model>()) {
-			auto models = entity->getAll<Model>();
-			for (auto* model : models) {
-				DrawNode(model->getName().c_str(), *model);
-			}
-		}
-
-		// Directional Light
-		if (entity->hasComponent<DirectionalLight>()) {
-			auto lights = entity->getAll<DirectionalLight>();
-			for (auto* light : lights) {
-				DrawNode("Directional Light", *light);
-			}
-		}
-
-		// Point Light
-		if (entity->hasComponent<PointLight>()) {
-			auto lights = entity->getAll<PointLight>();
-			for (auto* light : lights) {
-				DrawNode("Point Light", *light);
-			}
-		}
-
-		// Spot Light
-		if (entity->hasComponent<SpotLight>()) {
-			auto lights = entity->getAll<SpotLight>();
-			for (auto* light : lights) {
-				DrawNode("Spot Light", *light);
-			}
-		}
-
-		// Camera Movement
-		if (entity->hasComponent<CameraMovement>()) {
-			auto components = entity->getAll<CameraMovement>();
-			for (auto* comp : components) {
-				DrawNode("Camera Movement", *comp);
-			}
-		}
-
-		// Mouse Rotation
-		if (entity->hasComponent<MouseRotation>()) {
-			auto components = entity->getAll<MouseRotation>();
-			for (auto* comp : components) {
-				DrawNode("Mouse Rotation", *comp);
-			}
-		}
-
-		// Axis Rotation
-		if (entity->hasComponent<AxisRotation>()) {
-			auto components = entity->getAll<AxisRotation>();
-			for (auto* comp : components) {
-				DrawNode("Axis Rotation", *comp);
-			}
-		}
-
-		// Axis Orbit
-		if (entity->hasComponent<AxisOrbit>()) {
-			auto components = entity->getAll<AxisOrbit>();
-			for (auto* comp : components) {
-				DrawNode("Axis Orbit", *comp);
-			}
-		}
-
-		ImGui::TreePop();
+		DrawEntityNode(entity_ptr);
 	}
-
-	ImGui::TreePop();
 }
 
 
@@ -657,6 +672,7 @@ void DrawTree(Scene& scene) {
 
 		if (node_open) {
 			DrawTreeNodes(scene);
+			ImGui::TreePop();
 		}
 
 		if (selected == &scene) {

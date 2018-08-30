@@ -18,41 +18,11 @@ IEntity::~IEntity() {
 }
 
 
-void IEntity::setHandle(EntityPtr entity_ptr) {
-	this_ptr = entity_ptr;
-}
-
-
-void IEntity::setComponentMgr(ComponentMgr* mgr) {
-	component_mgr = mgr;
-}
-
-
 void IEntity::setActive(bool state) {
 	active = state;
 	for (auto& pair : components) {
 		pair.second->setActive(state);
 	}
-}
-
-
-bool IEntity::isActive() const {
-	return active;
-}
-
-
-EntityPtr IEntity::getHandle() const {
-	return this_ptr;
-}
-
-
-EntityPtr IEntity::getParent() const {
-	return parent_ptr;
-}
-
-
-void IEntity::setParent(EntityPtr parent) {
-	parent_ptr = parent;
 }
 
 

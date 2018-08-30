@@ -76,7 +76,7 @@ size_t IEntity::countOf() const {
 
 
 template<typename ActionT>
-void IEntity::forEachChild(const ActionT& act) {
+void IEntity::forEachChild(ActionT&& act) {
 	children.erase(std::remove_if(children.begin(), children.end(),
 	                              [](EntityPtr& child) { return !child.valid(); }),
 	               children.end());
@@ -88,13 +88,13 @@ void IEntity::forEachChild(const ActionT& act) {
 
 
 template<typename ActionT>
-void IEntity::forEachChildRecursive(const ActionT& act) {
+void IEntity::forEachChildRecursive(ActionT&& act) {
 	children.erase(std::remove_if(children.begin(), children.end(),
 	                              [](EntityPtr& child) { return !child.valid(); }),
 	               children.end());
 
 	for (auto child : children) {
-		child->forEachChildRecursive(act);
 		act(child);
+		child->forEachChildRecursive(act);
 	}
 }
