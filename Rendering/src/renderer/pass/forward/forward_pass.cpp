@@ -197,11 +197,11 @@ void ForwardPass::renderFalseColor(Scene& scene,
 }
 
 
-void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection) const {
+void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, const vec4_f32& color) const {
 
 	bindWireframeState();
 
-	color_buffer.updateData(device_context, vec4_f32{0.0f, 1.0f, 0.0f, 1.0f});
+	color_buffer.updateData(device_context, color);
 
 	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, FalseColor::Static);
 	pixel_shader->bind(device_context);

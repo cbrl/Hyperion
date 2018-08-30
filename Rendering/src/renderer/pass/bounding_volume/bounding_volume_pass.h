@@ -16,11 +16,11 @@ public:
 	                   ResourceMgr& resource_mgr);
 	~BoundingVolumePass() = default;
 
-	void bindRenderStates() const;
-	void XM_CALLCONV render(Scene& scene, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV render(Scene& scene, FXMMATRIX world_to_projection, const vec4_f32& color) const;
 
 
 private:
+	void bindRenderStates() const;
 	void XM_CALLCONV renderAABB(const AABB& aabb, FXMMATRIX object_to_world) const;
 
 
@@ -35,4 +35,5 @@ private:
 
 	// Buffers
 	ConstantBuffer<XMMATRIX> model_matrix_buffer;
+	ConstantBuffer<vec4_f32> color_buffer;
 };

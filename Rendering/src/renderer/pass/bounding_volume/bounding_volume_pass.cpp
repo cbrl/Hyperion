@@ -14,7 +14,8 @@ BoundingVolumePass::BoundingVolumePass(ID3D11Device& device,
 									   ResourceMgr& resource_mgr)
 	: device_context(device_context)
 	, render_state_mgr(render_state_mgr)
-	, model_matrix_buffer(device) {
+	, model_matrix_buffer(device)
+	, color_buffer(device) {
 
 	vertex_shader = ShaderFactory::createWireframeBoxVS(resource_mgr);
 	pixel_shader  = ShaderFactory::createWireframeBoxPS(resource_mgr);
@@ -34,8 +35,9 @@ void BoundingVolumePass::bindRenderStates() const {
 	vertex_shader->bind(device_context);
 	pixel_shader->bind(device_context);
 
-	// Bind the constant buffer
+	// Bind the constant buffers
 	model_matrix_buffer.bind<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
+	color_buffer.bind<Pipeline::PS>(device_context, SLOT_CBUFFER_COLOR);
 
 	// Bind the render states
 	render_state_mgr.bind(device_context, DepthStencilStates::LessEqRW);
@@ -44,10 +46,12 @@ void BoundingVolumePass::bindRenderStates() const {
 }
 
 
-void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_projection, const vec4_f32& color) const {
 
 	// Bind the render states
 	bindRenderStates();
+
+	color_buffer.updateData(device_context, color);
 
 	scene.forEach<DirectionalLight>([&](const DirectionalLight& light) {
 

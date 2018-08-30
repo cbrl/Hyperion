@@ -60,7 +60,7 @@ public:
 	                                  FXMMATRIX world_to_projection,
 	                                  FalseColor color) const;
 
-	void XM_CALLCONV renderWireframe(Scene& scene, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV renderWireframe(Scene& scene, FXMMATRIX world_to_projection, const vec4_f32& color) const;
 
 
 private:

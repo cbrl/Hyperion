@@ -39,7 +39,9 @@ public:
 	CameraSettings()
 		: render_mode(RenderMode::Forward)
 		, lighting_mode(LightingMode::Default)
-		, render_options(static_cast<u8>(RenderOptions::None)) {
+		, render_options(static_cast<u8>(RenderOptions::None))
+		, bounding_volume_color(1.0f, 1.0f, 1.0f, 1.0f)
+		, wireframe_color(0.0f, 1.0f, 0.0f, 1.0f) {
 	}
 
 	CameraSettings(const CameraSettings& settings) noexcept = default;
@@ -111,6 +113,22 @@ public:
 		render_options &= ~(static_cast<u8>(opt));
 	}
 
+	const vec4_f32& getBoundingVolumeColor() const {
+		return bounding_volume_color;
+	}
+
+	void setBoundingVolumeColor(const vec4_f32& color) {
+		bounding_volume_color = color;
+	}
+
+	const vec4_f32& getWireframeColor() const {
+		return wireframe_color;
+	}
+
+	void setWireframeColor(const vec4_f32& color) {
+		wireframe_color = color;
+	}
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Fog
@@ -151,6 +169,10 @@ private:
 
 	// The extra rendering options
 	u8 render_options;
+
+	// The color of bounding volumes and wireframes
+	vec4_f32 bounding_volume_color;
+	vec4_f32 wireframe_color;
 
 	// Describes the fog color, start radius, range
 	Fog fog;

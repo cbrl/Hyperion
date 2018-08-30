@@ -143,12 +143,26 @@ void DrawCameraSettings(CameraSettings& settings) {
 	ImGui::Spacing();
 
 	auto bounding_volumes = settings.hasRenderOption(RenderOptions::BoundingVolume);
-	if (ImGui::Checkbox("Bounding Volumes", &bounding_volumes))
+	if (ImGui::Checkbox("Bounding Volumes", &bounding_volumes)) {
 		settings.toggleRenderOption(RenderOptions::BoundingVolume);
+	}
+	if (bounding_volumes) {
+		auto color = settings.getBoundingVolumeColor();
+		if (ImGui::DragFloat3("BV Color", color.data(), 0.01f, 0.0f, 1.0f)) {
+			settings.setBoundingVolumeColor(color);
+		}
+	}
 
 	auto wireframe = settings.hasRenderOption(RenderOptions::Wireframe);
-	if (ImGui::Checkbox("Wireframe", &wireframe))
+	if (ImGui::Checkbox("Wireframe", &wireframe)) {
 		settings.toggleRenderOption(RenderOptions::Wireframe);
+	}
+	if (wireframe) {
+		auto color = settings.getWireframeColor();
+		if (ImGui::DragFloat3("Wire Color", color.data(), 0.01f, 0.0f, 1.0f)) {
+			settings.setWireframeColor(color);
+		}
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -219,11 +233,11 @@ void DrawDetails(OrthographicCamera& camera) {
 	// Viewport
 	auto& vp = camera.getViewport();
 	vec2_u32 size = vp.getSize();
-	vec2_u32 pos = vp.getTopLeft();
+	vec2_u32 pos  = vp.getTopLeft();
 
 	static constexpr u32 v_min_size = 1;
-	static constexpr u32 v_min_pos = 0;
-	static constexpr u32 v_max = 15360;
+	static constexpr u32 v_min_pos  = 0;
+	static constexpr u32 v_max      = 15360;
 
 	if (ImGui::DragScalarN("Viewport Size", ImGuiDataType_U32, size.data(), 2, 1.0f, &v_min_size, &v_max)) {
 		vp.setSize(size);

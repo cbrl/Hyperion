@@ -55,14 +55,14 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 	}
 
 	if (settings.hasRenderOption(RenderOptions::Wireframe))
-		forward_pass->renderWireframe(scene, world_to_projection);
+		forward_pass->renderWireframe(scene, world_to_projection, camera.getSettings().getWireframeColor());
 
 
 	//----------------------------------------------------------------------------------
 	// Render bounding volumes
 	//----------------------------------------------------------------------------------
 	if (settings.hasRenderOption(RenderOptions::BoundingVolume))
-		bounding_volume_pass->render(scene, world_to_projection);
+		bounding_volume_pass->render(scene, world_to_projection, camera.getSettings().getBoundingVolumeColor());
 
 
 	//----------------------------------------------------------------------------------
