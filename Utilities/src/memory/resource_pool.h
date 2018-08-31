@@ -132,7 +132,9 @@ public:
 
 	// Get the number of objects contained in this pool
 	[[nodiscard]]
-	size_t getCount() const override { return count; }
+	size_t getCount() const override {
+		return count;
+	}
 
 
 	// Apply an action to each resource
@@ -176,7 +178,8 @@ private:
 //
 // 'index' is used as an index into the map of resource pools. This requirement
 // allows the user to retrieve the proper pool even when the specific resource
-// type is unkown (e.g. when a polymorphic type is referred to by its base class).
+// type is unkown (e.g. using a virtual getTypeIndex() method used when a
+// polymorphic type is referred to by its base class).
 //
 //----------------------------------------------------------------------------------
 
@@ -226,10 +229,7 @@ public:
 	template<typename ResourceT>
 	[[nodiscard]]
 	ResourcePool<ResourceT>* getPool() {
-		const auto& it = pools.find(ResourceT::index);
-
-		assert(it != pools.end() && "Invalid resource pool type requested");
-		return static_cast<ResourcePool<ResourceT>*>(it->second.get());
+		return static_cast<ResourcePool<ResourceT>*>(getPool(ResourceT::index));
 	}
 
 
@@ -246,7 +246,7 @@ public:
 	// Check if a pool exists for the specified type
 	template<typename ResourceT>
 	bool poolExists() const {
-		return pools.find(ResourceT::index) != pools.end();
+		return poolExists(ResourceT::index);
 	}
 
 
