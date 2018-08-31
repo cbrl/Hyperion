@@ -26,6 +26,12 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 
 
 	//----------------------------------------------------------------------------------
+	// Render the skybox
+	//----------------------------------------------------------------------------------
+	sky_pass->render(skybox);
+
+
+	//----------------------------------------------------------------------------------
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
 	switch (settings.getLightingMode()) {
@@ -60,11 +66,6 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 	if (settings.hasRenderOption(RenderOptions::BoundingVolume))
 		bounding_volume_pass->render(scene, world_to_projection, camera.getSettings().getBoundingVolumeColor());
 
-
-	//----------------------------------------------------------------------------------
-	// Render the skybox
-	//----------------------------------------------------------------------------------
-	sky_pass->render(skybox);
 
 
 	// Clear the bound forward state
