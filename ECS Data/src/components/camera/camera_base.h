@@ -18,7 +18,6 @@ enum class RenderMode : u8 {
 enum class LightingMode : u8 {
 	Default,
 	Unlit,
-	FalseColorPosition,
 	FalseColorNormal,
 	FalseColorDepth,
 };

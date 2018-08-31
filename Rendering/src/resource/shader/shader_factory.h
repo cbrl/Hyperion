@@ -6,7 +6,6 @@
 
 enum class FalseColor {
 	Static,
-	Position,
 	Normal,
 	Depth
 };

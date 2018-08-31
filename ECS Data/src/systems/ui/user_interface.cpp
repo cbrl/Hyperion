@@ -119,14 +119,12 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static constexpr const char* light_mode_names[] = {
 		"Default",
 		"Unlint",
-		"FalseColorPosition",
 		"FalseColorNormal",
 		"FalseColorDepth"
 	};
 	static constexpr LightingMode light_modes[] = {
 		LightingMode::Default,
 		LightingMode::Unlit,
-		LightingMode::FalseColorPosition,
 		LightingMode::FalseColorNormal,
 		LightingMode::FalseColorDepth
 	};

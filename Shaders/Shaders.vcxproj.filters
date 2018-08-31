@@ -53,9 +53,6 @@
     <FxCompile Include="shaders\false_color\static_color.hlsl">
       <Filter>Shader Files\false_color</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\false_color\position_color.hlsl">
-      <Filter>Shader Files\false_color</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\false_color\normal_color.hlsl">
       <Filter>Shader Files\false_color</Filter>
     </FxCompile>

@@ -38,10 +38,6 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 			forward_pass->renderUnlit(scene, world_to_projection, skybox);
 			break;
 
-		case LightingMode::FalseColorPosition:
-			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Position);
-			break;
-
 		case LightingMode::FalseColorNormal:
 			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Normal);
 			break;

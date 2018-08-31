@@ -25,7 +25,6 @@
 
 // False Color
 #include "compiled_headers/static_color.h"
-#include "compiled_headers/position_color.h"
 #include "compiled_headers/normal_color.h"
 #include "compiled_headers/depth_color.h"
 
@@ -135,9 +134,6 @@ namespace ShaderFactory {
 		switch (color) {
 			case FalseColor::Static:
 				return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_static", BYTECODE(shader_static_color));
-
-			case FalseColor::Position:
-				return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_position", BYTECODE(shader_position_color));
 
 			case FalseColor::Normal:
 				return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_normal", BYTECODE(shader_normal_color));
