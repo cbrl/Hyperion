@@ -1,5 +1,4 @@
 #include "model_blueprint.h"
-#include "resource/resource_mgr.h"
 #include "loader/model_loader.h"
 
 

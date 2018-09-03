@@ -123,6 +123,9 @@
     <Filter Include="Header Files\renderer\state">
       <UniqueIdentifier>{e48fa1f5-d47c-4769-b06e-7e6a622afc99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resource\texture">
+      <UniqueIdentifier>{9a06a259-8487-47ae-8ef3-35d19e071ce9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -187,6 +190,12 @@
     </ClCompile>
     <ClCompile Include="src\scene\scene.cpp">
       <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\texture\texture_factory.cpp">
+      <Filter>Source Files\resource\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\texture\texture.cpp">
+      <Filter>Source Files\resource\texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -309,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="src\renderer\output\output_mgr.h">
       <Filter>Header Files\renderer\output</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resource\texture\texture_factory.h">
+      <Filter>Header Files\resource\texture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -35,11 +35,11 @@ std::enable_if_t<std::is_same_v<Texture, ResourceT>,
 
 template<typename ResourceT>
 std::enable_if_t<std::is_same_v<Texture, ResourceT>,
-	shared_ptr<Texture>> ResourceMgr::getOrCreate(const vec4_f32& color) {
+	shared_ptr<Texture>> ResourceMgr::getOrCreate(const std::wstring& name,
+	                                              const D3D11_TEXTURE2D_DESC& desc, 
+	                                              const D3D11_SUBRESOURCE_DATA& init_data) {
 
-	u32 texColor = Float4ColorToU32(color);
-
-	return textures.getOrCreateResource(std::to_wstring(texColor), device, texColor);
+	return textures.getOrCreateResource(name, name, device, desc, init_data);
 }
 
 

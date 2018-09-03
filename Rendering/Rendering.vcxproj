@@ -153,6 +153,8 @@
     <ClCompile Include="src\resource\shader\shader.cpp" />
     <ClCompile Include="src\resource\shader\shader_bytecode.cpp" />
     <ClCompile Include="src\resource\shader\shader_factory.cpp" />
+    <ClCompile Include="src\resource\texture\texture.cpp" />
+    <ClCompile Include="src\resource\texture\texture_factory.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +196,7 @@
     <ClInclude Include="src\resource\shader\shader_bytecode.h" />
     <ClInclude Include="src\resource\shader\shader_factory.h" />
     <ClInclude Include="src\resource\texture\texture.h" />
+    <ClInclude Include="src\resource\texture\texture_factory.h" />
     <ClInclude Include="src\scene\scene.h" />
   </ItemGroup>
   <ItemGroup>

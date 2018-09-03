@@ -2,7 +2,6 @@
 
 #include "directx/d3d11.h"
 #include "directx/vertex_types.h"
-#include "directx/directx_math.h"
 #include "resource/mesh/mesh.h"
 #include "resource/model/model_output.h"
 
@@ -15,12 +14,11 @@ public:
 	//----------------------------------------------------------------------------------
 
 	ModelBlueprint(ID3D11Device& device,
-		ResourceMgr& resource_mgr,
-		const std::wstring& filename);
+	               ResourceMgr& resource_mgr,
+	               const std::wstring& filename);
 
 	template<typename VertexT>
-	ModelBlueprint(ID3D11Device& device,
-	               const ModelOutput<VertexT>& model_output)
+	ModelBlueprint(ID3D11Device& device, const ModelOutput<VertexT>& model_output)
 		: Resource(str2wstr(model_output.name)) {
 
 		constructBlueprint(device, model_output);

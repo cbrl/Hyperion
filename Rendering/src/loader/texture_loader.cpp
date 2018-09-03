@@ -4,10 +4,64 @@
 #include "log/log.h"
 
 
+bool error_tex_initialized = false;
+u32 error_tex_data[128][128] = {{}};
+
+
+void InitErrorTextureData() {
+
+	u32 color = 0xFF0000FF;
+
+	for (size_t i = 0; i < 128; ++i) {
+		if (i > 64) color = 0xFF000000;
+		for (size_t j = 0; j < 128; ++j) {
+			if (j > 64) error_tex_data[i][j] = color ^ 0x000000FF;
+			else error_tex_data[i][j] = color;
+		}
+	}
+}
+
+
+void CreateErrorTexture(ID3D11Device& device, ID3D11ShaderResourceView** srv_out) {
+
+	if (!error_tex_initialized) {
+		InitErrorTextureData();
+		error_tex_initialized = true;
+	}
+
+	ComPtr<ID3D11Texture2D> texture;
+
+	{
+		D3D11_SUBRESOURCE_DATA init_data = { error_tex_data, sizeof(u32) * 128, 0 };
+
+		D3D11_TEXTURE2D_DESC desc = {};
+		desc.Width            = 128;
+		desc.Height           = 128;
+		desc.MipLevels        = 1;
+		desc.ArraySize        = 1;
+		desc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
+		desc.SampleDesc.Count = 1;
+		desc.Usage            = D3D11_USAGE_IMMUTABLE;
+		desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
+
+		ThrowIfFailed(device.CreateTexture2D(&desc, &init_data, texture.GetAddressOf()),
+		              "Failed to create Texture2D");
+	}
+
+	ThrowIfFailed(device.CreateShaderResourceView(texture.Get(), nullptr, srv_out),
+	              "Failed to create SRV");
+
+	SetDebugObjectName(*srv_out, "TextureLoader error texture");
+	Logger::log(LogLevel::debug, "Created error texture");
+}
+
+
 void HandleLoaderError(ID3D11Device& device, const std::string& msg, ID3D11ShaderResourceView** srv_out) {
 	Logger::log(LogLevel::err, msg);
-	TextureLoader::LoadTexture(device, 0xFFFFFFFF, srv_out);
+	CreateErrorTexture(device, srv_out);
 }
+
+
 
 
 namespace TextureLoader {
@@ -20,6 +74,7 @@ void LoadTexture(ID3D11Device& device,
 	// Return white texture if the file is missing
 	if (!fs::exists(filename)) {
 		HandleLoaderError(device, "Error loading texture (file not found): " + wstr2str(filename), srv_out);
+		return;
 	}
 
 	const std::wstring ext = GetFileExtension(filename);
@@ -29,6 +84,7 @@ void LoadTexture(ID3D11Device& device,
 		HRESULT hr = CreateDDSTextureFromFile(&device, filename.c_str(), nullptr, srv_out);
 		if (FAILED(hr)) {
 			HandleLoaderError(device, "Failed to create DDS texture: " + wstr2str(filename), srv_out);
+			return;
 		}
 	}
 
@@ -40,6 +96,7 @@ void LoadTexture(ID3D11Device& device,
 		hr = LoadFromTGAFile(filename.c_str(), nullptr, image);
 		if (FAILED(hr)) {
 			HandleLoaderError(device, "Failed to load TGA texture: " + wstr2str(filename), srv_out);
+			return;
 		}
 
 		ComPtr<ID3D11Resource> texture;
@@ -50,6 +107,7 @@ void LoadTexture(ID3D11Device& device,
 		                   texture.GetAddressOf());
 		if (FAILED(hr)) {
 			HandleLoaderError(device, "Failed to create ID3D11Resource: " + wstr2str(filename), srv_out);
+			return;
 		}
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
@@ -60,6 +118,7 @@ void LoadTexture(ID3D11Device& device,
 		hr = device.CreateShaderResourceView(texture.Get(), &srv_desc, srv_out);
 		if (FAILED(hr)) {
 			HandleLoaderError(device, "Failed to create SRV: " + wstr2str(filename), srv_out);
+			return;
 		}
 	}
 
@@ -68,49 +127,13 @@ void LoadTexture(ID3D11Device& device,
 		HRESULT hr = CreateWICTextureFromFile(&device, &device_context, filename.c_str(), nullptr, srv_out);
 		if (FAILED(hr)) {
 			HandleLoaderError(device, "Failed to create WIC texture: " + wstr2str(filename), srv_out);
+			return;
 		}
 	}
 
 	SetDebugObjectName(*srv_out, "TextureLoader Texture");
 	Logger::log(LogLevel::debug, "Loaded texture: {}", wstr2str(filename));
 }
-
-
-
-
-void LoadTexture(ID3D11Device& device,
-                 u32 color,
-                 ID3D11ShaderResourceView** srv_out) {
-
-	// Create a texture from the color
-	ComPtr<ID3D11Texture2D> texture;
-	D3D11_SUBRESOURCE_DATA init_data = {&color, sizeof(u32), 0};
-
-	D3D11_TEXTURE2D_DESC desc = {};
-	desc.Width                = desc.Height = desc.MipLevels = desc.ArraySize = 1;
-	desc.Format               = DXGI_FORMAT_R8G8B8A8_UNORM;
-	desc.SampleDesc.Count     = 1;
-	desc.Usage                = D3D11_USAGE_IMMUTABLE;
-	desc.BindFlags            = D3D11_BIND_SHADER_RESOURCE;
-
-	ThrowIfFailed(device.CreateTexture2D(&desc, &init_data, texture.GetAddressOf()),
-	              "Failed to create color Texture2D");
-
-
-	// Create the SRV from the texture
-	D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
-	srv_desc.Format                          = DXGI_FORMAT_R8G8B8A8_UNORM;
-	srv_desc.ViewDimension                   = D3D11_SRV_DIMENSION_TEXTURE2D;
-	srv_desc.Texture2D.MipLevels             = 1;
-
-	ThrowIfFailed(device.CreateShaderResourceView(texture.Get(), &srv_desc, srv_out),
-	              "Failed to create color SRV");
-
-	SetDebugObjectName(*srv_out, "TextureLoader ColorTexture");
-	Logger::log(LogLevel::debug, "Created single color texture (color: {x})", color);
-}
-
-
 
 
 void LoadTexture(ID3D11Device& device,
@@ -122,6 +145,7 @@ void LoadTexture(ID3D11Device& device,
 	for (const std::wstring& fn : filenames) {
 		if (!fs::exists(fn)) {
 			HandleLoaderError(device, "Error loading texture (file not found): " + wstr2str(fn), srv_out);
+			return;
 		}
 	}
 
@@ -143,6 +167,7 @@ void LoadTexture(ID3D11Device& device,
 			                                        nullptr);
 			if (FAILED(hr)) {
 				HandleLoaderError(device, "Failed to create Texture2D: " + wstr2str(filenames[i]), srv_out);
+				return;
 			}
 		}
 		else {
@@ -159,6 +184,7 @@ void LoadTexture(ID3D11Device& device,
 			                                        nullptr);
 			if (FAILED(hr)) {
 				HandleLoaderError(device, "Failed to create Texture2D: " + wstr2str(filenames[i]), srv_out);
+				return;
 			}
 		}
 	}
@@ -170,23 +196,24 @@ void LoadTexture(ID3D11Device& device,
 
 	// Create the texture array description
 	D3D11_TEXTURE2D_DESC array_desc = {};
-	array_desc.Width                = desc.Width;
-	array_desc.Height               = desc.Height;
-	array_desc.MipLevels            = desc.MipLevels;
-	array_desc.ArraySize            = size;
-	array_desc.Format               = desc.Format;
-	array_desc.SampleDesc.Count     = 1;
-	array_desc.SampleDesc.Quality   = 0;
-	array_desc.Usage                = D3D11_USAGE_DEFAULT;
-	array_desc.BindFlags            = D3D11_BIND_SHADER_RESOURCE;
-	array_desc.CPUAccessFlags       = 0;
-	array_desc.MiscFlags            = 0;
+	array_desc.Width              = desc.Width;
+	array_desc.Height             = desc.Height;
+	array_desc.MipLevels          = desc.MipLevels;
+	array_desc.ArraySize          = size;
+	array_desc.Format             = desc.Format;
+	array_desc.SampleDesc.Count   = 1;
+	array_desc.SampleDesc.Quality = 0;
+	array_desc.Usage              = D3D11_USAGE_DEFAULT;
+	array_desc.BindFlags          = D3D11_BIND_SHADER_RESOURCE;
+	array_desc.CPUAccessFlags     = 0;
+	array_desc.MiscFlags          = 0;
 
 	// Create texture array
 	ComPtr<ID3D11Texture2D> tex_array;
 	HRESULT hr_tex2d = device.CreateTexture2D(&array_desc, nullptr, tex_array.GetAddressOf());
 	if (FAILED(hr_tex2d)) {
 		HandleLoaderError(device, "Failed to create Texture2DArray", srv_out);
+		return;
 	}
 
 
@@ -198,6 +225,7 @@ void LoadTexture(ID3D11Device& device,
 			HRESULT hr = device_context.Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex);
 			if (FAILED(hr)) {
 				HandleLoaderError(device, "Failed to map Texture2D for Texture2DArray", srv_out);
+				return;
 			}
 
 			device_context.UpdateSubresource(tex_array.Get(),
@@ -214,17 +242,18 @@ void LoadTexture(ID3D11Device& device,
 
 	// Create SRV description
 	D3D11_SHADER_RESOURCE_VIEW_DESC view_desc = {};
-	view_desc.Format                          = array_desc.Format;
-	view_desc.ViewDimension                   = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
-	view_desc.Texture2DArray.MipLevels        = array_desc.MipLevels;
-	view_desc.Texture2DArray.MostDetailedMip  = 0;
-	view_desc.Texture2DArray.FirstArraySlice  = 0;
-	view_desc.Texture2DArray.ArraySize        = size;
+	view_desc.Format                         = array_desc.Format;
+	view_desc.ViewDimension                  = D3D11_SRV_DIMENSION_TEXTURE2DARRAY;
+	view_desc.Texture2DArray.MipLevels       = array_desc.MipLevels;
+	view_desc.Texture2DArray.MostDetailedMip = 0;
+	view_desc.Texture2DArray.FirstArraySlice = 0;
+	view_desc.Texture2DArray.ArraySize       = size;
 
 	// Create the SRV
 	HRESULT hr_srv = device.CreateShaderResourceView(tex_array.Get(), &view_desc, srv_out);
 	if (FAILED(hr_srv)) {
 		HandleLoaderError(device, "Failed to create Texture2DArray SRV", srv_out);
+		return;
 	}
 
 	SetDebugObjectName(*srv_out, "TextureLoader Texture2DArray");
