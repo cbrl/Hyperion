@@ -10,8 +10,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	PointLight() noexcept
-		: ambient_color(0.0f, 0.0f, 0.0f, 0.0f)
-		, diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
+		: diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
 		, specular(1.0f, 1.0f, 1.0f, 1.0f)
 		, attenuation(0.0f, 1.0f, 0.0f)
 		, near_plane(0.1f)
@@ -34,19 +33,6 @@ public:
 	//----------------------------------------------------------------------------------
 	PointLight& operator=(const PointLight& light) = delete;
 	PointLight& operator=(PointLight&& light) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Ambient Color
-	//----------------------------------------------------------------------------------
-	void setAmbientColor(const vec4_f32& color) {
-		this->ambient_color = color;
-	}
-
-	[[nodiscard]]
-	const vec4_f32& getAmbientColor() const {
-		return ambient_color;
-	}
 
 
 	//----------------------------------------------------------------------------------
@@ -153,7 +139,6 @@ private:
 
 private:
 	// Lighting parameters
-	vec4_f32 ambient_color;
 	vec4_f32 diffuse_color;
 	vec4_f32 specular;
 	vec3_f32 attenuation;

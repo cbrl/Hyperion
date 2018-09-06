@@ -16,7 +16,6 @@
 //----------------------------------------------------------------------------------
 
 struct DirectionalLight {
-	float4 ambient;
 	float4 diffuse;
 	float4 specular;
 	float3 direction;
@@ -26,7 +25,6 @@ struct DirectionalLight {
 
 
 struct PointLight {
-	float4 ambient;
 	float4 diffuse;
 	float4 specular;
 	float3 position;
@@ -44,7 +42,6 @@ struct ShadowedPointLight {
 
 
 struct SpotLight {
-	float4 ambient;
 	float4 diffuse;
 	float4 specular;
 	float3 position;
@@ -190,7 +187,7 @@ float ShadowFactor(ShadowCubeMap shadow_map, float3 p_light, float2 projection_v
 //----------------------------------------------------------------------------------
 // ComputeDirectionalLight
 //----------------------------------------------------------------------------------
-// Computes the ambient, diffuse, and specular terms in the lighting equation
+// Computes the diffuse and specular terms in the lighting equation
 // from a directional light.  We need to output the terms separately because
 // later we will modify the individual terms.
 //----------------------------------------------------------------------------------
@@ -199,12 +196,10 @@ void ComputeDirectionalLight(DirectionalLight L,
                              float3 pos,
                              float3 normal,
                              float3 view_vec,
-                             out float4 ambient,
                              out float4 diffuse,
                              out float4 specular,
                              out float3 p_ndc) {
 	// Initialize outputs.
-	ambient  = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	diffuse  = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -213,9 +208,6 @@ void ComputeDirectionalLight(DirectionalLight L,
 
 	const float4 p_proj = mul(float4(pos, 1.0f), L.world_to_projection);
 	p_ndc = p_proj.xyz / p_proj.w;
-
-	// Add ambient term.
-	ambient = mat.ambient * L.ambient;
 
 	// Diffuse
 	const float diffuse_factor = DiffuseFactor(light_vec, normal);
@@ -233,12 +225,11 @@ void ComputeDirectionalLight(DirectionalLight L,
                              float3 pos,
                              float3 normal,
                              float3 view_vec,
-                             out float4 ambient,
                              out float4 diffuse,
                              out float4 specular) {
 
 	float3 p_ndc;
-	ComputeDirectionalLight(L, mat, pos, normal, view_vec, ambient, diffuse, specular, p_ndc);
+	ComputeDirectionalLight(L, mat, pos, normal, view_vec, diffuse, specular, p_ndc);
 }
 
 
@@ -248,20 +239,17 @@ void ComputeShadowedDirectionalLight(DirectionalLight L,
 									 float3 pos,
 									 float3 normal,
 									 float3 view_vec,
-									 out float4 ambient,
 									 out float4 diffuse,
 									 out float4 specular) {
 
-	float4 ambient0;
 	float4 diffuse0;
 	float4 specular0;
 	float3 p_ndc;
 
-	ComputeDirectionalLight(L, mat, pos, normal, view_vec, ambient0, diffuse0, specular0, p_ndc);
+	ComputeDirectionalLight(L, mat, pos, normal, view_vec, diffuse0, specular0, p_ndc);
 
 	const float shadow_factor = ShadowFactor(shadow_map, p_ndc);
 
-	ambient  = ambient0;
 	diffuse  = diffuse0  * shadow_factor;
 	specular = specular0 * shadow_factor;
 }
@@ -271,8 +259,8 @@ void ComputeShadowedDirectionalLight(DirectionalLight L,
 //----------------------------------------------------------------------------------
 // ComputePointLight
 //----------------------------------------------------------------------------------
-// Computes the ambient, diffuse, and specular terms in the lighting equation
-// from a point light.  We need to output the terms separately because
+// Computes the diffuse and specular terms in the lighting equation
+// from a point light. We need to output the terms separately because
 // later we will modify the individual terms.
 //----------------------------------------------------------------------------------
 void ComputePointLight(PointLight L,
@@ -280,12 +268,10 @@ void ComputePointLight(PointLight L,
 					   float3 pos,
 					   float3 normal,
 					   float3 view_vec,
-					   out float4 ambient,
 					   out float4 diffuse,
 					   out float4 specular) {
 
 	// Initialize outputs.
-	ambient  = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	diffuse  = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -301,9 +287,6 @@ void ComputePointLight(PointLight L,
 
 	// Normalize the light vector.
 	light_vec /= d;
-
-	// Ambient term.
-	ambient = mat.ambient * L.ambient;
 
 	// Diffuse
 	const float diffuse_factor = DiffuseFactor(light_vec, normal);
@@ -327,20 +310,17 @@ void ComputeShadowedPointLight(ShadowedPointLight L,
 							   float3 pos,
 							   float3 normal,
 							   float3 view_vec,
-							   out float4 ambient,
 							   out float4 diffuse,
 							   out float4 specular) {
 
-	float4 ambient0;
 	float4 diffuse0;
 	float4 specular0;
 
-	ComputePointLight(L.light, mat, pos, normal, view_vec, ambient0, diffuse0, specular0);
+	ComputePointLight(L.light, mat, pos, normal, view_vec, diffuse0, specular0);
 
 	const float3 p_light      = mul(float4(pos, 1.0f), L.world_to_light).xyz;
 	const float shadow_factor = ShadowFactor(shadow_map, p_light, L.projection_values);
 
-	ambient  = ambient0;
 	diffuse  = diffuse0  * shadow_factor;
 	specular = specular0 * shadow_factor;
 }
@@ -350,8 +330,8 @@ void ComputeShadowedPointLight(ShadowedPointLight L,
 //----------------------------------------------------------------------------------
 // ComputeSpotLight
 //----------------------------------------------------------------------------------
-// Computes the ambient, diffuse, and specular terms in the lighting equation
-// from a spotlight.  We need to output the terms separately because
+// Computes the diffuse and specular terms in the lighting equation
+// from a spotlight. We need to output the terms separately because
 // later we will modify the individual terms.
 //----------------------------------------------------------------------------------
 void ComputeSpotLight(SpotLight L,
@@ -359,12 +339,10 @@ void ComputeSpotLight(SpotLight L,
 					  float3 pos,
 					  float3 normal,
 					  float3 view_vec,
-					  out float4 ambient,
 					  out float4 diffuse,
 					  out float4 specular) {
 
 	// Initialize outputs.
-	ambient  = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	diffuse  = float4(0.0f, 0.0f, 0.0f, 0.0f);
 	specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -381,9 +359,6 @@ void ComputeSpotLight(SpotLight L,
 	// Normalize the light vector.
 	light_vec /= d;
 
-
-	// Ambient
-	ambient = mat.ambient * L.ambient;
 
 	// Diffuse
 	const float diffuse_factor = DiffuseFactor(light_vec, normal);
@@ -410,21 +385,18 @@ void ComputeShadowedSpotLight(ShadowedSpotLight L,
 							  float3 pos,
 							  float3 normal,
 							  float3 view_vec,
-							  out float4 ambient,
 							  out float4 diffuse,
 							  out float4 specular) {
 	
-	float4 ambient0;
 	float4 diffuse0;
 	float4 specular0;
 
-	ComputeSpotLight(L.light, mat, pos, normal, view_vec, ambient0, diffuse0, specular0);
+	ComputeSpotLight(L.light, mat, pos, normal, view_vec, diffuse0, specular0);
 
 	const float4 p_proj       = mul(float4(pos, 1.0f), L.world_to_projection);
 	const float3 p_ndc        = p_proj.xyz / p_proj.w;
 	const float shadow_factor = ShadowFactor(shadow_map, p_ndc);
 
-	ambient  = ambient0;
 	diffuse  = diffuse0  * shadow_factor;
 	specular = specular0 * shadow_factor;
 }

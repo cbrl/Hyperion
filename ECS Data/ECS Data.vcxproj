@@ -137,6 +137,7 @@
     <ClInclude Include="src\components\camera\orthographic_camera.h" />
     <ClInclude Include="src\components\camera\perspective_camera.h" />
     <ClInclude Include="src\components\components.h" />
+    <ClInclude Include="src\components\light\ambient_light.h" />
     <ClInclude Include="src\components\light\directional_light.h" />
     <ClInclude Include="src\components\light\point_light.h" />
     <ClInclude Include="src\components\light\spot_light.h" />

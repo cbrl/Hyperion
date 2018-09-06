@@ -43,7 +43,7 @@ void XM_CALLCONV LightPass::render(Scene& scene, FXMMATRIX world_to_projection) 
 	renderShadowMaps(scene);
 
 	// Update light info buffer
-	updateData();
+	updateData(scene);
 
 	// Bind the buffers
 	bindBuffers();
@@ -75,7 +75,7 @@ void LightPass::bindBuffers() {
 }
 
 
-void LightPass::updateData() const {
+void LightPass::updateData(Scene& scene) const {
 
 	LightBuffer light_data;
 
@@ -86,6 +86,11 @@ void LightPass::updateData() const {
 	light_data.num_shadow_directional_lights = static_cast<u32>(shadowed_directional_lights.size());
 	light_data.num_shadow_point_lights       = static_cast<u32>(shadowed_point_lights.size());
 	light_data.num_shadow_spot_lights        = static_cast<u32>(shadowed_spot_lights.size());
+
+	scene.forEach<AmbientLight>([&light_data](const AmbientLight& light) {
+		if (!light.isActive()) return;
+		light_data.ambient += light.getColor();
+	});
 
 	light_buffer.updateData(device_context, light_data);
 }
@@ -167,7 +172,6 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(Scene& scene, FXMMATRIX w
 
 		DirectionalLightBuffer buffer;
 		XMStore(&buffer.direction, transform->getWorldAxisZ());
-		buffer.ambient_color       = light.getAmbientColor();
 		buffer.diffuse_color       = light.getDiffuseColor();
 		buffer.specular            = light.getSpecular();
 		buffer.world_to_projection = XMMatrixTranspose(world_to_lprojection);
@@ -231,7 +235,6 @@ void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_t
 			PointLightBuffer buffer;
 
 			XMStore(&buffer.position, transform->getWorldOrigin());
-			buffer.ambient_color = light.getAmbientColor();
 			buffer.diffuse_color = light.getDiffuseColor();
 			buffer.specular      = light.getSpecular();
 			buffer.attenuation   = light.getAttenuation();
@@ -256,7 +259,6 @@ void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_t
 			ShadowedPointLightBuffer buffer;
 
 			XMStore(&buffer.light_buffer.position, transform->getWorldOrigin());
-			buffer.light_buffer.ambient_color = light.getAmbientColor();
 			buffer.light_buffer.diffuse_color = light.getDiffuseColor();
 			buffer.light_buffer.specular      = light.getSpecular();
 			buffer.light_buffer.attenuation   = light.getAttenuation();
@@ -311,7 +313,6 @@ void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to
 
 			XMStore(&buffer.position, transform->getWorldOrigin());
 			XMStore(&buffer.direction, transform->getWorldAxisZ());
-			buffer.ambient_color = light.getAmbientColor();
 			buffer.diffuse_color = light.getDiffuseColor();
 			buffer.specular      = light.getSpecular();
 			buffer.attenuation   = light.getAttenuation();
@@ -339,7 +340,6 @@ void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to
 
 			XMStore(&buffer.light_buffer.position, transform->getWorldOrigin());
 			XMStore(&buffer.light_buffer.direction, transform->getWorldAxisZ());
-			buffer.light_buffer.ambient_color = light.getAmbientColor();
 			buffer.light_buffer.diffuse_color = light.getDiffuseColor();
 			buffer.light_buffer.specular      = light.getSpecular();
 			buffer.light_buffer.attenuation   = light.getAttenuation();

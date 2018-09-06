@@ -161,6 +161,9 @@
     <ClInclude Include="src\components\text\text.h">
       <Filter>Header Files\components\text</Filter>
     </ClInclude>
+    <ClInclude Include="src\components\light\ambient_light.h">
+      <Filter>Header Files\components\light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\systems\transform\transform_system.cpp">

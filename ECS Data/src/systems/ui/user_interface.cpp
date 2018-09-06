@@ -339,10 +339,6 @@ void DrawDetails(DirectionalLight& light) {
 	if (ImGui::ColorEdit3("Diffuse Color", diffuse.data()))
 		light.setDiffuseColor(diffuse);
 
-	auto ambient = light.getAmbientColor();
-	if (ImGui::ColorEdit3("Ambient Color", ambient.data()))
-		light.setAmbientColor(ambient);
-
 	auto specular = light.getSpecular();
 	if (ImGui::ColorEdit3("Specular Color", specular.data()))
 		light.setSpecular(specular);
@@ -380,10 +376,6 @@ void DrawDetails(PointLight& light) {
 	if (ImGui::ColorEdit3("Diffuse Color", diffuse.data()))
 		light.setDiffuseColor(diffuse);
 
-	auto ambient = light.getAmbientColor();
-	if (ImGui::ColorEdit3("Ambient Color", ambient.data()))
-		light.setAmbientColor(ambient);
-
 	auto specular = light.getSpecular();
 	if (ImGui::ColorEdit3("Specular Color", specular.data()))
 		light.setSpecular(specular);
@@ -420,10 +412,6 @@ void DrawDetails(SpotLight& light) {
 	auto diffuse = light.getDiffuseColor();
 	if (ImGui::ColorEdit3("Diffuse Color", diffuse.data()))
 		light.setDiffuseColor(diffuse);
-
-	auto ambient = light.getAmbientColor();
-	if (ImGui::ColorEdit3("Ambient Color", ambient.data()))
-		light.setAmbientColor(ambient);
 
 	auto specular = light.getSpecular();
 	if (ImGui::ColorEdit3("Specular Color", specular.data()))

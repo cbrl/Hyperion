@@ -40,6 +40,7 @@ void TestScene::load(const Engine& engine) {
 
 	// Create the camera
 	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindowSize());
+	camera->addComponent<AmbientLight>()->setColor(vec4_f32{ 0.2f, 0.2f, 0.2f, 1.0f });
 
 	// Set the parameters
 	auto* cam = camera->getComponent<PerspectiveCamera>();
@@ -51,11 +52,11 @@ void TestScene::load(const Engine& engine) {
 		resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	auto& fog = cam->getSettings().getFog();
-	fog.color = vec4_f32{0.2f, 0.2f, 0.2f, 1.0f};
+	fog.color = vec4_f32{ 0.2f, 0.2f, 0.2f, 1.0f };
 	fog.start = 150.0f;
 	fog.range = 100.0f;
 
-	camera->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 6.0f, -2.0f});
+	camera->getComponent<Transform>()->setPosition(vec3_f32{ 0.0f, 6.0f, -2.0f });
 	camera->getComponent<MouseRotation>()->setSensitivity(0.01f);
 
 
@@ -88,10 +89,9 @@ void TestScene::load(const Engine& engine) {
 	// Sphere light
 	{
 		auto light = sphere->addComponent<SpotLight>();
-		light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
-		light->setDiffuseColor(vec4_f32(0.0f, 0.9f, 0.6f, 1.0f));
-		light->setAttenuation(vec3_f32(0.1f, 0.15f, 0.0f));
-		light->setSpecular(vec4_f32(1.0f, 1.0f, 1.0f, 1.0f));
+		light->setDiffuseColor(vec4_f32{ 0.0f, 0.9f, 0.6f, 1.0f });
+		light->setAttenuation(vec3_f32{ 0.1f, 0.15f, 0.0f });
+		light->setSpecular(vec4_f32{ 1.0f, 1.0f, 1.0f, 1.0f });
 		light->setRange(100.0f);
 		light->setUmbraAngle(XM_PI / 6.0f);
 		light->setPenumbraAngle(XM_PI / 3.0f);
@@ -104,17 +104,16 @@ void TestScene::load(const Engine& engine) {
 		camera->addChild(light);
 
 		auto* spot_light = light->addComponent<SpotLight>();
-		spot_light->setAmbientColor(vec4_f32(0.15f, 0.15f, 0.15f, 1.0f));
-		spot_light->setDiffuseColor(vec4_f32(0.85f, 0.85f, 0.9f, 1.0f));
-		spot_light->setAttenuation(vec3_f32(0.05f, 0.2f, 0.0f));
-		spot_light->setSpecular(vec4_f32(1.0f, 1.0f, 1.0f, 1.0f));
+		spot_light->setDiffuseColor(vec4_f32{ 0.85f, 0.85f, 0.9f, 1.0f });
+		spot_light->setAttenuation(vec3_f32{ 0.05f, 0.2f, 0.0f });
+		spot_light->setSpecular(vec4_f32{ 1.0f, 1.0f, 1.0f, 1.0f });
 		spot_light->setRange(100.0f);
 		spot_light->setUmbraAngle(XM_PI / 6.0f);
 		spot_light->setPenumbraAngle(XM_PI / 4.0f);
 		spot_light->setShadows(true);
 
 		auto* transform = light->getComponent<Transform>();
-		transform->setPosition(vec3_f32(-1.0f, 0.0f, 0.0f));
+		transform->setPosition(vec3_f32{ -1.0f, 0.0f, 0.0f });
 	}
 
 	// Directional Light
@@ -190,14 +189,14 @@ void TestScene::tick(Engine& engine) {
 	static std::wostringstream cpu_str;
 	static std::wostringstream mem_str;
 
-	// Build the CPU usage std::string
+	// Build the CPU usage string
 	cpu_str.clear();
 	cpu_str.str(L"");
 	cpu_str.precision(4);
 	cpu_str << L"CPU Usage\nTotal: " << total_cpu_usage << L"%"
 	        << L"\nProcess: "        << proc_cpu_usage  << L"%";
 
-	// Build the memory usage std::string
+	// Build the memory usage string
 	mem_str.clear();
 	mem_str.str(L"");
 	mem_str.precision(4);

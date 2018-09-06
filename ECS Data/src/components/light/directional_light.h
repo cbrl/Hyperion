@@ -10,8 +10,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	DirectionalLight() noexcept
-		: ambient_color(0.0f, 0.0f, 0.0f, 0.0f)
-		, diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
+		: diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
 		, specular(1.0f, 1.0f, 1.0f, 1.0f)
 		, start(0.1f)
 		, range(1.0f)
@@ -34,19 +33,6 @@ public:
 	//----------------------------------------------------------------------------------
 	DirectionalLight& operator=(const DirectionalLight& light) = delete;
 	DirectionalLight& operator=(DirectionalLight&& light) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Ambient Color
-	//----------------------------------------------------------------------------------
-	void setAmbientColor(const vec4_f32& color) {
-		this->ambient_color = color;
-	}
-
-	[[nodiscard]]
-	const vec4_f32& getAmbientColor() const {
-		return ambient_color;
-	}
 
 
 	//----------------------------------------------------------------------------------
@@ -137,13 +123,20 @@ private:
 
 
 private:
-	vec4_f32 ambient_color;
+	// Lighting parameters
 	vec4_f32 diffuse_color;
 	vec4_f32 specular;
+
+	// Clipping planes
 	f32      start;
 	f32      range;
+
+	// Projection matrix size
 	vec2_f32 proj_size;
+
+	// Bounding volume
 	AABB     aabb;
 
+	// Shadow boolean
 	bool shadows;
 };
