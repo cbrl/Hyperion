@@ -31,10 +31,12 @@ cbuffer LightBuffer : REG_B(SLOT_CBUFFER_LIGHT) {
 
 
 
-float4 CalculateLights(float3 P, float3 N, float3 V, Material material, float4 tex_color) {
-
-	float4 diffuse  = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	float4 specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+void CalculateLights(float3 P,
+                     float3 N,
+                     float3 V,
+                     Material material,
+                     out float4 diffuse,
+                     out float4 specular) {
 
 	// Directional Lights
 	for (uint i0 = 0; i0 < num_directional_lights; ++i0) {
@@ -65,21 +67,15 @@ float4 CalculateLights(float3 P, float3 N, float3 V, Material material, float4 t
 		diffuse  += D;
 		specular += S;
 	}
-
-	// Calculate final color
-	float4 out_color = tex_color * (ambient_color + diffuse) + specular;
-
-	// Common to take alpha from diffuse mat and texture
-	out_color.a = material.diffuse.a * tex_color.a;
-
-	return out_color;
 }
 
 
-float4 CalculateShadowedLights(float3 P, float3 N, float3 V, Material material, float4 tex_color) {
-
-	float4 diffuse  = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	float4 specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+void CalculateShadowedLights(float3 P,
+                             float3 N,
+                             float3 V,
+                             Material material,
+                             out float4 diffuse,
+                             out float4 specular) {
 
 	// Directional Lights
 	for (uint i0 = 0; i0 < num_shadow_directional_lights; ++i0) {
@@ -116,6 +112,20 @@ float4 CalculateShadowedLights(float3 P, float3 N, float3 V, Material material, 
 		diffuse  += D;
 		specular += S;
 	}
+}
+
+
+float4 CalculateLighting(float3 P, float3 N, float3 V, float4 tex_color, Material material) {
+
+	float4 diffuse   = { 0.0f, 0.0f, 0.0f, 1.0f };
+	float4 specular  = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	CalculateLights(P, N, V, material, diffuse, specular);
+
+	#ifdef ENABLE_SHADOW_MAPPING
+	CalculateShadowedLights(P, N, V, material, diffuse, specular);
+	#endif
+
 
 	// Calculate final color
 	float4 out_color = tex_color * (ambient_color + diffuse) + specular;
@@ -124,20 +134,6 @@ float4 CalculateShadowedLights(float3 P, float3 N, float3 V, Material material, 
 	out_color.a = material.diffuse.a * tex_color.a;
 
 	return out_color;
-}
-
-
-float4 CalculateLighting(float3 P, float3 N, float3 V, float4 tex_color, Material material) {
-
-	float4 lit_color = float4(0.0f, 0.0f, 0.0f, 0.0f);
-
-	lit_color += CalculateLights(P, N, V, material, tex_color);
-
-	#ifdef ENABLE_SHADOW_MAPPING
-	lit_color += CalculateShadowedLights(P, N, V, material, tex_color);
-	#endif
-
-	return lit_color;
 }
 
 

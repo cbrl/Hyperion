@@ -13,10 +13,12 @@ LRESULT EngineMessageHandler::msgProc(HWND window, UINT msg, WPARAM wParam, LPAR
 			if (wParam == VK_RETURN) {
 				on_fullscreen_toggle();
 			}
+			return 0;
 		}
 
 		case WM_SIZE: {
 			on_resize();
+			return 0;
 		}
 
 		default:

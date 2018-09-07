@@ -90,7 +90,8 @@ void DrawDetails(Transform& transform) {
 
 void DrawCameraSettings(CameraSettings& settings) {
 
-	ImGui::Text("Settings");
+	ImGui::Spacing();
+	ImGui::Text("Render Settings");
 	ImGui::Separator();
 
 	//----------------------------------------------------------------------------------
@@ -146,7 +147,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	}
 	if (bounding_volumes) {
 		auto color = settings.getBoundingVolumeColor();
-		if (ImGui::DragFloat3("BV Color", color.data(), 0.01f, 0.0f, 1.0f)) {
+		if (ImGui::ColorEdit3("BV Color", color.data())) {
 			settings.setBoundingVolumeColor(color);
 		}
 	}
@@ -157,7 +158,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	}
 	if (wireframe) {
 		auto color = settings.getWireframeColor();
-		if (ImGui::DragFloat3("Wire Color", color.data(), 0.01f, 0.0f, 1.0f)) {
+		if (ImGui::ColorEdit3("Wire Color", color.data())) {
 			settings.setWireframeColor(color);
 		}
 	}
@@ -167,6 +168,8 @@ void DrawCameraSettings(CameraSettings& settings) {
 	// Fog
 	//----------------------------------------------------------------------------------
 	ImGui::Spacing();
+	ImGui::Text("Fog");
+	ImGui::Separator();
 
 	auto& fog = settings.getFog();
 	ImGui::ColorEdit3("Fog Color", fog.color.data());
@@ -325,6 +328,19 @@ void DrawDetails(Model& model) {
 	ImGui::ColorEdit3("Reflective Color", model.getMaterial().reflect.data());
 	ImGui::Checkbox("Transparent", &model.getMaterial().transparent);
 	ImGui::Checkbox("Reflection", &model.getMaterial().reflection_enabled);
+}
+
+
+void DrawDetails(AmbientLight& light) {
+
+	DrawComponentState(light);
+
+	ImGui::Text("Ambient Light");
+	ImGui::Separator();
+
+	auto color = light.getColor();
+	if (ImGui::ColorEdit3("Ambient Color", color.data()))
+		light.setColor(color);
 }
 
 
@@ -572,6 +588,14 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 		auto models = entity->getAll<Model>();
 		for (auto* model : models) {
 			DrawNode(model->getName().c_str(), *model);
+		}
+	}
+
+	// Ambient Light
+	if (entity->hasComponent<AmbientLight>()) {
+		auto lights = entity->getAll<AmbientLight>();
+		for (auto* light : lights) {
+			DrawNode("Ambient Light", *light);
 		}
 	}
 
