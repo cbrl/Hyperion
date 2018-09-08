@@ -7,10 +7,10 @@
 
 cbuffer Model : REG_B(SLOT_CBUFFER_MODEL) {
 
-	matrix   model_to_world;
-	matrix   world_inv_transpose;
-	matrix   tex_transform;
-	Material mat;
+	matrix   g_model_to_world;
+	matrix   g_world_inv_transpose;
+	matrix   g_tex_transform;
+	Material g_material;
 };
 
 

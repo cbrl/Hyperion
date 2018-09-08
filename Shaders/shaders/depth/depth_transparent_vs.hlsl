@@ -6,11 +6,11 @@ PSTexture VS(VSPositionNormalTexture vin) {
 
 	PSTexture vout;
 	vout.position = Transform(vin.position,
-	                          model_to_world,
-	                          world_to_camera_alt,
-	                          camera_to_projection_alt);
+	                          g_model_to_world,
+	                          g_world_to_camera_alt,
+	                          g_camera_to_projection_alt);
 
-	vout.tex = Transform(vin.tex, tex_transform);
+	vout.tex = Transform(vin.tex, g_tex_transform);
 
 	return vout;
 }

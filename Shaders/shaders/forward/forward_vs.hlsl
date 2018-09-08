@@ -5,9 +5,9 @@
 PSPositionNormalTexture VS(VSPositionNormalTexture vin) {
 
 	return Transform(vin,
-					 model_to_world,
-					 world_to_camera,
-					 camera_to_projection,
-					 world_inv_transpose,
-					 tex_transform);
+					 g_model_to_world,
+					 g_world_to_camera,
+					 g_camera_to_projection,
+					 g_world_inv_transpose,
+					 g_tex_transform);
 }

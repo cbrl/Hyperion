@@ -29,12 +29,12 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	float4 tex_color;
 	float  alpha;
 	{
-		if (mat.has_texture) {
-			tex_color = diffuse_map.Sample(aniso_wrap, pin.tex);
-			alpha     = tex_color.w * mat.diffuse.w;
+		if (g_material.has_texture) {
+			tex_color = diffuse_map.Sample(g_aniso_wrap, pin.tex);
+			alpha     = tex_color.w * g_material.diffuse.w;
 		}
 		else {
-			tex_color = mat.diffuse;
+			tex_color = g_material.diffuse;
 			alpha     = tex_color.w;
 		}
 
@@ -59,14 +59,14 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	//----------------------------------------------------------------------------------
 
 	#ifdef ENABLE_LIGHTING
-	float4 out_color = CalculateLighting(pin.position_world, normal_vec, to_eye, tex_color, mat);
+	float4 out_color = CalculateLighting(pin.position_world, normal_vec, to_eye, tex_color, g_material);
 
-	if (mat.reflection_enabled) {
+	if (g_material.reflection_enabled) {
 		const float3 incident         = -to_eye;
 		const float3 reflection_vec   = reflect(incident, pin.normal);
-		const float3 reflection_color = env_map.Sample(aniso_wrap, reflection_vec).xyz;
+		const float3 reflection_color = env_map.Sample(g_aniso_wrap, reflection_vec).xyz;
 
-		out_color.xyz += mat.reflect.xyz * reflection_color;
+		out_color.xyz += g_material.reflect.xyz * reflection_color;
 	}
 	#else
 	float4 out_color = tex_color;
@@ -77,10 +77,10 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Fogging
 	//----------------------------------------------------------------------------------
 
-	float fog_lerp = saturate((dist_to_eye - fog.start) / fog.range);
+	float fog_lerp = saturate((dist_to_eye - g_fog.start) / g_fog.range);
 
 	// Blend the fog color and the lit color
-	out_color = lerp(out_color, fog.color, fog_lerp);
+	out_color = lerp(out_color, g_fog.color, fog_lerp);
 
 
 	out_color.w = alpha;

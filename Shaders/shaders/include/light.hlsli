@@ -77,20 +77,20 @@ struct ShadowCubeMap {
 //----------------------------------------------------------------------------------
 
 // Lights
-StructuredBuffer<DirectionalLight> directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS);
-StructuredBuffer<PointLight>       point_lights       : REG_T(SLOT_SRV_POINT_LIGHTS);
-StructuredBuffer<SpotLight>        spot_lights        : REG_T(SLOT_SRV_SPOT_LIGHTS);
+StructuredBuffer<DirectionalLight> g_directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS);
+StructuredBuffer<PointLight>       g_point_lights       : REG_T(SLOT_SRV_POINT_LIGHTS);
+StructuredBuffer<SpotLight>        g_spot_lights        : REG_T(SLOT_SRV_SPOT_LIGHTS);
 
 
 // Shadowed Lights
-StructuredBuffer<DirectionalLight> shadow_directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOWED);
-Texture2DArray directional_light_smaps : REG_T(SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS);
+StructuredBuffer<DirectionalLight> g_shadow_directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOWED);
+Texture2DArray g_directional_light_smaps : REG_T(SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS);
 
-StructuredBuffer<ShadowedPointLight> shadow_point_lights : REG_T(SLOT_SRV_POINT_LIGHTS_SHADOWED);
-TextureCubeArray point_light_smaps : REG_T(SLOT_SRV_POINT_LIGHT_SHADOW_MAPS);
+StructuredBuffer<ShadowedPointLight> g_shadow_point_lights : REG_T(SLOT_SRV_POINT_LIGHTS_SHADOWED);
+TextureCubeArray g_point_light_smaps : REG_T(SLOT_SRV_POINT_LIGHT_SHADOW_MAPS);
 
-StructuredBuffer<ShadowedSpotLight> shadow_spot_lights : REG_T(SLOT_SRV_SPOT_LIGHTS_SHADOWED);
-Texture2DArray spot_light_smaps : REG_T(SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS);
+StructuredBuffer<ShadowedSpotLight> g_shadow_spot_lights : REG_T(SLOT_SRV_SPOT_LIGHTS_SHADOWED);
+Texture2DArray g_spot_light_smaps : REG_T(SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS);
 
 
 

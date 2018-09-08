@@ -15,18 +15,18 @@
 
 cbuffer LightBuffer : REG_B(SLOT_CBUFFER_LIGHT) {
 	// Lights
-	uint num_directional_lights;
-	uint num_point_lights;
-	uint num_spot_lights;
+	uint g_num_directional_lights;
+	uint g_num_point_lights;
+	uint g_num_spot_lights;
 	uint lb_pad0;
 
 	// Shadowed Lights
-	uint num_shadow_directional_lights;
-	uint num_shadow_point_lights;
-	uint num_shadow_spot_lights;
+	uint g_num_shadow_directional_lights;
+	uint g_num_shadow_point_lights;
+	uint g_num_shadow_spot_lights;
 	uint lb_pad1;
 
-	float4 ambient_color;
+	float4 g_ambient_color;
 };
 
 
@@ -39,9 +39,9 @@ void CalculateLights(float3 P,
                      out float4 specular) {
 
 	// Directional Lights
-	for (uint i0 = 0; i0 < num_directional_lights; ++i0) {
+	for (uint i0 = 0; i0 < g_num_directional_lights; ++i0) {
 		float4 D, S;
-		ComputeDirectionalLight(directional_lights[i0], material, P, N, V,
+		ComputeDirectionalLight(g_directional_lights[i0], material, P, N, V,
 								D, S);
 
 		diffuse  += D;
@@ -49,9 +49,9 @@ void CalculateLights(float3 P,
 	}
 
 	// Point Lights
-	for (uint i1 = 0; i1 < num_point_lights; ++i1) {
+	for (uint i1 = 0; i1 < g_num_point_lights; ++i1) {
 		float4 D, S;
-		ComputePointLight(point_lights[i1], material, P, N, V,
+		ComputePointLight(g_point_lights[i1], material, P, N, V,
 						  D, S);
 
 		diffuse  += D;
@@ -59,9 +59,9 @@ void CalculateLights(float3 P,
 	}
 
 	// Spot lights
-	for (uint i2 = 0; i2 < num_spot_lights; ++i2) {
+	for (uint i2 = 0; i2 < g_num_spot_lights; ++i2) {
 		float4 D, S;
-		ComputeSpotLight(spot_lights[i2], material, P, N, V,
+		ComputeSpotLight(g_spot_lights[i2], material, P, N, V,
 						 D, S);
 
 		diffuse  += D;
@@ -78,11 +78,11 @@ void CalculateShadowedLights(float3 P,
                              out float4 specular) {
 
 	// Directional Lights
-	for (uint i0 = 0; i0 < num_shadow_directional_lights; ++i0) {
+	for (uint i0 = 0; i0 < g_num_shadow_directional_lights; ++i0) {
 		float4 D, S;
-		ShadowMap shadow_map = { pcf_sampler, directional_light_smaps, i0 };
+		ShadowMap shadow_map = { g_pcf_sampler, g_directional_light_smaps, i0 };
 
-		ComputeShadowedDirectionalLight(shadow_directional_lights[i0], shadow_map, material, P, N, V,
+		ComputeShadowedDirectionalLight(g_shadow_directional_lights[i0], shadow_map, material, P, N, V,
 		                                D, S);
 
 		diffuse  += D;
@@ -90,11 +90,11 @@ void CalculateShadowedLights(float3 P,
 	}
 
 	// Point Lights
-	for (uint i1 = 0; i1 < num_shadow_point_lights; ++i1) {
+	for (uint i1 = 0; i1 < g_num_shadow_point_lights; ++i1) {
 		float4 D, S;
-		ShadowCubeMap cube_map = { pcf_sampler, point_light_smaps, i1 };
+		ShadowCubeMap cube_map = { g_pcf_sampler, g_point_light_smaps, i1 };
 
-		ComputeShadowedPointLight(shadow_point_lights[i1], cube_map, material, P, N, V,
+		ComputeShadowedPointLight(g_shadow_point_lights[i1], cube_map, material, P, N, V,
 		                          D, S);
 
 		diffuse  += D;
@@ -102,11 +102,11 @@ void CalculateShadowedLights(float3 P,
 	}
 
 	// Spot Lights
-	for (uint i2 = 0; i2 < num_shadow_spot_lights; ++i2) {
+	for (uint i2 = 0; i2 < g_num_shadow_spot_lights; ++i2) {
 		float4 D, S;
-		ShadowMap shadow_map = { pcf_sampler, spot_light_smaps, i2 };
+		ShadowMap shadow_map = { g_pcf_sampler, g_spot_light_smaps, i2 };
 
-		ComputeShadowedSpotLight(shadow_spot_lights[i2], shadow_map, material, P, N, V,
+		ComputeShadowedSpotLight(g_shadow_spot_lights[i2], shadow_map, material, P, N, V,
 		                         D, S);
 
 		diffuse  += D;
@@ -128,7 +128,7 @@ float4 CalculateLighting(float3 P, float3 N, float3 V, float4 tex_color, Materia
 
 
 	// Calculate final color
-	float4 out_color = tex_color * (ambient_color + diffuse) + specular;
+	float4 out_color = tex_color * (g_ambient_color + diffuse) + specular;
 
 	// Common to take alpha from diffuse mat and texture
 	out_color.a = material.diffuse.a * tex_color.a;
