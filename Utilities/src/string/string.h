@@ -23,6 +23,9 @@
 #include <codecvt>
 //#include <charconv>
 
+#include <gsl/pointers>
+#include <gsl/string_span>
+
 
 
 //----------------------------------------------------------------------------------

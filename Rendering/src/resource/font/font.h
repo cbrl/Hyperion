@@ -11,7 +11,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Font(_In_ ID3D11Device& device, const wchar_t* file, bool forceSRGB = false)
+	Font(_In_ ID3D11Device& device, gsl::cwzstring<> file, bool forceSRGB = false)
 		: SpriteFont(&device, file, forceSRGB)
 		, Resource(file) {
 	}

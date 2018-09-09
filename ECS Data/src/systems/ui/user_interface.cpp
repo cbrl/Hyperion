@@ -97,7 +97,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	//----------------------------------------------------------------------------------
 	// Render Mode
 	//----------------------------------------------------------------------------------
-	static constexpr const char* render_mode_names[] = {
+	static constexpr gsl::czstring<> render_mode_names[] = {
 		"Forward",
 		"Forward+",
 		"Deferred"
@@ -117,7 +117,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	//----------------------------------------------------------------------------------
 	// Lighting Mode
 	//----------------------------------------------------------------------------------
-	static constexpr const char* light_mode_names[] = {
+	static constexpr gsl::czstring<> light_mode_names[] = {
 		"Default",
 		"Unlint",
 		"FalseColorNormal",

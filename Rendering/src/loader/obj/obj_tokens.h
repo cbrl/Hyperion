@@ -1,36 +1,38 @@
 #pragma once
 
+#include "string/string.h"
+
 namespace ObjTokens {
 	constexpr const wchar_t comment = L'#';
 
-	constexpr const wchar_t* vertex          = L"v";
-	constexpr const wchar_t* normal          = L"vn";
-	constexpr const wchar_t* texture         = L"vt";
-	constexpr const wchar_t* face            = L"f";
-	constexpr const wchar_t* group           = L"g";
-	constexpr const wchar_t* object          = L"o";
-	constexpr const wchar_t* smoothing_group = L"s";
+	constexpr gsl::cwzstring<> vertex          = L"v";
+	constexpr gsl::cwzstring<> normal          = L"vn";
+	constexpr gsl::cwzstring<> texture         = L"vt";
+	constexpr gsl::cwzstring<> face            = L"f";
+	constexpr gsl::cwzstring<> group           = L"g";
+	constexpr gsl::cwzstring<> object          = L"o";
+	constexpr gsl::cwzstring<> smoothing_group = L"s";
 
-	constexpr const wchar_t* mtl_library = L"mtllib";
-	constexpr const wchar_t* use_mtl     = L"usemtl";
-	constexpr const wchar_t* new_mtl     = L"newmtl";
+	constexpr gsl::cwzstring<> mtl_library = L"mtllib";
+	constexpr gsl::cwzstring<> use_mtl     = L"usemtl";
+	constexpr gsl::cwzstring<> new_mtl     = L"newmtl";
 
-	constexpr const wchar_t* specular_exponent   = L"Ns";
-	constexpr const wchar_t* specular_color      = L"Ks";
-	constexpr const wchar_t* ambient_color       = L"Ka";
-	constexpr const wchar_t* diffuse_color       = L"Kd";
-	constexpr const wchar_t* emissive_color      = L"Ke";
-	constexpr const wchar_t* optical_density     = L"Ni";
-	constexpr const wchar_t* transparency        = L"Tr";
-	constexpr const wchar_t* transparency_inv    = L"d";
-	constexpr const wchar_t* transmission_filter = L"Tf";
-	constexpr const wchar_t* illumination_model  = L"illum";
+	constexpr gsl::cwzstring<> specular_exponent   = L"Ns";
+	constexpr gsl::cwzstring<> specular_color      = L"Ks";
+	constexpr gsl::cwzstring<> ambient_color       = L"Ka";
+	constexpr gsl::cwzstring<> diffuse_color       = L"Kd";
+	constexpr gsl::cwzstring<> emissive_color      = L"Ke";
+	constexpr gsl::cwzstring<> optical_density     = L"Ni";
+	constexpr gsl::cwzstring<> transparency        = L"Tr";
+	constexpr gsl::cwzstring<> transparency_inv    = L"d";
+	constexpr gsl::cwzstring<> transmission_filter = L"Tf";
+	constexpr gsl::cwzstring<> illumination_model  = L"illum";
 
-	constexpr const wchar_t* ambient_color_map  = L"map_Ka";
-	constexpr const wchar_t* diffuse_color_map  = L"map_Kd";
-	constexpr const wchar_t* specular_color_map = L"map_Ks";
-	constexpr const wchar_t* spec_highlight_map = L"map_Ns";
-	constexpr const wchar_t* alpha_texture_map  = L"map_d";
-	constexpr const wchar_t* bump_map           = L"bump";
-	constexpr const wchar_t* bump_map2          = L"map_bump";
+	constexpr gsl::cwzstring<> ambient_color_map  = L"map_Ka";
+	constexpr gsl::cwzstring<> diffuse_color_map  = L"map_Kd";
+	constexpr gsl::cwzstring<> specular_color_map = L"map_Ks";
+	constexpr gsl::cwzstring<> spec_highlight_map = L"map_Ns";
+	constexpr gsl::cwzstring<> alpha_texture_map  = L"map_d";
+	constexpr gsl::cwzstring<> bump_map           = L"bump";
+	constexpr gsl::cwzstring<> bump_map2          = L"map_bump";
 };
