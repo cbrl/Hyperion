@@ -4,7 +4,7 @@
 #include "imgui_message_forwarder.h"
 
 
-LRESULT EngineMessageHandler::msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	switch(msg) {
 
@@ -66,7 +66,7 @@ void Engine::init() {
 
 	// Create the main window
 	{
-		auto win_config = std::make_shared<WindowConfig>(GetModuleHandle(nullptr), L"Engine");
+		auto win_config = std::make_shared<WindowConfig>(gsl::not_null<HINSTANCE>(GetModuleHandle(nullptr)), L"Engine");
 		window = std::make_unique<Window>(win_config,
 		                                  L"Engine",
 		                                  display_config.getDisplayResolution());
@@ -86,9 +86,9 @@ void Engine::init() {
 			Logger::log(LogLevel::info, "Viewport resized to {}x{}", size.x, size.y);
 		};
 
-		window->addHandler(&msg_handler);
-		window->addHandler(&InputMessageHandler::handler);
-		window->addForwarder(&ImGuiMessageForwarder::forwarder);
+		window->addHandler(gsl::not_null<MessageHandler*>(&msg_handler));
+		window->addHandler(gsl::not_null<MessageHandler*>(&InputMessageHandler::handler));
+		window->addForwarder(gsl::not_null<MessageForwarder*>(&ImGuiMessageForwarder::forwarder));
 
 		Logger::log(LogLevel::info, "Initialized main window");
 	}
@@ -98,7 +98,7 @@ void Engine::init() {
 	system_monitor = std::make_unique<SystemMonitor>();
 
 	// Input Handler
-	input = std::make_unique<Input>(window->getWindow());
+	input = std::make_unique<Input>(gsl::not_null<HWND>(window->getWindow()));
 
 	// Timer
 	timer = std::make_unique<HighResTimer>();
@@ -107,7 +107,7 @@ void Engine::init() {
 	fps_counter = std::make_unique<FPS>();
 
 	// Rendering Manager
-	rendering_mgr = std::make_unique<RenderingMgr>(window->getWindow(), display_config);
+	rendering_mgr = std::make_unique<RenderingMgr>(gsl::not_null<HWND>(window->getWindow()), display_config);
 }
 
 
@@ -217,11 +217,11 @@ void Engine::processInput() const {
 	// F2: Toggle mouse mode
 	if (input->isKeyPressed(Keyboard::F2)) {
 		if (input->getMouseMode() == Mouse::MODE_ABSOLUTE) {
-			window->removeForwarder(&ImGuiMessageForwarder::forwarder);
+			window->removeForwarder(gsl::not_null<MessageForwarder*>(&ImGuiMessageForwarder::forwarder));
 		}
 		if (input->getMouseMode() == Mouse::MODE_RELATIVE) {
-			window->removeForwarder(&ImGuiMessageForwarder::forwarder);
-			window->addForwarder(&ImGuiMessageForwarder::forwarder);
+			window->removeForwarder(gsl::not_null<MessageForwarder*>(&ImGuiMessageForwarder::forwarder));
+			window->addForwarder(gsl::not_null<MessageForwarder*>(&ImGuiMessageForwarder::forwarder));
 		}
 		input->toggleMouseMode();
 	}

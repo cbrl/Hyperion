@@ -22,7 +22,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	IEntity() = delete;
-	IEntity(EntityPtr this_ptr, ComponentMgr* component_mgr);
+	IEntity(EntityPtr this_ptr, gsl::not_null<ComponentMgr*> component_mgr);
 	IEntity(const IEntity& entity) = delete;
 	IEntity(IEntity&& entity) = default;
 
@@ -150,14 +150,6 @@ public:
 
 
 private:
-	void setPtr(EntityPtr entity_ptr) {
-		this_ptr = entity_ptr;
-	}
-
-	void setComponentMgr(ComponentMgr* mgr) {
-		component_mgr = mgr;
-	}
-
 	void setParent(EntityPtr parent) {
 		parent_ptr = parent;
 	}
@@ -248,7 +240,7 @@ protected:
 	//----------------------------------------------------------------------------------
 
 	Entity(EntityPtr this_ptr, ComponentMgr* component_mgr)
-		: IEntity(this_ptr, component_mgr) {
+		: IEntity(this_ptr, gsl::not_null<ComponentMgr*>(component_mgr)) {
 	}
 
 

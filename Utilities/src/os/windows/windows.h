@@ -37,8 +37,7 @@
 using Microsoft::WRL::ComPtr;
 
 #include "exception/exception.h"
-#include "datatypes/scalar_types.h"
-#include "string/string.h"
+#include "datatypes/datatypes.h"
 
 
 

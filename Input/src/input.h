@@ -36,7 +36,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Updates DirectXTK mouse and keyboard state
 	[[nodiscard]]
-	LRESULT msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) override;
+	LRESULT msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) override;
 };
 
 
@@ -47,8 +47,30 @@ public:
 //----------------------------------------------------------------------------------
 class Input final {
 public:
-	Input(HWND hWnd);
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	Input(gsl::not_null<HWND> hWnd);
+	Input(const Input& input) = delete;
+	Input(Input&& input) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 	~Input() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	Input& operator=(const Input& input) = delete;
+	Input& operator=(Input&& input) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	void tick();
 	void reset();
@@ -122,6 +144,10 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	unique_ptr<Keyboard> keyboard;
 	unique_ptr<Mouse> mouse;
 

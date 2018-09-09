@@ -6,7 +6,7 @@
 #include "imgui_impl_win32.h"
 
 
-RenderingMgr::RenderingMgr(HWND window, DisplayConfig config) {
+RenderingMgr::RenderingMgr(gsl::not_null<HWND> window, DisplayConfig config) {
 
 	// Display Configuration
 	display_config = std::make_unique<DisplayConfig>(std::move(config));

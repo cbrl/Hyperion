@@ -29,5 +29,5 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) override;
+	void msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) override;
 };

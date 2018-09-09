@@ -3,7 +3,7 @@
 #include "ecs.h"
 
 
-IEntity::IEntity(EntityPtr this_ptr, ComponentMgr* component_mgr)
+IEntity::IEntity(EntityPtr this_ptr, gsl::not_null<ComponentMgr*> component_mgr)
 	: active(true)
 	, this_ptr(this_ptr)
 	, component_mgr(component_mgr) {

@@ -8,7 +8,7 @@
 // Define the static handler
 InputMessageHandler InputMessageHandler::handler;
 
-LRESULT InputMessageHandler::msgProc(HWND window, u32 msg, WPARAM wParam, LPARAM lParam) {
+LRESULT InputMessageHandler::msgProc(gsl::not_null<HWND> window, u32 msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 		case WM_ACTIVATEAPP:
 			Keyboard::ProcessMessage(msg, wParam, lParam);
@@ -51,7 +51,7 @@ LRESULT InputMessageHandler::msgProc(HWND window, u32 msg, WPARAM wParam, LPARAM
 // Input
 //----------------------------------------------------------------------------------
 
-Input::Input(HWND hWnd) {
+Input::Input(gsl::not_null<HWND> hWnd) {
 	keyboard = std::make_unique<Keyboard>();
 	mouse    = std::make_unique<Mouse>();
 

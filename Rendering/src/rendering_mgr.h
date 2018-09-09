@@ -12,7 +12,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	RenderingMgr(HWND window, DisplayConfig config);
+	RenderingMgr(gsl::not_null<HWND> window, DisplayConfig config);
 	RenderingMgr(const RenderingMgr& mgr) = delete;
 	RenderingMgr(RenderingMgr&& mgr) noexcept = default;
 

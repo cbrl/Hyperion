@@ -4,18 +4,16 @@
 VertexShader::VertexShader(const std::wstring& guid,
                            ID3D11Device& device,
                            const ShaderBytecode& bytecode,
-                           const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-                           size_t numElements)
+                           gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs)
 	: Resource(guid) {
 
-	createShader(device, bytecode, inputElementDesc, numElements);
+	createShader(device, bytecode, input_element_descs);
 }
 
 
 void VertexShader::createShader(ID3D11Device& device,
-                           const ShaderBytecode& bytecode,
-                           const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-                           size_t numElements) {
+                                const ShaderBytecode& bytecode,
+                                gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs) {
 
 	// Create the shader
 	ThrowIfFailed(device.CreateVertexShader(bytecode.getBytecode(),
@@ -26,9 +24,9 @@ void VertexShader::createShader(ID3D11Device& device,
 
 
 	// Create the input layout, if specified.
-	if (!inputElementDesc) return;
-	ThrowIfFailed(device.CreateInputLayout(inputElementDesc,
-										   static_cast<UINT>(numElements),
+	if (input_element_descs.data() == nullptr) return;
+	ThrowIfFailed(device.CreateInputLayout(input_element_descs.data(),
+										   static_cast<UINT>(input_element_descs.size()),
 										   bytecode.getBytecode(),
 										   bytecode.getBytecodeSize(),
 										   layout.ReleaseAndGetAddressOf()),

@@ -37,7 +37,7 @@ void RenderStateMgr::setupStates(ID3D11Device& device, ID3D11DeviceContext& devi
 HRESULT RenderStateMgr::createBlendState(ID3D11Device& device,
                                          D3D11_BLEND src_blend,
                                          D3D11_BLEND dest_blend,
-                                         ID3D11BlendState** p_result) const {
+                                         gsl::not_null<ID3D11BlendState**> p_result) const {
 	D3D11_BLEND_DESC desc = {};
 
 	desc.RenderTarget[0].BlendEnable = (src_blend != D3D11_BLEND_ONE) || (dest_blend != D3D11_BLEND_ZERO);
@@ -62,7 +62,7 @@ HRESULT RenderStateMgr::createDepthStencilState(ID3D11Device& device,
                                                 bool enable,
                                                 bool write_enable,
                                                 bool depth_greater,
-                                                ID3D11DepthStencilState** p_result) const {
+                                                gsl::not_null<ID3D11DepthStencilState**> p_result) const {
 	D3D11_DEPTH_STENCIL_DESC desc = {};
 
 	desc.DepthEnable    = enable ? TRUE : FALSE;
@@ -93,7 +93,7 @@ HRESULT RenderStateMgr::createDepthStencilState(ID3D11Device& device,
 HRESULT RenderStateMgr::createRasterizerState(ID3D11Device& device,
                                               D3D11_CULL_MODE cull_mode,
                                               D3D11_FILL_MODE fill_mode,
-                                              ID3D11RasterizerState** p_result) const {
+                                              gsl::not_null<ID3D11RasterizerState**> p_result) const {
 	D3D11_RASTERIZER_DESC desc = {};
 
 	desc.CullMode          = cull_mode;
@@ -114,7 +114,7 @@ HRESULT RenderStateMgr::createRasterizerState(ID3D11Device& device,
 HRESULT RenderStateMgr::createSamplerState(ID3D11Device& device,
                                            D3D11_FILTER filter,
                                            D3D11_TEXTURE_ADDRESS_MODE address_mode,
-                                           ID3D11SamplerState** p_result) const {
+                                           gsl::not_null<ID3D11SamplerState**> p_result) const {
 	D3D11_SAMPLER_DESC desc = {};
 
 	desc.Filter = filter;
@@ -330,5 +330,5 @@ void RenderStateMgr::bind(ID3D11DeviceContext& device_context, RasterStates stat
 
 void RenderStateMgr::bind(ID3D11DeviceContext& device_context, SamplerStates state, u32 slot) const {
 	
-	Pipeline::bindSamplers(device_context, slot, 1, getAddressOf(state));
+	Pipeline::bindSampler(device_context, slot, get(state));
 }

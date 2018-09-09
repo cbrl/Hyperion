@@ -7,7 +7,7 @@
 HRESULT CompileShaderToBytecode(const std::wstring& file,
                                 const std::string& entry_point,
                                 const std::string& target_ver,
-                                ID3DBlob** out);
+                                gsl::not_null<ID3DBlob**> out);
 
 
 class ShaderBytecode {
@@ -48,9 +48,9 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	ShaderBytecodeBuffer(const BYTE* bytecode_buffer, size_t buffer_size)
-		: buffer(bytecode_buffer)
-		, size(buffer_size) {
+	ShaderBytecodeBuffer(gsl::span<const BYTE> bytecode_buffer)
+		: buffer(bytecode_buffer.data())
+		, size(bytecode_buffer.size()) {
 	}
 	ShaderBytecodeBuffer(const ShaderBytecodeBuffer& buffer) noexcept = default;
 	ShaderBytecodeBuffer(ShaderBytecodeBuffer&& buffer) noexcept = default;

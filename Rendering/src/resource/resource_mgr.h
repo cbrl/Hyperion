@@ -110,8 +110,7 @@ public:
 	std::enable_if_t<std::is_same_v<VertexShader, ResourceT>,
 		shared_ptr<VertexShader>> getOrCreate(const std::wstring& guid,
 		                                      const ShaderBytecode& bytecode,
-		                                      const D3D11_INPUT_ELEMENT_DESC* input_element_descs,
-		                                      u32 input_element_count);
+		                                      gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
 
 
 private:

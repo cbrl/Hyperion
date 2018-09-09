@@ -4,7 +4,7 @@
 // Global Functions
 //----------------------------------------------------------------------------------
 
-Window* GetCaller(HWND window,
+Window* GetCaller(gsl::not_null<HWND> window,
                   UINT msg,
                   WPARAM wParam,
                   LPARAM lParam) {
@@ -28,7 +28,7 @@ Window* GetCaller(HWND window,
 // WindowConfig
 //----------------------------------------------------------------------------------
 
-WindowConfig::WindowConfig(HINSTANCE instance,
+WindowConfig::WindowConfig(gsl::not_null<HINSTANCE> instance,
                            std::wstring window_class_name,
 						   u32 window_class_style)
 	: instance(instance)
@@ -115,10 +115,11 @@ void Window::init(const std::wstring& title,
 
 LRESULT CALLBACK Window::wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	auto* caller = GetCaller(window, msg, wParam, lParam);
+	const auto hwnd = gsl::not_null<HWND>(window);
+	auto* caller = GetCaller(hwnd, msg, wParam, lParam);
 
 	if (caller) {
-		const auto result = caller->msgProc(window, msg, wParam, lParam);
+		const auto result = caller->msgProc(hwnd, msg, wParam, lParam);
 
 		if (result) {
 			return result;
@@ -137,13 +138,13 @@ LRESULT CALLBACK Window::wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lP
 }
 
 
-LRESULT Window::msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT Window::msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	for (auto* forwarder : forwarders) {
+	for (auto forwarder : forwarders) {
 		forwarder->msgProc(window, msg, wParam, lParam);
 	}
 
-	for (auto* handler : handlers) {
+	for (auto handler : handlers) {
 		const auto result = handler->msgProc(window, msg, wParam, lParam);
 
 		if (result)

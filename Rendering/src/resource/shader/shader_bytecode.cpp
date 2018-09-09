@@ -4,7 +4,7 @@
 HRESULT CompileShaderToBytecode(const std::wstring& file,
                                 const std::string& entry_point,
                                 const std::string& target_ver,
-                                ID3DBlob** out) {
+                                gsl::not_null<ID3DBlob**> out) {
 
 	u32 flags = D3DCOMPILE_ENABLE_STRICTNESS;
 

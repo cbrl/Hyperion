@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\GSL\src;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
     <SourcePath>$(SolutionDir)\Utilities\src;$(SourcePath)</SourcePath>
@@ -82,7 +82,7 @@
     <SourcePath>$(SolutionDir)\Utilities\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\GSL\src;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)\Utilities\src;$(SourcePath)</SourcePath>
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>

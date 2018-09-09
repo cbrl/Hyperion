@@ -99,23 +99,23 @@ private:
 	HRESULT createBlendState(ID3D11Device& device,
 	                         D3D11_BLEND src_blend,
 	                         D3D11_BLEND dest_blend,
-	                         _Out_ ID3D11BlendState** p_result) const;
+	                         _Out_ gsl::not_null<ID3D11BlendState**> p_result) const;
 
 	HRESULT createDepthStencilState(ID3D11Device& device,
 	                                bool enable,
 	                                bool write_enable,
 	                                bool depth_greater,
-	                                _Out_ ID3D11DepthStencilState** p_result) const;
+	                                _Out_ gsl::not_null<ID3D11DepthStencilState**> p_result) const;
 
 	HRESULT createRasterizerState(ID3D11Device& device,
 	                              D3D11_CULL_MODE cull_mode,
 	                              D3D11_FILL_MODE fill_mode,
-	                              _Out_ ID3D11RasterizerState** p_result) const;
+	                              _Out_ gsl::not_null<ID3D11RasterizerState**> p_result) const;
 
 	HRESULT createSamplerState(ID3D11Device& device,
 	                           D3D11_FILTER filter,
 	                           D3D11_TEXTURE_ADDRESS_MODE address_mode,
-	                           _Out_ ID3D11SamplerState** p_result) const;
+	                           _Out_ gsl::not_null<ID3D11SamplerState**> p_result) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -141,35 +141,31 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// Blend States
-	ID3D11BlendState** getAddressOf(BlendStates state) {
-		return blend_states[static_cast<u8>(state)].GetAddressOf();
-	}
-	ID3D11BlendState* const* getAddressOf(BlendStates state) const {
-		return blend_states[static_cast<u8>(state)].GetAddressOf();
+	gsl::not_null<ID3D11BlendState**> getAddressOf(BlendStates state) {
+
+		auto& state_ptr = blend_states[static_cast<u8>(state)];
+		return gsl::not_null<ID3D11BlendState**>(state_ptr.GetAddressOf());
 	}
 
 	// Depth States
-	ID3D11DepthStencilState** getAddressOf(DepthStencilStates state) {
-		return depth_states[static_cast<u8>(state)].GetAddressOf();
-	}
-	ID3D11DepthStencilState* const* getAddressOf(DepthStencilStates state) const {
-		return depth_states[static_cast<u8>(state)].GetAddressOf();
+	gsl::not_null<ID3D11DepthStencilState**> getAddressOf(DepthStencilStates state) {
+
+		auto& state_ptr = depth_states[static_cast<u8>(state)];
+		return gsl::not_null<ID3D11DepthStencilState**>(state_ptr.GetAddressOf());
 	}
 
 	// Raster Staes
-	ID3D11RasterizerState** getAddressOf(RasterStates state) {
-		return raster_states[static_cast<u8>(state)].GetAddressOf();
-	}
-	ID3D11RasterizerState* const* getAddressOf(RasterStates state) const {
-		return raster_states[static_cast<u8>(state)].GetAddressOf();
+	gsl::not_null<ID3D11RasterizerState**> getAddressOf(RasterStates state) {
+		
+		auto& state_ptr = raster_states[static_cast<u8>(state)];
+		return gsl::not_null<ID3D11RasterizerState**>(state_ptr.GetAddressOf());
 	}
 
 	// Sampler States
-	ID3D11SamplerState** getAddressOf(SamplerStates state) {
-		return sampler_states[static_cast<u8>(state)].GetAddressOf();
-	}
-	ID3D11SamplerState* const* getAddressOf(SamplerStates state) const {
-		return sampler_states[static_cast<u8>(state)].GetAddressOf();
+	gsl::not_null<ID3D11SamplerState**> getAddressOf(SamplerStates state) {
+
+		auto& state_ptr = sampler_states[static_cast<u8>(state)];
+		return gsl::not_null<ID3D11SamplerState**>(state_ptr.GetAddressOf());
 	}
 
 

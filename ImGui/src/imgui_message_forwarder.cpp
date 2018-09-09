@@ -7,6 +7,6 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 // Define the static message forwarder
 ImGuiMessageForwarder ImGuiMessageForwarder::forwarder;
 
-void ImGuiMessageForwarder::msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
+void ImGuiMessageForwarder::msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) {
 	ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 }

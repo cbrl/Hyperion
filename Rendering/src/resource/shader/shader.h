@@ -14,8 +14,7 @@ public:
 	VertexShader(const std::wstring& guid,
 	             ID3D11Device& device,
 	             const ShaderBytecode& bytecode,
-	             const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-	             size_t numElements);
+	             gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
 
 	VertexShader(const VertexShader& shader) = delete;
 	VertexShader(VertexShader&& shader) noexcept = default;
@@ -50,8 +49,7 @@ public:
 private:
 	void createShader(ID3D11Device& device,
 					  const ShaderBytecode& bytecode,
-					  const D3D11_INPUT_ELEMENT_DESC* inputElementDesc,
-					  size_t numElements);
+					  gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
 
 
 private:

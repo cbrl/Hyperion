@@ -10,7 +10,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	SwapChain(HWND window,
+	SwapChain(gsl::not_null<HWND> window,
 	          DisplayConfig& config,
 	          ID3D11Device& device,
 	          ID3D11DeviceContext& device_context);

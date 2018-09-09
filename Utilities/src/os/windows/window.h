@@ -31,7 +31,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	virtual void msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) = 0;
+	virtual void msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) = 0;
 };
 
 
@@ -62,7 +62,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	virtual LRESULT msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) = 0;
+	virtual LRESULT msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) = 0;
 };
 
 
@@ -76,7 +76,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	WindowConfig(HINSTANCE instance,
+	WindowConfig(gsl::not_null<HINSTANCE> instance,
 				 std::wstring window_class_name,
 				 u32 window_class_style = CS_HREDRAW | CS_VREDRAW);
 
@@ -101,8 +101,8 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	HINSTANCE getInstance() const noexcept {
-		return instance;
+	gsl::not_null<HINSTANCE> getInstance() const noexcept {
+		return gsl::not_null<HINSTANCE>(instance);
 	}
 
 	[[nodiscard]]
@@ -167,7 +167,7 @@ public:
 	}
 
 	[[nodiscard]]
-	HINSTANCE getInstance() const noexcept {
+	gsl::not_null<HINSTANCE> getInstance() const noexcept {
 		return config->getInstance();
 	}
 
@@ -196,11 +196,11 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Forwarders
 	//----------------------------------------------------------------------------------
-	void addForwarder(MessageForwarder* forwarder) {
+	void addForwarder(gsl::not_null<MessageForwarder*> forwarder) {
 		forwarders.push_back(forwarder);
 	}
 
-	void removeForwarder(MessageForwarder* forwarder) {
+	void removeForwarder(gsl::not_null<MessageForwarder*> forwarder) {
 		forwarders.erase(std::remove(std::begin(forwarders), std::end(forwarders),
 		                             forwarder),
 		                 std::end(forwarders));
@@ -210,11 +210,11 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Handlers
 	//----------------------------------------------------------------------------------
-	void addHandler(MessageHandler* handler) {
+	void addHandler(gsl::not_null<MessageHandler*> handler) {
 		handlers.push_back(handler);
 	}
 
-	void removeHandler(MessageHandler* handler) {
+	void removeHandler(gsl::not_null<MessageHandler*> handler) {
 		handlers.erase(std::remove(std::begin(handlers), std::end(handlers),
 		                           handler),
 		               std::end(handlers));
@@ -225,7 +225,7 @@ private:
 	void init(const std::wstring& title, vec2_u32 resolution, DWORD style);
 
 	[[nodiscard]]
-	LRESULT msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
+	LRESULT msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam);
 
 
 private:
@@ -235,6 +235,6 @@ private:
 	std::shared_ptr<WindowConfig> config;
 	HWND window;
 
-	std::vector<MessageForwarder*> forwarders;
-	std::vector<MessageHandler*> handlers;
+	std::vector<gsl::not_null<MessageForwarder*>> forwarders;
+	std::vector<gsl::not_null<MessageHandler*>> handlers;
 };

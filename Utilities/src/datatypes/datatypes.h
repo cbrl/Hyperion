@@ -26,3 +26,6 @@
 #include "string/string.h"
 #include <typeindex>
 #include <type_traits>
+
+// Microsoft GSL
+#include <gsl/gsl>

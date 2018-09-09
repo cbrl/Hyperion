@@ -37,7 +37,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	LRESULT msgProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) override;
+	LRESULT msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) override;
 
 
 public:

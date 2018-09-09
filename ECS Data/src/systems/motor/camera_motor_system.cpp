@@ -14,7 +14,7 @@ void CameraMotorSystem::update(Engine& engine) {
 		if (!transform->isActive()) return;
 
 		if (auto* movement = entity->template getComponent<CameraMovement>()) {
-			processInput(engine, movement, transform);
+			processInput(engine, *movement, *transform);
 		}
 	};
 
@@ -32,7 +32,7 @@ void CameraMotorSystem::update(Engine& engine) {
 
 
 
-void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movement, Transform* transform) const {
+void CameraMotorSystem::processInput(const Engine& engine, CameraMovement& movement, Transform& transform) const {
 
 	const auto& input = engine.getInput();
 
@@ -74,10 +74,10 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement* movem
 }
 
 
-void CameraMotorSystem::updateMovement(CameraMovement* mv, vec3_f32 units) const {
+void CameraMotorSystem::updateMovement(CameraMovement& mv, vec3_f32 units) const {
 
 	// Get the velocity
-	vec3_f32 velocity = mv->getVelocity();
+	vec3_f32 velocity = mv.getVelocity();
 
 	//----------------------------------------------------------------------------------
 	// X movement
@@ -87,13 +87,13 @@ void CameraMotorSystem::updateMovement(CameraMovement* mv, vec3_f32 units) const
 	if (units.x) {
 
 		// is_moving determines if the camera will decelerate when Update is called
-		mv->setMovingX(true);
+		mv.setMovingX(true);
 
 		if (copysign(1.0f, units.x) == copysign(1.0f, velocity.x)) {
-			velocity.x += units.x * mv->getAcceleration();
+			velocity.x += units.x * mv.getAcceleration();
 		}
 		else {
-			velocity.x = units.x * mv->getAcceleration();
+			velocity.x = units.x * mv.getAcceleration();
 		}
 	}
 
@@ -102,13 +102,13 @@ void CameraMotorSystem::updateMovement(CameraMovement* mv, vec3_f32 units) const
 	// Y movement
 	//----------------------------------------------------------------------------------
 	if (units.y) {
-		mv->setMovingY(true);
+		mv.setMovingY(true);
 
 		if (copysign(1.0f, units.y) == copysign(1.0f, velocity.y)) {
-			velocity.y += units.y * mv->getAcceleration();
+			velocity.y += units.y * mv.getAcceleration();
 		}
 		else {
-			velocity.y = units.y * mv->getAcceleration();
+			velocity.y = units.y * mv.getAcceleration();
 		}
 	}
 
@@ -117,32 +117,32 @@ void CameraMotorSystem::updateMovement(CameraMovement* mv, vec3_f32 units) const
 	// Z movement
 	//----------------------------------------------------------------------------------
 	if (units.z) {
-		mv->setMovingZ(true);
+		mv.setMovingZ(true);
 
 		if (copysign(1.0f, units.z) == copysign(1.0f, velocity.z)) {
-			velocity.z += units.z * mv->getAcceleration();
+			velocity.z += units.z * mv.getAcceleration();
 		}
 		else {
-			velocity.z = units.z * mv->getAcceleration();
+			velocity.z = units.z * mv.getAcceleration();
 		}
 	}
 
 	// Set the new velocity
-	mv->setVelocity(velocity);
+	mv.setVelocity(velocity);
 }
 
 
-void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, f32 dt) const {
+void CameraMotorSystem::move(CameraMovement& mv, Transform& transform, f32 dt) const {
 
-	const vec3_f32 velocity = mv->getVelocity();
+	const vec3_f32 velocity = mv.getVelocity();
 	XMVECTOR velocity_vec = XMLoad(&velocity);
 	const f32 velocity_mag = XMVectorGetX(XMVector3Length(velocity_vec));
 
 	// Limit veloctiy to maximum
-	if (velocity_mag > mv->getMaxVelocity()) {
+	if (velocity_mag > mv.getMaxVelocity()) {
 
-		velocity_vec = XMVector3Normalize(velocity_vec) * mv->getMaxVelocity();
-		mv->setVelocity(velocity_vec);
+		velocity_vec = XMVector3Normalize(velocity_vec) * mv.getMaxVelocity();
+		mv.setVelocity(velocity_vec);
 	}
 
 
@@ -151,11 +151,11 @@ void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, f32 dt) c
 		// Move the camera
 		XMVECTOR movement = XMVectorZero();
 
-		movement += transform->getWorldAxisX() * mv->getVelocity().x * dt;
-		movement += transform->getWorldAxisY() * mv->getVelocity().y * dt;
-		movement += transform->getWorldAxisZ() * mv->getVelocity().z * dt;
+		movement += transform.getWorldAxisX() * mv.getVelocity().x * dt;
+		movement += transform.getWorldAxisY() * mv.getVelocity().y * dt;
+		movement += transform.getWorldAxisZ() * mv.getVelocity().z * dt;
 
-		transform->move(movement);
+		transform.move(movement);
 
 		// Decelerate the camera
 		decelerate(mv, dt);
@@ -163,16 +163,16 @@ void CameraMotorSystem::move(CameraMovement* mv, Transform* transform, f32 dt) c
 }
 
 
-void CameraMotorSystem::decelerate(CameraMovement* mv, f32 delta_time) const {
+void CameraMotorSystem::decelerate(CameraMovement& mv, f32 delta_time) const {
 
 	f32 decel_amount;
-	vec3_f32 velocity = mv->getVelocity();
+	vec3_f32 velocity = mv.getVelocity();
 
 	// Decelerate in each direction if not moving in that
 	// direction and the current velocity isn't 0.
-	if (!mv->isMovingX() && velocity.x != 0.0f) {
+	if (!mv.isMovingX() && velocity.x != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity.x) * mv->getDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity.x) * mv.getDeceleration() * delta_time;
 
 		if (abs(decel_amount) > abs(velocity.x)) {
 			velocity.x = 0.0f;
@@ -182,9 +182,9 @@ void CameraMotorSystem::decelerate(CameraMovement* mv, f32 delta_time) const {
 		}
 	}
 
-	if (!mv->isMovingY() && velocity.y != 0.0f) {
+	if (!mv.isMovingY() && velocity.y != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity.y) * mv->getDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity.y) * mv.getDeceleration() * delta_time;
 
 		if (abs(decel_amount) > abs(velocity.y)) {
 			velocity.y = 0.0f;
@@ -194,9 +194,9 @@ void CameraMotorSystem::decelerate(CameraMovement* mv, f32 delta_time) const {
 		}
 	}
 
-	if (!mv->isMovingZ() && velocity.z != 0.0f) {
+	if (!mv.isMovingZ() && velocity.z != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity.z) * mv->getDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity.z) * mv.getDeceleration() * delta_time;
 
 		if (abs(decel_amount) > abs(velocity.z)) {
 			velocity.z = 0.0f;
@@ -207,10 +207,10 @@ void CameraMotorSystem::decelerate(CameraMovement* mv, f32 delta_time) const {
 	}
 
 	// Set the new velocity
-	mv->setVelocity(velocity);
+	mv.setVelocity(velocity);
 
 	// Set is_moving to false. Will be set to true if camera moves again before update.
-	mv->setMovingX(false);
-	mv->setMovingY(false);
-	mv->setMovingZ(false);
+	mv.setMovingX(false);
+	mv.setMovingY(false);
+	mv.setMovingZ(false);
 }
