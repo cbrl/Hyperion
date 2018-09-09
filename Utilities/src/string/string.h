@@ -100,7 +100,7 @@ std::vector<StringT> Split(const StringT& in, const typename StringT::value_type
 	size_t start = 0;
 	size_t end   = in.find(token_s);
 
-	while (end != std::string::npos) {
+	while (end != StringT::npos) {
 		out.push_back(in.substr(start, end - start));
 		start = end + token_s.length();
 		end = in.find(token_s, start);
