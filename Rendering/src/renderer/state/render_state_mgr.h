@@ -122,16 +122,16 @@ private:
 	// Member Fucntions - Get
 	//----------------------------------------------------------------------------------
 
-	ID3D11BlendState* get(BlendStates state) const {
+	ID3D11BlendState* get(BlendStates state) const noexcept {
 		return blend_states[static_cast<u8>(state)].Get();
 	}
-	ID3D11DepthStencilState* get(DepthStencilStates state) const {
+	ID3D11DepthStencilState* get(DepthStencilStates state) const noexcept {
 		return depth_states[static_cast<u8>(state)].Get();
 	}
-	ID3D11RasterizerState* get(RasterStates state) const {
+	ID3D11RasterizerState* get(RasterStates state) const noexcept {
 		return raster_states[static_cast<u8>(state)].Get();
 	}
-	ID3D11SamplerState* get(SamplerStates state) const {
+	ID3D11SamplerState* get(SamplerStates state) const noexcept {
 		return sampler_states[static_cast<u8>(state)].Get();
 	}
 
@@ -141,31 +141,31 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// Blend States
-	gsl::not_null<ID3D11BlendState**> getAddressOf(BlendStates state) {
+	gsl::not_null<ID3D11BlendState**> getAddressOf(BlendStates state) noexcept {
 
 		auto& state_ptr = blend_states[static_cast<u8>(state)];
-		return gsl::not_null<ID3D11BlendState**>(state_ptr.GetAddressOf());
+		return gsl::make_not_null(state_ptr.GetAddressOf());
 	}
 
 	// Depth States
-	gsl::not_null<ID3D11DepthStencilState**> getAddressOf(DepthStencilStates state) {
+	gsl::not_null<ID3D11DepthStencilState**> getAddressOf(DepthStencilStates state) noexcept {
 
 		auto& state_ptr = depth_states[static_cast<u8>(state)];
-		return gsl::not_null<ID3D11DepthStencilState**>(state_ptr.GetAddressOf());
+		return gsl::make_not_null(state_ptr.GetAddressOf());
 	}
 
 	// Raster Staes
-	gsl::not_null<ID3D11RasterizerState**> getAddressOf(RasterStates state) {
+	gsl::not_null<ID3D11RasterizerState**> getAddressOf(RasterStates state) noexcept {
 		
 		auto& state_ptr = raster_states[static_cast<u8>(state)];
-		return gsl::not_null<ID3D11RasterizerState**>(state_ptr.GetAddressOf());
+		return gsl::make_not_null(state_ptr.GetAddressOf());
 	}
 
 	// Sampler States
-	gsl::not_null<ID3D11SamplerState**> getAddressOf(SamplerStates state) {
+	gsl::not_null<ID3D11SamplerState**> getAddressOf(SamplerStates state) noexcept {
 
 		auto& state_ptr = sampler_states[static_cast<u8>(state)];
-		return gsl::not_null<ID3D11SamplerState**>(state_ptr.GetAddressOf());
+		return gsl::make_not_null(state_ptr.GetAddressOf());
 	}
 
 

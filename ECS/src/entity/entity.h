@@ -240,7 +240,7 @@ protected:
 	//----------------------------------------------------------------------------------
 
 	Entity(EntityPtr this_ptr, ComponentMgr* component_mgr)
-		: IEntity(this_ptr, gsl::not_null<ComponentMgr*>(component_mgr)) {
+		: IEntity(this_ptr, gsl::make_not_null(component_mgr)) {
 	}
 
 

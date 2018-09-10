@@ -99,7 +99,7 @@ inline u64 GetCPUTime() {
 //----------------------------------------------------------------------------------
 
 // Get a file path through the Windows file picker
-inline bool OpenFilePicker(LPWSTR lpstrFile, DWORD nMaxFile) {
+inline bool OpenFilePicker(gsl::not_null<LPWSTR> lpstrFile, DWORD nMaxFile) {
 
 	OPENFILENAME ofn = {};
 	ofn.lStructSize  = sizeof(ofn);

@@ -115,7 +115,7 @@ void Window::init(const std::wstring& title,
 
 LRESULT CALLBACK Window::wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	const auto hwnd = gsl::not_null<HWND>(window);
+	const auto hwnd = gsl::make_not_null(window);
 	auto* caller = GetCaller(hwnd, msg, wParam, lParam);
 
 	if (caller) {
