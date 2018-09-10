@@ -11,6 +11,11 @@ IEntity::IEntity(EntityPtr this_ptr, gsl::not_null<ComponentMgr*> component_mgr)
 
 
 IEntity::~IEntity() {
+
+	forEachChild([this](EntityPtr& child) {
+		this->removeChild(child);
+	});
+
 	for (auto& pair : components) {
 		component_mgr->destroyComponent(pair.second);
 		pair.second = nullptr;
