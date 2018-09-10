@@ -17,7 +17,7 @@ public:
 
 	[[nodiscard]]
 	static ModelOutput<VertexT> load(ResourceMgr& resource_mgr,
-	                                 const std::wstring& filename,
+	                                 const fs::path& filename,
 	                                 bool right_hand_coords);
 
 
@@ -34,19 +34,19 @@ private:
 			, transparency(false) {
 		}
 
-		std::wstring name;
+		std::string name;
 		// Ambient std::map
-		std::wstring map_Ka;
+		std::string map_Ka;
 		// Diffuse std::map
-		std::wstring map_Kd;
+		std::string map_Kd;
 		// Specular std::map
-		std::wstring map_Ks;
+		std::string map_Ks;
 		// Specular Highlight std::map
-		std::wstring map_Ns;
+		std::string map_Ns;
 		// Alpha std::map
-		std::wstring map_d;
+		std::string map_d;
 		// Bump std::map
-		std::wstring map_bump;
+		std::string map_bump;
 		// Ambient Color
 		vec4_f32 Ka;
 		// Diffuse Color
@@ -79,12 +79,12 @@ private:
 private:
 	static void reset();
 
-	static void loadModel(const std::wstring& filename);
-	static void readFace(const std::wstring& line);
+	static void loadModel(const fs::path& file);
+	static void readFace(const std::string& line);
 	static VertexT createVertex(vec3_u32 vert_def);
 	static void triangulate(std::vector<vec3_u32>& face_def);
 
-	static void loadMaterials(const std::wstring& folder);
+	static void loadMaterials(const fs::path& mat_file);
 
 
 private:
@@ -106,10 +106,10 @@ private:
 	static std::vector<u32> indices;
 
 	// Material library name
-	static std::wstring mat_lib;
+	static std::string mat_lib;
 
 	// Material names for each group <grp number, mat name>
-	static std::map<u32, std::wstring> group_mat_names;
+	static std::map<u32, std::string> group_mat_names;
 
 	// Vector of material definitions
 	static std::vector<OBJMaterial> materials;
@@ -142,13 +142,13 @@ template<typename VertexT>
 std::vector<u32> OBJLoader<VertexT>::indices;
 
 template<typename VertexT>
-std::wstring OBJLoader<VertexT>::mat_lib;
+std::string OBJLoader<VertexT>::mat_lib;
 
 template<typename VertexT>
 std::vector<Group> OBJLoader<VertexT>::groups;
 
 template<typename VertexT>
-std::map<u32, std::wstring> OBJLoader<VertexT>::group_mat_names;
+std::map<u32, std::string> OBJLoader<VertexT>::group_mat_names;
 
 template<typename VertexT>
 std::vector<typename OBJLoader<VertexT>::OBJMaterial> OBJLoader<VertexT>::materials;

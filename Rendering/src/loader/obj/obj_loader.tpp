@@ -44,55 +44,54 @@ void OBJLoader<VertexT>::reset() {
 template<typename VertexT>
 [[nodiscard]]
 ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
-                                              const std::wstring& filename,
+                                              const fs::path& file,
                                               bool right_hand_coords) {
 
 	// Make sure the file exists first
-	if (!fs::exists(filename)) {
-		Logger::log(LogLevel::err, "File does not exist: {}", wstr2str(filename));
+	if (!fs::exists(file)) {
+		Logger::log(LogLevel::err, "File does not exist: {}", file.string());
 		throw std::exception("OBJ file not found");
 	}
 
 	// Set the coordinate system
 	rh_coord = right_hand_coords;
 
-
-	// Get the folder that the file is in
-	const std::wstring folder = GetParentPath(filename);
-
 	// Load the model
-	loadModel(filename);
+	loadModel(file);
 
 	// Load the materials
-	loadMaterials(folder);
+	loadMaterials(file.parent_path() / mat_lib);
 
+
+	// Get the folder that the file is in
+	const fs::path parent_path = file.parent_path();
 
 	// Create the materials
 	std::vector<Material> mtl_vector;
 	for (u32 i = 0; i < materials.size(); ++i) {
 		Material mtl;
 
-		mtl.name = wstr2str(materials[i].name);
+		mtl.name = materials[i].name;
 
 		if (!materials[i].map_Kd.empty())
-			mtl.map_diffuse = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_Kd);
+			mtl.map_diffuse = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_Kd);
 		else
 			mtl.has_texture = false;
 
 		if (!materials[i].map_Ka.empty())
-			mtl.map_alpha = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_Ka);
+			mtl.map_alpha = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_Ka);
 
 		if (!materials[i].map_Ks.empty())
-			mtl.map_specular = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_Ks);
+			mtl.map_specular = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_Ks);
 
 		if (!materials[i].map_Ns.empty())
-			mtl.map_spec_highlight = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_Ns);
+			mtl.map_spec_highlight = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_Ns);
 
 		if (!materials[i].map_d.empty())
-			mtl.map_alpha = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_d);
+			mtl.map_alpha = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_d);
 
 		if (!materials[i].map_bump.empty())
-			mtl.map_bump = resource_mgr.getOrCreate<Texture>(folder + materials[i].map_bump);
+			mtl.map_bump = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_bump);
 
 		mtl.ambient         = materials[i].Ka;
 		mtl.diffuse         = materials[i].Kd;
@@ -106,8 +105,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 	}
 
 	// Create the model
-	std::string name = wstr2str(GetFilename(filename));
-	ModelOutput<VertexT> out(name, vertices, indices, mtl_vector, groups);
+	ModelOutput<VertexT> out(file.filename().string(), vertices, indices, mtl_vector, groups);
 
 
 	// Reset the obj loader
@@ -119,12 +117,12 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::loadModel(const std::wstring& filename) {
+void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 
 	// Open the file
-	wifstream file(filename);
-	if (file.fail()) {
-		Logger::log(LogLevel::err, "Could not open obj file: {}", wstr2str(filename));
+	ifstream stream(file.string());
+	if (stream.fail()) {
+		Logger::log(LogLevel::err, "Could not open obj file: {}", file.string());
 		throw std::exception("Could not open obj file");
 	}
 
@@ -133,22 +131,22 @@ void OBJLoader<VertexT>::loadModel(const std::wstring& filename) {
 	// Read file contents
 	//----------------------------------------------------------------------------------
 
-	std::wstring line;
-	while (std::getline(file, line)) {
+	std::string line;
+	while (std::getline(stream, line)) {
 		line = TrimWhiteSpace(line);
 		if (line[0] == ObjTokens::comment || line.empty()) {
 			continue;
 		}
 
 		// Copy the first token from the line
-		std::wstring token = line.substr(0, line.find_first_of(L' '));
+		std::string token = line.substr(0, line.find_first_of(L' '));
 
 		// Remove the token from the line
 		line = line.substr(token.size());
 		line = TrimWhiteSpace(line);
 
 		// Create a stringstream to easily read data into variables
-		std::wstringstream stream(line);
+		std::stringstream stream(line);
 
 
 		// Vertex
@@ -189,11 +187,11 @@ void OBJLoader<VertexT>::loadModel(const std::wstring& filename) {
 
 		// Group
 		else if (token == ObjTokens::group) {
-			std::wstring name;
+			std::string name;
 			stream >> name;
 
 			groups.emplace_back();
-			groups.back().name        = wstr2str(name);
+			groups.back().name        = name;
 			groups.back().index_start = static_cast<u32>(indices.size());
 		}
 
@@ -214,7 +212,7 @@ void OBJLoader<VertexT>::loadModel(const std::wstring& filename) {
 	}
 
 	// Close the OBJ file
-	file.close();
+	stream.close();
 
 
 	// Sometimes a group is defined at the top of the file, then an extra one
@@ -228,12 +226,12 @@ void OBJLoader<VertexT>::loadModel(const std::wstring& filename) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::loadMaterials(const std::wstring& folder) {
+void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
 	// Open the material file
-	wifstream file(folder + mat_lib);
-	if (file.fail()) {
-		Logger::log(LogLevel::err, "Could not open mtl file: {}", wstr2str(folder + mat_lib));
+	ifstream stream(mat_file.string());
+	if (stream.fail()) {
+		Logger::log(LogLevel::err, "Could not open mtl file: {}", mat_file.string());
 		throw std::exception("Could not open mtl file");
 	}
 
@@ -242,22 +240,22 @@ void OBJLoader<VertexT>::loadMaterials(const std::wstring& folder) {
 	// Read file contents
 	//----------------------------------------------------------------------------------
 
-	std::wstring line;
-	while (std::getline(file, line)) {
+	std::string line;
+	while (std::getline(stream, line)) {
 		line = TrimWhiteSpace(line);
 		if (line[0] == ObjTokens::comment || line.empty()) {
 			continue;
 		}
 
 		// Copy the first token from the line
-		std::wstring token = line.substr(0, line.find_first_of(L' '));
+		std::string token = line.substr(0, line.find_first_of(L' '));
 
 		// Remove the token from the line
 		line = line.substr(token.size());
 		line = TrimWhiteSpace(line);
 
 		// Create a stringstream to easily read data into variables
-		std::wstringstream stream(line);
+		std::stringstream stream(line);
 
 
 		// New Material
@@ -355,7 +353,7 @@ void OBJLoader<VertexT>::loadMaterials(const std::wstring& folder) {
 	}
 
 	// Close the material file
-	file.close();
+	stream.close();
 
 
 	// Set the group's material to the index value of its
@@ -377,17 +375,17 @@ void OBJLoader<VertexT>::loadMaterials(const std::wstring& folder) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::readFace(const std::wstring& line) {
+void OBJLoader<VertexT>::readFace(const std::string& line) {
 
 	std::vector<vec3_u32> face_def;
 
 	// Split the line into separate vertex definitions
-	std::vector<std::wstring> vert_strings = Split(line, L" ");
+	std::vector<std::string> vert_strings = Split(line, " ");
 
 	for (const auto& vert_string : vert_strings) {
 
 		// Split the vertex definition into separate parts
-		std::vector<std::wstring> vert_parts = Split(vert_string, L"/");
+		std::vector<std::string> vert_parts = Split(vert_string, "/");
 
 		vec3_u32 vertex{ 0, 0, 0 };
 

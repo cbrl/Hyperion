@@ -11,7 +11,7 @@
 namespace ModelLoader {
 	template<typename VertexT>
 	[[nodiscard]]
-	ModelOutput<VertexT> load(ResourceMgr& resource_mgr, const std::wstring& filename);
+	ModelOutput<VertexT> load(ResourceMgr& resource_mgr, const fs::path& file);
 };
 
 

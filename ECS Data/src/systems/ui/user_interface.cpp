@@ -1211,7 +1211,7 @@ void DrawSceneMenu(ID3D11Device& device,
 						if (ImGui::MenuItem("From file")) {
 							wchar_t szFile[512] = {};
 
-							if (OpenFilePicker(gsl::make_not_null(szFile), 512)) {
+							if (OpenFilePicker(gsl::not_null<wchar_t*>(szFile), 512)) {
 								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
 								scene.importModel(selected_entity, device, bp);
 							}
