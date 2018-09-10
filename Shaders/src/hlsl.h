@@ -3,12 +3,15 @@
 
 
 // The maximum alpha value before the material is considered opaque
-#define ALPHA_MAX 0.9568627f
+// 250/255
+#define ALPHA_MAX 0.98039215f
 
 // The minimum alpha value before the material is considered invisible
-#define ALPHA_MIN 0.0039212f
+// 1/255
+#define ALPHA_MIN 0.00392156f
 
 // The minimum alpha value at which a shadow will still be cast
+// ~64/255
 #define ALPHA_SHADOW_THRESHOLD 0.25f
 
 

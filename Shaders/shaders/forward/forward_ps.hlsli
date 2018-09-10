@@ -83,6 +83,8 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	out_color = lerp(out_color, g_fog.color, fog_lerp);
 
 
+	// Apply the correct alpha
 	out_color.w = alpha;
+
 	return saturate(out_color);
 }

@@ -54,7 +54,7 @@ void ForwardPass::bindTransparentState() const {
 	vertex_shader->bind(device_context);
 
 	// Bind render states
-	render_state_mgr.bind(device_context, BlendStates::Additive);
+	render_state_mgr.bind(device_context, BlendStates::NonPremultiplied);
 	render_state_mgr.bind(device_context, DepthStencilStates::LessEqRW);
 	render_state_mgr.bind(device_context, RasterStates::CullCounterClockwise);
 }
