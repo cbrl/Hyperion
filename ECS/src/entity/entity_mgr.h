@@ -108,7 +108,7 @@ private:
 	shared_ptr<ComponentMgr> component_mgr;
 
 	// Map of unique resource pools for each type of entity
-	ResourcePoolFactory entity_pools;
+	ResourcePoolManager entity_pools;
 
 	// Handle table, which maps handles to a pointer to an entity
 	HandleTable<handle64, IEntity> handle_table;

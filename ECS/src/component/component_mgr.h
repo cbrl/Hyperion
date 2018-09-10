@@ -94,5 +94,5 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// Map of unique resource pools for each type of component
-	ResourcePoolFactory component_pools;
+	ResourcePoolManager component_pools;
 };

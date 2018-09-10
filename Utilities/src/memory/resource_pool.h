@@ -168,7 +168,7 @@ private:
 
 
 //----------------------------------------------------------------------------------
-// ResourcePool Factory
+// ResourcePool Manager
 //----------------------------------------------------------------------------------
 //
 // Creates a new resource pool for each unique resource type.
@@ -183,29 +183,29 @@ private:
 //
 //----------------------------------------------------------------------------------
 
-class ResourcePoolFactory final {
+class ResourcePoolManager final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	ResourcePoolFactory() = default;
-	ResourcePoolFactory(const ResourcePoolFactory& factory) = delete;
-	ResourcePoolFactory(ResourcePoolFactory&& factory) = default;
+	ResourcePoolManager() = default;
+	ResourcePoolManager(const ResourcePoolManager& factory) = delete;
+	ResourcePoolManager(ResourcePoolManager&& factory) = default;
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
 
-	~ResourcePoolFactory() = default;
+	~ResourcePoolManager() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
 
-	ResourcePoolFactory& operator=(const ResourcePoolFactory& factory) = delete;
-	ResourcePoolFactory& operator=(ResourcePoolFactory&& factory) noexcept = default;
+	ResourcePoolManager& operator=(const ResourcePoolManager& factory) = delete;
+	ResourcePoolManager& operator=(ResourcePoolManager&& factory) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
