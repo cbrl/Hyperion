@@ -57,8 +57,8 @@ namespace ShaderFactory {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_forward_vs",
 													  BYTECODE(shader_forward_vs),
-		                                              gsl::make_span(VertexPositionNormalTexture::InputElements,
-		                                                             VertexPositionNormalTexture::InputElementCount));
+		                                              gsl::make_span(VertexPositionNormalTexture::input_elements,
+		                                                             VertexPositionNormalTexture::input_element_count));
 	}
 
 
@@ -70,8 +70,8 @@ namespace ShaderFactory {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_vs",
 													  BYTECODE(shader_depth_vs),
-													  gsl::make_span(VertexPositionNormalTexture::InputElements,
-													                 VertexPositionNormalTexture::InputElementCount));
+													  gsl::make_span(VertexPositionNormalTexture::input_elements,
+													                 VertexPositionNormalTexture::input_element_count));
 	}
 
 	shared_ptr<PixelShader> createDepthTransparentPS(ResourceMgr& resource_mgr) {
@@ -83,8 +83,8 @@ namespace ShaderFactory {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_transparent_vs",
 													  BYTECODE(shader_depth_transparent_vs),
-													  gsl::make_span(VertexPositionNormalTexture::InputElements,
-													                 VertexPositionNormalTexture::InputElementCount));
+													  gsl::make_span(VertexPositionNormalTexture::input_elements,
+													                 VertexPositionNormalTexture::input_element_count));
 	}
 
 
@@ -101,8 +101,8 @@ namespace ShaderFactory {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_skybox_vs",
 													  BYTECODE(shader_skybox_vs),
-		                                              gsl::make_span(VertexPositionTexture::InputElements,
-		                                                             VertexPositionTexture::InputElementCount));
+		                                              gsl::make_span(VertexPositionTexture::input_elements,
+		                                                             VertexPositionTexture::input_element_count));
 	}
 
 
@@ -120,8 +120,8 @@ namespace ShaderFactory {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_wireframe_box_vs",
 													  BYTECODE(shader_wireframe_box_vs),
-		                                              gsl::make_span(VertexPosition::InputElements,
-		                                                             VertexPosition::InputElementCount));
+		                                              gsl::make_span(VertexPosition::input_elements,
+		                                                             VertexPosition::input_element_count));
 	}
 
 
