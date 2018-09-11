@@ -34,8 +34,8 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 			alpha     = tex_color.w * g_material.diffuse.w;
 		}
 		else {
-			tex_color = g_material.diffuse;
-			alpha     = tex_color.w;
+			tex_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+			alpha     = g_material.diffuse.w;
 		}
 
 		// Test alpha if transparency is enabled, or set it to 1 if not.
