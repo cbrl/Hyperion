@@ -23,7 +23,7 @@ void EntityMgr::removeExpiredEntities() {
 
 		// Destroy the entity
 		handle_table.releaseHandle(handle);
-		pool->destroyObject(entity);
+		pool->deallocate(entity);
 	}
 
 	expired_entities.clear();

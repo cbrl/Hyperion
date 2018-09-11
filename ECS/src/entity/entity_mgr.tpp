@@ -5,7 +5,7 @@ EntityPtr EntityMgr::createEntity(ArgsT&&... args) {
 				  "Calling EntityMgr::CreateEntity() with non-entity type.");
 
 	auto  pool = entity_pools.getOrCreatePool<EntityT>();
-	void* memory = pool->allocateObject();
+	void* memory = pool->allocate();
 
 	// Create a handle
 	handle64  handle = handle_table.createHandle(static_cast<IEntity*>(memory));

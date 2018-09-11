@@ -49,7 +49,7 @@ public:
 			"Calling ComponentMgr::CreateComponent() with non-component type.");
 
 		auto pool = component_pools.getOrCreatePool<ComponentT>();
-		ComponentT* component = pool->constructObject(std::forward<ArgsT>(args)...);
+		ComponentT* component = pool->construct(std::forward<ArgsT>(args)...);
 
 		return component;
 	}
@@ -57,7 +57,7 @@ public:
 
 	void destroyComponent(IComponent* component) {
 		auto pool = component_pools.getPool(component->getTypeIndex());
-		pool->destroyObject(component);
+		pool->deallocate(component);
 	}
 
 

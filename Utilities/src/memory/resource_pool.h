@@ -20,10 +20,10 @@ public:
 
 	// Allocate an unitialized object
 	[[nodiscard]]
-	virtual void* allocateObject() = 0;
+	virtual void* allocate() = 0;
 
 	// Destroy and deallocate an object
-	virtual void destroyObject(void* object) = 0;
+	virtual void deallocate(void* object) = 0;
 
 	// Get the number of objects created
 	[[nodiscard]]
@@ -103,13 +103,13 @@ public:
 
 	// Allocate memory for an object
 	[[nodiscard]]
-	void* allocateObject() override;
+	void* allocate() override;
 
 
 	// Allocate and initialize an object
 	template<typename... ArgsT>
 	[[nodiscard]]
-	DataT* constructObject(ArgsT&&... args);
+	DataT* construct(ArgsT&&... args);
 
 
 	//----------------------------------------------------------------------------------
@@ -117,12 +117,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Destroy and deallocate an object
-	void destroyObject(DataT* object);
+	void deallocate(DataT* object);
 
 
 	// Destroy and deallocate an object
-	void destroyObject(void* object) override {
-		destroyObject(static_cast<DataT*>(object));
+	void deallocate(void* object) override {
+		deallocate(static_cast<DataT*>(object));
 	}
 
 

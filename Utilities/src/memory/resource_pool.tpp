@@ -7,7 +7,7 @@ ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::ResourcePool() : coun
 
 
 template<typename DataT, size_t InitialChunkObjects, size_t MaxChunkObjects>
-void* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::allocateObject() {
+void* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::allocate() {
 
 	DataT* object = nullptr;
 
@@ -44,9 +44,9 @@ void* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::allocateObject(
 
 template<typename DataT, size_t InitialChunkObjects, size_t MaxChunkObjects>
 template<typename... ArgsT>
-DataT* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::constructObject(ArgsT&&... args) {
+DataT* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::construct(ArgsT&&... args) {
 
-	void*  memory = allocateObject();
+	void*  memory = allocate();
 	DataT* object = new(memory) DataT(std::forward<ArgsT>(args)...);
 
 	return object;
@@ -54,7 +54,7 @@ DataT* ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::constructObjec
 
 
 template<typename DataT, size_t InitialChunkObjects, size_t MaxChunkObjects>
-void ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::destroyObject(DataT* object) {
+void ResourcePool<DataT, InitialChunkObjects, MaxChunkObjects>::deallocate(DataT* object) {
 
 	const uintptr addr = reinterpret_cast<uintptr>(object);
 
