@@ -35,12 +35,10 @@ void CameraMotorSystem::update(Engine& engine) {
 void CameraMotorSystem::processInput(const Engine& engine, CameraMovement& movement, Transform& transform) const {
 
 	const auto& input = engine.getInput();
-
-	const vec2_i32 mouse_delta = input.getMouseDelta();
-	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());
+	const auto& timer = engine.getTimer();
+	const auto dt = static_cast<f32>(timer.deltaTime<std::ratio<1,1>>());
 
 	vec3_f32 move_units{ 0.0f, 0.0f, 0.0f };
-
 
 	// Forward/Back movement
 	if (input.isKeyDown(Keyboard::W)) {

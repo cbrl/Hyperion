@@ -6,8 +6,10 @@
 
 void AxisRotationSystem::update(Engine& engine) {
 
-	auto& scene  = engine.getScene();
-	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());
+	auto& scene = engine.getScene();
+	auto& timer = engine.getTimer();
+
+	const auto dt = static_cast<f32>(timer.deltaTime<std::ratio<1,1>>());
 
 	scene.forEach<AxisRotation>([&](AxisRotation& rotation) {
 

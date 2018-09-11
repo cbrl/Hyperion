@@ -9,7 +9,6 @@ void MouseRotationSystem::update(Engine& engine) {
 	auto& scene       = engine.getScene();
 	const auto& input = engine.getInput();
 
-	const f32 dt = static_cast<f32>(engine.getTimer().deltaTime());
 	const vec2_i32 mouse_delta = input.getMouseDelta();
 
 	scene.forEach<MouseRotation>([&](MouseRotation& rotation) {

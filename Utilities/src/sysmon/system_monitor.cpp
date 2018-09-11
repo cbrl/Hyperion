@@ -7,25 +7,18 @@
 
 void SystemMonitor::CpuMonitor::tick() {
 
-	// Update wall clock and elapsed time
+	// Update wall clock and get elapsed time
 	wall_timer.tick();
-	dt += wall_timer.deltaTime();
+	const auto dt = wall_timer.deltaTime();
 
-	// Update stats only if 1/2 second has passed
-	if (dt >= 0.5) {
+	// Update system clocks
+	core_timer.tick();
+	sys_work_timer.tick();
+	sys_idle_timer.tick();
 
-		// Update system clocks
-		core_timer.tick();
-		sys_work_timer.tick();
-		sys_idle_timer.tick();
-
-		// Update cpu stats
-		sys_usage  = ((sys_work_timer.deltaTime() - sys_idle_timer.deltaTime()) * 100.0) / sys_work_timer.deltaTime();
-		proc_usage = (core_timer.deltaTime() * 100.0) / dt;
-
-		// Reset elapsed time
-		dt = 0.0;
-	}
+	// Update cpu stats
+	sys_usage = ((sys_work_timer.deltaTime() - sys_idle_timer.deltaTime()) * 100.0) / sys_work_timer.deltaTime();
+	proc_usage = (core_timer.deltaTime() * 100.0) / dt;
 }
 
 
@@ -51,7 +44,6 @@ void SystemMonitor::MemoryMonitor::tick() {
 
 	// Total memory
 	GlobalMemoryStatusEx(&mem_info);
-
 
 	// Process memory
 	GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PPROCESS_MEMORY_COUNTERS>(&pmc), sizeof(pmc));

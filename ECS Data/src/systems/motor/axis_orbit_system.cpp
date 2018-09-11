@@ -5,7 +5,7 @@
 void AxisOrbitSystem::update(Engine& engine) {
 	
 	auto& scene      = engine.getScene();
-	f32   delta_time = static_cast<f32>(engine.getTimer().deltaTime());
+	f64   delta_time = engine.getTimer().deltaTime<std::ratio<1,1>>();
 
 	scene.forEach<AxisOrbit>([&] (AxisOrbit& orbit) {
 	
@@ -13,7 +13,9 @@ void AxisOrbitSystem::update(Engine& engine) {
 
 		if (auto* transform = orbit.getOwner()->getComponent<Transform>()) {
 			if (!transform->isActive()) return;
-			transform->rotateAround(orbit.getAxis(), delta_time * orbit.getSpeed());
+
+			const auto units = static_cast<f32>(delta_time * orbit.getSpeed());
+			transform->rotateAround(orbit.getAxis(), units);
 		}
 	});
 }

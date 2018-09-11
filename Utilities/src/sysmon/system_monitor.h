@@ -65,8 +65,7 @@ class SystemMonitor final {
 
 	protected:
 		CpuMonitor() noexcept
-			: dt(0)
-			, sys_usage(0)
+			: sys_usage(0)
 			, proc_usage(0) {
 		}
 
@@ -85,7 +84,6 @@ class SystemMonitor final {
 
 
 	private:
-		f64 dt;
 		f64 sys_usage;
 		f64 proc_usage;
 
@@ -144,23 +142,40 @@ class SystemMonitor final {
 
 
 public:
-	SystemMonitor() = default;
+	SystemMonitor() noexcept
+		: dt(0.0) {
+	}
+
 	~SystemMonitor() = default;
 
 	// Update resource stats
 	void tick() {
-		cpu_mon.tick();
-		memory_mon.tick();
+		wall_timer.tick();
+		dt += wall_timer.deltaTime();
+
+		// Update every 500ms
+		if (dt >= 500) {
+			cpu_mon.tick();
+			memory_mon.tick();
+			dt = 0.0;
+		}
 	}
 
 	// Access CPU stats
-	const CpuMonitor& cpu() const { return cpu_mon; }
+	const CpuMonitor& cpu() const {
+		return cpu_mon;
+	}
 
 	// Access memory stats
-	const MemoryMonitor& memory() const { return memory_mon; }
+	const MemoryMonitor& memory() const {
+		return memory_mon;
+	}
 
 
 private:
+	f64 dt;
+	HighResTimer wall_timer;
+
 	CpuMonitor cpu_mon;
 	MemoryMonitor memory_mon;
 };

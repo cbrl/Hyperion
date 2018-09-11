@@ -209,7 +209,7 @@ void TestScene::tick(Engine& engine) {
 
 	// Frame Time
 	text_frame_time->getComponent<Text>()->setText(
-		L"Frame Time: " + std::to_wstring(delta_time * 1000.0) + L"ms");
+		L"Frame Time: " + std::to_wstring(delta_time) + L"ms");
 
 	// CPU Usage
 	text_cpu->getComponent<Text>()->setText(cpu_str.str());

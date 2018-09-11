@@ -52,11 +52,13 @@ void Timer<ClockT>::tick() {
 }
 
 template<typename ClockT>
+template<typename PeriodT>
 f64 Timer<ClockT>::deltaTime() const {
-	return std::chrono::duration_cast<std::chrono::duration<f64>>(delta_time).count();
+	return std::chrono::duration_cast<std::chrono::duration<f64, PeriodT>>(delta_time).count();
 }
 
 template<typename ClockT>
+template<typename PeriodT>
 f64 Timer<ClockT>::totalTime() const {
-	return std::chrono::duration_cast<std::chrono::duration<f64>>(total_time - pause_duration).count();
+	return std::chrono::duration_cast<std::chrono::duration<f64, PeriodT>>(total_time - pause_duration).count();
 }

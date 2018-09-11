@@ -9,8 +9,30 @@
 template<typename ClockT>
 class Timer final {
 public:
+	//----------------------------------------------------------------------------------
+	//
+	//----------------------------------------------------------------------------------
 	Timer();
+	Timer(const Timer& timer) noexcept = default;
+	Timer(Timer&& timer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	//
+	//----------------------------------------------------------------------------------
 	~Timer() = default;
+
+
+	//----------------------------------------------------------------------------------
+	//
+	//----------------------------------------------------------------------------------
+	Timer& operator=(const Timer& timer) noexcept = default;
+	Timer& operator=(Timer&& timer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	//
+	//----------------------------------------------------------------------------------
 
 	// Pause the timer
 	void pause();
@@ -24,16 +46,21 @@ public:
 	// Update the timer
 	void tick();
 
-	// Get the time elapsed since the last update (in seconds)
+	// Get the time elapsed since the last update in the specified units (default milliseconds)
+	template<typename PeriodT = std::milli>
 	[[nodiscard]]
 	f64 deltaTime() const;
 
-	// Get the time elapsed since the timer was created or reset (in seconds)
+	// Get the time elapsed since the timer was created or reset in the specified units (default milliseconds)
+	template<typename PeriodT = std::milli>
 	[[nodiscard]]
 	f64 totalTime() const;
 
 
 private:
+	//----------------------------------------------------------------------------------
+	//
+	//----------------------------------------------------------------------------------
 	bool paused;
 
 	using time_point = typename ClockT::time_point;
