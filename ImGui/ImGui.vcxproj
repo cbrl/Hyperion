@@ -25,10 +25,10 @@
     <ClInclude Include="src\imgui_impl_win32.h" />
     <ClInclude Include="src\imgui_internal.h" />
     <ClInclude Include="src\imgui_message_forwarder.h" />
+    <ClInclude Include="src\imstb_rectpack.h" />
+    <ClInclude Include="src\imstb_textedit.h" />
+    <ClInclude Include="src\imstb_truetype.h" />
     <ClInclude Include="src\misc\stl\imgui_stl.h" />
-    <ClInclude Include="src\stb_rect_pack.h" />
-    <ClInclude Include="src\stb_textedit.h" />
-    <ClInclude Include="src\stb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imgui.cpp" />
@@ -37,6 +37,7 @@
     <ClCompile Include="src\imgui_impl_dx11.cpp" />
     <ClCompile Include="src\imgui_impl_win32.cpp" />
     <ClCompile Include="src\imgui_message_forwarder.cpp" />
+    <ClCompile Include="src\imgui_widgets.cpp" />
     <ClCompile Include="src\misc\stl\imgui_stl.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

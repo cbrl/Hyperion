@@ -58,9 +58,11 @@ void Engine::init() {
 			std::cout << i++ << ": " << mode.Width << "x" << mode.Height << " " << rr << "Hz\n";
 		}
 
-		std::cout << "Select desired resolution:\n";
-		size_t select = 0;
-		std::cin >> select;
+		size_t select = std::numeric_limits<size_t>::max();
+		while (select >= display_config.getDisplayDescList().size()) {
+			std::cout << "\nSelect desired resolution \n>> ";
+			std::cin >> select;
+		}
 		display_config.setDisplayDesc(select);
 	}
 
