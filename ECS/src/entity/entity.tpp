@@ -49,7 +49,8 @@ void IEntity::removeComponent(ComponentT* component) {
 	for (auto it = range.first; it != range.second; ++it) {
 		if (it->second == component) {
 			components.erase(it);
-			break;
+			component_mgr->destroyComponent(component);
+			return;
 		}
 	}
 }
@@ -59,6 +60,10 @@ template<typename ComponentT>
 void IEntity::removeAll() {
 
 	const auto range = components.equal_range(ComponentT::index);
+
+	for (auto it = range.first; it != range.second; ++it) {
+		component_mgr->destroyComponent(it->second);
+	}
 	components.erase(range.first, range.second);
 }
 

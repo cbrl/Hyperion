@@ -19,7 +19,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	explicit EntityMgr(shared_ptr<ComponentMgr> component_mgr)
+	EntityMgr(shared_ptr<ComponentMgr> component_mgr)
 		: component_mgr(std::move(component_mgr))
 		, num_expired_entities(0) {
 	}
@@ -110,8 +110,10 @@ private:
 	// Map of unique resource pools for each type of entity
 	ResourcePoolManager entity_pools;
 
-	// Handle table, which maps handles to a pointer to an entity
+	// Handle table. Maps a handle to an IEntity pointer.
 	HandleTable<handle64, IEntity> handle_table;
+
+	std::unordered_multimap<std::type_index, IEntity*> entities;
 
 	// Container of entities that need to be deleted
 	std::vector<handle64> expired_entities;

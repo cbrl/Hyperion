@@ -1,6 +1,5 @@
 #pragma once
 
-#include "memory/allocator/linear_allocator.h"
 #include "system/system.h"
 #include "exception/exception.h"
 
@@ -11,7 +10,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	SystemMgr();
+	SystemMgr() = default;
 	SystemMgr(const SystemMgr& manager) = delete;
 	SystemMgr(SystemMgr&& manager) = default;
 
@@ -20,7 +19,7 @@ public:
 	// Destructor
 	//----------------------------------------------------------------------------------
 
-	~SystemMgr();
+	~SystemMgr() = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -42,20 +41,10 @@ public:
 		const auto& it = systems.find(SystemT::index);
 
 		if (it != systems.end() && it->second != nullptr)
-			return static_cast<SystemT*>(it->second);
+			return static_cast<SystemT*>(it->second.get());
 
-		void* memory = allocator->allocate<SystemT>();
-
-		if (memory != nullptr) {
-			SystemT* sys = new(memory) SystemT(std::forward<ArgsT>(args)...);
-
-			systems[SystemT::index] = sys;
-			return sys;
-		}
-
-		assert("SystemMgr::AddSystem() - Unable to allocate memory for System.");
-
-		return nullptr;
+		auto pair = systems.emplace(SystemT::index, new SystemT(std::forward<ArgsT>(args)...));
+		return static_cast<SystemT*>(pair.first->second.get());
 	}
 
 	template<typename SystemT>
@@ -63,7 +52,7 @@ public:
 		const auto& it = systems.find(SystemT::index);
 
 		if (it != systems.end() && it->second != nullptr)
-			return static_cast<SystemT*>(it->second);
+			return static_cast<SystemT*>(it->second.get());
 
 		return nullptr;
 	}
@@ -74,12 +63,6 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// The allocator used to allocate new systems
-	unique_ptr<LinearAllocator> allocator;
-
-	// Allocator's maximum memory size (4 MiB)
-	static constexpr size_t alloc_memory_size = 4194304;
-
-	// Map of systems
-	std::unordered_map<std::type_index, ISystem*> systems;
+	// The systems, mapped to their type_index
+	std::unordered_map<std::type_index, unique_ptr<ISystem>> systems;
 };

@@ -2,7 +2,7 @@
 
 #include "datatypes/datatypes.h"
 #include "exception/exception.h"
-#include "memory/allocator/pool_allocator.h"
+#include <memory_resource>
 
 
 //----------------------------------------------------------------------------------
@@ -13,9 +13,19 @@
 //
 //----------------------------------------------------------------------------------
 
-class IResourcePool {
+template<typename T>
+class PoolResource {
+protected:
+	static std::pmr::synchronized_pool_resource pool;
+};
+
+template<typename T>
+std::pmr::synchronized_pool_resource PoolResource<T>::pool;
+
+
+class IResourcePool : public PoolResource<void> {
 public:
-	IResourcePool() = default;
+	IResourcePool() noexcept = default;
 	virtual ~IResourcePool() = default;
 
 	// Allocate an unitialized object
@@ -27,57 +37,29 @@ public:
 
 	// Get the number of objects created
 	[[nodiscard]]
-	virtual size_t getCount() const = 0;
+	virtual size_t getCount() const noexcept = 0;
 };
+
+
 
 
 //----------------------------------------------------------------------------------
 // ResourcePool
 //----------------------------------------------------------------------------------
 //
-// The resource pool allocates memory for objects in chunks using the pool
-// allocator. The size of each new chunk is twice that of the last (up to a maximum)
-//
-//               DataT: The datatype this pool holds
-// InitialChunkObjects: The number of objects the initial chunk holds
-//     MaxChunkObjects: The maximum size of the chunks
+// Constructs objects using std::pmr::synchronized_pool_resource
+// as the underlying memory allocator.
 //
 //----------------------------------------------------------------------------------
 
-template<typename DataT, size_t InitialChunkObjects = 16, size_t MaxChunkObjects = 1024>
-class ResourcePool : public IResourcePool {
-private:
-	struct Chunk {
-	public:
-		explicit Chunk(size_t pool_size) {
-			allocator   = std::make_unique<PoolAllocator<DataT>>(pool_size);
-			start_addr  = reinterpret_cast<uintptr>(allocator->getStartAddr());
-			memory_size = pool_size;
-		}
-
-		~Chunk() {
-			// Destroy the objects (allocator will free the memory upon deletion)
-			for (auto* object : objects) {
-				object->~DataT();
-			}
-			objects.clear();
-		}
-
-	public:
-		unique_ptr<PoolAllocator<DataT>> allocator;
-		std::list<DataT*> objects;
-
-		uintptr start_addr;
-		size_t memory_size;
-	};
-
-
+template<typename T>
+class ResourcePool final : public IResourcePool {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	ResourcePool();
+	ResourcePool() = default;
 	ResourcePool(const ResourcePool& pool) = delete;
 	ResourcePool(ResourcePool&& pool) noexcept = default;
 
@@ -86,7 +68,7 @@ public:
 	// Destructor
 	//----------------------------------------------------------------------------------
 
-	~ResourcePool() = default;
+	~ResourcePool();
 
 
 	//----------------------------------------------------------------------------------
@@ -105,11 +87,10 @@ public:
 	[[nodiscard]]
 	void* allocate() override;
 
-
 	// Allocate and initialize an object
 	template<typename... ArgsT>
 	[[nodiscard]]
-	DataT* construct(ArgsT&&... args);
+	T* construct(ArgsT&&... args);
 
 
 	//----------------------------------------------------------------------------------
@@ -117,12 +98,10 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Destroy and deallocate an object
-	void deallocate(DataT* object);
+	void deallocate(T* object);
 
-
-	// Destroy and deallocate an object
 	void deallocate(void* object) override {
-		deallocate(static_cast<DataT*>(object));
+		deallocate(static_cast<T*>(object));
 	}
 
 
@@ -132,36 +111,26 @@ public:
 
 	// Get the number of objects contained in this pool
 	[[nodiscard]]
-	size_t getCount() const override {
-		return count;
+	size_t getCount() const noexcept override {
+		return objects.size();
 	}
 
 
 	// Apply an action to each resource
 	template<typename ActionT>
-	void forEach(ActionT act) {
-		for (auto& chunk : memory_chunks) {
-			for (auto* object : chunk->objects) {
-				act(*object);
-			}
+	void forEach(ActionT&& act) {
+		for (auto* obj : objects) {
+			act(*obj);
 		}
 	}
-
-
-private:
-	unique_ptr<Chunk>& createChunk();
 
 
 private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
-	std::list<unique_ptr<Chunk>> memory_chunks;
-	size_t chunk_objects = InitialChunkObjects;
-	size_t count;
+	std::list<T*> objects;
 };
-
 #include "resource_pool.tpp"
 
 
@@ -216,9 +185,7 @@ public:
 	template<typename ResourceT>
 	[[nodiscard]]
 	ResourcePool<ResourceT>* getOrCreatePool() {
-
 		using pool_t = ResourcePool<ResourceT>;
-
 		// pair = std::pair<iterator, bool>
 		const auto pair = pools.try_emplace(ResourceT::index, std::make_unique<pool_t>());
 		return static_cast<pool_t*>(pair.first->second.get());
@@ -237,7 +204,6 @@ public:
 	[[nodiscard]]
 	IResourcePool* getPool(std::type_index type) {
 		const auto& it = pools.find(type);
-
 		assert(it != pools.end() && "Invalid resource pool type requested");
 		return it->second.get();
 	}

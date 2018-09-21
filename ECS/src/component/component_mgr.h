@@ -48,7 +48,7 @@ public:
 		static_assert(std::is_base_of_v<IComponent, ComponentT>,
 			"Calling ComponentMgr::CreateComponent() with non-component type.");
 
-		auto pool = component_pools.getOrCreatePool<ComponentT>();
+		auto* pool = component_pools.getOrCreatePool<ComponentT>();
 		ComponentT* component = pool->construct(std::forward<ArgsT>(args)...);
 
 		return component;
@@ -56,7 +56,7 @@ public:
 
 
 	void destroyComponent(IComponent* component) {
-		auto pool = component_pools.getPool(component->getTypeIndex());
+		auto* pool = component_pools.getPool(component->getTypeIndex());
 		pool->deallocate(component);
 	}
 

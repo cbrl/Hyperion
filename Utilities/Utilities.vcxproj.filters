@@ -45,12 +45,6 @@
     <Filter Include="Source Files\sysmon">
       <UniqueIdentifier>{c130fc05-7574-4a91-ae46-09bd2c81c7c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\memory\allocator">
-      <UniqueIdentifier>{6d9e7b73-d2d6-4726-8570-48c719ff0b97}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\memory\allocator">
-      <UniqueIdentifier>{41528c5e-c9a2-415b-a77f-f167765edbae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\directx">
       <UniqueIdentifier>{286f5b4c-c30d-499e-bb63-27dcb519d439}</UniqueIdentifier>
     </Filter>
@@ -125,18 +119,6 @@
     <ClInclude Include="src\memory\resource_pool.h">
       <Filter>Header Files\memory</Filter>
     </ClInclude>
-    <ClInclude Include="src\memory\allocator\allocator_util.h">
-      <Filter>Header Files\memory\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="src\memory\allocator\linear_allocator.h">
-      <Filter>Header Files\memory\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="src\memory\allocator\pool_allocator.h">
-      <Filter>Header Files\memory\allocator</Filter>
-    </ClInclude>
-    <ClInclude Include="src\memory\allocator\stack_allocator.h">
-      <Filter>Header Files\memory\allocator</Filter>
-    </ClInclude>
     <ClInclude Include="src\string\string.h">
       <Filter>Header Files\string</Filter>
     </ClInclude>
@@ -175,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="src\memory\managed_resource_map.h">
       <Filter>Header Files\memory</Filter>
-    </ClInclude>
-    <ClInclude Include="src\memory\allocator\block_allocator.h">
-      <Filter>Header Files\memory\allocator</Filter>
     </ClInclude>
     <ClInclude Include="src\directx\directxtk.h">
       <Filter>Header Files\directx</Filter>
@@ -295,12 +274,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\memory\allocator\stack_allocator.cpp">
-      <Filter>Source Files\memory\allocator</Filter>
-    </ClCompile>
-    <ClCompile Include="src\memory\allocator\linear_allocator.cpp">
-      <Filter>Source Files\memory\allocator</Filter>
-    </ClCompile>
     <ClCompile Include="src\sysmon\system_monitor.cpp">
       <Filter>Source Files\sysmon</Filter>
     </ClCompile>
@@ -324,9 +297,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\memory\allocator\pool_allocator.tpp">
-      <Filter>Source Files\memory\allocator</Filter>
-    </None>
     <None Include="src\memory\resource_pool.tpp">
       <Filter>Source Files\memory</Filter>
     </None>

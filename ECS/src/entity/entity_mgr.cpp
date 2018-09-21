@@ -14,12 +14,13 @@ void EntityMgr::destroyEntity(handle64 handle) {
 
 
 void EntityMgr::removeExpiredEntities() {
+
 	for (const handle64 handle : expired_entities) {
 
 		IEntity* entity = getEntity(handle);
 		const auto type = entity->getTypeIndex();
 
-		auto pool = entity_pools.getPool(type);
+		auto* pool = entity_pools.getPool(type);
 
 		// Destroy the entity
 		handle_table.releaseHandle(handle);
