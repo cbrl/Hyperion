@@ -10,16 +10,6 @@
 using namespace DirectX;
 
 
-// Convert an rgba std::vector [0.0f, 1.0f] to a hex color value
-[[nodiscard]]
-inline u32 Float4ColorToU32(const vec4_f32& color) {
-	return static_cast<u32>(color.x * 0xff)            //R
-	       | (static_cast<u32>(color.y * 0xff) << 8)   //G
-	       | (static_cast<u32>(color.z * 0xff) << 16)  //B
-	       | (static_cast<u32>(color.w * 0xff) << 24); //A
-}
-
-
 // Determine if a point is inside a triangle using barycentric coordinates
 [[nodiscard]]
 inline bool PointInTriangle(const vec3_f32& vert1,
