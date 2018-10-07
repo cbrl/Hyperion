@@ -107,6 +107,7 @@ void Engine::init() {
 
 	// FPS Counter
 	fps_counter = std::make_unique<FPS>();
+	fps_counter->setWaitTime(250ms);
 
 	// Rendering Manager
 	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getWindow()), display_config);

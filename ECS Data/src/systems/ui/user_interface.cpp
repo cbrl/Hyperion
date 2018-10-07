@@ -13,6 +13,8 @@
 #include "log/log.h"
 #include "os/windows/win_utils.h"
 
+#include <iterator>
+
 
 void* selected = nullptr;
 EntityPtr selected_entity;
@@ -1076,6 +1078,100 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 //----------------------------------------------------------------------------------
 //
+//   Scene Menu
+//
+//----------------------------------------------------------------------------------
+
+void DrawSceneMenu(ID3D11Device& device,
+	ResourceMgr& resource_mgr,
+	Scene& scene,
+	ModelType& add_model_popup) {
+
+	if (ImGui::BeginMenuBar()) {
+
+		if (ImGui::BeginMenu("Entity")) {
+
+			if (ImGui::MenuItem("New")) {
+				scene.addEntity<WorldObject<>>();
+			}
+
+			if (ImGui::BeginMenu("Selected")) {
+
+				if (ImGui::BeginMenu("Add Component")) {
+
+					if (ImGui::MenuItem("Orthographic Camera")) {
+						selected_entity->addComponent<OrthographicCamera>(device, vec2_u32{ 480, 480 });
+					}
+
+					if (ImGui::MenuItem("Perspective Camera")) {
+						selected_entity->addComponent<PerspectiveCamera>(device, vec2_u32{ 480, 480 });
+					}
+
+					if (ImGui::MenuItem("Directional Light")) {
+						selected_entity->addComponent<DirectionalLight>();
+					}
+
+					if (ImGui::MenuItem("Point Light")) {
+						selected_entity->addComponent<PointLight>();
+					}
+
+					if (ImGui::MenuItem("Spot Light")) {
+						selected_entity->addComponent<SpotLight>();
+					}
+
+					if (ImGui::BeginMenu("Model")) {
+
+						if (ImGui::MenuItem("From file")) {
+							wchar_t szFile[512] = {};
+
+							if (OpenFilePicker(gsl::not_null<wchar_t*>(szFile), 512)) {
+								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
+								scene.importModel(selected_entity, device, bp);
+							}
+							else Logger::log(LogLevel::err, "Failed to open file dialog");
+						}
+
+						if (ImGui::BeginMenu("Geometric Shape")) {
+							if (ImGui::MenuItem("Cube")) add_model_popup = ModelType::Cube;
+							if (ImGui::MenuItem("Box")) add_model_popup = ModelType::Box;
+							if (ImGui::MenuItem("Sphere")) add_model_popup = ModelType::Sphere;
+							if (ImGui::MenuItem("GeoSphere")) add_model_popup = ModelType::GeoSphere;
+							if (ImGui::MenuItem("Cylinder")) add_model_popup = ModelType::Cylinder;
+							if (ImGui::MenuItem("Cone")) add_model_popup = ModelType::Cone;
+							if (ImGui::MenuItem("Torus")) add_model_popup = ModelType::Torus;
+							if (ImGui::MenuItem("Tetrahedron")) add_model_popup = ModelType::Tetrahedron;
+							if (ImGui::MenuItem("Octahedron")) add_model_popup = ModelType::Octahedron;
+							if (ImGui::MenuItem("Dodecahedron")) add_model_popup = ModelType::Dodecahedron;
+							if (ImGui::MenuItem("Icosahedron")) add_model_popup = ModelType::Icosahedron;
+
+							ImGui::EndMenu();
+						}
+
+						ImGui::EndMenu();
+					}
+
+					ImGui::EndMenu();
+				}
+
+				if (ImGui::MenuItem("Delete")) {
+					scene.removeEntity(selected_entity);
+				}
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+//
 //   System Menu
 //
 //----------------------------------------------------------------------------------
@@ -1165,95 +1261,41 @@ void DrawSystemMenu(Engine& engine) {
 
 //----------------------------------------------------------------------------------
 //
-//   Scene Menu
+//   FPS Display
 //
 //----------------------------------------------------------------------------------
+void DrawFPSDisplay(Engine& engine) {
 
-void DrawSceneMenu(ID3D11Device& device,
-                   ResourceMgr& resource_mgr,
-                   Scene& scene,
-                   ModelType& add_model_popup) {
+	const auto& timer = engine.getTimer();
+	const auto& fps_counter = engine.getFPSCounter();
 
-	if (ImGui::BeginMenuBar()) {
+	static std::vector<float> fps_history(50);
+	static f64 dt = 0.0;
 
-		if (ImGui::BeginMenu("Entity")) {
-
-			if (ImGui::MenuItem("New")) {
-				scene.addEntity<WorldObject<>>();
-			}
-
-			if (ImGui::BeginMenu("Selected")) {
-
-				if (ImGui::BeginMenu("Add Component")) {
-
-					if (ImGui::MenuItem("Orthographic Camera")) {
-						selected_entity->addComponent<OrthographicCamera>(device, vec2_u32{480, 480});
-					}
-
-					if (ImGui::MenuItem("Perspective Camera")) {
-						selected_entity->addComponent<PerspectiveCamera>(device, vec2_u32{480, 480});
-					}
-
-					if (ImGui::MenuItem("Directional Light")) {
-						selected_entity->addComponent<DirectionalLight>();
-					}
-
-					if (ImGui::MenuItem("Point Light")) {
-						selected_entity->addComponent<PointLight>();
-					}
-
-					if (ImGui::MenuItem("Spot Light")) {
-						selected_entity->addComponent<SpotLight>();
-					}
-
-					if (ImGui::BeginMenu("Model")) {
-
-						if (ImGui::MenuItem("From file")) {
-							wchar_t szFile[512] = {};
-
-							if (OpenFilePicker(gsl::not_null<wchar_t*>(szFile), 512)) {
-								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
-								scene.importModel(selected_entity, device, bp);
-							}
-							else Logger::log(LogLevel::err, "Failed to open file dialog");
-						}
-
-						if (ImGui::BeginMenu("Geometric Shape")) {
-							if (ImGui::MenuItem("Cube")) add_model_popup = ModelType::Cube;
-							if (ImGui::MenuItem("Box")) add_model_popup = ModelType::Box;
-							if (ImGui::MenuItem("Sphere")) add_model_popup = ModelType::Sphere;
-							if (ImGui::MenuItem("GeoSphere")) add_model_popup = ModelType::GeoSphere;
-							if (ImGui::MenuItem("Cylinder")) add_model_popup = ModelType::Cylinder;
-							if (ImGui::MenuItem("Cone")) add_model_popup = ModelType::Cone;
-							if (ImGui::MenuItem("Torus")) add_model_popup = ModelType::Torus;
-							if (ImGui::MenuItem("Tetrahedron")) add_model_popup = ModelType::Tetrahedron;
-							if (ImGui::MenuItem("Octahedron")) add_model_popup = ModelType::Octahedron;
-							if (ImGui::MenuItem("Dodecahedron")) add_model_popup = ModelType::Dodecahedron;
-							if (ImGui::MenuItem("Icosahedron")) add_model_popup = ModelType::Icosahedron;
-
-							ImGui::EndMenu();
-						}
-
-						ImGui::EndMenu();
-					}
-
-					ImGui::EndMenu();
-				}
-
-				if (ImGui::MenuItem("Delete")) {
-					scene.removeEntity(selected_entity);
-				}
-
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenu();
-		}
-
-		ImGui::EndMenuBar();
+	dt += timer.deltaTime();
+	const u32 fps = fps_counter.getFPS();
+	if (dt >= fps_counter.getWaitTime().count()) {
+		fps_history.push_back(static_cast<float>(fps));
+		dt = 0.0;
 	}
-}
+	if (fps_history.size() > 50) {
+		fps_history.erase(fps_history.begin(), fps_history.begin() + (fps_history.size() - 50));
+	}
 
+	if (ImGui::Begin("FPS", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		ImGui::BeginChild("FPS Histogram", {250, 50});
+		ImGui::PlotLines("", fps_history.data(), static_cast<int>(fps_history.size()), 0, nullptr, 0, FLT_MAX, {250, 50});
+		ImGui::EndChild();
+		ImGui::SameLine();
+
+		ImGui::BeginChild("FPS Stats", {150, 50});
+		ImGui::Text("FPS: %u", fps);
+		ImGui::Text("Frame Time: %.2fms", timer.deltaTime());
+		ImGui::EndChild();
+	}
+	ImGui::End();
+}
 
 
 
@@ -1263,7 +1305,6 @@ void DrawSceneMenu(ID3D11Device& device,
 //   Update
 //
 //----------------------------------------------------------------------------------
-
 void UserInterface::update(Engine& engine)  {
 
 	auto& scene = engine.getScene();
@@ -1281,10 +1322,15 @@ void UserInterface::update(Engine& engine)  {
 
 	// Draw the system menu
 	static bool system_menu = true;
-	if (engine.getInput().isKeyPressed(Keyboard::F1)) { system_menu = !system_menu; }
+	if (engine.getInput().isKeyPressed(Keyboard::F1)) {
+		system_menu = !system_menu;
+	}
 	if (system_menu) {
 		DrawSystemMenu(engine);
 	}
+
+	// Draw the FPS display window
+	DrawFPSDisplay(engine);
 
 	// Draw scene window contents
 	if (ImGui::Begin("Scene")) {
@@ -1300,7 +1346,5 @@ void UserInterface::update(Engine& engine)  {
 		// Draw tree
 		DrawTree(scene);
 	}
-
-	// End window
 	ImGui::End();
 }
