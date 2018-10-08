@@ -1269,7 +1269,7 @@ void DrawFPSDisplay(Engine& engine) {
 	const auto& timer = engine.getTimer();
 	const auto& fps_counter = engine.getFPSCounter();
 
-	static std::vector<float> fps_history(50);
+	static std::vector<float> fps_history;
 	static f64 dt = 0.0;
 
 	dt += timer.deltaTime();

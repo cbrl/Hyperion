@@ -9,56 +9,21 @@
 //----------------------------------------------------------------------------------
 
 struct MaterialBuffer {
-	MaterialBuffer() noexcept
-		: ambient(0.0f, 0.0f, 0.0f, 1.0f)
-		, diffuse(0.0f, 0.0f, 0.0f, 1.0f)
-		, specular(0.0f, 0.0f, 0.0f, 1.0f)
-		, reflect(0.0f, 0.0f, 0.0f, 1.0f)
-		, emissive(0.0f, 0.0f, 0.0f, 1.0f)
-		, optical_density(0.0f)
-		, has_texture(0)
-		, reflection_enabled(0) {
-	}
-
-	MaterialBuffer(const vec4_f32& ambient,
-	               const vec4_f32& diffuse,
-	               const vec4_f32& specular,
-	               const vec4_f32& reflect,
-	               const vec4_f32& emissive,
-	               const f32 optical_density,
-	               const bool has_texture,
-	               const bool reflection_enabled) noexcept
-		: ambient(ambient)
-		, diffuse(diffuse)
-		, specular(specular)
-		, reflect(reflect)
-		, emissive(emissive)
-		, optical_density(optical_density)
-		, has_texture(has_texture)
-		, reflection_enabled(reflection_enabled) {
-	}
-
-	vec4_f32 ambient;
-	vec4_f32 diffuse;
-	vec4_f32 specular;
-	vec4_f32 reflect;
-	vec4_f32 emissive;
-	f32 optical_density;
-	u32 has_texture;
-	u32 reflection_enabled;
+	vec4_f32 ambient = {};
+	vec4_f32 diffuse = {};
+	vec4_f32 specular = {};
+	vec4_f32 reflect = {};
+	vec4_f32 emissive = {};
+	f32 optical_density = {};
+	u32 has_texture = {};
+	u32 reflection_enabled = {};
 };
 
 
 struct ModelBuffer {
-	ModelBuffer() noexcept
-		: world(XMMatrixIdentity())
-		, world_inv_transpose(XMMatrixIdentity())
-		, texTransform(XMMatrixIdentity()) {
-	}
-
-	XMMATRIX       world;
-	XMMATRIX       world_inv_transpose;
-	XMMATRIX       texTransform;
+	XMMATRIX       world = XMMatrixIdentity();
+	XMMATRIX       world_inv_transpose = XMMatrixIdentity();
+	XMMATRIX       texTransform = XMMatrixIdentity();
 	MaterialBuffer mat;
 };
 
@@ -68,23 +33,9 @@ struct ModelBuffer {
 //----------------------------------------------------------------------------------
 
 struct Fog {
-	Fog() noexcept
-		: color(1.0f, 1.0f, 1.0f, 1.0f)
-		, start(0.0f)
-		, range(-1.0f) {
-	}
-
-	Fog(const vec4_f32& color,
-	    const f32 start,
-	    const f32 range) noexcept
-		: color(color)
-		, start(start)
-		, range(range) {
-	}
-
-	vec4_f32 color;
-	f32 start;
-	f32 range;
+	vec4_f32 color = { 1.0f };
+	f32 start = 0.0f;
+	f32 range = -1.0f;
 	vec2_f32 pad;
 };
 
@@ -123,142 +74,62 @@ struct LightBuffer {
 		, ambient(ambient_color) {
 	}
 
-	u32 num_directional_lights;
-	u32 num_point_lights;
-	u32 num_spot_lights;
-	u32 pad0;
+	u32 num_directional_lights = 0;
+	u32 num_point_lights = 0;
+	u32 num_spot_lights = 0;
+	u32 pad0 = 0;
 
-	u32 num_shadow_directional_lights;
-	u32 num_shadow_point_lights;
-	u32 num_shadow_spot_lights;
-	u32 pad1;
+	u32 num_shadow_directional_lights = 0;
+	u32 num_shadow_point_lights = 0;
+	u32 num_shadow_spot_lights = 0;
+	u32 pad1 = 0;
 
-	vec4_f32 ambient;
+	vec4_f32 ambient = {};
 };
 
 
 struct DirectionalLightBuffer {
-	DirectionalLightBuffer() noexcept
-		: diffuse_color(0.0f, 0.0f, 0.0f, 1.0f)
-		, specular(0.0f, 0.0f, 0.0f, 1.0f)
-		, direction(0.0f, 0.0f, 0.0f)
-		, pad(0.0f)
-		, world_to_projection(XMMatrixIdentity()) {
-	}
-
-	DirectionalLightBuffer(const vec4_f32& diffuse,
-	                       const vec3_f32& direction,
-	                       const vec4_f32& specular,
-	                       CXMMATRIX world_to_proj) noexcept
-		: diffuse_color(diffuse)
-		, specular(specular)
-		, direction(direction)
-		, pad(0.0f)
-		, world_to_projection(world_to_proj) {
-	}
-
-	vec4_f32 diffuse_color;
-	vec4_f32 specular; //specular.w is the specular power
-	vec3_f32 direction;
-	f32  pad;
-	XMMATRIX world_to_projection;
+	vec4_f32 diffuse_color = {};
+	vec4_f32 specular = {}; //specular.w is the specular power
+	vec3_f32 direction = {};
+	u32 pad = {};
+	XMMATRIX world_to_projection = XMMatrixIdentity();
 };
 
 
 struct PointLightBuffer {
-	PointLightBuffer() noexcept
-		: diffuse_color(0.0f, 0.0f, 0.0f, 1.0f)
-		, specular(0.0f, 0.0f, 0.0f, 1.0f)
-		, position(0.0f, 0.0f, 1.0f)
-		, range(0.0f)
-		, attenuation(0.0f, 0.0f, 0.0f)
-		, pad(0.0f) {
-	}
-
-	PointLightBuffer(const vec4_f32& diffuse_color,
-	                 const vec4_f32& specular,
-	                 const vec3_f32& position,
-	                 const f32 range,
-	                 const vec3_f32& attenuation) noexcept
-		: diffuse_color(diffuse_color)
-		, specular(specular)
-		, position(position)
-		, range(range)
-		, attenuation(attenuation)
-		, pad(0.0f) {
-	}
-
-	vec4_f32 diffuse_color;
-	vec4_f32 specular; //specular.w is the specular power
-	vec3_f32 position;
-	f32      range;
+	vec4_f32 diffuse_color = {};
+	vec4_f32 specular = {}; //specular.w is the specular power
+	vec3_f32 position = {};
+	f32      range = 0;
 	vec3_f32 attenuation;
-	f32 pad;
+	u32 pad;
 };
 
 
 struct ShadowedPointLightBuffer {
-	ShadowedPointLightBuffer() noexcept
-		: world_to_light(XMMatrixIdentity())
-		, projection_values(0.0f, 0.0f)
-		, pad(0.0f, 0.0f) {
-	}
-
 	PointLightBuffer light_buffer;
-	XMMATRIX world_to_light;
-	vec2_f32 projection_values;
-	vec2_f32 pad;
+	XMMATRIX world_to_light = XMMatrixIdentity();
+	vec2_f32 projection_values = {};
+	vec2_f32 pad = {};
 };
 
 
 struct SpotLightBuffer {
-	SpotLightBuffer() noexcept
-		: diffuse_color(0.0f, 0.0f, 0.0f, 1.0f)
-		, specular(0.0f, 0.0f, 0.0f, 1.0f)
-		, position(0.0f, 0.0f, 0.0f)
-		, range(0.0f)
-		, direction(0.0f, 0.0f, 0.0f)
-		, cos_umbra(0.0f)
-		, cos_penumbra(0.0f)
-		, attenuation(0.0f, 0.0f, 0.0f) {
-	}
-
-	SpotLightBuffer(const vec4_f32& diffuse_color,
-	                const vec4_f32& specular,
-	                const vec3_f32& position,
-	                const f32 range,
-	                const vec3_f32& direction,
-	                const f32 cos_umbra,
-	                const f32 cos_penumbra,
-	                const vec3_f32& attenuation) noexcept
-		: diffuse_color(diffuse_color)
-		, specular(specular)
-		, position(position)
-		, range(range)
-		, direction(direction)
-		, cos_umbra(cos_umbra)
-		, cos_penumbra(cos_penumbra)
-		, attenuation(attenuation) {
-	}
-
-	vec4_f32 diffuse_color;
-	vec4_f32 specular; //specular.w is the specular power
-	vec3_f32 position;
-	f32      range;
-	vec3_f32 direction;
-	f32      cos_umbra;
-	f32      cos_penumbra;
-	vec3_f32 attenuation;
+	vec4_f32 diffuse_color = {};
+	vec4_f32 specular = {}; //specular.w is the specular power
+	vec3_f32 position = {};
+	f32      range = 0.0f;
+	vec3_f32 direction = {};
+	f32      cos_umbra = 0.0f;
+	f32      cos_penumbra = 0.0f;
+	vec3_f32 attenuation = {};
 };
 
 
 struct ShadowedSpotLightBuffer {
-	ShadowedSpotLightBuffer() noexcept
-		: world_to_projection(XMMatrixIdentity()) {
-	}
-
 	SpotLightBuffer light_buffer;
-	XMMATRIX        world_to_projection;
+	XMMATRIX        world_to_projection = XMMatrixIdentity();
 };
 
 
@@ -268,40 +139,14 @@ struct ShadowedSpotLightBuffer {
 //----------------------------------------------------------------------------------
 
 struct CameraBuffer {
-	CameraBuffer() noexcept
-		: camera_to_world(XMMatrixIdentity())
-		, world_to_camera(XMMatrixIdentity())
-		, camera_to_projection(XMMatrixIdentity()) {
-	}
-
-	CameraBuffer(CXMMATRIX camera_to_world,
-	             CXMMATRIX world_to_camera,
-	             CXMMATRIX camera_to_projection,
-	             const Fog& fog) noexcept
-		: camera_to_world(camera_to_world)
-		, world_to_camera(world_to_camera)
-		, camera_to_projection(camera_to_projection)
-		, fog(fog) {
-	}
-
-	XMMATRIX camera_to_world;
-	XMMATRIX world_to_camera;
-	XMMATRIX camera_to_projection;
+	XMMATRIX camera_to_world = XMMatrixIdentity();
+	XMMATRIX world_to_camera = XMMatrixIdentity();
+	XMMATRIX camera_to_projection = XMMatrixIdentity();
 	Fog      fog;
 };
 
 
 struct AltCameraBuffer {
-	AltCameraBuffer() noexcept
-		: world_to_camera(XMMatrixIdentity())
-		, camera_to_projection(XMMatrixIdentity()) {
-	}
-
-	AltCameraBuffer(CXMMATRIX world_to_cam, CXMMATRIX cam_to_proj) noexcept
-		: world_to_camera(world_to_cam)
-		, camera_to_projection(cam_to_proj) {
-	}
-
-	XMMATRIX world_to_camera;
-	XMMATRIX camera_to_projection;
+	XMMATRIX world_to_camera = XMMatrixIdentity();
+	XMMATRIX camera_to_projection = XMMatrixIdentity();
 };
