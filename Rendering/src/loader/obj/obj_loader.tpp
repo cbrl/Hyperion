@@ -50,7 +50,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 	// Make sure the file exists first
 	if (!fs::exists(file)) {
 		Logger::log(LogLevel::err, "File does not exist: {}", file.string());
-		throw std::exception("OBJ file not found");
+		ThrowIfFailed(false, "OBJ file does not exist: " + file.string());
 	}
 
 	// Set the coordinate system
@@ -122,8 +122,8 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 	// Open the file
 	ifstream stream(file.string());
 	if (stream.fail()) {
-		Logger::log(LogLevel::err, "Could not open obj file: {}", file.string());
-		throw std::exception("Could not open obj file");
+		Logger::log(LogLevel::err, "Could not open OBJ file: {}", file.string());
+		ThrowIfFailed(false, "Could not open OBJ file: " + file.string());
 	}
 
 
@@ -146,13 +146,13 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 		line = TrimWhiteSpace(line);
 
 		// Create a stringstream to easily read data into variables
-		std::stringstream stream(line);
+		std::stringstream s_stream(line);
 
 
 		// Vertex
 		if (token == ObjTokens::vertex) {
 			vec3_f32 position;
-			stream >> position.x >> position.y >> position.z;
+			s_stream >> position.x >> position.y >> position.z;
 
 			if (rh_coord) {
 				position.z *= -1.0f;
@@ -164,7 +164,7 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 		// Normal
 		else if (token == ObjTokens::normal) {
 			vec3_f32 normal;
-			stream >> normal.x >> normal.y >> normal.z;
+			s_stream >> normal.x >> normal.y >> normal.z;
 
 			if (rh_coord) {
 				normal.z *= -1.0f;
@@ -176,7 +176,7 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 		// Texture
 		else if (token == ObjTokens::texture) {
 			vec2_f32 texCoord;
-			stream >> texCoord.x >> texCoord.y;
+			s_stream >> texCoord.x >> texCoord.y;
 
 			if (rh_coord) {
 				texCoord.y = 1.0f - texCoord.y;
@@ -188,7 +188,7 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 		// Group
 		else if (token == ObjTokens::group) {
 			std::string name;
-			stream >> name;
+			s_stream >> name;
 
 			groups.emplace_back();
 			groups.back().name        = name;
@@ -232,7 +232,7 @@ void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 	ifstream stream(mat_file.string());
 	if (stream.fail()) {
 		Logger::log(LogLevel::err, "Could not open mtl file: {}", mat_file.string());
-		throw std::exception("Could not open mtl file");
+		ThrowIfFailed(false, "Could not open mtl file: " + mat_file.string());
 	}
 
 

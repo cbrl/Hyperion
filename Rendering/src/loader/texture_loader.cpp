@@ -19,6 +19,8 @@ void InitErrorTextureData() {
 			else error_tex_data[i][j] = color;
 		}
 	}
+
+	error_tex_initialized = true;
 }
 
 
@@ -26,7 +28,6 @@ void CreateErrorTexture(ID3D11Device& device, ID3D11ShaderResourceView** srv_out
 
 	if (!error_tex_initialized) {
 		InitErrorTextureData();
-		error_tex_initialized = true;
 	}
 
 	ComPtr<ID3D11Texture2D> texture;

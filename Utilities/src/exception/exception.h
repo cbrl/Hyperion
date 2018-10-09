@@ -5,6 +5,7 @@
 // Includes
 //----------------------------------------------------------------------------------
 
+#include "string/string.h"
 #include <cassert>
 #include <stdexcept>
 #include <iostream>
@@ -18,7 +19,7 @@
 template<typename ExceptionT = std::runtime_error>
 inline void ThrowIfFailed(bool result, const std::string& msg = "") {
 	if (!result) {
-		std::cerr << msg.c_str() << std::endl;
+		std::cerr << msg << std::endl;
 		throw ExceptionT(msg);
 	}
 }
