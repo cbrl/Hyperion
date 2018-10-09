@@ -23,15 +23,12 @@ private:
 		}
 	}
 
-	~Logger() {
-		file.reset();
-		console.reset();
-	}
-
 
 public:
 	Logger(const Logger& logger) = delete;
 	Logger(Logger&& logger) = delete;
+
+	~Logger() = default;
 
 	Logger& operator=(const Logger& logger) = delete;
 	Logger& operator=(Logger&& logger) = delete;
