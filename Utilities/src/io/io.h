@@ -4,7 +4,18 @@
 #include <filesystem>
 
 
-// filesystem namespace alias
+// fstream
+using std::fstream;
+using std::ifstream;
+using std::ofstream;
+
+// wfstream
+using std::wfstream;
+using std::wifstream;
+using std::wofstream;
+
+
+// filesystem namespace
 namespace fs = std::filesystem;
 
 

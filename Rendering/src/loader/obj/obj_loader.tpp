@@ -49,7 +49,7 @@ ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
 
 	// Make sure the file exists first
 	if (!fs::exists(file)) {
-		Logger::log(LogLevel::err, "OBJ file does not exist: {}", file.string());
+		Logger::log(LogLevel::err, "File does not exist: {}", file.string());
 		ThrowIfFailed(false, "OBJ file does not exist: " + file.string());
 	}
 
@@ -120,12 +120,10 @@ template<typename VertexT>
 void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 
 	// Open the file
-	std::ifstream stream(file.string());
-
+	ifstream stream(file.string());
 	if (stream.fail()) {
-		const char* err = std::strerror(errno);
-		Logger::log(LogLevel::err, "Could not open OBJ file {} - {}", file.string(), err);
-		ThrowIfFailed(false, "Could not open OBJ file " + file.string() + " - " + err);
+		Logger::log(LogLevel::err, "Could not open OBJ file: {}", file.string());
+		ThrowIfFailed(false, "Could not open OBJ file: " + file.string());
 	}
 
 
@@ -135,7 +133,6 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 
 	std::string line;
 	while (std::getline(stream, line)) {
-
 		line = TrimWhiteSpace(line);
 		if (line[0] == ObjTokens::comment || line.empty()) {
 			continue;
@@ -155,9 +152,7 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 		// Vertex
 		if (token == ObjTokens::vertex) {
 			vec3_f32 position;
-			s_stream >> position.x;
-			s_stream >> position.y;
-			s_stream >> position.z;
+			s_stream >> position.x >> position.y >> position.z;
 
 			if (rh_coord) {
 				position.z *= -1.0f;
@@ -169,9 +164,7 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 		// Normal
 		else if (token == ObjTokens::normal) {
 			vec3_f32 normal;
-			s_stream >> normal.x;
-			s_stream >> normal.y;
-			s_stream >> normal.z;
+			s_stream >> normal.x >> normal.y >> normal.z;
 
 			if (rh_coord) {
 				normal.z *= -1.0f;
@@ -183,8 +176,7 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 		// Texture
 		else if (token == ObjTokens::texture) {
 			vec2_f32 texCoord;
-			s_stream >> texCoord.x;
-			s_stream >> texCoord.y;
+			s_stream >> texCoord.x >> texCoord.y;
 
 			if (rh_coord) {
 				texCoord.y = 1.0f - texCoord.y;
@@ -237,12 +229,10 @@ template<typename VertexT>
 void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
 	// Open the material file
-	std::ifstream stream(mat_file.string());
-
+	ifstream stream(mat_file.string());
 	if (stream.fail()) {
-		const char* err = std::strerror(errno);
-		Logger::log(LogLevel::err, "Could not open mtl file {} - {}", mat_file.string(), err);
-		ThrowIfFailed(false, "Could not open mtl file " + mat_file.string() + " - " + err);
+		Logger::log(LogLevel::err, "Could not open mtl file: {}", mat_file.string());
+		ThrowIfFailed(false, "Could not open mtl file: " + mat_file.string());
 	}
 
 
@@ -252,7 +242,6 @@ void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
 	std::string line;
 	while (std::getline(stream, line)) {
-
 		line = TrimWhiteSpace(line);
 		if (line[0] == ObjTokens::comment || line.empty()) {
 			continue;
@@ -266,7 +255,7 @@ void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 		line = TrimWhiteSpace(line);
 
 		// Create a stringstream to easily read data into variables
-		std::stringstream s_stream(line);
+		std::stringstream stream(line);
 
 
 		// New Material
@@ -278,48 +267,48 @@ void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
 		// Diffuse Color
 		else if (token == ObjTokens::diffuse_color) {
-			s_stream >> materials.back().Kd.x;
-			s_stream >> materials.back().Kd.y;
-			s_stream >> materials.back().Kd.z;
+			stream >> materials.back().Kd.x;
+			stream >> materials.back().Kd.y;
+			stream >> materials.back().Kd.z;
 			materials.back().Kd.w = 1.0f;
 		}
 
 		// Ambient Color
 		else if (token == ObjTokens::ambient_color) {
-			s_stream >> materials.back().Ka.x;
-			s_stream >> materials.back().Ka.y;
-			s_stream >> materials.back().Ka.z;
+			stream >> materials.back().Ka.x;
+			stream >> materials.back().Ka.y;
+			stream >> materials.back().Ka.z;
 			materials.back().Ka.w = 1.0f;
 		}
 
 		// Specular Color
 		else if (token == ObjTokens::specular_color) {
-			s_stream >> materials.back().Ks.x;
-			s_stream >> materials.back().Ks.y;
-			s_stream >> materials.back().Ks.z;
+			stream >> materials.back().Ks.x;
+			stream >> materials.back().Ks.y;
+			stream >> materials.back().Ks.z;
 		}
 
 		// Emissive Color
 		else if (token == ObjTokens::emissive_color) {
-			s_stream >> materials.back().Ke.x;
-			s_stream >> materials.back().Ke.y;
-			s_stream >> materials.back().Ke.z;
+			stream >> materials.back().Ke.x;
+			stream >> materials.back().Ke.y;
+			stream >> materials.back().Ke.z;
 			materials.back().Ke.w = 1.0f;
 		}
 
 		// Specular Expononet
 		else if (token == ObjTokens::specular_exponent) {
-			s_stream >> materials.back().Ks.w;
+			stream >> materials.back().Ks.w;
 		}
 
 		// Optical Density
 		else if (token == ObjTokens::optical_density) {
-			s_stream >> materials.back().Ni;
+			stream >> materials.back().Ni;
 		}
 
 		// Dissolve (transparency)
 		else if (token == ObjTokens::transparency) {
-			s_stream >> materials.back().Kd.w;
+			stream >> materials.back().Kd.w;
 
 			if (materials.back().Kd.w < 1.0f) {
 				materials.back().transparency = true;
@@ -328,7 +317,7 @@ void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
 		// Illumination
 		else if (token == ObjTokens::illumination_model) {
-			s_stream >> materials.back().illum;
+			stream >> materials.back().illum;
 		}
 
 		// Diffuse Map
