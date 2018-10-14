@@ -65,8 +65,6 @@ Engine::Engine(std::wstring title, DisplayConfig display_config)
 
 Engine::~Engine() {
 
-	Logger::logFile(LogLevel::info, "<==========================END==========================>\n");
-
 	// Explicity delete the scene before the rendering manager.
 	// This prevents D3D from potentially reporting live resources
 	// that are going to be deleted right after the report.
@@ -79,7 +77,6 @@ void Engine::init(std::wstring title, DisplayConfig display_config) {
 	// Create the console
 	AllocateConsole();
 
-	Logger::logFile(LogLevel::info, "<=========================START=========================>");
 
 	// Get the display resolution
 	{

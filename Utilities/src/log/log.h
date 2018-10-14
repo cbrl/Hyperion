@@ -17,6 +17,8 @@ private:
 			file->set_level(LogLevel::debug);
 			console->set_level(LogLevel::debug);
 			#endif
+
+			file->log(LogLevel::info, "<=========================START=========================>");
 		}
 		catch (const spdlog::spdlog_ex& ex) {
 			std::cout << "Log initialization failed: " << ex.what() << std::endl;
@@ -28,7 +30,9 @@ public:
 	Logger(const Logger& logger) = delete;
 	Logger(Logger&& logger) = delete;
 
-	~Logger() = default;
+	~Logger() {
+		file->log(LogLevel::info, "<==========================END==========================>\n");
+	}
 
 	Logger& operator=(const Logger& logger) = delete;
 	Logger& operator=(Logger&& logger) = delete;
