@@ -36,12 +36,6 @@
     <Filter Include="Header Files\timer">
       <UniqueIdentifier>{00658588-272d-4982-9711-030afd966cc9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\memory">
-      <UniqueIdentifier>{7b6f85bf-1701-4bde-a658-24db951bd013}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\timer">
-      <UniqueIdentifier>{a768c562-8f61-4724-9da7-c1f62fa64e86}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\sysmon">
       <UniqueIdentifier>{c130fc05-7574-4a91-ae46-09bd2c81c7c7}</UniqueIdentifier>
     </Filter>
@@ -56,9 +50,6 @@
     </Filter>
     <Filter Include="Header Files\memory\handle">
       <UniqueIdentifier>{c2dc4a9e-77fe-4652-909c-aca45c3be5db}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\memory\handle">
-      <UniqueIdentifier>{96a44e27-2c05-4060-a6bd-d05c40e81f60}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\exception">
       <UniqueIdentifier>{9b13a388-1e01-4a76-b0d2-90b6d1d89485}</UniqueIdentifier>
@@ -306,18 +297,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\memory\resource_pool.tpp">
-      <Filter>Source Files\memory</Filter>
-    </None>
-    <None Include="src\memory\handle\handle_table.tpp">
-      <Filter>Source Files\memory\handle</Filter>
-    </None>
-    <None Include="src\timer\timer.tpp">
-      <Filter>Source Files\timer</Filter>
-    </None>
-    <None Include="src\memory\managed_resource_map.tpp">
-      <Filter>Source Files\memory</Filter>
-    </None>
     <None Include="src\log\spdlog\fmt\bundled\LICENSE.rst">
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
     </None>
@@ -327,6 +306,18 @@
     </None>
     <None Include="src\io\line_reader.tpp">
       <Filter>Header Files\io</Filter>
+    </None>
+    <None Include="src\memory\managed_resource_map.tpp">
+      <Filter>Header Files\memory</Filter>
+    </None>
+    <None Include="src\memory\resource_pool.tpp">
+      <Filter>Header Files\memory</Filter>
+    </None>
+    <None Include="src\memory\handle\handle_table.tpp">
+      <Filter>Header Files\memory\handle</Filter>
+    </None>
+    <None Include="src\timer\timer.tpp">
+      <Filter>Header Files\timer</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -72,17 +72,8 @@
     <Filter Include="Source Files\buffer">
       <UniqueIdentifier>{2be99d4f-977e-4da5-81af-189bbd49072c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\resource\mesh">
-      <UniqueIdentifier>{7aec67e8-4e14-4253-9faa-07d9c27610a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\loader">
       <UniqueIdentifier>{0cdc4265-ea56-43b3-b251-fabb20535b77}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\loader\obj">
-      <UniqueIdentifier>{f2150c16-65eb-4d61-8e48-723182c9d88c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\geometry\shapes">
-      <UniqueIdentifier>{0391e9da-d063-4505-9771-7584f2ad70cb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\renderer">
       <UniqueIdentifier>{2a1c52de-eafb-460e-b9eb-738e495ce11b}</UniqueIdentifier>
@@ -274,9 +265,6 @@
     <ClInclude Include="src\resource\resource.h">
       <Filter>Header Files\resource</Filter>
     </ClInclude>
-    <ClInclude Include="src\loader\obj\obj_loader.tpp">
-      <Filter>Source Files\loader\obj</Filter>
-    </ClInclude>
     <ClInclude Include="src\renderer\renderer.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
@@ -328,38 +316,41 @@
     <ClInclude Include="src\resource\texture\texture_factory.h">
       <Filter>Header Files\resource\texture</Filter>
     </ClInclude>
+    <ClInclude Include="src\loader\obj\obj_loader.tpp">
+      <Filter>Header Files\loader\obj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\resource\resource_mgr.tpp">
-      <Filter>Source Files\resource</Filter>
-    </None>
-    <None Include="src\resource\model\blueprint_factory.tpp">
-      <Filter>Source Files\resource\model</Filter>
-    </None>
-    <None Include="src\resource\model\model_output.tpp">
-      <Filter>Source Files\resource\model</Filter>
-    </None>
-    <None Include="src\resource\mesh\mesh.tpp">
-      <Filter>Source Files\resource\mesh</Filter>
-    </None>
-    <None Include="src\loader\model_loader.tpp">
-      <Filter>Source Files\loader</Filter>
-    </None>
-    <None Include="src\geometry\shapes\shapes.tpp">
-      <Filter>Source Files\geometry\shapes</Filter>
-    </None>
+    <None Include="packages.config" />
     <None Include="src\buffer\constant_buffer.tpp">
-      <Filter>Source Files\buffer</Filter>
+      <Filter>Header Files\buffer</Filter>
     </None>
     <None Include="src\buffer\structured_buffer.tpp">
-      <Filter>Source Files\buffer</Filter>
+      <Filter>Header Files\buffer</Filter>
+    </None>
+    <None Include="src\geometry\shapes\shapes.tpp">
+      <Filter>Header Files\geometry\shapes</Filter>
+    </None>
+    <None Include="src\loader\model_loader.tpp">
+      <Filter>Header Files\loader</Filter>
     </None>
     <None Include="src\renderer\renderer.tpp">
-      <Filter>Source Files\renderer</Filter>
+      <Filter>Header Files\renderer</Filter>
+    </None>
+    <None Include="src\resource\mesh\mesh.tpp">
+      <Filter>Header Files\resource\mesh</Filter>
+    </None>
+    <None Include="src\resource\model\blueprint_factory.tpp">
+      <Filter>Header Files\resource\model</Filter>
+    </None>
+    <None Include="src\resource\model\model_output.tpp">
+      <Filter>Header Files\resource\model</Filter>
     </None>
     <None Include="src\resource\shader\shader.tpp">
-      <Filter>Source Files\resource\shader</Filter>
+      <Filter>Header Files\resource\shader</Filter>
     </None>
-    <None Include="packages.config" />
+    <None Include="src\resource\resource_mgr.tpp">
+      <Filter>Header Files\resource</Filter>
+    </None>
   </ItemGroup>
 </Project>
