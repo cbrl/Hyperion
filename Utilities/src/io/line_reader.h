@@ -47,6 +47,7 @@ public:
 			return;
 		}
 
+		line_number = 1;
 		std::string line;
 		while (std::getline(file_stream, line)) {
 
@@ -79,7 +80,7 @@ protected:
 	std::string readToken();
 
 	void readUnusedTokens() {
-		for (; hasTokens(); ++token_iterator) {
+		while (hasTokens()) {
 			const auto token = readToken<std::string>();
 			Logger::log(LogLevel::warn, "{}:{} - Unused token: {}", file_path.string(), line_number, token);
 		}
@@ -103,7 +104,7 @@ private:
 	std::sregex_iterator token_iterator;
 	
 	fs::path file_path;
-	size_t   line_number = 0;
+	size_t   line_number = 1;
 };
 
 
