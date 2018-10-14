@@ -17,19 +17,19 @@ public:
 	LineReader& operator=(const LineReader& reader) = delete;
 	LineReader& operator=(LineReader&& reader) noexcept = default;
 
-	void readFile(const fs::path file, std::regex regex) {
+	void readFile(fs::path file, std::regex regex) {
 
-		file_path = std::move(file);
+		file_path    = std::move(file);
 		search_regex = std::move(regex);
 
-		if (!fs::exists(file)) {
-			Logger::log(LogLevel::err, "File not found: {}", file.string());
+		if (!fs::exists(file_path)) {
+			Logger::log(LogLevel::err, "File not found: {}", file_path.string());
 			return;
 		}
 
-		std::ifstream file_stream(file.string());
+		std::ifstream file_stream(file_path.string());
 		if (file_stream.fail()) {
-			Logger::log(LogLevel::err, "Could not open file: {}", file.string());
+			Logger::log(LogLevel::err, "Could not open file: {}", file_path.string());
 			return;
 		}
 
@@ -52,6 +52,7 @@ protected:
 	T readToken();
 
 	bool hasTokens() const {
+		static const std::sregex_iterator token_iterator_end;
 		return token_iterator != token_iterator_end;
 	}
 
@@ -61,12 +62,11 @@ protected:
 
 
 private:
-	std::regex search_regex;
+	std::regex           search_regex;
 	std::sregex_iterator token_iterator;
-	const std::sregex_iterator token_iterator_end;
-
+	
 	fs::path file_path;
-	size_t line_number;
+	size_t   line_number = 0;
 };
 
 
