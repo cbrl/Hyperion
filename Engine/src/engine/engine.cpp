@@ -7,6 +7,9 @@
 #define CONFIG_FILE "./config.txt"
 std::unique_ptr<Engine> SetupEngine() {
 
+	// Create the console
+	AllocateConsole();
+
 	ConfigReader reader;
 	reader.readConfig(CONFIG_FILE);
 
@@ -73,10 +76,6 @@ Engine::~Engine() {
 
 
 void Engine::init(std::wstring title, DisplayConfig display_config) {
-
-	// Create the console
-	AllocateConsole();
-
 
 	// Get the display resolution
 	{
