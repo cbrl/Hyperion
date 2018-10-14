@@ -46,38 +46,6 @@ struct Vector2 {
 	constexpr Vector2<T>& operator=(const Vector2<T>& copy) noexcept = default;
 	constexpr Vector2<T>& operator=(Vector2<T>&& move) noexcept = default;
 
-	// Operator +
-	template<typename U>
-	constexpr Vector2<T>& operator+=(const Vector2<U>& in) noexcept {
-		this->x += in.x;
-		this->y += in.y;
-		return *this;
-	}
-
-	// Operator -
-	template<typename U>
-	constexpr Vector2<T>& operator-=(const Vector2<U>& in) noexcept {
-		this->x -= in.x;
-		this->y -= in.y;
-		return *this;
-	}
-
-	// Operator *
-	template<typename U>
-	constexpr Vector2<T>& operator*=(U in) noexcept {
-		this->x *= in;
-		this->y *= in;
-		return *this;
-	}
-
-	// Operator /
-	template<typename U>
-	constexpr Vector2<T>& operator/=(U in) noexcept {
-		this->x /= in;
-		this->y /= in;
-		return *this;
-	}
-
 
 	//----------------------------------------------------------------------------------
 	// Members
@@ -86,49 +54,77 @@ struct Vector2 {
 	T y{};
 };
 
+
 // Operator ==
 template<typename T, typename U>
-constexpr bool operator==(const Vector2<T>& first, const Vector2<U>& second) noexcept {
-	return (first.x == second.x &&
-	        first.y == second.y);
+constexpr bool operator==(const Vector2<T>& cmp1, const Vector2<U>& cmp2) noexcept {
+	return (cmp1.x == cmp2.x &&
+	        cmp1.y == cmp2.y);
 }
-
 // Operator !=
 template<typename T, typename U>
-constexpr bool operator!=(const Vector2<T>& first, const Vector2<U>& second) noexcept {
-	return !(first == second);
+constexpr bool operator!=(const Vector2<T>& cmp1, const Vector2<U>& cmp2) noexcept {
+	return !(cmp1 == cmp2);
 }
 
+
+// Operator +=
+template<typename T, typename U>
+constexpr Vector2<T>& operator+=(Vector2<T>& vec, const Vector2<U>& add) noexcept {
+	vec.x += add.x;
+	vec.y += add.y;
+	return vec;
+}
 // Operator +
 template<typename T, typename U>
-constexpr Vector2<T> operator+(const Vector2<T>& first, const Vector2<U>& second) noexcept {
-	Vector2<T> v(first);
-	v += second;
-	return v;
+constexpr Vector2<T> operator+(Vector2<T> vec, const Vector2<U>& add) noexcept {
+	vec += add;
+	return vec;
 }
 
+
+// Operator -=
+template<typename T, typename U>
+constexpr Vector2<T>& operator-=(Vector2<T>& vec, const Vector2<U>& sub) noexcept {
+	vec.x -= sub.x;
+	vec.y -= sub.y;
+	return vec;
+}
 // Operator -
 template<typename T, typename U>
-constexpr Vector2<T> operator-(const Vector2<T>& first, const Vector2<U>& second) noexcept {
-	Vector2<T> v(first);
-	v -= second;
-	return v;
+constexpr Vector2<T> operator-(Vector2<T> vec, const Vector2<U>& second) noexcept {
+	vec -= second;
+	return vec;
 }
 
+
+// Operator *=
+template<typename T, typename U>
+constexpr Vector2<T>& operator*=(Vector2<T>& vec, U mul) noexcept {
+	vec.x *= mul;
+	vec.y *= mul;
+	return vec;
+}
 // Operator *
 template<typename T, typename U>
-constexpr Vector2<T> operator*(const Vector2<T>& vec, U mul) noexcept {
-	Vector2<T> v(vec);
-	v *= mul;
-	return v;
+constexpr Vector2<T> operator*(Vector2<T> vec, U mul) noexcept {
+	vec *= mul;
+	return vec;
 }
 
+
+// Operator /=
+template<typename T, typename U>
+constexpr Vector2<T>& operator/=(Vector2<T>& vec, U div) noexcept {
+	vec.x /= div;
+	vec.y /= div;
+	return vec;
+}
 // Operator /
 template<typename T, typename U>
-constexpr Vector2<T> operator/(const Vector2<T>& vec, U div) noexcept {
-	Vector2<T> v(vec);
-	v /= div;
-	return v;
+constexpr Vector2<T> operator/(Vector2<T> vec, U div) noexcept {
+	vec /= div;
+	return vec;
 }
 
 
@@ -187,42 +183,6 @@ struct Vector3 {
 	constexpr Vector3<T>& operator=(const Vector3<T>& copy) noexcept = default;
 	constexpr Vector3<T>& operator=(Vector3<T>&& move) noexcept = default;
 
-	// Operator +
-	template<typename U>
-	constexpr Vector3<T>& operator+=(const Vector3<U>& in) noexcept {
-		this->x += in.x;
-		this->y += in.y;
-		this->z += in.z;
-		return *this;
-	}
-
-	// Operator -
-	template<typename U>
-	constexpr Vector3<T>& operator-=(const Vector3<U>& in) noexcept {
-		this->x -= in.x;
-		this->y -= in.y;
-		this->z -= in.z;
-		return *this;
-	}
-
-	// Operator *
-	template<typename U>
-	constexpr Vector3<T>& operator*=(U in) noexcept {
-		this->x *= in;
-		this->y *= in;
-		this->z *= in;
-		return *this;
-	}
-
-	// Operator /
-	template<typename U>
-	constexpr Vector3<T>& operator/=(U in) noexcept {
-		this->x /= in;
-		this->y /= in;
-		this->z /= in;
-		return *this;
-	}
-
 
 	//----------------------------------------------------------------------------------
 	// Members
@@ -232,49 +192,82 @@ struct Vector3 {
 	T z{};
 };
 
+
 // Operator ==
 template<typename T, typename U>
-constexpr bool operator==(const Vector3<T>& first, const Vector3<U>& second) noexcept {
-	return (first.x == second.x &&
-	        first.y == second.y);
+constexpr bool operator==(const Vector3<T>& cmp1, const Vector3<U>& cmp2) noexcept {
+	return (cmp1.x == cmp2.x &&
+	        cmp1.y == cmp2.y &&
+	        cmp1.z == cmp2.z);
 }
-
 // Operator !=
 template<typename T, typename U>
-constexpr bool operator!=(const Vector3<T>& first, const Vector3<U>& second) noexcept {
-	return !(first == second);
+constexpr bool operator!=(const Vector3<T>& cmp1, const Vector3<U>& cmp2) noexcept {
+	return !(cmp1 == cmp2);
 }
 
+
+// Operator +=
+template<typename T, typename U>
+constexpr Vector3<T>& operator+=(Vector3<T>& vec, const Vector3<U>& add) noexcept {
+	vec.x += add.x;
+	vec.y += add.y;
+	vec.z += add.z;
+	return vec;
+}
 // Operator +
 template<typename T, typename U>
-constexpr Vector3<T> operator+(const Vector3<T>& first, const Vector3<U>& second) noexcept {
-	Vector3<T> v(first);
-	v += second;
-	return v;
+constexpr Vector3<T> operator+(Vector3<T> vec, const Vector3<U>& add) noexcept {
+	vec += add;
+	return vec;
 }
 
+
+// Operator -=
+template<typename T, typename U>
+constexpr Vector3<T>& operator-=(Vector3<T>& vec, const Vector3<U>& sub) noexcept {
+	vec.x -= sub.x;
+	vec.y -= sub.y;
+	vec.z -= sub.z;
+	return vec;
+}
 // Operator -
 template<typename T, typename U>
-constexpr Vector3<T> operator-(const Vector3<T>& first, const Vector3<U>& second) noexcept {
-	Vector3<T> v(first);
-	v -= second;
-	return v;
+constexpr Vector3<T> operator-(Vector3<T> vec, const Vector3<U>& second) noexcept {
+	vec -= second;
+	return vec;
 }
 
+
+// Operator *=
+template<typename T, typename U>
+constexpr Vector3<T>& operator*=(Vector3<T>& vec, U mul) noexcept {
+	vec.x *= mul;
+	vec.y *= mul;
+	vec.z *= mul;
+	return vec;
+}
 // Operator *
 template<typename T, typename U>
-constexpr Vector3<T> operator*(const Vector3<T>& vec, U mul) noexcept {
-	Vector3<T> v(vec);
-	v *= mul;
-	return v;
+constexpr Vector3<T> operator*(Vector3<T> vec, U mul) noexcept {
+	vec *= mul;
+	return vec;
 }
 
+
+// Operator /=
+template<typename T, typename U>
+constexpr Vector3<T>& operator/=(Vector3<T>& vec, U div) noexcept {
+	vec.x /= div;
+	vec.y /= div;
+	vec.z /= div;
+	return vec;
+}
 // Operator /
 template<typename T, typename U>
-constexpr Vector3<T> operator/(const Vector3<T>& vec, U div) noexcept {
-	Vector3<T> v(vec);
-	v /= div;
-	return v;
+constexpr Vector3<T> operator/(Vector3<T> vec, U div) noexcept {
+	vec /= div;
+	return vec;
 }
 
 
@@ -290,7 +283,7 @@ struct Vector4 {
 	//----------------------------------------------------------------------------------
 
 	constexpr Vector4() noexcept = default;
-	constexpr Vector4(const Vector4<T>& _xyzw) noexcept = default;
+	constexpr Vector4(const Vector4<T>& vec) noexcept = default;
 	constexpr Vector4(Vector4<T>&& vec) noexcept = default;
 
 	constexpr Vector4(T n) noexcept
@@ -344,47 +337,6 @@ struct Vector4 {
 	constexpr Vector4<T>& operator=(Vector4<T>&& move) noexcept = default;
 
 
-	// Operator +
-	template<typename U>
-	constexpr Vector4<T>& operator+=(const Vector4<U>& in) noexcept {
-		this->x += in.x;
-		this->y += in.y;
-		this->z += in.z;
-		this->w += in.w;
-		return *this;
-	}
-
-	// Operator -
-	template<typename U>
-	constexpr Vector4<T>& operator-=(const Vector4<U>& in) noexcept {
-		this->x -= in.x;
-		this->y -= in.y;
-		this->z -= in.z;
-		this->w -= in.w;
-		return *this;
-	}
-
-	// Operator *
-	template<typename U>
-	constexpr Vector4<T>& operator*=(U in) noexcept {
-		this->x *= in;
-		this->y *= in;
-		this->z *= in;
-		this->w *= in;
-		return *this;
-	}
-
-	// Operator /
-	template<typename U>
-	constexpr Vector4<T>& operator/=(U in) noexcept {
-		this->x /= in;
-		this->y /= in;
-		this->z /= in;
-		this->w /= in;
-		return *this;
-	}
-
-
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
@@ -394,49 +346,87 @@ struct Vector4 {
 	T w{};
 };
 
+
 // Operator ==
 template<typename T, typename U>
-constexpr bool operator==(const Vector4<T>& first, const Vector4<U>& second) noexcept {
-	return (first.x == second.x &&
-	        first.y == second.y);
+constexpr bool operator==(const Vector4<T>& cmp1, const Vector4<U>& cmp2) noexcept {
+	return (cmp1.x == cmp2.x &&
+	        cmp1.y == cmp2.y &&
+	        cmp1.z == cmp2.z &&
+	        cmp1.w == cmp2.w);
 }
-
 // Operator !=
 template<typename T, typename U>
-constexpr bool operator!=(const Vector4<T>& first, const Vector4<U>& second) noexcept {
-	return !(first == second);
+constexpr bool operator!=(const Vector4<T>& cmp1, const Vector4<U>& cmp2) noexcept {
+	return !(cmp1 == cmp2);
 }
 
+
+// Operator +=
+template<typename T, typename U>
+constexpr Vector4<T>& operator+=(Vector4<T>& vec, const Vector4<U>& add) noexcept {
+	vec.x += add.x;
+	vec.y += add.y;
+	vec.z += add.z;
+	vec.w += add.w;
+	return vec;
+}
 // Operator +
 template<typename T, typename U>
-constexpr Vector4<T> operator+(const Vector4<T>& first, const Vector4<U>& second) noexcept {
-	Vector4<T> v(first);
-	v += second;
-	return v;
+constexpr Vector4<T> operator+(Vector4<T> vec, const Vector4<U>& add) noexcept {
+	vec += add;
+	return vec;
 }
 
+
+// Operator -=
+template<typename T, typename U>
+constexpr Vector4<T>& operator-=(Vector4<T>& vec, const Vector4<U>& sub) noexcept {
+	vec.x -= sub.x;
+	vec.y -= sub.y;
+	vec.z -= sub.z;
+	vec.w -= sub.w;
+	return vec;
+}
 // Operator -
 template<typename T, typename U>
-constexpr Vector4<T> operator-(const Vector4<T>& first, const Vector4<U>& second) noexcept {
-	Vector4<T> v(first);
-	v -= second;
-	return v;
+constexpr Vector4<T> operator-(Vector4<T> vec, const Vector4<U>& second) noexcept {
+	vec -= second;
+	return vec;
 }
 
+
+// Operator *=
+template<typename T, typename U>
+constexpr Vector4<T>& operator*=(Vector4<T>& vec, U mul) noexcept {
+	vec.x *= mul;
+	vec.y *= mul;
+	vec.z *= mul;
+	vec.w *= mul;
+	return vec;
+}
 // Operator *
 template<typename T, typename U>
-constexpr Vector4<T> operator*(const Vector4<T>& vec, U mul) noexcept {
-	Vector4<T> v(vec);
-	v *= mul;
-	return v;
+constexpr Vector4<T> operator*(Vector4<T> vec, U mul) noexcept {
+	vec *= mul;
+	return vec;
 }
 
+
+// Operator /=
+template<typename T, typename U>
+constexpr Vector4<T>& operator/=(Vector4<T>& vec, U div) noexcept {
+	vec.x /= div;
+	vec.y /= div;
+	vec.z /= div;
+	vec.w /= div;
+	return vec;
+}
 // Operator /
 template<typename T, typename U>
-constexpr Vector4<T> operator/(const Vector4<T>& vec, U div) noexcept {
-	Vector4<T> v(vec);
-	v /= div;
-	return v;
+constexpr Vector4<T> operator/(Vector4<T> vec, U div) noexcept {
+	vec /= div;
+	return vec;
 }
 
 
