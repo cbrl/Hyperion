@@ -14,7 +14,7 @@ ConfigReader::ConfigReader() {
 
 
 void ConfigReader::readConfig(const fs::path& file) {
-	readFile(file, std::regex(R"([^\s\t\r\n]+)"));
+	readFile(file);
 }
 
 
