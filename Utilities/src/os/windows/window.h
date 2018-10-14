@@ -77,7 +77,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	WindowConfig(gsl::not_null<HINSTANCE> instance,
-				 std::wstring window_class_name,
+				 std::wstring window_class_name = L"Engine",
 				 u32 window_class_style = CS_HREDRAW | CS_VREDRAW);
 
 	WindowConfig(const WindowConfig& config) = delete;
