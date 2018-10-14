@@ -16,10 +16,9 @@
 // Functions
 //----------------------------------------------------------------------------------
 
-template<typename ExceptionT = std::runtime_error>
 inline void ThrowIfFailed(bool result, const std::string& msg = "") {
 	if (!result) {
-		std::cerr << msg << std::endl;
-		throw ExceptionT(msg);
+		//std::cerr << msg << std::endl;
+		throw std::runtime_error(msg);
 	}
 }
