@@ -19,6 +19,12 @@
     <Filter Include="Source Files\engine">
       <UniqueIdentifier>{97c6cc69-3abd-48cf-aaef-fa88174e6fbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\config">
+      <UniqueIdentifier>{ffe8f5b4-c068-409d-afc7-77dd8d476bc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\config">
+      <UniqueIdentifier>{6bc72442-adc1-4279-96f1-71df76ce9493}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\targetver.h">
@@ -27,10 +33,19 @@
     <ClInclude Include="src\engine\engine.h">
       <Filter>Header Files\engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\config\config_reader.h">
+      <Filter>Header Files\config</Filter>
+    </ClInclude>
+    <ClInclude Include="src\config\config_tokens.h">
+      <Filter>Header Files\config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\engine.cpp">
       <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config\config_reader.cpp">
+      <Filter>Source Files\config</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

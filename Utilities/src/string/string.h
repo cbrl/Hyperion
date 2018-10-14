@@ -21,11 +21,13 @@
 #include <cwchar>
 #include <locale>
 #include <codecvt>
-//#include <charconv>
+#include <charconv>
 
 #include <gsl/pointers>
 #include <gsl/string_span>
 
+#include <optional>
+#include <type_traits>
 
 
 //----------------------------------------------------------------------------------
@@ -95,7 +97,7 @@ inline std::wstring TrimWhiteSpace(const std::wstring& in) {
 
 // Split a std::string by a specified token
 template<typename StringT>
-std::vector<StringT> Split(const StringT& in, const typename StringT::value_type* token) {
+inline std::vector<StringT> Split(const StringT& in, const typename StringT::value_type* token) {
 
 	std::vector<StringT> out;
 	StringT token_s(token);
@@ -112,4 +114,54 @@ std::vector<StringT> Split(const StringT& in, const typename StringT::value_type
 	out.push_back(in.substr(start, end));
 
 	return out;
+}
+
+
+
+template<typename T>
+inline std::optional<T> StrTo(std::string_view in) {
+
+	static_assert(std::is_arithmetic_v<T>, "StrTo called with non-arithmetic type");
+	
+	T out = {};
+	const std::from_chars_result result = std::from_chars(in.data(), in.data() + in.size(), out);
+
+	if (result.ptr != (in.data() + in.size())
+	    || result.ec == std::errc::invalid_argument
+	    || result.ec == std::errc::result_out_of_range) {
+		
+		return {};
+	}
+
+	return out;
+}
+
+template<>
+inline std::optional<bool> StrTo(std::string_view in) {
+
+	if (in.size() == 1) {
+		if (in[0] == '0')
+			return false;
+		else
+			return true;
+	}
+	else if (in.size() == 4
+	         && in[0] == 't'
+	         && in[1] == 'r'
+	         && in[2] == 'u'
+	         && in[3] == 'e') {
+
+		return true;
+	}
+	else if (in.size() == 5
+	         && in[0] == 'f'
+	         && in[1] == 'a'
+	         && in[2] == 'l'
+	         && in[3] == 's'
+	         && in[4] == 'e') {
+		
+		return false;
+	}
+
+	return {};
 }

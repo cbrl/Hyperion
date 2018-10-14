@@ -66,6 +66,11 @@ public:
 		curr_desc = index;
 	}
 
+	// Priority: format > res_width > res_height > refresh_rate
+	void setNearestDisplayDesc(const vec2_u32& resolution,
+	                           u32 refresh_rate = 0,
+	                           DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN);
+
 	[[nodiscard]]
 	size_t getDisplayDescIndex() const noexcept {
 		return curr_desc;
@@ -77,7 +82,7 @@ public:
 	}
 
 	[[nodiscard]]
-	DXGI_MODE_DESC getDisplayDesc() const noexcept {
+	const DXGI_MODE_DESC& getDisplayDesc() const noexcept {
 		return display_desc_list[curr_desc];
 	}
 
@@ -220,57 +225,7 @@ public:
 
 
 private:
-	void init() {
-		ComPtr<IDXGIFactory2> factory;
-
-		// Create the DXGI factory
-		ThrowIfFailed(CreateDXGIFactory1(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(factory.GetAddressOf())),
-			"Failed to create dxgiFactory");
-
-		// Get the default adapter and output
-		ComPtr<IDXGIOutput> output;
-		factory->EnumAdapters1(0, adapter.ReleaseAndGetAddressOf());
-		adapter->EnumOutputs(0, output.GetAddressOf());
-		output.As(&adapter_out);
-
-		// Get the number of display modes
-		u32 mode_count;
-		adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED, &mode_count, nullptr);
-
-		// Get the display modes
-		std::vector<DXGI_MODE_DESC> display_modes(mode_count);
-		adapter_out->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM,
-			DXGI_ENUM_MODES_INTERLACED,
-			&mode_count,
-			display_modes.data());
-
-
-		// Discard the display modes that are below 800px wide or
-		// have a scaling mode of DXGI_MODE_SCALING_STRETCHED
-		for (u32 i = 0; i < mode_count; i++) {
-			if (display_modes[i].Width <= 800)
-				continue;
-			if (display_modes[i].Scaling == DXGI_MODE_SCALING_STRETCHED)
-				continue;
-
-			display_desc_list.push_back(display_modes[i]);
-		}
-
-
-		// Get the highest refresh rate display mode for the current resolution
-		for (u32 i = 0; i < display_desc_list.size(); ++i) {
-			//if (display_desc_list[i].Width == GetSystemMetrics(SM_CXSCREEN) &&
-			//	display_desc_list[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
-			if (display_desc_list[i].Width == display_desc_list[curr_desc].Width &&
-				display_desc_list[i].Height == display_desc_list[curr_desc].Height) {
-
-				const u32 new_rr = display_desc_list[i].RefreshRate.Numerator / display_desc_list[i].RefreshRate.Denominator;
-				const u32 old_rr = display_desc_list[curr_desc].RefreshRate.Numerator / display_desc_list[curr_desc].RefreshRate.Denominator;
-
-				if (new_rr > old_rr) curr_desc = i;
-			}
-		}
-	}
+	void init();
 
 
 private:

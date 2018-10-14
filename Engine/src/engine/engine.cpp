@@ -1,7 +1,34 @@
 #include "targetver.h"
 #include "engine.h"
-#include "systems/systems.h"
 #include "imgui_message_forwarder.h"
+#include "config/config_reader.h"
+
+
+#define CONFIG_FILE "./config.txt"
+std::unique_ptr<Engine> SetupEngine() {
+
+	ConfigReader reader;
+	reader.readConfig(CONFIG_FILE);
+
+	// Create display configuration
+	DisplayConfig display_config;
+	const auto* width = reader.getConfigVar<u32>(ConfigTokens::width);
+	const auto* height = reader.getConfigVar<u32>(ConfigTokens::height);
+	const auto* refresh = reader.getConfigVar<u32>(ConfigTokens::refresh);
+	if (width && height) {
+		if (refresh)
+			display_config.setNearestDisplayDesc({*width, *height}, *refresh);
+		else
+			display_config.setNearestDisplayDesc({*width, *height});
+	}
+
+	// Create Engine
+	const auto* title = reader.getConfigVar<std::string>(ConfigTokens::win_title);
+	const std::wstring window_title = title ? str2wstr(*title) : L"Engine";
+
+	return std::make_unique<Engine>(window_title, display_config);
+}
+
 
 
 LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -28,6 +55,14 @@ LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPAR
 
 
 
+Engine::Engine(std::wstring title, DisplayConfig display_config)
+	: exit_requested(false)
+	, resize_requested(false)
+	, toggle_fullscreen(false) {
+
+	init(std::move(title), std::move(display_config));
+}
+
 Engine::~Engine() {
 
 	Logger::logFile(LogLevel::info, "<==========================END==========================>\n");
@@ -39,16 +74,12 @@ Engine::~Engine() {
 }
 
 
-void Engine::init() {
+void Engine::init(std::wstring title, DisplayConfig display_config) {
 
 	// Create the console
 	AllocateConsole();
 
 	Logger::logFile(LogLevel::info, "<=========================START=========================>");
-
-
-	// Create the display configuration
-	DisplayConfig display_config(AAType::None, false, false);
 
 	// Get the display resolution
 	{
@@ -68,9 +99,9 @@ void Engine::init() {
 
 	// Create the main window
 	{
-		auto win_config = std::make_shared<WindowConfig>(gsl::make_not_null(GetModuleHandle(nullptr)), L"Engine");
+		auto win_config = std::make_shared<WindowConfig>(gsl::make_not_null(GetModuleHandle(nullptr)));
 		window = std::make_unique<Window>(win_config,
-		                                  L"Engine",
+		                                  title,
 		                                  display_config.getDisplayResolution());
 
 		msg_handler.on_fullscreen_toggle = [this]() {
@@ -110,7 +141,7 @@ void Engine::init() {
 	fps_counter->setWaitTime(250ms);
 
 	// Rendering Manager
-	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getWindow()), display_config);
+	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getWindow()), std::move(display_config));
 }
 
 

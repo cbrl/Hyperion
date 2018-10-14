@@ -93,6 +93,9 @@
     <Filter Include="Source Files\os\windows">
       <UniqueIdentifier>{7bf52c0a-f820-4c43-ae22-e5cccf02d1c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\resource">
+      <UniqueIdentifier>{11ce7afa-159f-4431-95b4-84bcb00446bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -272,6 +275,12 @@
     <ClInclude Include="src\os\windows\window.h">
       <Filter>Header Files\os\windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\resource\var_map.h">
+      <Filter>Header Files\resource</Filter>
+    </ClInclude>
+    <ClInclude Include="src\io\line_reader.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\sysmon\system_monitor.cpp">
@@ -313,5 +322,11 @@
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="src\resource\var_map.tpp">
+      <Filter>Header Files\resource</Filter>
+    </None>
+    <None Include="src\io\line_reader.tpp">
+      <Filter>Header Files\io</Filter>
+    </None>
   </ItemGroup>
 </Project>

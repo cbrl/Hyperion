@@ -124,7 +124,7 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 
 	if (stream.fail()) {
 		Logger::log(LogLevel::err, "Could not open OBJ file: {}", file.string());
-		ThrowIfFailed(false, "Could not open OBJ file: " + file.string());
+		throw std::runtime_error("Could not open OBJ file: " + file.string());
 	}
 
 
@@ -234,7 +234,7 @@ void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
 	if (stream.fail()) {
 		Logger::log(LogLevel::err, "Could not open mtl file: {}", mat_file.string());
-		ThrowIfFailed(false, "Could not open mtl file: " + mat_file.string());
+		throw std::runtime_error("Could not open mtl file: " + mat_file.string());
 	}
 
 

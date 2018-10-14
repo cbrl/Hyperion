@@ -126,6 +126,9 @@
     <Filter Include="Source Files\resource\texture">
       <UniqueIdentifier>{9a06a259-8487-47ae-8ef3-35d19e071ce9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\display">
+      <UniqueIdentifier>{1899d370-bffa-44e8-a55d-b259101a9d9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -196,6 +199,9 @@
     </ClCompile>
     <ClCompile Include="src\resource\texture\texture.cpp">
       <Filter>Source Files\resource\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\display\display_config.cpp">
+      <Filter>Source Files\display</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,9 @@
 #include "rendering_mgr.h"
 
 
+std::unique_ptr<Engine> SetupEngine();
+
+
 //----------------------------------------------------------------------------------
 // EngineMessageHandler
 //----------------------------------------------------------------------------------
@@ -60,12 +63,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Engine()
-		: exit_requested(false)
-		, resize_requested(false)
-		, toggle_fullscreen(false) {
-	}
-
+	Engine(std::wstring title, DisplayConfig display_config);
 	Engine(const Engine& engine) = delete;
 	Engine(Engine&& engine) = default;
 
@@ -83,14 +81,6 @@ public:
 
 	Engine& operator=(const Engine& engine) = delete;
 	Engine& operator=(Engine&& engine) = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Initialization
-	//----------------------------------------------------------------------------------
-
-	// Initialize the engine
-	void init();
 
 
 	//----------------------------------------------------------------------------------
@@ -220,6 +210,14 @@ public:
 
 
 private:
+	//----------------------------------------------------------------------------------
+	// Member Functions - Initialization
+	//----------------------------------------------------------------------------------
+	void init(std::wstring title, DisplayConfig display_config);
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Per Frame
+	//----------------------------------------------------------------------------------
 	void tick();
 	void updateSystem();
 	void updateRendering();

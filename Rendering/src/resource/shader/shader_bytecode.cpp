@@ -31,7 +31,7 @@ HRESULT CompileShaderToBytecode(const std::wstring& file,
 			OutputDebugStringA(static_cast<const char*>(error_msgs->GetBufferPointer()));
 
 			// Copy error message to file and notify user
-			ofstream fout("shader_error.txt");
+			std::ofstream fout("shader_error.txt");
 			if (fout) {
 				const char*  compile_errors = static_cast<const char*>(error_msgs->GetBufferPointer());
 				const size_t buffer_size    = error_msgs->GetBufferSize();

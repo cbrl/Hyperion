@@ -152,6 +152,7 @@
     <ClInclude Include="src\exception\exception.h" />
     <ClInclude Include="src\fps\fps.h" />
     <ClInclude Include="src\io\io.h" />
+    <ClInclude Include="src\io\line_reader.h" />
     <ClInclude Include="src\log\log.h" />
     <ClInclude Include="src\log\spdlog\contrib\sinks\step_file_sink.h" />
     <ClInclude Include="src\log\spdlog\details\async_logger_impl.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="src\os\windows\window.h" />
     <ClInclude Include="src\os\windows\windows.h" />
     <ClInclude Include="src\os\windows\win_utils.h" />
+    <ClInclude Include="src\resource\var_map.h" />
     <ClInclude Include="src\string\string.h" />
     <ClInclude Include="src\sysmon\system_monitor.h" />
     <ClInclude Include="src\timer\timer.h" />
@@ -208,10 +210,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="src\io\line_reader.tpp" />
     <None Include="src\log\spdlog\fmt\bundled\LICENSE.rst" />
     <None Include="src\memory\handle\handle_table.tpp" />
     <None Include="src\memory\managed_resource_map.tpp" />
     <None Include="src\memory\resource_pool.tpp" />
+    <None Include="src\resource\var_map.tpp" />
     <None Include="src\timer\timer.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
