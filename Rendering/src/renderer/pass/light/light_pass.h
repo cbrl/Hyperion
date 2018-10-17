@@ -6,6 +6,7 @@
 #include "buffer/shadow_map_buffer.h"
 #include "renderer/pass/depth/depth_pass.h"
 
+class RenderingConfig;
 class RenderStateMgr;
 class ResourceMgr;
 class ECS;
@@ -13,10 +14,12 @@ class Scene;
 
 class LightPass final {
 public:
-	LightPass(ID3D11Device& device,
+	LightPass(const RenderingConfig& rendering_config,
+	          ID3D11Device& device,
 	          ID3D11DeviceContext& device_context,
 	          RenderStateMgr& render_state_mgr,
 	          ResourceMgr& resource_mgr);
+
 	~LightPass() = default;
 
 	void XM_CALLCONV render(Scene& scene, FXMMATRIX world_to_projection);
@@ -43,8 +46,9 @@ private:
 
 private:
 	// Dependency References
-	ID3D11Device&        device;
-	ID3D11DeviceContext& device_context;
+	ID3D11Device&          device;
+	ID3D11DeviceContext&   device_context;
+	const RenderingConfig& rendering_config;
 
 	// Depth rendering pass
 	unique_ptr<DepthPass> depth_pass;

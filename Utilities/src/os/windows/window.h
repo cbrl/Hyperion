@@ -177,6 +177,13 @@ public:
 	}
 
 	[[nodiscard]]
+	std::string getWindowTitle() const noexcept {
+		char title[256];
+		GetWindowTextA(window, title, static_cast<int>(std::size(title)));
+		return std::string(title);
+	}
+
+	[[nodiscard]]
 	vec2_u32 getClientSize() const noexcept {
 		RECT client;
 		GetClientRect(window, &client);

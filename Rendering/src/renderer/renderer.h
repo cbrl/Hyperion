@@ -14,6 +14,7 @@
 
 
 class RenderingMgr;
+class RenderingConfig;
 
 
 class Renderer final {
@@ -23,6 +24,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	Renderer(DisplayConfig& display_config,
+	         const RenderingConfig& rendering_config,
 	         ID3D11Device& device,
 	         ID3D11DeviceContext& device_context,
 	         SwapChain& swap_chain,

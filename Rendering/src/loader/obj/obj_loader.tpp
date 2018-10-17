@@ -120,7 +120,7 @@ template<typename VertexT>
 void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 
 	// Open the file
-	std::ifstream stream(file.string());
+	std::ifstream stream(file);
 
 	if (stream.fail()) {
 		Logger::log(LogLevel::err, "Could not open OBJ file: {}", file.string());
@@ -230,7 +230,7 @@ template<typename VertexT>
 void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
 	// Open the material file
-	std::ifstream stream(mat_file.string());
+	std::ifstream stream(mat_file);
 
 	if (stream.fail()) {
 		Logger::log(LogLevel::err, "Could not open mtl file: {}", mat_file.string());

@@ -1,6 +1,6 @@
 #Display
-width 1440
-height 900
+width 1280
+height 720
 refresh 60
 vsync 0
 fullscreen 0

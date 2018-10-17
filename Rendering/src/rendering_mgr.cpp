@@ -6,10 +6,14 @@
 #include "imgui_impl_win32.h"
 
 
-RenderingMgr::RenderingMgr(gsl::not_null<HWND> window, DisplayConfig config) {
+RenderingMgr::RenderingMgr(gsl::not_null<HWND> window,
+                           DisplayConfig display_conf,
+                           RenderingConfig rendering_conf) {
 
-	// Display Configuration
-	display_config = std::make_unique<DisplayConfig>(std::move(config));
+	// Store Display/Rendering configuration
+	display_config = std::make_unique<DisplayConfig>(std::move(display_conf));
+	rendering_config = std::make_unique<RenderingConfig>(std::move(rendering_conf));
+
 
 	//----------------------------------------------------------------------------------
 	// Initialize Direct3D
@@ -35,6 +39,7 @@ RenderingMgr::RenderingMgr(gsl::not_null<HWND> window, DisplayConfig config) {
 	// Create the renderer
 	//----------------------------------------------------------------------------------
 	renderer = std::make_unique<Renderer>(*display_config,
+	                                      *rendering_config,
 	                                      direct3D->getDevice(),
 	                                      direct3D->getDeviceContext(),
 	                                      *swap_chain,

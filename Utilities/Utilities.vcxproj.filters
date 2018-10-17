@@ -272,6 +272,9 @@
     <ClInclude Include="src\io\line_reader.h">
       <Filter>Header Files\io</Filter>
     </ClInclude>
+    <ClInclude Include="src\io\file_writer.h">
+      <Filter>Header Files\io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\sysmon\system_monitor.cpp">

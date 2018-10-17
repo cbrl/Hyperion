@@ -19,8 +19,7 @@ public:
 
 	ShadowMapBuffer(ID3D11Device& device,
 	                u32 map_count,
-	                u32 width  = 512,
-	                u32 height = 512);
+	                vec2_u32 resolution = {512, 512});
 
 	ShadowMapBuffer(const ShadowMapBuffer& buffer) = delete;
 	ShadowMapBuffer(ShadowMapBuffer&& buffer) noexcept = default;
@@ -101,8 +100,7 @@ public:
 
 	ShadowCubeMapBuffer(ID3D11Device& device,
 	                    u32 cube_map_count,
-	                    u32 width  = 512,
-	                    u32 height = 512);
+	                    vec2_u32 resolution = {512, 512});
 
 	ShadowCubeMapBuffer(const ShadowCubeMapBuffer& buffer) = delete;
 	ShadowCubeMapBuffer(ShadowCubeMapBuffer&& buffer) noexcept = default;

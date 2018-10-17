@@ -1,5 +1,6 @@
 #pragma once
 
+#include "rendering_config.h"
 #include "direct3d/direct3d.h"
 #include "direct3d/swapchain.h"
 #include "resource/resource_mgr.h"
@@ -12,7 +13,10 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	RenderingMgr(gsl::not_null<HWND> window, DisplayConfig config);
+	RenderingMgr(gsl::not_null<HWND> window,
+	             DisplayConfig display_conf,
+	             RenderingConfig rendering_conf);
+
 	RenderingMgr(const RenderingMgr& mgr) = delete;
 	RenderingMgr(RenderingMgr&& mgr) noexcept = default;
 
@@ -64,6 +68,11 @@ public:
 	}
 
 	[[nodiscard]]
+	RenderingConfig& getRenderingConfig() noexcept {
+		return *rendering_config;
+	}
+
+	[[nodiscard]]
 	ID3D11Device& getDevice() const noexcept {
 		return direct3D->getDevice();
 	}
@@ -90,6 +99,7 @@ private:
 	//----------------------------------------------------------------------------------
 
 	unique_ptr<DisplayConfig> display_config;
+	unique_ptr<RenderingConfig> rendering_config;
 	unique_ptr<Direct3D> direct3D;
 	unique_ptr<SwapChain> swap_chain;
 	unique_ptr<ResourceMgr> resource_mgr;

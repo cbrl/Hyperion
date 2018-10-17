@@ -319,6 +319,9 @@
     <ClInclude Include="src\loader\obj\obj_loader.tpp">
       <Filter>Header Files\loader\obj</Filter>
     </ClInclude>
+    <ClInclude Include="src\rendering_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

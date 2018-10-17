@@ -153,6 +153,7 @@
     <ClInclude Include="src\fps\fps.h" />
     <ClInclude Include="src\io\io.h" />
     <ClInclude Include="src\io\line_reader.h" />
+    <ClInclude Include="src\io\file_writer.h" />
     <ClInclude Include="src\log\log.h" />
     <ClInclude Include="src\log\spdlog\contrib\sinks\step_file_sink.h" />
     <ClInclude Include="src\log\spdlog\details\async_logger_impl.h" />

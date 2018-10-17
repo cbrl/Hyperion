@@ -2,7 +2,8 @@
 #include "rendering_mgr.h"
 
 
-Renderer::Renderer(DisplayConfig& display_config, 
+Renderer::Renderer(DisplayConfig& display_config,
+                   const RenderingConfig& rendering_config,
                    ID3D11Device& device,
                    ID3D11DeviceContext& device_context,
                    SwapChain& swap_chain,
@@ -14,7 +15,7 @@ Renderer::Renderer(DisplayConfig& display_config,
 	render_state_mgr = std::make_unique<RenderStateMgr>(device, device_context);
 
 	// Create renderers
-	light_pass           = std::make_unique<LightPass>(device, device_context, *render_state_mgr, resource_mgr);
+	light_pass           = std::make_unique<LightPass>(rendering_config, device, device_context, *render_state_mgr, resource_mgr);
 	forward_pass         = std::make_unique<ForwardPass>(device, device_context, *render_state_mgr, resource_mgr);
 	sky_pass             = std::make_unique<SkyPass>(device_context, *render_state_mgr, resource_mgr);
 	bounding_volume_pass = std::make_unique<BoundingVolumePass>(device, device_context, *render_state_mgr, resource_mgr);

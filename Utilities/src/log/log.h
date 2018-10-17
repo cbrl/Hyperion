@@ -52,15 +52,14 @@ public:
 	}
 
 	// Log a message with both loggers
-	template<typename Arg1, typename... Args>
+	template<typename... ArgsT>
 	static void log(LogLevel level,
 	                const char* fmt,
-	                const Arg1& arg1,
-	                Args&&... args) {
+	                ArgsT&&... args) {
 
 		auto& instance = get();
-		if (instance.file) instance.file->log(level, fmt, arg1, std::forward<Args>(args)...);
-		if (instance.console) instance.console->log(level, fmt, arg1, std::forward<Args>(args)...);
+		if (instance.file) instance.file->log(level, fmt, std::forward<ArgsT>(args)...);
+		if (instance.console) instance.console->log(level, fmt, std::forward<ArgsT>(args)...);
 	}
 
 	// Set the level of both loggers
@@ -83,14 +82,13 @@ public:
 	}
 
 	// Log a message with the console logger
-	template<typename Arg1, typename... ArgsT>
+	template<typename... ArgsT>
 	static void logConsole(LogLevel level,
 	                       const char* fmt,
-	                       const Arg1& arg1,
 	                       ArgsT&&... args) {
 
 		auto& instance = get();
-		if (instance.console) instance.console->log(level, fmt, arg1, std::forward<ArgsT>(args)...);
+		if (instance.console) instance.console->log(level, fmt, std::forward<ArgsT>(args)...);
 	}
 
 	// Set the level of the console logger
@@ -112,14 +110,13 @@ public:
 	}
 
 	// Log a message with the file logger
-	template<typename Arg1, typename... ArgsT>
+	template<typename... ArgsT>
 	static void logFile(LogLevel level,
 	                    const char* fmt,
-	                    const Arg1& arg1,
 	                    ArgsT&&... args) {
 
 		auto& instance = get();
-		if (instance.file) instance.file->log(level, fmt, arg1, std::forward<ArgsT>(args)...);
+		if (instance.file) instance.file->log(level, fmt, std::forward<ArgsT>(args)...);
 	}
 
 	// Set the level of the file logger

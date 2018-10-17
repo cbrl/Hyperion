@@ -41,7 +41,7 @@ public:
 			return;
 		}
 
-		std::ifstream file_stream(file_path.string());
+		std::ifstream file_stream(file_path);
 		if (file_stream.fail()) {
 			Logger::log(LogLevel::err, "Could not open file: {}", file_path.string());
 			return;
@@ -82,17 +82,26 @@ protected:
 	void readUnusedTokens() {
 		while (hasTokens()) {
 			const auto token = readToken<std::string>();
-			Logger::log(LogLevel::warn, "{}:{} - Unused token: {}", file_path.string(), line_number, token);
+			Logger::log(LogLevel::warn, "{}:{} - Unused token: {}", getFilePath().string(), getLineNumber(), token);
 		}
 	}
 
-	bool hasTokens() const {
+	bool hasTokens() const noexcept {
 		static const std::sregex_iterator token_iterator_end;
 		return token_iterator != token_iterator_end;
 	}
 
-	const std::sregex_iterator& getCurrentToken() const {
+	const std::sregex_iterator& getCurrentToken() const noexcept {
 		return token_iterator;
+	}
+
+
+	const fs::path& getFilePath() const noexcept {
+		return file_path;
+	}
+
+	const size_t getLineNumber() const noexcept {
+		return line_number;
 	}
 
 

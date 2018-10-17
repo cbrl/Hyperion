@@ -63,7 +63,10 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Engine(std::wstring title, DisplayConfig display_config);
+	Engine(std::wstring title,
+	       DisplayConfig display_config,
+	       RenderingConfig rendering_config);
+
 	Engine(const Engine& engine) = delete;
 	Engine(Engine&& engine) = default;
 
@@ -213,7 +216,12 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Initialization
 	//----------------------------------------------------------------------------------
-	void init(std::wstring title, DisplayConfig display_config);
+	void init(std::wstring title,
+	          DisplayConfig display_config,
+	          RenderingConfig rendering_config);
+
+	void quit();
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Per Frame

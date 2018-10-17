@@ -184,6 +184,7 @@
     <ClInclude Include="src\renderer\pass\text\text_pass.h" />
     <ClInclude Include="src\renderer\renderer.h" />
     <ClInclude Include="src\renderer\state\render_state_mgr.h" />
+    <ClInclude Include="src\rendering_config.h" />
     <ClInclude Include="src\rendering_mgr.h" />
     <ClInclude Include="src\resource\font\font.h" />
     <ClInclude Include="src\resource\mesh\mesh.h" />

@@ -1,18 +1,21 @@
 #include "light_pass.h"
 
 #include "hlsl.h"
+#include "rendering_config.h"
 #include "scene/scene.h"
 #include "renderer/state/render_state_mgr.h"
 #include "resource/resource_mgr.h"
 #include "geometry/frustum/frustum.h"
 
 
-LightPass::LightPass(ID3D11Device& device,
+LightPass::LightPass(const RenderingConfig& rendering_config,
+                     ID3D11Device& device,
 	                 ID3D11DeviceContext& device_context,
 	                 RenderStateMgr& render_state_mgr,
 	                 ResourceMgr& resource_mgr)
 	: device(device)
 	, device_context(device_context)
+	, rendering_config(rendering_config)
 	, depth_pass(std::make_unique<DepthPass>(device, device_context, render_state_mgr, resource_mgr))
 
 	, light_buffer(device)
@@ -24,9 +27,9 @@ LightPass::LightPass(ID3D11Device& device,
 	, shadowed_point_lights(device, 1)
 	, shadowed_spot_lights(device, 1)
 
-	, directional_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1))
-	, point_light_smaps(std::make_unique<ShadowCubeMapBuffer>(device, 1))
-	, spot_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1)) {
+	, directional_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1, rendering_config.getShadowMapResolution()))
+	, point_light_smaps(std::make_unique<ShadowCubeMapBuffer>(device, 1, rendering_config.getShadowMapResolution()))
+	, spot_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1, rendering_config.getShadowMapResolution())) {
 }
 
 
@@ -110,7 +113,7 @@ void LightPass::updateShadowMaps() {
 		const size_t available = directional_light_smaps->getMapCount();
 
 		if (size > available) {
-			directional_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size));
+			directional_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapResolution());
 		}
 
 		directional_light_smaps->clear(device_context);
@@ -122,7 +125,7 @@ void LightPass::updateShadowMaps() {
 		const size_t available = point_light_smaps->getMapCount();
 
 		if (size > available) {
-			point_light_smaps = std::make_unique<ShadowCubeMapBuffer>(device, static_cast<u32>(size));
+			point_light_smaps = std::make_unique<ShadowCubeMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapResolution());
 		}
 
 		point_light_smaps->clear(device_context);
@@ -134,7 +137,7 @@ void LightPass::updateShadowMaps() {
 		const size_t available = spot_light_smaps->getMapCount();
 
 		if (size > available) {
-			spot_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size));
+			spot_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapResolution());
 		}
 
 		spot_light_smaps->clear(device_context);

@@ -2,6 +2,7 @@
 #include "engine.h"
 #include "imgui_message_forwarder.h"
 #include "config/config_reader.h"
+#include "io/file_writer.h"
 
 
 #define CONFIG_FILE "./config.txt"
@@ -25,11 +26,19 @@ std::unique_ptr<Engine> SetupEngine() {
 			display_config.setNearestDisplayDesc({*width, *height});
 	}
 
+	// Create rendering configuration
+	RenderingConfig render_config;
+	const auto* smap_width = reader.getConfigVar<u32>(ConfigTokens::smap_width);
+	const auto* smap_height = reader.getConfigVar<u32>(ConfigTokens::smap_height);
+	if (smap_width && smap_height) {
+		render_config.setShadowMapResolution({*smap_width, *smap_height});
+	}
+
 	// Create Engine
 	const auto* title = reader.getConfigVar<std::string>(ConfigTokens::win_title);
 	const std::wstring window_title = title ? str2wstr(*title) : L"Engine";
 
-	return std::make_unique<Engine>(window_title, display_config);
+	return std::make_unique<Engine>(window_title, std::move(display_config), std::move(render_config));
 }
 
 
@@ -58,15 +67,47 @@ LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPAR
 
 
 
-Engine::Engine(std::wstring title, DisplayConfig display_config)
+Engine::Engine(std::wstring title,
+               DisplayConfig display_config,
+               RenderingConfig rendering_config)
 	: exit_requested(false)
 	, resize_requested(false)
 	, toggle_fullscreen(false) {
 
-	init(std::move(title), std::move(display_config));
+	init(std::move(title), std::move(display_config), std::move(rendering_config));
 }
 
 Engine::~Engine() {
+	quit();
+}
+
+
+void Engine::quit() {
+
+	FileWriter writer(CONFIG_FILE);
+
+	const auto res = window->getClientSize();
+	const auto& display = rendering_mgr->getDisplayConfig();
+	const auto& rendering = rendering_mgr->getRenderingConfig();
+
+	writer.writeLine(ConfigTokens::comment, "Display");
+	writer.writeLine(ConfigTokens::width, ' ', res.x);
+	writer.writeLine(ConfigTokens::height, ' ', res.y);
+	writer.writeLine(ConfigTokens::refresh, ' ', display.getRoundedDisplayRefreshRate());
+	writer.writeLine(ConfigTokens::vsync, ' ', display.isVsync());
+	writer.writeLine(ConfigTokens::fullscreen, ' ', display.isFullscreen());
+
+	writer.writeLine();
+
+	writer.writeLine(ConfigTokens::comment, "Window");
+	writer.writeLine(ConfigTokens::win_title, ' ', window->getWindowTitle());
+
+	writer.writeLine();
+
+	writer.writeLine(ConfigTokens::comment, "Engine");
+	writer.writeLine(ConfigTokens::smap_width, ' ', rendering.getShadowMapResolution().x);
+	writer.writeLine(ConfigTokens::smap_height, ' ', rendering.getShadowMapResolution().y);
+
 
 	// Explicity delete the scene before the rendering manager.
 	// This prevents D3D from potentially reporting live resources
@@ -75,7 +116,9 @@ Engine::~Engine() {
 }
 
 
-void Engine::init(std::wstring title, DisplayConfig display_config) {
+void Engine::init(std::wstring title,
+                  DisplayConfig display_config,
+                  RenderingConfig rendering_config) {
 
 	// Get the display resolution
 	{
@@ -137,7 +180,7 @@ void Engine::init(std::wstring title, DisplayConfig display_config) {
 	fps_counter->setWaitTime(250ms);
 
 	// Rendering Manager
-	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getWindow()), std::move(display_config));
+	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getWindow()), std::move(display_config), std::move(rendering_config));
 }
 
 
