@@ -27,9 +27,9 @@ LightPass::LightPass(const RenderingConfig& rendering_config,
 	, shadowed_point_lights(device, 1)
 	, shadowed_spot_lights(device, 1)
 
-	, directional_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1, rendering_config.getShadowMapResolution()))
-	, point_light_smaps(std::make_unique<ShadowCubeMapBuffer>(device, 1, rendering_config.getShadowMapResolution()))
-	, spot_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1, rendering_config.getShadowMapResolution())) {
+	, directional_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1, rendering_config.getShadowMapRes()))
+	, point_light_smaps(std::make_unique<ShadowCubeMapBuffer>(device, 1, rendering_config.getShadowMapRes()))
+	, spot_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1, rendering_config.getShadowMapRes())) {
 }
 
 
@@ -113,7 +113,7 @@ void LightPass::updateShadowMaps() {
 		const size_t available = directional_light_smaps->getMapCount();
 
 		if (size > available) {
-			directional_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapResolution());
+			directional_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapRes());
 		}
 
 		directional_light_smaps->clear(device_context);
@@ -125,7 +125,7 @@ void LightPass::updateShadowMaps() {
 		const size_t available = point_light_smaps->getMapCount();
 
 		if (size > available) {
-			point_light_smaps = std::make_unique<ShadowCubeMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapResolution());
+			point_light_smaps = std::make_unique<ShadowCubeMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapRes());
 		}
 
 		point_light_smaps->clear(device_context);
@@ -137,7 +137,7 @@ void LightPass::updateShadowMaps() {
 		const size_t available = spot_light_smaps->getMapCount();
 
 		if (size > available) {
-			spot_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapResolution());
+			spot_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapRes());
 		}
 
 		spot_light_smaps->clear(device_context);
