@@ -28,10 +28,9 @@ std::unique_ptr<Engine> SetupEngine() {
 
 	// Create rendering configuration
 	RenderingConfig render_config;
-	const auto* smap_width = reader.getConfigVar<u32>(ConfigTokens::smap_width);
-	const auto* smap_height = reader.getConfigVar<u32>(ConfigTokens::smap_height);
-	if (smap_width && smap_height) {
-		render_config.setShadowMapRes({*smap_width, *smap_height});
+	const auto* smap_res = reader.getConfigVar<u32>(ConfigTokens::shadowmap_res);
+	if (smap_res) {
+		render_config.setShadowMapRes(*smap_res);
 	}
 
 	// Create Engine
@@ -105,8 +104,7 @@ void Engine::quit() {
 	writer.writeLine();
 
 	writer.writeLine(ConfigTokens::comment, "Engine");
-	writer.writeLine(ConfigTokens::smap_width, ' ', rendering.getShadowMapRes().x);
-	writer.writeLine(ConfigTokens::smap_height, ' ', rendering.getShadowMapRes().y);
+	writer.writeLine(ConfigTokens::shadowmap_res, ' ', rendering.getShadowMapRes());
 
 
 	// Explicity delete the scene before the rendering manager.

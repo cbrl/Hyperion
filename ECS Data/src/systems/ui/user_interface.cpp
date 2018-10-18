@@ -1178,7 +1178,7 @@ void DrawSceneMenu(ID3D11Device& device,
 
 void DrawDisplaySettingsPopup(Engine& engine) {
 
-		if (ImGui::BeginPopupModal("Display Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+	if (ImGui::BeginPopupModal("Display Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 
 		auto& settings = engine.getRenderingMgr().getDisplayConfig();
 		static auto current = static_cast<int>(settings.getDisplayDescIndex());
@@ -1194,7 +1194,7 @@ void DrawDisplaySettingsPopup(Engine& engine) {
 		}
 
 		// Lamda to convert display mode to a string
-		static auto getter = [](void* data, int idx, const char** out_text) -> bool {
+		static const auto getter = [](void* data, int idx, const char** out_text) -> bool {
 			auto& vector = *static_cast<const std::vector<DXGI_MODE_DESC>*>(data);
 			if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
 			*out_text = display_modes[idx].c_str();
@@ -1223,9 +1223,33 @@ void DrawDisplaySettingsPopup(Engine& engine) {
 }
 
 
+void DrawEngineSettingsPopup(Engine& engine) {
+
+	if (ImGui::BeginPopupModal("Engine Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		auto& rendering_mgr = engine.getRenderingMgr();
+		auto& rendering_config = rendering_mgr.getRenderingConfig();
+
+		u32 smap_res = rendering_config.getShadowMapRes();
+		if (ImGui::DragScalar("Shadow Map Resolution", ImGuiDataType_U32, &smap_res, 1)) {
+			if (smap_res == 0)
+				smap_res = 1;
+			rendering_config.setShadowMapRes(smap_res);
+		}
+
+		if (ImGui::Button("Close")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+}
+
+
 void DrawSystemMenu(Engine& engine) {
 
 	bool display_settings_popup = false;
+	bool engine_settings_popup = false;
 
 	// Menu Bar
 	if (ImGui::BeginMainMenuBar()) {
@@ -1233,6 +1257,10 @@ void DrawSystemMenu(Engine& engine) {
 
 			if (ImGui::MenuItem("Display Settings")) {
 				display_settings_popup = true;
+			}
+
+			if (ImGui::MenuItem("Engine Settings")) {
+				engine_settings_popup = true;
 			}
 
 			ImGui::Separator();
@@ -1250,10 +1278,14 @@ void DrawSystemMenu(Engine& engine) {
 	if (display_settings_popup) {
 		ImGui::OpenPopup("Display Settings");
 	}
+	if (engine_settings_popup) {
+		ImGui::OpenPopup("Engine Settings");
+	}
 
 
-	// Display Settings Popup
+	// Settings Popups
 	DrawDisplaySettingsPopup(engine);
+	DrawEngineSettingsPopup(engine);
 }
 
 

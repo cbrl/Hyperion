@@ -82,7 +82,7 @@ public:
 		viewport.TopLeftY = static_cast<f32>(y);
 	}
 
-	void setTopLeft(vec2_u32 top_left) noexcept {
+	void setTopLeft(const vec2_u32& top_left) noexcept {
 		viewport.TopLeftX = static_cast<f32>(top_left.x);
 		viewport.TopLeftY = static_cast<f32>(top_left.y);
 	}
@@ -95,7 +95,7 @@ public:
 	[[nodiscard]]
 	vec2_u32 getSize() const noexcept {
 		return vec2_u32{ static_cast<u32>(viewport.Width),
-		              static_cast<u32>(viewport.Height) };
+		                 static_cast<u32>(viewport.Height) };
 	}
 
 	void setSize(u32 width, u32 height) noexcept {
@@ -103,7 +103,7 @@ public:
 		viewport.Height = static_cast<f32>(height);
 	}
 
-	void setSize(vec2_u32 size) noexcept {
+	void setSize(const vec2_u32& size) noexcept {
 		viewport.Width  = static_cast<f32>(size.x);
 		viewport.Height = static_cast<f32>(size.y);
 	}
@@ -123,7 +123,7 @@ public:
 		viewport.MaxDepth = max;
 	}
 
-	void setDepth(vec2_f32 depth_range) noexcept {
+	void setDepth(const vec2_f32& depth_range) noexcept {
 		viewport.MinDepth = depth_range.x;
 		viewport.MaxDepth = depth_range.y;
 	}

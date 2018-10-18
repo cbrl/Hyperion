@@ -2,7 +2,7 @@
 
 ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
                                  u32 map_count,
-                                 vec2_u32 resolution) {
+                                 u32 resolution) {
 	// Create the raster state
 	D3D11_RASTERIZER_DESC raster_desc = {};
 	raster_desc.CullMode              = D3D11_CULL_BACK;
@@ -19,14 +19,14 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 
 	// Define the viewport
 	viewport.setTopLeft(0, 0);
-	viewport.setSize(resolution);
+	viewport.setSize(resolution, resolution);
 	viewport.setDepth(0.0f, 1.0f);
 
 
 	// Create the depth map texture
 	D3D11_TEXTURE2D_DESC tex_desc = {};
-	tex_desc.Width                = resolution.x;
-	tex_desc.Height               = resolution.y;
+	tex_desc.Width                = resolution;
+	tex_desc.Height               = resolution;
 	tex_desc.MipLevels            = 1;
 	tex_desc.ArraySize            = map_count;
 	tex_desc.Format               = DXGI_FORMAT_R16_TYPELESS;
@@ -53,7 +53,7 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 	dsvs.clear();
 	dsvs.resize(tex_desc.ArraySize);
 
-	for (size_t i                               = 0; i < tex_desc.ArraySize; ++i) {
+	for (size_t i = 0; i < tex_desc.ArraySize; ++i) {
 		dsv_desc.Texture2DArray.FirstArraySlice = static_cast<u32>(i);
 
 		ThrowIfFailed(device.CreateDepthStencilView(depth_map.Get(), &dsv_desc, dsvs[i].GetAddressOf()),
@@ -76,7 +76,7 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 
 ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
                                          u32 cube_map_count,
-                                         vec2_u32 resolution) {
+                                         u32 resolution) {
 	// Create the raster state
 	D3D11_RASTERIZER_DESC raster_desc = {};
 	raster_desc.CullMode              = D3D11_CULL_BACK;
@@ -93,14 +93,14 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 
 	// Define the viewport
 	viewport.setTopLeft(0, 0);
-	viewport.setSize(resolution);
+	viewport.setSize(resolution, resolution);
 	viewport.setDepth(0.0f, 1.0f);
 
 
 	// Create the depth map texture
 	D3D11_TEXTURE2D_DESC tex_desc = {};
-	tex_desc.Width                = resolution.x;
-	tex_desc.Height               = resolution.y;
+	tex_desc.Width                = resolution;
+	tex_desc.Height               = resolution;
 	tex_desc.MipLevels            = 1;
 	tex_desc.ArraySize            = cube_map_count * 6;
 	tex_desc.Format               = DXGI_FORMAT_R16_TYPELESS;
@@ -127,7 +127,7 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 	dsvs.clear();
 	dsvs.resize(tex_desc.ArraySize);
 
-	for (size_t i                               = 0; i < tex_desc.ArraySize; ++i) {
+	for (size_t i = 0; i < tex_desc.ArraySize; ++i) {
 		dsv_desc.Texture2DArray.FirstArraySlice = static_cast<u32>(i);
 
 		ThrowIfFailed(device.CreateDepthStencilView(depth_map.Get(), &dsv_desc, dsvs[i].GetAddressOf()),

@@ -52,7 +52,7 @@ inline void ThrowIfFailed(HRESULT hr, const std::string& msg = "") {
 		std::stringstream result;
 		result << msg << " (Failure with HRESULT of 0x" << std::hex << hr << ")\n";
 
-		std::cerr << result.str();
+		//std::cerr << result.str();
 		throw ExceptionT(result.str());
 	}
 }

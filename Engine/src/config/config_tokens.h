@@ -14,6 +14,5 @@ namespace ConfigTokens {
 
 	constexpr gsl::czstring<> win_title = "title";
 
-	constexpr gsl::czstring<> smap_width = "shadowmap_width";
-	constexpr gsl::czstring<> smap_height = "shadowmap_height";
+	constexpr gsl::czstring<> shadowmap_res = "shadowmap_res";
 }

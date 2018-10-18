@@ -112,8 +112,13 @@ void LightPass::updateShadowMaps() {
 		const size_t size      = shadowed_directional_lights.size();
 		const size_t available = directional_light_smaps->getMapCount();
 
-		if (size > available) {
-			directional_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapRes());
+		const auto curr_res   = directional_light_smaps->getMapRes();
+		const auto config_res = rendering_config.getShadowMapRes();
+
+
+		if (size > available || curr_res != config_res) {
+			u32 count = size ? static_cast<u32>(size) : 1;
+			directional_light_smaps = std::make_unique<ShadowMapBuffer>(device, count, config_res);
 		}
 
 		directional_light_smaps->clear(device_context);
@@ -124,8 +129,12 @@ void LightPass::updateShadowMaps() {
 		const size_t size      = shadowed_point_lights.size();
 		const size_t available = point_light_smaps->getMapCount();
 
-		if (size > available) {
-			point_light_smaps = std::make_unique<ShadowCubeMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapRes());
+		const auto curr_res   = point_light_smaps->getMapRes();
+		const auto config_res = rendering_config.getShadowMapRes();
+
+		if (size > available || curr_res != config_res) {
+			u32 count = size ? static_cast<u32>(size) : 1;
+			point_light_smaps = std::make_unique<ShadowCubeMapBuffer>(device, count, config_res);
 		}
 
 		point_light_smaps->clear(device_context);
@@ -136,8 +145,12 @@ void LightPass::updateShadowMaps() {
 		const size_t size      = shadowed_spot_lights.size();
 		const size_t available = spot_light_smaps->getMapCount();
 
-		if (size > available) {
-			spot_light_smaps = std::make_unique<ShadowMapBuffer>(device, static_cast<u32>(size), rendering_config.getShadowMapRes());
+		const auto curr_res   = spot_light_smaps->getMapRes();
+		const auto config_res = rendering_config.getShadowMapRes();
+
+		if (size > available || curr_res != config_res) {
+			u32 count = size ? static_cast<u32>(size) : 1;
+			spot_light_smaps = std::make_unique<ShadowMapBuffer>(device, count, config_res);
 		}
 
 		spot_light_smaps->clear(device_context);

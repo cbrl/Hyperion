@@ -19,7 +19,7 @@ public:
 
 	ShadowMapBuffer(ID3D11Device& device,
 	                u32 map_count,
-	                vec2_u32 resolution = {512, 512});
+	                u32 resolution = 512);
 
 	ShadowMapBuffer(const ShadowMapBuffer& buffer) = delete;
 	ShadowMapBuffer(ShadowMapBuffer&& buffer) noexcept = default;
@@ -68,17 +68,23 @@ public:
 
 	// Get the number of shadow maps in this buffer
 	[[nodiscard]]
-	size_t getMapCount() const {
+	size_t getMapCount() const noexcept {
 		return dsvs.size();
 	}
 
+	// Get the resolution of the shadow map
 	[[nodiscard]]
-	ID3D11ShaderResourceView* getSRV() const {
+	u32 getMapRes() const noexcept {
+		return viewport.getSize().x;
+	}
+
+	[[nodiscard]]
+	ID3D11ShaderResourceView* getSRV() const noexcept {
 		return srv.Get();
 	}
 
 	[[nodiscard]]
-	ID3D11ShaderResourceView* const* getSRVAddress() const {
+	ID3D11ShaderResourceView* const* getSRVAddress() const noexcept {
 		return srv.GetAddressOf();
 	}
 
@@ -100,7 +106,7 @@ public:
 
 	ShadowCubeMapBuffer(ID3D11Device& device,
 	                    u32 cube_map_count,
-	                    vec2_u32 resolution = {512, 512});
+	                    u32 resolution = 512);
 
 	ShadowCubeMapBuffer(const ShadowCubeMapBuffer& buffer) = delete;
 	ShadowCubeMapBuffer(ShadowCubeMapBuffer&& buffer) noexcept = default;
@@ -148,20 +154,30 @@ public:
 	}
 
 	// Get the number of individual maps in this buffer
-	size_t getMapCount() const {
+	[[nodiscard]]
+	size_t getMapCount() const noexcept {
 		return dsvs.size();
 	}
 
 	// Get the number of cube maps in this buffer
-	size_t getCubeMapCount() const {
+	[[nodiscard]]
+	size_t getCubeMapCount() const noexcept {
 		return dsvs.size() / 6;
 	}
 
-	ID3D11ShaderResourceView& getSRV() const {
-		return *srv.Get();
+	// Get the resolution of the shadow map
+	[[nodiscard]]
+	u32 getMapRes() const noexcept {
+		return viewport.getSize().x;
 	}
 
-	ID3D11ShaderResourceView* const* getSRVAddress() const {
+	[[nodiscard]]
+	ID3D11ShaderResourceView* getSRV() const noexcept {
+		return srv.Get();
+	}
+
+	[[nodiscard]]
+	ID3D11ShaderResourceView* const* getSRVAddress() const noexcept {
 		return srv.GetAddressOf();
 	}
 

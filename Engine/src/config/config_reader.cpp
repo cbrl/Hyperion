@@ -7,8 +7,7 @@ ConfigReader::ConfigReader() {
 	config_vars.addVar<u32>(ConfigTokens::refresh, 60);
 	config_vars.addVar(ConfigTokens::vsync, false);
 	config_vars.addVar(ConfigTokens::fullscreen, false);
-	config_vars.addVar<u32>(ConfigTokens::smap_width, 512);
-	config_vars.addVar<u32>(ConfigTokens::smap_height, 512);
+	config_vars.addVar<u32>(ConfigTokens::shadowmap_res, 512);
 	config_vars.addVar<std::string>(ConfigTokens::win_title, "Engine");
 }
 
@@ -56,13 +55,8 @@ void ConfigReader::readLine() {
 		config_vars.addVar(ConfigTokens::win_title, val);
 	}
 
-	else if (token == ConfigTokens::smap_width) {
+	else if (token == ConfigTokens::shadowmap_res) {
 		const auto val = readToken<u32>();
-		config_vars.addVar(ConfigTokens::smap_width, val);
-	}
-
-	else if (token == ConfigTokens::smap_height) {
-		const auto val = readToken<u32>();
-		config_vars.addVar(ConfigTokens::smap_height, val);
+		config_vars.addVar(ConfigTokens::shadowmap_res, val);
 	}
 }

@@ -29,12 +29,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void setShadowMapRes(const vec2_u32& res) noexcept {
+	void setShadowMapRes(u32 res) noexcept {
 		smap_res = res;
 	}
 
 	[[nodiscard]]
-	const vec2_u32& getShadowMapRes() const noexcept {
+	u32 getShadowMapRes() const noexcept {
 		return smap_res;
 	}
 
@@ -43,5 +43,5 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	vec2_u32 smap_res;
+	u32 smap_res;
 };
