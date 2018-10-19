@@ -30,7 +30,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	void setShadowMapRes(u32 res) noexcept {
-		smap_res = res;
+		smap_res = (res == 0) ? 1 : res;
 	}
 
 	[[nodiscard]]

@@ -267,5 +267,6 @@ __pycache__/
 **/TODO.txt
 **/Sources.txt
 **/log.txt
+**/config.txt
 data/
 Shaders/src/compiled_headers/

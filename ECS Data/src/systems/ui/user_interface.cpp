@@ -1232,8 +1232,6 @@ void DrawEngineSettingsPopup(Engine& engine) {
 
 		u32 smap_res = rendering_config.getShadowMapRes();
 		if (ImGui::DragScalar("Shadow Map Resolution", ImGuiDataType_U32, &smap_res, 1)) {
-			if (smap_res == 0)
-				smap_res = 1;
 			rendering_config.setShadowMapRes(smap_res);
 		}
 

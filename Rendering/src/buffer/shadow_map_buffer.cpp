@@ -3,6 +3,9 @@
 ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
                                  u32 map_count,
                                  u32 resolution) {
+
+	ThrowIfFailed(resolution != 0, "ShadowMapBuffer resolution must be greater than 0");
+
 	// Create the raster state
 	D3D11_RASTERIZER_DESC raster_desc = {};
 	raster_desc.CullMode              = D3D11_CULL_BACK;
@@ -77,6 +80,9 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
                                          u32 cube_map_count,
                                          u32 resolution) {
+
+	ThrowIfFailed(resolution != 0, "ShadowCubeMapBuffer resolution must be greater than 0");
+
 	// Create the raster state
 	D3D11_RASTERIZER_DESC raster_desc = {};
 	raster_desc.CullMode              = D3D11_CULL_BACK;
