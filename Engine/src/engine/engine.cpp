@@ -185,8 +185,9 @@ void Engine::init(std::wstring title,
 void Engine::loadScene(unique_ptr<Scene>&& new_scene) {
 	
 	if (scene) {
+		const auto name = scene->getName();
 		scene.reset();
-		Logger::log(LogLevel::info, "Unloaded scene: {}", scene->getName());
+		Logger::log(LogLevel::info, "Unloaded scene: {}", name);
 	}
 
 	scene = std::move(new_scene);
