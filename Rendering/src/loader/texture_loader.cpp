@@ -74,7 +74,7 @@ void LoadTexture(ID3D11Device& device,
 
 	// Return white texture if the file is missing
 	if (!fs::exists(filename)) {
-		HandleLoaderError(device, "Error loading texture (file not found): " + wstr2str(filename), srv_out);
+		HandleLoaderError(device, "Error loading texture (file not found): " + WstrToStr(filename), srv_out);
 		return;
 	}
 
@@ -84,7 +84,7 @@ void LoadTexture(ID3D11Device& device,
 	if (ext == L".dds") {
 		HRESULT hr = CreateDDSTextureFromFile(&device, filename.c_str(), nullptr, srv_out);
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to create DDS texture: " + wstr2str(filename), srv_out);
+			HandleLoaderError(device, "Failed to create DDS texture: " + WstrToStr(filename), srv_out);
 			return;
 		}
 	}
@@ -96,7 +96,7 @@ void LoadTexture(ID3D11Device& device,
 		ScratchImage image;
 		hr = LoadFromTGAFile(filename.c_str(), nullptr, image);
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to load TGA texture: " + wstr2str(filename), srv_out);
+			HandleLoaderError(device, "Failed to load TGA texture: " + WstrToStr(filename), srv_out);
 			return;
 		}
 
@@ -107,7 +107,7 @@ void LoadTexture(ID3D11Device& device,
 		                   image.GetMetadata(),
 		                   texture.GetAddressOf());
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to create ID3D11Resource: " + wstr2str(filename), srv_out);
+			HandleLoaderError(device, "Failed to create ID3D11Resource: " + WstrToStr(filename), srv_out);
 			return;
 		}
 
@@ -118,7 +118,7 @@ void LoadTexture(ID3D11Device& device,
 
 		hr = device.CreateShaderResourceView(texture.Get(), &srv_desc, srv_out);
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to create SRV: " + wstr2str(filename), srv_out);
+			HandleLoaderError(device, "Failed to create SRV: " + WstrToStr(filename), srv_out);
 			return;
 		}
 	}
@@ -127,13 +127,13 @@ void LoadTexture(ID3D11Device& device,
 	else {
 		HRESULT hr = CreateWICTextureFromFile(&device, &device_context, filename.c_str(), nullptr, srv_out);
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to create WIC texture: " + wstr2str(filename), srv_out);
+			HandleLoaderError(device, "Failed to create WIC texture: " + WstrToStr(filename), srv_out);
 			return;
 		}
 	}
 
 	SetDebugObjectName(*srv_out, "TextureLoader Texture");
-	Logger::log(LogLevel::debug, "Loaded texture: {}", wstr2str(filename));
+	Logger::log(LogLevel::debug, "Loaded texture: {}", WstrToStr(filename));
 }
 
 
@@ -145,7 +145,7 @@ void LoadTexture(ID3D11Device& device,
 	// Return white texture if a file is missing
 	for (const std::wstring& fn : filenames) {
 		if (!fs::exists(fn)) {
-			HandleLoaderError(device, "Error loading texture (file not found): " + wstr2str(fn), srv_out);
+			HandleLoaderError(device, "Error loading texture (file not found): " + WstrToStr(fn), srv_out);
 			return;
 		}
 	}
@@ -167,7 +167,7 @@ void LoadTexture(ID3D11Device& device,
 			                                        reinterpret_cast<ID3D11Resource**>(srcTex[i].GetAddressOf()),
 			                                        nullptr);
 			if (FAILED(hr)) {
-				HandleLoaderError(device, "Failed to create Texture2D: " + wstr2str(filenames[i]), srv_out);
+				HandleLoaderError(device, "Failed to create Texture2D: " + WstrToStr(filenames[i]), srv_out);
 				return;
 			}
 		}
@@ -184,7 +184,7 @@ void LoadTexture(ID3D11Device& device,
 			                                        reinterpret_cast<ID3D11Resource**>(srcTex[i].GetAddressOf()),
 			                                        nullptr);
 			if (FAILED(hr)) {
-				HandleLoaderError(device, "Failed to create Texture2D: " + wstr2str(filenames[i]), srv_out);
+				HandleLoaderError(device, "Failed to create Texture2D: " + WstrToStr(filenames[i]), srv_out);
 				return;
 			}
 		}

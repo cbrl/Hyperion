@@ -300,10 +300,10 @@ void DrawDetails(Text& text) {
 
 	DrawComponentState(text);
 
-	std::string str = wstr2str(text.getText());
+	std::string str = WstrToStr(text.getText());
 
 	if (ImGui::InputTextMultiline("Text", &str)) {
-		text.setText(str2wstr(str));
+		text.setText(StrToWstr(str));
 	}
 }
 

@@ -1,12 +1,12 @@
 #Display
-width 3435973836
-height 3435973836
+width 1280
+height 720
 refresh 60
 vsync 0
 fullscreen 0
 
 #Window
-title 
+title Engine????
 
 #Engine
 shadowmap_res 512

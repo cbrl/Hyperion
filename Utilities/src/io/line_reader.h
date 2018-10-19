@@ -50,14 +50,11 @@ public:
 		line_number = 1;
 		std::string line;
 		while (std::getline(file_stream, line)) {
-
 			token_iterator = std::sregex_iterator(line.begin(), line.end(), search_regex);
-
 			if (hasTokens()) {
 				readLine();
 			}
 			readUnusedTokens();
-
 			++line_number;
 		}
 	}

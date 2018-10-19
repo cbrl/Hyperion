@@ -34,24 +34,22 @@
 // Functions
 //----------------------------------------------------------------------------------
 
-// Convert a std::string to a wide std::string
-inline std::wstring str2wstr(const std::string& in) {
+// Convert a string to a wide string
+inline std::wstring StrToWstr(const std::string& in) {
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
-
 	return wstring_converter.from_bytes(in);
 }
 
-// Convert a wide std::string to a std::string
-inline std::string wstr2str(const std::wstring& in) {
+// Convert a wide string to a string
+inline std::string WstrToStr(const std::wstring& in) {
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
-
 	return wstring_converter.to_bytes(in);
 }
 
 
-// Convert an integer to a hexadecimal std::string
+// Convert an integer to a hexadecimal string
 template<typename T>
-std::string int2hexstr(T i) {
+std::string IntToHexStr(T i) {
 
 	static_assert(std::is_integral_v<T>, "int2hexstr() input type is not an integral type");
 
@@ -64,7 +62,7 @@ std::string int2hexstr(T i) {
 }
 
 
-// Trim whitespace at the beginning and end of a std::string
+// Trim whitespace at the beginning and end of a string
 inline std::string TrimWhiteSpace(const std::string& in) {
 	const size_t text_start = in.find_first_not_of(" \t");
 	const size_t text_end = in.find_last_not_of(" \t");
@@ -79,7 +77,7 @@ inline std::string TrimWhiteSpace(const std::string& in) {
 	return std::string();
 }
 
-// Trim whitespace at the beginning and end of a std::string
+// Trim whitespace at the beginning and end of a string
 inline std::wstring TrimWhiteSpace(const std::wstring& in) {
 	const size_t text_start = in.find_first_not_of(L" \t");
 	const size_t text_end   = in.find_last_not_of(L" \t");
@@ -95,7 +93,7 @@ inline std::wstring TrimWhiteSpace(const std::wstring& in) {
 }
 
 
-// Split a std::string by a specified token
+// Split a string by a specified token
 template<typename StringT>
 inline std::vector<StringT> Split(const StringT& in, const typename StringT::value_type* token) {
 
@@ -117,7 +115,7 @@ inline std::vector<StringT> Split(const StringT& in, const typename StringT::val
 }
 
 
-
+// Convert a string to the specified arithmetic type
 template<typename T>
 inline std::optional<T> StrTo(std::string_view in) {
 
@@ -145,20 +143,20 @@ inline std::optional<bool> StrTo(std::string_view in) {
 		else
 			return true;
 	}
-	else if (in.size() == 4
-	         && in[0] == 't'
-	         && in[1] == 'r'
-	         && in[2] == 'u'
-	         && in[3] == 'e') {
+	if (in.size() == 4
+	    && (in[0] == 't' || in[0] == 'T')
+	    && (in[1] == 'r' || in[1] == 'R')
+	    && (in[2] == 'u' || in[2] == 'U')
+	    && (in[3] == 'e' || in[3] == 'E')) {
 
 		return true;
 	}
-	else if (in.size() == 5
-	         && in[0] == 'f'
-	         && in[1] == 'a'
-	         && in[2] == 'l'
-	         && in[3] == 's'
-	         && in[4] == 'e') {
+	if (in.size() == 5
+	    && (in[0] == 'f' || in[0] == 'F')
+	    && (in[1] == 'a' || in[1] == 'A')
+	    && (in[2] == 'l' || in[2] == 'L')
+	    && (in[3] == 's' || in[3] == 'S')
+	    && (in[4] == 'e' || in[4] == 'E')) {
 		
 		return false;
 	}

@@ -35,7 +35,7 @@ std::unique_ptr<Engine> SetupEngine() {
 
 	// Create Engine
 	const auto* title = reader.getConfigVar<std::string>(ConfigTokens::win_title);
-	const std::wstring window_title = title ? str2wstr(*title) : L"Engine";
+	const std::wstring window_title = title ? StrToWstr(*title) : L"Engine";
 
 	return std::make_unique<Engine>(window_title, std::move(display_config), std::move(render_config));
 }

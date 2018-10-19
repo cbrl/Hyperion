@@ -19,7 +19,7 @@ public:
 
 	template<typename VertexT>
 	ModelBlueprint(ID3D11Device& device, const ModelOutput<VertexT>& model_output)
-		: Resource(str2wstr(model_output.name)) {
+		: Resource(StrToWstr(model_output.name)) {
 
 		constructBlueprint(device, model_output);
 	}

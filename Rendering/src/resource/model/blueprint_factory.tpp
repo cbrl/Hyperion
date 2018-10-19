@@ -44,7 +44,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -93,7 +93,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -143,7 +143,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -191,7 +191,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -241,7 +241,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -291,7 +291,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -341,7 +341,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -388,7 +388,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -435,7 +435,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -482,7 +482,7 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 
 
@@ -529,6 +529,6 @@ namespace BlueprintFactory {
 		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
 
 
-		return resource_mgr.getOrCreate<ModelBlueprint>(str2wstr(name), out);
+		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
 	}
 }
