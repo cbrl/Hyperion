@@ -1,12 +1,27 @@
 #pragma once
 
+//----------------------------------------------------------------------------------
+// Defines
+//----------------------------------------------------------------------------------
+
+// Silence codecvt deprecation warning
+#undef _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
+
+//----------------------------------------------------------------------------------
+// Includes
+//----------------------------------------------------------------------------------
 #include <fstream>
 #include <filesystem>
-
 
 // filesystem namespace alias
 namespace fs = std::filesystem;
 
+
+//----------------------------------------------------------------------------------
+// Functions
+//----------------------------------------------------------------------------------
 
 // Get the parent path of a file/folder
 inline std::string GetParentPath(const std::string& in) {

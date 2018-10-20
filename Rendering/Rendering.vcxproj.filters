@@ -120,6 +120,12 @@
     <Filter Include="Source Files\display">
       <UniqueIdentifier>{1899d370-bffa-44e8-a55d-b259101a9d9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\loader\mtl">
+      <UniqueIdentifier>{ad9f8b61-c1f4-40ed-bddc-3d016658d80f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\loader\mtl">
+      <UniqueIdentifier>{397c3d82-454d-4936-ba06-9c5a4a6c8ada}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -193,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="src\display\display_config.cpp">
       <Filter>Source Files\display</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\material_loader.cpp">
+      <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\mtl\mtl_loader.cpp">
+      <Filter>Source Files\loader\mtl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -321,6 +333,15 @@
     </ClInclude>
     <ClInclude Include="src\rendering_config.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\material_loader.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\mtl\mtl_loader.h">
+      <Filter>Header Files\loader\mtl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\mtl\mtl_tokens.h">
+      <Filter>Header Files\loader\mtl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

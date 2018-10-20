@@ -54,7 +54,6 @@ public:
 			if (hasTokens()) {
 				readLine();
 			}
-			readUnusedTokens();
 			++line_number;
 		}
 	}

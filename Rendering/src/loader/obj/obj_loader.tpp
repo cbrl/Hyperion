@@ -1,220 +1,26 @@
 #include <algorithm>
+#include "io/io.h"
+#include "log/log.h"
 #include "directx/directx_math.h"
 #include "loader/obj/obj_tokens.h"
-#include "log/log.h"
-#include "io/io.h"
+#include "loader/material_loader.h"
+#include "resource/resource_mgr.h"
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::reset() {
-	// Reset the local variables
-	rh_coord = false;
-
-	// Clear vectors
-	vertices.clear();
-	vertices.shrink_to_fit();
-
-	index_map.clear();
-
-	indices.clear();
-	indices.shrink_to_fit();
-
-	vertex_positions.clear();
-	vertex_positions.shrink_to_fit();
-
-	vertex_normals.clear();
-	vertex_normals.shrink_to_fit();
-
-	vertex_texCoords.clear();
-	vertex_texCoords.shrink_to_fit();
-
-	mat_lib.clear();
-	mat_lib.shrink_to_fit();
-
-	materials.clear();
-	materials.shrink_to_fit();
-
-	groups.clear();
-	groups.shrink_to_fit();
-
-	group_mat_names.clear();
+ObjLoader<VertexT>::ObjLoader(ResourceMgr& resource_mgr)
+	: resource_mgr(resource_mgr) {
 }
 
 
 template<typename VertexT>
-[[nodiscard]]
-ModelOutput<VertexT> OBJLoader<VertexT>::load(ResourceMgr& resource_mgr,
-                                              const fs::path& file,
-                                              bool right_hand_coords) {
-
-	// Make sure the file exists first
-	if (!fs::exists(file)) {
-		Logger::log(LogLevel::err, "File does not exist: {}", file.string());
-		ThrowIfFailed(false, "OBJ file does not exist: " + file.string());
-	}
+ModelOutput<VertexT> ObjLoader<VertexT>::load(const fs::path& file, bool right_hand_coords) {
 
 	// Set the coordinate system
 	rh_coord = right_hand_coords;
 
 	// Load the model
-	loadModel(file);
-
-	// Load the materials
-	loadMaterials(file.parent_path() / mat_lib);
-
-
-	// Get the folder that the file is in
-	const fs::path parent_path = file.parent_path();
-
-	// Create the materials
-	std::vector<Material> mtl_vector;
-	for (u32 i = 0; i < materials.size(); ++i) {
-		Material mtl;
-
-		mtl.name = materials[i].name;
-
-		if (!materials[i].map_Kd.empty())
-			mtl.map_diffuse = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_Kd);
-		else
-			mtl.has_texture = false;
-
-		if (!materials[i].map_Ka.empty())
-			mtl.map_alpha = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_Ka);
-
-		if (!materials[i].map_Ks.empty())
-			mtl.map_specular = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_Ks);
-
-		if (!materials[i].map_Ns.empty())
-			mtl.map_spec_highlight = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_Ns);
-
-		if (!materials[i].map_d.empty())
-			mtl.map_alpha = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_d);
-
-		if (!materials[i].map_bump.empty())
-			mtl.map_bump = resource_mgr.getOrCreate<Texture>(parent_path / materials[i].map_bump);
-
-		mtl.ambient         = materials[i].Ka;
-		mtl.diffuse         = materials[i].Kd;
-		mtl.specular        = materials[i].Ks;
-		mtl.emissive        = materials[i].Ke;
-		mtl.optical_density = materials[i].Ni;
-		mtl.illum           = materials[i].illum;
-		mtl.transparent     = materials[i].transparency;
-
-		mtl_vector.push_back(std::move(mtl));
-	}
-
-	// Create the model
-	ModelOutput<VertexT> out(file.filename().string(), vertices, indices, mtl_vector, groups);
-
-
-	// Reset the obj loader
-	reset();
-
-
-	return out;
-}
-
-
-template<typename VertexT>
-void OBJLoader<VertexT>::loadModel(const fs::path& file) {
-
-	// Open the file
-	std::ifstream stream(file);
-
-	if (stream.fail()) {
-		Logger::log(LogLevel::err, "Could not open OBJ file: {}", file.string());
-		throw std::runtime_error("Could not open OBJ file: " + file.string());
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Read file contents
-	//----------------------------------------------------------------------------------
-
-	std::string line;
-	while (std::getline(stream, line)) {
-		line = TrimWhiteSpace(line);
-		if (line[0] == ObjTokens::comment || line.empty()) {
-			continue;
-		}
-
-		// Copy the first token from the line
-		std::string token = line.substr(0, line.find_first_of(L' '));
-
-		// Remove the token from the line
-		line = line.substr(token.size());
-		line = TrimWhiteSpace(line);
-
-		// Create a stringstream to easily read data into variables
-		std::stringstream s_stream(line);
-
-
-		// Vertex
-		if (token == ObjTokens::vertex) {
-			vec3_f32 position;
-			s_stream >> position.x >> position.y >> position.z;
-
-			if (rh_coord) {
-				position.z *= -1.0f;
-			}
-
-			vertex_positions.push_back(position);
-		}
-
-		// Normal
-		else if (token == ObjTokens::normal) {
-			vec3_f32 normal;
-			s_stream >> normal.x >> normal.y >> normal.z;
-
-			if (rh_coord) {
-				normal.z *= -1.0f;
-			}
-
-			vertex_normals.push_back(normal);
-		}
-
-		// Texture
-		else if (token == ObjTokens::texture) {
-			vec2_f32 texCoord;
-			s_stream >> texCoord.x >> texCoord.y;
-
-			if (rh_coord) {
-				texCoord.y = 1.0f - texCoord.y;
-			}
-
-			vertex_texCoords.push_back(texCoord);
-		}
-
-		// Group
-		else if (token == ObjTokens::group) {
-			std::string name;
-			s_stream >> name;
-
-			groups.emplace_back();
-			groups.back().name        = name;
-			groups.back().index_start = static_cast<u32>(indices.size());
-		}
-
-		// Face
-		else if (token == ObjTokens::face) {
-			readFace(line);
-		}
-
-		// Material Library
-		if (token == ObjTokens::mtl_library) {
-			mat_lib = line;
-		}
-
-		// Group Material
-		else if (token == ObjTokens::use_mtl) {
-			group_mat_names[static_cast<u32>(groups.size()) - 1] = line;
-		}
-	}
-
-	// Close the OBJ file
-	stream.close();
-
+	readFile(file);
 
 	// Sometimes a group is defined at the top of the file, then an extra one
 	// before the first vertex. If that happened, then remove the extra.
@@ -223,150 +29,101 @@ void OBJLoader<VertexT>::loadModel(const fs::path& file) {
 			groups.erase(groups.begin() + 1);
 		}
 	}
+
+	// Load the materials
+	auto path = getFilePath();
+	path.replace_filename(mat_lib);
+	loadMaterials(path);
+
+	// Create and return the model
+	return ModelOutput<VertexT>(file.filename().string(), vertices, indices, materials, groups);
 }
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
+void ObjLoader<VertexT>::readLine() {
 
-	// Open the material file
-	std::ifstream stream(mat_file);
+	const std::string token = readToken<std::string>();
 
-	if (stream.fail()) {
-		Logger::log(LogLevel::err, "Could not open mtl file: {}", mat_file.string());
-		throw std::runtime_error("Could not open mtl file: " + mat_file.string());
+	if (token[0] == ObjTokens::comment) {
+		return;
 	}
 
+	// Vertex
+	if (token == ObjTokens::vertex) {
+		vec3_f32 position;
+		position.x = readToken<f32>();
+		position.y = readToken<f32>();
+		position.z = readToken<f32>();
 
-	//----------------------------------------------------------------------------------
-	// Read file contents
-	//----------------------------------------------------------------------------------
-
-	std::string line;
-	while (std::getline(stream, line)) {
-		line = TrimWhiteSpace(line);
-		if (line[0] == ObjTokens::comment || line.empty()) {
-			continue;
+		if (rh_coord) {
+			position.z *= -1.0f;
 		}
 
-		// Copy the first token from the line
-		std::string token = line.substr(0, line.find_first_of(L' '));
-
-		// Remove the token from the line
-		line = line.substr(token.size());
-		line = TrimWhiteSpace(line);
-
-		// Create a stringstream to easily read data into variables
-		std::stringstream stream(line);
-
-
-		// New Material
-		if (token == ObjTokens::new_mtl) {
-			OBJMaterial temp;
-			temp.name = line;
-			materials.push_back(temp);
-		}
-
-		// Diffuse Color
-		else if (token == ObjTokens::diffuse_color) {
-			stream >> materials.back().Kd.x;
-			stream >> materials.back().Kd.y;
-			stream >> materials.back().Kd.z;
-			materials.back().Kd.w = 1.0f;
-		}
-
-		// Ambient Color
-		else if (token == ObjTokens::ambient_color) {
-			stream >> materials.back().Ka.x;
-			stream >> materials.back().Ka.y;
-			stream >> materials.back().Ka.z;
-			materials.back().Ka.w = 1.0f;
-		}
-
-		// Specular Color
-		else if (token == ObjTokens::specular_color) {
-			stream >> materials.back().Ks.x;
-			stream >> materials.back().Ks.y;
-			stream >> materials.back().Ks.z;
-		}
-
-		// Emissive Color
-		else if (token == ObjTokens::emissive_color) {
-			stream >> materials.back().Ke.x;
-			stream >> materials.back().Ke.y;
-			stream >> materials.back().Ke.z;
-			materials.back().Ke.w = 1.0f;
-		}
-
-		// Specular Expononet
-		else if (token == ObjTokens::specular_exponent) {
-			stream >> materials.back().Ks.w;
-		}
-
-		// Optical Density
-		else if (token == ObjTokens::optical_density) {
-			stream >> materials.back().Ni;
-		}
-
-		// Dissolve (transparency)
-		else if (token == ObjTokens::transparency) {
-			stream >> materials.back().Kd.w;
-
-			if (materials.back().Kd.w < 1.0f) {
-				materials.back().transparency = true;
-			}
-		}
-
-		// Illumination
-		else if (token == ObjTokens::illumination_model) {
-			stream >> materials.back().illum;
-		}
-
-		// Diffuse Map
-		else if (token == ObjTokens::diffuse_color_map) {
-			materials.back().map_Kd = line;
-		}
-
-		// Alpha Map
-		else if (token == ObjTokens::alpha_texture_map) {
-			materials.back().map_d        = line;
-			materials.back().transparency = true;
-		}
-
-		// Ambient Map
-		else if (token == ObjTokens::ambient_color_map) {
-			materials.back().map_Ka = line;
-		}
-
-		// Specular Map
-		else if (token == ObjTokens::specular_color_map) {
-			materials.back().map_Ks = line;
-		}
-
-		// Specular Highlight Map
-		else if (token == ObjTokens::spec_highlight_map) {
-			materials.back().map_Ns = line;
-		}
-
-		// Bump Map
-		else if (token == ObjTokens::bump_map || token == ObjTokens::bump_map2) {
-			materials.back().map_bump = line;
-		}
+		vertex_positions.push_back(position);
 	}
 
-	// Close the material file
-	stream.close();
+	// Normal
+	else if (token == ObjTokens::normal) {
+		vec3_f32 normal;
+		normal.x = readToken<f32>();
+		normal.y = readToken<f32>();
+		normal.z = readToken<f32>();
 
+		if (rh_coord) {
+			normal.z *= -1.0f;
+		}
+
+		vertex_normals.push_back(normal);
+	}
+
+	// Texture
+	else if (token == ObjTokens::texture) {
+		vec2_f32 tex_coord;
+		tex_coord.x = readToken<f32>();
+		tex_coord.y = readToken<f32>();
+
+		if (rh_coord) {
+			tex_coord.y = 1.0f - tex_coord.y;
+		}
+
+		vertex_texCoords.push_back(tex_coord);
+	}
+
+	// Group
+	else if (token == ObjTokens::group) {
+		groups.emplace_back();
+		groups.back().name = readToken<std::string>();
+		groups.back().index_start = static_cast<u32>(indices.size());
+	}
+
+	// Face
+	else if (token == ObjTokens::face) {
+		readFace();
+	}
+
+	// Material Library
+	if (token == ObjTokens::mtl_library) {
+		mat_lib = readToken<std::string>();
+	}
+
+	// Group Material
+	else if (token == ObjTokens::use_mtl) {
+		group_mat_names[static_cast<u32>(groups.size()) - 1] = readToken<std::string>();
+	}
+
+	readUnusedTokens();
+}
+
+
+template<typename VertexT>
+void ObjLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
+
+	MaterialLoader::load(mat_file, resource_mgr, materials);
 
 	// Set the group's material to the index value of its
-	// material in the material std::vector.
+	// material in the material vector.
 	for (u32 i = 0; i < groups.size(); ++i) {
-
-		// Use the first material if the group has no material assigned
-		if (group_mat_names[i].empty()) {
-			group_mat_names[i] = materials[0].name;
-		}
-
 		for (u32 j = 0; j < materials.size(); ++j) {
 			if (group_mat_names[i] == materials[j].name) {
 				groups[i].material_index = j;
@@ -377,12 +134,15 @@ void OBJLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
 
 template<typename VertexT>
-void OBJLoader<VertexT>::readFace(const std::string& line) {
+void ObjLoader<VertexT>::readFace() {
 
 	std::vector<vec3_u32> face_def;
 
 	// Split the line into separate vertex definitions
-	std::vector<std::string> vert_strings = Split(line, " ");
+	std::vector<std::string> vert_strings;
+	while (hasTokens()) {
+		vert_strings.push_back(readToken<std::string>());
+	}
 
 	for (const auto& vert_string : vert_strings) {
 
@@ -456,7 +216,7 @@ void OBJLoader<VertexT>::readFace(const std::string& line) {
 
 
 template<typename VertexT>
-VertexT OBJLoader<VertexT>::createVertex(vec3_u32 vert_def) {
+VertexT ObjLoader<VertexT>::createVertex(vec3_u32 vert_def) {
 	
 	VertexT out;
 
@@ -482,7 +242,7 @@ VertexT OBJLoader<VertexT>::createVertex(vec3_u32 vert_def) {
 
 // Converts the input face into triangles
 template<typename VertexT>
-void OBJLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
+void ObjLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 
 	// Create the vertices from the input faces
 	std::vector<VertexT> in_verts;

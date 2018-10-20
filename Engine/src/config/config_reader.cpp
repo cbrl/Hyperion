@@ -59,4 +59,6 @@ void ConfigReader::readLine() {
 		const auto val = readToken<u32>();
 		config_vars.addVar(ConfigTokens::shadowmap_res, val);
 	}
+
+	readUnusedTokens();
 }

@@ -139,6 +139,8 @@
     <ClCompile Include="src\display\display_config.cpp" />
     <ClCompile Include="src\geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="src\geometry\frustum\frustum.cpp" />
+    <ClCompile Include="src\loader\material_loader.cpp" />
+    <ClCompile Include="src\loader\mtl\mtl_loader.cpp" />
     <ClCompile Include="src\loader\texture_loader.cpp" />
     <ClCompile Include="src\renderer\output\output_mgr.cpp" />
     <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.cpp" />
@@ -171,7 +173,10 @@
     <ClInclude Include="src\geometry\frustum\frustum.h" />
     <ClInclude Include="src\geometry\shapes\bezier.h" />
     <ClInclude Include="src\geometry\shapes\shapes.h" />
+    <ClInclude Include="src\loader\material_loader.h" />
     <ClInclude Include="src\loader\model_loader.h" />
+    <ClInclude Include="src\loader\mtl\mtl_loader.h" />
+    <ClInclude Include="src\loader\mtl\mtl_tokens.h" />
     <ClInclude Include="src\loader\obj\obj_loader.h" />
     <ClInclude Include="src\loader\obj\obj_tokens.h" />
     <ClInclude Include="src\loader\texture_loader.h" />
