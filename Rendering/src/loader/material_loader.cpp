@@ -5,7 +5,7 @@
 
 namespace MaterialLoader {
 	
-	void load(const fs::path& file, ResourceMgr& resource_mgr, std::vector<Material>& materials) {
+	void load(ResourceMgr& resource_mgr, const fs::path& file, std::vector<Material>& materials) {
 		
 		if (file.extension().string() == ".mtl") {
 			MtlLoader loader(resource_mgr, materials);

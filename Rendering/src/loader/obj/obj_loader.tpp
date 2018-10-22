@@ -119,7 +119,7 @@ void ObjLoader<VertexT>::readLine() {
 template<typename VertexT>
 void ObjLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
-	MaterialLoader::load(mat_file, resource_mgr, materials);
+	MaterialLoader::load(resource_mgr, mat_file, materials);
 
 	// Set the group's material to the index value of its
 	// material in the material vector.
@@ -149,7 +149,7 @@ void ObjLoader<VertexT>::readFace() {
 		// Split the vertex definition into separate parts
 		std::vector<std::string> vert_parts = Split(vert_string, "/");
 
-		vec3_u32 vertex{ 0, 0, 0 };
+		vec3_u32 vertex{0, 0, 0};
 
 		// Determine the vertex type
 		switch (vert_parts.size()) {
@@ -244,90 +244,84 @@ VertexT ObjLoader<VertexT>::createVertex(vec3_u32 vert_def) {
 template<typename VertexT>
 void ObjLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 
-	// Create the vertices from the input faces
-	std::vector<VertexT> in_verts;
-	std::vector<VertexT> v_verts;
+	// Create the vertices from the input face
+	std::vector<VertexT> input_verts;
+	std::vector<VertexT> working_verts;
 	for (const auto& vert_def : face_def) {
 		auto vertex = createVertex(vert_def);
-		in_verts.push_back(vertex);
-		v_verts.push_back(vertex);
+		input_verts.push_back(vertex);
+		working_verts.push_back(vertex);
 	}
 
-	// Indices of new triangles
+	// Indices of the triangle vertices (index is relative to input vector)
 	std::vector<u32> tri_indices;
 
 	while (true) {
-		for (u32 i = 0; i < v_verts.size(); ++i) {
+		for (u32 i = 0; i < working_verts.size(); ++i) {
 
 			// Previous, current, and next vertices
 			vec3_f32 prev;
-			vec3_f32 curr = v_verts[i].position;
+			vec3_f32 curr = working_verts[i].position;
 			vec3_f32 next;
 
-			// Previous vertex definition
+			// Previous vertex value
 			if (i == 0) {
-				prev = v_verts[v_verts.size() - 1].position;
+				prev = working_verts.back().position;
 			}
 			else {
-				prev = v_verts[i - 1].position;
+				prev = working_verts[i - 1].position;
 			}
 
-			// Next vertex definition
-			if (i == v_verts.size() - 1) {
-				next = v_verts[0].position;
+			// Next vertex value
+			if (i == working_verts.size() - 1) {
+				next = working_verts[0].position;
 			}
 			else {
-				next = v_verts[i + 1].position;
+				next = working_verts[i + 1].position;
 			}
 
 
-			// Create a triangle from previous, current, and next vertices
-			if (v_verts.size() == 3) {
-				for (u32 j = 0; j < v_verts.size(); ++j) {
-					if (in_verts[j].position == prev)
-						tri_indices.push_back(j);
-					if (in_verts[j].position == curr)
-						tri_indices.push_back(j);
-					if (in_verts[j].position == next)
-						tri_indices.push_back(j);
+			// Handle a 3 vertex case then break
+			if (working_verts.size() == 3) {
+				for (u32 j = 0; j < working_verts.size(); ++j) {
+					if (input_verts[j].position == prev) tri_indices.push_back(j);
+					if (input_verts[j].position == curr) tri_indices.push_back(j);
+					if (input_verts[j].position == next) tri_indices.push_back(j);
 				}
 
-				v_verts.clear();
+				working_verts.clear();
 				break;
 			}
 
-			if (v_verts.size() == 4) {
+			// Handle a 4 vertex case then break
+			if (working_verts.size() == 4) {
 				// Create a triangle
-				for (u32 j = 0; j < in_verts.size(); ++j) {
-					if (in_verts[j].position == prev)
-						tri_indices.push_back(j);
-					if (in_verts[j].position == curr)
-						tri_indices.push_back(j);
-					if (in_verts[j].position == next)
-						tri_indices.push_back(j);
+				for (u32 j = 0; j < input_verts.size(); ++j) {
+					if (input_verts[j].position == prev) tri_indices.push_back(j);
+					if (input_verts[j].position == curr) tri_indices.push_back(j);
+					if (input_verts[j].position == next) tri_indices.push_back(j);
 				}
 
+				// Find the vertex that isn't prev, curr, or next
 				vec3_f32 temp;
-				for (u32 j = 0; j < v_verts.size(); ++j) {
-					if (v_verts[j].position != prev &&
-					    v_verts[j].position != curr &&
-					    v_verts[j].position != next) {
-						temp = v_verts[j].position;
+				for (u32 j = 0; j < working_verts.size(); ++j) {
+					if (working_verts[j].position != prev &&
+					    working_verts[j].position != curr &&
+					    working_verts[j].position != next) {
+
+						temp = working_verts[j].position;
 						break;
 					}
 				}
 
 				// Create a triangle
-				for (u32 j = 0; j < in_verts.size(); ++j) {
-					if (in_verts[j].position == prev)
-						tri_indices.push_back(j);
-					if (in_verts[j].position == next)
-						tri_indices.push_back(j);
-					if (in_verts[j].position == temp)
-						tri_indices.push_back(j);
+				for (u32 j = 0; j < input_verts.size(); ++j) {
+					if (input_verts[j].position == prev) tri_indices.push_back(j);
+					if (input_verts[j].position == next) tri_indices.push_back(j);
+					if (input_verts[j].position == temp) tri_indices.push_back(j);
 				}
 
-				v_verts.clear();
+				working_verts.clear();
 				break;
 			}
 
@@ -348,11 +342,11 @@ void ObjLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 
 			// Ensure that no vertices are inside the triangle
 			bool in_triangle = false;
-			for (u32 j = 0; j < in_verts.size(); ++j) {
-				if (PointInTriangle(prev, curr, next, in_verts[j].position)
-				    && in_verts[j].position != prev
-				    && in_verts[j].position != curr
-				    && in_verts[j].position != next) {
+			for (u32 j = 0; j < input_verts.size(); ++j) {
+				if (PointInTriangle(prev, curr, next, input_verts[j].position)
+				    && input_verts[j].position != prev
+				    && input_verts[j].position != curr
+				    && input_verts[j].position != next) {
 					in_triangle = true;
 					break;
 				}
@@ -362,19 +356,19 @@ void ObjLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 			}
 
 			// Create a triangle from previous, current, and next vertices
-			for (u32 j = 0; j < in_verts.size(); ++j) {
-				if (in_verts[j].position == prev)
+			for (u32 j = 0; j < input_verts.size(); ++j) {
+				if (input_verts[j].position == prev)
 					tri_indices.push_back(j);
-				if (in_verts[j].position == curr)
+				if (input_verts[j].position == curr)
 					tri_indices.push_back(j);
-				if (in_verts[j].position == next)
+				if (input_verts[j].position == next)
 					tri_indices.push_back(j);
 			}
 
 			// Delete current vertex from the list
-			for (u32 j = 0; j < v_verts.size(); ++j) {
-				if (v_verts[j].position == curr) {
-					v_verts.erase(v_verts.begin() + j);
+			for (u32 j = 0; j < working_verts.size(); ++j) {
+				if (working_verts[j].position == curr) {
+					working_verts.erase(working_verts.begin() + j);
 					break;
 				}
 			}
@@ -383,14 +377,8 @@ void ObjLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 			i = -1;
 		}
 
-
-		// If no tris were created, then break
-		if (indices.empty()) {
-			break;
-		}
-
-		// If there are no more vertices, then break
-		if (v_verts.empty()) {
+		// Break if no triangles were created, or there are no more vertices to process
+		if (indices.empty() || working_verts.empty()) {
 			break;
 		}
 	}
