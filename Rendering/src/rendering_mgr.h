@@ -108,9 +108,9 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
+	unique_ptr<Direct3D> direct3D;
 	unique_ptr<DisplayConfig> display_config;
 	unique_ptr<RenderingConfig> rendering_config;
-	unique_ptr<Direct3D> direct3D;
 	unique_ptr<SwapChain> swap_chain;
 	unique_ptr<ResourceMgr> resource_mgr;
 	unique_ptr<Renderer> renderer;
