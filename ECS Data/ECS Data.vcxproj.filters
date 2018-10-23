@@ -24,44 +24,8 @@
     <Filter Include="Source Files\systems">
       <UniqueIdentifier>{ead6894d-f978-42e8-a7b6-e5c8201681c7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\components\model">
-      <UniqueIdentifier>{c3a38fdb-38ce-4e4e-baae-893e64e8e087}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\components\camera">
-      <UniqueIdentifier>{840bddb9-8a5a-4aaa-aaec-f39f441c9099}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\components\light">
-      <UniqueIdentifier>{a8744bc6-d337-4088-acfd-730d990670cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\systems\camera">
-      <UniqueIdentifier>{86be85a1-9b94-4c12-a523-9b18b673ba3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\systems\model">
-      <UniqueIdentifier>{c7c35ea4-c8f7-4e45-89e0-86a83664e9bd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\components\transform">
-      <UniqueIdentifier>{30c1d015-2ee2-459d-b87b-7e88f54c488e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\systems\transform">
-      <UniqueIdentifier>{33ed6212-9481-46e2-ab6b-df968583da1d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\entities\basic">
       <UniqueIdentifier>{3914d4d5-bd57-475b-9aca-922358e257d2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\components\model">
-      <UniqueIdentifier>{20e2440c-f4ee-49c7-a7e0-65eb906ec16e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\components\camera">
-      <UniqueIdentifier>{5e4680ab-9490-4057-b331-1abe09a6e280}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\systems\model">
-      <UniqueIdentifier>{7ce3a652-5c05-4f49-ab48-184dedec8379}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\systems\camera">
-      <UniqueIdentifier>{56c7cbfa-be6f-4990-97fd-fe93d84e29a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\systems\transform">
-      <UniqueIdentifier>{12955cad-b065-4416-8643-c2bd334c9f3e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\systems\motor">
       <UniqueIdentifier>{f5105d09-d2fd-4321-ac7a-dce7ec38cb75}</UniqueIdentifier>
@@ -78,9 +42,6 @@
     <Filter Include="Header Files\systems\ui">
       <UniqueIdentifier>{b12f08b3-698c-4d71-9719-c36303bf1bba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\components\text">
-      <UniqueIdentifier>{4330ba85-88d1-46ae-b09c-2862139c706f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\components.h">
@@ -94,42 +55,6 @@
     </ClInclude>
     <ClInclude Include="src\entities\basic\player_camera.h">
       <Filter>Header Files\entities\basic</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entities\world_object.h">
-      <Filter>Header Files\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\camera\orthographic_camera.h">
-      <Filter>Header Files\components\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\camera\perspective_camera.h">
-      <Filter>Header Files\components\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\camera\camera_base.h">
-      <Filter>Header Files\components\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\light\directional_light.h">
-      <Filter>Header Files\components\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\light\point_light.h">
-      <Filter>Header Files\components\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\light\spot_light.h">
-      <Filter>Header Files\components\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\model\model.h">
-      <Filter>Header Files\components\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\transform\transform.h">
-      <Filter>Header Files\components\transform</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\camera\camera_system.h">
-      <Filter>Header Files\systems\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\model\model_system.h">
-      <Filter>Header Files\systems\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\systems\transform\transform_system.h">
-      <Filter>Header Files\systems\transform</Filter>
     </ClInclude>
     <ClInclude Include="src\systems\motor\camera_motor_system.h">
       <Filter>Header Files\systems\motor</Filter>
@@ -158,32 +83,8 @@
     <ClInclude Include="src\systems\ui\user_interface.h">
       <Filter>Header Files\systems\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\components\text\text.h">
-      <Filter>Header Files\components\text</Filter>
-    </ClInclude>
-    <ClInclude Include="src\components\light\ambient_light.h">
-      <Filter>Header Files\components\light</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\systems\transform\transform_system.cpp">
-      <Filter>Source Files\systems\transform</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\model\model_system.cpp">
-      <Filter>Source Files\systems\model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\systems\camera\camera_system.cpp">
-      <Filter>Source Files\systems\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\camera\orthographic_camera.cpp">
-      <Filter>Source Files\components\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\camera\perspective_camera.cpp">
-      <Filter>Source Files\components\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\components\model\model.cpp">
-      <Filter>Source Files\components\model</Filter>
-    </ClCompile>
     <ClCompile Include="src\systems\motor\camera_motor_system.cpp">
       <Filter>Source Files\systems\motor</Filter>
     </ClCompile>

@@ -126,6 +126,60 @@
     <Filter Include="Header Files\loader\mtl">
       <UniqueIdentifier>{397c3d82-454d-4936-ba06-9c5a4a6c8ada}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene\components">
+      <UniqueIdentifier>{bdf618f7-4549-455f-b852-b2b3597ca157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\components\camera">
+      <UniqueIdentifier>{7fc4b7d1-fa66-49a1-aa06-f62df56bf325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\components\light">
+      <UniqueIdentifier>{61c1d4cc-9fd6-4636-8dd9-682708180446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\components\model">
+      <UniqueIdentifier>{e7b26366-395b-434e-83fb-ddee0b650701}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\components\transform">
+      <UniqueIdentifier>{2bf4825f-5979-4019-b390-8cdd6549d2f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\components\text">
+      <UniqueIdentifier>{58467ef9-836a-451c-b25d-bb314f005c37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\components">
+      <UniqueIdentifier>{27dce12a-6518-46cc-9615-1e46cd12ce5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\components\model">
+      <UniqueIdentifier>{c928f903-03c3-4f78-93e7-4966d73e37f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\components\camera">
+      <UniqueIdentifier>{4e3da56c-0525-4f82-ab1b-72b2aaa3a74b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\entities">
+      <UniqueIdentifier>{e1ccd78c-2d8e-433e-99b1-e5a5c2a4337c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\systems">
+      <UniqueIdentifier>{a6597cad-c98b-4213-b93b-835f5abc0dad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\systems">
+      <UniqueIdentifier>{2ba28c72-5204-4ca4-914d-45335640e0a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\systems\camera">
+      <UniqueIdentifier>{f73db253-20dd-40b7-8c62-f9ec19320f81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\systems\model">
+      <UniqueIdentifier>{d2237944-1816-4c26-9076-06241a11d530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\systems\transform">
+      <UniqueIdentifier>{de106f36-2f19-4825-83ba-f5d2cce37ad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\systems\transform">
+      <UniqueIdentifier>{c26384a7-ddb9-4873-844c-7f457eb7db98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\systems\camera">
+      <UniqueIdentifier>{1ae7463a-e16d-4b8f-955a-9c98f5e1c4e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\systems\model">
+      <UniqueIdentifier>{c5c9f9fc-cc61-4c11-88ef-dc97e747d175}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -205,6 +259,24 @@
     </ClCompile>
     <ClCompile Include="src\loader\mtl\mtl_loader.cpp">
       <Filter>Source Files\loader\mtl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\camera\perspective_camera.cpp">
+      <Filter>Source Files\scene\components\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\camera\orthographic_camera.cpp">
+      <Filter>Source Files\scene\components\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\model\model.cpp">
+      <Filter>Source Files\scene\components\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\camera\camera_system.cpp">
+      <Filter>Source Files\scene\systems\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\model\model_system.cpp">
+      <Filter>Source Files\scene\systems\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\transform\transform_system.cpp">
+      <Filter>Source Files\scene\systems\transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -342,6 +414,54 @@
     </ClInclude>
     <ClInclude Include="src\loader\mtl\mtl_tokens.h">
       <Filter>Header Files\loader\mtl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\core_components.h">
+      <Filter>Header Files\scene\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\entities\world_object.h">
+      <Filter>Header Files\scene\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\camera\orthographic_camera.h">
+      <Filter>Header Files\scene\components\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\camera\perspective_camera.h">
+      <Filter>Header Files\scene\components\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\camera\camera_base.h">
+      <Filter>Header Files\scene\components\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\light\ambient_light.h">
+      <Filter>Header Files\scene\components\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\light\directional_light.h">
+      <Filter>Header Files\scene\components\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\light\point_light.h">
+      <Filter>Header Files\scene\components\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\light\spot_light.h">
+      <Filter>Header Files\scene\components\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\model\model.h">
+      <Filter>Header Files\scene\components\model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\text\text.h">
+      <Filter>Header Files\scene\components\text</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\transform\transform.h">
+      <Filter>Header Files\scene\components\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\core_systems.h">
+      <Filter>Header Files\scene\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\camera\camera_system.h">
+      <Filter>Header Files\scene\systems\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\model\model_system.h">
+      <Filter>Header Files\scene\systems\model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\transform\transform_system.h">
+      <Filter>Header Files\scene\systems\transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

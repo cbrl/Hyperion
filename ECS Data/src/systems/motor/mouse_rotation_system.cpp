@@ -1,7 +1,8 @@
 #include "mouse_rotation_system.h"
+
 #include "engine/engine.h"
 #include "components/motor/mouse_rotation.h"
-#include "components/transform/transform.h"
+#include "scene/components/transform/transform.h"
 
 
 void MouseRotationSystem::update(Engine& engine) {
@@ -20,7 +21,7 @@ void MouseRotationSystem::update(Engine& engine) {
 		if (!transform->isActive()) return;
 
 		const vec2_f32 max = rotation.getMaxRotation();
-		vec2_f32 units{ 0.0f, 0.0f };
+		vec2_f32 units{0.0f, 0.0f};
 
 		// Set x/y rotation with mouse data
 		units.x = static_cast<f32>(mouse_delta.y) * rotation.getSensitivity();

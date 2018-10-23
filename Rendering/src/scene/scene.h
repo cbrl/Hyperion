@@ -5,6 +5,10 @@
 #include "components/components.h"
 #include "systems/systems.h"
 
+#include "scene/entities/world_object.h"
+#include "scene/components/core_components.h"
+#include "scene/systems/core_systems.h"
+
 class Engine;
 
 class Scene {

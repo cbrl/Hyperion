@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ecs.h"
-#include "components/transform/transform.h"
+#include "scene/components/transform/transform.h"
 
 
 class TransformSystem final : public System<TransformSystem> {

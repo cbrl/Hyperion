@@ -1,7 +1,8 @@
 #include "camera_system.h"
+
 #include "engine/engine.h"
-#include "components/camera/perspective_camera.h"
-#include "components/camera/orthographic_camera.h"
+#include "scene/components/camera/perspective_camera.h"
+#include "scene/components/camera/orthographic_camera.h"
 
 
 void CameraSystem::update(Engine& engine) {

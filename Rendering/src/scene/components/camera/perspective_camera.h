@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/camera/camera_base.h"
+#include "scene/components/camera/camera_base.h"
 
 
 class PerspectiveCamera final : public CameraBase<PerspectiveCamera> {

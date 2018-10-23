@@ -1,7 +1,8 @@
 #include "model_system.h"
+
 #include "engine/engine.h"
-#include "components/transform/transform.h"
-#include "components/model/model.h"
+#include "scene/components/transform/transform.h"
+#include "scene/components/model/model.h"
 
 
 void ModelSystem::update(Engine& engine) {

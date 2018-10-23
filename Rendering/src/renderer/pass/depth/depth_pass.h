@@ -4,12 +4,11 @@
 #include "resource/shader/shader.h"
 #include "buffer/buffers.h"
 #include "buffer/constant_buffer.h"
-#include "components/model/model.h"
 
 class RenderStateMgr;
 class ResourceMgr;
-class ECS;
 class Scene;
+class Model;
 
 class DepthPass final {
 public:
@@ -17,7 +16,9 @@ public:
 	          ID3D11DeviceContext& device_context,
 	          RenderStateMgr& render_state_mgr,
 	          ResourceMgr& resource_mgr);
+
 	~DepthPass() = default;
+
 
 	void bindState() const;
 

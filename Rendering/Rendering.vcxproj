@@ -158,7 +158,13 @@
     <ClCompile Include="src\resource\shader\shader_factory.cpp" />
     <ClCompile Include="src\resource\texture\texture.cpp" />
     <ClCompile Include="src\resource\texture\texture_factory.cpp" />
+    <ClCompile Include="src\scene\components\camera\orthographic_camera.cpp" />
+    <ClCompile Include="src\scene\components\camera\perspective_camera.cpp" />
+    <ClCompile Include="src\scene\components\model\model.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
+    <ClCompile Include="src\scene\systems\camera\camera_system.cpp" />
+    <ClCompile Include="src\scene\systems\model\model_system.cpp" />
+    <ClCompile Include="src\scene\systems\transform\transform_system.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\buffer\buffers.h" />
@@ -204,7 +210,23 @@
     <ClInclude Include="src\resource\shader\shader_factory.h" />
     <ClInclude Include="src\resource\texture\texture.h" />
     <ClInclude Include="src\resource\texture\texture_factory.h" />
+    <ClInclude Include="src\scene\components\camera\camera_base.h" />
+    <ClInclude Include="src\scene\components\camera\orthographic_camera.h" />
+    <ClInclude Include="src\scene\components\camera\perspective_camera.h" />
+    <ClInclude Include="src\scene\components\core_components.h" />
+    <ClInclude Include="src\scene\components\light\ambient_light.h" />
+    <ClInclude Include="src\scene\components\light\directional_light.h" />
+    <ClInclude Include="src\scene\components\light\point_light.h" />
+    <ClInclude Include="src\scene\components\light\spot_light.h" />
+    <ClInclude Include="src\scene\components\model\model.h" />
+    <ClInclude Include="src\scene\components\text\text.h" />
+    <ClInclude Include="src\scene\components\transform\transform.h" />
+    <ClInclude Include="src\scene\entities\world_object.h" />
     <ClInclude Include="src\scene\scene.h" />
+    <ClInclude Include="src\scene\systems\camera\camera_system.h" />
+    <ClInclude Include="src\scene\systems\core_systems.h" />
+    <ClInclude Include="src\scene\systems\model\model_system.h" />
+    <ClInclude Include="src\scene\systems\transform\transform_system.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

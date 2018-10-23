@@ -1,14 +1,14 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
+#include "buffer/constant_buffer.h"
 #include "resource/shader/shader.h"
-#include "components/model/model.h"
 #include "resource/shader/shader_factory.h"
 
 class RenderStateMgr;
 class ResourceMgr;
-class ECS;
 class Scene;
+class Model;
 
 class ForwardPass final {
 public:

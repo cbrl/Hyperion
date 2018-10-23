@@ -1,7 +1,7 @@
 #pragma once
 
 #include "entities/world_object.h"
-#include "components/camera/perspective_camera.h"
+#include "scene/components/camera/perspective_camera.h"
 #include "components/motor/camera_movement.h"
 #include "components/motor/mouse_rotation.h"
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "system/system.h"
-#include "components/transform/transform.h"
 #include "components/motor/camera_movement.h"
+#include "scene/components/transform/transform.h"
 
 
 class CameraMotorSystem final : public System<CameraMotorSystem> {
