@@ -8,15 +8,35 @@ bool error_tex_initialized = false;
 u32 error_tex_data[128][128] = {{}};
 
 
+// Create data for a checkerboard pattern texture
 void InitErrorTextureData() {
 
-	u32 color = 0xFF0000FF;
+	constexpr u32 color  = 0xFF0000FF;
+	constexpr u32 color2 = 0xFF000000;
 
-	for (size_t i = 0; i < 128; ++i) {
-		if (i > 64) color = 0xFF000000;
-		for (size_t j = 0; j < 128; ++j) {
-			if (j > 64) error_tex_data[i][j] = color ^ 0x000000FF;
-			else error_tex_data[i][j] = color;
+	constexpr auto x_size = std::size(error_tex_data[0]);
+	constexpr auto y_size = std::size(error_tex_data);
+
+	constexpr auto x_half_size = x_size / 2;
+	constexpr auto y_half_size = y_size / 2;
+
+	for (size_t i = 0; i < y_half_size; ++i) {
+
+		for (size_t j = 0; j < x_half_size; ++j) {
+			error_tex_data[i][j] = color;
+		}
+		for (size_t j = x_half_size; j < x_size; ++j) {
+			error_tex_data[i][j] = color2;
+		}
+	}
+
+	for (size_t i = y_half_size; i < y_size; ++i) {
+
+		for (size_t j = 0; j < x_half_size; ++j) {
+			error_tex_data[i][j] = color2;
+		}
+		for (size_t j = x_half_size; j < x_size; ++j) {
+			error_tex_data[i][j] = color;
 		}
 	}
 
@@ -67,10 +87,10 @@ void HandleLoaderError(ID3D11Device& device, const std::string& msg, ID3D11Shade
 
 namespace TextureLoader {
 
-void LoadTexture(ID3D11Device& device,
-                 ID3D11DeviceContext& device_context,
-                 const std::wstring& filename,
-                 ID3D11ShaderResourceView** srv_out) {
+void load(ID3D11Device& device,
+          ID3D11DeviceContext& device_context,
+          const std::wstring& filename,
+          ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if the file is missing
 	if (!fs::exists(filename)) {
@@ -137,10 +157,10 @@ void LoadTexture(ID3D11Device& device,
 }
 
 
-void LoadTexture(ID3D11Device& device,
-                 ID3D11DeviceContext& device_context,
-                 const std::vector<std::wstring>& filenames,
-                 ID3D11ShaderResourceView** srv_out) {
+void load(ID3D11Device& device,
+          ID3D11DeviceContext& device_context,
+          const std::vector<std::wstring>& filenames,
+          ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if a file is missing
 	for (const std::wstring& fn : filenames) {

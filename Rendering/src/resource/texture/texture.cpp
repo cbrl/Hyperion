@@ -7,7 +7,7 @@ Texture::Texture(ID3D11Device& device,
                  const std::wstring& filename)
 	: Resource(filename) {
 
-	TextureLoader::LoadTexture(device, device_context, filename, texture_srv.GetAddressOf());
+	TextureLoader::load(device, device_context, filename, texture_srv.GetAddressOf());
 }
 
 
