@@ -260,10 +260,12 @@ public:
 	// Member Functions - Viewport
 	//----------------------------------------------------------------------------------
 
+	[[nodiscard]]
 	Viewport& getViewport() {
 		return viewport;
 	}
 
+	[[nodiscard]]
 	const Viewport& getViewport() const {
 		return viewport;
 	}
@@ -273,7 +275,8 @@ public:
 	// Member Functions - Z Depth
 	//----------------------------------------------------------------------------------
 
-	vec2_f32 getZDepth() const {
+	[[nodiscard]]
+	const vec2_f32& getZDepth() const {
 		return depth;
 	}
 
@@ -308,10 +311,12 @@ public:
 	// Member Functions - Settings
 	//----------------------------------------------------------------------------------
 
+	[[nodiscard]]
 	CameraSettings& getSettings() {
 		return settings;
 	}
 
+	[[nodiscard]]
 	const CameraSettings& getSettings() const {
 		return settings;
 	}

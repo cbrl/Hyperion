@@ -45,6 +45,7 @@ public:
 	}
 
 	// Update the projection matrix after changing depth/width/height/etc...
+	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getCameraToProjectionMatrix() const override;
 
 

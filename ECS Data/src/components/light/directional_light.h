@@ -128,14 +128,14 @@ private:
 	vec4_f32 specular;
 
 	// Clipping planes
-	f32      start;
-	f32      range;
+	f32 start;
+	f32 range;
 
 	// Projection matrix size
 	vec2_f32 proj_size;
 
 	// Bounding volume
-	AABB     aabb;
+	AABB aabb;
 
 	// Shadow boolean
 	bool shadows;

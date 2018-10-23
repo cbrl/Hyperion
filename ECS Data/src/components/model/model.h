@@ -48,6 +48,7 @@ public:
 	// Member Functions - Name
 	//----------------------------------------------------------------------------------
 
+	[[nodiscard]]
 	const std::string& getName() const {
 		return name;
 	}
@@ -111,10 +112,12 @@ public:
 	// Member Functions - Bounding Volumes
 	//----------------------------------------------------------------------------------
 
+	[[nodiscard]]
 	const AABB& getAABB() const {
 		return aabb;
 	}
 
+	[[nodiscard]]
 	const BoundingSphere& getBoundingSphere() const {
 		return sphere;
 	}

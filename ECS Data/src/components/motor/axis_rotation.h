@@ -104,14 +104,17 @@ public:
 		return rotation_speeds;
 	}
 
+	[[nodiscard]]
 	f32 getSpeedX() const {
 		return rotation_speeds.x;
 	}
 
+	[[nodiscard]]
 	f32 getSpeedY() const {
 		return rotation_speeds.y;
 	}
 
+	[[nodiscard]]
 	f32 getSpeedZ() const {
 		return rotation_speeds.z;
 	}
