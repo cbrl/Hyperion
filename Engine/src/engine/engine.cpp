@@ -12,6 +12,7 @@ std::unique_ptr<Engine> SetupEngine() {
 	// Create the console
 	AllocateConsole();
 
+	// Read the config file
 	ConfigReader reader;
 	reader.readConfig(CONFIG_FILE);
 
@@ -84,6 +85,7 @@ Engine::~Engine() {
 
 void Engine::quit() {
 
+	// Write the current configuration values to a file
 	ConfigWriter::write(*this, CONFIG_FILE);
 
 	// Explicity delete the scene before the rendering manager.
