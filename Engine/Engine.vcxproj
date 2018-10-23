@@ -170,11 +170,13 @@
   <ItemGroup>
     <ClInclude Include="src\config\config_reader.h" />
     <ClInclude Include="src\config\config_tokens.h" />
+    <ClInclude Include="src\config\config_writer.h" />
     <ClInclude Include="src\engine\engine.h" />
     <ClInclude Include="src\targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\config\config_reader.cpp" />
+    <ClCompile Include="src\config\config_writer.cpp" />
     <ClCompile Include="src\engine\engine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

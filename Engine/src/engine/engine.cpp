@@ -1,8 +1,9 @@
 #include "targetver.h"
 #include "engine.h"
-#include "imgui_message_forwarder.h"
 #include "config/config_reader.h"
-#include "io/file_writer.h"
+#include "config/config_writer.h"
+
+#include "imgui_message_forwarder.h"
 
 
 #define CONFIG_FILE "./config.txt"
@@ -83,8 +84,7 @@ Engine::~Engine() {
 
 void Engine::quit() {
 
-	
-
+	ConfigWriter::write(*this, CONFIG_FILE);
 
 	// Explicity delete the scene before the rendering manager.
 	// This prevents D3D from potentially reporting live resources

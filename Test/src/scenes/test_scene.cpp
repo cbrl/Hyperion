@@ -39,7 +39,7 @@ void TestScene::load(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera
-	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindowSize());
+	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
 	camera->addComponent<AmbientLight>()->setColor(vec4_f32{ 0.2f, 0.2f, 0.2f, 1.0f });
 
 	// Set the parameters

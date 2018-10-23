@@ -63,32 +63,42 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	DisplayConfig& getDisplayConfig() noexcept {
+	DisplayConfig& getDisplayConfig() {
 		return *display_config;
 	}
 
 	[[nodiscard]]
-	RenderingConfig& getRenderingConfig() noexcept {
+	const DisplayConfig& getDisplayConfig() const {
+		return *display_config;
+	}
+
+	[[nodiscard]]
+	RenderingConfig& getRenderingConfig() {
 		return *rendering_config;
 	}
 
 	[[nodiscard]]
-	ID3D11Device& getDevice() const noexcept {
+	const RenderingConfig& getRenderingConfig() const {
+		return *rendering_config;
+	}
+
+	[[nodiscard]]
+	ID3D11Device& getDevice() const {
 		return direct3D->getDevice();
 	}
 
 	[[nodiscard]]
-	ID3D11DeviceContext& getDeviceContext() const noexcept {
+	ID3D11DeviceContext& getDeviceContext() const {
 		return direct3D->getDeviceContext();
 	}
 
 	[[nodiscard]]
-	SwapChain& getSwapChain() const noexcept {
+	SwapChain& getSwapChain() const {
 		return *swap_chain;
 	}
 
 	[[nodiscard]]
-	ResourceMgr& getResourceMgr() const noexcept {
+	ResourceMgr& getResourceMgr() const {
 		return *resource_mgr;
 	}
 

@@ -39,12 +39,18 @@
     <ClInclude Include="src\config\config_tokens.h">
       <Filter>Header Files\config</Filter>
     </ClInclude>
+    <ClInclude Include="src\config\config_writer.h">
+      <Filter>Header Files\config</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\engine\engine.cpp">
       <Filter>Source Files\engine</Filter>
     </ClCompile>
     <ClCompile Include="src\config\config_reader.cpp">
+      <Filter>Source Files\config</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config\config_writer.cpp">
       <Filter>Source Files\config</Filter>
     </ClCompile>
   </ItemGroup>
