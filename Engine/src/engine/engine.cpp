@@ -83,28 +83,7 @@ Engine::~Engine() {
 
 void Engine::quit() {
 
-	FileWriter writer(CONFIG_FILE);
-
-	const auto res = window->getClientSize();
-	const auto& display = rendering_mgr->getDisplayConfig();
-	const auto& rendering = rendering_mgr->getRenderingConfig();
-
-	writer.writeLine(ConfigTokens::comment, "Display");
-	writer.writeLine(ConfigTokens::width, ' ', res.x);
-	writer.writeLine(ConfigTokens::height, ' ', res.y);
-	writer.writeLine(ConfigTokens::refresh, ' ', display.getRoundedDisplayRefreshRate());
-	writer.writeLine(ConfigTokens::vsync, ' ', display.isVsync());
-	writer.writeLine(ConfigTokens::fullscreen, ' ', display.isFullscreen());
-
-	writer.writeLine();
-
-	writer.writeLine(ConfigTokens::comment, "Window");
-	writer.writeLine(ConfigTokens::win_title, ' ', window->getWindowTitle());
-
-	writer.writeLine();
-
-	writer.writeLine(ConfigTokens::comment, "Engine");
-	writer.writeLine(ConfigTokens::shadowmap_res, ' ', rendering.getShadowMapRes());
+	
 
 
 	// Explicity delete the scene before the rendering manager.
@@ -168,7 +147,7 @@ void Engine::init(std::wstring title,
 	system_monitor = std::make_unique<SystemMonitor>();
 
 	// Input Handler
-	input = std::make_unique<Input>(gsl::make_not_null(window->getWindow()));
+	input = std::make_unique<Input>(gsl::make_not_null(window->getHandle()));
 
 	// Timer
 	timer = std::make_unique<HighResTimer>();
@@ -178,7 +157,7 @@ void Engine::init(std::wstring title,
 	fps_counter->setWaitTime(250ms);
 
 	// Rendering Manager
-	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getWindow()), std::move(display_config), std::move(rendering_config));
+	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getHandle()), std::move(display_config), std::move(rendering_config));
 }
 
 

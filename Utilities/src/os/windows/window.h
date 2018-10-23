@@ -172,7 +172,7 @@ public:
 	}
 
 	[[nodiscard]]
-	HWND getWindow() const noexcept {
+	HWND getHandle() const noexcept {
 		return window;
 	}
 

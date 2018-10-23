@@ -22,8 +22,8 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	EngineMessageHandler() noexcept = default;
-	EngineMessageHandler(const EngineMessageHandler& handler) = default;
-	EngineMessageHandler(EngineMessageHandler&& handler) = default;
+	EngineMessageHandler(const EngineMessageHandler& handler) noexcept = default;
+	EngineMessageHandler(EngineMessageHandler&& handler) noexcept = default;
 
 	//----------------------------------------------------------------------------------
 	// Destructor
@@ -33,8 +33,8 @@ public:
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	EngineMessageHandler& operator=(const EngineMessageHandler& handler) = default;
-	EngineMessageHandler& operator=(EngineMessageHandler&& handler) = default;
+	EngineMessageHandler& operator=(const EngineMessageHandler& handler) noexcept = default;
+	EngineMessageHandler& operator=(EngineMessageHandler&& handler) noexcept = default;
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
@@ -68,7 +68,7 @@ public:
 	       RenderingConfig rendering_config);
 
 	Engine(const Engine& engine) = delete;
-	Engine(Engine&& engine) = default;
+	Engine(Engine&& engine) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	Engine& operator=(const Engine& engine) = delete;
-	Engine& operator=(Engine&& engine) = default;
+	Engine& operator=(Engine&& engine) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ public:
 	void run();
 
 	// Request that the engine quit upon completion of the current frame
-	void requestExit() {
+	void requestExit() noexcept {
 		exit_requested = true;
 	}
 
@@ -104,17 +104,17 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	HWND getWindow() const {
-		return window->getWindow();
+	Window& getWindow() {
+		return *window;
 	}
 
 	[[nodiscard]]
-	vec2_u32 getWindowSize() const {
-		return window->getClientSize();
+	const Window& getWindow() const {
+		return *window;
 	}
 
 	// Request a resize of the window and renderer
-	void requestResize() {
+	void requestResize() noexcept {
 		resize_requested = true;
 	}
 
