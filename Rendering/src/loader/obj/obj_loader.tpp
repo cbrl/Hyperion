@@ -103,7 +103,7 @@ void ObjLoader<VertexT>::readLine() {
 	}
 
 	// Material Library
-	if (token == ObjTokens::mtl_library) {
+	else if (token == ObjTokens::mtl_library) {
 		mat_lib = readToken<std::string>();
 	}
 
@@ -111,6 +111,13 @@ void ObjLoader<VertexT>::readLine() {
 	else if (token == ObjTokens::use_mtl) {
 		group_mat_names[static_cast<u32>(groups.size()) - 1] = readToken<std::string>();
 	}
+
+	// Unknown Token
+	else {
+		Logger::log(LogLevel::warn, "{}:{} Unknown obj token: {}", getFilePath().string(), getLineNumber(), token);
+		return;
+	}
+
 
 	readUnusedTokens();
 }
