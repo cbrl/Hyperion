@@ -50,7 +50,7 @@ public:
 		line_number = 1;
 		std::string line;
 		while (std::getline(file_stream, line)) {
-			token_iterator = std::sregex_iterator(line.begin(), line.end(), search_regex);
+			token_iterator = std::sregex_token_iterator(line.begin(), line.end(), search_regex);
 			if (hasTokens()) {
 				readLine();
 			}
@@ -72,9 +72,6 @@ protected:
 	template<typename T>
 	T readToken();
 
-	template<>
-	std::string readToken();
-
 	void readUnusedTokens() {
 		while (hasTokens()) {
 			const auto token = readToken<std::string>();
@@ -83,30 +80,48 @@ protected:
 	}
 
 	bool hasTokens() const noexcept {
-		static const std::sregex_iterator token_iterator_end;
+		static const std::sregex_token_iterator token_iterator_end;
 		return token_iterator != token_iterator_end;
 	}
 
-	const std::sregex_iterator& getCurrentToken() const noexcept {
-		return token_iterator;
+	std::string_view getCurrentToken() const noexcept {
+		if (token_iterator->matched) {
+			return { &*token_iterator->first,
+			         static_cast<size_t>(token_iterator->second - token_iterator->first) };
+		}
+		return {};
 	}
 
 
+	//----------------------------------------------------------------------------------
+	//
+	//----------------------------------------------------------------------------------
 	const fs::path& getFilePath() const noexcept {
 		return file_path;
 	}
 
-	const size_t getLineNumber() const noexcept {
+	size_t getLineNumber() const noexcept {
 		return line_number;
 	}
+
+
+private:
+	template<typename T>
+	T readTokenImpl();
+
+	template<>
+	std::string_view readTokenImpl();
+
+	template<>
+	std::string readTokenImpl();
 
 
 private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	std::regex           search_regex;
-	std::sregex_iterator token_iterator;
+	std::regex                 search_regex;
+	std::sregex_token_iterator token_iterator;
 	
 	fs::path file_path;
 	size_t   line_number = 1;

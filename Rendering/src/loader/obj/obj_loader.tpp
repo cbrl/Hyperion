@@ -43,7 +43,7 @@ ModelOutput<VertexT> ObjLoader<VertexT>::load(const fs::path& file, bool right_h
 template<typename VertexT>
 void ObjLoader<VertexT>::readLine() {
 
-	const std::string token = readToken<std::string>();
+	const auto token = readToken<std::string_view>();
 
 	if (token[0] == ObjTokens::comment) {
 		return;
@@ -146,48 +146,51 @@ void ObjLoader<VertexT>::readFace() {
 	std::vector<vec3_u32> face_def;
 
 	// Split the line into separate vertex definitions
-	std::vector<std::string> vert_strings;
+	std::vector<std::string_view> vert_strings;
 	while (hasTokens()) {
-		vert_strings.push_back(readToken<std::string>());
+		vert_strings.push_back(readToken<std::string_view>());
 	}
 
 	for (const auto& vert_string : vert_strings) {
 
 		// Split the vertex definition into separate parts
-		std::vector<std::string> vert_parts = Split(vert_string, "/");
+		std::vector<std::string_view> vert_parts = Split(vert_string, "/");
 
 		vec3_u32 vertex{0, 0, 0};
 
 		// Determine the vertex type
 		switch (vert_parts.size()) {
 			// Position
-			case 1:
-				vertex.x = stoi(vert_parts[0]);
+			case 1: {
+				vertex.x = *StrTo<u32>(vert_parts[0]);
 				face_def.push_back(vertex);
 				break;
+			}
 
 			// Position/Texture
-			case 2:
-				vertex.x = stoi(vert_parts[0]);
-				vertex.y = stoi(vert_parts[1]);
+			case 2: {
+				vertex.x = *StrTo<u32>(vert_parts[0]);
+				vertex.y = *StrTo<u32>(vert_parts[1]);
 				face_def.push_back(vertex);
 				break;
+			}
 
-			case 3:
+			case 3: {
 				// Position//Normal
 				if (vert_parts[1].empty()) {
-					vertex.x = stoi(vert_parts[0]);
-					vertex.z = stoi(vert_parts[2]);
+					vertex.x = *StrTo<u32>(vert_parts[0]);
+					vertex.z = *StrTo<u32>(vert_parts[2]);
 					face_def.push_back(vertex);
 				}
 				// Position/Texture/Normal
 				else {
-					vertex.x = stoi(vert_parts[0]);
-					vertex.y = stoi(vert_parts[1]);
-					vertex.z = stoi(vert_parts[2]);
+					vertex.x = *StrTo<u32>(vert_parts[0]);
+					vertex.y = *StrTo<u32>(vert_parts[1]);
+					vertex.z = *StrTo<u32>(vert_parts[2]);
 					face_def.push_back(vertex);
 				}
 				break;
+			}
 
 			default:
 				break;
