@@ -46,13 +46,13 @@ using Microsoft::WRL::ComPtr;
 // Functions
 //----------------------------------------------------------------------------------
 
-template<typename ExceptionT = std::runtime_error>
-inline void ThrowIfFailed(HRESULT hr, const std::string& msg = "") {
+inline void (ThrowIfFailed)(HRESULT hr, const char* file, int line, const std::string& msg = "Unkown Error") {
 	if (FAILED(hr)) {
 		std::stringstream result;
-		result << msg << " (Failure with HRESULT of 0x" << std::hex << hr << ")\n";
+		result << msg << " (Failure with HRESULT of 0x" << std::hex << hr << ")";
 
 		//std::cerr << result.str();
-		throw ExceptionT(result.str());
+		Logger::log(LogLevel::critical, "{}:{:d} - {}", file, line, result.str());
+		throw std::runtime_error(result.str());
 	}
 }
