@@ -1,6 +1,8 @@
 #pragma once
 
 #include "log/spdlog/spdlog.h"
+#include "log/spdlog/sinks/stdout_sinks.h"
+#include "log/spdlog/sinks/rotating_file_sink.h"
 #include <iostream>
 
 
