@@ -24,7 +24,7 @@
 #define SELECT(name, num) CAT(name##_, num)
 #define GET_COUNT(_1, _2, _3, _4, _5, _6, _7, _8, count, ...) count
 #define VA_SIZE(...) EXPAND(GET_COUNT(__VA_ARGS__, 8, 7, 6, 5, 4, 3, 2, 1))
-#define VA_SELECT(name, ...) SELECT(name, VA_SIZE(__VA_ARGS__))(__VA_ARGS__)
+#define VA_SELECT(name, ...) EXPAND( SELECT(name, VA_SIZE(__VA_ARGS__))(__VA_ARGS__) )
 
 // ThrowIfFailed macros
 #define ThrowIfFailed_1(result) ThrowIfFailed(result, __FILE__, __LINE__)
