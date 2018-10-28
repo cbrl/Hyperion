@@ -15,6 +15,10 @@ private:
 			file    = spdlog::rotating_logger_mt("file_log", "log.txt", 1024 * 1024, 1);
 			console = spdlog::stdout_logger_mt("console_log");
 
+			const std::string pattern = "[%Y-%m-%d %H:%M:%S.%e] [%l] %v";
+			file->set_pattern(pattern);
+			console->set_pattern(pattern);
+
 			#ifdef _DEBUG
 			file->set_level(LogLevel::debug);
 			console->set_level(LogLevel::debug);
@@ -33,7 +37,7 @@ public:
 	Logger(Logger&& logger) = delete;
 
 	~Logger() {
-		file->log(LogLevel::info, "<==========================END==========================>\n");
+		if (file) file->log(LogLevel::info, "<==========================END==========================>\n");
 	}
 
 	Logger& operator=(const Logger& logger) = delete;
