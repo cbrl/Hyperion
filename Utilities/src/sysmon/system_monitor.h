@@ -3,12 +3,13 @@
 #include "os/windows/windows.h"
 #include "os/windows/win_utils.h"
 #include <Psapi.h>
+#include <thread> //std::thread::hardware_concurrency()
 
 #include "datatypes/scalar_types.h"
 #include "timer/timer.h"
 
 
-struct PerCoreClock {
+struct PerCoreClock final {
 	using rep        = u64;
 	using period     = std::ratio<1, 10000000>;
 	using duration   = std::chrono::duration<rep, period>;
@@ -18,37 +19,37 @@ struct PerCoreClock {
 
 	[[nodiscard]]
 	static time_point now() noexcept {
-		static u16 core_count = std::thread::hardware_concurrency();
+		static const u16 core_count = std::thread::hardware_concurrency();
 		return time_point(duration(GetCPUTime() / core_count));
 	}
 };
 
-struct SystemWorkClock {
-	using rep = u64;
-	using period = std::ratio<1, 10000000>;
-	using duration = std::chrono::duration<rep, period>;
+struct SystemWorkClock final {
+	using rep        = u64;
+	using period     = std::ratio<1, 10000000>;
+	using duration   = std::chrono::duration<rep, period>;
 	using time_point = std::chrono::time_point<SystemWorkClock>;
 
 	static constexpr bool is_steady = true;
 
 	[[nodiscard]]
 	static time_point now() noexcept {
-		static u16 core_count = std::thread::hardware_concurrency();
+		static const u16 core_count = std::thread::hardware_concurrency();
 		return time_point(duration(GetSystemWorkTime() / core_count));
 	}
 };
 
-struct SystemIdleClock {
-	using rep = u64;
-	using period = std::ratio<1, 10000000>;
-	using duration = std::chrono::duration<rep, period>;
+struct SystemIdleClock final {
+	using rep        = u64;
+	using period     = std::ratio<1, 10000000>;
+	using duration   = std::chrono::duration<rep, period>;
 	using time_point = std::chrono::time_point<SystemIdleClock>;
 
 	static constexpr bool is_steady = true;
 
 	[[nodiscard]]
 	static time_point now() noexcept {
-		static u16 core_count = std::thread::hardware_concurrency();
+		static const u16 core_count = std::thread::hardware_concurrency();
 		return time_point(duration(GetSystemIdleTime() / core_count));
 	}
 };
@@ -60,6 +61,9 @@ using PerCoreTimer = Timer<PerCoreClock>;
 
 class SystemMonitor final {
 
+	//----------------------------------------------------------------------------------
+	// CPU Monitor
+	//----------------------------------------------------------------------------------
 	class CpuMonitor final {
 		friend class SystemMonitor;
 
@@ -94,11 +98,16 @@ class SystemMonitor final {
 	};
 
 
+	//----------------------------------------------------------------------------------
+	// Memory Monitor
+	//----------------------------------------------------------------------------------
 	class MemoryMonitor final {
 		friend class SystemMonitor;
 
 	protected:
-		MemoryMonitor() noexcept {
+		MemoryMonitor() noexcept
+			: mem_info{}
+			, pmc{} {
 			mem_info.dwLength = sizeof(MEMORYSTATUSEX);
 		}
 

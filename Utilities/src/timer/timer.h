@@ -2,7 +2,6 @@
 
 #include <chrono>
 #include <ratio>
-#include <thread> //std::thread::hardware_concurrency()
 #include "datatypes/scalar_types.h"
 
 
