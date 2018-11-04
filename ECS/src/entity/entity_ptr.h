@@ -12,7 +12,7 @@
 //
 //----------------------------------------------------------------------------------
 
-class IEntity;
+class Entity;
 class EntityMgr;
 
 class EntityPtr final {
@@ -59,10 +59,10 @@ public:
 	}
 
 	[[nodiscard]]
-	IEntity* operator->() const;
+	Entity* operator->() const;
 
 	[[nodiscard]]
-	IEntity& operator*() const;
+	Entity& operator*() const;
 
 	[[nodiscard]]
 	operator bool() const {
@@ -74,7 +74,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	IEntity* get() const;
+	Entity* get() const;
 
 	[[nodiscard]]
 	handle64 getHandle() const noexcept;
@@ -162,12 +162,12 @@ public:
 	}
 
 	[[nodiscard]]
-	IEntity* operator->() const {
+	Entity* operator->() const {
 		return ptr.operator->();
 	}
 
 	[[nodiscard]]
-	IEntity& operator*() const {
+	Entity& operator*() const {
 		return ptr.operator*();
 	}
 
@@ -181,7 +181,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	IEntity* get() const {
+	Entity* get() const {
 		return ptr.get();
 	}
 

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "entities/world_object.h"
+#include "scene/entities/world_object.h"
 #include "scene/components/camera/perspective_camera.h"
 #include "components/motor/camera_movement.h"
 #include "components/motor/mouse_rotation.h"
 
 
-class PlayerCamera final : public WorldObject<PlayerCamera> {
+class PlayerCamera final : public WorldObject {
 public:
 	PlayerCamera(EntityPtr this_ptr,
 	             ComponentMgr* component_mgr,
@@ -18,6 +18,4 @@ public:
 		this->addComponent<CameraMovement>();
 		this->addComponent<MouseRotation>();
 	}
-
-	~PlayerCamera() = default;
 };

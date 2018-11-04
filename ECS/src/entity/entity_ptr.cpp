@@ -6,15 +6,15 @@
 // EntityPtr
 //----------------------------------------------------------------------------------
 
-IEntity* EntityPtr::operator->() const {
+Entity* EntityPtr::operator->() const {
 	return mgr->getEntity(handle);
 }
 
-IEntity& EntityPtr::operator*() const {
+Entity& EntityPtr::operator*() const {
 	return *(mgr->getEntity(handle));
 }
 
-IEntity* EntityPtr::get() const {
+Entity* EntityPtr::get() const {
 	return mgr->getEntity(handle);
 }
 

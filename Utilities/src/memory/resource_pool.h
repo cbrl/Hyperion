@@ -14,7 +14,7 @@
 //
 //----------------------------------------------------------------------------------
 
-template<typename T>
+template<typename T = void>
 class PoolResource {
 protected:
 	static std::pmr::synchronized_pool_resource pool;
@@ -24,7 +24,7 @@ template<typename T>
 std::pmr::synchronized_pool_resource PoolResource<T>::pool;
 
 
-class IResourcePool : public PoolResource<void> {
+class IResourcePool : public PoolResource<> {
 public:
 	IResourcePool() noexcept = default;
 	virtual ~IResourcePool() = default;
@@ -208,6 +208,7 @@ public:
 		if (it == pools.end()) {
 			Logger::log(LogLevel::err, "Invalid pool type requested: {}", type.name());
 			assert(false && "Invalid resource pool type requested");
+			return nullptr;
 		}
 		return it->second.get();
 	}

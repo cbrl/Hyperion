@@ -3,14 +3,14 @@
 #include "ecs.h"
 
 
-IEntity::IEntity(EntityPtr this_ptr, gsl::not_null<ComponentMgr*> component_mgr)
+Entity::Entity(EntityPtr this_ptr, gsl::not_null<ComponentMgr*> component_mgr)
 	: active(true)
 	, this_ptr(this_ptr)
 	, component_mgr(component_mgr) {
 }
 
 
-IEntity::~IEntity() {
+Entity::~Entity() {
 
 	removeAllChildren();
 
@@ -21,7 +21,7 @@ IEntity::~IEntity() {
 }
 
 
-void IEntity::setActive(bool state) {
+void Entity::setActive(bool state) {
 	active = state;
 	for (auto& pair : components) {
 		pair.second->setActive(state);
@@ -29,7 +29,7 @@ void IEntity::setActive(bool state) {
 }
 
 
-void IEntity::addChild(EntityPtr child) {
+void Entity::addChild(EntityPtr child) {
 	if (child != this_ptr
 	    && child.valid()
 	    && child->getParent() != this_ptr
@@ -41,7 +41,7 @@ void IEntity::addChild(EntityPtr child) {
 }
 
 
-void IEntity::removeChild(EntityPtr child) {
+void Entity::removeChild(EntityPtr child) {
 	if (child == this_ptr
 		|| !child.valid()
 		|| child->getParent() != this_ptr) {
@@ -56,13 +56,13 @@ void IEntity::removeChild(EntityPtr child) {
 }
 
 
-void IEntity::removeAllChildren() {
+void Entity::removeAllChildren() {
 	forEachChild([this](EntityPtr& child) {
 		removeChild(child);
 	});
 }
 
 
-bool IEntity::hasChild(EntityPtr child) const {
+bool Entity::hasChild(EntityPtr child) const {
 	return std::find(children.cbegin(), children.cend(), child) != children.cend();
 }

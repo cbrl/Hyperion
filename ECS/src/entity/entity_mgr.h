@@ -51,7 +51,6 @@ public:
 	[[nodiscard]]
 	EntityPtr createEntity(ArgsT&&... args);
 
-
 	// Add an entity to the list of expired entities. Will be
 	// destroyed at the end of the next ECS update.
 	void destroyEntity(handle64 handle);
@@ -61,33 +60,19 @@ public:
 	void removeExpiredEntities();
 
 
-	// Get an entity from the handle
+	// Get the entity associated with the handle
 	[[nodiscard]]
-	IEntity* getEntity(handle64 handle) {
-		return handle_table[handle];
-	}
+	Entity* getEntity(handle64 handle);
 
 
-	// Get the number of the specified entity type
-	template<typename EntityT>
+	// Get the number of entities
 	[[nodiscard]]
-	size_t countOf() {
-		return entity_pools.poolExists<EntityT>() ? entity_pools.getPool<EntityT>()->getCount() : 0;
-	}
+	size_t count() const noexcept;
 
 
-	// Check if the entity manager has created an entity of the specified type
-	template<typename EntityT>
+	// Check if a handle is valid
 	[[nodiscard]]
-	bool knowsEntity() const {
-		return entity_pools.poolExists<EntityT>();
-	}
-
-
-	[[nodiscard]]
-	bool validHandle(handle64 entity) const {
-		return handle_table.validHandle(entity);
-	}
+	bool validHandle(handle64 entity) const noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -95,8 +80,10 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Apply an action to each entity
-	template<typename EntityT, typename ActionT>
-	void forEach(ActionT&& act);
+	template<typename ActionT>
+	void forEach(ActionT&& act) {
+		entity_pool.forEach(act);
+	}
 
 
 private:
@@ -108,17 +95,16 @@ private:
 	shared_ptr<ComponentMgr> component_mgr;
 
 	// Map of unique resource pools for each type of entity
-	ResourcePoolManager entity_pools;
+	ResourcePool<Entity> entity_pool;
 
-	// Handle table. Maps a handle to an IEntity pointer.
-	HandleTable<handle64, IEntity> handle_table;
+	// Handle table. Maps a handle to an Entity pointer.
+	HandleTable<handle64, Entity> handle_table;
 
-	std::unordered_multimap<std::type_index, IEntity*> entities;
+	std::unordered_multimap<std::type_index, Entity*> entities;
 
 	// Container of entities that need to be deleted
 	std::vector<handle64> expired_entities;
 	u32 num_expired_entities;
 };
-
 
 #include "entity_mgr.tpp"

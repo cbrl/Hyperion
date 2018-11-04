@@ -5,49 +5,49 @@
 class IComponent;
 class ComponentMgr;
 
+
 //----------------------------------------------------------------------------------
-// IEntity
+// Entity
 //----------------------------------------------------------------------------------
 //
-// Interface for the Entity class
+// A class that represents an entity. Contains components that can be used to
+// describe the state or behavior of the entity. Also contains pointers to a
+// parent and children that allow for a relational hierarchy.
 //
 //----------------------------------------------------------------------------------
 
-class IEntity {
+class Entity {
 	friend class EntityMgr;
 
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
+	Entity() = delete;
+	Entity(const Entity& entity) = delete;
+	Entity(Entity&& entity) = default;
 
-	IEntity() = delete;
-	IEntity(EntityPtr this_ptr, gsl::not_null<ComponentMgr*> component_mgr);
-	IEntity(const IEntity& entity) = delete;
-	IEntity(IEntity&& entity) = default;
+protected:
+	Entity(EntityPtr this_ptr, gsl::not_null<ComponentMgr*> component_mgr);
 
 
+public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
-	virtual ~IEntity();
+	virtual ~Entity();
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
-	IEntity& operator=(const IEntity& entity) = delete;
-	IEntity& operator=(IEntity&& entity) noexcept = default;
+	Entity& operator=(const Entity& entity) = delete;
+	Entity& operator=(Entity&& entity) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - Pointer
 	//----------------------------------------------------------------------------------
-
-	// Get the entity's type index
-	virtual std::type_index getTypeIndex() const = 0;
 
 	// Get the entity's handle
 	[[nodiscard]]
@@ -169,6 +169,11 @@ protected:
 	// This entity's EntityPtr. Set on creation in EntityMgr.
 	EntityPtr this_ptr;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Variables - Components
+	//----------------------------------------------------------------------------------
+
 	// A pointer to the component manager. The ECS destroys all
 	// entities before the component manager is destroyed, so
 	// the pointer should never be invalid in this context.
@@ -177,85 +182,17 @@ protected:
 	// Map of pointers to components
 	std::unordered_multimap<std::type_index, IComponent*> components;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Variables - Parent/Children
+	//----------------------------------------------------------------------------------
+
 	// The parent of this entity
 	EntityPtr parent_ptr;
 
 	// The children of this entity
 	std::vector<EntityPtr> children;
 };
-
-
-
-
-//----------------------------------------------------------------------------------
-// Entity
-//----------------------------------------------------------------------------------
-//
-// Base class that all unique entities will derive from
-//
-//----------------------------------------------------------------------------------
-
-template<typename T>
-class Entity : public IEntity {
-	friend class EntityMgr;
-
-public:
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
-
-	Entity() = delete;
-	Entity(const Entity& entity) = delete;
-	Entity(Entity&& entity) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Destructor
-	//----------------------------------------------------------------------------------
-
-	virtual ~Entity() = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-
-	Entity& operator=(const Entity& entity) = delete;
-	Entity& operator=(Entity&& entity) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions
-	//----------------------------------------------------------------------------------
-
-	// Get the entity's type index
-	std::type_index getTypeIndex() const override {
-		return index;
-	}
-
-
-protected:
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
-
-	Entity(EntityPtr this_ptr, ComponentMgr* component_mgr)
-		: IEntity(this_ptr, gsl::make_not_null(component_mgr)) {
-	}
-
-
-public:
-	//----------------------------------------------------------------------------------
-	// Member Variables
-	//----------------------------------------------------------------------------------
-
-	// And ID unique to type T
-	static const std::type_index index;
-};
-
-
-template<typename T>
-const std::type_index Entity<T>::index = std::type_index(typeid(T));
 
 
 #include "entity.tpp"

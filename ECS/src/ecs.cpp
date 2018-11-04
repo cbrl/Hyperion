@@ -19,7 +19,6 @@ void ECS::destroyEntity(handle64 entity) {
 }
 
 
-
 void ECS::update(Engine& engine) {
 	system_mgr->update(engine);
 	entity_mgr->removeExpiredEntities();

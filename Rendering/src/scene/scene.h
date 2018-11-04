@@ -65,7 +65,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Add an entity to this scene
-	template<typename EntityT = WorldObject<>, typename... ArgsT>
+	template<typename EntityT = WorldObject, typename... ArgsT>
 	EntityPtr addEntity(ArgsT&&... args) {
 		auto entity = ecs->createEntity<EntityT>(std::forward<ArgsT>(args)...);
 		entities.push_back(entity);

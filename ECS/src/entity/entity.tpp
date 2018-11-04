@@ -3,7 +3,7 @@
 
 
 template<typename ComponentT, typename... ArgsT>
-ComponentT* IEntity::addComponent(ArgsT&&... args) {
+ComponentT* Entity::addComponent(ArgsT&&... args) {
 
 	ComponentT* component = component_mgr->createComponent<ComponentT>(std::forward<ArgsT>(args)...);
 	component->setOwner(this_ptr);
@@ -15,7 +15,7 @@ ComponentT* IEntity::addComponent(ArgsT&&... args) {
 
 
 template<typename ComponentT>
-ComponentT* IEntity::getComponent() {
+ComponentT* Entity::getComponent() {
 
 	auto it = components.find(ComponentT::index);
 
@@ -27,7 +27,7 @@ ComponentT* IEntity::getComponent() {
 
 
 template<typename ComponentT>
-std::vector<ComponentT*> IEntity::getAll() {
+std::vector<ComponentT*> Entity::getAll() {
 
 	std::vector<ComponentT*> component_vec;
 
@@ -42,7 +42,7 @@ std::vector<ComponentT*> IEntity::getAll() {
 
 
 template<typename ComponentT>
-void IEntity::removeComponent(ComponentT* component) {
+void Entity::removeComponent(ComponentT* component) {
 
 	const auto range = components.equal_range(ComponentT::index);
 
@@ -57,7 +57,7 @@ void IEntity::removeComponent(ComponentT* component) {
 
 
 template<typename ComponentT>
-void IEntity::removeAll() {
+void Entity::removeAll() {
 
 	const auto range = components.equal_range(ComponentT::index);
 
@@ -69,19 +69,19 @@ void IEntity::removeAll() {
 
 
 template<typename ComponentT>
-bool IEntity::hasComponent() const {
+bool Entity::hasComponent() const {
 	return components.find(ComponentT::index) != components.end();
 }
 
 
 template<typename ComponentT>
-size_t IEntity::countOf() const {
+size_t Entity::countOf() const {
 	return components.count(ComponentT::index);
 }
 
 
 template<typename ActionT>
-void IEntity::forEachChild(ActionT&& act) {
+void Entity::forEachChild(ActionT&& act) {
 	children.erase(std::remove_if(children.begin(), children.end(),
 	                              [](EntityPtr& child) { return !child.valid(); }),
 	               children.end());
@@ -93,7 +93,7 @@ void IEntity::forEachChild(ActionT&& act) {
 
 
 template<typename ActionT>
-void IEntity::forEachChildRecursive(ActionT&& act) {
+void Entity::forEachChildRecursive(ActionT&& act) {
 	children.erase(std::remove_if(children.begin(), children.end(),
 	                              [](EntityPtr& child) { return !child.valid(); }),
 	               children.end());

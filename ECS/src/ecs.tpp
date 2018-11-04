@@ -1,8 +1,9 @@
+
 template<typename EntityT, typename... ArgsT>
 [[nodiscard]]
 EntityPtr ECS::createEntity(ArgsT&&... args) {
-	static_assert(std::is_base_of_v<IEntity, EntityT>,
-		"Calling ECS::CreateEntity() with non-entity type.");
+	static_assert(std::is_base_of_v<Entity, EntityT>,
+	              "Calling ECS::CreateEntity() with non-entity type.");
 
 	return entity_mgr->createEntity<EntityT>(std::forward<ArgsT>(args)...);
 }
@@ -19,8 +20,8 @@ SystemT* ECS::addSystem(ArgsT&&... args) {
 
 template<typename T>
 size_t ECS::countOf() const {
-	if constexpr (std::is_base_of_v<IEntity, T>) {
-		return entity_mgr->countOf<T>();
+	if constexpr (std::is_same_v<Entity, T>) {
+		return entity_mgr->count();
 	}
 	if constexpr (std::is_base_of_v<IComponent, T>) {
 		return component_mgr->countOf<T>();
@@ -32,10 +33,8 @@ size_t ECS::countOf() const {
 // Do something for each entity or component
 template<typename T, typename ActionT>
 void ECS::forEach(ActionT&& act) {
-	if constexpr (std::is_base_of_v<IEntity, T>) {
-		if (!entity_mgr->knowsEntity<T>()) return;
-
-		entity_mgr->forEach<T>(act);
+	if constexpr (std::is_same_v<Entity, T>) {
+		entity_mgr->forEach(act);
 	}
 
 	if constexpr (std::is_base_of_v<IComponent, T>) {

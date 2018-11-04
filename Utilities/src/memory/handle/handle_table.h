@@ -75,7 +75,7 @@ public:
 
 
 private:
-	void allocateChunk();
+	bool allocateChunk();
 
 
 private:

@@ -1092,7 +1092,7 @@ void DrawSceneMenu(ID3D11Device& device,
 		if (ImGui::BeginMenu("Entity")) {
 
 			if (ImGui::MenuItem("New")) {
-				scene.addEntity<WorldObject<>>();
+				scene.addEntity();
 			}
 
 			if (ImGui::BeginMenu("Selected")) {

@@ -13,14 +13,13 @@
 //
 //----------------------------------------------------------------------------------
 
-template<typename T = void>
-class WorldObject : public Entity<WorldObject<T>> {
+class WorldObject : public Entity {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 	WorldObject(EntityPtr this_ptr, ComponentMgr* component_mgr)
-		: Entity<WorldObject<T>>(this_ptr, component_mgr) {
+		: Entity(this_ptr, gsl::make_not_null(component_mgr)) {
 
 		this->addComponent<Transform>();
 	}

@@ -1,11 +1,15 @@
 template<typename HandleT, typename DataT, size_t ChunkSize>
-void HandleTable<HandleT, DataT, ChunkSize>::allocateChunk() {
+bool HandleTable<HandleT, DataT, ChunkSize>::allocateChunk() {
 
-	assert((table.size() < HandleT::index_max) && "Max handle table size exceeded.");
+	if (table.size() >= HandleT::index_max) {
+		Logger::log(LogLevel::err, "Max handle table size reached ({})", HandleT::index_max);
+		assert(false && "Max handle table size reached");
+		return false;
+	}
 
 	size_t size = std::min(table.size() + ChunkSize, HandleT::index_max);
-
 	table.resize(size);
+	return true;
 }
 
 
@@ -32,20 +36,29 @@ HandleT HandleTable<HandleT, DataT, ChunkSize>::createHandle(DataT* object) {
 	// If this point is reached, then the table needs to
 	// be expanded before a new handle is created.
 
-	// Increase table size
-	allocateChunk();
+	// Try to increase table size
+	if (allocateChunk()) {
 
-	// Create the object/handle
-	table[i].first = 1;
-	table[i].second = object;
+		// Create the object/handle
+		table[i].first = 1;
+		table[i].second = object;
 
-	return HandleT(i, table[i].first);
+		return HandleT(i, table[i].first);
+	}
+
+	// Return an invalid handle if one couldn't be created
+	return HandleT::invalid_handle;
 }
 
 
 template<typename HandleT, typename DataT, size_t ChunkSize>
 void HandleTable<HandleT, DataT, ChunkSize>::releaseHandle(HandleT handle) {
-	assert(validHandle(handle) && "Invalid handle specified for release");
+
+	if (!validHandle(handle)) {
+		Logger::log(LogLevel::err, "Invalid handle specified for release (index: {}, counter: {})", handle.index, handle.counter);
+		assert(false && "Invalid handle specified for release");
+		return;
+	}
 
 	table[handle.index].second = nullptr;
 }
