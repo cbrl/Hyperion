@@ -205,8 +205,8 @@ public:
 	[[nodiscard]]
 	IResourcePool* getPool(std::type_index type) {
 		const auto& it = pools.find(type);
-		if (it != pools.end()) {
-			Logger::log(LogLevel::err, "Invalid pool type requested: "s + type.name());
+		if (it == pools.end()) {
+			Logger::log(LogLevel::err, "Invalid pool type requested: {}", type.name());
 			assert(false && "Invalid resource pool type requested");
 		}
 		return it->second.get();
