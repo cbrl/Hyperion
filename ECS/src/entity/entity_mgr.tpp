@@ -23,5 +23,7 @@ void EntityMgr::forEach(ActionT&& act) {
 
 	using pool_t = ResourcePool<EntityT>;
 	auto* pool = static_cast<pool_t*>(entity_pools.getPool<EntityT>());
-	pool->forEach(act);
+	if (pool) {
+		pool->forEach(act);
+	}
 }

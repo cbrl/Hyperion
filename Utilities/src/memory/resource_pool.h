@@ -2,6 +2,7 @@
 
 #include "datatypes/datatypes.h"
 #include "exception/exception.h"
+#include "log/log.h"
 #include <memory_resource>
 
 
@@ -28,7 +29,7 @@ public:
 	IResourcePool() noexcept = default;
 	virtual ~IResourcePool() = default;
 
-	// Allocate an unitialized object
+	// Allocate an uninitialized object
 	[[nodiscard]]
 	virtual void* allocate() = 0;
 
@@ -147,7 +148,7 @@ private:
 //
 // 'index' is used as an index into the map of resource pools. This requirement
 // allows the user to retrieve the proper pool even when the specific resource
-// type is unkown (e.g. using a virtual getTypeIndex() method used when a
+// type is unknown (e.g. using a virtual getTypeIndex() method used when a
 // polymorphic type is referred to by its base class).
 //
 //----------------------------------------------------------------------------------
@@ -204,7 +205,10 @@ public:
 	[[nodiscard]]
 	IResourcePool* getPool(std::type_index type) {
 		const auto& it = pools.find(type);
-		assert(it != pools.end() && "Invalid resource pool type requested");
+		if (it != pools.end()) {
+			Logger::log(LogLevel::err, "Invalid pool type requested: "s + type.name());
+			assert(false && "Invalid resource pool type requested");
+		}
 		return it->second.get();
 	}
 

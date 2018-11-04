@@ -84,7 +84,9 @@ public:
 	void forEach(ActionT&& act) {
 		using pool_t = ResourcePool<ComponentT>;
 		auto* pool = static_cast<pool_t*>(component_pools.getPool<ComponentT>());
-		pool->forEach(act);
+		if (pool) {
+			pool->forEach(act);
+		}
 	}
 
 
