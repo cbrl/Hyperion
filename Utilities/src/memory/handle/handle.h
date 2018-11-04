@@ -2,9 +2,12 @@
 
 #include "datatypes/datatypes.h"
 
-
+//----------------------------------------------------------------------------------
+// Handle
+//----------------------------------------------------------------------------------
 // Handle template that can be specialized for any given data size,
 // number of counter bits, and number of index bits
+//----------------------------------------------------------------------------------
 
 #pragma warning (push)
 #pragma warning (disable: 4293) //disable '<<' undefined behavior warning
@@ -56,6 +59,10 @@ public:
 		return (counter << (sizeof(T) * 8 - CounterBits)) | index;
 	}
 
+	std::size_t hash() const noexcept {
+		return std::hash<T>{}(T());
+	}
+
 
 public:
 	//----------------------------------------------------------------------------------
@@ -94,4 +101,20 @@ private:
 #pragma warning (pop)
 
 
+//----------------------------------------------------------------------------------
+// std::hash specialization
+//----------------------------------------------------------------------------------
+namespace std {
+	template<typename T, size_t IB, size_t CB>
+	struct hash<Handle<T,IB,CB>> {
+		size_t operator()(const Handle<T, IB, CB>& handle) const noexcept {
+			return handle.hash();
+		}
+	};
+}
+
+
+//----------------------------------------------------------------------------------
+// using declarations
+//----------------------------------------------------------------------------------
 using handle64 = Handle<u64, 40, 24>;
