@@ -178,9 +178,9 @@ void TestScene::tick(Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const vec2_i32 mouse_delta = engine.getInput().getMouseDelta();
-	const u32 fps              = engine.getFPSCounter().getFPS();
-	const f64 delta_time       = engine.getTimer().deltaTime();
+	const vec2_i32 mouse_pos   = engine.getInput().getMousePosition();
+	//const f32 fps              = engine.getFPSCounter().getFPS();
+	//const f64 delta_time       = engine.getTimer().deltaTime();
 	const f64 total_cpu_usage  = engine.getSysMon().cpu().getTotalCpuPercentage();
 	const f64 proc_cpu_usage   = engine.getSysMon().cpu().getProcessCpuPercentage();
 	const u64 total_mem_usage  = engine.getSysMon().memory().getTotalUsedPhysicalMem();
@@ -204,12 +204,12 @@ void TestScene::tick(Engine& engine) {
 	        << L"\nProcess: "        << static_cast<f64>(proc_mem_usage) / 1e6  << L"MB";
 
 	// FPS
-	text_fps->getComponent<Text>()->setText(
-		L"FPS: " + std::to_wstring(fps));
+	/*text_fps->getComponent<Text>()->setText(
+		L"FPS: " + std::to_wstring(fps));*/
 
 	// Frame Time
-	text_frame_time->getComponent<Text>()->setText(
-		L"Frame Time: " + std::to_wstring(delta_time) + L"ms");
+	//text_frame_time->getComponent<Text>()->setText(
+	//	L"Frame Time: " + std::to_wstring(delta_time) + L"ms");
 
 	// CPU Usage
 	text_cpu->getComponent<Text>()->setText(cpu_str.str());
@@ -219,6 +219,6 @@ void TestScene::tick(Engine& engine) {
 
 	// Mouse Activity
 	text_mouse->getComponent<Text>()->setText(
-		L"Mouse \nX: " + std::to_wstring(mouse_delta.x)
-	    + L"\nY: "     + std::to_wstring(mouse_delta.y));
+		L"Mouse \nX: " + std::to_wstring(mouse_pos.x)
+	    + L"\nY: "     + std::to_wstring(mouse_pos.y));
 }

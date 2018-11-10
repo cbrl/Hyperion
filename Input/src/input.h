@@ -69,11 +69,19 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions
+	// Member Functions - Update State
 	//----------------------------------------------------------------------------------
 
+	// Update the input state
 	void tick();
+
+	// Reset the input state
 	void reset();
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Mouse
+	//----------------------------------------------------------------------------------
 
 	// Set mouse to use absolute screen coords.
 	// Allows the mouse to leave the window.
@@ -104,7 +112,12 @@ public:
 		mouse->IsVisible() ? mouse->SetVisible(false) : mouse->SetVisible(true);
 	}
 
-	// Get mouse movement since last update
+	// Get the mouse's current position. Use getMouseDelta() when processing movement.
+	// Returns {0, 0} if the mouse is in Relative mode.
+	[[nodiscard]]
+	vec2_i32 getMousePosition() const;
+
+	// Get the mouse movement since last update. Returns {0, 0} in absolute mode.
 	[[nodiscard]]
 	vec2_i32 getMouseDelta() const;
 
@@ -114,6 +127,10 @@ public:
 		return mouse_state.positionMode;
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Keyboard
+	//----------------------------------------------------------------------------------
 
 	// Check if key is currently down
 	[[nodiscard]]

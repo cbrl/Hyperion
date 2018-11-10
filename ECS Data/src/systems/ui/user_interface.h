@@ -13,8 +13,6 @@ public:
 		, resource_mgr(resource_mgr) {
 	}
 
-	~UserInterface() = default;
-
 	void update(Engine& engine) override;
 
 

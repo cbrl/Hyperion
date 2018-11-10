@@ -13,10 +13,8 @@
 #include "log/log.h"
 #include "os/windows/win_utils.h"
 
-#include <iterator>
 
-
-void* selected = nullptr;
+void*     selected = nullptr;
 EntityPtr selected_entity;
 
 
@@ -1299,17 +1297,20 @@ void DrawFPSDisplay(Engine& engine) {
 	const auto& timer = engine.getTimer();
 	const auto& fps_counter = engine.getFPSCounter();
 
-	static std::vector<float> fps_history;
+	static int vec_size = 30;
+	static std::vector<float> fps_history(vec_size, 0.0f);
+
+	f32 fps = 0.0f;
 	static f64 dt = 0.0;
 
 	dt += timer.deltaTime();
-	const u32 fps = fps_counter.getFPS();
 	if (dt >= fps_counter.getWaitTime().count()) {
-		fps_history.push_back(static_cast<float>(fps));
+		fps = fps_counter.getFPS();
+		fps_history.push_back(fps);
 		dt = 0.0;
 	}
-	if (fps_history.size() > 50) {
-		fps_history.erase(fps_history.begin(), fps_history.begin() + (fps_history.size() - 50));
+	if (fps_history.size() > vec_size) {
+		fps_history.erase(fps_history.begin(), fps_history.begin() + (fps_history.size() - vec_size));
 	}
 
 	if (ImGui::Begin("FPS", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {

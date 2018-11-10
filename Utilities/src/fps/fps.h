@@ -49,9 +49,9 @@ public:
 	void tick() noexcept {
 		frame_count++;
 
-		// Update FPS when at least 1/2 second has passed
+		// Update FPS when enough time has passed
 		if (SteadyClock::now() >= (start_time + wait_time)) {
-			fps = static_cast<u32>(frame_count * (1000.0 / wait_time.count()));
+			fps = static_cast<f32>(frame_count * (1000.0 / wait_time.count()));
 			frame_count = 0;
 			start_time = SteadyClock::now();
 		}
@@ -62,18 +62,19 @@ public:
 		wait_time = time;
 	}
 
+	// Get the amount of time the FPS counter waits before updating (in milliseconds)
 	std::chrono::milliseconds getWaitTime() const noexcept {
 		return wait_time;
 	}
 
 	[[nodiscard]]
-	u32 getFPS() const noexcept {
+	f32 getFPS() const noexcept {
 		return fps;
 	}
 
 
 private:
-	u32 fps;
+	f32 fps;
 	u32 frame_count;
 	std::chrono::milliseconds wait_time;
 	SteadyClock::time_point start_time;
