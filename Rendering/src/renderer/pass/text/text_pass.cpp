@@ -19,12 +19,12 @@ void TextPass::render(Scene& scene) const {
 
 			sprite_batch->Begin();
 			font.DrawString(sprite_batch.get(),
-				text.getText().c_str(),
-				transform->getPosition(),
-				text.getColor(),
-				XMVectorGetZ(transform->getRotation()),
-				transform->getObjectOrigin(),
-				transform->getScale());
+			                text.getText().c_str(),
+			                transform->getPosition(),
+			                text.getColor(),
+			                XMVectorGetZ(transform->getRotation()),
+			                transform->getObjectOrigin(),
+			                transform->getScale());
 			sprite_batch->End();
 		}
 	});

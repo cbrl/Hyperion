@@ -30,7 +30,7 @@ void DisplayConfig::init() {
 
 	// Discard the display modes that are below 800px wide or
 	// have a scaling mode of DXGI_MODE_SCALING_STRETCHED
-	for (u32 i = 0; i < mode_count; i++) {
+	for (size_t i = 0; i < mode_count; i++) {
 		if (display_modes[i].Width <= 800)
 			continue;
 		if (display_modes[i].Scaling == DXGI_MODE_SCALING_STRETCHED)
@@ -41,7 +41,7 @@ void DisplayConfig::init() {
 
 
 	// Get the highest refresh rate display mode for the current resolution
-	for (u32 i = 0; i < display_desc_list.size(); ++i) {
+	for (size_t i = 0; i < display_desc_list.size(); ++i) {
 
 		//if (display_desc_list[i].Width == GetSystemMetrics(SM_CXSCREEN) &&
 		//	display_desc_list[i].Height == GetSystemMetrics(SM_CYSCREEN)) {
@@ -99,7 +99,8 @@ void DisplayConfig::setNearestDisplayDesc(const vec2_u32& resolution,
 			}
 		}
 	}
-	// Get best height
+
+	// Get best height
 	{
 		u32 closest_height = std::numeric_limits<u32>::max();
 

@@ -40,7 +40,7 @@ void TestScene::load(const Engine& engine) {
 
 	// Create the camera
 	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
-	camera->addComponent<AmbientLight>()->setColor(vec4_f32{ 0.2f, 0.2f, 0.2f, 1.0f });
+	camera->addComponent<AmbientLight>()->setColor(vec4_f32{ 0.16f, 0.16f, 0.16f, 1.0f });
 
 	// Set the parameters
 	auto* cam = camera->getComponent<PerspectiveCamera>();
@@ -136,35 +136,23 @@ void TestScene::load(const Engine& engine) {
 
 	auto font = resource_mgr.getOrCreate<Font>(L"../data/fonts/courier-12.spritefont");
 
-	// FPS
-	text_fps = addEntity<>();
-	text_fps->addComponent<Text>(font);
-	text_fps->getComponent<Transform>()->setPosition(
-		vec3_f32{ 10, 10, 0 });
-
-	// Frame Time
-	text_frame_time = addEntity<>();
-	text_frame_time->addComponent<Text>(font);
-	text_frame_time->getComponent<Transform>()->setPosition(
-		vec3_f32{ 10, 40, 0 });
-
 	// CPU Usage
 	text_cpu = addEntity<>();
 	text_cpu->addComponent<Text>(font);
 	text_cpu->getComponent<Transform>()->setPosition(
-		vec3_f32{ 10, 70, 0 });
+		vec3_f32{ 10, 10, 0 });
 
 	// RAM Usage
 	text_ram = addEntity<>();
 	text_ram->addComponent<Text>(font);
 	text_ram->getComponent<Transform>()->setPosition(
-		vec3_f32{ 10, 140, 0 });
+		vec3_f32{ 10, 80, 0 });
 
 	// Mouse Movement
 	text_mouse = addEntity<>();
 	text_mouse->addComponent<Text>(font);
 	text_mouse->getComponent<Transform>()->setPosition(
-		vec3_f32{ 10, 210, 0 });
+		vec3_f32{ 10, 150, 0 });
 }
 
 
@@ -179,8 +167,6 @@ void TestScene::tick(Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	const vec2_i32 mouse_pos   = engine.getInput().getMousePosition();
-	//const f32 fps              = engine.getFPSCounter().getFPS();
-	//const f64 delta_time       = engine.getTimer().deltaTime();
 	const f64 total_cpu_usage  = engine.getSysMon().cpu().getTotalCpuPercentage();
 	const f64 proc_cpu_usage   = engine.getSysMon().cpu().getProcessCpuPercentage();
 	const u64 total_mem_usage  = engine.getSysMon().memory().getTotalUsedPhysicalMem();
@@ -202,14 +188,6 @@ void TestScene::tick(Engine& engine) {
 	mem_str.precision(4);
 	mem_str << L"RAM Usage\nTotal: " << static_cast<f64>(total_mem_usage) / 1e6 << L"MB"
 	        << L"\nProcess: "        << static_cast<f64>(proc_mem_usage) / 1e6  << L"MB";
-
-	// FPS
-	/*text_fps->getComponent<Text>()->setText(
-		L"FPS: " + std::to_wstring(fps));*/
-
-	// Frame Time
-	//text_frame_time->getComponent<Text>()->setText(
-	//	L"Frame Time: " + std::to_wstring(delta_time) + L"ms");
 
 	// CPU Usage
 	text_cpu->getComponent<Text>()->setText(cpu_str.str());

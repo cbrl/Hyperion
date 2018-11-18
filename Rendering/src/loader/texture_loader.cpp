@@ -171,10 +171,9 @@ void load(ID3D11Device& device,
 	}
 
 	// Create a vector of textures
-	const u32 size = static_cast<u32>(filenames.size());
-	std::vector<ComPtr<ID3D11Texture2D>> srcTex(size);
+	std::vector<ComPtr<ID3D11Texture2D>> src_tex(filenames.size());
 
-	for (u32 i = 0; i < size; i++) {
+	for (size_t i = 0; i < filenames.size(); i++) {
 		if (GetFileExtension(filenames[i]) == L".dds") {
 			HRESULT hr = CreateDDSTextureFromFileEx(&device,
 			                                        filenames[i].c_str(),
@@ -184,7 +183,7 @@ void load(ID3D11Device& device,
 			                                        D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE,
 			                                        NULL,
 			                                        false,
-			                                        reinterpret_cast<ID3D11Resource**>(srcTex[i].GetAddressOf()),
+			                                        reinterpret_cast<ID3D11Resource**>(src_tex[i].GetAddressOf()),
 			                                        nullptr);
 			if (FAILED(hr)) {
 				HandleLoaderError(device, "Failed to create Texture2D: " + WstrToStr(filenames[i]), srv_out);
@@ -201,7 +200,7 @@ void load(ID3D11Device& device,
 			                                        D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE,
 			                                        NULL,
 			                                        NULL,
-			                                        reinterpret_cast<ID3D11Resource**>(srcTex[i].GetAddressOf()),
+			                                        reinterpret_cast<ID3D11Resource**>(src_tex[i].GetAddressOf()),
 			                                        nullptr);
 			if (FAILED(hr)) {
 				HandleLoaderError(device, "Failed to create Texture2D: " + WstrToStr(filenames[i]), srv_out);
@@ -213,14 +212,14 @@ void load(ID3D11Device& device,
 
 	// Get the texture description from a texture
 	D3D11_TEXTURE2D_DESC desc = {};
-	srcTex[0].Get()->GetDesc(&desc);
+	src_tex[0].Get()->GetDesc(&desc);
 
 	// Create the texture array description
 	D3D11_TEXTURE2D_DESC array_desc = {};
 	array_desc.Width              = desc.Width;
 	array_desc.Height             = desc.Height;
 	array_desc.MipLevels          = desc.MipLevels;
-	array_desc.ArraySize          = size;
+	array_desc.ArraySize          = static_cast<UINT>(filenames.size());
 	array_desc.Format             = desc.Format;
 	array_desc.SampleDesc.Count   = 1;
 	array_desc.SampleDesc.Quality = 0;
@@ -239,24 +238,24 @@ void load(ID3D11Device& device,
 
 
 	// Update texture array with texture data
-	for (u32 texElement = 0; texElement < size; texElement++) {
+	for (size_t texElement = 0; texElement < filenames.size(); texElement++) {
 		for (u32 mipLevel = 0; mipLevel < desc.MipLevels; mipLevel++) {
 			D3D11_MAPPED_SUBRESOURCE mappedTex = {};
 
-			HRESULT hr = device_context.Map(srcTex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex);
+			HRESULT hr = device_context.Map(src_tex[texElement].Get(), mipLevel, D3D11_MAP_READ, NULL, &mappedTex);
 			if (FAILED(hr)) {
 				HandleLoaderError(device, "Failed to map Texture2D for Texture2DArray", srv_out);
 				return;
 			}
 
 			device_context.UpdateSubresource(tex_array.Get(),
-			                                 D3D11CalcSubresource(mipLevel, texElement, desc.MipLevels),
+			                                 D3D11CalcSubresource(mipLevel, static_cast<UINT>(texElement), desc.MipLevels),
 			                                 nullptr,
 			                                 mappedTex.pData,
 			                                 mappedTex.RowPitch,
 			                                 mappedTex.DepthPitch);
 
-			device_context.Unmap(srcTex[texElement].Get(), mipLevel);
+			device_context.Unmap(src_tex[texElement].Get(), mipLevel);
 		}
 	}
 
@@ -268,7 +267,7 @@ void load(ID3D11Device& device,
 	view_desc.Texture2DArray.MipLevels       = array_desc.MipLevels;
 	view_desc.Texture2DArray.MostDetailedMip = 0;
 	view_desc.Texture2DArray.FirstArraySlice = 0;
-	view_desc.Texture2DArray.ArraySize       = size;
+	view_desc.Texture2DArray.ArraySize       = static_cast<UINT>(filenames.size());
 
 	// Create the SRV
 	HRESULT hr_srv = device.CreateShaderResourceView(tex_array.Get(), &view_desc, srv_out);

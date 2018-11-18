@@ -17,8 +17,6 @@ public:
 
 
 private:
-	EntityPtr text_fps;
-	EntityPtr text_frame_time;
 	EntityPtr text_cpu;
 	EntityPtr text_ram;
 	EntityPtr text_mouse;
