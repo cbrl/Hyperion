@@ -39,6 +39,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rendering", "Rendering\Rend
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Input", "Input\Input.vcxproj", "{2F60711D-83F1-469E-AD0A-3BAE21B529F9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Assimp", "Assimp\Assimp.vcxproj", "{57042576-E947-46C4-A2ED-EB058B2D8517}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -119,6 +121,14 @@ Global
 		{2F60711D-83F1-469E-AD0A-3BAE21B529F9}.Release|x64.Build.0 = Release|x64
 		{2F60711D-83F1-469E-AD0A-3BAE21B529F9}.Release|x86.ActiveCfg = Release|Win32
 		{2F60711D-83F1-469E-AD0A-3BAE21B529F9}.Release|x86.Build.0 = Release|Win32
+		{57042576-E947-46C4-A2ED-EB058B2D8517}.Debug|x64.ActiveCfg = Debug|x64
+		{57042576-E947-46C4-A2ED-EB058B2D8517}.Debug|x64.Build.0 = Debug|x64
+		{57042576-E947-46C4-A2ED-EB058B2D8517}.Debug|x86.ActiveCfg = Debug|Win32
+		{57042576-E947-46C4-A2ED-EB058B2D8517}.Debug|x86.Build.0 = Debug|Win32
+		{57042576-E947-46C4-A2ED-EB058B2D8517}.Release|x64.ActiveCfg = Release|x64
+		{57042576-E947-46C4-A2ED-EB058B2D8517}.Release|x64.Build.0 = Release|x64
+		{57042576-E947-46C4-A2ED-EB058B2D8517}.Release|x86.ActiveCfg = Release|Win32
+		{57042576-E947-46C4-A2ED-EB058B2D8517}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

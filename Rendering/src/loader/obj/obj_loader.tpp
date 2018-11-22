@@ -131,7 +131,7 @@ void ObjLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 	// Set the group's material to the index value of its
 	// material in the material vector.
 	for (size_t i = 0; i < groups.size(); ++i) {
-		for (size_t j = 0; j < materials.size(); ++j) {
+		for (u32 j = 0; j < materials.size(); ++j) {
 			if (group_mat_names[i] == materials[j].name) {
 				groups[i].material_index = j;
 			}
@@ -293,7 +293,7 @@ void ObjLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 
 			// Handle a 3 vertex case then break
 			if (working_verts.size() == 3) {
-				for (size_t j = 0; j < working_verts.size(); ++j) {
+				for (u32 j = 0; j < working_verts.size(); ++j) {
 					if (input_verts[j].position == prev) tri_indices.push_back(j);
 					if (input_verts[j].position == curr) tri_indices.push_back(j);
 					if (input_verts[j].position == next) tri_indices.push_back(j);
@@ -306,7 +306,7 @@ void ObjLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 			// Handle a 4 vertex case then break
 			if (working_verts.size() == 4) {
 				// Create a triangle
-				for (size_t j = 0; j < input_verts.size(); ++j) {
+				for (u32 j = 0; j < input_verts.size(); ++j) {
 					if (input_verts[j].position == prev) tri_indices.push_back(j);
 					if (input_verts[j].position == curr) tri_indices.push_back(j);
 					if (input_verts[j].position == next) tri_indices.push_back(j);
@@ -325,7 +325,7 @@ void ObjLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 				}
 
 				// Create a triangle
-				for (size_t j = 0; j < input_verts.size(); ++j) {
+				for (u32 j = 0; j < input_verts.size(); ++j) {
 					if (input_verts[j].position == prev) tri_indices.push_back(j);
 					if (input_verts[j].position == next) tri_indices.push_back(j);
 					if (input_verts[j].position == temp) tri_indices.push_back(j);
@@ -366,7 +366,7 @@ void ObjLoader<VertexT>::triangulate(std::vector<vec3_u32>& face_def) {
 			}
 
 			// Create a triangle from previous, current, and next vertices
-			for (size_t j = 0; j < input_verts.size(); ++j) {
+			for (u32 j = 0; j < input_verts.size(); ++j) {
 				if (input_verts[j].position == prev)
 					tri_indices.push_back(j);
 				if (input_verts[j].position == curr)
