@@ -130,7 +130,7 @@ void ObjLoader<VertexT>::loadMaterials(const fs::path& mat_file) {
 
 	// Set the group's material to the index value of its
 	// material in the material vector.
-	for (size_t i = 0; i < groups.size(); ++i) {
+	for (u32 i = 0; i < groups.size(); ++i) {
 		for (u32 j = 0; j < materials.size(); ++j) {
 			if (group_mat_names[i] == materials[j].name) {
 				groups[i].material_index = j;
