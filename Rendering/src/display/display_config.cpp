@@ -153,6 +153,11 @@ void DisplayConfig::setNearestDisplayDesc(const vec2_u32& resolution,
 	}
 
 	// Set the matching desc
-	const size_t match_index = desc_matches[0] - display_desc_list.begin();
-	setDisplayDesc(match_index);
+	if (desc_matches.empty()) {
+		setDisplayDesc(0);
+	}
+	else {
+		const size_t match_index = desc_matches[0] - display_desc_list.begin();
+		setDisplayDesc(match_index);
+	}
 }

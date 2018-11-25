@@ -167,3 +167,19 @@ inline std::optional<bool> StrTo(std::string_view in) {
 
 	return {};
 }
+
+
+// Get the string representation of a type name
+template <typename T>
+constexpr std::string_view type_name() {
+#if defined(__clang__)
+	std::string_view p = __PRETTY_FUNCTION__;
+	return std::string_view{p.data() + 34, p.size() - 34 - 1};
+#elif defined(__GNUC__)
+	std::string_view p = __PRETTY_FUNCTION__;
+	return std::string_view{p.data() + 49, p.find(';', 49) - 49};
+#elif defined(_MSC_VER)
+	std::string_view p = __FUNCSIG__;
+	return std::string_view{p.data() + 84, p.size() - 84 - 7};
+#endif
+}

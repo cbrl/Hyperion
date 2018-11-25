@@ -5,12 +5,11 @@
 template<typename T>
 T LineReader::readToken() {
 	if (!hasTokens()) {
-		Logger::log(LogLevel::err, "{}:{} - No token value to read", file_path.string(), line_number);
-		throw std::runtime_error("No token value to read");
+		Logger::log(LogLevel::warn, "{}:{} - No token value to read", file_path.string(), line_number);
+		return T{};
 	}
 
 	const auto out = readTokenImpl<T>();
-
 	++token_iterator;
 	return out;
 }
@@ -23,7 +22,7 @@ T LineReader::readTokenImpl() {
 
 	const auto out = StrTo<T>(str);
 	if (!out.has_value()) {
-		Logger::log(LogLevel::err, "Invalid value: {}", str);
+		Logger::log(LogLevel::err, "Error converting {} to {}", str, type_name<T>());
 		throw std::runtime_error("Invalid value: " + std::string(str));
 	}
 	
