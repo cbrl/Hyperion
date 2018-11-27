@@ -1,3 +1,4 @@
+
 namespace BlueprintFactory {
 
 	template<typename VertexT>
@@ -10,38 +11,37 @@ namespace BlueprintFactory {
 		// Model name
 		std::string name = "Cube " + std::to_string(size) + (rhcoords ? " RH" : "") + (invertn ? " InvertN" : "");
 
+		
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeCube(vertices, mesh.indices, size, rhcoords, invertn);
 
-		Shapes::ComputeCube(vertices, indices, size, rhcoords, invertn);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Cube Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Cube";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Cube Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);

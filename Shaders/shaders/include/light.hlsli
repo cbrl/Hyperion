@@ -215,7 +215,7 @@ void ComputeDirectionalLight(DirectionalLight L,
 	//diffuse = diffuse_factor * mat.diffuse * L.diffuse;
 
 	// Specular
-	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.specular.w);
+	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.spec_exponent);
 	specular = specular_factor * L.specular * mat.specular;
 }
 
@@ -293,7 +293,7 @@ void ComputePointLight(PointLight L,
 	diffuse = diffuse_factor * mat.diffuse * L.diffuse;
 
 	// Specular
-	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.specular.w);
+	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.spec_exponent);
 	specular = specular_factor * L.specular * mat.specular;
 
 	// Attenution
@@ -365,7 +365,7 @@ void ComputeSpotLight(SpotLight L,
 	diffuse = diffuse_factor * mat.diffuse * L.diffuse;
 
 	// Specular
-	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.specular.w);
+	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.spec_exponent);
 	specular = specular_factor * L.specular * mat.specular;
 
 	// Attenution

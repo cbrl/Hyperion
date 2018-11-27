@@ -97,14 +97,19 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	scene.forEach<Model>([&](Model& model) {
-		if (model.isActive()) {
-			const auto& mat = model.getMaterial();
-			if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
-				return;
+	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		if (!root.isActive()) return;
 
-			renderModel(model, world_to_projection);
-		}
+		root.forEachModel([&](const Model& model) {
+			//TODO: if (!model.isActive()) return;
+
+			const auto& mat = model.getMaterial();
+			//TODO:
+			//if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
+				//return;
+
+			renderModel(root, model, world_to_projection);
+		});
 	});
 }
 
@@ -124,16 +129,18 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	scene.forEach<Model>([&](Model& model) {
-		if (model.isActive()) {
+	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		if (!root.isActive()) return;
+
+		root.forEachModel([&](const Model& model) {
+			//TODO: if (!model.isActive()) return;
+
 			const auto& mat = model.getMaterial();
-			if (!mat.transparent
-				|| mat.diffuse.w < ALPHA_MIN
-				|| mat.diffuse.w > ALPHA_MAX)
+			if (mat.params.opacity < ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
 				return;
 
-			renderModel(model, world_to_projection);
-		}
+			renderModel(root, model, world_to_projection);
+		});
 	});
 }
 
@@ -151,14 +158,18 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 	const auto opaque_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, false);
 	opaque_ps->bind(device_context);
 
-	scene.forEach<Model>([&](Model& model) {
-		if (model.isActive()) {
+	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		if (!root.isActive()) return;
+
+		root.forEachModel([&](const Model& model) {
+			//TODO: if (!model.isActive()) return;
+
 			const auto& mat = model.getMaterial();
-			if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
+			if (mat.params.opacity <= ALPHA_MAX)
 				return;
 
-			renderModel(model, world_to_projection);
-		}
+			renderModel(root, model, world_to_projection);
+		});
 	});
 
 
@@ -167,16 +178,18 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 	const auto transparent_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, true);
 	transparent_ps->bind(device_context);
 
-	scene.forEach<Model>([&](Model& model) {
-		if (model.isActive()) {
+	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		if (!root.isActive()) return;
+
+		root.forEachModel([&](const Model& model) {
+			//TODO: if (!model.isActive()) return;
+
 			const auto& mat = model.getMaterial();
-			if (!mat.transparent
-				|| mat.diffuse.w < ALPHA_MIN
-				|| mat.diffuse.w > ALPHA_MAX)
+			if (mat.params.opacity< ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
 				return;
 
-			renderModel(model, world_to_projection);
-		}
+			renderModel(root, model, world_to_projection);
+		});
 	});
 }
 
@@ -190,9 +203,15 @@ void ForwardPass::renderFalseColor(Scene& scene,
 	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
-	scene.forEach<Model>([&](Model& model) {
-		if (model.isActive())
-			renderModel(model, world_to_projection);
+	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		if (!root.isActive()) return;
+
+		root.forEachModel([&](const Model& model) {
+			/* TODO:
+			if (model.isActive())
+				renderModel(model, world_to_projection);
+			*/
+		});
 	});
 }
 
@@ -206,16 +225,21 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, FalseColor::Static);
 	pixel_shader->bind(device_context);
 
-	scene.forEach<Model>([&](Model& model) {
-		if (model.isActive())
-			renderModel(model, world_to_projection);
+	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		root.forEachModel([&](const Model& model) {
+			/* TODO:
+			if (model.isActive())
+				renderModel(model, world_to_projection);
+			*/
+		});
 	});
 }
 
 
-void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::renderModel(const ModelRoot& root, const Model& model, FXMMATRIX world_to_projection) const {
 
-	const auto* transform = model.getOwner()->getComponent<Transform>();
+	// TODO: More elegant way of passing transform/root to function
+	const auto* transform = root.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world = transform->getObjectToWorldMatrix();
@@ -227,7 +251,7 @@ void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to
 		return;
 
 	// Bind the model's mesh
-	model.bind(device_context);
+	model.bindMesh(device_context);
 
 	// Get the model's material
 	const auto& mat = model.getMaterial();
@@ -237,16 +261,17 @@ void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to
 	model.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
 
 	// Bind the SRVs
-	if (mat.map_diffuse)        mat.map_diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
-	if (mat.map_ambient)        mat.map_ambient->bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
-	if (mat.map_specular)       mat.map_specular->bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
-	if (mat.map_spec_highlight) mat.map_spec_highlight->bind<Pipeline::PS>(device_context, SLOT_SRV_SPEC_HIGHLIGHT);
-	if (mat.map_alpha)          mat.map_alpha->bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
-	if (mat.map_bump)           mat.map_bump->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
+	if (mat.maps.diffuse)       mat.maps.diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
+	if (mat.maps.ambient)       mat.maps.ambient->bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
+	if (mat.maps.normal)        mat.maps.normal->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
+	if (mat.maps.specular)      mat.maps.specular->bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
+	if (mat.maps.spec_exponent) mat.maps.spec_exponent->bind<Pipeline::PS>(device_context, SLOT_SRV_SPEC_EXPONENT);
+	if (mat.maps.opacity)       mat.maps.opacity->bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
+	if (mat.maps.height)        mat.maps.height->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
 
 
 	// Draw the model
-	Pipeline::drawIndexed(device_context, model.getIndexCount(), model.getIndexStart());
+	Pipeline::drawIndexed(device_context, model.getIndexCount(), 0);
 
 
 	// Unbind the SRVs

@@ -33,9 +33,6 @@
     <Filter Include="Header Files\geometry\shapes">
       <UniqueIdentifier>{4c36ad30-5ba9-47ba-8445-165342c916c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\loader\obj">
-      <UniqueIdentifier>{a6aa0757-0f1b-44e5-89be-f194807c8137}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\resource\font">
       <UniqueIdentifier>{547e6de9-9daa-42d0-b80e-0738cff5b1ab}</UniqueIdentifier>
     </Filter>
@@ -119,12 +116,6 @@
     </Filter>
     <Filter Include="Source Files\display">
       <UniqueIdentifier>{1899d370-bffa-44e8-a55d-b259101a9d9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\loader\mtl">
-      <UniqueIdentifier>{ad9f8b61-c1f4-40ed-bddc-3d016658d80f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\loader\mtl">
-      <UniqueIdentifier>{397c3d82-454d-4936-ba06-9c5a4a6c8ada}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\scene\components">
       <UniqueIdentifier>{bdf618f7-4549-455f-b852-b2b3597ca157}</UniqueIdentifier>
@@ -254,12 +245,6 @@
     <ClCompile Include="src\display\display_config.cpp">
       <Filter>Source Files\display</Filter>
     </ClCompile>
-    <ClCompile Include="src\loader\material_loader.cpp">
-      <Filter>Source Files\loader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\loader\mtl\mtl_loader.cpp">
-      <Filter>Source Files\loader\mtl</Filter>
-    </ClCompile>
     <ClCompile Include="src\scene\components\camera\perspective_camera.cpp">
       <Filter>Source Files\scene\components\camera</Filter>
     </ClCompile>
@@ -277,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="src\scene\systems\transform\transform_system.cpp">
       <Filter>Source Files\scene\systems\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\loader\model_loader.cpp">
+      <Filter>Source Files\loader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -309,12 +297,6 @@
     </ClInclude>
     <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h">
       <Filter>Header Files\geometry\bounding_volume</Filter>
-    </ClInclude>
-    <ClInclude Include="src\loader\obj\obj_tokens.h">
-      <Filter>Header Files\loader\obj</Filter>
-    </ClInclude>
-    <ClInclude Include="src\loader\obj\obj_loader.h">
-      <Filter>Header Files\loader\obj</Filter>
     </ClInclude>
     <ClInclude Include="src\loader\texture_loader.h">
       <Filter>Header Files\loader</Filter>
@@ -400,20 +382,8 @@
     <ClInclude Include="src\resource\texture\texture_factory.h">
       <Filter>Header Files\resource\texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\loader\obj\obj_loader.tpp">
-      <Filter>Header Files\loader\obj</Filter>
-    </ClInclude>
     <ClInclude Include="src\rendering_config.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\loader\material_loader.h">
-      <Filter>Header Files\loader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\loader\mtl\mtl_loader.h">
-      <Filter>Header Files\loader\mtl</Filter>
-    </ClInclude>
-    <ClInclude Include="src\loader\mtl\mtl_tokens.h">
-      <Filter>Header Files\loader\mtl</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\components\core_components.h">
       <Filter>Header Files\scene\components</Filter>
@@ -475,9 +445,6 @@
     <None Include="src\geometry\shapes\shapes.tpp">
       <Filter>Header Files\geometry\shapes</Filter>
     </None>
-    <None Include="src\loader\model_loader.tpp">
-      <Filter>Header Files\loader</Filter>
-    </None>
     <None Include="src\renderer\renderer.tpp">
       <Filter>Header Files\renderer</Filter>
     </None>
@@ -485,9 +452,6 @@
       <Filter>Header Files\resource\mesh</Filter>
     </None>
     <None Include="src\resource\model\blueprint_factory.tpp">
-      <Filter>Header Files\resource\model</Filter>
-    </None>
-    <None Include="src\resource\model\model_output.tpp">
       <Filter>Header Files\resource\model</Filter>
     </None>
     <None Include="src\resource\shader\shader.tpp">

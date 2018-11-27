@@ -46,13 +46,13 @@
 
 // Material
 #define SLOT_SRV_DIFFUSE        0
-#define SLOT_SRV_AMBIENT        1
-#define SLOT_SRV_NORMAL         2
-#define SLOT_SRV_SPECULAR       3
-#define SLOT_SRV_SPEC_HIGHLIGHT 4
-#define SLOT_SRV_ALPHA          5
-#define SLOT_SRV_SKYBOX         6
-#define SLOT_SRV_ENV_MAP        7
+#define SLOT_SRV_AMBIENT       1
+#define SLOT_SRV_NORMAL        2
+#define SLOT_SRV_SPECULAR      3
+#define SLOT_SRV_SPEC_EXPONENT 4
+#define SLOT_SRV_ALPHA         5
+#define SLOT_SRV_SKYBOX        6
+#define SLOT_SRV_ENV_MAP       7
 
 // Light
 #define SLOT_SRV_DIRECTIONAL_LIGHTS 8

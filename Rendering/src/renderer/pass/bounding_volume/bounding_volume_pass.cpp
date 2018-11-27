@@ -101,20 +101,23 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 		renderAABB(light.getAABB(), object_to_world);
 	});
 
-	scene.forEach<Model>([&](const Model& model) {
+	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		if (!root.isActive()) return;
 
-		if (!model.isActive()) return;
+		root.forEachModel([&](const Model& model) {
+			//TODO: if (!model.isActive()) return;
 
-		const auto transform = model.getOwner()->getComponent<Transform>();
-		if (!transform) return;
+			const auto transform = root.getOwner()->getComponent<Transform>();
+			if (!transform) return;
 
-		const auto object_to_world      = transform->getObjectToWorldMatrix();
-		const auto object_to_projection = object_to_world * world_to_projection;
+			const auto object_to_world = transform->getObjectToWorldMatrix();
+			const auto object_to_projection = object_to_world * world_to_projection;
 
-		if (!Frustum(object_to_projection).contains(model.getAABB()))
-			return;
+			if (!Frustum(object_to_projection).contains(model.getAABB()))
+				return;
 
-		renderAABB(model.getAABB(), object_to_world);
+			renderAABB(model.getAABB(), object_to_world);
+		});
 	});
 }
 

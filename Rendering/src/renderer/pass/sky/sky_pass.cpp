@@ -33,6 +33,10 @@ void SkyPass::render(const Texture* sky) const {
 
 void SkyPass::bindRenderStates() const {
 
+	// Bind null vertex/index buffer (skybox shader uses its own vertex array)
+	Pipeline::IA::bindIndexBuffer(device_context, nullptr, DXGI_FORMAT_UNKNOWN, 0);
+	Pipeline::IA::bindVertexBuffer(device_context, 0, nullptr, 0, 0);
+
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);

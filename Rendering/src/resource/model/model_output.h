@@ -2,48 +2,28 @@
 
 #include "directx/d3d11.h"
 #include "resource/model/material/material.h"
-#include "geometry/bounding_volume/bounding_volume.h"
 
 
-// Groups are defined by the loader/factory, and
-// transformed into complete model parts by the
-// ModelOuptut constructor.
-struct Group {
+struct ModelOutput {
+	struct Node {
+		std::string name;
+		std::vector<u32> mesh_indices;  //Meshes in this node
+		std::vector<Node> child_nodes;  //Child nodes
+	};
+	struct MeshData {
+		std::string name;
+		std::vector<u32> indices;
+		std::vector<vec3_f32> positions;
+		std::vector<vec3_f32> normals;
+		std::vector<vec3_f32> tangents;
+		std::vector<vec3_f32> bitangents;
+		std::vector<vec2_f32> texture_coords;
+		std::vector<vec3_f32> colors;
+		u32 material_index = 0;
+	};
+
 	std::string name;
-	u32 index_start;
-	u32 material_index;
-};
-
-
-struct ModelPart {
-	std::string name;
-	u32 index_start;
-	u32 index_count;
-	u32 material_index;
-	AABB aabb;
-	BoundingSphere sphere;
-};
-
-
-// A ModelOuput object is returned by a model loader and
-// used in the construction of a ModelBlueprint.
-template<typename VertexT>
-struct ModelOutput final {
-public:
-	ModelOutput(const std::string& name,
-	            const std::vector<VertexT>& vertices,
-	            const std::vector<u32>& indices,
-	            const std::vector<Material>& materials,
-	            const std::vector<Group>& groups);
-
-
-public:
-	std::string name;
-	std::vector<VertexT> vertices;
-	std::vector<u32> indices;
+	std::vector<MeshData> meshes;
 	std::vector<Material> materials;
-	std::vector<ModelPart> model_parts;
+	Node root;
 };
-
-
-#include "model_output.tpp"

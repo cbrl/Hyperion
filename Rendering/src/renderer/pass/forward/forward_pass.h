@@ -8,6 +8,7 @@
 class RenderStateMgr;
 class ResourceMgr;
 class Scene;
+class ModelRoot;
 class Model;
 
 class ForwardPass final {
@@ -77,7 +78,7 @@ private:
 	// Member Functions - Render Model
 	//----------------------------------------------------------------------------------
 
-	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV renderModel(const ModelRoot& root, const Model& model, FXMMATRIX world_to_projection) const;
 
 
 private:

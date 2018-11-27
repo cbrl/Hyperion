@@ -62,12 +62,16 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 	// Draw each opaque model
 	//----------------------------------------------------------------------------------
 
-	scene.forEach<Model>([&](Model& model) {
-		const auto& mat = model.getMaterial();
-		if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
-			return;
+	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		if (!root.isActive()) return;
 
-		renderModel(model, world_to_proj);
+		root.forEachModel([&](const Model& model) {
+			const auto& mat = model.getMaterial();
+			if (mat.params.opacity <= ALPHA_MAX)
+				return;
+
+			renderModel(root, model, world_to_proj);
+		});
 	});
 
 
@@ -75,14 +79,16 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 	// Draw each transparent model
 	//----------------------------------------------------------------------------------
 
-	scene.forEach<Model>([&](Model& model) {
-		const auto& mat = model.getMaterial();
-		if (!mat.transparent
-			|| mat.diffuse.w < ALPHA_MIN
-			|| mat.diffuse.w > ALPHA_MAX)
-			return;
+	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		if (!root.isActive()) return;
+		
+		root.forEachModel([&](const Model& model) {
+			const auto& mat = model.getMaterial();
+			if (mat.params.opacity < ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
+				return;
 
-		renderModel(model, world_to_proj);
+			renderModel(root, model, world_to_proj);
+		});
 	});
 }
 
@@ -99,14 +105,18 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	bindOpaqueShaders();
-	scene.forEach<Model>([&](Model& model) {
-		if (!model.castsShadows()) return;
+	scene.forEach<ModelRoot>([&](ModelRoot& root) {
+		if (!root.isActive()) return;
 
-		const auto& mat = model.getMaterial();
-		if (mat.transparent && mat.diffuse.w <= ALPHA_MAX)
-			return;
+		root.forEachModel([&](const Model& model) {
+			if (!model.castsShadows()) return;
 
-		renderModel(model, world_to_proj);
+			const auto& mat = model.getMaterial();
+			if (mat.params.opacity <= ALPHA_MAX)
+				return;
+
+			renderModel(root, model, world_to_proj);
+		});
 	});
 
 
@@ -115,16 +125,18 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	bindTransparentShaders();
-	scene.forEach<Model>([&](Model& model) {
-		if (!model.castsShadows()) return;
+	scene.forEach<ModelRoot>([&](ModelRoot& root) {
+		if (!root.isActive()) return;
 
-		const auto& mat = model.getMaterial();
-		if (!mat.transparent
-			|| mat.diffuse.w < ALPHA_MIN
-			|| mat.diffuse.w > ALPHA_MAX)
-			return;
+		root.forEachModel([&](const Model& model) {
+			if (!model.castsShadows()) return;
 
-		renderModel(model, world_to_proj);
+			const auto& mat = model.getMaterial();
+			if (mat.params.opacity < ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
+				return;
+
+			renderModel(root, model, world_to_proj);
+		});
 	});
 }
 
@@ -140,11 +152,12 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 }
 
 
-void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV DepthPass::renderModel(const ModelRoot& root, const Model& model, FXMMATRIX world_to_projection) const {
 
-	if (!model.isActive()) return;
+	// TODO: if (!model.isActive()) return;
 
-	const auto transform = model.getOwner()->getComponent<Transform>();
+	// TODO: More elegant way of passing transform/root to function
+	const auto transform = root.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world      = transform->getObjectToWorldMatrix();
@@ -154,15 +167,15 @@ void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX world_to_p
 	if (!frustum.contains(model.getAABB()))
 		return;
 
-	model.bind(device_context);
+	model.bindMesh(device_context);
 	model.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
 	model.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
 	const auto& mat = model.getMaterial();
-	if (mat.map_diffuse)
-		mat.map_diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
+	if (mat.maps.diffuse)
+		mat.maps.diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
 
-	Pipeline::drawIndexed(device_context, model.getIndexCount(), model.getIndexStart());
+	Pipeline::drawIndexed(device_context, model.getIndexCount(), 0);
 
 	Pipeline::PS::bindSRV(device_context, SLOT_SRV_DIFFUSE, nullptr);
 }

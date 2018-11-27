@@ -8,6 +8,7 @@
 class RenderStateMgr;
 class ResourceMgr;
 class Scene;
+class ModelRoot;
 class Model;
 
 class DepthPass final {
@@ -37,7 +38,7 @@ private:
 
 	void XM_CALLCONV updateCamera(FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) const;
 
-	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV renderModel(const ModelRoot& root, const Model& model, FXMMATRIX world_to_projection) const;
 
 
 private:

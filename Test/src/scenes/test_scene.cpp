@@ -66,11 +66,14 @@ void TestScene::load(const Engine& engine) {
 
 	// Scene model
 	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
-	EntityPtr test_model = importModel(device, bp);
+	EntityPtr test_model = addEntity();
+	test_model->addComponent<ModelRoot>(device, bp);
 
+	/*
 	// Sphere
 	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
-	EntityPtr sphere = importModel(device, sphere_bp);
+	EntityPtr sphere = addEntity();
+	sphere->addComponent<ModelRoot>(device, bp);
 
 	sphere->getComponent<Transform>()->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });
 
@@ -80,14 +83,14 @@ void TestScene::load(const Engine& engine) {
 
 	auto orbit = sphere->addComponent<AxisOrbit>();
 	orbit->setSpeed(0.5f);
-
+	*/
 
 	//----------------------------------------------------------------------------------
 	// Create lights
 	//----------------------------------------------------------------------------------
 	
 	// Sphere light
-	{
+	/*{
 		auto light = sphere->addComponent<SpotLight>();
 		light->setDiffuseColor(vec4_f32{ 0.0f, 0.9f, 0.6f, 1.0f });
 		light->setAttenuation(vec3_f32{ 0.1f, 0.15f, 0.0f });
@@ -96,7 +99,7 @@ void TestScene::load(const Engine& engine) {
 		light->setUmbraAngle(XM_PI / 6.0f);
 		light->setPenumbraAngle(XM_PI / 3.0f);
 		light->setShadows(true);
-	}
+	}*/
 
 	// Camera light
 	{

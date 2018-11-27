@@ -7,6 +7,7 @@
 
 
 namespace BlueprintFactory {
+	/* TODO:
 	template<typename VertexT>
 	[[nodiscard]]
 	static shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
@@ -83,7 +84,8 @@ namespace BlueprintFactory {
 	static shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
 	                                                    f32  size     = 1,
 	                                                    bool rhcoords = false);
+	*/
 };
 
 
-#include "blueprint_factory.tpp"
+//#include "blueprint_factory.tpp"

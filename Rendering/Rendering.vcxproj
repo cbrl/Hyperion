@@ -72,13 +72,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\GSL\src;$(IncludePath)</IncludePath>
-    <SourcePath>$(SolutionDir)\ImGui\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Shaders\src;$(SourcePath)</SourcePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Assimp\src\include;$(SolutionDir)\ImGui\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\GSL\src;$(IncludePath)</IncludePath>
+    <SourcePath>$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Shaders\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\GSL\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Assimp\src\include;$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\GSL\src;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Shaders\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -139,8 +139,7 @@
     <ClCompile Include="src\display\display_config.cpp" />
     <ClCompile Include="src\geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="src\geometry\frustum\frustum.cpp" />
-    <ClCompile Include="src\loader\material_loader.cpp" />
-    <ClCompile Include="src\loader\mtl\mtl_loader.cpp" />
+    <ClCompile Include="src\loader\model_loader.cpp" />
     <ClCompile Include="src\loader\texture_loader.cpp" />
     <ClCompile Include="src\renderer\output\output_mgr.cpp" />
     <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.cpp" />
@@ -179,12 +178,7 @@
     <ClInclude Include="src\geometry\frustum\frustum.h" />
     <ClInclude Include="src\geometry\shapes\bezier.h" />
     <ClInclude Include="src\geometry\shapes\shapes.h" />
-    <ClInclude Include="src\loader\material_loader.h" />
     <ClInclude Include="src\loader\model_loader.h" />
-    <ClInclude Include="src\loader\mtl\mtl_loader.h" />
-    <ClInclude Include="src\loader\mtl\mtl_tokens.h" />
-    <ClInclude Include="src\loader\obj\obj_loader.h" />
-    <ClInclude Include="src\loader\obj\obj_tokens.h" />
     <ClInclude Include="src\loader\texture_loader.h" />
     <ClInclude Include="src\renderer\output\output_mgr.h" />
     <ClInclude Include="src\renderer\pass\bounding_volume\bounding_volume_pass.h" />
@@ -233,16 +227,16 @@
     <None Include="src\buffer\constant_buffer.tpp" />
     <None Include="src\buffer\structured_buffer.tpp" />
     <None Include="src\geometry\shapes\shapes.tpp" />
-    <None Include="src\loader\model_loader.tpp" />
-    <ClInclude Include="src\loader\obj\obj_loader.tpp">
-      <FileType>Document</FileType>
-    </ClInclude>
     <None Include="src\renderer\renderer.tpp" />
     <None Include="src\resource\mesh\mesh.tpp" />
     <None Include="src\resource\model\blueprint_factory.tpp" />
-    <None Include="src\resource\model\model_output.tpp" />
     <None Include="src\resource\resource_mgr.tpp" />
     <None Include="src\resource\shader\shader.tpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Assimp\Assimp.vcxproj">
+      <Project>{57042576-e947-46c4-a2ed-eb058b2d8517}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

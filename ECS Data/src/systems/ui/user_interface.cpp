@@ -305,7 +305,7 @@ void DrawDetails(Text& text) {
 	}
 }
 
-
+/*
 void DrawDetails(Model& model) {
 
 	DrawComponentState(model);
@@ -329,7 +329,7 @@ void DrawDetails(Model& model) {
 	ImGui::Checkbox("Transparent", &model.getMaterial().transparent);
 	ImGui::Checkbox("Reflection", &model.getMaterial().reflection_enabled);
 }
-
+*/
 
 void DrawDetails(AmbientLight& light) {
 
@@ -583,6 +583,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 		}
 	}
 
+	/* TODO:
 	// Model
 	if (entity->hasComponent<Model>()) {
 		auto models = entity->getAll<Model>();
@@ -590,6 +591,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 			DrawNode(model->getName().c_str(), *model);
 		}
 	}
+	*/
 
 	// Ambient Light
 	if (entity->hasComponent<AmbientLight>()) {
@@ -760,7 +762,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			break;
 	}
 
-
+	/* TODO:
 	if (ImGui::BeginPopupModal("New Cube", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 		static f32  size     = 1.0f;
 		static bool rhcoords = false;
@@ -1069,6 +1071,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		ImGui::EndPopup();
 	}
+	*/
 }
 
 
@@ -1124,7 +1127,7 @@ void DrawSceneMenu(ID3D11Device& device,
 
 							if (OpenFilePicker(gsl::not_null<wchar_t*>(szFile), 512)) {
 								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
-								scene.importModel(selected_entity, device, bp);
+								//TODO: scene.importModel(selected_entity, device, bp);
 							}
 							else Logger::log(LogLevel::err, "Failed to open file dialog");
 						}
@@ -1300,8 +1303,8 @@ void DrawFPSDisplay(Engine& engine) {
 	static int vec_size = 30;
 	static std::vector<float> fps_history(vec_size, 0.0f);
 
-	f32 fps = 0.0f;
-	static f64 dt = 0.0;
+	static f32 fps = 0.0f;
+	static f64 dt  = 0.0;
 
 	dt += timer.deltaTime();
 	if (dt >= fps_counter.getWaitTime().count()) {
@@ -1321,7 +1324,7 @@ void DrawFPSDisplay(Engine& engine) {
 		ImGui::SameLine();
 
 		ImGui::BeginChild("FPS Stats", {150, 50});
-		ImGui::Text("FPS: %u", fps);
+		ImGui::Text("FPS: %.2f", fps);
 		ImGui::Text("Frame Time: %.2fms", timer.deltaTime());
 		ImGui::EndChild();
 	}

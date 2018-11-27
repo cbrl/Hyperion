@@ -51,7 +51,7 @@ public:
 
 		// Update FPS when enough time has passed
 		if (SteadyClock::now() >= (start_time + wait_time)) {
-			fps = static_cast<f32>(frame_count * (1000.0 / wait_time.count()));
+			fps = static_cast<f32>(frame_count) * (1000.0f/*ms*/ / wait_time.count());
 			frame_count = 0;
 			start_time = SteadyClock::now();
 		}

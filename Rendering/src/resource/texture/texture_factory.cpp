@@ -8,12 +8,30 @@ shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
 
 	u32 tex_data[128][128];
 
-	u32 color = 0xFFFF0000;
-	for (size_t i = 0; i < 128; ++i) {
-		if (i > 64) color = 0xFF00FFFF;
-		for (size_t j = 0; j < 128; ++j) {
-			if (j > 64) tex_data[i][j] = color ^ 0x00FFFFFF;
-			else tex_data[i][j] = color;
+	constexpr u32 color  = 0xFFFF0000;
+	constexpr u32 color2 = 0xFF00FFFF;
+
+	constexpr auto x_size = std::size(tex_data[0]);
+	constexpr auto y_size = std::size(tex_data);
+
+	constexpr auto x_half_size = x_size / 2;
+	constexpr auto y_half_size = y_size / 2;
+
+	for (size_t i = 0; i < y_half_size; ++i) {
+		for (size_t j = 0; j < x_half_size; ++j) {
+			tex_data[i][j] = color;
+		}
+		for (size_t j = x_half_size; j < x_size; ++j) {
+			tex_data[i][j] = color2;
+		}
+	}
+
+	for (size_t i = y_half_size; i < y_size; ++i) {
+		for (size_t j = 0; j < x_half_size; ++j) {
+			tex_data[i][j] = color2;
+		}
+		for (size_t j = x_half_size; j < x_size; ++j) {
+			tex_data[i][j] = color;
 		}
 	}
 

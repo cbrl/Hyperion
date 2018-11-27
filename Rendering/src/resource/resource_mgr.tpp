@@ -15,8 +15,9 @@ std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>,
 template<typename ResourceT, typename VertexT>
 std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>,
 	shared_ptr<ModelBlueprint>> ResourceMgr::getOrCreate(const std::wstring& name,
-	                                                     const ModelOutput<VertexT>& model_data) {
+	                                                     const ModelOutput& model_data) {
 
+	// TODO: VertexT passed to constructor
 	return models.getOrCreateResource(name, device, model_data);
 }
 

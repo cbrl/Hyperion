@@ -11,7 +11,9 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename VertexT>
-	Mesh(ID3D11Device& device, const std::vector<VertexT>& vertices, const std::vector<u32>& indices);
+	Mesh(ID3D11Device& device,
+	     const std::vector<VertexT>& vertices,
+	     const std::vector<u32>& indices);
 
 	Mesh(const Mesh& mesh) = delete;
 	Mesh(Mesh&& mesh) noexcept = default;
@@ -48,8 +50,18 @@ public:
 		Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	}
 
+	[[nodiscard]]
+	u32 getVertexCount() const noexcept {
+		return vertex_count;
+	}
 
-public:
+	[[nodiscard]]
+	u32 getIndexCount() const noexcept {
+		return index_count;
+	}
+
+
+private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------

@@ -99,7 +99,7 @@ inline std::wstring TrimWhiteSpace(const std::wstring& in) {
 
 // Split a string by a specified token
 template<typename StringT>
-inline std::vector<StringT> Split(const StringT& in, const typename StringT::value_type* token) {
+std::vector<StringT> Split(const StringT& in, const typename StringT::value_type* token) {
 
 	std::vector<StringT> out;
 	StringT token_s(token);
@@ -121,7 +121,7 @@ inline std::vector<StringT> Split(const StringT& in, const typename StringT::val
 
 // Convert a string to the specified arithmetic type
 template<typename T>
-inline std::optional<T> StrTo(std::string_view in) {
+std::optional<T> StrTo(std::string_view in) {
 
 	static_assert(std::is_arithmetic_v<T>, "StrTo called with non-arithmetic type");
 	
