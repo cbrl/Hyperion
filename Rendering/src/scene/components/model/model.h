@@ -14,6 +14,7 @@
 
 
 class Model {
+	friend class ModelNode;
 	friend class ModelRoot;
 
 public:
@@ -116,46 +117,106 @@ private:
 
 
 
-class ModelRoot final : public Component<ModelRoot> {
-	
+class ModelNode final {
+	friend class ModelRoot;
+
 public:
-	//----------------------------------------------------------------------------------
-	// Model Node
-	//----------------------------------------------------------------------------------
-	struct Node final {
-		friend class ModelRoot;
-
-	public:
-		template<typename ActionT>
-		void forEachModel(const ActionT& act) {
-			for (auto& model : models) {
-				act(model);
-			}
+	// Apply an action to the node's children
+	template<typename ActionT>
+	void forEachNode(const ActionT& act) {
+		for (auto& node : child_nodes) {
+			act(node);
 		}
+	}
 
-		template<typename ActionT>
-		void forEachModel(const ActionT& act) const {
-			for (const auto& model : models) {
-				act(model);
-			}
+	// Apply an action to the node's children
+	template<typename ActionT>
+	void forEachNode(const ActionT& act) const {
+		for (const auto& node : child_nodes) {
+			act(node);
 		}
+	}
 
-		const std::string& getName() const noexcept {
-			return name;
+	// Apply an action to all descendants of the node recursively
+	template<typename ActionT>
+	void forEachNodeRecursive(const ActionT& act) {
+		for (auto& node : child_nodes) {
+			act(node);
+			node.forEachNodeRecursive(act);
 		}
+	}
 
-	private:
-		// The node's name
-		std::string name;
+	// Apply an action to all descendants of the node recursively
+	template<typename ActionT>
+	void forEachNodeRecursive(const ActionT& act) const {
+		for (const auto& node : child_nodes) {
+			act(node);
+			node.forEachNodeRecursive(act);
+		}
+	}
 
-		// The models in the node
-		std::vector<Model> models;
+	// Apply an action to each model in this node
+	template<typename ActionT>
+	void forEachModel(const ActionT& act) {
+		for (auto& model : models) {
+			act(model);
+		}
+	}
 
-		// The children of the node
-		std::vector<Node> child_nodes;
-	};
+	// Apply an action to each model in this node
+	template<typename ActionT>
+	void forEachModel(const ActionT& act) const {
+		for (const auto& model : models) {
+			act(model);
+		}
+	}
+
+	// Apply an action to each model in this node and all descendants recursively
+	template<typename ActionT>
+	void forEachModelRecursive(const ActionT& act) {
+		forEachModel(act);
+		forEachNodeRecursive([&act](ModelNode& node) {
+			node.forEachModel(act);
+		});
+	}
+
+	// Apply an action to each model in this node and all descendants recursively
+	template<typename ActionT>
+	void forEachModelRecursive(const ActionT& act) const {
+		forEachModel(act);
+		forEachNodeRecursive([&act](const ModelNode& node) {
+			node.forEachModel(act);
+		});
+	}
+
+	const std::string& getName() const noexcept {
+		return name;
+	}
+
+private:
+	// Recursively construct the nodes described by the blueprint nodes
+	void constructNode(ID3D11Device& device, ModelBlueprint& bp, ModelBlueprint::Node& bp_node);
+
+	// Update the model buffers of the node and any child nodes
+	void XM_CALLCONV updateNodeBuffers(ID3D11DeviceContext& device_context,
+		FXMMATRIX world_transpose,
+		CXMMATRIX world_inv_transpose);
+
+private:
+	// The node's name
+	std::string name;
+
+	// The models in the node
+	std::vector<Model> models;
+
+	// The children of the node
+	std::vector<ModelNode> child_nodes;
+};
 
 
+
+
+class ModelRoot final : public Component<ModelRoot> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -190,7 +251,17 @@ public:
 		return name;
 	}
 
-	// Update the models' cbuffers
+	[[nodiscard]]
+	ModelNode& getRootNode() noexcept {
+		return root;
+	}
+
+	[[nodiscard]]
+	const ModelNode& getRootNode() const noexcept {
+		return root;
+	}
+
+	// Update the cbuffers of all models
 	void XM_CALLCONV updateBuffers(ID3D11DeviceContext& device_context, FXMMATRIX object_to_world);
 
 
@@ -198,85 +269,30 @@ public:
 	// Member Functions - Iteration
 	//----------------------------------------------------------------------------------
 
-	// Apply an action to each node
+	// Apply an action to all nodes recursively
 	template<typename ActionT>
 	void forEachNode(const ActionT& act) {
-		forEachNodeImpl(act, root);
+		act(root);
+		root.forEachNodeRecursive(act);
 	}
 
-	// Apply an action to each node
+	// Apply an action to all nodes recursively
 	template<typename ActionT>
 	void forEachNode(const ActionT& act) const {
-		forEachNodeImpl(act, root);
+		act(root);
+		root.forEachNodeRecursive(act);
 	}
 
-	// Apply an action to each model ( shortcut for forEachNode(forEachModel(act)) )
+	// Apply an action to all models recursively
 	template<typename ActionT>
 	void forEachModel(const ActionT& act) {
-		forEachModelImpl(act, root);
+		root.forEachModelRecursive(act);
 	}
 
-	// Apply an action to each model ( shortcut for forEachNode(forEachModel(act)) )
+	// Apply an action to all models recursively
 	template<typename ActionT>
 	void forEachModel(const ActionT& act) const {
-		forEachModelImpl(act, root);
-	}
-
-
-private:
-	//----------------------------------------------------------------------------------
-	// Member Functions - Construction
-	//----------------------------------------------------------------------------------
-
-	// Construct the nodes described by the blueprint nodes
-	void constructNodes(ID3D11Device& device, ModelBlueprint::Node& bp_current, Node& current);
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Updating
-	//----------------------------------------------------------------------------------
-
-	// Update the model buffers of a node and any child nodes
-	void XM_CALLCONV updateNodeBuffers(ID3D11DeviceContext& device_context,
-                                       Node& current,
-                                       FXMMATRIX world_transpose,
-                                       CXMMATRIX world_inv_transpose);
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Iteration
-	//----------------------------------------------------------------------------------
-
-	template<typename ActionT>
-	void forEachModelImpl(const ActionT& act, Node& node) {
-		for (auto& child : node.child_nodes) {
-			child.forEachModel(act);
-			forEachModelImpl(act, child);
-		}
-	}
-
-	template<typename ActionT>
-	void forEachModelImpl(const ActionT& act, const Node& node) const {
-		for (const auto& child : node.child_nodes) {
-			child.forEachModel(act);
-			forEachModelImpl(act, child);
-		}
-	}
-
-	template<typename ActionT>
-	void forEachNodeImpl(const ActionT& act, Node& node) {
-		for (auto& child : node.child_nodes) {
-			act(child);
-			forEachNodeImpl(act, child);
-		}
-	}
-
-	template<typename ActionT>
-	void forEachNodeImpl(const ActionT& act, const Node& node) const {
-		for (const auto& child : node.child_nodes) {
-			act(child);
-			forEachNodeImpl(act, child);
-		}
+		root.forEachModelRecursive(act);
 	}
 
 
@@ -292,5 +308,5 @@ private:
 	std::shared_ptr<ModelBlueprint> blueprint;
 
 	// The root node
-	Node root;
+	ModelNode root;
 };

@@ -331,8 +331,9 @@ void DrawDetails(Text& text) {
 void DrawDetails(ModelRoot& root) {
 	DrawComponentState(root);
 }
-
-
+void DrawDetails(ModelNode& node) {
+	
+}
 void DrawDetails(Model& model) {
 
 	//DrawComponentState(model);
@@ -551,43 +552,58 @@ void DrawDetailsPanel(T& item) {
 	ImGui::End();
 }
 
-
 template<typename T>
-void DrawNode(gsl::czstring<> text, T& item) {
+void DrawLeafNode(gsl::czstring<> text, T& item) {
 
 	ImGui::TreeNodeEx(text, MakeTreeLeafFlags(&item));
 
-	if (ImGui::IsItemClicked()) {
-		g_selected = &item;
-	}
 	if (g_selected == &item) {
 		DrawDetailsPanel(item);
+	}
+	if (ImGui::IsItemClicked()) {
+		g_selected = &item;
 	}
 
 	ImGui::TreePop();
 }
 
 
-void DrawModelTree(ModelRoot& root) {
+void DrawModelNodes(ModelNode& node) {
 
-	//TODO: Root details & selectable nodes
+	const bool node_open = ImGui::TreeNodeEx(node.getName().c_str(), MakeTreeNodeFlags(&node));
 
-	const bool model_open = ImGui::TreeNodeEx(root.getName().c_str(), MakeTreeNodeFlags(&root));
+	if (g_selected == &node) {
+		DrawDetailsPanel(node);
+	}
+	if (ImGui::IsItemClicked()) {
+		g_selected = &node;
+	}
 
-	if (ImGui::IsItemClicked())
-		g_selected = &root;
+	if (!node_open) return;
 
-	if (!model_open) return;
-
-	root.forEachNode([](ModelRoot::Node& node) {
-		if (ImGui::TreeNodeEx(node.getName().c_str(), MakeTreeNodeFlags())) {
-			node.forEachModel([](Model& model) {
-				DrawNode("Model", model);
-			});
-			ImGui::TreePop();
-		}
+	node.forEachModel([](Model& model) {
+		DrawLeafNode("Model", model);
+	});
+	node.forEachNode([](ModelNode& node) {
+		DrawModelNodes(node);
 	});
 
+	ImGui::TreePop();
+}
+
+void DrawModelTree(ModelRoot& root) {
+
+	const bool node_open = ImGui::TreeNodeEx(("Model: " + root.getName()).c_str(), MakeTreeNodeFlags(&root));
+
+	if (g_selected == &root) {
+		DrawDetailsPanel(root);
+	}
+	if (ImGui::IsItemClicked()) {
+		g_selected = &root;
+	}
+
+	if (!node_open) return;
+	DrawModelNodes(root.getRootNode());
 	ImGui::TreePop();
 }
 
@@ -600,7 +616,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
 	const auto flags = MakeTreeNodeFlags(entity_ptr);
 
-	const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
+	const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags);
 
 	if (ImGui::IsItemClicked())
 		g_selected_entity = entity_ptr;
@@ -609,14 +625,14 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 
 	// Transform
 	if (auto* transform = entity->getComponent<Transform>()) {
-		DrawNode("Transform", *transform);
+		DrawLeafNode("Transform", *transform);
 	}
 
 	// Perspective Camera
 	if (entity->hasComponent<PerspectiveCamera>()) {
 		auto cams = entity->getAll<PerspectiveCamera>();
 		for (auto* cam : cams) {
-			DrawNode("Perspective Camera", *cam);
+			DrawLeafNode("Perspective Camera", *cam);
 		}
 	}
 
@@ -624,14 +640,15 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (entity->hasComponent<OrthographicCamera>()) {
 		auto cams = entity->getAll<OrthographicCamera>();
 		for (auto* cam : cams) {
-			DrawNode("Orthographic Camera", *cam);
+			DrawLeafNode("Orthographic Camera", *cam);
 		}
 	}
 
+	// Text
 	if (entity->hasComponent<Text>()) {
 		auto texts = entity->getAll<Text>();
 		for (auto* text : texts) {
-			DrawNode("Text", *text);
+			DrawLeafNode("Text", *text);
 		}
 	}
 
@@ -647,7 +664,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (entity->hasComponent<AmbientLight>()) {
 		auto lights = entity->getAll<AmbientLight>();
 		for (auto* light : lights) {
-			DrawNode("Ambient Light", *light);
+			DrawLeafNode("Ambient Light", *light);
 		}
 	}
 
@@ -655,7 +672,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (entity->hasComponent<DirectionalLight>()) {
 		auto lights = entity->getAll<DirectionalLight>();
 		for (auto* light : lights) {
-			DrawNode("Directional Light", *light);
+			DrawLeafNode("Directional Light", *light);
 		}
 	}
 
@@ -663,7 +680,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (entity->hasComponent<PointLight>()) {
 		auto lights = entity->getAll<PointLight>();
 		for (auto* light : lights) {
-			DrawNode("Point Light", *light);
+			DrawLeafNode("Point Light", *light);
 		}
 	}
 
@@ -671,7 +688,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (entity->hasComponent<SpotLight>()) {
 		auto lights = entity->getAll<SpotLight>();
 		for (auto* light : lights) {
-			DrawNode("Spot Light", *light);
+			DrawLeafNode("Spot Light", *light);
 		}
 	}
 
@@ -679,7 +696,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (entity->hasComponent<CameraMovement>()) {
 		auto components = entity->getAll<CameraMovement>();
 		for (auto* comp : components) {
-			DrawNode("Camera Movement", *comp);
+			DrawLeafNode("Camera Movement", *comp);
 		}
 	}
 
@@ -687,7 +704,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (entity->hasComponent<MouseRotation>()) {
 		auto components = entity->getAll<MouseRotation>();
 		for (auto* comp : components) {
-			DrawNode("Mouse Rotation", *comp);
+			DrawLeafNode("Mouse Rotation", *comp);
 		}
 	}
 
@@ -695,7 +712,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (entity->hasComponent<AxisRotation>()) {
 		auto components = entity->getAll<AxisRotation>();
 		for (auto* comp : components) {
-			DrawNode("Axis Rotation", *comp);
+			DrawLeafNode("Axis Rotation", *comp);
 		}
 	}
 
@@ -703,7 +720,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (entity->hasComponent<AxisOrbit>()) {
 		auto components = entity->getAll<AxisOrbit>();
 		for (auto* comp : components) {
-			DrawNode("Axis Orbit", *comp);
+			DrawLeafNode("Axis Orbit", *comp);
 		}
 	}
 

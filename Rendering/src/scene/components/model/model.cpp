@@ -5,28 +5,7 @@ ModelRoot::ModelRoot(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>
 	: name(bp->name)
 	, blueprint(bp) {
 
-	constructNodes(device, blueprint->root, root);
-}
-
-
-void ModelRoot::constructNodes(ID3D11Device& device, ModelBlueprint::Node& bp_current, Node& current) {
-	
-	current.name = bp_current.name;
-
-	for (const u32 index : bp_current.mesh_indices) {
-		Model model(device,
-		            blueprint->meshes[index],
-		            blueprint->materials[blueprint->mat_indices[index]],
-		            blueprint->aabbs[index],
-		            blueprint->bounding_spheres[index]);
-
-		//model.name = node.meshes[index].name;
-		current.models.push_back(std::move(model));
-	}
-
-	for (auto& bp_node : bp_current.child_nodes) {
-		constructNodes(device, bp_node, current.child_nodes.emplace_back());
-	}
+	root.constructNode(device, *blueprint, blueprint->root);
 }
 
 
@@ -38,16 +17,36 @@ void XM_CALLCONV ModelRoot::updateBuffers(ID3D11DeviceContext& device_context, F
 	// Create the inverse transpose of the model-to-world matrix
 	const auto world_inv_t = XMMatrixInverse(nullptr, object_to_world);
 
-	updateNodeBuffers(device_context, root, world_t, world_inv_t);
+	root.updateNodeBuffers(device_context, world_t, world_inv_t);
 }
 
 
-void XM_CALLCONV ModelRoot::updateNodeBuffers(ID3D11DeviceContext& device_context,
-                                              Node& current,
-                                              FXMMATRIX world_transpose,
-                                              CXMMATRIX world_inv_transpose) {
+void ModelNode::constructNode(ID3D11Device& device, ModelBlueprint& bp, ModelBlueprint::Node& bp_node) {
 	
-	for (auto& model : current.models) {
+	name = bp_node.name;
+
+	for (const u32 index : bp_node.mesh_indices) {
+		Model model(device,
+		            bp.meshes[index],
+		            bp.materials[bp.mat_indices[index]],
+		            bp.aabbs[index],
+		            bp.bounding_spheres[index]);
+
+		//model.name = meshes[index].name;
+		models.push_back(std::move(model));
+	}
+
+	for (auto& node : bp_node.child_nodes) {
+		child_nodes.emplace_back().constructNode(device, bp, node);
+	}
+}
+
+
+void XM_CALLCONV ModelNode::updateNodeBuffers(ID3D11DeviceContext& device_context,
+	                                          FXMMATRIX world_transpose,
+	                                          CXMMATRIX world_inv_transpose) {
+	
+	for (auto& model : models) {
 		ModelBuffer buffer_data;
 		buffer_data.world               = world_transpose;
 		buffer_data.world_inv_transpose = world_inv_transpose;
@@ -69,7 +68,7 @@ void XM_CALLCONV ModelRoot::updateNodeBuffers(ID3D11DeviceContext& device_contex
 		model.buffer.updateData(device_context, buffer_data);
 	}
 
-	for (auto& node : current.child_nodes) {
-		updateNodeBuffers(device_context, node, world_transpose, world_inv_transpose);
+	for (auto& node : child_nodes) {
+		node.updateNodeBuffers(device_context, world_transpose, world_inv_transpose);
 	}
 }
