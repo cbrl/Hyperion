@@ -18,8 +18,8 @@ void EntityMgr::removeExpiredEntities() {
 
 	for (const handle64 handle : expired_entities) {
 		// Destroy the entity
-		handle_table.releaseHandle(handle);
 		entity_pool.deallocate(getEntity(handle));
+		handle_table.releaseHandle(handle);
 	}
 
 	expired_entities.clear();

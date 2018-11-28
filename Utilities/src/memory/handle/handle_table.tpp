@@ -72,5 +72,6 @@ bool HandleTable<HandleT, DataT, ChunkSize>::validHandle(const HandleT& handle) 
 		return false;
 	}
 
-	return handle.counter == table[handle.index].first;
+	const auto& entry = table[handle.index];
+	return (entry.first == handle.counter && entry.second != nullptr);
 }
