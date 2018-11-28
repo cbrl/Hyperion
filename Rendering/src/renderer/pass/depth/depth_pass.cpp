@@ -163,8 +163,7 @@ void XM_CALLCONV DepthPass::renderModel(const ModelRoot& root, const Model& mode
 	const auto model_to_world      = transform->getObjectToWorldMatrix();
 	const auto model_to_projection = model_to_world * world_to_projection;
 
-	Frustum frustum{model_to_projection};
-	if (!frustum.contains(model.getAABB()))
+	if (!Frustum(model_to_projection).contains(model.getAABB()))
 		return;
 
 	model.bindMesh(device_context);

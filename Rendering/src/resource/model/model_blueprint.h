@@ -55,6 +55,8 @@ private:
 	template<typename VertexT>
 	void constructBlueprint(ID3D11Device& device, const ModelOutput& out) {
 
+		name = out.name;
+
 		// Copy the nodes and materials
 		root = out.root;
 		materials = out.materials;
@@ -104,6 +106,7 @@ public:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
+	std::string name;
 	std::vector<Mesh> meshes;
 	std::vector<AABB> aabbs;
 	std::vector<BoundingSphere> bounding_spheres;

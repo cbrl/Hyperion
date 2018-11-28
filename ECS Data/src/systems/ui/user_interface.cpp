@@ -14,8 +14,8 @@
 #include "os/windows/win_utils.h"
 
 
-void*     selected = nullptr;
-EntityPtr selected_entity;
+void*     g_selected = nullptr;
+EntityPtr g_selected_entity;
 
 
 enum class ModelType {
@@ -33,6 +33,28 @@ enum class ModelType {
 	Icosahedron
 };
 
+
+ImGuiTreeNodeFlags MakeTreeNodeFlags() {
+	return ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+}
+
+ImGuiTreeNodeFlags MakeTreeNodeFlags(void* compare_selected) {
+	return ImGuiTreeNodeFlags_OpenOnArrow
+	       | ImGuiTreeNodeFlags_OpenOnDoubleClick
+	       | ((compare_selected == g_selected) ? ImGuiTreeNodeFlags_Selected : 0);
+}
+
+ImGuiTreeNodeFlags MakeTreeNodeFlags(const EntityPtr& compare_selected) {
+	return ImGuiTreeNodeFlags_OpenOnArrow
+	       | ImGuiTreeNodeFlags_OpenOnDoubleClick
+	       | ((compare_selected == g_selected_entity) ? ImGuiTreeNodeFlags_Selected : 0);
+}
+
+ImGuiTreeNodeFlags MakeTreeLeafFlags(void* compare_selected) {
+	return ImGuiTreeNodeFlags_Leaf
+	       | ImGuiTreeNodeFlags_Bullet
+	       | ((compare_selected == g_selected) ? ImGuiTreeNodeFlags_Selected : 0);
+}
 
 
 
@@ -305,12 +327,17 @@ void DrawDetails(Text& text) {
 	}
 }
 
-/*
+
+void DrawDetails(ModelRoot& root) {
+	DrawComponentState(root);
+}
+
+
 void DrawDetails(Model& model) {
 
-	DrawComponentState(model);
+	//DrawComponentState(model);
 
-	ImGui::Text(model.getName().c_str());
+	//ImGui::Text(model.getName().c_str());
 	ImGui::Separator();
 
 	bool shadows = model.castsShadows();
@@ -318,18 +345,20 @@ void DrawDetails(Model& model) {
 		model.setShadows(shadows);
 
 	// Change material properties, textures
-	std::string name = "Material: " + model.getMaterial().name;
+	auto& mat = model.getMaterial();
+	std::string name = "Material: " + mat.name;
 	ImGui::Text(name.c_str());
 
-	ImGui::ColorEdit4("Diffuse Color", model.getMaterial().diffuse.data());
-	ImGui::ColorEdit3("Ambient Color", model.getMaterial().ambient.data());
-	ImGui::ColorEdit3("Specular Color", model.getMaterial().specular.data());
-	ImGui::DragFloat("Specular Exponent", &model.getMaterial().specular.w, 0.01f, 0.0f, FLT_MAX);
-	ImGui::ColorEdit3("Reflective Color", model.getMaterial().reflect.data());
-	ImGui::Checkbox("Transparent", &model.getMaterial().transparent);
-	ImGui::Checkbox("Reflection", &model.getMaterial().reflection_enabled);
+	ImGui::ColorEdit3("Diffuse Color", mat.params.diffuse.data());
+	ImGui::ColorEdit3("Ambient Color", mat.params.ambient.data());
+	ImGui::ColorEdit3("Specular Color", mat.params.specular.data());
+	ImGui::DragFloat("Specular Scale", &mat.params.spec_scale, 0.01f, 0.0f, FLT_MAX);
+	ImGui::DragFloat("Specular Exponent", &mat.params.spec_exponent, 0.01f, 0.0f, FLT_MAX);
+	ImGui::DragFloat("Opacity", &mat.params.opacity, 0.01f, 0.0f, 1.0f);
+	//ImGui::DragFloat("Index of Refraction", &mat.params.refraction_index, 0.01f, 0.0f, FLT_MAX);
+	//TODO: ImGui::Checkbox("Reflection", &model.mat.params.reflection_enabled);
 }
-*/
+
 
 void DrawDetails(AmbientLight& light) {
 
@@ -525,15 +554,41 @@ void DrawDetailsPanel(T& item) {
 
 template<typename T>
 void DrawNode(gsl::czstring<> text, T& item) {
-	bool node_selected = (selected == &item);
-	ImGui::Selectable(text, &node_selected);
+
+	ImGui::TreeNodeEx(text, MakeTreeLeafFlags(&item));
 
 	if (ImGui::IsItemClicked()) {
-		selected = &item;
+		g_selected = &item;
 	}
-	if (node_selected) {
+	if (g_selected == &item) {
 		DrawDetailsPanel(item);
 	}
+
+	ImGui::TreePop();
+}
+
+
+void DrawModelTree(ModelRoot& root) {
+
+	//TODO: Root details & selectable nodes
+
+	const bool model_open = ImGui::TreeNodeEx(root.getName().c_str(), MakeTreeNodeFlags(&root));
+
+	if (ImGui::IsItemClicked())
+		g_selected = &root;
+
+	if (!model_open) return;
+
+	root.forEachNode([](ModelRoot::Node& node) {
+		if (ImGui::TreeNodeEx(node.getName().c_str(), MakeTreeNodeFlags())) {
+			node.forEachModel([](Model& model) {
+				DrawNode("Model", model);
+			});
+			ImGui::TreePop();
+		}
+	});
+
+	ImGui::TreePop();
 }
 
 
@@ -543,15 +598,12 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	auto  handle = entity_ptr.getHandle();
 
 	std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
-
-	const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow
-		                             | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                             | ((selected_entity.getHandle() == handle) ? ImGuiTreeNodeFlags_Selected : 0);
+	const auto flags = MakeTreeNodeFlags(entity_ptr);
 
 	const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags, name.c_str());
 
 	if (ImGui::IsItemClicked())
-		selected_entity = entity_ptr;
+		g_selected_entity = entity_ptr;
 
 	if (!node_open) return;
 
@@ -583,15 +635,13 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 		}
 	}
 
-	/* TODO:
-	// Model
-	if (entity->hasComponent<Model>()) {
-		auto models = entity->getAll<Model>();
-		for (auto* model : models) {
-			DrawNode(model->getName().c_str(), *model);
+	// Model Root
+	if (entity->hasComponent<ModelRoot>()) {
+		auto roots = entity->getAll<ModelRoot>();
+		for (auto* root : roots) {
+			DrawModelTree(*root);
 		}
 	}
-	*/
 
 	// Ambient Light
 	if (entity->hasComponent<AmbientLight>()) {
@@ -687,21 +737,19 @@ void DrawTree(Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
 
-		const ImGuiTreeNodeFlags node_flags = ImGuiTreeNodeFlags_OpenOnArrow
-		                                      | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                                      | ((selected == &scene) ? ImGuiTreeNodeFlags_Selected : 0);
+		const auto node_flags = MakeTreeNodeFlags(&scene);
 
 		const bool node_open = ImGui::TreeNodeEx(&scene, node_flags, scene.getName().c_str());
 
 		if (ImGui::IsItemClicked())
-			selected = &scene;
+			g_selected = &scene;
 
 		if (node_open) {
 			DrawTreeNodes(scene);
 			ImGui::TreePop();
 		}
 
-		if (selected == &scene) {
+		if (g_selected == &scene) {
 			DrawDetailsPanel(scene);
 		}
 	}
@@ -1088,6 +1136,7 @@ void DrawSceneMenu(ID3D11Device& device,
 	Scene& scene,
 	ModelType& add_model_popup) {
 
+	//TODO: Make this look better
 	if (ImGui::BeginMenuBar()) {
 
 		if (ImGui::BeginMenu("Entity")) {
@@ -1101,23 +1150,23 @@ void DrawSceneMenu(ID3D11Device& device,
 				if (ImGui::BeginMenu("Add Component")) {
 
 					if (ImGui::MenuItem("Orthographic Camera")) {
-						selected_entity->addComponent<OrthographicCamera>(device, vec2_u32{ 480, 480 });
+						g_selected_entity->addComponent<OrthographicCamera>(device, vec2_u32{ 480, 480 });
 					}
 
 					if (ImGui::MenuItem("Perspective Camera")) {
-						selected_entity->addComponent<PerspectiveCamera>(device, vec2_u32{ 480, 480 });
+						g_selected_entity->addComponent<PerspectiveCamera>(device, vec2_u32{ 480, 480 });
 					}
 
 					if (ImGui::MenuItem("Directional Light")) {
-						selected_entity->addComponent<DirectionalLight>();
+						g_selected_entity->addComponent<DirectionalLight>();
 					}
 
 					if (ImGui::MenuItem("Point Light")) {
-						selected_entity->addComponent<PointLight>();
+						g_selected_entity->addComponent<PointLight>();
 					}
 
 					if (ImGui::MenuItem("Spot Light")) {
-						selected_entity->addComponent<SpotLight>();
+						g_selected_entity->addComponent<SpotLight>();
 					}
 
 					if (ImGui::BeginMenu("Model")) {
@@ -1127,7 +1176,7 @@ void DrawSceneMenu(ID3D11Device& device,
 
 							if (OpenFilePicker(gsl::not_null<wchar_t*>(szFile), 512)) {
 								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
-								//TODO: scene.importModel(selected_entity, device, bp);
+								//TODO: scene.importModel(g_selected_entity, device, bp);
 							}
 							else Logger::log(LogLevel::err, "Failed to open file dialog");
 						}
@@ -1155,7 +1204,7 @@ void DrawSceneMenu(ID3D11Device& device,
 				}
 
 				if (ImGui::MenuItem("Delete")) {
-					scene.removeEntity(selected_entity);
+					scene.removeEntity(g_selected_entity);
 				}
 
 				ImGui::EndMenu();
@@ -1375,7 +1424,7 @@ void UserInterface::update(Engine& engine)  {
 		DrawSceneMenu(device, resource_mgr, scene, add_model_popup);
 
 		// Process model popup
-		ProcNewModelPopups(device, scene, resource_mgr, selected_entity, add_model_popup);
+		ProcNewModelPopups(device, scene, resource_mgr, g_selected_entity, add_model_popup);
 
 		// Draw tree
 		DrawTree(scene);

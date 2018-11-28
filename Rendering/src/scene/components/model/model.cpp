@@ -2,14 +2,14 @@
 
 
 ModelRoot::ModelRoot(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& bp)
-	: name(WstrToStr(bp->guid))
+	: name(bp->name)
 	, blueprint(bp) {
 
 	constructNodes(device, blueprint->root, root);
 }
 
 
-void ModelRoot::constructNodes(ID3D11Device& device, ModelBlueprint::Node& bp_current, ModelNode& current) {
+void ModelRoot::constructNodes(ID3D11Device& device, ModelBlueprint::Node& bp_current, Node& current) {
 	
 	current.name = bp_current.name;
 
@@ -43,7 +43,7 @@ void XM_CALLCONV ModelRoot::updateBuffers(ID3D11DeviceContext& device_context, F
 
 
 void XM_CALLCONV ModelRoot::updateNodeBuffers(ID3D11DeviceContext& device_context,
-                                              ModelNode& current,
+                                              Node& current,
                                               FXMMATRIX world_transpose,
                                               CXMMATRIX world_inv_transpose) {
 	

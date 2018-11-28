@@ -178,7 +178,7 @@ inline ModelOutput AssimpLoad(ResourceMgr& resource_mgr, const fs::path& file) {
 
 	// Process the model
 	ModelOutput model_out;
-	model_out.name = file.string();
+	model_out.name = file.filename().string();
 	ProcessNodes(scene->mRootNode, model_out.root);
 	ProcessMeshes(scene, model_out);
 	ProcessMaterials(scene, resource_mgr, model_out);
