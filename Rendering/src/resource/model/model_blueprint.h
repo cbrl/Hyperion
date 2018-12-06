@@ -13,7 +13,6 @@ public:
 	using Node = ModelOutput::Node;
 
 
-public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -23,10 +22,10 @@ public:
 	               const std::wstring& filename);
 
 	template<typename VertexT>
-	ModelBlueprint(ID3D11Device& device, const ModelOutput& model_output)
-		: Resource(StrToWstr(model_output.name)) {
+	ModelBlueprint(ID3D11Device& device, const ModelOutput& output)
+	    : Resource(fs::exists(output.file) ? output.file.wstring() : StrToWstr(output.name)) {
 
-		constructBlueprint<VertexT>(device, model_output);
+		constructBlueprint<VertexT>(device, output);
 	}
 
 	ModelBlueprint(const ModelBlueprint& blueprint) = delete;
@@ -55,7 +54,7 @@ private:
 	template<typename VertexT>
 	void constructBlueprint(ID3D11Device& device, const ModelOutput& out) {
 
-		name = out.name;
+		name = out.file.filename().string();
 
 		// Copy the nodes and materials
 		root = out.root;

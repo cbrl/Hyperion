@@ -332,13 +332,13 @@ void DrawDetails(ModelRoot& root) {
 	DrawComponentState(root);
 }
 void DrawDetails(ModelNode& node) {
-	
+	//DrawState(node);
 }
 void DrawDetails(Model& model) {
 
-	//DrawComponentState(model);
+	//DrawState(model);
 
-	//ImGui::Text(model.getName().c_str());
+	//TODO: ImGui::Text(model.getName().c_str());
 	ImGui::Separator();
 
 	bool shadows = model.castsShadows();
@@ -356,7 +356,7 @@ void DrawDetails(Model& model) {
 	ImGui::DragFloat("Specular Scale", &mat.params.spec_scale, 0.01f, 0.0f, FLT_MAX);
 	ImGui::DragFloat("Specular Exponent", &mat.params.spec_exponent, 0.01f, 0.0f, FLT_MAX);
 	ImGui::DragFloat("Opacity", &mat.params.opacity, 0.01f, 0.0f, 1.0f);
-	//ImGui::DragFloat("Index of Refraction", &mat.params.refraction_index, 0.01f, 0.0f, FLT_MAX);
+	//TODO: ImGui::DragFloat("Index of Refraction", &mat.params.refraction_index, 0.01f, 0.0f, FLT_MAX);
 	//TODO: ImGui::Checkbox("Reflection", &model.mat.params.reflection_enabled);
 }
 
@@ -614,9 +614,8 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	auto  handle = entity_ptr.getHandle();
 
 	std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
-	const auto flags = MakeTreeNodeFlags(entity_ptr);
 
-	const bool node_open = ImGui::TreeNodeEx(name.c_str(), flags);
+	const bool node_open = ImGui::TreeNodeEx(name.c_str(), MakeTreeNodeFlags(entity_ptr));
 
 	if (ImGui::IsItemClicked())
 		g_selected_entity = entity_ptr;
@@ -753,10 +752,7 @@ void DrawTreeNodes(Scene& scene) {
 void DrawTree(Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
-
-		const auto node_flags = MakeTreeNodeFlags(&scene);
-
-		const bool node_open = ImGui::TreeNodeEx(&scene, node_flags, scene.getName().c_str());
+		const bool node_open = ImGui::TreeNodeEx(&scene, MakeTreeNodeFlags(&scene), scene.getName().c_str());
 
 		if (ImGui::IsItemClicked())
 			g_selected = &scene;
@@ -1148,88 +1144,97 @@ void ProcNewModelPopups(ID3D11Device& device,
 //
 //----------------------------------------------------------------------------------
 
-void DrawSceneMenu(ID3D11Device& device,
-	ResourceMgr& resource_mgr,
-	Scene& scene,
-	ModelType& add_model_popup) {
+void DrawAddComponentMenu(ID3D11Device& device,
+                          ResourceMgr& resource_mgr,
+                          Scene& scene,
+                          ModelType& add_model_popup) {
+	
+	if (ImGui::BeginMenu("Add Component")) {
 
-	//TODO: Make this look better
-	if (ImGui::BeginMenuBar()) {
-
-		if (ImGui::BeginMenu("Entity")) {
-
-			if (ImGui::MenuItem("New")) {
-				scene.addEntity();
-			}
-
-			if (ImGui::BeginMenu("Selected")) {
-
-				if (ImGui::BeginMenu("Add Component")) {
-
-					if (ImGui::MenuItem("Orthographic Camera")) {
-						g_selected_entity->addComponent<OrthographicCamera>(device, vec2_u32{ 480, 480 });
-					}
-
-					if (ImGui::MenuItem("Perspective Camera")) {
-						g_selected_entity->addComponent<PerspectiveCamera>(device, vec2_u32{ 480, 480 });
-					}
-
-					if (ImGui::MenuItem("Directional Light")) {
-						g_selected_entity->addComponent<DirectionalLight>();
-					}
-
-					if (ImGui::MenuItem("Point Light")) {
-						g_selected_entity->addComponent<PointLight>();
-					}
-
-					if (ImGui::MenuItem("Spot Light")) {
-						g_selected_entity->addComponent<SpotLight>();
-					}
-
-					if (ImGui::BeginMenu("Model")) {
-
-						if (ImGui::MenuItem("From file")) {
-							wchar_t szFile[512] = {};
-
-							if (OpenFilePicker(gsl::not_null<wchar_t*>(szFile), 512)) {
-								auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
-								//TODO: scene.importModel(g_selected_entity, device, bp);
-							}
-							else Logger::log(LogLevel::err, "Failed to open file dialog");
-						}
-
-						if (ImGui::BeginMenu("Geometric Shape")) {
-							if (ImGui::MenuItem("Cube")) add_model_popup = ModelType::Cube;
-							if (ImGui::MenuItem("Box")) add_model_popup = ModelType::Box;
-							if (ImGui::MenuItem("Sphere")) add_model_popup = ModelType::Sphere;
-							if (ImGui::MenuItem("GeoSphere")) add_model_popup = ModelType::GeoSphere;
-							if (ImGui::MenuItem("Cylinder")) add_model_popup = ModelType::Cylinder;
-							if (ImGui::MenuItem("Cone")) add_model_popup = ModelType::Cone;
-							if (ImGui::MenuItem("Torus")) add_model_popup = ModelType::Torus;
-							if (ImGui::MenuItem("Tetrahedron")) add_model_popup = ModelType::Tetrahedron;
-							if (ImGui::MenuItem("Octahedron")) add_model_popup = ModelType::Octahedron;
-							if (ImGui::MenuItem("Dodecahedron")) add_model_popup = ModelType::Dodecahedron;
-							if (ImGui::MenuItem("Icosahedron")) add_model_popup = ModelType::Icosahedron;
-
-							ImGui::EndMenu();
-						}
-
-						ImGui::EndMenu();
-					}
-
-					ImGui::EndMenu();
-				}
-
-				if (ImGui::MenuItem("Delete")) {
-					scene.removeEntity(g_selected_entity);
-				}
-
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenu();
+		if (ImGui::MenuItem("Orthographic Camera")) {
+			g_selected_entity->addComponent<OrthographicCamera>(device, vec2_u32{ 480, 480 });
+		}
+		if (ImGui::MenuItem("Perspective Camera")) {
+			g_selected_entity->addComponent<PerspectiveCamera>(device, vec2_u32{ 480, 480 });
+		}
+		if (ImGui::MenuItem("Directional Light")) {
+			g_selected_entity->addComponent<DirectionalLight>();
+		}
+		if (ImGui::MenuItem("Point Light")) {
+			g_selected_entity->addComponent<PointLight>();
+		}
+		if (ImGui::MenuItem("Spot Light")) {
+			g_selected_entity->addComponent<SpotLight>();
 		}
 
+		if (ImGui::BeginMenu("Model")) {
+			if (ImGui::MenuItem("From file")) {
+				wchar_t szFile[512] = {};
+
+				if (OpenFilePicker(gsl::not_null<wchar_t*>(szFile), 512)) {
+					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile);
+					//TODO: scene.importModel(g_selected_entity, device, bp);
+				}
+				else Logger::log(LogLevel::err, "Failed to open file dialog");
+			}
+
+			if (ImGui::BeginMenu("Geometric Shape")) {
+				if (ImGui::MenuItem("Cube"))         add_model_popup = ModelType::Cube;
+				if (ImGui::MenuItem("Box"))          add_model_popup = ModelType::Box;
+				if (ImGui::MenuItem("Sphere"))       add_model_popup = ModelType::Sphere;
+				if (ImGui::MenuItem("GeoSphere"))    add_model_popup = ModelType::GeoSphere;
+				if (ImGui::MenuItem("Cylinder"))     add_model_popup = ModelType::Cylinder;
+				if (ImGui::MenuItem("Cone"))         add_model_popup = ModelType::Cone;
+				if (ImGui::MenuItem("Torus"))        add_model_popup = ModelType::Torus;
+				if (ImGui::MenuItem("Tetrahedron"))  add_model_popup = ModelType::Tetrahedron;
+				if (ImGui::MenuItem("Octahedron"))   add_model_popup = ModelType::Octahedron;
+				if (ImGui::MenuItem("Dodecahedron")) add_model_popup = ModelType::Dodecahedron;
+				if (ImGui::MenuItem("Icosahedron"))  add_model_popup = ModelType::Icosahedron;
+
+				ImGui::EndMenu(); //Geometric Shape
+			}
+
+			ImGui::EndMenu(); //Model
+		}
+
+		ImGui::EndMenu(); //Add Component
+	}
+}
+
+
+void DrawEntityMenu(ID3D11Device& device,
+                    ResourceMgr& resource_mgr,
+                    Scene& scene,
+                    ModelType& add_model_popup) {
+
+	if (ImGui::BeginMenu("Entity")) {
+
+		if (ImGui::MenuItem("New")) {
+			scene.addEntity();
+		}
+		
+		if (ImGui::BeginMenu("Selected")) {
+			DrawAddComponentMenu(device, resource_mgr, scene , add_model_popup);
+
+			if (ImGui::MenuItem("Delete")) {
+				scene.removeEntity(g_selected_entity);
+			}
+
+			ImGui::EndMenu(); //Selected
+		}
+
+		ImGui::EndMenu(); //Entity
+	}
+}
+
+
+void DrawSceneMenu(ID3D11Device& device,
+                   ResourceMgr& resource_mgr,
+                   Scene& scene,
+                   ModelType& add_model_popup) {
+
+	if (ImGui::BeginMenuBar()) {
+		DrawEntityMenu(device, resource_mgr, scene, add_model_popup);
 		ImGui::EndMenuBar();
 	}
 }
@@ -1383,7 +1388,6 @@ void DrawFPSDisplay(Engine& engine) {
 	}
 
 	if (ImGui::Begin("FPS", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-
 		ImGui::BeginChild("FPS Histogram", {250, 50});
 		ImGui::PlotLines("", fps_history.data(), static_cast<int>(fps_history.size()), 0, nullptr, 0, FLT_MAX, {250, 50});
 		ImGui::EndChild();

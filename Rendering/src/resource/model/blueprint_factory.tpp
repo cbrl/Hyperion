@@ -2,7 +2,6 @@
 namespace BlueprintFactory {
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
 	                                      f32 size,
 	                                      bool rhcoords,
@@ -49,7 +48,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
 	                                     const vec3_f32& size,
 	                                     bool rhcoords,
@@ -60,37 +58,36 @@ namespace BlueprintFactory {
 			              invertn ? " InvertN" : "");
 
 
-		// Compute the vertices and indices
-		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		Shapes::ComputeBox(vertices, indices, size, rhcoords, invertn);
+		std::vector<VertexT> vertices;
+		Shapes::ComputeBox(vertices, mesh.indices, size, rhcoords, invertn);
+
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Box Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Box";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Box Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
@@ -98,7 +95,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
 	                                        f32 diameter,
 	                                        size_t tessellation,
@@ -109,38 +105,36 @@ namespace BlueprintFactory {
 		std::string name = "Sphere " + std::to_string(diameter) + std::to_string(tessellation) + (rhcoords ? " RH" : "") + (
 			              invertn ? " InvertN" : "");
 
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeSphere(vertices, mesh.indices, diameter, tessellation, rhcoords, invertn);
 
-		Shapes::ComputeSphere(vertices, indices, diameter, tessellation, rhcoords, invertn);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Sphere Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Sphere";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Sphere Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
@@ -148,7 +142,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
 	                                           f32 diameter,
 	                                           size_t tessellation,
@@ -157,38 +150,36 @@ namespace BlueprintFactory {
 		// Model name
 		std::string name = "GeoSphere " + std::to_string(diameter) + std::to_string(tessellation) + (rhcoords ? " RH" : "");
 
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeGeoSphere(vertices, mesh.indices, diameter, tessellation, rhcoords);
 
-		Shapes::ComputeGeoSphere(vertices, indices, diameter, tessellation, rhcoords);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "GeoSphere Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "GeoSphere";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "GeoSphere Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
@@ -196,7 +187,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
 	                                          f32 diameter,
 	                                          f32 height,
@@ -207,38 +197,36 @@ namespace BlueprintFactory {
 		std::string name = "Cylinder " + std::to_string(height) + std::to_string(diameter) + std::to_string(tessellation) + (
 			              rhcoords ? " RH" : "");
 
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeCylinder(vertices, mesh.indices, diameter, height, tessellation, rhcoords);
 
-		Shapes::ComputeCylinder(vertices, indices, diameter, height, tessellation, rhcoords);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Cylinder Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Cylinder";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Cylinder Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
@@ -246,7 +234,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
 	                                      f32 diameter,
 	                                      f32 height,
@@ -257,38 +244,36 @@ namespace BlueprintFactory {
 		std::string name = "Cone " + std::to_string(diameter) + std::to_string(height) + std::to_string(tessellation) + (
 			              rhcoords ? " RH" : "");
 
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeCone(vertices, mesh.indices, diameter, height, tessellation, rhcoords);
 
-		Shapes::ComputeCone(vertices, indices, diameter, height, tessellation, rhcoords);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Cone Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Cone";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Cone Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
@@ -296,7 +281,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
 	                                       f32 diameter,
 	                                       f32 thickness,
@@ -307,38 +291,36 @@ namespace BlueprintFactory {
 		std::string name = "Torus " + std::to_string(diameter) + std::to_string(thickness) + std::to_string(tessellation) + (
 			              rhcoords ? " RH" : "");
 
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeTorus(vertices, mesh.indices, diameter, thickness, tessellation, rhcoords);
 
-		Shapes::ComputeTorus(vertices, indices, diameter, thickness, tessellation, rhcoords);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Torus Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Torus";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Torus Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
@@ -346,7 +328,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
 	                                             f32 size,
 	                                             bool rhcoords) {
@@ -354,38 +335,36 @@ namespace BlueprintFactory {
 		// Model name
 		std::string name = "Tetrahedron " + std::to_string(size) + (rhcoords ? " RH" : "");
 
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeTetrahedron(vertices, mesh.indices, size, rhcoords);
 
-		Shapes::ComputeTetrahedron(vertices, indices, size, rhcoords);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Tetrahedron Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Tetrahedron";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Tetrahedron Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
@@ -393,7 +372,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
 	                                            f32 size,
 	                                            bool rhcoords) {
@@ -401,38 +379,36 @@ namespace BlueprintFactory {
 		// Model name
 		std::string name = "Octahedron " + std::to_string(size) + (rhcoords ? " RH" : "");
 
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeOctahedron(vertices, mesh.indices, size, rhcoords);
 
-		Shapes::ComputeOctahedron(vertices, indices, size, rhcoords);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Octahedron Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Octahedron";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Octahedron Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
@@ -440,7 +416,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
 	                                              f32 size,
 	                                              bool rhcoords) {
@@ -448,38 +423,36 @@ namespace BlueprintFactory {
 		// Model name
 		std::string name = "Dodecahedron " + std::to_string(size) + (rhcoords ? " RH" : "");
 
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeDodecahedron(vertices, mesh.indices, size, rhcoords);
 
-		Shapes::ComputeDodecahedron(vertices, indices, size, rhcoords);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Dodecahedron Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Dodecahedron";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Dodecahedron Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);
@@ -487,7 +460,6 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	[[nodiscard]]
 	shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
 	                                             f32 size,
 	                                             bool rhcoords) {
@@ -495,38 +467,36 @@ namespace BlueprintFactory {
 		// Model name
 		std::string name = "Icosahedron " + std::to_string(size) + (rhcoords ? " RH" : "");
 
+		// Create the mesh
+		ModelOutput::MeshData mesh;
 
-		// Compute the vertices and indices
 		std::vector<VertexT> vertices;
-		std::vector<u32> indices;
+		Shapes::ComputeIcosahedron(vertices, mesh.indices, size, rhcoords);
 
-		Shapes::ComputeIcosahedron(vertices, indices, size, rhcoords);
+		for (const auto& v : vertices) {
+			mesh.positions.push_back(v.position);
+			if constexpr (VertexT::hasNormal()) mesh.normals.push_back(v.normal);
+			if constexpr (VertexT::hasTexture()) mesh.texture_coords.push_back(v.texCoord);
+		}
 
 
 		// Create the material
 		Material mat;
-		mat.name        = "Icosahedron Material";
-		mat.ambient     = vec4_f32(0.1f, 0.1f, 0.1f, 1.0f);
-		mat.diffuse     = vec4_f32(1.0f, 1.0f, 1.0f, 1.0f);
-		mat.specular    = vec4_f32(1.0f, 1.0f, 1.0f, 20.0f);
-		mat.has_texture = false;
-
-		std::vector<Material> materials;
-		materials.push_back(mat);
-
-
-		// Create the group definition
-		Group grp;
-		grp.index_start    = 0;
-		grp.material_index = 0;
-		grp.name           = "Icosahedron";
-
-		std::vector<Group> groups;
-		groups.push_back(grp);
+		mat.name                 = "Icosahedron Material";
+		mat.params.ambient       = vec3_f32{0.1f, 0.1f, 0.1f};
+		mat.params.diffuse       = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.specular      = vec3_f32{1.0f, 1.0f, 1.0f};
+		mat.params.spec_scale    = 1.0f;
+		mat.params.spec_exponent = 20.0f;
 
 
 		// Create the ModelOutput object
-		ModelOutput<VertexT> out(name, vertices, indices, materials, groups);
+		ModelOutput out;
+		out.name = name;
+		out.root.name = name;
+		out.root.mesh_indices.push_back(0);
+		out.materials.push_back(std::move(mat));
+		out.meshes.push_back(std::move(mesh));
 
 
 		return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out);

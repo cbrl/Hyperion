@@ -13,6 +13,14 @@
 #include "resource/model/material/material.h"
 
 
+//----------------------------------------------------------------------------------
+// Model
+//----------------------------------------------------------------------------------
+//
+// A single model contained in the object hierarchy. Contains a mesh, material,
+// bounding volumes, and a shader constant buffer.
+//
+//----------------------------------------------------------------------------------
 class Model {
 	friend class ModelNode;
 	friend class ModelRoot;
@@ -117,6 +125,13 @@ private:
 
 
 
+//----------------------------------------------------------------------------------
+// ModelNode
+//----------------------------------------------------------------------------------
+//
+// A node in the object hierarchy. Can contain multiple models and child nodes, or none.
+//
+//----------------------------------------------------------------------------------
 class ModelNode final {
 	friend class ModelRoot;
 
@@ -216,6 +231,15 @@ private:
 
 
 
+//----------------------------------------------------------------------------------
+// ModelRoot
+//----------------------------------------------------------------------------------
+//
+// The root node of the object hierarchy, and also a component that can be added
+// to an entity. Provides some helper functions for iterating over the nodes
+// in the hierarchy.
+//
+//----------------------------------------------------------------------------------
 class ModelRoot final : public Component<ModelRoot> {
 public:
 	//----------------------------------------------------------------------------------
