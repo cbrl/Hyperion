@@ -28,6 +28,7 @@ IndentWidth: '4'
 Language: Cpp
 MaxEmptyLinesToKeep: '4'
 PointerAlignment: Left
+SortIncludes: 'false'
 SpaceBeforeParens: ControlStatements
 SpacesInAngles: 'false'
 SpacesInCStyleCastParentheses: 'false'
