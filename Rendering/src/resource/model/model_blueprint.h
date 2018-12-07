@@ -13,7 +13,6 @@ class ModelBlueprint final : public Resource<ModelBlueprint> {
 public:
 	using Node = ModelOutput::Node;
 
-
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -67,6 +66,7 @@ public:
 	std::vector<BoundingSphere> bounding_spheres;
 	std::vector<Material> materials;
 	std::vector<u32> mat_indices;
+
 	Node root;
 };
 
