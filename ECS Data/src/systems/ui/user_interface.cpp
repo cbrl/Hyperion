@@ -338,7 +338,7 @@ void DrawDetails(Model& model) {
 
 	//DrawState(model);
 
-	//TODO: ImGui::Text(model.getName().c_str());
+	ImGui::Text(model.getName().c_str());
 	ImGui::Separator();
 
 	bool shadows = model.castsShadows();
@@ -582,7 +582,7 @@ void DrawModelNodes(ModelNode& node) {
 	if (!node_open) return;
 
 	node.forEachModel([](Model& model) {
-		DrawLeafNode("Model", model);
+		DrawLeafNode(model.getName().c_str(), model);
 	});
 	node.forEachNode([](ModelNode& node) {
 		DrawModelNodes(node);
@@ -823,7 +823,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			break;
 	}
 
-	/* TODO:
+
 	if (ImGui::BeginPopupModal("New Cube", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 		static f32  size     = 1.0f;
 		static bool rhcoords = false;
@@ -834,8 +834,10 @@ void ProcNewModelPopups(ID3D11Device& device,
 		ImGui::Checkbox("Invert Normals", &invertn);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateCube<VertexPositionNormalTexture>(resource_mgr, size, rhcoords, invertn);
-			scene.importModel(entity, device, bp);
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
+			auto bp = BlueprintFactory::CreateCube(resource_mgr, config, size, invertn);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -858,8 +860,10 @@ void ProcNewModelPopups(ID3D11Device& device,
 		ImGui::Checkbox("Invert Normals", &invertn);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateBox<VertexPositionNormalTexture>(resource_mgr, size, rhcoords, invertn);
-			scene.importModel(entity, device, bp);
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
+			auto bp = BlueprintFactory::CreateBox(resource_mgr, config, size, invertn);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -892,9 +896,11 @@ void ProcNewModelPopups(ID3D11Device& device,
 		}
 
 		if (ImGui::IsItemClicked()) {
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, diameter, tessellation, rhcoords, invertn);
-			scene.importModel(entity, device, bp);
+			auto bp = BlueprintFactory::CreateSphere(resource_mgr, config, diameter, tessellation, invertn);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -925,9 +931,11 @@ void ProcNewModelPopups(ID3D11Device& device,
 		}
 
 		if (ImGui::IsItemClicked()) {
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateGeoSphere<VertexPositionNormalTexture>(resource_mgr, diameter, tessellation, rhcoords);
-			scene.importModel(entity, device, bp);
+			auto bp = BlueprintFactory::CreateGeoSphere(resource_mgr, config, diameter, tessellation);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -960,9 +968,11 @@ void ProcNewModelPopups(ID3D11Device& device,
 		}
 
 		if (ImGui::IsItemClicked()) {
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateCylinder<VertexPositionNormalTexture>(resource_mgr, diameter, height, tessellation, rhcoords);
-			scene.importModel(entity, device, bp);
+			auto bp = BlueprintFactory::CreateCylinder(resource_mgr, config, diameter, height, tessellation);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -995,9 +1005,11 @@ void ProcNewModelPopups(ID3D11Device& device,
 		}
 
 		if (ImGui::IsItemClicked()) {
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateCone<VertexPositionNormalTexture>(resource_mgr, diameter, height, tessellation, rhcoords);
-			scene.importModel(entity, device, bp);
+			auto bp = BlueprintFactory::CreateCone(resource_mgr, config, diameter, height, tessellation);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1030,9 +1042,11 @@ void ProcNewModelPopups(ID3D11Device& device,
 		}
 
 		if (ImGui::IsItemClicked()) {
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateTorus<VertexPositionNormalTexture>(resource_mgr, diameter, thickness, tessellation, rhcoords);
-			scene.importModel(entity, device, bp);
+			auto bp = BlueprintFactory::CreateTorus(resource_mgr, config, diameter, thickness, tessellation);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1053,8 +1067,10 @@ void ProcNewModelPopups(ID3D11Device& device,
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateTetrahedron<VertexPositionNormalTexture>(resource_mgr, size, rhcoords);
-			scene.importModel(entity, device, bp);
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
+			auto bp = BlueprintFactory::CreateTetrahedron(resource_mgr, config, size);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1075,8 +1091,10 @@ void ProcNewModelPopups(ID3D11Device& device,
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateOctahedron<VertexPositionNormalTexture>(resource_mgr, size, rhcoords);
-			scene.importModel(entity, device, bp);
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
+			auto bp = BlueprintFactory::CreateOctahedron(resource_mgr, config, size);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1097,8 +1115,10 @@ void ProcNewModelPopups(ID3D11Device& device,
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateDodecahedron<VertexPositionNormalTexture>(resource_mgr, size, rhcoords);
-			scene.importModel(entity, device, bp);
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
+			auto bp = BlueprintFactory::CreateDodecahedron(resource_mgr, config, size);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1119,8 +1139,10 @@ void ProcNewModelPopups(ID3D11Device& device,
 		ImGui::Checkbox("Right-hand Coords", &rhcoords);
 
 		if (ImGui::Button("Create")) {
-			auto bp = BlueprintFactory::CreateIcosahedron<VertexPositionNormalTexture>(resource_mgr, size, rhcoords);
-			scene.importModel(entity, device, bp);
+			ModelConfig<VertexPositionNormalTexture> config;
+			config.flip_winding = rhcoords;
+			auto bp = BlueprintFactory::CreateIcosahedron(resource_mgr, config, size);
+			scene.addEntity()->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1132,7 +1154,6 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		ImGui::EndPopup();
 	}
-	*/
 }
 
 

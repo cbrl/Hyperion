@@ -27,12 +27,12 @@ void ModelNode::constructNode(ID3D11Device& device, ModelBlueprint& bp, ModelBlu
 
 	for (const u32 index : bp_node.mesh_indices) {
 		Model model(device,
-		            bp.meshes[index],
-		            bp.materials[bp.mat_indices[index]],
-		            bp.aabbs[index],
-		            bp.bounding_spheres[index]);
+		            bp.meshes.at(index),
+		            bp.materials.at(bp.mat_indices.at(index)),
+		            bp.aabbs.at(index),
+		            bp.bounding_spheres.at(index));
 
-		//model.name = meshes[index].name;
+		model.name = bp.meshes.at(index).getName();
 		models.push_back(std::move(model));
 	}
 

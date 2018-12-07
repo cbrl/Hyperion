@@ -84,7 +84,7 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 
 	// Get a scalar value from a material
 	static constexpr auto get_scalar = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
-		mat->Get(key, type, idx, out) != aiReturn_SUCCESS;
+		mat->Get(key, type, idx, out);
 	};
 
 	// Get a color from a material

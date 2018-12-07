@@ -12,6 +12,7 @@ public:
 
 	template<typename VertexT>
 	Mesh(ID3D11Device& device,
+	     const std::string& name,
 	     const std::vector<VertexT>& vertices,
 	     const std::vector<u32>& indices);
 
@@ -51,6 +52,11 @@ public:
 	}
 
 	[[nodiscard]]
+	const std::string& getName() const noexcept {
+		return name;
+	}
+
+	[[nodiscard]]
 	u32 getVertexCount() const noexcept {
 		return vertex_count;
 	}
@@ -65,6 +71,8 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
+
+	std::string name;
 
 	ComPtr<ID3D11Buffer> vertex_buffer;
 	ComPtr<ID3D11Buffer> index_buffer;

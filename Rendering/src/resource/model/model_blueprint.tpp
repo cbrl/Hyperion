@@ -56,7 +56,7 @@ void ModelBlueprint::constructBlueprint(ID3D11Device& device, const ModelOutput&
 		}
 
 		// Create the mesh
-		meshes.emplace_back(device, /*mesh.name,*/ vertices, mesh.indices);
+		meshes.emplace_back(device, mesh.name, vertices, mesh.indices);
 
 		// Construct bounding volumes
 		auto [min, max] = MinMaxPoint(mesh.positions);

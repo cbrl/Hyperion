@@ -50,7 +50,17 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Material
+	// Member Functions - Name
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	const std::string getName() const noexcept {
+		return name;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Vertices
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
@@ -113,12 +123,15 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	//std::string name;
+	std::string name;
+
 	ConstantBuffer<ModelBuffer> buffer;
+
 	Mesh& mesh;
 	Material& material;
 	AABB aabb;
 	BoundingSphere bounding_sphere;
+
 	bool shadows;
 };
 
