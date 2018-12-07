@@ -1,4 +1,4 @@
-#include "model_loader.h"
+#include "assimp_loader.h"
 #include "log/log.h"
 
 #include "assimp/Importer.hpp"
@@ -26,7 +26,6 @@ void ProcessMeshes(const aiScene* scene, ModelOutput& model_out) {
 		const auto* mesh = scene->mMeshes[i];
 
 		ModelOutput::MeshData out_mesh;
-
 		out_mesh.name           = mesh->mName.C_Str();
 		out_mesh.material_index = mesh->mMaterialIndex;
 
@@ -85,15 +84,7 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 
 	// Get a scalar value from a material
 	static constexpr auto get_scalar = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
-	    if (mat->Get(key, type, idx, out) != aiReturn_SUCCESS) {
-		    aiString name;
-			if (mat->Get(AI_MATKEY_NAME, name) == aiReturn_SUCCESS) {
-				Logger::log(LogLevel::warn, "Error retrieving scalar from material (name: {}, key: {})", name.C_Str(), key);
-			}
-			else {
-				Logger::log(LogLevel::warn, "Error retrieving scalar from material (key: {})", key);
-			}
-		}
+		mat->Get(key, type, idx, out) != aiReturn_SUCCESS;
 	};
 
 	// Get a color from a material
@@ -101,15 +92,6 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 		aiColor3D color;
 		if (mat->Get(key, type, idx, color) == aiReturn_SUCCESS) {
 			out = {color.r, color.g, color.b, 0.0f};
-		}
-		else {
-			aiString name;
-			if (mat->Get(AI_MATKEY_NAME, name) == aiReturn_SUCCESS) {
-				Logger::log(LogLevel::warn, "Error retrieving color from material (name: {}, key: {})", name.C_Str(), key);
-			}
-			else {
-				Logger::log(LogLevel::warn, "Error retrieving color from material (key: {})", key);
-			}
 		}
 	};
 
@@ -122,21 +104,12 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 		aiTextureOp      op;
 		aiTextureMapMode mode;
 		//TODO: handle texture stacks
-		if (mat->GetTexture(type, /*index*/0, &path, &mapping, &uvindex, &blend, &op, &mode) == AI_SUCCESS) {
+		if (mat->GetTexture(type, /*index*/0, &path, &mapping, &uvindex, &blend, &op, &mode) == aiReturn_SUCCESS) {
 			if (path.data[0] == '*') {
 				//TODO: handle embedded textures? (very rare)
 			}
 			else {
 				out = resource_mgr.getOrCreate<Texture>(StrToWstr(path.C_Str()));
-			}
-		}
-		else {
-			aiString name;
-			if (mat->Get(AI_MATKEY_NAME, name) == aiReturn_SUCCESS) {
-				Logger::log(LogLevel::warn, "Error retrieving map from material (name: {}, type: {})", name.C_Str(), type);
-			}
-			else {
-				Logger::log(LogLevel::warn, "Error retrieving map from material (key: {})", type);
 			}
 		}
 	};
@@ -185,7 +158,10 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 }
 
 
-ModelOutput AssimpLoad(ResourceMgr& resource_mgr, const fs::path& file) {
+ModelOutput AssimpLoad(ResourceMgr& resource_mgr,
+                       const fs::path& file,
+                       bool flip_winding,
+                       bool flip_uv) {
 
 	Assimp::Importer importer;
 
@@ -193,24 +169,27 @@ ModelOutput AssimpLoad(ResourceMgr& resource_mgr, const fs::path& file) {
 	importer.SetPropertyInteger(AI_CONFIG_PP_SBP_REMOVE, aiPrimitiveType_LINE | aiPrimitiveType_POINT);
 
 	// Import flags
-	const u32 pflags = aiProcess_MakeLeftHanded        |    //Left handed coordinates
-	                   aiProcess_FlipWindingOrder      |    //CW vertex winding order
-	                   aiProcess_FlipUVs               |    //Flipped UV coordinates
-	                   aiProcess_GenUVCoords           |    //Convert texture mappings to UV
-	                   aiProcess_Triangulate           |    //Triangulate the mesh
-	                   aiProcess_GenSmoothNormals      |    //Generate smoothed normals if none exist
-	                   aiProcess_CalcTangentSpace      |    //Calculate vertex tangents
-	                   aiProcess_JoinIdenticalVertices |    //Join identical mesh vertices
-	                   aiProcess_SortByPType;               //Split meshes by primitive type
+	u32 pflags = aiProcess_MakeLeftHanded        |    //Left handed coordinate system
+	             aiProcess_GenUVCoords           |    //Convert texture mappings to UV
+	             aiProcess_Triangulate           |    //Triangulate the mesh
+	             aiProcess_GenNormals            |    //Generate normals if none exist
+	             aiProcess_CalcTangentSpace      |    //Calculate vertex tangents
+	             aiProcess_JoinIdenticalVertices |    //Join identical mesh vertices
+	             //aiProcess_OptimizeMeshes        |    //Reduce the number of meshes
+	             //aiProcess_OptimizeGraph         |    //Optimize the scene hierarchy
+	             aiProcess_SortByPType;               //Split meshes by primitive type
+
+	// Assimp uses opposite coordinates by default
+	if (!flip_winding) pflags |= aiProcess_FlipWindingOrder;
+	if (!flip_uv)      pflags |= aiProcess_FlipUVs;
 
 	//----------------------------------------------------------------------------------
 	// Load the model
 	//----------------------------------------------------------------------------------
-	Logger::log(LogLevel::info, "Loading model: {}", file.string());
 	const aiScene* scene = importer.ReadFile(file.string(), pflags);
 
 	if (!scene) {
-		Logger::log(LogLevel::err, "Failed to load model: {}", file.string());
+		Logger::log(LogLevel::err, "Error loading model: {}", file.string());
 		//return ModelOutput<VertexT>();
 	}
 
@@ -229,12 +208,13 @@ ModelOutput AssimpLoad(ResourceMgr& resource_mgr, const fs::path& file) {
 }
 
 
-namespace ModelLoader {
+namespace AssimpLoader {
 
-	ModelOutput load(ResourceMgr& resource_mgr, const fs::path& file) {
+	ModelOutput load(ResourceMgr& resource_mgr,
+	                 const fs::path& file,
+	                 bool flip_winding,
+	                 bool flip_uv) {
 
-		auto out = AssimpLoad(resource_mgr, file);
-		Logger::log(LogLevel::info, "Loaded model: {}", file.string());
-		return out;
+		return AssimpLoad(resource_mgr, file, flip_winding, flip_uv);
 	}
 }

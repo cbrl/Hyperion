@@ -63,9 +63,6 @@
     <Filter Include="Source Files\resource">
       <UniqueIdentifier>{40bf8821-7ff8-4d2b-91e9-b5a5c13a4cbc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\resource\model">
-      <UniqueIdentifier>{581a639f-74f4-446b-a6f4-48d2cca6af34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\buffer">
       <UniqueIdentifier>{2be99d4f-977e-4da5-81af-189bbd49072c}</UniqueIdentifier>
     </Filter>
@@ -230,9 +227,6 @@
     <ClCompile Include="src\renderer\output\output_mgr.cpp">
       <Filter>Source Files\renderer\output</Filter>
     </ClCompile>
-    <ClCompile Include="src\resource\model\model_blueprint.cpp">
-      <Filter>Source Files\resource\model</Filter>
-    </ClCompile>
     <ClCompile Include="src\scene\scene.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
@@ -263,7 +257,7 @@
     <ClCompile Include="src\scene\systems\transform\transform_system.cpp">
       <Filter>Source Files\scene\systems\transform</Filter>
     </ClCompile>
-    <ClCompile Include="src\loader\model_loader.cpp">
+    <ClCompile Include="src\loader\assimp_loader.cpp">
       <Filter>Source Files\loader</Filter>
     </ClCompile>
   </ItemGroup>
@@ -433,6 +427,12 @@
     <ClInclude Include="src\scene\systems\transform\transform_system.h">
       <Filter>Header Files\scene\systems\transform</Filter>
     </ClInclude>
+    <ClInclude Include="src\resource\model\model_config.h">
+      <Filter>Header Files\resource\model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\loader\assimp_loader.h">
+      <Filter>Header Files\loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -459,6 +459,9 @@
     </None>
     <None Include="src\resource\resource_mgr.tpp">
       <Filter>Header Files\resource</Filter>
+    </None>
+    <None Include="src\resource\model\model_blueprint.tpp">
+      <Filter>Header Files\resource\model</Filter>
     </None>
   </ItemGroup>
 </Project>

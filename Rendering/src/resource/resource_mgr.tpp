@@ -5,20 +5,20 @@
 // ModelBlueprint
 //----------------------------------------------------------------------------------
 
-template<typename ResourceT>
+template<typename ResourceT, typename VertexT>
 std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>,
-	shared_ptr<ModelBlueprint>> ResourceMgr::getOrCreate(const std::wstring& filename) {
+	shared_ptr<ModelBlueprint>> ResourceMgr::getOrCreate(const std::wstring& filename, const ModelConfig<VertexT>& config) {
 
-	return models.getOrCreateResource(filename, device, *this, filename);
+	return models.getOrCreateResource(filename, device, *this, filename, config);
 }
 
 template<typename ResourceT, typename VertexT>
 std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>,
 	shared_ptr<ModelBlueprint>> ResourceMgr::getOrCreate(const std::wstring& name,
-	                                                     const ModelOutput& model_data) {
+	                                                     const ModelOutput& model_data,
+	                                                     const ModelConfig<VertexT>& config) {
 
-	// TODO: VertexT passed to constructor
-	return models.getOrCreateResource(name, device, model_data);
+	return models.getOrCreateResource(name, device, model_data, config);
 }
 
 

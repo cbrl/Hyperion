@@ -139,7 +139,7 @@
     <ClCompile Include="src\display\display_config.cpp" />
     <ClCompile Include="src\geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="src\geometry\frustum\frustum.cpp" />
-    <ClCompile Include="src\loader\model_loader.cpp" />
+    <ClCompile Include="src\loader\assimp_loader.cpp" />
     <ClCompile Include="src\loader\texture_loader.cpp" />
     <ClCompile Include="src\renderer\output\output_mgr.cpp" />
     <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.cpp" />
@@ -151,7 +151,6 @@
     <ClCompile Include="src\renderer\renderer.cpp" />
     <ClCompile Include="src\renderer\state\render_state_mgr.cpp" />
     <ClCompile Include="src\rendering_mgr.cpp" />
-    <ClCompile Include="src\resource\model\model_blueprint.cpp" />
     <ClCompile Include="src\resource\shader\shader.cpp" />
     <ClCompile Include="src\resource\shader\shader_bytecode.cpp" />
     <ClCompile Include="src\resource\shader\shader_factory.cpp" />
@@ -178,6 +177,7 @@
     <ClInclude Include="src\geometry\frustum\frustum.h" />
     <ClInclude Include="src\geometry\shapes\bezier.h" />
     <ClInclude Include="src\geometry\shapes\shapes.h" />
+    <ClInclude Include="src\loader\assimp_loader.h" />
     <ClInclude Include="src\loader\model_loader.h" />
     <ClInclude Include="src\loader\texture_loader.h" />
     <ClInclude Include="src\renderer\output\output_mgr.h" />
@@ -196,6 +196,7 @@
     <ClInclude Include="src\resource\model\blueprint_factory.h" />
     <ClInclude Include="src\resource\model\material\material.h" />
     <ClInclude Include="src\resource\model\model_blueprint.h" />
+    <ClInclude Include="src\resource\model\model_config.h" />
     <ClInclude Include="src\resource\model\model_output.h" />
     <ClInclude Include="src\resource\resource.h" />
     <ClInclude Include="src\resource\resource_mgr.h" />
@@ -230,6 +231,7 @@
     <None Include="src\renderer\renderer.tpp" />
     <None Include="src\resource\mesh\mesh.tpp" />
     <None Include="src\resource\model\blueprint_factory.tpp" />
+    <None Include="src\resource\model\model_blueprint.tpp" />
     <None Include="src\resource\resource_mgr.tpp" />
     <None Include="src\resource\shader\shader.tpp" />
   </ItemGroup>

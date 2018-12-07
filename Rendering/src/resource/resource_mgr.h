@@ -48,14 +48,15 @@ public:
 	// Member Functions - ModelBlueprint
 	//----------------------------------------------------------------------------------
 
-	template<typename ResourceT>
+	template<typename ResourceT, typename VertexT>
 	std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>,
-		shared_ptr<ModelBlueprint>> getOrCreate(const std::wstring& filename);
+		shared_ptr<ModelBlueprint>> getOrCreate(const std::wstring& filename, const ModelConfig<VertexT>& config);
 
 	template<typename ResourceT, typename VertexT>
 	std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>,
 		shared_ptr<ModelBlueprint>> getOrCreate(const std::wstring& name,
-		                                        const ModelOutput& model_data);
+		                                        const ModelOutput& model_data,
+		                                        const ModelConfig<VertexT>& config);
 
 
 	//----------------------------------------------------------------------------------

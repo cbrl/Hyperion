@@ -64,16 +64,22 @@ void TestScene::load(const Engine& engine) {
 	// Create models
 	//----------------------------------------------------------------------------------
 
-	// Scene model
-	auto bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj");
-	EntityPtr test_model = addEntity();
-	test_model->addComponent<ModelRoot>(device, bp);
+	// Model config
+	ModelConfig<VertexPositionNormalTexture> config;
+	config.flip_winding = false;
+	config.flip_uv      = false;
 
-	/*
+
+	// Scene model
+	auto main_bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj", config);
+	EntityPtr test_model = addEntity();
+	test_model->addComponent<ModelRoot>(device, main_bp);
+
+
 	// Sphere
-	auto sphere_bp = BlueprintFactory::CreateSphere<VertexPositionNormalTexture>(resource_mgr, 1.0f);
+	auto sphere_bp = BlueprintFactory::CreateSphere(resource_mgr, config, 1.0f);
 	EntityPtr sphere = addEntity();
-	sphere->addComponent<ModelRoot>(device, bp);
+	sphere->addComponent<ModelRoot>(device, sphere_bp);
 
 	sphere->getComponent<Transform>()->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });
 
@@ -83,14 +89,13 @@ void TestScene::load(const Engine& engine) {
 
 	auto orbit = sphere->addComponent<AxisOrbit>();
 	orbit->setSpeed(0.5f);
-	*/
 
 	//----------------------------------------------------------------------------------
 	// Create lights
 	//----------------------------------------------------------------------------------
 	
 	// Sphere light
-	/*{
+	{
 		auto light = sphere->addComponent<SpotLight>();
 		light->setDiffuseColor(vec4_f32{ 0.0f, 0.9f, 0.6f, 1.0f });
 		light->setAttenuation(vec3_f32{ 0.1f, 0.15f, 0.0f });
@@ -99,7 +104,7 @@ void TestScene::load(const Engine& engine) {
 		light->setUmbraAngle(XM_PI / 6.0f);
 		light->setPenumbraAngle(XM_PI / 3.0f);
 		light->setShadows(true);
-	}*/
+	}
 
 	// Camera light
 	{
@@ -169,11 +174,11 @@ void TestScene::tick(Engine& engine) {
 	// Update FPS, CPU usage, memory usage, mouse position, etc...
 	//----------------------------------------------------------------------------------
 
-	const vec2_i32 mouse_pos   = engine.getInput().getMousePosition();
-	const f64 total_cpu_usage  = engine.getSysMon().cpu().getTotalCpuPercentage();
-	const f64 proc_cpu_usage   = engine.getSysMon().cpu().getProcessCpuPercentage();
-	const u64 total_mem_usage  = engine.getSysMon().memory().getTotalUsedPhysicalMem();
-	const u64 proc_mem_usage   = engine.getSysMon().memory().getProcessUsedPhysicalMem();
+	const vec2_i32 mouse_pos  = engine.getInput().getMousePosition();
+	const f64 total_cpu_usage = engine.getSysMon().cpu().getTotalCpuPercentage();
+	const f64 proc_cpu_usage  = engine.getSysMon().cpu().getProcessCpuPercentage();
+	const u64 total_mem_usage = engine.getSysMon().memory().getTotalUsedPhysicalMem();
+	const u64 proc_mem_usage  = engine.getSysMon().memory().getProcessUsedPhysicalMem();
 
 	static std::wostringstream cpu_str;
 	static std::wostringstream mem_str;

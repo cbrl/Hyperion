@@ -104,7 +104,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 			//TODO: if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.diffuse.w <= ALPHA_MAX)
+			if (mat.params.opacity <= ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_projection);
