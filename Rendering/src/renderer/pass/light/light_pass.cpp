@@ -266,9 +266,9 @@ void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_t
 
 			XMStore(&buffer.light_buffer.position, transform->getWorldOrigin());
 			buffer.light_buffer.diffuse_color = light.getDiffuseColor();
-			buffer.light_buffer.specular = light.getSpecular();
-			buffer.light_buffer.attenuation = light.getAttenuation();
-			buffer.light_buffer.range = light.getRange();
+			buffer.light_buffer.specular      = light.getSpecular();
+			buffer.light_buffer.attenuation   = light.getAttenuation();
+			buffer.light_buffer.range         = light.getRange();
 
 			buffer.world_to_light = XMMatrixTranspose(world_to_light);
 
@@ -285,9 +285,9 @@ void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_t
 
 			XMStore(&buffer.position, transform->getWorldOrigin());
 			buffer.diffuse_color = light.getDiffuseColor();
-			buffer.specular = light.getSpecular();
-			buffer.attenuation = light.getAttenuation();
-			buffer.range = light.getRange();
+			buffer.specular      = light.getSpecular();
+			buffer.attenuation   = light.getAttenuation();
+			buffer.range         = light.getRange();
 
 			buffers.push_back(std::move(buffer));
 		}
@@ -326,14 +326,14 @@ void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to
 			return;
 
 		if (light.castsShadows()) {
-			const auto world_to_light = transform->getWorldToObjectMatrix();
+			const auto world_to_light       = transform->getWorldToObjectMatrix();
 			const auto light_to_lprojection = light.getLightToProjectionMatrix();
 			const auto world_to_lprojection = world_to_light * light_to_lprojection;
 
 			// Create the camera
 			LightCamera cam;
 			cam.world_to_light = world_to_light;
-			cam.light_to_proj = light_to_lprojection;
+			cam.light_to_proj  = light_to_lprojection;
 
 			spot_light_cameras.push_back(std::move(cam));
 
@@ -344,11 +344,11 @@ void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to
 			XMStore(&buffer.light_buffer.position, transform->getWorldOrigin());
 			XMStore(&buffer.light_buffer.direction, transform->getWorldAxisZ());
 			buffer.light_buffer.diffuse_color = light.getDiffuseColor();
-			buffer.light_buffer.specular = light.getSpecular();
-			buffer.light_buffer.attenuation = light.getAttenuation();
-			buffer.light_buffer.range = light.getRange();
-			buffer.light_buffer.cos_umbra = light.getUmbra();
-			buffer.light_buffer.cos_penumbra = light.getPenumbra();
+			buffer.light_buffer.specular      = light.getSpecular();
+			buffer.light_buffer.attenuation   = light.getAttenuation();
+			buffer.light_buffer.range         = light.getRange();
+			buffer.light_buffer.cos_umbra     = light.getUmbra();
+			buffer.light_buffer.cos_penumbra  = light.getPenumbra();
 
 			buffer.world_to_projection = XMMatrixTranspose(world_to_lprojection);
 
@@ -360,11 +360,11 @@ void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to
 			XMStore(&buffer.position, transform->getWorldOrigin());
 			XMStore(&buffer.direction, transform->getWorldAxisZ());
 			buffer.diffuse_color = light.getDiffuseColor();
-			buffer.specular = light.getSpecular();
-			buffer.attenuation = light.getAttenuation();
-			buffer.cos_umbra = light.getUmbra();
-			buffer.cos_penumbra = light.getPenumbra();
-			buffer.range = light.getRange();
+			buffer.specular      = light.getSpecular();
+			buffer.attenuation   = light.getAttenuation();
+			buffer.cos_umbra     = light.getUmbra();
+			buffer.cos_penumbra  = light.getPenumbra();
+			buffer.range         = light.getRange();
 
 			buffers.push_back(std::move(buffer));
 		}
