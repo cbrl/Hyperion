@@ -154,7 +154,7 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 
 void XM_CALLCONV DepthPass::renderModel(const ModelRoot& root, const Model& model, FXMMATRIX world_to_projection) const {
 
-	// TODO: if (!model.isActive()) return;
+	if (!model.isActive()) return;
 
 	// TODO: More elegant way of passing transform/root to function
 	const auto transform = root.getOwner()->getComponent<Transform>();

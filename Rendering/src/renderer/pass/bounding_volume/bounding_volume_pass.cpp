@@ -54,7 +54,6 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 	color_buffer.updateData(device_context, color);
 
 	scene.forEach<DirectionalLight>([&](const DirectionalLight& light) {
-
 		if (!light.isActive()) return;
 		
 		const auto transform = light.getOwner()->getComponent<Transform>();
@@ -70,7 +69,6 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 	});
 
 	scene.forEach<PointLight>([&](const PointLight& light) {
-
 		if (!light.isActive()) return;
 
 		const auto transform = light.getOwner()->getComponent<Transform>();
@@ -86,7 +84,6 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 	});
 
 	scene.forEach<SpotLight>([&](const SpotLight& light) {
-
 		if (!light.isActive()) return;
 
 		const auto transform = light.getOwner()->getComponent<Transform>();
@@ -105,7 +102,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 		if (!root.isActive()) return;
 
 		root.forEachModel([&](const Model& model) {
-			//TODO: if (!model.isActive()) return;
+			if (!model.isActive()) return;
 
 			const auto transform = root.getOwner()->getComponent<Transform>();
 			if (!transform) return;

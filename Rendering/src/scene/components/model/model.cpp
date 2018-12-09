@@ -1,6 +1,21 @@
 #include "model.h"
 
 
+Model::Model(ID3D11Device& device,
+             Mesh& mesh,
+             Material& mat,
+             AABB aabb,
+             BoundingSphere sphere)
+    : buffer(device)
+    , mesh(mesh)
+    , material(mat)
+    , aabb(aabb)
+    , bounding_sphere(sphere)
+    , shadows(true)
+    , active(true) {
+}
+
+
 ModelRoot::ModelRoot(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& bp)
 	: name(bp->name)
 	, blueprint(bp) {

@@ -26,14 +26,34 @@ class Model {
 	friend class ModelRoot;
 
 public:
-	Model(ID3D11Device& device, Mesh& mesh, Material& mat, AABB aabb, BoundingSphere sphere)
-		: buffer(device)
-		, mesh(mesh)
-		, material(mat)
-		, aabb(aabb)
-		, bounding_sphere(sphere)
-		, shadows(true) {
-	}
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+
+	Model(ID3D11Device& device,
+	      Mesh& mesh,
+	      Material& mat,
+	      AABB aabb,
+	      BoundingSphere sphere);
+
+	Model(const Model& model) = delete;
+	Model(Model&& model) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+
+	~Model() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+
+	Model& operator=(const Model& model) = delete;
+	Model& operator=(Model&& model) = default;
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Bind
@@ -56,6 +76,19 @@ public:
 	[[nodiscard]]
 	const std::string getName() const noexcept {
 		return name;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - State
+	//----------------------------------------------------------------------------------
+
+	void setActive(bool state) noexcept {
+		active = state;
+	}
+
+	bool isActive() const noexcept {
+		return active;
 	}
 
 
@@ -123,16 +156,27 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
+	// The name of the model
 	std::string name;
 
+	// The shader constant buffer
 	ConstantBuffer<ModelBuffer> buffer;
 
+	// The mesh that the model refers to
 	Mesh& mesh;
+
+	// The material that the model refers to
 	Material& material;
+
+	// The bounding volumes of the model
 	AABB aabb;
 	BoundingSphere bounding_sphere;
 
+	// A flag that determines if the model casts shadows
 	bool shadows;
+
+	// A flag that determines if the model is rendered and operated on
+	bool active;
 };
 
 
@@ -149,7 +193,32 @@ class ModelNode final {
 	friend class ModelRoot;
 
 public:
-	// Apply an action to the node's children
+	//----------------------------------------------------------------------------------
+	// Member Functions - Name
+	//----------------------------------------------------------------------------------
+
+	const std::string& getName() const noexcept {
+		return name;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - State
+	//----------------------------------------------------------------------------------
+
+	// Set all descendant models to the specified state
+	void setModelsActive(bool state) noexcept {
+		forEachModelRecursive([state](Model& model) {
+			model.setActive(state);
+		});
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Iteration
+	//----------------------------------------------------------------------------------
+
+	// Apply an action to each child of this node
 	template<typename ActionT>
 	void forEachNode(const ActionT& act) {
 		for (auto& node : child_nodes) {
@@ -157,7 +226,7 @@ public:
 		}
 	}
 
-	// Apply an action to the node's children
+	// Apply an action to each child of this node
 	template<typename ActionT>
 	void forEachNode(const ActionT& act) const {
 		for (const auto& node : child_nodes) {
@@ -165,7 +234,7 @@ public:
 		}
 	}
 
-	// Apply an action to all descendants of the node recursively
+	// Apply an action to all descendants of this node recursively
 	template<typename ActionT>
 	void forEachNodeRecursive(const ActionT& act) {
 		for (auto& node : child_nodes) {
@@ -174,7 +243,7 @@ public:
 		}
 	}
 
-	// Apply an action to all descendants of the node recursively
+	// Apply an action to all descendants of this node recursively
 	template<typename ActionT>
 	void forEachNodeRecursive(const ActionT& act) const {
 		for (const auto& node : child_nodes) {
@@ -217,9 +286,6 @@ public:
 		});
 	}
 
-	const std::string& getName() const noexcept {
-		return name;
-	}
 
 private:
 	// Recursively construct the nodes described by the blueprint nodes
@@ -227,8 +293,9 @@ private:
 
 	// Update the model buffers of the node and any child nodes
 	void XM_CALLCONV updateNodeBuffers(ID3D11DeviceContext& device_context,
-		FXMMATRIX world_transpose,
-		CXMMATRIX world_inv_transpose);
+	                                   FXMMATRIX world_transpose,
+	                                   CXMMATRIX world_inv_transpose);
+
 
 private:
 	// The node's name

@@ -332,11 +332,17 @@ void DrawDetails(ModelRoot& root) {
 	DrawComponentState(root);
 }
 void DrawDetails(ModelNode& node) {
-	//DrawState(node);
+	ImGui::Text("State");
+	ImGui::Separator();
+	if (ImGui::Button("Active"))
+		node.setModelsActive(true);
+	ImGui::SameLine();
+	if (ImGui::Button("Inactive"))
+		node.setModelsActive(false);
 }
 void DrawDetails(Model& model) {
 
-	//DrawState(model);
+	DrawComponentState(model);
 
 	ImGui::Text(model.getName().c_str());
 	ImGui::Separator();
@@ -545,6 +551,7 @@ void DrawDetails(AxisOrbit& orbit) {
 //
 //----------------------------------------------------------------------------------
 
+// Draw the details panel for a component
 template<typename T>
 void DrawDetailsPanel(T& item) {
 	ImGui::Begin("Properties");
@@ -552,6 +559,7 @@ void DrawDetailsPanel(T& item) {
 	ImGui::End();
 }
 
+// Draw a leaf node in the tree, and its details if selectted
 template<typename T>
 void DrawLeafNode(gsl::czstring<> text, T& item) {
 
@@ -568,6 +576,7 @@ void DrawLeafNode(gsl::czstring<> text, T& item) {
 }
 
 
+// Draw the model hierarchy
 void DrawModelNodes(ModelNode& node) {
 
 	const bool node_open = ImGui::TreeNodeEx(node.getName().c_str(), MakeTreeNodeFlags(&node));
@@ -591,6 +600,7 @@ void DrawModelNodes(ModelNode& node) {
 	ImGui::TreePop();
 }
 
+// Draw the model component node, and the model hierarchy if the node is open
 void DrawModelTree(ModelRoot& root) {
 
 	const bool node_open = ImGui::TreeNodeEx(("Model: " + root.getName()).c_str(), MakeTreeNodeFlags(&root));
@@ -608,6 +618,7 @@ void DrawModelTree(ModelRoot& root) {
 }
 
 
+// Draw a single tree node
 void DrawEntityNode(EntityPtr entity_ptr) {
 
 	auto* entity = entity_ptr.get();
@@ -735,13 +746,14 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 }
 
 
+// Draw a tree node for each root entity
 void DrawTreeNodes(Scene& scene) {
 
 	auto& entities = scene.getEntities();
 
 	for (const auto& entity_ptr : entities) {
 
-		// Skip this entity if it's a child
+		// Skip the entity if it's a child
 		if (entity_ptr->hasParent()) continue;
 
 		DrawEntityNode(entity_ptr);
@@ -749,6 +761,7 @@ void DrawTreeNodes(Scene& scene) {
 }
 
 
+// Draw the scene tree
 void DrawTree(Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {

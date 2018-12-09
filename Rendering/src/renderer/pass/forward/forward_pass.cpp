@@ -101,7 +101,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 		if (!root.isActive()) return;
 
 		root.forEachModel([&](const Model& model) {
-			//TODO: if (!model.isActive()) return;
+			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
 			if (mat.params.opacity <= ALPHA_MAX)
@@ -132,7 +132,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 		if (!root.isActive()) return;
 
 		root.forEachModel([&](const Model& model) {
-			//TODO: if (!model.isActive()) return;
+			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
 			if (mat.params.opacity < ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
@@ -161,7 +161,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 		if (!root.isActive()) return;
 
 		root.forEachModel([&](const Model& model) {
-			//TODO: if (!model.isActive()) return;
+			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
 			if (mat.params.opacity <= ALPHA_MAX)
@@ -181,7 +181,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 		if (!root.isActive()) return;
 
 		root.forEachModel([&](const Model& model) {
-			//TODO: if (!model.isActive()) return;
+			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
 			if (mat.params.opacity< ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
@@ -206,7 +206,7 @@ void ForwardPass::renderFalseColor(Scene& scene,
 		if (!root.isActive()) return;
 
 		root.forEachModel([&](const Model& model) {
-			//if (model.isActive())
+			if (model.isActive())
 				renderModel(root, model, world_to_projection);
 		});
 	});
@@ -226,7 +226,7 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 		if (!root.isActive()) return;
 
 		root.forEachModel([&](const Model& model) {
-			//if (model.isActive())
+			if (model.isActive())
 				renderModel(root, model, world_to_projection);
 		});
 	});
