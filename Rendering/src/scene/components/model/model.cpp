@@ -62,7 +62,7 @@ void XM_CALLCONV ModelNode::updateNodeBuffers(ID3D11DeviceContext& device_contex
 			model.material.params.opacity,
 			model.material.params.refraction_index,
 			model.material.maps.diffuse != nullptr/*,
-			model.material->params.reflection_enabled*/
+			model.material.params.reflection_enabled*/
 		};
 
 		model.buffer.updateData(device_context, buffer_data);

@@ -26,16 +26,18 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 
 	// Sample texture
-	float4 tex_color;
+	float4 base_color;
 	float  alpha;
 	{
 		if (g_material.has_texture) {
-			tex_color = diffuse_map.Sample(g_aniso_wrap, pin.tex);
-			alpha     = tex_color.w * g_material.opacity;
+			float4 tex_color = diffuse_map.Sample(g_aniso_wrap, pin.tex);
+
+			base_color = tex_color * g_material.diffuse;
+			alpha      = tex_color.w * g_material.opacity;
 		}
 		else {
-			tex_color = float4(1.0f, 1.0f, 1.0f, 1.0f);
-			alpha     = g_material.opacity;
+			base_color = g_material.diffuse;
+			alpha      = g_material.opacity;
 		}
 
 		// Test alpha if transparency is enabled, or set it to 1 if not.
@@ -54,7 +56,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	#ifdef ENABLE_LIGHTING
 	const float3 normal_vec = GetNormal(pin.position.xyz, pin.normal, pin.tex);
 
-	float4 out_color = CalculateLighting(pin.position_world, normal_vec, to_eye, tex_color, g_material);
+	float4 out_color = CalculateLighting(pin.position_world, normal_vec, to_eye, base_color, g_material);
 
 	if (g_material.reflection_enabled) {
 		const float3 incident         = -to_eye;
@@ -64,7 +66,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 		out_color.xyz += g_material.diffuse.xyz * reflection_color;
 	}
 	#else
-	float4 out_color = tex_color;
+	float4 out_color = base_color;
 	#endif //ENABLE_LIGHTING
 
 

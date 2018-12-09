@@ -192,66 +192,65 @@ float ShadowFactor(ShadowCubeMap shadow_map, float3 p_light, float2 projection_v
 // later we will modify the individual terms.
 //----------------------------------------------------------------------------------
 void ComputeDirectionalLight(DirectionalLight L,
-                             Material mat,
                              float3 pos,
                              float3 normal,
                              float3 view_vec,
-                             out float4 diffuse,
-                             out float4 specular,
-                             out float3 p_ndc) {
+                             float  spec_exponent,
+                             out float4 out_diffuse,
+                             out float4 out_specular,
+                             out float3 out_p_ndc) {
 	// Initialize outputs.
-	diffuse  = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	out_diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	out_specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// The light vector aims opposite the direction the light rays travel.
 	const float3 light_vec = -L.direction;
 
 	const float4 p_proj = mul(float4(pos, 1.0f), L.world_to_projection);
-	p_ndc = p_proj.xyz / p_proj.w;
+	out_p_ndc = p_proj.xyz / p_proj.w;
 
 	// Diffuse
 	const float diffuse_factor = DiffuseFactor(light_vec, normal);
-	diffuse = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : (diffuse_factor * mat.diffuse * L.diffuse);
-	//diffuse = diffuse_factor * mat.diffuse * L.diffuse;
+	out_diffuse = (any(1.0f < abs(out_p_ndc)) || 0.0f > out_p_ndc.z) ? 0.0f : (diffuse_factor * L.diffuse);
 
 	// Specular
-	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.spec_exponent);
-	specular = specular_factor * L.specular * mat.specular;
+	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, spec_exponent);
+	out_specular = specular_factor * L.specular;
 }
 
 
 void ComputeDirectionalLight(DirectionalLight L,
-                             Material mat,
                              float3 pos,
                              float3 normal,
                              float3 view_vec,
-                             out float4 diffuse,
-                             out float4 specular) {
+                             float  spec_exponent,
+                             out float4 out_diffuse,
+                             out float4 out_specular) {
 
 	float3 p_ndc;
-	ComputeDirectionalLight(L, mat, pos, normal, view_vec, diffuse, specular, p_ndc);
+	ComputeDirectionalLight(L, pos, normal, view_vec, spec_exponent, out_diffuse, out_specular, p_ndc);
 }
 
 
 void ComputeShadowedDirectionalLight(DirectionalLight L,
 									 ShadowMap shadow_map,
-									 Material mat,
 									 float3 pos,
 									 float3 normal,
 									 float3 view_vec,
-									 out float4 diffuse,
-									 out float4 specular) {
+                                     float  spec_exponent,
+									 out float4 out_diffuse,
+									 out float4 out_specular) {
 
 	float4 diffuse0;
 	float4 specular0;
 	float3 p_ndc;
 
-	ComputeDirectionalLight(L, mat, pos, normal, view_vec, diffuse0, specular0, p_ndc);
+	ComputeDirectionalLight(L, pos, normal, view_vec, spec_exponent, diffuse0, specular0, p_ndc);
 
 	const float shadow_factor = ShadowFactor(shadow_map, p_ndc);
 
-	diffuse  = diffuse0  * shadow_factor;
-	specular = specular0 * shadow_factor;
+	out_diffuse  = diffuse0  * shadow_factor;
+	out_specular = specular0 * shadow_factor;
 }
 
 
@@ -264,16 +263,16 @@ void ComputeShadowedDirectionalLight(DirectionalLight L,
 // later we will modify the individual terms.
 //----------------------------------------------------------------------------------
 void ComputePointLight(PointLight L,
-					   Material mat,
 					   float3 pos,
 					   float3 normal,
-					   float3 view_vec,
-					   out float4 diffuse,
-					   out float4 specular) {
+                       float3 view_vec,
+                       float  spec_exponent,
+					   out float4 out_diffuse,
+					   out float4 out_specular) {
 
 	// Initialize outputs.
-	diffuse  = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	out_diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	out_specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// The vector from the surface to the light.
 	float3 light_vec = L.position - pos;
@@ -290,39 +289,39 @@ void ComputePointLight(PointLight L,
 
 	// Diffuse
 	const float diffuse_factor = DiffuseFactor(light_vec, normal);
-	diffuse = diffuse_factor * mat.diffuse * L.diffuse;
+	out_diffuse = diffuse_factor * L.diffuse;
 
 	// Specular
-	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.spec_exponent);
-	specular = specular_factor * L.specular * mat.specular;
+	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, spec_exponent);
+	out_specular = specular_factor * L.specular;
 
 	// Attenution
 	const float attenuation = Attenuation(d, L.attenuation);
 
-	diffuse  *= attenuation;
-	specular *= attenuation;
+	out_diffuse  *= attenuation;
+	out_specular *= attenuation;
 }
 
 
 void ComputeShadowedPointLight(ShadowedPointLight L,
 							   ShadowCubeMap shadow_map,
-							   Material mat,
 							   float3 pos,
 							   float3 normal,
-							   float3 view_vec,
-							   out float4 diffuse,
-							   out float4 specular) {
+                               float3 view_vec,
+                               float  spec_exponent,
+							   out float4 out_diffuse,
+							   out float4 out_specular) {
 
 	float4 diffuse0;
 	float4 specular0;
 
-	ComputePointLight(L.light, mat, pos, normal, view_vec, diffuse0, specular0);
+	ComputePointLight(L.light, pos, normal, view_vec, spec_exponent, diffuse0, specular0);
 
-	const float3 p_light      = mul(float4(pos, 1.0f), L.world_to_light).xyz;
-	const float shadow_factor = ShadowFactor(shadow_map, p_light, L.projection_values);
+	const float3 p_light       = mul(float4(pos, 1.0f), L.world_to_light).xyz;
+	const float  shadow_factor = ShadowFactor(shadow_map, p_light, L.projection_values);
 
-	diffuse  = diffuse0  * shadow_factor;
-	specular = specular0 * shadow_factor;
+	out_diffuse  = diffuse0  * shadow_factor;
+	out_specular = specular0 * shadow_factor;
 }
 
 
@@ -335,16 +334,16 @@ void ComputeShadowedPointLight(ShadowedPointLight L,
 // later we will modify the individual terms.
 //----------------------------------------------------------------------------------
 void ComputeSpotLight(SpotLight L,
-					  Material mat,
 					  float3 pos,
 					  float3 normal,
-					  float3 view_vec,
-					  out float4 diffuse,
-					  out float4 specular) {
+                      float3 view_vec,
+                      float  spec_exponent,
+					  out float4 out_diffuse,
+					  out float4 out_specular) {
 
 	// Initialize outputs.
-	diffuse  = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	out_diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	out_specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
 
 	// The vector from the surface to the light.
 	float3 light_vec = L.position - pos;
@@ -362,11 +361,11 @@ void ComputeSpotLight(SpotLight L,
 
 	// Diffuse
 	const float diffuse_factor = DiffuseFactor(light_vec, normal);
-	diffuse = diffuse_factor * mat.diffuse * L.diffuse;
+	out_diffuse = diffuse_factor * L.diffuse;
 
 	// Specular
-	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, mat.spec_exponent);
-	specular = specular_factor * L.specular * mat.specular;
+	const float specular_factor = SPECULAR_FACTOR_FUNC(light_vec, normal, view_vec, spec_exponent);
+	out_specular = specular_factor * L.specular;
 
 	// Attenution
 	const float attenuation = Attenuation(d, L.attenuation);
@@ -374,31 +373,31 @@ void ComputeSpotLight(SpotLight L,
 	// Spot intensity
 	const float intensity = SpotIntensity(light_vec, L.direction, L.cos_umbra, L.cos_penumbra);
 
-	diffuse  *= attenuation * intensity;
-	specular *= attenuation * intensity;
+	out_diffuse  *= attenuation * intensity;
+	out_specular *= attenuation * intensity;
 }
 
 
 void ComputeShadowedSpotLight(ShadowedSpotLight L,
 							  ShadowMap shadow_map,
-							  Material mat,
 							  float3 pos,
 							  float3 normal,
-							  float3 view_vec,
-							  out float4 diffuse,
-							  out float4 specular) {
+                              float3 view_vec,
+                              float  spec_exponent,
+							  out float4 out_diffuse,
+							  out float4 out_specular) {
 	
 	float4 diffuse0;
 	float4 specular0;
 
-	ComputeSpotLight(L.light, mat, pos, normal, view_vec, diffuse0, specular0);
+	ComputeSpotLight(L.light, pos, normal, view_vec, spec_exponent, diffuse0, specular0);
 
-	const float4 p_proj       = mul(float4(pos, 1.0f), L.world_to_projection);
-	const float3 p_ndc        = p_proj.xyz / p_proj.w;
-	const float shadow_factor = ShadowFactor(shadow_map, p_ndc);
+	const float4 p_proj        = mul(float4(pos, 1.0f), L.world_to_projection);
+	const float3 p_ndc         = p_proj.xyz / p_proj.w;
+	const float  shadow_factor = ShadowFactor(shadow_map, p_ndc);
 
-	diffuse  = diffuse0  * shadow_factor;
-	specular = specular0 * shadow_factor;
+	out_diffuse  = diffuse0  * shadow_factor;
+	out_specular = specular0 * shadow_factor;
 }
 
 
