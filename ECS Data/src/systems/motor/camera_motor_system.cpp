@@ -9,11 +9,11 @@ void CameraMotorSystem::update(Engine& engine) {
 	const auto process_cam = [&](auto& camera) {
 		auto* entity = camera.getOwner().get();
 
-		auto* transform = entity->template getComponent<Transform>();
+		auto* transform = entity->getComponent<Transform>();
 		if (!transform) return;
 		if (!transform->isActive()) return;
 
-		if (auto* movement = entity->template getComponent<CameraMovement>()) {
+		if (auto* movement = entity->getComponent<CameraMovement>()) {
 			processInput(engine, *movement, *transform);
 		}
 	};
