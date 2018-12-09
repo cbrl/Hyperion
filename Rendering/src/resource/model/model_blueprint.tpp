@@ -23,7 +23,7 @@ ModelBlueprint::ModelBlueprint(ID3D11Device& device,
 template <typename VertexT>
 void ModelBlueprint::constructBlueprint(ID3D11Device& device, const ModelOutput& out) {
 
-	name = out.file.filename().string();
+	name = out.file.empty() ? out.name : out.file.filename().string();
 
 	// Copy the nodes and materials
 	root = out.root;

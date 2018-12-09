@@ -13,6 +13,7 @@ namespace BlueprintFactory {
 		
 		// Create the mesh
 		ModelOutput::MeshData mesh;
+	    mesh.name = "Cube";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeCube(vertices, mesh.indices, size, config.flip_winding, invertn);
@@ -59,7 +60,8 @@ namespace BlueprintFactory {
 
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "Box";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeBox(vertices, mesh.indices, size, config.flip_winding, invertn);
@@ -106,7 +108,8 @@ namespace BlueprintFactory {
 			              invertn ? " InvertN" : "");
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "Sphere";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeSphere(vertices, mesh.indices, diameter, tessellation, config.flip_winding, invertn);
@@ -151,7 +154,8 @@ namespace BlueprintFactory {
 		std::string name = "GeoSphere " + std::to_string(diameter) + std::to_string(tessellation) + (config.flip_winding ? " RH" : "");
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "GeoSphere";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeGeoSphere(vertices, mesh.indices, diameter, tessellation, config.flip_winding);
@@ -198,7 +202,8 @@ namespace BlueprintFactory {
 			              config.flip_winding ? " RH" : "");
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "Cylinder";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeCylinder(vertices, mesh.indices, diameter, height, tessellation, config.flip_winding);
@@ -245,7 +250,8 @@ namespace BlueprintFactory {
 			              config.flip_winding ? " RH" : "");
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "Cone";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeCone(vertices, mesh.indices, diameter, height, tessellation, config.flip_winding);
@@ -292,7 +298,8 @@ namespace BlueprintFactory {
 			              config.flip_winding ? " RH" : "");
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "Torus";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeTorus(vertices, mesh.indices, diameter, thickness, tessellation, config.flip_winding);
@@ -336,7 +343,8 @@ namespace BlueprintFactory {
 		std::string name = "Tetrahedron " + std::to_string(size) + (config.flip_winding ? " RH" : "");
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "Tetrahedron";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeTetrahedron(vertices, mesh.indices, size, config.flip_winding);
@@ -380,7 +388,8 @@ namespace BlueprintFactory {
 		std::string name = "Octahedron " + std::to_string(size) + (config.flip_winding ? " RH" : "");
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "Octahedron";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeOctahedron(vertices, mesh.indices, size, config.flip_winding);
@@ -424,7 +433,8 @@ namespace BlueprintFactory {
 		std::string name = "Dodecahedron " + std::to_string(size) + (config.flip_winding ? " RH" : "");
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "Dodecahedron";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeDodecahedron(vertices, mesh.indices, size, config.flip_winding);
@@ -468,7 +478,8 @@ namespace BlueprintFactory {
 		std::string name = "Icosahedron " + std::to_string(size) + (config.flip_winding ? " RH" : "");
 
 		// Create the mesh
-		ModelOutput::MeshData mesh;
+	    ModelOutput::MeshData mesh;
+	    mesh.name = "Icosahedron";
 
 		std::vector<VertexT> vertices;
 		Shapes::ComputeIcosahedron(vertices, mesh.indices, size, config.flip_winding);
