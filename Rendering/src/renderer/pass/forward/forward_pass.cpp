@@ -206,10 +206,8 @@ void ForwardPass::renderFalseColor(Scene& scene,
 		if (!root.isActive()) return;
 
 		root.forEachModel([&](const Model& model) {
-			/* TODO:
-			if (model.isActive())
-				renderModel(model, world_to_projection);
-			*/
+			//if (model.isActive())
+				renderModel(root, model, world_to_projection);
 		});
 	});
 }
@@ -225,11 +223,11 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 	pixel_shader->bind(device_context);
 
 	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
+		if (!root.isActive()) return;
+
 		root.forEachModel([&](const Model& model) {
-			/* TODO:
-			if (model.isActive())
-				renderModel(model, world_to_projection);
-			*/
+			//if (model.isActive())
+				renderModel(root, model, world_to_projection);
 		});
 	});
 }
@@ -237,7 +235,7 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 
 void XM_CALLCONV ForwardPass::renderModel(const ModelRoot& root, const Model& model, FXMMATRIX world_to_projection) const {
 
-	// TODO: More elegant way of passing transform/root to function
+	// TODO: More elegant way of passing transform/root to function (per model transform relative to parent?)
 	const auto* transform = root.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
