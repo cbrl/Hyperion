@@ -65,13 +65,17 @@ void HandleTable<HandleT, DataT, ChunkSize>::releaseHandle(HandleT handle) {
 
 
 template<typename HandleT, typename DataT, size_t ChunkSize>
-bool HandleTable<HandleT, DataT, ChunkSize>::validHandle(const HandleT& handle) const {
+bool HandleTable<HandleT, DataT, ChunkSize>::validHandle(const HandleT& handle) const noexcept{
 
-	if (handle == HandleT::invalid_handle
-		|| handle.index > table.size()) {
-		return false;
+	bool valid;
+
+	if (handle == HandleT::invalid_handle || handle.index > table.size()) {
+		valid = false;
+	}
+	else {
+		const auto& entry = table[handle.index];
+		valid = (entry.first == handle.counter && entry.second != nullptr);
 	}
 
-	const auto& entry = table[handle.index];
-	return (entry.first == handle.counter && entry.second != nullptr);
+	return valid;
 }

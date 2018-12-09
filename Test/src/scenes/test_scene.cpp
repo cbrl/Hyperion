@@ -198,13 +198,19 @@ void TestScene::tick(Engine& engine) {
 	        << L"\nProcess: "        << static_cast<f64>(proc_mem_usage) / 1e6  << L"MB";
 
 	// CPU Usage
-	text_cpu->getComponent<Text>()->setText(cpu_str.str());
+	if (text_cpu.valid()) {
+		text_cpu->getComponent<Text>()->setText(cpu_str.str());
+	}
 
 	// RAM Usage
-	text_ram->getComponent<Text>()->setText(mem_str.str());
+	if (text_ram.valid()) {
+		text_ram->getComponent<Text>()->setText(mem_str.str());
+	}
 
 	// Mouse Activity
-	text_mouse->getComponent<Text>()->setText(
-		L"Mouse \nX: " + std::to_wstring(mouse_pos.x)
-	    + L"\nY: "     + std::to_wstring(mouse_pos.y));
+	if (text_mouse.valid()) {
+		text_mouse->getComponent<Text>()->setText(
+			L"Mouse \nX: " + std::to_wstring(mouse_pos.x)
+			+ L"\nY: "     + std::to_wstring(mouse_pos.y));
+	}
 }

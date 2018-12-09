@@ -56,7 +56,10 @@ public:
 	[[nodiscard]]
 	DataT* operator[](HandleT handle) {
 		bool valid = validHandle(handle);
-		assert(valid && "HandleTable::operator[](HandleT) - Invalid handle specified");
+		if (!valid) {
+			Logger::log(LogLevel::err, "Invalid handle specified (index: {}, counter: {})", handle.index, handle.counter);
+			assert(false && "HandleTable::operator[] - Invalid handle specified");
+		}
 
 		return valid ? table[handle.index].second : nullptr;
 	}
@@ -71,7 +74,7 @@ public:
 
 	void releaseHandle(HandleT handle);
 
-	bool validHandle(const HandleT& handle) const;
+	bool validHandle(const HandleT& handle) const noexcept;
 
 
 private:

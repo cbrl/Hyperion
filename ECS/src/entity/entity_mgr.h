@@ -100,8 +100,6 @@ private:
 	// Handle table. Maps a handle to an Entity pointer.
 	HandleTable<handle64, Entity> handle_table;
 
-	std::unordered_multimap<std::type_index, Entity*> entities;
-
 	// Container of entities that need to be deleted
 	std::vector<handle64> expired_entities;
 	u32 num_expired_entities;

@@ -15,6 +15,9 @@ BinPackArguments: 'false'
 BinPackParameters: 'false'
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
+BraceWrapping:
+  BeforeCatch: true
+  BeforeElse: true
 BreakBeforeInheritanceComma: 'false'
 BreakBeforeTernaryOperators: 'true'
 BreakConstructorInitializers: BeforeComma
