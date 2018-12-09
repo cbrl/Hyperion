@@ -9,6 +9,7 @@
 void ProcessNodes(const aiNode* node, ModelOutput::Node& out) {
 
 	out.name = node->mName.C_Str();
+
 	for (u32 i = 0; i < node->mNumMeshes; ++i) {
 		out.mesh_indices.push_back(node->mMeshes[i]);
 	}
