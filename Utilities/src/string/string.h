@@ -34,8 +34,9 @@
 using namespace std::string_literals;
 
 
+
 //----------------------------------------------------------------------------------
-// Functions
+// Functions - Conversion
 //----------------------------------------------------------------------------------
 
 // Convert a string to a wide string
@@ -51,20 +52,146 @@ inline std::string WstrToStr(const std::wstring& in) {
 }
 
 
-// Convert an integer to a hexadecimal string
-template<typename T>
-std::string IntToHexStr(T i) {
 
-	static_assert(std::is_integral_v<T>, "int2hexstr() input type is not an integral type");
 
-	std::stringstream stream;
-	stream << "0x"
-	       << std::setfill('0') << std::setw(sizeof(T) * 2)
-	       << std::hex << i;
+//----------------------------------------------------------------------------------
+// Functions - ToStr
+//----------------------------------------------------------------------------------
 
-	return stream.str();
+// Convert the specified arithemetic value to a string
+template <typename T>
+std::optional<std::string> ToStr(T val, int base = 10) {
+
+	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
+
+	// Determine maximum chars possible in string
+	size_t max_chars = 0;
+	if constexpr (std::is_floating_point_v<T>)
+		max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
+	else
+		max_chars = std::numeric_limits<T>::digits + 1;
+
+	// Convert the string
+	std::vector<char> chars(max_chars + 1, '\0');
+	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, base);
+
+	if (result.ec != std::errc()) {
+		return {};
+	}
+
+	return std::optional<std::string>{std::in_place, chars.data()};
 }
 
+// Convert the specified arithemetic value to a string
+template <typename T>
+std::optional<std::string> ToStr(T val, std::chars_format fmt) {
+
+	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
+
+	if constexpr (std::is_integral_v<T>) {
+		return ToStr(static_cast<double>(val), fmt); //Formatted to_chars only accepts floating point values
+	}
+
+	// Determine maximum chars possible in string
+	size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
+
+	// Convert the string
+	std::vector<char> chars(max_chars + 1, '\0');
+	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, fmt);
+
+	if (result.ec != std::errc()) {
+		return {};
+	}
+
+	return std::optional<std::string>{std::in_place, chars.data()};
+}
+
+// Convert the specified arithemetic value to a string
+template <typename T>
+std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) {
+
+	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
+
+	if constexpr (std::is_integral_v<T>) {
+		return ToStr(static_cast<double>(val), fmt, precision); //Formatted to_chars only accepts floating point values
+	}
+
+	// Determine maximum chars possible in string
+	size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
+
+	// Convert the string
+	std::vector<char> chars(max_chars + 1, '\0');
+	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, fmt, precision);
+
+	if (result.ec != std::errc()) {
+		return {};
+	}
+
+	return std::optional<std::string>{std::in_place, chars.data()};
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+// Functions - StrTo
+//----------------------------------------------------------------------------------
+
+// Convert a string to the specified arithmetic type
+template <typename T>
+std::optional<T> StrTo(std::string_view in) {
+
+	static_assert(std::is_arithmetic_v<T>, "StrTo called with non-arithmetic type");
+
+	T out = {};
+	const auto [ptr, ec] = std::from_chars(in.data(), in.data() + in.size(), out);
+
+	if (ptr != (in.data() + in.size())
+	    || ec == std::errc::invalid_argument
+	    || ec == std::errc::result_out_of_range) {
+
+		return {};
+	}
+
+	return out;
+}
+
+template <>
+inline std::optional<bool> StrTo(std::string_view in) {
+
+	if (in.size() == 1) {
+		if (in[0] == '0')
+			return false;
+		else
+			return true;
+	}
+	if (in.size() == 4
+	    && (in[0] == 't' || in[0] == 'T')
+	    && (in[1] == 'r' || in[1] == 'R')
+	    && (in[2] == 'u' || in[2] == 'U')
+	    && (in[3] == 'e' || in[3] == 'E')) {
+
+		return true;
+	}
+	if (in.size() == 5
+	    && (in[0] == 'f' || in[0] == 'F')
+	    && (in[1] == 'a' || in[1] == 'A')
+	    && (in[2] == 'l' || in[2] == 'L')
+	    && (in[3] == 's' || in[3] == 'S')
+	    && (in[4] == 'e' || in[4] == 'E')) {
+
+		return false;
+	}
+
+	return {};
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+// Functions - Manipulation
+//----------------------------------------------------------------------------------
 
 // Trim whitespace at the beginning and end of a string
 inline std::string TrimWhiteSpace(const std::string& in) {
@@ -119,55 +246,11 @@ std::vector<StringT> Split(const StringT& in, const typename StringT::value_type
 }
 
 
-// Convert a string to the specified arithmetic type
-template<typename T>
-std::optional<T> StrTo(std::string_view in) {
 
-	static_assert(std::is_arithmetic_v<T>, "StrTo called with non-arithmetic type");
-	
-	T out = {};
-	const std::from_chars_result result = std::from_chars(in.data(), in.data() + in.size(), out);
 
-	if (result.ptr != (in.data() + in.size())
-	    || result.ec == std::errc::invalid_argument
-	    || result.ec == std::errc::result_out_of_range) {
-		
-		return {};
-	}
-
-	return out;
-}
-
-template<>
-inline std::optional<bool> StrTo(std::string_view in) {
-
-	if (in.size() == 1) {
-		if (in[0] == '0')
-			return false;
-		else
-			return true;
-	}
-	if (in.size() == 4
-	    && (in[0] == 't' || in[0] == 'T')
-	    && (in[1] == 'r' || in[1] == 'R')
-	    && (in[2] == 'u' || in[2] == 'U')
-	    && (in[3] == 'e' || in[3] == 'E')) {
-
-		return true;
-	}
-	if (in.size() == 5
-	    && (in[0] == 'f' || in[0] == 'F')
-	    && (in[1] == 'a' || in[1] == 'A')
-	    && (in[2] == 'l' || in[2] == 'L')
-	    && (in[3] == 's' || in[3] == 'S')
-	    && (in[4] == 'e' || in[4] == 'E')) {
-		
-		return false;
-	}
-
-	return {};
-}
-
+//----------------------------------------------------------------------------------
+// Functions - Miscellaneous
+//----------------------------------------------------------------------------------
 
 // Get the string representation of a type name
 template <typename T>
