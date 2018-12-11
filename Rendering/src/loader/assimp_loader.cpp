@@ -65,13 +65,13 @@ void ProcessMeshes(const aiScene* scene, ModelOutput& model_out) {
 
 			//TODO: support multiple texture coords per vertex
 			if (mesh->HasTextureCoords(0)) {
-				const auto& tex = mesh->mTextureCoords[j][0];
+				const auto& tex = mesh->mTextureCoords[0][j];
 				out_mesh.texture_coords.emplace_back(tex.x, tex.y/*, tex.z*/);
 			}
 
 			//TODO: support vertex color sets
 			if (mesh->HasVertexColors(0)) {
-				const auto& color = mesh->mColors[j][0];
+				const auto& color = mesh->mColors[0][j];
 				out_mesh.colors.emplace_back(color.r, color.g, color.b);
 			}
 		}

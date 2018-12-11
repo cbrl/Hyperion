@@ -79,9 +79,9 @@ struct Material {
 		bool  wireframe        = false;
 		bool  two_sided        = false;
 		float opacity          = 1.0f;
-		float spec_scale       = 0.0f;
-		float spec_exponent    = 0.0f;
-		float refraction_index = 0.0f;
+		float spec_scale       = 1.0f;
+		float spec_exponent    = 1.0f;
+		float refraction_index = 1.0f;
 	} params;
 
 	struct {
