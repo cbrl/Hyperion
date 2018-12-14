@@ -89,11 +89,14 @@ std::optional<std::string> ToStr(T val, std::chars_format fmt) {
 	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
 
 	if constexpr (std::is_integral_v<T>) {
-		return ToStr(static_cast<double>(val), fmt); //Formatted to_chars only accepts floating point values
+		if constexpr (sizeof(T) <= sizeof(float))
+			return ToStr(static_cast<float>(val), fmt); //Formatted to_chars only accepts floating point values
+		else
+			return ToStr(static_cast<double>(val), fmt);
 	}
 
 	// Determine maximum chars possible in string
-	size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
+	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
 
 	// Convert the string
 	std::vector<char> chars(max_chars + 1, '\0');
@@ -113,11 +116,14 @@ std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) {
 	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
 
 	if constexpr (std::is_integral_v<T>) {
-		return ToStr(static_cast<double>(val), fmt, precision); //Formatted to_chars only accepts floating point values
+		if constexpr (sizeof(T) <= sizeof(float))
+			return ToStr(static_cast<float>(val), fmt, precision); //Formatted to_chars only accepts floating point values
+		else
+			return ToStr(static_cast<double>(val), fmt, precision);
 	}
 
 	// Determine maximum chars possible in string
-	size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
+	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
 
 	// Convert the string
 	std::vector<char> chars(max_chars + 1, '\0');
