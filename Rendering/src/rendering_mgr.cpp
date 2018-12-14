@@ -88,7 +88,7 @@ void RenderingMgr::beginFrame() const {
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 
 	// Clear the render target view with a specified color
