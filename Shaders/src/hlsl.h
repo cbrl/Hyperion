@@ -11,8 +11,8 @@
 #define ALPHA_MIN 0.00392156f
 
 // The minimum alpha value at which a shadow will still be cast
-// ~64/255
-#define ALPHA_SHADOW_THRESHOLD 0.25f
+// 32/255
+#define ALPHA_SHADOW_THRESHOLD 0.12549019f
 
 
 //----------------------------------------------------------------------------------
@@ -45,7 +45,7 @@
 //----------------------------------------------------------------------------------
 
 // Material
-#define SLOT_SRV_DIFFUSE        0
+#define SLOT_SRV_DIFFUSE       0
 #define SLOT_SRV_AMBIENT       1
 #define SLOT_SRV_NORMAL        2
 #define SLOT_SRV_SPECULAR      3
