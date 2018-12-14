@@ -603,7 +603,7 @@ void DrawModelNodes(ModelNode& node) {
 // Draw the model component node, and the model hierarchy if the node is open
 void DrawModelTree(ModelRoot& root) {
 
-	const bool node_open = ImGui::TreeNodeEx(("Model: " + root.getName()).c_str(), MakeTreeNodeFlags(&root));
+	const bool node_open = ImGui::TreeNodeEx(("ModelRoot: " + root.getName()).c_str(), MakeTreeNodeFlags(&root));
 
 	if (g_selected == &root) {
 		DrawDetailsPanel(root);
