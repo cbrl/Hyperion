@@ -47,7 +47,6 @@ HandleT HandleMap<HandleT, DataT, chunk_size>::createHandle(DataT object) {
 
 	// If this point is reached, then the table needs to
 	// be expanded before a new handle is created.
-
 	if (allocateChunk()) {
 		table[i].first = 1;
 		table[i].second = object;
@@ -77,7 +76,7 @@ bool HandleMap<HandleT, DataT, chunk_size>::validHandle(const HandleT& handle) c
 
 	bool valid;
 
-	if (handle == HandleT::invalid_handle || handle.index > table.size()) {
+	if (handle == HandleT::invalid_handle || handle.index >= table.size()) {
 		valid = false;
 	}
 	else {
