@@ -382,9 +382,6 @@
     <ClInclude Include="src\scene\components\core_components.h">
       <Filter>Header Files\scene\components</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\entities\world_object.h">
-      <Filter>Header Files\scene\entities</Filter>
-    </ClInclude>
     <ClInclude Include="src\scene\components\camera\orthographic_camera.h">
       <Filter>Header Files\scene\components\camera</Filter>
     </ClInclude>
