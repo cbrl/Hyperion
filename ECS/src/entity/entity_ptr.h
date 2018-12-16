@@ -7,16 +7,16 @@
 // EntityPtr
 //----------------------------------------------------------------------------------
 //
-// Holds handle and a pointer to the entity manager. Access operators retrieve
-// the entity from the entity manager.
+// Holds an entity handle and a pointer to the entity manager. Access operators
+// retrieve the entity from the entity manager.
 //
 //----------------------------------------------------------------------------------
 
 class Entity;
 class EntityMgr;
 
-class EntityPtr final {
-	//friend class UniqueEntityPtr;
+class EntityPtr {
+	friend class UniqueEntityPtr;
 
 public:
 	//----------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ private:
 //
 //----------------------------------------------------------------------------------
 
-class UniqueEntityPtr final {
+class UniqueEntityPtr final : public EntityPtr {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -111,15 +111,18 @@ public:
 	UniqueEntityPtr() noexcept = default;
 
 	UniqueEntityPtr(EntityMgr* mgr, handle64 entity) noexcept
-		: ptr(mgr, entity) {
+		: EntityPtr(mgr, entity) {
 	}
 
 	UniqueEntityPtr(const EntityPtr& entity) noexcept
-		: ptr(entity) {
+		: EntityPtr(entity) {
 	}
 
 	UniqueEntityPtr(const UniqueEntityPtr& ptr) = delete;
-	UniqueEntityPtr(UniqueEntityPtr&& ptr) noexcept = default;
+
+	UniqueEntityPtr(UniqueEntityPtr&& ptr) noexcept
+		: EntityPtr(ptr.release()) {
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -135,70 +138,37 @@ public:
 	//----------------------------------------------------------------------------------
 	UniqueEntityPtr& operator=(const UniqueEntityPtr& entity_ptr) = delete;
 	
-	UniqueEntityPtr& operator=(UniqueEntityPtr&& entity_ptr) noexcept {
-		if (ptr.valid()) reset();
-		this->ptr = std::move(entity_ptr.ptr);
-		return *this;
+	UniqueEntityPtr& operator=(UniqueEntityPtr&& ptr) noexcept;
+
+	[[nodiscard]]
+	bool operator==(const UniqueEntityPtr& ptr) const noexcept {
+		return EntityPtr::operator==(static_cast<EntityPtr&>(ptr));
 	}
 
 	[[nodiscard]]
-	bool operator==(const UniqueEntityPtr& entity_ptr) const noexcept {
-		return this->ptr == entity_ptr.ptr;
-	}
-
-	[[nodiscard]]
-	bool operator!=(const UniqueEntityPtr& entity_ptr) const noexcept {
-		return !(*this == ptr);
+	bool operator!=(const UniqueEntityPtr& ptr) const noexcept {
+		return EntityPtr::operator!=(static_cast<EntityPtr&>(ptr));
 	}
 
 	[[nodiscard]]
 	bool operator==(const EntityPtr& ptr) const noexcept {
-		return this->ptr == ptr;
+		return EntityPtr::operator==(ptr);
 	}
 
 	[[nodiscard]]
 	bool operator!=(const EntityPtr& ptr) const noexcept {
-		return !(*this == ptr);
-	}
-
-	[[nodiscard]]
-	Entity* operator->() const {
-		return ptr.operator->();
-	}
-
-	[[nodiscard]]
-	Entity& operator*() const {
-		return ptr.operator*();
-	}
-
-	[[nodiscard]]
-	operator bool() const {
-		return ptr.operator bool();
+		return EntityPtr::operator!=(ptr);
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	[[nodiscard]]
-	Entity* get() const {
-		return ptr.get();
-	}
-
-	[[nodiscard]]
-	EntityPtr getPtr() const noexcept {
-		return ptr;
-	}
-
-	[[nodiscard]]
-	handle64 getHandle() const noexcept {
-		return ptr.getHandle();
-	}
 
 	void reset();
 
-
 private:
-	EntityPtr ptr;
+	[[nodiscard]]
+	EntityPtr release() noexcept;
 };
 */

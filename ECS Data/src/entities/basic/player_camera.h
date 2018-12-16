@@ -8,7 +8,7 @@
 
 namespace EntityTemplates {
 
-struct PlayerCamera {
+struct PlayerCamera final {
 	static void applyTemplate(Entity& entity, ID3D11Device& device, vec2_u32 viewport_size) {
 		entity.addComponent<Transform>();
 		entity.addComponent<PerspectiveCamera>(device, viewport_size);

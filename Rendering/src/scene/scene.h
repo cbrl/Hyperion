@@ -70,7 +70,7 @@ public:
 	EntityPtr addEntity(ArgsT&&... args) {
 		auto ptr = ecs->createEntity();
 		entities.push_back(ptr);
-		TemplateT::addComponents(*ptr, std::forward<ArgsT>(args)...);
+		TemplateT::applyTemplate(*ptr, std::forward<ArgsT>(args)...);
 		return ptr;
 	}
 

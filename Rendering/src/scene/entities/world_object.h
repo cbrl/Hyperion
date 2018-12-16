@@ -13,7 +13,7 @@ namespace EntityTemplates {
 // The basic template used for any nonspecific entity with a position in the scene.
 //
 //----------------------------------------------------------------------------------
-struct WorldObject {
+struct WorldObject final {
 	static void applyTemplate(Entity& entity) {
 		entity.addComponent<Transform>();
 	}
