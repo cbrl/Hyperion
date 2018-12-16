@@ -751,6 +751,9 @@ void DrawTreeNodes(Scene& scene) {
 
 	auto& entities = scene.getEntities();
 
+	if (!g_selected_entity.valid())
+		g_selected_entity = entities[0];
+
 	for (const auto& entity_ptr : entities) {
 
 		// Skip the entity if it's a child
@@ -850,7 +853,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateCube(resource_mgr, config, size, invertn);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -876,7 +879,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateBox(resource_mgr, config, size, invertn);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -913,7 +916,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateSphere(resource_mgr, config, diameter, tessellation, invertn);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -948,7 +951,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateGeoSphere(resource_mgr, config, diameter, tessellation);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -985,7 +988,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCylinder(resource_mgr, config, diameter, height, tessellation);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1022,7 +1025,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCone(resource_mgr, config, diameter, height, tessellation);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1036,10 +1039,10 @@ void ProcNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Torus", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  thickness = 0.333f;
-		static f32  diameter = 1.0f;
+		static f32  thickness      = 0.333f;
+		static f32  diameter       = 1.0f;
 		static size_t tessellation = 32;
-		static bool   rhcoords = false;
+		static bool   rhcoords     = false;
 
 		ImGui::InputFloat("Thickness", &thickness);
 		ImGui::InputFloat("Diameter", &diameter);
@@ -1059,7 +1062,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateTorus(resource_mgr, config, diameter, thickness, tessellation);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1083,7 +1086,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateTetrahedron(resource_mgr, config, size);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1107,7 +1110,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateOctahedron(resource_mgr, config, size);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1131,7 +1134,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateDodecahedron(resource_mgr, config, size);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1155,7 +1158,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateIcosahedron(resource_mgr, config, size);
-			scene.addEntity()->addComponent<ModelRoot>(device, bp);
+			g_selected_entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1208,7 +1211,7 @@ void DrawAddComponentMenu(ID3D11Device& device,
 				if (OpenFilePicker(gsl::not_null<wchar_t*>(szFile), 512)) {
 					ModelConfig<VertexPositionNormalTexture> config;
 					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile, config);
-					scene.addEntity()->addComponent<ModelRoot>(device, bp);
+					g_selected_entity->addComponent<ModelRoot>(device, bp);
 				}
 				else Logger::log(LogLevel::err, "Failed to open file dialog");
 			}
