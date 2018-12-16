@@ -3,13 +3,6 @@
 #include "ecs.h"
 
 
-Entity::Entity(EntityPtr this_ptr, gsl::not_null<ComponentMgr*> component_mgr)
-	: active(true)
-	, this_ptr(this_ptr)
-	, component_mgr(component_mgr) {
-}
-
-
 Entity::~Entity() {
 
 	removeAllChildren();
@@ -21,11 +14,31 @@ Entity::~Entity() {
 }
 
 
-void Entity::setActive(bool state) {
+EntityPtr Entity::getPtr() const noexcept {
+	return this_ptr;
+}
+
+
+void Entity::setActive(bool state) noexcept {
 	active = state;
 	for (auto& pair : components) {
 		pair.second->setActive(state);
 	}
+}
+
+
+bool Entity::isActive() const noexcept {
+	return active;
+}
+
+
+EntityPtr Entity::getParent() const noexcept {
+	return parent_ptr;
+}
+
+
+bool Entity::hasParent() const noexcept {
+	return bool(parent_ptr);
 }
 
 
@@ -60,6 +73,32 @@ void Entity::removeAllChildren() {
 	forEachChild([this](EntityPtr& child) {
 		removeChild(child);
 	});
+}
+
+
+bool Entity::hasChildren() const noexcept {
+	return !children.empty();
+}
+
+
+void Entity::setComponentMgr(gsl::not_null<ComponentMgr*> mgr) {
+	component_mgr = mgr;
+}
+
+
+void Entity::setPointer(EntityPtr ptr) noexcept {
+	this_ptr = ptr;
+	forEachChild([ptr](EntityPtr& child) {
+		child->setParent(ptr);
+	});
+	for (auto& pair : components) {
+		pair.second->setOwner(ptr);
+	}
+}
+
+
+void Entity::setParent(EntityPtr parent) noexcept {
+	parent_ptr = parent;
 }
 
 

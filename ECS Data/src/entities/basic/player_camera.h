@@ -6,16 +6,16 @@
 #include "components/motor/mouse_rotation.h"
 
 
-class PlayerCamera final : public WorldObject {
-public:
-	PlayerCamera(EntityPtr this_ptr,
-	             ComponentMgr* component_mgr,
-	             ID3D11Device& device,
-				 vec2_u32 viewport_size)
-		: WorldObject(this_ptr, component_mgr) {
+namespace EntityTemplates {
 
-		this->addComponent<PerspectiveCamera>(device, viewport_size);
-		this->addComponent<CameraMovement>();
-		this->addComponent<MouseRotation>();
+struct PlayerCamera {
+	static void applyTemplate(Entity& entity, ID3D11Device& device, vec2_u32 viewport_size) {
+		entity.addComponent<Transform>();
+		entity.addComponent<PerspectiveCamera>(device, viewport_size);
+		entity.addComponent<CameraMovement>();
+		entity.addComponent<MouseRotation>();
 	}
 };
+
+} // namespace EntityTemplates
+

@@ -2,4 +2,4 @@
 
 namespace EntityTemplates {};
 
-#include "basic/player_camera.h"
+#include "world_object.h"

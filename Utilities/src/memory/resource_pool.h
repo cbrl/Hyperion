@@ -7,132 +7,35 @@
 
 
 //----------------------------------------------------------------------------------
-// IResourcePool
-//----------------------------------------------------------------------------------
-//
-// Interface class for the ResourcePool.
-//
-//----------------------------------------------------------------------------------
-
-template<typename T = void>
-class PoolResource {
-protected:
-	static std::pmr::synchronized_pool_resource pool;
-};
-
-template<typename T>
-std::pmr::synchronized_pool_resource PoolResource<T>::pool;
-
-
-class IResourcePool : public PoolResource<> {
-public:
-	IResourcePool() noexcept = default;
-	virtual ~IResourcePool() = default;
-
-	// Allocate an uninitialized object
-	[[nodiscard]]
-	virtual void* allocate() = 0;
-
-	// Destroy and deallocate an object
-	virtual void deallocate(void* object) = 0;
-
-	// Get the number of objects created
-	[[nodiscard]]
-	virtual size_t getCount() const noexcept = 0;
-};
-
-
-
-
-//----------------------------------------------------------------------------------
 // ResourcePool
 //----------------------------------------------------------------------------------
 //
-// Constructs objects using std::pmr::synchronized_pool_resource
-// as the underlying memory allocator.
+// Constructs resources of type T using a std::list with the
+// std::pmr::synchronized_pool_resource memory resource.
 //
 //----------------------------------------------------------------------------------
 
-template<typename T>
-class ResourcePool final : public IResourcePool {
+class IResourcePool {
 public:
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
+	virtual ~IResourcePool() = default;
 
-	ResourcePool() = default;
-	ResourcePool(const ResourcePool& pool) = delete;
-	ResourcePool(ResourcePool&& pool) noexcept = default;
+	// Remove a resource referenced to by its pointer
+	virtual void remove_resource(void* resource) = 0;
 
-
-	//----------------------------------------------------------------------------------
-	// Destructor
-	//----------------------------------------------------------------------------------
-
-	~ResourcePool();
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-
-	ResourcePool& operator=(const ResourcePool& pool) = delete;
-	ResourcePool& operator=(ResourcePool&& pool) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Allocation
-	//----------------------------------------------------------------------------------
-
-	// Allocate memory for an object
-	[[nodiscard]]
-	void* allocate() override;
-
-	// Allocate and initialize an object
-	template<typename... ArgsT>
-	[[nodiscard]]
-	T* construct(ArgsT&&... args);
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions -  Deallocation
-	//----------------------------------------------------------------------------------
-
-	// Destroy and deallocate an object
-	void deallocate(T* object);
-
-	void deallocate(void* object) override {
-		deallocate(static_cast<T*>(object));
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Miscellaneous
-	//----------------------------------------------------------------------------------
-
-	// Get the number of objects contained in this pool
-	[[nodiscard]]
-	size_t getCount() const noexcept override {
-		return objects.size();
-	}
-
-
-	// Apply an action to each resource
-	template<typename ActionT>
-	void forEach(ActionT&& act) {
-		for (auto* obj : objects) {
-			act(*obj);
-		}
-	}
-
-
-private:
-	//----------------------------------------------------------------------------------
-	// Member Variables
-	//----------------------------------------------------------------------------------
-	std::list<T*> objects;
+protected:
+	std::pmr::synchronized_pool_resource pool_resource;
 };
-#include "resource_pool.tpp"
+
+template <typename T>
+class ResourcePool final : public IResourcePool, public std::pmr::list<T> {
+public:
+	ResourcePool() : std::pmr::list<T>(&pool_resource) {}
+
+	// Remove a resource referenced to by its pointer
+	void remove_resource(void* resource) {
+		this->remove_if([resource](T& element) { return &element == resource; });
+	}
+};
 
 
 
@@ -161,7 +64,7 @@ public:
 
 	ResourcePoolManager() = default;
 	ResourcePoolManager(const ResourcePoolManager& factory) = delete;
-	ResourcePoolManager(ResourcePoolManager&& factory) = default;
+	ResourcePoolManager(ResourcePoolManager&& factory) noexcept = default;
 
 	//----------------------------------------------------------------------------------
 	// Destructor
@@ -183,21 +86,27 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get an existing pool or create it if it doesn't exist
-	template<typename ResourceT>
+	template <typename ResourceT>
 	[[nodiscard]]
 	ResourcePool<ResourceT>* getOrCreatePool() {
 		using pool_t = ResourcePool<ResourceT>;
-		// pair = std::pair<iterator, bool>
-		const auto pair = pools.try_emplace(ResourceT::index, std::make_unique<pool_t>());
+		const auto pair = pools.try_emplace(ResourceT::index, std::make_unique<pool_t>()); //pair = std::pair<iterator, bool>
 		return static_cast<pool_t*>(pair.first->second.get());
 	}
 
 
 	// Get an existing pool using the resource type
-	template<typename ResourceT>
+	template <typename ResourceT>
 	[[nodiscard]]
 	ResourcePool<ResourceT>* getPool() {
-		return static_cast<ResourcePool<ResourceT>*>(getPool(ResourceT::index));
+		auto* pool = getPool(ResourceT::index);
+		if (pool) {
+			return static_cast<ResourcePool<ResourceT>*>(getPool(ResourceT::index));
+		}
+		else {
+			Logger::log(LogLevel::err, "ResourcePoolManager::getPool<{}>() - Invalid pool type requested", type_name<ResourceT>());
+			return nullptr;
+		}
 	}
 
 
@@ -206,8 +115,8 @@ public:
 	IResourcePool* getPool(std::type_index type) {
 		const auto& it = pools.find(type);
 		if (it == pools.end()) {
-			Logger::log(LogLevel::err, "Invalid pool type requested: {}", type.name());
-			assert(false && "Invalid resource pool type requested");
+			Logger::log(LogLevel::err, "ResourcePoolManager::getPool<{}>() - Invalid pool type requested", type.name());
+			assert(false && "ResourcePoolManager::getPool() - Invalid resource pool type requested");
 			return nullptr;
 		}
 		return it->second.get();
@@ -215,14 +124,14 @@ public:
 
 
 	// Check if a pool exists for the specified type
-	template<typename ResourceT>
-	bool poolExists() const {
+	template <typename ResourceT>
+	bool poolExists() const noexcept {
 		return poolExists(ResourceT::index);
 	}
 
 
 	// Check if a pool exists for the specified index
-	bool poolExists(std::type_index type) const {
+	bool poolExists(std::type_index type) const noexcept {
 		return pools.find(type) != pools.end();
 	}
 

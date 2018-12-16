@@ -14,6 +14,11 @@ ECS::~ECS() {
 }
 
 
+EntityPtr ECS::createEntity() {
+	return entity_mgr->createEntity();
+}
+
+
 void ECS::destroyEntity(handle64 entity) {
 	entity_mgr->destroyEntity(entity);
 }

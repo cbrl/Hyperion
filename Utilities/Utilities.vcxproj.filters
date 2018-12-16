@@ -342,9 +342,6 @@
     <None Include="src\memory\managed_resource_map.tpp">
       <Filter>Header Files\memory</Filter>
     </None>
-    <None Include="src\memory\resource_pool.tpp">
-      <Filter>Header Files\memory</Filter>
-    </None>
     <None Include="src\memory\handle\handle_table.tpp">
       <Filter>Header Files\memory\handle</Filter>
     </None>

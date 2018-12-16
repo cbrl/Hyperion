@@ -4,39 +4,20 @@
 #include "scene/components/transform/transform.h"
 
 
+namespace EntityTemplates {
+
 //----------------------------------------------------------------------------------
 // WorldObjecct
 //----------------------------------------------------------------------------------
 //
-// The base class that any object with a position in the world
-// will inherit from. Automatically adds a Transform component.
+// The basic template used for any nonspecific entity with a position in the scene.
 //
 //----------------------------------------------------------------------------------
-
-class WorldObject : public Entity {
-public:
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
-	WorldObject(EntityPtr this_ptr, ComponentMgr* component_mgr)
-		: Entity(this_ptr, gsl::make_not_null(component_mgr)) {
-
-		this->addComponent<Transform>();
+struct WorldObject {
+	static void applyTemplate(Entity& entity) {
+		entity.addComponent<Transform>();
 	}
-
-	WorldObject(const WorldObject& obj) = delete;
-	WorldObject(WorldObject&& obj) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Destructor
-	//----------------------------------------------------------------------------------
-	virtual ~WorldObject() = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-	WorldObject& operator=(const WorldObject& obj) = delete;
-	WorldObject& operator=(WorldObject&& obj) noexcept = default;
 };
+
+
+} // namespace EntityTemplates

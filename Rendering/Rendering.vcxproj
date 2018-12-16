@@ -216,6 +216,7 @@
     <ClInclude Include="src\scene\components\model\model.h" />
     <ClInclude Include="src\scene\components\text\text.h" />
     <ClInclude Include="src\scene\components\transform\transform.h" />
+    <ClInclude Include="src\scene\entities\core_entities.h" />
     <ClInclude Include="src\scene\entities\world_object.h" />
     <ClInclude Include="src\scene\scene.h" />
     <ClInclude Include="src\scene\systems\camera\camera_system.h" />

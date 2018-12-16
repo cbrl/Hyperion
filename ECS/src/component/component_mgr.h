@@ -49,15 +49,15 @@ public:
 			"Calling ComponentMgr::CreateComponent() with non-component type.");
 
 		auto* pool = component_pools.getOrCreatePool<ComponentT>();
-		ComponentT* component = pool->construct(std::forward<ArgsT>(args)...);
+		auto& component = pool->emplace_back(std::forward<ArgsT>(args)...);
 
-		return component;
+		return &component;
 	}
 
 
 	void destroyComponent(IComponent* component) {
 		auto* pool = component_pools.getPool(component->getTypeIndex());
-		pool->deallocate(component);
+		pool->remove_resource(component);
 	}
 
 
@@ -84,8 +84,9 @@ public:
 	void forEach(ActionT&& act) {
 		using pool_t = ResourcePool<ComponentT>;
 		auto* pool = static_cast<pool_t*>(component_pools.getPool<ComponentT>());
-		if (pool) {
-			pool->forEach(act);
+		if (!pool) return;
+		for (auto& component : *pool) {
+			act(component);
 		}
 	}
 

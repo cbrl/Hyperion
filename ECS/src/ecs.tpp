@@ -1,14 +1,3 @@
-
-template<typename EntityT, typename... ArgsT>
-[[nodiscard]]
-EntityPtr ECS::createEntity(ArgsT&&... args) {
-	static_assert(std::is_base_of_v<Entity, EntityT>,
-	              "Calling ECS::CreateEntity() with non-entity type.");
-
-	return entity_mgr->createEntity<EntityT>(std::forward<ArgsT>(args)...);
-}
-
-
 template<typename SystemT, typename... ArgsT>
 SystemT* ECS::addSystem(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<ISystem, SystemT>,

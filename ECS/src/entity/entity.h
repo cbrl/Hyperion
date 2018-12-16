@@ -23,12 +23,9 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	Entity() = delete;
+	Entity() = default;
 	Entity(const Entity& entity) = delete;
 	Entity(Entity&& entity) = default;
-
-protected:
-	Entity(EntityPtr this_ptr, gsl::not_null<ComponentMgr*> component_mgr);
 
 
 public:
@@ -51,9 +48,7 @@ public:
 
 	// Get the entity's handle
 	[[nodiscard]]
-	EntityPtr getPtr() const {
-		return this_ptr;
-	}
+	EntityPtr getPtr() const noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -61,12 +56,11 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Set the entity's state
-	void setActive(bool state);
+	void setActive(bool state) noexcept;
 
 	// Get the entity's state
-	bool isActive() const {
-		return active;
-	}
+	[[nodiscard]]
+	bool isActive() const noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -111,15 +105,11 @@ public:
 
 	// Get the entity that is a parent of this entity
 	[[nodiscard]]
-	EntityPtr getParent() const {
-		return parent_ptr;
-	}
+	EntityPtr getParent() const noexcept;
 
 	// Determine if this entity has a valid parent
 	[[nodiscard]]
-	bool hasParent() const {
-		return bool(parent_ptr);
-	}
+	bool hasParent() const noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -136,9 +126,7 @@ public:
 	void removeAllChildren();
 
 	[[nodiscard]]
-	bool hasChildren() const {
-		return !children.empty();
-	}
+	bool hasChildren() const noexcept;
 
 	// Apply an action to each child of this entity
 	template<typename ActionT>
@@ -150,15 +138,20 @@ public:
 
 
 private:
-	void setParent(EntityPtr parent) {
-		parent_ptr = parent;
-	}
+	// Set the component manager pointer. Called by EntityMgr.
+	void setComponentMgr(gsl::not_null<ComponentMgr*> mgr);
+
+	// Set this entity's EntityPtr. Called by EntityMgr.
+	void setPointer(EntityPtr ptr) noexcept;
+
+	// Set the parent of this entity.
+	void setParent(EntityPtr parent) noexcept;
 
 	[[nodiscard]]
 	bool hasChild(EntityPtr child) const;
 
 
-protected:
+private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------

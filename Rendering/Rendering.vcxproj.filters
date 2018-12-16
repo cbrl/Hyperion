@@ -433,6 +433,9 @@
     <ClInclude Include="src\loader\assimp_loader.h">
       <Filter>Header Files\loader</Filter>
     </ClInclude>
+    <ClInclude Include="src\scene\entities\core_entities.h">
+      <Filter>Header Files\scene\entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

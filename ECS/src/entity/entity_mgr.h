@@ -47,9 +47,8 @@ public:
 	// Member Functions - Entities
 	//----------------------------------------------------------------------------------
 
-	template<typename EntityT, typename... ArgsT>
 	[[nodiscard]]
-	EntityPtr createEntity(ArgsT&&... args);
+	EntityPtr createEntity();
 
 	// Add an entity to the list of expired entities. Will be
 	// destroyed at the end of the next ECS update.
@@ -82,7 +81,9 @@ public:
 	// Apply an action to each entity
 	template<typename ActionT>
 	void forEach(ActionT&& act) {
-		entity_pool.forEach(act);
+		for (Entity& entity : entity_pool) {
+			act(entity);
+		}
 	}
 
 
@@ -104,5 +105,3 @@ private:
 	std::vector<handle64> expired_entities;
 	u32 num_expired_entities;
 };
-
-#include "entity_mgr.tpp"

@@ -16,15 +16,15 @@
 class IComponent {
 	friend class Entity;
 
-public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
+protected:
 	IComponent() noexcept
-		: active(true) {
+	    : active(true) {
 	}
 
+public:
 	IComponent(const IComponent& component) = delete;
 	IComponent(IComponent&& component) noexcept = default;
 
@@ -71,21 +71,20 @@ public:
 		return active;
 	}
 
-
 private:
 	void setOwner(EntityPtr owner_ptr) {
 		owner = owner_ptr;
 	}
 
 
-protected:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
+protected:
 	// Is the component active?
 	bool active;
 
+private:
 	// The entity that owns this component. Set on creation in IEntity.
 	EntityPtr owner;
 };

@@ -227,7 +227,6 @@
     <None Include="src\io\line_reader.tpp" />
     <None Include="src\memory\handle\handle_table.tpp" />
     <None Include="src\memory\managed_resource_map.tpp" />
-    <None Include="src\memory\resource_pool.tpp" />
     <None Include="src\resource\var_map.tpp" />
     <None Include="src\timer\timer.tpp" />
   </ItemGroup>

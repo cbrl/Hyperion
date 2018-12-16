@@ -1,6 +1,22 @@
 #include "entity_mgr.h"
 
 
+EntityPtr EntityMgr::createEntity() {
+
+	auto& entity = entity_pool.emplace_back();
+
+	// Create a handle
+	const handle64 handle = handle_table.createHandle(&entity);
+	const EntityPtr ptr = EntityPtr{this, handle};
+
+	// Create the entity
+	entity.setComponentMgr(gsl::make_not_null(component_mgr.get()));
+	entity.setPointer(ptr);
+
+	return ptr;
+}
+
+
 void EntityMgr::destroyEntity(handle64 handle) {
 
 	if (expired_entities.size() > num_expired_entities) {
@@ -18,7 +34,7 @@ void EntityMgr::removeExpiredEntities() {
 
 	for (const handle64 handle : expired_entities) {
 		// Destroy the entity
-		entity_pool.deallocate(getEntity(handle));
+		entity_pool.remove_resource(getEntity(handle));
 		handle_table.releaseHandle(handle);
 	}
 
@@ -33,7 +49,7 @@ Entity* EntityMgr::getEntity(handle64 handle) {
 
 
 size_t EntityMgr::count() const noexcept {
-	return entity_pool.getCount();
+	return entity_pool.size();
 }
 
 

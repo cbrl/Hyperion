@@ -5,10 +5,11 @@
 #include "components/components.h"
 #include "systems/systems.h"
 
-#include "scene/entities/world_object.h"
+#include "scene/entities/core_entities.h"
 #include "scene/components/core_components.h"
 #include "scene/systems/core_systems.h"
 
+using namespace EntityTemplates;
 class Engine;
 
 class Scene {
@@ -65,11 +66,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Add an entity to this scene
-	template<typename EntityT = WorldObject, typename... ArgsT>
+	template<typename TemplateT = WorldObject, typename... ArgsT>
 	EntityPtr addEntity(ArgsT&&... args) {
-		auto entity = ecs->createEntity<EntityT>(std::forward<ArgsT>(args)...);
-		entities.push_back(entity);
-		return entity;
+		auto ptr = ecs->createEntity();
+		entities.push_back(ptr);
+		TemplateT::addComponents(*ptr, std::forward<ArgsT>(args)...);
+		return ptr;
 	}
 
 	// Remove an entity from this scene
