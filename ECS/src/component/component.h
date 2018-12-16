@@ -102,11 +102,13 @@ private:
 
 template<typename T>
 class Component : public IComponent {
-public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
+protected:
 	Component() noexcept = default;
+
+public:
 	Component(const Component& component) = delete;
 	Component(Component&& component) noexcept = default;
 
