@@ -206,7 +206,7 @@
     <ClInclude Include="src\log\spdlog\version.h" />
     <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\memory\handle\handle.h" />
-    <ClInclude Include="src\memory\handle\handle_table.h" />
+    <ClInclude Include="src\memory\handle\handle_map.h" />
     <ClInclude Include="src\memory\managed_resource_map.h" />
     <ClInclude Include="src\memory\resource_pool.h" />
     <ClInclude Include="src\os\windows\window.h" />
@@ -225,7 +225,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="src\io\line_reader.tpp" />
-    <None Include="src\memory\handle\handle_table.tpp" />
+    <None Include="src\memory\handle\handle_map.tpp" />
     <None Include="src\memory\managed_resource_map.tpp" />
     <None Include="src\resource\var_map.tpp" />
     <None Include="src\timer\timer.tpp" />

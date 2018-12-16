@@ -122,9 +122,6 @@
     <ClInclude Include="src\memory\handle\handle.h">
       <Filter>Header Files\memory\handle</Filter>
     </ClInclude>
-    <ClInclude Include="src\memory\handle\handle_table.h">
-      <Filter>Header Files\memory\handle</Filter>
-    </ClInclude>
     <ClInclude Include="src\directx\d3d11.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
@@ -320,6 +317,9 @@
     <ClInclude Include="src\log\spdlog\details\thread_pool.h">
       <Filter>Header Files\log\spdlog\details</Filter>
     </ClInclude>
+    <ClInclude Include="src\memory\handle\handle_map.h">
+      <Filter>Header Files\memory\handle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\sysmon\system_monitor.cpp">
@@ -342,12 +342,12 @@
     <None Include="src\memory\managed_resource_map.tpp">
       <Filter>Header Files\memory</Filter>
     </None>
-    <None Include="src\memory\handle\handle_table.tpp">
-      <Filter>Header Files\memory\handle</Filter>
-    </None>
     <None Include="src\timer\timer.tpp">
       <Filter>Header Files\timer</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="src\memory\handle\handle_map.tpp">
+      <Filter>Header Files\memory\handle</Filter>
+    </None>
   </ItemGroup>
 </Project>

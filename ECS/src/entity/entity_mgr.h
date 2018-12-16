@@ -2,7 +2,7 @@
 
 #include "entity/entity.h"
 #include "component/component_mgr.h"
-#include "memory/handle/handle_table.h"
+#include "memory/handle/handle_map.h"
 
 
 //----------------------------------------------------------------------------------
@@ -98,8 +98,8 @@ private:
 	// Map of unique resource pools for each type of entity
 	ResourcePool<Entity> entity_pool;
 
-	// Handle table. Maps a handle to an Entity pointer.
-	HandleTable<handle64, Entity> handle_table;
+	// Handle map. Maps a handle to an Entity pointer.
+	HandleMap<handle64, Entity*> handle_map;
 
 	// Container of entities that need to be deleted
 	std::vector<handle64> expired_entities;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "scene/entities/world_object.h"
+#include "scene/components/transform/transform.h"
 #include "scene/components/camera/perspective_camera.h"
 #include "components/motor/camera_movement.h"
 #include "components/motor/mouse_rotation.h"
