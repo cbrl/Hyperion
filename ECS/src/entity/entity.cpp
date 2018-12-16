@@ -4,6 +4,8 @@
 
 
 Entity::~Entity() {
+	if (hasParent())
+		parent_ptr->removeChild(getPtr());
 
 	removeAllChildren();
 
@@ -55,8 +57,8 @@ void Entity::addChild(EntityPtr child) {
 
 
 void Entity::removeChild(EntityPtr child) {
-	if (child == this_ptr
-		|| !child.valid()
+	if (!child.valid()
+	    || child == this_ptr
 		|| child->getParent() != this_ptr) {
 		return;
 	}
