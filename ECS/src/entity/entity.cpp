@@ -4,7 +4,7 @@
 
 
 Entity::~Entity() {
-	if (hasParent())
+	if (hasParent() && parent_ptr.valid())
 		parent_ptr->removeChild(getPtr());
 
 	removeAllChildren();
