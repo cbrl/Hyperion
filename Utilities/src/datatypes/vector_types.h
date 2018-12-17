@@ -13,8 +13,8 @@ struct Vector2 {
 	//----------------------------------------------------------------------------------
 
 	constexpr Vector2() noexcept = default;
-	constexpr Vector2(const Vector2<T>& vec) noexcept = default;
-	constexpr Vector2(Vector2<T>&& vec) noexcept = default;
+	constexpr Vector2(const Vector2<T>&) noexcept = default;
+	constexpr Vector2(Vector2<T>&&) noexcept = default;
 
 	constexpr Vector2(T n) noexcept
 		: x(n)
@@ -148,8 +148,8 @@ struct Vector3 {
 	//----------------------------------------------------------------------------------
 
 	constexpr Vector3() noexcept = default;
-	constexpr Vector3(const Vector3<T>& vec) noexcept = default;
-	constexpr Vector3(Vector3<T>&& vec) noexcept = default;
+	constexpr Vector3(const Vector3<T>&) noexcept = default;
+	constexpr Vector3(Vector3<T>&&) noexcept = default;
 
 	constexpr Vector3(T n) noexcept
 		: x(n)
@@ -292,15 +292,15 @@ constexpr auto operator/(Vector3<T> lhs, U rhs) noexcept
 template<typename T>
 struct Vector4 {
 
-	static_assert(std::is_arithmetic_v<T>, "Vector4 template parameter is not an arithetic type");
+	static_assert(std::is_arithmetic_v<T>, "Vector4 template parameter is not an arithmetic type");
 
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
 	constexpr Vector4() noexcept = default;
-	constexpr Vector4(const Vector4<T>& vec) noexcept = default;
-	constexpr Vector4(Vector4<T>&& vec) noexcept = default;
+	constexpr Vector4(const Vector4<T>&) noexcept = default;
+	constexpr Vector4(Vector4<T>&&) noexcept = default;
 
 	constexpr Vector4(T n) noexcept
 		: x(n)
