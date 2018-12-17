@@ -132,6 +132,9 @@ public:
 	[[nodiscard]]
 	bool hasParent() const noexcept;
 
+	// Set the parent of this entity.
+	void setParent(EntityPtr parent) noexcept;
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Children
@@ -164,9 +167,6 @@ private:
 
 	// Set this entity's EntityPtr. Called by EntityMgr.
 	void setPointer(EntityPtr ptr) noexcept;
-
-	// Set the parent of this entity.
-	void setParent(EntityPtr parent) noexcept;
 
 	[[nodiscard]]
 	bool hasChild(EntityPtr child) const;

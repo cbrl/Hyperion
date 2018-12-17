@@ -117,12 +117,47 @@ void DrawDetails(Scene& scene) {
 }
 
 
-void DrawDetails(Entity& entity) {
+void DrawDetails(Entity& entity, const std::vector<EntityPtr>& entities) {
 
 	ImGui::Text("Entity");
+	ImGui::Text("Index: %d", entity.getPtr().getHandle().index);
+	ImGui::Text("Counter: %d", entity.getPtr().getHandle().counter);
 	ImGui::Separator();
 
+
+	//----------------------------------------------------------------------------------
+	// Name
+	//----------------------------------------------------------------------------------
 	ImGui::InputText("Name", &entity.getName());
+
+
+	//----------------------------------------------------------------------------------
+	// Parent
+	//----------------------------------------------------------------------------------
+	static const std::string none = "None";
+	static std::vector<std::reference_wrapper<const std::string>> names;
+	names.clear();
+	names.push_back(std::cref(none));
+	for (const auto& ptr : entities) {
+		names.push_back(ptr->getName());
+	}
+
+	static const auto getter = [](void* data, int idx, const char** out_text) -> bool {
+		auto& vector = *static_cast<const std::vector<DXGI_MODE_DESC>*>(data);
+		if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+		*out_text = names[idx].get().c_str();
+		return true;
+	};
+
+	static int index = 0;
+	if (ImGui::Combo("Parent", &index, getter, names.data(), static_cast<int>(names.size()))) {
+		if (index != 0) {
+			entities[index-1]->addChild(entity.getPtr()); //subtract 1 since index 0 is "None"
+		}
+		else {
+			entity.getParent()->removeChild(entity.getPtr());
+		}
+	}
 }
 
 
@@ -608,10 +643,10 @@ void DrawDetails(AxisOrbit& orbit) {
 //----------------------------------------------------------------------------------
 
 // Draw the details panel for a component
-template<typename T>
-void DrawDetailsPanel(T& item) {
+template<typename T, typename... ArgsT>
+void DrawDetailsPanel(T& item, ArgsT&... args) {
 	ImGui::Begin("Properties");
-	DrawDetails(item);
+	DrawDetails(item, std::forward<ArgsT>(args)...);
 	ImGui::End();
 }
 
@@ -675,7 +710,7 @@ void DrawModelTree(ModelRoot& root) {
 
 
 // Draw a single tree node
-void DrawEntityNode(EntityPtr entity_ptr) {
+void DrawEntityNode(EntityPtr entity_ptr, Scene& scene) {
 
 	if (!entity_ptr.valid())
 		return;
@@ -683,25 +718,17 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	auto* entity = entity_ptr.get();
 	auto  handle = entity_ptr.getHandle();
 
-	bool node_open;
-
 	//----------------------------------------------------------------------------------
 	// Draw Entity Node
 	//----------------------------------------------------------------------------------
-	if (entity->getName().empty()) {
-		std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
-		node_open = ImGui::TreeNodeEx(name.c_str(), MakeTreeNodeFlags(entity_ptr));
-	}
-	else {
-		node_open = ImGui::TreeNodeEx(entity->getName().c_str(), MakeTreeNodeFlags(entity_ptr));
-	}
+	const bool node_open = ImGui::TreeNodeEx(entity->getName().c_str(), MakeTreeNodeFlags(entity_ptr));
 
 	if (ImGui::IsItemClicked()) {
 		SetSelected(entity_ptr);
 	}
 
 	if (IsSelected(entity_ptr)) {
-		DrawDetailsPanel(*entity);
+		DrawDetailsPanel(*entity, scene.getEntities());
 	}
 
 	// Return early if the node isn't open
@@ -816,8 +843,8 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 
 	// Draw any child entities in this node
 	if (entity->hasChildren()) {
-		entity->forEachChildRecursive([](EntityPtr& child) {
-			DrawEntityNode(child);
+		entity->forEachChildRecursive([&scene](EntityPtr& child) {
+			DrawEntityNode(child, scene);
 		});
 	}
 
@@ -835,7 +862,7 @@ void DrawTreeNodes(Scene& scene) {
 		// Skip the entity if it's a child
 		if (entity_ptr->hasParent()) continue;
 
-		DrawEntityNode(entity_ptr);
+		DrawEntityNode(entity_ptr, scene);
 	}
 }
 

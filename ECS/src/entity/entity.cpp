@@ -44,6 +44,16 @@ bool Entity::hasParent() const noexcept {
 }
 
 
+void Entity::setParent(EntityPtr parent) noexcept {
+	if (parent_ptr != parent) {
+		parent_ptr = parent;
+		if (parent.valid()) {
+			parent->addChild(this_ptr);
+		}
+	}
+}
+
+
 void Entity::removeComponent(IComponent* component) {
 	for (auto it = components.begin(); it != components.end(); ++it) {
 		if (it->second == component) {
@@ -56,13 +66,13 @@ void Entity::removeComponent(IComponent* component) {
 
 
 void Entity::addChild(EntityPtr child) {
-	if (child != this_ptr
-	    && child.valid()
-	    && child->getParent() != this_ptr
+	if (child.valid()
+	    && child != this_ptr
+	    && !hasChild(child)
 		&& !child->hasChild(this_ptr)) {
 
-		child->setParent(this_ptr);
 		children.push_back(child);
+		child->setParent(this_ptr);
 	}
 }
 
@@ -89,6 +99,11 @@ void Entity::removeAllChildren() {
 }
 
 
+bool Entity::hasChild(EntityPtr child) const {
+	return std::find(children.cbegin(), children.cend(), child) != children.cend();
+}
+
+
 bool Entity::hasChildren() const noexcept {
 	return !children.empty();
 }
@@ -107,14 +122,9 @@ void Entity::setPointer(EntityPtr ptr) noexcept {
 	for (auto& pair : components) {
 		pair.second->setOwner(ptr);
 	}
-}
-
-
-void Entity::setParent(EntityPtr parent) noexcept {
-	parent_ptr = parent;
-}
-
-
-bool Entity::hasChild(EntityPtr child) const {
-	return std::find(children.cbegin(), children.cend(), child) != children.cend();
+	name = "Entity (i: "
+	       + ToStr(ptr.getHandle().index).value_or("-1"s)
+	       + ", c: "
+	       + ToStr(ptr.getHandle().counter).value_or("-1"s)
+	       + ")";
 }
