@@ -174,7 +174,7 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(Scene& scene, FXMMATRIX w
 
 		if (!light.isActive()) return;
 
-		const auto transform = light.getOwner()->getComponent<Transform>();
+		const auto* transform = light.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto light_to_world      = transform->getObjectToWorldMatrix();
@@ -229,7 +229,7 @@ void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_t
 
 		if (!light.isActive()) return;
 
-		const auto transform = light.getOwner()->getComponent<Transform>();
+		const auto* transform = light.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto light_to_world      = transform->getObjectToWorldMatrix();
@@ -316,7 +316,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to
 
 		if (!light.isActive()) return;
 
-		const auto transform = light.getOwner()->getComponent<Transform>();
+		const auto* transform = light.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto light_to_world      = transform->getObjectToWorldMatrix();

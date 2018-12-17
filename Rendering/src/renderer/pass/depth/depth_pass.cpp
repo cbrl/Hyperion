@@ -157,7 +157,7 @@ void XM_CALLCONV DepthPass::renderModel(const ModelRoot& root, const Model& mode
 	if (!model.isActive()) return;
 
 	// TODO: More elegant way of passing transform/root to function
-	const auto transform = root.getOwner()->getComponent<Transform>();
+	const auto* transform = root.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world      = transform->getObjectToWorldMatrix();

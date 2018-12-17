@@ -56,7 +56,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 	scene.forEach<DirectionalLight>([&](const DirectionalLight& light) {
 		if (!light.isActive()) return;
 		
-		const auto transform = light.getOwner()->getComponent<Transform>();
+		const auto* transform = light.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto object_to_world      = transform->getObjectToWorldMatrix();
@@ -71,7 +71,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 	scene.forEach<PointLight>([&](const PointLight& light) {
 		if (!light.isActive()) return;
 
-		const auto transform = light.getOwner()->getComponent<Transform>();
+		const auto* transform = light.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto object_to_world      = transform->getObjectToWorldMatrix();
@@ -86,7 +86,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 	scene.forEach<SpotLight>([&](const SpotLight& light) {
 		if (!light.isActive()) return;
 
-		const auto transform = light.getOwner()->getComponent<Transform>();
+		const auto* transform = light.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		const auto object_to_world      = transform->getObjectToWorldMatrix();
@@ -104,7 +104,7 @@ void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_pro
 		root.forEachModel([&](const Model& model) {
 			if (!model.isActive()) return;
 
-			const auto transform = root.getOwner()->getComponent<Transform>();
+			const auto* transform = root.getOwner()->getComponent<Transform>();
 			if (!transform) return;
 
 			const auto object_to_world = transform->getObjectToWorldMatrix();
