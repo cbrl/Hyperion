@@ -118,3 +118,5 @@ namespace std {
 // using declarations
 //----------------------------------------------------------------------------------
 using handle64 = Handle<u64, 40, 24>;
+static_assert(sizeof(handle64) == 8, "handle64 size is not 8 bytes");
+static_assert(std::has_unique_object_representations_v<handle64>, "handle64 is not properly packed");
