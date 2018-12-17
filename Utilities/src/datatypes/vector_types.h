@@ -43,8 +43,8 @@ struct Vector2 {
 	//----------------------------------------------------------------------------------
 
 	// Operator =
-	constexpr Vector2<T>& operator=(const Vector2<T>& copy) noexcept = default;
-	constexpr Vector2<T>& operator=(Vector2<T>&& move) noexcept = default;
+	constexpr Vector2<T>& operator=(const Vector2<T>&) noexcept = default;
+	constexpr Vector2<T>& operator=(Vector2<T>&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -57,81 +57,81 @@ struct Vector2 {
 
 // Operator ==
 template<typename T, typename U>
-constexpr bool operator==(const Vector2<T>& cmp1, const Vector2<U>& cmp2) noexcept {
-	return (cmp1.x == cmp2.x &&
-	        cmp1.y == cmp2.y);
+constexpr bool operator==(const Vector2<T>& lhs, const Vector2<U>& rhs) noexcept {
+	return (lhs.x == rhs.x &&
+	        lhs.y == rhs.y);
 }
 // Operator !=
 template<typename T, typename U>
-constexpr bool operator!=(const Vector2<T>& cmp1, const Vector2<U>& cmp2) noexcept {
-	return !(cmp1 == cmp2);
+constexpr bool operator!=(const Vector2<T>& lhs, const Vector2<U>& rhs) noexcept {
+	return !(lhs == rhs);
 }
 
 
 // Operator +=
 template<typename T, typename U>
-constexpr auto operator+=(Vector2<T>& vec, const Vector2<U>& add) noexcept
+constexpr auto operator+=(Vector2<T>& lhs, const Vector2<U>& rhs) noexcept
 	-> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>&> {
-	vec.x += add.x;
-	vec.y += add.y;
+	vec.x += rhs.x;
+	vec.y += rhs.y;
 	return vec;
 }
 // Operator +
 template<typename T, typename U>
-constexpr auto operator+(Vector2<T> vec, const Vector2<U>& add) noexcept
+constexpr auto operator+(Vector2<T> lhs, const Vector2<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>> {
-	vec += add;
+	vec += rhs;
 	return vec;
 }
 
 
 // Operator -=
 template<typename T, typename U>
-constexpr auto operator-=(Vector2<T>& vec, const Vector2<U>& sub) noexcept
+constexpr auto operator-=(Vector2<T>& lhs, const Vector2<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>&> {
-	vec.x -= sub.x;
-	vec.y -= sub.y;
+	vec.x -= rhs.x;
+	vec.y -= rhs.y;
 	return vec;
 }
 // Operator -
 template<typename T, typename U>
-constexpr auto operator-(Vector2<T> vec, const Vector2<U>& second) noexcept
+constexpr auto operator-(Vector2<T> lhs, const Vector2<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>> {
-	vec -= second;
+	vec -= rhs;
 	return vec;
 }
 
 
 // Operator *=
 template<typename T, typename U>
-constexpr auto operator*=(Vector2<T>& vec, U mul) noexcept
+constexpr auto operator*=(Vector2<T>& lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>&> {
-	vec.x *= mul;
-	vec.y *= mul;
+	vec.x *= rhs;
+	vec.y *= rhs;
 	return vec;
 }
 // Operator *
 template<typename T, typename U>
-constexpr auto operator*(Vector2<T> vec, U mul) noexcept
+constexpr auto operator*(Vector2<T> lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>> {
-	vec *= mul;
+	vec *= rhs;
 	return vec;
 }
 
 
 // Operator /=
 template<typename T, typename U>
-constexpr auto operator/=(Vector2<T>& vec, U div) noexcept
+constexpr auto operator/=(Vector2<T>& lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>&> {
-	vec.x /= div;
-	vec.y /= div;
+	vec.x /= rhs;
+	vec.y /= rhs;
 	return vec;
 }
 // Operator /
 template<typename T, typename U>
-constexpr auto operator/(Vector2<T> vec, U div) noexcept
+constexpr auto operator/(Vector2<T> lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>> {
-	vec /= div;
+	vec /= rhs;
 	return vec;
 }
 
@@ -188,8 +188,8 @@ struct Vector3 {
 	#pragma region operators
 
 	// Operator =
-	constexpr Vector3<T>& operator=(const Vector3<T>& copy) noexcept = default;
-	constexpr Vector3<T>& operator=(Vector3<T>&& move) noexcept = default;
+	constexpr Vector3<T>& operator=(const Vector3<T>&) noexcept = default;
+	constexpr Vector3<T>& operator=(Vector3<T>&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -203,86 +203,86 @@ struct Vector3 {
 
 // Operator ==
 template<typename T, typename U>
-constexpr bool operator==(const Vector3<T>& cmp1, const Vector3<U>& cmp2) noexcept {
-	return (cmp1.x == cmp2.x &&
-	        cmp1.y == cmp2.y &&
-	        cmp1.z == cmp2.z);
+constexpr bool operator==(const Vector3<T>& lhs, const Vector3<U>& rhs) noexcept {
+	return (lhs.x == rhs.x &&
+	        lhs.y == rhs.y &&
+	        lhs.z == rhs.z);
 }
 // Operator !=
 template<typename T, typename U>
-constexpr bool operator!=(const Vector3<T>& cmp1, const Vector3<U>& cmp2) noexcept {
-	return !(cmp1 == cmp2);
+constexpr bool operator!=(const Vector3<T>& lhs, const Vector3<U>& rhs) noexcept {
+	return !(lhs == rhs);
 }
 
 
 // Operator +=
 template<typename T, typename U>
-constexpr auto operator+=(Vector3<T>& vec, const Vector3<U>& add) noexcept
+constexpr auto operator+=(Vector3<T>& lhs, const Vector3<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>&> {
-	vec.x += add.x;
-	vec.y += add.y;
-	vec.z += add.z;
+	vec.x += rhs.x;
+	vec.y += rhs.y;
+	vec.z += rhs.z;
 	return vec;
 }
 // Operator +
 template<typename T, typename U>
-constexpr auto operator+(Vector3<T> vec, const Vector3<U>& add) noexcept
+constexpr auto operator+(Vector3<T> lhs, const Vector3<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>> {
-	vec += add;
+	vec += rhs;
 	return vec;
 }
 
 
 // Operator -=
 template<typename T, typename U>
-constexpr auto operator-=(Vector3<T>& vec, const Vector3<U>& sub) noexcept
+constexpr auto operator-=(Vector3<T>& lhs, const Vector3<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>&> {
-	vec.x -= sub.x;
-	vec.y -= sub.y;
-	vec.z -= sub.z;
+	vec.x -= rhs.x;
+	vec.y -= rhs.y;
+	vec.z -= rhs.z;
 	return vec;
 }
 // Operator -
 template<typename T, typename U>
-constexpr auto operator-(Vector3<T> vec, const Vector3<U>& second) noexcept
+constexpr auto operator-(Vector3<T> lhs, const Vector3<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>> {
-	vec -= second;
+	vec -= rhs;
 	return vec;
 }
 
 
 // Operator *=
 template<typename T, typename U>
-constexpr auto operator*=(Vector3<T>& vec, U mul) noexcept
+constexpr auto operator*=(Vector3<T>& lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>&> {
-	vec.x *= mul;
-	vec.y *= mul;
-	vec.z *= mul;
+	vec.x *= rhs;
+	vec.y *= rhs;
+	vec.z *= rhs;
 	return vec;
 }
 // Operator *
 template<typename T, typename U>
-constexpr auto operator*(Vector3<T> vec, U mul) noexcept
+constexpr auto operator*(Vector3<T> lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>> {
-	vec *= mul;
+	vec *= rhs;
 	return vec;
 }
 
 
 // Operator /=
 template<typename T, typename U>
-constexpr auto operator/=(Vector3<T>& vec, U div) noexcept
+constexpr auto operator/=(Vector3<T>& lhs, U rhs) noexcept
 	-> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>&> {
-	vec.x /= div;
-	vec.y /= div;
-	vec.z /= div;
+	vec.x /= rhs;
+	vec.y /= rhs;
+	vec.z /= rhs;
 	return vec;
 }
 // Operator /
 template<typename T, typename U>
-constexpr auto operator/(Vector3<T> vec, U div) noexcept
+constexpr auto operator/(Vector3<T> lhs, U rhs) noexcept
 	-> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>> {
-	vec /= div;
+	vec /= rhs;
 	return vec;
 }
 
@@ -349,8 +349,8 @@ struct Vector4 {
 	#pragma region operators
 
 	// Operator =
-	constexpr Vector4<T>& operator=(const Vector4<T>& copy) noexcept = default;
-	constexpr Vector4<T>& operator=(Vector4<T>&& move) noexcept = default;
+	constexpr Vector4<T>& operator=(const Vector4<T>&) noexcept = default;
+	constexpr Vector4<T>& operator=(Vector4<T>&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -365,91 +365,91 @@ struct Vector4 {
 
 // Operator ==
 template<typename T, typename U>
-constexpr bool operator==(const Vector4<T>& cmp1, const Vector4<U>& cmp2) noexcept{
-	return (cmp1.x == cmp2.x &&
-	        cmp1.y == cmp2.y &&
-	        cmp1.z == cmp2.z &&
-	        cmp1.w == cmp2.w);
+constexpr bool operator==(const Vector4<T>& lhs, const Vector4<U>& rhs) noexcept{
+	return (lhs.x == rhs.x &&
+	        lhs.y == rhs.y &&
+	        lhs.z == rhs.z &&
+	        lhs.w == rhs.w);
 }
 // Operator !=
 template<typename T, typename U>
-constexpr bool operator!=(const Vector4<T>& cmp1, const Vector4<U>& cmp2) noexcept{
-	return !(cmp1 == cmp2);
+constexpr bool operator!=(const Vector4<T>& lhs, const Vector4<U>& rhs) noexcept{
+	return !(lhs == rhs);
 }
 
 
 // Operator +=
 template<typename T, typename U>
-constexpr auto operator+=(Vector4<T>& vec, const Vector4<U>& add) noexcept
+constexpr auto operator+=(Vector4<T>& lhs, const Vector4<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>&> {
-	vec.x += add.x;
-	vec.y += add.y;
-	vec.z += add.z;
-	vec.w += add.w;
+	vec.x += rhs.x;
+	vec.y += rhs.y;
+	vec.z += rhs.z;
+	vec.w += rhs.w;
 	return vec;
 }
 // Operator +
 template<typename T, typename U>
-constexpr auto operator+(Vector4<T> vec, const Vector4<U>& add) noexcept
+constexpr auto operator+(Vector4<T> lhs, const Vector4<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>> {
-	vec += add;
+	vec += rhs;
 	return vec;
 }
 
 
 // Operator -=
 template<typename T, typename U>
-constexpr auto operator-=(Vector4<T>& vec, const Vector4<U>& sub) noexcept
+constexpr auto operator-=(Vector4<T>& lhs, const Vector4<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>&> {
-	vec.x -= sub.x;
-	vec.y -= sub.y;
-	vec.z -= sub.z;
-	vec.w -= sub.w;
+	vec.x -= rhs.x;
+	vec.y -= rhs.y;
+	vec.z -= rhs.z;
+	vec.w -= rhs.w;
 	return vec;
 }
 // Operator -
 template<typename T, typename U>
-constexpr auto operator-(Vector4<T> vec, const Vector4<U>& second) noexcept
+constexpr auto operator-(Vector4<T> lhs, const Vector4<U>& rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>> {
-	vec -= second;
+	vec -= rhs;
 	return vec;
 }
 
 
 // Operator *=
 template<typename T, typename U>
-constexpr auto operator*=(Vector4<T>& vec, U mul) noexcept
+constexpr auto operator*=(Vector4<T>& lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>&> {
-	vec.x *= mul;
-	vec.y *= mul;
-	vec.z *= mul;
-	vec.w *= mul;
+	vec.x *= rhs;
+	vec.y *= rhs;
+	vec.z *= rhs;
+	vec.w *= rhs;
 	return vec;
 }
 // Operator *
 template<typename T, typename U>
-constexpr auto operator*(Vector4<T> vec, U mul) noexcept
+constexpr auto operator*(Vector4<T> lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>> {
-	vec *= mul;
+	vec *= rhs;
 	return vec;
 }
 
 
 // Operator /=
 template<typename T, typename U>
-constexpr auto operator/=(Vector4<T>& vec, U div) noexcept
+constexpr auto operator/=(Vector4<T>& lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>&> {
-	vec.x /= div;
-	vec.y /= div;
-	vec.z /= div;
-	vec.w /= div;
+	vec.x /= rhs;
+	vec.y /= rhs;
+	vec.z /= rhs;
+	vec.w /= rhs;
 	return vec;
 }
 // Operator /
 template<typename T, typename U>
-constexpr auto operator/(Vector4<T> vec, U div) noexcept
+constexpr auto operator/(Vector4<T> lhs, U rhs) noexcept
     -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>> {
-	vec /= div;
+	vec /= rhs;
 	return vec;
 }
 
