@@ -43,6 +43,25 @@ public:
 
 
 	//----------------------------------------------------------------------------------
+	// Member Functions - Name
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	std::string& getName() noexcept {
+		return name;
+	}
+
+	[[nodiscard]]
+	const std::string& getName() const noexcept {
+		return name;
+	}
+
+	void setName(std::string new_name) noexcept {
+		name = std::move(new_name);
+	}
+
+
+	//----------------------------------------------------------------------------------
 	// Member Functions - Pointer
 	//----------------------------------------------------------------------------------
 
@@ -158,11 +177,14 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// Is this entity active?
-	bool active;
+	// The entity's name
+	std::string name;
 
 	// This entity's EntityPtr. Set on creation in EntityMgr.
 	EntityPtr this_ptr;
+
+	// Is this entity active?
+	bool active;
 
 
 	//----------------------------------------------------------------------------------

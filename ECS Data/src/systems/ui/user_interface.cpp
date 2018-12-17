@@ -121,6 +121,8 @@ void DrawDetails(Entity& entity) {
 
 	ImGui::Text("Entity");
 	ImGui::Separator();
+
+	ImGui::InputText("Name", &entity.getName());
 }
 
 
@@ -675,21 +677,40 @@ void DrawModelTree(ModelRoot& root) {
 // Draw a single tree node
 void DrawEntityNode(EntityPtr entity_ptr) {
 
+	if (!entity_ptr.valid())
+		return;
+
 	auto* entity = entity_ptr.get();
 	auto  handle = entity_ptr.getHandle();
 
-	std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
+	bool node_open;
 
-	const bool node_open = ImGui::TreeNodeEx(name.c_str(), MakeTreeNodeFlags(entity_ptr));
-
-	if (ImGui::IsItemClicked())
-		SetSelected(entity_ptr);
-
-	if (IsSelected(entity_ptr)) {
-		DrawDetailsPanel(*entity_ptr);
+	//----------------------------------------------------------------------------------
+	// Draw Entity Node
+	//----------------------------------------------------------------------------------
+	if (entity->getName().empty()) {
+		std::string name = "Entity (index: " + std::to_string(handle.index) + ", counter: " + std::to_string(handle.counter) + ")";
+		node_open = ImGui::TreeNodeEx(name.c_str(), MakeTreeNodeFlags(entity_ptr));
+	}
+	else {
+		node_open = ImGui::TreeNodeEx(entity->getName().c_str(), MakeTreeNodeFlags(entity_ptr));
 	}
 
+	if (ImGui::IsItemClicked()) {
+		SetSelected(entity_ptr);
+	}
+
+	if (IsSelected(entity_ptr)) {
+		DrawDetailsPanel(*entity);
+	}
+
+	// Return early if the node isn't open
 	if (!node_open) return;
+
+
+	//----------------------------------------------------------------------------------
+	// Draw Component Nodes
+	//----------------------------------------------------------------------------------
 
 	// Transform
 	if (auto* transform = entity->getComponent<Transform>()) {
@@ -794,8 +815,8 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 
 
 	// Draw any child entities in this node
-	if (entity_ptr->hasChildren()) {
-		entity_ptr->forEachChildRecursive([](EntityPtr& child) {
+	if (entity->hasChildren()) {
+		entity->forEachChildRecursive([](EntityPtr& child) {
 			DrawEntityNode(child);
 		});
 	}
