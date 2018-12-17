@@ -117,6 +117,13 @@ void DrawDetails(Scene& scene) {
 }
 
 
+void DrawDetails(Entity& entity) {
+
+	ImGui::Text("Entity");
+	ImGui::Separator();
+}
+
+
 void DrawDetails(Transform& transform) {
 
 	DrawComponentState(transform);
@@ -239,13 +246,17 @@ void DrawDetails(PerspectiveCamera& camera) {
 	ImGui::Text("Camera");
 	ImGui::Separator();
 
+	//----------------------------------------------------------------------------------
 	// FOV
+	//----------------------------------------------------------------------------------
 	f32 fov = camera.getFOV();
-	if (ImGui::DragFloat("FOV", &fov, 0.01f, XM_PI / 8.0f, XM_2PI / 3.0f)) {
+	if (ImGui::DragFloat("FOV", &fov, 0.01f, (XM_PI / 8.0f), (XM_2PI / 3.0f))) {
 		camera.setFOV(fov);
 	}
 
+	//----------------------------------------------------------------------------------
 	// Viewport
+	//----------------------------------------------------------------------------------
 	auto& vp = camera.getViewport();
 	vec2_u32 size = vp.getSize();
 	vec2_u32 pos  = vp.getTopLeft();
@@ -261,7 +272,9 @@ void DrawDetails(PerspectiveCamera& camera) {
 		vp.setTopLeft(pos);
 	}
 
+	//----------------------------------------------------------------------------------
 	// Depth
+	//----------------------------------------------------------------------------------
 	vec2_f32 depth = camera.getZDepth();
 	if (ImGui::DragFloat2("Depth Range", depth.data(), 1.0f, 0.01f, FLT_MAX)) {
 		camera.setZDepth(depth);
@@ -279,13 +292,17 @@ void DrawDetails(OrthographicCamera& camera) {
 	ImGui::Text("Camera");
 	ImGui::Separator();
 	
+	//----------------------------------------------------------------------------------
 	// Ortho Size
+	//----------------------------------------------------------------------------------
 	auto ortho_size = camera.getSize();
 	if (ImGui::DragFloat2("Orthographic Size", ortho_size.data(), 0.01f, 1.0f, 100.0f)) {
 		camera.setSize(ortho_size);
 	}
 
+	//----------------------------------------------------------------------------------
 	// Viewport
+	//----------------------------------------------------------------------------------
 	auto& vp = camera.getViewport();
 	vec2_u32 size = vp.getSize();
 	vec2_u32 pos  = vp.getTopLeft();
@@ -301,7 +318,9 @@ void DrawDetails(OrthographicCamera& camera) {
 		vp.setTopLeft(pos);
 	}
 
+	//----------------------------------------------------------------------------------
 	// Depth
+	//----------------------------------------------------------------------------------
 	vec2_f32 depth = camera.getZDepth();
 	if (ImGui::DragFloat2("Depth Range", depth.data(), 1.0f, 0.01f, FLT_MAX))
 		camera.setZDepth(depth);
@@ -383,7 +402,7 @@ void DrawDetails(Model& model) {
 	if (ImGui::Checkbox("Casts Shadows", &shadows))
 		model.setShadows(shadows);
 
-	// Change material properties, textures
+	// Material properties
 	auto& mat = model.getMaterial();
 	std::string name = "Material: " + mat.name;
 	ImGui::Text(name.c_str());
@@ -514,8 +533,9 @@ void DrawDetails(AxisRotation& rotation) {
 	ImGui::Text("Axis Rotation");
 	ImGui::Separator();
 
-
+	//----------------------------------------------------------------------------------
 	// X Rotation
+	//----------------------------------------------------------------------------------
 	bool x_enable = rotation.hasAxis(AxisRotation::Axis::X);
 
 	if (ImGui::Checkbox("X Axis", &x_enable)) {
@@ -529,8 +549,9 @@ void DrawDetails(AxisRotation& rotation) {
 		}
 	}
 
-
+	//----------------------------------------------------------------------------------
 	// Y Rotation
+	//----------------------------------------------------------------------------------
 	bool y_enable = rotation.hasAxis(AxisRotation::Axis::Y);
 
 	if (ImGui::Checkbox("Y Axis", &y_enable)) {
@@ -544,8 +565,9 @@ void DrawDetails(AxisRotation& rotation) {
 		}
 	}
 
-
+	//----------------------------------------------------------------------------------
 	// Z Rotation
+	//----------------------------------------------------------------------------------
 	bool z_enable = rotation.hasAxis(AxisRotation::Axis::Z);
 
 	if (ImGui::Checkbox("Z Axis", &z_enable)) {
@@ -591,7 +613,7 @@ void DrawDetailsPanel(T& item) {
 	ImGui::End();
 }
 
-// Draw a leaf node in the tree, and its details if selectted
+// Draw a leaf node in the tree, and its details if selected
 template<typename T>
 void DrawLeafNode(gsl::czstring<> text, T& item) {
 
@@ -662,6 +684,10 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 
 	if (ImGui::IsItemClicked())
 		SetSelected(entity_ptr);
+
+	if (IsSelected(entity_ptr)) {
+		DrawDetailsPanel(*entity_ptr);
+	}
 
 	if (!node_open) return;
 
