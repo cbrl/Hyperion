@@ -44,6 +44,17 @@ bool Entity::hasParent() const noexcept {
 }
 
 
+void Entity::removeComponent(IComponent* component) {
+	for (auto it = components.begin(); it != components.end(); ++it) {
+		if (it->second == component) {
+			components.erase(it);
+			component_mgr->destroyComponent(component);
+			return;
+		}
+	}
+}
+
+
 void Entity::addChild(EntityPtr child) {
 	if (child != this_ptr
 	    && child.valid()

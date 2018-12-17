@@ -84,6 +84,8 @@ public:
 	template<typename ComponentT>
 	void removeComponent(ComponentT* component);
 
+	void removeComponent(IComponent* component);
+
 	// Remove all components of the specified type from this entity
 	template<typename ComponentT>
 	void removeAll();

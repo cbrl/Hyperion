@@ -17,16 +17,30 @@
 //----------------------------------------------------------------------------------
 // Selected Item
 //----------------------------------------------------------------------------------
-void*     g_selected = nullptr;
-EntityPtr g_selected_entity;
+void*       g_selected = nullptr;
+IComponent* g_selected_component = nullptr;
+EntityPtr   g_selected_entity = {};
 
 void SetSelected(void* item) {
 	g_selected = item;
+	g_selected_component = nullptr;
+	g_selected_entity = EntityPtr{};
+}
+void SetSelected(IComponent* component) {
+	g_selected = nullptr;
+	g_selected_component = component;
 	g_selected_entity = EntityPtr{};
 }
 void SetSelected(const EntityPtr& entity) {
-	g_selected_entity = entity;
 	g_selected = nullptr;
+	g_selected_component = nullptr;
+	g_selected_entity = entity;
+}
+bool IsSelected(void* item) {
+	return g_selected == item || g_selected_component == item;
+}
+bool IsSelected(const EntityPtr& entity) {
+	return g_selected_entity == entity;
 }
 
 
@@ -59,19 +73,19 @@ ImGuiTreeNodeFlags MakeTreeNodeFlags() {
 ImGuiTreeNodeFlags MakeTreeNodeFlags(void* compare_selected) {
 	return ImGuiTreeNodeFlags_OpenOnArrow
 	       | ImGuiTreeNodeFlags_OpenOnDoubleClick
-	       | ((compare_selected == g_selected) ? ImGuiTreeNodeFlags_Selected : 0);
+	       | (IsSelected(compare_selected) ? ImGuiTreeNodeFlags_Selected : 0);
 }
 
 ImGuiTreeNodeFlags MakeTreeNodeFlags(const EntityPtr& compare_selected) {
 	return ImGuiTreeNodeFlags_OpenOnArrow
 	       | ImGuiTreeNodeFlags_OpenOnDoubleClick
-	       | ((compare_selected == g_selected_entity) ? ImGuiTreeNodeFlags_Selected : 0);
+	       | (IsSelected(compare_selected) ? ImGuiTreeNodeFlags_Selected : 0);
 }
 
 ImGuiTreeNodeFlags MakeTreeLeafFlags(void* compare_selected) {
 	return ImGuiTreeNodeFlags_Leaf
 	       | ImGuiTreeNodeFlags_Bullet
-	       | ((compare_selected == g_selected) ? ImGuiTreeNodeFlags_Selected : 0);
+	       | (IsSelected(compare_selected) ? ImGuiTreeNodeFlags_Selected : 0);
 }
 
 
@@ -583,7 +597,7 @@ void DrawLeafNode(gsl::czstring<> text, T& item) {
 
 	ImGui::TreeNodeEx(text, MakeTreeLeafFlags(&item));
 
-	if (g_selected == &item) {
+	if (IsSelected(&item)) {
 		DrawDetailsPanel(item);
 	}
 	if (ImGui::IsItemClicked()) {
@@ -599,7 +613,7 @@ void DrawModelNodes(ModelNode& node) {
 
 	const bool node_open = ImGui::TreeNodeEx(node.getName().c_str(), MakeTreeNodeFlags(&node));
 
-	if (g_selected == &node) {
+	if (IsSelected(&node)) {
 		DrawDetailsPanel(node);
 	}
 	if (ImGui::IsItemClicked()) {
@@ -623,7 +637,7 @@ void DrawModelTree(ModelRoot& root) {
 
 	const bool node_open = ImGui::TreeNodeEx(("ModelRoot: " + root.getName()).c_str(), MakeTreeNodeFlags(&root));
 
-	if (g_selected == &root) {
+	if (IsSelected(&root)) {
 		DrawDetailsPanel(root);
 	}
 	if (ImGui::IsItemClicked()) {
@@ -793,7 +807,7 @@ void DrawTree(Scene& scene) {
 			ImGui::TreePop();
 		}
 
-		if (g_selected == &scene) {
+		if (IsSelected(&scene)) {
 			DrawDetailsPanel(scene);
 		}
 	}
@@ -1268,7 +1282,7 @@ void DrawEntityMenu(ID3D11Device& device,
 		
 		if (ImGui::BeginMenu("Selected", g_selected_entity.valid())) {
 			DrawAddComponentMenu(device, resource_mgr, scene , add_model_popup);
-
+			ImGui::Separator();
 			if (ImGui::MenuItem("Delete")) {
 				scene.removeEntity(g_selected_entity);
 			}
@@ -1277,6 +1291,13 @@ void DrawEntityMenu(ID3D11Device& device,
 		}
 
 		ImGui::EndMenu(); //Entity
+	}
+
+	if (ImGui::BeginMenu("Component")) {
+		if (ImGui::MenuItem("Delete Selected", nullptr, nullptr, g_selected_component != nullptr)) {
+			g_selected_component->getOwner()->removeComponent(g_selected_component);
+		}
+		ImGui::EndMenu();
 	}
 }
 

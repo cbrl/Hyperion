@@ -199,18 +199,20 @@ void TestScene::tick(Engine& engine) {
 
 	// CPU Usage
 	if (text_cpu.valid()) {
-		text_cpu->getComponent<Text>()->setText(cpu_str.str());
+		if (auto* text = text_cpu->getComponent<Text>())
+			text->setText(cpu_str.str());
 	}
 
 	// RAM Usage
 	if (text_ram.valid()) {
-		text_ram->getComponent<Text>()->setText(mem_str.str());
+		if (auto* text = text_ram->getComponent<Text>())
+			text->setText(mem_str.str());
 	}
 
 	// Mouse Activity
 	if (text_mouse.valid()) {
-		text_mouse->getComponent<Text>()->setText(
-			L"Mouse \nX: " + std::to_wstring(mouse_pos.x)
-			+ L"\nY: "     + std::to_wstring(mouse_pos.y));
+		if (auto* text = text_mouse->getComponent<Text>())
+			text->setText(L"Mouse \nX: " + std::to_wstring(mouse_pos.x)
+			              + L"\nY: "     + std::to_wstring(mouse_pos.y));
 	}
 }
