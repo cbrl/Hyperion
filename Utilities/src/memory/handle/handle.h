@@ -60,7 +60,7 @@ public:
 	}
 
 	std::size_t hash() const noexcept {
-		return std::hash<T>{}(T());
+		return std::hash<T>{}(this->operator T());
 	}
 
 
