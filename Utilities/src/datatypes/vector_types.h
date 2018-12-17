@@ -34,8 +34,8 @@ struct Vector2 {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the std::vector
-	constexpr T* data() { return &this->x; }
-	constexpr const T* data() const { return &this->x; }
+	constexpr T* data() noexcept { return &this->x; }
+	constexpr const T* data() const noexcept { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -70,14 +70,16 @@ constexpr bool operator!=(const Vector2<T>& cmp1, const Vector2<U>& cmp2) noexce
 
 // Operator +=
 template<typename T, typename U>
-constexpr Vector2<T>& operator+=(Vector2<T>& vec, const Vector2<U>& add) noexcept {
+constexpr auto operator+=(Vector2<T>& vec, const Vector2<U>& add) noexcept
+	-> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>&> {
 	vec.x += add.x;
 	vec.y += add.y;
 	return vec;
 }
 // Operator +
 template<typename T, typename U>
-constexpr Vector2<T> operator+(Vector2<T> vec, const Vector2<U>& add) noexcept {
+constexpr auto operator+(Vector2<T> vec, const Vector2<U>& add) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>> {
 	vec += add;
 	return vec;
 }
@@ -85,14 +87,16 @@ constexpr Vector2<T> operator+(Vector2<T> vec, const Vector2<U>& add) noexcept {
 
 // Operator -=
 template<typename T, typename U>
-constexpr Vector2<T>& operator-=(Vector2<T>& vec, const Vector2<U>& sub) noexcept {
+constexpr auto operator-=(Vector2<T>& vec, const Vector2<U>& sub) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>&> {
 	vec.x -= sub.x;
 	vec.y -= sub.y;
 	return vec;
 }
 // Operator -
 template<typename T, typename U>
-constexpr Vector2<T> operator-(Vector2<T> vec, const Vector2<U>& second) noexcept {
+constexpr auto operator-(Vector2<T> vec, const Vector2<U>& second) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>> {
 	vec -= second;
 	return vec;
 }
@@ -100,14 +104,16 @@ constexpr Vector2<T> operator-(Vector2<T> vec, const Vector2<U>& second) noexcep
 
 // Operator *=
 template<typename T, typename U>
-constexpr Vector2<T>& operator*=(Vector2<T>& vec, U mul) noexcept {
+constexpr auto operator*=(Vector2<T>& vec, U mul) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>&> {
 	vec.x *= mul;
 	vec.y *= mul;
 	return vec;
 }
 // Operator *
 template<typename T, typename U>
-constexpr Vector2<T> operator*(Vector2<T> vec, U mul) noexcept {
+constexpr auto operator*(Vector2<T> vec, U mul) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>> {
 	vec *= mul;
 	return vec;
 }
@@ -115,14 +121,16 @@ constexpr Vector2<T> operator*(Vector2<T> vec, U mul) noexcept {
 
 // Operator /=
 template<typename T, typename U>
-constexpr Vector2<T>& operator/=(Vector2<T>& vec, U div) noexcept {
+constexpr auto operator/=(Vector2<T>& vec, U div) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>&> {
 	vec.x /= div;
 	vec.y /= div;
 	return vec;
 }
 // Operator /
 template<typename T, typename U>
-constexpr Vector2<T> operator/(Vector2<T> vec, U div) noexcept {
+constexpr auto operator/(Vector2<T> vec, U div) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector2<T>> {
 	vec /= div;
 	return vec;
 }
@@ -169,8 +177,8 @@ struct Vector3 {
 	//----------------------------------------------------------------------------------
 
 	// Return a pointer to the first element of the std::vector
-	constexpr T* data() { return &this->x; }
-	constexpr const T* data() const { return &this->x; }
+	constexpr T* data() noexcept { return &this->x; }
+	constexpr const T* data() const noexcept { return &this->x; }
 
 
 	//----------------------------------------------------------------------------------
@@ -209,7 +217,8 @@ constexpr bool operator!=(const Vector3<T>& cmp1, const Vector3<U>& cmp2) noexce
 
 // Operator +=
 template<typename T, typename U>
-constexpr Vector3<T>& operator+=(Vector3<T>& vec, const Vector3<U>& add) noexcept {
+constexpr auto operator+=(Vector3<T>& vec, const Vector3<U>& add) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>&> {
 	vec.x += add.x;
 	vec.y += add.y;
 	vec.z += add.z;
@@ -217,7 +226,8 @@ constexpr Vector3<T>& operator+=(Vector3<T>& vec, const Vector3<U>& add) noexcep
 }
 // Operator +
 template<typename T, typename U>
-constexpr Vector3<T> operator+(Vector3<T> vec, const Vector3<U>& add) noexcept {
+constexpr auto operator+(Vector3<T> vec, const Vector3<U>& add) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>> {
 	vec += add;
 	return vec;
 }
@@ -225,7 +235,8 @@ constexpr Vector3<T> operator+(Vector3<T> vec, const Vector3<U>& add) noexcept {
 
 // Operator -=
 template<typename T, typename U>
-constexpr Vector3<T>& operator-=(Vector3<T>& vec, const Vector3<U>& sub) noexcept {
+constexpr auto operator-=(Vector3<T>& vec, const Vector3<U>& sub) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>&> {
 	vec.x -= sub.x;
 	vec.y -= sub.y;
 	vec.z -= sub.z;
@@ -233,7 +244,8 @@ constexpr Vector3<T>& operator-=(Vector3<T>& vec, const Vector3<U>& sub) noexcep
 }
 // Operator -
 template<typename T, typename U>
-constexpr Vector3<T> operator-(Vector3<T> vec, const Vector3<U>& second) noexcept {
+constexpr auto operator-(Vector3<T> vec, const Vector3<U>& second) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>> {
 	vec -= second;
 	return vec;
 }
@@ -241,7 +253,8 @@ constexpr Vector3<T> operator-(Vector3<T> vec, const Vector3<U>& second) noexcep
 
 // Operator *=
 template<typename T, typename U>
-constexpr Vector3<T>& operator*=(Vector3<T>& vec, U mul) noexcept {
+constexpr auto operator*=(Vector3<T>& vec, U mul) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>&> {
 	vec.x *= mul;
 	vec.y *= mul;
 	vec.z *= mul;
@@ -249,7 +262,8 @@ constexpr Vector3<T>& operator*=(Vector3<T>& vec, U mul) noexcept {
 }
 // Operator *
 template<typename T, typename U>
-constexpr Vector3<T> operator*(Vector3<T> vec, U mul) noexcept {
+constexpr auto operator*(Vector3<T> vec, U mul) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>> {
 	vec *= mul;
 	return vec;
 }
@@ -257,7 +271,8 @@ constexpr Vector3<T> operator*(Vector3<T> vec, U mul) noexcept {
 
 // Operator /=
 template<typename T, typename U>
-constexpr Vector3<T>& operator/=(Vector3<T>& vec, U div) noexcept {
+constexpr auto operator/=(Vector3<T>& vec, U div) noexcept
+	-> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>&> {
 	vec.x /= div;
 	vec.y /= div;
 	vec.z /= div;
@@ -265,7 +280,8 @@ constexpr Vector3<T>& operator/=(Vector3<T>& vec, U div) noexcept {
 }
 // Operator /
 template<typename T, typename U>
-constexpr Vector3<T> operator/(Vector3<T> vec, U div) noexcept {
+constexpr auto operator/(Vector3<T> vec, U div) noexcept
+	-> std::enable_if_t<std::is_convertible_v<T, U>, Vector3<T>> {
 	vec /= div;
 	return vec;
 }
@@ -349,7 +365,7 @@ struct Vector4 {
 
 // Operator ==
 template<typename T, typename U>
-constexpr bool operator==(const Vector4<T>& cmp1, const Vector4<U>& cmp2) noexcept {
+constexpr bool operator==(const Vector4<T>& cmp1, const Vector4<U>& cmp2) noexcept{
 	return (cmp1.x == cmp2.x &&
 	        cmp1.y == cmp2.y &&
 	        cmp1.z == cmp2.z &&
@@ -357,14 +373,15 @@ constexpr bool operator==(const Vector4<T>& cmp1, const Vector4<U>& cmp2) noexce
 }
 // Operator !=
 template<typename T, typename U>
-constexpr bool operator!=(const Vector4<T>& cmp1, const Vector4<U>& cmp2) noexcept {
+constexpr bool operator!=(const Vector4<T>& cmp1, const Vector4<U>& cmp2) noexcept{
 	return !(cmp1 == cmp2);
 }
 
 
 // Operator +=
 template<typename T, typename U>
-constexpr Vector4<T>& operator+=(Vector4<T>& vec, const Vector4<U>& add) noexcept {
+constexpr auto operator+=(Vector4<T>& vec, const Vector4<U>& add) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>&> {
 	vec.x += add.x;
 	vec.y += add.y;
 	vec.z += add.z;
@@ -373,7 +390,8 @@ constexpr Vector4<T>& operator+=(Vector4<T>& vec, const Vector4<U>& add) noexcep
 }
 // Operator +
 template<typename T, typename U>
-constexpr Vector4<T> operator+(Vector4<T> vec, const Vector4<U>& add) noexcept {
+constexpr auto operator+(Vector4<T> vec, const Vector4<U>& add) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>> {
 	vec += add;
 	return vec;
 }
@@ -381,7 +399,8 @@ constexpr Vector4<T> operator+(Vector4<T> vec, const Vector4<U>& add) noexcept {
 
 // Operator -=
 template<typename T, typename U>
-constexpr Vector4<T>& operator-=(Vector4<T>& vec, const Vector4<U>& sub) noexcept {
+constexpr auto operator-=(Vector4<T>& vec, const Vector4<U>& sub) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>&> {
 	vec.x -= sub.x;
 	vec.y -= sub.y;
 	vec.z -= sub.z;
@@ -390,7 +409,8 @@ constexpr Vector4<T>& operator-=(Vector4<T>& vec, const Vector4<U>& sub) noexcep
 }
 // Operator -
 template<typename T, typename U>
-constexpr Vector4<T> operator-(Vector4<T> vec, const Vector4<U>& second) noexcept {
+constexpr auto operator-(Vector4<T> vec, const Vector4<U>& second) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>> {
 	vec -= second;
 	return vec;
 }
@@ -398,7 +418,8 @@ constexpr Vector4<T> operator-(Vector4<T> vec, const Vector4<U>& second) noexcep
 
 // Operator *=
 template<typename T, typename U>
-constexpr Vector4<T>& operator*=(Vector4<T>& vec, U mul) noexcept {
+constexpr auto operator*=(Vector4<T>& vec, U mul) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>&> {
 	vec.x *= mul;
 	vec.y *= mul;
 	vec.z *= mul;
@@ -407,7 +428,8 @@ constexpr Vector4<T>& operator*=(Vector4<T>& vec, U mul) noexcept {
 }
 // Operator *
 template<typename T, typename U>
-constexpr Vector4<T> operator*(Vector4<T> vec, U mul) noexcept {
+constexpr auto operator*(Vector4<T> vec, U mul) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>> {
 	vec *= mul;
 	return vec;
 }
@@ -415,7 +437,8 @@ constexpr Vector4<T> operator*(Vector4<T> vec, U mul) noexcept {
 
 // Operator /=
 template<typename T, typename U>
-constexpr Vector4<T>& operator/=(Vector4<T>& vec, U div) noexcept {
+constexpr auto operator/=(Vector4<T>& vec, U div) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>&> {
 	vec.x /= div;
 	vec.y /= div;
 	vec.z /= div;
@@ -424,7 +447,8 @@ constexpr Vector4<T>& operator/=(Vector4<T>& vec, U div) noexcept {
 }
 // Operator /
 template<typename T, typename U>
-constexpr Vector4<T> operator/(Vector4<T> vec, U div) noexcept {
+constexpr auto operator/(Vector4<T> vec, U div) noexcept
+    -> std::enable_if_t<std::is_convertible_v<T, U>, Vector4<T>> {
 	vec /= div;
 	return vec;
 }
