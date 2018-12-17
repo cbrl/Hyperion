@@ -14,10 +14,25 @@
 #include "os/windows/win_utils.h"
 
 
+//----------------------------------------------------------------------------------
+// Selected Item
+//----------------------------------------------------------------------------------
 void*     g_selected = nullptr;
 EntityPtr g_selected_entity;
 
+void SetSelected(void* item) {
+	g_selected = item;
+	g_selected_entity = EntityPtr{};
+}
+void SetSelected(const EntityPtr& entity) {
+	g_selected_entity = entity;
+	g_selected = nullptr;
+}
 
+
+//----------------------------------------------------------------------------------
+// Enum for "Add Model" popups
+//----------------------------------------------------------------------------------
 enum class ModelType {
 	None,
 	Cube,
@@ -34,6 +49,9 @@ enum class ModelType {
 };
 
 
+//----------------------------------------------------------------------------------
+// ImGuiTreeNodeFlags Helpers
+//----------------------------------------------------------------------------------
 ImGuiTreeNodeFlags MakeTreeNodeFlags() {
 	return ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 }
@@ -569,7 +587,7 @@ void DrawLeafNode(gsl::czstring<> text, T& item) {
 		DrawDetailsPanel(item);
 	}
 	if (ImGui::IsItemClicked()) {
-		g_selected = &item;
+		SetSelected(&item);
 	}
 
 	ImGui::TreePop();
@@ -585,7 +603,7 @@ void DrawModelNodes(ModelNode& node) {
 		DrawDetailsPanel(node);
 	}
 	if (ImGui::IsItemClicked()) {
-		g_selected = &node;
+		SetSelected(&node);
 	}
 
 	if (!node_open) return;
@@ -609,7 +627,7 @@ void DrawModelTree(ModelRoot& root) {
 		DrawDetailsPanel(root);
 	}
 	if (ImGui::IsItemClicked()) {
-		g_selected = &root;
+		SetSelected(&root);
 	}
 
 	if (!node_open) return;
@@ -629,7 +647,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	const bool node_open = ImGui::TreeNodeEx(name.c_str(), MakeTreeNodeFlags(entity_ptr));
 
 	if (ImGui::IsItemClicked())
-		g_selected_entity = entity_ptr;
+		SetSelected(entity_ptr);
 
 	if (!node_open) return;
 
@@ -751,9 +769,6 @@ void DrawTreeNodes(Scene& scene) {
 
 	auto& entities = scene.getEntities();
 
-	if (!g_selected_entity.valid())
-		g_selected_entity = entities[0];
-
 	for (const auto& entity_ptr : entities) {
 
 		// Skip the entity if it's a child
@@ -771,7 +786,7 @@ void DrawTree(Scene& scene) {
 		const bool node_open = ImGui::TreeNodeEx(&scene, MakeTreeNodeFlags(&scene), scene.getName().c_str());
 
 		if (ImGui::IsItemClicked())
-			g_selected = &scene;
+			SetSelected(&scene);
 
 		if (node_open) {
 			DrawTreeNodes(scene);
@@ -1251,7 +1266,7 @@ void DrawEntityMenu(ID3D11Device& device,
 			scene.addEntity();
 		}
 		
-		if (ImGui::BeginMenu("Selected")) {
+		if (ImGui::BeginMenu("Selected", g_selected_entity.valid())) {
 			DrawAddComponentMenu(device, resource_mgr, scene , add_model_popup);
 
 			if (ImGui::MenuItem("Delete")) {
