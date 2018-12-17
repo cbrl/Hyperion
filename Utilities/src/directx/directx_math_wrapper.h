@@ -84,7 +84,7 @@ template<typename T>
 T XM_CALLCONV XMStore(FXMVECTOR val) noexcept;
 
 template<typename T>
-void XM_CALLCONV XMStore(T* store, FXMVECTOR val) noexcept;
+void XM_CALLCONV XMStore(T* dest, FXMVECTOR val) noexcept;
 
 
 //----------------------------------------------------------------------------------
@@ -99,8 +99,8 @@ inline vec2_i32 XM_CALLCONV XMStore<vec2_i32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<vec2_i32>(vec2_i32* store, FXMVECTOR val) noexcept {
-	XMStoreSInt2(reinterpret_cast<XMINT2*>(store), val);
+inline void XM_CALLCONV XMStore<vec2_i32>(vec2_i32* dest, FXMVECTOR val) noexcept {
+	XMStoreSInt2(reinterpret_cast<XMINT2*>(dest), val);
 }
 
 
@@ -113,8 +113,8 @@ inline vec3_i32 XM_CALLCONV XMStore<vec3_i32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<vec3_i32>(vec3_i32* store, FXMVECTOR val) noexcept {
-	XMStoreSInt3(reinterpret_cast<XMINT3*>(&store), val);
+inline void XM_CALLCONV XMStore<vec3_i32>(vec3_i32* dest, FXMVECTOR val) noexcept {
+	XMStoreSInt3(reinterpret_cast<XMINT3*>(&dest), val);
 }
 
 
@@ -127,8 +127,8 @@ inline vec4_i32 XM_CALLCONV XMStore(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<vec4_i32>(vec4_i32* store, FXMVECTOR val) noexcept {
-	XMStoreSInt4(reinterpret_cast<XMINT4*>(&store), val);
+inline void XM_CALLCONV XMStore<vec4_i32>(vec4_i32* dest, FXMVECTOR val) noexcept {
+	XMStoreSInt4(reinterpret_cast<XMINT4*>(&dest), val);
 }
 
 
@@ -145,8 +145,8 @@ inline u32 XM_CALLCONV XMStore<u32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<u32>(u32* store, FXMVECTOR val) noexcept {
-	XMStoreInt(store, val);
+inline void XM_CALLCONV XMStore<u32>(u32* dest, FXMVECTOR val) noexcept {
+	XMStoreInt(dest, val);
 }
 
 
@@ -159,8 +159,8 @@ inline vec2_u32 XM_CALLCONV XMStore<vec2_u32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<vec2_u32>(vec2_u32* store, FXMVECTOR val) noexcept {
-	XMStoreUInt2(reinterpret_cast<XMUINT2*>(store), val);
+inline void XM_CALLCONV XMStore<vec2_u32>(vec2_u32* dest, FXMVECTOR val) noexcept {
+	XMStoreUInt2(reinterpret_cast<XMUINT2*>(dest), val);
 }
 
 
@@ -173,8 +173,8 @@ inline vec3_u32 XM_CALLCONV XMStore<vec3_u32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<vec3_u32>(vec3_u32* store, FXMVECTOR val) noexcept {
-	XMStoreUInt3(reinterpret_cast<XMUINT3*>(store), val);
+inline void XM_CALLCONV XMStore<vec3_u32>(vec3_u32* dest, FXMVECTOR val) noexcept {
+	XMStoreUInt3(reinterpret_cast<XMUINT3*>(dest), val);
 }
 
 
@@ -187,8 +187,8 @@ inline vec4_u32 XM_CALLCONV XMStore<vec4_u32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<vec4_u32>(vec4_u32* store, FXMVECTOR val) noexcept {
-	XMStoreUInt4(reinterpret_cast<XMUINT4*>(store), val);
+inline void XM_CALLCONV XMStore<vec4_u32>(vec4_u32* dest, FXMVECTOR val) noexcept {
+	XMStoreUInt4(reinterpret_cast<XMUINT4*>(dest), val);
 }
 
 
@@ -205,8 +205,8 @@ inline f32 XM_CALLCONV XMStore<f32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<f32>(f32* store, FXMVECTOR val) noexcept {
-	XMStoreFloat(store, val);
+inline void XM_CALLCONV XMStore<f32>(f32* dest, FXMVECTOR val) noexcept {
+	XMStoreFloat(dest, val);
 }
 
 
@@ -219,8 +219,8 @@ inline vec2_f32 XM_CALLCONV XMStore<vec2_f32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<vec2_f32>(vec2_f32* store, FXMVECTOR val) noexcept {
-	XMStoreFloat2(reinterpret_cast<XMFLOAT2*>(store), val);
+inline void XM_CALLCONV XMStore<vec2_f32>(vec2_f32* dest, FXMVECTOR val) noexcept {
+	XMStoreFloat2(reinterpret_cast<XMFLOAT2*>(dest), val);
 }
 
 
@@ -233,8 +233,8 @@ inline vec3_f32 XM_CALLCONV XMStore<vec3_f32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<vec3_f32>(vec3_f32* store, FXMVECTOR val) noexcept {
-	XMStoreFloat3(reinterpret_cast<XMFLOAT3*>(store), val);
+inline void XM_CALLCONV XMStore<vec3_f32>(vec3_f32* dest, FXMVECTOR val) noexcept {
+	XMStoreFloat3(reinterpret_cast<XMFLOAT3*>(dest), val);
 }
 
 
@@ -247,6 +247,6 @@ inline vec4_f32 XM_CALLCONV XMStore<vec4_f32>(FXMVECTOR val) noexcept {
 }
 
 template<>
-inline void XM_CALLCONV XMStore<vec4_f32>(vec4_f32* store, FXMVECTOR val) noexcept {
-	XMStoreFloat4(reinterpret_cast<XMFLOAT4*>(store), val);
+inline void XM_CALLCONV XMStore<vec4_f32>(vec4_f32* dest, FXMVECTOR val) noexcept {
+	XMStoreFloat4(reinterpret_cast<XMFLOAT4*>(dest), val);
 }
