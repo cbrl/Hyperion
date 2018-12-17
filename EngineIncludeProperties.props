@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\src;$(SolutionDir)\Assimp\src;$(SolutionDir)\Assimp\src\include;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\GSL\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Input\src;$(SolutionDir)\Rendering\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\Utilities\src</IncludePath>
+    <SourcePath>$(VC_SourcePath);$(SolutionDir)\Assimp\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Input\src;$(SolutionDir)\Rendering\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\Utilities\src;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup />
+</Project>

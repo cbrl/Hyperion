@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)\src;$(ProjectDir)\src\include;$(ProjectDir)\src\contrib;$(ProjectDir)\src\contrib\clipper;$(ProjectDir)\src\contrib\irrXML;$(ProjectDir)\src\contrib\Open3DGC;$(ProjectDir)\src\contrib\openddlparser;$(ProjectDir)\src\contrib\poly2tri;$(ProjectDir)\src\contrib\rapidjson;$(ProjectDir)\src\contrib\unzip;$(ProjectDir)\src\contrib\utf8cpp;$(ProjectDir)\src\contrib\zip;$(ProjectDir)\src\contrib\zlib;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup />
+</Project>

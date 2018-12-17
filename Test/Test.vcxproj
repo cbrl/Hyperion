@@ -57,30 +57,34 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\EngineIncludeProperties.props" />
+    <Import Project="..\CompileProperties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="Global.props" />
+    <Import Project="..\EngineIncludeProperties.props" />
+    <Import Project="..\CompileProperties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\EngineIncludeProperties.props" />
+    <Import Project="..\CompileProperties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="Global.props" />
+    <Import Project="..\EngineIncludeProperties.props" />
+    <Import Project="..\CompileProperties.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\Input\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\Rendering\src;$(SolutionDir)\GSL\src;$(IncludePath)</IncludePath>
-    <SourcePath>$(SolutionDir)\Utilities\src;$(SolutionDir)\Engine\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\Input\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\Rendering\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Rendering\src;$(SolutionDir)\Shaders\src;$(SolutionDir)\GSL\src;$(IncludePath)</IncludePath>
-    <SourcePath>$(SolutionDir)\Utilities\src;$(SolutionDir)\ImGui\src;$(SolutionDir)\ECS\src;$(SolutionDir)\ECS Data\src;$(SolutionDir)\Engine\src;$(SolutionDir)\Input\src;$(SolutionDir)\Rendering\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

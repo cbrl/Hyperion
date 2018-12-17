@@ -58,26 +58,36 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\EngineIncludeProperties.props" />
+    <Import Project="ShaderCompileProperties.props" />
+    <Import Project="ShaderIncludeProperties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\EngineIncludeProperties.props" />
+    <Import Project="ShaderCompileProperties.props" />
+    <Import Project="ShaderIncludeProperties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\EngineIncludeProperties.props" />
+    <Import Project="ShaderCompileProperties.props" />
+    <Import Project="ShaderIncludeProperties.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\EngineIncludeProperties.props" />
+    <Import Project="ShaderCompileProperties.props" />
+    <Import Project="ShaderIncludeProperties.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(ProjectDir)\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(ProjectDir)\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>$(ProjectDir)\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -87,12 +97,7 @@
       <ConformanceMode>true</ConformanceMode>
       <BrowseInformation>true</BrowseInformation>
     </ClCompile>
-    <FxCompile>
-      <ShaderModel>5.0</ShaderModel>
-      <AdditionalIncludeDirectories>$(ProjectDir)\shaders;$(ProjectDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <VariableName>shader_%(Filename)</VariableName>
-      <HeaderFileOutput>$(ProjectDir)\src\compiled_headers\%(Filename).h</HeaderFileOutput>
-    </FxCompile>
+    <FxCompile />
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
@@ -132,12 +137,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <FxCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)\shaders;$(ProjectDir)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ShaderModel>5.0</ShaderModel>
-      <VariableName>shader_%(Filename)</VariableName>
-      <HeaderFileOutput>$(ProjectDir)\src\compiled_headers\%(Filename).h</HeaderFileOutput>
-    </FxCompile>
+    <FxCompile />
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="shaders\depth\depth_include.hlsli">
