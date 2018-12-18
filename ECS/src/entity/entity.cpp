@@ -122,9 +122,9 @@ void Entity::setPointer(EntityPtr ptr) noexcept {
 	for (auto& pair : components) {
 		pair.second->setOwner(ptr);
 	}
-	name = "Entity (i: "
+	name = "Entity (i:"
 	       + ToStr(ptr.getHandle().index).value_or("-1"s)
-	       + ", c: "
+	       + ", c:"
 	       + ToStr(ptr.getHandle().counter).value_or("-1"s)
 	       + ")";
 }
