@@ -16,21 +16,25 @@
 //----------------------------------------------------------------------------------
 
 struct DirectionalLight {
-	float4 diffuse;
-	float4 specular;
+	float3 diffuse;
+	float  pad1;
+	float3 specular;
+	float  pad2;
 	float3 direction;
-	float  pad;
+	float  pad3;
 	matrix world_to_projection;
 };
 
 
 struct PointLight {
-	float4 diffuse;
-	float4 specular;
+	float3 diffuse;
+	float  pad1;
+	float3 specular;
+	float  pad2;
 	float3 position;
 	float  range;
 	float3 attenuation;
-	float  pad;
+	float  pad3;
 };
 
 struct ShadowedPointLight {
@@ -42,8 +46,10 @@ struct ShadowedPointLight {
 
 
 struct SpotLight {
-	float4 diffuse;
-	float4 specular;
+	float3 diffuse;
+	float  pad1;
+	float3 specular;
+	float  pad2;
 	float3 position;
 	float  range;
 	float3 direction;
@@ -196,12 +202,12 @@ void ComputeDirectionalLight(DirectionalLight L,
                              float3 normal,
                              float3 view_vec,
                              float  spec_exponent,
-                             out float4 out_diffuse,
-                             out float4 out_specular,
+                             out float3 out_diffuse,
+                             out float3 out_specular,
                              out float3 out_p_ndc) {
 	// Initialize outputs.
-	out_diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	out_specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	out_diffuse = float3(0.0f, 0.0f, 0.0f);
+	out_specular = float3(0.0f, 0.0f, 0.0f);
 
 	// The light vector aims opposite the direction the light rays travel.
 	const float3 light_vec = -L.direction;
@@ -224,8 +230,8 @@ void ComputeDirectionalLight(DirectionalLight L,
                              float3 normal,
                              float3 view_vec,
                              float  spec_exponent,
-                             out float4 out_diffuse,
-                             out float4 out_specular) {
+                             out float3 out_diffuse,
+                             out float3 out_specular) {
 
 	float3 p_ndc;
 	ComputeDirectionalLight(L, pos, normal, view_vec, spec_exponent, out_diffuse, out_specular, p_ndc);
@@ -238,11 +244,11 @@ void ComputeShadowedDirectionalLight(DirectionalLight L,
 									 float3 normal,
 									 float3 view_vec,
                                      float  spec_exponent,
-									 out float4 out_diffuse,
-									 out float4 out_specular) {
+									 out float3 out_diffuse,
+									 out float3 out_specular) {
 
-	float4 diffuse0;
-	float4 specular0;
+	float3 diffuse0;
+	float3 specular0;
 	float3 p_ndc;
 
 	ComputeDirectionalLight(L, pos, normal, view_vec, spec_exponent, diffuse0, specular0, p_ndc);
@@ -267,12 +273,12 @@ void ComputePointLight(PointLight L,
 					   float3 normal,
                        float3 view_vec,
                        float  spec_exponent,
-					   out float4 out_diffuse,
-					   out float4 out_specular) {
+					   out float3 out_diffuse,
+					   out float3 out_specular) {
 
 	// Initialize outputs.
-	out_diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	out_specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	out_diffuse = float3(0.0f, 0.0f, 0.0f);
+	out_specular = float3(0.0f, 0.0f, 0.0f);
 
 	// The vector from the surface to the light.
 	float3 light_vec = L.position - pos;
@@ -309,11 +315,11 @@ void ComputeShadowedPointLight(ShadowedPointLight L,
 							   float3 normal,
                                float3 view_vec,
                                float  spec_exponent,
-							   out float4 out_diffuse,
-							   out float4 out_specular) {
+							   out float3 out_diffuse,
+							   out float3 out_specular) {
 
-	float4 diffuse0;
-	float4 specular0;
+	float3 diffuse0;
+	float3 specular0;
 
 	ComputePointLight(L.light, pos, normal, view_vec, spec_exponent, diffuse0, specular0);
 
@@ -338,12 +344,12 @@ void ComputeSpotLight(SpotLight L,
 					  float3 normal,
                       float3 view_vec,
                       float  spec_exponent,
-					  out float4 out_diffuse,
-					  out float4 out_specular) {
+					  out float3 out_diffuse,
+					  out float3 out_specular) {
 
 	// Initialize outputs.
-	out_diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	out_specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	out_diffuse = float3(0.0f, 0.0f, 0.0f);
+	out_specular = float3(0.0f, 0.0f, 0.0f);
 
 	// The vector from the surface to the light.
 	float3 light_vec = L.position - pos;
@@ -384,11 +390,11 @@ void ComputeShadowedSpotLight(ShadowedSpotLight L,
 							  float3 normal,
                               float3 view_vec,
                               float  spec_exponent,
-							  out float4 out_diffuse,
-							  out float4 out_specular) {
+							  out float3 out_diffuse,
+							  out float3 out_specular) {
 	
-	float4 diffuse0;
-	float4 specular0;
+	float3 diffuse0;
+	float3 specular0;
 
 	ComputeSpotLight(L.light, pos, normal, view_vec, spec_exponent, diffuse0, specular0);
 
