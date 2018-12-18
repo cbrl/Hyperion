@@ -37,7 +37,7 @@ struct PointLight {
 	float  pad3;
 };
 
-struct ShadowedPointLight {
+struct ShadowPointLight {
 	PointLight light;
 	matrix world_to_light;
 	float2 projection_values;
@@ -58,7 +58,7 @@ struct SpotLight {
 	float3 attenuation;
 };
 
-struct ShadowedSpotLight {
+struct ShadowSpotLight {
 	SpotLight light;
 	matrix world_to_projection;
 };
@@ -88,14 +88,14 @@ StructuredBuffer<PointLight>       g_point_lights       : REG_T(SLOT_SRV_POINT_L
 StructuredBuffer<SpotLight>        g_spot_lights        : REG_T(SLOT_SRV_SPOT_LIGHTS);
 
 
-// Shadowed Lights
-StructuredBuffer<DirectionalLight> g_shadow_directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOWED);
+// Shadow Lights
+StructuredBuffer<DirectionalLight> g_shadow_directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOW);
 Texture2DArray g_directional_light_smaps : REG_T(SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS);
 
-StructuredBuffer<ShadowedPointLight> g_shadow_point_lights : REG_T(SLOT_SRV_POINT_LIGHTS_SHADOWED);
+StructuredBuffer<ShadowPointLight> g_shadow_point_lights : REG_T(SLOT_SRV_POINT_LIGHTS_SHADOW);
 TextureCubeArray g_point_light_smaps : REG_T(SLOT_SRV_POINT_LIGHT_SHADOW_MAPS);
 
-StructuredBuffer<ShadowedSpotLight> g_shadow_spot_lights : REG_T(SLOT_SRV_SPOT_LIGHTS_SHADOWED);
+StructuredBuffer<ShadowSpotLight> g_shadow_spot_lights : REG_T(SLOT_SRV_SPOT_LIGHTS_SHADOW);
 Texture2DArray g_spot_light_smaps : REG_T(SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS);
 
 
@@ -238,14 +238,14 @@ void ComputeDirectionalLight(DirectionalLight L,
 }
 
 
-void ComputeShadowedDirectionalLight(DirectionalLight L,
-									 ShadowMap shadow_map,
-									 float3 pos,
-									 float3 normal,
-									 float3 view_vec,
-                                     float  spec_exponent,
-									 out float3 out_diffuse,
-									 out float3 out_specular) {
+void ComputeShadowDirectionalLight(DirectionalLight L,
+                                   ShadowMap shadow_map,
+                                   float3 pos,
+                                   float3 normal,
+                                   float3 view_vec,
+                                   float spec_exponent,
+                                   out float3 out_diffuse,
+                                   out float3 out_specular) {
 
 	float3 diffuse0;
 	float3 specular0;
@@ -269,12 +269,12 @@ void ComputeShadowedDirectionalLight(DirectionalLight L,
 // later we will modify the individual terms.
 //----------------------------------------------------------------------------------
 void ComputePointLight(PointLight L,
-					   float3 pos,
-					   float3 normal,
+                       float3 pos,
+                       float3 normal,
                        float3 view_vec,
                        float  spec_exponent,
-					   out float3 out_diffuse,
-					   out float3 out_specular) {
+                       out float3 out_diffuse,
+                       out float3 out_specular) {
 
 	// Initialize outputs.
 	out_diffuse = float3(0.0f, 0.0f, 0.0f);
@@ -309,14 +309,14 @@ void ComputePointLight(PointLight L,
 }
 
 
-void ComputeShadowedPointLight(ShadowedPointLight L,
-							   ShadowCubeMap shadow_map,
-							   float3 pos,
-							   float3 normal,
-                               float3 view_vec,
-                               float  spec_exponent,
-							   out float3 out_diffuse,
-							   out float3 out_specular) {
+void ComputeShadowPointLight(ShadowPointLight L,
+                             ShadowCubeMap shadow_map,
+                             float3 pos,
+                             float3 normal,
+                             float3 view_vec,
+                             float spec_exponent,
+                             out float3 out_diffuse,
+                             out float3 out_specular) {
 
 	float3 diffuse0;
 	float3 specular0;
@@ -340,12 +340,12 @@ void ComputeShadowedPointLight(ShadowedPointLight L,
 // later we will modify the individual terms.
 //----------------------------------------------------------------------------------
 void ComputeSpotLight(SpotLight L,
-					  float3 pos,
-					  float3 normal,
+                      float3 pos,
+                      float3 normal,
                       float3 view_vec,
                       float  spec_exponent,
-					  out float3 out_diffuse,
-					  out float3 out_specular) {
+                      out float3 out_diffuse,
+                      out float3 out_specular) {
 
 	// Initialize outputs.
 	out_diffuse = float3(0.0f, 0.0f, 0.0f);
@@ -384,14 +384,14 @@ void ComputeSpotLight(SpotLight L,
 }
 
 
-void ComputeShadowedSpotLight(ShadowedSpotLight L,
-							  ShadowMap shadow_map,
-							  float3 pos,
-							  float3 normal,
-                              float3 view_vec,
-                              float  spec_exponent,
-							  out float3 out_diffuse,
-							  out float3 out_specular) {
+void ComputeShadowSpotLight(ShadowSpotLight L,
+                            ShadowMap shadow_map,
+                            float3 pos,
+                            float3 normal,
+                            float3 view_vec,
+                            float spec_exponent,
+                            out float3 out_diffuse,
+                            out float3 out_specular) {
 	
 	float3 diffuse0;
 	float3 specular0;
