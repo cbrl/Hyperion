@@ -654,7 +654,7 @@ void DrawDetailsPanel(T& item, ArgsT&... args) {
 template<typename T>
 void DrawLeafNode(gsl::czstring<> text, T& item) {
 
-	ImGui::TreeNodeEx(text, MakeTreeLeafFlags(&item));
+	ImGui::TreeNodeEx(&item, MakeTreeLeafFlags(&item), text);
 
 	if (IsSelected(&item)) {
 		DrawDetailsPanel(item);
@@ -670,7 +670,7 @@ void DrawLeafNode(gsl::czstring<> text, T& item) {
 // Draw the model hierarchy
 void DrawModelNodes(ModelNode& node) {
 
-	const bool node_open = ImGui::TreeNodeEx(node.getName().c_str(), MakeTreeNodeFlags(&node));
+	const bool node_open = ImGui::TreeNodeEx(&node, MakeTreeNodeFlags(&node), node.getName().c_str());
 
 	if (IsSelected(&node)) {
 		DrawDetailsPanel(node);
@@ -694,7 +694,8 @@ void DrawModelNodes(ModelNode& node) {
 // Draw the model component node, and the model hierarchy if the node is open
 void DrawModelTree(ModelRoot& root) {
 
-	const bool node_open = ImGui::TreeNodeEx(("ModelRoot: " + root.getName()).c_str(), MakeTreeNodeFlags(&root));
+	std::string name = "ModelRoot: " + root.getName();
+	const bool node_open = ImGui::TreeNodeEx(&root, MakeTreeNodeFlags(&root), name.c_str());
 
 	if (IsSelected(&root)) {
 		DrawDetailsPanel(root);
@@ -721,7 +722,7 @@ void DrawEntityNode(EntityPtr entity_ptr, Scene& scene) {
 	//----------------------------------------------------------------------------------
 	// Draw Entity Node
 	//----------------------------------------------------------------------------------
-	const bool node_open = ImGui::TreeNodeEx(entity->getName().c_str(), MakeTreeNodeFlags(entity_ptr));
+	const bool node_open = ImGui::TreeNodeEx(entity, MakeTreeNodeFlags(entity_ptr), entity->getName().c_str());
 
 	if (ImGui::IsItemClicked()) {
 		SetSelected(entity_ptr);
