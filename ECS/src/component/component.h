@@ -49,7 +49,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the component's type index
-	virtual std::type_index getTypeIndex() const = 0;
+	virtual const std::type_index& getTypeIndex() const = 0;
 
 	// Get the ptr of the entity that owns this component
 	EntityPtr getOwner() const {
@@ -129,7 +129,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	std::type_index getTypeIndex() const override {
+	const std::type_index& getTypeIndex() const override final {
 		return index;
 	}
 
