@@ -47,9 +47,9 @@ private:
 	RenderStateMgr&      render_state_mgr;
 
 	// Shaders
-	shared_ptr<VertexShader> opaque_vs;
-	shared_ptr<VertexShader> transparent_vs;
-	shared_ptr<PixelShader>  transparent_ps;
+	std::shared_ptr<VertexShader> opaque_vs;
+	std::shared_ptr<VertexShader> transparent_vs;
+	std::shared_ptr<PixelShader>  transparent_ps;
 
 	// Buffers
 	ConstantBuffer<AltCameraBuffer> alt_cam_buffer;

@@ -150,6 +150,11 @@
     <ClInclude Include="src\entity\entity.h" />
     <ClInclude Include="src\entity\entity_mgr.h" />
     <ClInclude Include="src\entity\entity_ptr.h" />
+    <ClInclude Include="src\event\event.h" />
+    <ClInclude Include="src\event\event_delegate.h" />
+    <ClInclude Include="src\event\event_dispatcher.h" />
+    <ClInclude Include="src\event\event_handler.h" />
+    <ClInclude Include="src\event\event_listener.h" />
     <ClInclude Include="src\system\system.h" />
     <ClInclude Include="src\system\system_mgr.h" />
   </ItemGroup>

@@ -74,9 +74,10 @@ public:
 
 
 private:
-	unique_ptr<EntityMgr> entity_mgr;
-	shared_ptr<ComponentMgr> component_mgr;
-	unique_ptr<SystemMgr> system_mgr;
+	std::unique_ptr<EntityMgr> entity_mgr;
+	std::shared_ptr<ComponentMgr> component_mgr;
+	std::unique_ptr<SystemMgr> system_mgr;
+
 };
 
 

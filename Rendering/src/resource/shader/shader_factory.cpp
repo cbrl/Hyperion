@@ -35,7 +35,7 @@ namespace ShaderFactory {
 	// Forward
 	//----------------------------------------------------------------------------------
 
-	shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr, bool transparency) {
+	std::shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr, bool transparency) {
 
 		if (transparency) {
 			return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_lit_ps", BYTECODE(shader_forward_transparent_lit));
@@ -44,7 +44,7 @@ namespace ShaderFactory {
 		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_lit_ps", BYTECODE(shader_forward_lit));
 	}
 
-	shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr, bool transparency) {
+	std::shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr, bool transparency) {
 
 		if (transparency) {
 			return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_unlit_ps", BYTECODE(shader_forward_transparent_unlit));
@@ -53,7 +53,7 @@ namespace ShaderFactory {
 		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_unlit_ps", BYTECODE(shader_forward_unlit));
 	}
 
-	shared_ptr<VertexShader> createForwardVS(ResourceMgr& resource_mgr) {
+	std::shared_ptr<VertexShader> createForwardVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_forward_vs",
 													  BYTECODE(shader_forward_vs),
@@ -66,7 +66,7 @@ namespace ShaderFactory {
 	// Depth
 	//----------------------------------------------------------------------------------
 
-	shared_ptr<VertexShader> createDepthVS(ResourceMgr& resource_mgr) {
+	std::shared_ptr<VertexShader> createDepthVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_vs",
 													  BYTECODE(shader_depth_vs),
@@ -74,12 +74,12 @@ namespace ShaderFactory {
 													                 VertexPositionNormalTexture::input_element_count));
 	}
 
-	shared_ptr<PixelShader> createDepthTransparentPS(ResourceMgr& resource_mgr) {
+	std::shared_ptr<PixelShader> createDepthTransparentPS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<PixelShader>(L"shader_depth_transparent_ps", BYTECODE(shader_depth_transparent_ps));
 	}
 
-	shared_ptr<VertexShader> createDepthTransparentVS(ResourceMgr& resource_mgr) {
+	std::shared_ptr<VertexShader> createDepthTransparentVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_transparent_vs",
 													  BYTECODE(shader_depth_transparent_vs),
@@ -92,12 +92,12 @@ namespace ShaderFactory {
 	// Sky
 	//----------------------------------------------------------------------------------
 
-	shared_ptr<PixelShader> createSkyPS(ResourceMgr& resource_mgr) {
+	std::shared_ptr<PixelShader> createSkyPS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<PixelShader>(L"shader_skybox_ps", BYTECODE(shader_skybox_ps));
 	}
 
-	shared_ptr<VertexShader> createSkyVS(ResourceMgr& resource_mgr) {
+	std::shared_ptr<VertexShader> createSkyVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_skybox_vs",
 													  BYTECODE(shader_skybox_vs),
@@ -110,13 +110,13 @@ namespace ShaderFactory {
 	// Bounding Volume
 	//----------------------------------------------------------------------------------
 
-	shared_ptr<PixelShader> createWireframeBoxPS(ResourceMgr& resource_mgr) {
+	std::shared_ptr<PixelShader> createWireframeBoxPS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<PixelShader>(L"shader_wireframe_box_ps",
 		                                             BYTECODE(shader_wireframe_box_ps));
 	}
 
-	shared_ptr<VertexShader> createWireframeBoxVS(ResourceMgr& resource_mgr) {
+	std::shared_ptr<VertexShader> createWireframeBoxVS(ResourceMgr& resource_mgr) {
 
 		return resource_mgr.getOrCreate<VertexShader>(L"shader_wireframe_box_vs",
 													  BYTECODE(shader_wireframe_box_vs),
@@ -129,7 +129,7 @@ namespace ShaderFactory {
 	// False Color
 	//----------------------------------------------------------------------------------
 
-	shared_ptr<PixelShader> createFalseColorPS(ResourceMgr& resource_mgr, FalseColor color) {
+	std::shared_ptr<PixelShader> createFalseColorPS(ResourceMgr& resource_mgr, FalseColor color) {
 
 		switch (color) {
 			case FalseColor::Static:

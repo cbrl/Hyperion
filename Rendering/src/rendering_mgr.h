@@ -108,10 +108,10 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	unique_ptr<Direct3D> direct3D;
-	unique_ptr<DisplayConfig> display_config;
-	unique_ptr<RenderingConfig> rendering_config;
-	unique_ptr<SwapChain> swap_chain;
-	unique_ptr<ResourceMgr> resource_mgr;
-	unique_ptr<Renderer> renderer;
+	std::unique_ptr<Direct3D>        direct3D;
+	std::unique_ptr<DisplayConfig>   display_config;
+	std::unique_ptr<RenderingConfig> rendering_config;
+	std::unique_ptr<SwapChain>       swap_chain;
+	std::unique_ptr<ResourceMgr>     resource_mgr;
+	std::unique_ptr<Renderer>        renderer;
 };

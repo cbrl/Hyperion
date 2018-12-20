@@ -138,7 +138,7 @@ protected:
 	std::string name;
 
 	// The ECS engine for this scene
-	unique_ptr<ECS> ecs;
+	std::unique_ptr<ECS> ecs;
 
 	// Entitites that currently exist in this scene
 	std::vector<EntityPtr> entities;

@@ -124,7 +124,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Unload the active scene (if applicable) and apply a new scene
-	void loadScene(unique_ptr<Scene>&& new_scene);
+	void loadScene(std::unique_ptr<Scene>&& new_scene);
 
 	[[nodiscard]]
 	Scene& getScene() {
@@ -240,13 +240,13 @@ private:
 
 	EngineMessageHandler msg_handler;
 
-	unique_ptr<Window> window;
-	unique_ptr<SystemMonitor> system_monitor;
-	unique_ptr<HighResTimer> timer;
-	unique_ptr<FPS> fps_counter;
-	unique_ptr<Input> input;
-	unique_ptr<RenderingMgr> rendering_mgr;
-	unique_ptr<Scene> scene;
+	std::unique_ptr<Window> window;
+	std::unique_ptr<SystemMonitor> system_monitor;
+	std::unique_ptr<HighResTimer> timer;
+	std::unique_ptr<FPS> fps_counter;
+	std::unique_ptr<Input> input;
+	std::unique_ptr<RenderingMgr> rendering_mgr;
+	std::unique_ptr<Scene> scene;
 
 	bool exit_requested;
 	bool resize_requested;

@@ -1,6 +1,6 @@
 template<typename KeyT, typename ValueT>
 template<typename... ArgsT>
-shared_ptr<ValueT> ManagedResourceMap<KeyT, ValueT>::getOrCreateResource(const KeyT& key, ArgsT&&... args) noexcept {
+std::shared_ptr<ValueT> ManagedResourceMap<KeyT, ValueT>::getOrCreateResource(const KeyT& key, ArgsT&&... args) noexcept {
 
 	// Find the resource
 	const auto it = resource_map.find(key);
@@ -26,7 +26,7 @@ shared_ptr<ValueT> ManagedResourceMap<KeyT, ValueT>::getOrCreateResource(const K
 
 
 template<typename KeyT, typename ValueT>
-shared_ptr<ValueT> ManagedResourceMap<KeyT, ValueT>::getResource(const KeyT& key) const noexcept {
+std::shared_ptr<ValueT> ManagedResourceMap<KeyT, ValueT>::getResource(const KeyT& key) const noexcept {
 
 	const auto n = resource_map.find(key);
 
@@ -41,5 +41,5 @@ shared_ptr<ValueT> ManagedResourceMap<KeyT, ValueT>::getResource(const KeyT& key
 	}
 
 	// Return a null pointer if the resource doesn't exist
-	return shared_ptr<ValueT>();
+	return std::shared_ptr<ValueT>();
 }

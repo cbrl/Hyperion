@@ -7,7 +7,7 @@ class ResourceMgr;
 
 namespace TextureFactory {
 
-	shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr);
+std::shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr);
 
-	shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const vec4_f32& color);
+std::shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const vec4_f32& color);
 }

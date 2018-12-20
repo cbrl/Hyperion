@@ -24,6 +24,12 @@
     <Filter Include="Source Files\system">
       <UniqueIdentifier>{c8310856-1825-4550-a6c2-1bff62e409a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\event">
+      <UniqueIdentifier>{95ef0811-e3ca-4f43-a2d1-1534ed58f7de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\event">
+      <UniqueIdentifier>{3e63c6bb-12b0-4a9a-b23a-3fb50763990d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entity\entity.h">
@@ -49,6 +55,21 @@
     </ClInclude>
     <ClInclude Include="src\entity\entity_ptr.h">
       <Filter>Header Files\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\event.h">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\event_delegate.h">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\event_dispatcher.h">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\event_handler.h">
+      <Filter>Header Files\event</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\event_listener.h">
+      <Filter>Header Files\event</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

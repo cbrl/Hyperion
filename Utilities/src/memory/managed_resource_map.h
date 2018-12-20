@@ -37,16 +37,16 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	template<typename... ArgsT>
-	shared_ptr<ValueT> getOrCreateResource(const KeyT& key, ArgsT&&... args) noexcept;
+	std::shared_ptr<ValueT> getOrCreateResource(const KeyT& key, ArgsT&&... args) noexcept;
 
-	shared_ptr<ValueT> getResource(const KeyT& key) const noexcept;
+	std::shared_ptr<ValueT> getResource(const KeyT& key) const noexcept;
 
 
 private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	std::unordered_map<KeyT, weak_ptr<ValueT>> resource_map;
+	std::unordered_map<KeyT, std::weak_ptr<ValueT>> resource_map;
 };
 
 

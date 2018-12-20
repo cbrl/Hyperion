@@ -73,15 +73,15 @@ private:
 	std::reference_wrapper<ID3D11Device>        device;
 	std::reference_wrapper<ID3D11DeviceContext> device_context;
 
-	unique_ptr<OutputMgr> output_mgr;
-	unique_ptr<RenderStateMgr> render_state_mgr;
+	std::unique_ptr<OutputMgr>      output_mgr;
+	std::unique_ptr<RenderStateMgr> render_state_mgr;
 
 	// Renderers
-	unique_ptr<LightPass>          light_pass;
-	unique_ptr<ForwardPass>        forward_pass;
-	unique_ptr<SkyPass>            sky_pass;
-	unique_ptr<BoundingVolumePass> bounding_volume_pass;
-	unique_ptr<TextPass>           text_pass;
+	std::unique_ptr<LightPass>          light_pass;
+	std::unique_ptr<ForwardPass>        forward_pass;
+	std::unique_ptr<SkyPass>            sky_pass;
+	std::unique_ptr<BoundingVolumePass> bounding_volume_pass;
+	std::unique_ptr<TextPass>           text_pass;
 };
 
 

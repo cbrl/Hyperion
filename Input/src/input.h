@@ -165,8 +165,8 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	unique_ptr<Keyboard> keyboard;
-	unique_ptr<Mouse> mouse;
+	std::unique_ptr<Keyboard> keyboard;
+	std::unique_ptr<Mouse> mouse;
 
 	Keyboard::KeyboardStateTracker keyboard_tracker;
 	Keyboard::State keyboard_state;

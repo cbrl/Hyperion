@@ -19,7 +19,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	EntityMgr(shared_ptr<ComponentMgr> component_mgr)
+	EntityMgr(std::shared_ptr<ComponentMgr> component_mgr)
 		: component_mgr(std::move(component_mgr))
 		, num_expired_entities(0) {
 	}
@@ -93,7 +93,7 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// A pointer to the component manager
-	shared_ptr<ComponentMgr> component_mgr;
+	std::shared_ptr<ComponentMgr> component_mgr;
 
 	// Map of unique resource pools for each type of entity
 	ResourcePool<Entity> entity_pool;

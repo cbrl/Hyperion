@@ -50,13 +50,13 @@ public:
 
 	template<typename ResourceT, typename VertexT>
 	auto getOrCreate(const std::wstring& filename, const ModelConfig<VertexT>& config)
-	    -> std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>>;
+	    -> std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>, std::shared_ptr<ModelBlueprint>>;
 
 	template<typename ResourceT, typename VertexT>
 	auto getOrCreate(const std::wstring& name,
 	                 const ModelOutput& model_data,
 	                 const ModelConfig<VertexT>& config)
-	    -> std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>, shared_ptr<ModelBlueprint>>;
+	    -> std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>, std::shared_ptr<ModelBlueprint>>;
 
 
 	//----------------------------------------------------------------------------------
@@ -65,13 +65,13 @@ public:
 
 	template<typename ResourceT>
 	auto getOrCreate(const std::wstring& filename)
-	    -> std::enable_if_t<std::is_same_v<Texture, ResourceT>, shared_ptr<Texture>>;
+	    -> std::enable_if_t<std::is_same_v<Texture, ResourceT>, std::shared_ptr<Texture>>;
 
 	template<typename ResourceT>
 	auto getOrCreate(const std::wstring& name,
 	                 const D3D11_TEXTURE2D_DESC& desc,
 	                 const D3D11_SUBRESOURCE_DATA& init_data)
-	    -> std::enable_if_t<std::is_same_v<Texture, ResourceT>, shared_ptr<Texture>>;
+	    -> std::enable_if_t<std::is_same_v<Texture, ResourceT>, std::shared_ptr<Texture>>;
 
 
 	//----------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ public:
 
 	template<typename ResourceT>
 	auto getOrCreate(const std::wstring& filename)
-	    -> std::enable_if_t<std::is_same_v<Font, ResourceT>, shared_ptr<Font>>;
+	    -> std::enable_if_t<std::is_same_v<Font, ResourceT>, std::shared_ptr<Font>>;
 
 
 	//----------------------------------------------------------------------------------
@@ -89,29 +89,29 @@ public:
 
 	template<typename ResourceT>
 	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-		-> std::enable_if_t<std::is_same_v<ComputeShader, ResourceT>, shared_ptr<ComputeShader>>;
+	    -> std::enable_if_t<std::is_same_v<ComputeShader, ResourceT>, std::shared_ptr<ComputeShader>>;
 
 	template<typename ResourceT>
 	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-		-> std::enable_if_t<std::is_same_v<DomainShader, ResourceT>, shared_ptr<DomainShader>>;
+	    -> std::enable_if_t<std::is_same_v<DomainShader, ResourceT>, std::shared_ptr<DomainShader>>;
 
 	template<typename ResourceT>
 	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<GeometryShader, ResourceT>, shared_ptr<GeometryShader>>;
+	    -> std::enable_if_t<std::is_same_v<GeometryShader, ResourceT>, std::shared_ptr<GeometryShader>>;
 
 	template<typename ResourceT>
 	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<HullShader, ResourceT>, shared_ptr<HullShader>>;
+	    -> std::enable_if_t<std::is_same_v<HullShader, ResourceT>, std::shared_ptr<HullShader>>;
 
 	template<typename ResourceT>
 	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<PixelShader, ResourceT>, shared_ptr<PixelShader>>;
+	    -> std::enable_if_t<std::is_same_v<PixelShader, ResourceT>, std::shared_ptr<PixelShader>>;
 
 	template<typename ResourceT>
 	auto getOrCreate(const std::wstring& guid,
 	                 const ShaderBytecode& bytecode,
 	                 gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs)
-	    -> std::enable_if_t<std::is_same_v<VertexShader, ResourceT>, shared_ptr<VertexShader>>;
+	    -> std::enable_if_t<std::is_same_v<VertexShader, ResourceT>, std::shared_ptr<VertexShader>>;
 
 
 private:

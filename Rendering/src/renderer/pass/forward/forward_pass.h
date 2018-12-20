@@ -92,7 +92,7 @@ private:
 	ResourceMgr& resource_mgr;
 
 	// Shaders
-	shared_ptr<VertexShader> vertex_shader;
+	std::shared_ptr<VertexShader> vertex_shader;
 
 	// Buffers
 	ConstantBuffer<vec4_f32> color_buffer;

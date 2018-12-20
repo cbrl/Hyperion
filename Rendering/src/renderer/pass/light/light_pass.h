@@ -51,15 +51,15 @@ private:
 	const RenderingConfig& rendering_config;
 
 	// Depth rendering pass
-	unique_ptr<DepthPass> depth_pass;
+	std::unique_ptr<DepthPass> depth_pass;
 
 	// Light info buffer
 	ConstantBuffer<LightBuffer> light_buffer;
 
 	// Light buffers
 	StructuredBuffer<DirectionalLightBuffer> directional_lights;
-	StructuredBuffer<PointLightBuffer> point_lights;
-	StructuredBuffer<SpotLightBuffer> spot_lights;
+	StructuredBuffer<PointLightBuffer>       point_lights;
+	StructuredBuffer<SpotLightBuffer>        spot_lights;
 
 	// Shadowed light buffers
 	StructuredBuffer<DirectionalLightBuffer> shadowed_directional_lights;
@@ -72,7 +72,7 @@ private:
 	std::vector<LightCamera> spot_light_cameras;
 
 	// Shadow maps
-	unique_ptr<ShadowMapBuffer> directional_light_smaps;
-	unique_ptr<ShadowCubeMapBuffer> point_light_smaps;
-	unique_ptr<ShadowMapBuffer> spot_light_smaps;
+	std::unique_ptr<ShadowMapBuffer>     directional_light_smaps;
+	std::unique_ptr<ShadowCubeMapBuffer> point_light_smaps;
+	std::unique_ptr<ShadowMapBuffer>     spot_light_smaps;
 };

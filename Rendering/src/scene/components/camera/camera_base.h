@@ -150,7 +150,7 @@ public:
 		return skybox.get();
 	}
 
-	void setSkybox(shared_ptr<Texture> sky) {
+	void setSkybox(std::shared_ptr<Texture> sky) {
 		skybox = std::move(sky);
 	}
 
@@ -177,7 +177,7 @@ private:
 	Fog fog;
 
 	// The skybox texture
-	shared_ptr<Texture> skybox;
+	std::shared_ptr<Texture> skybox;
 };
 
 

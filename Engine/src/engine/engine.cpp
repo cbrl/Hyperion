@@ -163,7 +163,7 @@ void Engine::init(std::wstring title,
 }
 
 
-void Engine::loadScene(unique_ptr<Scene>&& new_scene) {
+void Engine::loadScene(std::unique_ptr<Scene>&& new_scene) {
 	
 	if (scene) {
 		const auto name = scene->getName();

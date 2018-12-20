@@ -2,10 +2,10 @@
 namespace BlueprintFactory {
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
-	                                      const ModelConfig<VertexT>& config,
-	                                      f32 size,
-	                                      bool invertn) {
+	std::shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
+	                                           const ModelConfig<VertexT>& config,
+	                                           f32 size,
+	                                           bool invertn) {
 
 		// Model name
 		std::string name = "Cube " + std::to_string(size) + (config.flip_winding ? " RH" : "") + (invertn ? " InvertN" : "");
@@ -49,10 +49,10 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
-	                                     const ModelConfig<VertexT>& config,
-	                                     const vec3_f32& size,
-	                                     bool invertn) {
+	std::shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
+	                                          const ModelConfig<VertexT>& config,
+	                                          const vec3_f32& size,
+	                                          bool invertn) {
 
 		// Model name
 		std::string name = "Box " + std::to_string(size.x) + std::to_string(size.y) + std::to_string(size.z) + (config.flip_winding ? " RH" : "") + (
@@ -97,11 +97,11 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
-	                                        const ModelConfig<VertexT>& config,
-	                                        f32 diameter,
-	                                        size_t tessellation,
-	                                        bool invertn) {
+	std::shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
+	                                             const ModelConfig<VertexT>& config,
+	                                             f32 diameter,
+	                                             size_t tessellation,
+	                                             bool invertn) {
 
 		// Model name
 		std::string name = "Sphere " + std::to_string(diameter) + std::to_string(tessellation) + (config.flip_winding ? " RH" : "") + (
@@ -145,10 +145,10 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
-	                                           const ModelConfig<VertexT>& config,
-	                                           f32 diameter,
-	                                           size_t tessellation) {
+	std::shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
+	                                                const ModelConfig<VertexT>& config,
+	                                                f32 diameter,
+	                                                size_t tessellation) {
 
 		// Model name
 		std::string name = "GeoSphere " + std::to_string(diameter) + std::to_string(tessellation) + (config.flip_winding ? " RH" : "");
@@ -191,11 +191,11 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
-	                                          const ModelConfig<VertexT>& config,
-	                                          f32 diameter,
-	                                          f32 height,
-	                                          size_t tessellation) {
+    std::shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
+	                                               const ModelConfig<VertexT>& config,
+	                                               f32 diameter,
+	                                               f32 height,
+	                                               size_t tessellation) {
 
 		// Model name
 		std::string name = "Cylinder " + std::to_string(height) + std::to_string(diameter) + std::to_string(tessellation) + (
@@ -239,11 +239,11 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
-	                                      const ModelConfig<VertexT>& config,
-	                                      f32 diameter,
-	                                      f32 height,
-	                                      size_t tessellation) {
+    std::shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
+	                                           const ModelConfig<VertexT>& config,
+	                                           f32 diameter,
+	                                           f32 height,
+	                                           size_t tessellation) {
 
 		// Model name
 		std::string name = "Cone " + std::to_string(diameter) + std::to_string(height) + std::to_string(tessellation) + (
@@ -287,11 +287,11 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
-	                                       const ModelConfig<VertexT>& config,
-	                                       f32 diameter,
-	                                       f32 thickness,
-	                                       size_t tessellation) {
+	std::shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
+	                                            const ModelConfig<VertexT>& config,
+	                                            f32 diameter,
+	                                            f32 thickness,
+	                                            size_t tessellation) {
 
 		// Model name
 		std::string name = "Torus " + std::to_string(diameter) + std::to_string(thickness) + std::to_string(tessellation) + (
@@ -335,9 +335,9 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
-	                                             const ModelConfig<VertexT>& config,
-	                                             f32 size) {
+	std::shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
+	                                                  const ModelConfig<VertexT>& config,
+	                                                  f32 size) {
 
 		// Model name
 		std::string name = "Tetrahedron " + std::to_string(size) + (config.flip_winding ? " RH" : "");
@@ -380,9 +380,9 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
-	                                            const ModelConfig<VertexT>& config,
-	                                            f32 size) {
+	std::shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
+	                                                 const ModelConfig<VertexT>& config,
+	                                                 f32 size) {
 
 		// Model name
 		std::string name = "Octahedron " + std::to_string(size) + (config.flip_winding ? " RH" : "");
@@ -425,9 +425,9 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
-	                                              const ModelConfig<VertexT>& config,
-	                                              f32 size) {
+	std::shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
+	                                                   const ModelConfig<VertexT>& config,
+	                                                   f32 size) {
 
 		// Model name
 		std::string name = "Dodecahedron " + std::to_string(size) + (config.flip_winding ? " RH" : "");
@@ -470,9 +470,9 @@ namespace BlueprintFactory {
 
 
 	template<typename VertexT>
-	shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
-	                                             const ModelConfig<VertexT>& config,
-	                                             f32 size) {
+	std::shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
+	                                                  const ModelConfig<VertexT>& config,
+	                                                  f32 size) {
 
 		// Model name
 		std::string name = "Icosahedron " + std::to_string(size) + (config.flip_winding ? " RH" : "");

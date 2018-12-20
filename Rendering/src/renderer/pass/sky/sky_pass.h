@@ -28,6 +28,6 @@ private:
 	RenderStateMgr&      render_state_mgr;
 
 	// Shaders
-	shared_ptr<VertexShader> vertex_shader;
-	shared_ptr<PixelShader>  pixel_shader;
+	std::shared_ptr<VertexShader> vertex_shader;
+	std::shared_ptr<PixelShader>  pixel_shader;
 };

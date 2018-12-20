@@ -12,7 +12,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Text(shared_ptr<Font> font)
+	Text(std::shared_ptr<Font> font)
 		: font(std::move(font))
 		, text(L"Default Text")
 		, color(Colors::White) {
@@ -86,7 +86,7 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	shared_ptr<Font> font;
+	std::shared_ptr<Font> font;
 
 	std::wstring text;
 	XMVECTORF32  color;

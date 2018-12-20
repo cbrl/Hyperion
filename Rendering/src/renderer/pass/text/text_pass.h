@@ -15,5 +15,5 @@ public:
 
 
 private:
-	unique_ptr<SpriteBatch> sprite_batch;
+	std::unique_ptr<SpriteBatch> sprite_batch;
 };

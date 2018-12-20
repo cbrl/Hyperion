@@ -137,5 +137,5 @@ public:
 
 
 private:
-	std::unordered_map<std::type_index, unique_ptr<IResourcePool>> pools;
+	std::unordered_map<std::type_index, std::unique_ptr<IResourcePool>> pools;
 };

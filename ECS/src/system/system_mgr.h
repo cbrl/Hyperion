@@ -64,5 +64,5 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// The systems, mapped to their type_index
-	std::unordered_map<std::type_index, unique_ptr<ISystem>> systems;
+	std::unordered_map<std::type_index, std::unique_ptr<ISystem>> systems;
 };

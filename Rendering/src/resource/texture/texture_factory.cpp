@@ -4,7 +4,7 @@
 
 namespace TextureFactory {
 
-shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
+std::shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
 
 	u32 tex_data[128][128];
 
@@ -54,7 +54,7 @@ shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
 }
 
 
-shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const vec4_f32& color) {
+std::shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const vec4_f32& color) {
 
 	u32 color_u32 = Float4ColorToU32(color);
 
