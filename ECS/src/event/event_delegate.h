@@ -8,8 +8,27 @@ class IEvent;
 
 class IEventDelegate {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	IEventDelegate() noexcept = default;
+	IEventDelegate(const IEventDelegate&) noexcept = default;
+	IEventDelegate(IEventDelegate&&) noexcept = default;
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 	virtual ~IEventDelegate() = default;
 
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	IEventDelegate& operator=(const IEventDelegate&) noexcept = default;
+	IEventDelegate& operator=(IEventDelegate&&) noexcept = default;
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 	virtual void invoke(const IEvent* e) = 0;
 
 	virtual size_t getDelegateID() const = 0;
@@ -20,16 +39,49 @@ public:
 };
 
 
+
+//----------------------------------------------------------------------------------
+// EventDelegate
+//----------------------------------------------------------------------------------
+//
+// Holds a pointer to a member function in class ClassT which listens for events
+// of type EventT. When an applicable event is sent, the function will be invoked
+// with a pointer to the event.
+//
+//----------------------------------------------------------------------------------
 template<typename ClassT, typename EventT>
 class EventDelegate final : public IEventDelegate {
 	using callback = void (ClassT::*)(const EventT*);
 
 public:
-
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 	EventDelegate(ClassT* receiver, callback function)
 		: receiver(receiver)
 	    , function(function) {
 	}
+
+	EventDelegate(const EventDelegate&) noexcept = default;
+	EventDelegate(EventDelegate&&) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~EventDelegate() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	EventDelegate& operator=(const EventDelegate&) noexcept = default;
+	EventDelegate& operator=(EventDelegate&&) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	void invoke(const IEvent* e) override final {
 		std::invoke(function, receiver, reinterpret_cast<const EventT*>(e));
@@ -53,7 +105,12 @@ public:
 
 
 private:
-	ClassT* receiver;
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
+	ClassT*  receiver;
 	callback function;
 
 	static const size_t delegate_index;

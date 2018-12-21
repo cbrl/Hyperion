@@ -1,6 +1,6 @@
 #pragma once
 
-#include "event/event_handler.h"
+#include "event/event_mgr.h"
 #include "event/event_delegate.h"
 
 #include "string/string.h"
@@ -44,6 +44,14 @@ public:
 
 
 
+//----------------------------------------------------------------------------------
+// EvenDispatcher
+//----------------------------------------------------------------------------------
+//
+// Holds EventDelegates which listen for events of type EventT, and dispatches
+// events to them.
+//
+//----------------------------------------------------------------------------------
 template<class EventT>
 class EventDispatcher final : public IEventDispatcher {
 public:

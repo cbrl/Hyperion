@@ -9,7 +9,7 @@ SystemT* ECS::addSystem(ArgsT&&... args) {
 
 template <typename EventT, typename... ArgsT>
 void ECS::sendEvent(ArgsT&&... args) {
-	event_handler->send<EventT>(std::forward<ArgsT>(args)...);
+	event_mgr->send<EventT>(std::forward<ArgsT>(args)...);
 }
 
 

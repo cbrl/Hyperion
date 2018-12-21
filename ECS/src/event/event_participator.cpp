@@ -1,14 +1,14 @@
 #include "event_participator.h"
-#include "event_handler.h"
+#include "event_mgr.h"
 
 
 //----------------------------------------------------------------------------------
 // EventParticipator
 //----------------------------------------------------------------------------------
 
-EventMgr* EventParticipator::getEventHandler() const noexcept {
-	assert(event_handler != nullptr && "EventParticipator::event_handler == nullptr");
-	return event_handler;
+EventMgr* EventParticipator::getEventMgr() const noexcept {
+	assert(event_mgr != nullptr && "EventParticipator::event_handler == nullptr");
+	return event_mgr;
 }
 
 
@@ -19,22 +19,21 @@ EventMgr* EventParticipator::getEventHandler() const noexcept {
 //----------------------------------------------------------------------------------
 
 EventListener::~EventListener() {
-	// unsubcribe from all subscribed events
 	unregisterAllEventCallbacks();
 }
 
 
 void EventListener::unregisterAllEventCallbacks() {
 
-	// unsubcribe from all subscribed events
+	// Unsubcribe from all events
 	for (auto* callback : registered_callbacks) {
-		getEventHandler()->removeEventCallback(callback);
+		getEventMgr()->removeEventCallback(callback);
 	}
 
 	registered_callbacks.clear();
 }
 
 
-void EventParticipator::setEventHandler(gsl::not_null<EventMgr*> handler) noexcept {
-	event_handler = handler;
+void EventParticipator::setEventMgr(gsl::not_null<EventMgr*> handler) noexcept {
+	event_mgr = handler;
 }

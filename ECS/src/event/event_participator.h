@@ -50,14 +50,14 @@ public:
 
 protected:
 
-	EventMgr* getEventHandler() const noexcept;
+	EventMgr* getEventMgr() const noexcept;
 
 private:
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	EventMgr* event_handler;
+	EventMgr* event_mgr;
 };
 
 
@@ -118,7 +118,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EventListener() noexcept = default;
+	EventListener() = default;
 	EventListener(const EventListener&) = delete;
 	EventListener(EventListener&&) noexcept = default;
 

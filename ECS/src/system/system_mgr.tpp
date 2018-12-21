@@ -5,7 +5,7 @@ SystemT* SystemMgr::addSystem(ArgsT&&... args) {
 	if (it != systems.end() && it->second != nullptr)
 		return static_cast<SystemT*>(it->second.get());
 
-	auto  pair   = systems.try_emplace(SystemT::index, new SystemT(std::forward<ArgsT>(args)...));
+	auto  pair   = systems.try_emplace(SystemT::index, std::make_unique<SystemT>(std::forward<ArgsT>(args)...));
 	auto* system = static_cast<SystemT*>(pair.first->second.get());
 
 	if constexpr (std::is_base_of_v<EventParticipator, SystemT>) {
