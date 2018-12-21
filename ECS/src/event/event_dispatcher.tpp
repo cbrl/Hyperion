@@ -12,9 +12,9 @@ void EventDispatcher<EventT>::dispatch(IEvent* event) {
 
 	{
 		// remove pending delegates
-		if (pending_remove_delegates.empty() == false) {
-			for (auto iter : pending_remove_delegates) {
-				event_callbacks.erase(iter);
+		if (!pending_remove_delegates.empty()) {
+			for (auto it : pending_remove_delegates) {
+				event_callbacks.erase(it);
 			}
 			pending_remove_delegates.clear();
 		}
