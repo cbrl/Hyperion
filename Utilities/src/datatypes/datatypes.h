@@ -24,6 +24,7 @@
 #include "container_types.h"
 #include "vector_types.h"
 #include "string/string.h"
+#include <typeinfo>
 #include <typeindex>
 #include <type_traits>
 

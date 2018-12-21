@@ -11,6 +11,7 @@ public:
 
 	void registerCallbacks() override final;
 	void onTransformUpdate(const TransformEvent* event);
+	void onParentChanged(const ParentChanged* event);
 
 private:
 	static void updateWorld(Transform& transform);

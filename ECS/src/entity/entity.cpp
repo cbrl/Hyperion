@@ -50,6 +50,7 @@ void Entity::setParent(EntityPtr parent) noexcept {
 		if (parent.valid()) {
 			parent->addChild(this_ptr);
 		}
+		sendParentChangedEvent();
 	}
 }
 
@@ -127,4 +128,9 @@ void Entity::setPointer(EntityPtr ptr) noexcept {
 	       + ", c:"
 	       + ToStr(ptr.getHandle().counter).value_or("-1"s)
 	       + ")";
+}
+
+
+void Entity::sendParentChangedEvent() {
+	sendEvent<ParentChanged>(this_ptr);
 }

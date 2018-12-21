@@ -4,6 +4,7 @@
 EntityPtr EntityMgr::createEntity() {
 
 	auto& entity = entity_pool.emplace_back();
+	entity.setEventMgr(gsl::make_not_null(&event_mgr));
 
 	// Create a handle
 	const handle64 handle = handle_map.createHandle(&entity);
@@ -18,15 +19,7 @@ EntityPtr EntityMgr::createEntity() {
 
 
 void EntityMgr::destroyEntity(handle64 handle) {
-
-	if (expired_entities.size() > num_expired_entities) {
-		expired_entities[num_expired_entities] = handle;
-		++num_expired_entities;
-	}
-	else {
-		expired_entities.push_back(handle);
-		++num_expired_entities;
-	}
+	expired_entities.push_back(handle);
 }
 
 
@@ -39,7 +32,6 @@ void EntityMgr::removeExpiredEntities() {
 	}
 
 	expired_entities.clear();
-	num_expired_entities = 0;
 }
 
 

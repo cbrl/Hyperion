@@ -19,9 +19,9 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	EntityMgr(std::shared_ptr<ComponentMgr> component_mgr)
+	EntityMgr(std::shared_ptr<ComponentMgr> component_mgr, EventMgr& event_mgr)
 		: component_mgr(std::move(component_mgr))
-		, num_expired_entities(0) {
+	    , event_mgr(event_mgr) {
 	}
 
 	EntityMgr(const EntityMgr& manager) = delete;
@@ -95,6 +95,9 @@ private:
 	// A pointer to the component manager
 	std::shared_ptr<ComponentMgr> component_mgr;
 
+	// A reference to the event manager. Passed to the entity (EventSender).
+	EventMgr& event_mgr;
+
 	// Map of unique resource pools for each type of entity
 	ResourcePool<Entity> entity_pool;
 
@@ -103,5 +106,4 @@ private:
 
 	// Container of entities that need to be deleted
 	std::vector<handle64> expired_entities;
-	u32 num_expired_entities;
 };

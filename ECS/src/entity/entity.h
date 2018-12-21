@@ -1,9 +1,17 @@
 #pragma once
 
 #include "entity/entity_ptr.h"
+#include "event/event.h"
+#include "event/event_participator.h"
 
 class IComponent;
 class ComponentMgr;
+
+
+struct ParentChanged : public Event<ParentChanged> {
+	ParentChanged(EntityPtr entity) : entity(std::move(entity)) {}
+	EntityPtr entity;
+};
 
 
 //----------------------------------------------------------------------------------
@@ -16,7 +24,7 @@ class ComponentMgr;
 //
 //----------------------------------------------------------------------------------
 
-class Entity {
+class Entity : public EventSender {
 	friend class EntityMgr;
 
 public:
@@ -24,8 +32,8 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	Entity() = default;
-	Entity(const Entity& entity) = delete;
-	Entity(Entity&& entity) = default;
+	Entity(const Entity&) = delete;
+	Entity(Entity&&) noexcept = default;
 
 
 public:
@@ -38,8 +46,8 @@ public:
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	Entity& operator=(const Entity& entity) = delete;
-	Entity& operator=(Entity&& entity) noexcept = default;
+	Entity& operator=(const Entity&) = delete;
+	Entity& operator=(Entity&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -170,6 +178,8 @@ private:
 
 	[[nodiscard]]
 	bool hasChild(EntityPtr child) const;
+
+	void sendParentChangedEvent();
 
 
 private:

@@ -11,6 +11,7 @@ XMMATRIX XM_CALLCONV CalculateWorld(Transform& transform) {
 
 void TransformSystem::registerCallbacks() {
 	registerEventCallback(&TransformSystem::onTransformUpdate);
+	registerEventCallback(&TransformSystem::onParentChanged);
 }
 
 
@@ -54,4 +55,11 @@ void TransformSystem::onTransformUpdate(const TransformEvent* event) {
 			transform->sendUpdateEvent();
 		}
 	});
+}
+
+
+void TransformSystem::onParentChanged(const ParentChanged* event) {
+	if (auto* transform = event->entity->getComponent<Transform>()) {
+		transform->sendUpdateEvent();
+	}
 }

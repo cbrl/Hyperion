@@ -5,7 +5,7 @@ ECS::ECS() {
 	event_mgr     = std::make_unique<EventMgr>();
 	system_mgr    = std::make_unique<SystemMgr>(*event_mgr);
 	component_mgr = std::make_shared<ComponentMgr>(*event_mgr);
-	entity_mgr    = std::make_unique<EntityMgr>(component_mgr);
+	entity_mgr    = std::make_unique<EntityMgr>(component_mgr, *event_mgr);
 }
 
 

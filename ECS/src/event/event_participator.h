@@ -14,8 +14,8 @@ class EventMgr;
 // The EventSender and EventListener classes inherit from this class. It contains
 // a pointer to the event manager, which should never be null. The pointer is used
 // instead of a reference so that it can be set after construction in the
-// component/system manager, eliminating the need to modify the constructor of
-// every component or system.
+// entity/component/system manager, eliminating the need to modify the constructor
+// of every component or system.
 //
 //----------------------------------------------------------------------------------
 class EventParticipator {
@@ -66,7 +66,8 @@ private:
 // EventSender
 //----------------------------------------------------------------------------------
 //
-// Components/Systems that send events will inherit from this class
+// Components/Systems that send events will inherit from this class. The Entity
+// also inherits from this class.
 //
 //----------------------------------------------------------------------------------
 class EventSender : public virtual EventParticipator {
