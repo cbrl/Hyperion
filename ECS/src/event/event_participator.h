@@ -50,6 +50,7 @@ public:
 
 protected:
 
+	[[nodiscard]]
 	EventMgr* getEventMgr() const noexcept;
 
 private:

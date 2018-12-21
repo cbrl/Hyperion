@@ -26,16 +26,18 @@ public:
 	IEventDelegate& operator=(const IEventDelegate&) noexcept = default;
 	IEventDelegate& operator=(IEventDelegate&&) noexcept = default;
 
+	virtual bool operator==(const IEventDelegate& other) const = 0;
+
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	virtual void invoke(const IEvent* e) = 0;
 
+	[[nodiscard]]
 	virtual size_t getDelegateID() const = 0;
 
+	[[nodiscard]]
 	virtual std::type_index getEventID() const = 0;
-
-	virtual bool operator==(const IEventDelegate& other) const = 0;
 };
 
 
@@ -87,14 +89,17 @@ public:
 		std::invoke(function, receiver, reinterpret_cast<const EventT*>(e));
 	}
 
+	[[nodiscard]]
 	size_t getDelegateID() const override final {
 		return delegate_index;
 	}
 
+	[[nodiscard]]
 	std::type_index getEventID() const override final {
 		return EventT::static_index;
 	}
 
+	[[nodiscard]]
 	bool operator==(const IEventDelegate& other) const override final {
 		if (this->getDelegateID() != other.getDelegateID())
 			return false;

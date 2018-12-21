@@ -39,6 +39,7 @@ public:
 
 	virtual void removeEventCallback(IEventDelegate* eventDelegate) = 0;
 
+	[[nodiscard]]
 	virtual size_t getEventCallbackCount() const = 0;
 };
 
@@ -91,6 +92,7 @@ public:
 	void removeEventCallback(IEventDelegate* delegate) override final;
 
 	// Get the number of callback delegates in this dispatcher
+	[[nodiscard]]
 	size_t getEventCallbackCount() const override final;
 
 	
