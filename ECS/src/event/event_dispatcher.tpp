@@ -1,4 +1,12 @@
 template<typename T>
+EventDispatcher<T>::~EventDispatcher() {
+	//m_PendingAddDelegates.clear();
+	pending_remove_delegates.clear();
+	event_callbacks.clear();
+}
+
+
+template<typename T>
 void EventDispatcher<T>::dispatch(IEvent* event) {
 	locked = true;
 
@@ -53,6 +61,8 @@ void EventDispatcher<T>::removeEventCallback(IEventDelegate* delegate) {
 	}
 }
 
+
+template<typename T>
 size_t EventDispatcher<T>::getEventCallbackCount() const {
 	return event_callbacks.size();
 }

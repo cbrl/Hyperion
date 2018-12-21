@@ -9,8 +9,30 @@
 
 class IEventDispatcher {
 public:
-	virtual ~IEventDispatcher() {}
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	IEventDispatcher() noexcept = default;
+	IEventDispatcher(const IEventDispatcher&) = delete;
+	IEventDispatcher(IEventDispatcher&&) noexcept = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Destructors
+	//----------------------------------------------------------------------------------
+	virtual ~IEventDispatcher() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	IEventDispatcher& operator=(const IEventDispatcher&) = delete;
+	IEventDispatcher& operator=(IEventDispatcher&&) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 	virtual void dispatch(IEvent* event) = 0;
 
 	virtual void addEventCallback(IEventDelegate* const eventDelegate) = 0;
@@ -19,6 +41,7 @@ public:
 
 	virtual size_t getEventCallbackCount() const = 0;
 };
+
 
 
 template<class T>
@@ -30,24 +53,20 @@ public:
 	//----------------------------------------------------------------------------------
 	EventDispatcher() : locked(false) {}
 	EventDispatcher(const EventDispatcher&) = delete;
-	EventDispatcher(EventDispatcher&&) = default;
+	EventDispatcher(EventDispatcher&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~EventDispatcher() {
-		//m_PendingAddDelegates.clear();
-		pending_remove_delegates.clear();
-		event_callbacks.clear();
-	}
+	~EventDispatcher();
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
 	EventDispatcher& operator=(const EventDispatcher&) = delete;
-	EventDispatcher& operator=(EventDispatcher&&) = default;
+	EventDispatcher& operator=(EventDispatcher&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
