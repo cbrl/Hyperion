@@ -171,6 +171,7 @@
     <None Include="src\component\component_mgr.tpp" />
     <None Include="src\ecs.tpp" />
     <None Include="src\entity\entity.tpp" />
+    <None Include="src\event\event_dispatcher.tpp" />
     <None Include="src\event\event_handler.tpp" />
     <None Include="src\event\event_participator.tpp" />
     <None Include="src\system\system_mgr.tpp" />

@@ -114,5 +114,8 @@
     <None Include="src\event\event_handler.tpp">
       <Filter>Header Files\event</Filter>
     </None>
+    <None Include="src\event\event_dispatcher.tpp">
+      <Filter>Header Files\event</Filter>
+    </None>
   </ItemGroup>
 </Project>

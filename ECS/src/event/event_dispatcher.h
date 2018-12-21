@@ -55,63 +55,13 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// send event to all listeners
-	void dispatch(IEvent* event) override final {
-		locked = true;
+	void dispatch(IEvent* event) override final;
 
-		{
-			// remove pending delegates
-			if (pending_remove_delegates.empty() == false) {
-				for (auto iter : pending_remove_delegates) {
-					event_callbacks.erase(iter);
-				}
-				pending_remove_delegates.clear();
-			}
+	void addEventCallback(IEventDelegate* delegate) override final;
 
-			for (auto& callback : event_callbacks) {
-				assert(callback != nullptr && "Invalid event callback");
-				callback->invoke(event);
-			}
-		}
+	void removeEventCallback(IEventDelegate* delegate) override final;
 
-		locked = false;
-	}
-
-	void addEventCallback(IEventDelegate* const event_delegate) override final {
-		auto result = std::find_if(pending_remove_delegates.begin(), pending_remove_delegates.end(),
-			[&](typename decltype(event_callbacks)::iterator& it) {
-				return (*it)->operator==(*event_delegate);
-			}
-		);
-
-		// remove the delegate from the pending remove list if applicable
-		if (result != pending_remove_delegates.end()) {
-			pending_remove_delegates.erase(result);
-		}
-		else {
-			event_callbacks.emplace_back(event_delegate);
-		}
-	}
-
-	void removeEventCallback(IEventDelegate* delegate) override final { 
-
-		auto result = std::find_if(event_callbacks.begin(), event_callbacks.end(),
-			[&](std::unique_ptr<IEventDelegate>& other) {
-				return other->operator==(*delegate);
-			}
-		);
-
-		if (!locked && result != event_callbacks.end()) {
-			event_callbacks.erase(result);
-		}
-		else {
-			assert(result != event_callbacks.end() && "Invalid event callback specified for removal");
-			pending_remove_delegates.push_back(result);
-		}
-	}
-
-	size_t getEventCallbackCount() const override final {
-		return event_callbacks.size();
-	}
+	size_t getEventCallbackCount() const override final;
 
 	
 private:
@@ -127,3 +77,5 @@ private:
 	//std::list<IEventDelegate*> pending_add_delegates;
 	std::list<typename decltype(event_callbacks)::iterator> pending_remove_delegates; //using iterators since std::list::iterator isn't invalidated
 };
+
+#include "event_dispatcher.tpp"
