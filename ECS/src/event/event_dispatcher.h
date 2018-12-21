@@ -17,7 +17,7 @@ public:
 
 	virtual void removeEventCallback(IEventDelegate* eventDelegate) = 0;
 
-	virtual inline size_t getEventCallbackCount() const = 0;
+	virtual size_t getEventCallbackCount() const = 0;
 };
 
 
@@ -28,11 +28,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	// never use!
-	EventDispatcher()
-		: locked(false) {
-	}
-
+	EventDispatcher() : locked(false) {}
 	EventDispatcher(const EventDispatcher&) = delete;
 	EventDispatcher(EventDispatcher&&) = default;
 
@@ -40,7 +36,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	virtual ~EventDispatcher() {
+	~EventDispatcher() {
 		//m_PendingAddDelegates.clear();
 		pending_remove_delegates.clear();
 		event_callbacks.clear();
@@ -59,7 +55,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// send event to all listeners
-	inline void dispatch(IEvent* event) override final {
+	void dispatch(IEvent* event) override final {
 		locked = true;
 
 		{
@@ -80,15 +76,14 @@ public:
 		locked = false;
 	}
 
-	virtual void addEventCallback(IEventDelegate* const event_delegate) override final {
-		// if delegate wasn't deleted since last update, that is, delegate is still in pending list,
-		// remove it from pending list
+	void addEventCallback(IEventDelegate* const event_delegate) override final {
 		auto result = std::find_if(pending_remove_delegates.begin(), pending_remove_delegates.end(),
 			[&](typename decltype(event_callbacks)::iterator& it) {
 				return (*it)->operator==(*event_delegate);
 			}
 		);
 
+		// remove the delegate from the pending remove list if applicable
 		if (result != pending_remove_delegates.end()) {
 			pending_remove_delegates.erase(result);
 		}
@@ -97,11 +92,11 @@ public:
 		}
 	}
 
-	virtual void removeEventCallback(IEventDelegate* event_delegate) override final { 
+	void removeEventCallback(IEventDelegate* delegate) override final { 
 
 		auto result = std::find_if(event_callbacks.begin(), event_callbacks.end(),
 			[&](std::unique_ptr<IEventDelegate>& other) {
-				return other->operator==(*event_delegate);
+				return other->operator==(*delegate);
 			}
 		);
 
@@ -114,7 +109,7 @@ public:
 		}
 	}
 
-	virtual inline size_t getEventCallbackCount() const override final {
+	size_t getEventCallbackCount() const override final {
 		return event_callbacks.size();
 	}
 

@@ -55,10 +55,10 @@ private:
 
 	// Add an event callback to the relevant dispatcher
 	template<class EventT>
-	void addEventCallback(IEventDelegate* eventDelegate);
+	void addEventCallback(IEventDelegate* delegate);
 
 	// Remove an event callback
-	void removeEventCallback(IEventDelegate* eventDelegate);
+	void removeEventCallback(IEventDelegate* delegate);
 
 
 private:

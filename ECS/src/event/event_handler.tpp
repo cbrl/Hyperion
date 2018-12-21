@@ -17,15 +17,15 @@ void EventHandler::send(ArgsT&&... args) {
 
 
 template <class EventT>
-void EventHandler::addEventCallback(IEventDelegate* eventDelegate) {
+void EventHandler::addEventCallback(IEventDelegate* delegate) {
 	auto index = EventT::static_index;
 
 	auto it = event_dispatchers.find(index);
 	if (it == event_dispatchers.end()) {
 		auto pair = event_dispatchers.try_emplace(index, std::make_unique<EventDispatcher<EventT>>());
-		pair.first->second->addEventCallback(eventDelegate);
+		pair.first->second->addEventCallback(delegate);
 	}
 	else {
-		event_dispatchers[index]->addEventCallback(eventDelegate);
+		event_dispatchers[index]->addEventCallback(delegate);
 	}
 }

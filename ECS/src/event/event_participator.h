@@ -20,12 +20,43 @@ class EventHandler;
 //----------------------------------------------------------------------------------
 class EventParticipator {
 public:
+
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	EventParticipator() noexcept = default;
+	EventParticipator(const EventParticipator&) noexcept = default;
+	EventParticipator(EventParticipator&&) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	virtual ~EventParticipator() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	EventParticipator& operator=(const EventParticipator&) noexcept = default;
+	EventParticipator& operator=(EventParticipator&&) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+
 	void setEventHandler(gsl::not_null<EventHandler*> handler) noexcept;
 
 protected:
+
 	EventHandler* getEventHandler() const noexcept;
 
 private:
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
 	EventHandler* event_handler;
 };
 
@@ -39,7 +70,33 @@ private:
 //
 //----------------------------------------------------------------------------------
 class EventSender : public virtual EventParticipator {
+public:
+
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	EventSender() noexcept = default;
+	EventSender(const EventSender&) noexcept = default;
+	EventSender(EventSender&&) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	virtual ~EventSender() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	EventSender& operator=(const EventSender&) noexcept = default;
+	EventSender& operator=(EventSender&&) noexcept = default;
+
 protected:
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// Queue an event to be dispatched to all listeners
 	template<typename EventT, typename... ArgsT>
@@ -61,9 +118,9 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EventListener() = default;
+	EventListener() noexcept = default;
 	EventListener(const EventListener&) = delete;
-	EventListener(EventListener&&) = default;
+	EventListener(EventListener&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -76,7 +133,7 @@ public:
 	// Operators
 	//----------------------------------------------------------------------------------
 	EventListener& operator=(const EventListener&) = delete;
-	EventListener& operator=(EventListener&&) = default;
+	EventListener& operator=(EventListener&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -99,7 +156,6 @@ protected:
 
 	// Unregister all callback functions
 	void unregisterAllEventCallbacks();
-
 
 private:
 
