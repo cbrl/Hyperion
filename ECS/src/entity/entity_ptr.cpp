@@ -15,6 +15,7 @@ Entity& EntityPtr::operator*() const {
 }
 
 Entity* EntityPtr::get() const {
+	if (!valid()) return nullptr;
 	return mgr->getEntity(handle);
 }
 

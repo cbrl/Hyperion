@@ -4,6 +4,9 @@
 #include "component/component.h"
 
 
+class EventHandler;
+
+
 //----------------------------------------------------------------------------------
 // Component Manager
 //----------------------------------------------------------------------------------
@@ -18,7 +21,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	ComponentMgr() = default;
+	ComponentMgr(EventHandler& handler) : event_handler(handler) {}
 	ComponentMgr(const ComponentMgr& manager) = delete;
 	ComponentMgr(ComponentMgr&& manager) = default;
 
@@ -44,15 +47,7 @@ public:
 
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
-	ComponentT* createComponent(ArgsT&&... args) {
-		static_assert(std::is_base_of_v<IComponent, ComponentT>,
-			"Calling ComponentMgr::CreateComponent() with non-component type.");
-
-		auto* pool = component_pools.getOrCreatePool<ComponentT>();
-		auto& component = pool->emplace_back(std::forward<ArgsT>(args)...);
-
-		return &component;
-	}
+	ComponentT* createComponent(ArgsT&&... args);
 
 
 	void destroyComponent(IComponent* component) {
@@ -63,16 +58,12 @@ public:
 
 	// Get the number of the specified component
 	template<typename ComponentT>
-	size_t countOf() {
-		return component_pools.poolExists<ComponentT>() ? component_pools.getPool<ComponentT>()->GetCount() : 0;
-	}
+	size_t countOf();
 
 
 	// Check if the component manager has created a component of this type
 	template<typename ComponentT>
-	bool knowsComponent() const {
-		return component_pools.poolExists<ComponentT>();
-	}
+	bool knowsComponent() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -81,14 +72,7 @@ public:
 
 	// Apply an action to each component
 	template<typename ComponentT, typename ActionT>
-	void forEach(ActionT&& act) {
-		using pool_t = ResourcePool<ComponentT>;
-		auto* pool = static_cast<pool_t*>(component_pools.getPool<ComponentT>());
-		if (!pool) return;
-		for (auto& component : *pool) {
-			act(component);
-		}
-	}
+	void forEach(ActionT&& act);
 
 
 private:
@@ -98,4 +82,9 @@ private:
 
 	// Map of unique resource pools for each type of component
 	ResourcePoolManager component_pools;
+
+	// A reference to the event handler. Passed to systems that inherit from EventListener.
+	EventHandler& event_handler;
 };
+
+#include "component_mgr.tpp"

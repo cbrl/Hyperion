@@ -2,9 +2,10 @@
 
 
 ECS::ECS() {
-	component_mgr = std::make_unique<ComponentMgr>();
+	event_handler = std::make_unique<EventHandler>();
+	system_mgr    = std::make_unique<SystemMgr>(*event_handler);
+	component_mgr = std::make_shared<ComponentMgr>(*event_handler);
 	entity_mgr    = std::make_unique<EntityMgr>(component_mgr);
-	system_mgr    = std::make_unique<SystemMgr>();
 }
 
 
@@ -26,5 +27,6 @@ void ECS::destroyEntity(handle64 entity) {
 
 void ECS::update(Engine& engine) {
 	system_mgr->update(engine);
+	event_handler->dispatchEvents();
 	entity_mgr->removeExpiredEntities();
 }

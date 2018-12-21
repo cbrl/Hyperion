@@ -68,7 +68,7 @@
     <ClInclude Include="src\event\event_handler.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
-    <ClInclude Include="src\event\event_listener.h">
+    <ClInclude Include="src\event\event_participator.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
   </ItemGroup>
@@ -88,6 +88,12 @@
     <ClCompile Include="src\entity\entity_ptr.cpp">
       <Filter>Source Files\entity</Filter>
     </ClCompile>
+    <ClCompile Include="src\event\event_participator.cpp">
+      <Filter>Source Files\event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\event\event_handler.cpp">
+      <Filter>Source Files\event</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\ecs.tpp">
@@ -95,6 +101,18 @@
     </None>
     <None Include="src\entity\entity.tpp">
       <Filter>Header Files\entity</Filter>
+    </None>
+    <None Include="src\system\system_mgr.tpp">
+      <Filter>Header Files\system</Filter>
+    </None>
+    <None Include="src\component\component_mgr.tpp">
+      <Filter>Header Files\component</Filter>
+    </None>
+    <None Include="src\event\event_participator.tpp">
+      <Filter>Header Files\event</Filter>
+    </None>
+    <None Include="src\event\event_handler.tpp">
+      <Filter>Header Files\event</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -7,6 +7,12 @@ SystemT* ECS::addSystem(ArgsT&&... args) {
 }
 
 
+template <typename EventT, typename... ArgsT>
+void ECS::sendEvent(ArgsT&&... args) {
+	event_handler->send<EventT>(std::forward<ArgsT>(args)...);
+}
+
+
 template<typename T>
 size_t ECS::countOf() const {
 	if constexpr (std::is_same_v<Entity, T>) {
@@ -23,12 +29,12 @@ size_t ECS::countOf() const {
 template<typename T, typename ActionT>
 void ECS::forEach(ActionT&& act) {
 	if constexpr (std::is_same_v<Entity, T>) {
-		entity_mgr->forEach(act);
+		entity_mgr->forEach(std::forward<ActionT>(act));
 	}
 
 	if constexpr (std::is_base_of_v<IComponent, T>) {
 		if (!component_mgr->knowsComponent<T>()) return;
 
-		component_mgr->forEach<T>(act);
+		component_mgr->forEach<T>(std::forward<ActionT>(act));
 	}
 }

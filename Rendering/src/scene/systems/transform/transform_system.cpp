@@ -2,68 +2,56 @@
 #include "engine/engine.h"
 
 
-void TransformSystem::update(Engine& engine) {
-	auto& scene = engine.getScene();
-
-	scene.forEach<Transform>([&](Transform& transform) {
-		if (transform.isActive())
-			updateWorld(transform);
-	});
+XMMATRIX XM_CALLCONV CalculateWorld(Transform& transform) {
+	return XMMatrixScalingFromVector(transform.getScale())
+	       * XMMatrixRotationRollPitchYawFromVector(transform.getRotation())
+	       * XMMatrixTranslationFromVector(transform.getPosition());
 }
 
 
-void TransformSystem::postUpdate(Engine& engine) {
-	auto& scene = engine.getScene();
-
-	scene.forEach<Transform>([&](Transform& transform) {
-		if (transform.isActive())
-			transform.updated = false;
-	});
+void TransformSystem::registerCallbacks() {
+	registerEventCallback(&TransformSystem::onTransformUpdate);
 }
 
 
 void TransformSystem::updateWorld(Transform& transform) {
 
-	XMMATRIX parent_world = XMMatrixIdentity();
+	auto* owner  = transform.getOwner().get();
+	auto* parent = owner->getParent().get();
 
-	// If the transform has no parent and doesn't need an update,
-	// then nothing needs to be done.
-	if (!transform.getOwner()->hasParent()) {
-		if (!transform.needs_update) return;
+	Transform* parent_transform = parent ? parent->getComponent<Transform>() : nullptr;
+
+	if (parent_transform) {
+		if (parent_transform->needs_update) return; //early return if the parent transform also needs an update
+		transform.world = parent_transform->world * CalculateWorld(transform);
+	}
+	else {
+		transform.world = CalculateWorld(transform);
 	}
 
-	// If the transform has a parent, then process that first.
-	// If the parent was updated, or if this transform already needs
-	// an update, then get the parent's matrix.
-	else if (auto parent_ptr = transform.getOwner()->getParent()) {
-
-		auto* parent = parent_ptr->getComponent<Transform>();
-
-		if (parent) {
-			updateWorld(*parent);
-
-			if (parent->updated)
-				transform.needs_update = true;
-
-			// This may be true even if the above statement is not
-			if (transform.needs_update)
-				parent_world = parent->getObjectToWorldMatrix();
-		}
-	}
-
-
-	if (transform.needs_update) {
-		const XMMATRIX this_world = calculateWorld(transform);
-		transform.world = this_world * parent_world;
-
-		transform.needs_update = false;
-		transform.updated = true;
-	}
+	transform.needs_update = false;
 }
 
 
-XMMATRIX TransformSystem::calculateWorld(Transform& transform) {
-	return XMMatrixScalingFromVector(transform.scaling)
-	       * XMMatrixRotationRollPitchYawFromVector(transform.rotation)
-	       * XMMatrixTranslationFromVector(transform.translation);
+void TransformSystem::onTransformUpdate(const TransformEvent* event) {
+	
+	auto& transform = event->transform.get();
+	auto* owner     = transform.getOwner().get();
+	auto* parent    = owner->getParent().get();
+
+
+	// Early return if the transform has a parent and it needs an update too
+	if (parent) {
+		if (auto* parent_transform = parent->getComponent<Transform>()) {
+			if (parent_transform->needs_update) return;
+		}
+	}
+
+	updateWorld(transform);
+
+	owner->forEachChild([&](EntityPtr child) {
+		if (auto* transform = child->getComponent<Transform>()) {
+			transform->sendUpdateEvent();
+		}
+	});
 }

@@ -24,3 +24,16 @@ void Scene::addCriticalSystems() {
 	// Model system: updates the buffers of model components
 	ecs->addSystem<ModelSystem>();
 }
+
+
+void Scene::removeEntity(EntityPtr entity) {
+	if (entity) {
+		ecs->destroyEntity(entity.getHandle());
+
+		if (auto parent = entity->getParent()) {
+			parent->removeChild(entity);
+		}
+	}
+	entities.erase(std::remove(std::begin(entities), std::end(entities), entity),
+	               std::end(entities));
+}

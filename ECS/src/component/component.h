@@ -3,6 +3,7 @@
 #include "datatypes/datatypes.h"
 #include "memory/handle/handle.h"
 #include "entity/entity_ptr.h"
+#include "event/event_participator.h"
 
 
 //----------------------------------------------------------------------------------

@@ -14,6 +14,7 @@ class Engine;
 
 class Scene {
 public:
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -67,25 +68,10 @@ public:
 
 	// Add an entity to this scene
 	template<typename TemplateT = WorldObject, typename... ArgsT>
-	EntityPtr addEntity(ArgsT&&... args) {
-		auto ptr = ecs->createEntity();
-		entities.push_back(ptr);
-		TemplateT::applyTemplate(*ptr, std::forward<ArgsT>(args)...);
-		return ptr;
-	}
+	EntityPtr addEntity(ArgsT&&... args);
 
 	// Remove an entity from this scene
-	void removeEntity(EntityPtr entity) {
-		if (entity) {
-			ecs->destroyEntity(entity.getHandle());
-
-			if (auto parent = entity->getParent()) {
-				parent->removeChild(entity);
-			}
-		}
-		entities.erase(std::remove(std::begin(entities), std::end(entities), entity),
-		               std::end(entities));
-	}
+	void removeEntity(EntityPtr entity);
 
 	[[nodiscard]]
 	const std::vector<EntityPtr>& getEntities() const {
@@ -94,16 +80,22 @@ public:
 
 
 	//----------------------------------------------------------------------------------
+	// Member Functions - Events
+	//----------------------------------------------------------------------------------
+	template<typename EventT, typename... ArgsT>
+	void sendEvent(ArgsT&&... args);
+
+
+	//----------------------------------------------------------------------------------
 	// Member Functions - Iteration
 	//----------------------------------------------------------------------------------
 
 	template<typename T, typename ActionT>
-	void forEach(ActionT&& act) {
-		ecs->forEach<T>(act);
-	}
+	void forEach(ActionT&& act);
 
 
 protected:
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -129,7 +121,6 @@ protected:
 	Scene& operator=(Scene&& scene) = default;
 
 
-protected:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
@@ -145,6 +136,7 @@ protected:
 
 
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Functions - Add Systems
 	//----------------------------------------------------------------------------------
@@ -152,3 +144,5 @@ private:
 	// Add systems required for normal operation to the ECS
 	void addCriticalSystems();
 };
+
+#include "scene.tpp"

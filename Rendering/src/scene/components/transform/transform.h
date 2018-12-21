@@ -5,7 +5,15 @@
 #include "component/component.h"
 
 
-class Transform final : public Component<Transform> {
+#include "event/event.h"
+class Transform;
+struct TransformEvent : public Event<TransformEvent> {
+	TransformEvent(Transform& transform) : transform(transform) {}
+	std::reference_wrapper<Transform> transform;
+};
+
+
+class Transform final : public Component<Transform>, public EventSender {
 	friend class TransformSystem;
 
 public:
@@ -18,8 +26,7 @@ public:
 		, translation(XMVectorZero())
 		, rotation(XMVectorZero())
 		, scaling(XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f))
-		, needs_update(true)
-		, updated(false) {
+		, needs_update(true) {
 	}
 
 	Transform(const Transform& transform) = delete;
@@ -43,11 +50,12 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Updated
+	// Member Functions - Update
 	//----------------------------------------------------------------------------------
 
-	bool isUpdated() const {
-		return updated;
+	void sendUpdateEvent() {
+		needs_update = true;
+		this->sendEvent<TransformEvent>(std::ref(*this));
 	}
 
 
@@ -57,37 +65,37 @@ public:
 
 	void moveX(f32 units) {
 		translation += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void moveY(f32 units) {
 		translation += XMVectorSet(0.0f, units, 0.0f, 0.0f);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void moveZ(f32 units) {
 		translation += XMVectorSet(0.0f, 0.0f, units, 0.0f);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void move(const vec3_f32& units) {
 		translation += XMLoad(&units);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void XM_CALLCONV move(FXMVECTOR units) {
 		translation += units;
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void setPosition(const vec3_f32& position) {
 		translation = XMLoad(&position);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void XM_CALLCONV setPosition(FXMVECTOR position) {
 		translation = position;
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 
@@ -97,45 +105,45 @@ public:
 
 	void rotateX(f32 units) {
 		rotation += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void rotateY(f32 units) {
 		rotation += XMVectorSet(0.0f, units, 0.0f, 0.0f);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void rotateZ(f32 units) {
 		rotation += XMVectorSet(0.0f, 0.0f, units, 0.0f);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void rotateXClamped(f32 units, f32 min, f32 max) {
 		const f32 amount = ClampAngle(XMVectorGetX(rotation) + units, min, max);
 		rotation = XMVectorSetX(rotation, amount);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void rotateYClamped(f32 units, f32 min, f32 max) {
 		const f32 amount = ClampAngle(XMVectorGetY(rotation) + units, min, max);
 		rotation = XMVectorSetY(rotation, amount);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void rotateZClamped(f32 units, f32 min, f32 max) {
 		const f32 amount = ClampAngle(XMVectorGetZ(rotation) + units, min, max);
 		rotation = XMVectorSetZ(rotation, amount);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void rotate(const vec3_f32& units) {
 		rotation += XMLoad(&units);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void XM_CALLCONV rotate(FXMVECTOR units) {
 		rotation += units;
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void rotateClamped(const vec3_f32& units, f32 min, f32 max) {
@@ -156,17 +164,17 @@ public:
 
 	void XM_CALLCONV rotateAround(FXMVECTOR axis, f32 units) {
 		translation = XMVector3Transform(translation, XMMatrixRotationAxis(axis, units));
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void setRotation(const vec3_f32& rotation) {
 		this->rotation = XMLoad(&rotation);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void XM_CALLCONV setRotation(FXMVECTOR rotation) {
 		this->rotation = rotation;
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 
@@ -176,37 +184,37 @@ public:
 
 	void scaleX(f32 units) {
 		scaling += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void scaleY(f32 units) {
 		scaling += XMVectorSet(0.0f, units, 0.0f, 0.0f);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void scaleZ(f32 units) {
 		scaling += XMVectorSet(0.0f, 0.0f, units, 0.0f);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void scale(const vec3_f32& units) {
 		scaling *= XMLoad(&units);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void XM_CALLCONV scale(FXMVECTOR units) {
 		scaling *= units;
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void setScale(const vec3_f32& scale) {
 		scaling = XMLoad(&scale);
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 	void XM_CALLCONV setScale(FXMVECTOR scale) {
 		scaling = scale;
-		needs_update = true;
+		sendUpdateEvent();
 	}
 
 
@@ -261,22 +269,26 @@ public:
 
 	[[nodiscard]]
 	static XMVECTOR XM_CALLCONV getObjectAxisX() {
-		return XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+		static auto out = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+		return out;
 	}
 
 	[[nodiscard]]
 	static XMVECTOR XM_CALLCONV getObjectAxisY() {
-		return XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		static auto out = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		return out;
 	}
 
 	[[nodiscard]]
 	static XMVECTOR XM_CALLCONV getObjectAxisZ() {
-		return XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+		static auto out = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+		return out;
 	}
 
 	[[nodiscard]]
 	static XMVECTOR XM_CALLCONV getObjectOrigin() {
-		return XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		static auto out = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		return out;
 	}
 
 
@@ -319,9 +331,6 @@ private:
 	XMVECTOR rotation;
 	XMVECTOR scaling;
 
-	// Flag that decides if the object-to-world matrix requires an update
+	// Determines if the transform has been modified, but not updated
 	bool needs_update;
-
-	// Has the transform been updated in the past fame?
-	bool updated;
 };

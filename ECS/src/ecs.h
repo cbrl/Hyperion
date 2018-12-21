@@ -3,6 +3,7 @@
 #include "entity/entity_mgr.h"
 #include "component/component_mgr.h"
 #include "system/system_mgr.h"
+#include "event/event_handler.h"
 
 
 class ECS final {
@@ -10,7 +11,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	ECS();
 	ECS(const ECS& ecs) = delete;
 	ECS(ECS&& ecs) = default;
@@ -19,14 +19,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~ECS();
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	ECS& operator=(const ECS& ecs) = delete;
 	ECS& operator=(ECS&& ecs) = default;
 
@@ -54,6 +52,10 @@ public:
 	void update(Engine& engine);
 
 
+	template<typename EventT, typename... ArgsT>
+	void sendEvent(ArgsT&&... args);
+
+
 	//----------------------------------------------------------------------------------
 	// Member Functions - Iteration
 	//----------------------------------------------------------------------------------
@@ -74,11 +76,10 @@ public:
 
 
 private:
-	std::unique_ptr<EntityMgr> entity_mgr;
+	std::unique_ptr<EventHandler> event_handler;
+	std::unique_ptr<SystemMgr>    system_mgr;
 	std::shared_ptr<ComponentMgr> component_mgr;
-	std::unique_ptr<SystemMgr> system_mgr;
-
+	std::unique_ptr<EntityMgr>    entity_mgr;
 };
-
 
 #include "ecs.tpp"

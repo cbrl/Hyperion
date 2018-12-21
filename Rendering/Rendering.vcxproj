@@ -238,6 +238,7 @@
     <None Include="src\resource\model\model_blueprint.tpp" />
     <None Include="src\resource\resource_mgr.tpp" />
     <None Include="src\resource\shader\shader.tpp" />
+    <None Include="src\scene\scene.tpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Assimp\Assimp.vcxproj">

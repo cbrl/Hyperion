@@ -154,7 +154,7 @@
     <ClInclude Include="src\event\event_delegate.h" />
     <ClInclude Include="src\event\event_dispatcher.h" />
     <ClInclude Include="src\event\event_handler.h" />
-    <ClInclude Include="src\event\event_listener.h" />
+    <ClInclude Include="src\event\event_participator.h" />
     <ClInclude Include="src\system\system.h" />
     <ClInclude Include="src\system\system_mgr.h" />
   </ItemGroup>
@@ -163,11 +163,17 @@
     <ClCompile Include="src\entity\entity.cpp" />
     <ClCompile Include="src\entity\entity_mgr.cpp" />
     <ClCompile Include="src\entity\entity_ptr.cpp" />
+    <ClCompile Include="src\event\event_handler.cpp" />
+    <ClCompile Include="src\event\event_participator.cpp" />
     <ClCompile Include="src\system\system_mgr.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\component\component_mgr.tpp" />
     <None Include="src\ecs.tpp" />
     <None Include="src\entity\entity.tpp" />
+    <None Include="src\event\event_handler.tpp" />
+    <None Include="src\event\event_participator.tpp" />
+    <None Include="src\system\system_mgr.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

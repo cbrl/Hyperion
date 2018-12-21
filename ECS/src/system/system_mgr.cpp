@@ -1,6 +1,12 @@
 #include "system_mgr.h"
 
 
+SystemMgr::SystemMgr(EventHandler& handler)
+	: event_handler(handler) {
+
+}
+
+
 void SystemMgr::update(Engine& engine) {
 
 	// Pre Update

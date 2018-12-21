@@ -463,5 +463,8 @@
     <None Include="src\resource\model\model_blueprint.tpp">
       <Filter>Header Files\resource\model</Filter>
     </None>
+    <None Include="src\scene\scene.tpp">
+      <Filter>Header Files\scene</Filter>
+    </None>
   </ItemGroup>
 </Project>
