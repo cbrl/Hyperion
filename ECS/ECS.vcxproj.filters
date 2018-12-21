@@ -65,10 +65,10 @@
     <ClInclude Include="src\event\event_dispatcher.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
-    <ClInclude Include="src\event\event_handler.h">
+    <ClInclude Include="src\event\event_participator.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
-    <ClInclude Include="src\event\event_participator.h">
+    <ClInclude Include="src\event\event_mgr.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
   </ItemGroup>
@@ -111,10 +111,10 @@
     <None Include="src\event\event_participator.tpp">
       <Filter>Header Files\event</Filter>
     </None>
-    <None Include="src\event\event_handler.tpp">
+    <None Include="src\event\event_dispatcher.tpp">
       <Filter>Header Files\event</Filter>
     </None>
-    <None Include="src\event\event_dispatcher.tpp">
+    <None Include="src\event\event_mgr.tpp">
       <Filter>Header Files\event</Filter>
     </None>
   </ItemGroup>

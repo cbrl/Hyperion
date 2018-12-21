@@ -23,7 +23,7 @@ void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT*
 
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
 
-	// Create a new delegate. The event handler will own the delegate.
+	// Create a new delegate. The event manager will own the delegate.
 	IEventDelegate* delegate = new EventDelegate<ClassT, EventT>(static_cast<ClassT*>(this), Callback); //ClassT inherits from "this"
 
 	auto result = std::find_if(registered_callbacks.begin(), registered_callbacks.end(), [&](const IEventDelegate* other) {

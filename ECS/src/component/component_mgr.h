@@ -4,7 +4,7 @@
 #include "component/component.h"
 
 
-class EventHandler;
+class EventMgr;
 
 
 //----------------------------------------------------------------------------------
@@ -21,7 +21,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	ComponentMgr(EventHandler& handler) : event_handler(handler) {}
+	ComponentMgr(EventMgr& handler) : event_handler(handler) {}
 	ComponentMgr(const ComponentMgr& manager) = delete;
 	ComponentMgr(ComponentMgr&& manager) = default;
 
@@ -83,8 +83,8 @@ private:
 	// Map of unique resource pools for each type of component
 	ResourcePoolManager component_pools;
 
-	// A reference to the event handler. Passed to systems that inherit from EventListener.
-	EventHandler& event_handler;
+	// A reference to the event manager. Passed to systems that inherit from EventListener.
+	EventMgr& event_handler;
 };
 
 #include "component_mgr.tpp"

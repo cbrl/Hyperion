@@ -50,6 +50,14 @@ private:
 
 
 
+//----------------------------------------------------------------------------------
+// Event
+//----------------------------------------------------------------------------------
+//
+// All events will inherit from this class. Events should contain any relevant
+// data needed to process the event.
+//
+//----------------------------------------------------------------------------------
 template<typename T>
 class Event : public IEvent {
 public:

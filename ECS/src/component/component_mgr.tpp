@@ -7,7 +7,7 @@ ComponentT* ComponentMgr::createComponent(ArgsT&&... args) {
 	auto& component = pool->emplace_back(std::forward<ArgsT>(args)...);
 
 	if constexpr (std::is_base_of_v<EventParticipator, ComponentT>) {
-		component.setEventHandler(gsl::make_not_null(&event_handler));
+		component.setEventMgr(gsl::make_not_null(&event_handler));
 		if constexpr (std::is_base_of_v<EventListener, ComponentT>) {
 			component.registerCallbacks();
 		}

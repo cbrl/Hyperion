@@ -153,7 +153,7 @@
     <ClInclude Include="src\event\event.h" />
     <ClInclude Include="src\event\event_delegate.h" />
     <ClInclude Include="src\event\event_dispatcher.h" />
-    <ClInclude Include="src\event\event_handler.h" />
+    <ClInclude Include="src\event\event_mgr.h" />
     <ClInclude Include="src\event\event_participator.h" />
     <ClInclude Include="src\system\system.h" />
     <ClInclude Include="src\system\system_mgr.h" />
@@ -172,7 +172,7 @@
     <None Include="src\ecs.tpp" />
     <None Include="src\entity\entity.tpp" />
     <None Include="src\event\event_dispatcher.tpp" />
-    <None Include="src\event\event_handler.tpp" />
+    <None Include="src\event\event_mgr.tpp" />
     <None Include="src\event\event_participator.tpp" />
     <None Include="src\system\system_mgr.tpp" />
   </ItemGroup>

@@ -1,5 +1,5 @@
 template <class EventT, class... ArgsT>
-void EventHandler::send(ArgsT&&... args) {
+void EventMgr::send(ArgsT&&... args) {
 
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
 
@@ -17,7 +17,7 @@ void EventHandler::send(ArgsT&&... args) {
 
 
 template <class EventT>
-void EventHandler::addEventCallback(IEventDelegate* delegate) {
+void EventMgr::addEventCallback(IEventDelegate* delegate) {
 	auto index = EventT::static_index;
 
 	auto it = event_dispatchers.find(index);

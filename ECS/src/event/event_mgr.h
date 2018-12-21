@@ -8,7 +8,7 @@
 #include <memory_resource>
 
 
-class EventHandler final {
+class EventMgr final {
 	friend class EventListener;
 
 public:
@@ -16,22 +16,22 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EventHandler() = default;
-	EventHandler(const EventHandler&) = delete;
-	EventHandler(EventHandler&&) = default;
+	EventMgr() = default;
+	EventMgr(const EventMgr&) = delete;
+	EventMgr(EventMgr&&) = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~EventHandler() = default;
+	~EventMgr() = default;
 	
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	EventHandler& operator=(const EventHandler&) = delete;
-	EventHandler& operator=(EventHandler&&) = default;
+	EventMgr& operator=(const EventMgr&) = delete;
+	EventMgr& operator=(EventMgr&&) = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -75,4 +75,4 @@ private:
 	std::pmr::synchronized_pool_resource event_pool;
 };
 
-#include "event_handler.tpp"
+#include "event_mgr.tpp"

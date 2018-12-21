@@ -4,7 +4,7 @@
 #include "datatypes/datatypes.h"
 
 
-class EventHandler;
+class EventMgr;
 
 
 //----------------------------------------------------------------------------------
@@ -12,7 +12,7 @@ class EventHandler;
 //----------------------------------------------------------------------------------
 //
 // The EventSender and EventListener classes inherit from this class. It contains
-// a pointer to the event handler, which should never be null. The pointer is used
+// a pointer to the event manager, which should never be null. The pointer is used
 // instead of a reference so that it can be set after construction in the
 // component/system manager, eliminating the need to modify the constructor of
 // every component or system.
@@ -46,18 +46,18 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void setEventHandler(gsl::not_null<EventHandler*> handler) noexcept;
+	void setEventMgr(gsl::not_null<EventMgr*> handler) noexcept;
 
 protected:
 
-	EventHandler* getEventHandler() const noexcept;
+	EventMgr* getEventHandler() const noexcept;
 
 private:
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	EventHandler* event_handler;
+	EventMgr* event_handler;
 };
 
 
@@ -163,7 +163,7 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// A list of callback delegates registered by this event listener. The event handler owns the delegates.
+	// A list of callback delegates registered by this event listener. The event manager owns the delegates.
 	std::list<IEventDelegate*> registered_callbacks;
 };
 

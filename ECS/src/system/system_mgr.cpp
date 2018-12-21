@@ -1,9 +1,8 @@
 #include "system_mgr.h"
 
 
-SystemMgr::SystemMgr(EventHandler& handler)
+SystemMgr::SystemMgr(EventMgr& handler)
 	: event_handler(handler) {
-
 }
 
 

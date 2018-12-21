@@ -1,7 +1,7 @@
 #include "event_handler.h"
 
 
-void EventHandler::clearEventBuffer() {
+void EventMgr::clearEventBuffer() {
 	//destroy events
 	for (auto* event : events) {
 		event->~IEvent();
@@ -10,11 +10,11 @@ void EventHandler::clearEventBuffer() {
 	event_pool.release(); //clear allocated memory
 }
 
-void EventHandler::clearEventDispatchers() {
+void EventMgr::clearEventDispatchers() {
 	event_dispatchers.clear();
 }
 
-void EventHandler::dispatchEvents() {
+void EventMgr::dispatchEvents() {
 	size_t index = 0;
 	size_t last_index = events.size();
 
@@ -37,7 +37,7 @@ void EventHandler::dispatchEvents() {
 	clearEventBuffer();
 }
 
-void EventHandler::removeEventCallback(IEventDelegate* eventDelegate) {
+void EventMgr::removeEventCallback(IEventDelegate* eventDelegate) {
 	auto index = eventDelegate->getEventID();
 	if (auto it = event_dispatchers.find(index); it != event_dispatchers.end()) {
 		it->second->removeEventCallback(eventDelegate);

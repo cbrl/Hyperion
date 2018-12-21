@@ -3,7 +3,7 @@
 #include "entity/entity_mgr.h"
 #include "component/component_mgr.h"
 #include "system/system_mgr.h"
-#include "event/event_handler.h"
+#include "event/event_mgr.h"
 
 
 class ECS final {
@@ -76,7 +76,7 @@ public:
 
 
 private:
-	std::unique_ptr<EventHandler> event_handler;
+	std::unique_ptr<EventMgr>     event_mgr;
 	std::unique_ptr<SystemMgr>    system_mgr;
 	std::shared_ptr<ComponentMgr> component_mgr;
 	std::unique_ptr<EntityMgr>    entity_mgr;

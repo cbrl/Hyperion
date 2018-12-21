@@ -6,7 +6,7 @@
 // EventParticipator
 //----------------------------------------------------------------------------------
 
-EventHandler* EventParticipator::getEventHandler() const noexcept {
+EventMgr* EventParticipator::getEventHandler() const noexcept {
 	assert(event_handler != nullptr && "EventParticipator::event_handler == nullptr");
 	return event_handler;
 }
@@ -35,6 +35,6 @@ void EventListener::unregisterAllEventCallbacks() {
 }
 
 
-void EventParticipator::setEventHandler(gsl::not_null<EventHandler*> handler) noexcept {
+void EventParticipator::setEventHandler(gsl::not_null<EventMgr*> handler) noexcept {
 	event_handler = handler;
 }

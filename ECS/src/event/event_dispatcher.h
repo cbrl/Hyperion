@@ -44,7 +44,7 @@ public:
 
 
 
-template<class T>
+template<class EventT>
 class EventDispatcher final : public IEventDispatcher {
 public:
 
@@ -73,13 +73,16 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// send event to all listeners
+	// Send an event to all listeners
 	void dispatch(IEvent* event) override final;
 
+	// Add an event callback delegate to this dispatcher
 	void addEventCallback(IEventDelegate* delegate) override final;
 
+	// Remove an event callback delegate from this dispatcher
 	void removeEventCallback(IEventDelegate* delegate) override final;
 
+	// Get the number of callback delegates in this dispatcher
 	size_t getEventCallbackCount() const override final;
 
 	

@@ -1,13 +1,13 @@
-template<typename T>
-EventDispatcher<T>::~EventDispatcher() {
+template<typename EventT>
+EventDispatcher<EventT>::~EventDispatcher() {
 	//m_PendingAddDelegates.clear();
 	pending_remove_delegates.clear();
 	event_callbacks.clear();
 }
 
 
-template<typename T>
-void EventDispatcher<T>::dispatch(IEvent* event) {
+template<typename EventT>
+void EventDispatcher<EventT>::dispatch(IEvent* event) {
 	locked = true;
 
 	{
@@ -29,8 +29,8 @@ void EventDispatcher<T>::dispatch(IEvent* event) {
 }
 
 
-template <typename T>
-void EventDispatcher<T>::addEventCallback(IEventDelegate* delegate) {
+template<typename EventT>
+void EventDispatcher<EventT>::addEventCallback(IEventDelegate* delegate) {
 	auto result = std::find_if(pending_remove_delegates.begin(), pending_remove_delegates.end(), [&](typename decltype(event_callbacks)::iterator& it) {
 		return (*it)->operator==(*delegate);
 	});
@@ -45,8 +45,8 @@ void EventDispatcher<T>::addEventCallback(IEventDelegate* delegate) {
 }
 
 
-template <typename T>
-void EventDispatcher<T>::removeEventCallback(IEventDelegate* delegate) {
+template<typename EventT>
+void EventDispatcher<EventT>::removeEventCallback(IEventDelegate* delegate) {
 
 	auto result = std::find_if(event_callbacks.begin(), event_callbacks.end(), [&](std::unique_ptr<IEventDelegate>& other) {
 		return other->operator==(*delegate);
@@ -62,7 +62,7 @@ void EventDispatcher<T>::removeEventCallback(IEventDelegate* delegate) {
 }
 
 
-template<typename T>
-size_t EventDispatcher<T>::getEventCallbackCount() const {
+template<typename EventT>
+size_t EventDispatcher<EventT>::getEventCallbackCount() const {
 	return event_callbacks.size();
 }
