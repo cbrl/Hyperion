@@ -1575,7 +1575,7 @@ void UserInterface::update(Engine& engine)  {
 
 	// Draw the system menu
 	static bool system_menu = true;
-	if (engine.getInput().isKeyPressed(Keyboard::F1)) {
+	if (engine.getInput().isKeyPressed(Keyboard::F3)) {
 		system_menu = !system_menu;
 	}
 	if (system_menu) {

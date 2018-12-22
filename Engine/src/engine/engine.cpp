@@ -92,6 +92,8 @@ Engine::~Engine() {
 
 void Engine::quit() {
 
+	Logger::log(LogLevel::info, "Shutting down...");
+
 	// Write the current configuration values to a file
 	ConfigWriter::write(*this, CONFIG_FILE);
 
@@ -183,13 +185,15 @@ void Engine::loadScene(std::unique_ptr<Scene>&& new_scene) {
 	if (scene) {
 		Logger::log(LogLevel::info, "Loading scene: {}", scene->getName());
 		scene->load(*this);
-		Logger::log(LogLevel::info, "Finished loading scene: {}", scene->getName());
+		Logger::log(LogLevel::info, "Scene loaded: {}", scene->getName());
 		timer->reset();
 	}
 }
 
 
 void Engine::run() {
+
+	Logger::log(LogLevel::info, "Begin main loop");
 
 	// Show the window
 	window->show(SW_SHOWNORMAL);
@@ -215,6 +219,8 @@ void Engine::run() {
 			}
 		}
 	}
+
+	Logger::log(LogLevel::info, "End main loop");
 }
 
 
@@ -275,19 +281,20 @@ void Engine::renderFrame() {
 void Engine::processInput() const {
 
 	// F2: Toggle mouse mode
-	if (input->isKeyPressed(Keyboard::F2)) {
+	if (input->isKeyPressed(Keyboard::F1)) {
 		if (input->getMouseMode() == Mouse::MODE_ABSOLUTE) {
 			window->removeForwarder(gsl::make_not_null(&ImGuiMessageForwarder::forwarder));
 		}
 		if (input->getMouseMode() == Mouse::MODE_RELATIVE) {
 			window->removeForwarder(gsl::make_not_null(&ImGuiMessageForwarder::forwarder));
 			window->addForwarder(gsl::make_not_null(&ImGuiMessageForwarder::forwarder));
+			input->setMouseVisible(true);
 		}
 		input->toggleMouseMode();
 	}
 
 	// F3: Toggle mouse visibility (absolute mode only)
-	if (input->isKeyPressed(Keyboard::F3)) {
+	if (input->isKeyPressed(Keyboard::F2)) {
 		input->toggleMouseVisible();
 	}
 }

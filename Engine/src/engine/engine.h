@@ -95,6 +95,7 @@ public:
 
 	// Request that the engine quit upon completion of the current frame
 	void requestExit() noexcept {
+		Logger::log(LogLevel::info, "Exit requested");
 		exit_requested = true;
 	}
 
@@ -115,6 +116,7 @@ public:
 
 	// Request a resize of the window and renderer
 	void requestResize() noexcept {
+		Logger::log(LogLevel::info, "Resize requested");
 		resize_requested = true;
 	}
 
