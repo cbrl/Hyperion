@@ -32,7 +32,7 @@ namespace ConfigWriter {
 		writer.writeLine();
 
 		writer.writeLine(ConfigTokens::comment, "Window");
-		writer.writeLine(ConfigTokens::win_title, ' ', title.empty() ? "Engine" : title);
+		writer.writeLine(ConfigTokens::win_title, ' ', title);
 
 		writer.writeLine();
 

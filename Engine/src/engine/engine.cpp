@@ -1,12 +1,13 @@
 #include "targetver.h"
 #include "engine.h"
+#include "imgui_message_forwarder.h"
 #include "config/config_reader.h"
 #include "config/config_writer.h"
 
-#include "imgui_message_forwarder.h"
-
 
 #define CONFIG_FILE "./config.txt"
+
+
 std::unique_ptr<Engine> SetupEngine() {
 
 	// Create the console
@@ -37,7 +38,13 @@ std::unique_ptr<Engine> SetupEngine() {
 
 	// Create Engine
 	const auto* title = reader.getConfigVar<std::string>(ConfigTokens::win_title);
-	const std::wstring window_title = title ? StrToWstr(*title) : L"Engine";
+	std::wstring window_title;
+	if (title) {
+		window_title = title->empty() ? L"Engine" : StrToWstr(*title);
+	}
+	else {
+		window_title = L"Engine";
+	}
 
 	return std::make_unique<Engine>(window_title, std::move(display_config), std::move(render_config));
 }
