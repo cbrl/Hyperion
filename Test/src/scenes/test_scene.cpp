@@ -40,6 +40,7 @@ void TestScene::load(const Engine& engine) {
 
 	// Create the camera
 	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
+	camera->setName("Perspective Camera");
 	camera->addComponent<AmbientLight>()->setColor(vec4_f32{ 0.16f, 0.16f, 0.16f, 1.0f });
 
 	// Set the parameters
@@ -48,8 +49,7 @@ void TestScene::load(const Engine& engine) {
 	cam->getViewport().setDepth(0.0f, 1.0f);
 	cam->setZDepth(0.01f, 1000.0f);
 	cam->setFOV(XM_PI / 3.0f);
-	cam->getSettings().setSkybox(
-		resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	cam->getSettings().setSkybox( resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds") );
 
 	auto& fog = cam->getSettings().getFog();
 	fog.color = vec4_f32{ 0.2f, 0.2f, 0.2f, 1.0f };
@@ -69,25 +69,28 @@ void TestScene::load(const Engine& engine) {
 	config.flip_winding = false;
 	config.flip_uv      = false;
 
+	auto main_bp   = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj", config);
+	auto sphere_bp = BlueprintFactory::CreateSphere(resource_mgr, config, 1.0f);
+
 
 	// Scene model
-	auto main_bp = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj", config);
 	EntityPtr test_model = addEntity();
+	test_model->setName("Test Model");
 	test_model->addComponent<ModelRoot>(device, main_bp);
 
 
 	// Sphere
-	auto sphere_bp = BlueprintFactory::CreateSphere(resource_mgr, config, 1.0f);
 	EntityPtr sphere = addEntity();
+	sphere->setName("Sphere Light");
 	sphere->addComponent<ModelRoot>(device, sphere_bp);
 
 	sphere->getComponent<Transform>()->setPosition(vec3_f32{ 3.0f, 2.0f, 0.0f });
 
-	auto rotation = sphere->addComponent<AxisRotation>();
+	auto* rotation = sphere->addComponent<AxisRotation>();
 	rotation->setAxis(AxisRotation::Axis::Y);
 	rotation->setSpeedY(1.5f);
 
-	auto orbit = sphere->addComponent<AxisOrbit>();
+	auto* orbit = sphere->addComponent<AxisOrbit>();
 	orbit->setSpeed(0.5f);
 
 	//----------------------------------------------------------------------------------
@@ -96,7 +99,7 @@ void TestScene::load(const Engine& engine) {
 	
 	// Sphere light
 	{
-		auto light = sphere->addComponent<SpotLight>();
+		auto* light = sphere->addComponent<SpotLight>();
 		light->setDiffuseColor(vec4_f32{ 0.0f, 0.9f, 0.6f, 1.0f });
 		light->setAttenuation(vec3_f32{ 0.1f, 0.15f, 0.0f });
 		light->setSpecular(vec4_f32{ 1.0f, 1.0f, 1.0f, 1.0f });
@@ -109,6 +112,7 @@ void TestScene::load(const Engine& engine) {
 	// Camera light
 	{
 		const auto light = addEntity();
+		light->setName("Camera Light");
 		camera->addChild(light);
 
 		auto* spot_light = light->addComponent<SpotLight>();
@@ -146,18 +150,21 @@ void TestScene::load(const Engine& engine) {
 
 	// CPU Usage
 	text_cpu = addEntity<>();
+	text_cpu->setName("CPU Usage");
 	text_cpu->addComponent<Text>(font);
 	text_cpu->getComponent<Transform>()->setPosition(
 		vec3_f32{ 10, 10, 0 });
 
 	// RAM Usage
 	text_ram = addEntity<>();
+	text_ram->setName("Ram Usage");
 	text_ram->addComponent<Text>(font);
 	text_ram->getComponent<Transform>()->setPosition(
 		vec3_f32{ 10, 80, 0 });
 
-	// Mouse Movement
+	// Mouse Position
 	text_mouse = addEntity<>();
+	text_mouse->setName("Mouse Position");
 	text_mouse->addComponent<Text>(font);
 	text_mouse->getComponent<Transform>()->setPosition(
 		vec3_f32{ 10, 150, 0 });
