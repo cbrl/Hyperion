@@ -1,16 +1,9 @@
 #pragma once
 
-#include "directx/directx_math.h"
-#include "datatypes/datatypes.h"
 #include "component/component.h"
-
-
-#include "event/event.h"
-class Transform;
-struct TransformEvent : public Event<TransformEvent> {
-	TransformEvent(Transform& transform) : transform(transform) {}
-	std::reference_wrapper<Transform> transform;
-};
+#include "datatypes/datatypes.h"
+#include "directx/directx_math.h"
+#include "scene/events/core_events.h"
 
 
 class Transform final : public Component<Transform>, public EventSender {
@@ -53,9 +46,9 @@ public:
 	// Member Functions - Update
 	//----------------------------------------------------------------------------------
 
-	void sendUpdateEvent() {
+	void sendNeedsUpdateEvent() {
 		needs_update = true;
-		this->sendEvent<TransformEvent>(std::ref(*this));
+		this->sendEvent<TransformNeedsUpdate>(std::ref(*this));
 	}
 
 
@@ -65,37 +58,37 @@ public:
 
 	void moveX(f32 units) {
 		translation += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void moveY(f32 units) {
 		translation += XMVectorSet(0.0f, units, 0.0f, 0.0f);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void moveZ(f32 units) {
 		translation += XMVectorSet(0.0f, 0.0f, units, 0.0f);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void move(const vec3_f32& units) {
 		translation += XMLoad(&units);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void XM_CALLCONV move(FXMVECTOR units) {
 		translation += units;
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void setPosition(const vec3_f32& position) {
 		translation = XMLoad(&position);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void XM_CALLCONV setPosition(FXMVECTOR position) {
 		translation = position;
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 
@@ -105,45 +98,45 @@ public:
 
 	void rotateX(f32 units) {
 		rotation += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void rotateY(f32 units) {
 		rotation += XMVectorSet(0.0f, units, 0.0f, 0.0f);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void rotateZ(f32 units) {
 		rotation += XMVectorSet(0.0f, 0.0f, units, 0.0f);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void rotateXClamped(f32 units, f32 min, f32 max) {
 		const f32 amount = ClampAngle(XMVectorGetX(rotation) + units, min, max);
 		rotation = XMVectorSetX(rotation, amount);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void rotateYClamped(f32 units, f32 min, f32 max) {
 		const f32 amount = ClampAngle(XMVectorGetY(rotation) + units, min, max);
 		rotation = XMVectorSetY(rotation, amount);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void rotateZClamped(f32 units, f32 min, f32 max) {
 		const f32 amount = ClampAngle(XMVectorGetZ(rotation) + units, min, max);
 		rotation = XMVectorSetZ(rotation, amount);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void rotate(const vec3_f32& units) {
 		rotation += XMLoad(&units);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void XM_CALLCONV rotate(FXMVECTOR units) {
 		rotation += units;
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void rotateClamped(const vec3_f32& units, f32 min, f32 max) {
@@ -164,17 +157,17 @@ public:
 
 	void XM_CALLCONV rotateAround(FXMVECTOR axis, f32 units) {
 		translation = XMVector3Transform(translation, XMMatrixRotationAxis(axis, units));
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void setRotation(const vec3_f32& rotation) {
 		this->rotation = XMLoad(&rotation);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void XM_CALLCONV setRotation(FXMVECTOR rotation) {
 		this->rotation = rotation;
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 
@@ -184,37 +177,37 @@ public:
 
 	void scaleX(f32 units) {
 		scaling += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void scaleY(f32 units) {
 		scaling += XMVectorSet(0.0f, units, 0.0f, 0.0f);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void scaleZ(f32 units) {
 		scaling += XMVectorSet(0.0f, 0.0f, units, 0.0f);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void scale(const vec3_f32& units) {
 		scaling *= XMLoad(&units);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void XM_CALLCONV scale(FXMVECTOR units) {
 		scaling *= units;
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void setScale(const vec3_f32& scale) {
 		scaling = XMLoad(&scale);
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 	void XM_CALLCONV setScale(FXMVECTOR scale) {
 		scaling = scale;
-		sendUpdateEvent();
+		sendNeedsUpdateEvent();
 	}
 
 

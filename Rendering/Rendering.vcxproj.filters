@@ -168,6 +168,9 @@
     <Filter Include="Source Files\scene\systems\model">
       <UniqueIdentifier>{c5c9f9fc-cc61-4c11-88ef-dc97e747d175}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene\events">
+      <UniqueIdentifier>{95f6f4f3-e74e-4c5e-991b-eb6bb2b29421}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -432,6 +435,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\entities\core_entities.h">
       <Filter>Header Files\scene\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\events\core_events.h">
+      <Filter>Header Files\scene\events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

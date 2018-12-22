@@ -4,7 +4,7 @@
 
 
 template<typename T>
-struct Vector2 {
+struct Vector2 final {
 
 	static_assert(std::is_arithmetic_v<T>, "Vector2 template parameter is not an arithmetic type");
 
@@ -26,14 +26,14 @@ struct Vector2 {
 		, y(y){
 	}
 
-	~Vector2() noexcept = default;
+	~Vector2() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Functions
 	//----------------------------------------------------------------------------------
 
-	// Return a pointer to the first element of the std::vector
+	// Return a pointer to the first element of the vector
 	constexpr T* data() noexcept { return &this->x; }
 	constexpr const T* data() const noexcept { return &this->x; }
 
@@ -139,7 +139,7 @@ constexpr auto operator/(Vector2<T> lhs, U rhs) noexcept
 
 
 template<typename T>
-struct Vector3 {
+struct Vector3 final {
 
 	static_assert(std::is_arithmetic_v<T>, "Vector3 template parameter is not an arithmetic type");
 
@@ -169,14 +169,14 @@ struct Vector3 {
 		, z(z) {
 	}
 
-	~Vector3() noexcept = default;
+	~Vector3() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Functions
 	//----------------------------------------------------------------------------------
 
-	// Return a pointer to the first element of the std::vector
+	// Return a pointer to the first element of the vector
 	constexpr T* data() noexcept { return &this->x; }
 	constexpr const T* data() const noexcept { return &this->x; }
 
@@ -290,7 +290,7 @@ constexpr auto operator/(Vector3<T> lhs, U rhs) noexcept
 
 
 template<typename T>
-struct Vector4 {
+struct Vector4 final {
 
 	static_assert(std::is_arithmetic_v<T>, "Vector4 template parameter is not an arithmetic type");
 
@@ -330,14 +330,14 @@ struct Vector4 {
 		, w(w) {
 	}
 
-	~Vector4() noexcept = default;
+	~Vector4() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Functions
 	//----------------------------------------------------------------------------------
 
-	// Return a pointer to the first element of the std::vector
+	// Return a pointer to the first element of the vector
 	constexpr T* data() noexcept { return &this->x; }
 	constexpr const T* data() const noexcept { return &this->x; }
 

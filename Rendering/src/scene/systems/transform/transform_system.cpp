@@ -10,7 +10,7 @@ XMMATRIX XM_CALLCONV CalculateWorld(Transform& transform) {
 
 
 void TransformSystem::registerCallbacks() {
-	registerEventCallback(&TransformSystem::onTransformUpdate);
+	registerEventCallback(&TransformSystem::onTransformNeedsUpdate);
 	registerEventCallback(&TransformSystem::onParentChanged);
 }
 
@@ -31,10 +31,11 @@ void TransformSystem::updateWorld(Transform& transform) {
 	}
 
 	transform.needs_update = false;
+	sendEvent<TransformUpdated>(transform);
 }
 
 
-void TransformSystem::onTransformUpdate(const TransformEvent* event) {
+void TransformSystem::onTransformNeedsUpdate(const TransformNeedsUpdate* event) {
 	
 	auto& transform = event->transform.get();
 	auto* owner     = transform.getOwner().get();
@@ -52,7 +53,7 @@ void TransformSystem::onTransformUpdate(const TransformEvent* event) {
 
 	owner->forEachChild([&](EntityPtr child) {
 		if (auto* transform = child->getComponent<Transform>()) {
-			transform->sendUpdateEvent();
+			transform->sendNeedsUpdateEvent();
 		}
 	});
 }
@@ -60,6 +61,6 @@ void TransformSystem::onTransformUpdate(const TransformEvent* event) {
 
 void TransformSystem::onParentChanged(const ParentChanged* event) {
 	if (auto* transform = event->entity->getComponent<Transform>()) {
-		transform->sendUpdateEvent();
+		transform->sendNeedsUpdateEvent();
 	}
 }

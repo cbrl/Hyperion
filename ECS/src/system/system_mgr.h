@@ -4,6 +4,7 @@
 #include "exception/exception.h"
 
 
+class ECS;
 class EventMgr;
 class EventListener;
 
@@ -14,7 +15,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	SystemMgr(EventMgr& handler);
+	SystemMgr(ECS& ecs, EventMgr& handler);
 	SystemMgr(const SystemMgr& manager) = delete;
 	SystemMgr(SystemMgr&& manager) = default;
 
@@ -55,8 +56,11 @@ private:
 	// The systems, mapped to their type_index
 	std::unordered_map<std::type_index, std::unique_ptr<ISystem>> systems;
 
+	// A reference to the ECS. Passed to all systems.
+	ECS& ecs;
+
 	// A reference to the event manager. Passed to systems that inherit from EventListener.
-	EventMgr& event_handler;
+	EventMgr& event_mgr;
 };
 
 #include "system_mgr.tpp"

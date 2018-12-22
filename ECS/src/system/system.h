@@ -3,6 +3,7 @@
 #include "datatypes/datatypes.h"
 #include "event/event_participator.h"
 
+class ECS;
 class Engine;
 
 
@@ -18,6 +19,7 @@ class ISystem {
 	friend class SystemMgr;
 
 public:
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -52,6 +54,11 @@ public:
 	// Get the type index of this system
 	virtual std::type_index getTypeIndex() const = 0;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - State
+	//----------------------------------------------------------------------------------
+
 	// Set the system's state
 	void setActive(bool state) {
 		active = state;
@@ -78,12 +85,28 @@ public:
 
 
 protected:
+
+	void setECS(gsl::not_null<ECS*> pointer) {
+		ecs = pointer;
+	}
+
+	ECS& getECS() {
+		assert(ecs != nullptr && "ISystem::ecs == nullptr");
+		return *ecs;
+	}
+
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
 	// Is this system enabled?
 	bool active;
+
+private:
+
+	// A pointer to the ECS that created the system
+	ECS* ecs;
 };
 
 
@@ -129,7 +152,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the type index of this system
-	std::type_index getTypeIndex() const override {
+	std::type_index getTypeIndex() const override final {
 		return index;
 	}
 

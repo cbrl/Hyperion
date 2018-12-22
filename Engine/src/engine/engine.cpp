@@ -139,9 +139,9 @@ void Engine::init(std::wstring title,
 
 			const vec2_u32 size = window->getClientSize();
 			if (scene) {
-				scene->onResize(size);
+				scene->sendEvent<WindowResizeEvent>(size);
 			}
-			Logger::log(LogLevel::info, "Viewport resized to {}x{}", size.x, size.y);
+			Logger::log(LogLevel::info, "Window resized to {}x{}", size.x, size.y);
 		};
 
 		window->addHandler(gsl::make_not_null(&msg_handler));

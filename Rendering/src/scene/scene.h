@@ -8,6 +8,7 @@
 #include "scene/entities/core_entities.h"
 #include "scene/components/core_components.h"
 #include "scene/systems/core_systems.h"
+#include "scene/events/core_events.h"
 
 using namespace EntityTemplates;
 class Engine;
@@ -42,14 +43,6 @@ public:
 
 	// Update the scene
 	virtual void tick(Engine& engine) = 0;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Window Resize
-	//----------------------------------------------------------------------------------
-
-	// Handle a window resize event
-	void onResize(vec2_u32 size);
 
 
 	//----------------------------------------------------------------------------------

@@ -10,7 +10,7 @@ void CameraSystem::update(Engine& engine) {
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
 	const auto process_cam = [&](auto& camera) {
-		const auto* transform = camera.getOwner()->template getComponent<Transform>();
+		const auto* transform = camera.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 
 		// Update the camera's buffer
@@ -24,9 +24,23 @@ void CameraSystem::update(Engine& engine) {
 			process_cam(camera);
 	});
 
-
 	scene.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
+	});
+}
+
+
+void CameraSystem::registerCallbacks() {
+	registerEventCallback(&CameraSystem::onWindowResize);
+}
+
+
+void CameraSystem::onWindowResize(const WindowResizeEvent* event) {
+	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+		camera.getViewport().setSize(event->new_size);
+	});
+	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+		camera.getViewport().setSize(event->new_size);
 	});
 }
