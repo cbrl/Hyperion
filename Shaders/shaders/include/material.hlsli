@@ -11,8 +11,8 @@ struct Material {
 	float  spec_exponent;
 	float  opacity;
 	float  refraction_index;
-	bool   has_texture;
 	bool   reflection_enabled;
+	bool   has_texture;
 	float2 pad;
 };
 

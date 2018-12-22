@@ -76,8 +76,9 @@ struct Material {
 		vec4_f32 emissive;
 		vec4_f32 transparent;
 		
-		bool  wireframe        = false;
-		bool  two_sided        = false;
+		/*TODO*/ bool  wireframe        = false;
+		/*TODO*/ bool  two_sided        = false;
+		bool  reflection       = false;
 		float opacity          = 1.0f;
 		float spec_scale       = 1.0f;
 		float spec_exponent    = 1.0f;

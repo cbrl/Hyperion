@@ -17,8 +17,8 @@ struct MaterialBuffer {
 	f32      spec_exponent = 0.0f;
 	f32      opacity = 1.0f;
 	f32      refraction_index = 0.0f;
-	u32      has_texture = 0;
 	u32      reflection_enabled = 0;
+	u32      has_texture = 0;
 	vec2_f32 pad;
 };
 
