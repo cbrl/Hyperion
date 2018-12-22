@@ -450,9 +450,8 @@ void DrawDetails(Model& model) {
 	ImGui::DragFloat("Specular Scale", &mat.params.spec_scale, 0.01f, 0.0f, FLT_MAX);
 	ImGui::DragFloat("Specular Exponent", &mat.params.spec_exponent, 0.01f, 0.0f, FLT_MAX);
 	ImGui::DragFloat("Opacity", &mat.params.opacity, 0.01f, 0.0f, 1.0f);
-	//TODO: ImGui::DragFloat("Index of Refraction", &mat.params.refractive_index, 0.01f, 0.0f, FLT_MAX);
 	ImGui::Checkbox("Mirror Surface", &mat.params.mirror);
-	ImGui::DragFloat("Reflectivity", &mat.params.reflectivity);
+	ImGui::DragFloat("Reflectivity", &mat.params.reflectivity, 0.01f, 0.0f, 1.0f);
 }
 
 

@@ -65,7 +65,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 		out_color.xyz = (g_material.reflectivity * reflection_color) + ((1.0f - g_material.reflectivity) * out_color.xyz);
 	}
-	#else
+	#else  //ENABLE_LIGHTING
 	float4 out_color = base_color;
 	#endif //ENABLE_LIGHTING
 
