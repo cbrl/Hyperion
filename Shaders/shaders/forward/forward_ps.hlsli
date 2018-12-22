@@ -58,12 +58,12 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 	float4 out_color = CalculateLighting(pin.position_world, normal_vec, to_eye, base_color, g_material);
 
-	if (g_material.reflection_enabled) {
+	if (g_material.mirror_surface) {
 		const float3 incident         = -to_eye;
 		const float3 reflection_vec   = reflect(incident, pin.normal);
-		const float3 reflection_color = env_map.Sample(g_aniso_wrap, reflection_vec).xyz;
+		const float3 reflection_color = g_material.diffuse.xyz * env_map.Sample(g_aniso_wrap, reflection_vec).xyz;
 
-		out_color.xyz += g_material.diffuse.xyz * reflection_color;
+		out_color.xyz = (g_material.reflectivity * reflection_color) + ((1.0f - g_material.reflectivity) * out_color.xyz);
 	}
 	#else
 	float4 out_color = base_color;

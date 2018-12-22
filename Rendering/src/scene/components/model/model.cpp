@@ -67,7 +67,7 @@ void XM_CALLCONV ModelNode::updateNodeBuffers(ID3D11DeviceContext& device_contex
 		buffer_data.world_inv_transpose = world_inv_transpose;
 		buffer_data.texTransform        = XMMatrixIdentity();
 
-		buffer_data.mat = MaterialBuffer{
+		buffer_data.mat = MaterialBuffer {
 			model.material.params.ambient,
 			model.material.params.diffuse,
 			model.material.params.specular,
@@ -75,8 +75,9 @@ void XM_CALLCONV ModelNode::updateNodeBuffers(ID3D11DeviceContext& device_contex
 			model.material.params.spec_scale,
 			model.material.params.spec_exponent,
 			model.material.params.opacity,
-		    model.material.params.refraction_index,
-		    model.material.params.reflection,
+		    model.material.params.refractive_index,
+		    model.material.params.mirror,
+			model.material.params.reflectivity,
 			model.material.maps.diffuse != nullptr
 		};
 

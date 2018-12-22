@@ -3,17 +3,18 @@
 
 
 struct Material {
-	float4 ambient;
-	float4 diffuse;
-	float4 specular;
-	float4 emissive;
-	float  spec_scale;
-	float  spec_exponent;
+	float4 ambient;           //[0.0, 1.0]
+	float4 diffuse;           //[0.0, 1.0]
+	float4 specular;          //[0.0, 1.0]
+	float4 emissive;          //[0.0, 1.0]
+	float  spec_scale;        //(0.0, inf)
+	float  spec_exponent;     //[1.0, inf)
 	float  opacity;
-	float  refraction_index;
-	bool   reflection_enabled;
+	float  refractive_index;
+	bool   mirror_surface;
+	float  reflectivity;      //[0.0, 1.0]
 	bool   has_texture;
-	float2 pad;
+	float  pad;
 };
 
 

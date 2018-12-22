@@ -139,7 +139,7 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 		get_scalar(mat, AI_MATKEY_OPACITY,            out_mat.params.opacity);
 		get_scalar(mat, AI_MATKEY_SHININESS,          out_mat.params.spec_exponent);
 		get_scalar(mat, AI_MATKEY_SHININESS_STRENGTH, out_mat.params.spec_scale);
-		get_scalar(mat, AI_MATKEY_REFRACTI,           out_mat.params.refraction_index);
+		get_scalar(mat, AI_MATKEY_REFRACTI,           out_mat.params.refractive_index);
 		get_scalar(mat, AI_MATKEY_ENABLE_WIREFRAME,   out_mat.params.wireframe);
 		get_scalar(mat, AI_MATKEY_TWOSIDED,           out_mat.params.two_sided);
 
