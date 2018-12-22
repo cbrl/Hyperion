@@ -14,24 +14,29 @@ namespace ConfigWriter {
 		const auto& rendering_mgr = engine.getRenderingMgr();
 		const auto& display       = rendering_mgr.getDisplayConfig();
 		const auto& rendering     = rendering_mgr.getRenderingConfig();
-
-		const auto res = window.getClientSize();
+		
+	    const auto title      = WstrToStr(window.getWindowTitle());
+		const auto res        = window.getClientSize();
+	    const auto refresh    = display.getRoundedDisplayRefreshRate();
+	    const auto vsync      = display.isVsync();
+	    const auto fullscreen = display.isFullscreen();
+	    const auto shadowmap  = rendering.getShadowMapRes();
 
 		writer.writeLine(ConfigTokens::comment, "Display");
 		writer.writeLine(ConfigTokens::width, ' ', res.x);
 		writer.writeLine(ConfigTokens::height, ' ', res.y);
-		writer.writeLine(ConfigTokens::refresh, ' ', display.getRoundedDisplayRefreshRate());
-		writer.writeLine(ConfigTokens::vsync, ' ', display.isVsync());
-		writer.writeLine(ConfigTokens::fullscreen, ' ', display.isFullscreen());
+		writer.writeLine(ConfigTokens::refresh, ' ', refresh);
+		writer.writeLine(ConfigTokens::vsync, ' ', vsync);
+		writer.writeLine(ConfigTokens::fullscreen, ' ', fullscreen);
 
 		writer.writeLine();
 
 		writer.writeLine(ConfigTokens::comment, "Window");
-		writer.writeLine(ConfigTokens::win_title, ' ', window.getWindowTitle());
+		writer.writeLine(ConfigTokens::win_title, ' ', title.empty() ? "Engine" : title);
 
 		writer.writeLine();
 
 		writer.writeLine(ConfigTokens::comment, "Engine");
-		writer.writeLine(ConfigTokens::shadowmap_res, ' ', rendering.getShadowMapRes());
+		writer.writeLine(ConfigTokens::shadowmap_res, ' ', shadowmap);
 	}
 }

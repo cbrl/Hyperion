@@ -177,10 +177,14 @@ public:
 	}
 
 	[[nodiscard]]
-	std::string getWindowTitle() const noexcept {
-		char title[256];
-		GetWindowTextA(window, title, static_cast<int>(std::size(title)));
-		return std::string(title);
+	std::wstring getWindowTitle() const noexcept {
+		wchar_t title[256];
+		GetWindowText(window, title, static_cast<int>(std::size(title)));
+		return std::wstring(title);
+	}
+
+	void setWindowTitle(const std::wstring& title) noexcept {
+		SetWindowText(window, title.c_str());
 	}
 
 	[[nodiscard]]
