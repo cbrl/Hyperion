@@ -146,4 +146,4 @@ public:
 
 
 template<typename T>
-const std::type_index Component<T>::index = std::type_index(typeid(T));
+const std::type_index Component<T>::index = std::type_index{typeid(T)};

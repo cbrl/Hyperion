@@ -81,7 +81,7 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// Map of unique resource pools for each type of component
-	ResourcePoolManager component_pools;
+	ResourcePoolMgr component_pools;
 
 	// A reference to the event manager. Passed to systems that inherit from EventListener.
 	EventMgr& event_handler;
