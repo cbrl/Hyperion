@@ -61,11 +61,12 @@ void DisplayConfig::setNearestDisplayDesc(const vec2_u32& resolution,
                                           u32 refresh_rate,
                                           DXGI_FORMAT format) {
 
-	std::vector<std::vector<DXGI_MODE_DESC>::const_iterator> desc_matches;
+	std::vector<decltype(display_desc_list)::const_iterator> desc_matches;
 
+	//----------------------------------------------------------------------------------
 	// Populate matches
+	//----------------------------------------------------------------------------------
 	if (format != DXGI_FORMAT_UNKNOWN) {
-
 		for (auto it = display_desc_list.begin(); it != display_desc_list.end(); ++it) {
 			if (it->Format == format)
 				desc_matches.push_back(it);
@@ -77,78 +78,111 @@ void DisplayConfig::setNearestDisplayDesc(const vec2_u32& resolution,
 		}
 	}
 
+	//----------------------------------------------------------------------------------
 	// Get best width
+	//----------------------------------------------------------------------------------
 	{
-		u32 closest_width = std::numeric_limits<u32>::max();
+		// Sort the array by width (lowest -> highest)
+		std::sort(desc_matches.begin(), desc_matches.end(),
+			[](const decltype(desc_matches)::value_type& a, const decltype(desc_matches)::value_type& b) {
+				return a->Width < b->Width;
+		});
 
-		for (const auto& desc : desc_matches) {
-			const auto new_width = static_cast<i64>(desc->Width) - static_cast<i64>(resolution.x);
-			const auto old_width = static_cast<i64>(closest_width) - static_cast<i64>(resolution.x);
-
-			if (std::abs(new_width) < std::abs(old_width)) {
-				closest_width = desc->Width;
-			}
+		// Find and remove any elements with width > desired_width
+		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), resolution.x,
+			[](u32 a, const decltype(desc_matches)::value_type& b) {
+				return a < b->Width;
+		});
+		if (greater != desc_matches.end()) {
+			desc_matches.erase(greater, desc_matches.end());
 		}
 
-		for (auto it = desc_matches.begin(); it != desc_matches.end();) {
-			if ((*it)->Width != closest_width) {
-				it = desc_matches.erase(it);
-			}
-			else {
-				++it;
-			}
+		// Find and remove any elements with width != closest_match (aka matches.back())
+		auto first_eq = std::find_if(desc_matches.begin(), desc_matches.end(),
+			[&](const decltype(desc_matches)::value_type& a) {
+				return a->Width == desc_matches.back()->Width;
+		});
+		if (first_eq != desc_matches.end()) {
+			desc_matches.erase(desc_matches.begin(), first_eq);
 		}
 	}
 
+	//----------------------------------------------------------------------------------
 	// Get best height
+	//----------------------------------------------------------------------------------
 	{
-		u32 closest_height = std::numeric_limits<u32>::max();
+		// Sort the array by height (lowest -> highest)
+		std::sort(desc_matches.begin(), desc_matches.end(),
+			[](const decltype(desc_matches)::value_type& a, const decltype(desc_matches)::value_type& b) {
+				return a->Height < b->Height;
+		});
 
-		for (const auto& desc : desc_matches) {
-			const auto new_height = static_cast<i64>(desc->Height) - static_cast<i64>(resolution.y);
-			const auto old_height = static_cast<i64>(closest_height) - static_cast<i64>(resolution.y);
-
-			if (std::abs(new_height) < std::abs(old_height)) {
-				closest_height = desc->Height;
-			}
+		// Find and remove any elements with height > desired_height
+		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), resolution.y,
+			[](u32 a, const decltype(desc_matches)::value_type& b) {
+				return a < b->Height;
+		});
+		if (greater != desc_matches.end()) {
+			desc_matches.erase(greater, desc_matches.end());
 		}
 
-		for (auto it = desc_matches.begin(); it != desc_matches.end();) {
-			if ((*it)->Height != closest_height) {
-				it = desc_matches.erase(it);
-			}
-			else {
-				++it;
-			}
+		// Find and remove any elements with height != closest_match (aka matches.back())
+		auto first_eq = std::find_if(desc_matches.begin(), desc_matches.end(),
+			[&](const decltype(desc_matches)::value_type& a) {
+				return a->Height == desc_matches.back()->Height;
+		});
+		if (first_eq != desc_matches.end()) {
+			desc_matches.erase(desc_matches.begin(), first_eq);
 		}
 	}
 
+	//----------------------------------------------------------------------------------
 	// Get best refresh rate
+	//----------------------------------------------------------------------------------
 	if (refresh_rate != 0) {
 
-		u32 closest_rr = std::numeric_limits<u32>::max();
+		// Sort the array by refresh rate (lowest -> highest)
+		std::sort(desc_matches.begin(), desc_matches.end(),
+			[](const decltype(desc_matches)::value_type& a, const decltype(desc_matches)::value_type& b) {
+				const auto a_num   = static_cast<f32>(a->RefreshRate.Numerator);
+				const auto a_denom = static_cast<f32>(a->RefreshRate.Denominator);
+				const auto a_rr    = static_cast<i64>(round(a_num / a_denom));
 
-		for (const auto& desc : desc_matches) {
-			const auto num = static_cast<f32>(desc->RefreshRate.Numerator);
-			const auto denom = static_cast<f32>(desc->RefreshRate.Denominator);
-			const auto desc_rr = static_cast<i64>(round(num / denom));
+				const auto b_num   = static_cast<f32>(b->RefreshRate.Numerator);
+				const auto b_denom = static_cast<f32>(b->RefreshRate.Denominator);
+				const auto b_rr    = static_cast<i64>(round(b_num / b_denom));
 
-			const auto new_rr = desc_rr - refresh_rate;
-			const auto old_rr = static_cast<i64>(closest_rr - refresh_rate);
-			if (std::llabs(new_rr) < std::llabs(old_rr)) {
-				closest_rr = static_cast<u32>(desc_rr);
-			}
+				return a_rr < b_rr;
+		});
+
+		// Find and remove any elements with refresh > desired_refresh
+		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), refresh_rate,
+			[](u32 a, const decltype(desc_matches)::value_type& b) {
+				const auto b_num   = static_cast<f32>(b->RefreshRate.Numerator);
+				const auto b_denom = static_cast<f32>(b->RefreshRate.Denominator);
+				const auto b_rr    = static_cast<i64>(round(b_num / b_denom));
+
+				return a < b_rr;
+		});
+		if (greater != desc_matches.end()) {
+			desc_matches.erase(greater, desc_matches.end());
 		}
-		for (auto it = desc_matches.begin(); it != desc_matches.end();) {
-			const auto num = static_cast<f32>((*it)->RefreshRate.Numerator);
-			const auto denom = static_cast<f32>((*it)->RefreshRate.Denominator);
-			const auto desc_rr = static_cast<u32>(round(num / denom));
-			if (desc_rr != closest_rr) {
-				it = desc_matches.erase(it);
-			}
-			else {
-				++it;
-			}
+
+		// Find and remove any elements with refresh rate != closest_match (aka matches.last())
+		auto first_eq = std::find_if(desc_matches.begin(), desc_matches.end(),
+			[&](const decltype(desc_matches)::value_type& a) {
+				const auto a_num   = static_cast<f32>(a->RefreshRate.Numerator);
+				const auto a_denom = static_cast<f32>(a->RefreshRate.Denominator);
+			    const auto a_rr    = static_cast<i64>(round(a_num / a_denom));
+
+			    const auto b_num   = static_cast<f32>(desc_matches.back()->RefreshRate.Numerator);
+			    const auto b_denom = static_cast<f32>(desc_matches.back()->RefreshRate.Denominator);
+			    const auto b_rr    = static_cast<i64>(round(b_num / b_denom));
+
+				return a_rr == b_rr;
+		});
+		if (first_eq != desc_matches.end()) {
+			desc_matches.erase(desc_matches.begin(), first_eq);
 		}
 	}
 
