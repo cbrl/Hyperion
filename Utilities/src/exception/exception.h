@@ -5,8 +5,8 @@
 // Includes
 //----------------------------------------------------------------------------------
 
-#include "string/string.h"
 #include "log/log.h"
+#include <string>
 #include <cassert>
 #include <stdexcept>
 #include <iostream>

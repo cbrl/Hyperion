@@ -29,6 +29,10 @@
 #include <optional>
 #include <type_traits>
 
+#ifdef _WIN32
+#include "os/windows/windows.h"
+#endif
+
 
 // String literal operators
 using namespace std::string_literals;
@@ -40,15 +44,35 @@ using namespace std::string_literals;
 //----------------------------------------------------------------------------------
 
 // Convert a string to a wide string
-inline std::wstring StrToWstr(const std::string& in) {
+inline std::wstring StrToWstr(std::string_view in) {
+	if (in.empty()) return std::wstring{};
+#ifdef _WIN32
+	int count = MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), NULL, 0);
+	wchar_t* wstr = new wchar_t[count + 1]{0};
+	MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), wstr, count);
+	std::wstring out{wstr};
+	delete[] wstr;
+	return out;
+#else
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
 	return wstring_converter.from_bytes(in);
+#endif
 }
 
 // Convert a wide string to a string
-inline std::string WstrToStr(const std::wstring& in) {
+inline std::string WstrToStr(std::wstring_view in) {
+	if (in.empty()) return std::string{};
+#ifdef _WIN32
+	int count = WideCharToMultiByte(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), NULL, 0, NULL, NULL);
+	char* str = new char[count + 1]{0};
+	int written = WideCharToMultiByte(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), str, count, NULL, NULL);
+	std::string out{str};
+	delete[] str;
+	return out;
+#else
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
 	return wstring_converter.to_bytes(in);
+#endif
 }
 
 
