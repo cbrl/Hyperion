@@ -1,12 +1,14 @@
 #ifndef HLSL_NORMAL
 #define HLSL_NORMAL
 
+#include "include/math.hlsli"
+
 
 // http://www.thetenthplanet.de/archives/1180
 float3x3 ComputeTBN(float3 position, float3 normal, float2 tex) {
 	// Get edge vectors of the pixel triangle
-	float3 dp1 = ddx(position);
-	float3 dp2 = ddy(position);
+	float3 dp1  = ddx(position);
+	float3 dp2  = ddy(position);
 	float2 duv1 = ddx(tex);
 	float2 duv2 = ddx(tex);
 
@@ -22,12 +24,14 @@ float3x3 ComputeTBN(float3 position, float3 normal, float2 tex) {
 	return float3x3(T * invmax, B * invmax, normal);
 }
 
+float3 TransformNormal(float3x3 TBN, float3 normal_map_sample) {
+	const float3 tex_normal = UNormToSNorm(normal_map_sample);
+	return normalize(mul(tex_normal, TBN));
+}
+
 float3 TransformNormal(float3 position, float3 normal, float2 tex, float3 normal_map_sample) {
-	float3 tex_normal = (2.0f * normal_map_sample) - 1.0f;
-
 	float3x3 TBN = ComputeTBN(position, normal, tex);
-
-	return mul(tex_normal, TBN);
+	return TransformNormal(TBN, normal_map_sample);
 }
 
 

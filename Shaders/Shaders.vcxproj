@@ -229,6 +229,7 @@
       <FileType>Document</FileType>
     </None>
     <None Include="shaders\include\lighting.hlsli" />
+    <None Include="shaders\include\math.hlsli" />
     <None Include="shaders\include\normal.hlsli">
       <FileType>Document</FileType>
     </None>

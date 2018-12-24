@@ -2,15 +2,16 @@
 #include "include/transform.hlsli"
 
 
-PSTexture VS(VSPositionNormalTexture vin) {
+PSPositionTexture VS(VSPositionNormalTexture vin) {
 
-	PSTexture vout;
-	vout.position = Transform(vin.position,
-	                          g_model_to_world,
-	                          g_world_to_camera_alt,
-	                          g_camera_to_projection_alt);
+	PSPositionTexture vout;
 
-	vout.tex = Transform(vin.tex, g_tex_transform);
+	vout.p = Transform(vin.p,
+	                   g_model_to_world,
+	                   g_world_to_camera_alt,
+	                   g_camera_to_projection_alt);
+
+	vout.uv = Transform(vin.uv, g_tex_transform);
 
 	return vout;
 }

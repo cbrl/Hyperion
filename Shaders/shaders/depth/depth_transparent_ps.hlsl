@@ -1,12 +1,12 @@
 #include "forward/forward_include.hlsli"
 
 
-void PS(PSTexture pin) {
+void PS(PSPositionTexture pin) {
 	
 	float alpha = 1.0f;
 
 	if (g_material.has_texture) {
-		alpha  = diffuse_map.Sample(g_linear_wrap, pin.tex).w;
+		alpha  = diffuse_map.Sample(g_linear_wrap, pin.uv).w;
 		alpha *= g_material.opacity;
 	}
 	else {

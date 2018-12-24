@@ -18,7 +18,6 @@ Texture2D normal_map  : REG_T(SLOT_SRV_NORMAL);
 
 
 float3 GetNormal(float3 position, float3 normal, float2 tex) {
-
 	float3 sam = normal_map.Sample(g_linear_wrap, tex).xyz;
 	
 	// Simply normalize and return the input normal if there was no normal map

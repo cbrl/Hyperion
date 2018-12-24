@@ -7,20 +7,20 @@
 //----------------------------------------------------------------------------------
 
 struct VSPosition {
-	float3 position : POSITION0;
+	float3 p : POSITION0;
 };
 
 
 struct VSPositionNormal {
-	float3 position : POSITION0;
-	float3 normal   : NORMAL0;
+	float3 p : POSITION0;
+	float3 n   : NORMAL0;
 };
 
 
 struct VSPositionNormalTexture {
-	float3 position : POSITION0;
-	float3 normal   : NORMAL0;
-	float2 tex      : TEXCOORD0;
+	float3 p  : POSITION0;
+	float3 n  : NORMAL0;
+	float2 uv : TEXCOORD0;
 };
 
 
@@ -30,22 +30,28 @@ struct VSPositionNormalTexture {
 //----------------------------------------------------------------------------------
 
 struct PSWorldPosition {
-	float4 position       : SV_POSITION;
-	float3 position_world : POSITION0;
+	float4 p       : SV_POSITION;
+	float3 p_world : POSITION0;
 };
 
 
-struct PSTexture {
-	float4 position : SV_POSITION;
-	float2 tex      : TEXCOORD0;
+struct PSPositionNormal {
+	float4 p : SV_POSITION;
+	float2 n : NORMAL0;
+};
+
+
+struct PSPositionTexture {
+	float4 p  : SV_POSITION;
+	float2 uv : POSITION0;
 };
 
 
 struct PSPositionNormalTexture {
-	float4 position       : SV_POSITION;
-	float3 position_world : POSITION0;
-	float3 normal         : NORMAL0;
-	float2 tex            : TEXCOORD0;
+	float4 p       : SV_POSITION;
+	float3 p_world : POSITION0;
+	float3 n       : NORMAL0;
+	float2 uv      : TEXCOORD0;
 };
 
 

@@ -16,7 +16,7 @@
 float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 	// The to_eye vector is used in lighting
-	float3 to_eye = CameraPosition() - pin.position_world;
+	float3 to_eye = CameraPosition() - pin.p_world;
 
 	// Cache the distance to the eye from this surface point
 	float dist_to_eye = length(to_eye);
@@ -30,7 +30,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	float  alpha;
 	{
 		if (g_material.has_texture) {
-			float4 tex_color = diffuse_map.Sample(g_aniso_wrap, pin.tex);
+			float4 tex_color = diffuse_map.Sample(g_aniso_wrap, pin.uv);
 
 			base_color = tex_color * g_material.diffuse;
 			alpha      = tex_color.w * g_material.opacity;
@@ -54,13 +54,13 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	//----------------------------------------------------------------------------------
 
 	#ifdef ENABLE_LIGHTING
-	const float3 normal_vec = GetNormal(pin.position.xyz, pin.normal, pin.tex);
+	const float3 normal_vec = GetNormal(pin.p.xyz, pin.n, pin.uv);
 
-	float4 out_color = CalculateLighting(pin.position_world, normal_vec, to_eye, base_color, g_material);
+	float4 out_color = CalculateLighting(pin.p_world, normal_vec, to_eye, base_color, g_material);
 
 	if (g_material.mirror_surface) {
 		const float3 incident         = -to_eye;
-		const float3 reflection_vec   = reflect(incident, pin.normal);
+		const float3 reflection_vec   = reflect(incident, pin.n);
 		const float3 reflection_color = g_material.diffuse.xyz * env_map.Sample(g_aniso_wrap, reflection_vec).xyz;
 
 		out_color.xyz = (g_material.reflectivity * reflection_color) + ((1.0f - g_material.reflectivity) * out_color.xyz);

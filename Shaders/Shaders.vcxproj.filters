@@ -129,5 +129,8 @@
     <None Include="shaders\forward\forward_ps.hlsli">
       <Filter>Shader Files\forward</Filter>
     </None>
+    <None Include="shaders\include\math.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
   </ItemGroup>
 </Project>
