@@ -48,10 +48,9 @@ inline std::wstring StrToWstr(std::string_view in) {
 	if (in.empty()) return std::wstring{};
 #ifdef _WIN32
 	int count = MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), NULL, 0);
-	wchar_t* wstr = new wchar_t[count + 1]{0};
-	MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), wstr, count);
-	std::wstring out{wstr};
-	delete[] wstr;
+	std::wstring out(count, 0);
+	MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), out.data(), count);
+	out.resize(count);
 	return out;
 #else
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
@@ -64,10 +63,9 @@ inline std::string WstrToStr(std::wstring_view in) {
 	if (in.empty()) return std::string{};
 #ifdef _WIN32
 	int count = WideCharToMultiByte(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), NULL, 0, NULL, NULL);
-	char* str = new char[count + 1]{0};
-	int written = WideCharToMultiByte(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), str, count, NULL, NULL);
-	std::string out{str};
-	delete[] str;
+	std::string out(count, 0);
+	int written = WideCharToMultiByte(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), out.data(), count, NULL, NULL);
+	out.resize(count);
 	return out;
 #else
 	static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> wstring_converter;
