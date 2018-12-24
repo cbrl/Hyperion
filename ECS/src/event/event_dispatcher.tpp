@@ -1,38 +1,43 @@
 template<typename EventT>
+EventDispatcher<EventT>::EventDispatcher()
+    : delegate_list_locked(false) {
+}
+
+template<typename EventT>
 EventDispatcher<EventT>::~EventDispatcher() {
 	//m_PendingAddDelegates.clear();
 	pending_remove_delegates.clear();
-	event_callbacks.clear();
+	event_delegates.clear();
 }
 
 
 template<typename EventT>
 void EventDispatcher<EventT>::dispatch(IEvent* event) {
-	locked = true;
+	delegate_list_locked = true;
 
-	{
-		// remove pending delegates
-		if (!pending_remove_delegates.empty()) {
-			for (auto it : pending_remove_delegates) {
-				event_callbacks.erase(it);
-			}
-			pending_remove_delegates.clear();
+	// Remove pending delegates
+	if (!pending_remove_delegates.empty()) {
+		for (auto& it : pending_remove_delegates) {
+			event_delegates.erase(it);
 		}
-
-		for (auto& callback : event_callbacks) {
-			assert(callback != nullptr && "Invalid event callback");
-			callback->invoke(event);
-		}
+		pending_remove_delegates.clear();
 	}
 
-	locked = false;
+	// Dispatch event
+	for (auto& delegate : event_delegates) {
+		assert(delegate != nullptr && "Invalid event callback");
+		delegate->invoke(event);
+	}
+
+	delegate_list_locked = false;
 }
 
 
 template<typename EventT>
 void EventDispatcher<EventT>::addEventCallback(IEventDelegate* delegate) {
-	auto result = std::find_if(pending_remove_delegates.begin(), pending_remove_delegates.end(), [&](typename decltype(event_callbacks)::iterator& it) {
-		return (*it)->operator==(*delegate);
+	auto result = std::find_if(pending_remove_delegates.begin(), pending_remove_delegates.end(),
+		[&](typename decltype(event_delegates)::iterator& it) {
+			return (*it)->operator==(*delegate);
 	});
 
 	// remove the delegate from the pending remove list if applicable
@@ -40,7 +45,7 @@ void EventDispatcher<EventT>::addEventCallback(IEventDelegate* delegate) {
 		pending_remove_delegates.erase(result);
 	}
 	else {
-		event_callbacks.emplace_back(delegate);
+		event_delegates.emplace_back(delegate);
 	}
 }
 
@@ -48,15 +53,15 @@ void EventDispatcher<EventT>::addEventCallback(IEventDelegate* delegate) {
 template<typename EventT>
 void EventDispatcher<EventT>::removeEventCallback(IEventDelegate* delegate) {
 
-	auto result = std::find_if(event_callbacks.begin(), event_callbacks.end(), [&](std::unique_ptr<IEventDelegate>& other) {
+	auto result = std::find_if(event_delegates.begin(), event_delegates.end(), [&](std::unique_ptr<IEventDelegate>& other) {
 		return other->operator==(*delegate);
 	});
 
-	if (!locked && result != event_callbacks.end()) {
-		event_callbacks.erase(result);
+	if (!delegate_list_locked && result != event_delegates.end()) {
+		event_delegates.erase(result);
 	}
 	else {
-		assert(result != event_callbacks.end() && "Invalid event callback specified for removal");
+		assert(result != event_delegates.end() && "Invalid event callback specified for removal");
 		pending_remove_delegates.push_back(result);
 	}
 }
@@ -64,5 +69,5 @@ void EventDispatcher<EventT>::removeEventCallback(IEventDelegate* delegate) {
 
 template<typename EventT>
 size_t EventDispatcher<EventT>::getEventCallbackCount() const {
-	return event_callbacks.size();
+	return event_delegates.size();
 }

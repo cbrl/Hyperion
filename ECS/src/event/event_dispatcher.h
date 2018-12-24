@@ -60,7 +60,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EventDispatcher() : locked(false) {}
+	EventDispatcher();
 	EventDispatcher(const EventDispatcher&) = delete;
 	EventDispatcher(EventDispatcher&&) noexcept = default;
 
@@ -102,12 +102,12 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	bool locked;
+	bool delegate_list_locked;
 
-	std::list<std::unique_ptr<IEventDelegate>> event_callbacks;
+	std::list<std::unique_ptr<IEventDelegate>> event_delegates;
 
 	//std::list<IEventDelegate*> pending_add_delegates;
-	std::list<typename decltype(event_callbacks)::iterator> pending_remove_delegates; //using iterators since std::list::iterator isn't invalidated
+	std::list<typename decltype(event_delegates)::iterator> pending_remove_delegates; //using iterators since std::list::iterator isn't invalidated
 };
 
 #include "event_dispatcher.tpp"
