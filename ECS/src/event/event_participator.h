@@ -19,6 +19,10 @@ class EventMgr;
 //
 //----------------------------------------------------------------------------------
 class EventParticipator {
+	friend class EntityMgr;
+	friend class ComponentMgr;
+	friend class SystemMgr;
+
 public:
 
 	//----------------------------------------------------------------------------------
@@ -41,19 +45,18 @@ public:
 	EventParticipator& operator=(const EventParticipator&) noexcept = default;
 	EventParticipator& operator=(EventParticipator&&) noexcept = default;
 
+protected:
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-
-	void setEventMgr(gsl::not_null<EventMgr*> handler) noexcept;
-
-protected:
-
 	[[nodiscard]]
 	EventMgr* getEventMgr() const noexcept;
 
 private:
+
+	void setEventMgr(gsl::not_null<EventMgr*> handler) noexcept;
+
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
@@ -68,7 +71,7 @@ private:
 //----------------------------------------------------------------------------------
 //
 // Components/Systems that send events will inherit from this class. The Entity
-// also inherits from this class.
+// class also inherits from this.
 //
 //----------------------------------------------------------------------------------
 class EventSender : public virtual EventParticipator {
