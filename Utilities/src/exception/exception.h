@@ -37,6 +37,14 @@
 // Functions
 //----------------------------------------------------------------------------------
 
+inline void(ThrowIfFailed)(bool result, const char* file, int line, const char* msg = "Unknown Error") {
+	if (!result) {
+		//std::cerr << msg << std::endl;
+		Logger::log(LogLevel::critical, "{}:{:d} - {}", file, line, msg);
+		throw std::runtime_error(msg);
+	}
+}
+
 inline void (ThrowIfFailed)(bool result, const char* file, int line, const std::string& msg = "Unknown Error") {
 	if (!result) {
 		//std::cerr << msg << std::endl;

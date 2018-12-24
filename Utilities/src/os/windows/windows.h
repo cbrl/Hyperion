@@ -46,6 +46,17 @@ using Microsoft::WRL::ComPtr;
 // Functions
 //----------------------------------------------------------------------------------
 
+inline void(ThrowIfFailed)(HRESULT hr, const char* file, int line, const char* msg = "Unkown Error") {
+	if (FAILED(hr)) {
+		std::stringstream result;
+		result << msg << " (Failure with HRESULT of 0x" << std::hex << hr << ")";
+
+		//std::cerr << result.str();
+		Logger::log(LogLevel::critical, "{}:{:d} - {}", file, line, result.str());
+		throw std::runtime_error(result.str());
+	}
+}
+
 inline void (ThrowIfFailed)(HRESULT hr, const char* file, int line, const std::string& msg = "Unkown Error") {
 	if (FAILED(hr)) {
 		std::stringstream result;
