@@ -26,6 +26,7 @@ SamplerComparisonState g_pcf_sampler : REG_S(SLOT_SAMPLER_PCF);
 //----------------------------------------------------------------------------------
 
 //cbuffer EngineBuffer : REG_B(SLOT_CBUFFER_ENGINE) {
+	//float g_dt;
 //}
 
 
