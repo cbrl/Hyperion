@@ -152,22 +152,19 @@ void TestScene::load(const Engine& engine) {
 	text_cpu = addEntity<>();
 	text_cpu->setName("CPU Usage");
 	text_cpu->addComponent<Text>(font);
-	text_cpu->getComponent<Transform>()->setPosition(
-		vec3_f32{ 10, 10, 0 });
+	text_cpu->getComponent<Transform>()->setPosition(vec3_f32{ 10, 10, 0 });
 
 	// RAM Usage
 	text_ram = addEntity<>();
 	text_ram->setName("Ram Usage");
 	text_ram->addComponent<Text>(font);
-	text_ram->getComponent<Transform>()->setPosition(
-		vec3_f32{ 10, 80, 0 });
+	text_ram->getComponent<Transform>()->setPosition(vec3_f32{ 10, 80, 0 });
 
 	// Mouse Position
 	text_mouse = addEntity<>();
 	text_mouse->setName("Mouse Position");
 	text_mouse->addComponent<Text>(font);
-	text_mouse->getComponent<Transform>()->setPosition(
-		vec3_f32{ 10, 150, 0 });
+	text_mouse->getComponent<Transform>()->setPosition(vec3_f32{ 10, 150, 0 });
 }
 
 

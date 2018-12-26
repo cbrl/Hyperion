@@ -54,7 +54,7 @@ cbuffer CameraBuffer : REG_B(SLOT_CBUFFER_CAMERA) {
 
 
 float3 CameraPosition() {
-	return g_camera_to_world._m30_m31_m32;
+	return g_camera_to_world._41_42_43;
 }
 
 
