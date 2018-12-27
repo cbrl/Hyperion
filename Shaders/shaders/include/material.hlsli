@@ -7,7 +7,7 @@ struct Material {
 	float4 diffuse;           //[0.0, 1.0]
 	float4 specular;          //[0.0, 1.0]
 	float4 emissive;          //[0.0, 1.0]
-	float  spec_scale;        //(0.0, inf)
+	float  spec_scale;        //[0.0, inf)
 	float  spec_exponent;     //[1.0, inf)
 	float  opacity;           //[0.0, 1.0]
 	bool   mirror_surface;

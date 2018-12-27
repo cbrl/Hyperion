@@ -132,5 +132,8 @@
     <None Include="shaders\include\math.hlsli">
       <Filter>Shader Files\include</Filter>
     </None>
+    <None Include="shaders\include\brdf.hlsli">
+      <Filter>Shader Files\include</Filter>
+    </None>
   </ItemGroup>
 </Project>
