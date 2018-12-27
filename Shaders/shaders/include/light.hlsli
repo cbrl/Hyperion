@@ -7,13 +7,75 @@
 
 
 //----------------------------------------------------------------------------------
-// Defines
+// Attenuation
 //----------------------------------------------------------------------------------
-#define SPECULAR_FACTOR_FUNC SpecularBlinnPhong
+//          d: distance to light
+// att_values: constant, linear, and quadratic attenuation values respectively
+//----------------------------------------------------------------------------------
+float Attenuation(float d, float3 att_values) {
+	return 1.0f / dot(att_values, float3(1.0f, d, d * d));
+}
 
 
 //----------------------------------------------------------------------------------
-//  Structs
+// SpotIntensity
+//----------------------------------------------------------------------------------
+//         L: light vector (surface to light)
+//         D: light direction
+// cos_theta: cosine of the umbra angle
+//   cos_phi: cosine of the penumbra angle
+//----------------------------------------------------------------------------------
+float SpotIntensity(float3 L, float3 D, float cos_theta, float cos_phi) {
+	const float alpha = dot(-L, D);
+	return smoothstep(cos_phi, cos_theta, alpha);
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+// Shadow Map Structs
+//----------------------------------------------------------------------------------
+
+struct ShadowMap {
+	SamplerComparisonState sam_shadow;
+	Texture2DArray maps;
+	uint index;
+
+	float ShadowFactor(float3 p_ndc) {
+		const float2 uv = float2(0.5f, -0.5f) * p_ndc.xy + 0.5f;
+		const float3 location = {uv, index};
+
+		return maps.SampleCmpLevelZero(sam_shadow, location, p_ndc.z);
+	}
+
+	float ShadowFactor(float3 p_light, float2 projection_values);
+};
+
+
+struct ShadowCubeMap {
+	SamplerComparisonState sam_shadow;
+	TextureCubeArray maps;
+	uint index;
+
+	float ShadowFactor(float3 p_ndc);
+
+	float ShadowFactor(float3 p_light, float2 projection_values) {
+		const float3 p_light_abs = abs(p_light);
+
+		const float p_light_z = max(p_light_abs.x, max(p_light_abs.y, p_light_abs.z));
+		const float p_ndc_z = projection_values.x + projection_values.y / p_light_z;
+		const float4 location = float4(p_light, index);
+
+		return maps.SampleCmpLevelZero(sam_shadow, location, p_ndc_z);
+	}
+};
+
+
+
+
+//----------------------------------------------------------------------------------
+// Directional Light
 //----------------------------------------------------------------------------------
 
 struct DirectionalLight {
@@ -24,8 +86,48 @@ struct DirectionalLight {
 	float3 direction;
 	float  pad3;
 	matrix world_to_projection;
+
+	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor, out float3 p_ndc) {
+		// The light vector aims opposite the direction the light rays travel
+		p_to_l = -direction;
+
+		const float4 p_proj = mul(float4(p_world, 1.0f), world_to_projection);
+		p_ndc = Homogenize(p_proj);
+
+		E_factor = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : diffuse;
+	}
+
+	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor) {
+		float3 p_ndc;
+		float3 p_to_l0;
+		float3 E_factor0;
+
+		Calculate(p_world, p_to_l0, E_factor0, p_ndc);
+
+		p_to_l   = p_to_l0;
+		E_factor = E_factor0;
+	}
+
+	void Calculate(ShadowMap shadow_map, float3 p_world, out float3 p_to_l, out float3 E_factor) {
+		float3 p_ndc;
+		float3 p_to_l0;
+		float3 E_factor0;
+
+		Calculate(p_world, p_to_l0, E_factor0, p_ndc);
+
+		p_to_l = p_to_l0;
+
+		const float shadow_factor = shadow_map.ShadowFactor(p_ndc);
+		E_factor = E_factor0 * shadow_factor;
+	}
 };
 
+
+
+
+//----------------------------------------------------------------------------------
+// Point Light
+//----------------------------------------------------------------------------------
 
 struct PointLight {
 	float3 diffuse;
@@ -36,15 +138,50 @@ struct PointLight {
 	float  range;
 	float3 attenuation;
 	float  pad3;
+
+	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor) {
+		// The vector from the surface to the light
+		p_to_l = position - p_world;
+
+		// The distance from surface to light
+		const float d = length(p_to_l);
+
+		// Normalize the light vector
+		p_to_l /= d;
+
+		// Attenuation
+		const float att_factor = Attenuation(d, attenuation);
+		E_factor = diffuse * att_factor;
+	}
 };
 
-struct ShadowPointLight {
-	PointLight light;
+
+struct ShadowPointLight : PointLight {
 	matrix world_to_light;
 	float2 projection_values;
 	float2 pad;
+
+	void Calculate(ShadowCubeMap shadow_map, float3 p_world, out float3 p_to_l, out float3 E_factor) {
+		float3 p_to_l0;
+		float3 E_factor0;
+
+		PointLight::Calculate(p_world, p_to_l0, E_factor0);
+
+		p_to_l = p_to_l0;
+
+		const float3 p_light       = mul(float4(p_world, 1.0f), world_to_light).xyz;
+		const float  shadow_factor = shadow_map.ShadowFactor(p_light, projection_values);
+
+		E_factor = E_factor0 * shadow_factor;
+	}
 };
 
+
+
+
+//----------------------------------------------------------------------------------
+// Spot Light
+//----------------------------------------------------------------------------------
 
 struct SpotLight {
 	float3 diffuse;
@@ -57,25 +194,43 @@ struct SpotLight {
 	float  cos_umbra;
 	float  cos_penumbra;
 	float3 attenuation;
+
+	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor) {
+		// The vector from the surface to the light.
+		p_to_l = position - p_world;
+
+		// The distance from surface to light.
+		float d = length(p_to_l);
+
+		// Normalize the light vector.
+		p_to_l /= d;
+
+		const float att_factor = Attenuation(d, attenuation);
+		const float intensity  = SpotIntensity(p_to_l, direction, cos_umbra, cos_penumbra);
+
+		E_factor = diffuse * att_factor * intensity;
+	}
 };
 
-struct ShadowSpotLight {
-	SpotLight light;
+struct ShadowSpotLight : SpotLight {
 	matrix world_to_projection;
+
+	void Calculate(ShadowMap shadow_map, float3 p_world, out float3 p_to_l, out float3 E_factor) {
+		float3 p_to_l0;
+		float3 E_factor0;
+
+		SpotLight::Calculate(p_world, p_to_l0, E_factor0);
+
+		p_to_l = p_to_l0;
+
+		const float4 p_proj        = mul(float4(p_world, 1.0f), world_to_projection);
+		const float3 p_ndc         = Homogenize(p_proj);
+		const float  shadow_factor = shadow_map.ShadowFactor(p_ndc);
+
+		E_factor = E_factor0 * shadow_factor;
+	}
 };
 
-
-struct ShadowMap {
-	SamplerComparisonState sam_shadow;
-	Texture2DArray maps;
-	uint index;
-};
-
-struct ShadowCubeMap {
-	SamplerComparisonState sam_shadow;
-	TextureCubeArray maps;
-	uint index;
-};
 
 
 
@@ -99,204 +254,6 @@ TextureCubeArray g_point_light_smaps : REG_T(SLOT_SRV_POINT_LIGHT_SHADOW_MAPS);
 StructuredBuffer<ShadowSpotLight> g_shadow_spot_lights : REG_T(SLOT_SRV_SPOT_LIGHTS_SHADOW);
 Texture2DArray g_spot_light_smaps : REG_T(SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS);
 
-
-
-
-
-
-//----------------------------------------------------------------------------------
-// Attenuation
-//----------------------------------------------------------------------------------
-//          d: distance to light
-// att_values: constant, linear, and quadratic attenuation values respectively
-//----------------------------------------------------------------------------------
-float Attenuation(float d, float3 att_values) {
-	return 1.0f / dot(att_values, float3(1.0f, d, d*d));
-}
-
-
-//----------------------------------------------------------------------------------
-// SpotIntensity
-//----------------------------------------------------------------------------------
-//         L: light vector (surface to light)
-//         D: light direction
-// cos_theta: cosine of the umbra angle
-//   cos_phi: cosine of the penumbra angle
-//----------------------------------------------------------------------------------
-float SpotIntensity(float3 L, float3 D, float cos_theta, float cos_phi) {
-	const float alpha = dot(-L, D);
-	return smoothstep(cos_phi, cos_theta, alpha);
-}
-
-
-//----------------------------------------------------------------------------------
-// ShadowFactor
-//----------------------------------------------------------------------------------
-// shadow_map: shadow map for this light
-//      p_ndc: position vector in light NDC space
-//----------------------------------------------------------------------------------
-float ShadowFactor(ShadowMap shadow_map, float3 p_ndc) {
-	const float2 uv       = float2(0.5f, -0.5f) * p_ndc.xy + 0.5f;
-	const float3 location = { uv, shadow_map.index };
-
-	return shadow_map.maps.SampleCmpLevelZero(shadow_map.sam_shadow, location, p_ndc.z);
-}
-
-
-//----------------------------------------------------------------------------------
-// ShadowFactor
-//----------------------------------------------------------------------------------
-//        shadow_map: shadow cube map for this light
-//           p_light: position vector in light space
-// projection_values: projection values of the light
-//----------------------------------------------------------------------------------
-float ShadowFactor(ShadowCubeMap shadow_map, float3 p_light, float2 projection_values) {
-	const float3 p_light_abs = abs(p_light);
-
-	const float  p_light_z = max(p_light_abs.x, max(p_light_abs.y, p_light_abs.z));
-	const float  p_ndc_z   = projection_values.x + projection_values.y / p_light_z;
-	const float4 location  = float4(p_light, shadow_map.index);
-
-	return shadow_map.maps.SampleCmpLevelZero(shadow_map.sam_shadow, location, p_ndc_z);
-}
-
-
-//----------------------------------------------------------------------------------
-// ComputeDirectionalLight
-//----------------------------------------------------------------------------------
-// Computes the diffuse and specular terms in the lighting equation
-// from a directional light.  We need to output the terms separately because
-// later we will modify the individual terms.
-//----------------------------------------------------------------------------------
-void ComputeDirectionalLight(DirectionalLight L, float3 p_world,
-                             out float3 p_to_l, out float3 E_factor, out float3 out_p_ndc) {
-
-	// The light vector aims opposite the direction the light rays travel
-	p_to_l = -L.direction;
-
-	const float4 p_proj = mul(float4(p_world, 1.0f), L.world_to_projection);
-	out_p_ndc = Homogenize(p_proj);
-
-	E_factor = (any(1.0f < abs(out_p_ndc)) || 0.0f > out_p_ndc.z) ? 0.0f : L.diffuse;
-}
-
-
-void ComputeDirectionalLight(DirectionalLight L, float3 p_world,
-                             out float3 p_to_l, out float3 E_factor) {
-
-	float3 p_ndc;
-	float3 p_to_l0;
-	float3 E_factor0;
-
-	ComputeDirectionalLight(L, p_world, p_to_l0, E_factor0, p_ndc);
-
-	p_to_l   = p_to_l0;
-	E_factor = E_factor0;
-}
-
-
-void ComputeShadowDirectionalLight(DirectionalLight L, ShadowMap shadow_map, float3 p_world,
-                                   out float3 p_to_l, out float3 E_factor) {
-
-	float3 p_ndc;
-	float3 p_to_l0;
-	float3 E_factor0;
-
-	ComputeDirectionalLight(L, p_world, p_to_l0, E_factor0, p_ndc);
-
-	p_to_l = p_to_l0;
-
-	const float shadow_factor = ShadowFactor(shadow_map, p_ndc);
-	E_factor = E_factor0 * shadow_factor;
-}
-
-
-
-//----------------------------------------------------------------------------------
-// ComputePointLight
-//----------------------------------------------------------------------------------
-// Computes the diffuse and specular terms in the lighting equation
-// from a point light. We need to output the terms separately because
-// later we will modify the individual terms.
-//----------------------------------------------------------------------------------
-void ComputePointLight(PointLight L, float3 p_world,
-                       out float3 p_to_l, out float3 E_factor) {
-
-	// The vector from the surface to the light
-	p_to_l = L.position - p_world;
-
-	// The distance from surface to light
-	const float d = length(p_to_l);
-
-	// Normalize the light vector
-	p_to_l /= d;
-
-	// Attenuation
-	const float at = Attenuation(d, L.attenuation);
-	E_factor = L.diffuse * at;
-}
-
-
-void ComputeShadowPointLight(ShadowPointLight L, ShadowCubeMap shadow_map, float3 p_world,
-                             out float3 p_to_l, out float3 E_factor) {
-
-	float3 p_to_l0;
-	float3 E_factor0;
-
-	ComputePointLight(L.light, p_world, p_to_l0, E_factor0);
-
-	p_to_l = p_to_l0;
-
-	const float3 p_light       = mul(float4(p_world, 1.0f), L.world_to_light).xyz;
-	const float  shadow_factor = ShadowFactor(shadow_map, p_light, L.projection_values);
-
-	E_factor = E_factor0 * shadow_factor;
-}
-
-
-
-//----------------------------------------------------------------------------------
-// ComputeSpotLight
-//----------------------------------------------------------------------------------
-// Computes the diffuse and specular terms in the lighting equation
-// from a spotlight. We need to output the terms separately because
-// later we will modify the individual terms.
-//----------------------------------------------------------------------------------
-void ComputeSpotLight(SpotLight L, float3 p_world,
-                      out float3 p_to_l, out float3 E_factor) {
-
-	// The vector from the surface to the light.
-	p_to_l = L.position - p_world;
-
-	// The distance from surface to light.
-	float d = length(p_to_l);
-
-	// Normalize the light vector.
-	p_to_l /= d;
-
-	const float attenuation = Attenuation(d, L.attenuation);
-	const float intensity   = SpotIntensity(p_to_l, L.direction, L.cos_umbra, L.cos_penumbra);
-
-	E_factor = L.diffuse * attenuation * intensity;
-}
-
-
-void ComputeShadowSpotLight(ShadowSpotLight L, ShadowMap shadow_map, float3 p_world,
-                            out float3 p_to_l, out float3 E_factor) {
-	
-	float3 p_to_l0;
-	float3 E_factor0;
-
-	ComputeSpotLight(L.light, p_world, p_to_l0, E_factor0);
-
-	p_to_l = p_to_l0;
-
-	const float4 p_proj        = mul(float4(p_world, 1.0f), L.world_to_projection);
-	const float3 p_ndc         = Homogenize(p_proj);
-	const float  shadow_factor = ShadowFactor(shadow_map, p_ndc);
-
-	E_factor = E_factor0 * shadow_factor;
-}
 
 
 #endif //HLSL_LIGHT
