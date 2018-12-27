@@ -5,45 +5,78 @@
 #include "include/material.hlsli"
 
 
+#define BRDF_FUNCTION BlinnPhongBRDF
+
+
 //----------------------------------------------------------------------------------
-// DiffuseFactor
+// Lambert BRDF
 //----------------------------------------------------------------------------------
-// L: light vector (surface to light)
-// N: normal vector
+// l: light vector (surface to light)
+// n: normal vector
+// v: 
 //----------------------------------------------------------------------------------
-float DiffuseFactor(float3 L, float3 N) {
-	return max(dot(N, L), 0.0f) * g_inv_pi;
+
+float DiffuseLambert(float3 l, float3 n) {
+	return max(dot(n, l), 0.0f) * g_inv_pi;
 }
 
-
-//----------------------------------------------------------------------------------
-// Specular Factor Functions
-//----------------------------------------------------------------------------------
-//     L: light vector (surface to light)
-//     N: normal vector
-//     V: view vector (surface to camera)
-// power: specular exponent
-//----------------------------------------------------------------------------------
-
-float SpecularPhong(float3 L, float3 N, float3 V, float power) {
-	const float3 R = normalize(reflect(-L, N));
-	const float R_dot_V = max(dot(R, V), 0.0f);
-	return pow(R_dot_V, power);
-}
-float SpecularBlinnPhong(float3 L, float3 N, float3 V, float power) {
-	const float3 H = normalize(L + V);
-	const float N_dot_H = max(dot(N, H), 0.0f);
-	return pow(N_dot_H, power);
-}
-
-
-
-void ComputeBRDF(float3 p_to_l, float3 n, float3 p_to_v, Material mat,
+void LambertBRDF(float3 l, float3 n, float3 v, Material mat,
                  out float3 diffuse, out float3 specular) {
 
-	const float diff_factor = DiffuseFactor(p_to_l, n);
-	diffuse  = mat.diffuse.xyz * diff_factor;
-	specular = SpecularBlinnPhong(p_to_l, n, p_to_v, mat.spec_exponent);
+	diffuse  = DiffuseLambert(l, n) * mat.diffuse.xyz;
+	specular = float3(0.0f, 0.0f, 0.0f);
+}
+
+
+
+
+
+//----------------------------------------------------------------------------------
+// Blinn(-Phong) BRDF
+//----------------------------------------------------------------------------------
+//     l: light vector (surface to light)
+//     n: normal vector
+//     v: view vector (surface to camera)
+//----------------------------------------------------------------------------------
+
+float SpecularPhong(float3 l, float3 n, float3 v, float power) {
+	const float3 r       = normalize(reflect(-l, n));
+	const float  r_dot_v = max(dot(r, v), 0.0f);
+	return pow(r_dot_v, power);
+}
+float SpecularBlinnPhong(float3 l, float3 n, float3 v, float power) {
+	const float3 h       = normalize(l + v);
+	const float  n_dot_h = max(dot(n, h), 0.0f);
+	return pow(n_dot_h, power);
+}
+
+void PhongBRDF(float3 l, float3 n, float3 v, Material mat,
+               out float3 diffuse, out float3 specular) {
+
+	const float n_dot_l = dot(n, l);
+	diffuse  = DiffuseLambert(l, n) * mat.diffuse.xyz;
+	specular = SpecularPhong(l, n, v, mat.spec_exponent) * mat.specular.xyz * mat.spec_scale;
+}
+
+void BlinnPhongBRDF(float3 l, float3 n, float3 v, Material mat,
+                    out float3 diffuse, out float3 specular) {
+
+	const float n_dot_l = dot(n, l);
+	diffuse  = DiffuseLambert(l, n) * mat.diffuse.xyz;
+	specular = SpecularBlinnPhong(l, n, v, mat.spec_exponent) * mat.specular.xyz * mat.spec_scale;
+}
+
+
+
+
+//----------------------------------------------------------------------------------
+// Use the defined BRDF function to calculate the lighting
+//----------------------------------------------------------------------------------
+
+void ComputeBRDF(float3 l, float3 n, float3 v, Material mat,
+                 out float3 diffuse, out float3 specular) {
+
+	BRDF_FUNCTION(l, n, v, mat, diffuse, specular);
 }
 
 

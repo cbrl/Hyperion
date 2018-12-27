@@ -145,7 +145,7 @@ void CalculateShadowLights(float3 p_world,
 }
 
 
-float4 CalculateLighting(float3 p_world, float3 n, float3 p_to_v, float4 base_color, Material material) {
+float3 CalculateLighting(float3 p_world, float3 n, float3 p_to_v, Material material) {
 
 	// Diffuse and specular light intensity
 	float3 l_diffuse   = { 0.0f, 0.0f, 0.0f };
@@ -155,11 +155,10 @@ float4 CalculateLighting(float3 p_world, float3 n, float3 p_to_v, float4 base_co
 	CalculateShadowLights(p_world, n, p_to_v, material, l_diffuse, l_specular);
 
 	// Calculate final color
-	const float3 ambient     = g_ambient_intensity.xyz * material.ambient.xyz;
-	const float3 specular    = material.spec_scale * l_specular * material.specular.xyz;
-	const float3 final_color = (base_color.xyz * (ambient + l_diffuse)) + specular;
+	const float3 ambient     = g_ambient_intensity.xyz * material.ambient.xyz * material.diffuse.xyz;
+	const float3 final_color = ambient + l_diffuse + l_specular;
 
-	return float4(final_color, base_color.a);
+	return final_color;
 }
 
 
