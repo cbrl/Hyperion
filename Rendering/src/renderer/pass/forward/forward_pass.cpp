@@ -104,7 +104,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.opacity <= ALPHA_MAX)
+			if (mat.params.base_color.w <= ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_projection);
@@ -135,7 +135,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.opacity < ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
+			if (mat.params.base_color.w < ALPHA_MIN || mat.params.base_color.w > ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_projection);
@@ -164,7 +164,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.opacity <= ALPHA_MAX)
+			if (mat.params.base_color.w <= ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_projection);
@@ -184,7 +184,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.opacity< ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
+			if (mat.params.base_color.w< ALPHA_MIN || mat.params.base_color.w > ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_projection);
@@ -258,13 +258,15 @@ void XM_CALLCONV ForwardPass::renderModel(const ModelRoot& root, const Model& mo
 	model.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
 
 	// Bind the SRVs
-	if (mat.maps.diffuse)       mat.maps.diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
-	if (mat.maps.ambient)       mat.maps.ambient->bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
-	if (mat.maps.normal)        mat.maps.normal->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
-	if (mat.maps.specular)      mat.maps.specular->bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
-	if (mat.maps.spec_exponent) mat.maps.spec_exponent->bind<Pipeline::PS>(device_context, SLOT_SRV_SPEC_EXPONENT);
-	if (mat.maps.opacity)       mat.maps.opacity->bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
-	if (mat.maps.height)        mat.maps.height->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
+	if (mat.maps.base_color)      mat.maps.base_color->bind<Pipeline::PS>(device_context, SLOT_SRV_BASE_COLOR);
+	//if (mat.maps.ambient)       mat.maps.ambient->bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
+	if (mat.maps.normal)          mat.maps.normal->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
+	if (mat.maps.material_params) mat.maps.material_params->bind<Pipeline::PS>(device_context, SLOT_SRV_MATERIAL_PARAMS);
+	if (mat.maps.emissive)        mat.maps.emissive->bind<Pipeline::PS>(device_context, SLOT_SRV_EMISSIVE);
+	//if (mat.maps.specular)      mat.maps.specular->bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
+	//if (mat.maps.spec_exponent) mat.maps.spec_exponent->bind<Pipeline::PS>(device_context, SLOT_SRV_SPEC_EXPONENT);
+	//if (mat.maps.opacity)       mat.maps.opacity->bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
+	//if (mat.maps.height)        mat.maps.height->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
 
 
 	// Draw the model

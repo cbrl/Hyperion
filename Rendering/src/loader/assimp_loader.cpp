@@ -5,6 +5,9 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 
+#include "resource/resource_mgr.h"
+#include "resource/model/material/material_factory.h"
+
 
 void ProcessNodes(const aiNode* node, ModelOutput::Node& out) {
 
@@ -89,10 +92,12 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 	};
 
 	// Get a color from a material
-	static constexpr auto get_color = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, vec4_f32& out) {
+	static constexpr auto get_color = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
 		aiColor3D color;
 		if (mat->Get(key, type, idx, color) == aiReturn_SUCCESS) {
-			out = {color.r, color.g, color.b, 0.0f};
+			out.x = color.r;
+			out.y = color.g;
+			out.z = color.b;
 		}
 	};
 
@@ -106,8 +111,11 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 		aiTextureMapMode mode;
 		//TODO: handle texture stacks
 		if (mat->GetTexture(type, /*index*/0, &path, &mapping, &uvindex, &blend, &op, &mode) == aiReturn_SUCCESS) {
+			if (!path.data[0]) return;
+
 			if (path.data[0] == '*') {
 				//TODO: handle embedded textures? (very rare)
+				Logger::log(LogLevel::info, "Embedded texture found in model");
 			}
 			else {
 				out = resource_mgr.getOrCreate<Texture>(StrToWstr(path.C_Str()));
@@ -120,30 +128,46 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 	//----------------------------------------------------------------------------------
 	for (u32 i = 0; i < scene->mNumMaterials; ++i) {
 
+		// Create output material struct
+		Material out_mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
+
+		// Get current material
 		const auto* mat = scene->mMaterials[i];
-		Material out_mat;
 
 		aiString name;
 		if (mat->Get(AI_MATKEY_NAME, name) == aiReturn_SUCCESS) {
 			out_mat.name = name.C_Str();
 		}
+		
+		get_color(mat, AI_MATKEY_COLOR_DIFFUSE,  out_mat.params.base_color);
+		get_color(mat, AI_MATKEY_COLOR_EMISSIVE, out_mat.params.emissive);
+
+		get_map(mat, aiTextureType_DIFFUSE,  resource_mgr, out_mat.maps.base_color);
+		get_map(mat, aiTextureType_NORMALS,  resource_mgr, out_mat.maps.normal);
+		get_map(mat, aiTextureType_EMISSIVE, resource_mgr, out_mat.maps.emissive);
+
 
 		// Get colors
+		/*
 		get_color(mat, AI_MATKEY_COLOR_DIFFUSE,     out_mat.params.diffuse);
 		get_color(mat, AI_MATKEY_COLOR_AMBIENT,     out_mat.params.ambient);
 		get_color(mat, AI_MATKEY_COLOR_SPECULAR,    out_mat.params.specular);
 		get_color(mat, AI_MATKEY_COLOR_EMISSIVE,    out_mat.params.emissive);
 		get_color(mat, AI_MATKEY_COLOR_TRANSPARENT, out_mat.params.transparent);
+		*/
 
 		// Get scalars
+		/*
 		get_scalar(mat, AI_MATKEY_OPACITY,            out_mat.params.opacity);
 		get_scalar(mat, AI_MATKEY_SHININESS,          out_mat.params.spec_exponent);
 		get_scalar(mat, AI_MATKEY_SHININESS_STRENGTH, out_mat.params.spec_scale);
 		get_scalar(mat, AI_MATKEY_REFRACTI,           out_mat.params.refractive_index);
 		get_scalar(mat, AI_MATKEY_ENABLE_WIREFRAME,   out_mat.params.wireframe);
 		get_scalar(mat, AI_MATKEY_TWOSIDED,           out_mat.params.two_sided);
+		*/
 
 		// Get textures
+		/*
 		get_map(mat, aiTextureType_DIFFUSE,   resource_mgr, out_mat.maps.diffuse);
 		get_map(mat, aiTextureType_AMBIENT,   resource_mgr, out_mat.maps.ambient);
 		get_map(mat, aiTextureType_NORMALS,   resource_mgr, out_mat.maps.normal);
@@ -153,6 +177,7 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 		get_map(mat, aiTextureType_EMISSIVE,  resource_mgr, out_mat.maps.emissive);
 		get_map(mat, aiTextureType_HEIGHT,    resource_mgr, out_mat.maps.height);
 		get_map(mat, aiTextureType_LIGHTMAP,  resource_mgr, out_mat.maps.light);
+		*/
 
 		model_out.materials.push_back(out_mat);
 	}
@@ -191,7 +216,7 @@ ModelOutput AssimpLoad(ResourceMgr& resource_mgr,
 
 	if (!scene) {
 		Logger::log(LogLevel::err, "Error loading model: {}", file.string());
-		//return ModelOutput<VertexT>();
+		return ModelOutput{};
 	}
 
 	//----------------------------------------------------------------------------------
@@ -211,11 +236,12 @@ ModelOutput AssimpLoad(ResourceMgr& resource_mgr,
 
 namespace AssimpLoader {
 
-	ModelOutput load(ResourceMgr& resource_mgr,
-	                 const fs::path& file,
-	                 bool flip_winding,
-	                 bool flip_uv) {
+ModelOutput Load(ResourceMgr& resource_mgr,
+	                const fs::path& file,
+	                bool flip_winding,
+	                bool flip_uv) {
 
-		return AssimpLoad(resource_mgr, file, flip_winding, flip_uv);
-	}
+	return AssimpLoad(resource_mgr, file, flip_winding, flip_uv);
+}
+
 }

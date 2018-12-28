@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28407.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{BB944AD5-FFFE-4907-AD11-A4C3560A2B6A}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -40,6 +40,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rendering", "Rendering\Rendering.vcxproj", "{87A2ABB8-6DEC-4C8B-97A9-CCB14C037516}"
 	ProjectSection(ProjectDependencies) = postProject
 		{57042576-E947-46C4-A2ED-EB058B2D8517} = {57042576-E947-46C4-A2ED-EB058B2D8517}
+		{066019F4-1D8E-4455-9E16-01E32BC9819B} = {066019F4-1D8E-4455-9E16-01E32BC9819B}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Input", "Input\Input.vcxproj", "{2F60711D-83F1-469E-AD0A-3BAE21B529F9}"

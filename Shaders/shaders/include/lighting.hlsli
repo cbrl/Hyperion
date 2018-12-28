@@ -155,7 +155,7 @@ float3 CalculateLighting(float3 p_world, float3 n, float3 p_to_v, Material mater
 	CalculateShadowLights(p_world, n, p_to_v, material, l_diffuse, l_specular);
 
 	// Calculate final color
-	const float3 ambient     = g_ambient_intensity.xyz * material.ambient.xyz * material.diffuse.xyz;
+	const float3 ambient     = g_ambient_intensity.xyz * material.base_color.xyz;
 	const float3 final_color = ambient + l_diffuse + l_specular;
 
 	return final_color;

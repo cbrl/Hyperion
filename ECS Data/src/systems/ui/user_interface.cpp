@@ -444,14 +444,10 @@ void DrawDetails(Model& model) {
 	std::string name = "Material: " + mat.name;
 	ImGui::Text(name.c_str());
 
-	ImGui::ColorEdit3("Diffuse Color", mat.params.diffuse.data());
-	ImGui::ColorEdit3("Ambient Color", mat.params.ambient.data());
-	ImGui::ColorEdit3("Specular Color", mat.params.specular.data());
-	ImGui::DragFloat("Specular Scale", &mat.params.spec_scale, 0.01f, 0.0f, FLT_MAX);
-	ImGui::DragFloat("Specular Exponent", &mat.params.spec_exponent, 0.01f, 0.0f, FLT_MAX);
-	ImGui::DragFloat("Opacity", &mat.params.opacity, 0.01f, 0.0f, 1.0f);
-	ImGui::Checkbox("Mirror Surface", &mat.params.mirror);
-	ImGui::DragFloat("Reflectivity", &mat.params.reflectivity, 0.01f, 0.0f, 1.0f);
+	ImGui::ColorEdit4("Base Color", mat.params.base_color.data());
+	ImGui::DragFloat("Metalness", &mat.params.metalness, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Roughness", &mat.params.roughness, 0.01f, 0.0f, 1.0f);
+	//ImGui::ColorEdit3("Emissive", mat.params.emissive.data());
 }
 
 

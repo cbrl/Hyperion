@@ -155,6 +155,7 @@
     <ClCompile Include="src\renderer\renderer.cpp" />
     <ClCompile Include="src\renderer\state\render_state_mgr.cpp" />
     <ClCompile Include="src\rendering_mgr.cpp" />
+    <ClCompile Include="src\resource\model\material\material_factory.cpp" />
     <ClCompile Include="src\resource\shader\shader.cpp" />
     <ClCompile Include="src\resource\shader\shader_bytecode.cpp" />
     <ClCompile Include="src\resource\shader\shader_factory.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="src\resource\mesh\mesh.h" />
     <ClInclude Include="src\resource\model\blueprint_factory.h" />
     <ClInclude Include="src\resource\model\material\material.h" />
+    <ClInclude Include="src\resource\model\material\material_factory.h" />
     <ClInclude Include="src\resource\model\model_blueprint.h" />
     <ClInclude Include="src\resource\model\model_config.h" />
     <ClInclude Include="src\resource\model\model_output.h" />

@@ -171,6 +171,12 @@
     <Filter Include="Header Files\scene\events">
       <UniqueIdentifier>{95f6f4f3-e74e-4c5e-991b-eb6bb2b29421}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\resource\model">
+      <UniqueIdentifier>{80b37539-9cee-4122-8988-23d6cd19cf8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource\model\material">
+      <UniqueIdentifier>{5bd628fa-10e1-4f45-ae23-e389491308cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -262,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="src\loader\assimp_loader.cpp">
       <Filter>Source Files\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\material\material_factory.cpp">
+      <Filter>Source Files\resource\model\material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -438,6 +447,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\events\core_events.h">
       <Filter>Header Files\scene\events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resource\model\material\material_factory.h">
+      <Filter>Header Files\resource\model\material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

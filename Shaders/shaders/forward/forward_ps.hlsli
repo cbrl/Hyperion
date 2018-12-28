@@ -26,28 +26,23 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 
 	//----------------------------------------------------------------------------------
-	// Create Material
+	// Create the material
 	//----------------------------------------------------------------------------------
-	Material mat = g_material;
-	float alpha;
+	float4 base_color = GetBaseColor(pin.uv);
+	const float2 params = GetMaterialParams(pin.uv);
 
-	if (g_material.has_texture) {
-		float4 tex_color = diffuse_map.Sample(g_aniso_wrap, pin.uv);
-
-		mat.diffuse = tex_color   * g_material.diffuse;
-		alpha       = tex_color.w * g_material.opacity;
-	}
-	else {
-		mat.diffuse = g_material.diffuse;
-		alpha       = g_material.opacity;
-	}
+	Material mat;
+	mat.base_color = base_color;
+	mat.metalness = params.x;
+	mat.roughness = params.y;
+	mat.emissive = float3(0.0f, 0.0f, 0.0f);
 
 
 	// Test alpha if transparency is enabled, or set it to 1 if not.
 	#ifdef ENABLE_TRANSPARENCY
-	clip(alpha - ALPHA_MIN);
+	clip(base_color.w - ALPHA_MIN);
 	#else 
-	alpha = 1.0f;
+	base_color.w = 1.0f;
 	#endif
 	
 
@@ -60,6 +55,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 	float3 out_color = CalculateLighting(pin.p_world, normal_vec, to_eye, mat);
 
+	/*
 	if (g_material.mirror_surface) {
 		const float3 incident         = -to_eye;
 		const float3 reflection_vec   = reflect(incident, pin.n);
@@ -67,8 +63,9 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 		out_color.xyz = (g_material.reflectivity * reflection_color) + ((1.0f - g_material.reflectivity) * out_color.xyz);
 	}
+	*/
 	#else  //ENABLE_LIGHTING
-	float3 out_color = mat.diffuse;
+	float3 out_color = mat.base_color.xyz;
 	#endif //ENABLE_LIGHTING
 
 
@@ -87,5 +84,5 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	//----------------------------------------------------------------------------------
 	
 	// Apply the correct alpha and saturate
-	return saturate(float4(out_color, alpha));
+	return saturate(float4(out_color, base_color.w));
 }

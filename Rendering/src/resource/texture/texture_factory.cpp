@@ -73,4 +73,44 @@ std::shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const vec
 	return resource_mgr.getOrCreate<Texture>(std::to_wstring(color_u32), desc, init_data);
 }
 
+
+std::shared_ptr<Texture> CreateWhiteTexture(ResourceMgr& resource_mgr) {
+	return CreateColorTexture(resource_mgr, {1.0f, 1.0f, 1.0f, 1.0f});
+}
+
+
+std::shared_ptr<Texture> CreateBlackTexture(ResourceMgr& resource_mgr) {
+	return CreateColorTexture(resource_mgr, {0.0f, 0.0f, 0.0f, 1.0f});
+}
+
+
+std::shared_ptr<Texture> CreateRedTexture(ResourceMgr& resource_mgr) {
+	return CreateColorTexture(resource_mgr, {1.0f, 0.0f, 0.0f, 1.0f});
+}
+
+
+std::shared_ptr<Texture> CreateGreenTexture(ResourceMgr& resource_mgr) {
+	return CreateColorTexture(resource_mgr, {0.0f, 1.0f, 0.0f, 1.0f});
+}
+
+
+std::shared_ptr<Texture> CreateBlueTexture(ResourceMgr& resource_mgr) {
+	return CreateColorTexture(resource_mgr, {0.0f, 0.0f, 1.0f, 1.0f});
+}
+
+
+std::shared_ptr<Texture> CreateCyanTexture(ResourceMgr& resource_mgr) {
+	return CreateColorTexture(resource_mgr, {0.0f, 1.0f, 1.0f, 1.0f});
+}
+
+
+std::shared_ptr<Texture> CreateMagentaTexture(ResourceMgr& resource_mgr) {
+	return CreateColorTexture(resource_mgr, {1.0f, 0.0f, 1.0f, 1.0f});
+}
+
+
+std::shared_ptr<Texture> CreateYellowTexture(ResourceMgr& resource_mgr) {
+	return CreateColorTexture(resource_mgr, {1.0f, 1.0f, 0.0f, 1.0f});
+}
+
 }

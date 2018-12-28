@@ -7,7 +7,7 @@ ModelBlueprint::ModelBlueprint(ID3D11Device& device,
                                const ModelConfig<VertexT>& config)
 	: Resource(filename) {
 
-	const auto out = ModelLoader::load(resource_mgr, filename, config);
+	const auto out = ModelLoader::Load(resource_mgr, filename, config);
 	constructBlueprint<VertexT>(device, out);
 }
 

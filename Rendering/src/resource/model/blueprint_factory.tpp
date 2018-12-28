@@ -1,3 +1,4 @@
+#include "resource/model/material/material_factory.h"
 
 namespace BlueprintFactory {
 
@@ -26,14 +27,8 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Cube Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
-
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
+		
 
 		// Create the ModelOutput object
 		ModelOutput out;
@@ -74,13 +69,7 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Box Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
 
 		// Create the ModelOutput object
@@ -122,14 +111,8 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Sphere Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
-
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
+		
 
 		// Create the ModelOutput object
 		ModelOutput out;
@@ -168,13 +151,7 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "GeoSphere Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
 
 		// Create the ModelOutput object
@@ -216,13 +193,7 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Cylinder Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
 
 		// Create the ModelOutput object
@@ -264,13 +235,7 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Cone Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
 
 		// Create the ModelOutput object
@@ -312,13 +277,7 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Torus Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
 
 		// Create the ModelOutput object
@@ -357,13 +316,7 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Tetrahedron Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
 
 		// Create the ModelOutput object
@@ -402,13 +355,7 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Octahedron Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
 
 		// Create the ModelOutput object
@@ -447,13 +394,7 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Dodecahedron Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
 
 		// Create the ModelOutput object
@@ -492,13 +433,7 @@ namespace BlueprintFactory {
 
 
 		// Create the material
-		Material mat;
-		mat.name                 = "Icosahedron Material";
-		mat.params.ambient       = vec4_f32{0.1f, 0.1f, 0.1f};
-		mat.params.diffuse       = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.specular      = vec4_f32{1.0f, 1.0f, 1.0f};
-		mat.params.spec_scale    = 1.0f;
-		mat.params.spec_exponent = 20.0f;
+	    Material mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
 
 		// Create the ModelOutput object

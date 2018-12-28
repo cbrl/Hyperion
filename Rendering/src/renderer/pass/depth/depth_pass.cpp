@@ -67,7 +67,7 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 
 		root.forEachModel([&](const Model& model) {
 			const auto& mat = model.getMaterial();
-			if (mat.params.opacity <= ALPHA_MAX)
+			if (mat.params.base_color.w <= ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_proj);
@@ -84,7 +84,7 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 		
 		root.forEachModel([&](const Model& model) {
 			const auto& mat = model.getMaterial();
-			if (mat.params.opacity < ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
+			if (mat.params.base_color.w < ALPHA_MIN || mat.params.base_color.w > ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_proj);
@@ -112,7 +112,7 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 			if (!model.castsShadows()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.opacity <= ALPHA_MAX)
+			if (mat.params.base_color.w <= ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_proj);
@@ -132,7 +132,7 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 			if (!model.castsShadows()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.opacity < ALPHA_MIN || mat.params.opacity > ALPHA_MAX)
+			if (mat.params.base_color.w < ALPHA_MIN || mat.params.base_color.w > ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_proj);
@@ -171,10 +171,10 @@ void XM_CALLCONV DepthPass::renderModel(const ModelRoot& root, const Model& mode
 	model.bindBuffer<Pipeline::VS>(device_context, SLOT_CBUFFER_MODEL);
 
 	const auto& mat = model.getMaterial();
-	if (mat.maps.diffuse)
-		mat.maps.diffuse->bind<Pipeline::PS>(device_context, SLOT_SRV_DIFFUSE);
+	if (mat.maps.base_color)
+		mat.maps.base_color->bind<Pipeline::PS>(device_context, SLOT_SRV_BASE_COLOR);
 
 	Pipeline::drawIndexed(device_context, model.getIndexCount(), 0);
 
-	Pipeline::PS::bindSRV(device_context, SLOT_SRV_DIFFUSE, nullptr);
+	Pipeline::PS::bindSRV(device_context, SLOT_SRV_BASE_COLOR, nullptr);
 }

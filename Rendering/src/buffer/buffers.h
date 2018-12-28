@@ -8,6 +8,7 @@
 // Model Buffer
 //----------------------------------------------------------------------------------
 
+/*
 struct MaterialBuffer {
 	vec4_f32 ambient = {};
 	vec4_f32 diffuse = {};
@@ -20,6 +21,14 @@ struct MaterialBuffer {
 	f32      reflectivity = 1.0f;
 	u32      has_texture = 0;
 	f32      pad;
+};
+*/
+struct MaterialBuffer {
+	vec4_f32 base_color = {};
+	f32 metalness = 0.0f;
+	f32 roughness = 0.0f;
+	vec3_f32 emissive = {};
+	vec3_f32 pad;
 };
 
 
@@ -34,14 +43,6 @@ struct ModelBuffer {
 //----------------------------------------------------------------------------------
 // Light Buffers
 //----------------------------------------------------------------------------------
-
-struct Fog {
-	vec4_f32 color = { 1.0f };
-	f32      start = 0.0f;
-	f32      range = -1.0f;
-	vec2_f32 pad;
-};
-
 
 struct LightBuffer {
 	u32 num_directional_lights = 0;
@@ -107,6 +108,13 @@ struct ShadowedSpotLightBuffer {
 //----------------------------------------------------------------------------------
 // Camera Buffer
 //----------------------------------------------------------------------------------
+
+struct Fog {
+	vec4_f32 color = {1.0f};
+	f32 start = 0.0f;
+	f32 range = -1.0f;
+	vec2_f32 pad;
+};
 
 struct CameraBuffer {
 	XMMATRIX camera_to_world = XMMatrixIdentity();
