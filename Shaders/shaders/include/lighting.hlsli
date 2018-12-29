@@ -48,8 +48,10 @@ void CalculateLights(float3 p_world,
 		float3 D, S;
 		ComputeBRDF(p_to_l, n, p_to_v, mat, D, S);
 
-		diffuse  += D * E_factor;
-		specular += S * E_factor;
+		const float = saturate(dot(n, p_to_l));
+
+		diffuse  += D * E_factor * n_dot_l;
+		specular += S * E_factor * n_dot_l;
 	}
 
 	// Point Lights
@@ -60,8 +62,10 @@ void CalculateLights(float3 p_world,
 		float3 D, S;
 		ComputeBRDF(p_to_l, n, p_to_v, mat, D, S);
 
-		diffuse  += D * E_factor;
-		specular += S * E_factor;
+		const float = saturate(dot(n, p_to_l));
+
+		diffuse  += D * E_factor * n_dot_l;
+		specular += S * E_factor * n_dot_l;
 	}
 
 	// Spot lights
@@ -72,8 +76,10 @@ void CalculateLights(float3 p_world,
 		float3 D, S;
 		ComputeBRDF(p_to_l, n, p_to_v, mat, D, S);
 
-		diffuse  += D * E_factor;
-		specular += S * E_factor;
+		const float = saturate(dot(n, p_to_l));
+
+		diffuse  += D * E_factor * n_dot_l;
+		specular += S * E_factor * n_dot_l;
 	}
 }
 
@@ -101,8 +107,10 @@ void CalculateShadowLights(float3 p_world,
 		float3 D, S;
 		ComputeBRDF(p_to_l, n, p_to_v, mat, D, S);
 
-		diffuse  += D * E_factor;
-		specular += S * E_factor;
+		const float = saturate(dot(n, p_to_l));
+
+		diffuse  += D * E_factor * n_dot_l;
+		specular += S * E_factor * n_dot_l;
 	}
 
 	// Point Lights
@@ -120,8 +128,10 @@ void CalculateShadowLights(float3 p_world,
 		float3 D, S;
 		ComputeBRDF(p_to_l, n, p_to_v, mat, D, S);
 
-		diffuse  += D * E_factor;
-		specular += S * E_factor;
+		const float = saturate(dot(n, p_to_l));
+
+		diffuse  += D * E_factor * n_dot_l;
+		specular += S * E_factor * n_dot_l;
 	}
 
 	// Spot Lights
@@ -139,8 +149,10 @@ void CalculateShadowLights(float3 p_world,
 		float3 D, S;
 		ComputeBRDF(p_to_l, n, p_to_v, mat, D, S);
 
-		diffuse  += D * E_factor;
-		specular += S * E_factor;
+		const float = saturate(dot(n, p_to_l));
+
+		diffuse  += D * E_factor * n_dot_l;
+		specular += S * E_factor * n_dot_l;
 	}
 }
 
