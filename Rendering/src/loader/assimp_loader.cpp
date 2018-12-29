@@ -84,7 +84,7 @@ void ProcessMeshes(const aiScene* scene, ModelOutput& model_out) {
 }
 
 
-void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutput& model_out) {
+void ProcessMaterials(const aiScene* scene, fs::path base_path, ResourceMgr& resource_mgr, ModelOutput& model_out) {
 
 	// Get a scalar value from a material
 	static constexpr auto get_scalar = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
@@ -102,7 +102,7 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 	};
 
 	// Get a texture from a material
-	static constexpr auto get_map = [](const aiMaterial* mat, aiTextureType type, ResourceMgr& resource_mgr, std::shared_ptr<Texture>& out) {
+	const auto get_map = [&](const aiMaterial* mat, aiTextureType type, ResourceMgr& resource_mgr, std::shared_ptr<Texture>& out) {
 		aiString         path;
 		aiTextureMapping mapping;
 		unsigned int     uvindex;
@@ -118,7 +118,7 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 				Logger::log(LogLevel::info, "Embedded texture found in model");
 			}
 			else {
-				out = resource_mgr.getOrCreate<Texture>(StrToWstr(path.C_Str()));
+				out = resource_mgr.getOrCreate<Texture>(base_path / path.C_Str());
 			}
 		}
 	};
@@ -139,45 +139,17 @@ void ProcessMaterials(const aiScene* scene, ResourceMgr& resource_mgr, ModelOutp
 			out_mat.name = name.C_Str();
 		}
 		
+		// Get colors
 		get_color(mat, AI_MATKEY_COLOR_DIFFUSE,  out_mat.params.base_color);
 		get_color(mat, AI_MATKEY_COLOR_EMISSIVE, out_mat.params.emissive);
 
+		// Get maps
 		get_map(mat, aiTextureType_DIFFUSE,  resource_mgr, out_mat.maps.base_color);
+		get_map(mat, aiTextureType_HEIGHT,   resource_mgr, out_mat.maps.normal);  //Sometimes normal map will be stored in height maps section
 		get_map(mat, aiTextureType_NORMALS,  resource_mgr, out_mat.maps.normal);
 		get_map(mat, aiTextureType_EMISSIVE, resource_mgr, out_mat.maps.emissive);
 
-
-		// Get colors
-		/*
-		get_color(mat, AI_MATKEY_COLOR_DIFFUSE,     out_mat.params.diffuse);
-		get_color(mat, AI_MATKEY_COLOR_AMBIENT,     out_mat.params.ambient);
-		get_color(mat, AI_MATKEY_COLOR_SPECULAR,    out_mat.params.specular);
-		get_color(mat, AI_MATKEY_COLOR_EMISSIVE,    out_mat.params.emissive);
-		get_color(mat, AI_MATKEY_COLOR_TRANSPARENT, out_mat.params.transparent);
-		*/
-
-		// Get scalars
-		/*
-		get_scalar(mat, AI_MATKEY_OPACITY,            out_mat.params.opacity);
-		get_scalar(mat, AI_MATKEY_SHININESS,          out_mat.params.spec_exponent);
-		get_scalar(mat, AI_MATKEY_SHININESS_STRENGTH, out_mat.params.spec_scale);
-		get_scalar(mat, AI_MATKEY_REFRACTI,           out_mat.params.refractive_index);
-		get_scalar(mat, AI_MATKEY_ENABLE_WIREFRAME,   out_mat.params.wireframe);
-		get_scalar(mat, AI_MATKEY_TWOSIDED,           out_mat.params.two_sided);
-		*/
-
-		// Get textures
-		/*
-		get_map(mat, aiTextureType_DIFFUSE,   resource_mgr, out_mat.maps.diffuse);
-		get_map(mat, aiTextureType_AMBIENT,   resource_mgr, out_mat.maps.ambient);
-		get_map(mat, aiTextureType_NORMALS,   resource_mgr, out_mat.maps.normal);
-		get_map(mat, aiTextureType_SPECULAR,  resource_mgr, out_mat.maps.specular);
-		get_map(mat, aiTextureType_SHININESS, resource_mgr, out_mat.maps.spec_exponent);
-		get_map(mat, aiTextureType_OPACITY,   resource_mgr, out_mat.maps.opacity);
-		get_map(mat, aiTextureType_EMISSIVE,  resource_mgr, out_mat.maps.emissive);
-		get_map(mat, aiTextureType_HEIGHT,    resource_mgr, out_mat.maps.height);
-		get_map(mat, aiTextureType_LIGHTMAP,  resource_mgr, out_mat.maps.light);
-		*/
+		//TODO: get material parameter scalars and material parameter map
 
 		model_out.materials.push_back(out_mat);
 	}
@@ -228,7 +200,7 @@ ModelOutput AssimpLoad(ResourceMgr& resource_mgr,
 
 	ProcessNodes(scene->mRootNode, model_out.root);
 	ProcessMeshes(scene, model_out);
-	ProcessMaterials(scene, resource_mgr, model_out);
+	ProcessMaterials(scene, file.parent_path(), resource_mgr, model_out);
 
 	return model_out;
 }

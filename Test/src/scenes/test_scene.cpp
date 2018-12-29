@@ -93,6 +93,7 @@ void TestScene::load(const Engine& engine) {
 	auto* orbit = sphere->addComponent<AxisOrbit>();
 	orbit->setSpeed(0.5f);
 
+
 	//----------------------------------------------------------------------------------
 	// Create lights
 	//----------------------------------------------------------------------------------

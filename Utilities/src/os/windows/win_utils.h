@@ -5,7 +5,11 @@
 // Includes
 //----------------------------------------------------------------------------------
 
+#include "os/windows/windows.h"
+#include "io/io.h"
+
 #include <Commdlg.h>
+#include <ShObjIdl_core.h>
 
 
 
@@ -99,18 +103,38 @@ inline u64 GetCPUTime() {
 //----------------------------------------------------------------------------------
 
 // Get a file path through the Windows file picker
-inline bool OpenFilePicker(gsl::not_null<LPWSTR> lpstrFile, DWORD nMaxFile) {
+inline fs::path OpenFilePicker() {
+	ComPtr<IFileOpenDialog> pFileOpen;
 
-	OPENFILENAME ofn = {};
-	ofn.lStructSize  = sizeof(ofn);
-	ofn.lpstrFile    = lpstrFile;
-	ofn.lpstrFile[0] = '\0';
-	ofn.nMaxFile     = nMaxFile;
-	ofn.Flags        = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog,
+	                              NULL,
+	                              CLSCTX_ALL,
+	                              IID_IFileOpenDialog,
+	                              reinterpret_cast<void**>(pFileOpen.GetAddressOf()));
 
-	const bool result = GetOpenFileName(&ofn);
+	if (SUCCEEDED(hr)) {
+		// Show the file dialog
+		hr = pFileOpen->Show(NULL);
 
-	return result != 0;
+		if (SUCCEEDED(hr)) {
+			// Get the file
+			ComPtr<IShellItem> pItem;
+			hr = pFileOpen->GetResult(pItem.GetAddressOf());
+
+			if (SUCCEEDED(hr)) {
+				// Store the file name
+				PWSTR pszFilePath;
+				hr = pItem->GetDisplayName(SIGDN_FILESYSPATH, &pszFilePath);
+
+				if (SUCCEEDED(hr)) {
+					CoTaskMemFree(pszFilePath);
+					return fs::path{pszFilePath};
+				}
+			}
+		}
+	}
+
+	return fs::path{};
 }
 
 

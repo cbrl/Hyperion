@@ -1306,11 +1306,9 @@ void DrawAddComponentMenu(ID3D11Device& device,
 
 		if (ImGui::BeginMenu("Model")) {
 			if (ImGui::MenuItem("From file")) {
-				wchar_t szFile[512] = {};
-
-				if (OpenFilePicker(gsl::not_null<wchar_t*>(szFile), 512)) {
+				if (auto file = OpenFilePicker(); fs::exists(file)) {
 					ModelConfig<VertexPositionNormalTexture> config;
-					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(szFile, config);
+					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
 					g_selected_entity->addComponent<ModelRoot>(device, bp);
 				}
 				else Logger::log(LogLevel::err, "Failed to open file dialog");

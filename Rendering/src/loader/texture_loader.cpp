@@ -4,12 +4,10 @@
 #include "log/log.h"
 
 
-bool error_tex_initialized = false;
 u32 error_tex_data[128][128] = {{}};
 
-
 // Create data for a checkerboard pattern texture
-void InitErrorTextureData() {
+void CreateErrorTextureData() {
 
 	constexpr u32 color  = 0xFF0000FF;
 	constexpr u32 color2 = 0xFF000000;
@@ -39,15 +37,15 @@ void InitErrorTextureData() {
 			error_tex_data[i][j] = color;
 		}
 	}
-
-	error_tex_initialized = true;
 }
 
 
 void CreateErrorTexture(ID3D11Device& device, ID3D11ShaderResourceView** srv_out) {
 
+	static bool error_tex_initialized = false;
 	if (!error_tex_initialized) {
-		InitErrorTextureData();
+		CreateErrorTextureData();
+		error_tex_initialized = true;
 	}
 
 	ComPtr<ID3D11Texture2D> texture;

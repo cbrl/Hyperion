@@ -85,6 +85,7 @@ Engine::Engine(std::wstring title,
 	init(std::move(title), std::move(display_config), std::move(rendering_config));
 }
 
+
 Engine::~Engine() {
 	quit();
 }
@@ -101,6 +102,12 @@ void Engine::quit() {
 	// This prevents D3D from potentially reporting live resources
 	// that are going to be deleted right after the report.
 	scene.reset();
+	rendering_mgr.reset();
+	input.reset();
+	window.reset();
+
+	// Uninitialize the COM library
+	CoUninitialize();
 }
 
 
@@ -169,6 +176,9 @@ void Engine::init(std::wstring title,
 
 	// Rendering Manager
 	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getHandle()), std::move(display_config), std::move(rendering_config));
+
+	// Initialize the COM library
+	CoInitializeEx(NULL, COINIT_MULTITHREADED);
 }
 
 
@@ -199,7 +209,7 @@ void Engine::run() {
 	window->show(SW_SHOWNORMAL);
 
 	// Main loop
-	MSG  msg  = {};
+	MSG msg = {};
 	while (msg.message != WM_QUIT && !exit_requested) {
 
 		if (PeekMessage(&msg, nullptr, NULL, NULL, PM_REMOVE)) {

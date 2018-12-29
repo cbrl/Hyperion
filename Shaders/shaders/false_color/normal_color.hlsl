@@ -8,7 +8,7 @@
 float4 PS(PSPositionNormalTexture input) : SV_Target {
 
 	float3 norm = GetNormal(input.p.xyz, input.n, input.uv);
-	norm = (0.5f * norm) + 0.5f;
+	norm = SNormToUNorm(norm);
 
 	return float4(norm, 1.0f);
 }

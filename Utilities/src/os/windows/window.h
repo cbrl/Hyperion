@@ -1,8 +1,6 @@
 #pragma once
 
 #include "os/windows/windows.h"
-#include "datatypes/vector_types.h"
-#include <algorithm>
 
 
 //----------------------------------------------------------------------------------
