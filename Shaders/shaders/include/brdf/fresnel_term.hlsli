@@ -68,7 +68,6 @@ float F_Schlick(float l_dot_h, float f0, float f90) {
 
 	const float base       = 1.0f - l_dot_h;
 	const float base_pow_5 = sqr(sqr(base)) * base;
-	return f0 + ((1.0f - f0) * base_pow_5);
 
 	//return f0 + ((f90 - f0) * base_pow_5);
 	return lerp(f0, f90, base_pow_5);
@@ -87,7 +86,6 @@ float3 F_Schlick(float l_dot_h, float3 f0, float3 f90) {
 
 	const float base       = 1.0f - l_dot_h;
 	const float base_pow_5 = sqr(sqr(base)) * base;
-	return f0 + ((1.0f - f0) * base_pow_5);
 
 	//return f0 + ((f90 - f0) * base_pow_5);
 	return lerp(f0, f90, base_pow_5);

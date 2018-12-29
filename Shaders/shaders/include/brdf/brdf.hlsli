@@ -86,19 +86,19 @@ void BlinnPhongBRDF(float3 l, float3 n, float3 v, Material mat,
 
 void CookTorranceBRDF(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
 
-	const float n_dot_l = saturate(dot(n, l)); //possibly clamp to [0.001, 1.0]
-	const float n_dot_v = saturate(dot(n, v)); //possibly clamp to [0.001, 1.0]
-	const float3 h      = normalize(l + v);
-	const float n_dot_h = saturate(dot(n, h));
-	const float l_dot_h = saturate(dot(l, h));
-	const float v_dot_h = saturate(dot(v, h));
+	const float  n_dot_l = saturate(dot(n, l)); //possibly clamp to [0.001, 1.0]
+	const float  n_dot_v = saturate(dot(n, v)); //possibly clamp to [0.001, 1.0]
+	const float3 h       = normalize(l + v);
+	const float  n_dot_h = saturate(dot(n, h));
+	const float  l_dot_h = saturate(dot(l, h));
+	const float  v_dot_h = saturate(dot(v, h));
 
-	const float alpha = GetAlpha(mat);
-	const float3 f0   = GetF0(mat);
+	const float  alpha = GetAlpha(mat);
+	const float3 f0    = GetF0(mat);
 
-	const float D  = DISTRIBUTION_FUNC(n_dot_h, alpha);
+	const float  D = DISTRIBUTION_FUNC(n_dot_h, alpha);
 	const float3 F = FRESNEL_FUNC(l_dot_h, f0);
-	const float V  = VISIBILITY_FUNC(n_dot_l, n_dot_v, n_dot_h, v_dot_h, alpha);
+	const float  V = VISIBILITY_FUNC(n_dot_l, n_dot_v, n_dot_h, v_dot_h, alpha);
 
 	diffuse = (1.0f - F) * (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
 	diffuse = saturate(diffuse);
