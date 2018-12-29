@@ -101,9 +101,9 @@ void TestScene::load(const Engine& engine) {
 	// Sphere light
 	{
 		auto* light = sphere->addComponent<SpotLight>();
-		light->setDiffuseColor(vec4_f32{ 0.0f, 0.9f, 0.6f, 1.0f });
-		light->setAttenuation(vec3_f32{ 0.1f, 0.15f, 0.0f });
-		light->setSpecular(vec4_f32{ 1.0f, 1.0f, 1.0f, 1.0f });
+		light->setBaseColor(vec3_f32{ 0.0f, 0.9f, 0.6f });
+		light->setIntensity(7.0f);
+		light->setAttenuation(vec3_f32{ 0.0f, 0.1f, 0.05f });
 		light->setRange(100.0f);
 		light->setUmbraAngle(XM_PI / 6.0f);
 		light->setPenumbraAngle(XM_PI / 3.0f);
@@ -117,9 +117,9 @@ void TestScene::load(const Engine& engine) {
 		camera->addChild(light);
 
 		auto* spot_light = light->addComponent<SpotLight>();
-		spot_light->setDiffuseColor(vec4_f32{ 0.85f, 0.85f, 0.9f, 1.0f });
-		spot_light->setAttenuation(vec3_f32{ 0.05f, 0.2f, 0.0f });
-		spot_light->setSpecular(vec4_f32{ 1.0f, 1.0f, 1.0f, 1.0f });
+		spot_light->setBaseColor(vec3_f32{ 0.9f, 0.9f, 1.0f });
+		spot_light->setIntensity(7.0f);
+		spot_light->setAttenuation(vec3_f32{0.0f, 0.1f, 0.05f});
 		spot_light->setRange(100.0f);
 		spot_light->setUmbraAngle(XM_PI / 6.0f);
 		spot_light->setPenumbraAngle(XM_PI / 4.0f);

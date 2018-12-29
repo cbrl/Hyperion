@@ -9,9 +9,9 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	SpotLight() noexcept
-		: diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
-		, specular(1.0f, 1.0f, 1.0f, 1.0f)
-		, attenuation(0.0f, 1.0f, 0.0f)
+		: base_color(1.0f, 1.0f, 1.0f)
+	    , intensity(1.0f)
+		, attenuation(0.0f, 0.0f, 1.0f)
 		, cos_umbra(1.0f)
 		, cos_penumbra(0.1f)
 		, near_plane(0.1f)
@@ -37,40 +37,39 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Diffuse Color
+	// Member Functions - Base Color
 	//----------------------------------------------------------------------------------
-	void setDiffuseColor(const vec4_f32& color) {
-		diffuse_color = color;
+	void setBaseColor(const vec3_f32& color) noexcept {
+		base_color = color;
 	}
 
 	[[nodiscard]]
-	const vec4_f32& getDiffuseColor() const {
-		return diffuse_color;
+	const vec3_f32& getBaseColor() const noexcept{
+		return base_color;
 	}
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Specular Color/Power
+	// Member Functions - Intensity
 	//----------------------------------------------------------------------------------
-	void setSpecular(const vec4_f32& spec) {
-		specular = spec;
+	void setIntensity(f32 value) noexcept {
+		intensity = value;
 	}
 
-	[[nodiscard]]
-	const vec4_f32& getSpecular() const {
-		return specular;
+	[[nodiscard]] f32 getIntensity() const noexcept {
+		return intensity;
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Attenuation
 	//----------------------------------------------------------------------------------
-	void setAttenuation(const vec3_f32& atten) {
+	void setAttenuation(const vec3_f32& atten) noexcept {
 		attenuation = atten;
 	}
 
 	[[nodiscard]]
-	const vec3_f32& getAttenuation() const {
+	const vec3_f32& getAttenuation() const noexcept{
 		return attenuation;
 	}
 
@@ -78,21 +77,21 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Umbra
 	//----------------------------------------------------------------------------------
-	void setUmbraCosAngle(f32 cos_angle) {
+	void setUmbraCosAngle(f32 cos_angle) noexcept {
 		cos_umbra = std::max(std::max(cos_angle, cos_penumbra + 0.001f), 0.001f);
 	}
 
-	void setUmbraAngle(f32 angle) {
+	void setUmbraAngle(f32 angle) noexcept {
 		setUmbraCosAngle(std::cos(angle));
 	}
 
 	[[nodiscard]]
-	f32 getUmbra() const {
+	f32 getUmbra() const noexcept {
 		return cos_umbra;
 	}
 
 	[[nodiscard]]
-	f32 getUmbraAngle() const {
+	f32 getUmbraAngle() const noexcept {
 		return std::acos(cos_umbra);
 	}
 
@@ -100,22 +99,22 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Penumbra
 	//----------------------------------------------------------------------------------
-	void setPenumbraCosAngle(f32 cos_angle) {
+	void setPenumbraCosAngle(f32 cos_angle) noexcept {
 		cos_penumbra = std::max(std::min(cos_angle, cos_umbra - 0.001f), 0.001f);
 		updateBoundingVolumes();
 	}
 
-	void setPenumbraAngle(f32 angle) {
+	void setPenumbraAngle(f32 angle) noexcept {
 		setPenumbraCosAngle(std::cos(angle));
 	}
 
 	[[nodiscard]]
-	f32 getPenumbra() const {
+	f32 getPenumbra() const noexcept {
 		return cos_penumbra;
 	}
 
 	[[nodiscard]]
-	f32 getPenumbraAngle() const {
+	f32 getPenumbraAngle() const noexcept {
 		return std::acos(cos_penumbra);
 	}
 
@@ -123,7 +122,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Umbra/Penumbra
 	//----------------------------------------------------------------------------------
-	void setCutoffAngles(f32 cos_umbra, f32 cos_penumbra) {
+	void setCutoffAngles(f32 cos_umbra, f32 cos_penumbra) noexcept {
 		setUmbraAngle(cos_umbra);
 		setPenumbraAngle(cos_penumbra);
 	}
@@ -132,13 +131,13 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Range
 	//----------------------------------------------------------------------------------
-	void setRange(f32 range) {
+	void setRange(f32 range) noexcept {
 		this->range = std::max(0.01f, range);
 		updateBoundingVolumes();
 	}
 
 	[[nodiscard]]
-	f32 getRange() const {
+	f32 getRange() const noexcept {
 		return range;
 	}
 
@@ -146,25 +145,25 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Shadows
 	//----------------------------------------------------------------------------------
-	void setShadows(bool state) {
+	void setShadows(bool state) noexcept {
 		shadows = state;
 	}
 
 	[[nodiscard]]
-	bool castsShadows() const {
+	bool castsShadows() const noexcept {
 		return shadows;
 	}
 
 
 	// Get the AABB of this light
 	[[nodiscard]]
-	const AABB& getAABB() const {
+	const AABB& getAABB() const noexcept {
 		return aabb;
 	}
 
 	// Get the bounding sphere of this light
 	[[nodiscard]]
-	const BoundingSphere& getBoundingSphere() const {
+	const BoundingSphere& getBoundingSphere() const noexcept {
 		return sphere;
 	}
 
@@ -178,7 +177,7 @@ public:
 
 
 private:
-	void updateBoundingVolumes() {
+	void updateBoundingVolumes() noexcept {
 		const f32 a   = 1.0f / (cos_penumbra * cos_penumbra);
 		const f32 rxy = range * std::sqrt(a - 1.0f);
 		const f32 rz  = range * 0.5f;
@@ -191,8 +190,8 @@ private:
 
 private:
 	// Lighting parameters
-	vec4_f32 diffuse_color;
-	vec4_f32 specular;
+	vec3_f32 base_color;
+	f32 intensity;
 	vec3_f32 attenuation;
 	f32 cos_umbra;
 	f32 cos_penumbra;

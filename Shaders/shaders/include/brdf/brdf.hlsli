@@ -67,9 +67,7 @@ float SpecularBlinnPhong(float3 l, float3 n, float3 v, float power) {
 //----------------------------------------------------------------------------------
 
 void LambertBRDF(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
-
-	const float n_dot_l = saturate(dot(n, l));
-	diffuse  = n_dot_l * (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
+	diffuse  = (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
 	specular = float3(0.0f, 0.0f, 0.0f);
 }
 

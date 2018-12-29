@@ -60,8 +60,8 @@ struct LightBuffer {
 
 
 struct DirectionalLightBuffer {
-	vec4_f32 diffuse_color = {};
-	vec4_f32 specular = {}; //specular.w is the specular power
+	vec3_f32 base_color = {};
+	f32      intensity = 0.0f;
 	vec3_f32 direction = {};
 	u32      pad;
 	XMMATRIX world_to_projection = XMMatrixIdentity();
@@ -69,8 +69,8 @@ struct DirectionalLightBuffer {
 
 
 struct PointLightBuffer {
-	vec4_f32 diffuse_color = {};
-	vec4_f32 specular = {}; //specular.w is the specular power
+	vec3_f32 base_color = {};
+	f32      intensity = 0.0f;
 	vec3_f32 position = {};
 	f32      range = 0;
 	vec3_f32 attenuation = {};
@@ -87,8 +87,8 @@ struct ShadowedPointLightBuffer {
 
 
 struct SpotLightBuffer {
-	vec4_f32 diffuse_color = {};
-	vec4_f32 specular = {}; //specular.w is the specular power
+	vec3_f32 base_color = {};
+	f32      intensity = 0.0f;
 	vec3_f32 position = {};
 	f32      range = 0.0f;
 	vec3_f32 direction = {};

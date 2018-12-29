@@ -10,9 +10,9 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	PointLight() noexcept
-		: diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
-		, specular(1.0f, 1.0f, 1.0f, 1.0f)
-		, attenuation(0.0f, 1.0f, 0.0f)
+		: base_color(1.0f, 1.0f, 1.0f)
+	    , intensity(1.0f)
+		, attenuation(0.0f, 0.0f, 1.0f)
 		, near_plane(0.1f)
 		, range(1.0f)
 		, shadows(false) {
@@ -36,41 +36,40 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Diffuse Color
+	// Member Functions - Base Color
 	//----------------------------------------------------------------------------------
-	void setDiffuseColor(const vec4_f32& color) {
-		this->diffuse_color = color;
+	void setBaseColor(const vec3_f32& color) noexcept {
+		base_color = color;
 	}
 
 	[[nodiscard]]
-	const vec4_f32& getDiffuseColor() const {
-		return diffuse_color;
+	const vec3_f32& getBaseColor() const noexcept {
+		return base_color;
 	}
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Specular Color/Power
+	// Member Functions - Intensity
 	//----------------------------------------------------------------------------------
-	void setSpecular(const vec4_f32& spec) {
-		this->specular = spec;
+	void setIntensity(f32 value) noexcept {
+		intensity = value;
 	}
 
-	[[nodiscard]]
-	const vec4_f32& getSpecular() const {
-		return specular;
+	[[nodiscard]] f32 getIntensity() const noexcept {
+		return intensity;
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Range
 	//----------------------------------------------------------------------------------
-	void setRange(const f32 range) {
+	void setRange(const f32 range) noexcept {
 		this->range = std::max(0.01f, range);
 		updateBoundingVolumes();
 	}
 
 	[[nodiscard]]
-	f32 getRange() const {
+	f32 getRange() const noexcept {
 		return range;
 	}
 
@@ -78,12 +77,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Attenuation
 	//----------------------------------------------------------------------------------
-	void setAttenuation(const vec3_f32& attenuation) {
+	void setAttenuation(const vec3_f32& attenuation) noexcept {
 		this->attenuation = attenuation;
 	}
 
 	[[nodiscard]]
-	const vec3_f32& getAttenuation() const {
+	const vec3_f32& getAttenuation() const noexcept {
 		return attenuation;
 	}
 
@@ -91,32 +90,32 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Shadows
 	//----------------------------------------------------------------------------------
-	void setShadows(bool state) {
+	void setShadows(bool state) noexcept {
 		this->shadows = state;
 	}
 
 	[[nodiscard]]
-	bool castsShadows() const {
+	bool castsShadows() const noexcept {
 		return shadows;
 	}
 
 
 	// Get the AABB of this light
 	[[nodiscard]]
-	const AABB& getAABB() const {
+	const AABB& getAABB() const noexcept {
 		return aabb;
 	}
 
 	// Get the bounding sphere of this light
 	[[nodiscard]]
-	const BoundingSphere& getBoundingSphere() const {
+	const BoundingSphere& getBoundingSphere() const noexcept {
 		return sphere;
 	}
 
 
 	// Get the light-to-projection matrix
 	[[nodiscard]]
-	XMMATRIX XM_CALLCONV getLightToProjectionMatrix() const {
+	XMMATRIX XM_CALLCONV getLightToProjectionMatrix() const noexcept {
 
 		const f32 m22 = range / (range - near_plane);
 		const f32 m32 = -near_plane * m22;
@@ -131,7 +130,7 @@ public:
 
 
 private:
-	void updateBoundingVolumes() {
+	void updateBoundingVolumes() noexcept {
 		aabb   = AABB(vec3_f32(-range, -range, -range), vec3_f32(range, range, range));
 		sphere = BoundingSphere(vec3_f32(0.0f, 0.0f, 0.0f), range);
 	}
@@ -139,8 +138,8 @@ private:
 
 private:
 	// Lighting parameters
-	vec4_f32 diffuse_color;
-	vec4_f32 specular;
+	vec3_f32 base_color;
+	f32 intensity;
 	vec3_f32 attenuation;
 
 	// Near clipping plane and range (far plane)

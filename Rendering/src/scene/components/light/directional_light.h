@@ -10,8 +10,8 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	DirectionalLight() noexcept
-		: diffuse_color(1.0f, 1.0f, 1.0f, 0.0f)
-		, specular(1.0f, 1.0f, 1.0f, 1.0f)
+		: base_color(1.0f, 1.0f, 1.0f)
+	    , intensity(1.0f)
 		, start(0.1f)
 		, range(1.0f)
 		, proj_size(1.0f, 1.0f)
@@ -36,40 +36,40 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Diffuse Color
+	// Member Functions - Base Color
 	//----------------------------------------------------------------------------------
-	void setDiffuseColor(const vec4_f32& color) {
-		this->diffuse_color = color;
+	void setBaseColor(const vec3_f32& color) noexcept {
+		base_color = color;
 	}
 
 	[[nodiscard]]
-	const vec4_f32& getDiffuseColor() const {
-		return diffuse_color;
+	const vec3_f32& getBaseColor() const noexcept {
+		return base_color;
 	}
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Specular Color/Power
+	// Member Functions - Intensity
 	//----------------------------------------------------------------------------------
-	void setSpecular(const vec4_f32& spec) {
-		this->specular = spec;
+	void setIntensity(f32 value) noexcept {
+		intensity = value;
 	}
 
 	[[nodiscard]]
-	const vec4_f32& getSpecular() const {
-		return specular;
+	f32 getIntensity() const noexcept {
+		return intensity;
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Shadows
 	//----------------------------------------------------------------------------------
-	void setShadows(bool state) {
+	void setShadows(bool state) noexcept {
 		shadows = state;
 	}
 
 	[[nodiscard]]
-	bool castsShadows() const {
+	bool castsShadows() const noexcept {
 		return shadows;
 	}
 
@@ -77,13 +77,13 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Range
 	//----------------------------------------------------------------------------------
-	void setRange(f32 range) {
+	void setRange(f32 range) noexcept {
 		this->range = std::max(0.01f, range);
 		updateBoundingVolumes();
 	}
 
 	[[nodiscard]]
-	f32 getRange() const {
+	f32 getRange() const noexcept {
 		return range;
 	}
 
@@ -91,20 +91,20 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Size
 	//----------------------------------------------------------------------------------
-	void setSize(const vec2_f32& size) {
+	void setSize(const vec2_f32& size) noexcept {
 		proj_size = size;
 		updateBoundingVolumes();
 	}
 
 	[[nodiscard]]
-	const vec2_f32& getSize() const {
+	const vec2_f32& getSize() const noexcept {
 		return proj_size;
 	}
 
 
 	// Get the AABB of this light
 	[[nodiscard]]
-	const AABB& getAABB() const {
+	const AABB& getAABB() const noexcept {
 		return aabb;
 	}
 
@@ -116,7 +116,7 @@ public:
 
 
 private:
-	void updateBoundingVolumes() {
+	void updateBoundingVolumes() noexcept {
 		aabb = AABB{ vec3_f32{-0.5f * proj_size.x, -0.5f * proj_size.y, 0.0f},
 					 vec3_f32{ 0.5f * proj_size.x,  0.5f * proj_size.y, range} };
 	}
@@ -124,8 +124,8 @@ private:
 
 private:
 	// Lighting parameters
-	vec4_f32 diffuse_color;
-	vec4_f32 specular;
+	vec3_f32 base_color;
+	f32 intensity;
 
 	// Clipping planes
 	f32 start;

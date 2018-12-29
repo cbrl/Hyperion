@@ -119,16 +119,13 @@ void DrawDetails(Scene& scene) {
 
 void DrawDetails(Entity& entity, const std::vector<EntityPtr>& entities) {
 
-	ImGui::Text("Entity");
+	//----------------------------------------------------------------------------------
+	// Name/Details
+	//----------------------------------------------------------------------------------
+	ImGui::InputText("", &entity.getName());
 	ImGui::Text("Index: %d", entity.getPtr().getHandle().index);
 	ImGui::Text("Counter: %d", entity.getPtr().getHandle().counter);
 	ImGui::Separator();
-
-
-	//----------------------------------------------------------------------------------
-	// Name
-	//----------------------------------------------------------------------------------
-	ImGui::InputText("Name", &entity.getName());
 
 
 	//----------------------------------------------------------------------------------
@@ -471,13 +468,13 @@ void DrawDetails(DirectionalLight& light) {
 	ImGui::Text("Directional Light");
 	ImGui::Separator();
 
-	auto diffuse = light.getDiffuseColor();
-	if (ImGui::ColorEdit3("Diffuse Color", diffuse.data()))
-		light.setDiffuseColor(diffuse);
+	auto base_color = light.getBaseColor();
+	if (ImGui::ColorEdit3("Base Color", base_color.data()))
+		light.setBaseColor(base_color);
 
-	auto specular = light.getSpecular();
-	if (ImGui::ColorEdit3("Specular Color", specular.data()))
-		light.setSpecular(specular);
+	auto intensity = light.getIntensity();
+	if (ImGui::DragFloat("Intensity", &intensity, 0.01f, 0.0f, FLT_MAX))
+		light.setIntensity(intensity);
 
 	auto range = light.getRange();
 	if (ImGui::DragFloat("Range", &range, 0.1f, 0.1f, FLT_MAX))
@@ -500,21 +497,21 @@ void DrawDetails(PointLight& light) {
 	ImGui::Text("Point Light");
 	ImGui::Separator();
 
-	f32 range = light.getRange();
+	auto base_color = light.getBaseColor();
+	if (ImGui::ColorEdit3("Base Color", base_color.data()))
+		light.setBaseColor(base_color);
+
+	auto intensity = light.getIntensity();
+	if (ImGui::DragFloat("Intensity", &intensity, 0.01f, 0.0f, FLT_MAX))
+		light.setIntensity(intensity);
+
+	auto range = light.getRange();
 	if (ImGui::DragFloat("Range", &range, 0.1f, 0.0f, FLT_MAX))
 		light.setRange(range);
 
 	auto attenuation = light.getAttenuation();
 	if (ImGui::DragFloat3("Attenuation", attenuation.data(), 0.01f, 0.0f, 1.0f))
 		light.setAttenuation(attenuation);
-
-	auto diffuse = light.getDiffuseColor();
-	if (ImGui::ColorEdit3("Diffuse Color", diffuse.data()))
-		light.setDiffuseColor(diffuse);
-
-	auto specular = light.getSpecular();
-	if (ImGui::ColorEdit3("Specular Color", specular.data()))
-		light.setSpecular(specular);
 
 	auto shadows = light.castsShadows();
 	if (ImGui::Checkbox("Shadows", &shadows))
@@ -529,9 +526,21 @@ void DrawDetails(SpotLight& light) {
 	ImGui::Text("Spot Light");
 	ImGui::Separator();
 
+	auto base_color = light.getBaseColor();
+	if (ImGui::ColorEdit3("Base Color", base_color.data()))
+		light.setBaseColor(base_color);
+
+	auto intensity = light.getIntensity();
+	if (ImGui::DragFloat("Intensity", &intensity, 0.01f, 0.0f, FLT_MAX))
+		light.setIntensity(intensity);
+
 	auto range = light.getRange();
 	if (ImGui::DragFloat("Range", &range, 0.1f, 0.0f, FLT_MAX))
 		light.setRange(range);
+
+	auto attenuation = light.getAttenuation();
+	if (ImGui::DragFloat3("Attenuation", attenuation.data(), 0.01f, 0.0f, 1.0f))
+		light.setAttenuation(attenuation);
 
 	auto umbra = light.getUmbraAngle();
 	if (ImGui::DragFloat("Umbra", &umbra, 0.01f, 0.01f, XM_PIDIV2))
@@ -540,18 +549,6 @@ void DrawDetails(SpotLight& light) {
 	auto penumbra = light.getPenumbraAngle();
 	if (ImGui::DragFloat("Penumbra", &penumbra, 0.01f, 0.01f, XM_PIDIV2))
 		light.setPenumbraAngle(penumbra);
-
-	auto attenuation = light.getAttenuation();
-	if (ImGui::DragFloat3("Attenuation", attenuation.data(), 0.01f, 0.0f, 1.0f))
-		light.setAttenuation(attenuation);
-
-	auto diffuse = light.getDiffuseColor();
-	if (ImGui::ColorEdit3("Diffuse Color", diffuse.data()))
-		light.setDiffuseColor(diffuse);
-
-	auto specular = light.getSpecular();
-	if (ImGui::ColorEdit3("Specular Color", specular.data()))
-		light.setSpecular(specular);
 
 	auto shadows = light.castsShadows();
 	if (ImGui::Checkbox("Shadows", &shadows))

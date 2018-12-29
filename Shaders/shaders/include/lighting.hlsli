@@ -154,11 +154,14 @@ float3 CalculateLighting(float3 p_world, float3 n, float3 p_to_v, Material mater
 	CalculateLights(p_world, n, p_to_v, material, l_diffuse, l_specular);
 	CalculateShadowLights(p_world, n, p_to_v, material, l_diffuse, l_specular);
 
-	// Calculate final color
-	const float3 ambient     = g_ambient_intensity.xyz * material.base_color.xyz;
-	const float3 final_color = ambient + l_diffuse + l_specular;
+	// Calculate ambient light
+	float3 ambient;
+	float3 null;
+	LambertBRDF(0.0f, 0.0f, 0.0f, material, ambient, null);
+	ambient *= g_ambient_intensity.xyz;
 
-	return final_color;
+	// Calculate final color
+	return ambient + l_diffuse + l_specular;
 }
 
 

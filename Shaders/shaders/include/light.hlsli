@@ -13,7 +13,12 @@
 // att_values: constant, linear, and quadratic attenuation values respectively
 //----------------------------------------------------------------------------------
 float Attenuation(float d, float3 att_values) {
-	return 1.0f / dot(att_values, float3(1.0f, d, d * d));
+	const float denom = dot(att_values, float3(1.0f, d, sqr(d)));
+	return 1.0f / max(denom, 0.01f);
+}
+
+float DistanceAttenuation(float d) {
+	return Attenuation(d, float3(0.0f, 0.0f, 1.0f));
 }
 
 
@@ -79,12 +84,10 @@ struct ShadowCubeMap {
 //----------------------------------------------------------------------------------
 
 struct DirectionalLight {
-	float3 diffuse;
-	float  pad1;
-	float3 specular;
-	float  pad2;
+	float3 base_color;
+	float  intensity;
 	float3 direction;
-	float  pad3;
+	float  pad0;
 	matrix world_to_projection;
 
 	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor, out float3 p_ndc) {
@@ -94,7 +97,7 @@ struct DirectionalLight {
 		const float4 p_proj = mul(float4(p_world, 1.0f), world_to_projection);
 		p_ndc = Homogenize(p_proj);
 
-		E_factor = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : diffuse;
+		E_factor = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : (base_color * intensity);
 	}
 
 	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor) {
@@ -130,14 +133,12 @@ struct DirectionalLight {
 //----------------------------------------------------------------------------------
 
 struct PointLight {
-	float3 diffuse;
-	float  pad1;
-	float3 specular;
-	float  pad2;
+	float3 base_color;
+	float  intensity;
 	float3 position;
 	float  range;
 	float3 attenuation;
-	float  pad3;
+	float  pad0;
 
 	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor) {
 		// The vector from the surface to the light
@@ -151,7 +152,7 @@ struct PointLight {
 
 		// Attenuation
 		const float att_factor = Attenuation(d, attenuation);
-		E_factor = diffuse * att_factor;
+		E_factor = base_color * intensity * att_factor;
 	}
 };
 
@@ -159,7 +160,7 @@ struct PointLight {
 struct ShadowPointLight : PointLight {
 	matrix world_to_light;
 	float2 projection_values;
-	float2 pad;
+	float2 pad1;
 
 	void Calculate(ShadowCubeMap shadow_map, float3 p_world, out float3 p_to_l, out float3 E_factor) {
 		float3 p_to_l0;
@@ -184,10 +185,8 @@ struct ShadowPointLight : PointLight {
 //----------------------------------------------------------------------------------
 
 struct SpotLight {
-	float3 diffuse;
-	float  pad1;
-	float3 specular;
-	float  pad2;
+	float3 base_color;
+	float  intensity;
 	float3 position;
 	float  range;
 	float3 direction;
@@ -205,10 +204,10 @@ struct SpotLight {
 		// Normalize the light vector.
 		p_to_l /= d;
 
-		const float att_factor = Attenuation(d, attenuation);
-		const float intensity  = SpotIntensity(p_to_l, direction, cos_umbra, cos_penumbra);
+		const float att_factor  = Attenuation(d, attenuation);
+		const float spot_factor = SpotIntensity(p_to_l, direction, cos_umbra, cos_penumbra);
 
-		E_factor = diffuse * att_factor * intensity;
+		E_factor = base_color * intensity * att_factor * spot_factor;
 	}
 };
 
