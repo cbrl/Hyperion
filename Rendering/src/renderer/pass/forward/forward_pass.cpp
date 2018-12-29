@@ -243,7 +243,6 @@ void XM_CALLCONV ForwardPass::renderModel(const ModelRoot& root, const Model& mo
 	const auto model_to_proj  = model_to_world * world_to_projection;
 
 	// Cull the model if it isn't on screen
-	Frustum frustum(model_to_proj);
 	if (!Frustum(model_to_proj).contains(model.getAABB()))
 		return;
 
@@ -259,14 +258,9 @@ void XM_CALLCONV ForwardPass::renderModel(const ModelRoot& root, const Model& mo
 
 	// Bind the SRVs
 	if (mat.maps.base_color)      mat.maps.base_color->bind<Pipeline::PS>(device_context, SLOT_SRV_BASE_COLOR);
-	//if (mat.maps.ambient)       mat.maps.ambient->bind<Pipeline::PS>(device_context, SLOT_SRV_AMBIENT);
-	if (mat.maps.normal)          mat.maps.normal->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
 	if (mat.maps.material_params) mat.maps.material_params->bind<Pipeline::PS>(device_context, SLOT_SRV_MATERIAL_PARAMS);
+	if (mat.maps.normal)          mat.maps.normal->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
 	if (mat.maps.emissive)        mat.maps.emissive->bind<Pipeline::PS>(device_context, SLOT_SRV_EMISSIVE);
-	//if (mat.maps.specular)      mat.maps.specular->bind<Pipeline::PS>(device_context, SLOT_SRV_SPECULAR);
-	//if (mat.maps.spec_exponent) mat.maps.spec_exponent->bind<Pipeline::PS>(device_context, SLOT_SRV_SPEC_EXPONENT);
-	//if (mat.maps.opacity)       mat.maps.opacity->bind<Pipeline::PS>(device_context, SLOT_SRV_ALPHA);
-	//if (mat.maps.height)        mat.maps.height->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
 
 
 	// Draw the model
@@ -275,7 +269,7 @@ void XM_CALLCONV ForwardPass::renderModel(const ModelRoot& root, const Model& mo
 
 	// Unbind the SRVs
 	// Slot definition could be used as a more dynamic way of unbinding any amount of srvs
-	// E.g. null_srv[SLOT_SRV_ALPHA + 1] = { nullptr };
-	ID3D11ShaderResourceView* null_srv[6] = { nullptr };
-	Pipeline::PS::bindSRVs(device_context, 0, 6, null_srv);
+	// E.g. null_srv[SLOT_SRV_EMISSIVE + 1] = { nullptr };
+	ID3D11ShaderResourceView* null_srv[4] = { nullptr };
+	Pipeline::PS::bindSRVs(device_context, 0, 4, null_srv);
 }

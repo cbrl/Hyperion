@@ -7,7 +7,7 @@
 // ENABLE_SHADOW_MAPPING
 
 #include "include/light.hlsli"
-#include "include/brdf.hlsli"
+#include "include/brdf/brdf.hlsli"
 
 
 //----------------------------------------------------------------------------------

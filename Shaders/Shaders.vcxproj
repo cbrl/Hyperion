@@ -219,7 +219,10 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
-    <None Include="shaders\include\brdf.hlsli" />
+    <None Include="shaders\include\brdf\brdf.hlsli" />
+    <None Include="shaders\include\brdf\distribution_term.hlsli" />
+    <None Include="shaders\include\brdf\fresnel_term.hlsli" />
+    <None Include="shaders\include\brdf\geometry_term.hlsli" />
     <None Include="shaders\include\global.hlsli">
       <FileType>Document</FileType>
     </None>

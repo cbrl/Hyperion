@@ -33,6 +33,9 @@
     <Filter Include="Shader Files\false_color">
       <UniqueIdentifier>{752e2e52-b938-4b94-a9df-a1c437cc3db2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader Files\include\brdf">
+      <UniqueIdentifier>{555c9738-4799-44d7-8366-e13ec2dea181}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\depth\depth_vs.hlsl">
@@ -132,8 +135,17 @@
     <None Include="shaders\include\math.hlsli">
       <Filter>Shader Files\include</Filter>
     </None>
-    <None Include="shaders\include\brdf.hlsli">
-      <Filter>Shader Files\include</Filter>
+    <None Include="shaders\include\brdf\brdf.hlsli">
+      <Filter>Shader Files\include\brdf</Filter>
+    </None>
+    <None Include="shaders\include\brdf\fresnel_term.hlsli">
+      <Filter>Shader Files\include\brdf</Filter>
+    </None>
+    <None Include="shaders\include\brdf\geometry_term.hlsli">
+      <Filter>Shader Files\include\brdf</Filter>
+    </None>
+    <None Include="shaders\include\brdf\distribution_term.hlsli">
+      <Filter>Shader Files\include\brdf</Filter>
     </None>
   </ItemGroup>
 </Project>
