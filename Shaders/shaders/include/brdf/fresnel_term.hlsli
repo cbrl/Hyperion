@@ -101,7 +101,7 @@ float3 F_Schlick(float l_dot_h, float3 f0) {
 
 float F_CookTorrance(float l_dot_h, float f0) {
 
-	// F = (1/2) * ((g-c)/(g+c))^2 * { 1 + [((g+c)c - 1)/((g-c)c + 1)]^2 }
+	// F = (1/2) * [(g-c) / (g+c)]^2 * { 1 + [((g+c)c - 1)/((g-c)c + 1)]^2 }
 	
 	// g   = sqrt(eta^2 + c^2 - 1)
 	// eta = (1 + sqrt(f0))/(1 - sqrt(f0))
@@ -115,6 +115,27 @@ float F_CookTorrance(float l_dot_h, float f0) {
 
 	const float term1 = sqr(g_minus_c / g_plus_c);
 	const float term2 = 1.0f + sqr((g_plus_c * l_dot_h - 1.0f) / (g_minus_c * l_dot_h + 1.0f));
+
+	return 0.5f * term1 * term2;
+}
+
+
+float3 F_CookTorrance(float l_dot_h, float3 f0) {
+
+	// F = (1/2) * [(g-c) / (g+c)]^2 * { 1 + [((g+c)c - 1)/((g-c)c + 1)]^2 }
+
+	// g   = sqrt(eta^2 + c^2 - 1)
+	// eta = (1 + sqrt(f0))/(1 - sqrt(f0))
+	// c   = l.h
+
+	const float3 f0_sqrt = sqrt(f0);
+	const float3 eta = (1.0f + f0_sqrt) / (1.0f - f0_sqrt);
+	const float3 g = sqrt(sqr(eta) + sqr(l_dot_h) - 1.0f);
+	const float3 g_plus_c = g + l_dot_h;
+	const float3 g_minus_c = g - l_dot_h;
+
+	const float3 term1 = sqr(g_minus_c / g_plus_c);
+	const float3 term2 = 1.0f + sqr((g_plus_c * l_dot_h - 1.0f) / (g_minus_c * l_dot_h + 1.0f));
 
 	return 0.5f * term1 * term2;
 }

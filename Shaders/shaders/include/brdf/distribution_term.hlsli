@@ -23,6 +23,7 @@ float D_BlinnPhong(float n_dot_h, float alpha) {
 	const float inv_alpha_sqr = 1.0f / sqr(alpha);
 	const float s             = (2.0f * inv_alpha_sqr) - 2.0f;
 	const float K             = g_inv_pi * inv_alpha_sqr;
+
 	return K * pow(n_dot_h, s);
 }
 
