@@ -10,12 +10,11 @@
 // Environment map texture
 TextureCube env_map : REG_T(SLOT_SRV_ENV_MAP);
 
-// Model textures
+// Material textures
 Texture2D base_color_map     : REG_T(SLOT_SRV_BASE_COLOR);
 Texture2D normal_map         : REG_T(SLOT_SRV_NORMAL);
 Texture2D material_param_map : REG_T(SLOT_SRV_MATERIAL_PARAMS);
 Texture2D emissive_map       : REG_T(SLOT_SRV_EMISSIVE);
-// ambient, specular, etc...
 
 
 
