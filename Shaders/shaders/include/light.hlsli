@@ -158,6 +158,10 @@ struct ShadowPointLight : PointLight {
 	float2 projection_values;
 	float2 pad1;
 
+	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance) {
+		PointLight::Calculate(p_world, p_to_light, irradiance);
+	}
+
 	void Calculate(ShadowCubeMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		float3 p_to_l0;
 		float3 irradiance0;
@@ -209,6 +213,10 @@ struct SpotLight {
 
 struct ShadowSpotLight : SpotLight {
 	matrix world_to_projection;
+
+	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance) {
+		SpotLight::Calculate(p_world, p_to_light, irradiance);
+	}
 
 	void Calculate(ShadowMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		float3 p_to_l0;

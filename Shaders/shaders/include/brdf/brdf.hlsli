@@ -84,8 +84,8 @@ void BlinnPhongBRDF(float3 l, float3 n, float3 v, Material mat,
 
 void CookTorranceBRDF(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
 
-	const float  n_dot_l = saturate(dot(n, l)); //possibly clamp to [0.001, 1.0]
-	const float  n_dot_v = saturate(dot(n, v)); //possibly clamp to [0.001, 1.0]
+	const float  n_dot_l = saturate(dot(n, l));
+	const float  n_dot_v = saturate(dot(n, v));
 	const float3 h       = normalize(l + v);
 	const float  n_dot_h = saturate(dot(n, h));
 	const float  l_dot_h = saturate(dot(l, h));

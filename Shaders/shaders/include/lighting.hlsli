@@ -94,7 +94,6 @@ float3 CalculateShadowLights(float3 p_world,
 		const ShadowMap shadow_map = {g_pcf_sampler, g_directional_light_smaps, i0};
 		g_shadow_directional_lights[i0].Calculate(shadow_map, p_world, p_to_light, irradiance);
 		#else
-		ComputeDirectionalLight(g_shadow_directional_lights[i0], p_world, p_to_light, irradiance);
 		g_shadow_directional_lights[i0].Calculate(p_world, p_to_light, irradiance);
 		#endif
 
@@ -112,7 +111,6 @@ float3 CalculateShadowLights(float3 p_world,
 		const ShadowCubeMap shadow_map = {g_pcf_sampler, g_point_light_smaps, i1};
 		g_shadow_point_lights[i1].Calculate(shadow_map, p_world, p_to_light, irradiance);
 		#else
-		ComputePointLight(g_shadow_point_lights[i1].light, p_world, p_to_light, irradiance);
 		g_shadow_point_lights[i1].Calculate(p_world, p_to_light, irradiance);
 		#endif
 
@@ -130,7 +128,6 @@ float3 CalculateShadowLights(float3 p_world,
 		const ShadowMap shadow_map = {g_pcf_sampler, g_spot_light_smaps, i2};
 		g_shadow_spot_lights[i2].Calculate(shadow_map, p_world, p_to_light, irradiance);
 		#else
-		ComputeSpotLight(g_shadow_spot_lights[i2].light, p_world, p_to_light, irradiance);
 		g_shadow_spot_lights[i2].Calculate(p_world, p_to_light, irradiance);
 		#endif
 

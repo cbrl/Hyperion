@@ -1,3 +1,6 @@
+#ifndef HLSL_FORWARD_INCLUDE
+#define HLSL_FORWARD_INCLUDE
+
 #include "include/global.hlsli"
 #include "include/model.hlsli"
 #include "include/normal.hlsli"
@@ -39,3 +42,6 @@ float2 GetMaterialParams(float2 uv) {
 	const float2 sam = material_param_map.Sample(g_linear_wrap, uv).xy;
 	return float2(g_material.metalness, g_material.roughness) * sam;
 }
+
+
+#endif //HLSL_FORWARD_INCLUDE
