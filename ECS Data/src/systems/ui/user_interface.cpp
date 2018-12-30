@@ -572,15 +572,13 @@ void DrawDetails(AxisOrbit& orbit) {
 template <typename T>
 void DrawNode(gsl::czstring<> text, T& item) {
 
-	const bool open = ImGui::TreeNodeEx(&item, MakeTreeNodeFlags(IsEntityDetailsNodeSelected(&item)), text);
-
-	if (ImGui::IsItemClicked()) {
+	bool dont_delete = true;
+	if (ImGui::CollapsingHeader(text, &dont_delete)) {
 		SetEntityDetailsNodeSelected(&item);
-	}
-
-	if (open) {
 		DrawDetails(item);
-		ImGui::TreePop();
+	}
+	if (!dont_delete && g_selected_component) {
+		g_selected_component->getOwner()->removeComponent(g_selected_component);
 	}
 }
 
@@ -1486,17 +1484,17 @@ void DrawFPSDisplay(Engine& engine) {
 //----------------------------------------------------------------------------------
 void UserInterface::update(Engine& engine)  {
 
-	auto& scene = engine.getScene();
+	ImGui::ShowDemoWindow();
 
-	bool open = true;
+	auto& scene = engine.getScene();
 
 	// Setup window layout
 	ImGui::SetNextWindowSize(ImVec2(275, 600), ImGuiCond_FirstUseEver);
-	ImGui::Begin("Scene", &open, ImGuiWindowFlags_MenuBar);
+	ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_MenuBar);
 	ImGui::End();
 
 	ImGui::SetNextWindowSize(ImVec2(375, 425), ImGuiCond_FirstUseEver);
-	ImGui::Begin("Properties", &open);
+	ImGui::Begin("Properties");
 	ImGui::End();
 
 	// Draw the system menu
