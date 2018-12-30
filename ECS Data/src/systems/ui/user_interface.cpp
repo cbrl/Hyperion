@@ -123,9 +123,16 @@ void DrawDetails(Entity& entity, const std::vector<EntityPtr>& entities) {
 	// Name/Details
 	//----------------------------------------------------------------------------------
 	ImGui::InputText("", &entity.getName());
-	ImGui::Text("Index: %d", entity.getPtr().getHandle().index);
-	ImGui::Text("Counter: %d", entity.getPtr().getHandle().counter);
+	ImGui::SameLine();
+	bool state = entity.isActive();
+	if (ImGui::Checkbox("Active", &state))
+		entity.setActive(state);
+
 	ImGui::Separator();
+
+	ImGui::Text("Index:   %d", entity.getPtr().getHandle().index);
+	ImGui::Text("Counter: %d", entity.getPtr().getHandle().counter);
+	ImGui::Spacing();
 
 
 	//----------------------------------------------------------------------------------
@@ -151,7 +158,7 @@ void DrawDetails(Entity& entity, const std::vector<EntityPtr>& entities) {
 		if (index != 0) {
 			entities[index-1]->addChild(entity.getPtr()); //subtract 1 since index 0 is "None"
 		}
-		else {
+		else if (entity.hasParent()) {
 			entity.getParent()->removeChild(entity.getPtr());
 		}
 	}
