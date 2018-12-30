@@ -4,10 +4,6 @@
 // ENABLE_TRANSPARENCY
 // ENABLE_LIGHTING
 
-//----------------------------------------------------------------------------------
-// Defines
-//----------------------------------------------------------------------------------
-#define ENABLE_SHADOW_MAPPING
 
 #include "forward/forward_include.hlsli"
 #include "include/lighting.hlsli"
@@ -16,13 +12,13 @@
 float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 	// Calculate the position-to-eye vector
-	float3 to_eye = CameraPosition() - pin.p_world;
+	float3 p_to_view = CameraPosition() - pin.p_world;
 
 	// Calculate distance to viewer
-	float dist_to_eye = length(to_eye);
+	float dist_p_to_view = length(p_to_view);
 
 	// Normalize
-	to_eye /= dist_to_eye;
+	p_to_view /= dist_p_to_view;
 
 
 	//----------------------------------------------------------------------------------
@@ -33,9 +29,9 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 	Material mat;
 	mat.base_color = base_color;
-	mat.metalness = params.x;
-	mat.roughness = params.y;
-	mat.emissive = float3(0.0f, 0.0f, 0.0f);
+	mat.metalness  = params.x;
+	mat.roughness  = params.y;
+	mat.emissive   = 0.0f;
 
 
 	// Test alpha if transparency is enabled, or set it to 1 if not.
@@ -53,11 +49,11 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	#ifdef ENABLE_LIGHTING
 	const float3 normal_vec = GetNormal(pin.p.xyz, pin.n, pin.uv);
 
-	float3 out_color = CalculateLighting(pin.p_world, normal_vec, to_eye, mat);
+	float3 out_color = CalculateLighting(pin.p_world, normal_vec, p_to_view, mat);
 
 	/*
 	if (g_material.mirror_surface) {
-		const float3 incident         = -to_eye;
+		const float3 incident         = -p_to_view;
 		const float3 reflection_vec   = reflect(incident, pin.n);
 		const float3 reflection_color = g_material.diffuse.xyz * env_map.Sample(g_aniso_wrap, reflection_vec).xyz;
 
@@ -73,7 +69,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Fogging
 	//----------------------------------------------------------------------------------
 
-	float fog_lerp = saturate((dist_to_eye - g_fog.start) / g_fog.range);
+	float fog_lerp = saturate((dist_p_to_view - g_fog.start) / g_fog.range);
 
 	// Blend the fog color and the lit color
 	out_color = lerp(out_color, g_fog.color.xyz, fog_lerp);

@@ -25,7 +25,7 @@ float DistanceAttenuation(float d) {
 //----------------------------------------------------------------------------------
 // SpotIntensity
 //----------------------------------------------------------------------------------
-//         L: light vector (surface to light)
+//         L: surface-to-light vector
 //         D: light direction
 // cos_theta: cosine of the umbra angle
 //   cos_phi: cosine of the penumbra angle
@@ -53,8 +53,6 @@ struct ShadowMap {
 
 		return maps.SampleCmpLevelZero(sam_shadow, location, p_ndc.z);
 	}
-
-	float ShadowFactor(float3 p_light, float2 projection_values);
 };
 
 
@@ -62,8 +60,6 @@ struct ShadowCubeMap {
 	SamplerComparisonState sam_shadow;
 	TextureCubeArray maps;
 	uint index;
-
-	float ShadowFactor(float3 p_ndc);
 
 	float ShadowFactor(float3 p_light, float2 projection_values) {
 		const float3 p_light_abs = abs(p_light);
@@ -90,38 +86,38 @@ struct DirectionalLight {
 	float  pad0;
 	matrix world_to_projection;
 
-	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor, out float3 p_ndc) {
+	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance, out float3 p_ndc) {
 		// The light vector aims opposite the direction the light rays travel
-		p_to_l = -direction;
+		p_to_light = -direction;
 
 		const float4 p_proj = mul(float4(p_world, 1.0f), world_to_projection);
 		p_ndc = Homogenize(p_proj);
 
-		E_factor = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : (base_color * intensity);
+		irradiance = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : (base_color * intensity);
 	}
 
-	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor) {
+	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		float3 p_ndc;
 		float3 p_to_l0;
-		float3 E_factor0;
+		float3 irradiance0;
 
-		Calculate(p_world, p_to_l0, E_factor0, p_ndc);
+		Calculate(p_world, p_to_l0, irradiance0, p_ndc);
 
-		p_to_l   = p_to_l0;
-		E_factor = E_factor0;
+		p_to_light   = p_to_l0;
+		irradiance = irradiance0;
 	}
 
-	void Calculate(ShadowMap shadow_map, float3 p_world, out float3 p_to_l, out float3 E_factor) {
+	void Calculate(ShadowMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		float3 p_ndc;
 		float3 p_to_l0;
-		float3 E_factor0;
+		float3 irradiance0;
 
-		Calculate(p_world, p_to_l0, E_factor0, p_ndc);
+		Calculate(p_world, p_to_l0, irradiance0, p_ndc);
 
-		p_to_l = p_to_l0;
+		p_to_light = p_to_l0;
 
 		const float shadow_factor = shadow_map.ShadowFactor(p_ndc);
-		E_factor = E_factor0 * shadow_factor;
+		irradiance = irradiance0 * shadow_factor;
 	}
 };
 
@@ -140,19 +136,19 @@ struct PointLight {
 	float3 attenuation;
 	float  pad0;
 
-	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor) {
+	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		// The vector from the surface to the light
-		p_to_l = position - p_world;
+		p_to_light = position - p_world;
 
 		// The distance from surface to light
-		const float d = length(p_to_l);
+		const float d = length(p_to_light);
 
 		// Normalize the light vector
-		p_to_l /= d;
+		p_to_light /= d;
 
 		// Attenuation
 		const float att_factor = Attenuation(d, attenuation);
-		E_factor = base_color * intensity * att_factor;
+		irradiance = base_color * intensity * att_factor;
 	}
 };
 
@@ -162,18 +158,18 @@ struct ShadowPointLight : PointLight {
 	float2 projection_values;
 	float2 pad1;
 
-	void Calculate(ShadowCubeMap shadow_map, float3 p_world, out float3 p_to_l, out float3 E_factor) {
+	void Calculate(ShadowCubeMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		float3 p_to_l0;
-		float3 E_factor0;
+		float3 irradiance0;
 
-		PointLight::Calculate(p_world, p_to_l0, E_factor0);
+		PointLight::Calculate(p_world, p_to_l0, irradiance0);
 
-		p_to_l = p_to_l0;
+		p_to_light = p_to_l0;
 
 		const float3 p_light       = mul(float4(p_world, 1.0f), world_to_light).xyz;
 		const float  shadow_factor = shadow_map.ShadowFactor(p_light, projection_values);
 
-		E_factor = E_factor0 * shadow_factor;
+		irradiance = irradiance0 * shadow_factor;
 	}
 };
 
@@ -194,39 +190,39 @@ struct SpotLight {
 	float  cos_penumbra;
 	float3 attenuation;
 
-	void Calculate(float3 p_world, out float3 p_to_l, out float3 E_factor) {
+	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		// The vector from the surface to the light.
-		p_to_l = position - p_world;
+		p_to_light = position - p_world;
 
 		// The distance from surface to light.
-		float d = length(p_to_l);
+		float d = length(p_to_light);
 
 		// Normalize the light vector.
-		p_to_l /= d;
+		p_to_light /= d;
 
 		const float att_factor  = Attenuation(d, attenuation);
-		const float spot_factor = SpotIntensity(p_to_l, direction, cos_umbra, cos_penumbra);
+		const float spot_factor = SpotIntensity(p_to_light, direction, cos_umbra, cos_penumbra);
 
-		E_factor = base_color * intensity * att_factor * spot_factor;
+		irradiance = base_color * intensity * att_factor * spot_factor;
 	}
 };
 
 struct ShadowSpotLight : SpotLight {
 	matrix world_to_projection;
 
-	void Calculate(ShadowMap shadow_map, float3 p_world, out float3 p_to_l, out float3 E_factor) {
+	void Calculate(ShadowMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		float3 p_to_l0;
-		float3 E_factor0;
+		float3 irradiance0;
 
-		SpotLight::Calculate(p_world, p_to_l0, E_factor0);
+		SpotLight::Calculate(p_world, p_to_l0, irradiance0);
 
-		p_to_l = p_to_l0;
+		p_to_light = p_to_l0;
 
 		const float4 p_proj        = mul(float4(p_world, 1.0f), world_to_projection);
 		const float3 p_ndc         = Homogenize(p_proj);
 		const float  shadow_factor = shadow_map.ShadowFactor(p_ndc);
 
-		E_factor = E_factor0 * shadow_factor;
+		irradiance = irradiance0 * shadow_factor;
 	}
 };
 
@@ -239,8 +235,8 @@ struct ShadowSpotLight : SpotLight {
 
 // Lights
 StructuredBuffer<DirectionalLight> g_directional_lights : REG_T(SLOT_SRV_DIRECTIONAL_LIGHTS);
-StructuredBuffer<PointLight>       g_point_lights       : REG_T(SLOT_SRV_POINT_LIGHTS);
-StructuredBuffer<SpotLight>        g_spot_lights        : REG_T(SLOT_SRV_SPOT_LIGHTS);
+StructuredBuffer<PointLight> g_point_lights : REG_T(SLOT_SRV_POINT_LIGHTS);
+StructuredBuffer<SpotLight> g_spot_lights : REG_T(SLOT_SRV_SPOT_LIGHTS);
 
 
 // Shadow Lights
