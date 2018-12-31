@@ -56,7 +56,7 @@ void TestScene::load(const Engine& engine) {
 	fog.start = 150.0f;
 	fog.range = 100.0f;
 
-	camera->getComponent<Transform>()->setPosition(vec3_f32{ 0.0f, 6.0f, -2.0f });
+	camera->getComponent<Transform>()->setPosition(vec3_f32{ 0.0f, 0.0f, -2.0f });
 	camera->getComponent<MouseRotation>()->setSensitivity(0.01f);
 
 
@@ -69,14 +69,36 @@ void TestScene::load(const Engine& engine) {
 	config.flip_winding = false;
 	config.flip_uv      = false;
 
-	auto main_bp   = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj", config);
-	auto sphere_bp = BlueprintFactory::CreateSphere(resource_mgr, config, 1.0f);
+	ModelConfig<VertexPositionNormalTexture> inv_config;
+	config.flip_winding = true;
+	config.flip_uv      = false;
+
+	auto main_bp          = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj", config);
+	auto sphere_bp        = BlueprintFactory::CreateSphere(resource_mgr, config, 1.0f);
+	auto cube_bp          = BlueprintFactory::CreateCube(resource_mgr, config, 1.0f);
+	auto inverted_cube_bp = BlueprintFactory::CreateCube(resource_mgr, inv_config, 10.0f, true);
+	auto cylinder_bp      = BlueprintFactory::CreateCylinder(resource_mgr, config, 1.0f);
 
 
 	// Scene model
-	EntityPtr test_model = addEntity();
-	test_model->setName("Test Model");
-	test_model->addComponent<ModelRoot>(device, main_bp);
+	//EntityPtr test_model = addEntity();
+	//test_model->setName("Test Model");
+	//test_model->addComponent<ModelRoot>(device, main_bp);
+
+	EntityPtr inv_cube = addEntity();
+	inv_cube->setName("Bounding Cube");
+	inv_cube->addComponent<ModelRoot>(device, inverted_cube_bp);
+	inv_cube->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 4.5f, 0.0f});
+
+	EntityPtr cube = addEntity();
+	cube->setName("Cube");
+	cube->addComponent<ModelRoot>(device, cube_bp);
+	cube->getComponent<Transform>()->setPosition(vec3_f32{-2.0f, 0.0f, 0.75f});
+
+	EntityPtr cylinder = addEntity();
+	cylinder->setName("Cylinder");
+	cylinder->addComponent<ModelRoot>(device, cylinder_bp);
+	cylinder->getComponent<Transform>()->setPosition(vec3_f32{2.0f, 0.0f, -0.75f});
 
 
 	// Sphere

@@ -641,17 +641,19 @@ void DrawDetails(AxisOrbit& orbit) {
 
 // Draw a node in the tree, and its details if selected
 template <typename T>
-void DrawNode(gsl::czstring<> text, T& item) {
+void DrawComponentNode(gsl::czstring<> text, T& item) {
+
+	static IComponent* selected = nullptr;
 
 	bool dont_delete = true;
 	ImGui::PushID(&item);
 	if (ImGui::CollapsingHeader(text, &dont_delete)) {
-		SetEntityDetailsNodeSelected(&item);
+		selected = &item;
 		DrawDetails(item);
 	}
 	ImGui::PopID();
-	if (!dont_delete && g_selected_component) {
-		g_selected_component->getOwner()->removeComponent(g_selected_component);
+	if (!dont_delete && selected) {
+		selected->getOwner()->removeComponent(selected);
 	}
 }
 
@@ -717,7 +719,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<Transform>()) {
 		auto transforms = entity.getAll<Transform>();
 		for (auto* transform : transforms) {
-			DrawNode("Transform", *transform);
+			DrawComponentNode("Transform", *transform);
 		}
 	}
 
@@ -725,7 +727,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<ModelRoot>()) {
 		auto roots = entity.getAll<ModelRoot>();
 		for (auto* root : roots) {
-			DrawNode(("ModelRoot: " + root->getName()).c_str(), *root);
+			DrawComponentNode(("ModelRoot: " + root->getName()).c_str(), *root);
 		}
 	}
 
@@ -733,7 +735,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<PerspectiveCamera>()) {
 		auto cams = entity.getAll<PerspectiveCamera>();
 		for (auto* cam : cams) {
-			DrawNode("Perspective Camera", *cam);
+			DrawComponentNode("Perspective Camera", *cam);
 		}
 	}
 
@@ -741,7 +743,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<OrthographicCamera>()) {
 		auto cams = entity.getAll<OrthographicCamera>();
 		for (auto* cam : cams) {
-			DrawNode("Orthographic Camera", *cam);
+			DrawComponentNode("Orthographic Camera", *cam);
 		}
 	}
 
@@ -749,7 +751,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<Text>()) {
 		auto texts = entity.getAll<Text>();
 		for (auto* text : texts) {
-			DrawNode("Text", *text);
+			DrawComponentNode("Text", *text);
 		}
 	}
 
@@ -757,7 +759,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<AmbientLight>()) {
 		auto lights = entity.getAll<AmbientLight>();
 		for (auto* light : lights) {
-			DrawNode("Ambient Light", *light);
+			DrawComponentNode("Ambient Light", *light);
 		}
 	}
 
@@ -765,7 +767,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<DirectionalLight>()) {
 		auto lights = entity.getAll<DirectionalLight>();
 		for (auto* light : lights) {
-			DrawNode("Directional Light", *light);
+			DrawComponentNode("Directional Light", *light);
 		}
 	}
 
@@ -773,7 +775,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<PointLight>()) {
 		auto lights = entity.getAll<PointLight>();
 		for (auto* light : lights) {
-			DrawNode("Point Light", *light);
+			DrawComponentNode("Point Light", *light);
 		}
 	}
 
@@ -781,7 +783,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<SpotLight>()) {
 		auto lights = entity.getAll<SpotLight>();
 		for (auto* light : lights) {
-			DrawNode("Spot Light", *light);
+			DrawComponentNode("Spot Light", *light);
 		}
 	}
 
@@ -789,7 +791,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<CameraMovement>()) {
 		auto components = entity.getAll<CameraMovement>();
 		for (auto* comp : components) {
-			DrawNode("Camera Movement", *comp);
+			DrawComponentNode("Camera Movement", *comp);
 		}
 	}
 
@@ -797,7 +799,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<MouseRotation>()) {
 		auto components = entity.getAll<MouseRotation>();
 		for (auto* comp : components) {
-			DrawNode("Mouse Rotation", *comp);
+			DrawComponentNode("Mouse Rotation", *comp);
 		}
 	}
 
@@ -805,7 +807,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<AxisRotation>()) {
 		auto components = entity.getAll<AxisRotation>();
 		for (auto* comp : components) {
-			DrawNode("Axis Rotation", *comp);
+			DrawComponentNode("Axis Rotation", *comp);
 		}
 	}
 
@@ -813,7 +815,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 	if (entity.hasComponent<AxisOrbit>()) {
 		auto components = entity.getAll<AxisOrbit>();
 		for (auto* comp : components) {
-			DrawNode("Axis Orbit", *comp);
+			DrawComponentNode("Axis Orbit", *comp);
 		}
 	}
 
