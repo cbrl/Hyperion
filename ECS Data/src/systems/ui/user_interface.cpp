@@ -14,32 +14,104 @@
 #include "os/windows/win_utils.h"
 
 
+template<typename T>
+struct SelectableTree final {
+public:
+	template<typename... ArgsT>
+	bool newNode(T* ptr, gsl::czstring<> fmt, ArgsT... args) {
+		const auto flags = ImGuiTreeNodeFlags_OpenOnArrow
+		                   | ImGuiTreeNodeFlags_OpenOnDoubleClick
+		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
+		return node(ptr, flags, fmt, std::forward<ArgsT>(args)...);
+	}
+
+	template <typename... ArgsT>
+	bool newLeafNode(T* ptr, gsl::czstring<> fmt, ArgsT... args) {
+		const auto flags = ImGuiTreeNodeFlags_Leaf
+		                   | ImGuiTreeNodeFlags_Bullet
+		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
+		return node(ptr, flags, fmt, std::forward<ArgsT>(args)...);
+	}
+
+	void endNode() {
+		ImGui::TreePop();
+	}
+
+	T* getSelected() const noexcept {
+		return selected;
+	}
+
+	bool isSelected(T* ptr) const noexcept {
+		return selected == ptr;
+	}
+
+private:
+	template <typename... ArgsT>
+	bool node(T* ptr, ImGuiTreeNodeFlags flags, gsl::czstring<> fmt, ArgsT... args) {
+		const bool is_open = ImGui::TreeNodeEx(ptr, flags, fmt, std::forward<ArgsT>(args)...);
+		if (ImGui::IsItemClicked()) {
+			selected = ptr;
+		}
+		return is_open;
+	}
+
+
+private:
+	T* selected = nullptr;
+};
+
+
+template <>
+struct SelectableTree<EntityPtr> final {
+public:
+	template <typename... ArgsT>
+	bool newNode(const EntityPtr& ptr, gsl::czstring<> fmt, ArgsT... args) {
+		const auto flags = ImGuiTreeNodeFlags_OpenOnArrow
+		                   | ImGuiTreeNodeFlags_OpenOnDoubleClick
+		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
+		return node(ptr, flags, fmt, std::forward<ArgsT>(args)...);
+	}
+
+	template <typename... ArgsT>
+	bool newLeafNode(const EntityPtr& ptr, gsl::czstring<> fmt, ArgsT... args) {
+		const auto flags = ImGuiTreeNodeFlags_Leaf
+		                   | ImGuiTreeNodeFlags_Bullet
+		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
+		return node(ptr, flags, fmt, std::forward<ArgsT>(args)...);
+	}
+
+	void endNode() {
+		ImGui::TreePop();
+	}
+
+	EntityPtr getSelected() const noexcept {
+		return selected;
+	}
+
+	bool isSelected(const EntityPtr& ptr) const noexcept {
+		return selected == ptr;
+	}
+
+private:
+	template <typename... ArgsT>
+	bool node(const EntityPtr& ptr, ImGuiTreeNodeFlags flags, gsl::czstring<> fmt, ArgsT... args) {
+		const bool is_open = ImGui::TreeNodeEx(ptr.get(), flags, fmt, std::forward<ArgsT>(args)...);
+		if (ImGui::IsItemClicked()) {
+			selected = ptr;
+		}
+		return is_open;
+	}
+
+
+private:
+	EntityPtr selected = {};
+};
+
+
 //----------------------------------------------------------------------------------
-// Selected Item
+// Scene Tree global
 //----------------------------------------------------------------------------------
-
-EntityPtr g_scene_tree_selected_entity = {};
-IComponent* g_selected_component = nullptr;
-
-// Selected tree node in the scene tree
-void SetSceneTreeNodeSelected(const EntityPtr& item) {
-	g_scene_tree_selected_entity = item;
-}
-bool IsSceneTreeNodeSelected(const EntityPtr& compare) {
-	return g_scene_tree_selected_entity == compare;
-}
-
-// Selected tree nodes in the entity details panel
-void SetEntityDetailsNodeSelected(IComponent* item) {
-	g_selected_component = item;
-}
-bool IsEntityDetailsNodeSelected(IComponent* compare) {
-	return g_selected_component == compare;
-}
-
-const EntityPtr& GetSelectedEntity() {
-	return g_scene_tree_selected_entity;
-}
+SelectableTree<EntityPtr> g_scene_tree;
 
 
 //----------------------------------------------------------------------------------
@@ -353,8 +425,7 @@ void DrawDetails(Model& model) {
 
 	// Material properties
 	auto& mat = model.getMaterial();
-	std::string name = "Material: " + mat.name;
-	ImGui::Text(name.c_str());
+	ImGui::Text("Material: %s", mat.name.c_str());
 
 	ImGui::ColorEdit4("Base Color", mat.params.base_color.data());
 	ImGui::DragFloat("Metalness", &mat.params.metalness, 0.01f, 0.0f, 1.0f);
@@ -573,10 +644,12 @@ template <typename T>
 void DrawNode(gsl::czstring<> text, T& item) {
 
 	bool dont_delete = true;
+	ImGui::PushID(&item);
 	if (ImGui::CollapsingHeader(text, &dont_delete)) {
 		SetEntityDetailsNodeSelected(&item);
 		DrawDetails(item);
 	}
+	ImGui::PopID();
 	if (!dont_delete && g_selected_component) {
 		g_selected_component->getOwner()->removeComponent(g_selected_component);
 	}
@@ -752,7 +825,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 
 //----------------------------------------------------------------------------------
 //
-//   Object Tree
+//   Scene Tree
 //
 //----------------------------------------------------------------------------------
 
@@ -770,30 +843,22 @@ void DrawEntityNode(EntityPtr entity_ptr, Scene& scene) {
 	//----------------------------------------------------------------------------------
 	bool node_open = true;
 	if (entity->hasChildren()) {
-		node_open = ImGui::TreeNodeEx(entity, MakeTreeNodeFlags(IsSceneTreeNodeSelected(entity_ptr)), entity->getName().c_str());
+		node_open = g_scene_tree.newNode(entity_ptr, entity->getName().c_str());
 	}
 	else {
-		ImGui::TreeNodeEx(entity, MakeTreeLeafFlags(IsSceneTreeNodeSelected(entity_ptr)), entity->getName().c_str());
+		node_open = g_scene_tree.newLeafNode(entity_ptr, entity->getName().c_str());
 	}
 
-	if (ImGui::IsItemClicked()) {
-		SetSceneTreeNodeSelected(entity_ptr);
-	}
-	if (IsSceneTreeNodeSelected(entity_ptr)) {
-		DrawEntityDetails(*entity, scene);
-	}
+	if (node_open) {
+		// Draw any child entities in this node
+		if (entity->hasChildren()) {
+			entity->forEachChildRecursive([&scene](EntityPtr& child) {
+				DrawEntityNode(child, scene);
+			});
+		}
 
-	// Return early if the node isn't open
-	if (!node_open) return;
-
-	// Draw any child entities in this node
-	if (entity->hasChildren()) {
-		entity->forEachChildRecursive([&scene](EntityPtr& child) {
-			DrawEntityNode(child, scene);
-		});
+		g_scene_tree.endNode();
 	}
-
-	ImGui::TreePop();
 }
 
 
@@ -802,8 +867,7 @@ void DrawTree(Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
 
-		const std::string label = scene.getName() + " (Entities: " + ToStr(scene.getEntities().size()).value_or("-1"s) + ')';
-		ImGui::Text(label.c_str());
+		ImGui::Text("%s (Entities: %ull)", scene.getName().c_str(), scene.getEntities().size());
 		ImGui::Separator();
 
 		// Draw a tree node for each root entity
@@ -811,6 +875,10 @@ void DrawTree(Scene& scene) {
 		for (const auto& entity_ptr : entities) {
 			if (entity_ptr->hasParent()) continue;
 			DrawEntityNode(entity_ptr, scene);
+		}
+
+		if (g_scene_tree.getSelected()) {
+			DrawEntityDetails(*g_scene_tree.getSelected(), scene);
 		}
 	}
 
@@ -883,7 +951,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateCube(resource_mgr, config, size, invertn);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -909,7 +978,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateBox(resource_mgr, config, size, invertn);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -946,7 +1016,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateSphere(resource_mgr, config, diameter, tessellation, invertn);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -981,7 +1052,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateGeoSphere(resource_mgr, config, diameter, tessellation);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1018,7 +1090,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCylinder(resource_mgr, config, diameter, height, tessellation);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1055,7 +1128,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCone(resource_mgr, config, diameter, height, tessellation);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1092,7 +1166,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			config.flip_winding = rhcoords;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateTorus(resource_mgr, config, diameter, thickness, tessellation);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1116,7 +1191,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateTetrahedron(resource_mgr, config, size);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1140,7 +1216,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateOctahedron(resource_mgr, config, size);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1164,7 +1241,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateDodecahedron(resource_mgr, config, size);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1188,7 +1266,8 @@ void ProcNewModelPopups(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = rhcoords;
 			auto bp = BlueprintFactory::CreateIcosahedron(resource_mgr, config, size);
-			GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -1219,19 +1298,24 @@ void DrawAddComponentMenu(ID3D11Device& device,
 	if (ImGui::BeginMenu("Add Component")) {
 
 		if (ImGui::MenuItem("Orthographic Camera")) {
-			GetSelectedEntity()->addComponent<OrthographicCamera>(device, vec2_u32{ 480, 480 });
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<OrthographicCamera>(device, vec2_u32{ 480, 480 });
 		}
 		if (ImGui::MenuItem("Perspective Camera")) {
-			GetSelectedEntity()->addComponent<PerspectiveCamera>(device, vec2_u32{ 480, 480 });
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<PerspectiveCamera>(device, vec2_u32{ 480, 480 });
 		}
 		if (ImGui::MenuItem("Directional Light")) {
-			GetSelectedEntity()->addComponent<DirectionalLight>();
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<DirectionalLight>();
 		}
 		if (ImGui::MenuItem("Point Light")) {
-			GetSelectedEntity()->addComponent<PointLight>();
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<PointLight>();
 		}
 		if (ImGui::MenuItem("Spot Light")) {
-			GetSelectedEntity()->addComponent<SpotLight>();
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<SpotLight>();
 		}
 
 		if (ImGui::BeginMenu("Model")) {
@@ -1239,7 +1323,8 @@ void DrawAddComponentMenu(ID3D11Device& device,
 				if (auto file = OpenFilePicker(); fs::exists(file)) {
 					ModelConfig<VertexPositionNormalTexture> config;
 					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
-					GetSelectedEntity()->addComponent<ModelRoot>(device, bp);
+					if (auto entity = g_scene_tree.getSelected())
+						entity->addComponent<ModelRoot>(device, bp);
 				}
 				else Logger::log(LogLevel::err, "Failed to open file dialog");
 			}
@@ -1279,24 +1364,17 @@ void DrawEntityMenu(ID3D11Device& device,
 			scene.addEntity();
 		}
 		
-		if (ImGui::BeginMenu("Selected", GetSelectedEntity().valid())) {
+		if (ImGui::BeginMenu("Selected", g_scene_tree.getSelected().valid())) {
 			DrawAddComponentMenu(device, resource_mgr, scene , add_model_popup);
 			ImGui::Separator();
 			if (ImGui::MenuItem("Delete")) {
-				scene.removeEntity(GetSelectedEntity());
+				scene.removeEntity(g_scene_tree.getSelected()->getPtr());
 			}
 
 			ImGui::EndMenu(); //Selected
 		}
 
 		ImGui::EndMenu(); //Entity
-	}
-
-	if (ImGui::BeginMenu("Component")) {
-		if (ImGui::MenuItem("Delete Selected", nullptr, nullptr, g_selected_component != nullptr)) {
-			g_selected_component->getOwner()->removeComponent(g_selected_component);
-		}
-		ImGui::EndMenu();
 	}
 }
 
