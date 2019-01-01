@@ -24,7 +24,7 @@ void TransformSystem::updateWorld(Transform& transform) {
 
 	if (parent_transform) {
 		if (parent_transform->needs_update) return; //early return if the parent transform also needs an update
-		transform.world = parent_transform->world * CalculateWorld(transform);
+		transform.world = CalculateWorld(transform) * parent_transform->world;
 	}
 	else {
 		transform.world = CalculateWorld(transform);
@@ -40,7 +40,6 @@ void TransformSystem::onTransformNeedsUpdate(const TransformNeedsUpdate* event) 
 	auto& transform = event->transform.get();
 	auto* owner     = transform.getOwner().get();
 	auto* parent    = owner->getParent().get();
-
 
 	// Early return if the transform has a parent and it needs an update too
 	if (parent) {
