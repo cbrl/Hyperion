@@ -60,7 +60,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Add an entity to this scene
-	template<typename TemplateT = WorldObject, typename... ArgsT>
+	template<typename TemplateT = WorldObjectT, typename... ArgsT>
 	EntityPtr addEntity(ArgsT&&... args);
 
 	// Remove an entity from this scene

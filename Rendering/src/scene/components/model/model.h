@@ -315,7 +315,7 @@ private:
 // ModelRoot
 //----------------------------------------------------------------------------------
 //
-// The root node of the object hierarchy, and also a component that can be added
+// The root node of the model hierarchy, and also a component that can be added
 // to an entity. Provides some helper functions for iterating over the nodes
 // in the hierarchy.
 //
