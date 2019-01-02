@@ -8,25 +8,10 @@
 // Model Buffer
 //----------------------------------------------------------------------------------
 
-/*
-struct MaterialBuffer {
-	vec4_f32 ambient = {};
-	vec4_f32 diffuse = {};
-	vec4_f32 specular = {};
-	vec4_f32 emissive = {};
-	f32      spec_scale = 0.0f;
-	f32      spec_exponent = 0.0f;
-	f32      opacity = 1.0f;
-	u32      mirror_surface = 0;
-	f32      reflectivity = 1.0f;
-	u32      has_texture = 0;
-	f32      pad;
-};
-*/
 struct MaterialBuffer {
 	vec4_f32 base_color = {};
-	f32 metalness = 0.0f;
-	f32 roughness = 0.0f;
+	f32      metalness = 0.0f;
+	f32      roughness = 0.0f;
 	vec3_f32 emissive = {};
 	vec3_f32 pad;
 };
@@ -48,33 +33,33 @@ struct LightBuffer {
 	u32 num_directional_lights = 0;
 	u32 num_point_lights = 0;
 	u32 num_spot_lights = 0;
-	u32 pad0;
+	f32 pad0;
 
 	u32 num_shadow_directional_lights = 0;
 	u32 num_shadow_point_lights = 0;
 	u32 num_shadow_spot_lights = 0;
-	u32 pad1;
+	f32 pad1;
 
 	vec4_f32 ambient = {};
 };
 
 
 struct DirectionalLightBuffer {
-	vec3_f32 base_color = {};
-	f32      intensity = 0.0f;
+	vec3_f32 intensity = 0.0f;
+	f32      pad0;
 	vec3_f32 direction = {};
-	u32      pad;
+	f32      pad1;
 	XMMATRIX world_to_projection = XMMatrixIdentity();
 };
 
 
 struct PointLightBuffer {
-	vec3_f32 base_color = {};
-	f32      intensity = 0.0f;
+	vec3_f32 intensity = 0.0f;
+	f32      pad0;
 	vec3_f32 position = {};
 	f32      range = 0;
 	vec3_f32 attenuation = {};
-	u32      pad;
+	f32      pad1;
 };
 
 
@@ -87,8 +72,8 @@ struct ShadowedPointLightBuffer {
 
 
 struct SpotLightBuffer {
-	vec3_f32 base_color = {};
-	f32      intensity = 0.0f;
+	vec3_f32 intensity = 0.0f;
+	f32      pad;
 	vec3_f32 position = {};
 	f32      range = 0.0f;
 	vec3_f32 direction = {};
@@ -100,7 +85,7 @@ struct SpotLightBuffer {
 
 struct ShadowedSpotLightBuffer {
 	SpotLightBuffer light_buffer;
-	XMMATRIX        world_to_projection = XMMatrixIdentity();
+	XMMATRIX world_to_projection = XMMatrixIdentity();
 };
 
 
@@ -111,8 +96,8 @@ struct ShadowedSpotLightBuffer {
 
 struct Fog {
 	vec4_f32 color = {1.0f};
-	f32 start = 0.0f;
-	f32 range = -1.0f;
+	f32      start = 0.0f;
+	f32      range = -1.0f;
 	vec2_f32 pad;
 };
 

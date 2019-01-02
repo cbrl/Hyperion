@@ -189,8 +189,7 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(Scene& scene, FXMMATRIX w
 
 		DirectionalLightBuffer buffer;
 		XMStore(&buffer.direction, transform->getWorldAxisZ());
-		buffer.base_color          = light.getBaseColor();
-		buffer.intensity           = light.getIntensity();
+		buffer.intensity           = light.getBaseColor() * light.getIntensity();
 		buffer.world_to_projection = XMMatrixTranspose(world_to_lprojection);
 
 		if (light.castsShadows()) {
@@ -250,8 +249,7 @@ void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_t
 
 		PointLightBuffer light_buffer;
 		XMStore(&light_buffer.position, transform->getWorldOrigin());
-		light_buffer.base_color  = light.getBaseColor();
-		light_buffer.intensity   = light.getIntensity();
+		light_buffer.intensity   = light.getBaseColor() * light.getIntensity();
 		light_buffer.attenuation = light.getAttenuation();
 		light_buffer.range       = light.getRange();
 
@@ -321,8 +319,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to
 		SpotLightBuffer light_buffer;
 		XMStore(&light_buffer.position, transform->getWorldOrigin());
 		XMStore(&light_buffer.direction, transform->getWorldAxisZ());
-		light_buffer.base_color    = light.getBaseColor();
-		light_buffer.intensity     = light.getIntensity();
+		light_buffer.intensity     = light.getBaseColor() * light.getIntensity();
 		light_buffer.attenuation   = light.getAttenuation();
 		light_buffer.cos_umbra     = light.getUmbra();
 		light_buffer.cos_penumbra  = light.getPenumbra();

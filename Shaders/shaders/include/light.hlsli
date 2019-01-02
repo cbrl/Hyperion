@@ -80,10 +80,10 @@ struct ShadowCubeMap {
 //----------------------------------------------------------------------------------
 
 struct DirectionalLight {
-	float3 base_color;
-	float  intensity;
-	float3 direction;
+	float3 intensity;
 	float  pad0;
+	float3 direction;
+	float  pad1;
 	matrix world_to_projection;
 
 	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance, out float3 p_ndc) {
@@ -93,7 +93,7 @@ struct DirectionalLight {
 		const float4 p_proj = mul(float4(p_world, 1.0f), world_to_projection);
 		p_ndc = Homogenize(p_proj);
 
-		irradiance = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : (base_color * intensity);
+		irradiance = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : intensity;
 	}
 
 	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance) {
@@ -129,12 +129,12 @@ struct DirectionalLight {
 //----------------------------------------------------------------------------------
 
 struct PointLight {
-	float3 base_color;
-	float  intensity;
+	float3 intensity;
+	float  pad0;
 	float3 position;
 	float  range;
 	float3 attenuation;
-	float  pad0;
+	float  pad1;
 
 	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		// The vector from the surface to the light
@@ -148,7 +148,7 @@ struct PointLight {
 
 		// Attenuation
 		const float att_factor = Attenuation(d, attenuation);
-		irradiance = base_color * intensity * att_factor;
+		irradiance = intensity * att_factor;
 	}
 };
 
@@ -185,8 +185,8 @@ struct ShadowPointLight : PointLight {
 //----------------------------------------------------------------------------------
 
 struct SpotLight {
-	float3 base_color;
-	float  intensity;
+	float3 intensity;
+	float  pad;
 	float3 position;
 	float  range;
 	float3 direction;
@@ -207,7 +207,7 @@ struct SpotLight {
 		const float att_factor  = Attenuation(d, attenuation);
 		const float spot_factor = SpotIntensity(p_to_light, direction, cos_umbra, cos_penumbra);
 
-		irradiance = base_color * intensity * att_factor * spot_factor;
+		irradiance = intensity * att_factor * spot_factor;
 	}
 };
 
