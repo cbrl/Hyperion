@@ -1,6 +1,6 @@
 #include "targetver.h"
 #include "engine.h"
-#include "imgui_message_forwarder.h"
+#include "imgui_forwarder/imgui_message_forwarder.h"
 #include "config/config_reader.h"
 #include "config/config_writer.h"
 

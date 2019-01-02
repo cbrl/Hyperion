@@ -1,3 +1,7 @@
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+
+
 template<typename CameraT>
 void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 
@@ -67,7 +71,15 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 		bounding_volume_pass->render(scene, world_to_projection, camera.getSettings().getBoundingVolumeColor());
 
 
+	//----------------------------------------------------------------------------------
+	// Render ImGui data
+	//----------------------------------------------------------------------------------
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
+
+	//----------------------------------------------------------------------------------
 	// Clear the bound forward state
+	//----------------------------------------------------------------------------------
 	output_mgr->bindEndForward(device_context);
 }

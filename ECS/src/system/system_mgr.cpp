@@ -7,6 +7,11 @@ SystemMgr::SystemMgr(ECS& ecs, EventMgr& mgr)
 }
 
 
+void SystemMgr::removeSystem(ISystem* system) {
+	systems.erase(system->getTypeIndex());
+}
+
+
 void SystemMgr::update(Engine& engine) {
 
 	// Pre Update

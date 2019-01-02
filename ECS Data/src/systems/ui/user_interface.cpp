@@ -1562,9 +1562,17 @@ void DrawFPSDisplay(Engine& engine) {
 //   Update
 //
 //----------------------------------------------------------------------------------
+
+UserInterface::UserInterface(ID3D11Device& device, ResourceMgr& resource_mgr)
+    : device(device)
+    , resource_mgr(resource_mgr) {
+
+}
+
+
 void UserInterface::update(Engine& engine)  {
 
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 
 	auto& scene = engine.getScene();
 

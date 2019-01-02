@@ -7,6 +7,12 @@ SystemT* ECS::addSystem(ArgsT&&... args) {
 }
 
 
+template <typename SystemT>
+void ECS::removeSystem() {
+	system_mgr->removeSystem<SystemT>();
+}
+
+
 template <typename EventT, typename... ArgsT>
 void ECS::sendEvent(ArgsT&&... args) {
 	event_mgr->send<EventT>(std::forward<ArgsT>(args)...);

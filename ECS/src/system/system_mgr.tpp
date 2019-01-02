@@ -20,6 +20,13 @@ SystemT* SystemMgr::addSystem(ArgsT&&... args) {
 	return system;
 }
 
+
+template<typename SystemT>
+void SystemMgr::removeSystem() {
+	systems.erase(SystemT::index);
+}
+
+
 template <typename SystemT>
 SystemT* SystemMgr::getSystem() const {
 	const auto& it = systems.find(SystemT::index);

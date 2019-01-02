@@ -5,7 +5,6 @@
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 
-
 RenderingMgr::RenderingMgr(gsl::not_null<HWND> window,
                            DisplayConfig display_conf,
                            RenderingConfig rendering_conf) {
@@ -58,7 +57,9 @@ RenderingMgr::RenderingMgr(gsl::not_null<HWND> window,
 
 RenderingMgr::~RenderingMgr() {
 
+	//----------------------------------------------------------------------------------
 	// Shutdown ImGui
+	//----------------------------------------------------------------------------------
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
@@ -67,16 +68,13 @@ RenderingMgr::~RenderingMgr() {
 
 void RenderingMgr::onResize() const {
 	ImGui_ImplDX11_InvalidateDeviceObjects();
-
 	swap_chain->reset();
 	renderer->onResize();
-
 	ImGui_ImplDX11_CreateDeviceObjects();
 }
 
 
 void RenderingMgr::render(Scene& scene) const {
-
 	renderer->render(scene);
 }
 
@@ -88,22 +86,13 @@ void RenderingMgr::beginFrame() const {
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	//ImGui::ShowDemoWindow();
-
-
 	// Clear the render target view with a specified color
-	static f32 color[4] = {0.39f, 0.39f, 0.39f, 1.0f};
-	//ImGui::ColorEdit4("Clear Color", (f32*)&color);
-
+	static constexpr f32 color[4] = {0.39f, 0.39f, 0.39f, 1.0f};
 	swap_chain->clear(color);
 }
 
 
 void RenderingMgr::endFrame() const {
-
-	// Render the ImGui frame
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	// Present the final frame
 	swap_chain->present();

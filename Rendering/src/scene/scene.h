@@ -7,7 +7,6 @@
 
 #include "scene/entities/core_entities.h"
 #include "scene/components/core_components.h"
-#include "scene/systems/core_systems.h"
 #include "scene/events/core_events.h"
 
 using namespace EntityTemplates;
@@ -39,10 +38,10 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Load the scene contents
-	virtual void load(const Engine& engine) = 0;
+	void load(const Engine& engine);
 
 	// Update the scene
-	virtual void tick(Engine& engine) = 0;
+	void tick(Engine& engine);
 
 
 	//----------------------------------------------------------------------------------
@@ -73,6 +72,19 @@ public:
 
 
 	//----------------------------------------------------------------------------------
+	// Member Functions - Systems
+	//----------------------------------------------------------------------------------
+
+	template<typename SystemT, typename... ArgsT>
+	ISystem* addSystem(ArgsT&&... args);
+
+	void removeSystem(ISystem* system);
+
+	template <typename SystemT>
+	void removeSystem();
+
+
+	//----------------------------------------------------------------------------------
 	// Member Functions - Events
 	//----------------------------------------------------------------------------------
 	template<typename EventT, typename... ArgsT>
@@ -82,7 +94,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Iteration
 	//----------------------------------------------------------------------------------
-
 	template<typename T, typename ActionT>
 	void forEach(ActionT&& act);
 
@@ -96,13 +107,11 @@ protected:
 	Scene()
 		: name("Scene")
 		, ecs(std::make_unique<ECS>()) {
-		addCriticalSystems();
 	}
 
 	Scene(std::string name)
 		: name(std::move(name))
 		, ecs(std::make_unique<ECS>()) {
-		addCriticalSystems();
 	}
 
 	Scene(Scene&& scene) = default;
@@ -112,6 +121,23 @@ protected:
 	// Operators
 	//----------------------------------------------------------------------------------
 	Scene& operator=(Scene&& scene) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+
+	// Overrided by the derived class and called by Scene::load()
+	virtual void initialize(const Engine& engine) = 0;
+
+	// Update the scene per tick. Overrided by the derived class and called by Scene::tick()
+	virtual void update(Engine& engine) = 0;
+
+
+private:
+
+	// Add systems required for normal operation to the ECS
+	void addCoreSystems(const Engine& engine);
 
 
 	//----------------------------------------------------------------------------------
@@ -126,16 +152,6 @@ protected:
 
 	// Entitites that currently exist in this scene
 	std::vector<EntityPtr> entities;
-
-
-private:
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Add Systems
-	//----------------------------------------------------------------------------------
-
-	// Add systems required for normal operation to the ECS
-	void addCriticalSystems();
 };
 
 #include "scene.tpp"

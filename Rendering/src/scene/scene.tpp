@@ -17,3 +17,15 @@ template <typename T, typename ActionT>
 void Scene::forEach(ActionT&& act) {
 	ecs->forEach<T>(std::forward<ActionT>(act));
 }
+
+
+template <typename SystemT, typename... ArgsT>
+ISystem* Scene::addSystem(ArgsT&&... args) {
+	return ecs->addSystem<SystemT>(std::forward<ArgsT>(args)...);
+}
+
+
+template<typename SystemT>
+void Scene::removeSystem() {
+	ecs->removeSystem<SystemT>();
+}

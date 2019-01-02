@@ -21,6 +21,12 @@
     <Filter Include="Header Files\misc\stl">
       <UniqueIdentifier>{02bdb29e-ed2a-4cc3-b70f-167acbc9e2b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\imgui_forwarder">
+      <UniqueIdentifier>{cb3c7a2d-32e2-4678-991c-4ddb70d78b22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imgui_forwarder">
+      <UniqueIdentifier>{5a77c27d-9c75-4471-91ba-794f4c8f5809}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\imgui_impl_dx11.h">
@@ -38,9 +44,6 @@
     <ClInclude Include="src\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\imgui_message_forwarder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\misc\stl\imgui_stl.h">
       <Filter>Header Files\misc\stl</Filter>
     </ClInclude>
@@ -52,6 +55,9 @@
     </ClInclude>
     <ClInclude Include="src\imstb_truetype.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\imgui_forwarder\imgui_message_forwarder.h">
+      <Filter>Header Files\imgui_forwarder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -70,14 +76,14 @@
     <ClCompile Include="src\imgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\imgui_message_forwarder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\misc\stl\imgui_stl.cpp">
       <Filter>Source Files\misc\stl</Filter>
     </ClCompile>
     <ClCompile Include="src\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.cpp">
+      <Filter>Source Files\imgui_forwarder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

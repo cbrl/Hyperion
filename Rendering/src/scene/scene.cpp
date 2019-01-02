@@ -1,7 +1,15 @@
 #include "scene.h"
+#include "engine/engine.h"
+#include "scene/systems/core_systems.h"
 
 
-void Scene::addCriticalSystems() {
+void Scene::load(const Engine& engine) {
+	addCoreSystems(engine);
+	initialize(engine);
+}
+
+
+void Scene::addCoreSystems(const Engine& engine) {
 
 	// Transform system: updates transform components when they're modified
 	ecs->addSystem<TransformSystem>();
@@ -24,4 +32,15 @@ void Scene::removeEntity(EntityPtr entity) {
 	}
 	entities.erase(std::remove(std::begin(entities), std::end(entities), entity),
 	               std::end(entities));
+}
+
+
+void Scene::removeSystem(ISystem* system) {
+	ecs->removeSystem(system);
+}
+
+
+void Scene::tick(Engine& engine) {
+	ecs->update(engine);
+	this->update(engine);
 }

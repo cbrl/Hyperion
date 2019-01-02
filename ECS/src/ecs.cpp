@@ -25,6 +25,11 @@ void ECS::destroyEntity(handle64 entity) {
 }
 
 
+void ECS::removeSystem(ISystem* system) {
+	system_mgr->removeSystem(system);
+}
+
+
 void ECS::update(Engine& engine) {
 	system_mgr->update(engine);
 	event_mgr->dispatchEvents();

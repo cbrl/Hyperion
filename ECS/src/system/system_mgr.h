@@ -44,6 +44,11 @@ public:
 	template<typename SystemT, typename... ArgsT>
 	SystemT* addSystem(ArgsT&&... args);
 
+	void removeSystem(ISystem* system);
+
+	template<typename SystemT>
+	void removeSystem();
+
 	template<typename SystemT>
 	SystemT* getSystem() const;
 

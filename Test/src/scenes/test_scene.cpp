@@ -6,7 +6,7 @@ TestScene::TestScene() : Scene("Test Scene") {
 }
 
 
-void TestScene::load(const Engine& engine) {
+void TestScene::initialize(const Engine& engine) {
 
 	const auto& rendering_mgr = engine.getRenderingMgr();
 	auto& device              = rendering_mgr.getDevice();
@@ -19,19 +19,19 @@ void TestScene::load(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// User Interface
-	ecs->addSystem<UserInterface>(device, resource_mgr);
+	addSystem<UserInterface>(device, resource_mgr);
 
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
-	ecs->addSystem<CameraMotorSystem>();
+	addSystem<CameraMotorSystem>();
 
 	// Mouse rotation system: reads mouse input to rotate an entity (entity requires MouseRotation component)
-	ecs->addSystem<MouseRotationSystem>();
+	addSystem<MouseRotationSystem>();
 
 	// Axis rotation system: rotates an entity on an axis (entity requires AxisRotation component)
-	ecs->addSystem<AxisRotationSystem>();
+	addSystem<AxisRotationSystem>();
 
 	// Axis orbit system: orbits an entity around an axis (entity requires AxisOrbit component)
-	ecs->addSystem<AxisOrbitSystem>();
+	addSystem<AxisOrbitSystem>();
 
 
 	//----------------------------------------------------------------------------------
@@ -220,11 +220,7 @@ void TestScene::load(const Engine& engine) {
 }
 
 
-void TestScene::tick(Engine& engine) {
-
-	// Update the active systems in the ECS
-	ecs->update(engine);
-
+void TestScene::update(Engine& engine) {
 
 	//----------------------------------------------------------------------------------
 	// Update FPS, CPU usage, memory usage, mouse position, etc...

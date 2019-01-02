@@ -21,10 +21,10 @@
   <ItemGroup>
     <ClInclude Include="src\imconfig.h" />
     <ClInclude Include="src\imgui.h" />
+    <ClInclude Include="src\imgui_forwarder\imgui_message_forwarder.h" />
     <ClInclude Include="src\imgui_impl_dx11.h" />
     <ClInclude Include="src\imgui_impl_win32.h" />
     <ClInclude Include="src\imgui_internal.h" />
-    <ClInclude Include="src\imgui_message_forwarder.h" />
     <ClInclude Include="src\imstb_rectpack.h" />
     <ClInclude Include="src\imstb_textedit.h" />
     <ClInclude Include="src\imstb_truetype.h" />
@@ -34,9 +34,9 @@
     <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />
     <ClCompile Include="src\imgui_draw.cpp" />
+    <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.cpp" />
     <ClCompile Include="src\imgui_impl_dx11.cpp" />
     <ClCompile Include="src\imgui_impl_win32.cpp" />
-    <ClCompile Include="src\imgui_message_forwarder.cpp" />
     <ClCompile Include="src\imgui_widgets.cpp" />
     <ClCompile Include="src\misc\stl\imgui_stl.cpp" />
   </ItemGroup>
@@ -164,6 +164,5 @@
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

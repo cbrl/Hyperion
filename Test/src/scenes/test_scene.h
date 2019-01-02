@@ -8,12 +8,11 @@
 class TestScene final : public Scene {
 public:
 	TestScene();
-
 	~TestScene() = default;
 
-	void load(const Engine& engine) override;
+	void initialize(const Engine& engine);
 
-	void tick(Engine& engine) override;
+	void update(Engine& engine) override final;
 
 
 private:

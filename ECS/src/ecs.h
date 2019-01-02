@@ -48,6 +48,11 @@ public:
 	template<typename SystemT, typename... ArgsT>
 	SystemT* addSystem(ArgsT&&... args);
 
+	void removeSystem(ISystem* system);
+
+	template<typename SystemT>
+	void removeSystem();
+
 	// Update the systems
 	void update(Engine& engine);
 
