@@ -5,7 +5,7 @@ EventDispatcher<EventT>::EventDispatcher()
 
 template<typename EventT>
 EventDispatcher<EventT>::~EventDispatcher() {
-	//m_PendingAddDelegates.clear();
+	//pending_add_delegates.clear();
 	pending_remove_delegates.clear();
 	event_delegates.clear();
 }
