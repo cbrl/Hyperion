@@ -12,23 +12,20 @@ namespace BlueprintFactory {
 	[[nodiscard]]
 	static std::shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
 	                                                  const ModelConfig<VertexT>& config,
-	                                                  f32  size    = 1,
-	                                                  bool invertn = false);
+	                                                  f32 size = 1);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static std::shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
 	                                                 const ModelConfig<VertexT>& config,
-	                                                 const vec3_f32& size,
-	                                                 bool invertn = false);
+	                                                 const vec3_f32& size);
 
 	template<typename VertexT>
 	[[nodiscard]]
 	static std::shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
 	                                                    const ModelConfig<VertexT>& config,
 	                                                    f32    diameter     = 1,
-	                                                    size_t tessellation = 16,
-	                                                    bool   invertn      = false);
+	                                                    size_t tessellation = 16);
 
 	template<typename VertexT>
 	[[nodiscard]]

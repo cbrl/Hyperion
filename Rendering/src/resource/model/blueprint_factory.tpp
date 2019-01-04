@@ -5,11 +5,10 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	std::shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
 	                                           const ModelConfig<VertexT>& config,
-	                                           f32 size,
-	                                           bool invertn) {
+	                                           f32 size) {
 
 		// Model name
-		std::string name = "Cube " + std::to_string(size) + (!config.flip_winding ? " RH" : "") + (invertn ? " InvertN" : "");
+		std::string name = "Cube " + std::to_string(size) + (config.flip_winding ? " Inverted" : "");
 
 		
 		// Create the mesh
@@ -17,7 +16,7 @@ namespace BlueprintFactory {
 	    mesh.name = "Cube";
 
 		std::vector<VertexT> vertices;
-		Shapes::ComputeCube(vertices, mesh.indices, size, !config.flip_winding, invertn);
+		Shapes::ComputeCube(vertices, mesh.indices, size, !config.flip_winding, !config.flip_winding);
 
 		for (const auto& v : vertices) {
 			mesh.positions.push_back(v.position);
@@ -46,12 +45,10 @@ namespace BlueprintFactory {
 	template<typename VertexT>
 	std::shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
 	                                          const ModelConfig<VertexT>& config,
-	                                          const vec3_f32& size,
-	                                          bool invertn) {
+	                                          const vec3_f32& size) {
 
 		// Model name
-		std::string name = "Box " + std::to_string(size[0]) + std::to_string(size[1]) + std::to_string(size[2]) + (!config.flip_winding ? " RH" : "") + (
-			              invertn ? " InvertN" : "");
+	    std::string name = "Box " + std::to_string(size[0]) + std::to_string(size[1]) + std::to_string(size[2]) + (config.flip_winding ? " Inverted" : "");
 
 
 		// Create the mesh
@@ -59,7 +56,7 @@ namespace BlueprintFactory {
 	    mesh.name = "Box";
 
 		std::vector<VertexT> vertices;
-		Shapes::ComputeBox(vertices, mesh.indices, size, !config.flip_winding, invertn);
+		Shapes::ComputeBox(vertices, mesh.indices, size, !config.flip_winding, !config.flip_winding);
 
 		for (const auto& v : vertices) {
 			mesh.positions.push_back(v.position);
@@ -89,19 +86,17 @@ namespace BlueprintFactory {
 	std::shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
 	                                             const ModelConfig<VertexT>& config,
 	                                             f32 diameter,
-	                                             size_t tessellation,
-	                                             bool invertn) {
+	                                             size_t tessellation) {
 
 		// Model name
-		std::string name = "Sphere " + std::to_string(diameter) + std::to_string(tessellation) + (!config.flip_winding ? " RH" : "") + (
-			              invertn ? " InvertN" : "");
+	    std::string name = "Sphere " + std::to_string(diameter) + std::to_string(tessellation) + (config.flip_winding ? " Inverted" : "");
 
 		// Create the mesh
 	    ModelOutput::MeshData mesh;
 	    mesh.name = "Sphere";
 
 		std::vector<VertexT> vertices;
-		Shapes::ComputeSphere(vertices, mesh.indices, diameter, tessellation, !config.flip_winding, invertn);
+		Shapes::ComputeSphere(vertices, mesh.indices, diameter, tessellation, !config.flip_winding, !config.flip_winding);
 
 		for (const auto& v : vertices) {
 			mesh.positions.push_back(v.position);
@@ -134,7 +129,7 @@ namespace BlueprintFactory {
 	                                                size_t tessellation) {
 
 		// Model name
-		std::string name = "GeoSphere " + std::to_string(diameter) + std::to_string(tessellation) + (!config.flip_winding ? " RH" : "");
+	    std::string name = "GeoSphere " + std::to_string(diameter) + std::to_string(tessellation) + (config.flip_winding ? " Inverted" : "");
 
 		// Create the mesh
 	    ModelOutput::MeshData mesh;
@@ -175,8 +170,7 @@ namespace BlueprintFactory {
 	                                               size_t tessellation) {
 
 		// Model name
-		std::string name = "Cylinder " + std::to_string(height) + std::to_string(diameter) + std::to_string(tessellation) + (
-			              !config.flip_winding ? " RH" : "");
+	    std::string name = "Cylinder " + std::to_string(height) + std::to_string(diameter) + std::to_string(tessellation) + (config.flip_winding ? " Inverted" : "");
 
 		// Create the mesh
 	    ModelOutput::MeshData mesh;
@@ -217,8 +211,7 @@ namespace BlueprintFactory {
 	                                           size_t tessellation) {
 
 		// Model name
-		std::string name = "Cone " + std::to_string(diameter) + std::to_string(height) + std::to_string(tessellation) + (
-			              !config.flip_winding ? " RH" : "");
+	    std::string name = "Cone " + std::to_string(diameter) + std::to_string(height) + std::to_string(tessellation) + (config.flip_winding ? " Inverted" : "");
 
 		// Create the mesh
 	    ModelOutput::MeshData mesh;
@@ -259,8 +252,7 @@ namespace BlueprintFactory {
 	                                            size_t tessellation) {
 
 		// Model name
-		std::string name = "Torus " + std::to_string(diameter) + std::to_string(thickness) + std::to_string(tessellation) + (
-			              !config.flip_winding ? " RH" : "");
+	    std::string name = "Torus " + std::to_string(diameter) + std::to_string(thickness) + std::to_string(tessellation) + (config.flip_winding ? " Inverted" : "");
 
 		// Create the mesh
 	    ModelOutput::MeshData mesh;
@@ -299,7 +291,7 @@ namespace BlueprintFactory {
 	                                                  f32 size) {
 
 		// Model name
-		std::string name = "Tetrahedron " + std::to_string(size) + (!config.flip_winding ? " RH" : "");
+	    std::string name = "Tetrahedron " + std::to_string(size) + (config.flip_winding ? " Inverted" : "");
 
 		// Create the mesh
 	    ModelOutput::MeshData mesh;
@@ -338,7 +330,7 @@ namespace BlueprintFactory {
 	                                                 f32 size) {
 
 		// Model name
-		std::string name = "Octahedron " + std::to_string(size) + (!config.flip_winding ? " RH" : "");
+	    std::string name = "Octahedron " + std::to_string(size) + (config.flip_winding ? " Inverted" : "");
 
 		// Create the mesh
 	    ModelOutput::MeshData mesh;
@@ -377,7 +369,7 @@ namespace BlueprintFactory {
 	                                                   f32 size) {
 
 		// Model name
-		std::string name = "Dodecahedron " + std::to_string(size) + (!config.flip_winding ? " RH" : "");
+	    std::string name = "Dodecahedron " + std::to_string(size) + (config.flip_winding ? " Inverted" : "");
 
 		// Create the mesh
 	    ModelOutput::MeshData mesh;
@@ -416,7 +408,7 @@ namespace BlueprintFactory {
 	                                                  f32 size) {
 
 		// Model name
-		std::string name = "Icosahedron " + std::to_string(size) + (!config.flip_winding ? " RH" : "");
+	    std::string name = "Icosahedron " + std::to_string(size) + (config.flip_winding ? " Inverted" : "");
 
 		// Create the mesh
 	    ModelOutput::MeshData mesh;

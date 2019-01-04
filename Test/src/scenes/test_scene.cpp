@@ -75,7 +75,7 @@ void TestScene::initialize(const Engine& engine) {
 	auto main_bp          = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj", config);
 	auto sphere_bp        = BlueprintFactory::CreateSphere(resource_mgr, config, 1.0f);
 	auto cube_bp          = BlueprintFactory::CreateCube(resource_mgr, config, 2.0f);
-	auto inverted_cube_bp = BlueprintFactory::CreateCube(resource_mgr, inv_config, 10.0f, true);
+	auto inverted_cube_bp = BlueprintFactory::CreateCube(resource_mgr, inv_config, 10.0f);
 	auto cylinder_bp      = BlueprintFactory::CreateCylinder(resource_mgr, config, 2.0f, 2.0f);
 
 

@@ -941,18 +941,16 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 
 	if (ImGui::BeginPopupModal("New Cube", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size     = 1.0f;
-		static bool rhcoords = false;
-		static bool invertn  = false;
+		static f32  size         = 1.0f;
+		static bool flip_winding = false;
 
 		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
-		ImGui::Checkbox("Invert Normals", &invertn);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		if (ImGui::Button("Create")) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
-			auto bp = BlueprintFactory::CreateCube(resource_mgr, config, size, invertn);
+			config.flip_winding = flip_winding;
+			auto bp = BlueprintFactory::CreateCube(resource_mgr, config, size);
 			if (auto entity = g_scene_tree.getSelected())
 				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
@@ -968,18 +966,16 @@ void ProcNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Box", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static vec3_f32 size     = { 1.0f, 1.0f, 1.0f };
-		static bool     rhcoords = false;
-		static bool     invertn  = false;
+		static vec3_f32 size         = { 1.0f, 1.0f, 1.0f };
+		static bool     flip_winding = false;
 
 		ImGui::InputFloat3("Size", size.data());
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
-		ImGui::Checkbox("Invert Normals", &invertn);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		if (ImGui::Button("Create")) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
-			auto bp = BlueprintFactory::CreateBox(resource_mgr, config, size, invertn);
+			config.flip_winding = flip_winding;
+			auto bp = BlueprintFactory::CreateBox(resource_mgr, config, size);
 			if (auto entity = g_scene_tree.getSelected())
 				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
@@ -997,13 +993,11 @@ void ProcNewModelPopups(ID3D11Device& device,
 	if (ImGui::BeginPopupModal("New Sphere", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 		static f32    diameter     = 1.0f;
 		static size_t tessellation = 16;
-		static bool   rhcoords     = false;
-		static bool   invertn      = false;
+		static bool   flip_winding = false;
 
 		ImGui::InputFloat("Diameter", &diameter);
 		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
-		ImGui::Checkbox("Invert Normals", &invertn);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		ImGui::Button("Create");
 
@@ -1015,9 +1009,9 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::IsItemClicked()) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
+			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateSphere(resource_mgr, config, diameter, tessellation, invertn);
+			auto bp = BlueprintFactory::CreateSphere(resource_mgr, config, diameter, tessellation);
 			if (auto entity = g_scene_tree.getSelected())
 				entity->addComponent<ModelRoot>(device, bp);
 			ImGui::CloseCurrentPopup();
@@ -1035,11 +1029,11 @@ void ProcNewModelPopups(ID3D11Device& device,
 	if (ImGui::BeginPopupModal("New GeoSphere", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 		static f32    diameter     = 1.0f;
 		static size_t tessellation = 3;
-		static bool   rhcoords     = false;
+		static bool   flip_winding = false;
 
 		ImGui::InputFloat("Diameter", &diameter);
 		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		ImGui::Button("Create");
 
@@ -1051,7 +1045,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::IsItemClicked()) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
+			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateGeoSphere(resource_mgr, config, diameter, tessellation);
 			if (auto entity = g_scene_tree.getSelected())
@@ -1072,12 +1066,12 @@ void ProcNewModelPopups(ID3D11Device& device,
 		static f32    height       = 1.0f;
 		static f32    diameter     = 1.0f;
 		static size_t tessellation = 32;
-		static bool   rhcoords     = false;
+		static bool   flip_winding = false;
 
 		ImGui::InputFloat("Height", &height);
 		ImGui::InputFloat("Diameter", &diameter);
 		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		ImGui::Button("Create");
 
@@ -1089,7 +1083,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::IsItemClicked()) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
+			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCylinder(resource_mgr, config, diameter, height, tessellation);
 			if (auto entity = g_scene_tree.getSelected())
@@ -1110,12 +1104,12 @@ void ProcNewModelPopups(ID3D11Device& device,
 		static f32    height       = 1.0f;
 		static f32    diameter     = 1.0f;
 		static size_t tessellation = 32;
-		static bool   rhcoords     = false;
+		static bool   flip_winding = false;
 
 		ImGui::InputFloat("Height", &height);
 		ImGui::InputFloat("Diameter", &diameter);
 		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		ImGui::Button("Create");
 
@@ -1127,7 +1121,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::IsItemClicked()) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
+			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCone(resource_mgr, config, diameter, height, tessellation);
 			if (auto entity = g_scene_tree.getSelected())
@@ -1145,15 +1139,15 @@ void ProcNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Torus", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  thickness      = 0.333f;
-		static f32  diameter       = 1.0f;
+		static f32    thickness    = 0.333f;
+		static f32    diameter     = 1.0f;
 		static size_t tessellation = 32;
-		static bool   rhcoords     = false;
+		static bool   flip_winding = false;
 
 		ImGui::InputFloat("Thickness", &thickness);
 		ImGui::InputFloat("Diameter", &diameter);
 		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		ImGui::Button("Create");
 
@@ -1165,7 +1159,7 @@ void ProcNewModelPopups(ID3D11Device& device,
 
 		if (ImGui::IsItemClicked()) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
+			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateTorus(resource_mgr, config, diameter, thickness, tessellation);
 			if (auto entity = g_scene_tree.getSelected())
@@ -1183,15 +1177,15 @@ void ProcNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Tetrahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size     = 1.0f;
-		static bool rhcoords = false;
+		static f32  size         = 1.0f;
+		static bool flip_winding = false;
 
 		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		if (ImGui::Button("Create")) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
+			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateTetrahedron(resource_mgr, config, size);
 			if (auto entity = g_scene_tree.getSelected())
 				entity->addComponent<ModelRoot>(device, bp);
@@ -1208,15 +1202,15 @@ void ProcNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Octahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size     = 1.0f;
-		static bool rhcoords = false;
+		static f32  size         = 1.0f;
+		static bool flip_winding = false;
 
 		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		if (ImGui::Button("Create")) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
+			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateOctahedron(resource_mgr, config, size);
 			if (auto entity = g_scene_tree.getSelected())
 				entity->addComponent<ModelRoot>(device, bp);
@@ -1233,15 +1227,15 @@ void ProcNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Dodecahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size     = 1.0f;
-		static bool rhcoords = false;
+		static f32  size         = 1.0f;
+		static bool flip_winding = false;
 
 		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		if (ImGui::Button("Create")) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
+			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateDodecahedron(resource_mgr, config, size);
 			if (auto entity = g_scene_tree.getSelected())
 				entity->addComponent<ModelRoot>(device, bp);
@@ -1258,15 +1252,15 @@ void ProcNewModelPopups(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Icosahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size     = 1.0f;
-		static bool rhcoords = false;
+		static f32  size         = 1.0f;
+		static bool flip_winding = false;
 
 		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Right-hand Coords", &rhcoords);
+		ImGui::Checkbox("Flip winding", &flip_winding);
 
 		if (ImGui::Button("Create")) {
 			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = rhcoords;
+			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateIcosahedron(resource_mgr, config, size);
 			if (auto entity = g_scene_tree.getSelected())
 				entity->addComponent<ModelRoot>(device, bp);

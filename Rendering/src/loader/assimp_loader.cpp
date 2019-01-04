@@ -171,15 +171,15 @@ ModelOutput AssimpLoad(ResourceMgr& resource_mgr,
 	             aiProcess_GenUVCoords           |    //Convert texture mappings to UV
 	             aiProcess_Triangulate           |    //Triangulate the mesh
 	             aiProcess_GenNormals            |    //Generate normals if none exist
+	             aiProcess_FixInfacingNormals    |    //Invert normals facing inwards
 	             aiProcess_CalcTangentSpace      |    //Calculate vertex tangents
 	             aiProcess_JoinIdenticalVertices |    //Join identical mesh vertices
 	             //aiProcess_OptimizeMeshes        |    //Reduce the number of meshes
 	             //aiProcess_OptimizeGraph         |    //Optimize the scene hierarchy
 	             aiProcess_SortByPType;               //Split meshes by primitive type
 
-	// Assimp uses opposite coordinates by default
-	if (!flip_winding) pflags |= aiProcess_FlipWindingOrder;
-	if (!flip_uv)      pflags |= aiProcess_FlipUVs;
+	if (!flip_winding) pflags |= aiProcess_FlipWindingOrder;  // Assimp uses CCW winding by default (opposite of Direct3D)
+	if (!flip_uv)      pflags |= aiProcess_FlipUVs; // Assimp imports UVs with the origin at the bottom left (Direct3D = top left)
 
 	//----------------------------------------------------------------------------------
 	// Load the model
