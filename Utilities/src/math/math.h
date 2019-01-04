@@ -9,10 +9,10 @@
 // Convert an rgba vec4 [0.0f, 1.0f] to a hex color value
 [[nodiscard]]
 inline u32 Float4ColorToU32(const vec4_f32& color) {
-	return static_cast<u32>(color.x * 0xff)            //R
-	       | (static_cast<u32>(color.y * 0xff) << 8)   //G
-	       | (static_cast<u32>(color.z * 0xff) << 16)  //B
-	       | (static_cast<u32>(color.w * 0xff) << 24); //A
+	return static_cast<u32>(color[0] * 0xff)            //R
+	       | (static_cast<u32>(color[1] * 0xff) << 8)   //G
+	       | (static_cast<u32>(color[2] * 0xff) << 16)  //B
+	       | (static_cast<u32>(color[3] * 0xff) << 24); //A
 }
 
 
@@ -23,13 +23,13 @@ inline std::pair<vec3_f32, vec3_f32> MinMaxPoint(const std::vector<vec3_f32>& ve
 	vec3_f32 max{std::numeric_limits<float>::lowest()};
 
 	for (const vec3_f32& vertex : vertices) {
-		min.x = std::fminf(min.x, vertex.x);
-		min.y = std::fminf(min.y, vertex.y);
-		min.z = std::fminf(min.z, vertex.z);
+		min[0] = std::fminf(min[0], vertex[0]);
+		min[1] = std::fminf(min[1], vertex[1]);
+		min[2] = std::fminf(min[2], vertex[2]);
 
-		max.x = std::fmaxf(max.x, vertex.x);
-		max.y = std::fmaxf(max.y, vertex.y);
-		max.z = std::fmaxf(max.z, vertex.z);
+		max[0] = std::fmaxf(max[0], vertex[0]);
+		max[1] = std::fmaxf(max[1], vertex[1]);
+		max[2] = std::fmaxf(max[2], vertex[2]);
 	}
 
 	return {min, max};

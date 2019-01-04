@@ -42,26 +42,26 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement& movem
 
 	// Forward/Back movement
 	if (input.isKeyDown(Keyboard::W)) {
-		move_units.z += dt;
+		move_units[2] += dt;
 	}
 	else if (input.isKeyDown(Keyboard::S)) {
-		move_units.z -= dt;
+		move_units[2] -= dt;
 	}
 
 	// Left/Right movement
 	if (input.isKeyDown(Keyboard::A)) {
-		move_units.x -= dt;
+		move_units[0] -= dt;
 	}
 	else if (input.isKeyDown(Keyboard::D)) {
-		move_units.x += dt;
+		move_units[0] += dt;
 	}
 
 	// Up/Down movement
 	if (input.isKeyDown(Keyboard::Space)) {
-		move_units.y += dt;
+		move_units[1] += dt;
 	}
 	else if (input.isKeyDown(Keyboard::LeftControl)) {
-		move_units.y -= dt;
+		move_units[1] -= dt;
 	}
 
 
@@ -82,16 +82,16 @@ void CameraMotorSystem::updateMovement(CameraMovement& mv, vec3_f32 units) const
 	//----------------------------------------------------------------------------------
 	// If the movement is in the same direction as the camera is currently moving,
 	// then add to the velocity. Otherwise, reset the velocity using the new value.
-	if (units.x) {
+	if (units[0]) {
 
 		// is_moving determines if the camera will decelerate when Update is called
 		mv.setMovingX(true);
 
-		if (copysign(1.0f, units.x) == copysign(1.0f, velocity.x)) {
-			velocity.x += units.x * mv.getAcceleration();
+		if (copysign(1.0f, units[0]) == copysign(1.0f, velocity[0])) {
+			velocity[0] += units[0] * mv.getAcceleration();
 		}
 		else {
-			velocity.x = units.x * mv.getAcceleration();
+			velocity[0] = units[0] * mv.getAcceleration();
 		}
 	}
 
@@ -99,14 +99,14 @@ void CameraMotorSystem::updateMovement(CameraMovement& mv, vec3_f32 units) const
 	//----------------------------------------------------------------------------------
 	// Y movement
 	//----------------------------------------------------------------------------------
-	if (units.y) {
+	if (units[1]) {
 		mv.setMovingY(true);
 
-		if (copysign(1.0f, units.y) == copysign(1.0f, velocity.y)) {
-			velocity.y += units.y * mv.getAcceleration();
+		if (copysign(1.0f, units[1]) == copysign(1.0f, velocity[1])) {
+			velocity[1] += units[1] * mv.getAcceleration();
 		}
 		else {
-			velocity.y = units.y * mv.getAcceleration();
+			velocity[1] = units[1] * mv.getAcceleration();
 		}
 	}
 
@@ -114,14 +114,14 @@ void CameraMotorSystem::updateMovement(CameraMovement& mv, vec3_f32 units) const
 	//----------------------------------------------------------------------------------
 	// Z movement
 	//----------------------------------------------------------------------------------
-	if (units.z) {
+	if (units[2]) {
 		mv.setMovingZ(true);
 
-		if (copysign(1.0f, units.z) == copysign(1.0f, velocity.z)) {
-			velocity.z += units.z * mv.getAcceleration();
+		if (copysign(1.0f, units[2]) == copysign(1.0f, velocity[2])) {
+			velocity[2] += units[2] * mv.getAcceleration();
 		}
 		else {
-			velocity.z = units.z * mv.getAcceleration();
+			velocity[2] = units[2] * mv.getAcceleration();
 		}
 	}
 
@@ -149,9 +149,9 @@ void CameraMotorSystem::move(CameraMovement& mv, Transform& transform, f32 dt) c
 		// Move the camera
 		XMVECTOR movement = XMVectorZero();
 
-		movement += transform.getWorldAxisX() * mv.getVelocity().x * dt;
-		movement += transform.getWorldAxisY() * mv.getVelocity().y * dt;
-		movement += transform.getWorldAxisZ() * mv.getVelocity().z * dt;
+		movement += transform.getWorldAxisX() * mv.getVelocity()[0] * dt;
+		movement += transform.getWorldAxisY() * mv.getVelocity()[1] * dt;
+		movement += transform.getWorldAxisZ() * mv.getVelocity()[2] * dt;
 
 		transform.move(movement);
 
@@ -168,39 +168,39 @@ void CameraMotorSystem::decelerate(CameraMovement& mv, f32 delta_time) const {
 
 	// Decelerate in each direction if not moving in that
 	// direction and the current velocity isn't 0.
-	if (!mv.isMovingX() && velocity.x != 0.0f) {
+	if (!mv.isMovingX() && velocity[0] != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity.x) * mv.getDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity[0]) * mv.getDeceleration() * delta_time;
 
-		if (abs(decel_amount) > abs(velocity.x)) {
-			velocity.x = 0.0f;
+		if (abs(decel_amount) > abs(velocity[0])) {
+			velocity[0] = 0.0f;
 		}
 		else {
-			velocity.x -= decel_amount;
+			velocity[0] -= decel_amount;
 		}
 	}
 
-	if (!mv.isMovingY() && velocity.y != 0.0f) {
+	if (!mv.isMovingY() && velocity[1] != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity.y) * mv.getDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity[1]) * mv.getDeceleration() * delta_time;
 
-		if (abs(decel_amount) > abs(velocity.y)) {
-			velocity.y = 0.0f;
+		if (abs(decel_amount) > abs(velocity[1])) {
+			velocity[1] = 0.0f;
 		}
 		else {
-			velocity.y -= decel_amount;
+			velocity[1] -= decel_amount;
 		}
 	}
 
-	if (!mv.isMovingZ() && velocity.z != 0.0f) {
+	if (!mv.isMovingZ() && velocity[2] != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity.z) * mv.getDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity[2]) * mv.getDeceleration() * delta_time;
 
-		if (abs(decel_amount) > abs(velocity.z)) {
-			velocity.z = 0.0f;
+		if (abs(decel_amount) > abs(velocity[2])) {
+			velocity[2] = 0.0f;
 		}
 		else {
-			velocity.z -= decel_amount;
+			velocity[2] -= decel_amount;
 		}
 	}
 

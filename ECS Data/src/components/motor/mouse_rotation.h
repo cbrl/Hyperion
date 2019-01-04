@@ -57,16 +57,16 @@ public:
 	}
 
 	void setMaxRotation(vec2_f32 angle) noexcept {
-		max_rotation.x = (angle.x > abs_max.x) ? abs_max.x : angle.x;
-		max_rotation.y = (angle.y > abs_max.y) ? abs_max.y : angle.y;
+		max_rotation[0] = (angle[0] > abs_max[0]) ? abs_max[0] : angle[0];
+		max_rotation[1] = (angle[1] > abs_max[1]) ? abs_max[1] : angle[1];
 	}
 
 	void setMaxRotationX(f32 angle) noexcept {
-		max_rotation.x = angle > abs_max.x ? abs_max.x : angle;
+		max_rotation[0] = angle > abs_max[0] ? abs_max[0] : angle;
 	}
 
 	void setMaxRotationY(f32 angle) noexcept {
-		max_rotation.y = angle > abs_max.y ? abs_max.y : angle;
+		max_rotation[1] = angle > abs_max[1] ? abs_max[1] : angle;
 	}
 
 

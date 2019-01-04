@@ -50,7 +50,7 @@ namespace BlueprintFactory {
 	                                          bool invertn) {
 
 		// Model name
-		std::string name = "Box " + std::to_string(size.x) + std::to_string(size.y) + std::to_string(size.z) + (!config.flip_winding ? " RH" : "") + (
+		std::string name = "Box " + std::to_string(size[0]) + std::to_string(size[1]) + std::to_string(size[2]) + (!config.flip_winding ? " RH" : "") + (
 			              invertn ? " InvertN" : "");
 
 

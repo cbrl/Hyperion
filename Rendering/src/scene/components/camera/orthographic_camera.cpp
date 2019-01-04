@@ -11,5 +11,5 @@ OrthographicCamera::OrthographicCamera(ID3D11Device& device, vec2_u32 viewport_s
 
 XMMATRIX XM_CALLCONV OrthographicCamera::getCameraToProjectionMatrix() const {
 	// Recalculate the projection matrix
-	return XMMatrixOrthographicLH(ortho_size.x, ortho_size.y, depth.x, depth.y);
+	return XMMatrixOrthographicLH(ortho_size[0], ortho_size[1], depth[0], depth[1]);
 }

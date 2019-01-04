@@ -82,8 +82,8 @@ void Window::init(const std::wstring& title,
 	// Create a rect for the adjusted window size
 	RECT window_rect = { 0,
 	                     0,
-	                     static_cast<LONG>(resolution.x),
-	                     static_cast<LONG>(resolution.y) };
+	                     static_cast<LONG>(resolution[0]),
+	                     static_cast<LONG>(resolution[1]) };
 
 	// Calculate the total window size with decorations included
 	AdjustWindowRect(&window_rect, style, false);

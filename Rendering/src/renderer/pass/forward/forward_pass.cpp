@@ -104,7 +104,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.base_color.w <= ALPHA_MAX)
+			if (mat.params.base_color[3] <= ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_projection);
@@ -135,7 +135,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.base_color.w < ALPHA_MIN || mat.params.base_color.w > ALPHA_MAX)
+			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_projection);
@@ -164,7 +164,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.base_color.w <= ALPHA_MAX)
+			if (mat.params.base_color[3] <= ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_projection);
@@ -184,7 +184,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 			if (!model.isActive()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.base_color.w< ALPHA_MIN || mat.params.base_color.w > ALPHA_MAX)
+			if (mat.params.base_color[3]< ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_projection);

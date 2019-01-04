@@ -45,13 +45,13 @@ std::pair<vec3_f32, vec3_f32> MinMaxPoint(const std::vector<VertexT>& vertices) 
 	vec3_f32 max{ std::numeric_limits<float>::lowest() };
 
 	for (const auto& vertex : vertices) {
-		min.x = std::fminf(min.x, vertex.position.x);
-		min.y = std::fminf(min.y, vertex.position.y);
-		min.z = std::fminf(min.z, vertex.position.z);
+		min[0] = std::fminf(min[0], vertex.position[0]);
+		min[1] = std::fminf(min[1], vertex.position[1]);
+		min[2] = std::fminf(min[2], vertex.position[2]);
 
-		max.x = std::fmaxf(max.x, vertex.position.x);
-		max.y = std::fmaxf(max.y, vertex.position.y);
-		max.z = std::fmaxf(max.z, vertex.position.z);
+		max[0] = std::fmaxf(max[0], vertex.position[0]);
+		max[1] = std::fmaxf(max[1], vertex.position[1]);
+		max[2] = std::fmaxf(max[2], vertex.position[2]);
 	}
 
 	return {min, max};

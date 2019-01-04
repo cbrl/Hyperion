@@ -24,15 +24,15 @@ void MouseRotationSystem::update(Engine& engine) {
 		vec2_f32 units{0.0f, 0.0f};
 
 		// Set x/y rotation with mouse data
-		units.x = static_cast<f32>(mouse_delta.y) * rotation.getSensitivity();
-		units.y = static_cast<f32>(mouse_delta.x) * rotation.getSensitivity();
+		units[0] = static_cast<f32>(mouse_delta[1]) * rotation.getSensitivity();
+		units[1] = static_cast<f32>(mouse_delta[0]) * rotation.getSensitivity();
 
 		// Rotate the camera
-		if (units.x) {
-			transform->rotateXClamped(units.x, -max.x, max.x);
+		if (units[0]) {
+			transform->rotateXClamped(units[0], -max[0], max[0]);
 		}
-		if (units.y) { 
-			transform->rotateYClamped(units.y, -max.y, max.y);
+		if (units[1]) { 
+			transform->rotateYClamped(units[1], -max[1], max[1]);
 		}
 	});
 }

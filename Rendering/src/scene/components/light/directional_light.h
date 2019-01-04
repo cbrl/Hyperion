@@ -111,14 +111,14 @@ public:
 	// Get the light-to-projection matrix
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getLightToProjectionMatrix() const {
-		return XMMatrixOrthographicLH(proj_size.x, proj_size.y, start, range);
+		return XMMatrixOrthographicLH(proj_size[0], proj_size[1], start, range);
 	}
 
 
 private:
 	void updateBoundingVolumes() noexcept {
-		aabb = AABB{ vec3_f32{-0.5f * proj_size.x, -0.5f * proj_size.y, 0.0f},
-					 vec3_f32{ 0.5f * proj_size.x,  0.5f * proj_size.y, range} };
+		aabb = AABB{ vec3_f32{-0.5f * proj_size[0], -0.5f * proj_size[1], 0.0f},
+					 vec3_f32{ 0.5f * proj_size[0],  0.5f * proj_size[1], range} };
 	}
 
 

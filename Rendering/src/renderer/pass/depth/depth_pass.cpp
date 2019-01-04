@@ -67,7 +67,7 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 
 		root.forEachModel([&](const Model& model) {
 			const auto& mat = model.getMaterial();
-			if (mat.params.base_color.w <= ALPHA_MAX)
+			if (mat.params.base_color[3] <= ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_proj);
@@ -84,7 +84,7 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 		
 		root.forEachModel([&](const Model& model) {
 			const auto& mat = model.getMaterial();
-			if (mat.params.base_color.w < ALPHA_MIN || mat.params.base_color.w > ALPHA_MAX)
+			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_proj);
@@ -112,7 +112,7 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 			if (!model.castsShadows()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.base_color.w <= ALPHA_MAX)
+			if (mat.params.base_color[3] <= ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_proj);
@@ -132,7 +132,7 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 			if (!model.castsShadows()) return;
 
 			const auto& mat = model.getMaterial();
-			if (mat.params.base_color.w < ALPHA_MIN || mat.params.base_color.w > ALPHA_MAX)
+			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
 				return;
 
 			renderModel(root, model, world_to_proj);

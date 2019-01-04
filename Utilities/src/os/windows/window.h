@@ -196,7 +196,7 @@ public:
 	void resizeWindow(vec2_u32 size) const noexcept {
 		RECT pos;
 		GetWindowRect(window, &pos);
-		RECT client = { 0, 0, static_cast<LONG>(size.x), static_cast<LONG>(size.y) };
+		RECT client = { 0, 0, static_cast<LONG>(size[0]), static_cast<LONG>(size[1]) };
 		AdjustWindowRect(&client, GetWindowLong(window, GWL_STYLE), false);
 		MoveWindow(window, pos.left, pos.top, client.right - client.left, client.bottom - client.top, TRUE);
 	}

@@ -75,7 +75,7 @@ public:
 	// Get the resolution of the shadow map
 	[[nodiscard]]
 	u32 getMapRes() const noexcept {
-		return viewport.getSize().x;
+		return viewport.getSize()[0];
 	}
 
 	[[nodiscard]]
@@ -168,7 +168,7 @@ public:
 	// Get the resolution of the shadow map
 	[[nodiscard]]
 	u32 getMapRes() const noexcept {
-		return viewport.getSize().x;
+		return viewport.getSize()[0];
 	}
 
 	[[nodiscard]]

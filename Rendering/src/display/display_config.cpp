@@ -89,7 +89,7 @@ void DisplayConfig::setNearestDisplayDesc(const vec2_u32& resolution,
 		});
 
 		// Find and remove any elements with width > desired_width
-		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), resolution.x,
+		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), resolution[0],
 			[](u32 a, const decltype(desc_matches)::value_type& b) {
 				return a < b->Width;
 		});
@@ -118,7 +118,7 @@ void DisplayConfig::setNearestDisplayDesc(const vec2_u32& resolution,
 		});
 
 		// Find and remove any elements with height > desired_height
-		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), resolution.y,
+		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), resolution[1],
 			[](u32 a, const decltype(desc_matches)::value_type& b) {
 				return a < b->Height;
 		});

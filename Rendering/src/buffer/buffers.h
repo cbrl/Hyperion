@@ -45,7 +45,7 @@ struct LightBuffer {
 
 
 struct DirectionalLightBuffer {
-	vec3_f32 intensity = 0.0f;
+	vec3_f32 intensity = {};
 	f32      pad0;
 	vec3_f32 direction = {};
 	f32      pad1;
@@ -54,7 +54,7 @@ struct DirectionalLightBuffer {
 
 
 struct PointLightBuffer {
-	vec3_f32 intensity = 0.0f;
+	vec3_f32 intensity = {};
 	f32      pad0;
 	vec3_f32 position = {};
 	f32      range = 0;
@@ -72,7 +72,7 @@ struct ShadowedPointLightBuffer {
 
 
 struct SpotLightBuffer {
-	vec3_f32 intensity = 0.0f;
+	vec3_f32 intensity = {};
 	f32      pad;
 	vec3_f32 position = {};
 	f32      range = 0.0f;

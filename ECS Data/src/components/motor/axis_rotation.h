@@ -88,15 +88,15 @@ public:
 	}
 
 	void setSpeedX(f32 speed) {
-		rotation_speeds.x = speed;
+		rotation_speeds[0] = speed;
 	}
 
 	void setSpeedY(f32 speed) {
-		rotation_speeds.y = speed;
+		rotation_speeds[1] = speed;
 	}
 
 	void setSpeedZ(f32 speed) {
-		rotation_speeds.z = speed;
+		rotation_speeds[2] = speed;
 	}
 
 	[[nodiscard]]
@@ -106,17 +106,17 @@ public:
 
 	[[nodiscard]]
 	f32 getSpeedX() const {
-		return rotation_speeds.x;
+		return rotation_speeds[0];
 	}
 
 	[[nodiscard]]
 	f32 getSpeedY() const {
-		return rotation_speeds.y;
+		return rotation_speeds[1];
 	}
 
 	[[nodiscard]]
 	f32 getSpeedZ() const {
-		return rotation_speeds.z;
+		return rotation_speeds[2];
 	}
 
 

@@ -281,20 +281,20 @@ public:
 	}
 
 	void setZDepth(f32 z_near, f32 z_far) {
-		depth.x = std::min(z_near, z_far - 0.001f);
-		depth.y = std::max(z_far, z_near + 0.001f);
+		depth[0] = std::min(z_near, z_far - 0.001f);
+		depth[1] = std::max(z_far, z_near + 0.001f);
 	}
 
 	void setZDepth(vec2_f32 depth) {
-		setZDepth(depth.x, depth.y);
+		setZDepth(depth[0], depth[1]);
 	}
 
 	void setZNear(f32 z_near) {
-		depth.x = std::min(z_near, depth.y - 0.001f);
+		depth[0] = std::min(z_near, depth[1] - 0.001f);
 	}
 
 	void setZFar(f32 z_far) {
-		depth.y = std::max(z_far, depth.x + 0.001f);
+		depth[1] = std::max(z_far, depth[0] + 0.001f);
 	}
 
 

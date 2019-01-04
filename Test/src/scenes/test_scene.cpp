@@ -13,7 +13,6 @@ void TestScene::initialize(const Engine& engine) {
 	auto& device_context      = rendering_mgr.getDeviceContext();
 	auto& resource_mgr        = rendering_mgr.getResourceMgr();
 
-
 	//----------------------------------------------------------------------------------
 	// Add systems
 	//----------------------------------------------------------------------------------
@@ -264,7 +263,7 @@ void TestScene::update(Engine& engine) {
 	// Mouse Activity
 	if (text_mouse.valid()) {
 		if (auto* text = text_mouse->getComponent<Text>())
-			text->setText(L"Mouse \nX: " + std::to_wstring(mouse_pos.x)
-			              + L"\nY: "     + std::to_wstring(mouse_pos.y));
+			text->setText(L"Mouse \nX: " + std::to_wstring(mouse_pos[0])
+			              + L"\nY: "     + std::to_wstring(mouse_pos[1]));
 	}
 }

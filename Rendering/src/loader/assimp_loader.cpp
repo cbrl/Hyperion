@@ -51,25 +51,25 @@ void ProcessMeshes(const aiScene* scene, ModelOutput& model_out) {
 		for (u32 j = 0; j < mesh->mNumVertices; ++j) {
 			if (mesh->HasPositions()) {
 				const auto& position = mesh->mVertices[j];
-				out_mesh.positions.emplace_back(position.x, position.y, position.z);
+				out_mesh.positions.emplace_back(position[0], position[1], position[2]);
 			}
 
 			if (mesh->HasNormals()) {
 				const auto& normal = mesh->mNormals[j];
-				out_mesh.normals.emplace_back(normal.x, normal.y, normal.z);
+				out_mesh.normals.emplace_back(normal[0], normal[1], normal[2]);
 			}
 
 			if (mesh->HasTangentsAndBitangents()) {
 				const auto& tangent = mesh->mTangents[j];
 				const auto& bitangent = mesh->mBitangents[j];
-				out_mesh.tangents.emplace_back(tangent.x, tangent.y, tangent.z);
-				out_mesh.bitangents.emplace_back(bitangent.x, bitangent.y, bitangent.z);
+				out_mesh.tangents.emplace_back(tangent[0], tangent[1], tangent[2]);
+				out_mesh.bitangents.emplace_back(bitangent[0], bitangent[1], bitangent[2]);
 			}
 
 			//TODO: support multiple texture coords per vertex
 			if (mesh->HasTextureCoords(0)) {
 				const auto& tex = mesh->mTextureCoords[0][j];
-				out_mesh.texture_coords.emplace_back(tex.x, tex.y/*, tex.z*/);
+				out_mesh.texture_coords.emplace_back(tex[0], tex[1]/*, tex[2]*/);
 			}
 
 			//TODO: support vertex color sets
@@ -95,9 +95,9 @@ void ProcessMaterials(const aiScene* scene, fs::path base_path, ResourceMgr& res
 	static constexpr auto get_color = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
 		aiColor3D color;
 		if (mat->Get(key, type, idx, color) == aiReturn_SUCCESS) {
-			out.x = color.r;
-			out.y = color.g;
-			out.z = color.b;
+			out[0] = color.r;
+			out[1] = color.g;
+			out[2] = color.b;
 		}
 	};
 

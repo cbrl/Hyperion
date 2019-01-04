@@ -140,9 +140,9 @@ public:
 	}
 
 	void rotateClamped(const vec3_f32& units, f32 min, f32 max) {
-		rotateXClamped(units.x, min, max);
-		rotateYClamped(units.y, min, max);
-		rotateZClamped(units.z, min, max);
+		rotateXClamped(units[0], min, max);
+		rotateYClamped(units[1], min, max);
+		rotateZClamped(units[2], min, max);
 	}
 
 	void XM_CALLCONV rotateClamped(FXMVECTOR units, f32 min, f32 max) {

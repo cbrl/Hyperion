@@ -23,8 +23,8 @@ namespace ConfigWriter {
 	    const auto shadowmap  = rendering.getShadowMapRes();
 
 		writer.writeLine(ConfigTokens::comment, "Display");
-		writer.writeLine(ConfigTokens::width, ' ', res.x);
-		writer.writeLine(ConfigTokens::height, ' ', res.y);
+		writer.writeLine(ConfigTokens::width, ' ', res[0]);
+		writer.writeLine(ConfigTokens::height, ' ', res[1]);
 		writer.writeLine(ConfigTokens::refresh, ' ', refresh);
 		writer.writeLine(ConfigTokens::vsync, ' ', vsync);
 		writer.writeLine(ConfigTokens::fullscreen, ' ', fullscreen);

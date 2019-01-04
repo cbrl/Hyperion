@@ -43,7 +43,7 @@ namespace Shapes {
 		if constexpr (VertexT::hasTexture()) {
 			for (auto it = vertices.begin(); it != vertices.end(); ++it) {
 				vec2_f32 texCoord = it->texCoord;
-				texCoord.x = 1.0f - texCoord.x;
+				texCoord[0] = 1.0f - texCoord[0];
 
 				it->texCoord = texCoord;
 			}
@@ -57,9 +57,9 @@ namespace Shapes {
 		if constexpr (VertexT::hasNormal()) {
 			for (auto it = vertices.begin(); it != vertices.end(); ++it) {
 				vec3_f32 normal = it->normal;
-				normal.x = -normal.x;
-				normal.y = -normal.y;
-				normal.z = -normal.z;
+				normal[0] = -normal[0];
+				normal[1] = -normal[1];
+				normal[2] = -normal[2];
 
 				it->normal = normal;
 			}
@@ -399,8 +399,8 @@ namespace Shapes {
 			XMStore(&normalFloat3, normal);
 
 			// calculate texture coordinates for this vertex
-			const f32 longitude = atan2(normalFloat3.x, -normalFloat3.z);
-			const f32 latitude = acos(normalFloat3.y);
+			const f32 longitude = atan2(normalFloat3[0], -normalFloat3[2]);
+			const f32 latitude = acos(normalFloat3[1]);
 
 			const f32 u = longitude / XM_2PI + 0.5f;
 			const f32 v = latitude / XM_PI;
@@ -428,10 +428,10 @@ namespace Shapes {
 		if constexpr (VertexT::hasTexture()) {
 			const size_t preFixupVertexCount = vertices.size();
 			for (size_t i = 0; i < preFixupVertexCount; ++i) {
-				// This vertex is on the prime meridian if position.x and texcoord.u are both zero (allowing for small epsilon).
+				// This vertex is on the prime meridian if position[0] and texcoord.u are both zero (allowing for small epsilon).
 				const bool isOnPrimeMeridian = XMVector2NearEqual(
-				                                            XMVectorSet(vertices[i].position.x,
-				                                                        vertices[i].texCoord.x,
+				                                            XMVectorSet(vertices[i].position[0],
+				                                                        vertices[i].texCoord[0],
 				                                                        0.0f,
 				                                                        0.0f),
 				                                            XMVectorZero(),
@@ -443,7 +443,7 @@ namespace Shapes {
 
 					// copy this vertex, correct the texture coordinate, and add the vertex
 					VertexT v = vertices[i];
-					v.texCoord.x = 1.0f;
+					v.texCoord[0] = 1.0f;
 					vertices.push_back(v);
 
 					// Now find all the triangles which contain this vertex and update them if necessary
@@ -476,8 +476,8 @@ namespace Shapes {
 
 						// check the other two vertices to see if we might need to fix this triangle
 
-						if (abs(v0.texCoord.x - v1.texCoord.x) > 0.5f ||
-						    abs(v0.texCoord.x - v2.texCoord.x) > 0.5f) {
+						if (abs(v0.texCoord[0] - v1.texCoord[0]) > 0.5f ||
+						    abs(v0.texCoord[0] - v2.texCoord[0]) > 0.5f) {
 							// yep; replace the specified index to point to the new, corrected vertex
 							*triIndex0 = static_cast<u32>(newIndex);
 						}
@@ -527,8 +527,8 @@ namespace Shapes {
 
 					// Calculate the texcoords for the new pole vertex, add it to the vertices and update the index
 					VertexT newPoleVertex = poleVertex;
-					newPoleVertex.texCoord.x = (otherVertex0.texCoord.x + otherVertex1.texCoord.x) / 2;
-					newPoleVertex.texCoord.y = poleVertex.texCoord.y;
+					newPoleVertex.texCoord[0] = (otherVertex0.texCoord[0] + otherVertex1.texCoord[0]) / 2;
+					newPoleVertex.texCoord[1] = poleVertex.texCoord[1];
 
 					if (!overwrittenPoleVertex) {
 						vertices[poleIndex] = newPoleVertex;

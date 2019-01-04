@@ -150,7 +150,7 @@ void Engine::init(std::wstring title,
 			if (scene) {
 				scene->sendEvent<WindowResizeEvent>(size);
 			}
-			Logger::log(LogLevel::info, "Window resized to {}x{}", size.x, size.y);
+			Logger::log(LogLevel::info, "Window resized to {}x{}", size[0], size[1]);
 		};
 
 		window->addHandler(gsl::make_not_null(&msg_handler));
