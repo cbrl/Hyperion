@@ -145,15 +145,13 @@ public:
 	}
 
 
-	// Check if key has been pressed. If it has, the function
-	// will only return true for the first query
+	// Check if key has been pressed. Will only return true for the first frame.
 	[[nodiscard]]
 	bool isKeyPressed(Keyboard::Keys key) const {
 		return keyboard_tracker.IsKeyPressed(key);
 	}
 
-	// Check if key has been released. If it has, the function
-	// will only return true for the first query
+	// Check if key has been released. Will only return true for the first frame.
 	[[nodiscard]]
 	bool isKeyReleased(Keyboard::Keys key) const {
 		return keyboard_tracker.IsKeyReleased(key);

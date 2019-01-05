@@ -633,6 +633,91 @@ void DrawDetails(AxisOrbit& orbit) {
 }
 
 
+template<typename CameraT>
+void DrawTransformManipulator(Transform& transform, CameraT& camera, Input& input) {
+
+	auto* camera_transform = camera.getOwner()->getComponent<Transform>();
+	if (!camera_transform)
+		return;
+
+	if constexpr (std::is_same_v<CameraT, OrthographicCamera>) {
+		ImGuizmo::SetOrthographic(true);
+	}
+
+	//----------------------------------------------------------------------------------
+	// Matrices
+	//----------------------------------------------------------------------------------
+	XMMATRIX world_to_camera      = camera_transform->getWorldToObjectMatrix();
+	XMMATRIX camera_to_projection = camera.getCameraToProjectionMatrix();
+
+	XMFLOAT4X4 view;
+	XMFLOAT4X4 projection;
+	XMStoreFloat4x4(&view, world_to_camera);
+	XMStoreFloat4x4(&projection, camera_to_projection);
+
+	XMMATRIX transform_matrix = transform.getObjectToWorldMatrix();
+	XMFLOAT4X4 matrix;
+	XMStoreFloat4x4(&matrix, transform_matrix);
+
+	//----------------------------------------------------------------------------------
+	// View Rect
+	//----------------------------------------------------------------------------------
+	auto top_left = camera.getViewport().getTopLeft();
+	auto size     = camera.getViewport().getSize();
+	ImGuizmo::SetRect((float)top_left[0], (float)top_left[1], (float)size[0], (float)size[1]);
+
+	//----------------------------------------------------------------------------------
+	// Operation & Mode
+	//----------------------------------------------------------------------------------
+	static ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE;
+	static ImGuizmo::MODE      mode      = ImGuizmo::WORLD;
+	
+	if (input.isKeyPressed(Keyboard::R)) {
+		operation = ImGuizmo::ROTATE;
+	}
+	if (input.isKeyPressed(Keyboard::T)) {
+		operation = ImGuizmo::TRANSLATE;
+	}
+	if (input.isKeyPressed(Keyboard::Y)) {
+		operation = ImGuizmo::SCALE;
+	}
+
+	//----------------------------------------------------------------------------------
+	// Manipulate
+	//----------------------------------------------------------------------------------
+	ImGuizmo::Manipulate(&view.m[0][0], &projection.m[0][0], operation, mode, &matrix.m[0][0]);
+
+	// Allowing the transform matrix to be set here would eliminate the need to decompose the matrix
+	if (ImGuizmo::IsUsing()) {
+		vec3_f32 translation;
+		vec3_f32 rotation;
+		vec3_f32 scale;
+
+		if (!transform.getOwner()->hasParent()) {
+			ImGuizmo::DecomposeMatrixToComponents(&matrix.m[0][0], translation.data(), rotation.data(), scale.data());
+		}
+		else {
+			// If the transform is a child of another, then the matrix needs to be multiplied by the inverse of
+			// the parent's matrix to obtain the local transformation.
+			auto*      parent_transform   = transform.getOwner()->getParent()->getComponent<Transform>();
+			XMMATRIX   world_to_parent    = parent_transform->getWorldToObjectMatrix();
+			XMMATRIX   relative_transform = XMLoadFloat4x4(&matrix) * world_to_parent;
+			XMFLOAT4X4 new_matrix;
+			XMStoreFloat4x4(&new_matrix, relative_transform);
+
+			ImGuizmo::DecomposeMatrixToComponents(&new_matrix.m[0][0], translation.data(), rotation.data(), scale.data());
+		}
+		
+		// ImGuizmo outputs rotation in degrees
+		rotation = {XMConvertToRadians(rotation[0]), XMConvertToRadians(rotation[1]), XMConvertToRadians(rotation[2])};
+
+		transform.setPosition(translation);
+		transform.setRotation(rotation);
+		transform.setScale(scale);
+	}
+}
+
+
 
 
 //----------------------------------------------------------------------------------
@@ -661,10 +746,11 @@ void DrawComponentNode(gsl::czstring<> text, T& item) {
 
 
 // Draw the details panel for the specified entity
-void DrawEntityDetails(Entity& entity, Scene& scene) {
+void DrawEntityDetails(Entity& entity, Engine& engine) {
 
 	ImGui::Begin("Properties");
 
+	auto& scene = engine.getScene();
 	const auto& entities = scene.getEntities();
 
 	//----------------------------------------------------------------------------------
@@ -718,11 +804,24 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 
 
 	// Transform
-	if (entity.hasComponent<Transform>()) {
-		auto transforms = entity.getAll<Transform>();
-		for (auto* transform : transforms) {
-			DrawComponentNode("Transform", *transform);
-		}
+	if (auto* transform = entity.getComponent<Transform>()) {
+		DrawComponentNode("Transform", *transform);
+
+		// Draw transform manipulation tool. Only for the primary camera since it
+		// doesn't work well when drawing multiple transform tools.
+		bool first = true;
+		scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+			if (first) {
+				DrawTransformManipulator(*transform, camera, engine.getInput());
+				first = false;
+			}
+		});
+		scene.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+			if (first) {
+				DrawTransformManipulator(*transform, camera, engine.getInput());
+				first = false;
+			}
+		});
 	}
 
 	// Model Root
@@ -834,7 +933,7 @@ void DrawEntityDetails(Entity& entity, Scene& scene) {
 //----------------------------------------------------------------------------------
 
 // Draw a single tree node
-void DrawEntityNode(EntityPtr entity_ptr, Scene& scene) {
+void DrawEntityNode(EntityPtr entity_ptr) {
 
 	if (!entity_ptr.valid())
 		return;
@@ -856,8 +955,8 @@ void DrawEntityNode(EntityPtr entity_ptr, Scene& scene) {
 	if (node_open) {
 		// Draw any child entities in this node
 		if (entity->hasChildren()) {
-			entity->forEachChildRecursive([&scene](EntityPtr& child) {
-				DrawEntityNode(child, scene);
+			entity->forEachChildRecursive([](EntityPtr& child) {
+				DrawEntityNode(child);
 			});
 		}
 
@@ -867,7 +966,9 @@ void DrawEntityNode(EntityPtr entity_ptr, Scene& scene) {
 
 
 // Draw the scene tree
-void DrawTree(Scene& scene) {
+void DrawTree(Engine& engine) {
+
+	auto& scene = engine.getScene();
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
 
@@ -878,11 +979,11 @@ void DrawTree(Scene& scene) {
 		auto& entities = scene.getEntities();
 		for (const auto& entity_ptr : entities) {
 			if (entity_ptr->hasParent()) continue;
-			DrawEntityNode(entity_ptr, scene);
+			DrawEntityNode(entity_ptr);
 		}
 
-		if (g_scene_tree.getSelected()) {
-			DrawEntityDetails(*g_scene_tree.getSelected(), scene);
+		if (auto selected = g_scene_tree.getSelected(); selected.valid()) {
+			DrawEntityDetails(*selected, engine);
 		}
 	}
 
@@ -1536,7 +1637,7 @@ void DrawMetrics(Engine& engine) {
 	const auto& timer = engine.getTimer();
 
 	frame_time.AddNewValue(static_cast<float>(timer.deltaTime()));
-	fps.AddNewValue(1.0f / timer.deltaTime());
+	fps.AddNewValue(static_cast<float>(1.0 / timer.deltaTime()));
 	frame_plot.UpdateAxes();
 
 	if (ImGui::Begin("Metrics")) {
@@ -1564,6 +1665,7 @@ UserInterface::UserInterface(ID3D11Device& device, ResourceMgr& resource_mgr)
 void UserInterface::update(Engine& engine)  {
 
 	//ImGui::ShowDemoWindow();
+	ImGuizmo::BeginFrame();  //technicall should be called right after ImGui_XXXX_NewFrame();
 
 	auto& scene = engine.getScene();
 
@@ -1600,7 +1702,7 @@ void UserInterface::update(Engine& engine)  {
 		ProcNewModelPopups(device, scene, resource_mgr, add_model_popup);
 
 		// Draw tree
-		DrawTree(scene);
+		DrawTree(engine);
 	}
 	ImGui::End();
 }

@@ -93,7 +93,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, false);
+	static const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, false);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -124,7 +124,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, true);
+	static const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, true);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -154,7 +154,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 
 	// Opaque models
 	bindTransparentState();
-	const auto opaque_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, false);
+	static const auto opaque_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, false);
 	opaque_ps->bind(device_context);
 
 	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
@@ -174,7 +174,7 @@ void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
 
 	// Transparent Models
 	bindTransparentState();
-	const auto transparent_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, true);
+	static const auto transparent_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, true);
 	transparent_ps->bind(device_context);
 
 	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
@@ -199,7 +199,7 @@ void ForwardPass::renderFalseColor(Scene& scene,
 
 	bindOpaqueState();
 
-	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
+	static const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
 	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
@@ -219,7 +219,7 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 
 	color_buffer.updateData(device_context, color);
 
-	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, FalseColor::Static);
+	static const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, FalseColor::Static);
 	pixel_shader->bind(device_context);
 
 	scene.forEach<ModelRoot>([&](const ModelRoot& root) {

@@ -7,7 +7,7 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 
 	// Camera variables
 	const auto& settings  = camera.getSettings();
-	const auto* transform = camera.getOwner()->template getComponent<Transform>();
+	const auto* transform = camera.getOwner()->getComponent<Transform>();
 	assert(transform != nullptr);
 
 	const auto world_to_camera      = transform->getWorldToObjectMatrix();
