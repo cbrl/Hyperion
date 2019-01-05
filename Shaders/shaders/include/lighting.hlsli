@@ -156,7 +156,7 @@ float3 CalculateLighting(float3 p_world, float3 n, float3 p_to_view, Material ma
 	ambient *= g_ambient_intensity.xyz;
 
 	// Calculate final color
-	return radiance + ambient;
+	return radiance + ambient + material.emissive;
 }
 
 

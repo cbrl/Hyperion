@@ -12,8 +12,9 @@ struct MaterialBuffer {
 	vec4_f32 base_color = {};
 	f32      metalness = 0.0f;
 	f32      roughness = 0.0f;
+	vec2_f32 pad0;
 	vec3_f32 emissive = {};
-	vec3_f32 pad;
+	f32      pad1;
 };
 
 

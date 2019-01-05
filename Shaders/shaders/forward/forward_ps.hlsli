@@ -24,14 +24,14 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	//----------------------------------------------------------------------------------
 	// Create the material
 	//----------------------------------------------------------------------------------
-	float4 base_color = GetBaseColor(pin.uv);
+	float4 base_color   = GetBaseColor(pin.uv);
 	const float2 params = GetMaterialParams(pin.uv);
 
 	Material mat;
 	mat.base_color = base_color;
 	mat.metalness  = params.x;
 	mat.roughness  = params.y;
-	mat.emissive   = 0.0f;
+	mat.emissive   = g_material.emissive;
 
 
 	// Test alpha if transparency is enabled, or set it to 1 if not.

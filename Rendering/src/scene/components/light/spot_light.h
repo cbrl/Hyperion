@@ -39,12 +39,17 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Base Color
 	//----------------------------------------------------------------------------------
-	void setBaseColor(const vec3_f32& color) noexcept {
-		base_color = color;
+	void setBaseColor(vec3_f32 color) noexcept {
+		base_color = std::move(color);
 	}
 
 	[[nodiscard]]
-	const vec3_f32& getBaseColor() const noexcept{
+	vec3_f32& getBaseColor() noexcept {
+		return base_color;
+	}
+
+	[[nodiscard]]
+	const vec3_f32& getBaseColor() const noexcept {
 		return base_color;
 	}
 
@@ -64,12 +69,17 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Attenuation
 	//----------------------------------------------------------------------------------
-	void setAttenuation(const vec3_f32& atten) noexcept {
-		attenuation = atten;
+	void setAttenuation(vec3_f32 atten) noexcept {
+		attenuation = std::move(atten);
 	}
 
 	[[nodiscard]]
-	const vec3_f32& getAttenuation() const noexcept{
+	vec3_f32& getAttenuation() noexcept {
+		return attenuation;
+	}
+
+	[[nodiscard]]
+	const vec3_f32& getAttenuation() const noexcept {
 		return attenuation;
 	}
 
@@ -183,18 +193,18 @@ private:
 		const f32 rz  = range * 0.5f;
 		const f32 r   = std::sqrt((rxy * rxy) + (rz * rz));
 
-		aabb   = AABB(vec3_f32(-rxy, -rxy, 0.0f), vec3_f32(rxy, rxy, range));
-		sphere = BoundingSphere(vec3_f32(0.0f, 0.0f, rz), r);
+		aabb   = AABB{ vec3_f32{-rxy, -rxy, 0.0f}, vec3_f32{rxy, rxy, range} };
+		sphere = BoundingSphere{ vec3_f32{0.0f, 0.0f, rz}, r };
 	}
 
 
 private:
 	// Lighting parameters
 	vec3_f32 base_color;
-	f32 intensity;
+	f32      intensity;
 	vec3_f32 attenuation;
-	f32 cos_umbra;
-	f32 cos_penumbra;
+	f32      cos_umbra;
+	f32      cos_penumbra;
 
 	// Near clipping plane and range (far plane)
 	f32 near_plane;

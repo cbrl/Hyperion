@@ -43,6 +43,11 @@ public:
 	}
 
 	[[nodiscard]]
+	vec3_f32& getBaseColor() noexcept {
+		return base_color;
+	}
+
+	[[nodiscard]]
 	const vec3_f32& getBaseColor() const noexcept {
 		return base_color;
 	}

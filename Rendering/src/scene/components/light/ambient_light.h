@@ -9,7 +9,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	AmbientLight()
+	AmbientLight() noexcept
 		: color(0.0f, 0.0f, 0.0f, 1.0f) {
 	}
 
@@ -34,11 +34,16 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	const vec4_f32& getColor() const {
+	const vec4_f32& getColor() const noexcept{
 		return color;
 	}
 
-	void setColor(const vec4_f32& ambient_color) {
+	[[nodiscard]]
+	vec4_f32& getColor() noexcept {
+		return color;
+	}
+
+	void setColor(const vec4_f32& ambient_color) noexcept {
 		color = ambient_color;
 	}
 

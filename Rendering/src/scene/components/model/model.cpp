@@ -63,30 +63,15 @@ void XM_CALLCONV ModelNode::updateNodeBuffers(ID3D11DeviceContext& device_contex
 	
 	for (auto& model : models) {
 		ModelBuffer buffer_data;
+
 		buffer_data.world               = world_transpose;
 		buffer_data.world_inv_transpose = world_inv_transpose;
 		buffer_data.texTransform        = XMMatrixIdentity();
 
-		/*
-		buffer_data.mat = MaterialBuffer {
-			model.material.params.ambient,
-			model.material.params.diffuse,
-			model.material.params.specular,
-			model.material.params.emissive,
-			model.material.params.spec_scale,
-			model.material.params.spec_exponent,
-			model.material.params.opacity,
-		    model.material.params.mirror,
-			model.material.params.reflectivity,
-			model.material.maps.diffuse != nullptr
-		};
-		*/
-		buffer_data.mat = MaterialBuffer {
-		    model.material.params.base_color,
-		    model.material.params.metalness,
-		    model.material.params.roughness,
-		    model.material.params.emissive,
-		};
+		buffer_data.mat.base_color = model.material.params.base_color;
+		buffer_data.mat.metalness  = model.material.params.metalness;
+		buffer_data.mat.roughness  = model.material.params.roughness;
+		buffer_data.mat.emissive   = model.material.params.emissive;
 
 		model.buffer.updateData(device_context, buffer_data);
 	}

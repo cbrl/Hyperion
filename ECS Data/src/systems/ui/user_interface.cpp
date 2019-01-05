@@ -322,7 +322,7 @@ void DrawDetails(Model& model) {
 	ImGui::ColorEdit4("Base Color", mat.params.base_color.data());
 	ImGui::DragFloat("Metalness", &mat.params.metalness, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat("Roughness", &mat.params.roughness, 0.01f, 0.0f, 1.0f);
-	//TODO: ImGui::ColorEdit3("Emissive", mat.params.emissive.data());
+	ImGui::ColorEdit3("Emissive", mat.params.emissive.data());
 }
 
 void DrawDetails(ModelNode& node) {
@@ -376,22 +376,25 @@ void DrawDetails(DirectionalLight& light) {
 
 	DrawComponentState(light);
 
-	auto base_color = light.getBaseColor();
-	if (ImGui::ColorEdit3("Base Color", base_color.data()))
-		light.setBaseColor(base_color);
+	// Base Color
+	ImGui::ColorEdit3("Base Color", light.getBaseColor().data());
 
+	// Intensity
 	auto intensity = light.getIntensity();
 	if (ImGui::DragFloat("Intensity", &intensity, 0.01f, 0.0f, FLT_MAX))
 		light.setIntensity(intensity);
 
+	// Range
 	auto range = light.getRange();
 	if (ImGui::DragFloat("Range", &range, 0.1f, 0.1f, FLT_MAX))
 		light.setRange(range);
 
+	// Size
 	auto proj_size = light.getSize();
 	if (ImGui::DragFloat2("Size", proj_size.data(), 0.01f, 0.01f, FLT_MAX))
 		light.setSize(proj_size);
 
+	// Shadows
 	auto shadows = light.castsShadows();
 	if (ImGui::Checkbox("Shadows", &shadows))
 		light.setShadows(shadows);
@@ -402,22 +405,23 @@ void DrawDetails(PointLight& light) {
 
 	DrawComponentState(light);
 
-	auto base_color = light.getBaseColor();
-	if (ImGui::ColorEdit3("Base Color", base_color.data()))
-		light.setBaseColor(base_color);
+	// Base Color
+	ImGui::ColorEdit3("Base Color", light.getBaseColor().data());
 
+	// Intensity
 	auto intensity = light.getIntensity();
 	if (ImGui::DragFloat("Intensity", &intensity, 0.01f, 0.0f, FLT_MAX))
 		light.setIntensity(intensity);
 
+	// Range
 	auto range = light.getRange();
 	if (ImGui::DragFloat("Range", &range, 0.1f, 0.0f, FLT_MAX))
 		light.setRange(range);
 
-	auto attenuation = light.getAttenuation();
-	if (ImGui::DragFloat3("Attenuation", attenuation.data(), 0.01f, 0.0f, 1.0f))
-		light.setAttenuation(attenuation);
+	// Attenuation
+	ImGui::DragFloat3("Attenuation", light.getAttenuation().data(), 0.01f, 0.0f, 1.0f);
 
+	// Shadows
 	auto shadows = light.castsShadows();
 	if (ImGui::Checkbox("Shadows", &shadows))
 		light.setShadows(shadows);
@@ -428,30 +432,33 @@ void DrawDetails(SpotLight& light) {
 
 	DrawComponentState(light);
 
-	auto base_color = light.getBaseColor();
-	if (ImGui::ColorEdit3("Base Color", base_color.data()))
-		light.setBaseColor(base_color);
+	// Base Color
+	ImGui::ColorEdit3("Base Color", light.getBaseColor().data());
 
+	// Intensity
 	auto intensity = light.getIntensity();
 	if (ImGui::DragFloat("Intensity", &intensity, 0.01f, 0.0f, FLT_MAX))
 		light.setIntensity(intensity);
 
+	// Range
 	auto range = light.getRange();
 	if (ImGui::DragFloat("Range", &range, 0.1f, 0.0f, FLT_MAX))
 		light.setRange(range);
 
-	auto attenuation = light.getAttenuation();
-	if (ImGui::DragFloat3("Attenuation", attenuation.data(), 0.01f, 0.0f, 1.0f))
-		light.setAttenuation(attenuation);
+	// Attenuation
+	ImGui::DragFloat3("Attenuation", light.getAttenuation().data(), 0.01f, 0.0f, 1.0f);
 
+	// Umbra Angle
 	auto umbra = light.getUmbraAngle();
 	if (ImGui::DragFloat("Umbra", &umbra, 0.01f, 0.01f, XM_PIDIV2))
 		light.setUmbraAngle(umbra);
 
+	// Penumbra Angle
 	auto penumbra = light.getPenumbraAngle();
 	if (ImGui::DragFloat("Penumbra", &penumbra, 0.01f, 0.01f, XM_PIDIV2))
 		light.setPenumbraAngle(penumbra);
 
+	// Shadows
 	auto shadows = light.castsShadows();
 	if (ImGui::Checkbox("Shadows", &shadows))
 		light.setShadows(shadows);
