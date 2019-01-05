@@ -18,7 +18,7 @@ void TestScene::initialize(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// User Interface
-	addSystem<UserInterface>(device, resource_mgr);
+	addSystem<UserInterface>();
 
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
 	addSystem<CameraMotorSystem>();

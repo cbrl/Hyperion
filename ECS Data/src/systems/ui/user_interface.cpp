@@ -635,13 +635,77 @@ void DrawComponentNode(gsl::czstring<> text, T& item) {
 }
 
 
+// Draw the menu in the entity details window
+void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr) {
+
+	if (ImGui::BeginMenu("Add Component")) {
+
+		if (ImGui::MenuItem("Orthographic Camera")) {
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<OrthographicCamera>(device, vec2_u32{480, 480});
+		}
+		if (ImGui::MenuItem("Perspective Camera")) {
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<PerspectiveCamera>(device, vec2_u32{480, 480});
+		}
+		if (ImGui::MenuItem("Directional Light")) {
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<DirectionalLight>();
+		}
+		if (ImGui::MenuItem("Point Light")) {
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<PointLight>();
+		}
+		if (ImGui::MenuItem("Spot Light")) {
+			if (auto entity = g_scene_tree.getSelected())
+				entity->addComponent<SpotLight>();
+		}
+
+		if (ImGui::BeginMenu("Model")) {
+			if (ImGui::MenuItem("From file")) {
+				if (auto file = OpenFilePicker(); fs::exists(file)) {
+					ModelConfig<VertexPositionNormalTexture> config;
+					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
+					if (auto entity = g_scene_tree.getSelected())
+						entity->addComponent<ModelRoot>(device, bp);
+				}
+				else
+					Logger::log(LogLevel::err, "Failed to open file dialog");
+			}
+
+			if (ImGui::BeginMenu("Geometric Shape")) {
+				NewModelMenu::DoMenu();
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenu(); //Model
+		}
+
+		ImGui::EndMenu(); //Add Component
+	}
+}
+
+
 // Draw the details panel for the specified entity
 void DrawEntityDetails(Entity& entity, Engine& engine) {
-
-	ImGui::Begin("Properties");
-
-	auto& scene = engine.getScene();
+	
+	auto& device       = engine.getRenderingMgr().getDevice();
+	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
+	auto& scene        = engine.getScene();
 	const auto& entities = scene.getEntities();
+
+	//----------------------------------------------------------------------------------
+	// Begin Window
+	//----------------------------------------------------------------------------------
+	if (!ImGui::Begin("Properties"))
+		return;
+
+	// Draw Menu
+	if (ImGui::BeginMenuBar()) {
+		DrawAddComponentMenu(device, resource_mgr);
+		ImGui::EndMenuBar();
+	}
+
 
 	//----------------------------------------------------------------------------------
 	// Name/Details
@@ -885,62 +949,12 @@ void DrawTree(Engine& engine) {
 
 //----------------------------------------------------------------------------------
 //
-//   Scene Menu
+//   Scene Tree Menu
 //
 //----------------------------------------------------------------------------------
 
-void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr) {
-	
-	if (ImGui::BeginMenu("Add Component")) {
 
-		if (ImGui::MenuItem("Orthographic Camera")) {
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<OrthographicCamera>(device, vec2_u32{ 480, 480 });
-		}
-		if (ImGui::MenuItem("Perspective Camera")) {
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<PerspectiveCamera>(device, vec2_u32{ 480, 480 });
-		}
-		if (ImGui::MenuItem("Directional Light")) {
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<DirectionalLight>();
-		}
-		if (ImGui::MenuItem("Point Light")) {
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<PointLight>();
-		}
-		if (ImGui::MenuItem("Spot Light")) {
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<SpotLight>();
-		}
-
-		if (ImGui::BeginMenu("Model")) {
-			if (ImGui::MenuItem("From file")) {
-				if (auto file = OpenFilePicker(); fs::exists(file)) {
-					ModelConfig<VertexPositionNormalTexture> config;
-					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
-					if (auto entity = g_scene_tree.getSelected())
-						entity->addComponent<ModelRoot>(device, bp);
-				}
-				else Logger::log(LogLevel::err, "Failed to open file dialog");
-			}
-
-			if (ImGui::BeginMenu("Geometric Shape")) {
-				NewModelMenu::DoMenu();
-				ImGui::EndMenu();
-			}
-
-			ImGui::EndMenu(); //Model
-		}
-
-		ImGui::EndMenu(); //Add Component
-	}
-}
-
-
-void DrawEntityMenu(ID3D11Device& device,
-                    ResourceMgr& resource_mgr,
-                    Scene& scene) {
+void DrawEntityMenu(Scene& scene) {
 
 	if (ImGui::BeginMenu("Entity")) {
 
@@ -949,7 +963,6 @@ void DrawEntityMenu(ID3D11Device& device,
 		}
 		
 		if (ImGui::BeginMenu("Selected", g_scene_tree.getSelected().valid())) {
-			DrawAddComponentMenu(device, resource_mgr);
 			ImGui::Separator();
 			if (ImGui::MenuItem("Delete")) {
 				scene.removeEntity(g_scene_tree.getSelected()->getPtr());
@@ -963,12 +976,10 @@ void DrawEntityMenu(ID3D11Device& device,
 }
 
 
-void DrawSceneMenu(ID3D11Device& device,
-                   ResourceMgr& resource_mgr,
-                   Scene& scene) {
+void DrawSceneMenu(Scene& scene) {
 
 	if (ImGui::BeginMenuBar()) {
-		DrawEntityMenu(device, resource_mgr, scene);
+		DrawEntityMenu(scene);
 		ImGui::EndMenuBar();
 	}
 }
@@ -1139,19 +1150,15 @@ void DrawMetrics(Engine& engine) {
 //
 //----------------------------------------------------------------------------------
 
-UserInterface::UserInterface(ID3D11Device& device, ResourceMgr& resource_mgr)
-    : device(device)
-    , resource_mgr(resource_mgr) {
-
-}
-
 
 void UserInterface::update(Engine& engine)  {
 
 	//ImGui::ShowDemoWindow();
 	ImGuizmo::BeginFrame();  //technicall should be called right after ImGui_XXXX_NewFrame();
-
-	auto& scene = engine.getScene();
+	
+	auto& device       = engine.getRenderingMgr().getDevice();
+	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
+	auto& scene        = engine.getScene();
 
 	// Setup window layout
 	ImGui::SetNextWindowSize(ImVec2(275, 600), ImGuiCond_FirstUseEver);
@@ -1159,7 +1166,7 @@ void UserInterface::update(Engine& engine)  {
 	ImGui::End();
 
 	ImGui::SetNextWindowSize(ImVec2(375, 425), ImGuiCond_FirstUseEver);
-	ImGui::Begin("Properties");
+	ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_MenuBar);
 	ImGui::End();
 
 	// Draw the system menu
@@ -1177,7 +1184,7 @@ void UserInterface::update(Engine& engine)  {
 	// Draw scene window contents
 	if (ImGui::Begin("Scene")) {
 		// Draw menu
-		DrawSceneMenu(device, resource_mgr, scene);
+		DrawSceneMenu(scene);
 
 		// Process model popup
 		NewModelMenu::ProcNewModelPopup(device, resource_mgr, g_scene_tree.getSelected());
