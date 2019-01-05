@@ -149,6 +149,8 @@
     <ClInclude Include="src\systems\motor\camera_motor_system.h" />
     <ClInclude Include="src\systems\motor\mouse_rotation_system.h" />
     <ClInclude Include="src\systems\systems.h" />
+    <ClInclude Include="src\systems\ui\new_model_menu.h" />
+    <ClInclude Include="src\systems\ui\selectable_tree.h" />
     <ClInclude Include="src\systems\ui\user_interface.h" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +158,7 @@
     <ClCompile Include="src\systems\motor\axis_rotation_system.cpp" />
     <ClCompile Include="src\systems\motor\camera_motor_system.cpp" />
     <ClCompile Include="src\systems\motor\mouse_rotation_system.cpp" />
+    <ClCompile Include="src\systems\ui\new_model_menu.cpp" />
     <ClCompile Include="src\systems\ui\user_interface.cpp" />
   </ItemGroup>
   <ItemGroup>

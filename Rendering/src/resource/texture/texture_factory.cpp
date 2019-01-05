@@ -42,8 +42,8 @@ std::shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
 	init_data.SysMemPitch = static_cast<UINT>(sizeof(u32) * std::size(tex_data[0]));
 
 	D3D11_TEXTURE2D_DESC desc = {};
-	desc.Width            = std::size(tex_data[0]);
-	desc.Height           = std::size(tex_data);
+	desc.Width            = static_cast<UINT>(std::size(tex_data[0]));
+	desc.Height           = static_cast<UINT>(std::size(tex_data));
 	desc.MipLevels        = 1;
 	desc.ArraySize        = 1;
 	desc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;

@@ -47,7 +47,11 @@ void CreateErrorTexture(ID3D11Device& device, ID3D11ShaderResourceView** srv_out
 	}
 
 	ComPtr<ID3D11Texture2D> texture;
-	D3D11_SUBRESOURCE_DATA init_data = { g_error_tex_data, sizeof(u32) * std::size(g_error_tex_data), 0 };
+
+	D3D11_SUBRESOURCE_DATA init_data = {};
+	init_data.pSysMem          = g_error_tex_data;
+	init_data.SysMemPitch      = static_cast<UINT>(sizeof(u32) * std::size(g_error_tex_data));
+	init_data.SysMemSlicePitch = 0;
 
 	D3D11_TEXTURE2D_DESC desc = {};
 	desc.Width            = 128;

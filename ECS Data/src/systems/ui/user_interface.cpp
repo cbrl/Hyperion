@@ -1,113 +1,21 @@
 #include "user_interface.h"
+#include "new_model_menu.h"
+#include "selectable_tree.h"
+
 #include "engine/engine.h"
 
 #include "entities/entities.h"
 #include "components/components.h"
 
-#include "imgui.h"
-#include "misc/stl/imgui_stl.h"
-#include "imgui_addons/ImGuizmo/ImGuizmo.h"
-#include "imgui_addons/metrics_gui/metrics_gui/metrics_gui.h"
-
 #include "resource/resource_mgr.h"
-#include "resource/model/blueprint_factory.h"
 #include "scene/scene.h"
 #include "log/log.h"
 #include "os/windows/win_utils.h"
 
-
-template<typename T>
-struct SelectableTree final {
-public:
-	template<typename... ArgsT>
-	bool newNode(T* ptr, gsl::czstring<> fmt, ArgsT... args) {
-		const auto flags = ImGuiTreeNodeFlags_OpenOnArrow
-		                   | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
-		return node(ptr, flags, fmt, std::forward<ArgsT>(args)...);
-	}
-
-	template <typename... ArgsT>
-	bool newLeafNode(T* ptr, gsl::czstring<> fmt, ArgsT... args) {
-		const auto flags = ImGuiTreeNodeFlags_Leaf
-		                   | ImGuiTreeNodeFlags_Bullet
-		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
-		return node(ptr, flags, fmt, std::forward<ArgsT>(args)...);
-	}
-
-	void endNode() {
-		ImGui::TreePop();
-	}
-
-	T* getSelected() const noexcept {
-		return selected;
-	}
-
-	bool isSelected(T* ptr) const noexcept {
-		return selected == ptr;
-	}
-
-private:
-	template <typename... ArgsT>
-	bool node(T* ptr, ImGuiTreeNodeFlags flags, gsl::czstring<> fmt, ArgsT... args) {
-		const bool is_open = ImGui::TreeNodeEx(ptr, flags, fmt, std::forward<ArgsT>(args)...);
-		if (ImGui::IsItemClicked()) {
-			selected = ptr;
-		}
-		return is_open;
-	}
-
-
-private:
-	T* selected = nullptr;
-};
-
-
-template <>
-struct SelectableTree<EntityPtr> final {
-public:
-	template <typename... ArgsT>
-	bool newNode(const EntityPtr& ptr, gsl::czstring<> fmt, ArgsT... args) {
-		const auto flags = ImGuiTreeNodeFlags_OpenOnArrow
-		                   | ImGuiTreeNodeFlags_OpenOnDoubleClick
-		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
-		return node(ptr, flags, fmt, std::forward<ArgsT>(args)...);
-	}
-
-	template <typename... ArgsT>
-	bool newLeafNode(const EntityPtr& ptr, gsl::czstring<> fmt, ArgsT... args) {
-		const auto flags = ImGuiTreeNodeFlags_Leaf
-		                   | ImGuiTreeNodeFlags_Bullet
-		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
-		return node(ptr, flags, fmt, std::forward<ArgsT>(args)...);
-	}
-
-	void endNode() {
-		ImGui::TreePop();
-	}
-
-	EntityPtr getSelected() const noexcept {
-		return selected;
-	}
-
-	bool isSelected(const EntityPtr& ptr) const noexcept {
-		return selected == ptr;
-	}
-
-private:
-	template <typename... ArgsT>
-	bool node(const EntityPtr& ptr, ImGuiTreeNodeFlags flags, gsl::czstring<> fmt, ArgsT... args) {
-		const bool is_open = ImGui::TreeNodeEx(ptr.get(), flags, fmt, std::forward<ArgsT>(args)...);
-		if (ImGui::IsItemClicked()) {
-			selected = ptr;
-		}
-		return is_open;
-	}
-
-
-private:
-	EntityPtr selected = {};
-};
+#include "imgui.h"
+#include "misc/stl/imgui_stl.h"
+#include "imgui_addons/ImGuizmo/ImGuizmo.h"
+#include "imgui_addons/metrics_gui/metrics_gui/metrics_gui.h"
 
 
 //----------------------------------------------------------------------------------
@@ -115,24 +23,6 @@ private:
 //----------------------------------------------------------------------------------
 SelectableTree<EntityPtr> g_scene_tree;
 
-
-//----------------------------------------------------------------------------------
-// Enum for "Add Model" popups
-//----------------------------------------------------------------------------------
-enum class ModelType {
-	None,
-	Cube,
-	Box,
-	Sphere,
-	GeoSphere,
-	Cylinder,
-	Torus,
-	Cone,
-	Tetrahedron,
-	Octahedron,
-	Dodecahedron,
-	Icosahedron
-};
 
 
 //----------------------------------------------------------------------------------
@@ -995,404 +885,11 @@ void DrawTree(Engine& engine) {
 
 //----------------------------------------------------------------------------------
 //
-//   "Add Model" Popup Windows
-//
-//----------------------------------------------------------------------------------
-
-void ProcNewModelPopups(ID3D11Device& device,
-                        Scene& scene,
-                        ResourceMgr& resource_mgr,
-                        ModelType type) {
-
-	switch (type) {
-		case ModelType::Cube:
-			ImGui::OpenPopup("New Cube");
-			break;
-		case ModelType::Box:
-			ImGui::OpenPopup("New Box");
-			break;
-		case ModelType::Sphere:
-			ImGui::OpenPopup("New Sphere");
-			break;
-		case ModelType::GeoSphere:
-			ImGui::OpenPopup("New GeoSphere");
-			break;
-		case ModelType::Cylinder:
-			ImGui::OpenPopup("New Cylinder");
-			break;
-		case ModelType::Torus:
-			ImGui::OpenPopup("New Torus");
-			break;
-		case ModelType::Cone:
-			ImGui::OpenPopup("New Cone");
-			break;
-		case ModelType::Tetrahedron:
-			ImGui::OpenPopup("New Tetrahedron");
-			break;
-		case ModelType::Octahedron:
-			ImGui::OpenPopup("New Octahedron");
-			break;
-		case ModelType::Dodecahedron:
-			ImGui::OpenPopup("New Dodecahedron");
-			break;
-		case ModelType::Icosahedron:
-			ImGui::OpenPopup("New Icosahedron");
-			break;
-		default:
-			break;
-	}
-
-
-	if (ImGui::BeginPopupModal("New Cube", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size         = 1.0f;
-		static bool flip_winding = false;
-
-		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		if (ImGui::Button("Create")) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			auto bp = BlueprintFactory::CreateCube(resource_mgr, config, size);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New Box", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static vec3_f32 size         = { 1.0f, 1.0f, 1.0f };
-		static bool     flip_winding = false;
-
-		ImGui::InputFloat3("Size", size.data());
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		if (ImGui::Button("Create")) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			auto bp = BlueprintFactory::CreateBox(resource_mgr, config, size);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New Sphere", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32    diameter     = 1.0f;
-		static size_t tessellation = 16;
-		static bool   flip_winding = false;
-
-		ImGui::InputFloat("Diameter", &diameter);
-		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		ImGui::Button("Create");
-
-		if (ImGui::IsItemHovered() && tessellation >= 64) {
-			ImGui::BeginTooltip();
-			ImGui::Text("WARNING: Tessellation amount is very high");
-			ImGui::EndTooltip();
-		}
-
-		if (ImGui::IsItemClicked()) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateSphere(resource_mgr, config, diameter, tessellation);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New GeoSphere", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32    diameter     = 1.0f;
-		static size_t tessellation = 3;
-		static bool   flip_winding = false;
-
-		ImGui::InputFloat("Diameter", &diameter);
-		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		ImGui::Button("Create");
-
-		if (ImGui::IsItemHovered() && tessellation >= 6) {
-			ImGui::BeginTooltip();
-			ImGui::Text("WARNING: Tessellation amount is extremely high");
-			ImGui::EndTooltip();
-		}
-
-		if (ImGui::IsItemClicked()) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateGeoSphere(resource_mgr, config, diameter, tessellation);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New Cylinder", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32    height       = 1.0f;
-		static f32    diameter     = 1.0f;
-		static size_t tessellation = 32;
-		static bool   flip_winding = false;
-
-		ImGui::InputFloat("Height", &height);
-		ImGui::InputFloat("Diameter", &diameter);
-		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		ImGui::Button("Create");
-
-		if (ImGui::IsItemHovered() && tessellation >= 96) {
-			ImGui::BeginTooltip();
-			ImGui::Text("WARNING: Tessellation amount is very high");
-			ImGui::EndTooltip();
-		}
-
-		if (ImGui::IsItemClicked()) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateCylinder(resource_mgr, config, diameter, height, tessellation);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New Cone", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32    height       = 1.0f;
-		static f32    diameter     = 1.0f;
-		static size_t tessellation = 32;
-		static bool   flip_winding = false;
-
-		ImGui::InputFloat("Height", &height);
-		ImGui::InputFloat("Diameter", &diameter);
-		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		ImGui::Button("Create");
-
-		if (ImGui::IsItemHovered() && tessellation >= 96) {
-			ImGui::BeginTooltip();
-			ImGui::Text("WARNING: Tessellation amount is very high");
-			ImGui::EndTooltip();
-		}
-
-		if (ImGui::IsItemClicked()) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateCone(resource_mgr, config, diameter, height, tessellation);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New Torus", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32    thickness    = 0.333f;
-		static f32    diameter     = 1.0f;
-		static size_t tessellation = 32;
-		static bool   flip_winding = false;
-
-		ImGui::InputFloat("Thickness", &thickness);
-		ImGui::InputFloat("Diameter", &diameter);
-		ImGui::InputInt("Tessellation", (int*)&tessellation);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		ImGui::Button("Create");
-
-		if (ImGui::IsItemHovered() && tessellation >= 96) {
-			ImGui::BeginTooltip();
-			ImGui::Text("WARNING: Tessellation amount is very high");
-			ImGui::EndTooltip();
-		}
-
-		if (ImGui::IsItemClicked()) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			if (tessellation < 3) tessellation = 3;
-			auto bp = BlueprintFactory::CreateTorus(resource_mgr, config, diameter, thickness, tessellation);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New Tetrahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size         = 1.0f;
-		static bool flip_winding = false;
-
-		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		if (ImGui::Button("Create")) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			auto bp = BlueprintFactory::CreateTetrahedron(resource_mgr, config, size);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New Octahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size         = 1.0f;
-		static bool flip_winding = false;
-
-		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		if (ImGui::Button("Create")) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			auto bp = BlueprintFactory::CreateOctahedron(resource_mgr, config, size);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New Dodecahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size         = 1.0f;
-		static bool flip_winding = false;
-
-		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		if (ImGui::Button("Create")) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			auto bp = BlueprintFactory::CreateDodecahedron(resource_mgr, config, size);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-
-	if (ImGui::BeginPopupModal("New Icosahedron", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static f32  size         = 1.0f;
-		static bool flip_winding = false;
-
-		ImGui::InputFloat("Size", &size);
-		ImGui::Checkbox("Flip winding", &flip_winding);
-
-		if (ImGui::Button("Create")) {
-			ModelConfig<VertexPositionNormalTexture> config;
-			config.flip_winding = flip_winding;
-			auto bp = BlueprintFactory::CreateIcosahedron(resource_mgr, config, size);
-			if (auto entity = g_scene_tree.getSelected())
-				entity->addComponent<ModelRoot>(device, bp);
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Cancel")) {
-			ImGui::CloseCurrentPopup();
-		}
-
-		ImGui::EndPopup();
-	}
-}
-
-
-
-
-//----------------------------------------------------------------------------------
-//
 //   Scene Menu
 //
 //----------------------------------------------------------------------------------
 
-void DrawAddComponentMenu(ID3D11Device& device,
-                          ResourceMgr& resource_mgr,
-                          Scene& scene,
-                          ModelType& add_model_popup) {
+void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr) {
 	
 	if (ImGui::BeginMenu("Add Component")) {
 
@@ -1429,19 +926,8 @@ void DrawAddComponentMenu(ID3D11Device& device,
 			}
 
 			if (ImGui::BeginMenu("Geometric Shape")) {
-				if (ImGui::MenuItem("Cube"))         add_model_popup = ModelType::Cube;
-				if (ImGui::MenuItem("Box"))          add_model_popup = ModelType::Box;
-				if (ImGui::MenuItem("Sphere"))       add_model_popup = ModelType::Sphere;
-				if (ImGui::MenuItem("GeoSphere"))    add_model_popup = ModelType::GeoSphere;
-				if (ImGui::MenuItem("Cylinder"))     add_model_popup = ModelType::Cylinder;
-				if (ImGui::MenuItem("Cone"))         add_model_popup = ModelType::Cone;
-				if (ImGui::MenuItem("Torus"))        add_model_popup = ModelType::Torus;
-				if (ImGui::MenuItem("Tetrahedron"))  add_model_popup = ModelType::Tetrahedron;
-				if (ImGui::MenuItem("Octahedron"))   add_model_popup = ModelType::Octahedron;
-				if (ImGui::MenuItem("Dodecahedron")) add_model_popup = ModelType::Dodecahedron;
-				if (ImGui::MenuItem("Icosahedron"))  add_model_popup = ModelType::Icosahedron;
-
-				ImGui::EndMenu(); //Geometric Shape
+				NewModelMenu::DoMenu();
+				ImGui::EndMenu();
 			}
 
 			ImGui::EndMenu(); //Model
@@ -1454,8 +940,7 @@ void DrawAddComponentMenu(ID3D11Device& device,
 
 void DrawEntityMenu(ID3D11Device& device,
                     ResourceMgr& resource_mgr,
-                    Scene& scene,
-                    ModelType& add_model_popup) {
+                    Scene& scene) {
 
 	if (ImGui::BeginMenu("Entity")) {
 
@@ -1464,7 +949,7 @@ void DrawEntityMenu(ID3D11Device& device,
 		}
 		
 		if (ImGui::BeginMenu("Selected", g_scene_tree.getSelected().valid())) {
-			DrawAddComponentMenu(device, resource_mgr, scene , add_model_popup);
+			DrawAddComponentMenu(device, resource_mgr);
 			ImGui::Separator();
 			if (ImGui::MenuItem("Delete")) {
 				scene.removeEntity(g_scene_tree.getSelected()->getPtr());
@@ -1480,11 +965,10 @@ void DrawEntityMenu(ID3D11Device& device,
 
 void DrawSceneMenu(ID3D11Device& device,
                    ResourceMgr& resource_mgr,
-                   Scene& scene,
-                   ModelType& add_model_popup) {
+                   Scene& scene) {
 
 	if (ImGui::BeginMenuBar()) {
-		DrawEntityMenu(device, resource_mgr, scene, add_model_popup);
+		DrawEntityMenu(device, resource_mgr, scene);
 		ImGui::EndMenuBar();
 	}
 }
@@ -1692,14 +1176,11 @@ void UserInterface::update(Engine& engine)  {
 
 	// Draw scene window contents
 	if (ImGui::Begin("Scene")) {
-
-		ModelType add_model_popup = ModelType::None;
-
 		// Draw menu
-		DrawSceneMenu(device, resource_mgr, scene, add_model_popup);
+		DrawSceneMenu(device, resource_mgr, scene);
 
 		// Process model popup
-		ProcNewModelPopups(device, scene, resource_mgr, add_model_popup);
+		NewModelMenu::ProcNewModelPopup(device, resource_mgr, g_scene_tree.getSelected());
 
 		// Draw tree
 		DrawTree(engine);
