@@ -212,8 +212,6 @@ private:
 
 template<typename T>
 class CameraBase : public Component<T> {
-	friend class CameraSystem;
-
 protected:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -226,11 +224,7 @@ protected:
 		viewport.setDepth(0.0f, 1.0f);
 	}
 
-
 public:
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
 
 	CameraBase(const CameraBase& camera) = delete;
 	CameraBase(CameraBase&& camera) noexcept = default;

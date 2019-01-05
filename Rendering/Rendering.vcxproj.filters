@@ -463,9 +463,6 @@
     <None Include="src\geometry\shapes\shapes.tpp">
       <Filter>Header Files\geometry\shapes</Filter>
     </None>
-    <None Include="src\renderer\renderer.tpp">
-      <Filter>Header Files\renderer</Filter>
-    </None>
     <None Include="src\resource\mesh\mesh.tpp">
       <Filter>Header Files\resource\mesh</Filter>
     </None>
