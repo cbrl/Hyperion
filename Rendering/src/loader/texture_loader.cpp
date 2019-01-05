@@ -4,7 +4,7 @@
 #include "log/log.h"
 
 
-u32 error_tex_data[128][128] = {{}};
+u32 g_error_tex_data[128][128] = {{}};
 
 // Create data for a checkerboard pattern texture
 void CreateErrorTextureData() {
@@ -12,8 +12,8 @@ void CreateErrorTextureData() {
 	constexpr u32 color  = 0xFF0000FF;
 	constexpr u32 color2 = 0xFF000000;
 
-	constexpr auto x_size = std::size(error_tex_data[0]);
-	constexpr auto y_size = std::size(error_tex_data);
+	constexpr auto x_size = std::size(g_error_tex_data[0]);
+	constexpr auto y_size = std::size(g_error_tex_data);
 
 	constexpr auto x_half_size = x_size / 2;
 	constexpr auto y_half_size = y_size / 2;
@@ -21,20 +21,20 @@ void CreateErrorTextureData() {
 	for (size_t i = 0; i < y_half_size; ++i) {
 
 		for (size_t j = 0; j < x_half_size; ++j) {
-			error_tex_data[i][j] = color;
+			g_error_tex_data[i][j] = color;
 		}
 		for (size_t j = x_half_size; j < x_size; ++j) {
-			error_tex_data[i][j] = color2;
+			g_error_tex_data[i][j] = color2;
 		}
 	}
 
 	for (size_t i = y_half_size; i < y_size; ++i) {
 
 		for (size_t j = 0; j < x_half_size; ++j) {
-			error_tex_data[i][j] = color2;
+			g_error_tex_data[i][j] = color2;
 		}
 		for (size_t j = x_half_size; j < x_size; ++j) {
-			error_tex_data[i][j] = color;
+			g_error_tex_data[i][j] = color;
 		}
 	}
 }
@@ -42,30 +42,25 @@ void CreateErrorTextureData() {
 
 void CreateErrorTexture(ID3D11Device& device, ID3D11ShaderResourceView** srv_out) {
 
-	static bool error_tex_initialized = false;
-	if (!error_tex_initialized) {
+	for (static bool once = true; once; once = false) {
 		CreateErrorTextureData();
-		error_tex_initialized = true;
 	}
 
 	ComPtr<ID3D11Texture2D> texture;
+	D3D11_SUBRESOURCE_DATA init_data = { g_error_tex_data, sizeof(u32) * std::size(g_error_tex_data), 0 };
 
-	{
-		D3D11_SUBRESOURCE_DATA init_data = { error_tex_data, sizeof(u32) * 128, 0 };
+	D3D11_TEXTURE2D_DESC desc = {};
+	desc.Width            = 128;
+	desc.Height           = 128;
+	desc.MipLevels        = 1;
+	desc.ArraySize        = 1;
+	desc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.SampleDesc.Count = 1;
+	desc.Usage            = D3D11_USAGE_IMMUTABLE;
+	desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
 
-		D3D11_TEXTURE2D_DESC desc = {};
-		desc.Width            = 128;
-		desc.Height           = 128;
-		desc.MipLevels        = 1;
-		desc.ArraySize        = 1;
-		desc.Format           = DXGI_FORMAT_R8G8B8A8_UNORM;
-		desc.SampleDesc.Count = 1;
-		desc.Usage            = D3D11_USAGE_IMMUTABLE;
-		desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
-
-		ThrowIfFailed(device.CreateTexture2D(&desc, &init_data, texture.GetAddressOf()),
-		              "Failed to create Texture2D");
-	}
+	ThrowIfFailed(device.CreateTexture2D(&desc, &init_data, texture.GetAddressOf()),
+		            "Failed to create Texture2D");
 
 	ThrowIfFailed(device.CreateShaderResourceView(texture.Get(), nullptr, srv_out),
 	              "Failed to create SRV");

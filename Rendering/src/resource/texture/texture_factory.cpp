@@ -7,9 +7,8 @@ namespace TextureFactory {
 std::shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
 
 	static u32 tex_data[128][128] = {{}};
-	static bool initialized = false;
 
-	if (!initialized) {
+	for (static bool once = true; once; once = false) {
 		constexpr u32 color  = 0xFF808080; //ABGR
 		constexpr u32 color2 = 0xFFA0A0A0;
 
@@ -36,8 +35,6 @@ std::shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
 				tex_data[i][j] = color;
 			}
 		}
-
-		initialized = true;
 	}
 
 	D3D11_SUBRESOURCE_DATA init_data = {};
