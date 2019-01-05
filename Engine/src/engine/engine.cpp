@@ -170,10 +170,6 @@ void Engine::init(std::wstring title,
 	// Timer
 	timer = std::make_unique<HighResTimer>();
 
-	// FPS Counter
-	fps_counter = std::make_unique<FPS>();
-	fps_counter->setWaitTime(250ms);
-
 	// Rendering Manager
 	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getHandle()), std::move(display_config), std::move(rendering_config));
 
@@ -246,7 +242,6 @@ void Engine::updateSystem() {
 
 	system_monitor->tick();
 	timer->tick();
-	fps_counter->tick();
 	input->tick();
 }
 

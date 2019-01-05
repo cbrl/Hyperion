@@ -5,7 +5,6 @@
 #include "log/log.h"
 #include "sysmon/system_monitor.h"
 #include "timer/timer.h"
-#include "fps/fps.h"
 #include "input.h"
 #include "rendering_mgr.h"
 
@@ -170,21 +169,6 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - FPS
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	FPS& getFPSCounter() {
-		return *fps_counter;
-	}
-
-	[[nodiscard]]
-	const FPS& getFPSCounter() const {
-		return *fps_counter;
-	}
-
-
-	//----------------------------------------------------------------------------------
 	// Member Functions - System Monitor
 	//----------------------------------------------------------------------------------
 
@@ -245,7 +229,6 @@ private:
 	std::unique_ptr<Window> window;
 	std::unique_ptr<SystemMonitor> system_monitor;
 	std::unique_ptr<HighResTimer> timer;
-	std::unique_ptr<FPS> fps_counter;
 	std::unique_ptr<Input> input;
 	std::unique_ptr<RenderingMgr> rendering_mgr;
 	std::unique_ptr<Scene> scene;

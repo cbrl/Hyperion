@@ -45,13 +45,13 @@ public:
 	// Update the timer
 	void tick();
 
-	// Get the time elapsed since the last update in the specified units (default milliseconds)
-	template<typename PeriodT = std::milli>
+	// Get the time elapsed since the last update in the specified units (default: seconds)
+	template<typename PeriodT = std::ratio<1>>
 	[[nodiscard]]
 	f64 deltaTime() const;
 
-	// Get the time elapsed since the timer was created or reset in the specified units (default milliseconds)
-	template<typename PeriodT = std::milli>
+	// Get the time elapsed since the timer was created or reset in the specified units (default: seconds)
+	template<typename PeriodT = std::ratio<1>>
 	[[nodiscard]]
 	f64 totalTime() const;
 

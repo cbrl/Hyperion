@@ -21,6 +21,11 @@
   <ItemGroup>
     <ClInclude Include="src\imconfig.h" />
     <ClInclude Include="src\imgui.h" />
+    <ClInclude Include="src\imgui_addons\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.h" />
+    <ClInclude Include="src\imgui_addons\metrics_gui\portable\countof.h" />
+    <ClInclude Include="src\imgui_addons\metrics_gui\portable\perf_timer.h" />
+    <ClInclude Include="src\imgui_addons\metrics_gui\portable\snprintf.h" />
     <ClInclude Include="src\imgui_forwarder\imgui_message_forwarder.h" />
     <ClInclude Include="src\imgui_impl_dx11.h" />
     <ClInclude Include="src\imgui_impl_win32.h" />
@@ -32,6 +37,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imgui.cpp" />
+    <ClCompile Include="src\imgui_addons\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.cpp" />
+    <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\ProggyTiny.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />
     <ClCompile Include="src\imgui_draw.cpp" />
     <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.cpp" />

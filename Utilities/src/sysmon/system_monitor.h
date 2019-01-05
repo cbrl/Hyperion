@@ -163,7 +163,7 @@ public:
 		dt += wall_timer.deltaTime();
 
 		// Update every 500ms
-		if (dt >= 500) {
+		if (dt >= 0.5) {
 			cpu_mon.tick();
 			memory_mon.tick();
 			dt = 0.0;

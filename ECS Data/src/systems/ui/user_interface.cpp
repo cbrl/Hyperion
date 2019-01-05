@@ -6,6 +6,8 @@
 
 #include "imgui.h"
 #include "misc/stl/imgui_stl.h"
+#include "imgui_addons/ImGuizmo/ImGuizmo.h"
+#include "imgui_addons/metrics_gui/metrics_gui/metrics_gui.h"
 
 #include "resource/resource_mgr.h"
 #include "resource/model/blueprint_factory.h"
@@ -869,7 +871,7 @@ void DrawTree(Scene& scene) {
 
 	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
 
-		ImGui::Text("%s (Entities: %ull)", scene.getName().c_str(), scene.getEntities().size());
+		ImGui::Text("%s (Entities: %llu)", scene.getName().c_str(), scene.getEntities().size());
 		ImGui::Separator();
 
 		// Draw a tree node for each root entity
@@ -1510,42 +1512,37 @@ void DrawSystemMenu(Engine& engine) {
 
 //----------------------------------------------------------------------------------
 //
-//   FPS Display
+//   Metrics
 //
 //----------------------------------------------------------------------------------
-void DrawFPSDisplay(Engine& engine) {
+void DrawMetrics(Engine& engine) {
+
+	static MetricsGuiPlot frame_plot;
+	static MetricsGuiMetric frame_time("Frame Time", "s", MetricsGuiMetric::USE_SI_UNIT_PREFIX);
+	static MetricsGuiMetric fps("FPS", "", 0);
+
+	for (static bool once = true; once; once = false) {
+		frame_plot.mShowInlineGraphs = true;
+		frame_plot.mInlinePlotRowCount = 3;
+		frame_plot.mShowLegendAverage = true;
+		frame_plot.mShowLegendColor = false;
+		frame_plot.mShowLegendDesc = false;
+		frame_time.mSelected = true;
+		fps.mSelected = true;
+		frame_plot.AddMetric(&fps);
+		frame_plot.AddMetric(&frame_time);
+	}
 
 	const auto& timer = engine.getTimer();
-	const auto& fps_counter = engine.getFPSCounter();
 
-	static int vec_size = 30;
-	static std::vector<float> fps_history(vec_size, 0.0f);
+	frame_time.AddNewValue(static_cast<float>(timer.deltaTime()));
+	fps.AddNewValue(1.0f / timer.deltaTime());
+	frame_plot.UpdateAxes();
 
-	static f32 fps = 0.0f;
-	static f64 dt  = 0.0;
-
-	dt += timer.deltaTime();
-	if (dt >= fps_counter.getWaitTime().count()) {
-		fps = fps_counter.getFPS();
-		fps_history.push_back(fps);
-		dt = 0.0;
+	if (ImGui::Begin("Metrics")) {
+		frame_plot.DrawList();
+		ImGui::End();
 	}
-	if (fps_history.size() > vec_size) {
-		fps_history.erase(fps_history.begin(), fps_history.begin() + (fps_history.size() - vec_size));
-	}
-
-	if (ImGui::Begin("FPS", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		ImGui::BeginChild("FPS Histogram", {250, 50});
-		ImGui::PlotLines("", fps_history.data(), static_cast<int>(fps_history.size()), 0, nullptr, 0, FLT_MAX, {250, 50});
-		ImGui::EndChild();
-		ImGui::SameLine();
-
-		ImGui::BeginChild("FPS Stats", {150, 50});
-		ImGui::Text("FPS: %.2f", fps);
-		ImGui::Text("Frame Time: %.2fms", timer.deltaTime());
-		ImGui::EndChild();
-	}
-	ImGui::End();
 }
 
 
@@ -1588,8 +1585,8 @@ void UserInterface::update(Engine& engine)  {
 		DrawSystemMenu(engine);
 	}
 
-	// Draw the FPS display window
-	DrawFPSDisplay(engine);
+	// Draw the system metrics
+	DrawMetrics(engine);
 
 	// Draw scene window contents
 	if (ImGui::Begin("Scene")) {
