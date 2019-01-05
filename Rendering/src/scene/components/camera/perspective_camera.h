@@ -35,14 +35,10 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Change the field of view
-	void setFOV(f32 radians) {
-		fov = radians;
-	}
+	void setFOV(f32 radians) noexcept;
 
 	[[nodiscard]]
-	f32 getFOV() const {
-		return fov;
-	}
+	f32 getFOV() const noexcept;
 
 	// Update the projection matrix after changing depth/width/height/etc...
 	[[nodiscard]]

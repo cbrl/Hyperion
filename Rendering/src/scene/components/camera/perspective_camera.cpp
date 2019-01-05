@@ -8,6 +8,13 @@ PerspectiveCamera::PerspectiveCamera(ID3D11Device& device, vec2_u32 viewport_siz
 	viewport.setSize(viewport_size);
 }
 
+void PerspectiveCamera::setFOV(f32 radians) noexcept {
+	fov = radians;
+}
+
+f32 PerspectiveCamera::getFOV() const noexcept {
+	return fov;
+}
 
 XMMATRIX XM_CALLCONV PerspectiveCamera::getCameraToProjectionMatrix() const {
 

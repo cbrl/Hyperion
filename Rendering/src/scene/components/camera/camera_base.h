@@ -12,7 +12,7 @@
 enum class RenderMode : u8 {
 	Forward,
 	ForwardPlus,
-	Deferred
+	Deferred,
 };
 
 enum class LightingMode : u8 {
@@ -23,9 +23,9 @@ enum class LightingMode : u8 {
 };
 
 enum class RenderOptions : u8 {
-	None,
-	BoundingVolume,
-	Wireframe
+	None           = 1,
+	BoundingVolume = 1 << 1,
+	Wireframe      = 1 << 2,
 };
 
 
@@ -35,7 +35,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	CameraSettings()
+	CameraSettings() noexcept
 		: render_mode(RenderMode::Forward)
 		, lighting_mode(LightingMode::Default)
 		, render_options(static_cast<u8>(RenderOptions::None))
@@ -66,11 +66,12 @@ public:
 	// Member Functions - Render Mode
 	//----------------------------------------------------------------------------------
 
-	RenderMode getRenderMode() const {
+	[[nodiscard]]
+	RenderMode getRenderMode() const noexcept{
 		return render_mode;
 	}
 
-	void setRenderMode(RenderMode mode) {
+	void setRenderMode(RenderMode mode) noexcept {
 		render_mode = mode;
 	}
 
@@ -79,11 +80,12 @@ public:
 	// Member Functions - Lighting Mode
 	//----------------------------------------------------------------------------------
 
-	LightingMode getLightingMode() const {
+	[[nodiscard]]
+	LightingMode getLightingMode() const noexcept{
 		return lighting_mode;
 	}
 
-	void setLightingMode(LightingMode mode) {
+	void setLightingMode(LightingMode mode) noexcept {
 		lighting_mode = mode;
 	}
 
@@ -92,40 +94,62 @@ public:
 	// Member Functions - Render Options
 	//----------------------------------------------------------------------------------
 
-	bool hasRenderOption(RenderOptions opt) const {
+	bool hasRenderOption(RenderOptions opt) const noexcept {
 		return render_options & static_cast<u8>(opt);
 	}
 
-	void setRenderOption(RenderOptions opt) {
+	void setRenderOption(RenderOptions opt) noexcept {
 		render_options = static_cast<u8>(opt);
 	}
 
-	void toggleRenderOption(RenderOptions opt) {
+	void toggleRenderOption(RenderOptions opt) noexcept {
 		render_options ^= static_cast<u8>(opt);
 	}
 
-	void addRenderOption(RenderOptions opt) {
+	void addRenderOption(RenderOptions opt) noexcept {
 		render_options |= static_cast<u8>(opt);
 	}
 
-	void removeRenderOption(RenderOptions opt) {
+	void removeRenderOption(RenderOptions opt) noexcept {
 		render_options &= ~(static_cast<u8>(opt));
 	}
 
-	const vec4_f32& getBoundingVolumeColor() const {
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Bounding Volume Color
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	vec4_f32& getBoundingVolumeColor() noexcept{
 		return bounding_volume_color;
 	}
 
-	void setBoundingVolumeColor(const vec4_f32& color) {
-		bounding_volume_color = color;
+	[[nodiscard]]
+	const vec4_f32& getBoundingVolumeColor() const noexcept{
+		return bounding_volume_color;
 	}
 
-	const vec4_f32& getWireframeColor() const {
+	void setBoundingVolumeColor(vec4_f32 color) noexcept {
+		bounding_volume_color = std::move(color);
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Wireframe Color
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	vec4_f32& getWireframeColor() noexcept{
 		return wireframe_color;
 	}
 
-	void setWireframeColor(const vec4_f32& color) {
-		wireframe_color = color;
+	[[nodiscard]]
+	const vec4_f32& getWireframeColor() const noexcept{
+		return wireframe_color;
+	}
+
+	void setWireframeColor(vec4_f32 color) noexcept {
+		wireframe_color = std::move(color);
 	}
 
 
@@ -133,11 +157,13 @@ public:
 	// Member Functions - Fog
 	//----------------------------------------------------------------------------------
 
-	Fog& getFog() {
+	[[nodiscard]]
+	Fog& getFog() noexcept{
 		return fog;
 	}
 
-	const Fog& getFog() const {
+	[[nodiscard]]
+	const Fog& getFog() const noexcept {
 		return fog;
 	}
 
@@ -146,7 +172,8 @@ public:
 	// Member Functions - Skybox
 	//----------------------------------------------------------------------------------
 
-	const Texture* getSkybox() const {
+	[[nodiscard]]
+	const Texture* getSkybox() const noexcept {
 		return skybox.get();
 	}
 
@@ -261,12 +288,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	Viewport& getViewport() {
+	Viewport& getViewport() noexcept{
 		return viewport;
 	}
 
 	[[nodiscard]]
-	const Viewport& getViewport() const {
+	const Viewport& getViewport() const noexcept{
 		return viewport;
 	}
 
@@ -276,7 +303,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	const vec2_f32& getZDepth() const {
+	const vec2_f32& getZDepth() const noexcept{
 		return depth;
 	}
 
@@ -285,7 +312,7 @@ public:
 		depth[1] = std::max(z_far, z_near + 0.001f);
 	}
 
-	void setZDepth(vec2_f32 depth) {
+	void setZDepth(const vec2_f32& depth) {
 		setZDepth(depth[0], depth[1]);
 	}
 
@@ -312,12 +339,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	CameraSettings& getSettings() {
+	CameraSettings& getSettings() noexcept{
 		return settings;
 	}
 
 	[[nodiscard]]
-	const CameraSettings& getSettings() const {
+	const CameraSettings& getSettings() const noexcept{
 		return settings;
 	}
 
