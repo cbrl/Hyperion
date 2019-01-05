@@ -3,6 +3,11 @@
 #include "ecs.h"
 
 
+Entity::Entity()
+	: active(true) {
+}
+
+
 Entity::~Entity() {
 	if (hasParent() && parent_ptr.valid())
 		parent_ptr->removeChild(getPtr());
