@@ -34,7 +34,8 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	constexpr Vector() noexcept = default;
+	constexpr Vector() noexcept : std::array<T, N>{0} {}
+
 	constexpr Vector(const Vector&) noexcept = default;
 	constexpr Vector(Vector&&) noexcept = default;
 	
