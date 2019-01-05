@@ -955,7 +955,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	if (node_open) {
 		// Draw any child entities in this node
 		if (entity->hasChildren()) {
-			entity->forEachChildRecursive([](EntityPtr& child) {
+			entity->forEachChild([](EntityPtr& child) {
 				DrawEntityNode(child);
 			});
 		}

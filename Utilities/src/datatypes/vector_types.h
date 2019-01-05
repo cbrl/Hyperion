@@ -223,7 +223,7 @@ constexpr Vector<T, N> operator/(Vector<T, N> lhs, U rhs) noexcept {
 
 
 //----------------------------------------------------------------------------------
-// Signed Integer Vectors
+// i32 Vectors
 //----------------------------------------------------------------------------------
 
 using vec2_i32 = Vector<int32_t, 2>;
@@ -234,10 +234,19 @@ static_assert(sizeof(vec2_i32) == 8);
 static_assert(sizeof(vec3_i32) == 12);
 static_assert(sizeof(vec4_i32) == 16);
 
-static_assert(std::is_pod_v<vec2_i32>);
-static_assert(std::is_pod_v<vec3_i32>);
-static_assert(std::is_pod_v<vec4_i32>);
+static_assert(std::is_standard_layout_v<vec2_i32>);
+static_assert(std::is_standard_layout_v<vec3_i32>);
+static_assert(std::is_standard_layout_v<vec4_i32>);
 
+static_assert(std::is_trivially_copyable_v<vec2_i32>);
+static_assert(std::is_trivially_copyable_v<vec3_i32>);
+static_assert(std::is_trivially_copyable_v<vec4_i32>);
+
+
+
+//----------------------------------------------------------------------------------
+// i64 Vectors
+//----------------------------------------------------------------------------------
 
 using vec2_i64 = Vector<int64_t, 2>;
 using vec3_i64 = Vector<int64_t, 3>;
@@ -247,14 +256,18 @@ static_assert(sizeof(vec2_i64) == 16);
 static_assert(sizeof(vec3_i64) == 24);
 static_assert(sizeof(vec4_i64) == 32);
 
-static_assert(std::is_pod_v<vec2_i64>);
-static_assert(std::is_pod_v<vec3_i64>);
-static_assert(std::is_pod_v<vec4_i64>);
+static_assert(std::is_standard_layout_v<vec2_i64>);
+static_assert(std::is_standard_layout_v<vec3_i64>);
+static_assert(std::is_standard_layout_v<vec4_i64>);
+
+static_assert(std::is_trivially_copyable_v<vec2_i64>);
+static_assert(std::is_trivially_copyable_v<vec3_i64>);
+static_assert(std::is_trivially_copyable_v<vec4_i64>);
 
 
 
 //----------------------------------------------------------------------------------
-// Unsigned Integer Vectors
+// u32 Vectors
 //----------------------------------------------------------------------------------
 
 using vec2_u32 = Vector<uint32_t, 2>;
@@ -265,10 +278,19 @@ static_assert(sizeof(vec2_u32) == 8);
 static_assert(sizeof(vec3_u32) == 12);
 static_assert(sizeof(vec4_u32) == 16);
 
-static_assert(std::is_pod_v<vec2_u32>);
-static_assert(std::is_pod_v<vec3_u32>);
-static_assert(std::is_pod_v<vec4_u32>);
+static_assert(std::is_standard_layout_v<vec2_u32>);
+static_assert(std::is_standard_layout_v<vec3_u32>);
+static_assert(std::is_standard_layout_v<vec4_u32>);
 
+static_assert(std::is_trivially_copyable_v<vec2_u32>);
+static_assert(std::is_trivially_copyable_v<vec3_u32>);
+static_assert(std::is_trivially_copyable_v<vec4_u32>);
+
+
+
+//----------------------------------------------------------------------------------
+// u64 Vectors
+//----------------------------------------------------------------------------------
 
 using vec2_u64 = Vector<uint64_t, 2>;
 using vec3_u64 = Vector<uint64_t, 3>;
@@ -278,15 +300,18 @@ static_assert(sizeof(vec2_u64) == 16);
 static_assert(sizeof(vec3_u64) == 24);
 static_assert(sizeof(vec4_u64) == 32);
 
-static_assert(std::is_pod_v<vec2_u64>);
-static_assert(std::is_pod_v<vec3_u64>);
-static_assert(std::is_pod_v<vec4_u64>);
+static_assert(std::is_standard_layout_v<vec2_u64>);
+static_assert(std::is_standard_layout_v<vec3_u64>);
+static_assert(std::is_standard_layout_v<vec4_u64>);
 
+static_assert(std::is_trivially_copyable_v<vec2_u64>);
+static_assert(std::is_trivially_copyable_v<vec3_u64>);
+static_assert(std::is_trivially_copyable_v<vec4_u64>);
 
 
 
 //----------------------------------------------------------------------------------
-// Floating Point Vectors
+// f32 Vectors
 //----------------------------------------------------------------------------------
 
 using vec2_f32 = Vector<float, 2>;
@@ -297,10 +322,19 @@ static_assert(sizeof(vec2_f32) == 8);
 static_assert(sizeof(vec3_f32) == 12);
 static_assert(sizeof(vec4_f32) == 16);
 
-static_assert(std::is_pod_v<vec2_f32>);
-static_assert(std::is_pod_v<vec3_f32>);
-static_assert(std::is_pod_v<vec4_f32>);
+static_assert(std::is_standard_layout_v<vec2_f32>);
+static_assert(std::is_standard_layout_v<vec3_f32>);
+static_assert(std::is_standard_layout_v<vec4_f32>);
 
+static_assert(std::is_trivially_copyable_v<vec2_f32>);
+static_assert(std::is_trivially_copyable_v<vec3_f32>);
+static_assert(std::is_trivially_copyable_v<vec4_f32>);
+
+
+
+//----------------------------------------------------------------------------------
+// f64 Vectors
+//----------------------------------------------------------------------------------
 
 using vec2_f64 = Vector<double, 2>;
 using vec3_f64 = Vector<double, 3>;
@@ -310,6 +344,10 @@ static_assert(sizeof(vec2_f64) == 16);
 static_assert(sizeof(vec3_f64) == 24);
 static_assert(sizeof(vec4_f64) == 32);
 
-static_assert(std::is_pod_v<vec2_f64>);
-static_assert(std::is_pod_v<vec3_f64>);
-static_assert(std::is_pod_v<vec4_f64>);
+static_assert(std::is_standard_layout_v<vec2_f64>);
+static_assert(std::is_standard_layout_v<vec3_f64>);
+static_assert(std::is_standard_layout_v<vec4_f64>);
+
+static_assert(std::is_trivially_copyable_v<vec2_f64>);
+static_assert(std::is_trivially_copyable_v<vec3_f64>);
+static_assert(std::is_trivially_copyable_v<vec4_f64>);
