@@ -61,13 +61,13 @@ float D_GTR2_Anisotropic(float n_dot_h, float x_dot_h, float y_dot_h, float alph
 	const float inv_alpha_x = 1.0f / alpha_x;
 	const float inv_alpha_y = 1.0f / alpha_y;
 
-	//float denominator = (sqr(x_dot_h) * sqr(inv_alpha_x)) + (sqr(y_dot_h) * sqr(inv_alpha_y)) + sqr(n_dot_h);
+	//float denominator = sqr(x_dot_h * inv_alpha_x) + sqr(y_dot_h * inv_alpha_y) + sqr(n_dot_h);
 	//denominator = sqr(denominator);
 
 	const float3 terms       = float3(x_dot_h * inv_alpha_x, y_dot_h * inv_alpha_y, n_dot_h);
-	const float  denominator = dot(terms, terms);
+	const float  denominator = sqr(dot(terms, terms));
 
-	return (g_inv_pi * inv_alpha_x * inv_alpha_y) / denominator;
+	return (g_inv_pi * inv_alpha_x * inv_alpha_y) * (1.0f / denominator);
 }
 
 

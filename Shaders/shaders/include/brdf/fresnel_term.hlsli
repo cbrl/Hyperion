@@ -13,6 +13,7 @@
 //  n1, n2: The index of refraction for the two materials (unused in normal rendering)
 //----------------------------------------------------------------------------------
 
+
 /*
 float F_Schlick_Dielectric_Dielectric(float l_dot_h, float n1, float n2) {
 	// F = [(n1-n2)^2 + 4*n1*n2 * (1-l.h)^5] / (n1 + n2)^2
@@ -51,6 +52,11 @@ float F_Schlick_Dielectric_Conductor(float l_dot_h, float n1, float n2, float k)
 */
 
 
+
+//----------------------------------------------------------------------------------
+// None
+//----------------------------------------------------------------------------------
+
 float F_None(float l_dot_h, float f0) {
 	return f0;
 }
@@ -60,6 +66,11 @@ float3 F_None(float l_dot_h, float3 f0) {
 	return f0;
 }
 
+
+
+//----------------------------------------------------------------------------------
+// Schlick
+//----------------------------------------------------------------------------------
 
 float F_Schlick(float l_dot_h, float f0, float f90) {
 	// F(f0) = f0 + (f90-f0)(1-l.h)^5
@@ -96,6 +107,11 @@ float3 F_Schlick(float l_dot_h, float3 f0) {
 	return F_Schlick(l_dot_h, f0, 1.0f);
 }
 
+
+
+//----------------------------------------------------------------------------------
+// Cook-Torrance
+//----------------------------------------------------------------------------------
 
 float F_CookTorrance(float l_dot_h, float f0) {
 
