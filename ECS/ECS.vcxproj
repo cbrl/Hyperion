@@ -163,7 +163,7 @@
     <ClCompile Include="src\entity\entity.cpp" />
     <ClCompile Include="src\entity\entity_mgr.cpp" />
     <ClCompile Include="src\entity\entity_ptr.cpp" />
-    <ClCompile Include="src\event\event_handler.cpp" />
+    <ClCompile Include="src\event\event_mgr.cpp" />
     <ClCompile Include="src\event\event_participator.cpp" />
     <ClCompile Include="src\system\system_mgr.cpp" />
   </ItemGroup>

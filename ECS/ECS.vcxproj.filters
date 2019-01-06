@@ -91,7 +91,7 @@
     <ClCompile Include="src\event\event_participator.cpp">
       <Filter>Source Files\event</Filter>
     </ClCompile>
-    <ClCompile Include="src\event\event_handler.cpp">
+    <ClCompile Include="src\event\event_mgr.cpp">
       <Filter>Source Files\event</Filter>
     </ClCompile>
   </ItemGroup>
