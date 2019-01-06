@@ -710,8 +710,10 @@ void DrawEntityDetails(Entity& entity, Engine& engine) {
 	//----------------------------------------------------------------------------------
 	// Begin Window
 	//----------------------------------------------------------------------------------
-	if (!ImGui::Begin("Properties"))
+	if (!ImGui::Begin("Properties")) {
+		ImGui::End();
 		return;
+	}
 
 	// Draw Menu
 	if (ImGui::BeginMenuBar()) {
@@ -1150,8 +1152,8 @@ void DrawMetrics(Engine& engine) {
 
 	if (ImGui::Begin("Metrics")) {
 		frame_plot.DrawList();
-		ImGui::End();
 	}
+	ImGui::End();
 }
 
 
