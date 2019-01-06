@@ -57,9 +57,11 @@ ImGuiTreeNodeFlags MakeTreeLeafFlags(bool selected) {
 //----------------------------------------------------------------------------------
 
 template<typename T>
-void DrawComponentState(T& component, gsl::czstring<> name = "") {
-	ImGui::Text(name);
-	ImGui::SameLine();
+void DrawComponentState(T& component, gsl::czstring<> name = nullptr) {
+	if (name) {
+		ImGui::InputText("", const_cast<char*>(name), std::strlen(name), ImGuiInputTextFlags_ReadOnly);
+		ImGui::SameLine();
+	}
 	bool state = component.isActive();
 	if (ImGui::Checkbox("Active", &state))
 		component.setActive(state);
@@ -309,11 +311,11 @@ void DrawDetails(Text& text) {
 
 void DrawDetails(Model& model) {
 
-	DrawComponentState(model, model.getName().c_str());
+	ImGui::BeginChild("Model Details", {0, 0}, false, ImGuiWindowFlags_AlwaysAutoResize);
 
-	bool shadows = model.castsShadows();
-	if (ImGui::Checkbox("Casts Shadows", &shadows))
-		model.setShadows(shadows);
+	DrawComponentState(model);
+
+	ImGui::Separator();
 
 	// Material properties
 	auto& mat = model.getMaterial();
@@ -323,6 +325,14 @@ void DrawDetails(Model& model) {
 	ImGui::DragFloat("Metalness", &mat.params.metalness, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat("Roughness", &mat.params.roughness, 0.01f, 0.0f, 1.0f);
 	ImGui::ColorEdit3("Emissive", mat.params.emissive.data());
+
+	ImGui::Separator();
+
+	bool shadows = model.castsShadows();
+	if (ImGui::Checkbox("Casts Shadows", &shadows))
+		model.setShadows(shadows);
+
+	ImGui::EndChild();
 }
 
 void DrawDetails(ModelNode& node) {
@@ -338,12 +348,12 @@ void DrawDetails(ModelNode& node) {
 // Draw the model hierarchy
 void DrawModelNodes(ModelNode& node) {
 
-	if (ImGui::TreeNodeEx(&node, MakeTreeNodeFlags(), node.getName().c_str())) {
+	if (ImGui::TreeNodeEx(&node, MakeTreeNodeFlags(), "Node: %s", node.getName().c_str())) {
 
 		DrawDetails(node);
 
 		node.forEachModel([](Model& model) {
-			if (ImGui::TreeNodeEx(&model, MakeTreeNodeFlags(), model.getName().c_str())) {
+			if (ImGui::TreeNodeEx(&model, MakeTreeNodeFlags(), "Model: %s", model.getName().c_str())) {
 				DrawDetails(model);
 				ImGui::TreePop();
 			}
@@ -939,7 +949,7 @@ void DrawTree(Engine& engine) {
 
 	auto& scene = engine.getScene();
 
-	if (ImGui::BeginChild("object list", ImVec2(250, 0))) {
+	if (ImGui::BeginChild("Object List", {0, 0}, false, ImGuiWindowFlags_AlwaysAutoResize)) {
 
 		ImGui::Text("%s (Entities: %llu)", scene.getName().c_str(), scene.getEntities().size());
 		ImGui::Separator();
