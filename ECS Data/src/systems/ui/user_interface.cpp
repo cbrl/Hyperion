@@ -311,7 +311,7 @@ void DrawDetails(Text& text) {
 
 void DrawDetails(Model& model) {
 
-	ImGui::BeginChild("Model Details", {0, 0}, false, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::BeginGroup();
 
 	DrawComponentState(model);
 
@@ -332,7 +332,7 @@ void DrawDetails(Model& model) {
 	if (ImGui::Checkbox("Casts Shadows", &shadows))
 		model.setShadows(shadows);
 
-	ImGui::EndChild();
+	ImGui::EndGroup();
 }
 
 void DrawDetails(ModelNode& node) {
