@@ -47,6 +47,9 @@ using namespace std::string_literals;
 inline std::wstring StrToWstr(std::string_view in) {
 	if (in.empty()) return std::wstring{};
 #ifdef _WIN32
+	if (in.size() > static_cast<size_t>(std::numeric_limits<int>::max())) {
+		return std::wstring{}; //return empty string if the size is greater than what MultiByteToWideChar can support
+	}
 	int count = MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), NULL, 0);
 	std::wstring out(count, 0);
 	MultiByteToWideChar(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), out.data(), count);
@@ -62,6 +65,9 @@ inline std::wstring StrToWstr(std::string_view in) {
 inline std::string WstrToStr(std::wstring_view in) {
 	if (in.empty()) return std::string{};
 #ifdef _WIN32
+	if (in.size() > static_cast<size_t>(std::numeric_limits<int>::max())) {
+		return std::string{}; //return empty string if the size is greater than what WideCharToMultiByte can support
+	}
 	int count = WideCharToMultiByte(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), NULL, 0, NULL, NULL);
 	std::string out(count, 0);
 	int written = WideCharToMultiByte(CP_UTF8, 0, in.data(), static_cast<int>(in.size()), out.data(), count, NULL, NULL);
@@ -82,7 +88,7 @@ inline std::string WstrToStr(std::wstring_view in) {
 
 // Convert the specified arithemetic value to a string
 template <typename T>
-std::optional<std::string> ToStr(T val, int base = 10) {
+std::optional<std::string> ToStr(T val, int base = 10) noexcept {
 
 	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
 
@@ -106,7 +112,7 @@ std::optional<std::string> ToStr(T val, int base = 10) {
 
 // Convert the specified arithemetic value to a string
 template <typename T>
-std::optional<std::string> ToStr(T val, std::chars_format fmt) {
+std::optional<std::string> ToStr(T val, std::chars_format fmt) noexcept {
 
 	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
 
@@ -133,7 +139,7 @@ std::optional<std::string> ToStr(T val, std::chars_format fmt) {
 
 // Convert the specified arithemetic value to a string
 template <typename T>
-std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) {
+std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) noexcept {
 
 	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
 
@@ -167,7 +173,7 @@ std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) {
 
 // Convert a string to the specified arithmetic type
 template <typename T>
-std::optional<T> StrTo(std::string_view in) {
+std::optional<T> StrTo(std::string_view in) noexcept {
 
 	static_assert(std::is_arithmetic_v<T>, "StrTo called with non-arithmetic type");
 
@@ -185,7 +191,7 @@ std::optional<T> StrTo(std::string_view in) {
 }
 
 template <>
-inline std::optional<bool> StrTo(std::string_view in) {
+inline std::optional<bool> StrTo(std::string_view in) noexcept {
 
 	if (in.size() == 1) {
 		if (in[0] == '0')
@@ -282,7 +288,7 @@ std::vector<StringT> Split(const StringT& in, const typename StringT::value_type
 
 // Get the string representation of a type name
 template <typename T>
-constexpr std::string_view type_name() {
+constexpr std::string_view type_name() noexcept {
 #if defined(__clang__)
 	std::string_view p = __PRETTY_FUNCTION__;
 	return std::string_view{p.data() + 34, p.size() - 34 - 1};
