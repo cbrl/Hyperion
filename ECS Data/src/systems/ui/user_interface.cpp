@@ -533,10 +533,16 @@ void DrawDetails(AxisOrbit& orbit) {
 template<typename CameraT>
 void DrawTransformManipulator(Transform& transform, CameraT& camera, Input& input) {
 
+	// Active check
+	if (!transform.isActive())
+		return;
+
+	// Get camera transform
 	auto* camera_transform = camera.getOwner()->getComponent<Transform>();
 	if (!camera_transform)
 		return;
 
+	// Set orthographic mode for ortho camera
 	if constexpr (std::is_same_v<CameraT, OrthographicCamera>) {
 		ImGuizmo::SetOrthographic(true);
 	}
@@ -769,7 +775,7 @@ void DrawEntityDetails(Entity& entity, Engine& engine) {
 		DrawComponentNode("Transform", *transform);
 
 		// Draw transform manipulation tool. Only for the primary camera since it
-		// doesn't work well when drawing multiple transform tools.
+		// doesn't work well when drawing multiple transform tools at once.
 		bool first = true;
 		scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 			if (first) {
