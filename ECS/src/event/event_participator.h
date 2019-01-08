@@ -51,7 +51,7 @@ protected:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	EventMgr* getEventMgr() const noexcept;
+	EventMgr& getEventMgr() const noexcept;
 
 private:
 

@@ -6,9 +6,9 @@
 // EventParticipator
 //----------------------------------------------------------------------------------
 
-EventMgr* EventParticipator::getEventMgr() const noexcept {
+EventMgr& EventParticipator::getEventMgr() const noexcept {
 	assert(event_mgr != nullptr && "EventParticipator::event_handler == nullptr");
-	return event_mgr;
+	return *event_mgr;
 }
 
 
@@ -27,7 +27,7 @@ void EventListener::unregisterAllEventCallbacks() {
 
 	// Unsubcribe from all events
 	for (auto* callback : registered_callbacks) {
-		getEventMgr()->removeEventCallback(callback);
+		getEventMgr().removeEventCallback(callback);
 	}
 
 	registered_callbacks.clear();

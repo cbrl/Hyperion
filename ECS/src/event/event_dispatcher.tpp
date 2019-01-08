@@ -68,6 +68,6 @@ void EventDispatcher<EventT>::removeEventCallback(IEventDelegate* delegate) {
 
 
 template<typename EventT>
-size_t EventDispatcher<EventT>::getEventCallbackCount() const {
+size_t EventDispatcher<EventT>::getEventCallbackCount() const noexcept {
 	return event_delegates.size();
 }

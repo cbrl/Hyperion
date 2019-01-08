@@ -46,6 +46,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename SystemT, typename... ArgsT>
+	[[nodiscard]]
 	SystemT* addSystem(ArgsT&&... args);
 
 	void removeSystem(ISystem* system);
@@ -54,8 +55,7 @@ public:
 	void removeSystem();
 
 	// Update the systems
-	void update(Engine& engine);
-
+	void update(Engine& engine, f32 dt);
 
 	template<typename EventT, typename... ArgsT>
 	void sendEvent(ArgsT&&... args);

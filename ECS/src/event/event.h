@@ -34,8 +34,10 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
 	virtual std::type_index getID() const noexcept = 0;
 	
+	[[nodiscard]]
 	const high_res_clk::time_point& getCreationTime() const noexcept {
 		return creation_time;
 	}
@@ -86,6 +88,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
 	std::type_index getID() const noexcept override final {
 		return static_index;
 	}

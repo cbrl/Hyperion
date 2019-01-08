@@ -8,7 +8,7 @@
 template <typename EventT, typename... ArgsT>
 void EventSender::sendEvent(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
-	getEventMgr()->send<EventT>(std::forward<ArgsT>(args)...);
+	getEventMgr().send<EventT>(std::forward<ArgsT>(args)...);
 }
 
 
@@ -32,7 +32,7 @@ void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT*
 
 	if (result == registered_callbacks.end()) {
 		registered_callbacks.push_back(delegate);
-		getEventMgr()->addEventCallback<EventT>(delegate);
+		getEventMgr().addEventCallback<EventT>(delegate);
 	}
 }
 
@@ -48,7 +48,7 @@ void EventListener::unregisterEventCallback(void (ClassT::*Callback)(const Event
 	});
 
 	if (result != registered_callbacks.end()) {
-		getEventMgr()->removeEventCallback(&(*result));
+		getEventMgr().removeEventCallback(&(*result));
 		registered_callbacks.erase(result);
 	}
 }

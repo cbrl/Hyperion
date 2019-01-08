@@ -19,13 +19,15 @@ class ISystem {
 	friend class SystemMgr;
 
 public:
-
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
 	ISystem() noexcept
-		: active(true) {
+	    : active(true)
+		, update_interval(-1.0f)
+	    , time_since_last_update(FLT_MAX)
+		, needs_update(true) {
 	}
 
 	ISystem(const ISystem& system) = delete;
@@ -52,6 +54,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the type index of this system
+	[[nodiscard]]
 	virtual std::type_index getTypeIndex() const = 0;
 
 
@@ -60,13 +63,28 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Set the system's state
-	void setActive(bool state) {
+	void setActive(bool state) noexcept {
 		active = state;
 	}
 
 	// Get the system's state
-	bool isActive() const {
+	[[nodiscard]]
+	bool isActive() const noexcept {
 		return active;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Update Interval
+	//----------------------------------------------------------------------------------
+
+	void setUpdateInterval(f32 seconds) noexcept {
+		update_interval = seconds;
+	}
+
+	[[nodiscard]]
+	f32 getUpdateInterval() const noexcept {
+		return update_interval;
 	}
 
 
@@ -85,7 +103,6 @@ public:
 
 
 protected:
-
 	void setECS(gsl::not_null<ECS*> pointer) {
 		ecs = pointer;
 	}
@@ -96,17 +113,24 @@ protected:
 	}
 
 
+private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
+	// A pointer to the ECS that created the system. Useful for iterating over
+	// components while processing an event.
+	ECS* ecs;
+
 	// Is this system enabled?
 	bool active;
 
-private:
+	// The amount of time between that the system should wait before updating (in seconds).
+	// 0.0f or lower to update every tick.
+	f32 update_interval;
 
-	// A pointer to the ECS that created the system
-	ECS* ecs;
+	f32  time_since_last_update;
+	bool needs_update;
 };
 
 
@@ -120,7 +144,7 @@ private:
 //
 //----------------------------------------------------------------------------------
 
-template<typename T>
+template <typename T>
 class System : public ISystem {
 public:
 	//----------------------------------------------------------------------------------
@@ -152,6 +176,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the type index of this system
+	[[nodiscard]]
 	std::type_index getTypeIndex() const override final {
 		return index;
 	}
@@ -162,16 +187,13 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Actions taken before any systems have executed their main update
-	void preUpdate(Engine& engine) override {
-	};
+	void preUpdate(Engine& engine) override{};
 
 	// Main update function
-	void update(Engine& engine) override {
-	};
+	void update(Engine& engine) override{};
 
 	// Actions taken after all systems have executed their main update
-	void postUpdate( Engine& engine) override {
-	};
+	void postUpdate(Engine& engine) override{};
 
 
 public:
@@ -184,5 +206,5 @@ public:
 };
 
 
-template<typename T>
+template <typename T>
 const std::type_index System<T>::index = std::type_index(typeid(T));

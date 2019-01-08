@@ -34,10 +34,10 @@ public:
 	virtual void invoke(const IEvent* e) = 0;
 
 	[[nodiscard]]
-	virtual size_t getDelegateID() const = 0;
+	virtual size_t getDelegateID() const noexcept = 0;
 
 	[[nodiscard]]
-	virtual std::type_index getEventID() const = 0;
+	virtual std::type_index getEventID() const noexcept = 0;
 };
 
 
@@ -90,17 +90,17 @@ public:
 	}
 
 	[[nodiscard]]
-	size_t getDelegateID() const override final {
+	size_t getDelegateID() const noexcept override final {
 		return delegate_index;
 	}
 
 	[[nodiscard]]
-	std::type_index getEventID() const override final {
+	std::type_index getEventID() const noexcept override final {
 		return EventT::static_index;
 	}
 
 	[[nodiscard]]
-	bool operator==(const IEventDelegate& other) const override final {
+	bool operator==(const IEventDelegate& other) const noexcept override final {
 		if (this->getDelegateID() != other.getDelegateID())
 			return false;
 

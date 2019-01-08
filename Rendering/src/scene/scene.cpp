@@ -41,6 +41,6 @@ void Scene::removeSystem(ISystem* system) {
 
 
 void Scene::tick(Engine& engine) {
-	ecs->update(engine);
+	ecs->update(engine, engine.getTimer().deltaTime());
 	this->update(engine);
 }

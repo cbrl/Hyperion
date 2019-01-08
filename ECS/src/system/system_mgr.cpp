@@ -12,26 +12,36 @@ void SystemMgr::removeSystem(ISystem* system) {
 }
 
 
-void SystemMgr::update(Engine& engine) {
+void SystemMgr::update(Engine& engine, f32 dt) {
 
 	// Pre Update
-	for (const auto& pair : systems) {
-		if (pair.second->isActive()) {
-			pair.second->preUpdate(engine);
+	for (auto& [index, system] : systems) {
+		
+		system->time_since_last_update += dt;
+
+		if (system->isActive()) {
+			if (system->time_since_last_update > system->update_interval) {
+				system->needs_update = true;
+			}
+			if (system->needs_update) {
+				system->preUpdate(engine);
+			}
 		}
 	}
 
 	// Update
-	for (const auto& pair : systems) {
-		if (pair.second->isActive()) {
-			pair.second->update(engine);
+	for (auto& [index, system] : systems) {
+		if (system->isActive() && system->needs_update) {
+			system->update(engine);
 		}
 	}
 
 	// Post Update
-	for (const auto& pair : systems) {
-		if (pair.second->isActive()) {
-			pair.second->postUpdate(engine);
+	for (auto& [index, system] : systems) {
+		if (system->isActive() && system->needs_update) {
+			system->postUpdate(engine);
+			system->needs_update = false;
+			system->time_since_last_update = 0.0f;
 		}
 	}
 }
