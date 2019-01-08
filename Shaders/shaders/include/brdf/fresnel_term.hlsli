@@ -121,6 +121,8 @@ float F_CookTorrance(float l_dot_h, float f0) {
 	// eta = (1 + sqrt(f0))/(1 - sqrt(f0))
 	// c   = l.h
 
+	f0 = min(f0, 0.999f);
+
 	const float f0_sqrt   = sqrt(f0);
 	const float eta       = (1.0f + f0_sqrt) / (1.0f - f0_sqrt);
 	const float g         = sqrt(sqr(eta) + sqr(l_dot_h) - 1.0f);
@@ -142,10 +144,12 @@ float3 F_CookTorrance(float l_dot_h, float3 f0) {
 	// eta = (1 + sqrt(f0))/(1 - sqrt(f0))
 	// c   = l.h
 
-	const float3 f0_sqrt = sqrt(f0);
-	const float3 eta = (1.0f + f0_sqrt) / (1.0f - f0_sqrt);
-	const float3 g = sqrt(sqr(eta) + sqr(l_dot_h) - 1.0f);
-	const float3 g_plus_c = g + l_dot_h;
+	f0 = min(f0, 0.999f);
+
+	const float3 f0_sqrt   = sqrt(f0);
+	const float3 eta       = (1.0f + f0_sqrt) / (1.0f - f0_sqrt);
+	const float3 g         = sqrt(sqr(eta) + sqr(l_dot_h) - 1.0f);
+	const float3 g_plus_c  = g + l_dot_h;
 	const float3 g_minus_c = g - l_dot_h;
 
 	const float3 term1 = sqr(g_minus_c / g_plus_c);
