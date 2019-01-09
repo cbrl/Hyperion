@@ -1143,13 +1143,13 @@ void DrawMetrics(Engine& engine) {
 	static MetricsGuiMetric fps("FPS", "", 0);
 
 	for (static bool once = true; once; once = false) {
-		frame_plot.mShowInlineGraphs = true;
+		frame_plot.mShowInlineGraphs   = true;
 		frame_plot.mInlinePlotRowCount = 3;
-		frame_plot.mShowLegendAverage = true;
-		frame_plot.mShowLegendColor = false;
-		frame_plot.mShowLegendDesc = false;
-		frame_time.mSelected = true;
-		fps.mSelected = true;
+		frame_plot.mShowLegendAverage  = true;
+		frame_plot.mShowLegendColor    = false;
+		frame_plot.mShowLegendDesc     = false;
+		frame_time.mSelected           = true;
+		fps.mSelected                  = true;
 		frame_plot.AddMetric(&fps);
 		frame_plot.AddMetric(&frame_time);
 	}

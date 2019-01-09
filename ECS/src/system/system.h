@@ -78,10 +78,13 @@ public:
 	// Member Functions - Update Interval
 	//----------------------------------------------------------------------------------
 
-	void setUpdateInterval(f32 seconds) noexcept {
+	// Set the time that must pass between updates for this system. This method can be
+	// overridden in order to disallow changing the update interval.
+	virtual void setUpdateInterval(f32 seconds) noexcept {
 		update_interval = seconds;
 	}
 
+	// Get the time that must pass between updates for this system.
 	[[nodiscard]]
 	f32 getUpdateInterval() const noexcept {
 		return update_interval;
@@ -101,19 +104,32 @@ public:
 	// Actions taken after all systems have executed their main update
 	virtual void postUpdate(Engine& engine) = 0;
 
-
 protected:
-	void setECS(gsl::not_null<ECS*> pointer) {
-		ecs = pointer;
+
+	// Retrieve the total time passed since the last update
+	[[nodiscard]]
+	f32 dtSinceLastUpdate() const noexcept {
+		return time_since_last_update;
 	}
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - ECS
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
 	ECS& getECS() {
 		assert(ecs != nullptr && "ISystem::ecs == nullptr");
 		return *ecs;
 	}
 
-
 private:
+
+	void setECS(gsl::not_null<ECS*> pointer) {
+		ecs = pointer;
+	}
+
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
@@ -129,6 +145,8 @@ private:
 	// 0.0f or lower to update every tick.
 	f32 update_interval;
 
+	// The time passed since the last update and a flag set when that time exceeds the update
+	// interval. These variables are managed by the System Manager.
 	f32  time_since_last_update;
 	bool needs_update;
 };

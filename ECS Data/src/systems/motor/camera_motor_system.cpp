@@ -34,41 +34,38 @@ void CameraMotorSystem::update(Engine& engine) {
 
 void CameraMotorSystem::processInput(const Engine& engine, CameraMovement& movement, Transform& transform) const {
 
-	const auto& input = engine.getInput();
-	const auto& timer = engine.getTimer();
-	const auto dt = static_cast<f32>(timer.deltaTime<std::ratio<1,1>>());
-
-	vec3_f32 move_units{ 0.0f, 0.0f, 0.0f };
+	const auto& input      = engine.getInput();
+	vec3_f32    move_units = { 0.0f, 0.0f, 0.0f };
 
 	// Forward/Back movement
 	if (input.isKeyDown(Keyboard::W)) {
-		move_units[2] += dt;
+		move_units[2] += dtSinceLastUpdate();
 	}
 	else if (input.isKeyDown(Keyboard::S)) {
-		move_units[2] -= dt;
+		move_units[2] -= dtSinceLastUpdate();
 	}
 
 	// Left/Right movement
 	if (input.isKeyDown(Keyboard::A)) {
-		move_units[0] -= dt;
+		move_units[0] -= dtSinceLastUpdate();
 	}
 	else if (input.isKeyDown(Keyboard::D)) {
-		move_units[0] += dt;
+		move_units[0] += dtSinceLastUpdate();
 	}
 
 	// Up/Down movement
 	if (input.isKeyDown(Keyboard::Space)) {
-		move_units[1] += dt;
+		move_units[1] += dtSinceLastUpdate();
 	}
 	else if (input.isKeyDown(Keyboard::LeftControl)) {
-		move_units[1] -= dt;
+		move_units[1] -= dtSinceLastUpdate();
 	}
 
 
 	// Move the camera
 	updateMovement(movement, move_units);
 
-	move(movement, transform, dt);
+	move(movement, transform);
 }
 
 
@@ -130,7 +127,7 @@ void CameraMotorSystem::updateMovement(CameraMovement& mv, vec3_f32 units) const
 }
 
 
-void CameraMotorSystem::move(CameraMovement& mv, Transform& transform, f32 dt) const {
+void CameraMotorSystem::move(CameraMovement& mv, Transform& transform) const {
 
 	const vec3_f32 velocity = mv.getVelocity();
 	XMVECTOR velocity_vec = XMLoad(&velocity);
@@ -149,19 +146,19 @@ void CameraMotorSystem::move(CameraMovement& mv, Transform& transform, f32 dt) c
 		// Move the camera
 		XMVECTOR movement = XMVectorZero();
 
-		movement += transform.getWorldAxisX() * mv.getVelocity()[0] * dt;
-		movement += transform.getWorldAxisY() * mv.getVelocity()[1] * dt;
-		movement += transform.getWorldAxisZ() * mv.getVelocity()[2] * dt;
+		movement += transform.getWorldAxisX() * mv.getVelocity()[0] * dtSinceLastUpdate();
+		movement += transform.getWorldAxisY() * mv.getVelocity()[1] * dtSinceLastUpdate();
+		movement += transform.getWorldAxisZ() * mv.getVelocity()[2] * dtSinceLastUpdate();
 
 		transform.move(movement);
 
 		// Decelerate the camera
-		decelerate(mv, dt);
+		decelerate(mv);
 	}
 }
 
 
-void CameraMotorSystem::decelerate(CameraMovement& mv, f32 delta_time) const {
+void CameraMotorSystem::decelerate(CameraMovement& mv) const {
 
 	f32 decel_amount;
 	vec3_f32 velocity = mv.getVelocity();
@@ -170,7 +167,7 @@ void CameraMotorSystem::decelerate(CameraMovement& mv, f32 delta_time) const {
 	// direction and the current velocity isn't 0.
 	if (!mv.isMovingX() && velocity[0] != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity[0]) * mv.getDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity[0]) * mv.getDeceleration() * dtSinceLastUpdate();
 
 		if (abs(decel_amount) > abs(velocity[0])) {
 			velocity[0] = 0.0f;
@@ -182,7 +179,7 @@ void CameraMotorSystem::decelerate(CameraMovement& mv, f32 delta_time) const {
 
 	if (!mv.isMovingY() && velocity[1] != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity[1]) * mv.getDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity[1]) * mv.getDeceleration() * dtSinceLastUpdate();
 
 		if (abs(decel_amount) > abs(velocity[1])) {
 			velocity[1] = 0.0f;
@@ -194,7 +191,7 @@ void CameraMotorSystem::decelerate(CameraMovement& mv, f32 delta_time) const {
 
 	if (!mv.isMovingZ() && velocity[2] != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity[2]) * mv.getDeceleration() * delta_time;
+		decel_amount = copysign(1.0f, velocity[2]) * mv.getDeceleration() * dtSinceLastUpdate();
 
 		if (abs(decel_amount) > abs(velocity[2])) {
 			velocity[2] = 0.0f;

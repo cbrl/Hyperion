@@ -12,4 +12,6 @@ public:
 	~UserInterface() = default;
 
 	void update(Engine& engine) override;
+
+	void setUpdateInterval(f32 seconds) noexcept override final {}; //UI updates every frame
 };

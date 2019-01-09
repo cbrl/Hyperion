@@ -8,9 +8,6 @@
 void AxisRotationSystem::update(Engine& engine) {
 
 	auto& scene = engine.getScene();
-	auto& timer = engine.getTimer();
-
-	const auto dt = static_cast<f32>(timer.deltaTime<std::ratio<1,1>>());
 
 	scene.forEach<AxisRotation>([&](AxisRotation& rotation) {
 
@@ -21,13 +18,13 @@ void AxisRotationSystem::update(Engine& engine) {
 		if (!transform->isActive()) return;
 
 		if (rotation.hasAxis(AxisRotation::Axis::X)) {
-			transform->rotateXClamped(dt * rotation.getSpeedX(), -XM_PI, XM_PI);
+			transform->rotateXClamped(dtSinceLastUpdate() * rotation.getSpeedX(), -XM_PI, XM_PI);
 		}
 		if (rotation.hasAxis(AxisRotation::Axis::Y)) {
-			transform->rotateYClamped(dt * rotation.getSpeedY(), -XM_PI, XM_PI);
+			transform->rotateYClamped(dtSinceLastUpdate() * rotation.getSpeedY(), -XM_PI, XM_PI);
 		}
 		if (rotation.hasAxis(AxisRotation::Axis::Z)) {
-			transform->rotateZClamped(dt * rotation.getSpeedZ(), -XM_PI, XM_PI);
+			transform->rotateZClamped(dtSinceLastUpdate() * rotation.getSpeedZ(), -XM_PI, XM_PI);
 		}
 	});
 }
