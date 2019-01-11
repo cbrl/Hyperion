@@ -49,7 +49,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	#ifdef ENABLE_LIGHTING
 	const float3 normal_vec = GetNormal(pin.p_world, pin.n, pin.uv);
 
-	float3 out_color = CalculateLighting(pin.p_world, normal_vec, p_to_view, mat);
+	float3 out_color = Lighting::CalculateLighting(pin.p_world, normal_vec, p_to_view, mat);
 
 	/*
 	if (g_material.mirror_surface) {

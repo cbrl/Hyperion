@@ -1,17 +1,23 @@
 #ifndef HLSL_BRDF
 #define HLSL_BRDF
 
+#include "include/syntax.hlsli"
 #include "include/math.hlsli"
 #include "include/material.hlsli"
 
 //----------------------------------------------------------------------------------
 // Defines
 //----------------------------------------------------------------------------------
-#define BRDF_FUNCTION CookTorranceBRDF
+#define BRDF_FUNCTION CookTorrance
 
-#define DISTRIBUTION_FUNC D_Beckmann
-#define FRESNEL_FUNC F_CookTorrance
-#define VISIBILITY_FUNC V_Smith
+#define D_FUNC Beckmann
+#define DISTRIBUTION CAT(CAT(Distribution, ::), D_FUNC)
+
+#define F_FUNC CookTorrance
+#define FRESNEL CAT(CAT(Fresnel, ::), F_FUNC)
+
+#define V_FUNC Smith
+#define VISIBILITY CAT(CAT(Visibility, ::), V_FUNC)
 
 #define G1_FUNC G1_GGX
 #define V1_FUNC V1_GGX
@@ -24,6 +30,8 @@
 #include "geometry_term.hlsli"
 #include "fresnel_term.hlsli"
 
+
+namespace BRDF {
 
 //----------------------------------------------------------------------------------
 // Utility Functions
@@ -66,7 +74,7 @@ float SpecularBlinnPhong(float3 l, float3 n, float3 v, float power) {
 //
 //----------------------------------------------------------------------------------
 
-void LambertBRDF(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
+void Lambert(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
 	diffuse  = (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
 	specular = float3(0.0f, 0.0f, 0.0f);
 }
@@ -82,7 +90,7 @@ void BlinnPhongBRDF(float3 l, float3 n, float3 v, Material mat,
 */
 
 
-void CookTorranceBRDF(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
+void CookTorrance(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
 
 	const float  n_dot_l = saturate(dot(n, l));
 	const float  n_dot_v = saturate(dot(n, v));
@@ -94,9 +102,9 @@ void CookTorranceBRDF(float3 l, float3 n, float3 v, Material mat, out float3 dif
 	const float  alpha = GetAlpha(mat);
 	const float3 f0    = GetF0(mat);
 
-	const float  D = DISTRIBUTION_FUNC(n_dot_h, alpha);
-	const float3 F = FRESNEL_FUNC(l_dot_h, f0);
-	const float  V = VISIBILITY_FUNC(n_dot_l, n_dot_v, n_dot_h, v_dot_h, alpha);
+	const float  D = DISTRIBUTION(n_dot_h, alpha);
+	const float3 F = FRESNEL(l_dot_h, f0);
+	const float  V = VISIBILITY(n_dot_l, n_dot_v, n_dot_h, v_dot_h, alpha);
 
 	diffuse = (1.0f - F) * (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
 	diffuse = saturate(diffuse);
@@ -126,6 +134,8 @@ void ComputeBRDF(float3 l, float3 n, float3 v, Material mat, out float3 diffuse,
 
 	BRDF_FUNCTION(l, n, v, mat, diffuse, specular);
 }
+
+} //namespace BRDF
 
 
 #endif //HLSL_BRDF

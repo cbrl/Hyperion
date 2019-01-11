@@ -1,9 +1,6 @@
 #ifndef HLSL_SYNTAX
 #define HLSL_SYNTAX
 
-// Allows the preprocessor definitions for register
-// slots to be easily used in the buffer definitions.
-
 
 //----------------------------------------------------------------------------------
 // Registers
@@ -14,6 +11,13 @@
 #define REG_S(slot) register(s##slot)
 #define REG_T(slot) register(t##slot)
 #define REG_U(slot) register(u##slot)
+
+
+//----------------------------------------------------------------------------------
+// Utility
+//----------------------------------------------------------------------------------
+
+#define CAT(a, b) a##b
 
 
 #endif //HLSL_SYNTAX

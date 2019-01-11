@@ -29,17 +29,21 @@
 // n_dot_x: n.v or n.l (used in partial term functions)
 //----------------------------------------------------------------------------------
 
-float G_Implicit(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+
+namespace BRDF {
+namespace Geometry {
+
+float Implicit(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return n_dot_l * n_dot_v;
 }
 
 
-float G_Neumann(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+float Neumann(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return (n_dot_l * n_dot_v) / max(n_dot_l, n_dot_v);
 }
 
 
-float G_CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+float CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	// G(n,h,v,l) = min( 1, (2*n.h*n.v)/(v.h), (2*n.h*n.l)/(v.h) )
 	//            = min( 1, [(2*n.h) / (v.h)] * min(n.v, n.l) )
 
@@ -48,7 +52,7 @@ float G_CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h,
 }
 
 
-float G_Kelemen(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+float Kelemen(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return (n_dot_l * n_dot_v) / sqr(v_dot_h);
 }
 
@@ -90,9 +94,12 @@ float G1_GGX(float n_dot_x, float alpha) {
 }
 
 
-float G_Smith(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+float Smith(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return G1_FUNC(n_dot_l, alpha) * G1_FUNC(n_dot_v, alpha);
 }
+
+} //namespace Geometry
+} //namespace BRDF
 
 
 
@@ -108,17 +115,21 @@ float G_Smith(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float 
 // n_dot_x: n.v or n.l (used in partial term functions)
 //----------------------------------------------------------------------------------
 
-float V_Implicit(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+
+namespace BRDF {
+namespace Visibility {
+
+float Implicit(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return 1.0f;
 }
 
 
-float V_Neumann(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+float Neumann(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return 1.0f / max(n_dot_l, n_dot_v);
 }
 
 
-float V_CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+float CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	// V(n,h,v,l) = min( 1/(n.v*n.l), (2*n.h)/(v.h*n.l), (2*n.h)/(v.h*n.l) )
 	//            = min( 1/(n.v*n.l), [(2*n.h) / (v.h)] / max(n.v, n.l) )
 
@@ -128,7 +139,7 @@ float V_CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h,
 }
 
 
-float V_Kelemen(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+float Kelemen(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return 1.0f / sqr(v_dot_h);
 }
 
@@ -158,10 +169,12 @@ float V1_GGX(float n_dot_x, float alpha) {
 }
 
 
-float V_Smith(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
+float Smith(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return V1_FUNC(n_dot_l, alpha) * V1_FUNC(n_dot_v, alpha);
 }
 
+} //namespace Visibility
+} //namespace BRDF
 
 
 #endif //HLSL_BRDF_G_TERM

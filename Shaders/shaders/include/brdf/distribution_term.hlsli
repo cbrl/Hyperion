@@ -12,7 +12,11 @@
 //   alpha: the squared roughness
 //----------------------------------------------------------------------------------
 
-float D_BlinnPhong(float n_dot_h, float alpha) {
+
+namespace BRDF {
+namespace Distribution {
+
+float BlinnPhong(float n_dot_h, float alpha) {
 	// D(h) = K(n.h)^s
 
 	// K     = (s+2) / (2pi)
@@ -28,7 +32,7 @@ float D_BlinnPhong(float n_dot_h, float alpha) {
 }
 
 
-float D_Beckmann(float n_dot_h, float alpha) {
+float Beckmann(float n_dot_h, float alpha) {
 
 	// D = [1 / (pi * alpha^2 * (n.h)^4)] * e^[((n.h)^2 - 1) / (alpha^2 * (n.h)^2)]
 
@@ -43,7 +47,7 @@ float D_Beckmann(float n_dot_h, float alpha) {
 
 
 // AKA: GGX
-float D_TrowbridgeReitz(float n_dot_h, float alpha) {
+float TrowbridgeReitz(float n_dot_h, float alpha) {
 	// D = alpha^2 / { pi * [(n.h)^2 * (alpha^2 - 1) + 1]^2 }
 
 	const float alpha_sqr  = sqr(alpha);
@@ -54,7 +58,7 @@ float D_TrowbridgeReitz(float n_dot_h, float alpha) {
 
 
 // Anisotropic GGX (Generalized Trowbridge Reitz)
-float D_GTR2_Anisotropic(float n_dot_h, float x_dot_h, float y_dot_h, float alpha_x, float alpha_y) {
+float GTR2_Anisotropic(float n_dot_h, float x_dot_h, float y_dot_h, float alpha_x, float alpha_y) {
 
 	// D = (1/pi) * [1 / (a_x * a_y)] * { 1 / [(x.h)^2/a_x^2 + (y.h)^2/a_y^2 + n.h^2]^2 }
 
@@ -69,6 +73,9 @@ float D_GTR2_Anisotropic(float n_dot_h, float x_dot_h, float y_dot_h, float alph
 
 	return (g_inv_pi * inv_alpha_x * inv_alpha_y) * (1.0f / denominator);
 }
+
+} //namespace Distribution
+} //namespace BRDF
 
 
 #endif //HLSL_BRDF_D_TERM

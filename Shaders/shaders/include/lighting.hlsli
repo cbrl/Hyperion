@@ -11,6 +11,8 @@
 #include "include/brdf/brdf.hlsli"
 
 
+namespace Lighting {
+
 //----------------------------------------------------------------------------------
 //  Constant Buffers
 //----------------------------------------------------------------------------------
@@ -33,7 +35,9 @@ cbuffer LightBuffer : REG_B(SLOT_CBUFFER_LIGHT) {
 
 
 
-// Calculate the light intensities for lights that don't cast shadows
+namespace detail {
+
+// Calculate the radiance for lights that don't cast shadows
 float3 CalculateLights(float3 p_world,
                        float3 n,
                        float3 p_to_view,
@@ -41,35 +45,41 @@ float3 CalculateLights(float3 p_world,
 
 	float3 radiance = 0.0f;
 
+	//----------------------------------------------------------------------------------
 	// Directional Lights
+	//----------------------------------------------------------------------------------
 	for (uint i0 = 0; i0 < g_num_directional_lights; ++i0) {
 		float3 p_to_light, irradiance;
 		g_directional_lights[i0].Calculate(p_world, p_to_light, irradiance);
 
 		float3 D, S;
-		ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
 
+	//----------------------------------------------------------------------------------
 	// Point Lights
+	//----------------------------------------------------------------------------------
 	for (uint i1 = 0; i1 < g_num_point_lights; ++i1) {
 		float3 p_to_light, irradiance;
 		g_point_lights[i1].Calculate(p_world, p_to_light, irradiance);
 
 		float3 D, S;
-		ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
 
+	//----------------------------------------------------------------------------------
 	// Spot lights
+	//----------------------------------------------------------------------------------
 	for (uint i2 = 0; i2 < g_num_spot_lights; ++i2) {
 		float3 p_to_light, irradiance;
 		g_spot_lights[i2].Calculate(p_world, p_to_light, irradiance);
 
 		float3 D, S;
-		ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
@@ -78,7 +88,7 @@ float3 CalculateLights(float3 p_world,
 }
 
 
-// Calculate the light intensities for shadow lights
+// Calculate the radiance for lights that cast shadows
 float3 CalculateShadowLights(float3 p_world,
                              float3 n,
                              float3 p_to_view,
@@ -86,7 +96,9 @@ float3 CalculateShadowLights(float3 p_world,
 
 	float3 radiance = 0.0f;
 
+	//----------------------------------------------------------------------------------
 	// Directional Lights
+	//----------------------------------------------------------------------------------
 	for (uint i0 = 0; i0 < g_num_shadow_directional_lights; ++i0) {
 		float3 p_to_light, irradiance;
 
@@ -98,12 +110,14 @@ float3 CalculateShadowLights(float3 p_world,
 		#endif
 
 		float3 D, S;
-		ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
 
+	//----------------------------------------------------------------------------------
 	// Point Lights
+	//----------------------------------------------------------------------------------
 	for (uint i1 = 0; i1 < g_num_shadow_point_lights; ++i1) {
 		float3 p_to_light, irradiance;
 
@@ -115,12 +129,14 @@ float3 CalculateShadowLights(float3 p_world,
 		#endif
 
 		float3 D, S;
-		ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
 
+	//----------------------------------------------------------------------------------
 	// Spot Lights
+	//----------------------------------------------------------------------------------
 	for (uint i2 = 0; i2 < g_num_shadow_spot_lights; ++i2) {
 		float3 p_to_light, irradiance;
 
@@ -132,7 +148,7 @@ float3 CalculateShadowLights(float3 p_world,
 		#endif
 
 		float3 D, S;
-		ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
@@ -140,24 +156,30 @@ float3 CalculateShadowLights(float3 p_world,
 	return radiance;
 }
 
+} //namespace detail
+
+
 
 float3 CalculateLighting(float3 p_world, float3 n, float3 p_to_view, Material material) {
 
 	float3 radiance = 0.0f;
 	
 	// Calculate radiance
-	radiance += CalculateLights(p_world, n, p_to_view, material);
-	radiance += CalculateShadowLights(p_world, n, p_to_view, material);
+	radiance += detail::CalculateLights(p_world, n, p_to_view, material);
+	radiance += detail::CalculateShadowLights(p_world, n, p_to_view, material);
 
 	// Calculate ambient light
 	float3 ambient;
 	float3 null;
-	LambertBRDF(0.0f, 0.0f, 0.0f, material, ambient, null);
+	BRDF::Lambert(0.0f, 0.0f, 0.0f, material, ambient, null);
 	ambient *= g_ambient_intensity.xyz;
 
 	// Calculate final color
 	return radiance + ambient + material.emissive;
 }
+
+} //namespace Lighting
+
 
 
 #endif //HLSL_LIGHTING

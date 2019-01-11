@@ -14,8 +14,11 @@
 //----------------------------------------------------------------------------------
 
 
+namespace BRDF {
+namespace Fresnel {
+
 /*
-float F_Schlick_Dielectric_Dielectric(float l_dot_h, float n1, float n2) {
+float Schlick_Dielectric_Dielectric(float l_dot_h, float n1, float n2) {
 	// F = [(n1-n2)^2 + 4*n1*n2 * (1-l.h)^5] / (n1 + n2)^2
 	//   = f0 + [(4*n1*n2 * (1-l.h)^5) / (n1 + n2)^2]
 
@@ -33,7 +36,7 @@ float F_Schlick_Dielectric_Dielectric(float l_dot_h, float n1, float n2) {
 }
 
 
-float F_Schlick_Dielectric_Conductor(float l_dot_h, float n1, float n2, float k) {
+float Schlick_Dielectric_Conductor(float l_dot_h, float n1, float n2, float k) {
 	// k = imaginary
 
 	// F = [(n1-n2)^2 + 4*n1*n2 * (1-l.h)^5 + k^2] / [(n1 + n2)^2 + k^2]
@@ -57,12 +60,12 @@ float F_Schlick_Dielectric_Conductor(float l_dot_h, float n1, float n2, float k)
 // None
 //----------------------------------------------------------------------------------
 
-float F_None(float l_dot_h, float f0) {
+float None(float l_dot_h, float f0) {
 	return f0;
 }
 
 
-float3 F_None(float l_dot_h, float3 f0) {
+float3 None(float l_dot_h, float3 f0) {
 	return f0;
 }
 
@@ -72,7 +75,7 @@ float3 F_None(float l_dot_h, float3 f0) {
 // Schlick
 //----------------------------------------------------------------------------------
 
-float F_Schlick(float l_dot_h, float f0, float f90) {
+float Schlick(float l_dot_h, float f0, float f90) {
 	// F(f0) = f0 + (f90-f0)(1-l.h)^5
 	//       = f0(f90 - (1-l.h)^5) + (1-l.h)^5
 	//       = lerp(f0, f90, (1-l.h)^5)
@@ -85,12 +88,12 @@ float F_Schlick(float l_dot_h, float f0, float f90) {
 }
 
 
-float F_Schlick(float l_dot_h, float f0) {
-	return F_Schlick(l_dot_h, f0, 1.0f);
+float Schlick(float l_dot_h, float f0) {
+	return Schlick(l_dot_h, f0, 1.0f);
 }
 
 
-float3 F_Schlick(float l_dot_h, float3 f0, float3 f90) {
+float3 Schlick(float l_dot_h, float3 f0, float3 f90) {
 	// F(f0) = f0 + (f90-f0)(1-l.h)^5
 	//       = f0(f90 - (1-l.h)^5) + (1-l.h)^5
 	//       = lerp(f0, f90, (1-l.h)^5)
@@ -103,8 +106,8 @@ float3 F_Schlick(float l_dot_h, float3 f0, float3 f90) {
 }
 
 
-float3 F_Schlick(float l_dot_h, float3 f0) {
-	return F_Schlick(l_dot_h, f0, 1.0f);
+float3 Schlick(float l_dot_h, float3 f0) {
+	return Schlick(l_dot_h, f0, 1.0f);
 }
 
 
@@ -113,7 +116,7 @@ float3 F_Schlick(float l_dot_h, float3 f0) {
 // Cook-Torrance
 //----------------------------------------------------------------------------------
 
-float F_CookTorrance(float l_dot_h, float f0) {
+float CookTorrance(float l_dot_h, float f0) {
 
 	// F = (1/2) * [(g-c) / (g+c)]^2 * { 1 + [((g+c)c - 1)/((g-c)c + 1)]^2 }
 	
@@ -136,7 +139,7 @@ float F_CookTorrance(float l_dot_h, float f0) {
 }
 
 
-float3 F_CookTorrance(float l_dot_h, float3 f0) {
+float3 CookTorrance(float l_dot_h, float3 f0) {
 
 	// F = (1/2) * [(g-c) / (g+c)]^2 * { 1 + [((g+c)c - 1)/((g-c)c + 1)]^2 }
 
@@ -157,6 +160,9 @@ float3 F_CookTorrance(float l_dot_h, float3 f0) {
 
 	return 0.5f * term1 * term2;
 }
+
+} //namespace Fresnel
+} //namespace BRDF
 
 
 #endif //HLSL_BRDF_F_TERM
