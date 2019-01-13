@@ -62,12 +62,6 @@
     <FxCompile Include="shaders\false_color\depth_color.hlsl">
       <Filter>Shader Files\false_color</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\forward\forward_unlit.hlsl">
-      <Filter>Shader Files\forward</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\forward\forward_lit.hlsl">
-      <Filter>Shader Files\forward</Filter>
-    </FxCompile>
     <FxCompile Include="shaders\skybox\skybox_ps.hlsl">
       <Filter>Shader Files\sky</Filter>
     </FxCompile>
@@ -77,11 +71,26 @@
     <FxCompile Include="shaders\depth\depth_transparent_vs.hlsl">
       <Filter>Shader Files\depth</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\forward\forward_transparent_lit.hlsl">
+    <FxCompile Include="shaders\forward\forward_cook_torrance.hlsl">
       <Filter>Shader Files\forward</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\forward\forward_transparent_unlit.hlsl">
+    <FxCompile Include="shaders\forward\forward_transparent_cook_torrance.hlsl">
       <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\forward\forward_lambert.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\forward\forward_transparent_blinn_phong.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\forward\forward_transparent_lambert.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\forward\forward_blinn_phong.hlsl">
+      <Filter>Shader Files\forward</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\false_color\fullbright.hlsl">
+      <Filter>Shader Files\false_color</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

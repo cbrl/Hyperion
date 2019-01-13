@@ -37,7 +37,7 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	// Test alpha if transparency is enabled, or set it to 1 if not.
 	#ifdef ENABLE_TRANSPARENCY
 	clip(base_color.w - ALPHA_MIN);
-	#else 
+	#else
 	base_color.w = 1.0f;
 	#endif
 	
@@ -45,11 +45,13 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 	//----------------------------------------------------------------------------------
 	// Lighting
 	//----------------------------------------------------------------------------------
+	float3 out_color = 0.0f;
 
-	#ifdef ENABLE_LIGHTING
+	#ifdef DISABLE_LIGHTING
+	out_color = mat.base_color.xyz;
+	#else  //DISABLE_LIGHTING
 	const float3 normal_vec = GetNormal(pin.p_world, pin.n, pin.uv);
-
-	float3 out_color = Lighting::CalculateLighting(pin.p_world, normal_vec, p_to_view, mat);
+	out_color = Lighting::CalculateLighting(pin.p_world, normal_vec, p_to_view, mat);
 
 	/*
 	if (g_material.mirror_surface) {
@@ -60,19 +62,19 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 		out_color.xyz = (g_material.reflectivity * reflection_color) + ((1.0f - g_material.reflectivity) * out_color.xyz);
 	}
 	*/
-	#else  //ENABLE_LIGHTING
-	float3 out_color = mat.base_color.xyz;
-	#endif //ENABLE_LIGHTING
+	#endif //DISABLE_LIGHTING
 
 
 	//----------------------------------------------------------------------------------
 	// Fogging
 	//----------------------------------------------------------------------------------
 
+	#ifndef DISABLE_FOG
 	float fog_lerp = saturate((dist_p_to_view - g_fog.start) / g_fog.range);
 
 	// Blend the fog color and the lit color
 	out_color = lerp(out_color, g_fog.color.xyz, fog_lerp);
+	#endif
 
 
 	//----------------------------------------------------------------------------------

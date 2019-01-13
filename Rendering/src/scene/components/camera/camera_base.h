@@ -7,26 +7,7 @@
 #include "buffer/constant_buffer.h"
 #include "display/viewport.h"
 #include "resource/texture/texture.h"
-
-
-enum class RenderMode : u8 {
-	Forward,
-	ForwardPlus,
-	Deferred,
-};
-
-enum class LightingMode : u8 {
-	Default,
-	Unlit,
-	FalseColorNormal,
-	FalseColorDepth,
-};
-
-enum class RenderOptions : u8 {
-	None           = 1,
-	BoundingVolume = 1 << 1,
-	Wireframe      = 1 << 2,
-};
+#include "rendering_options.h"
 
 
 class CameraSettings final {
@@ -38,6 +19,7 @@ public:
 	CameraSettings() noexcept
 		: render_mode(RenderMode::Forward)
 		, lighting_mode(LightingMode::Default)
+		, brdf(BRDF::CookTorrance)
 		, render_options(static_cast<u8>(RenderOptions::None))
 		, bounding_volume_color(1.0f, 1.0f, 1.0f, 1.0f)
 		, wireframe_color(0.0f, 1.0f, 0.0f, 1.0f) {
@@ -87,6 +69,20 @@ public:
 
 	void setLightingMode(LightingMode mode) noexcept {
 		lighting_mode = mode;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - BRDF
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	BRDF getBRDF() const noexcept {
+		return brdf;
+	}
+
+	void setBRDF(BRDF type) noexcept {
+		brdf = type;
 	}
 
 
@@ -192,6 +188,9 @@ private:
 
 	// The lighting mode of the camera
 	LightingMode lighting_mode;
+
+	// The BRDF to use for the lighting calculations
+	BRDF brdf;
 
 	// The extra rendering options
 	u8 render_options;

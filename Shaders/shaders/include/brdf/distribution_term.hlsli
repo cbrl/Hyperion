@@ -16,6 +16,9 @@
 namespace BRDF {
 namespace Distribution {
 
+//----------------------------------------------------------------------------------
+// Blinn-Phong
+//----------------------------------------------------------------------------------
 float BlinnPhong(float n_dot_h, float alpha) {
 	// D(h) = K(n.h)^s
 
@@ -32,6 +35,9 @@ float BlinnPhong(float n_dot_h, float alpha) {
 }
 
 
+//----------------------------------------------------------------------------------
+// Beckmann
+//----------------------------------------------------------------------------------
 float Beckmann(float n_dot_h, float alpha) {
 
 	// D = [1 / (pi * alpha^2 * (n.h)^4)] * e^[((n.h)^2 - 1) / (alpha^2 * (n.h)^2)]
@@ -46,7 +52,9 @@ float Beckmann(float n_dot_h, float alpha) {
 }
 
 
-// AKA: GGX
+//----------------------------------------------------------------------------------
+// Trowbridge-Reitz (AKA: GGX)
+//----------------------------------------------------------------------------------
 float TrowbridgeReitz(float n_dot_h, float alpha) {
 	// D = alpha^2 / { pi * [(n.h)^2 * (alpha^2 - 1) + 1]^2 }
 
@@ -57,7 +65,9 @@ float TrowbridgeReitz(float n_dot_h, float alpha) {
 }
 
 
+//----------------------------------------------------------------------------------
 // Anisotropic GGX (Generalized Trowbridge Reitz)
+//----------------------------------------------------------------------------------
 float GTR2_Anisotropic(float n_dot_h, float x_dot_h, float y_dot_h, float alpha_x, float alpha_y) {
 
 	// D = (1/pi) * [1 / (a_x * a_y)] * { 1 / [(x.h)^2/a_x^2 + (y.h)^2/a_y^2 + n.h^2]^2 }

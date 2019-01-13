@@ -3,14 +3,7 @@
 #include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
 #include "os/windows/windows.h"
-
-
-enum class AAType {
-	None,
-	MSAA_2x,
-	MSAA_4x,
-	MSAA_8x,
-};
+#include "rendering_options.h"
 
 
 class DisplayConfig final {

@@ -4,11 +4,15 @@
 //#define BYTECODE(x) ShaderBytecodeBlob("./shaders/"#x)
 
 // Forward
-#include "compiled_headers/forward_lit.h"
-#include "compiled_headers/forward_transparent_lit.h"
-#include "compiled_headers/forward_unlit.h"
-#include "compiled_headers/forward_transparent_unlit.h"
 #include "compiled_headers/forward_vs.h"
+
+#include "compiled_headers/forward_lambert.h"
+#include "compiled_headers/forward_blinn_phong.h"
+#include "compiled_headers/forward_cook_torrance.h"
+
+#include "compiled_headers/forward_transparent_lambert.h"
+#include "compiled_headers/forward_transparent_blinn_phong.h"
+#include "compiled_headers/forward_transparent_cook_torrance.h"
 
 // Depth
 #include "compiled_headers/depth_vs.h"
@@ -25,6 +29,7 @@
 
 // False Color
 #include "compiled_headers/static_color.h"
+#include "compiled_headers/fullbright.h"
 #include "compiled_headers/normal_color.h"
 #include "compiled_headers/depth_color.h"
 
@@ -35,22 +40,31 @@ namespace ShaderFactory {
 	// Forward
 	//----------------------------------------------------------------------------------
 
-	std::shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr, bool transparency) {
+	std::shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr, BRDF brdf, bool transparency) {
 
-		if (transparency) {
-			return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_lit_ps", BYTECODE(shader_forward_transparent_lit));
+		switch (brdf) {
+		    case BRDF::Lambert: {
+			    if (transparency)
+				    return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_lambert_ps", BYTECODE(shader_forward_transparent_lambert));
+			    else
+				    return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_lambert_ps", BYTECODE(shader_forward_lambert));
+		    }
+		    case BRDF::BlinnPhong: {
+			    if (transparency)
+				    return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_blinn_phong_ps", BYTECODE(shader_forward_transparent_blinn_phong));
+			    else
+				    return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_blinn_phong_ps", BYTECODE(shader_forward_blinn_phong));
+		    }
+		    case BRDF::CookTorrance: {
+			    if (transparency)
+				    return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_cook_torrance_ps", BYTECODE(shader_forward_transparent_cook_torrance));
+			    else
+				    return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_cook_torrance_ps", BYTECODE(shader_forward_cook_torrance));
+		    }
+			default: {
+			    return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_lambert_ps", BYTECODE(shader_forward_lambert));
+			}
 		}
-
-		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_lit_ps", BYTECODE(shader_forward_lit));
-	}
-
-	std::shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr, bool transparency) {
-
-		if (transparency) {
-			return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_unlit_ps", BYTECODE(shader_forward_transparent_unlit));
-		}
-
-		return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_unlit_ps", BYTECODE(shader_forward_unlit));
 	}
 
 	std::shared_ptr<VertexShader> createForwardVS(ResourceMgr& resource_mgr) {
@@ -134,6 +148,9 @@ namespace ShaderFactory {
 		switch (color) {
 			case FalseColor::Static:
 				return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_static", BYTECODE(shader_static_color));
+
+			case FalseColor::Fullbright:
+			    return resource_mgr.getOrCreate <PixelShader>(L"shader_false_color_fullbright", BYTECODE(shader_fullbright));
 
 			case FalseColor::Normal:
 				return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_normal", BYTECODE(shader_normal_color));

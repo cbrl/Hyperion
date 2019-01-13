@@ -1,5 +1,4 @@
 #define ENABLE_TRANSPARENCY
-#define ENABLE_LIGHTING
-#define ENABLE_SHADOW_MAPPING
+#define BRDF_FUNCTION CookTorrance
 
 #include "forward/forward_ps.hlsli"

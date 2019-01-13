@@ -4,11 +4,6 @@
 #include "include/math.hlsli"
 
 
-// Includes Visibility Term Functions
-// V Term         = (G Term) / (n.v * n.l)
-// Partial V Term = (Partial G Term) / n.x
-
-
 //----------------------------------------------------------------------------------
 // Required Defines
 //----------------------------------------------------------------------------------
@@ -23,7 +18,7 @@
 //----------------------------------------------------------------------------------
 // n_dot_l: clamped cos of the angle between the normal and light vector
 // n_dot_v: clamped cos of the angle between the normal and view vector
-// n_dot_h: clamped cos of the half angle between the normal and the half direction
+// n_dot_h: clamped cos of the angle between the normal and the half direction
 //          between the view and light vector
 //   alpha: the squared roughness
 // n_dot_x: n.v or n.l (used in partial term functions)
@@ -33,16 +28,25 @@
 namespace BRDF {
 namespace Geometry {
 
+//----------------------------------------------------------------------------------
+// Implicit
+//----------------------------------------------------------------------------------
 float Implicit(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return n_dot_l * n_dot_v;
 }
 
 
+//----------------------------------------------------------------------------------
+// Neumann
+//----------------------------------------------------------------------------------
 float Neumann(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return (n_dot_l * n_dot_v) / max(n_dot_l, n_dot_v);
 }
 
 
+//----------------------------------------------------------------------------------
+// Cook-Torrance
+//----------------------------------------------------------------------------------
 float CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	// G(n,h,v,l) = min( 1, (2*n.h*n.v)/(v.h), (2*n.h*n.l)/(v.h) )
 	//            = min( 1, [(2*n.h) / (v.h)] * min(n.v, n.l) )
@@ -52,13 +56,16 @@ float CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, f
 }
 
 
+//----------------------------------------------------------------------------------
+// Kelemen
+//----------------------------------------------------------------------------------
 float Kelemen(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return (n_dot_l * n_dot_v) / sqr(v_dot_h);
 }
 
 
 //----------------------------------------------------------------------------------
-// Partial Geometry Term Functions (Smith Method)
+// Smith Method - Partial Geometry Terms
 //----------------------------------------------------------------------------------
 
 float G1_Schlick(float n_dot_x, float alpha) {
@@ -107,9 +114,12 @@ float Smith(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float al
 //----------------------------------------------------------------------------------
 // Visibility Term Functions
 //----------------------------------------------------------------------------------
+// V  = G  / (n.v * n.l)
+// V1 = G1 / n.x
+//----------------------------------------------------------------------------------
 // n_dot_l: clamped cos of the angle between the normal and light vector
 // n_dot_v: clamped cos of the angle between the normal and view vector
-// n_dot_h: clamped cos of the half angle between the normal and the half direction
+// n_dot_h: clamped cos of the angle between the normal and the half direction
 //          between the view and light vector
 //   alpha: the squared roughness
 // n_dot_x: n.v or n.l (used in partial term functions)
@@ -119,16 +129,25 @@ float Smith(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float al
 namespace BRDF {
 namespace Visibility {
 
+//----------------------------------------------------------------------------------
+// Implicit
+//----------------------------------------------------------------------------------
 float Implicit(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return 1.0f;
 }
 
 
+//----------------------------------------------------------------------------------
+// Neumann
+//----------------------------------------------------------------------------------
 float Neumann(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return 1.0f / max(n_dot_l, n_dot_v);
 }
 
 
+//----------------------------------------------------------------------------------
+// Cook-Torrance
+//----------------------------------------------------------------------------------
 float CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	// V(n,h,v,l) = min( 1/(n.v*n.l), (2*n.h)/(v.h*n.l), (2*n.h)/(v.h*n.l) )
 	//            = min( 1/(n.v*n.l), [(2*n.h) / (v.h)] / max(n.v, n.l) )
@@ -139,13 +158,16 @@ float CookTorrance(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, f
 }
 
 
+//----------------------------------------------------------------------------------
+// Kelemen
+//----------------------------------------------------------------------------------
 float Kelemen(float n_dot_l, float n_dot_v, float n_dot_h, float v_dot_h, float alpha) {
 	return 1.0f / sqr(v_dot_h);
 }
 
 
 //----------------------------------------------------------------------------------
-// Partial Visibility Term Functions (Smith Method)
+// Smith Method - Partial Visibility Terms
 //----------------------------------------------------------------------------------
 
 float V1_Schlick(float n_dot_x, float alpha) {

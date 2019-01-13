@@ -53,7 +53,7 @@ float3 CalculateLights(float3 p_world,
 		g_directional_lights[i0].Calculate(p_world, p_to_light, irradiance);
 
 		float3 D, S;
-		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::Compute(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
@@ -66,7 +66,7 @@ float3 CalculateLights(float3 p_world,
 		g_point_lights[i1].Calculate(p_world, p_to_light, irradiance);
 
 		float3 D, S;
-		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::Compute(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
@@ -79,7 +79,7 @@ float3 CalculateLights(float3 p_world,
 		g_spot_lights[i2].Calculate(p_world, p_to_light, irradiance);
 
 		float3 D, S;
-		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::Compute(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
@@ -102,15 +102,15 @@ float3 CalculateShadowLights(float3 p_world,
 	for (uint i0 = 0; i0 < g_num_shadow_directional_lights; ++i0) {
 		float3 p_to_light, irradiance;
 
-		#ifdef ENABLE_SHADOW_MAPPING
+		#ifdef DISABLE_SHADOW_MAPPING
+		g_shadow_directional_lights[i0].Calculate(p_world, p_to_light, irradiance);
+		#else
 		const ShadowMap shadow_map = {g_pcf_sampler, g_directional_light_smaps, i0};
 		g_shadow_directional_lights[i0].Calculate(shadow_map, p_world, p_to_light, irradiance);
-		#else
-		g_shadow_directional_lights[i0].Calculate(p_world, p_to_light, irradiance);
 		#endif
 
 		float3 D, S;
-		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::Compute(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
@@ -121,15 +121,15 @@ float3 CalculateShadowLights(float3 p_world,
 	for (uint i1 = 0; i1 < g_num_shadow_point_lights; ++i1) {
 		float3 p_to_light, irradiance;
 
-		#ifdef ENABLE_SHADOW_MAPPING
+		#ifdef DISABLE_SHADOW_MAPPING
+		g_shadow_point_lights[i1].Calculate(p_world, p_to_light, irradiance);
+		#else
 		const ShadowCubeMap shadow_map = {g_pcf_sampler, g_point_light_smaps, i1};
 		g_shadow_point_lights[i1].Calculate(shadow_map, p_world, p_to_light, irradiance);
-		#else
-		g_shadow_point_lights[i1].Calculate(p_world, p_to_light, irradiance);
 		#endif
 
 		float3 D, S;
-		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::Compute(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}
@@ -140,15 +140,15 @@ float3 CalculateShadowLights(float3 p_world,
 	for (uint i2 = 0; i2 < g_num_shadow_spot_lights; ++i2) {
 		float3 p_to_light, irradiance;
 
-		#ifdef ENABLE_SHADOW_MAPPING
+		#ifdef DISABLE_SHADOW_MAPPING
+		g_shadow_spot_lights[i2].Calculate(p_world, p_to_light, irradiance);
+		#else
 		const ShadowMap shadow_map = {g_pcf_sampler, g_spot_light_smaps, i2};
 		g_shadow_spot_lights[i2].Calculate(shadow_map, p_world, p_to_light, irradiance);
-		#else
-		g_shadow_spot_lights[i2].Calculate(p_world, p_to_light, irradiance);
 		#endif
 
 		float3 D, S;
-		BRDF::ComputeBRDF(p_to_light, n, p_to_view, mat, D, S);
+		BRDF::Compute(p_to_light, n, p_to_view, mat, D, S);
 
 		radiance += (D + S) * irradiance * saturate(dot(n, p_to_light));
 	}

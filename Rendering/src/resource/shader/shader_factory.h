@@ -3,10 +3,12 @@
 #include "datatypes/datatypes.h"
 #include "resource/resource_mgr.h"
 #include "resource/shader/shader.h"
+#include "rendering_options.h"
 
 
 enum class FalseColor {
 	Static,
+	Fullbright,
 	Normal,
 	Depth
 };
@@ -15,8 +17,7 @@ enum class FalseColor {
 namespace ShaderFactory {
 	
 	// Forward
-	std::shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr, bool transparency);
-	std::shared_ptr<PixelShader> createForwardUnlitPS(ResourceMgr& resource_mgr, bool transparency);
+	std::shared_ptr<PixelShader> createForwardPS(ResourceMgr& resource_mgr, BRDF brdf, bool transparency);
     std::shared_ptr<VertexShader> createForwardVS(ResourceMgr& resource_mgr);
 
 	// Depth
@@ -34,4 +35,4 @@ namespace ShaderFactory {
 
 	// False Color
     std::shared_ptr<PixelShader> createFalseColorPS(ResourceMgr& resource_mgr, FalseColor color);
-    }
+}

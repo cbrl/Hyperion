@@ -451,6 +451,9 @@
     <ClInclude Include="src\resource\model\material\material_factory.h">
       <Filter>Header Files\resource\model\material</Filter>
     </ClInclude>
+    <ClInclude Include="src\rendering_options.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

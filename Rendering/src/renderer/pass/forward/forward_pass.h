@@ -47,21 +47,21 @@ public:
 
 	void XM_CALLCONV renderOpaque(Scene& scene,
 	                              FXMMATRIX world_to_projection,
-	                              const Texture* sky) const;
+	                              const Texture* env_map,
+	                              BRDF brdf) const;
 
 	void XM_CALLCONV renderTransparent(Scene& scene,
 	                                   FXMMATRIX world_to_projection,
-	                                   const Texture* sky) const;
-
-	void XM_CALLCONV renderUnlit(Scene& scene,
-	                             FXMMATRIX world_to_projection,
-	                             const Texture* sky) const;
+	                                   const Texture* env_map,
+	                                   BRDF brdf) const;
 
 	void XM_CALLCONV renderFalseColor(Scene& scene,
 	                                  FXMMATRIX world_to_projection,
 	                                  FalseColor color) const;
 
-	void XM_CALLCONV renderWireframe(Scene& scene, FXMMATRIX world_to_projection, const vec4_f32& color) const;
+	void XM_CALLCONV renderWireframe(Scene& scene,
+	                                 FXMMATRIX world_to_projection,
+	                                 const vec4_f32& color) const;
 
 
 private:

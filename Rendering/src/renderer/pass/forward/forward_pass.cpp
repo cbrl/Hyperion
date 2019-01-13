@@ -84,16 +84,17 @@ void ForwardPass::bindWireframeState() const {
 
 void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
                                            FXMMATRIX world_to_projection,
-                                           const Texture* sky) const {
+                                           const Texture* env_map,
+                                           BRDF brdf) const {
 
 	// Bind the shaders, render states, etc
 	bindOpaqueState();
 
 	// Bind the skybox texture as the environment map
-	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
+	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	static const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, false);
+	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, brdf, false);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -115,16 +116,17 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 
 void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
                                                 FXMMATRIX world_to_projection,
-                                                const Texture* sky) const {
+                                                const Texture* env_map,
+                                                BRDF brdf) const {
 
 	// Bind the shaders, render states, etc
 	bindTransparentState();
 
 	// Bind the skybox texture as the environment map
-	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
+	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	static const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, true);
+	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, brdf, true);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -144,62 +146,13 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 }
 
 
-void XM_CALLCONV ForwardPass::renderUnlit(Scene& scene,
-                                          FXMMATRIX world_to_projection,
-                                          const Texture* sky) const {
-
-	// Bind the skybox texture as the environment map
-	if (sky) sky->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
-
-
-	// Opaque models
-	bindTransparentState();
-	static const auto opaque_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, false);
-	opaque_ps->bind(device_context);
-
-	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
-		if (!root.isActive()) return;
-
-		root.forEachModel([&](const Model& model) {
-			if (!model.isActive()) return;
-
-			const auto& mat = model.getMaterial();
-			if (mat.params.base_color[3] <= ALPHA_MAX)
-				return;
-
-			renderModel(root, model, world_to_projection);
-		});
-	});
-
-
-	// Transparent Models
-	bindTransparentState();
-	static const auto transparent_ps = ShaderFactory::createForwardUnlitPS(resource_mgr, true);
-	transparent_ps->bind(device_context);
-
-	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
-		if (!root.isActive()) return;
-
-		root.forEachModel([&](const Model& model) {
-			if (!model.isActive()) return;
-
-			const auto& mat = model.getMaterial();
-			if (mat.params.base_color[3]< ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
-				return;
-
-			renderModel(root, model, world_to_projection);
-		});
-	});
-}
-
-
 void ForwardPass::renderFalseColor(Scene& scene,
                                    FXMMATRIX world_to_projection,
                                    FalseColor color) const {
 
 	bindOpaqueState();
 
-	static const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
+	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
 	scene.forEach<ModelRoot>([&](const ModelRoot& root) {

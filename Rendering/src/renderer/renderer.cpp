@@ -105,12 +105,12 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	switch (settings.getLightingMode()) {
 		case LightingMode::Default:
-			forward_pass->renderOpaque(scene, world_to_projection, skybox);
-			forward_pass->renderTransparent(scene, world_to_projection, skybox);
+			forward_pass->renderOpaque(scene, world_to_projection, skybox, settings.getBRDF());
+			forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
 			break;
 
-		case LightingMode::Unlit:
-			forward_pass->renderUnlit(scene, world_to_projection, skybox);
+		case LightingMode::FalseColorFullbright:
+			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Fullbright);
 			break;
 
 		case LightingMode::FalseColorNormal:

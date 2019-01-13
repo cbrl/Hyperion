@@ -6,18 +6,22 @@
 #include "include/material.hlsli"
 
 //----------------------------------------------------------------------------------
+// Required Defines
+//----------------------------------------------------------------------------------
+//#define BRDF_FUNCTION ...
+
+
+//----------------------------------------------------------------------------------
 // Defines
 //----------------------------------------------------------------------------------
-#define BRDF_FUNCTION CookTorrance
+#define BRDF_DISTRIBUTION TrowbridgeReitz
+#define D_FUNC CAT(CAT(Distribution, ::), BRDF_DISTRIBUTION)
 
-#define D_FUNC Beckmann
-#define DISTRIBUTION CAT(CAT(Distribution, ::), D_FUNC)
+#define BRDF_FRESNEL Schlick
+#define F_FUNC CAT(CAT(Fresnel, ::), BRDF_FRESNEL)
 
-#define F_FUNC CookTorrance
-#define FRESNEL CAT(CAT(Fresnel, ::), F_FUNC)
-
-#define V_FUNC Smith
-#define VISIBILITY CAT(CAT(Visibility, ::), V_FUNC)
+#define BRDF_VISIBILITY Smith
+#define V_FUNC CAT(CAT(Visibility, ::), BRDF_VISIBILITY)
 
 #define G1_FUNC G1_GGX
 #define V1_FUNC V1_GGX
@@ -36,7 +40,7 @@ namespace BRDF {
 //----------------------------------------------------------------------------------
 // Utility Functions
 //----------------------------------------------------------------------------------
-
+namespace detail {
 float3 GetF0(Material mat) {
 	// 0.04f = dielectric constant for metalness workflow (IOR of approx. 1.5)
 	return lerp(0.04f, mat.base_color.xyz, mat.metalness);
@@ -45,51 +49,36 @@ float3 GetF0(Material mat) {
 float GetAlpha(Material mat) {
 	return max(sqr(mat.roughness), 0.01f);
 }
+} // namespace detail
 
 
 
 
 //----------------------------------------------------------------------------------
-// Naive Specular Functions
+// Lambert BRDF
 //----------------------------------------------------------------------------------
-float SpecularPhong(float3 l, float3 n, float3 v, float power) {
-	const float3 r       = normalize(reflect(-l, n));
-	const float  r_dot_v = max(dot(r, v), 0.0f);
-	return pow(r_dot_v, power);
-}
-float SpecularBlinnPhong(float3 l, float3 n, float3 v, float power) {
-	const float3 h       = normalize(l + v);
-	const float  n_dot_h = max(dot(n, h), 0.0f);
-	return pow(n_dot_h, power);
-}
-
-
-
-
-//----------------------------------------------------------------------------------
-// BRDF Functions
-//----------------------------------------------------------------------------------
-//
-// Inputs/Outputs are the same as ComputeBRDF()
-//
-//----------------------------------------------------------------------------------
-
 void Lambert(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
 	diffuse  = (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
 	specular = float3(0.0f, 0.0f, 0.0f);
 }
 
-/*
-void BlinnPhongBRDF(float3 l, float3 n, float3 v, Material mat,
-                    out float3 diffuse, out float3 specular) {
 
-	const float n_dot_l = saturate(dot(n, l));
-	diffuse  = n_dot_l * (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
-	specular = SpecularBlinnPhong(l, n, v, mat.spec_exponent) * mat.specular.xyz * mat.spec_scale;
+//----------------------------------------------------------------------------------
+// Blinn-Phong BRDF
+//----------------------------------------------------------------------------------
+void BlinnPhong(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
+	Lambert(l, n, v, mat, diffuse, specular);
+
+	const float3 h      = normalize(l + v);
+	const float n_dot_h = max(dot(n, h), 0.0f);
+	const float power   = exp2((1.0f - mat.metalness) * 10.0f); //roughness[1, 0] -> exponent[0, 1024]
+	specular = detail::GetF0(mat) * pow(n_dot_h, power);
 }
-*/
 
 
+//----------------------------------------------------------------------------------
+// Cook-Torrance BRDF
+//----------------------------------------------------------------------------------
 void CookTorrance(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
 
 	const float  n_dot_l = saturate(dot(n, l));
@@ -99,12 +88,12 @@ void CookTorrance(float3 l, float3 n, float3 v, Material mat, out float3 diffuse
 	const float  l_dot_h = saturate(dot(l, h));
 	const float  v_dot_h = saturate(dot(v, h));
 
-	const float  alpha = GetAlpha(mat);
-	const float3 f0    = GetF0(mat);
+	const float  alpha = detail::GetAlpha(mat);
+	const float3 f0    = detail::GetF0(mat);
 
-	const float  D = DISTRIBUTION(n_dot_h, alpha);
-	const float3 F = FRESNEL(l_dot_h, f0);
-	const float  V = VISIBILITY(n_dot_l, n_dot_v, n_dot_h, v_dot_h, alpha);
+	const float  D = D_FUNC(n_dot_h, alpha);
+	const float3 F = F_FUNC(l_dot_h, f0);
+	const float  V = V_FUNC(n_dot_l, n_dot_v, n_dot_h, v_dot_h, alpha);
 
 	diffuse = (1.0f - F) * (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
 	diffuse = saturate(diffuse);
@@ -130,7 +119,7 @@ void CookTorrance(float3 l, float3 n, float3 v, Material mat, out float3 diffuse
 //   specular: The specular intensity
 //----------------------------------------------------------------------------------
 
-void ComputeBRDF(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
+void Compute(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
 
 	BRDF_FUNCTION(l, n, v, mat, diffuse, specular);
 }

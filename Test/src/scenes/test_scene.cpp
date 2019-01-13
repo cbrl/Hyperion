@@ -100,7 +100,7 @@ void TestScene::initialize(const Engine& engine) {
 	cube->getComponent<Transform>()->setPosition(vec3_f32{-2.5f, 1.0f, 1.5f});
 	cube->getComponent<ModelRoot>()->forEachModel([](Model& model) {
 		model.getMaterial().params.base_color = {1.0f, 0.0f, 0.0f, 1.0f};
-		model.getMaterial().params.roughness  = 0.4f;
+		model.getMaterial().params.roughness  = 0.3f;
 		model.getMaterial().params.metalness  = 0.65f;
 	});
 
@@ -110,7 +110,7 @@ void TestScene::initialize(const Engine& engine) {
 	cylinder->getComponent<Transform>()->setPosition(vec3_f32{2.5f, 1.0f, 0.75f});
 	cylinder->getComponent<ModelRoot>()->forEachModel([](Model& model) {
 		model.getMaterial().params.base_color = {0.0f, 1.0f, 0.0f, 1.0f};
-		model.getMaterial().params.roughness  = 0.4f;
+		model.getMaterial().params.roughness  = 0.7f;
 		model.getMaterial().params.metalness  = 0.6f;
 	});
 
@@ -122,7 +122,7 @@ void TestScene::initialize(const Engine& engine) {
 	sphere->getComponent<Transform>()->setScale(vec3_f32{2.0f});
 	sphere->getComponent<ModelRoot>()->forEachModel([](Model& model) {
 		model.getMaterial().params.base_color = {1.0f, 0.7f, 0.0f, 1.0f};
-		model.getMaterial().params.roughness = 0.9f;
+		model.getMaterial().params.roughness = 0.5f;
 		model.getMaterial().params.metalness = 0.3f;
 	});
 

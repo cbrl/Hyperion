@@ -110,7 +110,6 @@ void DrawCameraSettings(CameraSettings& settings) {
 		RenderMode::ForwardPlus,
 		RenderMode::Deferred
 	};
-	static_assert(std::size(render_mode_names) == std::size(render_modes));
 
 	auto render_mode = static_cast<int>(settings.getRenderMode());
 	if (ImGui::Combo("Render Mode", &render_mode, render_mode_names, static_cast<int>(std::size(render_mode_names))))
@@ -122,21 +121,39 @@ void DrawCameraSettings(CameraSettings& settings) {
 	//----------------------------------------------------------------------------------
 	static constexpr gsl::czstring<> light_mode_names[] = {
 		"Default",
-		"Unlint",
+		"FalseColorFullbright",
 		"FalseColorNormal",
 		"FalseColorDepth"
 	};
 	static constexpr LightingMode light_modes[] = {
 		LightingMode::Default,
-		LightingMode::Unlit,
+		LightingMode::FalseColorFullbright,
 		LightingMode::FalseColorNormal,
 		LightingMode::FalseColorDepth
 	};
-	static_assert(std::size(light_mode_names) == std::size(light_modes));
 
 	auto light_mode = static_cast<int>(settings.getLightingMode());
 	if (ImGui::Combo("Lighting Mode", &light_mode, light_mode_names, static_cast<int>(std::size(light_mode_names))))
 		settings.setLightingMode(static_cast<LightingMode>(light_mode));
+
+
+	//----------------------------------------------------------------------------------
+	// BRDF
+	//----------------------------------------------------------------------------------
+	static constexpr gsl::czstring<> brdf_names[] = {
+		"Lambert",
+		"Blinn-Phong",
+		"Cook-Torrance"
+	};
+	static constexpr BRDF brdfs[] = {
+	    BRDF::Lambert,
+	    BRDF::BlinnPhong,
+	    BRDF::CookTorrance
+	};
+
+	auto brdf = static_cast<int>(settings.getBRDF());
+	if (ImGui::Combo("BRDF", &brdf, brdf_names, static_cast<int>(std::size(brdf_names))))
+		settings.setBRDF(static_cast<BRDF>(brdf));
 
 
 	//----------------------------------------------------------------------------------

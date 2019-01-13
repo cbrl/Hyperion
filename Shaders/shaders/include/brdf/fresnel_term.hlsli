@@ -75,7 +75,7 @@ float3 None(float l_dot_h, float3 f0) {
 // Schlick
 //----------------------------------------------------------------------------------
 
-float Schlick(float l_dot_h, float f0, float f90) {
+float Schlick(float l_dot_h, float f0, float f90 = 1.0f) {
 	// F(f0) = f0 + (f90-f0)(1-l.h)^5
 	//       = f0(f90 - (1-l.h)^5) + (1-l.h)^5
 	//       = lerp(f0, f90, (1-l.h)^5)
@@ -88,12 +88,7 @@ float Schlick(float l_dot_h, float f0, float f90) {
 }
 
 
-float Schlick(float l_dot_h, float f0) {
-	return Schlick(l_dot_h, f0, 1.0f);
-}
-
-
-float3 Schlick(float l_dot_h, float3 f0, float3 f90) {
+float3 Schlick(float l_dot_h, float3 f0, float3 f90 = 1.0f) {
 	// F(f0) = f0 + (f90-f0)(1-l.h)^5
 	//       = f0(f90 - (1-l.h)^5) + (1-l.h)^5
 	//       = lerp(f0, f90, (1-l.h)^5)
@@ -103,11 +98,6 @@ float3 Schlick(float l_dot_h, float3 f0, float3 f90) {
 
 	//return f0 + ((f90 - f0) * base_pow_5);
 	return lerp(f0, f90, base_pow_5);
-}
-
-
-float3 Schlick(float l_dot_h, float3 f0) {
-	return Schlick(l_dot_h, f0, 1.0f);
 }
 
 
