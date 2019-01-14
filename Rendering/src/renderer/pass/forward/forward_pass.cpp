@@ -94,7 +94,8 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, brdf, false);
+	static std::shared_ptr<PixelShader> pixel_shader;
+	pixel_shader = ShaderFactory::createForwardPS(resource_mgr, brdf, false);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -126,7 +127,8 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	const auto pixel_shader = ShaderFactory::createForwardPS(resource_mgr, brdf, true);
+	static std::shared_ptr<PixelShader> pixel_shader;
+	pixel_shader = ShaderFactory::createForwardPS(resource_mgr, brdf, true);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -152,7 +154,8 @@ void ForwardPass::renderFalseColor(Scene& scene,
 
 	bindOpaqueState();
 
-	const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
+	static std::shared_ptr<PixelShader> pixel_shader;
+	pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
 	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
