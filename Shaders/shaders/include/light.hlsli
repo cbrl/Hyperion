@@ -146,9 +146,14 @@ struct PointLight {
 		// Normalize the light vector
 		p_to_light /= d;
 
-		// Attenuation
-		const float att_factor = Attenuation(d, attenuation);
-		irradiance = intensity * att_factor;
+		if (d <= range) {
+			// Attenuation
+			const float att_factor = Attenuation(d, attenuation);
+			irradiance = intensity * att_factor;
+		}
+		else {
+			irradiance = 0.0f;
+		}
 	}
 };
 
@@ -204,10 +209,15 @@ struct SpotLight {
 		// Normalize the light vector.
 		p_to_light /= d;
 
-		const float att_factor  = Attenuation(d, attenuation);
-		const float spot_factor = SpotIntensity(p_to_light, direction, cos_umbra, cos_penumbra);
+		if (d <= range) {
+			const float att_factor = Attenuation(d, attenuation);
+			const float spot_factor = SpotIntensity(p_to_light, direction, cos_umbra, cos_penumbra);
 
-		irradiance = intensity * att_factor * spot_factor;
+			irradiance = intensity * att_factor * spot_factor;
+		}
+		else {
+			irradiance = 0.0f;
+		}
 	}
 };
 
