@@ -51,9 +51,8 @@ void TestScene::initialize(const Engine& engine) {
 	cam->getSettings().setSkybox( resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds") );
 
 	auto& fog = cam->getSettings().getFog();
-	fog.color = vec4_f32{ 0.2f, 0.2f, 0.2f, 1.0f };
-	fog.start = 150.0f;
-	fog.range = 100.0f;
+	fog.density = 0.05f;
+	fog.color   = { 0.2f, 0.2f, 0.2f };
 
 	camera->getComponent<Transform>()->setPosition(vec3_f32{ 0.0f, 3.0f, -3.0f });
 	camera->getComponent<MouseRotation>()->setSensitivity(0.01f);

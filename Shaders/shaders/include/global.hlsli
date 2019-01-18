@@ -32,10 +32,8 @@ SamplerComparisonState g_pcf_sampler : REG_S(SLOT_SAMPLER_PCF);
 
 // Camera fog
 struct Fog {
-	float4 color;
-	float  start;
-	float  range;
-	float2 pad0;
+	float  density;
+	float3 color;
 };
 
 cbuffer CameraBuffer : REG_B(SLOT_CBUFFER_CAMERA) {

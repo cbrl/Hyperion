@@ -96,10 +96,8 @@ struct ShadowedSpotLightBuffer {
 //----------------------------------------------------------------------------------
 
 struct Fog {
-	vec4_f32 color = {1.0f};
-	f32      start = 0.0f;
-	f32      range = -1.0f;
-	vec2_f32 pad;
+	f32      density = 0.0f;
+	vec3_f32 color   = {1.0f};
 };
 
 struct CameraBuffer {

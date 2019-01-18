@@ -192,9 +192,8 @@ void DrawCameraSettings(CameraSettings& settings) {
 	ImGui::Separator();
 
 	auto& fog = settings.getFog();
+	ImGui::DragFloat("Fog Density", &fog.density, 0.001f, 0.0f, FLT_MAX);
 	ImGui::ColorEdit3("Fog Color", fog.color.data());
-	ImGui::DragFloat("Fog Start", &fog.start, 0.1f);
-	ImGui::DragFloat("Fog Range", &fog.range, 0.1f);
 }
 
 

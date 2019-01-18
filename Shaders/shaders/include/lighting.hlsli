@@ -4,7 +4,8 @@
 //----------------------------------------------------------------------------------
 // Settings
 //----------------------------------------------------------------------------------
-// ENABLE_SHADOW_MAPPING
+// DISABLE_SHADOW_MAPPING
+// DISABLE_FOG
 
 
 #include "include/light.hlsli"
@@ -160,9 +161,14 @@ float3 CalculateShadowLights(float3 p_world,
 
 
 
-float3 CalculateLighting(float3 p_world, float3 n, float3 p_to_view, Material material) {
+float3 CalculateLighting(float3 p_world, float3 n, Material material) {
 
 	float3 radiance = 0.0f;
+
+	float3      p_to_view      = CameraPosition() - p_world;
+	const float dist_p_to_view = length(p_to_view);
+
+	p_to_view /= dist_p_to_view;
 	
 	// Calculate radiance
 	radiance += detail::CalculateLights(p_world, n, p_to_view, material);
@@ -173,6 +179,12 @@ float3 CalculateLighting(float3 p_world, float3 n, float3 p_to_view, Material ma
 	float3 null;
 	BRDF::Lambert(0.0f, 0.0f, 0.0f, material, ambient, null);
 	ambient *= g_ambient_intensity.xyz;
+
+	// Calculate fog
+	#ifndef DISABLE_FOG
+	const float fog = exp(-dist_p_to_view * g_fog.density);
+	radiance = lerp(g_fog.color, radiance, fog);
+	#endif
 
 	// Calculate final color
 	return radiance + ambient + material.emissive;

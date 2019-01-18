@@ -154,7 +154,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	Fog& getFog() noexcept{
+	Fog& getFog() noexcept {
 		return fog;
 	}
 
