@@ -2,7 +2,7 @@
 
 #include "component/component.h"
 #include "datatypes/datatypes.h"
-#include "directx/directx_math.h"
+#include "directx/math/directx_math.h"
 #include "scene/events/core_events.h"
 
 

@@ -81,6 +81,15 @@
     <Filter Include="Header Files\log\spdlog\fmt\bundled">
       <UniqueIdentifier>{467f8eb8-311d-4a6e-aae8-67fbd92a56f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\directx\math">
+      <UniqueIdentifier>{5dea8a68-3b5a-45a4-bcb9-7f4b1c2ae942}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\directx\vertex">
+      <UniqueIdentifier>{55a3473c-fb6b-45de-bda0-359f9803149d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\directx\vertex">
+      <UniqueIdentifier>{5f8438b9-4483-4497-bb9e-dfaf741eeb8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -113,9 +122,6 @@
     <ClInclude Include="src\sysmon\system_monitor.h">
       <Filter>Header Files\sysmon</Filter>
     </ClInclude>
-    <ClInclude Include="src\directx\vertex_types.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
     <ClInclude Include="src\datatypes\scalar_types.h">
       <Filter>Header Files\datatypes</Filter>
     </ClInclude>
@@ -130,15 +136,6 @@
     </ClInclude>
     <ClInclude Include="src\timer\timer.h">
       <Filter>Header Files\timer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directx\directx_math_extensions.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directx\directx_math_wrapper.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directx\directx_math.h">
-      <Filter>Header Files\directx</Filter>
     </ClInclude>
     <ClInclude Include="src\memory\managed_resource_map.h">
       <Filter>Header Files\memory</Filter>
@@ -320,16 +317,28 @@
     <ClInclude Include="src\memory\handle\handle_map.h">
       <Filter>Header Files\memory\handle</Filter>
     </ClInclude>
+    <ClInclude Include="src\directx\math\directx_math_extensions.h">
+      <Filter>Header Files\directx\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\math\directx_math_wrapper.h">
+      <Filter>Header Files\directx\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\math\directx_math.h">
+      <Filter>Header Files\directx\math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\vertex\vertex_types.h">
+      <Filter>Header Files\directx\vertex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\sysmon\system_monitor.cpp">
       <Filter>Source Files\sysmon</Filter>
     </ClCompile>
-    <ClCompile Include="src\directx\vertex_types.cpp">
-      <Filter>Source Files\directx</Filter>
-    </ClCompile>
     <ClCompile Include="src\os\windows\window.cpp">
       <Filter>Source Files\os\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directx\vertex\vertex_types.cpp">
+      <Filter>Source Files\directx\vertex</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

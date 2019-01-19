@@ -1,7 +1,7 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "directx/vertex_types.h"
+#include "directx/vertex/vertex_types.h"
 #include "resource/mesh/mesh.h"
 #include "resource/model/model_config.h"
 #include "resource/model/model_output.h"

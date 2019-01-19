@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "directx/directx_math.h"
+#include "directx/math/directx_math.h"
 
 
 namespace Bezier {

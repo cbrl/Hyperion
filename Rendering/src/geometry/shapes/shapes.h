@@ -11,7 +11,7 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
-#include "directx/vertex_types.h"
+#include "directx/vertex/vertex_types.h"
 
 
 namespace Shapes {
