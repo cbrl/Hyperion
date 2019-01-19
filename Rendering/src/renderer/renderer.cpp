@@ -53,15 +53,23 @@ void Renderer::render(Scene& scene) {
 	});
 
 
+	//----------------------------------------------------------------------------------
 	// Bind the final output state
+	//----------------------------------------------------------------------------------
 	output_mgr->bindEnd(device_context);
 
 
 	//----------------------------------------------------------------------------------
 	// Render text objects
 	//----------------------------------------------------------------------------------
-
 	text_pass->render(scene);
+
+
+	//----------------------------------------------------------------------------------
+	// Render ImGui data
+	//----------------------------------------------------------------------------------
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
 
@@ -138,13 +146,6 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	if (settings.hasRenderOption(RenderOptions::BoundingVolume))
 		bounding_volume_pass->render(scene, world_to_projection, camera.getSettings().getBoundingVolumeColor());
-
-
-	//----------------------------------------------------------------------------------
-	// Render ImGui data
-	//----------------------------------------------------------------------------------
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 
 	//----------------------------------------------------------------------------------
