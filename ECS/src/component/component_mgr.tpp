@@ -3,6 +3,9 @@ ComponentT* ComponentMgr::createComponent(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>,
 	              "Calling ComponentMgr::CreateComponent() with non-component type.");
 
+	static_assert(std::is_constructible_v<ComponentT, ArgsT...>,
+	              "Component does not have a constructor taking the provided argument types.");
+
 	auto* pool = component_pools.getOrCreatePool<ComponentT>();
 	auto& component = pool->emplace_back(std::forward<ArgsT>(args)...);
 

@@ -24,7 +24,7 @@ struct ParentChanged : public Event<ParentChanged> {
 //
 //----------------------------------------------------------------------------------
 
-class Entity : public EventSender {
+class Entity final : public EventSender {
 	friend class EntityMgr;
 
 public:
@@ -33,21 +33,21 @@ public:
 	//----------------------------------------------------------------------------------
 	Entity();
 	Entity(const Entity&) = delete;
-	Entity(Entity&&) noexcept = default;
+	Entity(Entity&&) = default;
 
 
 public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	virtual ~Entity();
+	~Entity();
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
 	Entity& operator=(const Entity&) = delete;
-	Entity& operator=(Entity&&) noexcept = default;
+	Entity& operator=(Entity&&) = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -220,6 +220,5 @@ private:
 	// The children of this entity
 	std::vector<EntityPtr> children;
 };
-
 
 #include "entity.tpp"

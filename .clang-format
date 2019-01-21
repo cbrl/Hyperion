@@ -10,15 +10,10 @@ AllowShortCaseLabelsOnASingleLine: 'true'
 AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: 'true'
 AllowShortLoopsOnASingleLine: 'true'
-AlwaysBreakTemplateDeclarations: 'true'
 BinPackArguments: 'false'
 BinPackParameters: 'false'
 BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Custom
-BraceWrapping:
-  BeforeCatch: true
-  BeforeElse: true
-BreakBeforeInheritanceComma: 'false'
+BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: 'true'
 BreakConstructorInitializers: BeforeComma
 ColumnLimit: '0'
@@ -30,9 +25,17 @@ IndentCaseLabels: 'true'
 IndentWidth: '4'
 Language: Cpp
 MaxEmptyLinesToKeep: '4'
+NamespaceIndentation: None
 PointerAlignment: Left
 SortIncludes: 'false'
+SpaceAfterCStyleCast: 'false'
+SpaceAfterTemplateKeyword: 'false'
+SpaceBeforeAssignmentOperators: 'true'
+SpaceBeforeCpp11BracedList: 'false'
+SpaceBeforeCtorInitializerColon: 'true'
+SpaceBeforeInheritanceColon: 'true'
 SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: 'true'
 SpacesInAngles: 'false'
 SpacesInCStyleCastParentheses: 'false'
 SpacesInContainerLiterals: 'false'

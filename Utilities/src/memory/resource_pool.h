@@ -55,22 +55,20 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	ResourcePoolMgr() = default;
 	ResourcePoolMgr(const ResourcePoolMgr& factory) = delete;
 	ResourcePoolMgr(ResourcePoolMgr&& factory) noexcept = default;
 
+
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~ResourcePoolMgr() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	ResourcePoolMgr& operator=(const ResourcePoolMgr& factory) = delete;
 	ResourcePoolMgr& operator=(ResourcePoolMgr&& factory) noexcept = default;
 
@@ -84,7 +82,8 @@ public:
 	[[nodiscard]]
 	ResourcePool<ResourceT>* getOrCreatePool() {
 		using pool_t = ResourcePool<ResourceT>;
-		const auto pair = pools.try_emplace(std::type_index{typeid(ResourceT)}, std::make_unique<pool_t>()); //pair = std::pair<iterator, bool>
+		static const auto index = std::type_index{typeid(ResourceT)};
+		const auto pair = pools.try_emplace(index, std::make_unique<pool_t>()); //pair = std::pair<iterator, bool>
 		return static_cast<pool_t*>(pair.first->second.get());
 	}
 
@@ -93,9 +92,9 @@ public:
 	template <typename ResourceT>
 	[[nodiscard]]
 	ResourcePool<ResourceT>* getPool() {
-		auto* pool = getPool(std::type_index{typeid(ResourceT)});
+		static const auto index = std::type_index{typeid(ResourceT)};
+		auto* pool = getPool(index);
 		if (pool) {
-			auto* pool = getPool(std::type_index{typeid(ResourceT)});
 			return static_cast<ResourcePool<ResourceT>*>(pool);
 		}
 		else {
