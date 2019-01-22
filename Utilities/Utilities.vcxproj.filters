@@ -90,6 +90,12 @@
     <Filter Include="Source Files\directx\vertex">
       <UniqueIdentifier>{5f8438b9-4483-4497-bb9e-dfaf741eeb8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\directx\profiler">
+      <UniqueIdentifier>{ecd76a3f-aab8-42f9-8a83-e860615ad52a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\directx\profiler">
+      <UniqueIdentifier>{1af6fc68-cf66-4d13-ab76-723a5f6d4bc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -329,6 +335,9 @@
     <ClInclude Include="src\directx\vertex\vertex_types.h">
       <Filter>Header Files\directx\vertex</Filter>
     </ClInclude>
+    <ClInclude Include="src\directx\profiler\gpu_profiler.h">
+      <Filter>Header Files\directx\profiler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\sysmon\system_monitor.cpp">
@@ -339,6 +348,9 @@
     </ClCompile>
     <ClCompile Include="src\directx\vertex\vertex_types.cpp">
       <Filter>Source Files\directx\vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directx\profiler\gpu_profiler.cpp">
+      <Filter>Source Files\directx\profiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

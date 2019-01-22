@@ -1,7 +1,9 @@
 #pragma once
 
 #include "directx/d3d11.h"
+#include "directx/profiler/gpu_profiler.h"
 #include "hlsl.h"
+
 #include "renderer/output/output_mgr.h"
 #include "renderer/state/render_state_mgr.h"
 
@@ -22,7 +24,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	Renderer(DisplayConfig& display_config,
 	         const RenderingConfig& rendering_config,
 	         ID3D11Device& device,
@@ -37,14 +38,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~Renderer() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	Renderer& operator=(const Renderer& renderer) = delete;
 	Renderer& operator=(Renderer&& renderer) = default;
 
@@ -52,6 +51,11 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	const GPUProfiler& getProfiler() const noexcept {
+		return profiler;
+	}
 
 	void onResize() {
 		output_mgr->resizeBuffers();
@@ -70,8 +74,10 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	std::reference_wrapper<ID3D11Device>        device;
-	std::reference_wrapper<ID3D11DeviceContext> device_context;
+	ID3D11Device&        device;
+	ID3D11DeviceContext& device_context;
+
+	GPUProfiler profiler;
 
 	std::unique_ptr<OutputMgr>      output_mgr;
 	std::unique_ptr<RenderStateMgr> render_state_mgr;

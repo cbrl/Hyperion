@@ -154,6 +154,7 @@
     <ClInclude Include="src\directx\math\directx_math_extensions.h" />
     <ClInclude Include="src\directx\math\directx_math_wrapper.h" />
     <ClInclude Include="src\directx\pipeline.h" />
+    <ClInclude Include="src\directx\profiler\gpu_profiler.h" />
     <ClInclude Include="src\directx\vertex\vertex_types.h" />
     <ClInclude Include="src\exception\exception.h" />
     <ClInclude Include="src\fps\fps.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="src\timer\timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\directx\profiler\gpu_profiler.cpp" />
     <ClCompile Include="src\directx\vertex\vertex_types.cpp" />
     <ClCompile Include="src\os\windows\window.cpp" />
     <ClCompile Include="src\sysmon\system_monitor.cpp" />

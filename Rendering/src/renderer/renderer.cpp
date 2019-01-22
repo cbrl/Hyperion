@@ -12,7 +12,12 @@ Renderer::Renderer(DisplayConfig& display_config,
                    SwapChain& swap_chain,
                    ResourceMgr& resource_mgr)
 	: device(device)
-	, device_context(device_context) {
+	, device_context(device_context)
+	, profiler(device, device_context) {
+
+	profiler.registerTimestampID("ImGui");
+	profiler.registerTimestampID("Text");
+	profiler.registerTimestampID("Skybox");
 
 	output_mgr       = std::make_unique<OutputMgr>(display_config, device, swap_chain);
 	render_state_mgr = std::make_unique<RenderStateMgr>(device, device_context);
@@ -27,6 +32,10 @@ Renderer::Renderer(DisplayConfig& display_config,
 
 
 void Renderer::render(Scene& scene) {
+
+	profiler.beginFrame();
+
+	profiler.beginTimestamp(GPUTimestamps::render_scene);
 
 	scene.forEach<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
 
@@ -62,14 +71,23 @@ void Renderer::render(Scene& scene) {
 	//----------------------------------------------------------------------------------
 	// Render text objects
 	//----------------------------------------------------------------------------------
+	profiler.beginTimestamp("Text");
 	text_pass->render(scene);
+	profiler.endTimestamp("Text");
+
+	profiler.endTimestamp(GPUTimestamps::render_scene);
 
 
 	//----------------------------------------------------------------------------------
 	// Render ImGui data
 	//----------------------------------------------------------------------------------
+	profiler.beginTimestamp("ImGui");
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	profiler.endTimestamp("ImGui");
+
+	profiler.endFrame();
+	profiler.update();
 }
 
 
@@ -92,7 +110,9 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	// Process the light buffers
 	//----------------------------------------------------------------------------------
+	profiler.beginTimestamp(GPUTimestamps::shadow_maps);
 	light_pass->render(scene, world_to_projection);
+	profiler.endTimestamp(GPUTimestamps::shadow_maps);
 
 
 	//----------------------------------------------------------------------------------
@@ -105,12 +125,16 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	// Render the skybox
 	//----------------------------------------------------------------------------------
+	profiler.beginTimestamp("Skybox");
 	sky_pass->render(skybox);
+	profiler.endTimestamp("Skybox");
 
 
 	//----------------------------------------------------------------------------------
 	// Render objects with forward shader
 	//----------------------------------------------------------------------------------
+	profiler.beginTimestamp(GPUTimestamps::forward_render);
+
 	switch (settings.getLightingMode()) {
 		case LightingMode::Default:
 			forward_pass->renderOpaque(scene, world_to_projection, skybox, settings.getBRDF());
@@ -132,6 +156,8 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 		default:
 			break;
 	}
+
+	profiler.endTimestamp(GPUTimestamps::forward_render);
 
 
 	//----------------------------------------------------------------------------------

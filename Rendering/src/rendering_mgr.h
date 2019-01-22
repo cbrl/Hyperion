@@ -99,6 +99,11 @@ public:
 		return *resource_mgr;
 	}
 
+	[[nodiscard]]
+	const GPUProfiler& getProfiler() const {
+		return renderer->getProfiler();
+	}
+
 
 private:
 	//----------------------------------------------------------------------------------
