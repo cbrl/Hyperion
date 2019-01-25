@@ -180,10 +180,12 @@
     <ClInclude Include="src\log\spdlog\details\registry.h" />
     <ClInclude Include="src\log\spdlog\details\thread_pool.h" />
     <ClInclude Include="src\log\spdlog\fmt\bin_to_hex.h" />
-    <ClInclude Include="src\log\spdlog\fmt\bundled\colors.h" />
+    <ClInclude Include="src\log\spdlog\fmt\bundled\chrono.h" />
+    <ClInclude Include="src\log\spdlog\fmt\bundled\color.h" />
     <ClInclude Include="src\log\spdlog\fmt\bundled\core.h" />
     <ClInclude Include="src\log\spdlog\fmt\bundled\format-inl.h" />
     <ClInclude Include="src\log\spdlog\fmt\bundled\format.h" />
+    <ClInclude Include="src\log\spdlog\fmt\bundled\locale.h" />
     <ClInclude Include="src\log\spdlog\fmt\bundled\ostream.h" />
     <ClInclude Include="src\log\spdlog\fmt\bundled\posix.h" />
     <ClInclude Include="src\log\spdlog\fmt\bundled\printf.h" />

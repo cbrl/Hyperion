@@ -272,9 +272,6 @@
     <ClInclude Include="src\log\spdlog\fmt\bundled\time.h">
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
     </ClInclude>
-    <ClInclude Include="src\log\spdlog\fmt\bundled\colors.h">
-      <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
-    </ClInclude>
     <ClInclude Include="src\log\spdlog\fmt\bundled\core.h">
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
     </ClInclude>
@@ -337,6 +334,15 @@
     </ClInclude>
     <ClInclude Include="src\directx\profiler\gpu_profiler.h">
       <Filter>Header Files\directx\profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\log\spdlog\fmt\bundled\color.h">
+      <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="src\log\spdlog\fmt\bundled\chrono.h">
+      <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="src\log\spdlog\fmt\bundled\locale.h">
+      <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
