@@ -15,12 +15,6 @@
     <Filter Include="Source Files\misc">
       <UniqueIdentifier>{c627ea4c-1471-4a17-819b-35c33ab612a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\misc\stl">
-      <UniqueIdentifier>{d7a05d03-8078-4893-9c48-c7ce962ef702}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\misc\stl">
-      <UniqueIdentifier>{02bdb29e-ed2a-4cc3-b70f-167acbc9e2b8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\imgui_forwarder">
       <UniqueIdentifier>{cb3c7a2d-32e2-4678-991c-4ddb70d78b22}</UniqueIdentifier>
     </Filter>
@@ -54,6 +48,12 @@
     <Filter Include="Source Files\imgui_addons\metrics_gui\metrics_gui">
       <UniqueIdentifier>{2d9008d4-f6a9-4bac-b070-b08bdb1ce116}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\misc\cpp">
+      <UniqueIdentifier>{02bdb29e-ed2a-4cc3-b70f-167acbc9e2b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\misc\cpp">
+      <UniqueIdentifier>{d7a05d03-8078-4893-9c48-c7ce962ef702}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\imgui_impl_dx11.h">
@@ -70,9 +70,6 @@
     </ClInclude>
     <ClInclude Include="src\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\misc\stl\imgui_stl.h">
-      <Filter>Header Files\misc\stl</Filter>
     </ClInclude>
     <ClInclude Include="src\imstb_rectpack.h">
       <Filter>Header Files</Filter>
@@ -101,6 +98,9 @@
     <ClInclude Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.h">
       <Filter>Header Files\imgui_addons\metrics_gui\metrics_gui</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Downloads\imgui-1.67\misc\cpp\imgui_stdlib.h">
+      <Filter>Header Files\misc\cpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imgui_draw.cpp">
@@ -118,9 +118,6 @@
     <ClCompile Include="src\imgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\misc\stl\imgui_stl.cpp">
-      <Filter>Source Files\misc\stl</Filter>
-    </ClCompile>
     <ClCompile Include="src\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -135,6 +132,9 @@
     </ClCompile>
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\ProggyTiny.cpp">
       <Filter>Source Files\imgui_addons\metrics_gui\metrics_gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Downloads\imgui-1.67\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Source Files\misc\cpp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
