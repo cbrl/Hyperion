@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Downloads\imgui-1.67\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="src\imconfig.h" />
     <ClInclude Include="src\imgui.h" />
     <ClInclude Include="src\imgui_addons\ImGuizmo\ImGuizmo.h" />
@@ -34,9 +33,9 @@
     <ClInclude Include="src\imstb_rectpack.h" />
     <ClInclude Include="src\imstb_textedit.h" />
     <ClInclude Include="src\imstb_truetype.h" />
+    <ClInclude Include="src\misc\cpp\imgui_stdlib.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Downloads\imgui-1.67\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\imgui_addons\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.cpp" />
@@ -47,6 +46,7 @@
     <ClCompile Include="src\imgui_impl_dx11.cpp" />
     <ClCompile Include="src\imgui_impl_win32.cpp" />
     <ClCompile Include="src\imgui_widgets.cpp" />
+    <ClCompile Include="src\misc\cpp\imgui_stdlib.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

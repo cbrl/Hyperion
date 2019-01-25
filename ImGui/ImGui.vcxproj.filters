@@ -98,7 +98,7 @@
     <ClInclude Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.h">
       <Filter>Header Files\imgui_addons\metrics_gui\metrics_gui</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Downloads\imgui-1.67\misc\cpp\imgui_stdlib.h">
+    <ClInclude Include="src\misc\cpp\imgui_stdlib.h">
       <Filter>Header Files\misc\cpp</Filter>
     </ClInclude>
   </ItemGroup>
@@ -133,7 +133,7 @@
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\ProggyTiny.cpp">
       <Filter>Source Files\imgui_addons\metrics_gui\metrics_gui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Downloads\imgui-1.67\misc\cpp\imgui_stdlib.cpp">
+    <ClCompile Include="src\misc\cpp\imgui_stdlib.cpp">
       <Filter>Source Files\misc\cpp</Filter>
     </ClCompile>
   </ItemGroup>

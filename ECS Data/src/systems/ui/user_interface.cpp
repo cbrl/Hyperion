@@ -101,15 +101,13 @@ void DrawCameraSettings(CameraSettings& settings) {
 	// Render Mode
 	//----------------------------------------------------------------------------------
 	static constexpr gsl::czstring<> render_mode_names[] = {
-		"Forward",
-		"Forward+",
-		"Deferred"
-	};
+	    "Forward",
+	    "Forward+",
+	    "Deferred"};
 	static constexpr RenderMode render_modes[] = {
-		RenderMode::Forward,
-		RenderMode::ForwardPlus,
-		RenderMode::Deferred
-	};
+	    RenderMode::Forward,
+	    RenderMode::ForwardPlus,
+	    RenderMode::Deferred};
 
 	auto render_mode = static_cast<int>(settings.getRenderMode());
 	if (ImGui::Combo("Render Mode", &render_mode, render_mode_names, static_cast<int>(std::size(render_mode_names))))
@@ -120,17 +118,15 @@ void DrawCameraSettings(CameraSettings& settings) {
 	// Lighting Mode
 	//----------------------------------------------------------------------------------
 	static constexpr gsl::czstring<> light_mode_names[] = {
-		"Default",
-		"FalseColorFullbright",
-		"FalseColorNormal",
-		"FalseColorDepth"
-	};
+	    "Default",
+	    "FalseColorFullbright",
+	    "FalseColorNormal",
+	    "FalseColorDepth"};
 	static constexpr LightingMode light_modes[] = {
-		LightingMode::Default,
-		LightingMode::FalseColorFullbright,
-		LightingMode::FalseColorNormal,
-		LightingMode::FalseColorDepth
-	};
+	    LightingMode::Default,
+	    LightingMode::FalseColorFullbright,
+	    LightingMode::FalseColorNormal,
+	    LightingMode::FalseColorDepth};
 
 	auto light_mode = static_cast<int>(settings.getLightingMode());
 	if (ImGui::Combo("Lighting Mode", &light_mode, light_mode_names, static_cast<int>(std::size(light_mode_names))))
@@ -141,15 +137,13 @@ void DrawCameraSettings(CameraSettings& settings) {
 	// BRDF
 	//----------------------------------------------------------------------------------
 	static constexpr gsl::czstring<> brdf_names[] = {
-		"Lambert",
-		"Blinn-Phong",
-		"Cook-Torrance"
-	};
+	    "Lambert",
+	    "Blinn-Phong",
+	    "Cook-Torrance"};
 	static constexpr BRDF brdfs[] = {
 	    BRDF::Lambert,
 	    BRDF::BlinnPhong,
-	    BRDF::CookTorrance
-	};
+	    BRDF::CookTorrance};
 
 	auto brdf = static_cast<int>(settings.getBRDF());
 	if (ImGui::Combo("BRDF", &brdf, brdf_names, static_cast<int>(std::size(brdf_names))))
@@ -214,11 +208,11 @@ void DrawDetails(PerspectiveCamera& camera) {
 	//----------------------------------------------------------------------------------
 	auto& vp = camera.getViewport();
 	vec2_u32 size = vp.getSize();
-	vec2_u32 pos  = vp.getTopLeft();
+	vec2_u32 pos = vp.getTopLeft();
 
 	static constexpr u32 v_min_size = 1;
-	static constexpr u32 v_min_pos  = 0;
-	static constexpr u32 v_max      = 15360;
+	static constexpr u32 v_min_pos = 0;
+	static constexpr u32 v_max = 15360;
 
 	if (ImGui::DragScalarN("Viewport Size", ImGuiDataType_U32, size.data(), 2, 1.0f, &v_min_size, &v_max)) {
 		vp.setSize(size);
@@ -243,7 +237,7 @@ void DrawDetails(PerspectiveCamera& camera) {
 void DrawDetails(OrthographicCamera& camera) {
 
 	DrawComponentState(camera);
-	
+
 	//----------------------------------------------------------------------------------
 	// Ortho Size
 	//----------------------------------------------------------------------------------
@@ -257,11 +251,11 @@ void DrawDetails(OrthographicCamera& camera) {
 	//----------------------------------------------------------------------------------
 	auto& vp = camera.getViewport();
 	vec2_u32 size = vp.getSize();
-	vec2_u32 pos  = vp.getTopLeft();
+	vec2_u32 pos = vp.getTopLeft();
 
 	static constexpr u32 v_min_size = 1;
-	static constexpr u32 v_min_pos  = 0;
-	static constexpr u32 v_max      = 15360;
+	static constexpr u32 v_min_pos = 0;
+	static constexpr u32 v_max = 15360;
 
 	if (ImGui::DragScalarN("Viewport Size", ImGuiDataType_U32, size.data(), 2, 1.0f, &v_min_size, &v_max)) {
 		vp.setSize(size);
@@ -501,8 +495,10 @@ void DrawDetails(AxisRotation& rotation) {
 	bool x_enable = rotation.hasAxis(AxisRotation::Axis::X);
 
 	if (ImGui::Checkbox("X Axis", &x_enable)) {
-		if (x_enable) rotation.addAxis(AxisRotation::Axis::X);
-		else rotation.removeAxis(AxisRotation::Axis::X);
+		if (x_enable)
+			rotation.addAxis(AxisRotation::Axis::X);
+		else
+			rotation.removeAxis(AxisRotation::Axis::X);
 	}
 	if (x_enable) {
 		f32 speed_x = rotation.getSpeedX();
@@ -517,8 +513,10 @@ void DrawDetails(AxisRotation& rotation) {
 	bool y_enable = rotation.hasAxis(AxisRotation::Axis::Y);
 
 	if (ImGui::Checkbox("Y Axis", &y_enable)) {
-		if (y_enable) rotation.addAxis(AxisRotation::Axis::Y);
-		else rotation.removeAxis(AxisRotation::Axis::Y);
+		if (y_enable)
+			rotation.addAxis(AxisRotation::Axis::Y);
+		else
+			rotation.removeAxis(AxisRotation::Axis::Y);
 	}
 	if (y_enable) {
 		f32 speed_y = rotation.getSpeedY();
@@ -533,8 +531,10 @@ void DrawDetails(AxisRotation& rotation) {
 	bool z_enable = rotation.hasAxis(AxisRotation::Axis::Z);
 
 	if (ImGui::Checkbox("Z Axis", &z_enable)) {
-		if (z_enable) rotation.addAxis(AxisRotation::Axis::Z);
-		else rotation.removeAxis(AxisRotation::Axis::Z);
+		if (z_enable)
+			rotation.addAxis(AxisRotation::Axis::Z);
+		else
+			rotation.removeAxis(AxisRotation::Axis::Z);
 	}
 	if (z_enable) {
 		f32 speed_z = rotation.getSpeedZ();
@@ -576,7 +576,7 @@ void DrawTransformManipulator(Transform& transform, CameraT& camera, Input& inpu
 	//----------------------------------------------------------------------------------
 	// Matrices
 	//----------------------------------------------------------------------------------
-	XMMATRIX world_to_camera      = camera_transform->getWorldToObjectMatrix();
+	XMMATRIX world_to_camera = camera_transform->getWorldToObjectMatrix();
 	XMMATRIX camera_to_projection = camera.getCameraToProjectionMatrix();
 
 	XMFLOAT4X4 view;
@@ -592,15 +592,15 @@ void DrawTransformManipulator(Transform& transform, CameraT& camera, Input& inpu
 	// View Rect
 	//----------------------------------------------------------------------------------
 	auto top_left = camera.getViewport().getTopLeft();
-	auto size     = camera.getViewport().getSize();
+	auto size = camera.getViewport().getSize();
 	ImGuizmo::SetRect((float)top_left[0], (float)top_left[1], (float)size[0], (float)size[1]);
 
 	//----------------------------------------------------------------------------------
 	// Operation & Mode
 	//----------------------------------------------------------------------------------
 	static ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE;
-	static ImGuizmo::MODE      mode      = ImGuizmo::WORLD;
-	
+	static ImGuizmo::MODE mode = ImGuizmo::WORLD;
+
 	if (input.isKeyPressed(Keyboard::R)) {
 		operation = ImGuizmo::ROTATE;
 	}
@@ -624,19 +624,18 @@ void DrawTransformManipulator(Transform& transform, CameraT& camera, Input& inpu
 
 		if (!transform.getOwner()->hasParent()) {
 			ImGuizmo::DecomposeMatrixToComponents(&matrix.m[0][0], translation.data(), rotation.data(), scale.data());
-		}
-		else {
+		} else {
 			// If the transform is a child of another, then the matrix needs to be multiplied by the inverse of
 			// the parent's matrix to obtain the local transformation.
-			auto*      parent_transform   = transform.getOwner()->getParent()->getComponent<Transform>();
-			XMMATRIX   world_to_parent    = parent_transform->getWorldToObjectMatrix();
-			XMMATRIX   relative_transform = XMLoadFloat4x4(&matrix) * world_to_parent;
+			auto* parent_transform = transform.getOwner()->getParent()->getComponent<Transform>();
+			XMMATRIX world_to_parent = parent_transform->getWorldToObjectMatrix();
+			XMMATRIX relative_transform = XMLoadFloat4x4(&matrix) * world_to_parent;
 			XMFLOAT4X4 new_matrix;
 			XMStoreFloat4x4(&new_matrix, relative_transform);
 
 			ImGuizmo::DecomposeMatrixToComponents(&new_matrix.m[0][0], translation.data(), rotation.data(), scale.data());
 		}
-		
+
 		// ImGuizmo outputs rotation in degrees
 		rotation = {XMConvertToRadians(rotation[0]), XMConvertToRadians(rotation[1]), XMConvertToRadians(rotation[2])};
 
@@ -656,7 +655,7 @@ void DrawTransformManipulator(Transform& transform, CameraT& camera, Input& inpu
 //----------------------------------------------------------------------------------
 
 // Draw a node in the tree, and its details if selected
-template <typename T>
+template<typename T>
 void DrawComponentNode(gsl::czstring<> text, T& item) {
 
 	static IComponent* selected = nullptr;
@@ -707,8 +706,7 @@ void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr) {
 					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
 					if (auto entity = g_scene_tree.getSelected())
 						entity->addComponent<ModelRoot>(device, bp);
-				}
-				else
+				} else
 					Logger::log(LogLevel::err, "Failed to open file dialog");
 			}
 
@@ -727,10 +725,10 @@ void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr) {
 
 // Draw the details panel for the specified entity
 void DrawEntityDetails(Entity& entity, Engine& engine) {
-	
-	auto& device       = engine.getRenderingMgr().getDevice();
+
+	auto& device = engine.getRenderingMgr().getDevice();
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
-	auto& scene        = engine.getScene();
+	auto& scene = engine.getScene();
 	const auto& entities = scene.getEntities();
 
 	//----------------------------------------------------------------------------------
@@ -786,8 +784,7 @@ void DrawEntityDetails(Entity& entity, Engine& engine) {
 	if (ImGui::Combo("Parent", &index, getter, names.data(), static_cast<int>(names.size()))) {
 		if (index != 0) {
 			entities[index - 1]->addChild(entity.getPtr()); //subtract 1 since index 0 is "None"
-		}
-		else if (entity.hasParent()) {
+		} else if (entity.hasParent()) {
 			entity.getParent()->removeChild(entity.getPtr());
 		}
 	}
@@ -934,7 +931,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 		return;
 
 	auto* entity = entity_ptr.get();
-	auto  handle = entity_ptr.getHandle();
+	auto handle = entity_ptr.getHandle();
 
 	//----------------------------------------------------------------------------------
 	// Draw Entity Node
@@ -942,8 +939,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 	bool node_open = true;
 	if (entity->hasChildren()) {
 		node_open = g_scene_tree.newNode(entity_ptr, entity->getName().c_str());
-	}
-	else {
+	} else {
 		node_open = g_scene_tree.newLeafNode(entity_ptr, entity->getName().c_str());
 	}
 
@@ -1002,7 +998,7 @@ void DrawEntityMenu(Scene& scene) {
 		if (ImGui::MenuItem("New")) {
 			scene.addEntity();
 		}
-		
+
 		if (ImGui::BeginMenu("Selected", g_scene_tree.getSelected().valid())) {
 			ImGui::Separator();
 			if (ImGui::MenuItem("Delete")) {
@@ -1046,7 +1042,7 @@ void DrawDisplaySettingsPopup(Engine& engine) {
 		if (display_modes.empty()) {
 			for (const auto& desc : settings.getDisplayDescList()) {
 				const auto exact_refresh = static_cast<f32>(desc.RefreshRate.Numerator) / static_cast<f32>(desc.RefreshRate.Denominator);
-				const auto refresh       = static_cast<u32>(round(exact_refresh));
+				const auto refresh = static_cast<u32>(round(exact_refresh));
 				display_modes.push_back(std::to_string(desc.Width) + "x" + std::to_string(desc.Height) + " " + std::to_string(refresh) + "Hz");
 			}
 		}
@@ -1164,13 +1160,13 @@ void DrawMetrics(Engine& engine) {
 
 	// CPU Usage
 	static MetricsGuiPlot cpu_plot;
-	static MetricsGuiMetric total_cpu("Total CPU", "%", known_min_max);
-	static MetricsGuiMetric process_cpu("Process CPU", "%", known_min_max);
+	static MetricsGuiMetric total_cpu("Total Usage", "%", known_min_max);
+	static MetricsGuiMetric process_cpu("Process Usage", "%", known_min_max);
 
 	// RAM Usage
 	static MetricsGuiPlot ram_plot;
-	static MetricsGuiMetric total_ram("Total RAM", "B", si_prefix | known_min_max);
-	static MetricsGuiMetric process_ram("Process RAM", "B", si_prefix | known_min_max);
+	static MetricsGuiMetric total_ram("Total Usage", "B", si_prefix | known_min_max);
+	static MetricsGuiMetric process_ram("Process Usage", "B", si_prefix | known_min_max);
 
 	// GPU Time
 	static MetricsGuiPlot gpu_plot;
@@ -1186,40 +1182,52 @@ void DrawMetrics(Engine& engine) {
 	static MetricsGuiMetric text_render("Text Render", "s", si_prefix);
 
 	for (static bool once = true; once; once = false) {
-		frame_plot.mShowInlineGraphs   = true;
+		frame_plot.mShowInlineGraphs = true;
 		frame_plot.mInlinePlotRowCount = 3;
-		frame_plot.mShowLegendAverage  = true;
-		frame_plot.mShowLegendColor    = false;
-		frame_plot.mShowLegendDesc     = false;
-		frame_time.mSelected           = true;
-		fps.mSelected                  = true;
+		frame_plot.mShowLegendAverage = true;
+		frame_plot.mShowLegendColor = false;
+		frame_plot.mShowLegendDesc = false;
+		frame_time.mSelected = true;
+		fps.mSelected = true;
 		frame_plot.AddMetric(&fps);
 		frame_plot.AddMetric(&frame_time);
 
-		cpu_plot.AddMetric(&total_cpu);
-		cpu_plot.AddMetric(&process_cpu);
 		total_cpu.mKnownMinValue = 0.0f;
 		total_cpu.mKnownMaxValue = 100.0f;
 		process_cpu.mKnownMinValue = 0.0f;
 		process_cpu.mKnownMaxValue = 100.0f;
+		cpu_plot.mShowLegendMin = false;
+		cpu_plot.mShowLegendMax = false;
+		cpu_plot.mShowLegendAverage = true;
+		cpu_plot.AddMetric(&total_cpu);
+		cpu_plot.AddMetric(&process_cpu);
 
-		ram_plot.AddMetric(&total_ram);
-		ram_plot.AddMetric(&process_ram);
 		total_ram.mKnownMinValue = 0.0f;
 		total_ram.mKnownMaxValue = static_cast<float>(engine.getSysMon().memory().getPhysicalMemSize());
 		process_ram.mKnownMinValue = 0.0f;
 		process_ram.mKnownMaxValue = static_cast<float>(engine.getSysMon().memory().getPhysicalMemSize());
+		ram_plot.mShowLegendAverage = true;
+		ram_plot.mShowLegendMin = false;
+		ram_plot.AddMetric(&total_ram);
+		ram_plot.AddMetric(&process_ram);
 
+		gpu_plot.mShowLegendMin = false;
+		gpu_plot.mShowLegendMax = false;
+		gpu_plot.mShowLegendAverage = true;
 		gpu_plot.AddMetric(&frame_gpu_time);
 		gpu_plot.AddMetric(&scene_render);
 		gpu_plot.AddMetric(&imgui_render);
 		gpu_plot.LinkLegends(&scene_gpu_plot);
 
+		scene_gpu_plot.mShowLegendMin = false;
+		scene_gpu_plot.mShowLegendMax = false;
+		scene_gpu_plot.mShowLegendAverage = true;
 		scene_gpu_plot.AddMetric(&skybox_render);
 		scene_gpu_plot.AddMetric(&shadow_maps);
 		scene_gpu_plot.AddMetric(&forward_render);
 		scene_gpu_plot.AddMetric(&text_render);
 	}
+
 
 	//----------------------------------------------------------------------------------
 	// Update frame time
@@ -1228,6 +1236,7 @@ void DrawMetrics(Engine& engine) {
 	frame_time.AddNewValue(static_cast<float>(timer.deltaTime()));
 	fps.AddNewValue(static_cast<float>(1.0 / timer.deltaTime()));
 	frame_plot.UpdateAxes();
+
 
 	//----------------------------------------------------------------------------------
 	// Update CPU/RAM usage
@@ -1240,7 +1249,8 @@ void DrawMetrics(Engine& engine) {
 	total_ram.AddNewValue(static_cast<float>(sys_mon.memory().getTotalUsedPhysicalMem()));
 	process_ram.AddNewValue(static_cast<float>(sys_mon.memory().getProcessUsedPhysicalMem()));
 	ram_plot.UpdateAxes();
-	
+
+
 	//----------------------------------------------------------------------------------
 	// Update GPU time
 	//----------------------------------------------------------------------------------
@@ -1256,29 +1266,62 @@ void DrawMetrics(Engine& engine) {
 	text_render.AddNewValue(profiler.deltaTime("Text"));
 	scene_gpu_plot.UpdateAxes();
 
+
 	//----------------------------------------------------------------------------------
 	// Draw Window
 	//----------------------------------------------------------------------------------
-	if (ImGui::Begin("Metrics")) {
-		if (ImGui::CollapsingHeader("FPS Data", ImGuiTreeNodeFlags_DefaultOpen)) {
-			frame_plot.DrawList();
-		}
+	ImGui::SetNextWindowSizeConstraints({500, 0}, {500, -1});
+	if (ImGui::Begin("Metrics", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+		if (ImGui::BeginTabBar("Metrics Tab Bar")) {
 
-		ImGui::Spacing();
+			if (ImGui::BeginTabItem("All")) {
+				ImGui::Text("FPS");
+				ImGui::Separator();
+				frame_plot.DrawList();
 
-		if (ImGui::CollapsingHeader("CPU Data", ImGuiTreeNodeFlags_DefaultOpen)) {
-			cpu_plot.DrawHistory();
-		}
+				ImGui::Spacing();
+				ImGui::Text("CPU");
+				ImGui::Separator();
+				cpu_plot.DrawHistory();
 
-		ImGui::Spacing();
+				ImGui::Spacing();
+				ImGui::Text("RAM");
+				ImGui::Separator();
+				ram_plot.DrawHistory();
 
-		if (ImGui::CollapsingHeader("RAM Data", ImGuiTreeNodeFlags_DefaultOpen)) {
-			ram_plot.DrawHistory();
-		}
+				ImGui::Spacing();
+				ImGui::Text("GPU");
+				ImGui::Separator();
+				gpu_plot.DrawHistory();
+				//scene_gpu_plot.DrawHistory();
 
-		if (ImGui::CollapsingHeader("GPU Data", ImGuiTreeNodeFlags_DefaultOpen)) {
-			gpu_plot.DrawHistory();
-			scene_gpu_plot.DrawHistory();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("FPS")) {
+				frame_plot.DrawList();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("CPU")) {
+				cpu_plot.DrawHistory();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("RAM")) {
+				ram_plot.DrawHistory();
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("GPU")) {
+				gpu_plot.DrawHistory();
+				ImGui::Spacing();
+				ImGui::Text("Scene Render Breakdown");
+				scene_gpu_plot.DrawHistory();
+				ImGui::EndTabItem();
+			}
+
+			ImGui::EndTabBar();
 		}
 	}
 	ImGui::End();
@@ -1294,14 +1337,14 @@ void DrawMetrics(Engine& engine) {
 //----------------------------------------------------------------------------------
 
 
-void UserInterface::update(Engine& engine)  {
+void UserInterface::update(Engine& engine) {
 
 	//ImGui::ShowDemoWindow();
-	ImGuizmo::BeginFrame();  //technicall should be called right after ImGui_XXXX_NewFrame();
-	
-	auto& device       = engine.getRenderingMgr().getDevice();
+	ImGuizmo::BeginFrame(); //technicall should be called right after ImGui_XXXX_NewFrame();
+
+	auto& device = engine.getRenderingMgr().getDevice();
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
-	auto& scene        = engine.getScene();
+	auto& scene = engine.getScene();
 
 	// Setup window layout
 	ImGui::SetNextWindowSize(ImVec2(275, 600), ImGuiCond_FirstUseEver);
