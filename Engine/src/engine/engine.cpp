@@ -158,7 +158,8 @@ void Engine::init(std::wstring title,
 	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getHandle()), std::move(display_config), std::move(rendering_config));
 
 	// Initialize the COM library
-	CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	auto com_result = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+	ThrowIfFailed(com_result != S_FALSE, "Failed to initialize the COM library");
 }
 
 

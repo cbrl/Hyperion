@@ -28,7 +28,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EventParticipator() noexcept = default;
+	EventParticipator() noexcept;
 	EventParticipator(const EventParticipator&) noexcept = default;
 	EventParticipator(EventParticipator&&) noexcept = default;
 

@@ -39,7 +39,8 @@ public:
 	constexpr Vector(const Vector&) noexcept = default;
 	constexpr Vector(Vector&&) noexcept = default;
 	
-	constexpr Vector(T val) noexcept {
+	constexpr Vector(T val) noexcept
+	    : std::array<T, N>{} {
 		this->fill(val); //constexpr since C++20
 	}
 

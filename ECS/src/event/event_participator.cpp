@@ -6,6 +6,11 @@
 // EventParticipator
 //----------------------------------------------------------------------------------
 
+EventParticipator::EventParticipator() noexcept
+    : event_mgr(nullptr) {
+}
+
+
 EventMgr& EventParticipator::getEventMgr() const noexcept {
 	assert(event_mgr != nullptr && "EventParticipator::event_handler == nullptr");
 	return *event_mgr;

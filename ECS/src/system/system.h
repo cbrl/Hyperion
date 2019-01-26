@@ -24,7 +24,8 @@ public:
 	//----------------------------------------------------------------------------------
 
 	ISystem() noexcept
-	    : active(true)
+	    : ecs(nullptr)
+	    , active(true)
 		, update_interval(-1.0f)
 	    , time_since_last_update(FLT_MAX)
 		, needs_update(true) {
