@@ -68,26 +68,68 @@ class SystemMonitor final {
 		friend class SystemMonitor;
 
 	protected:
+		//----------------------------------------------------------------------------------
+		// Constructors
+		//----------------------------------------------------------------------------------
 		CpuMonitor() noexcept
 			: sys_usage(0)
 			, proc_usage(0) {
 		}
 
+		CpuMonitor(const CpuMonitor&) = default;
+		CpuMonitor(CpuMonitor&&) = default;
+
+
+		//----------------------------------------------------------------------------------
+		// Destructor
+		//----------------------------------------------------------------------------------
 		~CpuMonitor() = default;
 
-		// Update the CPU stats
-		void tick();
 
+		//----------------------------------------------------------------------------------
+		// Operators
+		//----------------------------------------------------------------------------------
+		CpuMonitor& operator=(const CpuMonitor&) = default;
+		CpuMonitor& operator=(CpuMonitor&&) = default;
+
+
+		//----------------------------------------------------------------------------------
+		// Member Functions
+		//----------------------------------------------------------------------------------
+
+		// Update the CPU stats
+		void tick() {
+			// Update wall clock and get elapsed time
+			wall_timer.tick();
+			const auto dt = wall_timer.deltaTime();
+
+			// Update system clocks
+			core_timer.tick();
+			sys_work_timer.tick();
+			sys_idle_timer.tick();
+
+			// Update cpu stats
+			sys_usage  = ((sys_work_timer.deltaTime() - sys_idle_timer.deltaTime()) * 100.0) / sys_work_timer.deltaTime();
+			proc_usage = (core_timer.deltaTime() * 100.0) / dt;
+		}
 
 	public:
-		[[nodiscard]]
-		f64 getTotalCpuPercentage() const;
 
 		[[nodiscard]]
-		f64 getProcessCpuPercentage() const;
+		f64 getTotalCpuPercentage() const noexcept {
+			return sys_usage;
+		}
 
+		[[nodiscard]]
+		f64 getProcessCpuPercentage() const noexcept {
+			return proc_usage;
+		}
 
 	private:
+
+		//----------------------------------------------------------------------------------
+		// Member Variables
+		//----------------------------------------------------------------------------------
 		f64 sys_usage;
 		f64 proc_usage;
 
@@ -98,6 +140,7 @@ class SystemMonitor final {
 	};
 
 
+
 	//----------------------------------------------------------------------------------
 	// Memory Monitor
 	//----------------------------------------------------------------------------------
@@ -105,84 +148,162 @@ class SystemMonitor final {
 		friend class SystemMonitor;
 
 	protected:
+		//----------------------------------------------------------------------------------
+		// Constructors
+		//----------------------------------------------------------------------------------
 		MemoryMonitor() noexcept
 			: mem_info{}
 			, pmc{} {
 			mem_info.dwLength = sizeof(MEMORYSTATUSEX);
 		}
 
+		MemoryMonitor(const MemoryMonitor&) = default;
+		MemoryMonitor(MemoryMonitor&&) = default;
+
+
+		//----------------------------------------------------------------------------------
+		// Destructor
+		//----------------------------------------------------------------------------------
 		~MemoryMonitor() = default;
 
-		// Update the memory stats
-		void tick();
 
+		//----------------------------------------------------------------------------------
+		// Operators
+		//----------------------------------------------------------------------------------
+		MemoryMonitor& operator=(const MemoryMonitor&) = default;
+		MemoryMonitor& operator=(MemoryMonitor&&) = default;
+
+
+		//----------------------------------------------------------------------------------
+		// Member Functions - Tick
+		//----------------------------------------------------------------------------------
+
+		// Update the memory stats
+		void tick() {
+			GlobalMemoryStatusEx(&mem_info); //Total memory
+			GetProcessMemoryInfo(GetCurrentProcess(), reinterpret_cast<PPROCESS_MEMORY_COUNTERS>(&pmc), sizeof(pmc)); //Process memory
+		}
 
 	public:
-		//----------------------------------------------------------------------------------
-		// Physical Memory
-		//----------------------------------------------------------------------------------
-		[[nodiscard]]
-		u64 getPhysicalMemSize() const;
-
-		[[nodiscard]]
-		u64 getTotalUsedPhysicalMem() const;
-
-		[[nodiscard]]
-		u64 getProcessUsedPhysicalMem() const;
-
 
 		//----------------------------------------------------------------------------------
-		// Virtual Memory
+		// Member Functions - Physical Memory
 		//----------------------------------------------------------------------------------
 		[[nodiscard]]
-		u64 getVirtualMemSize() const;
+		u64 getPhysicalMemSize() const noexcept {
+			return mem_info.ullTotalPhys;
+		}
 
 		[[nodiscard]]
-		u64 getTotalUsedVirtualMem() const;
+		u64 getTotalUsedPhysicalMem() const noexcept {
+			return mem_info.ullTotalPhys - mem_info.ullAvailPhys;
+		}
 
 		[[nodiscard]]
-		u64 getProcessUsedVirtualMem() const;
+		u64 getProcessUsedPhysicalMem() const noexcept {
+			return pmc.WorkingSetSize;
+		}
 
+
+		//----------------------------------------------------------------------------------
+		// Member Functions - Virtual Memory
+		//----------------------------------------------------------------------------------
+		[[nodiscard]]
+		u64 getVirtualMemSize() const noexcept {
+			return mem_info.ullTotalPageFile;
+		}
+
+		[[nodiscard]]
+		u64 getTotalUsedVirtualMem() const noexcept {
+			return mem_info.ullTotalPageFile - mem_info.ullAvailPageFile;
+		}
+
+		[[nodiscard]]
+		u64 getProcessUsedVirtualMem() const noexcept {
+			return pmc.PrivateUsage;
+		}
 
 	private:
+
+		//----------------------------------------------------------------------------------
+		// Member Variables
+		//----------------------------------------------------------------------------------
 		MEMORYSTATUSEX mem_info;
 		PROCESS_MEMORY_COUNTERS_EX pmc;
 	};
 
 
+
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 	SystemMonitor() noexcept
-		: dt(0.0) {
+		: dt(0.0)
+		, update_interval(0.2f) {
 	}
 
+	SystemMonitor(const SystemMonitor&) = default;
+	SystemMonitor(SystemMonitor&&) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 	~SystemMonitor() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	SystemMonitor& operator=(const SystemMonitor&) = default;
+	SystemMonitor& operator=(SystemMonitor&&) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 
 	// Update resource stats
 	void tick() {
 		wall_timer.tick();
 		dt += wall_timer.deltaTime();
 
-		// Update every 500ms
-		if (dt >= 0.5) {
+		if (dt >= update_interval) {
 			cpu_mon.tick();
 			memory_mon.tick();
 			dt = 0.0;
 		}
 	}
 
+	// Get the time between updates (in seconds)
+	[[nodiscard]]
+	f32 getUpdateInterval() const noexcept {
+		return update_interval;
+	}
+
+	// Set the time between updates (in seconds)
+	void setUpdateInterval(f32 time) noexcept {
+		update_interval = time;
+	}
+
 	// Access CPU stats
-	const CpuMonitor& cpu() const {
+	const CpuMonitor& cpu() const noexcept {
 		return cpu_mon;
 	}
 
 	// Access memory stats
-	const MemoryMonitor& memory() const {
+	const MemoryMonitor& memory() const noexcept {
 		return memory_mon;
 	}
 
-
 private:
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
 	f64 dt;
+	f32 update_interval;
 	HighResTimer wall_timer;
 
 	CpuMonitor cpu_mon;

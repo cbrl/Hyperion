@@ -12,9 +12,6 @@
     <Filter Include="Header Files\datatypes">
       <UniqueIdentifier>{d340d6c5-76f7-49dc-bd21-55919b24d377}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\fps">
-      <UniqueIdentifier>{8e5f21e0-9bd4-4140-ab83-9b54b20596f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\io">
       <UniqueIdentifier>{105bc6f5-b4c3-443f-832c-61ac3bffdce6}</UniqueIdentifier>
     </Filter>
@@ -35,9 +32,6 @@
     </Filter>
     <Filter Include="Header Files\timer">
       <UniqueIdentifier>{00658588-272d-4982-9711-030afd966cc9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\sysmon">
-      <UniqueIdentifier>{c130fc05-7574-4a91-ae46-09bd2c81c7c7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\directx">
       <UniqueIdentifier>{286f5b4c-c30d-499e-bb63-27dcb519d439}</UniqueIdentifier>
@@ -109,9 +103,6 @@
     </ClInclude>
     <ClInclude Include="src\datatypes\datatypes.h">
       <Filter>Header Files\datatypes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fps\fps.h">
-      <Filter>Header Files\fps</Filter>
     </ClInclude>
     <ClInclude Include="src\io\io.h">
       <Filter>Header Files\io</Filter>
@@ -346,9 +337,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\sysmon\system_monitor.cpp">
-      <Filter>Source Files\sysmon</Filter>
-    </ClCompile>
     <ClCompile Include="src\os\windows\window.cpp">
       <Filter>Source Files\os\windows</Filter>
     </ClCompile>
