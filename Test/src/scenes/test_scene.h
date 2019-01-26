@@ -16,7 +16,5 @@ public:
 
 
 private:
-	EntityPtr text_cpu;
-	EntityPtr text_ram;
-	EntityPtr text_mouse;
+	EntityPtr scene_name_text;
 };
