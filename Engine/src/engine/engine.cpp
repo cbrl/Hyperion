@@ -115,22 +115,6 @@ void Engine::init(std::wstring title,
                   DisplayConfig display_config,
                   RenderingConfig rendering_config) {
 
-	// Get the display resolution
-	{
-		size_t i = 0;
-		for (const auto& mode : display_config.getDisplayDescList()) {
-			const f32 rr = static_cast<f32>(mode.RefreshRate.Numerator) / static_cast<f32>(mode.RefreshRate.Denominator);
-			std::cout << i++ << ": " << mode.Width << "x" << mode.Height << " " << rr << "Hz\n";
-		}
-
-		size_t select = std::numeric_limits<size_t>::max();
-		while (select >= display_config.getDisplayDescList().size()) {
-			std::cout << "\nSelect desired resolution \n>> ";
-			std::cin >> select;
-		}
-		display_config.setDisplayDesc(select);
-	}
-
 	// Create the main window
 	{
 		auto win_config = std::make_shared<WindowConfig>(gsl::make_not_null(GetModuleHandle(nullptr)));
