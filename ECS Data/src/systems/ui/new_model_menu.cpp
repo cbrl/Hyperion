@@ -3,7 +3,7 @@
 #include "imgui.h"
 #include "entity/entity.h"
 #include "resource/resource_mgr.h"
-#include "scene/components/model/model.h"
+#include "scene/scene.h"
 #include "resource/model/blueprint_factory.h"
 
 
@@ -62,6 +62,7 @@ void DoMenu() {
 
 void ProcNewModelPopup(ID3D11Device& device,
                        ResourceMgr& resource_mgr,
+                       Scene& scene,
                        EntityPtr entity) {
 
 	// Open popup
@@ -119,7 +120,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateCube(resource_mgr, config, size);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -143,7 +144,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateBox(resource_mgr, config, size);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -178,7 +179,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateSphere(resource_mgr, config, diameter, tessellation);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -213,7 +214,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateGeoSphere(resource_mgr, config, diameter, tessellation);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -250,7 +251,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCylinder(resource_mgr, config, diameter, height, tessellation);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -287,7 +288,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateCone(resource_mgr, config, diameter, height, tessellation);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -324,7 +325,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			config.flip_winding = flip_winding;
 			if (tessellation < 3) tessellation = 3;
 			auto bp = BlueprintFactory::CreateTorus(resource_mgr, config, diameter, thickness, tessellation);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -348,7 +349,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateTetrahedron(resource_mgr, config, size);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -372,7 +373,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateOctahedron(resource_mgr, config, size);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -396,7 +397,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateDodecahedron(resource_mgr, config, size);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 
@@ -420,7 +421,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 			ModelConfig<VertexPositionNormalTexture> config;
 			config.flip_winding = flip_winding;
 			auto bp = BlueprintFactory::CreateIcosahedron(resource_mgr, config, size);
-			if (entity) entity->addComponent<ModelRoot>(device, bp);
+			if (entity) scene.importModel(entity, device, bp);
 			ImGui::CloseCurrentPopup();
 		}
 

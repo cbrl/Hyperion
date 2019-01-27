@@ -99,18 +99,14 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
-		if (!root.isActive()) return;
+	scene.forEach<Model>([&](const Model& model) {
+		if (!model.isActive()) return;
 
-		root.forEachModel([&](const Model& model) {
-			if (!model.isActive()) return;
+		const auto& mat = model.getMaterial();
+		if (mat.params.base_color[3] <= ALPHA_MAX)
+			return;
 
-			const auto& mat = model.getMaterial();
-			if (mat.params.base_color[3] <= ALPHA_MAX)
-				return;
-
-			renderModel(root, model, world_to_projection);
-		});
+		renderModel(model, world_to_projection);
 	});
 }
 
@@ -132,19 +128,68 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
-		if (!root.isActive()) return;
+	scene.forEach<Model>([&](const Model& model) {
+		if (!model.isActive()) return;
 
-		root.forEachModel([&](const Model& model) {
-			if (!model.isActive()) return;
+		const auto& mat = model.getMaterial();
+		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
+			return;
 
-			const auto& mat = model.getMaterial();
-			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
-				return;
-
-			renderModel(root, model, world_to_projection);
-		});
+		renderModel(model, world_to_projection);
 	});
+}
+
+
+void XM_CALLCONV ForwardPass::renderOpaque(const std::vector<std::reference_wrapper<const Model>>& models,
+                                           PixelShader* shader,
+                                           FXMMATRIX world_to_projection,
+                                           const Texture* env_map) const {
+
+	bindOpaqueState();
+
+	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
+
+	static auto default_shader = ShaderFactory::createForwardPS(resource_mgr, BRDF::CookTorrance, false);
+
+	if (!shader) {
+		shader = default_shader.get();
+	}
+
+	shader->bind(device_context);
+
+	for (auto& model : models) {
+		auto& mat = model.get().getMaterial();
+		if (mat.params.base_color[3] <= ALPHA_MAX)
+			return;
+
+		renderModel(model, world_to_projection);
+	}
+}
+
+void XM_CALLCONV ForwardPass::renderTransparent(const std::vector<std::reference_wrapper<const Model>>& models,
+                                                PixelShader* shader,
+                                                FXMMATRIX world_to_projection,
+                                                const Texture* env_map) const {
+
+	bindTransparentState();
+
+	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
+
+	static auto default_shader = ShaderFactory::createForwardPS(resource_mgr, BRDF::CookTorrance, true);
+
+	if (!shader) {
+		shader = default_shader.get();
+	}
+
+	shader->bind(device_context);
+
+	for (auto& model : models) {
+		auto& mat = model.get().getMaterial();
+		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
+			return;
+
+		renderModel(model, world_to_projection);
+	}
 }
 
 
@@ -158,13 +203,9 @@ void ForwardPass::renderFalseColor(Scene& scene,
 	pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
-	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
-		if (!root.isActive()) return;
-
-		root.forEachModel([&](const Model& model) {
-			if (model.isActive())
-				renderModel(root, model, world_to_projection);
-		});
+	scene.forEach<Model>([&](const Model& model) {
+		if (model.isActive())
+			renderModel(model, world_to_projection);
 	});
 }
 
@@ -178,21 +219,16 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 	static const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, FalseColor::Static);
 	pixel_shader->bind(device_context);
 
-	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
-		if (!root.isActive()) return;
-
-		root.forEachModel([&](const Model& model) {
-			if (model.isActive())
-				renderModel(root, model, world_to_projection);
-		});
+	scene.forEach<Model>([&](const Model& model) {
+		if (model.isActive())
+			renderModel(model, world_to_projection);
 	});
 }
 
 
-void XM_CALLCONV ForwardPass::renderModel(const ModelRoot& root, const Model& model, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
 
-	// TODO: More elegant way of passing transform/root to function (per model transform relative to parent?)
-	const auto* transform = root.getOwner()->getComponent<Transform>();
+	const auto* transform = model.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world = transform->getObjectToWorldMatrix();

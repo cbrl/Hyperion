@@ -21,20 +21,19 @@
 // bounding volumes, and a shader constant buffer.
 //
 //----------------------------------------------------------------------------------
-class Model {
-	friend class ModelNode;
-	friend class ModelRoot;
-
+class Model final : public Component<Model> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
 	Model(ID3D11Device& device,
+	      const std::string& name,
 	      Mesh& mesh,
 	      Material& mat,
 	      AABB aabb,
-	      BoundingSphere sphere);
+	      BoundingSphere sphere,
+	      const std::shared_ptr<ModelBlueprint>& bp);
 
 	Model(const Model& model) = delete;
 	Model(Model&& model) = default;
@@ -68,6 +67,8 @@ public:
 		buffer.bind<StageT>(device_context, slot);
 	}
 
+	void XM_CALLCONV updateBuffer(ID3D11DeviceContext& device_context, FXMMATRIX object_to_world);
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Name
@@ -76,19 +77,6 @@ public:
 	[[nodiscard]]
 	const std::string getName() const noexcept {
 		return name;
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - State
-	//----------------------------------------------------------------------------------
-
-	void setActive(bool state) noexcept {
-		active = state;
-	}
-
-	bool isActive() const noexcept {
-		return active;
 	}
 
 
@@ -175,12 +163,13 @@ private:
 	// A flag that determines if the model casts shadows
 	bool shadows;
 
-	// A flag that determines if the model is rendered and operated on
-	bool active;
+	// The blueprint this model was constructed from
+	std::shared_ptr<ModelBlueprint> blueprint;
 };
 
 
 
+/*
 
 //----------------------------------------------------------------------------------
 // ModelNode
@@ -414,3 +403,5 @@ private:
 	// The root node
 	ModelNode root;
 };
+
+*/

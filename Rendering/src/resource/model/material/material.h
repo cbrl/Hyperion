@@ -2,6 +2,7 @@
 
 #include "datatypes/datatypes.h"
 #include "resource/texture/texture.h"
+#include "resource/shader/shader.h"
 
 
 struct Material {
@@ -25,4 +26,7 @@ struct Material {
 		std::shared_ptr<Texture> normal;
 		std::shared_ptr<Texture> emissive;
 	} maps;
+
+
+	std::shared_ptr<PixelShader> shader;
 };

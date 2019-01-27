@@ -7,5 +7,5 @@ class EntityPtr;
 
 namespace NewModelMenu {
 void DoMenu();
-void ProcNewModelPopup(ID3D11Device& device, ResourceMgr& resource_mgr, EntityPtr entity);
+void ProcNewModelPopup(ID3D11Device& device, ResourceMgr& resource_mgr, Scene& scene, EntityPtr entity);
 };

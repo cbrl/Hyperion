@@ -62,16 +62,14 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 	// Draw each opaque model
 	//----------------------------------------------------------------------------------
 
-	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
-		if (!root.isActive()) return;
+	scene.forEach<Model>([&](const Model& model) {
+		if (!model.isActive()) return;
 
-		root.forEachModel([&](const Model& model) {
-			const auto& mat = model.getMaterial();
-			if (mat.params.base_color[3] <= ALPHA_MAX)
-				return;
+		const auto& mat = model.getMaterial();
+		if (mat.params.base_color[3] <= ALPHA_MAX)
+			return;
 
-			renderModel(root, model, world_to_proj);
-		});
+		renderModel(model, world_to_proj);
 	});
 
 
@@ -79,16 +77,14 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 	// Draw each transparent model
 	//----------------------------------------------------------------------------------
 
-	scene.forEach<ModelRoot>([&](const ModelRoot& root) {
-		if (!root.isActive()) return;
+	scene.forEach<Model>([&](const Model& model) {
+		if (!model.isActive()) return;
 		
-		root.forEachModel([&](const Model& model) {
-			const auto& mat = model.getMaterial();
-			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
-				return;
+		const auto& mat = model.getMaterial();
+		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
+			return;
 
-			renderModel(root, model, world_to_proj);
-		});
+		renderModel(model, world_to_proj);
 	});
 }
 
@@ -105,18 +101,15 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	bindOpaqueShaders();
-	scene.forEach<ModelRoot>([&](ModelRoot& root) {
-		if (!root.isActive()) return;
+	scene.forEach<Model>([&](const Model& model) {
+		if (!model.isActive()) return;
+		if (!model.castsShadows()) return;
 
-		root.forEachModel([&](const Model& model) {
-			if (!model.castsShadows()) return;
+		const auto& mat = model.getMaterial();
+		if (mat.params.base_color[3] <= ALPHA_MAX)
+			return;
 
-			const auto& mat = model.getMaterial();
-			if (mat.params.base_color[3] <= ALPHA_MAX)
-				return;
-
-			renderModel(root, model, world_to_proj);
-		});
+		renderModel(model, world_to_proj);
 	});
 
 
@@ -125,18 +118,15 @@ void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	bindTransparentShaders();
-	scene.forEach<ModelRoot>([&](ModelRoot& root) {
-		if (!root.isActive()) return;
+	scene.forEach<Model>([&](const Model& model) {
+		if (!model.isActive()) return;
+		if (!model.castsShadows()) return;
 
-		root.forEachModel([&](const Model& model) {
-			if (!model.castsShadows()) return;
+		const auto& mat = model.getMaterial();
+		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
+			return;
 
-			const auto& mat = model.getMaterial();
-			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
-				return;
-
-			renderModel(root, model, world_to_proj);
-		});
+		renderModel(model, world_to_proj);
 	});
 }
 
@@ -152,12 +142,10 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 }
 
 
-void XM_CALLCONV DepthPass::renderModel(const ModelRoot& root, const Model& model, FXMMATRIX world_to_projection) const {
-
-	if (!model.isActive()) return;
+void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
 
 	// TODO: More elegant way of passing transform/root to function
-	const auto* transform = root.getOwner()->getComponent<Transform>();
+	const auto* transform = model.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world      = transform->getObjectToWorldMatrix();

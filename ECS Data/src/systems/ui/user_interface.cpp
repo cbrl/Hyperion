@@ -344,7 +344,7 @@ void DrawDetails(Model& model) {
 
 	ImGui::EndGroup();
 }
-
+/*
 void DrawDetails(ModelNode& node) {
 	if (ImGui::Button("Active"))
 		node.setModelsActive(true);
@@ -380,7 +380,7 @@ void DrawDetails(ModelRoot& root) {
 	DrawComponentState(root);
 	DrawModelNodes(root.getRootNode());
 }
-
+*/
 
 void DrawDetails(AmbientLight& light) {
 
@@ -674,7 +674,7 @@ void DrawComponentNode(gsl::czstring<> text, T& item) {
 
 
 // Draw the menu in the entity details window
-void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr) {
+void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr, Scene& scene) {
 
 	if (ImGui::BeginMenu("Add Component")) {
 
@@ -705,7 +705,7 @@ void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr) {
 					ModelConfig<VertexPositionNormalTexture> config;
 					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
 					if (auto entity = g_scene_tree.getSelected())
-						entity->addComponent<ModelRoot>(device, bp);
+						scene.importModel(entity, device, bp);
 				} else
 					Logger::log(LogLevel::err, "Failed to open file dialog");
 			}
@@ -741,7 +741,7 @@ void DrawEntityDetails(Entity& entity, Engine& engine) {
 
 	// Draw Menu
 	if (ImGui::BeginMenuBar()) {
-		DrawAddComponentMenu(device, resource_mgr);
+		DrawAddComponentMenu(device, resource_mgr, scene);
 		ImGui::EndMenuBar();
 	}
 
@@ -816,11 +816,20 @@ void DrawEntityDetails(Entity& entity, Engine& engine) {
 		});
 	}
 
+	/*
 	// Model Root
 	if (entity.hasComponent<ModelRoot>()) {
 		auto roots = entity.getAll<ModelRoot>();
 		for (auto* root : roots) {
 			DrawComponentNode(("ModelRoot: " + root->getName()).c_str(), *root);
+		}
+	}
+	*/
+	if (entity.hasComponent<Model>()) {
+		auto models = entity.getAll<Model>();
+		for (auto* model : models) {
+			std::string name = "Model: " + model->getName();
+			DrawComponentNode(name.c_str(), *model);
 		}
 	}
 
@@ -1373,7 +1382,7 @@ void UserInterface::update(Engine& engine) {
 		DrawSceneMenu(scene);
 
 		// Process model popup
-		NewModelMenu::ProcNewModelPopup(device, resource_mgr, g_scene_tree.getSelected());
+		NewModelMenu::ProcNewModelPopup(device, resource_mgr, scene, g_scene_tree.getSelected());
 
 		// Draw tree
 		DrawTree(engine);

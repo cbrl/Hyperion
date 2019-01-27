@@ -10,6 +10,8 @@ public:
 	TestScene();
 	~TestScene() = default;
 
+
+protected:
 	void initialize(const Engine& engine);
 
 	void update(Engine& engine) override final;

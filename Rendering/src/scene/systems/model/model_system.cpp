@@ -9,14 +9,14 @@ void ModelSystem::update(Engine& engine) {
 	auto& scene          = engine.getScene();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
-	scene.forEach<ModelRoot>([&](ModelRoot& root) {
+	scene.forEach<Model>([&](Model& model) {
 
-		if (!root.isActive()) return;
+		if (!model.isActive()) return;
 
-		if (const auto* transform = root.getOwner()->getComponent<Transform>()) {
+		if (const auto* transform = model.getOwner()->getComponent<Transform>()) {
 
 			// Update the model's buffer
-			root.updateBuffers(device_context, transform->getObjectToWorldMatrix());
+			model.updateBuffer(device_context, transform->getObjectToWorldMatrix());
 		}
 	});
 }

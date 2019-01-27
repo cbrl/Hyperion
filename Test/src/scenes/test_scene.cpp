@@ -2,16 +2,17 @@
 #include "engine/engine.h"
 
 
-TestScene::TestScene() : Scene("Test Scene") {
+TestScene::TestScene()
+    : Scene("Test Scene") {
 }
 
 
 void TestScene::initialize(const Engine& engine) {
 
 	const auto& rendering_mgr = engine.getRenderingMgr();
-	auto& device              = rendering_mgr.getDevice();
-	auto& device_context      = rendering_mgr.getDeviceContext();
-	auto& resource_mgr        = rendering_mgr.getResourceMgr();
+	auto& device = rendering_mgr.getDevice();
+	auto& device_context = rendering_mgr.getDeviceContext();
+	auto& resource_mgr = rendering_mgr.getResourceMgr();
 
 	//----------------------------------------------------------------------------------
 	// Add systems
@@ -40,7 +41,7 @@ void TestScene::initialize(const Engine& engine) {
 	// Create the camera
 	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
 	camera->setName("Perspective Camera");
-	camera->addComponent<AmbientLight>()->setColor(vec4_f32{ 0.16f, 0.16f, 0.16f, 1.0f });
+	camera->addComponent<AmbientLight>()->setColor(vec4_f32{0.16f, 0.16f, 0.16f, 1.0f});
 
 	// Set the parameters
 	auto* cam = camera->getComponent<PerspectiveCamera>();
@@ -51,15 +52,15 @@ void TestScene::initialize(const Engine& engine) {
 	cam->setFOV(XM_PI / 3.0f);
 
 	// Skybox
-	cam->getSettings().setSkybox( resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds") );
+	cam->getSettings().setSkybox(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	// Fog
 	auto& fog = cam->getSettings().getFog();
 	fog.density = 0.05f;
-	fog.color   = { 0.2f, 0.2f, 0.2f };
+	fog.color = {0.2f, 0.2f, 0.2f};
 
 	// Initial position
-	camera->getComponent<Transform>()->setPosition(vec3_f32{ 0.0f, 3.0f, -3.0f });
+	camera->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 3.0f, -3.0f});
 
 	// Mouse control settings
 	camera->getComponent<MouseRotation>()->setSensitivity(0.01f);
@@ -87,50 +88,56 @@ void TestScene::initialize(const Engine& engine) {
 	auto cylinder_bp      = BlueprintFactory::CreateCylinder(resource_mgr, config, 2.0f, 2.0f);
 
 	// Bounding Cube
-	EntityPtr inv_cube = addEntity<ModelT>(device, inverted_cube_bp);
-	inv_cube->setName("Bounding Cube");
-	inv_cube->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 5.0f, 0.0f});
-	inv_cube->getComponent<ModelRoot>()->forEachModel([](Model& model) {
-		model.getMaterial().params.base_color = {0.2f, 0.2f, 0.8f, 1.0f};
-		model.getMaterial().params.roughness  = 0.8f;
-		model.getMaterial().params.metalness  = 0.1f;
-	});
+	{
+		EntityPtr inv_cube = importModel(device, inverted_cube_bp);
+		inv_cube->setName("Bounding Cube");
+		inv_cube->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 5.0f, 0.0f});
+		auto& mat = inv_cube->getComponent<Model>()->getMaterial();
+		mat.params.base_color = {0.2f, 0.2f, 0.8f, 1.0f};
+		mat.params.roughness  = 0.8f;
+		mat.params.metalness  = 0.1f;
+	}
 
 	// Cube
-	EntityPtr cube = addEntity<ModelT>(device, cube_bp);
-	cube->setName("Cube");
-	cube->getComponent<Transform>()->setPosition(vec3_f32{-2.5f, 1.0f, 1.5f});
-	cube->getComponent<ModelRoot>()->forEachModel([](Model& model) {
-		model.getMaterial().params.base_color = {1.0f, 0.0f, 0.0f, 1.0f};
-		model.getMaterial().params.roughness  = 0.3f;
-		model.getMaterial().params.metalness  = 0.65f;
-	});
+	{
+		EntityPtr cube = importModel(device, cube_bp);
+		cube->setName("Cube");
+		cube->getComponent<Transform>()->setPosition(vec3_f32{-2.5f, 1.0f, 1.5f});
+
+		auto& mat = cube->getComponent<Model>()->getMaterial();
+		mat.params.base_color = {1.0f, 0.0f, 0.0f, 1.0f};
+		mat.params.roughness  = 0.3f;
+		mat.params.metalness  = 0.65f;
+	}
 
 	// Cylinder
-	EntityPtr cylinder = addEntity<ModelT>(device, cylinder_bp);
-	cylinder->setName("Cylinder");
-	cylinder->getComponent<Transform>()->setPosition(vec3_f32{2.5f, 1.0f, 0.75f});
-	cylinder->getComponent<ModelRoot>()->forEachModel([](Model& model) {
-		model.getMaterial().params.base_color = {0.0f, 1.0f, 0.0f, 1.0f};
-		model.getMaterial().params.roughness  = 0.7f;
-		model.getMaterial().params.metalness  = 0.6f;
-	});
+	{
+		EntityPtr cylinder = importModel(device, cylinder_bp);
+		cylinder->setName("Cylinder");
+		cylinder->getComponent<Transform>()->setPosition(vec3_f32{2.5f, 1.0f, 0.75f});
+
+		auto& mat = cylinder->getComponent<Model>()->getMaterial();
+		mat.params.base_color = {0.0f, 1.0f, 0.0f, 1.0f};
+		mat.params.roughness  = 0.7f;
+		mat.params.metalness  = 0.6f;
+	}
 
 
 	// Sphere
-	EntityPtr sphere = addEntity<ModelT>(device, sphere_bp);
-	sphere->setName("Sphere");
-	sphere->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 1.0f, -1.0f});
-	sphere->getComponent<Transform>()->setScale(vec3_f32{2.0f});
-	sphere->getComponent<ModelRoot>()->forEachModel([](Model& model) {
-		model.getMaterial().params.base_color = {1.0f, 0.7f, 0.0f, 1.0f};
-		model.getMaterial().params.roughness = 0.5f;
-		model.getMaterial().params.metalness = 0.3f;
-	});
+	{
+		EntityPtr sphere = importModel(device, sphere_bp);
+		sphere->setName("Sphere");
+		sphere->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 1.0f, -1.0f});
+		sphere->getComponent<Transform>()->setScale(vec3_f32{2.0f});
+		auto& mat = sphere->getComponent<Model>()->getMaterial();
+		mat.params.base_color = {1.0f, 0.7f, 0.0f, 1.0f};
+		mat.params.roughness  = 0.5f;
+		mat.params.metalness  = 0.3f;
+	}
 
 
 	// Sphere Light
-	//EntityPtr sphere_light = addEntity<ModelT>(device, sphere_bp);
+	//EntityPtr sphere_light = importModel(device, sphere_bp);
 	//sphere_light->setName("Sphere Light");
 	//sphere_light->addComponent<PointLight>();
 	//sphere_light->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 4.0f, 0.0f});
@@ -146,7 +153,7 @@ void TestScene::initialize(const Engine& engine) {
 	//----------------------------------------------------------------------------------
 	// Lights
 	//----------------------------------------------------------------------------------
-	
+
 	// Sphere light
 	{
 		//auto* light = sphere_light->getComponent<PointLight>();
@@ -155,9 +162,9 @@ void TestScene::initialize(const Engine& engine) {
 		entity->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 4.0f, 0.0f});
 
 		auto* light = entity->addComponent<PointLight>();
-		light->setBaseColor(vec3_f32{ 1.0f, 1.0f, 1.0f });
+		light->setBaseColor(vec3_f32{1.0f, 1.0f, 1.0f});
 		light->setIntensity(9.0f);
-		light->setAttenuation(vec3_f32{ 0.0f, 0.1f, 0.1f });
+		light->setAttenuation(vec3_f32{0.0f, 0.1f, 0.1f});
 		light->setRange(100.0f);
 		light->setShadows(true);
 	}
@@ -169,7 +176,7 @@ void TestScene::initialize(const Engine& engine) {
 		camera->addChild(light);
 
 		auto* spot_light = light->addComponent<SpotLight>();
-		spot_light->setBaseColor(vec3_f32{ 0.9f, 0.9f, 0.9f });
+		spot_light->setBaseColor(vec3_f32{0.9f, 0.9f, 0.9f});
 		spot_light->setIntensity(7.0f);
 		spot_light->setAttenuation(vec3_f32{0.0f, 0.1f, 0.1f});
 		spot_light->setRange(100.0f);
@@ -178,7 +185,7 @@ void TestScene::initialize(const Engine& engine) {
 		spot_light->setShadows(true);
 
 		auto* transform = light->getComponent<Transform>();
-		transform->setPosition(vec3_f32{ -1.0f, 0.0f, 0.0f });
+		transform->setPosition(vec3_f32{-1.0f, 0.0f, 0.0f});
 	}
 
 	// Directional Light
@@ -210,5 +217,4 @@ void TestScene::initialize(const Engine& engine) {
 
 
 void TestScene::update(Engine& engine) {
-
 }

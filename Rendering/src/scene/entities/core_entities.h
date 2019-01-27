@@ -20,13 +20,4 @@ struct WorldObjectT final {
 	}
 };
 
-
-// Adds a model to the specified entity
-struct ModelT final {
-	static void applyTemplate(Entity& entity, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& bp) {
-		entity.addComponent<Transform>();
-		entity.addComponent<ModelRoot>(device, bp);
-	}
-};
-
 } // namespace EntityTemplates

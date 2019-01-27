@@ -8,7 +8,6 @@
 class RenderStateMgr;
 class ResourceMgr;
 class Scene;
-class ModelRoot;
 class Model;
 
 class ForwardPass final {
@@ -55,6 +54,16 @@ public:
 	                                   const Texture* env_map,
 	                                   BRDF brdf) const;
 
+	void XM_CALLCONV renderOpaque(const std::vector<std::reference_wrapper<const Model>>& models,
+	                              PixelShader* shader,
+	                              FXMMATRIX world_to_projection,
+	                              const Texture* env_map) const;
+
+	void XM_CALLCONV renderTransparent(const std::vector<std::reference_wrapper<const Model>>& models,
+	                                   PixelShader* shader,
+	                                   FXMMATRIX world_to_projection,
+	                                   const Texture* env_map) const;
+
 	void XM_CALLCONV renderFalseColor(Scene& scene,
 	                                  FXMMATRIX world_to_projection,
 	                                  FalseColor color) const;
@@ -78,7 +87,7 @@ private:
 	// Member Functions - Render Model
 	//----------------------------------------------------------------------------------
 
-	void XM_CALLCONV renderModel(const ModelRoot& root, const Model& model, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX world_to_projection) const;
 
 
 private:

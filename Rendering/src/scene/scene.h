@@ -98,6 +98,14 @@ public:
 	void forEach(ActionT&& act);
 
 
+	//----------------------------------------------------------------------------------
+	// Member Functions - Import Model
+	//----------------------------------------------------------------------------------
+	EntityPtr importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
+
+	void importModel(const EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
+
+
 protected:
 
 	//----------------------------------------------------------------------------------

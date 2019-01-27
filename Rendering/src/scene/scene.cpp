@@ -44,3 +44,37 @@ void Scene::tick(Engine& engine) {
 	ecs->update(engine, static_cast<f32>(engine.getTimer().deltaTime()));
 	this->update(engine);
 }
+
+
+EntityPtr Scene::importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
+	EntityPtr ptr = addEntity();
+	importModel(ptr, device, blueprint);
+	return ptr;
+}
+
+
+void Scene::importModel(const EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
+
+	std::function<void(Entity&, const std::shared_ptr<ModelBlueprint>&, ModelBlueprint::Node&)> process_node =
+		[&](Entity& entity, const std::shared_ptr<ModelBlueprint>& bp, ModelBlueprint::Node& bp_node) {
+			for (const u32 index : bp_node.mesh_indices) {
+				auto* model = entity.addComponent<Model>(
+					device,
+					bp->meshes.at(index).getName(),
+					bp->meshes.at(index),
+					bp->materials.at(bp->mat_indices.at(index)),
+					bp->aabbs.at(index),
+					bp->bounding_spheres.at(index),
+					bp
+				);
+			}
+
+			for (auto& node : bp_node.child_nodes) {
+			    auto child = addEntity();
+			    entity.addChild(child);
+				process_node(*child, bp, node);
+			}
+		};
+
+	process_node(*ptr, blueprint, blueprint->root);
+}
