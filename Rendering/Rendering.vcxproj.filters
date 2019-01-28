@@ -51,9 +51,6 @@
     <Filter Include="Source Files\geometry">
       <UniqueIdentifier>{c4396dde-4afa-4ccf-931d-3cd7724ef455}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\geometry\bounding_volume">
-      <UniqueIdentifier>{c5f08073-cd98-4f69-afba-1b5e9a3c2c92}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\direct3d">
       <UniqueIdentifier>{b3d68db7-7277-43e1-9297-0884dc993d47}</UniqueIdentifier>
     </Filter>
@@ -181,9 +178,6 @@
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\geometry\bounding_volume\bounding_volume.cpp">
-      <Filter>Source Files\geometry\bounding_volume</Filter>
     </ClCompile>
     <ClCompile Include="src\geometry\frustum\frustum.cpp">
       <Filter>Source Files\geometry\frustum</Filter>

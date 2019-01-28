@@ -10,31 +10,38 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	AABB();
+	constexpr AABB() noexcept
+	    : min_point({std::numeric_limits<f32>::infinity()})
+	    , max_point({-std::numeric_limits<f32>::infinity()}) {
+	}
 
 	// Construct an AABB from the min and max points of an object
-	AABB(const vec3_f32& min, const vec3_f32& max);
+	AABB(const vec3_f32& min, const vec3_f32& max) noexcept
+		: min_point(XMLoad(&min))
+		, max_point(XMLoad(&max)) {
+	}
 
 	// Construct an AABB from the min and max points of an object
-	AABB(FXMVECTOR min, FXMVECTOR max);
+	constexpr AABB(FXMVECTOR min, FXMVECTOR max) noexcept
+	    : min_point(min)
+	    , max_point(max) {
+	}
 
-	AABB(const AABB& aabb) = default;
-	AABB(AABB&& aabb) = default;
+	constexpr AABB(const AABB& aabb) noexcept = default;
+	constexpr AABB(AABB&& aabb) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~AABB() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
-	AABB& operator=(const AABB& aabb) = default;
-	AABB& operator=(AABB&& aabb) = default;
+	constexpr AABB& operator=(const AABB& aabb) noexcept = default;
+	constexpr AABB& operator=(AABB&& aabb) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -42,17 +49,16 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	XMVECTOR XM_CALLCONV min() const { return min_point; }
+	constexpr XMVECTOR XM_CALLCONV min() const noexcept { return min_point; }
 
 	[[nodiscard]]
-	XMVECTOR XM_CALLCONV max() const { return max_point; }
+	constexpr XMVECTOR XM_CALLCONV max() const noexcept { return max_point; }
 
 
 private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
 	XMVECTOR min_point;
 	XMVECTOR max_point;
 };
@@ -64,31 +70,38 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	BoundingSphere();
+	constexpr BoundingSphere() noexcept
+	    : sphere_center({0.0f})
+	    , sphere_radius(std::numeric_limits<f32>::infinity()) {
+	}
 
 	// Construct a bounding sphere from the center point and radius of an object
-	BoundingSphere(const vec3_f32& center, f32 radius);
+	BoundingSphere(const vec3_f32& center, f32 radius) noexcept
+	    : sphere_center(XMLoad(&center))
+	    , sphere_radius(radius) {
+	}
 
 	// Construct a bounding sphere from the center point and radius of an object
-	BoundingSphere(FXMVECTOR center, f32 radius);
+	constexpr BoundingSphere(FXMVECTOR center, f32 radius) noexcept
+	    : sphere_center(center)
+	    , sphere_radius(radius) {
+	}
 
-	BoundingSphere(const BoundingSphere& sphere) = default;
-	BoundingSphere(BoundingSphere&& sphere) = default;
+	constexpr BoundingSphere(const BoundingSphere& sphere) noexcept = default;
+	constexpr BoundingSphere(BoundingSphere&& sphere) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~BoundingSphere() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
-	BoundingSphere& operator=(const BoundingSphere& sphere) = default;
-	BoundingSphere& operator=(BoundingSphere&& sphere) = default;
+	constexpr BoundingSphere& operator=(const BoundingSphere& sphere) noexcept = default;
+	constexpr BoundingSphere& operator=(BoundingSphere&& sphere) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -96,17 +109,16 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	XMVECTOR XM_CALLCONV center() const { return sphere_center; }
+	constexpr XMVECTOR XM_CALLCONV center() const noexcept { return sphere_center; }
 
 	[[nodiscard]]
-	f32 radius() const { return sphere_radius; }
+	constexpr f32 radius() const noexcept { return sphere_radius; }
 
 
 private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
 	XMVECTOR sphere_center;
-	f32 sphere_radius;
+	f32      sphere_radius;
 };

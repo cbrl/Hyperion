@@ -141,7 +141,6 @@
     <ClCompile Include="src\direct3d\direct3d.cpp" />
     <ClCompile Include="src\direct3d\swapchain.cpp" />
     <ClCompile Include="src\display\display_config.cpp" />
-    <ClCompile Include="src\geometry\bounding_volume\bounding_volume.cpp" />
     <ClCompile Include="src\geometry\frustum\frustum.cpp" />
     <ClCompile Include="src\loader\assimp_loader.cpp" />
     <ClCompile Include="src\loader\texture_loader.cpp" />
