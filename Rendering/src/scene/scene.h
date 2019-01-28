@@ -76,7 +76,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename SystemT, typename... ArgsT>
-	ISystem* addSystem(ArgsT&&... args);
+	SystemT* addSystem(ArgsT&&... args);
 
 	void removeSystem(ISystem* system);
 
@@ -101,8 +101,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Import Model
 	//----------------------------------------------------------------------------------
+
+	// Import a model blueprint under a new entity
+	[[nodiscard]]
 	EntityPtr importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
 
+	// Import a model blueprint under an existing entity
 	void importModel(const EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
 
 
