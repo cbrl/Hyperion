@@ -41,7 +41,7 @@ void TestScene::initialize(const Engine& engine) {
 	// Create the camera
 	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
 	camera->setName("Perspective Camera");
-	camera->addComponent<AmbientLight>()->setColor(vec4_f32{0.16f, 0.16f, 0.16f, 1.0f});
+	camera->addComponent<AmbientLight>().setColor(vec4_f32{0.16f, 0.16f, 0.16f, 1.0f});
 
 	// Set the parameters
 	auto* cam = camera->getComponent<PerspectiveCamera>();
@@ -162,12 +162,12 @@ void TestScene::initialize(const Engine& engine) {
 		entity->setName("Point Light");
 		entity->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 4.0f, 0.0f});
 
-		auto* light = entity->addComponent<PointLight>();
-		light->setBaseColor(vec3_f32{1.0f, 1.0f, 1.0f});
-		light->setIntensity(9.0f);
-		light->setAttenuation(vec3_f32{0.0f, 0.1f, 0.1f});
-		light->setRange(100.0f);
-		light->setShadows(true);
+		auto& light = entity->addComponent<PointLight>();
+		light.setBaseColor(vec3_f32{1.0f, 1.0f, 1.0f});
+		light.setIntensity(9.0f);
+		light.setAttenuation(vec3_f32{0.0f, 0.1f, 0.1f});
+		light.setRange(100.0f);
+		light.setShadows(true);
 	}
 
 	// Camera light
@@ -176,14 +176,14 @@ void TestScene::initialize(const Engine& engine) {
 		light->setName("Camera Light");
 		camera->addChild(light);
 
-		auto* spot_light = light->addComponent<SpotLight>();
-		spot_light->setBaseColor(vec3_f32{0.9f, 0.9f, 0.9f});
-		spot_light->setIntensity(7.0f);
-		spot_light->setAttenuation(vec3_f32{0.0f, 0.1f, 0.1f});
-		spot_light->setRange(100.0f);
-		spot_light->setUmbraAngle(XM_PI / 6.0f);
-		spot_light->setPenumbraAngle(XM_PI / 4.0f);
-		spot_light->setShadows(true);
+		auto& spot_light = light->addComponent<SpotLight>();
+		spot_light.setBaseColor(vec3_f32{0.9f, 0.9f, 0.9f});
+		spot_light.setIntensity(7.0f);
+		spot_light.setAttenuation(vec3_f32{0.0f, 0.1f, 0.1f});
+		spot_light.setRange(100.0f);
+		spot_light.setUmbraAngle(XM_PI / 6.0f);
+		spot_light.setPenumbraAngle(XM_PI / 4.0f);
+		spot_light.setShadows(true);
 
 		auto* transform = light->getComponent<Transform>();
 		transform->setPosition(vec3_f32{-1.0f, 0.0f, 0.0f});

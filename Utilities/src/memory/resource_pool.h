@@ -35,6 +35,10 @@ public:
 	void remove_resource(void* resource) {
 		this->remove_if([resource](T& element) { return &element == resource; });
 	}
+
+	void remove_resource(T& resource) {
+		remove_resource(&resource);
+	}
 };
 
 

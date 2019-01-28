@@ -47,12 +47,12 @@ public:
 
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
-	ComponentT* createComponent(ArgsT&&... args);
+	ComponentT& createComponent(ArgsT&&... args);
 
 
-	void destroyComponent(IComponent* component) {
-		auto* pool = component_pools.getPool(component->getTypeIndex());
-		pool->remove_resource(component);
+	void destroyComponent(IComponent& component) {
+		auto* pool = component_pools.getPool(component.getTypeIndex());
+		pool->remove_resource(&component);
 	}
 
 

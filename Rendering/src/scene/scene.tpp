@@ -20,7 +20,7 @@ void Scene::forEach(ActionT&& act) {
 
 
 template <typename SystemT, typename... ArgsT>
-SystemT* Scene::addSystem(ArgsT&&... args) {
+SystemT& Scene::addSystem(ArgsT&&... args) {
 	return ecs->addSystem<SystemT>(std::forward<ArgsT>(args)...);
 }
 

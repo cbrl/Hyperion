@@ -47,9 +47,9 @@ public:
 
 	template<typename SystemT, typename... ArgsT>
 	[[nodiscard]]
-	SystemT* addSystem(ArgsT&&... args);
+	SystemT& addSystem(ArgsT&&... args);
 
-	void removeSystem(ISystem* system);
+	void removeSystem(ISystem& system);
 
 	template<typename SystemT>
 	void removeSystem();

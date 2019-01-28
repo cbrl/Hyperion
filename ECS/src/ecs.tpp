@@ -1,5 +1,5 @@
 template<typename SystemT, typename... ArgsT>
-SystemT* ECS::addSystem(ArgsT&&... args) {
+SystemT& ECS::addSystem(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<ISystem, SystemT>,
 		"Calling ECS::AddSystem() with non-system type.");
 

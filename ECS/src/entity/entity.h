@@ -96,22 +96,22 @@ public:
 
 	// Add a component to this entity
 	template<typename ComponentT, typename... ArgsT>
-	ComponentT* addComponent(ArgsT&&... args);
+	ComponentT& addComponent(ArgsT&&... args);
 
-	// Get the first component of the specified type
+	// Get the first component of the specified type, if it exists.
 	template<typename ComponentT>
 	[[nodiscard]]
 	ComponentT* getComponent();
 
 	// Get all components of the specified type
 	template<typename ComponentT>
-	std::vector<ComponentT*> getAll();
+	std::vector<std::reference_wrapper<ComponentT>> getAll();
 
 	// Remove a specific component from this entity
 	template<typename ComponentT>
-	void removeComponent(ComponentT* component);
+	void removeComponent(ComponentT& component);
 
-	void removeComponent(IComponent* component);
+	void removeComponent(IComponent& component);
 
 	// Remove all components of the specified type from this entity
 	template<typename ComponentT>
@@ -207,7 +207,7 @@ private:
 	ComponentMgr* component_mgr;
 
 	// Map of pointers to components
-	std::unordered_multimap<std::type_index, IComponent*> components;
+	std::unordered_multimap<std::type_index, std::reference_wrapper<IComponent>> components;
 
 
 	//----------------------------------------------------------------------------------

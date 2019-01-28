@@ -1,5 +1,5 @@
 template <typename ComponentT, typename... ArgsT>
-ComponentT* ComponentMgr::createComponent(ArgsT&&... args) {
+ComponentT& ComponentMgr::createComponent(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>,
 	              "Calling ComponentMgr::CreateComponent() with non-component type.");
 
@@ -16,7 +16,7 @@ ComponentT* ComponentMgr::createComponent(ArgsT&&... args) {
 		}
 	}
 
-	return &component;
+	return component;
 }
 
 

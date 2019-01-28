@@ -35,7 +35,7 @@ void Scene::removeEntity(EntityPtr entity) {
 }
 
 
-void Scene::removeSystem(ISystem* system) {
+void Scene::removeSystem(ISystem& system) {
 	ecs->removeSystem(system);
 }
 

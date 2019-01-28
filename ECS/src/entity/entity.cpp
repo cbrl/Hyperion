@@ -16,7 +16,6 @@ Entity::~Entity() {
 
 	for (auto& pair : components) {
 		component_mgr->destroyComponent(pair.second);
-		pair.second = nullptr;
 	}
 }
 
@@ -29,7 +28,7 @@ EntityPtr Entity::getPtr() const noexcept {
 void Entity::setActive(bool state) noexcept {
 	active = state;
 	for (auto& pair : components) {
-		pair.second->setActive(state);
+		pair.second.get().setActive(state);
 	}
 }
 
@@ -60,9 +59,9 @@ void Entity::setParent(EntityPtr parent) noexcept {
 }
 
 
-void Entity::removeComponent(IComponent* component) {
+void Entity::removeComponent(IComponent& component) {
 	for (auto it = components.begin(); it != components.end(); ++it) {
-		if (it->second == component) {
+		if (&it->second.get() == &component) {
 			components.erase(it);
 			component_mgr->destroyComponent(component);
 			return;
@@ -126,7 +125,7 @@ void Entity::setPointer(EntityPtr ptr) noexcept {
 		child->setParent(ptr);
 	});
 	for (auto& pair : components) {
-		pair.second->setOwner(ptr);
+		pair.second.get().setOwner(ptr);
 	}
 	name = "Entity (i:"
 	       + ToStr(ptr.getHandle().index).value_or("-1"s)

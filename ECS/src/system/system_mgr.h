@@ -14,7 +14,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	SystemMgr(ECS& ecs, EventMgr& handler);
 	SystemMgr(const SystemMgr& manager) = delete;
 	SystemMgr(SystemMgr&& manager) = default;
@@ -23,14 +22,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~SystemMgr() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	SystemMgr& operator=(const SystemMgr& manager) = delete;
 	SystemMgr& operator=(SystemMgr&& manager) = default;
 
@@ -42,9 +39,9 @@ public:
 	void update(Engine& engine, f32 dt);
 
 	template<typename SystemT, typename... ArgsT>
-	SystemT* addSystem(ArgsT&&... args);
+	SystemT& addSystem(ArgsT&&... args);
 
-	void removeSystem(ISystem* system);
+	void removeSystem(ISystem& system);
 
 	template<typename SystemT>
 	void removeSystem();
