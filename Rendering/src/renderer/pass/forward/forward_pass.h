@@ -15,7 +15,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	ForwardPass(ID3D11Device& device,
 	            ID3D11DeviceContext& device_context,
 	            RenderStateMgr& render_state_mgr,
@@ -28,14 +27,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~ForwardPass() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	ForwardPass& operator=(const ForwardPass& pass) = delete;
 	ForwardPass& operator=(ForwardPass&& pass) = delete;
 
@@ -44,30 +41,36 @@ public:
 	// Member Functions - Render Scene
 	//----------------------------------------------------------------------------------
 
+	// Render the given models with the given shader (opaque only)
+	void XM_CALLCONV renderOpaque(const std::vector<std::reference_wrapper<const Model>>& models,
+	                              FXMMATRIX world_to_projection,
+	                              const Texture* env_map,
+	                              PixelShader* shader) const;
+
+	// Render the given models with the given shader (transparent only)
+	void XM_CALLCONV renderTransparent(const std::vector<std::reference_wrapper<const Model>>& models,
+	                                   FXMMATRIX world_to_projection,
+	                                   const Texture* env_map,
+	                                   PixelShader* shader) const;
+
+	// Render all (opaque) models with a given BRDF
 	void XM_CALLCONV renderOpaque(Scene& scene,
 	                              FXMMATRIX world_to_projection,
 	                              const Texture* env_map,
 	                              BRDF brdf) const;
 
+	// Render all (transparent) models with a given BRDF
 	void XM_CALLCONV renderTransparent(Scene& scene,
 	                                   FXMMATRIX world_to_projection,
 	                                   const Texture* env_map,
 	                                   BRDF brdf) const;
 
-	void XM_CALLCONV renderOpaque(const std::vector<std::reference_wrapper<const Model>>& models,
-	                              PixelShader* shader,
-	                              FXMMATRIX world_to_projection,
-	                              const Texture* env_map) const;
-
-	void XM_CALLCONV renderTransparent(const std::vector<std::reference_wrapper<const Model>>& models,
-	                                   PixelShader* shader,
-	                                   FXMMATRIX world_to_projection,
-	                                   const Texture* env_map) const;
-
+	// Render all models with the given false color format
 	void XM_CALLCONV renderFalseColor(Scene& scene,
 	                                  FXMMATRIX world_to_projection,
 	                                  FalseColor color) const;
 
+	// Render all models as a wireframe
 	void XM_CALLCONV renderWireframe(Scene& scene,
 	                                 FXMMATRIX world_to_projection,
 	                                 const vec4_f32& color) const;
@@ -77,7 +80,6 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Bind State
 	//----------------------------------------------------------------------------------
-
 	void bindOpaqueState() const;
 	void bindTransparentState() const;
 	void bindWireframeState() const;
@@ -86,7 +88,6 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Render Model
 	//----------------------------------------------------------------------------------
-
 	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX world_to_projection) const;
 
 

@@ -135,41 +135,45 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 	//----------------------------------------------------------------------------------
 	profiler.beginTimestamp(GPUTimestamps::forward_render);
 
-	std::map<PixelShader*, std::vector<std::reference_wrapper<const Model>>> sorted_models;
-	scene.forEach<Model>([&](Model& model) {
-		if (!model.isActive()) return;
-		auto& mat = model.getMaterial();
-		sorted_models[mat.shader.get()].push_back(std::cref(model));
-	});
+	if (settings.getLightingMode() == LightingMode::Default) {
+		using model_cref_vector = std::vector<std::reference_wrapper<const Model>>;
 
-	for (auto& [shader, model_vec] : sorted_models) {
-		forward_pass->renderOpaque(model_vec, shader, world_to_projection, skybox);
-		forward_pass->renderTransparent(model_vec, shader, world_to_projection, skybox);
+		// Sort models by shader type
+		std::unordered_map<PixelShader*, model_cref_vector> sorted_models;
+		scene.forEach<Model>([&](Model& model) {
+			if (!model.isActive()) return;
+			auto& mat = model.getMaterial();
+			sorted_models[mat.shader.get()].push_back(std::cref(model));
+		});
+
+		// Render each list of models with its associated shader
+		for (auto& [shader, model_vec] : sorted_models) {
+			forward_pass->renderOpaque(model_vec, world_to_projection, skybox, shader);
+			forward_pass->renderTransparent(model_vec, world_to_projection, skybox, shader);
+		}
 	}
+	else {
+		switch (settings.getLightingMode()) {
+			case LightingMode::BRDF:
+				forward_pass->renderOpaque(scene, world_to_projection, skybox, settings.getBRDF());
+				forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
+				break;
 
-	/*
-	switch (settings.getLightingMode()) {
-		case LightingMode::Default:
-			forward_pass->renderOpaque(scene, world_to_projection, skybox, settings.getBRDF());
-			forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
-			break;
+			case LightingMode::FalseColorFullbright:
+				forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Fullbright);
+				break;
 
-		case LightingMode::FalseColorFullbright:
-			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Fullbright);
-			break;
+			case LightingMode::FalseColorNormal:
+				forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Normal);
+				break;
 
-		case LightingMode::FalseColorNormal:
-			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Normal);
-			break;
+			case LightingMode::FalseColorDepth:
+				forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Depth);
+				break;
 
-		case LightingMode::FalseColorDepth:
-			forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Depth);
-			break;
-
-		default:
-			break;
+			default: break;
+		}
 	}
-	*/
 
 	profiler.endTimestamp(GPUTimestamps::forward_render);
 

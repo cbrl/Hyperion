@@ -55,20 +55,14 @@ EntityPtr Scene::importModel(ID3D11Device& device, const std::shared_ptr<ModelBl
 
 void Scene::importModel(const EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
 
-	std::function<void(Entity&, const std::shared_ptr<ModelBlueprint>&, ModelBlueprint::Node&)> process_node =
-		[&](Entity& entity, const std::shared_ptr<ModelBlueprint>& bp, ModelBlueprint::Node& bp_node) {
+	std::function<void(Entity&, const std::shared_ptr<ModelBlueprint>&, const ModelBlueprint::Node&)> process_node =
+		[&](Entity& entity, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
+			// Construct each model at this node
 			for (const u32 index : bp_node.mesh_indices) {
-				auto* model = entity.addComponent<Model>(
-					device,
-					bp->meshes.at(index).getName(),
-					bp->meshes.at(index),
-					bp->materials.at(bp->mat_indices.at(index)),
-					bp->aabbs.at(index),
-					bp->bounding_spheres.at(index),
-					bp
-				);
+			    entity.addComponent<Model>(device, bp, index);
 			}
 
+			// Add a child entity for each child node
 			for (auto& node : bp_node.child_nodes) {
 			    auto child = addEntity();
 			    entity.addChild(child);

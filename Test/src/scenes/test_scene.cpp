@@ -92,6 +92,7 @@ void TestScene::initialize(const Engine& engine) {
 		EntityPtr inv_cube = importModel(device, inverted_cube_bp);
 		inv_cube->setName("Bounding Cube");
 		inv_cube->getComponent<Transform>()->setPosition(vec3_f32{0.0f, 5.0f, 0.0f});
+
 		auto& mat = inv_cube->getComponent<Model>()->getMaterial();
 		mat.params.base_color = {0.2f, 0.2f, 0.8f, 1.0f};
 		mat.params.roughness  = 0.8f;
@@ -217,4 +218,5 @@ void TestScene::initialize(const Engine& engine) {
 
 
 void TestScene::update(Engine& engine) {
+
 }
