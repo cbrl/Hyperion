@@ -7,8 +7,8 @@ EntityPtr EntityMgr::createEntity() {
 	entity.setEventMgr(gsl::make_not_null(&event_mgr));
 
 	// Create a handle
-	const handle64 handle = handle_map.createHandle(&entity);
-	const EntityPtr ptr = EntityPtr{this, handle};
+	const handle64  handle = handle_map.createHandle(&entity);
+	const EntityPtr ptr    = EntityPtr{this, handle};
 
 	// Create the entity
 	entity.setComponentMgr(gsl::make_not_null(component_mgr.get()));

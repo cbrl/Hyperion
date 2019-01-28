@@ -80,11 +80,11 @@ public:
 	// Get an existing pool or create it if it doesn't exist
 	template <typename ResourceT>
 	[[nodiscard]]
-	ResourcePool<ResourceT>* getOrCreatePool() {
+	ResourcePool<ResourceT>& getOrCreatePool() {
 		using pool_t = ResourcePool<ResourceT>;
 		static const auto index = std::type_index{typeid(ResourceT)};
 		const auto pair = pools.try_emplace(index, std::make_unique<pool_t>()); //pair = std::pair<iterator, bool>
-		return static_cast<pool_t*>(pair.first->second.get());
+		return *static_cast<pool_t*>(pair.first->second.get());
 	}
 
 
