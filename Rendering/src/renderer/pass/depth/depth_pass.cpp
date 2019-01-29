@@ -16,9 +16,9 @@ DepthPass::DepthPass(ID3D11Device& device,
 	, render_state_mgr(render_state_mgr)
 	, alt_cam_buffer(device) {
 
-	opaque_vs      = ShaderFactory::createDepthVS(resource_mgr);
-	transparent_vs = ShaderFactory::createDepthTransparentVS(resource_mgr);
-	transparent_ps = ShaderFactory::createDepthTransparentPS(resource_mgr);
+	opaque_vs      = ShaderFactory::CreateDepthVS(resource_mgr);
+	transparent_vs = ShaderFactory::CreateDepthTransparentVS(resource_mgr);
+	transparent_ps = ShaderFactory::CreateDepthTransparentPS(resource_mgr);
 }
 
 

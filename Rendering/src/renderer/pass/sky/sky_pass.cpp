@@ -11,8 +11,8 @@ SkyPass::SkyPass(ID3D11DeviceContext& device_context,
 	: device_context(device_context)
 	, render_state_mgr(render_state_mgr) {
 
-	vertex_shader = ShaderFactory::createSkyVS(resource_mgr);
-	pixel_shader  = ShaderFactory::createSkyPS(resource_mgr);
+	vertex_shader = ShaderFactory::CreateSkyVS(resource_mgr);
+	pixel_shader  = ShaderFactory::CreateSkyPS(resource_mgr);
 }
 
 

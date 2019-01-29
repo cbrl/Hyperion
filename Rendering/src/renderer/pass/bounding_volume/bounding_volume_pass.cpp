@@ -17,8 +17,8 @@ BoundingVolumePass::BoundingVolumePass(ID3D11Device& device,
 	, model_matrix_buffer(device)
 	, color_buffer(device) {
 
-	vertex_shader = ShaderFactory::createWireframeBoxVS(resource_mgr);
-	pixel_shader  = ShaderFactory::createWireframeBoxPS(resource_mgr);
+	vertex_shader = ShaderFactory::CreateWireframeBoxVS(resource_mgr);
+	pixel_shader  = ShaderFactory::CreateWireframeBoxPS(resource_mgr);
 }
 
 

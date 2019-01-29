@@ -788,15 +788,7 @@ void DrawEntityDetails(Entity& entity, Engine& engine) {
 		});
 	}
 
-	/*
-	// Model Root
-	if (entity.hasComponent<ModelRoot>()) {
-		auto roots = entity.getAll<ModelRoot>();
-		for (auto* root : roots) {
-			DrawComponentNode(("ModelRoot: " + root->getName()).c_str(), *root);
-		}
-	}
-	*/
+	// Model
 	if (entity.hasComponent<Model>()) {
 		auto models = entity.getAll<Model>();
 		for (Model& model : models) {

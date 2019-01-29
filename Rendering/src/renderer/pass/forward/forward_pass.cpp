@@ -16,7 +16,7 @@ ForwardPass::ForwardPass(ID3D11Device& device,
 	, resource_mgr(resource_mgr)
 	, color_buffer(device) {
 
-	vertex_shader = ShaderFactory::createForwardVS(resource_mgr);
+	vertex_shader = ShaderFactory::CreateForwardVS(resource_mgr);
 }
 
 
@@ -94,7 +94,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(const std::vector<std::reference_wrap
 	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Default pixel shader. Used if shader == nullptr
-	static auto default_shader = ShaderFactory::createForwardPS(resource_mgr, BRDF::CookTorrance, false);
+	static auto default_shader = ShaderFactory::CreateForwardPS(resource_mgr, BRDF::CookTorrance, false);
 
 	// Bind the shader
 	if (shader)
@@ -125,7 +125,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(const std::vector<std::reference
 	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Default pixel shader. Used if shader == nullptr
-	static auto default_shader = ShaderFactory::createForwardPS(resource_mgr, BRDF::CookTorrance, true);
+	static auto default_shader = ShaderFactory::CreateForwardPS(resource_mgr, BRDF::CookTorrance, true);
 
 	// Bind the shader
 	if (shader)
@@ -157,7 +157,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 
 	// Create the apporopriate pixel shader and bind it
 	static std::shared_ptr<PixelShader> pixel_shader;
-	pixel_shader = ShaderFactory::createForwardPS(resource_mgr, brdf, false);
+	pixel_shader = ShaderFactory::CreateForwardPS(resource_mgr, brdf, false);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -186,7 +186,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 
 	// Create the apporopriate pixel shader and bind it
 	static std::shared_ptr<PixelShader> pixel_shader;
-	pixel_shader = ShaderFactory::createForwardPS(resource_mgr, brdf, true);
+	pixel_shader = ShaderFactory::CreateForwardPS(resource_mgr, brdf, true);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -209,7 +209,7 @@ void ForwardPass::renderFalseColor(Scene& scene,
 	bindOpaqueState();
 
 	static std::shared_ptr<PixelShader> pixel_shader;
-	pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, color);
+	pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
 	scene.forEach<Model>([&](const Model& model) {
@@ -225,7 +225,7 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 
 	color_buffer.updateData(device_context, color);
 
-	static const auto pixel_shader = ShaderFactory::createFalseColorPS(resource_mgr, FalseColor::Static);
+	static const auto pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, FalseColor::Static);
 	pixel_shader->bind(device_context);
 
 	scene.forEach<Model>([&](const Model& model) {
