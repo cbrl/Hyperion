@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -234,7 +234,6 @@
     <None Include="packages.config" />
     <None Include="src\io\line_reader.tpp" />
     <None Include="src\memory\handle\handle_map.tpp" />
-    <None Include="src\memory\managed_resource_map.tpp" />
     <None Include="src\resource\var_map.tpp" />
     <None Include="src\timer\timer.tpp" />
   </ItemGroup>

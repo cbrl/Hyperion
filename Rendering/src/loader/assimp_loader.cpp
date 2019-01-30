@@ -118,7 +118,7 @@ void ProcessMaterials(const aiScene* scene, fs::path base_path, ResourceMgr& res
 				Logger::log(LogLevel::info, "Embedded texture found in model");
 			}
 			else {
-				out = resource_mgr.getOrCreate<Texture>(base_path / path.C_Str());
+				out = resource_mgr.acquire<Texture>(base_path / path.C_Str());
 			}
 		}
 	};

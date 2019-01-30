@@ -38,7 +38,7 @@ std::shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -78,7 +78,7 @@ std::shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -118,7 +118,7 @@ std::shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -158,7 +158,7 @@ std::shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -199,7 +199,7 @@ std::shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -240,7 +240,7 @@ std::shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -281,7 +281,7 @@ std::shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -320,7 +320,7 @@ std::shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -359,7 +359,7 @@ std::shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -398,7 +398,7 @@ std::shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 
@@ -437,7 +437,7 @@ std::shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
 	out.meshes.push_back(std::move(mesh));
 
 
-	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
+	return resource_mgr.acquire<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
 } //namespace BlueprintFactory

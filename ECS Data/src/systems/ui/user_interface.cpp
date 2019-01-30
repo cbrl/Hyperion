@@ -344,6 +344,21 @@ void DrawDetails(Model& model) {
 	ImGui::DragFloat("Roughness", &mat.params.roughness, 0.01f, 0.0f, 1.0f);
 	ImGui::ColorEdit3("Emissive", mat.params.emissive.data());
 
+	/*
+	if (ImGui::BeginCombo("Shader", nullptr)) {
+		const auto& shaders = resource_mgr.getAll<PixelShader>();
+		static std::vector<std::string> names{shaders.size()};
+		for (const auto& [guid, shader_ptr] : shaders) {
+			names.push_back(WstrToStr(guid));
+			if (ImGui::Selectable(names.back().c_str())) {
+				mat.shader = shader_ptr;
+			}
+		}
+		names.clear();
+		ImGui::EndCombo();
+	}
+	*/
+
 	ImGui::Separator();
 
 	bool shadows = model.castsShadows();
@@ -675,7 +690,7 @@ void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr, Scene
 			if (ImGui::MenuItem("From file")) {
 				if (auto file = OpenFilePicker(); fs::exists(file)) {
 					ModelConfig<VertexPositionNormalTexture> config;
-					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
+					auto bp = resource_mgr.acquire<ModelBlueprint>(file, config);
 					if (auto entity = g_scene_tree.getSelected())
 						scene.importModel(entity, device, bp);
 				} else
