@@ -125,7 +125,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(const std::vector<std::reference
 	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Default pixel shader. Used if shader == nullptr
-	static auto default_shader = ShaderFactory::CreateForwardPS(resource_mgr, BRDF::CookTorrance, true);
+	auto default_shader = ShaderFactory::CreateForwardPS(resource_mgr, BRDF::CookTorrance, true);
 
 	// Bind the shader
 	if (shader)
@@ -156,8 +156,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	static std::shared_ptr<PixelShader> pixel_shader;
-	pixel_shader = ShaderFactory::CreateForwardPS(resource_mgr, brdf, false);
+	auto pixel_shader = ShaderFactory::CreateForwardPS(resource_mgr, brdf, false);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -185,8 +184,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Create the apporopriate pixel shader and bind it
-	static std::shared_ptr<PixelShader> pixel_shader;
-	pixel_shader = ShaderFactory::CreateForwardPS(resource_mgr, brdf, true);
+	auto pixel_shader = ShaderFactory::CreateForwardPS(resource_mgr, brdf, true);
 	pixel_shader->bind(device_context);
 
 	// Render models
@@ -208,8 +206,7 @@ void ForwardPass::renderFalseColor(Scene& scene,
 
 	bindOpaqueState();
 
-	static std::shared_ptr<PixelShader> pixel_shader;
-	pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, color);
+	auto pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
 	scene.forEach<Model>([&](const Model& model) {
@@ -225,7 +222,7 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 
 	color_buffer.updateData(device_context, color);
 
-	static const auto pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, FalseColor::Static);
+	auto pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, FalseColor::Static);
 	pixel_shader->bind(device_context);
 
 	scene.forEach<Model>([&](const Model& model) {
