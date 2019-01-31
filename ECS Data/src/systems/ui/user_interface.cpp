@@ -327,7 +327,7 @@ void DrawDetails(Text& text) {
 }
 
 
-void DrawDetails(Model& model) {
+void DrawDetails(Model& model, ResourceMgr& resource_mgr) {
 
 	ImGui::BeginGroup();
 
@@ -335,19 +335,30 @@ void DrawDetails(Model& model) {
 
 	ImGui::Separator();
 
-	// Material properties
 	auto& mat = model.getMaterial();
 	ImGui::Text("Material: %s", mat.name.c_str());
 
+	//----------------------------------------------------------------------------------
+	// Material properties
+	//----------------------------------------------------------------------------------
 	ImGui::ColorEdit4("Base Color", mat.params.base_color.data());
 	ImGui::DragFloat("Metalness", &mat.params.metalness, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat("Roughness", &mat.params.roughness, 0.01f, 0.0f, 1.0f);
 	ImGui::ColorEdit3("Emissive", mat.params.emissive.data());
 
-	/*
-	if (ImGui::BeginCombo("Shader", nullptr)) {
-		const auto& shaders = resource_mgr.getAll<PixelShader>();
+	//----------------------------------------------------------------------------------
+	// Material shader
+	//----------------------------------------------------------------------------------
+	static std::string preview;
+	preview = mat.shader ? WstrToStr(mat.shader->getGUID()) : "Default";
+
+	if (ImGui::BeginCombo("Shader", preview.c_str())) {
+		const auto& shaders = resource_mgr.getResourceMap<PixelShader>();
 		static std::vector<std::string> names{shaders.size()};
+
+		if (ImGui::Selectable("Default")) {
+			mat.shader = nullptr;
+		}
 		for (const auto& [guid, shader_ptr] : shaders) {
 			names.push_back(WstrToStr(guid));
 			if (ImGui::Selectable(names.back().c_str())) {
@@ -357,10 +368,12 @@ void DrawDetails(Model& model) {
 		names.clear();
 		ImGui::EndCombo();
 	}
-	*/
 
 	ImGui::Separator();
 
+	//----------------------------------------------------------------------------------
+	// Shadows
+	//----------------------------------------------------------------------------------
 	bool shadows = model.castsShadows();
 	if (ImGui::Checkbox("Casts Shadows", &shadows))
 		model.setShadows(shadows);
@@ -642,8 +655,8 @@ void DrawTransformManipulator(Transform& transform, CameraT& camera, Input& inpu
 //----------------------------------------------------------------------------------
 
 // Draw a node in the tree, and its details if selected
-template<typename T>
-void DrawComponentNode(gsl::czstring<> text, T& item) {
+template<typename T, typename... ArgsT>
+void DrawComponentNode(gsl::czstring<> text, T& item, ArgsT&&... args) {
 
 	static IComponent* selected = nullptr;
 
@@ -651,7 +664,7 @@ void DrawComponentNode(gsl::czstring<> text, T& item) {
 	ImGui::PushID(&item);
 	if (ImGui::CollapsingHeader(text, &dont_delete)) {
 		selected = &item;
-		DrawDetails(item);
+		DrawDetails(item, std::forward<ArgsT>(args)...);
 	}
 	ImGui::PopID();
 	if (!dont_delete && selected) {
@@ -713,10 +726,10 @@ void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr, Scene
 // Draw the details panel for the specified entity
 void DrawEntityDetails(Entity& entity, Engine& engine) {
 
-	auto& device = engine.getRenderingMgr().getDevice();
-	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
-	auto& scene = engine.getScene();
-	const auto& entities = scene.getEntities();
+	auto&       device       = engine.getRenderingMgr().getDevice();
+	auto&       resource_mgr = engine.getRenderingMgr().getResourceMgr();
+	auto&       scene        = engine.getScene();
+	const auto& entities     = scene.getEntities();
 
 	//----------------------------------------------------------------------------------
 	// Begin Window
@@ -781,7 +794,6 @@ void DrawEntityDetails(Entity& entity, Engine& engine) {
 	// Draw Component Nodes
 	//----------------------------------------------------------------------------------
 
-
 	// Transform
 	if (auto* transform = entity.getComponent<Transform>()) {
 		DrawComponentNode("Transform", *transform);
@@ -808,7 +820,7 @@ void DrawEntityDetails(Entity& entity, Engine& engine) {
 		auto models = entity.getAll<Model>();
 		for (Model& model : models) {
 			std::string name = "Model: " + model.getName();
-			DrawComponentNode(name.c_str(), model);
+			DrawComponentNode(name.c_str(), model, resource_mgr);
 		}
 	}
 
