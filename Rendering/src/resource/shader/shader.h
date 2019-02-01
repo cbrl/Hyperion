@@ -10,7 +10,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	VertexShader(const std::wstring& guid,
 	             ID3D11Device& device,
 	             const ShaderBytecode& bytecode,
@@ -23,14 +22,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~VertexShader() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	VertexShader& operator=(const VertexShader& shader) = delete;
 	VertexShader& operator=(VertexShader&& shader) noexcept = default;
 
@@ -45,20 +42,19 @@ public:
 		Pipeline::VS::bindShader(device_context, shader.Get(), nullptr, 0);
 	}
 
-
 private:
+
 	void createShader(ID3D11Device& device,
 					  const ShaderBytecode& bytecode,
 					  gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
 	ComPtr<ID3D11VertexShader> shader;
-	ComPtr<ID3D11InputLayout> layout;
+	ComPtr<ID3D11InputLayout>  layout;
 };
 
 
@@ -70,7 +66,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	Shader(const std::wstring& guid,
 		   ID3D11Device& device,
 		   const ShaderBytecode& bytecode);
@@ -82,14 +77,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~Shader() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	Shader& operator=(const Shader& shader) = delete;
 	Shader& operator=(Shader&& shader) noexcept = default;
 
@@ -103,18 +96,18 @@ public:
 		StageT::bindShader(device_context, shader.Get(), nullptr, 0);
 	}
 
-
 private:
+
 	void createShader(ID3D11Device& device, const ShaderBytecode& bytecode);
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
 	ComPtr<ShaderT> shader;
 };
+
 
 using ComputeShader  = Shader<ID3D11ComputeShader, Pipeline::CS>;
 using DomainShader   = Shader<ID3D11DomainShader, Pipeline::DS>;
