@@ -377,17 +377,17 @@ void DrawDetails(Model& model, ResourceMgr& resource_mgr) {
 	static std::string matparams_preview;
 	static std::string emissive_preview;
 
-	diffuse_preview = mat.maps.base_color ? WstrToStr(mat.maps.base_color->getGUID()) : "None";
-	normal_preview = mat.maps.normal ? WstrToStr(mat.maps.normal->getGUID()) : "None";
+	diffuse_preview   = mat.maps.base_color      ? WstrToStr(mat.maps.base_color->getGUID())      : "None";
+	normal_preview    = mat.maps.normal          ? WstrToStr(mat.maps.normal->getGUID())          : "None";
 	matparams_preview = mat.maps.material_params ? WstrToStr(mat.maps.material_params->getGUID()) : "None";
-	emissive_preview = mat.maps.emissive ? WstrToStr(mat.maps.emissive->getGUID()) : "None";
+	emissive_preview  = mat.maps.emissive        ? WstrToStr(mat.maps.emissive->getGUID())        : "None";
 
 	const auto& resource_map = resource_mgr.getResourceMap<Texture>();
 
-	resource_map_combo_box("Base Color Map", diffuse_preview.c_str(), resource_map, mat.maps.base_color);
-	resource_map_combo_box("Normal Map", normal_preview.c_str(), resource_map, mat.maps.normal);
+	resource_map_combo_box("Base Color Map",      diffuse_preview.c_str(),   resource_map, mat.maps.base_color);
+	resource_map_combo_box("Normal Map",          normal_preview.c_str(),    resource_map, mat.maps.normal);
 	resource_map_combo_box("Material Params Map", matparams_preview.c_str(), resource_map, mat.maps.material_params);
-	resource_map_combo_box("Emissive Map", emissive_preview.c_str(), resource_map, mat.maps.emissive);
+	resource_map_combo_box("Emissive Map",        emissive_preview.c_str(),  resource_map, mat.maps.emissive);
 
 	ImGui::Spacing();
 
