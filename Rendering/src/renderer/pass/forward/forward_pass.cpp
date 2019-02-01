@@ -106,7 +106,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(const std::vector<std::reference_wrap
 	for (auto& model : models) {
 		auto& mat = model.get().getMaterial();
 		if (mat.params.base_color[3] <= ALPHA_MAX)
-			return;
+			continue;
 
 		renderModel(model, world_to_projection);
 	}
@@ -125,7 +125,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(const std::vector<std::reference
 	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
 
 	// Default pixel shader. Used if shader == nullptr
-	auto default_shader = ShaderFactory::CreateForwardPS(resource_mgr, BRDF::CookTorrance, true);
+	static auto default_shader = ShaderFactory::CreateForwardPS(resource_mgr, BRDF::CookTorrance, true);
 
 	// Bind the shader
 	if (shader)
@@ -137,7 +137,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(const std::vector<std::reference
 	for (auto& model : models) {
 		auto& mat = model.get().getMaterial();
 		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
-			return;
+			continue;
 
 		renderModel(model, world_to_projection);
 	}
