@@ -149,6 +149,8 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 		// Render each list of models with its associated shader
 		for (auto& [shader, model_vec] : sorted_models) {
 			forward_pass->renderOpaque(model_vec, world_to_projection, skybox, shader);
+		}
+		for (auto& [shader, model_vec] : sorted_models) {
 			forward_pass->renderTransparent(model_vec, world_to_projection, skybox, shader);
 		}
 	}

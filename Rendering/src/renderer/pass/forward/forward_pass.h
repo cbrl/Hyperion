@@ -38,7 +38,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Render Scene
+	// Member Functions - Render With Specified Shader
 	//----------------------------------------------------------------------------------
 
 	// Render the given models with the given shader (opaque only)
@@ -53,6 +53,11 @@ public:
 	                                   const Texture* env_map,
 	                                   PixelShader* shader) const;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Render With Specified Mode
+	//----------------------------------------------------------------------------------
+
 	// Render all (opaque) models with a given BRDF
 	void XM_CALLCONV renderOpaque(Scene& scene,
 	                              FXMMATRIX world_to_projection,
@@ -65,7 +70,7 @@ public:
 	                                   const Texture* env_map,
 	                                   BRDF brdf) const;
 
-	// Render all models with the given false color format
+	// Render all models with the given false color mode
 	void XM_CALLCONV renderFalseColor(Scene& scene,
 	                                  FXMMATRIX world_to_projection,
 	                                  FalseColor color) const;
@@ -75,8 +80,8 @@ public:
 	                                 FXMMATRIX world_to_projection,
 	                                 const vec4_f32& color) const;
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Functions - Bind State
 	//----------------------------------------------------------------------------------
@@ -91,7 +96,6 @@ private:
 	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX world_to_projection) const;
 
 
-private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
