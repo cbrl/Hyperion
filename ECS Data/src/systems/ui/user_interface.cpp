@@ -329,7 +329,27 @@ void DrawDetails(Text& text) {
 
 void DrawDetails(Model& model, ResourceMgr& resource_mgr) {
 
-	ImGui::BeginGroup();
+	auto resource_map_combo_box = [](const char* name, const char* preview_text, const auto& resource_map, auto& selection_receiver) {
+		if (ImGui::BeginCombo(name, preview_text)) {
+			static std::vector<std::string> names{resource_map.size()};
+
+			if (ImGui::Selectable("None")) {
+				selection_receiver = nullptr;
+			}
+			for (const auto& [guid, sharedptr] : resource_map) {
+				names.push_back(WstrToStr(guid));
+				if constexpr (std::is_same_v<Texture, std::remove_reference_t<decltype(resource_map)>::value_type>) {
+					ImGui::Image(sharedptr->get(), {10, 10});
+					ImGui::SameLine();
+				}
+				if (ImGui::Selectable(names.back().c_str())) {
+					selection_receiver = sharedptr;
+				}
+			}
+			names.clear();
+			ImGui::EndCombo();
+		}
+	};
 
 	DrawComponentState(model);
 
@@ -337,6 +357,7 @@ void DrawDetails(Model& model, ResourceMgr& resource_mgr) {
 
 	auto& mat = model.getMaterial();
 	ImGui::Text("Material: %s", mat.name.c_str());
+	ImGui::Spacing();
 
 	//----------------------------------------------------------------------------------
 	// Material properties
@@ -346,28 +367,37 @@ void DrawDetails(Model& model, ResourceMgr& resource_mgr) {
 	ImGui::DragFloat("Roughness", &mat.params.roughness, 0.01f, 0.0f, 1.0f);
 	ImGui::ColorEdit3("Emissive", mat.params.emissive.data());
 
+	ImGui::Spacing();
+
+	//----------------------------------------------------------------------------------
+	// Texture
+	//----------------------------------------------------------------------------------
+	static std::string diffuse_preview;
+	static std::string normal_preview;
+	static std::string matparams_preview;
+	static std::string emissive_preview;
+
+	diffuse_preview = mat.maps.base_color ? WstrToStr(mat.maps.base_color->getGUID()) : "None";
+	normal_preview = mat.maps.normal ? WstrToStr(mat.maps.normal->getGUID()) : "None";
+	matparams_preview = mat.maps.material_params ? WstrToStr(mat.maps.material_params->getGUID()) : "None";
+	emissive_preview = mat.maps.emissive ? WstrToStr(mat.maps.emissive->getGUID()) : "None";
+
+	const auto& resource_map = resource_mgr.getResourceMap<Texture>();
+
+	resource_map_combo_box("Base Color Map", diffuse_preview.c_str(), resource_map, mat.maps.base_color);
+	resource_map_combo_box("Normal Map", normal_preview.c_str(), resource_map, mat.maps.normal);
+	resource_map_combo_box("Material Params Map", matparams_preview.c_str(), resource_map, mat.maps.material_params);
+	resource_map_combo_box("Emissive Map", emissive_preview.c_str(), resource_map, mat.maps.emissive);
+
+	ImGui::Spacing();
+
 	//----------------------------------------------------------------------------------
 	// Material shader
 	//----------------------------------------------------------------------------------
-	static std::string preview;
-	preview = mat.shader ? WstrToStr(mat.shader->getGUID()) : "Default";
+	static std::string shader_title_preview;
+	shader_title_preview = mat.shader ? WstrToStr(mat.shader->getGUID()) : "Default";
 
-	if (ImGui::BeginCombo("Shader", preview.c_str())) {
-		const auto& shaders = resource_mgr.getResourceMap<PixelShader>();
-		static std::vector<std::string> names{shaders.size()};
-
-		if (ImGui::Selectable("Default")) {
-			mat.shader = nullptr;
-		}
-		for (const auto& [guid, shader_ptr] : shaders) {
-			names.push_back(WstrToStr(guid));
-			if (ImGui::Selectable(names.back().c_str())) {
-				mat.shader = shader_ptr;
-			}
-		}
-		names.clear();
-		ImGui::EndCombo();
-	}
+	resource_map_combo_box("Shader", shader_title_preview.c_str(), resource_mgr.getResourceMap<PixelShader>(), mat.shader);
 
 	ImGui::Separator();
 
@@ -377,8 +407,6 @@ void DrawDetails(Model& model, ResourceMgr& resource_mgr) {
 	bool shadows = model.castsShadows();
 	if (ImGui::Checkbox("Casts Shadows", &shadows))
 		model.setShadows(shadows);
-
-	ImGui::EndGroup();
 }
 
 
