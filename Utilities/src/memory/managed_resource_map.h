@@ -91,7 +91,7 @@ private:
 		[[nodiscard]] pair_kp operator*()  { return pair_kp{it->first, it->second.lock()}; }
 		[[nodiscard]] pair_kp operator->() { return pair_kp{it->first, it->second.lock()}; }
 
-		iterator& operator++() { it++; return *this; }
+		iterator& operator++() { ++it; return *this; }
 
 		bool operator==(const iterator& rhs) const noexcept { return it == rhs.it; }
 		bool operator!=(const iterator& rhs) const noexcept { return it != rhs.it; }
