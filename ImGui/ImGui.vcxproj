@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="src\imconfig.h" />
     <ClInclude Include="src\imgui.h" />
+    <ClInclude Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.h" />
     <ClInclude Include="src\imgui_addons\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\countof.h" />
@@ -37,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imgui.cpp" />
+    <ClCompile Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.cpp" />
     <ClCompile Include="src\imgui_addons\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.cpp" />
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\ProggyTiny.cpp" />

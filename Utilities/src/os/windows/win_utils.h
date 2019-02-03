@@ -102,24 +102,15 @@ inline u64 GetCPUTime() {
 // Functions - I/O
 //----------------------------------------------------------------------------------
 
-// Get a file path through the Windows file picker
-inline fs::path OpenFilePicker() {
-	ComPtr<IFileOpenDialog> pFileOpen;
-
-	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog,
-	                              NULL,
-	                              CLSCTX_ALL,
-	                              IID_IFileOpenDialog,
-	                              reinterpret_cast<void**>(pFileOpen.GetAddressOf()));
-
-	if (SUCCEEDED(hr)) {
+inline fs::path PickFile(IFileDialog* dialog) {
+	if (dialog) {
 		// Show the file dialog
-		hr = pFileOpen->Show(NULL);
+		HRESULT hr = dialog->Show(NULL);
 
 		if (SUCCEEDED(hr)) {
 			// Get the file
 			ComPtr<IShellItem> pItem;
-			hr = pFileOpen->GetResult(pItem.GetAddressOf());
+			hr = dialog->GetResult(pItem.GetAddressOf());
 
 			if (SUCCEEDED(hr)) {
 				// Store the file name
@@ -135,6 +126,33 @@ inline fs::path OpenFilePicker() {
 	}
 
 	return fs::path{};
+}
+
+// Open the Windows file open dialog
+inline fs::path OpenFileDialog() {
+	ComPtr<IFileOpenDialog> pFileOpen;
+
+	HRESULT hr = CoCreateInstance(CLSID_FileOpenDialog,
+	                              NULL,
+	                              CLSCTX_ALL,
+	                              IID_IFileOpenDialog,
+	                              reinterpret_cast<void**>(pFileOpen.GetAddressOf()));
+
+	return PickFile(pFileOpen.Get());
+}
+
+
+// Open the Windows file save dialog
+inline fs::path SaveFileDialog() {
+	ComPtr<IFileSaveDialog> pFileSave;
+
+	HRESULT hr = CoCreateInstance(CLSID_FileSaveDialog,
+	                              NULL,
+	                              CLSCTX_ALL,
+	                              IID_IFileSaveDialog,
+	                              reinterpret_cast<void**>(pFileSave.GetAddressOf()));
+
+	return PickFile(pFileSave.Get());
 }
 
 

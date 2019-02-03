@@ -1,27 +1,32 @@
 #include "user_interface.h"
 #include "new_model_menu.h"
 #include "selectable_tree.h"
+#include "shader_editor.h"
+
+#include "log/log.h"
+#include "os/windows/win_utils.h"
 
 #include "engine/engine.h"
+#include "resource/resource_mgr.h"
+#include "scene/scene.h"
 
 #include "entities/entities.h"
 #include "components/components.h"
-
-#include "resource/resource_mgr.h"
-#include "scene/scene.h"
-#include "log/log.h"
-#include "os/windows/win_utils.h"
 
 #include "imgui.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "imgui_addons/ImGuizmo/ImGuizmo.h"
 #include "imgui_addons/metrics_gui/metrics_gui/metrics_gui.h"
+#include "imgui_addons/ImGuiColorTextEdit/TextEditor.h"
 
 
 //----------------------------------------------------------------------------------
 // Scene Tree global
 //----------------------------------------------------------------------------------
 SelectableTree<EntityPtr> g_scene_tree;
+
+
+bool g_shader_editor_visible = false;
 
 
 
@@ -103,13 +108,11 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static constexpr gsl::czstring<> render_mode_names[] = {
 	    "Forward",
 	    "Forward+",
-	    "Deferred"
-	};
+	    "Deferred"};
 	static constexpr RenderMode render_modes[] = {
 	    RenderMode::Forward,
 	    RenderMode::ForwardPlus,
-	    RenderMode::Deferred
-	};
+	    RenderMode::Deferred};
 
 	auto render_mode = static_cast<int>(settings.getRenderMode());
 	if (ImGui::Combo("Render Mode", &render_mode, render_mode_names, static_cast<int>(std::size(render_mode_names))))
@@ -124,15 +127,13 @@ void DrawCameraSettings(CameraSettings& settings) {
 	    "BRDF",
 	    "FalseColorFullbright",
 	    "FalseColorNormal",
-	    "FalseColorDepth"
-	};
+	    "FalseColorDepth"};
 	static constexpr LightingMode light_modes[] = {
 	    LightingMode::Default,
-		LightingMode::BRDF,
+	    LightingMode::BRDF,
 	    LightingMode::FalseColorFullbright,
 	    LightingMode::FalseColorNormal,
-	    LightingMode::FalseColorDepth
-	};
+	    LightingMode::FalseColorDepth};
 
 	auto light_mode = static_cast<int>(settings.getLightingMode());
 	if (ImGui::Combo("Lighting Mode", &light_mode, light_mode_names, static_cast<int>(std::size(light_mode_names))))
@@ -145,13 +146,11 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static constexpr gsl::czstring<> brdf_names[] = {
 	    "Lambert",
 	    "Blinn-Phong",
-	    "Cook-Torrance"
-	};
+	    "Cook-Torrance"};
 	static constexpr BRDF brdfs[] = {
 	    BRDF::Lambert,
 	    BRDF::BlinnPhong,
-	    BRDF::CookTorrance
-	};
+	    BRDF::CookTorrance};
 
 	auto brdf = static_cast<int>(settings.getBRDF());
 	if (ImGui::Combo("BRDF", &brdf, brdf_names, static_cast<int>(std::size(brdf_names))))
@@ -377,17 +376,17 @@ void DrawDetails(Model& model, ResourceMgr& resource_mgr) {
 	static std::string matparams_preview;
 	static std::string emissive_preview;
 
-	diffuse_preview   = mat.maps.base_color      ? WstrToStr(mat.maps.base_color->getGUID())      : "None";
-	normal_preview    = mat.maps.normal          ? WstrToStr(mat.maps.normal->getGUID())          : "None";
+	diffuse_preview = mat.maps.base_color ? WstrToStr(mat.maps.base_color->getGUID()) : "None";
+	normal_preview = mat.maps.normal ? WstrToStr(mat.maps.normal->getGUID()) : "None";
 	matparams_preview = mat.maps.material_params ? WstrToStr(mat.maps.material_params->getGUID()) : "None";
-	emissive_preview  = mat.maps.emissive        ? WstrToStr(mat.maps.emissive->getGUID())        : "None";
+	emissive_preview = mat.maps.emissive ? WstrToStr(mat.maps.emissive->getGUID()) : "None";
 
 	const auto& resource_map = resource_mgr.getResourceMap<Texture>();
 
-	resource_map_combo_box("Base Color Map",      diffuse_preview.c_str(),   resource_map, mat.maps.base_color);
-	resource_map_combo_box("Normal Map",          normal_preview.c_str(),    resource_map, mat.maps.normal);
+	resource_map_combo_box("Base Color Map", diffuse_preview.c_str(), resource_map, mat.maps.base_color);
+	resource_map_combo_box("Normal Map", normal_preview.c_str(), resource_map, mat.maps.normal);
 	resource_map_combo_box("Material Params Map", matparams_preview.c_str(), resource_map, mat.maps.material_params);
-	resource_map_combo_box("Emissive Map",        emissive_preview.c_str(),  resource_map, mat.maps.emissive);
+	resource_map_combo_box("Emissive Map", emissive_preview.c_str(), resource_map, mat.maps.emissive);
 
 	ImGui::Spacing();
 
@@ -729,9 +728,9 @@ void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr, Scene
 
 		if (ImGui::BeginMenu("Model")) {
 			if (ImGui::MenuItem("From file")) {
-				if (auto file = OpenFilePicker(); fs::exists(file)) {
+				if (auto file = OpenFileDialog(); fs::exists(file)) {
 					ModelConfig<VertexPositionNormalTexture> config;
-					auto bp = resource_mgr.acquire<ModelBlueprint>(file, config);
+					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
 					if (auto entity = g_scene_tree.getSelected())
 						scene.importModel(entity, device, bp);
 				} else
@@ -754,10 +753,10 @@ void DrawAddComponentMenu(ID3D11Device& device, ResourceMgr& resource_mgr, Scene
 // Draw the details panel for the specified entity
 void DrawEntityDetails(Entity& entity, Engine& engine) {
 
-	auto&       device       = engine.getRenderingMgr().getDevice();
-	auto&       resource_mgr = engine.getRenderingMgr().getResourceMgr();
-	auto&       scene        = engine.getScene();
-	const auto& entities     = scene.getEntities();
+	auto& device = engine.getRenderingMgr().getDevice();
+	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
+	auto& scene = engine.getScene();
+	const auto& entities = scene.getEntities();
 
 	//----------------------------------------------------------------------------------
 	// Begin Window
@@ -985,7 +984,7 @@ void DrawEntityNode(EntityPtr entity_ptr) {
 
 
 // Draw the scene tree
-void DrawTree(Engine& engine) {
+void DrawSceneTree(Engine& engine) {
 
 	auto& scene = engine.getScene();
 
@@ -1149,6 +1148,12 @@ void DrawSystemMenu(Engine& engine) {
 				engine.requestExit();
 			}
 
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Shader")) {
+			if (ImGui::MenuItem("Shader Editor")) {
+				g_shader_editor_visible = true;
+			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
@@ -1357,7 +1362,6 @@ void DrawMetrics(Engine& engine) {
 
 
 
-
 //----------------------------------------------------------------------------------
 //
 //   UserInterface
@@ -1368,7 +1372,7 @@ void DrawMetrics(Engine& engine) {
 void UserInterface::update(Engine& engine) {
 
 	//ImGui::ShowDemoWindow();
-	ImGuizmo::BeginFrame(); //technicall should be called right after ImGui_XXXX_NewFrame();
+	ImGuizmo::BeginFrame();
 
 	auto& device = engine.getRenderingMgr().getDevice();
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
@@ -1395,6 +1399,8 @@ void UserInterface::update(Engine& engine) {
 	// Draw the system metrics
 	DrawMetrics(engine);
 
+	ShaderEditor::DrawEditor(engine, g_shader_editor_visible);
+
 	// Draw scene window contents
 	if (ImGui::Begin("Scene")) {
 		// Draw menu
@@ -1404,7 +1410,7 @@ void UserInterface::update(Engine& engine) {
 		NewModelMenu::ProcNewModelPopup(device, resource_mgr, scene, g_scene_tree.getSelected());
 
 		// Draw tree
-		DrawTree(engine);
+		DrawSceneTree(engine);
 	}
 	ImGui::End();
 }

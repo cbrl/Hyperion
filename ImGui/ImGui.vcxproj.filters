@@ -54,6 +54,12 @@
     <Filter Include="Source Files\misc\cpp">
       <UniqueIdentifier>{d7a05d03-8078-4893-9c48-c7ce962ef702}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\imgui_addons\ImGuiColorTextEdit">
+      <UniqueIdentifier>{0621ea39-97bd-4ed5-bc30-48832f2daf0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imgui_addons\ImGuiColorTextEdit">
+      <UniqueIdentifier>{9cc6f9ff-74f8-4fc0-b6e9-7c31d55792cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\imgui_impl_dx11.h">
@@ -101,6 +107,9 @@
     <ClInclude Include="src\misc\cpp\imgui_stdlib.h">
       <Filter>Header Files\misc\cpp</Filter>
     </ClInclude>
+    <ClInclude Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.h">
+      <Filter>Header Files\imgui_addons\ImGuiColorTextEdit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imgui_draw.cpp">
@@ -135,6 +144,9 @@
     </ClCompile>
     <ClCompile Include="src\misc\cpp\imgui_stdlib.cpp">
       <Filter>Source Files\misc\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.cpp">
+      <Filter>Source Files\imgui_addons\ImGuiColorTextEdit</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
