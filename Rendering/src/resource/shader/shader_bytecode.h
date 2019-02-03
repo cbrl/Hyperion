@@ -3,8 +3,16 @@
 #include "directx/d3d11.h"
 
 
-// Compile a shader file to bytecode
+// Compile a shader file
+[[nodiscard]]
 HRESULT CompileShaderToBytecode(const std::wstring& file,
+                                const std::string& entry_point,
+                                const std::string& target_ver,
+                                gsl::not_null<ID3DBlob**> out);
+
+// Compile a shader from memory
+[[nodiscard]]
+HRESULT CompileShaderToBytecode(gsl::span<const char> data,
                                 const std::string& entry_point,
                                 const std::string& target_ver,
                                 gsl::not_null<ID3DBlob**> out);
@@ -36,7 +44,10 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
 	virtual const BYTE* getBytecode() const noexcept = 0;
+
+	[[nodiscard]]
 	virtual size_t getBytecodeSize() const noexcept = 0;
 };
 
@@ -72,10 +83,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
 	const BYTE* getBytecode() const noexcept override {
 		return buffer;
 	}
 
+	[[nodiscard]]
 	size_t getBytecodeSize() const noexcept override {
 		return size;
 	}
@@ -100,6 +113,9 @@ public:
 	ShaderBytecodeBlob(const std::wstring& file) {
 		D3DReadFileToBlob(file.c_str(), blob.GetAddressOf());
 	}
+	ShaderBytecodeBlob(ComPtr<ID3DBlob> blob)
+		: blob(std::move(blob)) {
+	}
 	ShaderBytecodeBlob(const ShaderBytecodeBlob& buffer) noexcept = default;
 	ShaderBytecodeBlob(ShaderBytecodeBlob&& buffer) noexcept = default;
 
@@ -120,10 +136,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
 	const BYTE* getBytecode() const noexcept override {
 		return static_cast<BYTE*>(blob->GetBufferPointer());
 	}
 
+	[[nodiscard]]
 	size_t getBytecodeSize() const noexcept override {
 		return blob->GetBufferSize();
 	}

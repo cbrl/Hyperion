@@ -52,7 +52,7 @@ std::shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
 	desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
 
 
-	return resource_mgr.acquire<Texture>(L"Default", desc, init_data);
+	return resource_mgr.getOrCreate<Texture>(L"Default", desc, init_data);
 }
 
 
@@ -71,7 +71,7 @@ std::shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const vec
 	desc.Usage            = D3D11_USAGE_IMMUTABLE;
 	desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
 
-	return resource_mgr.acquire<Texture>(std::to_wstring(color_u32), desc, init_data);
+	return resource_mgr.getOrCreate<Texture>(std::to_wstring(color_u32), desc, init_data);
 }
 
 

@@ -52,7 +52,7 @@ void TestScene::initialize(const Engine& engine) {
 	cam->setFOV(XM_PI / 3.0f);
 
 	// Skybox
-	cam->getSettings().setSkybox(resource_mgr.acquire<Texture>(L"../data/Textures/grasscube1024.dds"));
+	cam->getSettings().setSkybox(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	// Fog
 	auto& fog = cam->getSettings().getFog();
@@ -81,7 +81,7 @@ void TestScene::initialize(const Engine& engine) {
 	config.flip_uv      = false;
 
 	// Create blueprints
-	//auto main_bp          = resource_mgr.acquire<ModelBlueprint>(L"../data/models/test/test.obj", config);
+	//auto main_bp          = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj", config);
 	auto sphere_bp        = BlueprintFactory::CreateSphere(resource_mgr, config, 1.0f);
 	auto cube_bp          = BlueprintFactory::CreateCube(resource_mgr, config, 2.0f);
 	auto inverted_cube_bp = BlueprintFactory::CreateCube(resource_mgr, inv_config, 10.0f);
@@ -207,7 +207,7 @@ void TestScene::initialize(const Engine& engine) {
 	// Text objects
 	//----------------------------------------------------------------------------------
 
-	auto font = resource_mgr.acquire<Font>(L"../data/fonts/courier-12.spritefont");
+	auto font = resource_mgr.getOrCreate<Font>(L"../data/fonts/courier-12.spritefont");
 
 	scene_name_text = addEntity();
 	scene_name_text->setName("Scene Name Text");

@@ -45,31 +45,31 @@ std::shared_ptr<PixelShader> CreateForwardPS(ResourceMgr& resource_mgr, BRDF brd
 	switch (brdf) {
 		case BRDF::Lambert: {
 			if (transparency)
-				return resource_mgr.acquire<PixelShader>(L"shader_forward_transparent_lambert_ps", BYTECODE(shader_forward_transparent_lambert));
+				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_lambert_ps", BYTECODE(shader_forward_transparent_lambert));
 			else
-				return resource_mgr.acquire<PixelShader>(L"shader_forward_lambert_ps", BYTECODE(shader_forward_lambert));
+				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_lambert_ps", BYTECODE(shader_forward_lambert));
 		}
 		case BRDF::BlinnPhong: {
 			if (transparency)
-				return resource_mgr.acquire<PixelShader>(L"shader_forward_transparent_blinn_phong_ps", BYTECODE(shader_forward_transparent_blinn_phong));
+				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_blinn_phong_ps", BYTECODE(shader_forward_transparent_blinn_phong));
 			else
-				return resource_mgr.acquire<PixelShader>(L"shader_forward_blinn_phong_ps", BYTECODE(shader_forward_blinn_phong));
+				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_blinn_phong_ps", BYTECODE(shader_forward_blinn_phong));
 		}
 		case BRDF::CookTorrance: {
 			if (transparency)
-				return resource_mgr.acquire<PixelShader>(L"shader_forward_transparent_cook_torrance_ps", BYTECODE(shader_forward_transparent_cook_torrance));
+				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_cook_torrance_ps", BYTECODE(shader_forward_transparent_cook_torrance));
 			else
-				return resource_mgr.acquire<PixelShader>(L"shader_forward_cook_torrance_ps", BYTECODE(shader_forward_cook_torrance));
+				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_cook_torrance_ps", BYTECODE(shader_forward_cook_torrance));
 		}
 		default: {
-			return resource_mgr.acquire<PixelShader>(L"shader_forward_lambert_ps", BYTECODE(shader_forward_lambert));
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_lambert_ps", BYTECODE(shader_forward_lambert));
 		}
 	}
 }
 
 std::shared_ptr<VertexShader> CreateForwardVS(ResourceMgr& resource_mgr) {
 
-	return resource_mgr.acquire<VertexShader>(L"shader_forward_vs",
+	return resource_mgr.getOrCreate<VertexShader>(L"shader_forward_vs",
 													BYTECODE(shader_forward_vs),
 		                                            gsl::make_span(VertexPositionNormalTexture::input_elements,
 		                                                            VertexPositionNormalTexture::input_element_count));
@@ -82,7 +82,7 @@ std::shared_ptr<VertexShader> CreateForwardVS(ResourceMgr& resource_mgr) {
 
 std::shared_ptr<VertexShader> CreateDepthVS(ResourceMgr& resource_mgr) {
 
-	return resource_mgr.acquire<VertexShader>(L"shader_depth_vs",
+	return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_vs",
 													BYTECODE(shader_depth_vs),
 													gsl::make_span(VertexPositionNormalTexture::input_elements,
 													                VertexPositionNormalTexture::input_element_count));
@@ -90,12 +90,12 @@ std::shared_ptr<VertexShader> CreateDepthVS(ResourceMgr& resource_mgr) {
 
 std::shared_ptr<PixelShader> CreateDepthTransparentPS(ResourceMgr& resource_mgr) {
 
-	return resource_mgr.acquire<PixelShader>(L"shader_depth_transparent_ps", BYTECODE(shader_depth_transparent_ps));
+	return resource_mgr.getOrCreate<PixelShader>(L"shader_depth_transparent_ps", BYTECODE(shader_depth_transparent_ps));
 }
 
 std::shared_ptr<VertexShader> CreateDepthTransparentVS(ResourceMgr& resource_mgr) {
 
-	return resource_mgr.acquire<VertexShader>(L"shader_depth_transparent_vs",
+	return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_transparent_vs",
 													BYTECODE(shader_depth_transparent_vs),
 													gsl::make_span(VertexPositionNormalTexture::input_elements,
 													                VertexPositionNormalTexture::input_element_count));
@@ -108,12 +108,12 @@ std::shared_ptr<VertexShader> CreateDepthTransparentVS(ResourceMgr& resource_mgr
 
 std::shared_ptr<PixelShader> CreateSkyPS(ResourceMgr& resource_mgr) {
 
-	return resource_mgr.acquire<PixelShader>(L"shader_skybox_ps", BYTECODE(shader_skybox_ps));
+	return resource_mgr.getOrCreate<PixelShader>(L"shader_skybox_ps", BYTECODE(shader_skybox_ps));
 }
 
 std::shared_ptr<VertexShader> CreateSkyVS(ResourceMgr& resource_mgr) {
 
-	return resource_mgr.acquire<VertexShader>(L"shader_skybox_vs",
+	return resource_mgr.getOrCreate<VertexShader>(L"shader_skybox_vs",
 													BYTECODE(shader_skybox_vs),
 		                                            gsl::make_span(VertexPositionTexture::input_elements,
 		                                                            VertexPositionTexture::input_element_count));
@@ -126,13 +126,13 @@ std::shared_ptr<VertexShader> CreateSkyVS(ResourceMgr& resource_mgr) {
 
 std::shared_ptr<PixelShader> CreateWireframeBoxPS(ResourceMgr& resource_mgr) {
 
-	return resource_mgr.acquire<PixelShader>(L"shader_wireframe_box_ps",
+	return resource_mgr.getOrCreate<PixelShader>(L"shader_wireframe_box_ps",
 		                                            BYTECODE(shader_wireframe_box_ps));
 }
 
 std::shared_ptr<VertexShader> CreateWireframeBoxVS(ResourceMgr& resource_mgr) {
 
-	return resource_mgr.acquire<VertexShader>(L"shader_wireframe_box_vs",
+	return resource_mgr.getOrCreate<VertexShader>(L"shader_wireframe_box_vs",
 													BYTECODE(shader_wireframe_box_vs),
 		                                            gsl::make_span(VertexPosition::input_elements,
 		                                                            VertexPosition::input_element_count));
@@ -147,19 +147,19 @@ std::shared_ptr<PixelShader> CreateFalseColorPS(ResourceMgr& resource_mgr, False
 
 	switch (color) {
 		case FalseColor::Static:
-			return resource_mgr.acquire<PixelShader>(L"shader_false_color_static", BYTECODE(shader_static_color));
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_static", BYTECODE(shader_static_color));
 
 		case FalseColor::Fullbright:
-			return resource_mgr.acquire <PixelShader>(L"shader_false_color_fullbright", BYTECODE(shader_fullbright));
+			return resource_mgr.getOrCreate <PixelShader>(L"shader_false_color_fullbright", BYTECODE(shader_fullbright));
 
 		case FalseColor::Normal:
-			return resource_mgr.acquire<PixelShader>(L"shader_false_color_normal", BYTECODE(shader_normal_color));
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_normal", BYTECODE(shader_normal_color));
 
 		case FalseColor::Depth:
-			return resource_mgr.acquire<PixelShader>(L"shader_false_color_depth", BYTECODE(shader_depth_color));
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_depth", BYTECODE(shader_depth_color));
 
 		default:
-			return resource_mgr.acquire<PixelShader>(L"shader_false_color_static", BYTECODE(shader_static_color));
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_static", BYTECODE(shader_static_color));
 	}
 }
 
