@@ -27,18 +27,58 @@ protected:
 };
 
 template <typename T>
-class ResourcePool final : public IResourcePool, public std::pmr::list<T> {
+class ResourcePool final : public IResourcePool, private std::pmr::list<T> {
 public:
 	ResourcePool() : std::pmr::list<T>(&pool_resource) {}
 
+	//----------------------------------------------------------------------------------
+	// Modifiers
+	//----------------------------------------------------------------------------------
+	//using std::pmr::list<T>::emplace_font;
+	using std::pmr::list<T>::emplace_back;
+
+	//----------------------------------------------------------------------------------
+	// Operations
+	//----------------------------------------------------------------------------------
+
 	// Remove a resource referenced to by its pointer
 	void remove_resource(void* resource) {
-		this->remove_if([resource](T& element) { return &element == resource; });
+		bool found = false;
+		this->remove_if([resource, &found](T& element) {
+			if (&element == resource) {
+				found = true;
+				return true;
+			}
+			else return false;
+		});
+		if (!found) Logger::log(LogLevel::warn, "ResourcePool::remove_resource() found no object to remove");
 	}
 
+	// Remove a resource referenced to by its pointer
 	void remove_resource(T& resource) {
-		remove_resource(&resource);
+			remove_resource(&resource);
 	}
+
+	//----------------------------------------------------------------------------------
+	// Iterators
+	//----------------------------------------------------------------------------------
+	using std::pmr::list<T>::front;
+	using std::pmr::list<T>::back;
+	using std::pmr::list<T>::begin;
+	using std::pmr::list<T>::cbegin;
+	using std::pmr::list<T>::rbegin;
+	using std::pmr::list<T>::crbegin;
+	using std::pmr::list<T>::end;
+	using std::pmr::list<T>::cend;
+	using std::pmr::list<T>::rend;
+	using std::pmr::list<T>::crend;
+
+	//----------------------------------------------------------------------------------
+	// Capacity
+	//----------------------------------------------------------------------------------
+	using std::pmr::list<T>::empty;
+	using std::pmr::list<T>::size;
+	using std::pmr::list<T>::max_size;
 };
 
 
