@@ -112,7 +112,8 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static constexpr RenderMode render_modes[] = {
 	    RenderMode::Forward,
 	    RenderMode::ForwardPlus,
-	    RenderMode::Deferred};
+	    RenderMode::Deferred
+	};
 
 	auto render_mode = static_cast<int>(settings.getRenderMode());
 	if (ImGui::Combo("Render Mode", &render_mode, render_mode_names, static_cast<int>(std::size(render_mode_names))))
@@ -127,13 +128,15 @@ void DrawCameraSettings(CameraSettings& settings) {
 	    "BRDF",
 	    "FalseColorFullbright",
 	    "FalseColorNormal",
-	    "FalseColorDepth"};
+	    "FalseColorDepth"
+	};
 	static constexpr LightingMode light_modes[] = {
 	    LightingMode::Default,
 	    LightingMode::BRDF,
 	    LightingMode::FalseColorFullbright,
 	    LightingMode::FalseColorNormal,
-	    LightingMode::FalseColorDepth};
+	    LightingMode::FalseColorDepth
+	};
 
 	auto light_mode = static_cast<int>(settings.getLightingMode());
 	if (ImGui::Combo("Lighting Mode", &light_mode, light_mode_names, static_cast<int>(std::size(light_mode_names))))
@@ -150,7 +153,8 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static constexpr BRDF brdfs[] = {
 	    BRDF::Lambert,
 	    BRDF::BlinnPhong,
-	    BRDF::CookTorrance};
+	    BRDF::CookTorrance
+	};
 
 	auto brdf = static_cast<int>(settings.getBRDF());
 	if (ImGui::Combo("BRDF", &brdf, brdf_names, static_cast<int>(std::size(brdf_names))))
@@ -1374,16 +1378,16 @@ void UserInterface::update(Engine& engine) {
 	//ImGui::ShowDemoWindow();
 	ImGuizmo::BeginFrame();
 
-	auto& device = engine.getRenderingMgr().getDevice();
+	auto& device       = engine.getRenderingMgr().getDevice();
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
-	auto& scene = engine.getScene();
+	auto& scene        = engine.getScene();
 
 	// Setup window layout
-	ImGui::SetNextWindowSize(ImVec2(275, 600), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2{275, 600}, ImGuiCond_FirstUseEver);
 	ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_MenuBar);
 	ImGui::End();
 
-	ImGui::SetNextWindowSize(ImVec2(375, 425), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2{375, 425}, ImGuiCond_FirstUseEver);
 	ImGui::Begin("Properties", nullptr, ImGuiWindowFlags_MenuBar);
 	ImGui::End();
 
@@ -1399,9 +1403,9 @@ void UserInterface::update(Engine& engine) {
 	// Draw the system metrics
 	DrawMetrics(engine);
 
+	// Draw the shader editor
 	ShaderEditor::DrawEditor(engine, g_shader_editor_visible);
 
-	// Draw scene window contents
 	if (ImGui::Begin("Scene")) {
 		// Draw menu
 		DrawSceneMenu(scene);

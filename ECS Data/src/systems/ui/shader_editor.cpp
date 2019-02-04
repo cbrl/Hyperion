@@ -6,19 +6,27 @@
 #include "imgui_addons/ImGuiColorTextEdit/TextEditor.h"
 
 
-namespace ShaderEditor {
+namespace {
 
-void CompileShader(Engine& engine, const std::wstring& name, const std::string& shader) {
+void CompileShader(Engine& engine,
+                   const std::wstring& name,
+                   const std::string& entry_point,
+                   const std::string& target_version,
+                   const std::string& shader) {
 	ComPtr<ID3DBlob> blob;
 
 	const auto    data   = gsl::make_span<const char>(shader.c_str(), shader.size());
-	const HRESULT result = CompileShaderToBytecode(data, "PS", "ps_5_0", gsl::make_not_null(blob.GetAddressOf()));
+	const HRESULT result = CompileShaderToBytecode(data,
+	                                               entry_point.c_str(),
+	                                               target_version,
+	                                               gsl::make_not_null(blob.GetAddressOf()));
 
 	if (SUCCEEDED(result)) {
 		auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
 		(void)resource_mgr.createOrReplace<PixelShader>(name, ShaderBytecodeBlob(blob));
 	}
 }
+
 
 void DrawCompilePopup(Engine& engine, TextEditor& editor, bool& compile_popup_open) {
 	if (compile_popup_open) {
@@ -33,8 +41,35 @@ void DrawCompilePopup(Engine& engine, TextEditor& editor, bool& compile_popup_op
 
 		ImGui::Spacing();
 
+		static std::string entry_point;
+		ImGui::InputText("Entry Point", &entry_point);
+
+		ImGui::Spacing();
+
+		static constexpr gsl::czstring<> type_names[] = {
+		    "Compute Shader",
+		    "Domain Shader",
+		    "Geometry Shader",
+		    "Hull Shader",
+		    "Pixel Shader",
+		    "Vertex Shader",
+		};
+		static constexpr gsl::czstring<> target_versions[] = {
+		    "cs_5_0",
+		    "ds_5_0",
+		    "gs_5_0",
+		    "hs_5_0",
+		    "ps_5_0",
+		    "vs_5_0"
+		};
+		
+		static int curr_type = 0;
+		ImGui::Combo("Shader Type", &curr_type, type_names, static_cast<int>(std::size(type_names)));
+
+		ImGui::Spacing();
+
 		if (ImGui::Button("Compile")) {
-			CompileShader(engine, StrToWstr(name), editor.GetText());
+			CompileShader(engine, StrToWstr(name), entry_point, target_versions[curr_type], editor.GetText());
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel")) {
@@ -90,6 +125,10 @@ void DrawMenuBar(Engine& engine, TextEditor& editor, bool& compile_popup) {
 	}
 }
 
+}
+
+
+namespace ShaderEditor {
 
 void DrawEditor(Engine& engine, bool& open) {
 	static TextEditor editor;
