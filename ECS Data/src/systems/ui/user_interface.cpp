@@ -1,7 +1,7 @@
 #include "user_interface.h"
 #include "new_model_menu.h"
 #include "selectable_tree.h"
-#include "shader_editor.h"
+#include "text_edit_window.h"
 
 #include "log/log.h"
 #include "os/windows/win_utils.h"
@@ -1154,8 +1154,8 @@ void DrawSystemMenu(Engine& engine) {
 
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Shader")) {
-			if (ImGui::MenuItem("Shader Editor")) {
+		if (ImGui::BeginMenu("Text Editor")) {
+			if (ImGui::MenuItem("Open text editor")) {
 				g_shader_editor_visible = true;
 			}
 			ImGui::EndMenu();
@@ -1404,8 +1404,8 @@ void UserInterface::update(Engine& engine) {
 	DrawMetrics(engine);
 
 	// Draw the shader editor
-	static ShaderEditor shader_editor;
-	shader_editor.drawEditor(engine, g_shader_editor_visible);
+	static TextEditWindow text_editor;
+	text_editor.drawEditor(engine, g_shader_editor_visible);
 
 	if (ImGui::Begin("Scene")) {
 		// Draw menu

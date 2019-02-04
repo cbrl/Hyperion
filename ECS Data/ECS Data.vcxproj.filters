@@ -89,7 +89,10 @@
     <ClInclude Include="src\systems\ui\selectable_tree.h">
       <Filter>Header Files\systems\ui</Filter>
     </ClInclude>
-    <ClInclude Include="src\systems\ui\shader_editor.h">
+    <ClInclude Include="src\systems\ui\shader_compile_menu.h">
+      <Filter>Header Files\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\ui\text_edit_window.h">
       <Filter>Header Files\systems\ui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -112,7 +115,10 @@
     <ClCompile Include="src\systems\ui\new_model_menu.cpp">
       <Filter>Source Files\systems\ui</Filter>
     </ClCompile>
-    <ClCompile Include="src\systems\ui\shader_editor.cpp">
+    <ClCompile Include="src\systems\ui\shader_compile_menu.cpp">
+      <Filter>Source Files\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\ui\text_edit_window.cpp">
       <Filter>Source Files\systems\ui</Filter>
     </ClCompile>
   </ItemGroup>

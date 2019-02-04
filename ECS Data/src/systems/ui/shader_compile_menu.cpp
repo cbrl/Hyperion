@@ -1,86 +1,36 @@
-#include "shader_editor.h"
+#include "shader_compile_menu.h"
 #include "engine/engine.h"
 
+#include "imgui.h"
 #include "misc/cpp/imgui_stdlib.h"
 
 
-ShaderEditor::ShaderEditor()
+ShaderCompileMenu::ShaderCompileMenu()
 	: compile_popup_open(false)
 	, overwrite_warning_open(false)
 	, type_idx(0) {
 }
 
 
-void ShaderEditor::drawEditor(Engine& engine, bool& open) {
-	if (!open) return;
-
-	if (ImGui::Begin("Shader Editor", &open, ImGuiWindowFlags_MenuBar)) {
-		drawMenuBar();
-		editor.Render("Editor");
-	}
-	ImGui::End();
-
-	drawCompilePopup(engine);
-}
-
-
-void ShaderEditor::drawMenuBar() {
-	if (ImGui::BeginMenuBar()) {
-		if (ImGui::BeginMenu("File")) {
-			if (ImGui::MenuItem("Open...")) {
-				openFile();
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Save")) {
-				saveFile(false);
-			}
-			if (ImGui::MenuItem("Save As...")) {
-				saveFile(true);
-			}
-
-			ImGui::Separator();
-
-			if (ImGui::MenuItem("Compile Shader")) {
-				compile_popup_open = true;
-			}
-			ImGui::EndMenu();
+void ShaderCompileMenu::drawMenu() {
+	if (ImGui::BeginMenu("Shader")) {
+		if (ImGui::MenuItem("Compile Shader")) {
+			compile_popup_open = true;
 		}
-		ImGui::EndMenuBar();
+		ImGui::EndMenu();
 	}
 }
 
 
-void ShaderEditor::openFile() {
-	current_file = OpenFileDialog();
-
-	if (not fs::exists(current_file))
-		return;
-
-	std::ifstream stream(current_file);
-	if (stream.good()) {
-		std::string text{std::istreambuf_iterator<char>{stream}, std::istreambuf_iterator<char>{}};
-		editor.SetText(text);
-	}
+bool ShaderCompileMenu::update(Engine& engine) {
+	return drawCompilePopup(engine);
 }
 
 
-void ShaderEditor::saveFile(bool save_as) {
-	if (save_as)
-		current_file = SaveFileDialog();  //open the save file dialog every time for the "Save As" option
-	else if (not fs::exists(current_file))
-		current_file = SaveFileDialog();  //else open the save file dialog only if the current path doesn't exist
+bool ShaderCompileMenu::drawCompilePopup(Engine& engine) {
 
-	std::ofstream file(current_file, std::ios_base::trunc);
-	if (file.good()) {
-		const std::string text = editor.GetText();
-		file.write(text.c_str(), text.size());
-	}
-}
+	bool out_compile = false;
 
-
-void ShaderEditor::drawCompilePopup(Engine& engine) {
 	if (compile_popup_open) {
 		ImGui::OpenPopup("Compile");
 		compile_popup_open = false;
@@ -99,7 +49,7 @@ void ShaderEditor::drawCompilePopup(Engine& engine) {
 		// Entry Point
 		ImGui::InputText("Entry Point", &entry_point);
 		ImGui::Spacing();
-		
+
 		// Shader Type
 		static const auto type_name_getter = [](void* data, int idx, const char** out_text) {
 			if (idx < 0 || idx > std::size(shader_types)) return false;
@@ -114,7 +64,7 @@ void ShaderEditor::drawCompilePopup(Engine& engine) {
 			if (checkExistingShaderName(engine))
 				overwrite_warning_open = true;
 			else
-				compileShader(engine);
+				out_compile = true;
 		}
 
 		ImGui::SameLine();
@@ -130,28 +80,29 @@ void ShaderEditor::drawCompilePopup(Engine& engine) {
 		ImGui::Text("A shader named \"%s\" already exists. Do you want to overwrite it?", shader_name.c_str());
 
 		if (ImGui::Button("Yes")) {
-			compileShader(engine);
+			out_compile = true;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("No")) {
+			out_compile = false;
 			ImGui::CloseCurrentPopup();
 		}
 
 		ImGui::EndPopup();
 	}
+
+	return out_compile;
 }
 
 
-void ShaderEditor::compileShader(Engine& engine) const {
-	ComPtr<ID3DBlob> blob;
+void ShaderCompileMenu::compileShader(Engine& engine, gsl::span<const char> data) const {
 
-	const std::string shader = editor.GetText();
-	const auto        data   = gsl::make_span<const char>(shader.c_str(), shader.size());
-	const HRESULT     result = CompileShaderToBytecode(data,
-	                                                   entry_point.c_str(),
-	                                                   shader_types[type_idx].second,
-	                                                   gsl::make_not_null(blob.GetAddressOf()));
+	ComPtr<ID3DBlob> blob;
+	const HRESULT result = CompileShaderToBytecode(data,
+	                                               entry_point.c_str(),
+	                                               shader_types[type_idx].second,
+	                                               gsl::make_not_null(blob.GetAddressOf()));
 
 	if (SUCCEEDED(result)) {
 		auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
@@ -160,13 +111,13 @@ void ShaderEditor::compileShader(Engine& engine) const {
 }
 
 
-bool ShaderEditor::checkExistingShaderName(Engine& engine) const {
+bool ShaderCompileMenu::checkExistingShaderName(Engine& engine) const {
 	const char* type_name = shader_types[type_idx].first;
 
 	// Check the selected shader type name, then compare existing names of that type of shader.
 	if (strcmp(type_name, "Compute Shader") == 0) {
 		return checkTypeNames<ComputeShader>(engine);
-	} 
+	}
 	else if (strcmp(type_name, "Domain Shader") == 0) {
 		return checkTypeNames<DomainShader>(engine);
 	}
@@ -188,7 +139,7 @@ bool ShaderEditor::checkExistingShaderName(Engine& engine) const {
 
 
 template<typename ShaderT>
-bool ShaderEditor::checkTypeNames(Engine& engine) const {
+bool ShaderCompileMenu::checkTypeNames(Engine& engine) const {
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
 	std::wstring wstr_name = StrToWstr(shader_name);
 

@@ -151,7 +151,8 @@
     <ClInclude Include="src\systems\systems.h" />
     <ClInclude Include="src\systems\ui\new_model_menu.h" />
     <ClInclude Include="src\systems\ui\selectable_tree.h" />
-    <ClInclude Include="src\systems\ui\shader_editor.h" />
+    <ClInclude Include="src\systems\ui\text_edit_window.h" />
+    <ClInclude Include="src\systems\ui\shader_compile_menu.h" />
     <ClInclude Include="src\systems\ui\user_interface.h" />
   </ItemGroup>
   <ItemGroup>
@@ -160,7 +161,8 @@
     <ClCompile Include="src\systems\motor\camera_motor_system.cpp" />
     <ClCompile Include="src\systems\motor\mouse_rotation_system.cpp" />
     <ClCompile Include="src\systems\ui\new_model_menu.cpp" />
-    <ClCompile Include="src\systems\ui\shader_editor.cpp" />
+    <ClCompile Include="src\systems\ui\text_edit_window.cpp" />
+    <ClCompile Include="src\systems\ui\shader_compile_menu.cpp" />
     <ClCompile Include="src\systems\ui\user_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
