@@ -1404,7 +1404,8 @@ void UserInterface::update(Engine& engine) {
 	DrawMetrics(engine);
 
 	// Draw the shader editor
-	ShaderEditor::DrawEditor(engine, g_shader_editor_visible);
+	static ShaderEditor shader_editor;
+	shader_editor.drawEditor(engine, g_shader_editor_visible);
 
 	if (ImGui::Begin("Scene")) {
 		// Draw menu
