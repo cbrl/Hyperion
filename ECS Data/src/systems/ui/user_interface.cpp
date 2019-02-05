@@ -340,6 +340,7 @@ void DrawDetails(Model& model, ResourceMgr& resource_mgr) {
 				selection_receiver = nullptr;
 			}
 			for (const auto& [guid, sharedptr] : resource_map) {
+				if (!sharedptr) continue;
 				names.push_back(WstrToStr(guid));
 				if constexpr (std::is_same_v<Texture, std::remove_reference_t<decltype(resource_map)>::value_type>) {
 					ImGui::Image(sharedptr->get(), {10, 10});
