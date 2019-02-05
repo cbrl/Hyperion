@@ -9,10 +9,10 @@ TestScene::TestScene()
 
 void TestScene::initialize(const Engine& engine) {
 
-	const auto& rendering_mgr = engine.getRenderingMgr();
-	auto& device = rendering_mgr.getDevice();
-	auto& device_context = rendering_mgr.getDeviceContext();
-	auto& resource_mgr = rendering_mgr.getResourceMgr();
+	const auto& rendering_mgr  = engine.getRenderingMgr();
+	auto&       device         = rendering_mgr.getDevice();
+	auto&       device_context = rendering_mgr.getDeviceContext();
+	auto&       resource_mgr   = rendering_mgr.getResourceMgr();
 
 	//----------------------------------------------------------------------------------
 	// Add systems
