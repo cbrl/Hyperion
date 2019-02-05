@@ -71,7 +71,8 @@ std::shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const vec
 	desc.Usage            = D3D11_USAGE_IMMUTABLE;
 	desc.BindFlags        = D3D11_BIND_SHADER_RESOURCE;
 
-	return resource_mgr.getOrCreate<Texture>(std::to_wstring(color_u32), desc, init_data);
+	std::string name = ToStr(color_u32, 16).value_or(std::to_string(color_u32));
+	return resource_mgr.getOrCreate<Texture>(StrToWstr(name), desc, init_data);
 }
 
 
