@@ -86,6 +86,40 @@ inline std::string WstrToStr(std::wstring_view in) {
 // Functions - ToStr
 //----------------------------------------------------------------------------------
 
+namespace detail {
+template<typename T>
+std::optional<std::string> ToStrImpl(T val, std::chars_format fmt) noexcept {
+	// Determine maximum chars possible in string
+	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
+
+	// Convert the string
+	std::vector<char> chars(max_chars + 1, '\0');
+	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, fmt);
+
+	if (result.ec != std::errc()) {
+		return {};
+	}
+
+	return std::optional<std::string>{std::in_place, chars.data()};
+}
+
+template<typename T>
+std::optional<std::string> ToStrImpl(T val, std::chars_format fmt, int precision) noexcept {
+	// Determine maximum chars possible in string
+	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
+
+	// Convert the string
+	std::vector<char> chars(max_chars + 1, '\0');
+	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, fmt, precision);
+
+	if (result.ec != std::errc()) {
+		return {};
+	}
+
+	return std::optional<std::string>{std::in_place, chars.data()};
+}
+} //namespace detail
+
 // Convert the specified arithemetic value to a string
 template <typename T>
 std::optional<std::string> ToStr(T val, int base = 10) noexcept {
@@ -118,23 +152,13 @@ std::optional<std::string> ToStr(T val, std::chars_format fmt) noexcept {
 
 	if constexpr (std::is_integral_v<T>) {
 		if constexpr (sizeof(T) <= sizeof(float))
-			return ToStr(static_cast<float>(val), fmt); //Formatted to_chars only accepts floating point values
+			return detail::ToStrImpl(static_cast<float>(val), fmt); //Formatted to_chars only accepts floating point values
 		else
-			return ToStr(static_cast<double>(val), fmt);
+			return detail::ToStrImpl(static_cast<double>(val), fmt);
 	}
-
-	// Determine maximum chars possible in string
-	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
-
-	// Convert the string
-	std::vector<char> chars(max_chars + 1, '\0');
-	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, fmt);
-
-	if (result.ec != std::errc()) {
-		return {};
+	else {
+		return detail::ToStrImpl(val, fmt);
 	}
-
-	return std::optional<std::string>{std::in_place, chars.data()};
 }
 
 // Convert the specified arithemetic value to a string
@@ -145,23 +169,13 @@ std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) no
 
 	if constexpr (std::is_integral_v<T>) {
 		if constexpr (sizeof(T) <= sizeof(float))
-			return ToStr(static_cast<float>(val), fmt, precision); //Formatted to_chars only accepts floating point values
+			return detail::ToStr(static_cast<float>(val), fmt, precision); //Formatted to_chars only accepts floating point values
 		else
-			return ToStr(static_cast<double>(val), fmt, precision);
+			return detail::ToStr(static_cast<double>(val), fmt, precision);
 	}
-
-	// Determine maximum chars possible in string
-	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
-
-	// Convert the string
-	std::vector<char> chars(max_chars + 1, '\0');
-	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, fmt, precision);
-
-	if (result.ec != std::errc()) {
-		return {};
+	else {
+		return detail::ToStrImpl(val, fmt, precision);
 	}
-
-	return std::optional<std::string>{std::in_place, chars.data()};
 }
 
 
