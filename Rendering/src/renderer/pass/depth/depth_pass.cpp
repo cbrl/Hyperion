@@ -144,7 +144,6 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 
 void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
 
-	// TODO: More elegant way of passing transform/root to function
 	const auto* transform = model.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
