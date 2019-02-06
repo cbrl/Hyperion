@@ -9,6 +9,10 @@
 #include "rendering_mgr.h"
 
 
+//----------------------------------------------------------------------------------
+// Engine Setup Function
+//----------------------------------------------------------------------------------
+class Engine;
 std::unique_ptr<Engine> SetupEngine();
 
 
@@ -21,8 +25,8 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	EngineMessageHandler() noexcept = default;
-	EngineMessageHandler(const EngineMessageHandler& handler) noexcept = default;
-	EngineMessageHandler(EngineMessageHandler&& handler) noexcept = default;
+	EngineMessageHandler(const EngineMessageHandler& handler) = default;
+	EngineMessageHandler(EngineMessageHandler&& handler) = default;
 
 	//----------------------------------------------------------------------------------
 	// Destructor
@@ -32,8 +36,8 @@ public:
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	EngineMessageHandler& operator=(const EngineMessageHandler& handler) noexcept = default;
-	EngineMessageHandler& operator=(EngineMessageHandler&& handler) noexcept = default;
+	EngineMessageHandler& operator=(const EngineMessageHandler& handler) = default;
+	EngineMessageHandler& operator=(EngineMessageHandler&& handler) = default;
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
@@ -41,8 +45,6 @@ public:
 	[[nodiscard]]
 	LRESULT msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) override;
 
-
-public:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
@@ -61,7 +63,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	Engine(std::wstring title,
 	       DisplayConfig display_config,
 	       RenderingConfig rendering_config);
@@ -73,14 +74,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~Engine();
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	Engine& operator=(const Engine& engine) = delete;
 	Engine& operator=(Engine&& engine) noexcept = default;
 
@@ -197,8 +196,8 @@ public:
 		return *rendering_mgr;
 	}
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Functions - Initialization
 	//----------------------------------------------------------------------------------
@@ -219,7 +218,6 @@ private:
 	void processInput() const;
 
 
-private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
