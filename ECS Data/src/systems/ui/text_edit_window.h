@@ -10,7 +10,7 @@
 
 class Engine;
 
-class TextEditWindow {
+class TextEditWindow final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -36,7 +36,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void drawEditor(Engine& engine, bool& open);
+	void draw(Engine& engine, bool& open);
 
 private:
 	void drawMenuBar();

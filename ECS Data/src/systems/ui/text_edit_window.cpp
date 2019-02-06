@@ -4,7 +4,7 @@
 #include "misc/cpp/imgui_stdlib.h"
 
 
-void TextEditWindow::drawEditor(Engine& engine, bool& open) {
+void TextEditWindow::draw(Engine& engine, bool& open) {
 	if (!open) return;
 
 	if (ImGui::Begin("Text Editor", &open, ImGuiWindowFlags_MenuBar)) {

@@ -4,7 +4,7 @@
 
 class Engine;
 
-class ShaderCompileMenu {
+class ShaderCompileMenu final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
