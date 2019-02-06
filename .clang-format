@@ -13,7 +13,7 @@ AllowShortLoopsOnASingleLine: 'true'
 BinPackArguments: 'false'
 BinPackParameters: 'false'
 BreakBeforeBinaryOperators: NonAssignment
-BreakBeforeBraces: Attach
+BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: 'true'
 BreakConstructorInitializers: BeforeComma
 ColumnLimit: '0'
