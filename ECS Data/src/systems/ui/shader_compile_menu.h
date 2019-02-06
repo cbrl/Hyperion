@@ -39,7 +39,7 @@ public:
 	[[nodiscard]]
 	bool update(Engine& engine);
 
-	// Compile HLSL code from memory
+	// Compile an input shader of the type selected in this menu
 	void compileShader(Engine& engine, gsl::span<const char> data) const;
 
 private:
@@ -51,7 +51,11 @@ private:
 
 	template<typename ShaderT>
 	[[nodiscard]]
-	bool checkTypeNames(Engine& engine) const;
+	bool checkTypeExistingName(Engine& engine) const;
+
+	template<typename ShaderT>
+	[[nodiscard]]
+	bool checkTypeSelected() const;
 
 
 	//----------------------------------------------------------------------------------

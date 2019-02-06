@@ -1,11 +1,12 @@
 #pragma once
 
 #include "directx/d3d11.h"
+#include "io/io.h"
 
 
 // Compile a shader file
 [[nodiscard]]
-HRESULT CompileShaderToBytecode(const std::wstring& file,
+HRESULT CompileShaderToBytecode(const fs::path& file,
                                 const std::string& entry_point,
                                 const std::string& target_ver,
                                 gsl::not_null<ID3DBlob**> out);

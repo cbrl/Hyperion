@@ -1,7 +1,6 @@
 #include "shader_bytecode.h"
-#include "io/io.h"
 
-HRESULT CompileShaderToBytecode(const std::wstring& file,
+HRESULT CompileShaderToBytecode(const fs::path& file,
                                 const std::string& entry_point,
                                 const std::string& target_ver,
                                 gsl::not_null<ID3DBlob**> out) {
@@ -14,7 +13,8 @@ HRESULT CompileShaderToBytecode(const std::wstring& file,
 	#endif
 
 	ComPtr<ID3DBlob> error_msgs;
-	const HRESULT hr = D3DCompileFromFile(file.c_str(),
+	const auto filename = file.wstring();
+	const HRESULT hr = D3DCompileFromFile(filename.c_str(),
 	                                      nullptr,
 	                                      D3D_COMPILE_STANDARD_FILE_INCLUDE,
 	                                      entry_point.c_str(),
@@ -25,22 +25,13 @@ HRESULT CompileShaderToBytecode(const std::wstring& file,
 	                                      error_msgs.GetAddressOf());
 
 	if (FAILED(hr) && error_msgs) {
-		// Send error message to the debugger
-		OutputDebugStringA(static_cast<const char*>(error_msgs->GetBufferPointer()));
+		// Get the buffer pointer and size
+		const auto*  buffer = static_cast<const char*>(error_msgs->GetBufferPointer());
+		const size_t size = error_msgs->GetBufferSize();
 
-		// Copy error message to file and notify user
-		std::ofstream fout("shader_error.txt");
-		if (fout) {
-			const char*  compile_errors = static_cast<const char*>(error_msgs->GetBufferPointer());
-			const size_t buffer_size    = error_msgs->GetBufferSize();
-
-			for (size_t i = 0; i < buffer_size; ++i) {
-				fout << compile_errors[i];
-			}
-			fout.close();
-
-			MessageBox(nullptr, L"Error compiling shader. Check shader_error.txt", L"Shader Compilation Failed", MB_OK);
-		}
+		// Create a string_view and print the error message
+		const std::string_view error{buffer, size};
+		Logger::log(LogLevel::err, "Shader compilation failed: {}", error);
 	}
 
 	return hr;
@@ -73,22 +64,13 @@ HRESULT CompileShaderToBytecode(gsl::span<const char> data,
 	                              error_msgs.GetAddressOf());
 
 	if (FAILED(hr) && error_msgs) {
-		// Send error message to the debugger
-		OutputDebugStringA(static_cast<const char*>(error_msgs->GetBufferPointer()));
+		// Get the buffer pointer and size
+		const auto* buffer = static_cast<const char*>(error_msgs->GetBufferPointer());
+		const size_t size = error_msgs->GetBufferSize();
 
-		// Copy error message to file and notify user
-		std::ofstream fout("shader_error.txt");
-		if (fout) {
-			const char* compile_errors = static_cast<const char*>(error_msgs->GetBufferPointer());
-			const size_t buffer_size = error_msgs->GetBufferSize();
-
-			for (size_t i = 0; i < buffer_size; ++i) {
-				fout << compile_errors[i];
-			}
-			fout.close();
-
-			MessageBox(nullptr, L"Error compiling shader. Check shader_error.txt", L"Shader Compilation Failed", MB_OK);
-		}
+		// Create a string_view and print the error message
+		const std::string_view error{buffer, size};
+		Logger::log(LogLevel::err, "Shader compilation failed: {}", error);
 	}
 
 	return hr;

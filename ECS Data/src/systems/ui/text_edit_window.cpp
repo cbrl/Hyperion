@@ -14,7 +14,7 @@ void TextEditWindow::drawEditor(Engine& engine, bool& open) {
 	ImGui::End();
 
 	if (shader_compile_menu.update(engine)) {
-		std::string text = editor.GetText();
+		const std::string text = editor.GetText();
 		shader_compile_menu.compileShader(engine, gsl::make_span(text));
 	}
 }

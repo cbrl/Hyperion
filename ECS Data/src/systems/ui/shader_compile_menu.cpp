@@ -1,5 +1,6 @@
 #include "shader_compile_menu.h"
 #include "engine/engine.h"
+#include "resource/shader/shader_factory.h"
 
 #include "imgui.h"
 #include "misc/cpp/imgui_stdlib.h"
@@ -27,9 +28,60 @@ bool ShaderCompileMenu::update(Engine& engine) {
 }
 
 
+void ShaderCompileMenu::compileShader(Engine& engine, gsl::span<const char> data) const {
+	using ShaderFactory::CreateShaderFromMemory;
+
+	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
+	const std::string target_ver = shader_types[type_idx].second;
+
+	if (checkTypeSelected<ComputeShader>()) {
+		(void)CreateShaderFromMemory<ComputeShader>(resource_mgr,
+		                                            data,
+		                                            StrToWstr(shader_name),
+		                                            entry_point,
+		                                            target_ver);
+	}
+	else if (checkTypeSelected<DomainShader>()) {
+		(void)CreateShaderFromMemory<DomainShader>(resource_mgr,
+		                                           data,
+		                                           StrToWstr(shader_name),
+		                                           entry_point,
+		                                           target_ver);
+	}
+	else if (checkTypeSelected<GeometryShader>()) {
+		(void)CreateShaderFromMemory<GeometryShader>(resource_mgr,
+		                                             data,
+		                                             StrToWstr(shader_name),
+		                                             entry_point,
+		                                             target_ver);
+	}
+	else if (checkTypeSelected<HullShader>()) {
+		(void)CreateShaderFromMemory<HullShader>(resource_mgr,
+		                                         data,
+		                                         StrToWstr(shader_name),
+		                                         entry_point,
+		                                         target_ver);
+	}
+	else if (checkTypeSelected<PixelShader>()) {
+		(void)CreateShaderFromMemory<PixelShader>(resource_mgr,
+		                                          data,
+		                                          StrToWstr(shader_name),
+		                                          entry_point,
+		                                          target_ver);
+	}
+	else if (checkTypeSelected<VertexShader>()) {
+		(void)CreateShaderFromMemory<VertexShader>(resource_mgr,
+		                                           data,
+		                                           StrToWstr(shader_name),
+		                                           entry_point,
+		                                           target_ver);
+	}
+}
+
+
 bool ShaderCompileMenu::drawCompilePopup(Engine& engine) {
 
-	bool out_compile = false;
+	bool compile_clicked = false;
 
 	if (compile_popup_open) {
 		ImGui::OpenPopup("Compile");
@@ -61,10 +113,13 @@ bool ShaderCompileMenu::drawCompilePopup(Engine& engine) {
 
 		// Compile Button
 		if (ImGui::Button("Compile")) {
-			if (checkExistingShaderName(engine))
+			if (checkExistingShaderName(engine)) {
 				overwrite_warning_open = true;
-			else
-				out_compile = true;
+			}
+			else {
+				compile_clicked = true;
+			}
+			ImGui::CloseCurrentPopup();
 		}
 
 		ImGui::SameLine();
@@ -80,34 +135,18 @@ bool ShaderCompileMenu::drawCompilePopup(Engine& engine) {
 		ImGui::Text("A shader named \"%s\" already exists. Do you want to overwrite it?", shader_name.c_str());
 
 		if (ImGui::Button("Yes")) {
-			out_compile = true;
+			compile_clicked = true;
 			ImGui::CloseCurrentPopup();
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("No")) {
-			out_compile = false;
 			ImGui::CloseCurrentPopup();
 		}
 
 		ImGui::EndPopup();
 	}
 
-	return out_compile;
-}
-
-
-void ShaderCompileMenu::compileShader(Engine& engine, gsl::span<const char> data) const {
-
-	ComPtr<ID3DBlob> blob;
-	const HRESULT result = CompileShaderToBytecode(data,
-	                                               entry_point.c_str(),
-	                                               shader_types[type_idx].second,
-	                                               gsl::make_not_null(blob.GetAddressOf()));
-
-	if (SUCCEEDED(result)) {
-		auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
-		(void)resource_mgr.createOrReplace<PixelShader>(StrToWstr(shader_name), ShaderBytecodeBlob(blob));
-	}
+	return compile_clicked;
 }
 
 
@@ -115,23 +154,23 @@ bool ShaderCompileMenu::checkExistingShaderName(Engine& engine) const {
 	const char* type_name = shader_types[type_idx].first;
 
 	// Check the selected shader type name, then compare existing names of that type of shader.
-	if (strcmp(type_name, "Compute Shader") == 0) {
-		return checkTypeNames<ComputeShader>(engine);
+	if (checkTypeSelected<ComputeShader>()) {
+		return checkTypeExistingName<ComputeShader>(engine);
 	}
-	else if (strcmp(type_name, "Domain Shader") == 0) {
-		return checkTypeNames<DomainShader>(engine);
+	else if (checkTypeSelected<DomainShader>()) {
+		return checkTypeExistingName<DomainShader>(engine);
 	}
-	else if (strcmp(type_name, "Geometry Shader") == 0) {
-		return checkTypeNames<GeometryShader>(engine);
+	else if (checkTypeSelected<GeometryShader>()) {
+		return checkTypeExistingName<GeometryShader>(engine);
 	}
-	else if (strcmp(type_name, "Hull Shader") == 0) {
-		return checkTypeNames<HullShader>(engine);
+	else if (checkTypeSelected<HullShader>()) {
+		return checkTypeExistingName<HullShader>(engine);
 	}
-	else if (strcmp(type_name, "Pixel Shader") == 0) {
-		return checkTypeNames<PixelShader>(engine);
+	else if (checkTypeSelected<PixelShader>()) {
+		return checkTypeExistingName<PixelShader>(engine);
 	}
-	else if (strcmp(type_name, "Vertex Shader") == 0) {
-		return checkTypeNames<VertexShader>(engine);
+	else if (checkTypeSelected<VertexShader>()) {
+		return checkTypeExistingName<VertexShader>(engine);
 	}
 
 	return false;
@@ -139,7 +178,34 @@ bool ShaderCompileMenu::checkExistingShaderName(Engine& engine) const {
 
 
 template<typename ShaderT>
-bool ShaderCompileMenu::checkTypeNames(Engine& engine) const {
+bool ShaderCompileMenu::checkTypeSelected() const {
+	const char* type_name = shader_types[type_idx].first;
+
+	if constexpr (std::is_same_v<ComputeShader, ShaderT>) {
+		return (strcmp(type_name, "Compute Shader") == 0);
+	}
+	else if constexpr(std::is_same_v<DomainShader, ShaderT>) {
+		return (strcmp(type_name, "Domain Shader") == 0);
+	}
+	else if constexpr (std::is_same_v<GeometryShader, ShaderT>) {
+		return (strcmp(type_name, "Geometry Shader") == 0);
+	}
+	else if constexpr (std::is_same_v<HullShader, ShaderT>) {
+		return (strcmp(type_name, "Hull Shader") == 0);
+	}
+	else if constexpr (std::is_same_v<PixelShader, ShaderT>) {
+		return (strcmp(type_name, "Pixel Shader") == 0);
+	}
+	else if constexpr (std::is_same_v<VertexShader, ShaderT>) {
+		return (strcmp(type_name, "Vertex Shader") == 0);
+	}
+
+	return false;
+}
+
+
+template<typename ShaderT>
+bool ShaderCompileMenu::checkTypeExistingName(Engine& engine) const {
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
 	std::wstring wstr_name = StrToWstr(shader_name);
 
