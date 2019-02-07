@@ -10,6 +10,7 @@ void SceneTree::draw(Scene& scene) {
 		drawMenuBar(scene);
 		drawTree(scene);
 	}
+	ImGui::End();
 }
 
 

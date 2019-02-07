@@ -63,6 +63,4 @@ void UserInterface::update(Engine& engine) {
 
 	// Draw transform manipulation tool
 	transform_manipulator->draw(engine, scene_tree->getSelectedEntity());
-
-	ImGui::End();
 }
