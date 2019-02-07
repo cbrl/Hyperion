@@ -52,7 +52,7 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 	//----------------------------------------------------------------------------------
 	// Matrices
 	//----------------------------------------------------------------------------------
-	XMMATRIX world_to_camera      = camera_transform->getWorldToObjectMatrix();
+	XMMATRIX world_to_camera = camera_transform->getWorldToObjectMatrix();
 	XMMATRIX camera_to_projection = camera.getCameraToProjectionMatrix();
 
 	XMFLOAT4X4 view;

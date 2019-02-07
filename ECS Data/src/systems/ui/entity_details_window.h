@@ -19,9 +19,9 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EntityDetailsWindow();
+	EntityDetailsWindow() = default;
 	EntityDetailsWindow(const EntityDetailsWindow&) = default;
-	EntityDetailsWindow(EntityDetailsWindow&&) = default;
+	EntityDetailsWindow(EntityDetailsWindow&&) noexcept = default;
 
 	
 	//----------------------------------------------------------------------------------
@@ -34,7 +34,7 @@ public:
 	// Operators
 	//----------------------------------------------------------------------------------
 	EntityDetailsWindow& operator=(const EntityDetailsWindow&) = default;
-	EntityDetailsWindow& operator=(EntityDetailsWindow&&) = default;
+	EntityDetailsWindow& operator=(EntityDetailsWindow&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------

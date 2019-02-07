@@ -12,7 +12,7 @@ public:
 	//----------------------------------------------------------------------------------
 	MetricsWindow(const Engine& engine);
 	MetricsWindow(const MetricsWindow&) = default;
-	MetricsWindow(MetricsWindow&&) = default;
+	MetricsWindow(MetricsWindow&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ public:
 	// Operators
 	//----------------------------------------------------------------------------------
 	MetricsWindow& operator=(const MetricsWindow&) = default;
-	MetricsWindow& operator=(MetricsWindow&&) = default;
+	MetricsWindow& operator=(MetricsWindow&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------

@@ -10,7 +10,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	SceneTree();
+	SceneTree() = default;
 	SceneTree(const SceneTree&) = default;
 	SceneTree(SceneTree&&) = default;
 

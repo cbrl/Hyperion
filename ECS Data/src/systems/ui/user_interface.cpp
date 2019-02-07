@@ -8,22 +8,28 @@
 #include "metrics_window.h"
 #include "transform_manipulator.h"
 
-#include "log/log.h"
-#include "os/windows/win_utils.h"
-
 #include "engine/engine.h"
-#include "resource/resource_mgr.h"
-#include "scene/scene.h"
-
-#include "entities/entities.h"
-#include "components/components.h"
 
 #include "imgui.h"
-#include "misc/cpp/imgui_stdlib.h"
-#include "imgui_addons/ImGuizmo/ImGuizmo.h"
-#include "imgui_addons/metrics_gui/metrics_gui/metrics_gui.h"
-#include "imgui_addons/ImGuiColorTextEdit/TextEditor.h"
 
+
+UserInterface::UserInterface(const Engine& engine) {
+	system_menu           = std::make_unique<SystemMenu>(engine);
+	scene_tree            = std::make_unique<SceneTree>();
+	entity_details        = std::make_unique<EntityDetailsWindow>();
+	metrics               = std::make_unique<MetricsWindow>(engine);
+	text_editor           = std::make_unique<TextEditWindow>();
+	transform_manipulator = std::make_unique<TransformManipulator>();
+}
+
+
+UserInterface::UserInterface(UserInterface&&) noexcept = default;
+
+
+UserInterface::~UserInterface() = default;
+
+
+UserInterface& UserInterface::operator=(UserInterface&&) noexcept = default;
 
 
 void UserInterface::update(Engine& engine) {
@@ -36,34 +42,27 @@ void UserInterface::update(Engine& engine) {
 	auto& scene        = engine.getScene();
 
 	// Draw the system menu
-	static SystemMenu system_menu(engine);
-	static bool system_menu_open = true;
 	if (engine.getInput().isKeyPressed(Keyboard::F3)) {
 		system_menu_open = !system_menu_open;
 	}
 	if (system_menu_open) {
-		system_menu.draw(engine);
+		system_menu->draw(engine);
 	}
 
 	// Draw the system metrics
-	static MetricsWindow metrics(engine);
-	metrics.draw(engine);
+	metrics->draw(engine);
 
 	// Draw the shader editor
-	static TextEditWindow text_editor;
-	text_editor.draw(engine, system_menu.getTextEditorState());
+	text_editor->draw(engine, system_menu->getTextEditorState());
 
 	// Draw the scene tree
-	static SceneTree scene_tree;
-	scene_tree.draw(scene);
+	scene_tree->draw(scene);
 
 	// Draw the selected entity's details
-	static EntityDetailsWindow entity_details;
-	entity_details.draw(engine, scene_tree.getSelectedEntity());
+	entity_details->draw(engine, scene_tree->getSelectedEntity());
 
 	// Draw transform manipulation tool
-	static TransformManipulator transform_manipulator;
-	transform_manipulator.draw(engine, scene_tree.getSelectedEntity());
+	transform_manipulator->draw(engine, scene_tree->getSelectedEntity());
 
 	ImGui::End();
 }

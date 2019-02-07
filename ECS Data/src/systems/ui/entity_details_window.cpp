@@ -5,13 +5,6 @@
 #include "misc/cpp/imgui_stdlib.h"
 
 
-EntityDetailsWindow::EntityDetailsWindow() {
-	ImGui::SetNextWindowSize(ImVec2{375, 425}, ImGuiCond_FirstUseEver);
-	ImGui::Begin("Entity Properties", nullptr, ImGuiWindowFlags_MenuBar);
-	ImGui::End();
-}
-
-
 void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
 
 	auto&       device       = engine.getRenderingMgr().getDevice();
@@ -20,6 +13,7 @@ void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
 	const auto& entities     = scene.getEntities();
 
 	// Begin window. Early return if window isn't open or entity isn't valid.
+	ImGui::SetNextWindowSize(ImVec2{375, 425}, ImGuiCond_FirstUseEver);
 	if (!ImGui::Begin("Entity Properties", nullptr, ImGuiWindowFlags_MenuBar) || !entity_ptr) {
 		ImGui::End();
 		return;

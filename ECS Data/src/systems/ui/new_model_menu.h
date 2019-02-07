@@ -27,7 +27,7 @@ public:
 	//----------------------------------------------------------------------------------
 	NewModelMenu() = default;
 	NewModelMenu(const NewModelMenu&) = default;
-	NewModelMenu(NewModelMenu&&) = default;
+	NewModelMenu(NewModelMenu&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -40,7 +40,7 @@ public:
 	// Operators
 	//----------------------------------------------------------------------------------
 	NewModelMenu& operator=(const NewModelMenu&) = default;
-	NewModelMenu& operator=(NewModelMenu&&) = default;
+	NewModelMenu& operator=(NewModelMenu&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------

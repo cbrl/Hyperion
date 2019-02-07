@@ -4,15 +4,8 @@
 #include "imgui.h"
 
 
-SceneTree::SceneTree() {
-	// Setup window layout
-	ImGui::SetNextWindowSize(ImVec2{275, 600}, ImGuiCond_FirstUseEver);
-	ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_MenuBar);
-	ImGui::End();
-}
-
-
 void SceneTree::draw(Scene& scene) {
+	ImGui::SetNextWindowSize(ImVec2{275, 600}, ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_MenuBar)) {
 		drawMenuBar(scene);
 		drawTree(scene);
