@@ -107,6 +107,9 @@
     <ClInclude Include="src\systems\ui\system_menu.h">
       <Filter>Header Files\systems\ui</Filter>
     </ClInclude>
+    <ClInclude Include="src\systems\ui\transform_manipulator.h">
+      <Filter>Header Files\systems\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\systems\motor\camera_motor_system.cpp">
@@ -143,6 +146,9 @@
       <Filter>Source Files\systems\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\systems\ui\system_menu.cpp">
+      <Filter>Source Files\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\ui\transform_manipulator.cpp">
       <Filter>Source Files\systems\ui</Filter>
     </ClCompile>
   </ItemGroup>

@@ -157,6 +157,7 @@
     <ClInclude Include="src\systems\ui\system_menu.h" />
     <ClInclude Include="src\systems\ui\text_edit_window.h" />
     <ClInclude Include="src\systems\ui\shader_compile_menu.h" />
+    <ClInclude Include="src\systems\ui\transform_manipulator.h" />
     <ClInclude Include="src\systems\ui\user_interface.h" />
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +172,7 @@
     <ClCompile Include="src\systems\ui\system_menu.cpp" />
     <ClCompile Include="src\systems\ui\text_edit_window.cpp" />
     <ClCompile Include="src\systems\ui\shader_compile_menu.cpp" />
+    <ClCompile Include="src\systems\ui\transform_manipulator.cpp" />
     <ClCompile Include="src\systems\ui\user_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
