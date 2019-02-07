@@ -1,58 +1,52 @@
 #pragma once
 
-struct ID3D11Device;
-class  ResourceMgr;
-class  Scene;
-class  EntityPtr;
+#include "selectable_tree.h"
 
-class NewModelMenu {
-	enum class ModelType {
-		None,
-		Cube,
-		Box,
-		Sphere,
-		GeoSphere,
-		Cylinder,
-		Torus,
-		Cone,
-		Tetrahedron,
-		Octahedron,
-		Dodecahedron,
-		Icosahedron
-	};
+class Scene;
+class EntityPtr;
 
+class SceneTree final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	NewModelMenu() = default;
-	NewModelMenu(const NewModelMenu&) = default;
-	NewModelMenu(NewModelMenu&&) = default;
+	SceneTree();
+	SceneTree(const SceneTree&) = default;
+	SceneTree(SceneTree&&) = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~NewModelMenu() = default;
+	~SceneTree() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	NewModelMenu& operator=(const NewModelMenu&) = default;
-	NewModelMenu& operator=(NewModelMenu&&) = default;
+	SceneTree& operator=(const SceneTree&) = default;
+	SceneTree& operator=(SceneTree&&) = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void drawMenu();
-	void procNewModelPopup(ID3D11Device& device, ResourceMgr& resource_mgr, Scene& scene, EntityPtr entity);
+	void draw(Scene& scene);
+
+	[[nodiscard]]
+	EntityPtr getSelectedEntity() const noexcept;
 
 private:
+
+	void drawTree(Scene& scene);
+	void drawEntityNode(EntityPtr entity_ptr);
+
+	void drawMenuBar(Scene& scene);
+	void drawEntityMenu(Scene& scene);
+
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	ModelType model_type = ModelType::None;
+	SelectableTree<EntityPtr> scene_tree;
 };

@@ -41,31 +41,31 @@ private:
 
 	// FPS
 	MetricsGuiPlot   frame_plot;
-	MetricsGuiMetric frame_time;
-	MetricsGuiMetric fps;
+	MetricsGuiMetric frame_time{"Frame Time", "s", si_prefix};
+	MetricsGuiMetric fps{"FPS", "", 0};
 
 	// CPU Usage
 	MetricsGuiPlot   cpu_plot;
-	MetricsGuiMetric total_cpu;
-	MetricsGuiMetric process_cpu;
+	MetricsGuiMetric total_cpu{"Total Usage", "%", known_min_max};
+	MetricsGuiMetric process_cpu{"Process Usage", "%", known_min_max};
 
 	// RAM Usage
 	MetricsGuiPlot   ram_plot;
-	MetricsGuiMetric total_ram;
-	MetricsGuiMetric process_ram;
+	MetricsGuiMetric total_ram{"Total Usage", "B", si_prefix | known_min_max};
+	MetricsGuiMetric process_ram{"Process Usage", "B", si_prefix | known_min_max};
 
 	// GPU Time
 	MetricsGuiPlot   gpu_plot;
-	MetricsGuiMetric frame_gpu_time;
-	MetricsGuiMetric imgui_render;
+	MetricsGuiMetric frame_gpu_time{"Frame Time (GPU)", "s", si_prefix};
+	MetricsGuiMetric imgui_render{"ImGui Render", "s", si_prefix};
 
 	// Scene Render GPU Time
 	MetricsGuiPlot   scene_gpu_plot;
-	MetricsGuiMetric scene_render;
-	MetricsGuiMetric skybox_render;
-	MetricsGuiMetric shadow_maps;
-	MetricsGuiMetric forward_render;
-	MetricsGuiMetric text_render;
+	MetricsGuiMetric scene_render{"Scene Render", "s", si_prefix};
+	MetricsGuiMetric skybox_render{"Skybox Render", "s", si_prefix};
+	MetricsGuiMetric shadow_maps{"Shadow Maps Render", "s", si_prefix};
+	MetricsGuiMetric forward_render{"Forward Render", "s", si_prefix};
+	MetricsGuiMetric text_render{"Text Render", "s", si_prefix};
 
 	static constexpr auto si_prefix     = MetricsGuiMetric::USE_SI_UNIT_PREFIX;
 	static constexpr auto known_min_max = MetricsGuiMetric::KNOWN_MIN_VALUE | MetricsGuiMetric::KNOWN_MAX_VALUE;

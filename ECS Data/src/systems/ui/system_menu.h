@@ -1,58 +1,50 @@
 #pragma once
 
-struct ID3D11Device;
-class  ResourceMgr;
-class  Scene;
-class  EntityPtr;
+#include "datatypes/datatypes.h"
 
-class NewModelMenu {
-	enum class ModelType {
-		None,
-		Cube,
-		Box,
-		Sphere,
-		GeoSphere,
-		Cylinder,
-		Torus,
-		Cone,
-		Tetrahedron,
-		Octahedron,
-		Dodecahedron,
-		Icosahedron
-	};
+class Engine;
 
+class SystemMenu final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	NewModelMenu() = default;
-	NewModelMenu(const NewModelMenu&) = default;
-	NewModelMenu(NewModelMenu&&) = default;
+	SystemMenu(const Engine& engine);
+	SystemMenu(const SystemMenu&) = default;
+	SystemMenu(SystemMenu&&) = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~NewModelMenu() = default;
+	~SystemMenu() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	NewModelMenu& operator=(const NewModelMenu&) = default;
-	NewModelMenu& operator=(NewModelMenu&&) = default;
+	SystemMenu& operator=(const SystemMenu&) = default;
+	SystemMenu& operator=(SystemMenu&&) = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void drawMenu();
-	void procNewModelPopup(ID3D11Device& device, ResourceMgr& resource_mgr, Scene& scene, EntityPtr entity);
+	void draw(Engine& engine);
+
+	[[nodiscard]]
+	bool& getTextEditorState() noexcept;
 
 private:
+
+	void drawEngineSettingsPopup(Engine& engine);
+	void drawDisplaySettingsPopup(Engine& engine);
+
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	ModelType model_type = ModelType::None;
+	bool text_editor = false;
+	int current_display_desc = 0;
+	std::vector<std::string> display_modes;
 };

@@ -7,66 +7,40 @@
 #include "resource/model/blueprint_factory.h"
 
 
-//----------------------------------------------------------------------------------
-// Enum for "Add Model" popups
-//----------------------------------------------------------------------------------
-enum class ModelType {
-	None,
-	Cube,
-	Box,
-	Sphere,
-	GeoSphere,
-	Cylinder,
-	Torus,
-	Cone,
-	Tetrahedron,
-	Octahedron,
-	Dodecahedron,
-	Icosahedron
-};
-
-ModelType g_model_type = ModelType::None;
-
-
-
-
-namespace NewModelMenu {
-
-void DoMenu() {
-
+void NewModelMenu::drawMenu() {
 	if (ImGui::MenuItem("Cube"))
-		g_model_type = ModelType::Cube;
+		model_type = ModelType::Cube;
 	if (ImGui::MenuItem("Box"))
-		g_model_type = ModelType::Box;
+		model_type = ModelType::Box;
 	if (ImGui::MenuItem("Sphere"))
-		g_model_type = ModelType::Sphere;
+		model_type = ModelType::Sphere;
 	if (ImGui::MenuItem("GeoSphere"))
-		g_model_type = ModelType::GeoSphere;
+		model_type = ModelType::GeoSphere;
 	if (ImGui::MenuItem("Cylinder"))
-		g_model_type = ModelType::Cylinder;
+		model_type = ModelType::Cylinder;
 	if (ImGui::MenuItem("Cone"))
-		g_model_type = ModelType::Cone;
+		model_type = ModelType::Cone;
 	if (ImGui::MenuItem("Torus"))
-		g_model_type = ModelType::Torus;
+		model_type = ModelType::Torus;
 	if (ImGui::MenuItem("Tetrahedron"))
-		g_model_type = ModelType::Tetrahedron;
+		model_type = ModelType::Tetrahedron;
 	if (ImGui::MenuItem("Octahedron"))
-		g_model_type = ModelType::Octahedron;
+		model_type = ModelType::Octahedron;
 	if (ImGui::MenuItem("Dodecahedron"))
-		g_model_type = ModelType::Dodecahedron;
+		model_type = ModelType::Dodecahedron;
 	if (ImGui::MenuItem("Icosahedron"))
-		g_model_type = ModelType::Icosahedron;
+		model_type = ModelType::Icosahedron;
 }
 
 
 
-void ProcNewModelPopup(ID3D11Device& device,
-                       ResourceMgr& resource_mgr,
-                       Scene& scene,
-                       EntityPtr entity) {
+void NewModelMenu::procNewModelPopup(ID3D11Device& device,
+                                     ResourceMgr& resource_mgr,
+                                     Scene& scene,
+                                     EntityPtr entity) {
 
 	// Open popup
-	switch (g_model_type) {
+	switch (model_type) {
 		case ModelType::Cube:
 			ImGui::OpenPopup("New Cube");
 			break;
@@ -106,7 +80,7 @@ void ProcNewModelPopup(ID3D11Device& device,
 
 
 	// Reset model type
-	g_model_type = ModelType::None;
+	model_type = ModelType::None;
 
 
 	if (ImGui::BeginPopupModal("New Cube", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
@@ -434,5 +408,3 @@ void ProcNewModelPopup(ID3D11Device& device,
 		ImGui::EndPopup();
 	}
 }
-
-} //namespace NewModelMenu

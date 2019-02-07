@@ -2,20 +2,7 @@
 #include "engine/engine.h"
 
 
-MetricsWindow::MetricsWindow(const Engine& engine)
-	: frame_time("Frame Time", "s", si_prefix)
-	, fps("FPS", "", 0)
-	, total_cpu("Total Usage", "%", known_min_max)
-	, process_cpu("Process Usage", "%", known_min_max)
-	, total_ram("Total Usage", "B", si_prefix | known_min_max)
-	, process_ram("Process Usage", "B", si_prefix | known_min_max)
-	, frame_gpu_time("Frame Time (GPU)", "s", si_prefix)
-	, imgui_render("ImGui Render", "s", si_prefix)
-	, scene_render("Scene Render", "s", si_prefix)
-	, skybox_render("Skybox Render", "s", si_prefix)
-	, shadow_maps("Shadow Maps Render", "s", si_prefix)
-	, forward_render("Forward Render", "s", si_prefix)
-	, text_render("Text Render", "s", si_prefix) {
+MetricsWindow::MetricsWindow(const Engine& engine) {
 
 	frame_plot.mShowInlineGraphs   = true;
 	frame_plot.mInlinePlotRowCount = 3;

@@ -98,6 +98,15 @@
     <ClInclude Include="src\systems\ui\metrics_window.h">
       <Filter>Header Files\systems\ui</Filter>
     </ClInclude>
+    <ClInclude Include="src\systems\ui\scene_tree.h">
+      <Filter>Header Files\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\ui\entity_details_window.h">
+      <Filter>Header Files\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\systems\ui\system_menu.h">
+      <Filter>Header Files\systems\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\systems\motor\camera_motor_system.cpp">
@@ -125,6 +134,15 @@
       <Filter>Source Files\systems\ui</Filter>
     </ClCompile>
     <ClCompile Include="src\systems\ui\metrics_window.cpp">
+      <Filter>Source Files\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\ui\scene_tree.cpp">
+      <Filter>Source Files\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\ui\entity_details_window.cpp">
+      <Filter>Source Files\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\systems\ui\system_menu.cpp">
       <Filter>Source Files\systems\ui</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,8 +11,8 @@
 // Holds shared_ptrs to resources of the provided template type.
 //
 //----------------------------------------------------------------------------------
-template<typename KeyT, typename ValueT, template<typename, typename, typename...> typename MapT = std::unordered_map>
-class SharedResourceMap final : public MapT<KeyT, std::shared_ptr<ValueT>> {
+template<typename KeyT, typename ResourceT, template<typename, typename, typename...> typename MapT = std::unordered_map>
+class SharedResourceMap final : public MapT<KeyT, std::shared_ptr<ResourceT>> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -42,14 +42,14 @@ public:
 	// Create a resource, or retrieve it if it already exists.
 	template<typename... ArgsT>
 	[[nodiscard]]
-	std::shared_ptr<ValueT> getOrCreate(const KeyT& key, ArgsT&&... args) {
-		return getOrCreateDerived<ValueT>(key, std::forward<ArgsT>(args)...);
+	std::shared_ptr<ResourceT> getOrCreate(const KeyT& key, ArgsT&&... args) {
+		return getOrCreateDerived<ResourceT>(key, std::forward<ArgsT>(args)...);
 	}
 
 	// Create a resource of a derived type, or retrieve it if it already exists.
 	template<typename DerivedT, typename... ArgsT>
 	[[nodiscard]]
-	std::shared_ptr<ValueT> getOrCreateDerived(const KeyT& key, ArgsT&&... args) {
+	std::shared_ptr<ResourceT> getOrCreateDerived(const KeyT& key, ArgsT&&... args) {
 		if (const auto it = this->find(key); it != this->end()) {
 			return it->second;
 		}
@@ -61,13 +61,14 @@ public:
 	// Create a resource, or replace it if it already exists.
 	template<typename... ArgsT>
 	[[nodiscard]]
-	std::shared_ptr<ValueT> createOrReplace(const KeyT& key, ArgsT&&... args) {
-		return createOrReplaceDerived<ValueT>(key, std::forward<ArgsT>(args)...);
+	std::shared_ptr<ResourceT> createOrReplace(const KeyT& key, ArgsT&&... args) {
+		return createOrReplaceDerived<ResourceT>(key, std::forward<ArgsT>(args)...);
 	}
 
 	// Create a resource of a derived type, or replace it if it already exists.
 	template<typename DerivedT, typename... ArgsT>
-	[[nodiscard]] std::shared_ptr<ValueT> createOrReplaceDerived(const KeyT& key, ArgsT&&... args) {
+	[[nodiscard]]
+	std::shared_ptr<ResourceT> createOrReplaceDerived(const KeyT& key, ArgsT&&... args) {
 		const auto resource = std::make_shared<DerivedT>(std::forward<ArgsT>(args)...);
 		this->operator[](key) = resource;
 		return resource;
@@ -85,21 +86,21 @@ public:
 // all shared_ptrs are destroyed.
 //
 //----------------------------------------------------------------------------------
-template<typename KeyT, typename ValueT, template <typename, typename, typename...> typename MapT = std::unordered_map>
+template<typename KeyT, typename ResourceT, template <typename, typename, typename...> typename MapT = std::unordered_map>
 class WeakResourceMap final {
-public:
-	using key_type   = KeyT;
-	using value_type = ValueT;
-	using map_type   = MapT<key_type, std::weak_ptr<value_type>>;
+private:
+	using key_type      = KeyT;
+	using resource_type = ResourceT;
+	using shared_ptr    = std::shared_ptr<resource_type>;
+	using map_type      = MapT<key_type, std::weak_ptr<resource_type>>;
 
 private:
 	class iterator {
-		friend class WeakResourceMap<key_type, value_type, MapT>;
+		friend class WeakResourceMap<key_type, resource_type, MapT>;
 
 	public:
 		using map_iterator   = typename map_type::iterator;
-		using shared_pointer = std::shared_ptr<value_type>;
-		using pair_kp        = std::pair<const key_type&, shared_pointer>;
+		using pair_kp        = std::pair<const key_type&, shared_ptr>;
 
 		iterator(map_iterator it) : it(it) {}
 
@@ -117,12 +118,11 @@ private:
 
 
 	class const_iterator {
-		friend class WeakResourceMap<key_type, value_type, MapT>;
+		friend class WeakResourceMap<key_type, resource_type, MapT>;
 
 	public:
 		using const_map_iterator = typename map_type::const_iterator;
-		using shared_pointer     = std::shared_ptr<value_type>;
-		using pair_kp            = std::pair<const key_type&, shared_pointer>;
+		using pair_kp            = std::pair<const key_type&, shared_ptr>;
 
 		const_iterator(const_map_iterator it) : it(it) {}
 
@@ -168,14 +168,14 @@ public:
 	// Create a resource, or retrieve it if it already exists.
 	template<typename... ArgsT>
 	[[nodiscard]]
-	std::shared_ptr<value_type> getOrCreate(const key_type& key, ArgsT&& ... args) {
-		return getOrCreateDerived<value_type>(key, std::forward<ArgsT>(args)...);
+	shared_ptr getOrCreate(const key_type& key, ArgsT&& ... args) {
+		return getOrCreateDerived<resource_type>(key, std::forward<ArgsT>(args)...);
 	}
 
 	// Create a resource of a derived type, or retrieve it if it already exists.
 	template<typename DerivedT, typename... ArgsT>
 	[[nodiscard]]
-	std::shared_ptr<value_type> getOrCreateDerived(const key_type& key, ArgsT&& ... args) {
+	shared_ptr getOrCreateDerived(const key_type& key, ArgsT&& ... args) {
 
 		if (const auto it = resource_map.find(key); it != resource_map.end() && !it->second.expired()) {
 			return it->second.lock(); //Return the resource if it exists and hasn't expired
@@ -190,21 +190,21 @@ public:
 	// Create a resource, or replace it if it already exists.
 	template<typename... ArgsT>
 	[[nodiscard]]
-	std::shared_ptr<value_type> createOrReplace(const key_type& key, ArgsT&& ... args) {
-		return createOrReplaceDerived<value_type>(key, std::forward<ArgsT>(args)...);
+	shared_ptr createOrReplace(const key_type& key, ArgsT&& ... args) {
+		return createOrReplaceDerived<resource_type>(key, std::forward<ArgsT>(args)...);
 	}
 
 	// Create a resource of a derived type, or replace it if it already exists.
 	template<typename DerivedT, typename... ArgsT>
 	[[nodiscard]]
-	std::shared_ptr<value_type> createOrReplaceDerived(const key_type& key, ArgsT&&... args) {
+	shared_ptr createOrReplaceDerived(const key_type& key, ArgsT&&... args) {
 		const auto resource = std::make_shared<DerivedT>(std::forward<ArgsT>(args)...);
 		resource_map[key] = resource;
 		return resource;		
 	}
 
 	[[nodiscard]]
-	std::shared_ptr<value_type> at(const key_type& key) { return resource_map.at(key).lock(); }
+	shared_ptr at(const key_type& key) { return resource_map.at(key).lock(); }
 
 	[[nodiscard]]
 	iterator find(const key_type& key) { return iterator{resource_map.find(key)}; }
@@ -243,8 +243,8 @@ private:
 //----------------------------------------------------------------------------------
 #include <concurrent_unordered_map.h>
 
-template<typename KeyT, typename ValueT>
-using ConcurrentSharedResourceMap = SharedResourceMap<KeyT, ValueT, concurrency::concurrent_unordered_map>;
+template<typename KeyT, typename ResourceT>
+using ConcurrentSharedResourceMap = SharedResourceMap<KeyT, ResourceT, concurrency::concurrent_unordered_map>;
 
-template<typename KeyT, typename ValueT>
-using ConcurrentWeakResourceMap = WeakResourceMap<KeyT, ValueT, concurrency::concurrent_unordered_map>;
+template<typename KeyT, typename ResourceT>
+using ConcurrentWeakResourceMap = WeakResourceMap<KeyT, ResourceT, concurrency::concurrent_unordered_map>;

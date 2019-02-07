@@ -6,13 +6,6 @@
 #include "misc/cpp/imgui_stdlib.h"
 
 
-ShaderCompileMenu::ShaderCompileMenu()
-	: compile_popup_open(false)
-	, overwrite_warning_open(false)
-	, type_idx(0) {
-}
-
-
 void ShaderCompileMenu::drawMenu() {
 	if (ImGui::BeginMenu("Shader")) {
 		if (ImGui::MenuItem("Compile Shader")) {

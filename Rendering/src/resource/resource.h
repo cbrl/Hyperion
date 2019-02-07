@@ -10,32 +10,31 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	Resource(const std::wstring& guid)
-		: guid(guid) {
+	    : str_guid{WstrToStr(guid)}
+		, wstr_guid{guid} {
 	}
 
-	Resource(std::wstring&& guid)
-		: guid(guid) {
+	Resource(const std::string& guid)
+	    : str_guid{guid}
+	    , wstr_guid{StrToWstr(guid)} {
 	}
 
-	Resource(const Resource& resource) = delete;
-	Resource(Resource&& resource) noexcept = default;
+	Resource(const Resource& resource) = default;
+	Resource(Resource&& resource)  = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	virtual ~Resource() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
-	Resource& operator=(const Resource& resource) = delete;
-	Resource& operator=(Resource&& resource) noexcept = default;
+	Resource& operator=(const Resource& resource) = default;
+	Resource& operator=(Resource&& resource) = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -43,13 +42,18 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	const std::wstring& getGUID() const {
-		return guid;
+	const std::string& getGUID() const noexcept {
+		return str_guid;
+	}
+
+	[[nodiscard]]
+	const std::wstring& getWGUID() const noexcept {
+		return wstr_guid;
 	}
 
 	[[nodiscard]]
 	bool isFileGUID() const {
-		return fs::is_regular_file(guid);
+		return fs::is_regular_file(str_guid);
 	}
 
 
@@ -58,5 +62,6 @@ public:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	std::wstring guid;
+	std::string  str_guid;
+	std::wstring wstr_guid;
 };

@@ -9,7 +9,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	ShaderCompileMenu();
+	ShaderCompileMenu() = default;
 	ShaderCompileMenu(const ShaderCompileMenu&) = default;
 	ShaderCompileMenu(ShaderCompileMenu&&) = default;
 
@@ -62,13 +62,13 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	bool compile_popup_open;
-	bool overwrite_warning_open;
+	bool compile_popup_open     = false;
+	bool overwrite_warning_open = false;
 
 	std::string shader_name;
 	std::string entry_point;
 
-	int type_idx;
+	int type_idx = 0;
 
 	// pair<name, target_version>
 	static constexpr std::pair<gsl::czstring<>, gsl::czstring<>> shader_types[] = {

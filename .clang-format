@@ -14,6 +14,9 @@ BinPackArguments: 'false'
 BinPackParameters: 'false'
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Custom
+BraceWrapping:
+  BeforeCatch: 'true'
+  BeforeElse: 'true'
 BreakBeforeTernaryOperators: 'true'
 BreakConstructorInitializers: BeforeComma
 ColumnLimit: '0'
