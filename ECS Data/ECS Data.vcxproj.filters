@@ -42,6 +42,9 @@
     <Filter Include="Header Files\systems\ui">
       <UniqueIdentifier>{b12f08b3-698c-4d71-9719-c36303bf1bba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\events">
+      <UniqueIdentifier>{afa4dfa7-e8a3-4912-9c78-0af5a312ce70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\components\components.h">
@@ -109,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="src\systems\ui\transform_manipulator.h">
       <Filter>Header Files\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\events\gui_focus_event.h">
+      <Filter>Header Files\events</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

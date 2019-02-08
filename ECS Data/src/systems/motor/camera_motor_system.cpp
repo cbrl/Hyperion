@@ -3,6 +3,7 @@
 
 
 void CameraMotorSystem::update(Engine& engine) {
+
 	auto& scene          = engine.getScene();
 	auto& device_context = engine.getRenderingMgr().getDeviceContext();
 
@@ -30,6 +31,15 @@ void CameraMotorSystem::update(Engine& engine) {
 	});
 }
 
+
+void CameraMotorSystem::registerCallbacks() {
+	registerEventCallback(&CameraMotorSystem::onGuiFocus);
+}
+
+
+void CameraMotorSystem::onGuiFocus(const GuiFocusEvent* event) {
+	this->setActive(!event->keyboard_focus);
+}
 
 
 void CameraMotorSystem::processInput(const Engine& engine, CameraMovement& movement, Transform& transform) const {

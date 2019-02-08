@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/system.h"
+#include "events/gui_focus_event.h"
 
 
 class Engine;
@@ -15,7 +16,7 @@ class TextEditWindow;
 class TransformManipulator;
 
 
-class UserInterface final : public System<UserInterface> {
+class UserInterface final : public System<UserInterface>, public EventSender {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -58,4 +59,7 @@ private:
 	std::unique_ptr<TransformManipulator> transform_manipulator;
 
 	bool system_menu_open = true;
+
+	bool last_keyboard_state = false;
+	bool last_mouse_state    = false;
 };

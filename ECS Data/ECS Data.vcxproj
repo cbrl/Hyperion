@@ -144,6 +144,7 @@
     <ClInclude Include="src\components\motor\mouse_rotation.h" />
     <ClInclude Include="src\entities\basic\player_camera.h" />
     <ClInclude Include="src\entities\entities.h" />
+    <ClInclude Include="src\events\gui_focus_event.h" />
     <ClInclude Include="src\systems\motor\axis_orbit_system.h" />
     <ClInclude Include="src\systems\motor\axis_rotation_system.h" />
     <ClInclude Include="src\systems\motor\camera_motor_system.h" />

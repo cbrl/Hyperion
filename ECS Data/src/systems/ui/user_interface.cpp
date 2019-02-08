@@ -63,4 +63,15 @@ void UserInterface::update(Engine& engine) {
 
 	// Draw transform manipulation tool
 	transform_manipulator->draw(engine, scene_tree->getSelectedEntity());
+
+	// Send a gui focus event when the focus state changes
+	const auto& io = ImGui::GetIO();
+	bool keyboard_state = io.WantCaptureKeyboard;
+	bool mouse_state = io.WantCaptureMouse;
+
+	if (keyboard_state != last_keyboard_state || mouse_state != last_mouse_state) {
+		last_keyboard_state = keyboard_state;
+		last_mouse_state    = mouse_state;
+		sendEvent<GuiFocusEvent>(io.WantCaptureKeyboard, io.WantCaptureMouse);
+	}
 }

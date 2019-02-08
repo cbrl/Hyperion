@@ -548,7 +548,6 @@ void EntityDetailsWindow::drawDetails(Model& model, ResourceMgr& resource_mgr) {
 	//----------------------------------------------------------------------------------
 	// Texture
 	//----------------------------------------------------------------------------------
-
 	auto& maps = mat.maps;
 
 	const char* diffuse_preview   = mat.maps.base_color      ? maps.base_color->getGUID().c_str()      : "None";
