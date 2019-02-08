@@ -67,11 +67,11 @@ void UserInterface::update(Engine& engine) {
 	// Send a gui focus event when the focus state changes
 	const auto& io = ImGui::GetIO();
 	bool keyboard_state = io.WantCaptureKeyboard;
-	bool mouse_state = io.WantCaptureMouse;
+	bool mouse_state    = io.WantCaptureMouse;
 
 	if (keyboard_state != last_keyboard_state || mouse_state != last_mouse_state) {
 		last_keyboard_state = keyboard_state;
 		last_mouse_state    = mouse_state;
-		sendEvent<GuiFocusEvent>(io.WantCaptureKeyboard, io.WantCaptureMouse);
+		sendEvent<GuiFocusEvent>(keyboard_state, mouse_state);
 	}
 }

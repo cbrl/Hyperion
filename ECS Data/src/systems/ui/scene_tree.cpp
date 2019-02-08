@@ -51,7 +51,8 @@ void SceneTree::drawEntityNode(EntityPtr entity_ptr) {
 	bool node_open = true;
 	if (entity->hasChildren()) {
 		node_open = scene_tree.newNode(entity_ptr, entity->getName().c_str());
-	} else {
+	}
+	else {
 		node_open = scene_tree.newLeafNode(entity_ptr, entity->getName().c_str());
 	}
 
