@@ -8,6 +8,6 @@ struct GuiFocusEvent : public Event<GuiFocusEvent> {
 	    , mouse_focus(mouse) {
 	}
 
-	bool keyboard_focus;
-	bool mouse_focus;
+	const bool keyboard_focus;
+	const bool mouse_focus;
 };
