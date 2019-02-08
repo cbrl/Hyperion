@@ -92,6 +92,18 @@
     <FxCompile Include="shaders\false_color\fullbright.hlsl">
       <Filter>Shader Files\false_color</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\false_color\metalness_color.hlsl">
+      <Filter>Shader Files\false_color</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\false_color\roughness_color.hlsl">
+      <Filter>Shader Files\false_color</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\false_color\texcoord_color.hlsl">
+      <Filter>Shader Files\false_color</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\false_color\material_params_color.hlsl">
+      <Filter>Shader Files\false_color</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\hlsl.h">

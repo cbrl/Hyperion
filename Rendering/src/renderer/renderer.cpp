@@ -161,19 +161,12 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 				forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
 				break;
 
-			case LightingMode::FalseColorFullbright:
-				forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Fullbright);
+			case LightingMode::FalseColor:
+				forward_pass->renderFalseColor(scene, world_to_projection, settings.getFalseColorMode());
 				break;
 
-			case LightingMode::FalseColorNormal:
-				forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Normal);
+			default:
 				break;
-
-			case LightingMode::FalseColorDepth:
-				forward_pass->renderFalseColor(scene, world_to_projection, FalseColor::Depth);
-				break;
-
-			default: break;
 		}
 	}
 

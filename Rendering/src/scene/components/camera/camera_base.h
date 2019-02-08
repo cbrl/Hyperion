@@ -19,6 +19,7 @@ public:
 		: render_mode(RenderMode::Forward)
 		, lighting_mode(LightingMode::Default)
 		, brdf(BRDF::CookTorrance)
+	    , false_color(FalseColor::Fullbright)
 		, render_options(static_cast<u8>(RenderOptions::None))
 		, bounding_volume_color(1.0f, 1.0f, 1.0f, 1.0f)
 		, wireframe_color(0.0f, 1.0f, 0.0f, 1.0f) {
@@ -80,6 +81,20 @@ public:
 
 	void setBRDF(BRDF type) noexcept {
 		brdf = type;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - False Color
+	//----------------------------------------------------------------------------------
+
+	[[nodiscard]]
+	FalseColor getFalseColorMode() const noexcept {
+		return false_color;
+	}
+
+	void setFalseColorMode(FalseColor type) noexcept {
+		false_color = type;
 	}
 
 
@@ -186,8 +201,11 @@ private:
 	// The lighting mode of the camera
 	LightingMode lighting_mode;
 
-	// The BRDF to use for the lighting calculations
+	// The BRDF to use (when LightingMode::BRDF is selected)
 	BRDF brdf;
+
+	// The false color mode to use (when LightingMode::FalseColor is selected)
+	FalseColor false_color;
 
 	// The extra rendering options
 	u8 render_options;

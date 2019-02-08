@@ -28,10 +28,14 @@
 #include "compiled_headers/wireframe_box_ps.h"
 
 // False Color
-#include "compiled_headers/static_color.h"
-#include "compiled_headers/fullbright.h"
-#include "compiled_headers/normal_color.h"
 #include "compiled_headers/depth_color.h"
+#include "compiled_headers/fullbright.h"
+#include "compiled_headers/material_params_color.h"
+#include "compiled_headers/metalness_color.h"
+#include "compiled_headers/normal_color.h"
+#include "compiled_headers/roughness_color.h"
+#include "compiled_headers/static_color.h"
+#include "compiled_headers/texcoord_color.h"
 
 
 namespace ShaderFactory {
@@ -150,7 +154,19 @@ std::shared_ptr<PixelShader> CreateFalseColorPS(ResourceMgr& resource_mgr, False
 			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_static", BYTECODE(shader_static_color));
 
 		case FalseColor::Fullbright:
-			return resource_mgr.getOrCreate <PixelShader>(L"shader_false_color_fullbright", BYTECODE(shader_fullbright));
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_fullbright", BYTECODE(shader_fullbright));
+
+		case FalseColor::TextureCoord:
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_texcoord", BYTECODE(shader_texcoord_color));
+
+		case FalseColor::MaterialParams:
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_material_params", BYTECODE(shader_material_params_color));
+
+		case FalseColor::Metalness:
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_metalness", BYTECODE(shader_metalness_color));
+
+		case FalseColor::Roughness:
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_roughness", BYTECODE(shader_roughness_color));
 
 		case FalseColor::Normal:
 			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_normal", BYTECODE(shader_normal_color));

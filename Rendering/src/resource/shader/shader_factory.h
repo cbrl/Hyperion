@@ -6,14 +6,6 @@
 #include "rendering_options.h"
 
 
-enum class FalseColor {
-	Static,
-	Fullbright,
-	Normal,
-	Depth
-};
-
-
 namespace ShaderFactory {
 
 //----------------------------------------------------------------------------------

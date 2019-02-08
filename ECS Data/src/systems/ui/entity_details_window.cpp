@@ -314,16 +314,12 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static constexpr gsl::czstring<> light_mode_names[] = {
 	    "Default",
 	    "BRDF",
-	    "FalseColorFullbright",
-	    "FalseColorNormal",
-	    "FalseColorDepth"
+	    "False Color",
 	};
 	static constexpr LightingMode light_modes[] = {
 	    LightingMode::Default,
 	    LightingMode::BRDF,
-	    LightingMode::FalseColorFullbright,
-	    LightingMode::FalseColorNormal,
-	    LightingMode::FalseColorDepth
+	    LightingMode::FalseColor,
 	};
 
 	auto light_mode = static_cast<int>(settings.getLightingMode());
@@ -337,17 +333,48 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static constexpr gsl::czstring<> brdf_names[] = {
 	    "Lambert",
 	    "Blinn-Phong",
-	    "Cook-Torrance"
+	    "Cook-Torrance",
 	};
 	static constexpr BRDF brdfs[] = {
 	    BRDF::Lambert,
 	    BRDF::BlinnPhong,
-	    BRDF::CookTorrance
+	    BRDF::CookTorrance,
 	};
 
-	auto brdf = static_cast<int>(settings.getBRDF());
-	if (ImGui::Combo("BRDF", &brdf, brdf_names, static_cast<int>(std::size(brdf_names))))
-		settings.setBRDF(static_cast<BRDF>(brdf));
+	if (settings.getLightingMode() == LightingMode::BRDF) {
+		auto brdf = static_cast<int>(settings.getBRDF());
+		if (ImGui::Combo("BRDF", &brdf, brdf_names, static_cast<int>(std::size(brdf_names))))
+			settings.setBRDF(static_cast<BRDF>(brdf));
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// FalseColor
+	//----------------------------------------------------------------------------------
+	static constexpr gsl::czstring<> false_color_names[] = {
+	    "Fullbright",
+	    "Texture Coord",
+	    "Material Params",
+	    "Metalness",
+	    "Roughness",
+	    "Normal",
+	    "Depth",
+	};
+	static constexpr FalseColor false_colors[] = {
+	    FalseColor::Fullbright,
+	    FalseColor::TextureCoord,
+		FalseColor::MaterialParams,
+		FalseColor::Metalness,
+		FalseColor::Roughness,
+	    FalseColor::Normal,
+	    FalseColor::Depth,
+	};
+
+	if (settings.getLightingMode() == LightingMode::FalseColor) {
+		auto false_color = static_cast<int>(settings.getFalseColorMode());
+		if (ImGui::Combo("BRDF", &false_color, false_color_names, static_cast<int>(std::size(false_color_names))))
+			settings.setFalseColorMode(static_cast<FalseColor>(false_color));
+	}
 
 
 	//----------------------------------------------------------------------------------

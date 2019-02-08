@@ -3,11 +3,11 @@
 #include "datatypes/datatypes.h"
 
 
-enum class AAType {
-	None,
-	MSAA_2x,
-	MSAA_4x,
-	MSAA_8x,
+enum class AAType : u8 {
+	None    = 0,
+	MSAA_2x = 1,
+	MSAA_4x = 2,
+	MSAA_8x = 3,
 };
 
 enum class RenderMode : u8 {
@@ -17,11 +17,9 @@ enum class RenderMode : u8 {
 };
 
 enum class LightingMode : u8 {
-	Default              = 0,
-	BRDF                 = 1,
-	FalseColorFullbright = 2,
-	FalseColorNormal     = 3,
-	FalseColorDepth      = 4,
+	Default    = 0,
+	BRDF       = 1,
+	FalseColor = 2,
 };
 
 enum class RenderOptions : u8 {
@@ -34,4 +32,15 @@ enum class BRDF : u8 {
 	Lambert      = 0,
 	BlinnPhong   = 1,
 	CookTorrance = 2,
+};
+
+enum class FalseColor : u8 {
+	Fullbright     = 0,
+	TextureCoord   = 1,
+	MaterialParams = 2,
+	Metalness      = 3,
+	Roughness      = 4,
+	Normal         = 5,
+	Depth          = 6,
+	Static         = 7,
 };
