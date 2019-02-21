@@ -56,7 +56,7 @@ std::shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
 }
 
 
-std::shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const vec4_f32& color) {
+std::shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const f32_4& color) {
 
 	u32 color_u32 = Float4ColorToU32(color);
 

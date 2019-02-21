@@ -128,16 +128,16 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	vec4_f32& getBoundingVolumeColor() noexcept{
+	f32_4& getBoundingVolumeColor() noexcept{
 		return bounding_volume_color;
 	}
 
 	[[nodiscard]]
-	const vec4_f32& getBoundingVolumeColor() const noexcept{
+	const f32_4& getBoundingVolumeColor() const noexcept{
 		return bounding_volume_color;
 	}
 
-	void setBoundingVolumeColor(vec4_f32 color) noexcept {
+	void setBoundingVolumeColor(f32_4 color) noexcept {
 		bounding_volume_color = std::move(color);
 	}
 
@@ -147,16 +147,16 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	vec4_f32& getWireframeColor() noexcept{
+	f32_4& getWireframeColor() noexcept{
 		return wireframe_color;
 	}
 
 	[[nodiscard]]
-	const vec4_f32& getWireframeColor() const noexcept{
+	const f32_4& getWireframeColor() const noexcept{
 		return wireframe_color;
 	}
 
-	void setWireframeColor(vec4_f32 color) noexcept {
+	void setWireframeColor(f32_4 color) noexcept {
 		wireframe_color = std::move(color);
 	}
 
@@ -211,8 +211,8 @@ private:
 	u8 render_options;
 
 	// The color of bounding volumes and wireframes
-	vec4_f32 bounding_volume_color;
-	vec4_f32 wireframe_color;
+	f32_4 bounding_volume_color;
+	f32_4 wireframe_color;
 
 	// Describes the fog color, start radius, range
 	Fog fog;
@@ -308,7 +308,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	const vec2_f32& getZDepth() const noexcept{
+	const f32_2& getZDepth() const noexcept{
 		return depth;
 	}
 
@@ -317,7 +317,7 @@ public:
 		depth[1] = std::max(z_far, z_near + 0.001f);
 	}
 
-	void setZDepth(const vec2_f32& depth) {
+	void setZDepth(const f32_2& depth) {
 		setZDepth(depth[0], depth[1]);
 	}
 
@@ -366,7 +366,7 @@ protected:
 	Viewport viewport;
 
 	// Z Depth
-	vec2_f32 depth;
+	f32_2 depth;
 
 	// Camera settings (render settings, fog, skybox)
 	CameraSettings settings;

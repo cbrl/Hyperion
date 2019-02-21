@@ -46,11 +46,11 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	vec3_f32 getVelocity() const {
+	f32_3 getVelocity() const {
 		return velocity;
 	}
 
-	void setVelocity(const vec3_f32& vel) {
+	void setVelocity(const f32_3& vel) {
 		velocity = vel;
 	}
 
@@ -131,10 +131,10 @@ private:
 
 private:
 	// Position, veloctiy, acceleration (units per second)
-	vec3_f32 velocity;
-	f32 acceleration;
-	f32 deceleration;
-	f32 max_velocity;
+	f32_3 velocity;
+	f32   acceleration;
+	f32   deceleration;
+	f32   max_velocity;
 
 	// Movement booleans
 	bool is_moving_x;

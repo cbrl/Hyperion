@@ -57,7 +57,7 @@ void DisplayConfig::init() {
 }
 
 
-void DisplayConfig::setNearestDisplayDesc(const vec2_u32& resolution,
+void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
                                           u32 refresh_rate,
                                           DXGI_FORMAT format) {
 

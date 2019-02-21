@@ -9,7 +9,7 @@ struct VertexPosition final {
 	constexpr VertexPosition(const VertexPosition& vertex) noexcept = default;
 	constexpr VertexPosition(VertexPosition&& vertex) noexcept = default;
 
-	constexpr VertexPosition(const vec3_f32& position) noexcept
+	constexpr VertexPosition(const f32_3& position) noexcept
 		: position(position) {
 	}
 
@@ -26,7 +26,7 @@ struct VertexPosition final {
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	vec3_f32 position;
+	f32_3 position;
 
 	static const u32 input_element_count = 1;
 	static const D3D11_INPUT_ELEMENT_DESC input_elements[input_element_count];
@@ -38,7 +38,7 @@ struct VertexPositionColor final {
 	constexpr VertexPositionColor(const VertexPositionColor& vertex) noexcept = default;
 	constexpr VertexPositionColor(VertexPositionColor&& vertex) noexcept = default;
 
-	constexpr VertexPositionColor(const vec3_f32& position, const vec4_f32& color) noexcept
+	constexpr VertexPositionColor(const f32_3& position, const f32_4& color) noexcept
 		: position(position)
 		, color(color) {
 	}
@@ -56,8 +56,8 @@ struct VertexPositionColor final {
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	vec3_f32 position;
-	vec4_f32 color;
+	f32_3 position;
+	f32_4 color;
 
 	static const u32 input_element_count = 2;
 	static const D3D11_INPUT_ELEMENT_DESC input_elements[input_element_count];
@@ -69,7 +69,7 @@ struct VertexPositionTexture final {
 	constexpr VertexPositionTexture(const VertexPositionTexture& vertex) noexcept = default;
 	constexpr VertexPositionTexture(VertexPositionTexture&& vertex) noexcept = default;
 
-	constexpr VertexPositionTexture(const vec3_f32& position, const vec2_f32& texCoord) noexcept
+	constexpr VertexPositionTexture(const f32_3& position, const f32_2& texCoord) noexcept
 		: position(position)
 		, texCoord(texCoord) {
 	}
@@ -87,8 +87,8 @@ struct VertexPositionTexture final {
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	vec3_f32 position;
-	vec2_f32 texCoord;
+	f32_3 position;
+	f32_2 texCoord;
 
 	static const u32 input_element_count = 2;
 	static const D3D11_INPUT_ELEMENT_DESC input_elements[input_element_count];
@@ -100,9 +100,9 @@ struct VertexPositionDualTexture final {
 	constexpr VertexPositionDualTexture(const VertexPositionDualTexture& vertex) noexcept = default;
 	constexpr VertexPositionDualTexture(VertexPositionDualTexture&& vertex) noexcept = default;
 
-	constexpr VertexPositionDualTexture(const vec3_f32& position,
-	                                    const vec2_f32& texCoord0,
-	                                    const vec2_f32& texCoord1) noexcept
+	constexpr VertexPositionDualTexture(const f32_3& position,
+	                                    const f32_2& texCoord0,
+	                                    const f32_2& texCoord1) noexcept
 		: position(position)
 		, texCoord0(texCoord0)
 		, texCoord1(texCoord1) {
@@ -121,9 +121,9 @@ struct VertexPositionDualTexture final {
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	vec3_f32 position;
-	vec2_f32 texCoord0;
-	vec2_f32 texCoord1;
+	f32_3 position;
+	f32_2 texCoord0;
+	f32_2 texCoord1;
 
 	static const u32 InputElementCount = 3;
 	static const D3D11_INPUT_ELEMENT_DESC input_elements[InputElementCount];
@@ -135,7 +135,7 @@ struct VertexPositionNormal final {
 	constexpr VertexPositionNormal(const VertexPositionNormal& vertex) noexcept = default;
 	constexpr VertexPositionNormal(VertexPositionNormal&& vertex) noexcept = default;
 
-	constexpr VertexPositionNormal(const vec3_f32& position, const vec3_f32& normal) noexcept
+	constexpr VertexPositionNormal(const f32_3& position, const f32_3& normal) noexcept
 		: position(position)
 		, normal(normal) {
 	}
@@ -153,8 +153,8 @@ struct VertexPositionNormal final {
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	vec3_f32 position;
-	vec3_f32 normal;
+	f32_3 position;
+	f32_3 normal;
 
 	static const u32 input_element_count = 2;
 	static const D3D11_INPUT_ELEMENT_DESC input_elements[input_element_count];
@@ -166,9 +166,9 @@ struct VertexPositionNormalColor final {
 	constexpr VertexPositionNormalColor(const VertexPositionNormalColor& vertex) noexcept = default;
 	constexpr VertexPositionNormalColor(VertexPositionNormalColor&& vertex) noexcept = default;
 
-	constexpr VertexPositionNormalColor(const vec3_f32& position,
-	                                    const vec3_f32& normal,
-	                                    const vec4_f32& color) noexcept
+	constexpr VertexPositionNormalColor(const f32_3& position,
+	                                    const f32_3& normal,
+	                                    const f32_4& color) noexcept
 		: position(position)
 		, normal(normal)
 		, color(color) {
@@ -187,9 +187,9 @@ struct VertexPositionNormalColor final {
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	vec3_f32 position;
-	vec3_f32 normal;
-	vec4_f32 color;
+	f32_3 position;
+	f32_3 normal;
+	f32_4 color;
 
 	static const u32 input_element_count = 3;
 	static const D3D11_INPUT_ELEMENT_DESC input_elements[input_element_count];
@@ -201,9 +201,9 @@ struct VertexPositionNormalTexture final {
 	constexpr VertexPositionNormalTexture(const VertexPositionNormalTexture& vertex) noexcept = default;
 	constexpr VertexPositionNormalTexture(VertexPositionNormalTexture&& vertex) noexcept = default;
 
-	constexpr VertexPositionNormalTexture(const vec3_f32& position,
-	                                      const vec3_f32& normal,
-	                                      const vec2_f32& texCoord) noexcept
+	constexpr VertexPositionNormalTexture(const f32_3& position,
+	                                      const f32_3& normal,
+	                                      const f32_2& texCoord) noexcept
 		: position(position)
 		, normal(normal)
 		, texCoord(texCoord) {
@@ -222,9 +222,9 @@ struct VertexPositionNormalTexture final {
 	//----------------------------------------------------------------------------------
 	// Members
 	//----------------------------------------------------------------------------------
-	vec3_f32 position;
-	vec3_f32 normal;
-	vec2_f32 texCoord;
+	f32_3 position;
+	f32_3 normal;
+	f32_2 texCoord;
 
 	static const u32 input_element_count = 3;
 	static const D3D11_INPUT_ELEMENT_DESC input_elements[input_element_count];

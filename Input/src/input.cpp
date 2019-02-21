@@ -77,23 +77,23 @@ void Input::reset() {
 }
 
 
-vec2_i32 Input::getMousePosition() const {
+i32_2 Input::getMousePosition() const {
 	// Mouse::MODE_ABSOLUTE - x/y are the position
 	// Mouse::MODE_RELATIVE - x/y are the delta
 
 	if (mouse_state.positionMode == Mouse::MODE_RELATIVE) {
-		return vec2_i32{0, 0};
+		return i32_2{0, 0};
 	}
-	return vec2_i32{mouse_state.x, mouse_state.y};
+	return i32_2{mouse_state.x, mouse_state.y};
 }
 
 
-vec2_i32 Input::getMouseDelta() const {
+i32_2 Input::getMouseDelta() const {
 	// Mouse::MODE_ABSOLUTE - x/y are the position
 	// Mouse::MODE_RELATIVE - x/y are the delta
 
 	if (mouse_state.positionMode == Mouse::MODE_ABSOLUTE) {
-		return vec2_i32{0, 0};
+		return i32_2{0, 0};
 	}
-	return vec2_i32{mouse_state.x, mouse_state.y};
+	return i32_2{mouse_state.x, mouse_state.y};
 }

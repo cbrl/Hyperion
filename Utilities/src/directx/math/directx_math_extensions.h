@@ -40,9 +40,9 @@ inline bool XM_CALLCONV PointInTriangle(FXMVECTOR vert1,
 // Find the minimum and maximum points in a vector of vertices
 template<typename VertexT>
 [[nodiscard]]
-std::pair<vec3_f32, vec3_f32> MinMaxPoint(const std::vector<VertexT>& vertices) {
-	vec3_f32 min{ std::numeric_limits<float>::max() };
-	vec3_f32 max{ std::numeric_limits<float>::lowest() };
+std::pair<f32_3, f32_3> MinMaxPoint(const std::vector<VertexT>& vertices) {
+	f32_3 min{ std::numeric_limits<float>::max() };
+	f32_3 max{ std::numeric_limits<float>::lowest() };
 
 	for (const auto& vertex : vertices) {
 		min[0] = std::fminf(min[0], vertex.position[0]);

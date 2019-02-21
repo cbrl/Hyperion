@@ -46,7 +46,7 @@ void BoundingVolumePass::bindRenderStates() const {
 }
 
 
-void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_projection, const vec4_f32& color) const {
+void XM_CALLCONV BoundingVolumePass::render(Scene& scene, FXMMATRIX world_to_projection, const f32_4& color) const {
 
 	// Bind the render states
 	bindRenderStates();

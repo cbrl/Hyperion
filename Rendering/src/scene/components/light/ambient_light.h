@@ -34,16 +34,16 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	const vec4_f32& getColor() const noexcept{
+	const f32_4& getColor() const noexcept{
 		return color;
 	}
 
 	[[nodiscard]]
-	vec4_f32& getColor() noexcept {
+	f32_4& getColor() noexcept {
 		return color;
 	}
 
-	void setColor(const vec4_f32& ambient_color) noexcept {
+	void setColor(const f32_4& ambient_color) noexcept {
 		color = ambient_color;
 	}
 
@@ -52,5 +52,5 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	vec4_f32 color;
+	f32_4 color;
 };

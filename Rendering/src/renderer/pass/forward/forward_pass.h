@@ -78,7 +78,7 @@ public:
 	// Render all models as a wireframe
 	void XM_CALLCONV renderWireframe(Scene& scene,
 	                                 FXMMATRIX world_to_projection,
-	                                 const vec4_f32& color) const;
+	                                 const f32_4& color) const;
 
 private:
 
@@ -109,5 +109,5 @@ private:
 	std::shared_ptr<VertexShader> vertex_shader;
 
 	// Buffers
-	ConstantBuffer<vec4_f32> color_buffer;
+	ConstantBuffer<f32_4> color_buffer;
 };

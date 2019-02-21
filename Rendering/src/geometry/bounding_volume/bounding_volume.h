@@ -16,7 +16,7 @@ public:
 	}
 
 	// Construct an AABB from the min and max points of an object
-	AABB(const vec3_f32& min, const vec3_f32& max) noexcept
+	AABB(const f32_3& min, const f32_3& max) noexcept
 		: min_point(XMLoad(&min))
 		, max_point(XMLoad(&max)) {
 	}
@@ -76,7 +76,7 @@ public:
 	}
 
 	// Construct a bounding sphere from the center point and radius of an object
-	BoundingSphere(const vec3_f32& center, f32 radius) noexcept
+	BoundingSphere(const f32_3& center, f32 radius) noexcept
 	    : sphere_center(XMLoad(&center))
 	    , sphere_radius(radius) {
 	}

@@ -8,7 +8,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	OrthographicCamera(ID3D11Device& device, vec2_u32 viewport_size);
+	OrthographicCamera(ID3D11Device& device, u32_2 viewport_size);
 
 	OrthographicCamera(const OrthographicCamera& camera) = delete;
 	OrthographicCamera(OrthographicCamera&& camera) noexcept = default;
@@ -33,10 +33,10 @@ public:
 
 	// Get the size of the camera's viewing volume {width, height}
 	[[nodiscard]]
-	vec2_f32 getSize() const noexcept;
+	f32_2 getSize() const noexcept;
 
 	// Set the size of the camera's viewing volume {width, height}
-	void setSize(vec2_f32 size) noexcept;
+	void setSize(f32_2 size) noexcept;
 
 	// Update the projection matrix after changing depth/width/height/etc...
 	[[nodiscard]]
@@ -45,5 +45,5 @@ public:
 
 private:
 	// The width and height of the camera's viewing volume
-	vec2_f32 ortho_size;
+	f32_2 ortho_size;
 };

@@ -45,7 +45,7 @@ std::shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
 template<typename VertexT>
 std::shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
 	                                        const ModelConfig<VertexT>& config,
-	                                        const vec3_f32& size) {
+	                                        const f32_3& size) {
 
 	// Model name
 	std::string name = "Box " + std::to_string(size[0]) + std::to_string(size[1]) + std::to_string(size[2]) + (config.flip_winding ? " Inverted" : "");

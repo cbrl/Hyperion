@@ -65,7 +65,7 @@ WindowConfig::~WindowConfig() {
 
 Window::Window(std::shared_ptr<WindowConfig> window_config,
                const std::wstring& title,
-			   vec2_u32 resolution,
+			   u32_2 resolution,
                DWORD style)
 	: config(std::move(window_config))
 	, window(nullptr) {
@@ -76,7 +76,7 @@ Window::Window(std::shared_ptr<WindowConfig> window_config,
 
 
 void Window::init(const std::wstring& title,
-				  vec2_u32 resolution,
+				  u32_2 resolution,
                   DWORD style) {
 
 	// Create a rect for the adjusted window size

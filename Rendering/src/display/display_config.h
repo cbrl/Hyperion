@@ -60,7 +60,7 @@ public:
 	}
 
 	// Priority: format > res_width > res_height > refresh_rate
-	void setNearestDisplayDesc(const vec2_u32& resolution,
+	void setNearestDisplayDesc(const u32_2& resolution,
 	                           u32 refresh_rate = 0,
 	                           DXGI_FORMAT format = DXGI_FORMAT_UNKNOWN);
 
@@ -95,7 +95,7 @@ public:
 	}
 
 	[[nodiscard]]
-	vec2_u32 getDisplayResolution() const noexcept {
+	u32_2 getDisplayResolution() const noexcept {
 		return { getDisplayWidth(), getDisplayHeight() };
 	}
 

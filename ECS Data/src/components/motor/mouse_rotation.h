@@ -52,11 +52,11 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	vec2_f32 getMaxRotation() const noexcept {
+	f32_2 getMaxRotation() const noexcept {
 		return max_rotation;
 	}
 
-	void setMaxRotation(vec2_f32 angle) noexcept {
+	void setMaxRotation(f32_2 angle) noexcept {
 		max_rotation[0] = (angle[0] > abs_max[0]) ? abs_max[0] : angle[0];
 		max_rotation[1] = (angle[1] > abs_max[1]) ? abs_max[1] : angle[1];
 	}
@@ -71,8 +71,8 @@ public:
 
 
 private:
-	f32      sensitivity;
-	vec2_f32 max_rotation;
+	f32   sensitivity;
+	f32_2 max_rotation;
 
-	static inline vec2_f32 abs_max{ XMConvertToRadians(89.0f), XM_PI };
+	static inline f32_2 abs_max{ XMConvertToRadians(89.0f), XM_PI };
 };

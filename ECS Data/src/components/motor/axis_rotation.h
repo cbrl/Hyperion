@@ -83,7 +83,7 @@ public:
 	// Member Functions - Speed
 	//----------------------------------------------------------------------------------
 
-	void setSpeeds(vec3_f32 speeds) {
+	void setSpeeds(f32_3 speeds) {
 		rotation_speeds = speeds;
 	}
 
@@ -100,7 +100,7 @@ public:
 	}
 
 	[[nodiscard]]
-	vec3_f32 speeds() const {
+	f32_3 speeds() const {
 		return rotation_speeds;
 	}
 
@@ -121,6 +121,6 @@ public:
 
 
 private:
-	u8       rotation_axis;
-	vec3_f32 rotation_speeds;
+	u8    rotation_axis;
+	f32_3 rotation_speeds;
 };

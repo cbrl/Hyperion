@@ -26,12 +26,12 @@ struct ModelOutput {
 	struct MeshData {
 		std::string name;
 		std::vector<u32> indices;
-		std::vector<vec3_f32> positions;
-		std::vector<vec3_f32> normals;
-		std::vector<vec3_f32> tangents;
-		std::vector<vec3_f32> bitangents;
-		std::vector<vec2_f32> texture_coords;
-		std::vector<vec3_f32> colors;
+		std::vector<f32_3> positions;
+		std::vector<f32_3> normals;
+		std::vector<f32_3> tangents;
+		std::vector<f32_3> bitangents;
+		std::vector<f32_2> texture_coords;
+		std::vector<f32_3> colors;
 		u32 material_index = 0;
 	};
 

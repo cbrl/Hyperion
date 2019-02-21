@@ -9,12 +9,12 @@
 //----------------------------------------------------------------------------------
 
 struct MaterialBuffer {
-	vec4_f32 base_color = {};
-	f32      metalness  = 0.0f;
-	f32      roughness  = 0.0f;
-	vec2_f32 pad0;
-	vec3_f32 emissive   = {};
-	f32      pad1;
+	f32_4 base_color = {};
+	f32   metalness  = 0.0f;
+	f32   roughness  = 0.0f;
+	f32_2 pad0;
+	f32_3 emissive   = {};
+	f32   pad1;
 };
 
 
@@ -41,46 +41,46 @@ struct LightBuffer {
 	u32 num_shadow_spot_lights        = 0;
 	f32 pad1;
 
-	vec4_f32 ambient = {};
+	f32_4 ambient = {};
 };
 
 
 struct DirectionalLightBuffer {
-	vec3_f32 intensity = {};
-	f32      pad0;
-	vec3_f32 direction = {};
-	f32      pad1;
+	f32_3 intensity = {};
+	f32   pad0;
+	f32_3 direction = {};
+	f32   pad1;
 	XMMATRIX world_to_projection = XMMatrixIdentity();
 };
 
 
 struct PointLightBuffer {
-	vec3_f32 intensity   = {};
-	f32      pad0;
-	vec3_f32 position    = {};
-	f32      range       = 0;
-	vec3_f32 attenuation = {};
-	f32      pad1;
+	f32_3 intensity   = {};
+	f32   pad0;
+	f32_3 position    = {};
+	f32   range       = 0;
+	f32_3 attenuation = {};
+	f32   pad1;
 };
 
 
 struct ShadowedPointLightBuffer {
 	PointLightBuffer light_buffer;
 	XMMATRIX         world_to_light    = XMMatrixIdentity();
-	vec2_f32         projection_values = {};
-	vec2_f32         pad;
+	f32_2            projection_values = {};
+	f32_2            pad;
 };
 
 
 struct SpotLightBuffer {
-	vec3_f32 intensity    = {};
-	f32      pad;
-	vec3_f32 position     = {};
-	f32      range        = 0.0f;
-	vec3_f32 direction    = {};
-	f32      cos_umbra    = 0.0f;
-	f32      cos_penumbra = 0.0f;
-	vec3_f32 attenuation  = {};
+	f32_3 intensity    = {};
+	f32   pad;
+	f32_3 position     = {};
+	f32   range        = 0.0f;
+	f32_3 direction    = {};
+	f32   cos_umbra    = 0.0f;
+	f32   cos_penumbra = 0.0f;
+	f32_3 attenuation  = {};
 };
 
 
@@ -96,8 +96,8 @@ struct ShadowedSpotLightBuffer {
 //----------------------------------------------------------------------------------
 
 struct Fog {
-	f32      density = 0.0f;
-	vec3_f32 color   = {1.0f};
+	f32   density = 0.0f;
+	f32_3 color   = {1.0f};
 };
 
 struct CameraBuffer {

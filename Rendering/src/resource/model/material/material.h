@@ -10,10 +10,10 @@ struct Material {
 	std::string name;
 
 	struct {
-		vec4_f32 base_color;
+		f32_4 base_color;
 		f32      metalness;
 		f32      roughness;
-		vec3_f32 emissive;
+		f32_3 emissive;
 
 		//bool mirror = false;
 		//bool wireframe = false;

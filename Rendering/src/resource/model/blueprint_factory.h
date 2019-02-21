@@ -18,7 +18,7 @@ namespace BlueprintFactory {
 	[[nodiscard]]
 	std::shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
 	                                          const ModelConfig<VertexT>& config,
-	                                          const vec3_f32& size);
+	                                          const f32_3& size);
 
 	template<typename VertexT>
 	[[nodiscard]]

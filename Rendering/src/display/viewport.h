@@ -20,7 +20,7 @@ public:
 		viewport.Height = height;
 	}
 
-	explicit Viewport(vec2_f32 size) noexcept
+	explicit Viewport(f32_2 size) noexcept
 		: viewport{} {
 		viewport.Width = size[0];
 		viewport.Height = size[1];
@@ -72,8 +72,8 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	vec2_u32 getTopLeft() const noexcept {
-		return vec2_u32{ static_cast<u32>(viewport.TopLeftX),
+	u32_2 getTopLeft() const noexcept {
+		return u32_2{ static_cast<u32>(viewport.TopLeftX),
 		                 static_cast<u32>(viewport.TopLeftY) };
 	}
 
@@ -82,7 +82,7 @@ public:
 		viewport.TopLeftY = static_cast<f32>(y);
 	}
 
-	void setTopLeft(const vec2_u32& top_left) noexcept {
+	void setTopLeft(const u32_2& top_left) noexcept {
 		viewport.TopLeftX = static_cast<f32>(top_left[0]);
 		viewport.TopLeftY = static_cast<f32>(top_left[1]);
 	}
@@ -93,8 +93,8 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	vec2_u32 getSize() const noexcept {
-		return vec2_u32{ static_cast<u32>(viewport.Width),
+	u32_2 getSize() const noexcept {
+		return u32_2{ static_cast<u32>(viewport.Width),
 		                 static_cast<u32>(viewport.Height) };
 	}
 
@@ -103,7 +103,7 @@ public:
 		viewport.Height = static_cast<f32>(height);
 	}
 
-	void setSize(const vec2_u32& size) noexcept {
+	void setSize(const u32_2& size) noexcept {
 		viewport.Width  = static_cast<f32>(size[0]);
 		viewport.Height = static_cast<f32>(size[1]);
 	}
@@ -114,8 +114,8 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	vec2_f32 getDepth() const noexcept {
-		return vec2_f32{ viewport.MinDepth, viewport.MaxDepth };
+	f32_2 getDepth() const noexcept {
+		return f32_2{ viewport.MinDepth, viewport.MaxDepth };
 	}
 
 	void setDepth(f32 min, f32 max) noexcept {
@@ -123,7 +123,7 @@ public:
 		viewport.MaxDepth = max;
 	}
 
-	void setDepth(const vec2_f32& depth_range) noexcept {
+	void setDepth(const f32_2& depth_range) noexcept {
 		viewport.MinDepth = depth_range[0];
 		viewport.MaxDepth = depth_range[1];
 	}

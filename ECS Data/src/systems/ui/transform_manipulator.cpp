@@ -91,9 +91,9 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 
 	// Allowing the transform matrix to be set here would eliminate the need to decompose the matrix
 	if (ImGuizmo::IsUsing()) {
-		vec3_f32 translation;
-		vec3_f32 rotation;
-		vec3_f32 scale;
+		f32_3 translation;
+		f32_3 rotation;
+		f32_3 scale;
 
 		if (!transform.getOwner()->hasParent()) {
 			ImGuizmo::DecomposeMatrixToComponents(&matrix.m[0][0], translation.data(), rotation.data(), scale.data());

@@ -209,10 +209,10 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, EntityPtr entity_
 	if (ImGui::BeginMenu("Add Component")) {
 
 		if (ImGui::MenuItem("Orthographic Camera", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<OrthographicCamera>(device, vec2_u32{480, 480});
+			entity_ptr->addComponent<OrthographicCamera>(device, u32_2{480, 480});
 		}
 		if (ImGui::MenuItem("Perspective Camera", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<PerspectiveCamera>(device, vec2_u32{480, 480});
+			entity_ptr->addComponent<PerspectiveCamera>(device, u32_2{480, 480});
 		}
 		if (ImGui::MenuItem("Directional Light", nullptr, nullptr, valid_entity)) {
 			entity_ptr->addComponent<DirectionalLight>();
@@ -266,9 +266,9 @@ void EntityDetailsWindow::drawDetails(Transform& transform) {
 
 	DrawComponentState(transform);
 
-	vec3_f32 position;
-	vec3_f32 rotation;
-	vec3_f32 scale;
+	f32_3 position;
+	f32_3 rotation;
+	f32_3 scale;
 	XMStore(&position, transform.getPosition());
 	XMStore(&rotation, transform.getRotation());
 	XMStore(&scale, transform.getScale());
@@ -435,8 +435,8 @@ void EntityDetailsWindow::drawDetails(PerspectiveCamera& camera) {
 	// Viewport
 	//----------------------------------------------------------------------------------
 	auto& vp = camera.getViewport();
-	vec2_u32 size = vp.getSize();
-	vec2_u32 pos = vp.getTopLeft();
+	u32_2 size = vp.getSize();
+	u32_2 pos = vp.getTopLeft();
 
 	static constexpr u32 v_min_size = 1;
 	static constexpr u32 v_min_pos  = 0;
@@ -452,7 +452,7 @@ void EntityDetailsWindow::drawDetails(PerspectiveCamera& camera) {
 	//----------------------------------------------------------------------------------
 	// Depth
 	//----------------------------------------------------------------------------------
-	vec2_f32 depth = camera.getZDepth();
+	f32_2 depth = camera.getZDepth();
 	if (ImGui::DragFloat2("Depth Range", depth.data(), 1.0f, 0.01f, FLT_MAX)) {
 		camera.setZDepth(depth);
 	}
@@ -479,8 +479,8 @@ void EntityDetailsWindow::drawDetails(OrthographicCamera& camera) {
 	// Viewport
 	//----------------------------------------------------------------------------------
 	auto& vp = camera.getViewport();
-	vec2_u32 size = vp.getSize();
-	vec2_u32 pos = vp.getTopLeft();
+	u32_2 size = vp.getSize();
+	u32_2 pos = vp.getTopLeft();
 
 	static constexpr u32 v_min_size = 1;
 	static constexpr u32 v_min_pos  = 0;
@@ -496,7 +496,7 @@ void EntityDetailsWindow::drawDetails(OrthographicCamera& camera) {
 	//----------------------------------------------------------------------------------
 	// Depth
 	//----------------------------------------------------------------------------------
-	vec2_f32 depth = camera.getZDepth();
+	f32_2 depth = camera.getZDepth();
 	if (ImGui::DragFloat2("Depth Range", depth.data(), 1.0f, 0.01f, FLT_MAX))
 		camera.setZDepth(depth);
 
@@ -810,7 +810,7 @@ void EntityDetailsWindow::drawDetails(AxisOrbit& orbit) {
 
 	DrawComponentState(orbit);
 
-	auto axis = XMStore<vec3_f32>(orbit.getAxis());
+	auto axis = XMStore<f32_3>(orbit.getAxis());
 	if (ImGui::InputFloat3("Axis", axis.data())) {
 		orbit.setAxis(axis);
 	}

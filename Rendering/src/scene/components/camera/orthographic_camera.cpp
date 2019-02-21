@@ -1,18 +1,18 @@
 #include "orthographic_camera.h"
 
 
-OrthographicCamera::OrthographicCamera(ID3D11Device& device, vec2_u32 viewport_size)
+OrthographicCamera::OrthographicCamera(ID3D11Device& device, u32_2 viewport_size)
 	: CameraBase(device)
 	, ortho_size(1.0f, 1.0f) {
 
 	viewport.setSize(viewport_size);
 }
 
-vec2_f32 OrthographicCamera::getSize() const noexcept {
+f32_2 OrthographicCamera::getSize() const noexcept {
 	return ortho_size;
 }
 
-void OrthographicCamera::setSize(vec2_f32 size) noexcept {
+void OrthographicCamera::setSize(f32_2 size) noexcept {
 	ortho_size = size;
 }
 

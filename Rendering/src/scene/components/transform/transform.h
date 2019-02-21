@@ -71,7 +71,7 @@ public:
 		sendNeedsUpdateEvent();
 	}
 
-	void move(const vec3_f32& units) {
+	void move(const f32_3& units) {
 		translation += XMLoad(&units);
 		sendNeedsUpdateEvent();
 	}
@@ -81,7 +81,7 @@ public:
 		sendNeedsUpdateEvent();
 	}
 
-	void setPosition(const vec3_f32& position) {
+	void setPosition(const f32_3& position) {
 		translation = XMLoad(&position);
 		sendNeedsUpdateEvent();
 	}
@@ -129,7 +129,7 @@ public:
 		sendNeedsUpdateEvent();
 	}
 
-	void rotate(const vec3_f32& units) {
+	void rotate(const f32_3& units) {
 		rotation += XMLoad(&units);
 		sendNeedsUpdateEvent();
 	}
@@ -139,7 +139,7 @@ public:
 		sendNeedsUpdateEvent();
 	}
 
-	void rotateClamped(const vec3_f32& units, f32 min, f32 max) {
+	void rotateClamped(const f32_3& units, f32 min, f32 max) {
 		rotateXClamped(units[0], min, max);
 		rotateYClamped(units[1], min, max);
 		rotateZClamped(units[2], min, max);
@@ -151,7 +151,7 @@ public:
 		rotateZClamped(XMVectorGetZ(units), min, max);
 	}
 
-	void rotateAround(vec3_f32 axis, f32 units) {
+	void rotateAround(f32_3 axis, f32 units) {
 		rotateAround(XMLoad(&axis), units);
 	}
 
@@ -160,7 +160,7 @@ public:
 		sendNeedsUpdateEvent();
 	}
 
-	void setRotation(const vec3_f32& rotation) {
+	void setRotation(const f32_3& rotation) {
 		this->rotation = XMLoad(&rotation);
 		sendNeedsUpdateEvent();
 	}
@@ -190,7 +190,7 @@ public:
 		sendNeedsUpdateEvent();
 	}
 
-	void scale(const vec3_f32& units) {
+	void scale(const f32_3& units) {
 		scaling *= XMLoad(&units);
 		sendNeedsUpdateEvent();
 	}
@@ -200,7 +200,7 @@ public:
 		sendNeedsUpdateEvent();
 	}
 
-	void setScale(const vec3_f32& scale) {
+	void setScale(const f32_3& scale) {
 		scaling = XMLoad(&scale);
 		sendNeedsUpdateEvent();
 	}

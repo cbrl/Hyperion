@@ -11,7 +11,7 @@ namespace TextureFactory {
 	std::shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr);
 
 	// Create a 1x1 texture from a specified color (RGBA)
-	std::shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const vec4_f32& color);
+	std::shared_ptr<Texture> CreateColorTexture(ResourceMgr& resource_mgr, const f32_4& color);
 
 	// Create a white texture
 	std::shared_ptr<Texture> CreateWhiteTexture(ResourceMgr& resource_mgr);

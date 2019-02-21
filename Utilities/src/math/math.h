@@ -8,7 +8,7 @@
 
 // Convert an rgba vec4 [0.0f, 1.0f] to a hex color value
 [[nodiscard]]
-inline u32 Float4ColorToU32(const vec4_f32& color) {
+inline u32 Float4ColorToU32(const f32_4& color) {
 	return static_cast<u32>(color[0] * 0xff)            //R
 	       | (static_cast<u32>(color[1] * 0xff) << 8)   //G
 	       | (static_cast<u32>(color[2] * 0xff) << 16)  //B
@@ -18,11 +18,11 @@ inline u32 Float4ColorToU32(const vec4_f32& color) {
 
 // Find the minimum and maximum points in a vector of vertices
 [[nodiscard]]
-inline std::pair<vec3_f32, vec3_f32> MinMaxPoint(const std::vector<vec3_f32>& vertices) {
-	vec3_f32 min{std::numeric_limits<float>::max()};
-	vec3_f32 max{std::numeric_limits<float>::lowest()};
+inline std::pair<f32_3, f32_3> MinMaxPoint(const std::vector<f32_3>& vertices) {
+	f32_3 min{std::numeric_limits<float>::max()};
+	f32_3 max{std::numeric_limits<float>::lowest()};
 
-	for (const vec3_f32& vertex : vertices) {
+	for (const f32_3& vertex : vertices) {
 		min[0] = std::fminf(min[0], vertex[0]);
 		min[1] = std::fminf(min[1], vertex[1]);
 		min[2] = std::fminf(min[2], vertex[2]);
@@ -38,10 +38,10 @@ inline std::pair<vec3_f32, vec3_f32> MinMaxPoint(const std::vector<vec3_f32>& ve
 
 // Determine if a point is inside a triangle using barycentric coordinates
 [[nodiscard]]
-inline bool PointInTriangle(const vec3_f32& vert1,
-                            const vec3_f32& vert2,
-                            const vec3_f32& vert3,
-                            const vec3_f32& point) {
+inline bool PointInTriangle(const f32_3& vert1,
+                            const f32_3& vert2,
+                            const f32_3& vert3,
+                            const f32_3& point) {
 	const XMVECTOR v0 = XMLoad(&vert2) - XMLoad(&vert1);
 	const XMVECTOR v1 = XMLoad(&vert3) - XMLoad(&vert1);
 	const XMVECTOR v2 = XMLoad(&point) - XMLoad(&vert1);

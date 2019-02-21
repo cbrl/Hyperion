@@ -9,7 +9,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	PerspectiveCamera(ID3D11Device& device, vec2_u32 viewport_size);
+	PerspectiveCamera(ID3D11Device& device, u32_2 viewport_size);
 
 	PerspectiveCamera(const PerspectiveCamera& camera) = delete;
 	PerspectiveCamera(PerspectiveCamera&& camera) noexcept = default;

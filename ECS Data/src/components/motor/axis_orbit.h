@@ -38,7 +38,7 @@ public:
 	// Member Functions - Axis
 	//----------------------------------------------------------------------------------
 
-	void setAxis(vec3_f32 orbit_axis) {
+	void setAxis(f32_3 orbit_axis) {
 		axis = XMLoad(&orbit_axis);
 	}
 

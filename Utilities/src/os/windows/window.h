@@ -137,7 +137,7 @@ public:
 	//----------------------------------------------------------------------------------
 	Window(std::shared_ptr<WindowConfig> window_config,
 	       const std::wstring& title,
-	       vec2_u32 resolution,
+	       u32_2 resolution,
 	       DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
 
 	Window(const Window& window) = delete;
@@ -186,14 +186,14 @@ public:
 	}
 
 	[[nodiscard]]
-	vec2_u32 getClientSize() const noexcept {
+	u32_2 getClientSize() const noexcept {
 		RECT client;
 		GetClientRect(window, &client);
 		return { static_cast<u32>(client.right),
 		         static_cast<u32>(client.bottom) };
 	}
 
-	void resizeWindow(vec2_u32 size) const noexcept {
+	void resizeWindow(u32_2 size) const noexcept {
 		RECT pos;
 		GetWindowRect(window, &pos);
 		RECT client = { 0, 0, static_cast<LONG>(size[0]), static_cast<LONG>(size[1]) };
@@ -231,7 +231,7 @@ public:
 
 
 private:
-	void init(const std::wstring& title, vec2_u32 resolution, DWORD style);
+	void init(const std::wstring& title, u32_2 resolution, DWORD style);
 
 	[[nodiscard]]
 	LRESULT msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam);

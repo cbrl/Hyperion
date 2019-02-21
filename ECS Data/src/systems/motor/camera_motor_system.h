@@ -37,7 +37,7 @@ public:
 	void registerCallbacks() override;
 
 	void processInput(const Engine& engine, CameraMovement& movement, Transform& transform) const;
-	void updateMovement(CameraMovement& mv, vec3_f32 units) const;
+	void updateMovement(CameraMovement& mv, f32_3 units) const;
 	void move(CameraMovement& mv, Transform& transform) const;
 	void decelerate(CameraMovement& mv) const;
 

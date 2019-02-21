@@ -38,17 +38,17 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Base Color
 	//----------------------------------------------------------------------------------
-	void setBaseColor(const vec3_f32& color) noexcept {
+	void setBaseColor(const f32_3& color) noexcept {
 		base_color = color;
 	}
 
 	[[nodiscard]]
-	vec3_f32& getBaseColor() noexcept {
+	f32_3& getBaseColor() noexcept {
 		return base_color;
 	}
 
 	[[nodiscard]]
-	const vec3_f32& getBaseColor() const noexcept {
+	const f32_3& getBaseColor() const noexcept {
 		return base_color;
 	}
 
@@ -96,13 +96,13 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Size
 	//----------------------------------------------------------------------------------
-	void setSize(const vec2_f32& size) noexcept {
+	void setSize(const f32_2& size) noexcept {
 		proj_size = size;
 		updateBoundingVolumes();
 	}
 
 	[[nodiscard]]
-	const vec2_f32& getSize() const noexcept {
+	const f32_2& getSize() const noexcept {
 		return proj_size;
 	}
 
@@ -122,14 +122,14 @@ public:
 
 private:
 	void updateBoundingVolumes() noexcept {
-		aabb = AABB{ vec3_f32{-0.5f * proj_size[0], -0.5f * proj_size[1], 0.0f},
-					 vec3_f32{ 0.5f * proj_size[0],  0.5f * proj_size[1], range} };
+		aabb = AABB{ f32_3{-0.5f * proj_size[0], -0.5f * proj_size[1], 0.0f},
+					 f32_3{ 0.5f * proj_size[0],  0.5f * proj_size[1], range} };
 	}
 
 
 private:
 	// Lighting parameters
-	vec3_f32 base_color;
+	f32_3 base_color;
 	f32 intensity;
 
 	// Clipping planes
@@ -137,7 +137,7 @@ private:
 	f32 range;
 
 	// Projection matrix size
-	vec2_f32 proj_size;
+	f32_2 proj_size;
 
 	// Bounding volume
 	AABB aabb;

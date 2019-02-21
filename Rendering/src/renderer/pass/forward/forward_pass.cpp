@@ -216,7 +216,7 @@ void ForwardPass::renderFalseColor(Scene& scene,
 }
 
 
-void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, const vec4_f32& color) const {
+void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, const f32_4& color) const {
 
 	bindWireframeState();
 

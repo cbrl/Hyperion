@@ -108,7 +108,7 @@ void NewModelMenu::procNewModelPopup(ID3D11Device& device,
 	}
 
 	if (ImGui::BeginPopupModal("New Box", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-		static vec3_f32 size = {1.0f, 1.0f, 1.0f};
+		static f32_3 size = {1.0f, 1.0f, 1.0f};
 		static bool flip_winding = false;
 
 		ImGui::InputFloat3("Size", size.data());

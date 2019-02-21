@@ -45,7 +45,7 @@ void CameraMotorSystem::onGuiFocus(const GuiFocusEvent* event) {
 void CameraMotorSystem::processInput(const Engine& engine, CameraMovement& movement, Transform& transform) const {
 
 	const auto& input      = engine.getInput();
-	vec3_f32    move_units = { 0.0f, 0.0f, 0.0f };
+	f32_3    move_units = { 0.0f, 0.0f, 0.0f };
 
 	// Forward/Back movement
 	if (input.isKeyDown(Keyboard::W)) {
@@ -79,10 +79,10 @@ void CameraMotorSystem::processInput(const Engine& engine, CameraMovement& movem
 }
 
 
-void CameraMotorSystem::updateMovement(CameraMovement& mv, vec3_f32 units) const {
+void CameraMotorSystem::updateMovement(CameraMovement& mv, f32_3 units) const {
 
 	// Get the velocity
-	vec3_f32 velocity = mv.getVelocity();
+	f32_3 velocity = mv.getVelocity();
 
 	//----------------------------------------------------------------------------------
 	// X movement
@@ -139,7 +139,7 @@ void CameraMotorSystem::updateMovement(CameraMovement& mv, vec3_f32 units) const
 
 void CameraMotorSystem::move(CameraMovement& mv, Transform& transform) const {
 
-	const vec3_f32 velocity = mv.getVelocity();
+	const f32_3 velocity = mv.getVelocity();
 	XMVECTOR velocity_vec = XMLoad(&velocity);
 	const f32 velocity_mag = XMVectorGetX(XMVector3Length(velocity_vec));
 
@@ -171,7 +171,7 @@ void CameraMotorSystem::move(CameraMovement& mv, Transform& transform) const {
 void CameraMotorSystem::decelerate(CameraMovement& mv) const {
 
 	f32 decel_amount;
-	vec3_f32 velocity = mv.getVelocity();
+	f32_3 velocity = mv.getVelocity();
 
 	// Decelerate in each direction if not moving in that
 	// direction and the current velocity isn't 0.

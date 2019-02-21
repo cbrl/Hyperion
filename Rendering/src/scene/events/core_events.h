@@ -34,9 +34,9 @@ struct TransformUpdated : public Event<TransformUpdated> {
 //----------------------------------------------------------------------------------
 
 struct WindowResizeEvent : public Event<WindowResizeEvent> {
-	WindowResizeEvent(vec2_u32 size)
+	WindowResizeEvent(u32_2 size)
 	    : new_size(std::move(size)) {
 	}
 
-	const vec2_u32 new_size;
+	const u32_2 new_size;
 };

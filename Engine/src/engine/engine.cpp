@@ -130,7 +130,7 @@ void Engine::init(std::wstring title,
 			if (!rendering_mgr) return;
 			rendering_mgr->onResize();
 
-			const vec2_u32 size = window->getClientSize();
+			const u32_2 size = window->getClientSize();
 			if (scene) {
 				scene->sendEvent<WindowResizeEvent>(size);
 			}
