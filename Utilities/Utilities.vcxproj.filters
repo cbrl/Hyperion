@@ -354,15 +354,12 @@
     <None Include="src\io\line_reader.tpp">
       <Filter>Header Files\io</Filter>
     </None>
-    <None Include="src\memory\managed_resource_map.tpp">
-      <Filter>Header Files\memory</Filter>
-    </None>
     <None Include="src\timer\timer.tpp">
       <Filter>Header Files\timer</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="src\memory\handle\handle_map.tpp">
       <Filter>Header Files\memory\handle</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
