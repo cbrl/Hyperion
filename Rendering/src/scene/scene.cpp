@@ -3,7 +3,7 @@
 #include "scene/systems/core_systems.h"
 
 
-void Scene::load(const Engine& engine) {
+void Scene::load(Engine& engine) {
 	addCoreSystems(engine);
 	initialize(engine);
 }
@@ -15,10 +15,10 @@ void Scene::addCoreSystems(const Engine& engine) {
 	ecs->addSystem<TransformSystem>();
 
 	// Camera system: updates the buffers of camera components
-	ecs->addSystem<CameraSystem>();
+	ecs->addSystem<CameraSystem>(engine.getRenderingMgr());
 
 	// Model system: updates the buffers of model components
-	ecs->addSystem<ModelSystem>();
+	ecs->addSystem<ModelSystem>(engine.getRenderingMgr());
 }
 
 
@@ -41,7 +41,7 @@ void Scene::removeSystem(ISystem& system) {
 
 
 void Scene::tick(Engine& engine) {
-	ecs->update(engine, static_cast<f32>(engine.getTimer().deltaTime()));
+	ecs->update(engine.getTimer().deltaTime());
 	this->update(engine);
 }
 

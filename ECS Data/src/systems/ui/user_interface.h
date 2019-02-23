@@ -21,7 +21,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	UserInterface(const Engine& engine);
+	UserInterface(Engine& engine);
 	UserInterface(const UserInterface&) = delete;
 	UserInterface(UserInterface&&) noexcept;
 
@@ -42,7 +42,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void update(Engine& engine) override;
+	void update() override;
 
 	void setUpdateInterval(f32 seconds) noexcept override {}; //UI updates every frame
 
@@ -51,6 +51,8 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
+	std::reference_wrapper<Engine> engine;
+
 	std::unique_ptr<SystemMenu>           system_menu;
 	std::unique_ptr<SceneTree>            scene_tree;
 	std::unique_ptr<EntityDetailsWindow>  entity_details;

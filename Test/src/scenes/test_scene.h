@@ -12,9 +12,9 @@ public:
 
 
 protected:
-	void initialize(const Engine& engine);
+	void initialize(Engine& engine) override;
 
-	void update(Engine& engine) override final;
+	void update(Engine& engine) override;
 
 
 private:

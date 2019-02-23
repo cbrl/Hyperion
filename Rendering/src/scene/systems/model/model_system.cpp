@@ -5,11 +5,15 @@
 #include "scene/components/model/model.h"
 
 
-void ModelSystem::update(Engine& engine) {
-	auto& scene          = engine.getScene();
-	auto& device_context = engine.getRenderingMgr().getDeviceContext();
+ModelSystem::ModelSystem(const RenderingMgr& rendering_mgr)
+	: rendering_mgr(rendering_mgr) {
+}
 
-	scene.forEach<Model>([&](Model& model) {
+
+void ModelSystem::update() {
+	auto& device_context = rendering_mgr.getDeviceContext();
+
+	getECS().forEach<Model>([&](Model& model) {
 
 		if (!model.isActive()) return;
 

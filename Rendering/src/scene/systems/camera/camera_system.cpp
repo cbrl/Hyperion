@@ -5,9 +5,13 @@
 #include "scene/components/camera/orthographic_camera.h"
 
 
-void CameraSystem::update(Engine& engine) {
-	auto& scene          = engine.getScene();
-	auto& device_context = engine.getRenderingMgr().getDeviceContext();
+CameraSystem::CameraSystem(const RenderingMgr& rendering_mgr)
+	: rendering_mgr(rendering_mgr) {
+}
+
+
+void CameraSystem::update() {
+	auto& device_context = rendering_mgr.getDeviceContext();
 
 	const auto process_cam = [&](auto& camera) {
 		const auto* transform = camera.getOwner()->getComponent<Transform>();
@@ -19,12 +23,12 @@ void CameraSystem::update(Engine& engine) {
 		                    transform->getWorldToObjectMatrix());
 	};
 
-	scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
 
-	scene.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});

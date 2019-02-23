@@ -33,5 +33,5 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void update(Engine& engine) override;
+	void update() override;
 };

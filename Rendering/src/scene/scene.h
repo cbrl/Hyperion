@@ -38,7 +38,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Load the scene contents
-	void load(const Engine& engine);
+	void load(Engine& engine);
 
 	// Update the scene
 	void tick(Engine& engine);
@@ -140,7 +140,7 @@ protected:
 	//----------------------------------------------------------------------------------
 
 	// Overrided by the derived class and called by Scene::load()
-	virtual void initialize(const Engine& engine) = 0;
+	virtual void initialize(Engine& engine) = 0;
 
 	// Update the scene per tick. Overrided by the derived class and called by Scene::tick()
 	virtual void update(Engine& engine) = 0;

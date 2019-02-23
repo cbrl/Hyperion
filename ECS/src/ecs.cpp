@@ -30,8 +30,8 @@ void ECS::removeSystem(ISystem& system) {
 }
 
 
-void ECS::update(Engine& engine, f32 dt) {
-	system_mgr->update(engine, dt);
+void ECS::update(f64 dt) {
+	system_mgr->update(dt);
 	event_mgr->dispatchEvents();
 	entity_mgr->removeExpiredEntities();
 }

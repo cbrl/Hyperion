@@ -2,10 +2,12 @@
 #include "engine/engine.h"
 
 
-void CameraMotorSystem::update(Engine& engine) {
+CameraMotorSystem::CameraMotorSystem(const Input& input)
+	: input(input) {
+}
 
-	auto& scene          = engine.getScene();
-	auto& device_context = engine.getRenderingMgr().getDeviceContext();
+
+void CameraMotorSystem::update() {
 
 	const auto process_cam = [&](auto& camera) {
 		auto* entity = camera.getOwner().get();
@@ -15,17 +17,17 @@ void CameraMotorSystem::update(Engine& engine) {
 		if (!transform->isActive()) return;
 
 		if (auto* movement = entity->getComponent<CameraMovement>()) {
-			processInput(engine, *movement, *transform);
+			processInput(*movement, *transform);
 		}
 	};
 
-	scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
 
 
-	scene.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
@@ -42,33 +44,33 @@ void CameraMotorSystem::onGuiFocus(const GuiFocusEvent& event) {
 }
 
 
-void CameraMotorSystem::processInput(const Engine& engine, CameraMovement& movement, Transform& transform) const {
+void CameraMotorSystem::processInput(CameraMovement& movement, Transform& transform) const {
 
-	const auto& input      = engine.getInput();
-	f32_3    move_units = { 0.0f, 0.0f, 0.0f };
+	const auto dt = static_cast<f32>(dtSinceLastUpdate());
+	f32_3 move_units = { 0.0f, 0.0f, 0.0f };
 
 	// Forward/Back movement
 	if (input.isKeyDown(Keyboard::W)) {
-		move_units[2] += dtSinceLastUpdate();
+		move_units[2] += dt;
 	}
 	else if (input.isKeyDown(Keyboard::S)) {
-		move_units[2] -= dtSinceLastUpdate();
+		move_units[2] -= dt;
 	}
 
 	// Left/Right movement
 	if (input.isKeyDown(Keyboard::A)) {
-		move_units[0] -= dtSinceLastUpdate();
+		move_units[0] -= dt;
 	}
 	else if (input.isKeyDown(Keyboard::D)) {
-		move_units[0] += dtSinceLastUpdate();
+		move_units[0] += dt;
 	}
 
 	// Up/Down movement
 	if (input.isKeyDown(Keyboard::Space)) {
-		move_units[1] += dtSinceLastUpdate();
+		move_units[1] += dt;
 	}
 	else if (input.isKeyDown(Keyboard::LeftControl)) {
-		move_units[1] -= dtSinceLastUpdate();
+		move_units[1] -= dt;
 	}
 
 
@@ -153,12 +155,13 @@ void CameraMotorSystem::move(CameraMovement& mv, Transform& transform) const {
 
 	if (velocity_mag != 0.0f) {
 
+		const auto dt = static_cast<f32>(dtSinceLastUpdate());
+
 		// Move the camera
 		XMVECTOR movement = XMVectorZero();
-
-		movement += transform.getWorldAxisX() * mv.getVelocity()[0] * dtSinceLastUpdate();
-		movement += transform.getWorldAxisY() * mv.getVelocity()[1] * dtSinceLastUpdate();
-		movement += transform.getWorldAxisZ() * mv.getVelocity()[2] * dtSinceLastUpdate();
+		movement += transform.getWorldAxisX() * mv.getVelocity()[0] * dt;
+		movement += transform.getWorldAxisY() * mv.getVelocity()[1] * dt;
+		movement += transform.getWorldAxisZ() * mv.getVelocity()[2] * dt;
 
 		transform.move(movement);
 
@@ -170,14 +173,16 @@ void CameraMotorSystem::move(CameraMovement& mv, Transform& transform) const {
 
 void CameraMotorSystem::decelerate(CameraMovement& mv) const {
 
-	f32 decel_amount;
+	f32   decel_amount;
 	f32_3 velocity = mv.getVelocity();
+
+	const auto dt = static_cast<f32>(dtSinceLastUpdate());
 
 	// Decelerate in each direction if not moving in that
 	// direction and the current velocity isn't 0.
 	if (!mv.isMovingX() && velocity[0] != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity[0]) * mv.getDeceleration() * dtSinceLastUpdate();
+		decel_amount = copysign(1.0f, velocity[0]) * mv.getDeceleration() * dt;
 
 		if (abs(decel_amount) > abs(velocity[0])) {
 			velocity[0] = 0.0f;
@@ -189,7 +194,7 @@ void CameraMotorSystem::decelerate(CameraMovement& mv) const {
 
 	if (!mv.isMovingY() && velocity[1] != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity[1]) * mv.getDeceleration() * dtSinceLastUpdate();
+		decel_amount = copysign(1.0f, velocity[1]) * mv.getDeceleration() * dt;
 
 		if (abs(decel_amount) > abs(velocity[1])) {
 			velocity[1] = 0.0f;
@@ -201,7 +206,7 @@ void CameraMotorSystem::decelerate(CameraMovement& mv) const {
 
 	if (!mv.isMovingZ() && velocity[2] != 0.0f) {
 
-		decel_amount = copysign(1.0f, velocity[2]) * mv.getDeceleration() * dtSinceLastUpdate();
+		decel_amount = copysign(1.0f, velocity[2]) * mv.getDeceleration() * dt;
 
 		if (abs(decel_amount) > abs(velocity[2])) {
 			velocity[2] = 0.0f;

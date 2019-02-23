@@ -5,13 +5,14 @@
 #include "components/motor/camera_movement.h"
 #include "scene/components/transform/transform.h"
 
+class Input;
 
 class CameraMotorSystem final : public System<CameraMotorSystem>, public EventListener {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	CameraMotorSystem() = default;
+	CameraMotorSystem(const Input& input);
 	CameraMotorSystem(const CameraMotorSystem&) = delete;
 	CameraMotorSystem(CameraMotorSystem&&) = default;
 
@@ -32,16 +33,23 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void update(Engine& engine) override;
+
+	void update() override;
+
+private:
 
 	void registerCallbacks() override;
 
-	void processInput(const Engine& engine, CameraMovement& movement, Transform& transform) const;
+	void processInput(CameraMovement& movement, Transform& transform) const;
 	void updateMovement(CameraMovement& mv, f32_3 units) const;
 	void move(CameraMovement& mv, Transform& transform) const;
 	void decelerate(CameraMovement& mv) const;
 
-private:
-
 	void onGuiFocus(const GuiFocusEvent& event);
+
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+	const Input& input;
 };

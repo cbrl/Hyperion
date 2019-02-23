@@ -5,11 +5,9 @@
 #include "scene/components/transform/transform.h"
 
 
-void AxisRotationSystem::update(Engine& engine) {
+void AxisRotationSystem::update() {
 
-	auto& scene = engine.getScene();
-
-	scene.forEach<AxisRotation>([&](AxisRotation& rotation) {
+	getECS().forEach<AxisRotation>([&](AxisRotation& rotation) {
 
 		if (!rotation.isActive()) return;
 		
@@ -17,14 +15,16 @@ void AxisRotationSystem::update(Engine& engine) {
 		if (!transform) return;
 		if (!transform->isActive()) return;
 
+		const auto dt = static_cast<f32>(dtSinceLastUpdate());
+
 		if (rotation.hasAxis(AxisRotation::Axis::X)) {
-			transform->rotateXClamped(dtSinceLastUpdate() * rotation.getSpeedX(), -XM_PI, XM_PI);
+			transform->rotateXClamped(dt * rotation.getSpeedX(), -XM_PI, XM_PI);
 		}
 		if (rotation.hasAxis(AxisRotation::Axis::Y)) {
-			transform->rotateYClamped(dtSinceLastUpdate() * rotation.getSpeedY(), -XM_PI, XM_PI);
+			transform->rotateYClamped(dt * rotation.getSpeedY(), -XM_PI, XM_PI);
 		}
 		if (rotation.hasAxis(AxisRotation::Axis::Z)) {
-			transform->rotateZClamped(dtSinceLastUpdate() * rotation.getSpeedZ(), -XM_PI, XM_PI);
+			transform->rotateZClamped(dt * rotation.getSpeedZ(), -XM_PI, XM_PI);
 		}
 	});
 }

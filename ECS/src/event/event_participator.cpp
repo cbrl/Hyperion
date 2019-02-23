@@ -41,6 +41,11 @@ void EventListener::unregisterAllEventCallbacks() {
 }
 
 
+void EventListener::doRegisterCallbacks() {
+	registerCallbacks();
+}
+
+
 void EventParticipator::setEventMgr(gsl::not_null<EventMgr*> handler) noexcept {
 	event_mgr = handler;
 }

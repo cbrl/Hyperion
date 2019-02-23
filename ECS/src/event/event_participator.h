@@ -172,6 +172,11 @@ protected:
 
 private:
 
+	// registerCallbacks() is a virtual function. The "friend" declaration doesn't apply to
+	// overrided functions in derived classes, so SystemMgr/ComponentMgr can't call it. This function
+	// solves that by calling registerCallbacks() inside.
+	void doRegisterCallbacks();
+
 	// Make getEventMgr() private
 	using EventParticipator::getEventMgr;
 

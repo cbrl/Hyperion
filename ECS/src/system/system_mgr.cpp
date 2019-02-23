@@ -12,19 +12,20 @@ void SystemMgr::removeSystem(ISystem& system) {
 }
 
 
-void SystemMgr::update(Engine& engine, f32 dt) {
+void SystemMgr::update(f64 dt) {
 
 	// Pre Update
 	for (auto& [index, system] : systems) {
-		
-		system->time_since_last_update += dt;
 
 		if (system->isActive()) {
-			if (system->time_since_last_update > system->update_interval) {
+			system->time_since_last_update += dt; //update system delta time
+
+			if (system->time_since_last_update >= system->update_interval) {
 				system->needs_update = true;
 			}
+
 			if (system->needs_update) {
-				system->preUpdate(engine);
+				system->preUpdate();
 			}
 		}
 	}
@@ -32,14 +33,14 @@ void SystemMgr::update(Engine& engine, f32 dt) {
 	// Update
 	for (auto& [index, system] : systems) {
 		if (system->isActive() && system->needs_update) {
-			system->update(engine);
+			system->update();
 		}
 	}
 
 	// Post Update
 	for (auto& [index, system] : systems) {
 		if (system->isActive() && system->needs_update) {
-			system->postUpdate(engine);
+			system->postUpdate();
 			system->needs_update = false;
 			system->time_since_last_update = 0.0f;
 		}

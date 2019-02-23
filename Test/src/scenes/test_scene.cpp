@@ -7,12 +7,13 @@ TestScene::TestScene()
 }
 
 
-void TestScene::initialize(const Engine& engine) {
-
-	const auto& rendering_mgr  = engine.getRenderingMgr();
-	auto&       device         = rendering_mgr.getDevice();
-	auto&       device_context = rendering_mgr.getDeviceContext();
-	auto&       resource_mgr   = rendering_mgr.getResourceMgr();
+void TestScene::initialize(Engine& engine) {
+	
+	auto& input          = engine.getInput();
+	auto& rendering_mgr  = engine.getRenderingMgr();
+	auto& device         = rendering_mgr.getDevice();
+	auto& device_context = rendering_mgr.getDeviceContext();
+	auto& resource_mgr   = rendering_mgr.getResourceMgr();
 
 	//----------------------------------------------------------------------------------
 	// Add systems
@@ -22,10 +23,10 @@ void TestScene::initialize(const Engine& engine) {
 	addSystem<UserInterface>(engine);
 
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
-	addSystem<CameraMotorSystem>();
+	addSystem<CameraMotorSystem>(input);
 
 	// Mouse rotation system: reads mouse input to rotate an entity (entity requires MouseRotation component)
-	addSystem<MouseRotationSystem>();
+	addSystem<MouseRotationSystem>(input);
 
 	// Axis rotation system: rotates an entity on an axis (entity requires AxisRotation component)
 	addSystem<AxisRotationSystem>();

@@ -2,11 +2,9 @@
 #include "engine/engine.h"
 
 
-void AxisOrbitSystem::update(Engine& engine) {
-	
-	auto& scene      = engine.getScene();
+void AxisOrbitSystem::update() {
 
-	scene.forEach<AxisOrbit>([&] (AxisOrbit& orbit) {
+	getECS().forEach<AxisOrbit>([&] (AxisOrbit& orbit) {
 	
 		if (!orbit.isActive()) return;
 

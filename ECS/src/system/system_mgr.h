@@ -36,7 +36,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void update(Engine& engine, f32 dt);
+	void update(f64 dt);
 
 	template<typename SystemT, typename... ArgsT>
 	SystemT& addSystem(ArgsT&&... args);

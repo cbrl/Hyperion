@@ -7,12 +7,33 @@
 
 class TransformSystem final : public System<TransformSystem>, public EventListener, public EventSender {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 	TransformSystem() = default;
+	TransformSystem(const TransformSystem&) = delete;
+	TransformSystem(TransformSystem&&) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructors
+	//----------------------------------------------------------------------------------
 	~TransformSystem() = default;
 
-	void registerCallbacks() override final;
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	TransformSystem& operator=(const TransformSystem&) = delete;
+	TransformSystem& operator=(TransformSystem&&) noexcept = default;
 
 private:
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+	void registerCallbacks() override;
+
 	void updateWorld(Transform& transform);
 	
 	void onTransformNeedsUpdate(const TransformNeedsUpdate& event);

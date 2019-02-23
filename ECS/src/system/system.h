@@ -4,7 +4,6 @@
 #include "event/event_participator.h"
 
 class ECS;
-class Engine;
 
 
 //----------------------------------------------------------------------------------
@@ -66,6 +65,8 @@ public:
 	// Set the system's state
 	void setActive(bool state) noexcept {
 		active = state;
+		if (!state)
+			time_since_last_update = 0.0;
 	}
 
 	// Get the system's state
@@ -97,19 +98,20 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Actions taken before any systems have executed their main update
-	virtual void preUpdate(Engine& engine) = 0;
+	virtual void preUpdate() = 0;
 
 	// Main update function
-	virtual void update(Engine& engine) = 0;
+	virtual void update() = 0;
 
 	// Actions taken after all systems have executed their main update
-	virtual void postUpdate(Engine& engine) = 0;
+	virtual void postUpdate() = 0;
 
 protected:
 
-	// Retrieve the total time passed since the last update
+	// Retrieve the total time passed since the last update.
+	// Inactive systems do not accumulate time.
 	[[nodiscard]]
-	f32 dtSinceLastUpdate() const noexcept {
+	f64 dtSinceLastUpdate() const noexcept {
 		return time_since_last_update;
 	}
 
@@ -148,8 +150,9 @@ private:
 	f32 update_interval;
 
 	// The time passed since the last update and a flag set when that time exceeds the update
-	// interval. These variables are managed by the System Manager.
-	f32  time_since_last_update;
+	// interval. These variables are managed by the System Manager. This variable is not
+	// updated if the system is inactive.
+	f64  time_since_last_update;
 	bool needs_update;
 };
 
@@ -208,13 +211,13 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Actions taken before any systems have executed their main update
-	void preUpdate(Engine& engine) override {};
+	void preUpdate() override {};
 
 	// Main update function
-	void update(Engine& engine) override {};
+	void update() override{};
 
 	// Actions taken after all systems have executed their main update
-	void postUpdate(Engine& engine) override {};
+	void postUpdate() override{};
 
 public:
 

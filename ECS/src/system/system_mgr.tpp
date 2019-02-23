@@ -11,7 +11,7 @@ SystemT& SystemMgr::addSystem(ArgsT&&... args) {
 	if constexpr (std::is_base_of_v<EventParticipator, SystemT>) {
 		system.setEventMgr(gsl::make_not_null(&event_mgr));
 		if constexpr (std::is_base_of_v<EventListener, SystemT>) {
-			system.registerCallbacks();
+			system.doRegisterCallbacks();
 		}
 	}
 	

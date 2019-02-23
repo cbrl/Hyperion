@@ -5,14 +5,16 @@
 #include "scene/components/transform/transform.h"
 
 
-void MouseRotationSystem::update(Engine& engine) {
+MouseRotationSystem::MouseRotationSystem(const Input& input)
+	:input(input) {
+}
 
-	auto& scene       = engine.getScene();
-	const auto& input = engine.getInput();
+
+void MouseRotationSystem::update() {
 
 	const i32_2 mouse_delta = input.getMouseDelta();
 
-	scene.forEach<MouseRotation>([&](MouseRotation& rotation) {
+	getECS().forEach<MouseRotation>([&](MouseRotation& rotation) {
 
 		if (!rotation.isActive()) return;
 

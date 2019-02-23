@@ -13,7 +13,8 @@
 #include "imgui.h"
 
 
-UserInterface::UserInterface(const Engine& engine) {
+UserInterface::UserInterface(Engine& engine)
+	: engine(engine) {
 	system_menu           = std::make_unique<SystemMenu>(engine);
 	scene_tree            = std::make_unique<SceneTree>();
 	entity_details        = std::make_unique<EntityDetailsWindow>();
@@ -32,17 +33,18 @@ UserInterface::~UserInterface() = default;
 UserInterface& UserInterface::operator=(UserInterface&&) noexcept = default;
 
 
-void UserInterface::update(Engine& engine) {
+void UserInterface::update() {
 
 	//ImGui::ShowDemoWindow();
 	ImGuizmo::BeginFrame();
 
-	auto& device       = engine.getRenderingMgr().getDevice();
-	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
-	auto& scene        = engine.getScene();
+	auto& input        = engine.get().getInput();
+	auto& scene        = engine.get().getScene();
+	auto& device       = engine.get().getRenderingMgr().getDevice();
+	auto& resource_mgr = engine.get().getRenderingMgr().getResourceMgr();
 
 	// Draw the system menu
-	if (engine.getInput().isKeyPressed(Keyboard::F3)) {
+	if (input.isKeyPressed(Keyboard::F3)) {
 		system_menu_open = !system_menu_open;
 	}
 	if (system_menu_open) {
