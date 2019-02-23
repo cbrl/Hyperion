@@ -106,6 +106,9 @@ protected:
 	// Queue an event to be dispatched to all listeners
 	template<typename EventT, typename... ArgsT>
 	void sendEvent(ArgsT&&... args);
+
+	// Make getEventMgr() private
+	using EventParticipator::getEventMgr;
 };
 
 
@@ -153,16 +156,19 @@ protected:
 
 	// Register a single event handling callback function
 	template<typename ClassT, typename EventT>
-	void registerEventCallback(void (ClassT::*Callback)(const EventT* const));
+	void registerEventCallback(void (ClassT::*Callback)(const EventT&));
 
 	// Unregister a single event handling callback function
 	template<typename ClassT, typename EventT>
-	void unregisterEventCallback(void (ClassT::*Callback)(const EventT* const));
+	void unregisterEventCallback(void (ClassT::*Callback)(const EventT&));
 
 	// Unregister all callback functions
 	void unregisterAllEventCallbacks();
 
 private:
+
+	// Make getEventMgr() private
+	using EventParticipator::getEventMgr;
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

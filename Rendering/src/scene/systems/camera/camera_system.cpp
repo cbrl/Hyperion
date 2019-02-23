@@ -36,11 +36,11 @@ void CameraSystem::registerCallbacks() {
 }
 
 
-void CameraSystem::onWindowResize(const WindowResizeEvent* event) {
+void CameraSystem::onWindowResize(const WindowResizeEvent& event) {
 	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-		camera.getViewport().setSize(event->new_size);
+		camera.getViewport().setSize(event.new_size);
 	});
 	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
-		camera.getViewport().setSize(event->new_size);
+		camera.getViewport().setSize(event.new_size);
 	});
 }

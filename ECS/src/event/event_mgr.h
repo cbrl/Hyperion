@@ -55,10 +55,10 @@ private:
 
 	// Add an event callback to the relevant dispatcher
 	template<class EventT>
-	void addEventCallback(IEventDelegate* delegate);
+	void addEventCallback(gsl::not_null<IEventDelegate*> delegate);
 
 	// Remove an event callback
-	void removeEventCallback(IEventDelegate* delegate);
+	void removeEventCallback(gsl::not_null<IEventDelegate*> delegate);
 
 
 private:

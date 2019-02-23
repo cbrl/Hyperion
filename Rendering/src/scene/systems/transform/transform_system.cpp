@@ -35,9 +35,9 @@ void TransformSystem::updateWorld(Transform& transform) {
 }
 
 
-void TransformSystem::onTransformNeedsUpdate(const TransformNeedsUpdate* event) {
+void TransformSystem::onTransformNeedsUpdate(const TransformNeedsUpdate& event) {
 	
-	auto& transform = event->transform.get();
+	auto& transform = event.transform.get();
 	auto* owner     = transform.getOwner().get();
 	auto* parent    = owner->getParent().get();
 
@@ -58,8 +58,8 @@ void TransformSystem::onTransformNeedsUpdate(const TransformNeedsUpdate* event) 
 }
 
 
-void TransformSystem::onParentChanged(const ParentChanged* event) {
-	if (auto* transform = event->entity->getComponent<Transform>()) {
+void TransformSystem::onParentChanged(const ParentChanged& event) {
+	if (auto* transform = event.entity->getComponent<Transform>()) {
 		transform->sendNeedsUpdateEvent();
 	}
 }

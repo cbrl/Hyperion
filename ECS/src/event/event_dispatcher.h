@@ -33,11 +33,11 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	virtual void dispatch(IEvent* event) = 0;
+	virtual void dispatch(const IEvent& event) = 0;
 
-	virtual void addEventCallback(IEventDelegate* const eventDelegate) = 0;
+	virtual void addEventCallback(gsl::not_null<IEventDelegate*> eventDelegate) = 0;
 
-	virtual void removeEventCallback(IEventDelegate* eventDelegate) = 0;
+	virtual void removeEventCallback(gsl::not_null<IEventDelegate*> eventDelegate) = 0;
 
 	[[nodiscard]]
 	virtual size_t getEventCallbackCount() const noexcept = 0;
@@ -83,17 +83,17 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Send an event to all listeners
-	void dispatch(IEvent* event) override final;
+	void dispatch(const IEvent& event) override;
 
 	// Add an event callback delegate to this dispatcher
-	void addEventCallback(IEventDelegate* delegate) override final;
+	void addEventCallback(gsl::not_null<IEventDelegate*> delegate) override;
 
 	// Remove an event callback delegate from this dispatcher
-	void removeEventCallback(IEventDelegate* delegate) override final;
+	void removeEventCallback(gsl::not_null<IEventDelegate*> delegate) override;
 
 	// Get the number of callback delegates in this dispatcher
 	[[nodiscard]]
-	size_t getEventCallbackCount() const noexcept override final;
+	size_t getEventCallbackCount() const noexcept override;
 
 	
 private:

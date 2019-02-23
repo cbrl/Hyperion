@@ -32,7 +32,8 @@ void EventListener::unregisterAllEventCallbacks() {
 
 	// Unsubcribe from all events
 	for (auto* callback : registered_callbacks) {
-		getEventMgr().removeEventCallback(callback);
+		if (callback)
+			getEventMgr().removeEventCallback(gsl::make_not_null(callback));
 	}
 
 	registered_callbacks.clear();

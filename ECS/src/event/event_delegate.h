@@ -31,7 +31,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	virtual void invoke(const IEvent* e) = 0;
+	virtual void invoke(const IEvent& e) = 0;
 
 	[[nodiscard]]
 	virtual size_t getDelegateID() const noexcept = 0;
@@ -53,7 +53,7 @@ public:
 //----------------------------------------------------------------------------------
 template<typename ClassT, typename EventT>
 class EventDelegate final : public IEventDelegate {
-	using callback = void (ClassT::*)(const EventT*);
+	using callback = void (ClassT::*)(const EventT&);
 
 public:
 	//----------------------------------------------------------------------------------
@@ -85,22 +85,22 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void invoke(const IEvent* e) override final {
-		std::invoke(function, receiver, reinterpret_cast<const EventT*>(e));
+	void invoke(const IEvent& e) override {
+		std::invoke(function, receiver, static_cast<const EventT&>(e));
 	}
 
 	[[nodiscard]]
-	size_t getDelegateID() const noexcept override final {
+	size_t getDelegateID() const noexcept override {
 		return delegate_index;
 	}
 
 	[[nodiscard]]
-	std::type_index getEventID() const noexcept override final {
+	std::type_index getEventID() const noexcept override {
 		return EventT::static_index;
 	}
 
 	[[nodiscard]]
-	bool operator==(const IEventDelegate& other) const noexcept override final {
+	bool operator==(const IEventDelegate& other) const noexcept override {
 		if (this->getDelegateID() != other.getDelegateID())
 			return false;
 

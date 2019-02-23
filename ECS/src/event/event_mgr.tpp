@@ -4,11 +4,12 @@ void EventMgr::send(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
 
 	// allocate memory to store event data
-	void* mem = nullptr;
+	EventT* mem = nullptr;
 	try {
 		// add new event to buffer and event storage
-		mem = event_pool.allocate(sizeof(EventT), alignof(EventT));
-		events.emplace_back(new (mem) EventT(std::forward<ArgsT>(args)...));
+		mem = static_cast<EventT*>(event_pool.allocate(sizeof(EventT), alignof(EventT)));
+		new(mem) EventT(std::forward<ArgsT>(args)...);
+		events.push_back(mem);
 	}
 	catch (const std::exception& e) {
 		Logger::log(LogLevel::err, "Could not allocate memory for event: ", e.what());
@@ -17,7 +18,7 @@ void EventMgr::send(ArgsT&&... args) {
 
 
 template <class EventT>
-void EventMgr::addEventCallback(IEventDelegate* delegate) {
+void EventMgr::addEventCallback(gsl::not_null<IEventDelegate*> delegate) {
 	auto index = EventT::static_index;
 
 	auto it = event_dispatchers.find(index);

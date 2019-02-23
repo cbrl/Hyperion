@@ -13,5 +13,5 @@ public:
 	void update(Engine& engine) override final;
 
 private:
-	void onWindowResize(const WindowResizeEvent* event);
+	void onWindowResize(const WindowResizeEvent& event);
 };

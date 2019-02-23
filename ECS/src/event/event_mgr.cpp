@@ -26,18 +26,17 @@ void EventMgr::dispatchEvents() {
 		}
 
 		if (auto it = event_dispatchers.find(event->getID()); it != event_dispatchers.end()) {
-			it->second->dispatch(event);
+			it->second->dispatch(*event);
 
 			// update last index, after dispatch operation there could be new events
 			last_index = events.size();
 		}
 	}
 
-	// reset
-	clearEventBuffer();
+	clearEventBuffer(); //reset
 }
 
-void EventMgr::removeEventCallback(IEventDelegate* eventDelegate) {
+void EventMgr::removeEventCallback(gsl::not_null<IEventDelegate*> eventDelegate) {
 	auto index = eventDelegate->getEventID();
 	if (auto it = event_dispatchers.find(index); it != event_dispatchers.end()) {
 		it->second->removeEventCallback(eventDelegate);

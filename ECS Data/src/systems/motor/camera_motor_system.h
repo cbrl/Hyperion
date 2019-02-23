@@ -43,5 +43,5 @@ public:
 
 private:
 
-	void onGuiFocus(const GuiFocusEvent* event);
+	void onGuiFocus(const GuiFocusEvent& event);
 };

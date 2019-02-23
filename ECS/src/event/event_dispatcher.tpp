@@ -12,7 +12,7 @@ EventDispatcher<EventT>::~EventDispatcher() {
 
 
 template<typename EventT>
-void EventDispatcher<EventT>::dispatch(IEvent* event) {
+void EventDispatcher<EventT>::dispatch(const IEvent& event) {
 	delegate_list_locked = true;
 
 	// Remove pending delegates
@@ -34,7 +34,7 @@ void EventDispatcher<EventT>::dispatch(IEvent* event) {
 
 
 template<typename EventT>
-void EventDispatcher<EventT>::addEventCallback(IEventDelegate* delegate) {
+void EventDispatcher<EventT>::addEventCallback(gsl::not_null<IEventDelegate*> delegate) {
 	auto result = std::find_if(pending_remove_delegates.begin(), pending_remove_delegates.end(),
 		[&](typename decltype(event_delegates)::iterator& it) {
 			return (*it)->operator==(*delegate);
@@ -51,7 +51,7 @@ void EventDispatcher<EventT>::addEventCallback(IEventDelegate* delegate) {
 
 
 template<typename EventT>
-void EventDispatcher<EventT>::removeEventCallback(IEventDelegate* delegate) {
+void EventDispatcher<EventT>::removeEventCallback(gsl::not_null<IEventDelegate*> delegate) {
 
 	auto result = std::find_if(event_delegates.begin(), event_delegates.end(), [&](std::unique_ptr<IEventDelegate>& other) {
 		return other->operator==(*delegate);

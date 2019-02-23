@@ -19,7 +19,7 @@ void EventSender::sendEvent(ArgsT&&... args) {
 //----------------------------------------------------------------------------------
 
 template <typename ClassT, typename EventT>
-void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT* const)) {
+void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT&)) {
 
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
 
@@ -32,12 +32,12 @@ void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT*
 
 	if (result == registered_callbacks.end()) {
 		registered_callbacks.push_back(delegate);
-		getEventMgr().addEventCallback<EventT>(delegate);
+		getEventMgr().addEventCallback<EventT>(gsl::make_not_null(delegate));
 	}
 }
 
 template <typename ClassT, typename EventT>
-void EventListener::unregisterEventCallback(void (ClassT::*Callback)(const EventT* const)) {
+void EventListener::unregisterEventCallback(void (ClassT::*Callback)(const EventT&)) {
 
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
 
@@ -48,7 +48,7 @@ void EventListener::unregisterEventCallback(void (ClassT::*Callback)(const Event
 	});
 
 	if (result != registered_callbacks.end()) {
-		getEventMgr().removeEventCallback(&(*result));
+		getEventMgr().removeEventCallback(gsl::make_not_null(&(*result)));
 		registered_callbacks.erase(result);
 	}
 }

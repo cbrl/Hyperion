@@ -37,8 +37,8 @@ void CameraMotorSystem::registerCallbacks() {
 }
 
 
-void CameraMotorSystem::onGuiFocus(const GuiFocusEvent* event) {
-	this->setActive(!event->keyboard_focus);
+void CameraMotorSystem::onGuiFocus(const GuiFocusEvent& event) {
+	this->setActive(!event.keyboard_focus);
 }
 
 

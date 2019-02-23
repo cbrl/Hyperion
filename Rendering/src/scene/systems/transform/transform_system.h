@@ -11,9 +11,10 @@ public:
 	~TransformSystem() = default;
 
 	void registerCallbacks() override final;
-	void onTransformNeedsUpdate(const TransformNeedsUpdate* event);
-	void onParentChanged(const ParentChanged* event);
 
 private:
 	void updateWorld(Transform& transform);
+	
+	void onTransformNeedsUpdate(const TransformNeedsUpdate& event);
+	void onParentChanged(const ParentChanged& event);
 };
