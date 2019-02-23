@@ -118,9 +118,11 @@ protected:
 	// Member Functions - ECS
 	//----------------------------------------------------------------------------------
 
+	// Get a reference to the ECS this system is a part of. The reference is assigned
+	// after construction, so this function cannot be called in a system's constructor.
 	[[nodiscard]]
 	ECS& getECS() {
-		assert(ecs != nullptr && "ISystem::ecs == nullptr");
+		assert(ecs != nullptr && "ISystem::ecs == nullptr (Was getECS() called in a system's constructor?)");
 		return *ecs;
 	}
 
@@ -135,8 +137,7 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// A pointer to the ECS that created the system. Useful for iterating over
-	// components while processing an event.
+	// A pointer to the ECS that created the system.
 	ECS* ecs;
 
 	// Is this system enabled?
@@ -159,7 +160,8 @@ private:
 // System
 //----------------------------------------------------------------------------------
 //
-// Base class that all unique systems will derive from
+// Base class that all unique systems will derive from. Systems have a reference
+// to the ECS that created them, allowing access to ECS functions by default.
 //
 //----------------------------------------------------------------------------------
 
@@ -206,16 +208,16 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Actions taken before any systems have executed their main update
-	void preUpdate(Engine& engine) override{};
+	void preUpdate(Engine& engine) override {};
 
 	// Main update function
-	void update(Engine& engine) override{};
+	void update(Engine& engine) override {};
 
 	// Actions taken after all systems have executed their main update
-	void postUpdate(Engine& engine) override{};
-
+	void postUpdate(Engine& engine) override {};
 
 public:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------

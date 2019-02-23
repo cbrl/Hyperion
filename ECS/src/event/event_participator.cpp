@@ -12,7 +12,8 @@ EventParticipator::EventParticipator() noexcept
 
 
 EventMgr& EventParticipator::getEventMgr() const noexcept {
-	assert(event_mgr != nullptr && "EventParticipator::event_handler == nullptr");
+	assert(event_mgr != nullptr &&
+	       "EventParticipator::event_handler == nullptr (Was sendEvent() called in a component/system constructor?");
 	return *event_mgr;
 }
 

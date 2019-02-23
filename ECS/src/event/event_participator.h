@@ -50,6 +50,9 @@ protected:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+
+	// Get a reference to the event manager of the ECS this participator belongs to. The
+	// reference is assigned after construction, so this function 
 	[[nodiscard]]
 	EventMgr& getEventMgr() const noexcept;
 
@@ -76,7 +79,6 @@ private:
 //----------------------------------------------------------------------------------
 class EventSender : public virtual EventParticipator {
 public:
-
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -107,6 +109,8 @@ protected:
 	template<typename EventT, typename... ArgsT>
 	void sendEvent(ArgsT&&... args);
 
+private:
+
 	// Make getEventMgr() private
 	using EventParticipator::getEventMgr;
 };
@@ -121,8 +125,10 @@ protected:
 //
 //----------------------------------------------------------------------------------
 class EventListener : public virtual EventParticipator {
-public:
+	friend class ComponentMgr;
+	friend class SystemMgr;
 
+public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -143,6 +149,7 @@ public:
 	EventListener& operator=(const EventListener&) = delete;
 	EventListener& operator=(EventListener&&) noexcept = default;
 
+protected:
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
@@ -151,8 +158,6 @@ public:
 	// Register event handling callback functions. Will be called automatically by the
 	// component/system manager. This function should contain calls to registerEventCallback().
 	virtual void registerCallbacks() = 0;
-
-protected:
 
 	// Register a single event handling callback function
 	template<typename ClassT, typename EventT>

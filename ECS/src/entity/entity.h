@@ -168,8 +168,8 @@ public:
 	template<typename ActionT>
 	void forEachChildRecursive(ActionT&& act);
 
-
 private:
+
 	// Set the component manager pointer. Called by EntityMgr.
 	void setComponentMgr(gsl::not_null<ComponentMgr*> mgr);
 
@@ -182,9 +182,8 @@ private:
 	void sendParentChangedEvent();
 
 
-private:
 	//----------------------------------------------------------------------------------
-	// Member Variables
+	// Member Variables - This
 	//----------------------------------------------------------------------------------
 
 	// The entity's name

@@ -71,6 +71,7 @@ public:
 	}
 
 private:
+
 	void setOwner(EntityPtr owner_ptr) {
 		owner = owner_ptr;
 	}
@@ -79,11 +80,10 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-protected:
+
 	// Is the component active?
 	bool active;
 
-private:
 	// The entity that owns this component. Set on creation in IEntity.
 	EntityPtr owner;
 };
@@ -133,7 +133,6 @@ public:
 	}
 
 
-public:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
