@@ -1,8 +1,8 @@
 #include "axis_rotation_system.h"
 
 #include "engine/engine.h"
-#include "components/motor/axis_rotation.h"
 #include "scene/components/transform/transform.h"
+#include "scenes/test_scene/components/motor/axis_rotation.h"
 
 
 void AxisRotationSystem::update() {

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "system/system.h"
-#include "events/gui_focus_event.h"
-#include "components/motor/camera_movement.h"
+#include "scene/events/core_events.h"
 #include "scene/components/transform/transform.h"
+#include "scenes/test_scene/components/motor/camera_movement.h"
 
 class Input;
 

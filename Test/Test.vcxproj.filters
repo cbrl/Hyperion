@@ -15,21 +15,111 @@
     <Filter Include="Source Files\scenes">
       <UniqueIdentifier>{8e1cd3e1-c542-4d70-82eb-6032bd988edd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\scenes\test_scene">
+      <UniqueIdentifier>{0011b69c-48ad-4402-800a-79d33894d1c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scenes\test_scene\components">
+      <UniqueIdentifier>{f978182e-1690-4909-bd29-b45063aa4449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scenes\test_scene\entities">
+      <UniqueIdentifier>{3ab7ceb4-83ab-4a87-87b7-ecbb455bfda7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scenes\test_scene\events">
+      <UniqueIdentifier>{aa07b8d6-f792-4830-9a5b-12e905489142}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scenes\test_scene\systems">
+      <UniqueIdentifier>{45193d0c-8655-487d-82b0-530e3036593b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scenes\components">
+      <UniqueIdentifier>{ff122848-89f8-4a45-b2ca-5c5434c27bdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scenes\entities">
+      <UniqueIdentifier>{114decdd-5054-4a38-bb68-7d1366840b48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scenes\events">
+      <UniqueIdentifier>{5b6865a6-c30f-4fb7-9e28-997380d276d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scenes\systems">
+      <UniqueIdentifier>{1762c263-df0c-41bd-a7ab-5eab84bc8a03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scenes\components\motor">
+      <UniqueIdentifier>{bb80c402-1f80-4be5-b87b-039d0d5fcf11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scenes\entities\basic">
+      <UniqueIdentifier>{0126a8f6-7133-48f0-8386-60bb50b00524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scenes\systems\motor">
+      <UniqueIdentifier>{33b6670f-ff83-4484-8dd4-ccd2375144f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scenes\test_scene\systems\motor">
+      <UniqueIdentifier>{6b89767e-c206-4f35-a31a-019097df178f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\scenes\test_scene.h">
-      <Filter>Header Files\scenes</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\scenes\test_scene.cpp">
-      <Filter>Source Files\scenes</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\test_scene\test_scene.cpp">
+      <Filter>Source Files\scenes\test_scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\test_scene\systems\motor\axis_orbit_system.cpp">
+      <Filter>Source Files\scenes\test_scene\systems\motor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\test_scene\systems\motor\axis_rotation_system.cpp">
+      <Filter>Source Files\scenes\test_scene\systems\motor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\test_scene\systems\motor\camera_motor_system.cpp">
+      <Filter>Source Files\scenes\test_scene\systems\motor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\test_scene\systems\motor\mouse_rotation_system.cpp">
+      <Filter>Source Files\scenes\test_scene\systems\motor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\scenes\test_scene\test_scene.h">
+      <Filter>Header Files\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\components\components.h">
+      <Filter>Header Files\scenes\components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\components\motor\axis_orbit.h">
+      <Filter>Header Files\scenes\components\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\components\motor\axis_rotation.h">
+      <Filter>Header Files\scenes\components\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\components\motor\camera_movement.h">
+      <Filter>Header Files\scenes\components\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\components\motor\mouse_rotation.h">
+      <Filter>Header Files\scenes\components\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\entities\entities.h">
+      <Filter>Header Files\scenes\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\entities\basic\player_camera.h">
+      <Filter>Header Files\scenes\entities\basic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\systems\systems.h">
+      <Filter>Header Files\scenes\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\systems\motor\axis_orbit_system.h">
+      <Filter>Header Files\scenes\systems\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\systems\motor\axis_rotation_system.h">
+      <Filter>Header Files\scenes\systems\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\systems\motor\camera_motor_system.h">
+      <Filter>Header Files\scenes\systems\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\systems\motor\mouse_rotation_system.h">
+      <Filter>Header Files\scenes\systems\motor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scenes\test_scene\events\events.h">
+      <Filter>Header Files\scenes\events</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

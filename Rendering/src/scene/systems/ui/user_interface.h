@@ -1,16 +1,17 @@
 #pragma once
 
 #include "system/system.h"
-#include "events/gui_focus_event.h"
+#include "scene/events/core_events.h"
+#include "entity_details_window.h"
 
 
 class Engine;
 class ResourceMgr;
 class Scene;
+class IComponent;
 
 class SystemMenu;
 class SceneTree;
-class EntityDetailsWindow;
 class MetricsWindow;
 class TextEditWindow;
 class TransformManipulator;
@@ -45,6 +46,11 @@ public:
 	void update() override;
 
 	void setUpdateInterval(f32 seconds) noexcept override {}; //UI updates every frame
+
+	template<typename ComponentT>
+	void addComponentDetailsRenderer(gsl::czstring<> name, const std::function<void(IComponent&)>& renderer) {
+		entity_details->addComponentDetailsRenderer<ComponentT>(name, renderer);
+	}
 
 private:
 

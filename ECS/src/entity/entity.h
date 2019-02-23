@@ -103,6 +103,11 @@ public:
 	[[nodiscard]]
 	ComponentT* getComponent();
 
+	// Get all components in this entity
+	[[nodiscard]]
+	const std::unordered_multimap<std::type_index, std::reference_wrapper<IComponent>>&
+	getComponents();
+
 	// Get all components of the specified type
 	template<typename ComponentT>
 	std::vector<std::reference_wrapper<ComponentT>> getAll();

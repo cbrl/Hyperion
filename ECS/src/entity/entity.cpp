@@ -70,6 +70,11 @@ void Entity::removeComponent(IComponent& component) {
 }
 
 
+const decltype(Entity::components)& Entity::getComponents() {
+	return components;
+}
+
+
 void Entity::addChild(EntityPtr child) {
 	if (child.valid()
 	    && child != this_ptr

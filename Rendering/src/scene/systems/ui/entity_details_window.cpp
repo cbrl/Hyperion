@@ -5,6 +5,19 @@
 #include "misc/cpp/imgui_stdlib.h"
 
 
+template<typename ComponentT>
+void DrawComponentState(ComponentT& component, gsl::czstring<> name = nullptr) {
+	if (name) {
+		ImGui::InputText("", const_cast<char*>(name), std::strlen(name), ImGuiInputTextFlags_ReadOnly);
+		ImGui::SameLine();
+	}
+	bool state = component.isActive();
+	if (ImGui::Checkbox("Active", &state))
+		component.setActive(state);
+	ImGui::Spacing();
+}
+
+
 void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
 
 	auto&       device       = engine.getRenderingMgr().getDevice();
@@ -76,6 +89,15 @@ void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
 	// Draw Component Nodes
 	//----------------------------------------------------------------------------------
 
+	// Render user-added component details with their associated renderer, if it exists
+	const auto& components = entity.getComponents();
+	for (const auto& [idx, component] : components) {
+		const auto it = component_renderers.find(component.get().getTypeIndex());
+		if (it != component_renderers.end()) {
+			drawUserComponentNode(it->second.first, component.get(), it->second.second);
+		}
+	}
+
 	// Transform
 	if (auto* transform = entity.getComponent<Transform>()) {
 		drawComponentNode("Transform", *transform); //multiple transforms are technically allowed but only the first is relevant
@@ -138,46 +160,6 @@ void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
 		}
 	}
 
-	// Spot Light
-	if (entity.hasComponent<SpotLight>()) {
-		auto lights = entity.getAll<SpotLight>();
-		for (SpotLight& light : lights) {
-			drawComponentNode("Spot Light", light);
-		}
-	}
-
-	// Camera Movement
-	if (entity.hasComponent<CameraMovement>()) {
-		auto components = entity.getAll<CameraMovement>();
-		for (CameraMovement& comp : components) {
-			drawComponentNode("Camera Movement", comp);
-		}
-	}
-
-	// Mouse Rotation
-	if (entity.hasComponent<MouseRotation>()) {
-		auto components = entity.getAll<MouseRotation>();
-		for (MouseRotation& comp : components) {
-			drawComponentNode("Mouse Rotation", comp);
-		}
-	}
-
-	// Axis Rotation
-	if (entity.hasComponent<AxisRotation>()) {
-		auto components = entity.getAll<AxisRotation>();
-		for (AxisRotation& comp : components) {
-			drawComponentNode("Axis Rotation", comp);
-		}
-	}
-
-	// Axis Orbit
-	if (entity.hasComponent<AxisOrbit>()) {
-		auto components = entity.getAll<AxisOrbit>();
-		for (AxisOrbit& comp : components) {
-			drawComponentNode("Axis Orbit", comp);
-		}
-	}
-
 	ImGui::End(); //"Properties"
 }
 
@@ -188,7 +170,25 @@ void EntityDetailsWindow::drawComponentNode(gsl::czstring<> text, T& component, 
 	bool dont_delete = true;
 	ImGui::PushID(&component);
 	if (ImGui::CollapsingHeader(text, &dont_delete)) {
+		DrawComponentState(component);
 		drawDetails(component, std::forward<ArgsT>(args)...);
+	}
+	ImGui::PopID();
+	if (!dont_delete) {
+		component.getOwner()->removeComponent(component);
+	}
+}
+
+
+void EntityDetailsWindow::drawUserComponentNode(gsl::czstring<> text,
+                                                IComponent& component,
+                                                const ComponentDetailsFunc& draw_func) {
+	
+	bool dont_delete = true;
+	ImGui::PushID(&component);
+	if (ImGui::CollapsingHeader(text, &dont_delete)) {
+		DrawComponentState(component);
+		draw_func(component);
 	}
 	ImGui::PopID();
 	if (!dont_delete) {
@@ -248,23 +248,8 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, EntityPtr entity_
 }
 
 
-template<typename T>
-void DrawComponentState(T& component, gsl::czstring<> name = nullptr) {
-	if (name) {
-		ImGui::InputText("", const_cast<char*>(name), std::strlen(name), ImGuiInputTextFlags_ReadOnly);
-		ImGui::SameLine();
-	}
-	bool state = component.isActive();
-	if (ImGui::Checkbox("Active", &state))
-		component.setActive(state);
-	ImGui::Spacing();
-}
-
-
 template<>
 void EntityDetailsWindow::drawDetails(Transform& transform) {
-
-	DrawComponentState(transform);
 
 	f32_3 position;
 	f32_3 rotation;
@@ -421,8 +406,6 @@ void DrawCameraSettings(CameraSettings& settings) {
 template<>
 void EntityDetailsWindow::drawDetails(PerspectiveCamera& camera) {
 
-	DrawComponentState(camera);
-
 	//----------------------------------------------------------------------------------
 	// FOV
 	//----------------------------------------------------------------------------------
@@ -465,8 +448,6 @@ void EntityDetailsWindow::drawDetails(PerspectiveCamera& camera) {
 template<>
 void EntityDetailsWindow::drawDetails(OrthographicCamera& camera) {
 
-	DrawComponentState(camera);
-
 	//----------------------------------------------------------------------------------
 	// Ortho Size
 	//----------------------------------------------------------------------------------
@@ -506,42 +487,7 @@ void EntityDetailsWindow::drawDetails(OrthographicCamera& camera) {
 
 
 template<>
-void EntityDetailsWindow::drawDetails(CameraMovement& movement) {
-
-	DrawComponentState(movement);
-
-	f32 max_velocity = movement.getMaxVelocity();
-	f32 acceleration = movement.getAcceleration();
-	f32 deceleration = movement.getDeceleration();
-
-	if (ImGui::InputFloat("Max Velocity", &max_velocity))
-		movement.setMaxVelocity(max_velocity);
-
-	if (ImGui::InputFloat("Acceleration", &acceleration))
-		movement.setAcceleration(acceleration);
-
-	if (ImGui::InputFloat("Deceleration", &deceleration))
-		movement.setDeceleration(deceleration);
-}
-
-
-template<>
-void EntityDetailsWindow::drawDetails(MouseRotation& rotation) {
-
-	DrawComponentState(rotation);
-
-	f32 sensitivity = rotation.getSensitivity();
-
-	if (ImGui::DragFloat("Sensitivity", &sensitivity, 0.01f, 0.0f, FLT_MAX)) {
-		rotation.setSensitivity(sensitivity);
-	}
-}
-
-
-template<>
 void EntityDetailsWindow::drawDetails(Text& text) {
-
-	DrawComponentState(text);
 
 	std::string str = WstrToStr(text.getText());
 
@@ -553,8 +499,6 @@ void EntityDetailsWindow::drawDetails(Text& text) {
 
 template<>
 void EntityDetailsWindow::drawDetails(Model& model, ResourceMgr& resource_mgr) {
-
-	DrawComponentState(model);
 
 	ImGui::Separator();
 
@@ -640,8 +584,6 @@ void EntityDetailsWindow::drawResourceMapComboBox(const char* name,
 template<>
 void EntityDetailsWindow::drawDetails(AmbientLight& light) {
 
-	DrawComponentState(light);
-
 	auto color = light.getColor();
 	if (ImGui::ColorEdit3("Ambient Color", color.data()))
 		light.setColor(color);
@@ -650,8 +592,6 @@ void EntityDetailsWindow::drawDetails(AmbientLight& light) {
 
 template<>
 void EntityDetailsWindow::drawDetails(DirectionalLight& light) {
-
-	DrawComponentState(light);
 
 	// Base Color
 	ImGui::ColorEdit3("Base Color", light.getBaseColor().data());
@@ -681,8 +621,6 @@ void EntityDetailsWindow::drawDetails(DirectionalLight& light) {
 template<>
 void EntityDetailsWindow::drawDetails(PointLight& light) {
 
-	DrawComponentState(light);
-
 	// Base Color
 	ImGui::ColorEdit3("Base Color", light.getBaseColor().data());
 
@@ -708,8 +646,6 @@ void EntityDetailsWindow::drawDetails(PointLight& light) {
 
 template<>
 void EntityDetailsWindow::drawDetails(SpotLight& light) {
-
-	DrawComponentState(light);
 
 	// Base Color
 	ImGui::ColorEdit3("Base Color", light.getBaseColor().data());
@@ -741,77 +677,4 @@ void EntityDetailsWindow::drawDetails(SpotLight& light) {
 	auto shadows = light.castsShadows();
 	if (ImGui::Checkbox("Shadows", &shadows))
 		light.setShadows(shadows);
-}
-
-
-template<>
-void EntityDetailsWindow::drawDetails(AxisRotation& rotation) {
-
-	DrawComponentState(rotation);
-
-	//----------------------------------------------------------------------------------
-	// X Rotation
-	//----------------------------------------------------------------------------------
-	bool x_enable = rotation.hasAxis(AxisRotation::Axis::X);
-
-	if (ImGui::Checkbox("X Axis", &x_enable)) {
-		if (x_enable)
-			rotation.addAxis(AxisRotation::Axis::X);
-		else
-			rotation.removeAxis(AxisRotation::Axis::X);
-	}
-	if (x_enable) {
-		f32 speed_x = rotation.getSpeedX();
-		if (ImGui::DragFloat("X Speed", &speed_x, 0.05f, -FLT_MAX, FLT_MAX)) {
-			rotation.setSpeedX(speed_x);
-		}
-	}
-
-	//----------------------------------------------------------------------------------
-	// Y Rotation
-	//----------------------------------------------------------------------------------
-	bool y_enable = rotation.hasAxis(AxisRotation::Axis::Y);
-
-	if (ImGui::Checkbox("Y Axis", &y_enable)) {
-		if (y_enable)
-			rotation.addAxis(AxisRotation::Axis::Y);
-		else
-			rotation.removeAxis(AxisRotation::Axis::Y);
-	}
-	if (y_enable) {
-		f32 speed_y = rotation.getSpeedY();
-		if (ImGui::DragFloat("Y Speed", &speed_y, 0.05f, -FLT_MAX, FLT_MAX)) {
-			rotation.setSpeedY(speed_y);
-		}
-	}
-
-	//----------------------------------------------------------------------------------
-	// Z Rotation
-	//----------------------------------------------------------------------------------
-	bool z_enable = rotation.hasAxis(AxisRotation::Axis::Z);
-
-	if (ImGui::Checkbox("Z Axis", &z_enable)) {
-		if (z_enable)
-			rotation.addAxis(AxisRotation::Axis::Z);
-		else
-			rotation.removeAxis(AxisRotation::Axis::Z);
-	}
-	if (z_enable) {
-		f32 speed_z = rotation.getSpeedZ();
-		if (ImGui::DragFloat("Z Speed", &speed_z, 0.05f, -FLT_MAX, FLT_MAX)) {
-			rotation.setSpeedZ(speed_z);
-		}
-	}
-}
-
-
-template<>
-void EntityDetailsWindow::drawDetails(AxisOrbit& orbit) {
-
-	DrawComponentState(orbit);
-
-	auto axis = XMStore<f32_3>(orbit.getAxis());
-	if (ImGui::InputFloat3("Axis", axis.data())) {
-		orbit.setAxis(axis);
-	}
 }

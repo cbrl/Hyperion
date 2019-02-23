@@ -1,5 +1,6 @@
 #include "camera_motor_system.h"
 #include "engine/engine.h"
+#include "scenes/test_scene/components/motor/camera_movement.h"
 
 
 CameraMotorSystem::CameraMotorSystem(const Input& input)

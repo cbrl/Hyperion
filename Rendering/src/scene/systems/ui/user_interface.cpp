@@ -1,7 +1,6 @@
 #include "user_interface.h"
 #include "system_menu.h"
 #include "scene_tree.h"
-#include "entity_details_window.h"
 #include "new_model_menu.h"
 #include "selectable_tree.h"
 #include "text_edit_window.h"

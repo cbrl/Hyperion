@@ -1,12 +1,9 @@
 #pragma once
 
 #include "ecs.h"
-#include "entities/entities.h"
-#include "components/components.h"
-#include "systems/systems.h"
-
 #include "scene/entities/core_entities.h"
 #include "scene/components/core_components.h"
+#include "scene/systems/core_systems.h"
 #include "scene/events/core_events.h"
 
 using namespace EntityTemplates;

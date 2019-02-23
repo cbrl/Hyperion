@@ -174,6 +174,12 @@
     <Filter Include="Source Files\resource\model\material">
       <UniqueIdentifier>{5bd628fa-10e1-4f45-ae23-e389491308cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene\systems\ui">
+      <UniqueIdentifier>{d043af9f-0637-4beb-b00c-6c519abac7ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\systems\ui">
+      <UniqueIdentifier>{df713725-e8ec-4278-8c17-4c6a873b9e53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -265,6 +271,33 @@
     </ClCompile>
     <ClCompile Include="src\resource\model\material\material_factory.cpp">
       <Filter>Source Files\resource\model\material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\entity_details_window.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\metrics_window.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\new_model_menu.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\scene_tree.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\shader_compile_menu.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\system_menu.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\text_edit_window.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\transform_manipulator.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\user_interface.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -447,6 +480,36 @@
     </ClInclude>
     <ClInclude Include="src\rendering_options.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\transform_manipulator.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\user_interface.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\entity_details_window.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\metrics_window.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\new_model_menu.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\scene_tree.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\shader_compile_menu.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\system_menu.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\text_edit_window.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\selectable_tree.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

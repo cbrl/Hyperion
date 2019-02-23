@@ -1,8 +1,8 @@
 #include "mouse_rotation_system.h"
 
 #include "engine/engine.h"
-#include "components/motor/mouse_rotation.h"
 #include "scene/components/transform/transform.h"
+#include "scenes/test_scene/components/motor/mouse_rotation.h"
 
 
 MouseRotationSystem::MouseRotationSystem(const Input& input)

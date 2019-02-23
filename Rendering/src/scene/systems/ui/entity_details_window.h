@@ -9,12 +9,15 @@ class Engine;
 class Input;
 class Scene;
 class ResourceMgr;
+class IComponent;
 class EntityPtr;
 
 class Transform;
 
 
 class EntityDetailsWindow final {
+	using ComponentDetailsFunc = std::function<void(IComponent&)>;
+
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -44,6 +47,14 @@ public:
 	// Draw the details panel for the specified entity
 	void draw(Engine& engine, EntityPtr entity_ptr);
 
+	template<typename ComponentT>
+	void addComponentDetailsRenderer(gsl::czstring<> name, const std::function<void(IComponent&)>& renderer) {
+		static_assert(std::is_base_of_v<IComponent, ComponentT>,
+		              "EntityDetailsWindow::addComponentDetailsRenderer() - Invalid component type specified");
+
+		component_renderers[ComponentT::index] = std::make_pair(name, renderer);
+	}
+
 private:
 
 	// Draw the menu in the entity details window
@@ -51,7 +62,9 @@ private:
 
 	// Draw a node in the tree, and its details if selected
 	template<typename T, typename... ArgsT>
-	void drawComponentNode(gsl::czstring<> text, T& item, ArgsT&&... args);
+	void drawComponentNode(gsl::czstring<> text, T& component, ArgsT&&... args);
+
+	void drawUserComponentNode(gsl::czstring<> text, IComponent& component, const ComponentDetailsFunc& draw_func);
 
 	template<typename ComponentT, typename... ArgsT>
 	void drawDetails(ComponentT& component, ArgsT&&... args);
@@ -76,5 +89,6 @@ private:
 	// Resource Map Combo Box
 	std::vector<std::reference_wrapper<const std::string>> res_map_names;
 
-	//ImGuizmo
+	// Functions to draw the details of user-added components
+	std::unordered_map< std::type_index, std::pair<gsl::czstring<>, ComponentDetailsFunc> > component_renderers;
 };

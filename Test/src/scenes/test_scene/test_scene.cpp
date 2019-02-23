@@ -1,6 +1,12 @@
 #include "test_scene.h"
 #include "engine/engine.h"
 
+#include "components/components.h"
+#include "entities/entities.h"
+#include "events/events.h"
+#include "systems/systems.h"
+
+#include "imgui.h"
 
 TestScene::TestScene()
     : Scene("Test Scene") {
@@ -20,7 +26,8 @@ void TestScene::initialize(Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// User Interface
-	addSystem<UserInterface>(engine);
+	auto& ui = addSystem<UserInterface>(engine);
+	addComponentDetailRenderes(ui);
 
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
 	addSystem<CameraMotorSystem>(input);
@@ -215,6 +222,101 @@ void TestScene::initialize(Engine& engine) {
 	scene_name_text->addComponent<Text>(font);
 	scene_name_text->getComponent<Text>()->setText(StrToWstr(this->getName()));
 	scene_name_text->getComponent<Transform>()->setPosition(f32_3{10, 10, 0});
+}
+
+
+void TestScene::addComponentDetailRenderes(UserInterface& ui) {
+	ui.addComponentDetailsRenderer<CameraMovement>("Camera Movement", [](IComponent& component) -> void {
+		CameraMovement& movement = static_cast<CameraMovement&>(component);
+
+		f32 max_velocity = movement.getMaxVelocity();
+		f32 acceleration = movement.getAcceleration();
+		f32 deceleration = movement.getDeceleration();
+
+		if (ImGui::InputFloat("Max Velocity", &max_velocity))
+			movement.setMaxVelocity(max_velocity);
+
+		if (ImGui::InputFloat("Acceleration", &acceleration))
+			movement.setAcceleration(acceleration);
+
+		if (ImGui::InputFloat("Deceleration", &deceleration))
+			movement.setDeceleration(deceleration);
+	});
+
+	ui.addComponentDetailsRenderer<MouseRotation>("Mouse Rotation", [](IComponent& component) {
+		MouseRotation& rotation = static_cast<MouseRotation&>(component);
+		f32 sensitivity = rotation.getSensitivity();
+
+		if (ImGui::DragFloat("Sensitivity", &sensitivity, 0.01f, 0.0f, FLT_MAX)) {
+			rotation.setSensitivity(sensitivity);
+		}
+	});
+
+	ui.addComponentDetailsRenderer<AxisRotation>("Axis Rotation", [](IComponent& component) {
+		AxisRotation& rotation = static_cast<AxisRotation&>(component);
+
+		//----------------------------------------------------------------------------------
+		// X Rotation
+		//----------------------------------------------------------------------------------
+		bool x_enable = rotation.hasAxis(AxisRotation::Axis::X);
+
+		if (ImGui::Checkbox("X Axis", &x_enable)) {
+			if (x_enable)
+				rotation.addAxis(AxisRotation::Axis::X);
+			else
+				rotation.removeAxis(AxisRotation::Axis::X);
+		}
+		if (x_enable) {
+			f32 speed_x = rotation.getSpeedX();
+			if (ImGui::DragFloat("X Speed", &speed_x, 0.05f, -FLT_MAX, FLT_MAX)) {
+				rotation.setSpeedX(speed_x);
+			}
+		}
+
+		//----------------------------------------------------------------------------------
+		// Y Rotation
+		//----------------------------------------------------------------------------------
+		bool y_enable = rotation.hasAxis(AxisRotation::Axis::Y);
+
+		if (ImGui::Checkbox("Y Axis", &y_enable)) {
+			if (y_enable)
+				rotation.addAxis(AxisRotation::Axis::Y);
+			else
+				rotation.removeAxis(AxisRotation::Axis::Y);
+		}
+		if (y_enable) {
+			f32 speed_y = rotation.getSpeedY();
+			if (ImGui::DragFloat("Y Speed", &speed_y, 0.05f, -FLT_MAX, FLT_MAX)) {
+				rotation.setSpeedY(speed_y);
+			}
+		}
+
+		//----------------------------------------------------------------------------------
+		// Z Rotation
+		//----------------------------------------------------------------------------------
+		bool z_enable = rotation.hasAxis(AxisRotation::Axis::Z);
+
+		if (ImGui::Checkbox("Z Axis", &z_enable)) {
+			if (z_enable)
+				rotation.addAxis(AxisRotation::Axis::Z);
+			else
+				rotation.removeAxis(AxisRotation::Axis::Z);
+		}
+		if (z_enable) {
+			f32 speed_z = rotation.getSpeedZ();
+			if (ImGui::DragFloat("Z Speed", &speed_z, 0.05f, -FLT_MAX, FLT_MAX)) {
+				rotation.setSpeedZ(speed_z);
+			}
+		}
+	});
+
+	ui.addComponentDetailsRenderer<AxisOrbit>("Axis Orbit", [](IComponent& component) {
+		AxisOrbit& orbit = static_cast<AxisOrbit&>(component);
+		auto axis = XMStore<f32_3>(orbit.getAxis());
+		if (ImGui::InputFloat3("Axis", axis.data())) {
+			orbit.setAxis(axis);
+		}
+	});
 }
 
 
