@@ -1,6 +1,6 @@
 template <typename HandleT, typename DataT, size_t chunk_size>
 DataT HandleMap<HandleT, DataT, chunk_size>::operator[](HandleT handle) {
-	bool valid = validHandle(handle);
+	bool valid = isValid(handle);
 	if (!valid) {
 		Logger::log(LogLevel::err, "Invalid handle specified (index: {}, counter: {})", handle.index, handle.counter);
 		assert(false && "HandleMap::operator[] - Invalid handle specified");
@@ -61,7 +61,7 @@ HandleT HandleMap<HandleT, DataT, chunk_size>::createHandle(DataT object) {
 template<typename HandleT, typename DataT, size_t chunk_size>
 void HandleMap<HandleT, DataT, chunk_size>::releaseHandle(HandleT handle) {
 
-	if (!validHandle(handle)) {
+	if (!isValid(handle)) {
 		Logger::log(LogLevel::err, "Invalid handle specified for release (index: {}, counter: {})", handle.index, handle.counter);
 		assert(false && "Invalid handle specified for release");
 		return;
@@ -72,7 +72,7 @@ void HandleMap<HandleT, DataT, chunk_size>::releaseHandle(HandleT handle) {
 
 
 template<typename HandleT, typename DataT, size_t chunk_size>
-bool HandleMap<HandleT, DataT, chunk_size>::validHandle(const HandleT& handle) const noexcept{
+bool HandleMap<HandleT, DataT, chunk_size>::isValid(const HandleT& handle) const noexcept{
 
 	bool valid;
 

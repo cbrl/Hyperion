@@ -9,7 +9,7 @@ template<typename HandleT, typename DataT, size_t chunk_size = 512>
 class HandleMap {
 
 	static_assert(std::is_pointer_v<DataT>,
-	              "HandleMap: invalid DataT. The HandleMap does not store resources, only pointers to a resources.");
+	              "HandleMap: invalid DataT. The HandleMap does not store resources, only pointers to resources.");
 
 private:
 	using table_entry = std::pair<typename HandleT::value_type, DataT>;
@@ -19,7 +19,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	HandleMap() noexcept {
 		allocateChunk();
 	}
@@ -31,18 +30,17 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~HandleMap() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	HandleMap& operator=(const HandleMap& map) = delete;
 	HandleMap& operator=(HandleMap&& map) noexcept = default;
 
-	[[nodiscard]] DataT operator[](HandleT handle);
+	[[nodiscard]]
+	DataT operator[](HandleT handle);
 
 
 	//----------------------------------------------------------------------------------
@@ -54,18 +52,17 @@ public:
 
 	void releaseHandle(HandleT handle);
 
-	bool validHandle(const HandleT& handle) const noexcept;
-
+	bool isValid(const HandleT& handle) const noexcept;
 
 private:
+
 	bool allocateChunk();
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
 	std::vector<table_entry> table;
 };
 

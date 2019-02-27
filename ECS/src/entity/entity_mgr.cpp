@@ -45,6 +45,6 @@ size_t EntityMgr::count() const noexcept {
 }
 
 
-bool EntityMgr::validHandle(handle64 entity) const noexcept {
-	return handle_map.validHandle(entity);
+bool EntityMgr::isValid(handle64 entity) const noexcept {
+	return handle_map.isValid(entity);
 }
