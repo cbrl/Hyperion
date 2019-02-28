@@ -299,6 +299,9 @@
     <ClCompile Include="src\scene\systems\ui\user_interface.cpp">
       <Filter>Source Files\scene\systems\ui</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\file_selector.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rendering_mgr.h">
@@ -509,6 +512,9 @@
       <Filter>Header Files\scene\systems\ui</Filter>
     </ClInclude>
     <ClInclude Include="src\scene\systems\ui\selectable_tree.h">
+      <Filter>Header Files\scene\systems\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\ui\file_selector.h">
       <Filter>Header Files\scene\systems\ui</Filter>
     </ClInclude>
   </ItemGroup>
