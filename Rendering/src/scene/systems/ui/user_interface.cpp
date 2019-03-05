@@ -20,6 +20,8 @@ UserInterface::UserInterface(Engine& engine)
 	metrics               = std::make_unique<MetricsWindow>(engine);
 	text_editor           = std::make_unique<TextEditWindow>();
 	transform_manipulator = std::make_unique<TransformManipulator>();
+
+	ImGui::StyleColorsDark();
 }
 
 
