@@ -15,7 +15,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	TextEditWindow() = default;
+	TextEditWindow();
 	TextEditWindow(const TextEditWindow&) = default;
 	TextEditWindow(TextEditWindow&&) = default;
 
@@ -44,12 +44,19 @@ private:
 	void openFile();
 	void saveFile(bool save_as);
 
+	std::pair<TextEditor, fs::path>& newEditor();
+
+	TextEditor& getCurrEditor();
+	fs::path& getCurrPath();
+
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	TextEditor editor;
-	fs::path current_file;
+	std::vector<std::pair<TextEditor, fs::path>> editors;
+	std::reference_wrapper<std::pair<TextEditor, fs::path>> current_editor;
+	//TextEditor editor;
+	//fs::path current_file;
 
 	ShaderCompileMenu shader_compile_menu;
 };
