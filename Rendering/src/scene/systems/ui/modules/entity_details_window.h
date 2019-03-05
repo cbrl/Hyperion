@@ -9,6 +9,7 @@ class Engine;
 class Input;
 class Scene;
 class ResourceMgr;
+class Texture;
 class IComponent;
 class EntityPtr;
 
@@ -72,8 +73,14 @@ private:
 	template<typename ResourceT>
 	void drawResourceMapComboBox(const char* name,
 	                             const char* preview_text,
-	                             const ResourceMgr& resource_mgr,
+	                             ResourceMgr& resource_mgr,
 	                             std::shared_ptr<ResourceT>& selection_receiver);
+
+	template<>
+	void drawResourceMapComboBox(const char* name,
+	                             const char* preview_text,
+	                             ResourceMgr& resource_mgr,
+	                             std::shared_ptr<Texture>& selection_receiver);
 
 
 	//----------------------------------------------------------------------------------
@@ -81,6 +88,10 @@ private:
 	//----------------------------------------------------------------------------------
 
 	NewModelMenu new_model_menu;
+
+	// Variables used for popups when creating a new texture
+	f32_4       new_color_texture_color;
+	std::string new_file_texture_path;
 
 	// "Parent" Combo Box
 	int entity_names_idx = 0;

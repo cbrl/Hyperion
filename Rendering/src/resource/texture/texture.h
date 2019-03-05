@@ -5,7 +5,7 @@
 #include "resource/resource.h"
 
 
-struct Texture final : public Resource<Texture> {
+class Texture final : public Resource<Texture> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

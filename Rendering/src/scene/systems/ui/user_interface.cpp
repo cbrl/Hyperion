@@ -34,7 +34,7 @@ UserInterface& UserInterface::operator=(UserInterface&&) noexcept = default;
 
 void UserInterface::update() {
 
-	//ImGui::ShowDemoWindow();
+	ImGui::ShowDemoWindow();
 	ImGuizmo::BeginFrame();
 
 	auto& input        = engine.get().getInput();

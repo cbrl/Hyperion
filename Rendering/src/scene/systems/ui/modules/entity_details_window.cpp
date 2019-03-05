@@ -1,5 +1,7 @@
 #include "entity_details_window.h"
 #include "engine/engine.h"
+#include "resource/texture/texture_factory.h"
+#include "os/windows/win_utils.h"
 
 #include "imgui.h"
 #include "misc/cpp/imgui_stdlib.h"
@@ -164,39 +166,6 @@ void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
 }
 
 
-template<typename T, typename... ArgsT>
-void EntityDetailsWindow::drawComponentNode(gsl::czstring<> text, T& component, ArgsT&&... args) {
-
-	bool dont_delete = true;
-	ImGui::PushID(&component);
-	if (ImGui::CollapsingHeader(text, &dont_delete)) {
-		DrawComponentState(component);
-		drawDetails(component, std::forward<ArgsT>(args)...);
-	}
-	ImGui::PopID();
-	if (!dont_delete) {
-		component.getOwner()->removeComponent(component);
-	}
-}
-
-
-void EntityDetailsWindow::drawUserComponentNode(gsl::czstring<> text,
-                                                IComponent& component,
-                                                const ComponentDetailsFunc& draw_func) {
-	
-	bool dont_delete = true;
-	ImGui::PushID(&component);
-	if (ImGui::CollapsingHeader(text, &dont_delete)) {
-		DrawComponentState(component);
-		draw_func(component);
-	}
-	ImGui::PopID();
-	if (!dont_delete) {
-		component.getOwner()->removeComponent(component);
-	}
-}
-
-
 void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, EntityPtr entity_ptr) {
 
 	bool valid_entity = entity_ptr.valid();
@@ -244,6 +213,39 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, EntityPtr entity_
 		}
 
 		ImGui::EndMenu(); //Add Component
+	}
+}
+
+
+template<typename T, typename... ArgsT>
+void EntityDetailsWindow::drawComponentNode(gsl::czstring<> text, T& component, ArgsT&&... args) {
+
+	bool dont_delete = true;
+	ImGui::PushID(&component);
+	if (ImGui::CollapsingHeader(text, &dont_delete)) {
+		DrawComponentState(component);
+		drawDetails(component, std::forward<ArgsT>(args)...);
+	}
+	ImGui::PopID();
+	if (!dont_delete) {
+		component.getOwner()->removeComponent(component);
+	}
+}
+
+
+void EntityDetailsWindow::drawUserComponentNode(gsl::czstring<> text,
+                                                IComponent& component,
+                                                const ComponentDetailsFunc& draw_func) {
+
+	bool dont_delete = true;
+	ImGui::PushID(&component);
+	if (ImGui::CollapsingHeader(text, &dont_delete)) {
+		DrawComponentState(component);
+		draw_func(component);
+	}
+	ImGui::PopID();
+	if (!dont_delete) {
+		component.getOwner()->removeComponent(component);
 	}
 }
 
@@ -551,10 +553,128 @@ void EntityDetailsWindow::drawDetails(Model& model, ResourceMgr& resource_mgr) {
 }
 
 
+template<>
+void EntityDetailsWindow::drawResourceMapComboBox(const char* name,
+                                                  const char* preview_text,
+                                                  ResourceMgr& resource_mgr,
+                                                  std::shared_ptr<Texture>& selection_receiver) {
+
+	// If the combo box is opened, a pointer to the current texture will be
+	// kept in order to prevent it from potentially expiring before ImGui draws it.
+	static std::shared_ptr<Texture> last;
+
+	//----------------------------------------------------------------------------------
+	// Draw the list of textures with a preview
+	//----------------------------------------------------------------------------------
+	if (ImGui::BeginCombo("", preview_text)) {
+		last = selection_receiver;
+
+		const auto& resource_map = resource_mgr.getResourceMap<Texture>();
+		res_map_names.clear();
+
+		if (ImGui::Selectable("None")) {
+			selection_receiver = nullptr;
+		}
+		for (const auto& [key, sharedptr] : resource_map) {
+			if (!sharedptr) continue;
+
+			res_map_names.push_back(std::ref(sharedptr->getGUID()));
+
+			ImGui::Image(sharedptr->get(), {15, 15});
+			ImGui::SameLine();
+			if (ImGui::Selectable(res_map_names.back().get().c_str())) {
+				selection_receiver = sharedptr;
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	ImGui::SameLine();
+
+	
+	//----------------------------------------------------------------------------------
+	// Draw the "new texture" button and popups
+	//----------------------------------------------------------------------------------
+	bool new_file_texture_popup  = false;
+	bool new_color_texture_popup = false;
+
+	ImGui::PushID(name);
+
+	ImGui::SetCursorPosX(ImGui::GetCursorPosX() - (ImGui::GetStyle().ItemSpacing.x * 0.5));
+	if (ImGui::Button("+")) {
+		ImGui::OpenPopup("NewTextureType");
+	}
+	if (ImGui::BeginPopup("NewTextureType")) {
+		if (ImGui::MenuItem("File")) {
+			new_file_texture_popup = true;
+		}
+		if (ImGui::MenuItem("Color")) {
+			new_color_texture_popup = true;
+		}
+		ImGui::EndPopup();
+	}
+
+	if (new_file_texture_popup) {
+		ImGui::OpenPopup("New File Texture");
+	}
+	if (new_color_texture_popup) {
+		ImGui::OpenPopup("New Color Texture");
+	}
+
+	if (ImGui::BeginPopupModal("New File Texture", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		ImGui::Text("Path:");
+		ImGui::InputText("", &new_file_texture_path);
+
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() - ImGui::GetStyle().ItemSpacing.x);
+		if (ImGui::Button("...")) {
+			new_file_texture_path = OpenFileDialog().string();
+		}
+
+		ImGui::Spacing();
+
+		if (ImGui::Button("Load")) {
+			selection_receiver = resource_mgr.getOrCreate<Texture>(StrToWstr(new_file_texture_path));
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Close")) {
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::BeginPopupModal("New Color Texture", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+
+		ImGui::ColorEdit4("Color", new_color_texture_color.data());
+
+		ImGui::Spacing();
+
+		if (ImGui::Button("Create")) {
+			selection_receiver = TextureFactory::CreateColorTexture(resource_mgr, new_color_texture_color);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Close")) {
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::EndPopup();
+	}
+
+	ImGui::PopID();
+
+	
+	//----------------------------------------------------------------------------------
+	// Draw the combo box name
+	//----------------------------------------------------------------------------------
+	ImGui::SameLine();
+	ImGui::Text(name);
+}
+
+
 template<typename ResourceT>
 void EntityDetailsWindow::drawResourceMapComboBox(const char* name,
                                                   const char* preview_text,
-                                                  const ResourceMgr& resource_mgr,
+                                                  ResourceMgr& resource_mgr,
                                                   std::shared_ptr<ResourceT>& selection_receiver) {
 	if (ImGui::BeginCombo(name, preview_text)) {
 		const auto& resource_map = resource_mgr.getResourceMap<ResourceT>();
@@ -568,10 +688,6 @@ void EntityDetailsWindow::drawResourceMapComboBox(const char* name,
 
 			res_map_names.push_back(std::ref(sharedptr->getGUID()));
 
-			if constexpr (std::is_same_v<Texture, ResourceT>) {
-				ImGui::Image(sharedptr->get(), {15, 15});
-				ImGui::SameLine();
-			}
 			if (ImGui::Selectable(res_map_names.back().get().c_str())) {
 				selection_receiver = sharedptr;
 			}
