@@ -52,7 +52,7 @@ public:
 	void endFrame() const;
 
 	// Render the current scene
-	void render(Scene& scene) const;
+	void render(Scene& scene, f32 delta_time) const;
 
 
 	//----------------------------------------------------------------------------------

@@ -74,8 +74,8 @@ void RenderingMgr::onResize() const {
 }
 
 
-void RenderingMgr::render(Scene& scene) const {
-	renderer->render(scene);
+void RenderingMgr::render(Scene& scene, f32 delta_time) const {
+	renderer->render(scene, delta_time);
 }
 
 

@@ -13,12 +13,18 @@ Renderer::Renderer(DisplayConfig& display_config,
                    ResourceMgr& resource_mgr)
 	: device(device)
 	, device_context(device_context)
-	, profiler(device, device_context) {
+    , display_config(display_config)
+	, profiler(device, device_context)
+	, engine_buffer(device) {
 
 	profiler.registerTimestampID("ImGui");
 	profiler.registerTimestampID("Text");
 	profiler.registerTimestampID("Skybox");
 
+	// Bind the engine buffer (stays bound for the engine's lifetime)
+	engine_buffer.bind<Pipeline>(device_context, SLOT_CBUFFER_ENGINE);
+
+	// Create state managers
 	output_mgr       = std::make_unique<OutputMgr>(display_config, device, swap_chain);
 	render_state_mgr = std::make_unique<RenderStateMgr>(device, device_context);
 
@@ -31,12 +37,25 @@ Renderer::Renderer(DisplayConfig& display_config,
 }
 
 
-void Renderer::render(Scene& scene) {
+void Renderer::render(Scene& scene, f32 delta_time) {
 
+	//----------------------------------------------------------------------------------
+	// Update the engine buffer
+	//----------------------------------------------------------------------------------
+	updateBuffers(delta_time);
+
+	
+	//----------------------------------------------------------------------------------
+	// Begin a new profiler frame
+	//----------------------------------------------------------------------------------
 	profiler.beginFrame();
 
-	profiler.beginTimestamp(GPUTimestamps::render_scene);
 
+	profiler.beginTimestamp(GPUTimestamps::render_scene);
+	
+	//----------------------------------------------------------------------------------
+	// Render the scene for each camera
+	//----------------------------------------------------------------------------------
 	scene.forEach<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
 
 		if (!camera.isActive()) return;
@@ -90,6 +109,15 @@ void Renderer::render(Scene& scene) {
 	profiler.update();
 }
 
+
+void Renderer::updateBuffers(f32 delta_time) {
+	EngineBuffer buffer;
+
+	buffer.resolution = display_config.getDisplayResolution();
+	buffer.delta_time = delta_time;
+
+	engine_buffer.updateData(device_context, buffer);
+}
 
 
 // This function template is only called from within this translation unit so it can be defined here as well

@@ -25,9 +25,11 @@ SamplerComparisonState g_pcf_sampler : REG_S(SLOT_SAMPLER_PCF);
 // Constant Buffers
 //----------------------------------------------------------------------------------
 
-//cbuffer EngineBuffer : REG_B(SLOT_CBUFFER_ENGINE) {
-	//float g_dt;
-//}
+cbuffer EngineBuffer : REG_B(SLOT_CBUFFER_ENGINE) {
+	uint2 resolution;
+	float g_dt;
+	float eb_pad0;
+}
 
 
 // Camera fog

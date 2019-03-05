@@ -260,7 +260,7 @@ void Engine::renderFrame() {
 	// Draw a frame
 	if (scene) {
 		scene->tick(*this);
-		rendering_mgr->render(*scene);
+		rendering_mgr->render(*scene, static_cast<f32>(timer->deltaTime()));
 	}
 
 	// Present the frame

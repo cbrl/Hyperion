@@ -61,10 +61,12 @@ public:
 		output_mgr->resizeBuffers();
 	}
 
-	void render(Scene& scene);
+	void render(Scene& scene, f32 delta_time);
 
 
 private:
+	void updateBuffers(f32 delta_time);
+
 	template<typename CameraT>
 	void renderCamera(Scene& scene, const CameraT& camera);
 
@@ -74,13 +76,21 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
+	// Device/Context References
 	ID3D11Device&        device;
 	ID3D11DeviceContext& device_context;
 
-	GPUProfiler profiler;
+	DisplayConfig& display_config;
 
+	// State Managers
 	std::unique_ptr<OutputMgr>      output_mgr;
 	std::unique_ptr<RenderStateMgr> render_state_mgr;
+
+	// Profiles render times for different render stages
+	GPUProfiler profiler;
+
+	// Buffers
+	ConstantBuffer<EngineBuffer> engine_buffer;
 
 	// Renderers
 	std::unique_ptr<LightPass>          light_pass;
@@ -89,6 +99,3 @@ private:
 	std::unique_ptr<BoundingVolumePass> bounding_volume_pass;
 	std::unique_ptr<TextPass>           text_pass;
 };
-
-
-//#include "renderer.tpp"
