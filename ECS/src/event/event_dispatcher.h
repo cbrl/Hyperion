@@ -49,7 +49,7 @@ public:
 // EvenDispatcher
 //----------------------------------------------------------------------------------
 //
-// Holds EventDelegates which listen for events of type EventT, and dispatches
+// Stores EventDelegates that listen for events of type EventT, and dispatches
 // events to them.
 //
 //----------------------------------------------------------------------------------

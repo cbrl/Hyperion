@@ -48,7 +48,7 @@ public:
 //
 // Holds a pointer to a member function in class ClassT which listens for events
 // of type EventT. When an applicable event is sent, the function will be invoked
-// with a pointer to the event.
+// with a reference to the event.
 //
 //----------------------------------------------------------------------------------
 template<typename ClassT, typename EventT>
@@ -80,6 +80,15 @@ public:
 	EventDelegate& operator=(const EventDelegate&) noexcept = default;
 	EventDelegate& operator=(EventDelegate&&) noexcept = default;
 
+	[[nodiscard]]
+	bool operator==(const IEventDelegate& other) const noexcept override {
+		if (this->getDelegateID() != other.getDelegateID())
+			return false;
+
+		return (this->function == static_cast<const EventDelegate&>(other).function &&
+		        this->receiver == static_cast<const EventDelegate&>(other).receiver);
+	}
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
@@ -98,16 +107,6 @@ public:
 	std::type_index getEventID() const noexcept override {
 		return EventT::static_index;
 	}
-
-	[[nodiscard]]
-	bool operator==(const IEventDelegate& other) const noexcept override {
-		if (this->getDelegateID() != other.getDelegateID())
-			return false;
-
-		return (this->function == static_cast<const EventDelegate&>(other).function &&
-		        this->receiver == static_cast<const EventDelegate&>(other).receiver);
-	}
-
 
 private:
 
