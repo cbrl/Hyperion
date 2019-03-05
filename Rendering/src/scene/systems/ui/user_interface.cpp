@@ -1,11 +1,11 @@
 #include "user_interface.h"
-#include "system_menu.h"
-#include "scene_tree.h"
-#include "new_model_menu.h"
-#include "selectable_tree.h"
-#include "text_edit_window.h"
-#include "metrics_window.h"
-#include "transform_manipulator.h"
+#include "modules/system_menu.h"
+#include "modules/scene_tree.h"
+#include "modules/new_model_menu.h"
+#include "modules/selectable_tree.h"
+#include "modules/text_edit_window.h"
+#include "modules/metrics_window.h"
+#include "modules/transform_manipulator.h"
 
 #include "engine/engine.h"
 

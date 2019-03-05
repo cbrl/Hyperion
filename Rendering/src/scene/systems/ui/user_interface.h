@@ -2,7 +2,7 @@
 
 #include "system/system.h"
 #include "scene/events/core_events.h"
-#include "entity_details_window.h"
+#include "modules/entity_details_window.h"
 
 
 class Engine;

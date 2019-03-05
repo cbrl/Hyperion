@@ -167,15 +167,15 @@
     <ClCompile Include="src\scene\systems\camera\camera_system.cpp" />
     <ClCompile Include="src\scene\systems\model\model_system.cpp" />
     <ClCompile Include="src\scene\systems\transform\transform_system.cpp" />
-    <ClCompile Include="src\scene\systems\ui\entity_details_window.cpp" />
-    <ClCompile Include="src\scene\systems\ui\file_selector.cpp" />
-    <ClCompile Include="src\scene\systems\ui\metrics_window.cpp" />
-    <ClCompile Include="src\scene\systems\ui\new_model_menu.cpp" />
-    <ClCompile Include="src\scene\systems\ui\scene_tree.cpp" />
-    <ClCompile Include="src\scene\systems\ui\shader_compile_menu.cpp" />
-    <ClCompile Include="src\scene\systems\ui\system_menu.cpp" />
-    <ClCompile Include="src\scene\systems\ui\text_edit_window.cpp" />
-    <ClCompile Include="src\scene\systems\ui\transform_manipulator.cpp" />
+    <ClCompile Include="src\scene\systems\ui\modules\entity_details_window.cpp" />
+    <ClCompile Include="src\scene\systems\ui\modules\file_selector.cpp" />
+    <ClCompile Include="src\scene\systems\ui\modules\metrics_window.cpp" />
+    <ClCompile Include="src\scene\systems\ui\modules\new_model_menu.cpp" />
+    <ClCompile Include="src\scene\systems\ui\modules\scene_tree.cpp" />
+    <ClCompile Include="src\scene\systems\ui\modules\shader_compile_menu.cpp" />
+    <ClCompile Include="src\scene\systems\ui\modules\system_menu.cpp" />
+    <ClCompile Include="src\scene\systems\ui\modules\text_edit_window.cpp" />
+    <ClCompile Include="src\scene\systems\ui\modules\transform_manipulator.cpp" />
     <ClCompile Include="src\scene\systems\ui\user_interface.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -239,16 +239,16 @@
     <ClInclude Include="src\scene\systems\core_systems.h" />
     <ClInclude Include="src\scene\systems\model\model_system.h" />
     <ClInclude Include="src\scene\systems\transform\transform_system.h" />
-    <ClInclude Include="src\scene\systems\ui\entity_details_window.h" />
-    <ClInclude Include="src\scene\systems\ui\file_selector.h" />
-    <ClInclude Include="src\scene\systems\ui\metrics_window.h" />
-    <ClInclude Include="src\scene\systems\ui\new_model_menu.h" />
-    <ClInclude Include="src\scene\systems\ui\scene_tree.h" />
-    <ClInclude Include="src\scene\systems\ui\selectable_tree.h" />
-    <ClInclude Include="src\scene\systems\ui\shader_compile_menu.h" />
-    <ClInclude Include="src\scene\systems\ui\system_menu.h" />
-    <ClInclude Include="src\scene\systems\ui\text_edit_window.h" />
-    <ClInclude Include="src\scene\systems\ui\transform_manipulator.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\entity_details_window.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\file_selector.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\metrics_window.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\new_model_menu.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\scene_tree.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\selectable_tree.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\shader_compile_menu.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\system_menu.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\text_edit_window.h" />
+    <ClInclude Include="src\scene\systems\ui\modules\transform_manipulator.h" />
     <ClInclude Include="src\scene\systems\ui\user_interface.h" />
   </ItemGroup>
   <ItemGroup>
