@@ -11,6 +11,8 @@ struct GPUTimestamps {
 	static constexpr gsl::czstring<> render_scene       = "Render Scene";
 	static constexpr gsl::czstring<> shadow_maps        = "Shadow Maps";
 	static constexpr gsl::czstring<> forward_render     = "Forward Render";
+	static constexpr gsl::czstring<> forwardplus_render = "Forward+ Render";
+	static constexpr gsl::czstring<> deferred_render    = "Deferred Render";
 	static constexpr gsl::czstring<> render_opaque      = "Render Opaque";
 	static constexpr gsl::czstring<> render_transparent = "Render Transparent";
 };

@@ -132,8 +132,61 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 	const auto  world_to_camera      = transform->getWorldToObjectMatrix();
 	const auto  camera_to_projection = camera.getCameraToProjectionMatrix();
 	const auto  world_to_projection  = world_to_camera * camera_to_projection;
-	const auto* skybox               = camera.getSettings().getSkybox();
+	const auto* skybox               = settings.getSkybox();
 
+	//----------------------------------------------------------------------------------
+	// Render the scene
+	//----------------------------------------------------------------------------------
+	switch (settings.getRenderMode()) {
+		case RenderMode::Forward: {
+			profiler.beginTimestamp(GPUTimestamps::forward_render);
+			renderForward(scene, camera, world_to_projection);
+			profiler.endTimestamp(GPUTimestamps::forward_render);
+			break;
+		}
+		case RenderMode::ForwardPlus: {
+			//profiler.beginTimestamp(GPUTimestamps::forwardplus_render);
+			//renderForwardPlus(scene, camera, world_to_projection);
+			//profiler.endTimestamp(GPUTimestamps::forwardplus_render);
+			break;
+		}
+		case RenderMode::Deferred: {
+			//profiler.beginTimestamp(GPUTimestamps::deferred_render);
+			//renderDeferred(scene, camera, world_to_projection);
+			//profiler.endTimestamp(GPUTimestamps::deferred_render);
+			break;
+		}
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Render wireframes
+	//----------------------------------------------------------------------------------
+	if (settings.hasRenderOption(RenderOptions::Wireframe))
+		forward_pass->renderWireframe(scene, world_to_projection, camera.getSettings().getWireframeColor());
+
+
+	//----------------------------------------------------------------------------------
+	// Render bounding volumes
+	//----------------------------------------------------------------------------------
+	if (settings.hasRenderOption(RenderOptions::BoundingVolume))
+		bounding_volume_pass->render(scene, world_to_projection, camera.getSettings().getBoundingVolumeColor());
+
+
+	//----------------------------------------------------------------------------------
+	// Clear the bound forward state
+	//----------------------------------------------------------------------------------
+	output_mgr->bindEndForward(device_context);
+}
+
+
+template<typename CameraT>
+void XM_CALLCONV Renderer::renderForward(Scene& scene,
+                                         CameraT& camera,
+                                         FXMMATRIX world_to_projection) {
+
+	const auto& settings = camera.getSettings();
+	const auto* skybox   = settings.getSkybox();
 
 	//----------------------------------------------------------------------------------
 	// Process the light buffers
@@ -159,15 +212,14 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 
 
 	//----------------------------------------------------------------------------------
-	// Render objects with forward shader
+	// Default Lighting
 	//----------------------------------------------------------------------------------
-	profiler.beginTimestamp(GPUTimestamps::forward_render);
-
 	if (settings.getLightingMode() == LightingMode::Default) {
 		using model_cref_vector = std::vector<std::reference_wrapper<const Model>>;
 
 		// Sort models by shader type
 		std::unordered_map<PixelShader*, model_cref_vector> sorted_models;
+
 		scene.forEach<Model>([&](Model& model) {
 			if (!model.isActive()) return;
 			auto& mat = model.getMaterial();
@@ -182,6 +234,9 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 			forward_pass->renderTransparent(model_vec, world_to_projection, skybox, shader);
 		}
 	}
+	//----------------------------------------------------------------------------------
+	// Overrided Lighting
+	//----------------------------------------------------------------------------------
 	else {
 		switch (settings.getLightingMode()) {
 			case LightingMode::BRDF:
@@ -197,26 +252,4 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 				break;
 		}
 	}
-
-	profiler.endTimestamp(GPUTimestamps::forward_render);
-
-
-	//----------------------------------------------------------------------------------
-	// Render wireframes
-	//----------------------------------------------------------------------------------
-	if (settings.hasRenderOption(RenderOptions::Wireframe))
-		forward_pass->renderWireframe(scene, world_to_projection, camera.getSettings().getWireframeColor());
-
-
-	//----------------------------------------------------------------------------------
-	// Render bounding volumes
-	//----------------------------------------------------------------------------------
-	if (settings.hasRenderOption(RenderOptions::BoundingVolume))
-		bounding_volume_pass->render(scene, world_to_projection, camera.getSettings().getBoundingVolumeColor());
-
-
-	//----------------------------------------------------------------------------------
-	// Clear the bound forward state
-	//----------------------------------------------------------------------------------
-	output_mgr->bindEndForward(device_context);
 }

@@ -63,15 +63,19 @@ public:
 
 	void render(Scene& scene, f32 delta_time);
 
-
 private:
+
 	void updateBuffers(f32 delta_time);
 
 	template<typename CameraT>
 	void renderCamera(Scene& scene, const CameraT& camera);
 
+	template<typename CameraT>
+	void XM_CALLCONV renderForward(Scene& scene,
+	                               CameraT& camera,
+	                               FXMMATRIX world_to_projection);
 
-private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
