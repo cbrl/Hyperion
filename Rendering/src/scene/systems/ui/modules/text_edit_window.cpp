@@ -63,6 +63,8 @@ void TextEditWindow::draw(Engine& engine, bool& open) {
 		drawMenuBar();
 
 		if (ImGui::BeginTabBar("TextEditors", ImGuiTabBarFlags_AutoSelectNewTabs)) {
+
+			// Render each editor tab
 			for (size_t i = 0; i < editors.size(); ++i) {
 				auto& path   = getPath(i);
 				auto& editor = getEditor(i);
@@ -81,10 +83,11 @@ void TextEditWindow::draw(Engine& engine, bool& open) {
 				}
 			}
 
+			// "New tab" tab
 			if (ImGui::BeginTabItem("+", nullptr, ImGuiTabItemFlags_NoPushId | ImGuiTabItemFlags_NoCloseWithMiddleMouseButton)) {
-				ImGui::EndTabItem();
+				ImGui::EndTabItem(); //do nothing when this "tab" is opened
 			}
-			if (ImGui::IsItemClicked()) {
+			if (ImGui::IsItemClicked()) { //open a new editor when the "+" tab is clicked
 				newEditor();
 			}
 
