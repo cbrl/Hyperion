@@ -36,16 +36,23 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+
 	void draw(Engine& engine, bool& open);
 
 private:
+
 	void drawMenuBar();
 
 	void openFile();
 	void saveFile(bool save_as);
 
-	std::pair<TextEditor, fs::path>& newEditor();
+	void newEditor();
+	void closeEditor(size_t index);
 
+	TextEditor& getEditor(size_t index);
+	fs::path& getPath(size_t index);
+	
+	void closeCurrEditor();
 	TextEditor& getCurrEditor();
 	fs::path& getCurrPath();
 
@@ -53,10 +60,12 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	std::vector<std::pair<TextEditor, fs::path>> editors;
-	std::reference_wrapper<std::pair<TextEditor, fs::path>> current_editor;
-	//TextEditor editor;
-	//fs::path current_file;
-
 	ShaderCompileMenu shader_compile_menu;
+
+	// Vector of text editors and associated file
+	std::vector<std::pair<TextEditor, fs::path>> editors;
+	size_t current = 0;
+
+	// Used for the initial value of the path of a new editor
+	size_t untitled_n = 1;
 };

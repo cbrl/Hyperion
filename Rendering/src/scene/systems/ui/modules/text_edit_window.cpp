@@ -4,27 +4,55 @@
 #include "misc/cpp/imgui_stdlib.h"
 
 
-TextEditWindow::TextEditWindow()
-	: current_editor(newEditor()) {
-
+TextEditWindow::TextEditWindow() {
+	newEditor();
 }
 
 
-std::pair<TextEditor, fs::path>& TextEditWindow::newEditor() {
-	static size_t n = 1;
+void TextEditWindow::newEditor() {
 	auto& editor = editors.emplace_back();
-	editor.second = "Untitled-" + ToStr(n++).value_or(std::string{"0"});
-	return editor;
+	editor.second = "Untitled-" + ToStr(untitled_n++).value_or(std::string{"0"});
+	current = editors.size() - 1;
+}
+
+
+void TextEditWindow::closeEditor(size_t index) {
+	if (index < editors.size()) {
+		if (index >= current)
+			current--;
+		editors.erase(editors.begin() + index);
+	}
+}
+
+
+TextEditor& TextEditWindow::getEditor(size_t index) {
+	if (index < editors.size())
+		return editors[index].first;
+	else
+		return editors[0].first;
+}
+
+
+fs::path& TextEditWindow::getPath(size_t index) {
+	if (index < editors.size())
+		return editors[index].second;
+	else
+		return editors[0].second;
+}
+
+
+void TextEditWindow::closeCurrEditor() {
+	closeEditor(current);
 }
 
 
 TextEditor& TextEditWindow::getCurrEditor() {
-	return current_editor.get().first;
+	return getEditor(current);
 }
 
 
 fs::path& TextEditWindow::getCurrPath() {
-	return current_editor.get().second;
+	return getPath(current);
 }
 
 
@@ -34,27 +62,34 @@ void TextEditWindow::draw(Engine& engine, bool& open) {
 	if (ImGui::Begin("Text Editor", &open, ImGuiWindowFlags_MenuBar)) {
 		drawMenuBar();
 
-		if (ImGui::BeginTabBar("TextEditors")) {
-			for (auto& editor : editors) {
-				if (ImGui::BeginTabItem(editor.second.empty() ? "New File" : editor.second.string().c_str())) {
+		if (ImGui::BeginTabBar("TextEditors", ImGuiTabBarFlags_AutoSelectNewTabs)) {
+			for (size_t i = 0; i < editors.size(); ++i) {
+				auto& path   = getPath(i);
+				auto& editor = getEditor(i);
+
+				bool open = true;
+				if (ImGui::BeginTabItem(path.string().c_str(), &open)) {
 					if (ImGui::IsItemClicked()) {
-						current_editor = editor;
+						current = i;
 					}
+					editor.Render("Editor");
 					ImGui::EndTabItem();
+				}
+
+				if (!open) {
+					closeEditor(i);
 				}
 			}
 
-			if (ImGui::BeginTabItem("+", nullptr, ImGuiTabItemFlags_NoPushId)) {
+			if (ImGui::BeginTabItem("+", nullptr, ImGuiTabItemFlags_NoPushId | ImGuiTabItemFlags_NoCloseWithMiddleMouseButton)) {
 				ImGui::EndTabItem();
 			}
 			if (ImGui::IsItemClicked()) {
-				current_editor = newEditor();
+				newEditor();
 			}
 
 			ImGui::EndTabBar();
 		}
-
-		getCurrEditor().Render("Editor");
 	}
 	ImGui::End();
 
@@ -102,6 +137,9 @@ void TextEditWindow::openFile() {
 		std::string text{std::istreambuf_iterator<char>{stream}, std::istreambuf_iterator<char>{}};
 		getCurrEditor().SetText(text);
 	}
+	else {
+		Logger::log(LogLevel::err, "Failed to open \"{}\" for input", getCurrPath().string());
+	}
 }
 
 
@@ -115,5 +153,8 @@ void TextEditWindow::saveFile(bool save_as) {
 	if (file.good()) {
 		const std::string text = getCurrEditor().GetText();
 		file.write(text.c_str(), text.size());
+	}
+	else {
+		Logger::log(LogLevel::err, "Failed to open \"{}\" for output", getCurrPath().string());
 	}
 }
