@@ -95,9 +95,6 @@ void Engine::quit() {
 
 	Logger::log(LogLevel::info, "Shutting down...");
 
-	// Write the current configuration values to a file
-	ConfigWriter::write(*this, CONFIG_FILE);
-
 	// Explicity delete the scene before the rendering manager.
 	// This prevents D3D from potentially reporting live resources
 	// that are going to be deleted right after the report.
@@ -108,6 +105,12 @@ void Engine::quit() {
 
 	// Uninitialize the COM library
 	CoUninitialize();
+}
+
+
+void Engine::saveConfig() {
+	// Write the current configuration values to a file
+	ConfigWriter::write(*this, CONFIG_FILE);
 }
 
 

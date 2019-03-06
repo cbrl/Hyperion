@@ -20,7 +20,7 @@ SystemMenu::SystemMenu(const Engine& engine) {
 void SystemMenu::draw(Engine& engine) {
 
 	bool display_settings_popup = false;
-	bool engine_settings_popup  = false;
+	bool engine_settings_popup = false;
 
 	// Menu Bar
 	if (ImGui::BeginMainMenuBar()) {
@@ -75,14 +75,23 @@ void SystemMenu::drawEngineSettingsPopup(Engine& engine) {
 
 	if (ImGui::BeginPopupModal("Engine Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-		auto& rendering_mgr    = engine.getRenderingMgr();
+		auto& rendering_mgr = engine.getRenderingMgr();
 		auto& rendering_config = rendering_mgr.getRenderingConfig();
 
-		u32 smap_res = rendering_config.getShadowMapRes();
-		if (ImGui::DragScalar("Shadow Map Resolution", ImGuiDataType_U32, &smap_res, 1)) {
-			rendering_config.setShadowMapRes(smap_res);
-		}
+		smap_res = rendering_config.getShadowMapRes();
+		ImGui::DragScalar("Shadow Map Resolution", ImGuiDataType_U32, &smap_res, 1);
 
+		if (ImGui::Button("Apply")) {
+			rendering_config.setShadowMapRes(smap_res);
+			engine.saveConfig();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Save")) {
+			rendering_config.setShadowMapRes(smap_res);
+			engine.saveConfig();
+			ImGui::CloseCurrentPopup();
+		}
+		ImGui::SameLine();
 		if (ImGui::Button("Close")) {
 			ImGui::CloseCurrentPopup();
 		}
@@ -114,6 +123,11 @@ void SystemMenu::drawDisplaySettingsPopup(Engine& engine) {
 
 
 		if (ImGui::Button("Apply")) {
+			settings.setDisplayDesc(current_display_desc);
+			engine.requestResize();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Save")) {
 			settings.setDisplayDesc(current_display_desc);
 			engine.requestResize();
 			ImGui::CloseCurrentPopup();

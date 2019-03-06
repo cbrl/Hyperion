@@ -44,7 +44,14 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
+
+	// Text editor visibility
 	bool text_editor = false;
+
+	// Display modes
 	int current_display_desc = 0;
 	std::vector<std::string> display_modes;
+
+	// Shadow map resolution
+	u32 smap_res = 0;
 };
