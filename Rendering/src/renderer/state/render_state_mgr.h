@@ -174,8 +174,8 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 	
-	ComPtr<ID3D11BlendState>        blend_states[static_cast<u8>(BlendStates::StateCount)];
-	ComPtr<ID3D11DepthStencilState> depth_states[static_cast<u8>(DepthStencilStates::StateCount)];
-	ComPtr<ID3D11RasterizerState>   raster_states[static_cast<u8>(RasterStates::StateCount)];
-	ComPtr<ID3D11SamplerState>      sampler_states[static_cast<u8>(SamplerStates::StateCount)];
+	std::array<ComPtr<ID3D11BlendState>,        static_cast<size_t>(BlendStates::StateCount)>        blend_states;
+	std::array<ComPtr<ID3D11DepthStencilState>, static_cast<size_t>(DepthStencilStates::StateCount)> depth_states;
+	std::array<ComPtr<ID3D11RasterizerState>,   static_cast<size_t>(RasterStates::StateCount)>       raster_states;
+	std::array<ComPtr<ID3D11SamplerState>,      static_cast<size_t>(SamplerStates::StateCount)>      sampler_states;
 };
