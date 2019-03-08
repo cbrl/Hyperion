@@ -81,6 +81,11 @@ private:
 	                                CameraT& camera,
 	                                FXMMATRIX world_to_projection);
 
+	template<typename CameraT>
+	void XM_CALLCONV renderFalseColor(Scene& scene,
+	                                  CameraT& camera,
+	                                  FXMMATRIX world_to_projection);
+
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

@@ -84,68 +84,6 @@ void ForwardPass::bindWireframeState() const {
 }
 
 
-void XM_CALLCONV ForwardPass::renderOpaque(const std::vector<std::reference_wrapper<const Model>>& models,
-                                           FXMMATRIX world_to_projection,
-                                           const Texture* env_map,
-                                           PixelShader* shader) const {
-
-	// Bind the vertex shader, render states, etc
-	bindOpaqueState();
-
-	// Bind the skybox texture as the environment map
-	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
-
-	// Default pixel shader. Used if shader == nullptr
-	static auto default_shader = ShaderFactory::CreateForwardPS(resource_mgr, BRDF::CookTorrance, false);
-
-	// Bind the shader
-	if (shader)
-		shader->bind(device_context);
-	else
-		default_shader->bind(device_context);
-
-	// Render each model
-	for (auto& model : models) {
-		auto& mat = model.get().getMaterial();
-		if (mat.params.base_color[3] <= ALPHA_MAX)
-			continue;
-
-		renderModel(model, world_to_projection);
-	}
-}
-
-
-void XM_CALLCONV ForwardPass::renderTransparent(const std::vector<std::reference_wrapper<const Model>>& models,
-                                                FXMMATRIX world_to_projection,
-                                                const Texture* env_map,
-                                                PixelShader* shader) const {
-
-	// Bind the vertex shader, render states, etc
-	bindTransparentState();
-
-	// Bind the skybox texture as the environment map
-	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
-
-	// Default pixel shader. Used if shader == nullptr
-	static auto default_shader = ShaderFactory::CreateForwardPS(resource_mgr, BRDF::CookTorrance, true);
-
-	// Bind the shader
-	if (shader)
-		shader->bind(device_context);
-	else
-		default_shader->bind(device_context);
-
-	// Render each model
-	for (auto& model : models) {
-		auto& mat = model.get().getMaterial();
-		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
-			continue;
-
-		renderModel(model, world_to_projection);
-	}
-}
-
-
 void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
                                            FXMMATRIX world_to_projection,
                                            const Texture* env_map,
@@ -167,7 +105,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 			return;
 
 		const auto& mat = model.getMaterial();
-		if (mat.params.base_color[3] <= ALPHA_MAX)
+		if (mat.shader || mat.params.base_color[3] <= ALPHA_MAX)
 			return;
 
 		renderModel(model, world_to_projection);
@@ -196,11 +134,67 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 			return;
 
 		const auto& mat = model.getMaterial();
-		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
+		if (mat.shader ||
+		    mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
 			return;
 
 		renderModel(model, world_to_projection);
 	});
+}
+
+
+void XM_CALLCONV ForwardPass::renderOverrided(Scene& scene, FXMMATRIX world_to_projection, const Texture* env_map) const {
+
+	//----------------------------------------------------------------------------------
+	// Sort models by shader type
+	//----------------------------------------------------------------------------------
+	std::unordered_map<PixelShader*, std::vector<const Model*>> sorted_models;
+
+	scene.forEach<Model>([&](const Model& model) {
+		if (not model.isActive()) return;
+		auto& mat = model.getMaterial();
+		if (not mat.shader) return;
+		sorted_models[mat.shader.get()].push_back(&model);
+	});
+
+
+	// Bind the environment map
+	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
+
+
+	//----------------------------------------------------------------------------------
+	// Render opaque models
+	//----------------------------------------------------------------------------------
+	bindOpaqueState();
+
+	for (auto& [shader, model_vec] : sorted_models) {
+		shader->bind(device_context);
+
+		for (const auto* model : model_vec) {
+			const auto& mat = model->getMaterial();
+			if (mat.params.base_color[3] <= ALPHA_MAX)
+				continue;
+
+			renderModel(*model, world_to_projection);
+		}
+	}
+
+	//----------------------------------------------------------------------------------
+	// Render transparent models
+	//----------------------------------------------------------------------------------
+	bindTransparentState();
+
+	for (auto& [shader, model_vec] : sorted_models) {
+		shader->bind(device_context);
+
+		for (const auto* model : model_vec) {
+			const auto& mat = model->getMaterial();
+			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
+				continue;
+
+			renderModel(*model, world_to_projection);
+		}
+	}
 }
 
 
@@ -247,7 +241,7 @@ void XM_CALLCONV ForwardPass::renderGBuffer(Scene& scene, FXMMATRIX world_to_pro
 			return;
 
 		const auto& mat = model.getMaterial();
-		if (mat.params.base_color[3] <= ALPHA_MAX)
+		if (mat.shader || mat.params.base_color[3] <= ALPHA_MAX)
 			return;
 
 		renderModel(model, world_to_projection);

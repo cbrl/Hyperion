@@ -283,35 +283,19 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static constexpr gsl::czstring<> render_mode_names[] = {
 	    "Forward",
 	    "Forward+",
-	    "Deferred"};
+	    "Deferred",
+	    "False Color",
+	};
 	static constexpr RenderMode render_modes[] = {
 	    RenderMode::Forward,
 	    RenderMode::ForwardPlus,
-	    RenderMode::Deferred
+	    RenderMode::Deferred,
+		RenderMode::FalseColor,
 	};
 
 	auto render_mode = static_cast<int>(settings.getRenderMode());
 	if (ImGui::Combo("Render Mode", &render_mode, render_mode_names, static_cast<int>(std::size(render_mode_names))))
 		settings.setRenderMode(static_cast<RenderMode>(render_mode));
-
-
-	//----------------------------------------------------------------------------------
-	// Lighting Mode
-	//----------------------------------------------------------------------------------
-	static constexpr gsl::czstring<> light_mode_names[] = {
-	    "Default",
-	    "BRDF",
-	    "False Color",
-	};
-	static constexpr LightingMode light_modes[] = {
-	    LightingMode::Default,
-	    LightingMode::BRDF,
-	    LightingMode::FalseColor,
-	};
-
-	auto light_mode = static_cast<int>(settings.getLightingMode());
-	if (ImGui::Combo("Lighting Mode", &light_mode, light_mode_names, static_cast<int>(std::size(light_mode_names))))
-		settings.setLightingMode(static_cast<LightingMode>(light_mode));
 
 
 	//----------------------------------------------------------------------------------
@@ -328,7 +312,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	    BRDF::CookTorrance,
 	};
 
-	if (settings.getLightingMode() == LightingMode::BRDF) {
+	if (settings.getRenderMode() != RenderMode::FalseColor) {
 		auto brdf = static_cast<int>(settings.getBRDF());
 		if (ImGui::Combo("BRDF", &brdf, brdf_names, static_cast<int>(std::size(brdf_names))))
 			settings.setBRDF(static_cast<BRDF>(brdf));
@@ -357,9 +341,9 @@ void DrawCameraSettings(CameraSettings& settings) {
 	    FalseColor::Depth,
 	};
 
-	if (settings.getLightingMode() == LightingMode::FalseColor) {
+	if (settings.getRenderMode() == RenderMode::FalseColor) {
 		auto false_color = static_cast<int>(settings.getFalseColorMode());
-		if (ImGui::Combo("BRDF", &false_color, false_color_names, static_cast<int>(std::size(false_color_names))))
+		if (ImGui::Combo("False Color Mode", &false_color, false_color_names, static_cast<int>(std::size(false_color_names))))
 			settings.setFalseColorMode(static_cast<FalseColor>(false_color));
 	}
 
@@ -538,9 +522,9 @@ void EntityDetailsWindow::drawDetails(Model& model, ResourceMgr& resource_mgr) {
 	//----------------------------------------------------------------------------------
 	// Material shader
 	//----------------------------------------------------------------------------------
-	const char* shader_title_preview = mat.shader ? mat.shader->getGUID().c_str() : "Default";
+	const char* shader_title_preview = mat.shader ? mat.shader->getGUID().c_str() : "None";
 
-	drawResourceMapComboBox<PixelShader>("Shader", shader_title_preview, resource_mgr, mat.shader);
+	drawResourceMapComboBox<PixelShader>("Override Shader", shader_title_preview, resource_mgr, mat.shader);
 
 	ImGui::Separator();
 

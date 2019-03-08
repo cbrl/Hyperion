@@ -168,8 +168,15 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 			profiler.endTimestamp(GPUTimestamps::deferred_render);
 			break;
 		}
+		case RenderMode::FalseColor: {
+			profiler.beginTimestamp(GPUTimestamps::forward_render);
+			renderFalseColor(scene, camera, world_to_projection);
+			profiler.endTimestamp(GPUTimestamps::forward_render);
+			break;
+		}
+		default:
+			break;
 	}
-
 
 	// Bind the forward state
 	output_mgr->bindBeginForward(device_context);
@@ -220,46 +227,12 @@ void XM_CALLCONV Renderer::renderForward(Scene& scene,
 
 
 	//----------------------------------------------------------------------------------
-	// Default Lighting
+	// Render the scene
 	//----------------------------------------------------------------------------------
-	if (settings.getLightingMode() == LightingMode::Default) {
-		using model_cref_vector = std::vector<std::reference_wrapper<const Model>>;
+	forward_pass->renderOpaque(scene, world_to_projection, skybox, settings.getBRDF());
+	forward_pass->renderOverrided(scene, world_to_projection, skybox);
+	forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
 
-		// Sort models by shader type
-		std::unordered_map<PixelShader*, model_cref_vector> sorted_models;
-
-		scene.forEach<Model>([&](Model& model) {
-			if (!model.isActive()) return;
-			auto& mat = model.getMaterial();
-			sorted_models[mat.shader.get()].push_back(std::cref(model));
-		});
-
-		// Render each list of models with its associated shader
-		for (auto& [shader, model_vec] : sorted_models) {
-			forward_pass->renderOpaque(model_vec, world_to_projection, skybox, shader);
-		}
-		for (auto& [shader, model_vec] : sorted_models) {
-			forward_pass->renderTransparent(model_vec, world_to_projection, skybox, shader);
-		}
-	}
-	//----------------------------------------------------------------------------------
-	// Overrided Lighting
-	//----------------------------------------------------------------------------------
-	else {
-		switch (settings.getLightingMode()) {
-			case LightingMode::BRDF:
-				forward_pass->renderOpaque(scene, world_to_projection, skybox, settings.getBRDF());
-				forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
-				break;
-
-			case LightingMode::FalseColor:
-				forward_pass->renderFalseColor(scene, world_to_projection, settings.getFalseColorMode());
-				break;
-
-			default:
-				break;
-		}
-	}
 
 	output_mgr->bindEndForward(device_context);
 }
@@ -314,9 +287,24 @@ void XM_CALLCONV Renderer::renderDeferred(Scene& scene,
 
 	
 	//----------------------------------------------------------------------------------
-	// Forward Render (transparent objects)
+	// Forward Render (overrided shaders and transparent objects)
 	//----------------------------------------------------------------------------------
+	forward_pass->renderOverrided(scene, world_to_projection, skybox);
 	forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
+
+	output_mgr->bindEndForward(device_context);
+}
+
+
+template<typename CameraT>
+void XM_CALLCONV Renderer::renderFalseColor(Scene& scene,
+                                            CameraT& camera,
+                                            FXMMATRIX world_to_projection) {
+
+	output_mgr->bindBeginForward(device_context);
+
+	const auto& settings = camera.getSettings();
+	forward_pass->renderFalseColor(scene, world_to_projection, settings.getFalseColorMode());
 
 	output_mgr->bindEndForward(device_context);
 }

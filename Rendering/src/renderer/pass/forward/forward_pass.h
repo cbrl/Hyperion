@@ -39,23 +39,6 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Render With Specified Shader
-	//----------------------------------------------------------------------------------
-
-	// Render the given models with the given shader (opaque only)
-	void XM_CALLCONV renderOpaque(const std::vector<std::reference_wrapper<const Model>>& models,
-	                              FXMMATRIX world_to_projection,
-	                              const Texture* env_map,
-	                              PixelShader* shader) const;
-
-	// Render the given models with the given shader (transparent only)
-	void XM_CALLCONV renderTransparent(const std::vector<std::reference_wrapper<const Model>>& models,
-	                                   FXMMATRIX world_to_projection,
-	                                   const Texture* env_map,
-	                                   PixelShader* shader) const;
-
-
-	//----------------------------------------------------------------------------------
 	// Member Functions - Render With Specified Mode
 	//----------------------------------------------------------------------------------
 
@@ -80,6 +63,17 @@ public:
 	void XM_CALLCONV renderWireframe(Scene& scene,
 	                                 FXMMATRIX world_to_projection,
 	                                 const f32_4& color) const;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Render With Overrided Shader
+	//----------------------------------------------------------------------------------
+
+	// Sorts by shader type all models with overrided shaders, then renders them.
+	// Renders opaque models, then transparent. Call between opaque and transparent render passes.
+	void XM_CALLCONV renderOverrided(Scene& scene,
+	                                 FXMMATRIX world_to_projection,
+	                                 const Texture* env_map) const;
 
 	
 	//----------------------------------------------------------------------------------

@@ -17,7 +17,6 @@ public:
 	//----------------------------------------------------------------------------------
 	CameraSettings() noexcept
 		: render_mode(RenderMode::Forward)
-		, lighting_mode(LightingMode::Default)
 		, brdf(BRDF::CookTorrance)
 	    , false_color(FalseColor::Fullbright)
 		, render_options(static_cast<u8>(RenderOptions::None))
@@ -53,20 +52,6 @@ public:
 
 	void setRenderMode(RenderMode mode) noexcept {
 		render_mode = mode;
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Lighting Mode
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	LightingMode getLightingMode() const noexcept{
-		return lighting_mode;
-	}
-
-	void setLightingMode(LightingMode mode) noexcept {
-		lighting_mode = mode;
 	}
 
 
@@ -198,13 +183,10 @@ private:
 	// The rendering mode of the camera
 	RenderMode render_mode;
 
-	// The lighting mode of the camera
-	LightingMode lighting_mode;
-
-	// The BRDF to use (when LightingMode::BRDF is selected)
+	// The BRDF to use for lighting calculations
 	BRDF brdf;
 
-	// The false color mode to use (when LightingMode::FalseColor is selected)
+	// The false color mode to use (when RenderMode::FalseColor is selected)
 	FalseColor false_color;
 
 	// The extra rendering options
