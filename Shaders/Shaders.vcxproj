@@ -317,7 +317,7 @@
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
-    <FxCompile Include="shaders\shapes\clip_triangle_vs.hlsl">
+    <FxCompile Include="shaders\shapes\fullscreen_quad_vs.hlsl">
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
@@ -336,7 +336,7 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
     <None Include="shaders\shapes\geosphere.hlsli" />
-    <None Include="shaders\shapes\triangle.hlsli" />
+    <None Include="shaders\shapes\fullscreen_quad.hlsli" />
     <None Include="shaders\shapes\wireframe_cube.hlsli">
       <FileType>Document</FileType>
     </None>

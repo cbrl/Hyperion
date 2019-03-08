@@ -45,8 +45,8 @@
 #include "compiled_headers/static_color.h"
 #include "compiled_headers/texcoord_color.h"
 
-// Clip Space Triangle
-#include "compiled_headers/clip_triangle_vs.h"
+// Fullscreen Quad
+#include "compiled_headers/fullscreen_quad_vs.h"
 
 
 namespace ShaderFactory {
@@ -227,9 +227,9 @@ std::shared_ptr<PixelShader> CreateFalseColorPS(ResourceMgr& resource_mgr, False
 //----------------------------------------------------------------------------------
 // Fullscreen Triangle
 //----------------------------------------------------------------------------------
-std::shared_ptr<VertexShader> CreateFullscreenTriVS(ResourceMgr& resource_mgr) {
-	return resource_mgr.getOrCreate<VertexShader>(L"shader_ndc_triangle_vs",
-	                                              BYTECODE(shader_clip_triangle_vs),
+std::shared_ptr<VertexShader> CreateFullscreenQuadVS(ResourceMgr& resource_mgr) {
+	return resource_mgr.getOrCreate<VertexShader>(L"shader_fullscreen_quad_vs",
+	                                              BYTECODE(shader_fullscreen_quad_vs),
 	                                              gsl::make_span(VertexPosition::input_elements,
 	                                                             VertexPosition::input_element_count));
 }

@@ -27,7 +27,7 @@ float3 GetGBufferBaseColor(uint2 coords) {
 
 // returns [metalness, roughness]
 float2 GetGBufferMaterialParams(uint2 coords) {
-	return g_material_param_map[coords].xy;
+	return g_material_param_map[coords];
 }
 
 float3 GetGBufferNormal(uint2 coords) {

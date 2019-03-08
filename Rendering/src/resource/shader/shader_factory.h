@@ -95,7 +95,7 @@ std::shared_ptr<PixelShader> CreateFalseColorPS(ResourceMgr& resource_mgr, False
 // Fullscreen Triangle
 //----------------------------------------------------------------------------------
 [[nodiscard]]
-std::shared_ptr<VertexShader> CreateFullscreenTriVS(ResourceMgr& resource_mgr);
+std::shared_ptr<VertexShader> CreateFullscreenQuadVS(ResourceMgr& resource_mgr);
 
 } //namespace ShaderFactory
 

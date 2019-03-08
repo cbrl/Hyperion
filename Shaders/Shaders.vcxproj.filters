@@ -122,7 +122,7 @@
     <FxCompile Include="shaders\deferred\deferred_blinn_phong.hlsl">
       <Filter>Shader Files\deferred</Filter>
     </FxCompile>
-    <FxCompile Include="shaders\shapes\clip_triangle_vs.hlsl">
+    <FxCompile Include="shaders\shapes\fullscreen_quad_vs.hlsl">
       <Filter>Shader Files\shapes</Filter>
     </FxCompile>
   </ItemGroup>
@@ -195,7 +195,7 @@
     <None Include="shaders\deferred\deferred_ps.hlsli">
       <Filter>Shader Files\deferred</Filter>
     </None>
-    <None Include="shaders\shapes\triangle.hlsli">
+    <None Include="shaders\shapes\fullscreen_quad.hlsli">
       <Filter>Shader Files\shapes</Filter>
     </None>
   </ItemGroup>

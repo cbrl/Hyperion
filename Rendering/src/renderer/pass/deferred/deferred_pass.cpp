@@ -11,7 +11,7 @@ DeferredPass::DeferredPass(ID3D11DeviceContext& device_context,
 	, render_state_mgr(render_state_mgr)
 	, resource_mgr(resource_mgr) {
 
-	vertex_shader = ShaderFactory::CreateFullscreenTriVS(resource_mgr);
+	vertex_shader = ShaderFactory::CreateFullscreenQuadVS(resource_mgr);
 }
 
 
@@ -42,5 +42,5 @@ void DeferredPass::render(BRDF brdf) const {
 	const auto ps = ShaderFactory::CreateDeferredPS(resource_mgr, brdf);
 	ps->bind(device_context);
 	
-	Pipeline::draw(device_context, 3, 0);
+	Pipeline::draw(device_context, 6, 0);
 }
