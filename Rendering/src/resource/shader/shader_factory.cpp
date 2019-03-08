@@ -14,6 +14,14 @@
 #include "compiled_headers/forward_transparent_blinn_phong.h"
 #include "compiled_headers/forward_transparent_cook_torrance.h"
 
+// GBuffer
+#include "compiled_headers/gbuffer_ps.h"
+
+// Deferred
+#include "compiled_headers/deferred_lambert.h"
+#include "compiled_headers/deferred_blinn_phong.h"
+#include "compiled_headers/deferred_cook_torrance.h"
+
 // Depth
 #include "compiled_headers/depth_vs.h"
 #include "compiled_headers/depth_transparent_ps.h"
@@ -36,6 +44,9 @@
 #include "compiled_headers/roughness_color.h"
 #include "compiled_headers/static_color.h"
 #include "compiled_headers/texcoord_color.h"
+
+// Clip Space Triangle
+#include "compiled_headers/clip_triangle_vs.h"
 
 
 namespace ShaderFactory {
@@ -77,6 +88,39 @@ std::shared_ptr<VertexShader> CreateForwardVS(ResourceMgr& resource_mgr) {
 													BYTECODE(shader_forward_vs),
 		                                            gsl::make_span(VertexPositionNormalTexture::input_elements,
 		                                                            VertexPositionNormalTexture::input_element_count));
+}
+
+
+//----------------------------------------------------------------------------------
+// GBuffer
+//----------------------------------------------------------------------------------
+
+std::shared_ptr<PixelShader> CreateGBufferPS(ResourceMgr& resource_mgr) {
+
+	return resource_mgr.getOrCreate<PixelShader>(L"shader_gbuffer_ps", BYTECODE(shader_gbuffer_ps));
+}
+
+
+//----------------------------------------------------------------------------------
+// Deferred
+//----------------------------------------------------------------------------------
+
+std::shared_ptr<PixelShader> CreateDeferredPS(ResourceMgr& resource_mgr, BRDF brdf) {
+
+	switch (brdf) {
+		case BRDF::Lambert: {
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_deferred_lambert_ps", BYTECODE(shader_deferred_lambert));
+		}
+		case BRDF::BlinnPhong: {
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_deferred_blinn_phong_ps", BYTECODE(shader_deferred_blinn_phong));
+		}
+		case BRDF::CookTorrance: {
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_deferred_cook_torrance_ps", BYTECODE(shader_deferred_cook_torrance));
+		}
+		default: {
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_deferred_lambert_ps", BYTECODE(shader_deferred_lambert));
+		}
+	}
 }
 
 
@@ -139,7 +183,7 @@ std::shared_ptr<VertexShader> CreateWireframeBoxVS(ResourceMgr& resource_mgr) {
 	return resource_mgr.getOrCreate<VertexShader>(L"shader_wireframe_box_vs",
 													BYTECODE(shader_wireframe_box_vs),
 		                                            gsl::make_span(VertexPosition::input_elements,
-		                                                            VertexPosition::input_element_count));
+		                                                           VertexPosition::input_element_count));
 }
 
 
@@ -177,6 +221,17 @@ std::shared_ptr<PixelShader> CreateFalseColorPS(ResourceMgr& resource_mgr, False
 		default:
 			return resource_mgr.getOrCreate<PixelShader>(L"shader_false_color_static", BYTECODE(shader_static_color));
 	}
+}
+
+
+//----------------------------------------------------------------------------------
+// Fullscreen Triangle
+//----------------------------------------------------------------------------------
+std::shared_ptr<VertexShader> CreateFullscreenTriVS(ResourceMgr& resource_mgr) {
+	return resource_mgr.getOrCreate<VertexShader>(L"shader_ndc_triangle_vs",
+	                                              BYTECODE(shader_clip_triangle_vs),
+	                                              gsl::make_span(VertexPosition::input_elements,
+	                                                             VertexPosition::input_element_count));
 }
 
 } //namespace ShaderFactory

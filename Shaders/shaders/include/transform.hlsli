@@ -48,14 +48,15 @@ PSPositionNormalTexture Transform(VSPositionNormalTexture vin,
 	// Transform to world space
 	vout.p_world = mul(float4(vin.p, 1.0f), object_to_world).xyz;
 
+	// Normal
 	vout.n = normalize(mul(vin.n, (float3x3)world_inv_transpose));
 
 	// Transform to homogeneous clip space
 	const float3 p_view = mul(float4(vout.p_world, 1.0f), world_to_view).xyz;
-	vout.p       = mul(float4(p_view, 1.0f), view_to_projection);
+	vout.p = mul(float4(p_view, 1.0f), view_to_projection);
 
 	// Output vertex attributes for interpolation across triangle
-	vout.uv = mul(float4(vin.uv, 0.0f, 1.0f), texture_transform).xy;
+	vout.uv = Transform(vin.uv, texture_transform);
 
 	return vout;
 }

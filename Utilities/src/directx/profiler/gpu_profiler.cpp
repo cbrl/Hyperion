@@ -16,6 +16,7 @@ GPUProfiler::GPUProfiler(ID3D11Device& device, ID3D11DeviceContext& device_conte
 	registerTimestampID(GPUTimestamps::render_scene);
 	registerTimestampID(GPUTimestamps::shadow_maps);
 	registerTimestampID(GPUTimestamps::forward_render);
+	registerTimestampID(GPUTimestamps::deferred_render);
 	registerTimestampID(GPUTimestamps::render_opaque);
 	registerTimestampID(GPUTimestamps::render_transparent);
 }

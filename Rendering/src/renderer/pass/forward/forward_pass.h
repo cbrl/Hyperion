@@ -3,12 +3,13 @@
 #include "datatypes/datatypes.h"
 #include "buffer/constant_buffer.h"
 #include "resource/shader/shader.h"
-#include "resource/shader/shader_factory.h"
+#include "rendering_options.h"
 
 class RenderStateMgr;
 class ResourceMgr;
 class Scene;
 class Model;
+class Texture;
 
 class ForwardPass final {
 public:
@@ -80,6 +81,12 @@ public:
 	                                 FXMMATRIX world_to_projection,
 	                                 const f32_4& color) const;
 
+	
+	//----------------------------------------------------------------------------------
+	// Member Functions - Render to GBuffer
+	//----------------------------------------------------------------------------------
+	void XM_CALLCONV renderGBuffer(Scene& scene, FXMMATRIX world_to_projection) const;
+
 private:
 
 	//----------------------------------------------------------------------------------
@@ -102,11 +109,12 @@ private:
 
 	// Dependency References
 	ID3D11DeviceContext& device_context;
-	RenderStateMgr& render_state_mgr;
-	ResourceMgr& resource_mgr;
+	RenderStateMgr&      render_state_mgr;
+	ResourceMgr&         resource_mgr;
 
 	// Shaders
 	std::shared_ptr<VertexShader> vertex_shader;
+	std::shared_ptr<PixelShader>  gbuffer_shader;
 
 	// Buffers
 	ConstantBuffer<f32_4> color_buffer;

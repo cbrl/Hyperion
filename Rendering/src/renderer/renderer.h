@@ -10,6 +10,7 @@
 #include "scene/scene.h"
 #include "renderer/pass/light/light_pass.h"
 #include "renderer/pass/forward/forward_pass.h"
+#include "renderer/pass/deferred/deferred_pass.h"
 #include "renderer/pass/sky/sky_pass.h"
 #include "renderer/pass/bounding_volume/bounding_volume_pass.h"
 #include "renderer/pass/text/text_pass.h"
@@ -75,6 +76,11 @@ private:
 	                               CameraT& camera,
 	                               FXMMATRIX world_to_projection);
 
+	template<typename CameraT>
+	void XM_CALLCONV renderDeferred(Scene& scene,
+	                                CameraT& camera,
+	                                FXMMATRIX world_to_projection);
+
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
@@ -99,6 +105,7 @@ private:
 	// Renderers
 	std::unique_ptr<LightPass>          light_pass;
 	std::unique_ptr<ForwardPass>        forward_pass;
+	std::unique_ptr<DeferredPass>       deferred_pass;
 	std::unique_ptr<SkyPass>            sky_pass;
 	std::unique_ptr<BoundingVolumePass> bounding_volume_pass;
 	std::unique_ptr<TextPass>           text_pass;

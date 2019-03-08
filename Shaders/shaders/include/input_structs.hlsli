@@ -55,4 +55,15 @@ struct PSPositionNormalTexture {
 };
 
 
+//----------------------------------------------------------------------------------
+//  Output Merger input structs
+//----------------------------------------------------------------------------------
+
+struct OMGBuffer {
+	float4 base_color : SV_Target0;
+	float4 material   : SV_Target1;
+	float4 n          : SV_Target2;
+};
+
+
 #endif //HLSL_INPUT_STRUCTS

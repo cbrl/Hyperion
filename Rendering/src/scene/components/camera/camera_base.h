@@ -275,11 +275,18 @@ public:
 	                              FXMMATRIX camera_to_world,
 	                              CXMMATRIX world_to_camera) const {
 
-		buffer.updateData(device_context,
-						  CameraBuffer{XMMatrixTranspose(camera_to_world),
-									   XMMatrixTranspose(world_to_camera),
-									   XMMatrixTranspose(getCameraToProjectionMatrix()),
-		                               settings.getFog()});
+		const XMMATRIX camera_to_projection = getCameraToProjectionMatrix();
+
+		CameraBuffer cam_buffer;
+		cam_buffer.camera_to_world      = XMMatrixTranspose(camera_to_world);
+		cam_buffer.world_to_camera      = XMMatrixTranspose(world_to_camera);
+		cam_buffer.camera_to_projection = XMMatrixTranspose(camera_to_projection);
+		cam_buffer.projection_to_camera = XMMatrixTranspose(XMMatrixInverse(nullptr, camera_to_projection));
+		cam_buffer.viewport_top_left    = viewport.getTopLeft();
+		cam_buffer.viewport_resolution  = viewport.getSize();
+		cam_buffer.fog                  = settings.getFog();
+
+		buffer.updateData(device_context, cam_buffer);
 	}
 
 	// Bind the camera's constant buffer

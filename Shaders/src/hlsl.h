@@ -44,30 +44,31 @@
 // SRVs
 //----------------------------------------------------------------------------------
 
-// Material SRVs
+// Material/GBuffer SRVs
 #define SLOT_SRV_BASE_COLOR      0
 #define SLOT_SRV_MATERIAL_PARAMS 1
 #define SLOT_SRV_NORMAL          2
-#define SLOT_SRV_EMISSIVE        3
+#define SLOT_SRV_DEPTH           3
+#define SLOT_SRV_EMISSIVE        4
 
 // Other SRVs
-#define SLOT_SRV_SKYBOX          4
-#define SLOT_SRV_ENV_MAP         5
+#define SLOT_SRV_SKYBOX          5
+#define SLOT_SRV_ENV_MAP         6
 
 // Light
-#define SLOT_SRV_DIRECTIONAL_LIGHTS 6
-#define SLOT_SRV_POINT_LIGHTS       7
-#define SLOT_SRV_SPOT_LIGHTS        8
+#define SLOT_SRV_DIRECTIONAL_LIGHTS 7
+#define SLOT_SRV_POINT_LIGHTS       8
+#define SLOT_SRV_SPOT_LIGHTS        9
 
 // Shadowed Lights
-#define SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOW 9
-#define SLOT_SRV_POINT_LIGHTS_SHADOW       10
-#define SLOT_SRV_SPOT_LIGHTS_SHADOW        11
+#define SLOT_SRV_DIRECTIONAL_LIGHTS_SHADOW 10
+#define SLOT_SRV_POINT_LIGHTS_SHADOW       11
+#define SLOT_SRV_SPOT_LIGHTS_SHADOW        12
 
 // Shadow Maps
-#define SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS 12
-#define SLOT_SRV_POINT_LIGHT_SHADOW_MAPS       13
-#define SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS        14
+#define SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS 13
+#define SLOT_SRV_POINT_LIGHT_SHADOW_MAPS       14
+#define SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS        15
 
 
 

@@ -146,6 +146,7 @@
     <ClCompile Include="src\loader\texture_loader.cpp" />
     <ClCompile Include="src\renderer\output\output_mgr.cpp" />
     <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.cpp" />
+    <ClCompile Include="src\renderer\pass\deferred\deferred_pass.cpp" />
     <ClCompile Include="src\renderer\pass\depth\depth_pass.cpp" />
     <ClCompile Include="src\renderer\pass\forward\forward_pass.cpp" />
     <ClCompile Include="src\renderer\pass\light\light_pass.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="src\loader\texture_loader.h" />
     <ClInclude Include="src\renderer\output\output_mgr.h" />
     <ClInclude Include="src\renderer\pass\bounding_volume\bounding_volume_pass.h" />
+    <ClInclude Include="src\renderer\pass\deferred\deferred_pass.h" />
     <ClInclude Include="src\renderer\pass\depth\depth_pass.h" />
     <ClInclude Include="src\renderer\pass\forward\forward_pass.h" />
     <ClInclude Include="src\renderer\pass\light\light_pass.h" />

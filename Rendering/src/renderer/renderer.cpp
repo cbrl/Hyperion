@@ -31,6 +31,7 @@ Renderer::Renderer(DisplayConfig& display_config,
 	// Create renderers
 	light_pass           = std::make_unique<LightPass>(rendering_config, device, device_context, *render_state_mgr, resource_mgr);
 	forward_pass         = std::make_unique<ForwardPass>(device, device_context, *render_state_mgr, resource_mgr);
+	deferred_pass = std::make_unique<DeferredPass>(device_context, *render_state_mgr, resource_mgr);
 	sky_pass             = std::make_unique<SkyPass>(device_context, *render_state_mgr, resource_mgr);
 	bounding_volume_pass = std::make_unique<BoundingVolumePass>(device, device_context, *render_state_mgr, resource_mgr);
 	text_pass            = std::make_unique<TextPass>(device_context);
@@ -52,6 +53,12 @@ void Renderer::render(Scene& scene, f32 delta_time) {
 
 
 	profiler.beginTimestamp(GPUTimestamps::render_scene);
+
+	//----------------------------------------------------------------------------------
+	// Bind the initial output state
+	//----------------------------------------------------------------------------------
+	output_mgr->bindBegin(device_context);
+
 	
 	//----------------------------------------------------------------------------------
 	// Render the scene for each camera
@@ -94,6 +101,7 @@ void Renderer::render(Scene& scene, f32 delta_time) {
 	text_pass->render(scene);
 	profiler.endTimestamp("Text");
 
+
 	profiler.endTimestamp(GPUTimestamps::render_scene);
 
 
@@ -105,6 +113,10 @@ void Renderer::render(Scene& scene, f32 delta_time) {
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 	profiler.endTimestamp("ImGui");
 
+	
+	//----------------------------------------------------------------------------------
+	// End profiler frame and update
+	//----------------------------------------------------------------------------------
 	profiler.endFrame();
 	profiler.update();
 }
@@ -151,31 +163,26 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 			break;
 		}
 		case RenderMode::Deferred: {
-			//profiler.beginTimestamp(GPUTimestamps::deferred_render);
-			//renderDeferred(scene, camera, world_to_projection);
-			//profiler.endTimestamp(GPUTimestamps::deferred_render);
+			profiler.beginTimestamp(GPUTimestamps::deferred_render);
+			renderDeferred(scene, camera, world_to_projection);
+			profiler.endTimestamp(GPUTimestamps::deferred_render);
 			break;
 		}
 	}
 
 
-	//----------------------------------------------------------------------------------
+	// Bind the forward state
+	output_mgr->bindBeginForward(device_context);
+
 	// Render wireframes
-	//----------------------------------------------------------------------------------
 	if (settings.hasRenderOption(RenderOptions::Wireframe))
 		forward_pass->renderWireframe(scene, world_to_projection, camera.getSettings().getWireframeColor());
 
-
-	//----------------------------------------------------------------------------------
 	// Render bounding volumes
-	//----------------------------------------------------------------------------------
 	if (settings.hasRenderOption(RenderOptions::BoundingVolume))
 		bounding_volume_pass->render(scene, world_to_projection, camera.getSettings().getBoundingVolumeColor());
 
-
-	//----------------------------------------------------------------------------------
 	// Clear the bound forward state
-	//----------------------------------------------------------------------------------
 	output_mgr->bindEndForward(device_context);
 }
 
@@ -200,8 +207,9 @@ void XM_CALLCONV Renderer::renderForward(Scene& scene,
 	// Bind the camera's viewport and the forward output state
 	//----------------------------------------------------------------------------------
 	camera.bindViewport(device_context);
-	output_mgr->bindBeginForward(device_context);
 
+
+	output_mgr->bindBeginForward(device_context);
 
 	//----------------------------------------------------------------------------------
 	// Render the skybox
@@ -252,4 +260,63 @@ void XM_CALLCONV Renderer::renderForward(Scene& scene,
 				break;
 		}
 	}
+
+	output_mgr->bindEndForward(device_context);
+}
+
+
+template<typename CameraT>
+void XM_CALLCONV Renderer::renderDeferred(Scene& scene,
+                                          CameraT& camera,
+                                          FXMMATRIX world_to_projection) {
+
+	const auto& settings = camera.getSettings();
+	const auto* skybox = settings.getSkybox();
+
+	//----------------------------------------------------------------------------------
+	// Process the light buffers
+	//----------------------------------------------------------------------------------
+	profiler.beginTimestamp(GPUTimestamps::shadow_maps);
+	light_pass->render(scene, world_to_projection);
+	profiler.endTimestamp(GPUTimestamps::shadow_maps);
+
+
+	//----------------------------------------------------------------------------------
+	// Bind the camera's viewport
+	//----------------------------------------------------------------------------------
+	camera.bindViewport(device_context);
+
+
+	//----------------------------------------------------------------------------------
+	// Render the gbuffer
+	//----------------------------------------------------------------------------------
+	output_mgr->bindBeginGBuffer(device_context);
+	forward_pass->renderGBuffer(scene, world_to_projection);
+	output_mgr->bindEndGBuffer(device_context);
+
+	
+	//----------------------------------------------------------------------------------
+	// Deferred Render (opaque objects)
+	//----------------------------------------------------------------------------------
+	output_mgr->bindBeginDeferred(device_context);
+	deferred_pass->render(settings.getBRDF());
+	output_mgr->bindEndDeferred(device_context);
+
+	
+	output_mgr->bindBeginForward(device_context);
+
+	//----------------------------------------------------------------------------------
+	// Render the skybox
+	//----------------------------------------------------------------------------------
+	profiler.beginTimestamp("Skybox");
+	sky_pass->render(skybox);
+	profiler.endTimestamp("Skybox");
+
+	
+	//----------------------------------------------------------------------------------
+	// Forward Render (transparent objects)
+	//----------------------------------------------------------------------------------
+	forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
+
+	output_mgr->bindEndForward(device_context);
 }

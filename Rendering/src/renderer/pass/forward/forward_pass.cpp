@@ -5,27 +5,29 @@
 #include "renderer/state/render_state_mgr.h"
 #include "resource/resource_mgr.h"
 #include "geometry/frustum/frustum.h"
+#include "resource/shader/shader_factory.h"
 
 
 ForwardPass::ForwardPass(ID3D11Device& device,
                          ID3D11DeviceContext& device_context,
                          RenderStateMgr& render_state_mgr,
                          ResourceMgr& resource_mgr)
-	: device_context(device_context)
-	, render_state_mgr(render_state_mgr)
-	, resource_mgr(resource_mgr)
-	, color_buffer(device) {
+    : device_context(device_context)
+    , render_state_mgr(render_state_mgr)
+    , resource_mgr(resource_mgr)
+    , color_buffer(device) {
 
 	vertex_shader = ShaderFactory::CreateForwardVS(resource_mgr);
+	gbuffer_shader = ShaderFactory::CreateGBufferPS(resource_mgr);
 }
 
 
 void ForwardPass::bindOpaqueState() const {
-	
+
 	// Bind topology
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	// Bind null shaders
+	// Unbind shaders
 	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
 	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
 	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
@@ -161,7 +163,8 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 
 	// Render models
 	scene.forEach<Model>([&](const Model& model) {
-		if (!model.isActive()) return;
+		if (not model.isActive())
+			return;
 
 		const auto& mat = model.getMaterial();
 		if (mat.params.base_color[3] <= ALPHA_MAX)
@@ -189,7 +192,8 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 
 	// Render models
 	scene.forEach<Model>([&](const Model& model) {
-		if (!model.isActive()) return;
+		if (not model.isActive())
+			return;
 
 		const auto& mat = model.getMaterial();
 		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
@@ -232,16 +236,35 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 }
 
 
+void XM_CALLCONV ForwardPass::renderGBuffer(Scene& scene, FXMMATRIX world_to_projection) const {
+
+	bindOpaqueState();
+
+	gbuffer_shader->bind(device_context);
+
+	scene.forEach<Model>([&](const Model& model) {
+		if (not model.isActive())
+			return;
+
+		const auto& mat = model.getMaterial();
+		if (mat.params.base_color[3] <= ALPHA_MAX)
+			return;
+
+		renderModel(model, world_to_projection);
+	});
+}
+
+
 void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
 
 	const auto* transform = model.getOwner()->getComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world = transform->getObjectToWorldMatrix();
-	const auto model_to_proj  = model_to_world * world_to_projection;
+	const auto model_to_proj = model_to_world * world_to_projection;
 
 	// Cull the model if it isn't on screen
-	if (!Frustum(model_to_proj).contains(model.getAABB()))
+	if (not Frustum(model_to_proj).contains(model.getAABB()))
 		return;
 
 	// Bind the model's mesh
@@ -255,19 +278,17 @@ void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to
 	model.bindBuffer<Pipeline::PS>(device_context, SLOT_CBUFFER_MODEL);
 
 	// Bind the SRVs
-	if (mat.maps.base_color)      mat.maps.base_color->bind<Pipeline::PS>(device_context, SLOT_SRV_BASE_COLOR);
+	if (mat.maps.base_color) mat.maps.base_color->bind<Pipeline::PS>(device_context, SLOT_SRV_BASE_COLOR);
 	if (mat.maps.material_params) mat.maps.material_params->bind<Pipeline::PS>(device_context, SLOT_SRV_MATERIAL_PARAMS);
-	if (mat.maps.normal)          mat.maps.normal->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
-	if (mat.maps.emissive)        mat.maps.emissive->bind<Pipeline::PS>(device_context, SLOT_SRV_EMISSIVE);
-
+	if (mat.maps.normal) mat.maps.normal->bind<Pipeline::PS>(device_context, SLOT_SRV_NORMAL);
+	if (mat.maps.emissive) mat.maps.emissive->bind<Pipeline::PS>(device_context, SLOT_SRV_EMISSIVE);
 
 	// Draw the model
 	Pipeline::drawIndexed(device_context, model.getIndexCount(), 0);
 
-
 	// Unbind the SRVs
-	// Slot definition could be used as a more dynamic way of unbinding any amount of srvs
-	// E.g. null_srv[SLOT_SRV_EMISSIVE + 1] = { nullptr };
-	ID3D11ShaderResourceView* null_srv[4] = { nullptr };
-	Pipeline::PS::bindSRVs(device_context, 0, 4, null_srv);
+	Pipeline::PS::bindSRV(device_context, SLOT_SRV_BASE_COLOR, nullptr);
+	Pipeline::PS::bindSRV(device_context, SLOT_SRV_MATERIAL_PARAMS, nullptr);
+	Pipeline::PS::bindSRV(device_context, SLOT_SRV_NORMAL, nullptr);
+	Pipeline::PS::bindSRV(device_context, SLOT_SRV_EMISSIVE, nullptr);
 }

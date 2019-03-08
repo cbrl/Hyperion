@@ -36,6 +36,12 @@
     <Filter Include="Shader Files\include\brdf">
       <UniqueIdentifier>{555c9738-4799-44d7-8366-e13ec2dea181}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader Files\gbuffer">
+      <UniqueIdentifier>{65cdeec8-089f-4e56-ae64-9f9dcccc7ed3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files\deferred">
+      <UniqueIdentifier>{5d5d110f-0384-4c46-8ca8-b932716f606f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\depth\depth_vs.hlsl">
@@ -104,6 +110,21 @@
     <FxCompile Include="shaders\false_color\material_params_color.hlsl">
       <Filter>Shader Files\false_color</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\gbuffer\gbuffer_ps.hlsl">
+      <Filter>Shader Files\gbuffer</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\deferred\deferred_cook_torrance.hlsl">
+      <Filter>Shader Files\deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\deferred\deferred_lambert.hlsl">
+      <Filter>Shader Files\deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\deferred\deferred_blinn_phong.hlsl">
+      <Filter>Shader Files\deferred</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\shapes\clip_triangle_vs.hlsl">
+      <Filter>Shader Files\shapes</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\hlsl.h">
@@ -167,6 +188,15 @@
     </None>
     <None Include="shaders\include\brdf\distribution_term.hlsli">
       <Filter>Shader Files\include\brdf</Filter>
+    </None>
+    <None Include="shaders\deferred\deferred_include.hlsli">
+      <Filter>Shader Files\deferred</Filter>
+    </None>
+    <None Include="shaders\deferred\deferred_ps.hlsli">
+      <Filter>Shader Files\deferred</Filter>
+    </None>
+    <None Include="shaders\shapes\triangle.hlsli">
+      <Filter>Shader Files\shapes</Filter>
     </None>
   </ItemGroup>
 </Project>

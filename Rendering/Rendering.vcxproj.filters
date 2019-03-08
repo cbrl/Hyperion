@@ -308,6 +308,9 @@
     <ClCompile Include="src\scene\systems\ui\modules\file_selector.cpp">
       <Filter>Source Files\scene\systems\ui\modules</Filter>
     </ClCompile>
+    <ClCompile Include="src\renderer\pass\deferred\deferred_pass.cpp">
+      <Filter>Source Files\renderer\pass</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rendering_mgr.h">
@@ -522,6 +525,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\systems\ui\modules\new_model_menu.h">
       <Filter>Header Files\scene\systems\ui\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer\pass\deferred\deferred_pass.h">
+      <Filter>Header Files\renderer\pass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

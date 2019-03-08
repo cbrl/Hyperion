@@ -114,6 +114,9 @@ struct CameraBuffer {
 	XMMATRIX camera_to_world      = XMMatrixIdentity();
 	XMMATRIX world_to_camera      = XMMatrixIdentity();
 	XMMATRIX camera_to_projection = XMMatrixIdentity();
+	XMMATRIX projection_to_camera = XMMatrixIdentity();
+	u32_2    viewport_top_left    = {};
+	u32_2    viewport_resolution  = {};
 	Fog      fog;
 };
 

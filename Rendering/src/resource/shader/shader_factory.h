@@ -38,6 +38,20 @@ std::shared_ptr<VertexShader> CreateForwardVS(ResourceMgr& resource_mgr);
 
 
 //----------------------------------------------------------------------------------
+// GBuffer
+//----------------------------------------------------------------------------------
+[[nodiscard]]
+std::shared_ptr<PixelShader> CreateGBufferPS(ResourceMgr& resource_mgr);
+
+
+//----------------------------------------------------------------------------------
+// Deferred
+//----------------------------------------------------------------------------------
+[[nodiscard]]
+std::shared_ptr<PixelShader> CreateDeferredPS(ResourceMgr& resource_mgr, BRDF brdf);    
+
+
+//----------------------------------------------------------------------------------
 // Depth
 //----------------------------------------------------------------------------------
 [[nodiscard]]
@@ -75,6 +89,13 @@ std::shared_ptr<VertexShader> CreateWireframeBoxVS(ResourceMgr& resource_mgr);
 //----------------------------------------------------------------------------------
 [[nodiscard]]
 std::shared_ptr<PixelShader> CreateFalseColorPS(ResourceMgr& resource_mgr, FalseColor color);
+
+
+//----------------------------------------------------------------------------------
+// Fullscreen Triangle
+//----------------------------------------------------------------------------------
+[[nodiscard]]
+std::shared_ptr<VertexShader> CreateFullscreenTriVS(ResourceMgr& resource_mgr);
 
 } //namespace ShaderFactory
 

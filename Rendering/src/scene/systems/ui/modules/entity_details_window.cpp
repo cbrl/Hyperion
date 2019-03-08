@@ -600,7 +600,7 @@ void EntityDetailsWindow::drawResourceMapComboBox(const char* name,
 
 	ImGui::PushID(name);
 
-	ImGui::SetCursorPosX(ImGui::GetCursorPosX() - (ImGui::GetStyle().ItemSpacing.x * 0.5));
+	ImGui::SetCursorPosX(ImGui::GetCursorPosX() - (ImGui::GetStyle().ItemSpacing.x * 0.5f));
 	if (ImGui::Button("+")) {
 		ImGui::OpenPopup("NewTextureType");
 	}
