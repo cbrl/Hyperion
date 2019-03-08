@@ -74,6 +74,12 @@ cbuffer CameraBuffer : REG_B(SLOT_CBUFFER_CAMERA) {
 	// The camera's viewport resolution
 	uint2 g_viewport_resolution;
 
+	// The inverse of the viewport_resolution
+	float2 g_inv_viewport_resolution;
+	
+	// Alignment padding
+	float2 g_cbpad0;
+
 
 	//----------------------------------------------------------------------------------
 	// Fog
@@ -102,7 +108,7 @@ float2 DisplayToViewport(float2 p_display) {
 }
 
 float2 ViewportToUV(float2 p_viewport) {
-	return p_viewport / g_viewport_resolution;
+	return p_viewport * g_inv_viewport_resolution;
 }
 
 float3 ClipToCamera(float3 p_clip) {

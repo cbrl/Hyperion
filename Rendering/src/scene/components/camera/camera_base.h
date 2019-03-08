@@ -276,15 +276,17 @@ public:
 	                              CXMMATRIX world_to_camera) const {
 
 		const XMMATRIX camera_to_projection = getCameraToProjectionMatrix();
+		const u32_2    viewport_res         = viewport.getSize();
 
 		CameraBuffer cam_buffer;
-		cam_buffer.camera_to_world      = XMMatrixTranspose(camera_to_world);
-		cam_buffer.world_to_camera      = XMMatrixTranspose(world_to_camera);
-		cam_buffer.camera_to_projection = XMMatrixTranspose(camera_to_projection);
-		cam_buffer.projection_to_camera = XMMatrixTranspose(XMMatrixInverse(nullptr, camera_to_projection));
-		cam_buffer.viewport_top_left    = viewport.getTopLeft();
-		cam_buffer.viewport_resolution  = viewport.getSize();
-		cam_buffer.fog                  = settings.getFog();
+		cam_buffer.camera_to_world         = XMMatrixTranspose(camera_to_world);
+		cam_buffer.world_to_camera         = XMMatrixTranspose(world_to_camera);
+		cam_buffer.camera_to_projection    = XMMatrixTranspose(camera_to_projection);
+		cam_buffer.projection_to_camera    = XMMatrixTranspose(XMMatrixInverse(nullptr, camera_to_projection));
+		cam_buffer.viewport_top_left       = viewport.getTopLeft();
+		cam_buffer.viewport_resolution     = viewport_res;
+		cam_buffer.inv_viewport_resolution = {1.0f / viewport_res[0], 1.0f / viewport_res[1]};
+		cam_buffer.fog                     = settings.getFog();
 
 		buffer.updateData(device_context, cam_buffer);
 	}
