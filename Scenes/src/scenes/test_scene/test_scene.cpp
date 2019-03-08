@@ -163,20 +163,6 @@ void TestScene::initialize(Engine& engine) {
 	// Lights
 	//----------------------------------------------------------------------------------
 
-	std::srand(10101010);
-	for (size_t i = 0; i < 500; ++i) {
-		auto entity = addEntity();
-		entity->setName("Light" + std::to_string(i));
-
-		auto* transform = entity->getComponent<Transform>();
-		transform->setPosition(f32_3{(std::rand() % 10) / 5.0f, (std::rand() % 10) / 10.0f + 2.0f, (std::rand() % 10) / 5.0f});
-		auto& light = entity->addComponent<PointLight>();
-		light.setBaseColor({(std::rand() % 10) / 10.0f, (std::rand() % 10) / 10.0f, (std::rand() % 10) / 10.0f});
-		light.setIntensity(10.0f);
-		light.setAttenuation({0.0f, 0.1f, 0.1f});
-		light.setRange(20.0f);
-	}
-
 	// Sphere light
 	{
 		//auto* light = sphere_light->getComponent<PointLight>();
