@@ -90,8 +90,8 @@ struct DirectionalLight {
 		// The light vector aims opposite the direction the light rays travel
 		p_to_light = -direction;
 
-		const float4 p_proj = mul(float4(p_world, 1.0f), world_to_projection);
-		p_ndc = Homogenize(p_proj);
+		const float4 p_clip = mul(float4(p_world, 1.0f), world_to_projection);
+		p_ndc = PerspectiveDiv(p_clip);
 
 		irradiance = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : intensity;
 	}
@@ -236,8 +236,8 @@ struct ShadowSpotLight : SpotLight {
 
 		p_to_light = p_to_l0;
 
-		const float4 p_proj        = mul(float4(p_world, 1.0f), world_to_projection);
-		const float3 p_ndc         = Homogenize(p_proj);
+		const float4 p_clip        = mul(float4(p_world, 1.0f), world_to_projection);
+		const float3 p_ndc         = PerspectiveDiv(p_clip);
 		const float  shadow_factor = shadow_map.ShadowFactor(p_ndc);
 
 		irradiance = irradiance0 * shadow_factor;

@@ -114,7 +114,7 @@ float2 ViewportToUV(float2 p_viewport) {
 float3 ClipToCamera(float3 p_clip) {
 	const float4 p_projection = {p_clip, 1.0f};
 	const float4 p_camera     = mul(p_projection, g_projection_to_camera);
-	return Homogenize(p_camera);
+	return PerspectiveDiv(p_camera);
 }
 
 float3 ViewportToCamera(float2 p_viewport, float depth) {

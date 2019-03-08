@@ -94,15 +94,15 @@ double4 sqr(double4 x) {
 // Transformations
 //----------------------------------------------------------------------------------
 
-half3 Homogenize(half4 input) {
+half3 PerspectiveDiv(half4 input) {
 	return input.xyz / input.w;
 }
 
-float3 Homogenize(float4 input) {
+float3 PerspectiveDiv(float4 input) {
 	return input.xyz / input.w;
 }
 
-double3 Homogenize(double4 input) {
+double3 PerspectiveDiv(double4 input) {
 	return input.xyz / input.w;
 }
 
