@@ -37,10 +37,13 @@ void DeferredPass::bindState() const {
 
 void DeferredPass::render(BRDF brdf) const {
 	
+	// Bind the render states and vertex shader
 	bindState();
 
+	// Create the appropriate BRDF pixel shader
 	const auto ps = ShaderFactory::CreateDeferredPS(resource_mgr, brdf);
 	ps->bind(device_context);
 	
+	// Draw a fullscreen quad
 	Pipeline::draw(device_context, 6, 0);
 }
