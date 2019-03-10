@@ -31,7 +31,7 @@ Renderer::Renderer(DisplayConfig& display_config,
 	// Create renderers
 	light_pass           = std::make_unique<LightPass>(rendering_config, device, device_context, *render_state_mgr, resource_mgr);
 	forward_pass         = std::make_unique<ForwardPass>(device, device_context, *render_state_mgr, resource_mgr);
-	deferred_pass = std::make_unique<DeferredPass>(device_context, *render_state_mgr, resource_mgr);
+	deferred_pass        = std::make_unique<DeferredPass>(device_context, *render_state_mgr, resource_mgr);
 	sky_pass             = std::make_unique<SkyPass>(device_context, *render_state_mgr, resource_mgr);
 	bounding_volume_pass = std::make_unique<BoundingVolumePass>(device, device_context, *render_state_mgr, resource_mgr);
 	text_pass            = std::make_unique<TextPass>(device_context);

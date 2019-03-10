@@ -48,7 +48,7 @@ struct ShadowMap {
 	uint index;
 
 	float ShadowFactor(float3 p_ndc) {
-		const float2 uv = float2(0.5f, -0.5f) * p_ndc.xy + 0.5f;
+		const float2 uv       = float2(0.5f, -0.5f) * p_ndc.xy + 0.5f;
 		const float3 location = {uv, index};
 
 		return maps.SampleCmpLevelZero(sam_shadow, location, p_ndc.z);
@@ -65,7 +65,7 @@ struct ShadowCubeMap {
 		const float3 p_light_abs = abs(p_light);
 
 		const float p_light_z = max(p_light_abs.x, max(p_light_abs.y, p_light_abs.z));
-		const float p_ndc_z = projection_values.x + projection_values.y / p_light_z;
+		const float p_ndc_z   = projection_values.x + projection_values.y / p_light_z;
 		const float4 location = float4(p_light, index);
 
 		return maps.SampleCmpLevelZero(sam_shadow, location, p_ndc_z);
@@ -103,7 +103,7 @@ struct DirectionalLight {
 
 		Calculate(p_world, p_to_l0, irradiance0, p_ndc);
 
-		p_to_light   = p_to_l0;
+		p_to_light = p_to_l0;
 		irradiance = irradiance0;
 	}
 
@@ -210,7 +210,7 @@ struct SpotLight {
 		p_to_light /= d;
 
 		if (d <= range) {
-			const float att_factor = Attenuation(d, attenuation);
+			const float att_factor  = Attenuation(d, attenuation);
 			const float spot_factor = SpotIntensity(p_to_light, direction, cos_umbra, cos_penumbra);
 
 			irradiance = intensity * att_factor * spot_factor;
