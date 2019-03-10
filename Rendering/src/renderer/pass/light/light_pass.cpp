@@ -25,11 +25,11 @@ LightPass::LightPass(const RenderingConfig& rendering_config,
 
 	, shadowed_directional_lights(device, 1)
 	, shadowed_point_lights(device, 1)
-	, shadowed_spot_lights(device, 1)
+	, shadowed_spot_lights(device, 1) {
 
-	, directional_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1, rendering_config.getShadowMapRes()))
-	, point_light_smaps(std::make_unique<ShadowCubeMapBuffer>(device, 1, rendering_config.getShadowMapRes()))
-	, spot_light_smaps(std::make_unique<ShadowMapBuffer>(device, 1, rendering_config.getShadowMapRes())) {
+	directional_light_smaps = std::make_unique<ShadowMapBuffer>(device,     1, rendering_config.getShadowMapRes());
+	point_light_smaps       = std::make_unique<ShadowCubeMapBuffer>(device, 1, rendering_config.getShadowMapRes());
+	spot_light_smaps        = std::make_unique<ShadowMapBuffer>(device,     1, rendering_config.getShadowMapRes());
 }
 
 
@@ -101,6 +101,10 @@ void LightPass::updateData(Scene& scene) const {
 
 
 void LightPass::updateShadowMaps() {
+
+	// Ensure the slot #defines are consecutive numbers
+	static_assert(SLOT_SRV_POINT_LIGHT_SHADOW_MAPS == SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS + 1);
+	static_assert(SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS  == SLOT_SRV_POINT_LIGHT_SHADOW_MAPS + 1);
 
 	// Clear SRVs
 	ID3D11ShaderResourceView* const srvs[3] = {};
