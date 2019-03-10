@@ -117,7 +117,7 @@ void LightPass::updateShadowMaps() {
 
 
 		if (size > available || curr_res != config_res) {
-			u32 count = size ? static_cast<u32>(size) : 1;
+			const u32 count = size ? static_cast<u32>(size) : 1;
 			directional_light_smaps = std::make_unique<ShadowMapBuffer>(device, count, config_res);
 		}
 
@@ -127,13 +127,13 @@ void LightPass::updateShadowMaps() {
 	// Point Lights
 	{
 		const size_t size      = shadowed_point_lights.size();
-		const size_t available = point_light_smaps->getMapCount();
+		const size_t available = point_light_smaps->getCubeMapCount();
 
 		const auto curr_res   = point_light_smaps->getMapRes();
 		const auto config_res = rendering_config.getShadowMapRes();
 
 		if (size > available || curr_res != config_res) {
-			u32 count = size ? static_cast<u32>(size) : 1;
+			const u32 count = size ? static_cast<u32>(size) : 1;
 			point_light_smaps = std::make_unique<ShadowCubeMapBuffer>(device, count, config_res);
 		}
 
@@ -149,7 +149,7 @@ void LightPass::updateShadowMaps() {
 		const auto config_res = rendering_config.getShadowMapRes();
 
 		if (size > available || curr_res != config_res) {
-			u32 count = size ? static_cast<u32>(size) : 1;
+			const u32 count = size ? static_cast<u32>(size) : 1;
 			spot_light_smaps = std::make_unique<ShadowMapBuffer>(device, count, config_res);
 		}
 
