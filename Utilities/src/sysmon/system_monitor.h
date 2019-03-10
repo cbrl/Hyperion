@@ -155,6 +155,7 @@ class SystemMonitor final {
 			: mem_info{}
 			, pmc{} {
 			mem_info.dwLength = sizeof(MEMORYSTATUSEX);
+			tick();
 		}
 
 		MemoryMonitor(const MemoryMonitor&) = default;
