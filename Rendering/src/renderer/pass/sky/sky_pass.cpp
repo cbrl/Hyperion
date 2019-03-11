@@ -39,9 +39,9 @@ void SkyPass::bindRenderStates() const {
 
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::DS::bindShader(device_context, nullptr, {});
+	Pipeline::GS::bindShader(device_context, nullptr, {});
+	Pipeline::HS::bindShader(device_context, nullptr, {});
 
 	render_state_mgr.bind(device_context, BlendStates::Opaque);
 	render_state_mgr.bind(device_context, DepthStencilStates::LessEqR);

@@ -27,9 +27,9 @@ void BoundingVolumePass::bindRenderStates() const {
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 	// Unbind shaders
-	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::DS::bindShader(device_context, nullptr, {});
+	Pipeline::GS::bindShader(device_context, nullptr, {});
+	Pipeline::HS::bindShader(device_context, nullptr, {});
 
 	// Bind the vertex and pixel shaders
 	vertex_shader->bind(device_context);

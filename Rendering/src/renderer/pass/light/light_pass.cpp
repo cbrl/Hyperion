@@ -56,7 +56,7 @@ void XM_CALLCONV LightPass::render(Scene& scene, FXMMATRIX world_to_projection) 
 void LightPass::bindBuffers() {
 
 	// Bind null RTV and DSV
-	Pipeline::OM::bindRTVsAndDSV(device_context, 0, nullptr, nullptr);
+	Pipeline::OM::bindRTVsAndDSV(device_context, {}, nullptr);
 
 	// Bind light info buffer
 	light_buffer.bind<Pipeline::PS>(device_context, SLOT_CBUFFER_LIGHT);
@@ -73,9 +73,9 @@ void LightPass::bindBuffers() {
 
 
 	// Bind the shadow buffer SRVs
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, 1, directional_light_smaps->getSRVAddress());
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_POINT_LIGHT_SHADOW_MAPS,       1, point_light_smaps->getSRVAddress());
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS,        1, spot_light_smaps->getSRVAddress());
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, gsl::span{directional_light_smaps->getSRVAddress(), 1});
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_POINT_LIGHT_SHADOW_MAPS,       gsl::span{point_light_smaps->getSRVAddress(), 1});
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS,        gsl::span{spot_light_smaps->getSRVAddress(), 1});
 }
 
 
@@ -108,7 +108,7 @@ void LightPass::updateShadowMaps() {
 
 	// Clear SRVs
 	ID3D11ShaderResourceView* const srvs[3] = {};
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, 3, srvs);
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, gsl::span{srvs});
 
 
 	// Directional Lights

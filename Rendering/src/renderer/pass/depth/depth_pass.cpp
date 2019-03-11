@@ -25,9 +25,9 @@ DepthPass::DepthPass(ID3D11Device& device,
 void DepthPass::bindState() const {
 
 	// Bind null shaders
-	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::HS::bindShader(device_context, nullptr, {});
+	Pipeline::DS::bindShader(device_context, nullptr, {});
+	Pipeline::GS::bindShader(device_context, nullptr, {});
 
 	// Render States
 	render_state_mgr.bind(device_context, RasterStates::CullCounterClockwise);
@@ -37,7 +37,7 @@ void DepthPass::bindState() const {
 
 void DepthPass::bindOpaqueShaders() const {
 	opaque_vs->bind(device_context);
-	Pipeline::PS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::PS::bindShader(device_context, nullptr, {});
 }
 
 

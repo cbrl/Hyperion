@@ -28,9 +28,9 @@ void ForwardPass::bindOpaqueState() const {
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Unbind shaders
-	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::DS::bindShader(device_context, nullptr, {});
+	Pipeline::GS::bindShader(device_context, nullptr, {});
+	Pipeline::HS::bindShader(device_context, nullptr, {});
 
 	// Bind shaders
 	vertex_shader->bind(device_context);
@@ -48,9 +48,9 @@ void ForwardPass::bindTransparentState() const {
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Bind null shaders
-	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::DS::bindShader(device_context, nullptr, {});
+	Pipeline::GS::bindShader(device_context, nullptr, {});
+	Pipeline::HS::bindShader(device_context, nullptr, {});
 
 	// Bind shaders
 	vertex_shader->bind(device_context);
@@ -68,9 +68,9 @@ void ForwardPass::bindWireframeState() const {
 	Pipeline::IA::bindPrimitiveTopology(device_context, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// Bind null shaders
-	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::DS::bindShader(device_context, nullptr, {});
+	Pipeline::GS::bindShader(device_context, nullptr, {});
+	Pipeline::HS::bindShader(device_context, nullptr, {});
 
 	color_buffer.bind<Pipeline::PS>(device_context, SLOT_CBUFFER_COLOR);
 

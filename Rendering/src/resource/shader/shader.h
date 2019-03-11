@@ -39,7 +39,7 @@ public:
 	// Bind the vertex shader to a pipeline stage
 	void bind(ID3D11DeviceContext& device_context) const {
 		if (layout) Pipeline::IA::bindInputLayout(device_context, layout.Get());
-		Pipeline::VS::bindShader(device_context, shader.Get(), nullptr, 0);
+		Pipeline::VS::bindShader(device_context, shader.Get(), {});
 	}
 
 private:
@@ -48,7 +48,6 @@ private:
 					  const ShaderBytecode& bytecode,
 					  gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
 
-private:
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
@@ -93,14 +92,13 @@ public:
 
 	// Bind the vertex shader to a pipeline stage
 	void bind(ID3D11DeviceContext& device_context) const {
-		StageT::bindShader(device_context, shader.Get(), nullptr, 0);
+		StageT::bindShader(device_context, shader.Get(), {});
 	}
 
 private:
 
 	void createShader(ID3D11Device& device, const ShaderBytecode& bytecode);
 
-private:
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

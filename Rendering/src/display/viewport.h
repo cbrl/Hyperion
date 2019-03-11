@@ -10,9 +10,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Viewport() noexcept
-		: viewport{} {
-	}
+	Viewport() = default;
 
 	explicit Viewport(f32 width, f32 height) noexcept
 		: viewport{} {
@@ -50,7 +48,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void bind(ID3D11DeviceContext& device_context) const noexcept {
-		Pipeline::RS::bindViewports(device_context, 1, &viewport);
+		Pipeline::RS::bindViewports(device_context, gsl::span{&viewport, 1});
 	}
 
 
@@ -128,11 +126,10 @@ public:
 		viewport.MaxDepth = depth_range[1];
 	}
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
-	D3D11_VIEWPORT viewport;
+	D3D11_VIEWPORT viewport = {};
 };

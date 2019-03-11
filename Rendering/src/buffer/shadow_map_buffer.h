@@ -56,7 +56,7 @@ public:
 
 	// Bind the depth stencil view for the cube std::map
 	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
-		Pipeline::OM::bindRTVsAndDSV(device_context, 0, nullptr, dsvs[index].Get());
+		Pipeline::OM::bindRTVsAndDSV(device_context, {}, dsvs[index].Get());
 	}
 
 	// Clear the DSVs
@@ -103,7 +103,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	ShadowCubeMapBuffer(ID3D11Device& device,
 	                    u32 cube_map_count,
 	                    u32 resolution = 512);
@@ -115,14 +114,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~ShadowCubeMapBuffer() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	ShadowCubeMapBuffer& operator=(const ShadowCubeMapBuffer& buffer) = delete;
 	ShadowCubeMapBuffer& operator=(ShadowCubeMapBuffer&& buffer) noexcept = default;
 
@@ -181,8 +178,11 @@ public:
 		return srv.GetAddressOf();
 	}
 
-
 private:
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
 	Viewport viewport;
 	ComPtr<ID3D11RasterizerState> raster_state;
 

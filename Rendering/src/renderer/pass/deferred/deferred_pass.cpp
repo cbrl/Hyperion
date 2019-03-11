@@ -24,9 +24,9 @@ void DeferredPass::bindState() const {
 	vertex_shader->bind(device_context);
 
 	// Unbind shaders
-	Pipeline::DS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::GS::bindShader(device_context, nullptr, nullptr, 0);
-	Pipeline::HS::bindShader(device_context, nullptr, nullptr, 0);
+	Pipeline::DS::bindShader(device_context, nullptr, {});
+	Pipeline::GS::bindShader(device_context, nullptr, {});
+	Pipeline::HS::bindShader(device_context, nullptr, {});
 
 	// Bind render states
 	render_state_mgr.get().bind(device_context, BlendStates::Opaque);

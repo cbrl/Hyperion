@@ -2,6 +2,7 @@
 
 #include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
+#include "gsl/span"
 
 
 class Pipeline final {
@@ -22,15 +23,14 @@ public:
 	// Bind samplers to every stage
 	static void bindSamplers(ID3D11DeviceContext& device_context,
 	                         u32 start_slot,
-	                         u32 num_samplers,
-	                         ID3D11SamplerState* const* samplers) {
+	                         gsl::span<ID3D11SamplerState* const> samplers) {
 
-		CS::bindSamplers(device_context, start_slot, num_samplers, samplers);
-		DS::bindSamplers(device_context, start_slot, num_samplers, samplers);
-		GS::bindSamplers(device_context, start_slot, num_samplers, samplers);
-		HS::bindSamplers(device_context, start_slot, num_samplers, samplers);
-		PS::bindSamplers(device_context, start_slot, num_samplers, samplers);
-		VS::bindSamplers(device_context, start_slot, num_samplers, samplers);
+		CS::bindSamplers(device_context, start_slot, samplers);
+		DS::bindSamplers(device_context, start_slot, samplers);
+		GS::bindSamplers(device_context, start_slot, samplers);
+		HS::bindSamplers(device_context, start_slot, samplers);
+		PS::bindSamplers(device_context, start_slot, samplers);
+		VS::bindSamplers(device_context, start_slot, samplers);
 	}
 
 	// Bind a constant buffer to every stage
@@ -49,15 +49,14 @@ public:
 	// Bind constant buffers to every stage
 	static void bindConstantBuffers(ID3D11DeviceContext& device_context,
 	                                u32 start_slot,
-	                                u32 num_buffers,
-	                                ID3D11Buffer* const* buffers) {
+	                                gsl::span<ID3D11Buffer* const> buffers) {
 
-		CS::bindConstantBuffers(device_context, start_slot, num_buffers, buffers);
-		DS::bindConstantBuffers(device_context, start_slot, num_buffers, buffers);
-		GS::bindConstantBuffers(device_context, start_slot, num_buffers, buffers);
-		HS::bindConstantBuffers(device_context, start_slot, num_buffers, buffers);
-		PS::bindConstantBuffers(device_context, start_slot, num_buffers, buffers);
-		VS::bindConstantBuffers(device_context, start_slot, num_buffers, buffers);
+		CS::bindConstantBuffers(device_context, start_slot, buffers);
+		DS::bindConstantBuffers(device_context, start_slot, buffers);
+		GS::bindConstantBuffers(device_context, start_slot, buffers);
+		HS::bindConstantBuffers(device_context, start_slot, buffers);
+		PS::bindConstantBuffers(device_context, start_slot, buffers);
+		VS::bindConstantBuffers(device_context, start_slot, buffers);
 	}
 
 	// Bind a shader resource view to every stage
@@ -76,15 +75,14 @@ public:
 	// Bind shader resource views to every stage
 	static void bindSRVs(ID3D11DeviceContext& device_context,
 	                     u32 start_slot,
-	                     u32 num_views,
-	                     ID3D11ShaderResourceView* const* srvs) {
+	                     gsl::span<ID3D11ShaderResourceView* const> srvs) {
 
-		CS::bindSRVs(device_context, start_slot, num_views, srvs);
-		DS::bindSRVs(device_context, start_slot, num_views, srvs);
-		GS::bindSRVs(device_context, start_slot, num_views, srvs);
-		HS::bindSRVs(device_context, start_slot, num_views, srvs);
-		PS::bindSRVs(device_context, start_slot, num_views, srvs);
-		VS::bindSRVs(device_context, start_slot, num_views, srvs);
+		CS::bindSRVs(device_context, start_slot, srvs);
+		DS::bindSRVs(device_context, start_slot, srvs);
+		GS::bindSRVs(device_context, start_slot, srvs);
+		HS::bindSRVs(device_context, start_slot, srvs);
+		PS::bindSRVs(device_context, start_slot, srvs);
+		VS::bindSRVs(device_context, start_slot, srvs);
 	}
 
 	static void draw(ID3D11DeviceContext& device_context,
@@ -148,18 +146,17 @@ public:
 		                             u32 stride,
 		                             u32 offset) {
 
-			ID3D11Buffer* buffers[] = { buffer };
-			bindVertexBuffers(device_context, slot, 1, buffers, &stride, &offset);
+			ID3D11Buffer* buffers[1] = { buffer };
+			bindVertexBuffers(device_context, slot, gsl::span{buffers}, &stride, &offset);
 		}
 
 		static void bindVertexBuffers(ID3D11DeviceContext& device_context,
 		                              u32 start_slot,
-		                              u32 num_buffers,
-		                              ID3D11Buffer* const* buffers,
+		                              gsl::span<ID3D11Buffer* const> buffers,
 		                              const u32* strides,
 		                              const u32* offsets) {
 
-			device_context.IASetVertexBuffers(start_slot, num_buffers, buffers, strides, offsets);
+			device_context.IASetVertexBuffers(start_slot, static_cast<UINT>(buffers.size()), buffers.data(), strides, offsets);
 		}
 
 		static void bindInputLayout(ID3D11DeviceContext& device_context,
@@ -198,37 +195,34 @@ public:
 		                          ID3D11DepthStencilView* dsv) {
 
 			if (rtv) {
-				ID3D11RenderTargetView* const rtvs[] = { rtv };
-				bindRTVsAndDSV(device_context, 1, rtvs, dsv);
+				ID3D11RenderTargetView* const rtvs[1] = { rtv };
+				bindRTVsAndDSV(device_context, gsl::span{rtvs}, dsv);
 			}
 			else {
-				bindRTVsAndDSV(device_context, 0, nullptr, dsv);
+				bindRTVsAndDSV(device_context, {}, dsv);
 			}
 		}
 
 		static void bindRTVsAndDSV(ID3D11DeviceContext& device_context,
-		                           u32 num_views,
-		                           ID3D11RenderTargetView* const* rtvs,
+		                           gsl::span<ID3D11RenderTargetView* const> rtvs,
 		                           ID3D11DepthStencilView* dsv) {
 
-			device_context.OMSetRenderTargets(num_views, rtvs, dsv);
+			device_context.OMSetRenderTargets(static_cast<UINT>(rtvs.size()), rtvs.data(), dsv);
 		}
 
 		static void bindRTVsAndUTVs(ID3D11DeviceContext& device_context,
-		                            u32 num_rtvs,
-		                            ID3D11RenderTargetView* const* rtvs,
+		                            gsl::span<ID3D11RenderTargetView* const> rtvs,
 		                            ID3D11DepthStencilView* dsv,
 		                            u32 start_slot,
-		                            u32 num_uavs,
-		                            ID3D11UnorderedAccessView* const* uavs,
+		                            gsl::span<ID3D11UnorderedAccessView* const> uavs,
 		                            u32 initial_counts) {
 
-			device_context.OMSetRenderTargetsAndUnorderedAccessViews(num_rtvs,
-			                                                         rtvs,
+			device_context.OMSetRenderTargetsAndUnorderedAccessViews(static_cast<UINT>(rtvs.size()),
+			                                                         rtvs.data(),
 			                                                         dsv,
 			                                                         start_slot,
-			                                                         num_uavs,
-			                                                         uavs,
+			                                                         static_cast<UINT>(uavs.size()),
+			                                                         uavs.data(),
 			                                                         &initial_counts);
 		}
 
@@ -260,58 +254,54 @@ public:
 	struct CS {
 		static void bindShader(ID3D11DeviceContext& device_context,
 		                       ID3D11ComputeShader* shader,
-		                       ID3D11ClassInstance* const* instances,
-		                       u32 num_instances) {
+		                       gsl::span<ID3D11ClassInstance* const> instances) {
 
-			device_context.CSSetShader(shader, instances, num_instances);
+			device_context.CSSetShader(shader, instances.data(), static_cast<UINT>(instances.size()));
 		}
 
 		static void bindSampler(ID3D11DeviceContext& device_context,
 		                        u32 start_slot,
 		                        ID3D11SamplerState* sampler) {
 
-			ID3D11SamplerState* const samplers[] = { sampler };
-			bindSamplers(device_context, start_slot, 1, samplers);
+			ID3D11SamplerState* const samplers[1] = { sampler };
+			bindSamplers(device_context, start_slot, gsl::span{samplers});
 		}
 
 		static void bindSamplers(ID3D11DeviceContext& device_context,
 		                         u32 start_slot,
-		                         u32 num_samplers,
-		                         ID3D11SamplerState* const* samplers) {
+		                         gsl::span<ID3D11SamplerState* const> samplers) {
 
-			device_context.CSSetSamplers(start_slot, num_samplers, samplers);
+			device_context.CSSetSamplers(start_slot, static_cast<UINT>(samplers.size()), samplers.data());
 		}
 
 		static void bindConstantBuffer(ID3D11DeviceContext& device_context,
 		                               u32 start_slot,
 		                               ID3D11Buffer* buffer) {
 
-			ID3D11Buffer* const buffers[] = { buffer };
-			bindConstantBuffers(device_context, start_slot, 1, buffers);
+			ID3D11Buffer* const buffers[1] = { buffer };
+			bindConstantBuffers(device_context, start_slot, gsl::span{buffers});
 		}
 
 		static void bindConstantBuffers(ID3D11DeviceContext& device_context,
 		                                u32 start_slot,
-		                                u32 num_buffers,
-		                                ID3D11Buffer* const* buffers) {
+		                                gsl::span<ID3D11Buffer* const> buffers) {
 
-			device_context.CSSetConstantBuffers(start_slot, num_buffers, buffers);
+			device_context.CSSetConstantBuffers(start_slot, static_cast<UINT>(buffers.size()), buffers.data());
 		}
 
 		static void bindSRV(ID3D11DeviceContext& device_context,
 		                    u32 start_slot,
 		                    ID3D11ShaderResourceView* srv) {
 
-			ID3D11ShaderResourceView* const srvs[] = { srv };
-			bindSRVs(device_context, start_slot, 1, srvs);
+			ID3D11ShaderResourceView* const srvs[1] = { srv };
+			bindSRVs(device_context, start_slot, gsl::span{srvs});
 		}
 
 		static void bindSRVs(ID3D11DeviceContext& device_context,
 		                     u32 start_slot,
-		                     u32 num_views,
-		                     ID3D11ShaderResourceView* const* srvs) {
+		                     gsl::span<ID3D11ShaderResourceView* const> srvs) {
 
-			device_context.CSSetShaderResources(start_slot, num_views, srvs);
+			device_context.CSSetShaderResources(start_slot, static_cast<UINT>(srvs.size()), srvs.data());
 		}
 
 		static void bindUAV(ID3D11DeviceContext& device_context,
@@ -319,17 +309,16 @@ public:
 		                     ID3D11UnorderedAccessView* uav,
 		                     const u32* initial_counts = nullptr) {
 
-			ID3D11UnorderedAccessView* const uavs[] = { uav };
-			bindUAVs(device_context, start_slot, 1, uavs, initial_counts);
+			ID3D11UnorderedAccessView* const uavs[1] = { uav };
+			bindUAVs(device_context, start_slot, gsl::span{uavs}, initial_counts);
 		}
 
 		static void bindUAVs(ID3D11DeviceContext& device_context,
 		                     u32 start_slot,
-		                     u32 num_uavs,
-		                     ID3D11UnorderedAccessView* const* uavs,
+		                     gsl::span<ID3D11UnorderedAccessView* const> uavs,
 		                     const u32* initial_counts = nullptr) {
 
-			device_context.CSSetUnorderedAccessViews(start_slot, num_uavs, uavs, initial_counts);
+			device_context.CSSetUnorderedAccessViews(start_slot, static_cast<UINT>(uavs.size()), uavs.data(), initial_counts);
 		}
 	};
 
@@ -340,58 +329,54 @@ public:
 	struct DS {
 		static void bindShader(ID3D11DeviceContext& device_context,
 		                       ID3D11DomainShader* shader,
-		                       ID3D11ClassInstance* const* instances,
-		                       u32 num_instances) {
+		                       gsl::span<ID3D11ClassInstance* const> instances) {
 
-			device_context.DSSetShader(shader, instances, num_instances);
+			device_context.DSSetShader(shader, instances.data(), static_cast<UINT>(instances.size()));
 		}
 
 		static void bindSampler(ID3D11DeviceContext& device_context,
 		                        u32 start_slot,
 		                        ID3D11SamplerState* sampler) {
 
-			ID3D11SamplerState* const samplers[] = { sampler };
-			bindSamplers(device_context, start_slot, 1, samplers);
+			ID3D11SamplerState* const samplers[1] = { sampler };
+			bindSamplers(device_context, start_slot, gsl::span{samplers});
 		}
 
 		static void bindSamplers(ID3D11DeviceContext& device_context,
 		                         u32 start_slot,
-		                         u32 num_samplers,
-		                         ID3D11SamplerState* const* samplers) {
+		                         gsl::span<ID3D11SamplerState* const> samplers) {
 
-			device_context.DSSetSamplers(start_slot, num_samplers, samplers);
+			device_context.DSSetSamplers(start_slot, static_cast<UINT>(samplers.size()), samplers.data());
 		}
 
 		static void bindConstantBuffer(ID3D11DeviceContext& device_context,
 		                               u32 start_slot,
 		                               ID3D11Buffer* buffer) {
 
-			ID3D11Buffer* const buffers[] = { buffer };
-			bindConstantBuffers(device_context, start_slot, 1, buffers);
+			ID3D11Buffer* const buffers[1] = { buffer };
+			bindConstantBuffers(device_context, start_slot, gsl::span{buffers});
 		}
 
 		static void bindConstantBuffers(ID3D11DeviceContext& device_context,
 		                                u32 start_slot,
-		                                u32 num_buffers,
-		                                ID3D11Buffer* const* buffers) {
+		                                gsl::span<ID3D11Buffer* const> buffers) {
 
-			device_context.DSSetConstantBuffers(start_slot, num_buffers, buffers);
+			device_context.DSSetConstantBuffers(start_slot, static_cast<UINT>(buffers.size()), buffers.data());
 		}
 
 		static void bindSRV(ID3D11DeviceContext& device_context,
 		                    u32 start_slot,
 		                    ID3D11ShaderResourceView* srv) {
 
-			ID3D11ShaderResourceView* const srvs[] = { srv };
-			bindSRVs(device_context, start_slot, 1, srvs);
+			ID3D11ShaderResourceView* const srvs[1] = { srv };
+			bindSRVs(device_context, start_slot, gsl::span{srvs});
 		}
 
 		static void bindSRVs(ID3D11DeviceContext& device_context,
 		                     u32 start_slot,
-		                     u32 num_views,
-		                     ID3D11ShaderResourceView* const* srvs) {
+		                     gsl::span<ID3D11ShaderResourceView* const> srvs) {
 
-			device_context.DSSetShaderResources(start_slot, num_views, srvs);
+			device_context.DSSetShaderResources(start_slot, static_cast<UINT>(srvs.size()), srvs.data());
 		}
 	};
 
@@ -402,58 +387,54 @@ public:
 	struct GS {
 		static void bindShader(ID3D11DeviceContext& device_context,
 		                       ID3D11GeometryShader* shader,
-		                       ID3D11ClassInstance* const* instances,
-		                       u32 num_instances) {
+		                       gsl::span<ID3D11ClassInstance* const> instances) {
 
-			device_context.GSSetShader(shader, instances, num_instances);
+			device_context.GSSetShader(shader, instances.data(), static_cast<UINT>(instances.size()));
 		}
 
 		static void bindSampler(ID3D11DeviceContext& device_context,
 		                        u32 start_slot,
 		                        ID3D11SamplerState* sampler) {
 
-			ID3D11SamplerState* const samplers[] = { sampler };
-			bindSamplers(device_context, start_slot, 1, samplers);
+			ID3D11SamplerState* const samplers[1] = { sampler };
+			bindSamplers(device_context, start_slot, gsl::span{samplers});
 		}
 
 		static void bindSamplers(ID3D11DeviceContext& device_context,
 		                         u32 start_slot,
-		                         u32 num_samplers,
-		                         ID3D11SamplerState* const* samplers) {
+		                         gsl::span<ID3D11SamplerState* const> samplers) {
 
-			device_context.GSSetSamplers(start_slot, num_samplers, samplers);
+			device_context.GSSetSamplers(start_slot, static_cast<UINT>(samplers.size()), samplers.data());
 		}
 
 		static void bindConstantBuffer(ID3D11DeviceContext& device_context,
 		                               u32 start_slot,
 		                               ID3D11Buffer* buffer) {
 
-			ID3D11Buffer* const buffers[] = { buffer };
-			bindConstantBuffers(device_context, start_slot, 1, buffers);
+			ID3D11Buffer* const buffers[1] = { buffer };
+			bindConstantBuffers(device_context, start_slot, gsl::span{buffers});
 		}
 
 		static void bindConstantBuffers(ID3D11DeviceContext& device_context,
 		                                u32 start_slot,
-		                                u32 num_buffers,
-		                                ID3D11Buffer* const* buffers) {
+		                                gsl::span<ID3D11Buffer* const> buffers) {
 
-			device_context.GSSetConstantBuffers(start_slot, num_buffers, buffers);
+			device_context.GSSetConstantBuffers(start_slot, static_cast<UINT>(buffers.size()), buffers.data());
 		}
 
 		static void bindSRV(ID3D11DeviceContext& device_context,
 		                    u32 start_slot,
 		                    ID3D11ShaderResourceView* srv) {
 
-			ID3D11ShaderResourceView* const srvs[] = { srv };
-			bindSRVs(device_context, start_slot, 1, srvs);
+			ID3D11ShaderResourceView* const srvs[1] = { srv };
+			bindSRVs(device_context, start_slot, gsl::span{srvs});
 		}
 
 		static void bindSRVs(ID3D11DeviceContext& device_context,
 		                     u32 start_slot,
-		                     u32 num_views,
-		                     ID3D11ShaderResourceView* const* srvs) {
+		                     gsl::span<ID3D11ShaderResourceView* const> srvs) {
 
-			device_context.GSSetShaderResources(start_slot, num_views, srvs);
+			device_context.GSSetShaderResources(start_slot, static_cast<UINT>(srvs.size()), srvs.data());
 		}
 	};
 
@@ -464,58 +445,54 @@ public:
 	struct HS {
 		static void bindShader(ID3D11DeviceContext& device_context,
 		                       ID3D11HullShader* shader,
-		                       ID3D11ClassInstance* const* instances,
-		                       u32 num_instances) {
+		                       gsl::span<ID3D11ClassInstance* const> instances) {
 
-			device_context.HSSetShader(shader, instances, num_instances);
+			device_context.HSSetShader(shader, instances.data(), static_cast<UINT>(instances.size()));
 		}
 
 		static void bindSampler(ID3D11DeviceContext& device_context,
 		                        u32 start_slot,
 		                        ID3D11SamplerState* sampler) {
 
-			ID3D11SamplerState* const samplers[] = { sampler };
-			bindSamplers(device_context, start_slot, 1, samplers);
+			ID3D11SamplerState* const samplers[1] = { sampler };
+			bindSamplers(device_context, start_slot, gsl::span{samplers});
 		}
 
 		static void bindSamplers(ID3D11DeviceContext& device_context,
 		                         u32 start_slot,
-		                         u32 num_samplers,
-		                         ID3D11SamplerState* const* samplers) {
+		                         gsl::span<ID3D11SamplerState* const> samplers) {
 
-			device_context.HSSetSamplers(start_slot, num_samplers, samplers);
+			device_context.HSSetSamplers(start_slot, static_cast<UINT>(samplers.size()), samplers.data());
 		}
 
 		static void bindConstantBuffer(ID3D11DeviceContext& device_context,
 		                               u32 start_slot,
 		                               ID3D11Buffer* buffer) {
 
-			ID3D11Buffer* const buffers[] = { buffer };
-			bindConstantBuffers(device_context, start_slot, 1, buffers);
+			ID3D11Buffer* const buffers[1] = { buffer };
+			bindConstantBuffers(device_context, start_slot, gsl::span{buffers});
 		}
 
 		static void bindConstantBuffers(ID3D11DeviceContext& device_context,
 		                                u32 start_slot,
-		                                u32 num_buffers,
-		                                ID3D11Buffer* const* buffers) {
+		                                gsl::span<ID3D11Buffer* const> buffers) {
 
-			device_context.HSSetConstantBuffers(start_slot, num_buffers, buffers);
+			device_context.HSSetConstantBuffers(start_slot, static_cast<UINT>(buffers.size()), buffers.data());
 		}
 
 		static void bindSRV(ID3D11DeviceContext& device_context,
 		                    u32 start_slot,
 		                    ID3D11ShaderResourceView* srv) {
 
-			ID3D11ShaderResourceView* const srvs[] = { srv };
-			bindSRVs(device_context, start_slot, 1, srvs);
+			ID3D11ShaderResourceView* const srvs[1] = { srv };
+			bindSRVs(device_context, start_slot, gsl::span{srvs});
 		}
 
 		static void bindSRVs(ID3D11DeviceContext& device_context,
 		                     u32 start_slot,
-		                     u32 num_views,
-		                     ID3D11ShaderResourceView* const* srvs) {
+		                     gsl::span<ID3D11ShaderResourceView* const> srvs) {
 
-			device_context.HSSetShaderResources(start_slot, num_views, srvs);
+			device_context.HSSetShaderResources(start_slot, static_cast<UINT>(srvs.size()), srvs.data());
 		}
 	};
 
@@ -526,58 +503,54 @@ public:
 	struct PS {
 		static void bindShader(ID3D11DeviceContext& device_context,
 		                       ID3D11PixelShader* shader,
-		                       ID3D11ClassInstance* const* instances,
-		                       u32 num_instances) {
+		                       gsl::span<ID3D11ClassInstance* const> instances) {
 
-			device_context.PSSetShader(shader, instances, num_instances);
+			device_context.PSSetShader(shader, instances.data(), static_cast<UINT>(instances.size()));
 		}
 
 		static void bindSampler(ID3D11DeviceContext& device_context,
 		                        u32 start_slot,
 		                        ID3D11SamplerState* sampler) {
 
-			ID3D11SamplerState* const samplers[] = { sampler };
-			bindSamplers(device_context, start_slot, 1, samplers);
+			ID3D11SamplerState* const samplers[1] = { sampler };
+			bindSamplers(device_context, start_slot, gsl::span{samplers});
 		}
 
 		static void bindSamplers(ID3D11DeviceContext& device_context,
 		                         u32 start_slot,
-		                         u32 num_samplers,
-		                         ID3D11SamplerState* const* samplers) {
+		                         gsl::span<ID3D11SamplerState* const> samplers) {
 
-			device_context.PSSetSamplers(start_slot, num_samplers, samplers);
+			device_context.PSSetSamplers(start_slot, static_cast<UINT>(samplers.size()), samplers.data());
 		}
 
 		static void bindConstantBuffer(ID3D11DeviceContext& device_context,
 		                               u32 start_slot,
 		                               ID3D11Buffer* buffer) {
 
-			ID3D11Buffer* const buffers[] = { buffer };
-			bindConstantBuffers(device_context, start_slot, 1, buffers);
+			ID3D11Buffer* const buffers[1] = { buffer };
+			bindConstantBuffers(device_context, start_slot, gsl::span{buffers});
 		}
 
 		static void bindConstantBuffers(ID3D11DeviceContext& device_context,
 		                                u32 start_slot,
-		                                u32 num_buffers,
-		                                ID3D11Buffer* const* buffers) {
+		                                gsl::span<ID3D11Buffer* const> buffers) {
 
-			device_context.PSSetConstantBuffers(start_slot, num_buffers, buffers);
+			device_context.PSSetConstantBuffers(start_slot, static_cast<UINT>(buffers.size()), buffers.data());
 		}
 
 		static void bindSRV(ID3D11DeviceContext& device_context,
 		                    u32 start_slot,
 		                    ID3D11ShaderResourceView* srv) {
 
-			ID3D11ShaderResourceView* const srvs[] = { srv };
-			bindSRVs(device_context, start_slot, 1, srvs);
+			ID3D11ShaderResourceView* const srvs[1] = { srv };
+			bindSRVs(device_context, start_slot, gsl::span{srvs});
 		}
 
 		static void bindSRVs(ID3D11DeviceContext& device_context,
 		                     u32 start_slot,
-		                     u32 num_views,
-		                     ID3D11ShaderResourceView* const* srvs) {
+		                     gsl::span<ID3D11ShaderResourceView* const> srvs) {
 
-			device_context.PSSetShaderResources(start_slot, num_views, srvs);
+			device_context.PSSetShaderResources(start_slot, static_cast<UINT>(srvs.size()), srvs.data());
 		}
 	};
 
@@ -587,10 +560,9 @@ public:
 	//----------------------------------------------------------------------------------
 	struct RS {
 		static void bindScissorRects(ID3D11DeviceContext& device_context,
-		                             u32 num_rects,
-		                             const D3D11_RECT* rects) {
+		                             gsl::span<const D3D11_RECT> rects) {
 
-			device_context.RSSetScissorRects(num_rects, rects);
+			device_context.RSSetScissorRects(static_cast<UINT>(rects.size()), rects.data());
 		}
 
 		static void bindState(ID3D11DeviceContext& device_context,
@@ -600,10 +572,9 @@ public:
 		}
 
 		static void bindViewports(ID3D11DeviceContext& device_context,
-		                          u32 num_viewports,
-		                          const D3D11_VIEWPORT* viewports) {
+		                          gsl::span<const D3D11_VIEWPORT> viewports) {
 
-			device_context.RSSetViewports(num_viewports, viewports);
+			device_context.RSSetViewports(static_cast<UINT>(viewports.size()), viewports.data());
 		}
 	};
 
@@ -614,58 +585,54 @@ public:
 	struct VS {
 		static void bindShader(ID3D11DeviceContext& device_context,
 		                       ID3D11VertexShader* shader,
-		                       ID3D11ClassInstance* const* instances,
-		                       u32 num_instances) {
+		                       gsl::span<ID3D11ClassInstance* const> instances) {
 
-			device_context.VSSetShader(shader, instances, num_instances);
+			device_context.VSSetShader(shader, instances.data(), static_cast<UINT>(instances.size()));
 		}
 
 		static void bindSampler(ID3D11DeviceContext& device_context,
 		                        u32 start_slot,
 		                        ID3D11SamplerState* sampler) {
 
-			ID3D11SamplerState* const samplers[] = { sampler };
-			bindSamplers(device_context, start_slot, 1, samplers);
+			ID3D11SamplerState* const samplers[1] = { sampler };
+			bindSamplers(device_context, start_slot, gsl::span{samplers});
 		}
 
 		static void bindSamplers(ID3D11DeviceContext& device_context,
 		                         u32 start_slot,
-		                         u32 num_samplers,
-		                         ID3D11SamplerState* const* samplers) {
+		                         gsl::span<ID3D11SamplerState* const> samplers) {
 
-			device_context.VSSetSamplers(start_slot, num_samplers, samplers);
+			device_context.VSSetSamplers(start_slot, static_cast<UINT>(samplers.size()), samplers.data());
 		}
 
 		static void bindConstantBuffer(ID3D11DeviceContext& device_context,
 		                               u32 start_slot,
 		                               ID3D11Buffer* buffer) {
 
-			ID3D11Buffer* const buffers[] = { buffer };
-			bindConstantBuffers(device_context, start_slot, 1, buffers);
+			ID3D11Buffer* const buffers[1] = { buffer };
+			bindConstantBuffers(device_context, start_slot, gsl::span{buffers});
 		}
 
 		static void bindConstantBuffers(ID3D11DeviceContext& device_context,
 		                                u32 start_slot,
-		                                u32 num_buffers,
-		                                ID3D11Buffer* const* buffers) {
+		                                gsl::span<ID3D11Buffer* const> buffers) {
 
-			device_context.VSSetConstantBuffers(start_slot, num_buffers, buffers);
+			device_context.VSSetConstantBuffers(start_slot, static_cast<UINT>(buffers.size()), buffers.data());
 		}
 
 		static void bindSRV(ID3D11DeviceContext& device_context,
 		                    u32 start_slot,
 		                    ID3D11ShaderResourceView* srv) {
 
-			ID3D11ShaderResourceView* const srvs[] = { srv };
-			bindSRVs(device_context, start_slot, 1, srvs);
+			ID3D11ShaderResourceView* const srvs[1] = { srv };
+			bindSRVs(device_context, start_slot, gsl::span{srvs});
 		}
 
 		static void bindSRVs(ID3D11DeviceContext& device_context,
 		                     u32 start_slot,
-		                     u32 num_views,
-		                     ID3D11ShaderResourceView* const* srvs) {
+		                     gsl::span<ID3D11ShaderResourceView* const> srvs) {
 
-			device_context.VSSetShaderResources(start_slot, num_views, srvs);
+			device_context.VSSetShaderResources(start_slot, static_cast<UINT>(srvs.size()), srvs.data());
 		}
 	};
 };
