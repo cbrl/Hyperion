@@ -35,7 +35,7 @@ protected:
 
 private:
 
-	void addComponentDetailRenderes(UserInterface& ui);
+	void addUserComponentsToUI(UserInterface& ui);
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

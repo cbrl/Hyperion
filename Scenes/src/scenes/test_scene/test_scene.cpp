@@ -27,7 +27,7 @@ void TestScene::initialize(Engine& engine) {
 
 	// User Interface
 	auto& ui = addSystem<UserInterface>(engine);
-	addComponentDetailRenderes(ui);
+	addUserComponentsToUI(ui);
 
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
 	addSystem<CameraMotorSystem>(input);
@@ -48,7 +48,7 @@ void TestScene::initialize(Engine& engine) {
 
 	// Create the camera
 	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
-	camera->setName("Perspective Camera");
+	camera->setName("Camera");
 	camera->addComponent<AmbientLight>().setColor(f32_4{0.16f, 0.16f, 0.16f, 1.0f});
 
 	// Set the parameters
@@ -225,7 +225,7 @@ void TestScene::initialize(Engine& engine) {
 }
 
 
-void TestScene::addComponentDetailRenderes(UserInterface& ui) {
+void TestScene::addUserComponentsToUI(UserInterface& ui) {
 
 	//----------------------------------------------------------------------------------
 	// Camera Movement
