@@ -10,14 +10,33 @@ class Input;
 class Scene;
 class ResourceMgr;
 class Texture;
-class IComponent;
+
+class Entity;
 class EntityPtr;
+class IComponent;
 
 class Transform;
 
 
 class EntityDetailsWindow final {
-	using ComponentDetailsFunc = std::function<void(IComponent&)>;
+public:
+	//----------------------------------------------------------------------------------
+	// User Component
+	//----------------------------------------------------------------------------------
+	struct UserComponent final {
+		using adder_func = std::function<void(Entity&)>;
+		using details_func = std::function<void(IComponent&)>;
+
+		// The display name of this component
+		std::string name;
+
+		// A function that handles adding the component to a given entity
+		adder_func adder;
+
+		// A function that draws the component's details in ImGui
+		details_func details_renderer;
+	};
+
 
 public:
 	//----------------------------------------------------------------------------------
@@ -49,11 +68,11 @@ public:
 	void draw(Engine& engine, EntityPtr entity_ptr);
 
 	template<typename ComponentT>
-	void addComponentDetailsRenderer(gsl::czstring<> name, const std::function<void(IComponent&)>& renderer) {
+	void registerUserComponent(const UserComponent& component_def) {
 		static_assert(std::is_base_of_v<IComponent, ComponentT>,
 		              "EntityDetailsWindow::addComponentDetailsRenderer() - Invalid component type specified");
 
-		component_renderers[ComponentT::index] = std::make_pair(name, renderer);
+		user_components[ComponentT::index] = component_def;
 	}
 
 private:
@@ -65,7 +84,7 @@ private:
 	template<typename T, typename... ArgsT>
 	void drawComponentNode(gsl::czstring<> text, T& component, ArgsT&&... args);
 
-	void drawUserComponentNode(gsl::czstring<> text, IComponent& component, const ComponentDetailsFunc& draw_func);
+	void drawUserComponentNode(gsl::czstring<> text, IComponent& component, const UserComponent::details_func& draw_func);
 
 	template<typename ComponentT, typename... ArgsT>
 	void drawDetails(ComponentT& component, ArgsT&&... args);
@@ -100,6 +119,7 @@ private:
 	// Resource Map Combo Box
 	std::vector<std::reference_wrapper<const std::string>> res_map_names;
 
-	// Functions to draw the details of user-added components
-	std::unordered_map< std::type_index, std::pair<gsl::czstring<>, ComponentDetailsFunc> > component_renderers;
+	// User component definitions. Each component definiton contains functions that handle
+	// adding a new component of that type, and drawing its details in ImGui.
+	std::unordered_map<std::type_index, UserComponent> user_components;
 };

@@ -226,7 +226,19 @@ void TestScene::initialize(Engine& engine) {
 
 
 void TestScene::addComponentDetailRenderes(UserInterface& ui) {
-	ui.addComponentDetailsRenderer<CameraMovement>("Camera Movement", [](IComponent& component) -> void {
+
+	//----------------------------------------------------------------------------------
+	// Camera Movement
+	//----------------------------------------------------------------------------------
+	UserInterface::UserComponent camera_movement;
+
+	camera_movement.name = "Camera Movement";
+
+	camera_movement.adder = [](Entity& entity) -> void {
+		entity.addComponent<CameraMovement>();
+	};
+
+	camera_movement.details_renderer = [](IComponent& component) -> void {
 		CameraMovement& movement = static_cast<CameraMovement&>(component);
 
 		f32 max_velocity = movement.getMaxVelocity();
@@ -241,18 +253,46 @@ void TestScene::addComponentDetailRenderes(UserInterface& ui) {
 
 		if (ImGui::InputFloat("Deceleration", &deceleration))
 			movement.setDeceleration(deceleration);
-	});
+	};
 
-	ui.addComponentDetailsRenderer<MouseRotation>("Mouse Rotation", [](IComponent& component) {
+	ui.registerUserComponent<CameraMovement>(camera_movement);
+
+
+	//----------------------------------------------------------------------------------
+	// Mouse Rotation
+	//----------------------------------------------------------------------------------
+	UserInterface::UserComponent mouse_rotation;
+
+	mouse_rotation.name = "Mouse Rotation";
+
+	mouse_rotation.adder = [](Entity& entity) -> void {
+		entity.addComponent<MouseRotation>();
+	};
+
+	mouse_rotation.details_renderer = [](IComponent& component) -> void {
 		MouseRotation& rotation = static_cast<MouseRotation&>(component);
 		f32 sensitivity = rotation.getSensitivity();
 
 		if (ImGui::DragFloat("Sensitivity", &sensitivity, 0.01f, 0.0f, FLT_MAX)) {
 			rotation.setSensitivity(sensitivity);
 		}
-	});
+	};
 
-	ui.addComponentDetailsRenderer<AxisRotation>("Axis Rotation", [](IComponent& component) {
+	ui.registerUserComponent<MouseRotation>(mouse_rotation);
+
+
+	//----------------------------------------------------------------------------------
+	// Axis Rotation
+	//----------------------------------------------------------------------------------
+	UserInterface::UserComponent axis_rotation;
+
+	axis_rotation.name = "Axis Rotation";
+
+	axis_rotation.adder = [](Entity& entity) -> void {
+		entity.addComponent<AxisRotation>();
+	};
+
+	axis_rotation.details_renderer = [](IComponent& component) -> void {
 		AxisRotation& rotation = static_cast<AxisRotation&>(component);
 
 		//----------------------------------------------------------------------------------
@@ -308,15 +348,31 @@ void TestScene::addComponentDetailRenderes(UserInterface& ui) {
 				rotation.setSpeedZ(speed_z);
 			}
 		}
-	});
+	};
 
-	ui.addComponentDetailsRenderer<AxisOrbit>("Axis Orbit", [](IComponent& component) {
+	ui.registerUserComponent<AxisRotation>(axis_rotation);
+
+
+	//----------------------------------------------------------------------------------
+	// Axis Orbit
+	//----------------------------------------------------------------------------------
+	UserInterface::UserComponent axis_orbit;
+
+	axis_orbit.name = "Axis Orbit";
+
+	axis_orbit.adder = [](Entity& entity) -> void {
+		entity.addComponent<AxisOrbit>();
+	};
+
+	axis_orbit.details_renderer = [](IComponent& component) -> void{
 		AxisOrbit& orbit = static_cast<AxisOrbit&>(component);
 		auto axis = XMStore<f32_3>(orbit.getAxis());
 		if (ImGui::InputFloat3("Axis", axis.data())) {
 			orbit.setAxis(axis);
 		}
-	});
+	};
+
+	ui.registerUserComponent<AxisOrbit>(axis_orbit);
 }
 
 

@@ -19,6 +19,9 @@ class TransformManipulator;
 
 class UserInterface final : public System<UserInterface>, public EventSender {
 public:
+	using UserComponent = EntityDetailsWindow::UserComponent;
+
+public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -48,8 +51,8 @@ public:
 	void setUpdateInterval(f32 seconds) noexcept override {}; //UI updates every frame
 
 	template<typename ComponentT>
-	void addComponentDetailsRenderer(gsl::czstring<> name, const std::function<void(IComponent&)>& renderer) {
-		entity_details->addComponentDetailsRenderer<ComponentT>(name, renderer);
+	void registerUserComponent(const UserComponent& component_def) {
+		entity_details->registerUserComponent<ComponentT>(component_def);
 	}
 
 private:

@@ -94,9 +94,9 @@ void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
 	// Render user-added component details with their associated renderer, if it exists
 	const auto& components = entity.getComponents();
 	for (const auto& [idx, component] : components) {
-		const auto it = component_renderers.find(component.get().getTypeIndex());
-		if (it != component_renderers.end()) {
-			drawUserComponentNode(it->second.first, component.get(), it->second.second);
+		const auto it = user_components.find(component.get().getTypeIndex());
+		if (it != user_components.end()) {
+			drawUserComponentNode(it->second.name.c_str(), component.get(), it->second.details_renderer);
 		}
 	}
 
@@ -175,7 +175,7 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, EntityPtr entity_
 	auto& device        = rendering_mgr.getDevice();
 	auto& resource_mgr  = rendering_mgr.getResourceMgr();
 
-	if (ImGui::BeginMenu("Add Component")) {
+	if (ImGui::BeginMenu("Add Component", valid_entity)) {
 
 		if (ImGui::MenuItem("Orthographic Camera", nullptr, nullptr, valid_entity)) {
 			entity_ptr->addComponent<OrthographicCamera>(device, u32_2{480, 480});
@@ -212,6 +212,15 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, EntityPtr entity_
 			ImGui::EndMenu(); //Model
 		}
 
+		// List user components
+		for (const auto& [idx, component] : user_components) {
+			if (component.adder) {
+				if (ImGui::MenuItem(component.name.c_str(), nullptr, nullptr, valid_entity)) {
+					component.adder(*entity_ptr);
+				}
+			}
+		}
+
 		ImGui::EndMenu(); //Add Component
 	}
 }
@@ -235,13 +244,15 @@ void EntityDetailsWindow::drawComponentNode(gsl::czstring<> text, T& component, 
 
 void EntityDetailsWindow::drawUserComponentNode(gsl::czstring<> text,
                                                 IComponent& component,
-                                                const ComponentDetailsFunc& draw_func) {
+                                                const UserComponent::details_func& draw_func) {
 
 	bool dont_delete = true;
 	ImGui::PushID(&component);
 	if (ImGui::CollapsingHeader(text, &dont_delete)) {
 		DrawComponentState(component);
-		draw_func(component);
+		if (draw_func) {
+			draw_func(component);
+		}
 	}
 	ImGui::PopID();
 	if (!dont_delete) {
