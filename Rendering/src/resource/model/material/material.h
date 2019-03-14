@@ -7,19 +7,18 @@
 
 struct Material {
 
+	// The material's name
 	std::string name;
 
+	// The scalar paramters of the material
 	struct {
 		f32_4 base_color;
-		f32      metalness;
-		f32      roughness;
+		f32   metalness;
+		f32   roughness;
 		f32_3 emissive;
-
-		//bool mirror = false;
-		//bool wireframe = false;
-		//bool two_sided = false;
 	} params;
 
+	// The textures for the material
 	struct {
 		std::shared_ptr<Texture> base_color;
 		std::shared_ptr<Texture> material_params; //R: metalness, G: roughness
@@ -27,6 +26,6 @@ struct Material {
 		std::shared_ptr<Texture> emissive;
 	} maps;
 
-
+	// (Optional) shader that overrides the default global shader
 	std::shared_ptr<PixelShader> shader;
 };
