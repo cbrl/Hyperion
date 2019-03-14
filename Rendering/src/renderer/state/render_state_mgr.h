@@ -2,43 +2,7 @@
 
 #include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
-
-
-enum class BlendStates : u8 {
-	Opaque,
-	AlphaBlend,
-	Additive,
-	NonPremultiplied,
-	StateCount
-};
-
-enum class DepthStencilStates : u8 {
-	None,
-	LessEqR,
-	LessEqRW,
-	GreaterEqR,
-	GreaterEqRW,
-	StateCount
-};
-
-enum class RasterStates : u8 {
-	CullNone,
-	CullClockwise,
-	CullCounterClockwise,
-	Wireframe,
-	StateCount
-};
-
-enum class SamplerStates : u8 {
-	PointClamp,
-	PointWrap,
-	LinearClamp,
-	LinearWrap,
-	AnisotropicClamp,
-	AnisotropicWrap,
-	PCF,
-	StateCount
-};
+#include "renderer/state/render_states.h"
 
 
 class RenderStateMgr final {
