@@ -227,7 +227,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\directx\profiler\gpu_profiler.cpp" />
-    <ClCompile Include="src\directx\vertex\vertex_types.cpp" />
     <ClCompile Include="src\os\windows\window.cpp" />
   </ItemGroup>
   <ItemGroup>

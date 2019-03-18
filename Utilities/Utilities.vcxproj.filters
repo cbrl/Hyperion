@@ -81,9 +81,6 @@
     <Filter Include="Header Files\directx\vertex">
       <UniqueIdentifier>{55a3473c-fb6b-45de-bda0-359f9803149d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\directx\vertex">
-      <UniqueIdentifier>{5f8438b9-4483-4497-bb9e-dfaf741eeb8a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\directx\profiler">
       <UniqueIdentifier>{ecd76a3f-aab8-42f9-8a83-e860615ad52a}</UniqueIdentifier>
     </Filter>
@@ -339,9 +336,6 @@
   <ItemGroup>
     <ClCompile Include="src\os\windows\window.cpp">
       <Filter>Source Files\os\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\directx\vertex\vertex_types.cpp">
-      <Filter>Source Files\directx\vertex</Filter>
     </ClCompile>
     <ClCompile Include="src\directx\profiler\gpu_profiler.cpp">
       <Filter>Source Files\directx\profiler</Filter>
