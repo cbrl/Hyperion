@@ -50,6 +50,9 @@ public:
 	template<typename DerivedT, typename... ArgsT>
 	[[nodiscard]]
 	std::shared_ptr<ResourceT> getOrCreateDerived(const KeyT& key, ArgsT&&... args) {
+
+		static_assert(std::is_base_of_v<ResourceT, DerivedT>, "DerivedT must inherit from ResourceT");
+
 		if (const auto it = this->find(key); it != this->end()) {
 			return it->second;
 		}
@@ -69,6 +72,9 @@ public:
 	template<typename DerivedT, typename... ArgsT>
 	[[nodiscard]]
 	std::shared_ptr<ResourceT> createOrReplaceDerived(const KeyT& key, ArgsT&&... args) {
+
+		static_assert(std::is_base_of_v<ResourceT, DerivedT>, "DerivedT must inherit from ResourceT");
+
 		const auto resource = std::make_shared<DerivedT>(std::forward<ArgsT>(args)...);
 		this->operator[](key) = resource;
 		return resource;
@@ -177,6 +183,8 @@ public:
 	[[nodiscard]]
 	shared_ptr getOrCreateDerived(const key_type& key, ArgsT&& ... args) {
 
+		static_assert(std::is_base_of_v<ResourceT, DerivedT>, "DerivedT must inherit from ResourceT");
+
 		if (const auto it = resource_map.find(key); it != resource_map.end() && !it->second.expired()) {
 			return it->second.lock(); //Return the resource if it exists and hasn't expired
 		}
@@ -198,6 +206,9 @@ public:
 	template<typename DerivedT, typename... ArgsT>
 	[[nodiscard]]
 	shared_ptr createOrReplaceDerived(const key_type& key, ArgsT&&... args) {
+
+		static_assert(std::is_base_of_v<ResourceT, DerivedT>, "DerivedT must inherit from ResourceT");
+
 		const auto resource = std::make_shared<DerivedT>(std::forward<ArgsT>(args)...);
 		resource_map[key] = resource;
 		return resource;		
