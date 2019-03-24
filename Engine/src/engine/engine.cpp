@@ -10,7 +10,7 @@ using json = nlohmann::json;
 #define CONFIG_FILE "./config.json"
 
 
-const json default_config = {
+const json g_default_config = {
 	{ConfigTokens::width, 1200},
 	{ConfigTokens::height, 900},
 	{ConfigTokens::refresh, 60},
@@ -47,26 +47,21 @@ std::unique_ptr<Engine> SetupEngine() {
 	// Create the console
 	AllocateConsole();
 
-	// Read the config file, or load the default config if that fails
-	json config;
-	std::ifstream file{CONFIG_FILE};
-	if (file) {
-		file >> config;
-		file.close();
-	}
-	else {
-		return LoadConfig(default_config);
-	}
-
-
-	// Try to process the config file, or use the default config if that fails
+	// Try to process the config file, or use the default config if that fails.
 	try {
-		return LoadConfig(config);
+		json config;
+		std::ifstream file{CONFIG_FILE};
+		if (file) {
+			file >> config;
+			file.close();
+			return LoadConfig(config);
+		}
 	}
 	catch (json::type_error& e) {
 		Logger::log(LogLevel::err, e.what());
-		return LoadConfig(default_config);
 	}
+
+	return LoadConfig(g_default_config);
 }
 
 
@@ -129,11 +124,12 @@ void Engine::quit() {
 
 
 void Engine::saveConfig() {
+	// Open the file
 	std::ofstream file(CONFIG_FILE, std::ofstream::trunc);
 	if (!file) return;
 
-	const auto& display       = rendering_mgr->getDisplayConfig();
-	const auto& rendering     = rendering_mgr->getRenderingConfig();
+	const auto& display   = rendering_mgr->getDisplayConfig();
+	const auto& rendering = rendering_mgr->getRenderingConfig();
 		
 	const auto title      = WstrToStr(window->getWindowTitle());
 	const auto res        = window->getClientSize();
@@ -142,6 +138,7 @@ void Engine::saveConfig() {
 	const auto fullscreen = display.isFullscreen();
 	const auto shadowmap  = rendering.getShadowMapRes();
 
+	// Store the values
 	json config;
 	config[ConfigTokens::width]         = res[0];
 	config[ConfigTokens::height]        = res[1];
@@ -150,6 +147,7 @@ void Engine::saveConfig() {
 	config[ConfigTokens::win_title]     = title;
 	config[ConfigTokens::shadowmap_res] = shadowmap;
 
+	// Write the file
 	file << std::setw(4) << config << std::endl;
 	file.close();
 }

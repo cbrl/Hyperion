@@ -29,8 +29,11 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+
+	// Shadow maps are square, so only one value is needed. The resolution will not be
+	// changed if an invalid value of 0 is provided.
 	void setShadowMapRes(u32 res) noexcept {
-		smap_res = (res == 0) ? 1 : res;
+		if (res != 0) smap_res = res;
 	}
 
 	[[nodiscard]]
@@ -43,5 +46,5 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	u32 smap_res;
+	u32 smap_res = 512;
 };
