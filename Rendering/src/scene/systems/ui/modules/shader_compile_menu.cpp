@@ -144,7 +144,6 @@ bool ShaderCompileMenu::drawCompilePopup(Engine& engine) {
 
 
 bool ShaderCompileMenu::checkExistingShaderName(Engine& engine) const {
-	const char* type_name = shader_types[type_idx].first;
 
 	// Check the selected shader type name, then compare existing names of that type of shader.
 	if (checkTypeSelected<ComputeShader>()) {
