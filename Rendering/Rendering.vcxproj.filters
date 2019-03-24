@@ -308,6 +308,9 @@
     <ClCompile Include="src\renderer\pass\deferred\deferred_pass.cpp">
       <Filter>Source Files\renderer\pass</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\system_menu.cpp">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rendering_mgr.h">

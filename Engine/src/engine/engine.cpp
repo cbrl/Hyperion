@@ -1,8 +1,7 @@
 #include "targetver.h"
 #include "engine.h"
 #include "imgui_forwarder/imgui_message_forwarder.h"
-#include "config/config_reader.h"
-#include "config/config_writer.h"
+#include "config/config_tokens.h"
 
 #include "json/json.hpp"
 using json = nlohmann::json;
@@ -151,7 +150,7 @@ void Engine::saveConfig() {
 	config[ConfigTokens::win_title]     = title;
 	config[ConfigTokens::shadowmap_res] = shadowmap;
 
-	file << config;
+	file << std::setw(4) << config << std::endl;
 	file.close();
 }
 
