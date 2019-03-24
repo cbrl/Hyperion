@@ -43,13 +43,35 @@ public:
 
 		std::ifstream file_stream(file_path);
 		if (file_stream.fail()) {
-			Logger::log(LogLevel::err, "Could not open file: {}", file_path.string());
+			Logger::log(LogLevel::err, "LineReader could not open file: {}", file_path.string());
 			return;
 		}
 
 		line_number = 1;
 		std::string line;
 		while (std::getline(file_stream, line)) {
+			token_iterator = std::sregex_token_iterator(line.begin(), line.end(), search_regex);
+			if (hasTokens()) {
+				readLine();
+			}
+			++line_number;
+		}
+	}
+
+	void readString(const std::string& input, std::regex regex = std::regex(R"([^\s\t\r\n]+)")) {
+
+		file_path    = fs::path{};
+		search_regex = std::move(regex);
+
+		std::istringstream string_stream(input);
+		if (string_stream.fail()) {
+			Logger::log(LogLevel::err, "LineReader failed to create string stream");
+			return;
+		}
+
+		line_number = 1;
+		std::string line;
+		while (std::getline(string_stream, line)) {
 			token_iterator = std::sregex_token_iterator(line.begin(), line.end(), search_regex);
 			if (hasTokens()) {
 				readLine();

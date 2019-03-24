@@ -161,9 +161,6 @@
     <ClInclude Include="src\io\line_reader.h">
       <Filter>Header Files\io</Filter>
     </ClInclude>
-    <ClInclude Include="src\io\file_writer.h">
-      <Filter>Header Files\io</Filter>
-    </ClInclude>
     <ClInclude Include="src\log\spdlog\tweakme.h">
       <Filter>Header Files\log\spdlog</Filter>
     </ClInclude>
