@@ -4,8 +4,43 @@
 #include "config/config_reader.h"
 #include "config/config_writer.h"
 
+#include "json/json.hpp"
+using json = nlohmann::json;
 
-#define CONFIG_FILE "./config.txt"
+
+#define CONFIG_FILE "./config.json"
+
+
+const json default_config = {
+	{ConfigTokens::width, 1200},
+	{ConfigTokens::height, 900},
+	{ConfigTokens::refresh, 60},
+	{ConfigTokens::vsync, false},
+	{ConfigTokens::fullscreen, false},
+	{ConfigTokens::shadowmap_res, 512},
+	{ConfigTokens::win_title, "Engine"},
+};
+
+
+// Can throw json::type_error
+std::unique_ptr<Engine> LoadConfig(const json& config) {
+
+	// Create display configuration
+	DisplayConfig display_config;
+	const auto width   = config[ConfigTokens::width].get<u32>();
+	const auto height  = config[ConfigTokens::height].get<u32>();
+	const auto refresh = config[ConfigTokens::refresh].get<u32>();
+	display_config.setNearestDisplayDesc({width, height}, refresh);
+
+	// Create rendering configuration
+	RenderingConfig render_config;
+	const auto smap_res = config[ConfigTokens::shadowmap_res].get<u32>();
+	render_config.setShadowMapRes(smap_res);
+
+	// Create Engine
+	const auto title = config[ConfigTokens::win_title].get<std::string>();
+	return std::make_unique<Engine>(StrToWstr(title), std::move(display_config), std::move(render_config));
+}
 
 
 std::unique_ptr<Engine> SetupEngine() {
@@ -13,40 +48,26 @@ std::unique_ptr<Engine> SetupEngine() {
 	// Create the console
 	AllocateConsole();
 
-	// Read the config file
-	ConfigReader reader;
-	reader.readConfig(CONFIG_FILE);
-
-	// Create display configuration
-	DisplayConfig display_config;
-	const auto* width = reader.getConfigVar<u32>(ConfigTokens::width);
-	const auto* height = reader.getConfigVar<u32>(ConfigTokens::height);
-	const auto* refresh = reader.getConfigVar<u32>(ConfigTokens::refresh);
-	if (width && height) {
-		if (refresh)
-			display_config.setNearestDisplayDesc({*width, *height}, *refresh);
-		else
-			display_config.setNearestDisplayDesc({*width, *height});
-	}
-
-	// Create rendering configuration
-	RenderingConfig render_config;
-	const auto* smap_res = reader.getConfigVar<u32>(ConfigTokens::shadowmap_res);
-	if (smap_res) {
-		render_config.setShadowMapRes(*smap_res);
-	}
-
-	// Create Engine
-	const auto* title = reader.getConfigVar<std::string>(ConfigTokens::win_title);
-	std::wstring window_title;
-	if (title) {
-		window_title = title->empty() ? L"Engine" : StrToWstr(*title);
+	// Read the config file, or load the default config if that fails
+	json config;
+	std::ifstream file{CONFIG_FILE};
+	if (file) {
+		file >> config;
+		file.close();
 	}
 	else {
-		window_title = L"Engine";
+		return LoadConfig(default_config);
 	}
 
-	return std::make_unique<Engine>(window_title, std::move(display_config), std::move(render_config));
+
+	// Try to process the config file, or use the default config if that fails
+	try {
+		return LoadConfig(config);
+	}
+	catch (json::type_error& e) {
+		Logger::log(LogLevel::err, e.what());
+		return LoadConfig(default_config);
+	}
 }
 
 
@@ -109,8 +130,29 @@ void Engine::quit() {
 
 
 void Engine::saveConfig() {
-	// Write the current configuration values to a file
-	ConfigWriter::write(*this, CONFIG_FILE);
+	std::ofstream file(CONFIG_FILE, std::ofstream::trunc);
+	if (!file) return;
+
+	const auto& display       = rendering_mgr->getDisplayConfig();
+	const auto& rendering     = rendering_mgr->getRenderingConfig();
+		
+	const auto title      = WstrToStr(window->getWindowTitle());
+	const auto res        = window->getClientSize();
+	const auto refresh    = display.getRoundedDisplayRefreshRate();
+	const auto vsync      = display.isVsync();
+	const auto fullscreen = display.isFullscreen();
+	const auto shadowmap  = rendering.getShadowMapRes();
+
+	json config;
+	config[ConfigTokens::width]         = res[0];
+	config[ConfigTokens::height]        = res[1];
+	config[ConfigTokens::refresh]       = refresh;
+	config[ConfigTokens::vsync]         = vsync;
+	config[ConfigTokens::win_title]     = title;
+	config[ConfigTokens::shadowmap_res] = shadowmap;
+
+	file << config;
+	file.close();
 }
 
 

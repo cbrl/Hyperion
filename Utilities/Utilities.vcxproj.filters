@@ -87,6 +87,9 @@
     <Filter Include="Source Files\directx\profiler">
       <UniqueIdentifier>{1af6fc68-cf66-4d13-ab76-723a5f6d4bc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\json">
+      <UniqueIdentifier>{1058c100-7a57-4437-85d0-ccd9860c6751}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -331,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="src\log\spdlog\fmt\bundled\locale.h">
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
+    </ClInclude>
+    <ClInclude Include="src\json\json.hpp">
+      <Filter>Header Files\json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,9 @@
 
 SystemMenu::SystemMenu(const Engine& engine) {
 
-	auto& settings = engine.getRenderingMgr().getDisplayConfig();
+	auto& rendering_mgr = engine.getRenderingMgr();
+	auto& settings      = rendering_mgr.getDisplayConfig();
+	smap_res            = rendering_mgr.getRenderingConfig().getShadowMapRes();
 
 	// Create the display mode strings
 	for (const auto& desc : settings.getDisplayDescList()) {
@@ -75,10 +77,9 @@ void SystemMenu::drawEngineSettingsPopup(Engine& engine) {
 
 	if (ImGui::BeginPopupModal("Engine Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-		auto& rendering_mgr = engine.getRenderingMgr();
+		auto& rendering_mgr    = engine.getRenderingMgr();
 		auto& rendering_config = rendering_mgr.getRenderingConfig();
 
-		smap_res = rendering_config.getShadowMapRes();
 		ImGui::DragScalar("Shadow Map Resolution", ImGuiDataType_U32, &smap_res, 1);
 
 		if (ImGui::Button("Apply")) {
@@ -124,11 +125,13 @@ void SystemMenu::drawDisplaySettingsPopup(Engine& engine) {
 
 		if (ImGui::Button("Apply")) {
 			settings.setDisplayDesc(current_display_desc);
+			engine.saveConfig();
 			engine.requestResize();
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Save")) {
 			settings.setDisplayDesc(current_display_desc);
+			engine.saveConfig();
 			engine.requestResize();
 			ImGui::CloseCurrentPopup();
 		}

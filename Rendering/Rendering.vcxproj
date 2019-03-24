@@ -174,7 +174,6 @@
     <ClCompile Include="src\scene\systems\ui\modules\new_model_menu.cpp" />
     <ClCompile Include="src\scene\systems\ui\modules\scene_tree.cpp" />
     <ClCompile Include="src\scene\systems\ui\modules\shader_compile_menu.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\system_menu.cpp" />
     <ClCompile Include="src\scene\systems\ui\modules\text_edit_window.cpp" />
     <ClCompile Include="src\scene\systems\ui\modules\transform_manipulator.cpp" />
     <ClCompile Include="src\scene\systems\ui\user_interface.cpp" />
