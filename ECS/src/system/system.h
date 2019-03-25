@@ -18,18 +18,15 @@ class ISystem {
 	friend class SystemMgr;
 
 public:
+
+	// Default system priority
+	static constexpr u32 default_priority = 100;
+
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
-	ISystem() noexcept
-	    : ecs(nullptr)
-	    , active(true)
-		, update_interval(-1.0f)
-	    , time_since_last_update(FLT_MAX)
-		, needs_update(true) {
-	}
-
+	ISystem() noexcept = default;
 	ISystem(const ISystem& system) = delete;
 	ISystem(ISystem&& system) = default;
 
@@ -37,14 +34,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	virtual ~ISystem() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	ISystem& operator=(const ISystem& system) = delete;
 	ISystem& operator=(ISystem&& system) = default;
 
@@ -77,7 +72,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Update Interval
+	// Member Functions - Update Interval / Priority
 	//----------------------------------------------------------------------------------
 
 	// Set the time that must pass between updates for this system. This method can be
@@ -90,6 +85,15 @@ public:
 	[[nodiscard]]
 	f32 getUpdateInterval() const noexcept {
 		return update_interval;
+	}
+
+	void setPriority(u32 value) noexcept {
+		priority = value;
+	}
+
+	[[nodiscard]]
+	u32 getPriority() const noexcept {
+		return priority;
 	}
 
 
@@ -140,20 +144,23 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// A pointer to the ECS that created the system.
-	ECS* ecs;
+	ECS* ecs = nullptr;
 
 	// Is this system enabled?
-	bool active;
+	bool active = true;
+
+	// The system's priority. Higher prioity systems get updated before lower priority ones.
+	u32 priority = default_priority;
 
 	// The amount of time between that the system should wait before updating (in seconds).
 	// 0.0f or lower to update every tick.
-	f32 update_interval;
+	f32 update_interval = -1.0f;
 
 	// The time passed since the last update and a flag set when that time exceeds the update
 	// interval. These variables are managed by the System Manager. This variable is not
 	// updated if the system is inactive.
-	f64  time_since_last_update;
-	bool needs_update;
+	f64  time_since_last_update = FLT_MAX;
+	bool needs_update = true;
 };
 
 
@@ -174,7 +181,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	System() = default;
 	System(const System& system) = delete;
 	System(System&& system) = default;
@@ -183,14 +189,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	virtual ~System() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	System& operator=(const System& system) = delete;
 	System& operator=(System&& system) = default;
 

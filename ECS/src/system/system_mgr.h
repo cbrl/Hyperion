@@ -49,14 +49,29 @@ public:
 	template<typename SystemT>
 	SystemT* getSystem() const;
 
+	// Set a system's priority. Higher priority systems get executed sooner.
+	template<typename SystemT>
+	void setSystemPriority(u32 priority);
 
 private:
+
+	void sortSystemQueue();
+
+	struct PriorityCompareGreater {
+		bool operator()(const ISystem& lhs, const ISystem& rhs) const {
+			return lhs.getPriority() > rhs.getPriority();
+		}
+	};
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
 	// The systems, mapped to their type_index
 	std::unordered_map<std::type_index, std::unique_ptr<ISystem>> systems;
+
+	// The system execution order, determined by the system's priority.
+	std::vector<std::reference_wrapper<ISystem>> system_queue;
 
 	// A reference to the ECS. Passed to all systems.
 	ECS& ecs;
