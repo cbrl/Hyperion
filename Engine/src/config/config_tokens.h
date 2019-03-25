@@ -4,15 +4,16 @@
 
 
 namespace ConfigTokens {
-	constexpr const char comment = '#';
+	constexpr gsl::czstring<> win_title      = "window title";
 
-	constexpr gsl::czstring<> width = "width";
-	constexpr gsl::czstring<> height = "height";
-	constexpr gsl::czstring<> refresh = "refresh";
-	constexpr gsl::czstring<> vsync = "vsync";
-	constexpr gsl::czstring<> fullscreen = "fullscreen";
+	constexpr gsl::czstring<> display_config = "display configuration";
+	constexpr gsl::czstring<> display_width  = "display width";
+	constexpr gsl::czstring<> display_height = "display height";
+	constexpr gsl::czstring<> refresh        = "refresh rate";
+	constexpr gsl::czstring<> vsync          = "vsync";
+	constexpr gsl::czstring<> fullscreen     = "fullscreen";
+	constexpr gsl::czstring<> aa_type        = "anti aliasing";
 
-	constexpr gsl::czstring<> win_title = "title";
-
-	constexpr gsl::czstring<> shadowmap_res = "shadowmap_res";
+	constexpr gsl::czstring<> render_config  = "rendering configuration";
+	constexpr gsl::czstring<> shadowmap_res  = "shadow map resolution";
 }

@@ -1,8 +1,14 @@
 {
-    "height": 900,
-    "refresh": 144,
-    "shadowmap_res": 512,
-    "title": "Engine",
-    "vsync": false,
-    "width": 1600
+    "display configuration": {
+        "anti aliasing": 0,
+        "display height": 900,
+        "display width": 1600,
+        "fullscreen": false,
+        "refresh rate": 144,
+        "vsync": false
+    },
+    "rendering configuration": {
+        "shadow map resolution": 512
+    },
+    "title": "Engine"
 }

@@ -2,9 +2,7 @@
 #include "engine.h"
 #include "imgui_forwarder/imgui_message_forwarder.h"
 #include "config/config_tokens.h"
-
-#include "json/json.hpp"
-using json = nlohmann::json;
+#include "json/json.h"
 
 
 #define CONFIG_FILE "./config.json"
@@ -12,33 +10,51 @@ using json = nlohmann::json;
 
 // Default configuration used when the config file fails to load
 const json g_default_config = {
-	{ConfigTokens::width,         1200},
-	{ConfigTokens::height,        900},
-	{ConfigTokens::refresh,       60},
-	{ConfigTokens::vsync,         false},
-	{ConfigTokens::fullscreen,    false},
-	{ConfigTokens::shadowmap_res, 512},
-	{ConfigTokens::win_title,     "Engine"},
+	{ConfigTokens::display_config, {
+		{ConfigTokens::display_width,  1200},
+		{ConfigTokens::display_height, 900},
+		{ConfigTokens::refresh,        60},
+		{ConfigTokens::vsync,          false},
+		{ConfigTokens::fullscreen,     false},
+		{ConfigTokens::aa_type,        AAType::None},
+	}},
+	{ConfigTokens::render_config, {
+		{ConfigTokens::shadowmap_res, 512},
+	}},
+	{ConfigTokens::win_title, "Engine"},
 };
 
 
-// Can throw json::type_error
 std::unique_ptr<Engine> LoadConfig(const json& config) {
 
 	// Create display configuration
 	DisplayConfig display_config;
-	const auto width   = config[ConfigTokens::width].get<u32>();
-	const auto height  = config[ConfigTokens::height].get<u32>();
-	const auto refresh = config[ConfigTokens::refresh].get<u32>();
-	display_config.setNearestDisplayDesc({width, height}, refresh);
+	try {
+		config.at(ConfigTokens::display_config).get_to(display_config);
+	}
+	catch (json::exception& e) {
+		Logger::log(LogLevel::err, e.what());
+		g_default_config.at(ConfigTokens::display_config).get_to(display_config);
+	}
 
 	// Create rendering configuration
 	RenderingConfig render_config;
-	const auto smap_res = config[ConfigTokens::shadowmap_res].get<u32>();
-	render_config.setShadowMapRes(smap_res);
+	try {
+		config.at(ConfigTokens::render_config).get_to(render_config);
+	}
+	catch (json::exception & e) {
+		Logger::log(LogLevel::err, e.what());
+		g_default_config.at(ConfigTokens::render_config).get_to(render_config);
+	}
 
-	// Create Engine
-	const auto title = config[ConfigTokens::win_title].get<std::string>();
+	// Get title
+	std::string title;
+	if (config.contains(ConfigTokens::win_title))
+		config[ConfigTokens::win_title].get_to(title);
+	else
+		g_default_config[ConfigTokens::win_title].get_to(title);
+
+	// Create the engine
 	return std::make_unique<Engine>(StrToWstr(title), std::move(display_config), std::move(render_config));
 }
 
@@ -48,21 +64,19 @@ std::unique_ptr<Engine> SetupEngine() {
 	// Create the console
 	AllocateConsole();
 
-	// Try to process the config file, or use the default config if that fails.
-	try {
-		json config;
-		std::ifstream file{CONFIG_FILE};
-		if (file) {
-			file >> config;
-			file.close();
-			return LoadConfig(config);
-		}
-	}
-	catch (json::type_error& e) {
-		Logger::log(LogLevel::err, e.what());
+	// Try to process the config file
+	json config;
+	std::ifstream file{CONFIG_FILE};
+	if (file) {
+		file >> config;
+		file.close();
+		return LoadConfig(config);
 	}
 
-	return LoadConfig(g_default_config);
+	// Use the default config if loading the config file failed
+	std::unique_ptr<Engine> engine = LoadConfig(g_default_config);
+	engine->saveConfig();
+	return engine;
 }
 
 
@@ -125,28 +139,19 @@ void Engine::quit() {
 
 
 void Engine::saveConfig() {
+
 	// Open the file
 	std::ofstream file(CONFIG_FILE, std::ofstream::trunc);
 	if (!file) return;
 
 	const auto& display   = rendering_mgr->getDisplayConfig();
 	const auto& rendering = rendering_mgr->getRenderingConfig();
-		
-	const auto title      = WstrToStr(window->getWindowTitle());
-	const auto res        = window->getClientSize();
-	const auto refresh    = display.getRoundedDisplayRefreshRate();
-	const auto vsync      = display.isVsync();
-	const auto fullscreen = display.isFullscreen();
-	const auto shadowmap  = rendering.getShadowMapRes();
 
-	// Store the values
+	// Serialize the configuration data
 	json config;
-	config[ConfigTokens::width]         = res[0];
-	config[ConfigTokens::height]        = res[1];
-	config[ConfigTokens::refresh]       = refresh;
-	config[ConfigTokens::vsync]         = vsync;
-	config[ConfigTokens::win_title]     = title;
-	config[ConfigTokens::shadowmap_res] = shadowmap;
+	config[ConfigTokens::display_config] = display;
+	config[ConfigTokens::render_config]  = rendering;
+	config[ConfigTokens::win_title]      = WstrToStr(window->getWindowTitle());
 
 	// Write the file
 	file << std::setw(4) << config << std::endl;

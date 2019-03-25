@@ -1,9 +1,11 @@
 #pragma once
 
-#include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
+#include "directx/d3d11.h"
 #include "os/windows/windows.h"
 #include "rendering_options.h"
+#include "config/config_tokens.h"
+#include "json/json.h"
 
 
 class DisplayConfig final {
@@ -216,12 +218,43 @@ public:
 	}
 
 
+	//----------------------------------------------------------------------------------
+	// Friend Functions - JSON Serialization
+	//----------------------------------------------------------------------------------
+	friend void to_json(json& j, const DisplayConfig& cfg) {
+		const auto res = cfg.getDisplayResolution();
+		j[ConfigTokens::display_width]  = res[0];
+		j[ConfigTokens::display_height] = res[1];
+		j[ConfigTokens::refresh]        = cfg.getRoundedDisplayRefreshRate();
+		j[ConfigTokens::vsync]          = cfg.isVsync();
+		j[ConfigTokens::fullscreen]     = cfg.isFullscreen();
+		j[ConfigTokens::aa_type]        = cfg.getAAType();
+	}
+
+	friend void from_json(const json& j, DisplayConfig& cfg) {
+		u32_2 res;
+		j.at(ConfigTokens::display_width).get_to(res[0]);
+		j.at(ConfigTokens::display_height).get_to(res[1]);
+		
+		const auto refresh    = j.at(ConfigTokens::refresh).get<u32>();
+		const auto vsync      = j.at(ConfigTokens::vsync).get<bool>();
+		const auto fullscreen = j.at(ConfigTokens::fullscreen).get<bool>();
+		const auto aa         = static_cast<AAType>(j.at(ConfigTokens::aa_type).get<u32>());
+
+		cfg.setNearestDisplayDesc(res, refresh);
+		cfg.setVsync(vsync);
+		cfg.setFullscreen(fullscreen);
+		cfg.setAAType(aa);
+	}
 
 private:
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Initialization
+	//----------------------------------------------------------------------------------
 	void init();
 
 
-private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------

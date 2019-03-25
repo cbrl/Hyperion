@@ -1,6 +1,8 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/scalar_types.h"
+#include "config/config_tokens.h"
+#include "json/json.h"
 
 
 class RenderingConfig final {
@@ -39,6 +41,19 @@ public:
 	[[nodiscard]]
 	u32 getShadowMapRes() const noexcept {
 		return smap_res;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Friend Functions - JSON Serialization
+	//----------------------------------------------------------------------------------
+	friend void to_json(json& j, const RenderingConfig& cfg) {
+		j[ConfigTokens::shadowmap_res] = cfg.smap_res;
+	}
+
+	friend void from_json(const json& j, RenderingConfig& cfg) {
+		const auto res = j.at(ConfigTokens::shadowmap_res).get<u32>();
+		cfg.setShadowMapRes(res);
 	}
 
 

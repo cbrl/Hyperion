@@ -159,7 +159,8 @@
     <ClInclude Include="src\exception\exception.h" />
     <ClInclude Include="src\io\io.h" />
     <ClInclude Include="src\io\line_reader.h" />
-    <ClInclude Include="src\json\json.hpp" />
+    <ClInclude Include="src\json\json.h" />
+    <ClInclude Include="src\json\nlohmann\json.hpp" />
     <ClInclude Include="src\log\log.h" />
     <ClInclude Include="src\log\spdlog\async.h" />
     <ClInclude Include="src\log\spdlog\async_logger.h" />

@@ -90,6 +90,9 @@
     <Filter Include="Header Files\json">
       <UniqueIdentifier>{1058c100-7a57-4437-85d0-ccd9860c6751}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\json\nlohmann">
+      <UniqueIdentifier>{2fb0e27a-13e9-4327-b789-61222ed579fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -332,7 +335,10 @@
     <ClInclude Include="src\log\spdlog\fmt\bundled\locale.h">
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
     </ClInclude>
-    <ClInclude Include="src\json\json.hpp">
+    <ClInclude Include="src\json\nlohmann\json.hpp">
+      <Filter>Header Files\json\nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="src\json\json.h">
       <Filter>Header Files\json</Filter>
     </ClInclude>
   </ItemGroup>
