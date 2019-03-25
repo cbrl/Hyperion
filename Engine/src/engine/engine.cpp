@@ -10,14 +10,15 @@ using json = nlohmann::json;
 #define CONFIG_FILE "./config.json"
 
 
+// Default configuration used when the config file fails to load
 const json g_default_config = {
-	{ConfigTokens::width, 1200},
-	{ConfigTokens::height, 900},
-	{ConfigTokens::refresh, 60},
-	{ConfigTokens::vsync, false},
-	{ConfigTokens::fullscreen, false},
+	{ConfigTokens::width,         1200},
+	{ConfigTokens::height,        900},
+	{ConfigTokens::refresh,       60},
+	{ConfigTokens::vsync,         false},
+	{ConfigTokens::fullscreen,    false},
 	{ConfigTokens::shadowmap_res, 512},
-	{ConfigTokens::win_title, "Engine"},
+	{ConfigTokens::win_title,     "Engine"},
 };
 
 
