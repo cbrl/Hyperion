@@ -34,7 +34,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Modifiers
 	//----------------------------------------------------------------------------------
-	//using std::pmr::list<T>::emplace_font;
+	using std::pmr::list<T>::emplace_front;
 	using std::pmr::list<T>::emplace_back;
 
 	//----------------------------------------------------------------------------------
@@ -56,14 +56,12 @@ public:
 
 	// Remove a resource referenced to by its pointer
 	void remove_resource(T& resource) {
-			remove_resource(&resource);
+		remove_resource(&resource);
 	}
 
 	//----------------------------------------------------------------------------------
 	// Iterators
 	//----------------------------------------------------------------------------------
-	using std::pmr::list<T>::front;
-	using std::pmr::list<T>::back;
 	using std::pmr::list<T>::begin;
 	using std::pmr::list<T>::cbegin;
 	using std::pmr::list<T>::rbegin;
@@ -79,101 +77,4 @@ public:
 	using std::pmr::list<T>::empty;
 	using std::pmr::list<T>::size;
 	using std::pmr::list<T>::max_size;
-};
-
-
-
-
-//----------------------------------------------------------------------------------
-// ResourcePool Manager
-//----------------------------------------------------------------------------------
-//
-// Creates a new resource pool for each unique resource type. For polymorphic types,
-// storing a static std::type_index variable in the class will allow for the
-// retrieval of the correct pool even when referred to by the base class.
-//
-//----------------------------------------------------------------------------------
-
-class ResourcePoolMgr final {
-public:
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
-	ResourcePoolMgr() = default;
-	ResourcePoolMgr(const ResourcePoolMgr& factory) = delete;
-	ResourcePoolMgr(ResourcePoolMgr&& factory) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Destructor
-	//----------------------------------------------------------------------------------
-	~ResourcePoolMgr() = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-	ResourcePoolMgr& operator=(const ResourcePoolMgr& factory) = delete;
-	ResourcePoolMgr& operator=(ResourcePoolMgr&& factory) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions
-	//----------------------------------------------------------------------------------
-
-	// Get an existing pool or create it if it doesn't exist
-	template <typename ResourceT>
-	[[nodiscard]]
-	ResourcePool<ResourceT>& getOrCreatePool() {
-		using pool_t = ResourcePool<ResourceT>;
-		static const auto index = std::type_index{typeid(ResourceT)};
-		const auto pair = pools.try_emplace(index, std::make_unique<pool_t>()); //pair = std::pair<iterator, bool>
-		return *static_cast<pool_t*>(pair.first->second.get());
-	}
-
-
-	// Get an existing pool using the resource type
-	template <typename ResourceT>
-	[[nodiscard]]
-	ResourcePool<ResourceT>* getPool() {
-		static const auto index = std::type_index{typeid(ResourceT)};
-		auto* pool = getPool(index);
-		if (pool) {
-			return static_cast<ResourcePool<ResourceT>*>(pool);
-		}
-		else {
-			Logger::log(LogLevel::err, "ResourcePoolMgr::getPool<{}>() - Invalid pool type requested", type_name<ResourceT>());
-			return nullptr;
-		}
-	}
-
-
-	// Get an existing pool using the resource index
-	[[nodiscard]]
-	IResourcePool* getPool(std::type_index type) {
-		const auto& it = pools.find(type);
-		if (it == pools.end()) {
-			Logger::log(LogLevel::err, "ResourcePoolMgr::getPool<{}>() - Invalid pool type requested", type.name());
-			assert(false && "ResourcePoolMgr::getPool() - Invalid resource pool type requested");
-			return nullptr;
-		}
-		return it->second.get();
-	}
-
-
-	// Check if a pool exists for the specified type
-	template <typename ResourceT>
-	bool poolExists() const noexcept {
-		return poolExists(std::type_index{typeid(ResourceT)});
-	}
-
-
-	// Check if a pool exists for the specified index
-	bool poolExists(std::type_index type) const noexcept {
-		return pools.find(type) != pools.end();
-	}
-
-
-private:
-	std::unordered_map<std::type_index, std::unique_ptr<IResourcePool>> pools;
 };

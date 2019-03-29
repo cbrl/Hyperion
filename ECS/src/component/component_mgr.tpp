@@ -6,7 +6,16 @@ ComponentT& ComponentMgr::createComponent(ArgsT&&... args) {
 	static_assert(std::is_constructible_v<ComponentT, ArgsT...>,
 	              "Component does not have a constructor taking the provided argument types.");
 
-	auto& pool      = component_pools.getOrCreatePool<ComponentT>();
+	using pool_t = ResourcePool<ComponentT>;
+
+	// Get or create the component pool
+	auto it = component_pools.find(ComponentT::index);
+	if (it == component_pools.end()) {
+		const auto pair = component_pools.try_emplace(ComponentT::index, std::make_unique<pool_t>());
+		it = pair.first; //pair == pair<iterator, bool>
+	}
+
+	auto& pool      = *static_cast<pool_t*>(it->second.get());
 	auto& component = pool.emplace_back(std::forward<ArgsT>(args)...);
 
 	if constexpr (std::is_base_of_v<EventParticipator, ComponentT>) {
@@ -22,22 +31,33 @@ ComponentT& ComponentMgr::createComponent(ArgsT&&... args) {
 
 template <typename ComponentT>
 size_t ComponentMgr::countOf() {
-	return component_pools.poolExists<ComponentT>() ? component_pools.getPool<ComponentT>()->GetCount() : 0;
+	const auto it = component_pools.find(ComponentT::index);
+	if (it == component_pools.end()) {
+		return 0;
+	}
+	return it->second.size();
 }
 
 
 template <typename ComponentT>
 bool ComponentMgr::knowsComponent() const {
-	return component_pools.poolExists<ComponentT>();
+	return component_pools.find(ComponentT::index) != component_pools.end();
 }
 
 
 template <typename ComponentT, typename ActionT>
 void ComponentMgr::forEach(ActionT&& act) {
+
+	// Find the component pool
+	const auto it = component_pools.find(ComponentT::index);
+	if (it == component_pools.end()) {
+		return;
+	}
+
+	// Apply the action to each component
 	using pool_t = ResourcePool<ComponentT>;
-	auto* pool = static_cast<pool_t*>(component_pools.getPool<ComponentT>());
-	if (!pool) return;
-	for (auto& component : *pool) {
+	auto& pool = *static_cast<pool_t*>(it->second.get());
+	for (auto& component : pool) {
 		act(component);
 	}
 }

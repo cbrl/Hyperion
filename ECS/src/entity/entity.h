@@ -210,7 +210,7 @@ private:
 	// the pointer should never be invalid in this context.
 	ComponentMgr* component_mgr;
 
-	// Map of pointers to components
+	// Map of references to components
 	std::unordered_multimap<std::type_index, std::reference_wrapper<IComponent>> components;
 
 

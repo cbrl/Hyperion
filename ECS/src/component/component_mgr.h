@@ -51,8 +51,15 @@ public:
 
 
 	void destroyComponent(IComponent& component) {
-		auto* pool = component_pools.getPool(component.getTypeIndex());
-		pool->remove_resource(&component);
+		const auto it = component_pools.find(component.getTypeIndex());
+		if (it != component_pools.end()) {
+			it->second->remove_resource(&component);
+		}
+		else {
+			Logger::log(LogLevel::err,
+			            "Could not find appropriate pool when destroying a component of type \"{}\"",
+			            component.getTypeIndex().name());
+		}
 	}
 
 
@@ -84,7 +91,7 @@ private:
 	EventMgr& event_handler;
 
 	// Map of unique resource pools for each type of component
-	ResourcePoolMgr component_pools;
+	std::unordered_map<std::type_index, std::unique_ptr<IResourcePool>> component_pools;
 };
 
 #include "component_mgr.tpp"
