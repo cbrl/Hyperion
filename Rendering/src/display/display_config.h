@@ -14,20 +14,14 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	DisplayConfig() noexcept
-		: curr_desc(0)
-		, anti_aliasing(AAType::None)
-		, fullscreen(false)
-		, vsync(false) {
-
+	DisplayConfig() {
 		init();
 	}
 
 	DisplayConfig(AAType aa,
 	              bool fullscreen,
 	              bool vsync)
-		: curr_desc(0)
-		, anti_aliasing(aa)
+		: anti_aliasing(aa)
 		, fullscreen(fullscreen)
 		, vsync(vsync) {
 
@@ -164,14 +158,7 @@ public:
 
 	[[nodiscard]]
 	bool hasAA() const noexcept {
-		switch (anti_aliasing) {
-			case AAType::MSAA_2x:
-			case AAType::MSAA_4x:
-			case AAType::MSAA_8x:
-				return true;
-			default:
-				return false;
-		}
+		return anti_aliasing != AAType::None;
 	}
 
 
@@ -221,31 +208,9 @@ public:
 	//----------------------------------------------------------------------------------
 	// Friend Functions - JSON Serialization
 	//----------------------------------------------------------------------------------
-	friend void to_json(json& j, const DisplayConfig& cfg) {
-		const auto res = cfg.getDisplayResolution();
-		j[ConfigTokens::display_width]  = res[0];
-		j[ConfigTokens::display_height] = res[1];
-		j[ConfigTokens::refresh]        = cfg.getRoundedDisplayRefreshRate();
-		j[ConfigTokens::vsync]          = cfg.isVsync();
-		j[ConfigTokens::fullscreen]     = cfg.isFullscreen();
-		j[ConfigTokens::aa_type]        = cfg.getAAType();
-	}
+	friend void to_json(json& j, const DisplayConfig& cfg);
 
-	friend void from_json(const json& j, DisplayConfig& cfg) {
-		u32_2 res;
-		j.at(ConfigTokens::display_width).get_to(res[0]);
-		j.at(ConfigTokens::display_height).get_to(res[1]);
-		
-		const auto refresh    = j.at(ConfigTokens::refresh).get<u32>();
-		const auto vsync      = j.at(ConfigTokens::vsync).get<bool>();
-		const auto fullscreen = j.at(ConfigTokens::fullscreen).get<bool>();
-		const auto aa         = static_cast<AAType>(j.at(ConfigTokens::aa_type).get<u32>());
-
-		cfg.setNearestDisplayDesc(res, refresh);
-		cfg.setVsync(vsync);
-		cfg.setFullscreen(fullscreen);
-		cfg.setAAType(aa);
-	}
+	friend void from_json(const json& j, DisplayConfig& cfg);
 
 private:
 
@@ -261,9 +226,11 @@ private:
 
 	ComPtr<IDXGIAdapter1> adapter;
 	ComPtr<IDXGIOutput1> adapter_out;
+
 	std::vector<DXGI_MODE_DESC> display_desc_list;
-	size_t curr_desc;
-	AAType anti_aliasing;
-	bool   fullscreen;
-	bool   vsync;
+
+	size_t curr_desc     = 0;
+	AAType anti_aliasing = AAType::None;
+	bool   fullscreen    = false;
+	bool   vsync         = false;
 };

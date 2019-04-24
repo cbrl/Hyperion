@@ -61,7 +61,9 @@ void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
                                           u32 refresh_rate,
                                           DXGI_FORMAT format) {
 
-	std::vector<decltype(display_desc_list)::const_iterator> desc_matches;
+	using display_desc_list_iter = decltype(display_desc_list)::const_iterator;
+
+	std::vector<display_desc_list_iter> desc_matches;
 
 	//----------------------------------------------------------------------------------
 	// Populate matches
@@ -84,13 +86,13 @@ void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
 	{
 		// Sort the array by width (lowest -> highest)
 		std::sort(desc_matches.begin(), desc_matches.end(),
-			[](const decltype(desc_matches)::value_type& a, const decltype(desc_matches)::value_type& b) {
+			[](const display_desc_list_iter& a, const display_desc_list_iter& b) {
 				return a->Width < b->Width;
 		});
 
 		// Find and remove any elements with width > desired_width
 		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), resolution[0],
-			[](u32 a, const decltype(desc_matches)::value_type& b) {
+			[](u32 a, display_desc_list_iter& b) {
 				return a < b->Width;
 		});
 		if (greater != desc_matches.end()) {
@@ -99,7 +101,7 @@ void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
 
 		// Find and remove any elements with width != closest_match (aka matches.back())
 		auto first_eq = std::find_if(desc_matches.begin(), desc_matches.end(),
-			[&](const decltype(desc_matches)::value_type& a) {
+			[&](const display_desc_list_iter& a) {
 				return a->Width == desc_matches.back()->Width;
 		});
 		if (first_eq != desc_matches.end()) {
@@ -113,13 +115,13 @@ void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
 	{
 		// Sort the array by height (lowest -> highest)
 		std::sort(desc_matches.begin(), desc_matches.end(),
-			[](const decltype(desc_matches)::value_type& a, const decltype(desc_matches)::value_type& b) {
+			[](const display_desc_list_iter& a, const display_desc_list_iter& b) {
 				return a->Height < b->Height;
 		});
 
 		// Find and remove any elements with height > desired_height
 		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), resolution[1],
-			[](u32 a, const decltype(desc_matches)::value_type& b) {
+			[](u32 a, const display_desc_list_iter& b) {
 				return a < b->Height;
 		});
 		if (greater != desc_matches.end()) {
@@ -128,7 +130,7 @@ void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
 
 		// Find and remove any elements with height != closest_match (aka matches.back())
 		auto first_eq = std::find_if(desc_matches.begin(), desc_matches.end(),
-			[&](const decltype(desc_matches)::value_type& a) {
+			[&](const display_desc_list_iter& a) {
 				return a->Height == desc_matches.back()->Height;
 		});
 		if (first_eq != desc_matches.end()) {
@@ -141,26 +143,25 @@ void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
 	//----------------------------------------------------------------------------------
 	if (refresh_rate != 0) {
 
+		const auto rounded_refresh_rate = [](const DXGI_MODE_DESC& desc) -> i64 {
+			const auto num   = static_cast<f32>(desc.RefreshRate.Numerator);
+			const auto denom = static_cast<f32>(desc.RefreshRate.Denominator);
+			return static_cast<i64>(round(num / denom));
+		};
+
 		// Sort the array by refresh rate (lowest -> highest)
 		std::sort(desc_matches.begin(), desc_matches.end(),
-			[](const decltype(desc_matches)::value_type& a, const decltype(desc_matches)::value_type& b) {
-				const auto a_num   = static_cast<f32>(a->RefreshRate.Numerator);
-				const auto a_denom = static_cast<f32>(a->RefreshRate.Denominator);
-				const auto a_rr    = static_cast<i64>(round(a_num / a_denom));
-
-				const auto b_num   = static_cast<f32>(b->RefreshRate.Numerator);
-				const auto b_denom = static_cast<f32>(b->RefreshRate.Denominator);
-				const auto b_rr    = static_cast<i64>(round(b_num / b_denom));
+			[&](const display_desc_list_iter& a, const display_desc_list_iter& b) {
+				const auto a_rr = rounded_refresh_rate(*a);
+			    const auto b_rr = rounded_refresh_rate(*b);
 
 				return a_rr < b_rr;
 		});
 
 		// Find and remove any elements with refresh > desired_refresh
 		auto greater = std::upper_bound(desc_matches.begin(), desc_matches.end(), refresh_rate,
-			[](u32 a, const decltype(desc_matches)::value_type& b) {
-				const auto b_num   = static_cast<f32>(b->RefreshRate.Numerator);
-				const auto b_denom = static_cast<f32>(b->RefreshRate.Denominator);
-				const auto b_rr    = static_cast<i64>(round(b_num / b_denom));
+			[&](u32 a, const display_desc_list_iter& b) {
+			    const auto b_rr = rounded_refresh_rate(*b);
 
 				return a < b_rr;
 		});
@@ -170,14 +171,9 @@ void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
 
 		// Find and remove any elements with refresh rate != closest_match (aka matches.last())
 		auto first_eq = std::find_if(desc_matches.begin(), desc_matches.end(),
-			[&](const decltype(desc_matches)::value_type& a) {
-				const auto a_num   = static_cast<f32>(a->RefreshRate.Numerator);
-				const auto a_denom = static_cast<f32>(a->RefreshRate.Denominator);
-			    const auto a_rr    = static_cast<i64>(round(a_num / a_denom));
-
-			    const auto b_num   = static_cast<f32>(desc_matches.back()->RefreshRate.Numerator);
-			    const auto b_denom = static_cast<f32>(desc_matches.back()->RefreshRate.Denominator);
-			    const auto b_rr    = static_cast<i64>(round(b_num / b_denom));
+			[&](const display_desc_list_iter& a) {
+				const auto a_rr = rounded_refresh_rate(*a);
+			    const auto b_rr = rounded_refresh_rate(*desc_matches.back());
 
 				return a_rr == b_rr;
 		});
@@ -194,4 +190,32 @@ void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
 		const size_t match_index = desc_matches[0] - display_desc_list.begin();
 		setDisplayDesc(match_index);
 	}
+}
+
+
+void to_json(json& j, const DisplayConfig& cfg) {
+	const auto res = cfg.getDisplayResolution();
+	j[ConfigTokens::display_width] = res[0];
+	j[ConfigTokens::display_height] = res[1];
+	j[ConfigTokens::refresh] = cfg.getRoundedDisplayRefreshRate();
+	j[ConfigTokens::vsync] = cfg.isVsync();
+	j[ConfigTokens::fullscreen] = cfg.isFullscreen();
+	j[ConfigTokens::aa_type] = cfg.getAAType();
+}
+
+
+void from_json(const json& j, DisplayConfig& cfg) {
+	u32_2 res;
+	j.at(ConfigTokens::display_width).get_to(res[0]);
+	j.at(ConfigTokens::display_height).get_to(res[1]);
+
+	const auto refresh = j.at(ConfigTokens::refresh).get<u32>();
+	const auto vsync = j.at(ConfigTokens::vsync).get<bool>();
+	const auto fullscreen = j.at(ConfigTokens::fullscreen).get<bool>();
+	const auto aa = static_cast<AAType>(j.at(ConfigTokens::aa_type).get<u32>());
+
+	cfg.setNearestDisplayDesc(res, refresh);
+	cfg.setVsync(vsync);
+	cfg.setFullscreen(fullscreen);
+	cfg.setAAType(aa);
 }
