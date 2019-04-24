@@ -137,9 +137,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\input.h" />
+    <ClInclude Include="src\key_config.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\key_config.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
