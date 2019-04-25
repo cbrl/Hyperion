@@ -315,12 +315,12 @@ void DrawCameraSettings(CameraSettings& settings) {
 	static constexpr gsl::czstring<> brdf_names[] = {
 	    "Lambert",
 	    "Blinn-Phong",
-	    "Cook-Torrance",
+	    "Microfacet",
 	};
 	static constexpr BRDF brdfs[] = {
 	    BRDF::Lambert,
 	    BRDF::BlinnPhong,
-	    BRDF::CookTorrance,
+	    BRDF::Microfacet,
 	};
 
 	if (settings.getRenderMode() != RenderMode::FalseColor) {

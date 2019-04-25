@@ -28,7 +28,7 @@
 
 
 //----------------------------------------------------------------------------------
-// Cook-Torrance BRDF Terms
+// Microfacet BRDF Terms
 //----------------------------------------------------------------------------------
 #include "distribution_term.hlsli"
 #include "geometry_term.hlsli"
@@ -77,9 +77,9 @@ void BlinnPhong(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, 
 
 
 //----------------------------------------------------------------------------------
-// Cook-Torrance BRDF
+// Microfacet BRDF
 //----------------------------------------------------------------------------------
-void CookTorrance(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
+void Microfacet(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, out float3 specular) {
 
 	const float  n_dot_l = saturate(dot(n, l));
 	const float  n_dot_v = saturate(dot(n, v));

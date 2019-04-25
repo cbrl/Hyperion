@@ -8,11 +8,11 @@
 
 #include "compiled_headers/forward_lambert.h"
 #include "compiled_headers/forward_blinn_phong.h"
-#include "compiled_headers/forward_cook_torrance.h"
+#include "compiled_headers/forward_microfacet.h"
 
 #include "compiled_headers/forward_transparent_lambert.h"
 #include "compiled_headers/forward_transparent_blinn_phong.h"
-#include "compiled_headers/forward_transparent_cook_torrance.h"
+#include "compiled_headers/forward_transparent_microfacet.h"
 
 // GBuffer
 #include "compiled_headers/gbuffer_ps.h"
@@ -20,7 +20,7 @@
 // Deferred
 #include "compiled_headers/deferred_lambert.h"
 #include "compiled_headers/deferred_blinn_phong.h"
-#include "compiled_headers/deferred_cook_torrance.h"
+#include "compiled_headers/deferred_microfacet.h"
 
 // Depth
 #include "compiled_headers/depth_vs.h"
@@ -70,11 +70,11 @@ std::shared_ptr<PixelShader> CreateForwardPS(ResourceMgr& resource_mgr, BRDF brd
 			else
 				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_blinn_phong_ps", BYTECODE(shader_forward_blinn_phong));
 		}
-		case BRDF::CookTorrance: {
+		case BRDF::Microfacet: {
 			if (transparency)
-				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_cook_torrance_ps", BYTECODE(shader_forward_transparent_cook_torrance));
+				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_transparent_microfacet_ps", BYTECODE(shader_forward_transparent_microfacet));
 			else
-				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_cook_torrance_ps", BYTECODE(shader_forward_cook_torrance));
+				return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_microfacet_ps", BYTECODE(shader_forward_microfacet));
 		}
 		default: {
 			return resource_mgr.getOrCreate<PixelShader>(L"shader_forward_lambert_ps", BYTECODE(shader_forward_lambert));
@@ -114,8 +114,8 @@ std::shared_ptr<PixelShader> CreateDeferredPS(ResourceMgr& resource_mgr, BRDF br
 		case BRDF::BlinnPhong: {
 			return resource_mgr.getOrCreate<PixelShader>(L"shader_deferred_blinn_phong_ps", BYTECODE(shader_deferred_blinn_phong));
 		}
-		case BRDF::CookTorrance: {
-			return resource_mgr.getOrCreate<PixelShader>(L"shader_deferred_cook_torrance_ps", BYTECODE(shader_deferred_cook_torrance));
+		case BRDF::Microfacet: {
+			return resource_mgr.getOrCreate<PixelShader>(L"shader_deferred_microfacet_ps", BYTECODE(shader_deferred_microfacet));
 		}
 		default: {
 			return resource_mgr.getOrCreate<PixelShader>(L"shader_deferred_lambert_ps", BYTECODE(shader_deferred_lambert));

@@ -26,7 +26,7 @@ enum class RenderOptions : u8 {
 enum class BRDF : u8 {
 	Lambert = 0,
 	BlinnPhong,
-	CookTorrance,
+	Microfacet,
 };
 
 enum class FalseColor : u8 {

@@ -17,7 +17,7 @@ public:
 	//----------------------------------------------------------------------------------
 	CameraSettings() noexcept
 		: render_mode(RenderMode::Forward)
-		, brdf(BRDF::CookTorrance)
+		, brdf(BRDF::Microfacet)
 	    , false_color(FalseColor::Fullbright)
 		, render_options(static_cast<u8>(RenderOptions::None))
 		, bounding_volume_color(1.0f, 1.0f, 1.0f, 1.0f)
