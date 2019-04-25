@@ -28,7 +28,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EventParticipator() noexcept;
+	EventParticipator() noexcept = default;
 	EventParticipator(const EventParticipator&) noexcept = default;
 	EventParticipator(EventParticipator&&) noexcept = default;
 
@@ -64,7 +64,7 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	EventMgr* event_mgr;
+	EventMgr* event_mgr = nullptr;
 };
 
 
