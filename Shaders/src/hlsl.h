@@ -11,8 +11,8 @@
 #define ALPHA_MIN 0.00392156f
 
 // The minimum alpha value at which a shadow will still be cast
-// 32/255
-#define ALPHA_SHADOW_THRESHOLD 0.12549019f
+// 16/255
+#define ALPHA_SHADOW_THRESHOLD 0.06274509f
 
 
 //----------------------------------------------------------------------------------
