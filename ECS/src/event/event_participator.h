@@ -186,7 +186,7 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// A list of callback delegates registered by this event listener. The event manager owns the delegates.
-	std::list<IEventDelegate*> registered_callbacks;
+	std::vector<IEventDelegate*> registered_callbacks;
 };
 
 #include "event_participator.tpp"
