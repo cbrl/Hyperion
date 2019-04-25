@@ -13,7 +13,7 @@ Renderer::Renderer(DisplayConfig& display_config,
                    ResourceMgr& resource_mgr)
 	: device(device)
 	, device_context(device_context)
-    , display_config(display_config)
+	, display_config(display_config)
 	, profiler(device, device_context)
 	, engine_buffer(device) {
 
