@@ -123,6 +123,7 @@ float3 ViewportToCamera(float2 p_viewport, float depth) {
 	return ClipToCamera(p_clip);
 }
 
+// Convert display-space coordinates + depth to camera-space coordinates
 float3 DisplayToCamera(float2 p_display, float depth) {
 	const float2 p_viewport = DisplayToViewport(p_display);
 	return ViewportToCamera(p_viewport, depth);
