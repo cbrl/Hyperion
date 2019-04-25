@@ -11,11 +11,11 @@ class EventMgr;
 // EventParticipator
 //----------------------------------------------------------------------------------
 //
-// The EventSender and EventListener classes inherit from this class. It contains
-// a pointer to the event manager, which should never be null. The pointer is used
-// instead of a reference so that it can be set after construction in the
-// entity/component/system manager, eliminating the need to modify the constructor
-// of every component or system.
+// The EventSender and EventListener classes inherit from this class. It simply
+// stores a pointer to the event manager, which should never be null. The pointer is
+// used instead of a reference so that it can be set after construction, eliminating
+// the need to modify the constructor of every class that uses events. The downside
+// is that components/systems cannot call sendEvent() in a constructor.
 //
 //----------------------------------------------------------------------------------
 class EventParticipator {
@@ -73,8 +73,8 @@ private:
 // EventSender
 //----------------------------------------------------------------------------------
 //
-// Components/Systems that send events will inherit from this class. The Entity
-// class also inherits from this.
+// User components/systems that send events will inherit from this class. The Entity
+// class also inherits from this to notify systems when its parent changes.
 //
 //----------------------------------------------------------------------------------
 class EventSender : public virtual EventParticipator {
@@ -121,7 +121,7 @@ private:
 // EventListener
 //----------------------------------------------------------------------------------
 //
-// Components/Systems that listen for events will inherit from this class
+// Components/Systems that listen for events will inherit from this class.
 //
 //----------------------------------------------------------------------------------
 class EventListener : public virtual EventParticipator {
@@ -129,6 +129,7 @@ class EventListener : public virtual EventParticipator {
 	friend class SystemMgr;
 
 public:
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
