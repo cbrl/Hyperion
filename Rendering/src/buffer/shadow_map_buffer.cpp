@@ -1,8 +1,26 @@
 #include "shadow_map_buffer.h"
 
+
+//----------------------------------------------------------------------------------
+// ShadowMapBuffer
+//----------------------------------------------------------------------------------
+
 ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
                                  u32 map_count,
-                                 u32 resolution) {
+                                 u32 resolution,
+                                 i32 depth_bias,
+                                 f32 slope_scaled_depth_bias,
+                                 f32 depth_bias_clamp) {
+
+	init(device, map_count, resolution, depth_bias, slope_scaled_depth_bias, depth_bias_clamp);
+}
+
+void ShadowMapBuffer::init(ID3D11Device& device,
+                           u32 map_count,
+                           u32 resolution,
+                           i32 depth_bias,
+                           f32 slope_scaled_depth_bias,
+                           f32 depth_bias_clamp) {
 
 	ThrowIfFailed(resolution != 0, "ShadowMapBuffer resolution must be greater than 0");
 
@@ -10,9 +28,9 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 	D3D11_RASTERIZER_DESC raster_desc = {};
 	raster_desc.CullMode              = D3D11_CULL_BACK;
 	raster_desc.FillMode              = D3D11_FILL_SOLID;
-	raster_desc.DepthBias             = DEPTH_BIAS;
-	raster_desc.SlopeScaledDepthBias  = SLOPE_SCALED_DEPTH_BIAS;
-	raster_desc.DepthBiasClamp        = DEPTH_BIAS_CLAMP;
+	raster_desc.DepthBias             = depth_bias;
+	raster_desc.SlopeScaledDepthBias  = slope_scaled_depth_bias;
+	raster_desc.DepthBiasClamp        = depth_bias_clamp;
 	raster_desc.DepthClipEnable       = TRUE;
 	raster_desc.MultisampleEnable     = TRUE;
 
@@ -77,9 +95,28 @@ ShadowMapBuffer::ShadowMapBuffer(ID3D11Device& device,
 }
 
 
+
+//----------------------------------------------------------------------------------
+// ShadowCubeMapBuffer
+//----------------------------------------------------------------------------------
+
 ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
                                          u32 cube_map_count,
-                                         u32 resolution) {
+                                         u32 resolution,
+                                         i32 depth_bias,
+                                         f32 slope_scaled_depth_bias,
+                                         f32 depth_bias_clamp) {
+	
+	init(device, cube_map_count, resolution, depth_bias, slope_scaled_depth_bias, depth_bias_clamp);
+}
+
+
+void ShadowCubeMapBuffer::init(ID3D11Device& device,
+                               u32 cube_map_count,
+                               u32 resolution,
+                               i32 depth_bias,
+                               f32 slope_scaled_depth_bias,
+                               f32 depth_bias_clamp) {
 
 	ThrowIfFailed(resolution != 0, "ShadowCubeMapBuffer resolution must be greater than 0");
 
@@ -87,9 +124,9 @@ ShadowCubeMapBuffer::ShadowCubeMapBuffer(ID3D11Device& device,
 	D3D11_RASTERIZER_DESC raster_desc = {};
 	raster_desc.CullMode              = D3D11_CULL_BACK;
 	raster_desc.FillMode              = D3D11_FILL_SOLID;
-	raster_desc.DepthBias             = DEPTH_BIAS;
-	raster_desc.SlopeScaledDepthBias  = SLOPE_SCALED_DEPTH_BIAS;
-	raster_desc.DepthBiasClamp        = DEPTH_BIAS_CLAMP;
+	raster_desc.DepthBias             = depth_bias;
+	raster_desc.SlopeScaledDepthBias  = slope_scaled_depth_bias;
+	raster_desc.DepthBiasClamp        = depth_bias_clamp;
 	raster_desc.DepthClipEnable       = TRUE;
 	raster_desc.MultisampleEnable     = TRUE;
 

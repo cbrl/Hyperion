@@ -52,6 +52,9 @@ private:
 	int current_display_desc = 0;
 	std::vector<std::string> display_modes;
 
-	// Shadow map resolution
+	// Shadow map variables
 	u32 smap_res = 0;
+	i32 smap_depth_bias = 0;
+	f32 smap_slope_scaled_depth_bias = 0;
+	f32 smap_depth_bias_clamp = 0;
 };

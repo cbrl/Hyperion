@@ -8,54 +8,51 @@
 #define CONFIG_FILE "./config.json"
 
 
-// Default configuration used when the config file fails to load
-const json g_default_config = {
-	{ConfigTokens::display_config, {
-		{ConfigTokens::display_width,  1200},
-		{ConfigTokens::display_height, 900},
-		{ConfigTokens::refresh,        60},
-		{ConfigTokens::vsync,          false},
-		{ConfigTokens::fullscreen,     false},
-		{ConfigTokens::aa_type,        AAType::None},
-	}},
-	{ConfigTokens::render_config, {
-		{ConfigTokens::shadowmap_res, 512},
-	}},
-	{ConfigTokens::win_title, "Engine"},
-};
+std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
 
+	// Window title
+	std::string title = "Engine";
 
-std::unique_ptr<Engine> LoadConfig(const json& config) {
-
-	// Create display configuration
-	DisplayConfig display_config;
-	try {
-		config.at(ConfigTokens::display_config).get_to(display_config);
-	}
-	catch (json::exception& e) {
-		Logger::log(LogLevel::err, e.what());
-		g_default_config.at(ConfigTokens::display_config).get_to(display_config);
-	}
-
-	// Create rendering configuration
+	// Configuration classes
+	DisplayConfig   display_config;
 	RenderingConfig render_config;
-	try {
-		config.at(ConfigTokens::render_config).get_to(render_config);
-	}
-	catch (json::exception & e) {
-		Logger::log(LogLevel::err, e.what());
-		g_default_config.at(ConfigTokens::render_config).get_to(render_config);
-	}
 
-	// Get title
-	std::string title;
-	if (config.contains(ConfigTokens::win_title))
-		config[ConfigTokens::win_title].get_to(title);
-	else
-		g_default_config[ConfigTokens::win_title].get_to(title);
+	// Try to process the config file
+	json config;
+	std::ifstream file{config_file};
 
-	// Create the engine
-	return std::make_unique<Engine>(StrToWstr(title), std::move(display_config), std::move(render_config));
+	if (file) {
+		// Read file contents into json object
+		file >> config;
+		file.close();
+
+		// Load display configuration
+		try {
+			config.at(ConfigTokens::display_config).get_to(display_config);
+		}
+		catch (json::exception& e) {
+			Logger::log(LogLevel::err, e.what());
+		}
+
+		// Load rendering configuration
+		try {
+			config.at(ConfigTokens::render_config).get_to(render_config);
+		}
+		catch (json::exception& e) {
+			Logger::log(LogLevel::err, e.what());
+		}
+
+		// Get title
+		if (config.contains(ConfigTokens::win_title))
+			config[ConfigTokens::win_title].get_to(title);
+
+		return std::make_unique<Engine>(StrToWstr(title), std::move(display_config), std::move(render_config));
+	}
+	else { //if the file failed to open
+		auto engine = std::make_unique<Engine>(StrToWstr(title), std::move(display_config), std::move(render_config));
+		engine->saveConfig();
+		return engine;
+	}
 }
 
 
@@ -64,19 +61,8 @@ std::unique_ptr<Engine> SetupEngine() {
 	// Create the console
 	AllocateConsole();
 
-	// Try to process the config file
-	json config;
-	std::ifstream file{CONFIG_FILE};
-	if (file) {
-		file >> config;
-		file.close();
-		return LoadConfig(config);
-	}
-
-	// Use the default config if loading the config file failed
-	std::unique_ptr<Engine> engine = LoadConfig(g_default_config);
-	engine->saveConfig();
-	return engine;
+	// Load the configuration file and create the engine
+	return LoadConfig(CONFIG_FILE);
 }
 
 
@@ -84,20 +70,16 @@ std::unique_ptr<Engine> SetupEngine() {
 LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	switch(msg) {
-
-		// Handle Alt-Enter keypress
 		case WM_SYSKEYDOWN: {
-			if (wParam == VK_RETURN) {
+			if (wParam == VK_RETURN) { //Handle Alt-Enter keypress
 				on_fullscreen_toggle();
 			}
 			return 0;
 		}
-
 		case WM_SIZE: {
 			on_resize();
 			return 0;
 		}
-
 		default:
 			return 0;
 	}

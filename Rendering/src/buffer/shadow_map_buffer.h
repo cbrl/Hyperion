@@ -5,39 +5,27 @@
 #include "display/viewport.h"
 
 
-// Rasterizer depth bias values
-#define DEPTH_BIAS 50
-#define SLOPE_SCALED_DEPTH_BIAS 1.0f
-#define DEPTH_BIAS_CLAMP 0.0f
-
-
-class ShadowMapBuffer final {
+class IShadowMapBuffer {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
-	ShadowMapBuffer(ID3D11Device& device,
-	                u32 map_count,
-	                u32 resolution = 512);
-
-	ShadowMapBuffer(const ShadowMapBuffer& buffer) = delete;
-	ShadowMapBuffer(ShadowMapBuffer&& buffer) noexcept = default;
+	IShadowMapBuffer() = default;
+	IShadowMapBuffer(const IShadowMapBuffer& buffer) = delete;
+	IShadowMapBuffer(IShadowMapBuffer&& buffer) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
-	~ShadowMapBuffer() = default;
+	virtual ~IShadowMapBuffer() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
-	ShadowMapBuffer& operator=(const ShadowMapBuffer& buffer) = delete;
-	ShadowMapBuffer& operator=(ShadowMapBuffer&& buffer) noexcept = default;
+	IShadowMapBuffer& operator=(const IShadowMapBuffer& buffer) = delete;
+	IShadowMapBuffer& operator=(IShadowMapBuffer&& buffer) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -49,12 +37,12 @@ public:
 		viewport.bind(device_context);
 	}
 
-	// Bind the raster state for the cube std::map
+	// Bind the raster state for the cubemap
 	void bindRasterState(ID3D11DeviceContext& device_context) const {
 		Pipeline::RS::bindState(device_context, raster_state.Get());
 	}
 
-	// Bind the depth stencil view for the cube std::map
+	// Bind the depth stencil view for the cubemap
 	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
 		Pipeline::OM::bindRTVsAndDSV(device_context, {}, dsvs[index].Get());
 	}
@@ -72,10 +60,30 @@ public:
 		return dsvs.size();
 	}
 
-	// Get the resolution of the shadow map
 	[[nodiscard]]
 	u32 getMapRes() const noexcept {
 		return viewport.getSize()[0];
+	}
+
+	[[nodiscard]]
+	i32 getDepthBias() const noexcept {
+		D3D11_RASTERIZER_DESC desc;
+		raster_state->GetDesc(&desc);
+		return desc.DepthBias;
+	}
+
+	[[nodiscard]]
+	f32 getSlopeScaledDepthBias() const noexcept {
+		D3D11_RASTERIZER_DESC desc;
+		raster_state->GetDesc(&desc);
+		return desc.SlopeScaledDepthBias;
+	}
+
+	[[nodiscard]]
+	f32 getDepthBiasClamp() const noexcept {
+		D3D11_RASTERIZER_DESC desc;
+		raster_state->GetDesc(&desc);
+		return desc.DepthBiasClamp;
 	}
 
 	[[nodiscard]]
@@ -88,8 +96,15 @@ public:
 		return srv.GetAddressOf();
 	}
 
+protected:
 
-private:
+	virtual void init(ID3D11Device& device,
+	                  u32 map_count,
+	                  u32 resolution,
+	                  i32 depth_bias,
+	                  f32 slope_scaled_depth_bias,
+	                  f32 depth_bias_clamp) = 0;
+
 	Viewport viewport;
 	ComPtr<ID3D11RasterizerState> raster_state;
 
@@ -98,14 +113,59 @@ private:
 };
 
 
-class ShadowCubeMapBuffer final {
+class ShadowMapBuffer final : public IShadowMapBuffer {
+public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	ShadowMapBuffer(ID3D11Device& device,
+	                u32 map_count,
+	                u32 resolution,
+	                i32 depth_bias,
+	                f32 slope_scaled_depth_bias,
+	                f32 depth_bias_clamp);
+
+	ShadowMapBuffer(const ShadowMapBuffer& buffer) = delete;
+	ShadowMapBuffer(ShadowMapBuffer&& buffer) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~ShadowMapBuffer() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	ShadowMapBuffer& operator=(const ShadowMapBuffer& buffer) = delete;
+	ShadowMapBuffer& operator=(ShadowMapBuffer&& buffer) noexcept = default;
+
+private:
+
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
+	void init(ID3D11Device& device,
+	          u32 map_count,
+	          u32 resolution,
+	          i32 depth_bias,
+	          f32 slope_scaled_depth_bias,
+	          f32 depth_bias_clamp) override;
+};
+
+
+class ShadowCubeMapBuffer final : public IShadowMapBuffer {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 	ShadowCubeMapBuffer(ID3D11Device& device,
 	                    u32 cube_map_count,
-	                    u32 resolution = 512);
+	                    u32 resolution,
+	                    i32 depth_bias,
+	                    f32 slope_scaled_depth_bias,
+	                    f32 depth_bias_clamp);
 
 	ShadowCubeMapBuffer(const ShadowCubeMapBuffer& buffer) = delete;
 	ShadowCubeMapBuffer(ShadowCubeMapBuffer&& buffer) noexcept = default;
@@ -128,64 +188,21 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// Bind the viewport and DSVs
-	void bindViewport(ID3D11DeviceContext& device_context) const {
-		viewport.bind(device_context);
-	}
-
-	// Bind the raster state for the cube std::map
-	void bindRasterState(ID3D11DeviceContext& device_context) const {
-		Pipeline::RS::bindState(device_context, raster_state.Get());
-	}
-
-	// Bind the depth stencil view for the cube std::map
-	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
-		Pipeline::OM::bindRTVAndDSV(device_context, nullptr, dsvs[index].Get());
-	}
-
-	// Clear the DSVs
-	void clear(ID3D11DeviceContext& device_context) const {
-		for (const auto& dsv : dsvs) {
-			Pipeline::OM::clearDSV(device_context, dsv.Get());
-		}
-	}
-
-	// Get the number of individual maps in this buffer
-	[[nodiscard]]
-	size_t getMapCount() const noexcept {
-		return dsvs.size();
-	}
-
-	// Get the number of cube maps in this buffer
+	// Get the number of cube maps in this buffer (cubemaps = maps / 6)
 	[[nodiscard]]
 	size_t getCubeMapCount() const noexcept {
 		return dsvs.size() / 6;
 	}
 
-	// Get the resolution of the shadow map
-	[[nodiscard]]
-	u32 getMapRes() const noexcept {
-		return viewport.getSize()[0];
-	}
-
-	[[nodiscard]]
-	ID3D11ShaderResourceView* getSRV() const noexcept {
-		return srv.Get();
-	}
-
-	[[nodiscard]]
-	ID3D11ShaderResourceView* const* getSRVAddress() const noexcept {
-		return srv.GetAddressOf();
-	}
-
 private:
 
 	//----------------------------------------------------------------------------------
-	// Member Variables
+	// Member Functions
 	//----------------------------------------------------------------------------------
-	Viewport viewport;
-	ComPtr<ID3D11RasterizerState> raster_state;
-
-	std::vector<ComPtr<ID3D11DepthStencilView>> dsvs;
-	ComPtr<ID3D11ShaderResourceView> srv;
+	void init(ID3D11Device& device,
+	          u32 cube_map_count,
+	          u32 resolution,
+	          i32 depth_bias,
+	          f32 slope_scaled_depth_bias,
+	          f32 depth_bias_clamp) override;
 };

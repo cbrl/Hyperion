@@ -16,7 +16,6 @@ LightPass::LightPass(const RenderingConfig& rendering_config,
 	: device(device)
 	, device_context(device_context)
 	, rendering_config(rendering_config)
-	, depth_pass(std::make_unique<DepthPass>(device, device_context, render_state_mgr, resource_mgr))
 
 	, light_buffer(device)
 	, directional_lights(device, 16)
@@ -27,9 +26,31 @@ LightPass::LightPass(const RenderingConfig& rendering_config,
 	, shadowed_point_lights(device, 1)
 	, shadowed_spot_lights(device, 1) {
 
-	directional_light_smaps = std::make_unique<ShadowMapBuffer>(device,     1, rendering_config.getShadowMapRes());
-	point_light_smaps       = std::make_unique<ShadowCubeMapBuffer>(device, 1, rendering_config.getShadowMapRes());
-	spot_light_smaps        = std::make_unique<ShadowMapBuffer>(device,     1, rendering_config.getShadowMapRes());
+	depth_pass = std::make_unique<DepthPass>(device, device_context, render_state_mgr, resource_mgr);
+
+	directional_light_smaps =
+		std::make_unique<ShadowMapBuffer>(device,
+		                                  1,
+	                                      rendering_config.getShadowMapRes(),
+	                                      rendering_config.getShadowMapDepthBias(),
+	                                      rendering_config.getShadowMapSlopeScaledDepthBias(),
+	                                      rendering_config.getShadowMapDepthBiasClamp());
+
+	point_light_smaps =
+	    std::make_unique<ShadowCubeMapBuffer>(device,
+	                                          1,
+	                                          rendering_config.getShadowMapRes(),
+	                                          rendering_config.getShadowMapDepthBias(),
+	                                          rendering_config.getShadowMapSlopeScaledDepthBias(),
+	                                          rendering_config.getShadowMapDepthBiasClamp());
+
+	spot_light_smaps =
+	    std::make_unique<ShadowMapBuffer>(device,
+	                                      1,
+	                                      rendering_config.getShadowMapRes(),
+	                                      rendering_config.getShadowMapDepthBias(),
+	                                      rendering_config.getShadowMapSlopeScaledDepthBias(),
+	                                      rendering_config.getShadowMapDepthBiasClamp());
 }
 
 
@@ -40,8 +61,9 @@ void XM_CALLCONV LightPass::render(Scene& scene, FXMMATRIX world_to_projection) 
 	updatePointLightData(scene, world_to_projection);
 	updateSpotLightData(scene, world_to_projection);
 
-	// Update the shadow std::map sizes
+	// Update the shadow map sizes
 	updateShadowMaps();
+
 	// Render the shadow maps
 	renderShadowMaps(scene);
 
@@ -110,19 +132,31 @@ void LightPass::updateShadowMaps() {
 	ID3D11ShaderResourceView* const srvs[3] = {};
 	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, gsl::span{srvs});
 
+	// Get current shadow map config values
+	const auto config_res = rendering_config.getShadowMapRes();
+	const auto config_db = rendering_config.getShadowMapDepthBias();
+	const auto config_ssdb = rendering_config.getShadowMapSlopeScaledDepthBias();
+	const auto config_dbc = rendering_config.getShadowMapDepthBiasClamp();
 
 	// Directional Lights
 	{
 		const size_t size      = shadowed_directional_lights.size();
 		const size_t available = directional_light_smaps->getMapCount();
 
-		const auto curr_res   = directional_light_smaps->getMapRes();
-		const auto config_res = rendering_config.getShadowMapRes();
+		const auto curr_res  = directional_light_smaps->getMapRes();
+		const auto curr_db   = directional_light_smaps->getDepthBias();
+		const auto curr_ssdb = directional_light_smaps->getSlopeScaledDepthBias();
+		const auto curr_dbc  = directional_light_smaps->getDepthBiasClamp();
 
+		if (size > available         ||
+		    curr_res  != config_res  ||
+		    curr_db   != config_db   ||
+		    curr_ssdb != config_ssdb ||
+		    curr_dbc  != config_dbc) {
 
-		if (size > available || curr_res != config_res) {
 			const u32 count = size ? static_cast<u32>(size) : 1;
-			directional_light_smaps = std::make_unique<ShadowMapBuffer>(device, count, config_res);
+			directional_light_smaps =
+			    std::make_unique<ShadowMapBuffer>(device, count, config_res, config_db, config_ssdb, config_dbc);
 		}
 
 		directional_light_smaps->clear(device_context);
@@ -133,12 +167,20 @@ void LightPass::updateShadowMaps() {
 		const size_t size      = shadowed_point_lights.size();
 		const size_t available = point_light_smaps->getCubeMapCount();
 
-		const auto curr_res   = point_light_smaps->getMapRes();
-		const auto config_res = rendering_config.getShadowMapRes();
+		const auto curr_res  = point_light_smaps->getMapRes();
+		const auto curr_db   = point_light_smaps->getDepthBias();
+		const auto curr_ssdb = point_light_smaps->getSlopeScaledDepthBias();
+		const auto curr_dbc  = point_light_smaps->getDepthBiasClamp();
 
-		if (size > available || curr_res != config_res) {
+		if (size > available         ||
+		    curr_res  != config_res  ||
+		    curr_db   != config_db   ||
+		    curr_ssdb != config_ssdb ||
+		    curr_dbc  != config_dbc) {
+
 			const u32 count = size ? static_cast<u32>(size) : 1;
-			point_light_smaps = std::make_unique<ShadowCubeMapBuffer>(device, count, config_res);
+			point_light_smaps =
+			    std::make_unique<ShadowCubeMapBuffer>(device, count, config_res, config_db, config_ssdb, config_dbc);
 		}
 
 		point_light_smaps->clear(device_context);
@@ -149,12 +191,20 @@ void LightPass::updateShadowMaps() {
 		const size_t size      = shadowed_spot_lights.size();
 		const size_t available = spot_light_smaps->getMapCount();
 
-		const auto curr_res   = spot_light_smaps->getMapRes();
-		const auto config_res = rendering_config.getShadowMapRes();
+		const auto curr_res  = spot_light_smaps->getMapRes();
+		const auto curr_db   = spot_light_smaps->getDepthBias();
+		const auto curr_ssdb = spot_light_smaps->getSlopeScaledDepthBias();
+		const auto curr_dbc  = spot_light_smaps->getDepthBiasClamp();
 
-		if (size > available || curr_res != config_res) {
+		if (size > available         ||
+		    curr_res  != config_res  ||
+		    curr_db   != config_db   ||
+		    curr_ssdb != config_ssdb ||
+		    curr_dbc  != config_dbc) {
+
 			const u32 count = size ? static_cast<u32>(size) : 1;
-			spot_light_smaps = std::make_unique<ShadowMapBuffer>(device, count, config_res);
+			spot_light_smaps =
+			    std::make_unique<ShadowMapBuffer>(device, count, config_res, config_db, config_ssdb, config_dbc);
 		}
 
 		spot_light_smaps->clear(device_context);

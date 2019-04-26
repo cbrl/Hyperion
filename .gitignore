@@ -270,3 +270,4 @@ __pycache__/
 **/config.txt
 data/
 Shaders/src/compiled_headers/
+**/config.json

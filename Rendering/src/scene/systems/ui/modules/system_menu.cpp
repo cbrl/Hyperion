@@ -6,12 +6,18 @@
 
 SystemMenu::SystemMenu(const Engine& engine) {
 
-	auto& rendering_mgr = engine.getRenderingMgr();
-	auto& settings      = rendering_mgr.getDisplayConfig();
-	smap_res            = rendering_mgr.getRenderingConfig().getShadowMapRes();
+	const auto& rendering_mgr    = engine.getRenderingMgr();
+	const auto& rendering_config = rendering_mgr.getRenderingConfig();
+	const auto& display_config   = rendering_mgr.getDisplayConfig();
+
+	// Get shadow map config
+	smap_res                     = rendering_config.getShadowMapRes();
+	smap_depth_bias              = rendering_config.getShadowMapDepthBias();
+	smap_slope_scaled_depth_bias = rendering_config.getShadowMapSlopeScaledDepthBias();
+	smap_depth_bias_clamp        = rendering_config.getShadowMapDepthBiasClamp();
 
 	// Create the display mode strings
-	for (const auto& desc : settings.getDisplayDescList()) {
+	for (const auto& desc : display_config.getDisplayDescList()) {
 		const auto exact_refresh = static_cast<f32>(desc.RefreshRate.Numerator) / static_cast<f32>(desc.RefreshRate.Denominator);
 		const auto refresh = static_cast<u32>(round(exact_refresh));
 		display_modes.push_back(std::to_string(desc.Width) + "x" + std::to_string(desc.Height) + " " + std::to_string(refresh) + "Hz");
@@ -80,20 +86,35 @@ void SystemMenu::drawEngineSettingsPopup(Engine& engine) {
 		auto& rendering_mgr    = engine.getRenderingMgr();
 		auto& rendering_config = rendering_mgr.getRenderingConfig();
 
-		ImGui::DragScalar("Shadow Map Resolution", ImGuiDataType_U32, &smap_res, 1);
+		ImGui::Text("Shadow Maps");
+		ImGui::Separator();
 
-		if (ImGui::Button("Apply")) {
-			rendering_config.setShadowMapRes(smap_res);
-			engine.saveConfig();
-		}
+		ImGui::DragScalar("Resolution", ImGuiDataType_U32, &smap_res, 1);
+		ImGui::DragScalar("Depth Bias", ImGuiDataType_S32, &smap_depth_bias, 1);
+		ImGui::DragFloat("Slope Scaled Depth Bias", &smap_slope_scaled_depth_bias, 0.01f);
+		ImGui::DragFloat("Depth Bias Clamp", &smap_depth_bias_clamp, 0.01f);
+
+		bool apply = false;
+		bool save  = false;
+		bool close = false;
+
+		apply = ImGui::Button("Apply");
 		ImGui::SameLine();
-		if (ImGui::Button("Save")) {
-			rendering_config.setShadowMapRes(smap_res);
-			engine.saveConfig();
-			ImGui::CloseCurrentPopup();
-		}
+		save = ImGui::Button("Save");
 		ImGui::SameLine();
-		if (ImGui::Button("Close")) {
+		close = ImGui::Button("Close");
+
+		if (apply || save) {
+			rendering_config.setShadowMapRes(smap_res);
+			rendering_config.setShadowMapDepthBias(smap_depth_bias);
+			rendering_config.setShadowMapSlopeScaledDepthBias(smap_slope_scaled_depth_bias);
+			rendering_config.setShadowMapDepthBiasClamp(smap_depth_bias_clamp);
+			engine.saveConfig();
+
+			if (save)
+				ImGui::CloseCurrentPopup();
+		}
+		if (close) {
 			ImGui::CloseCurrentPopup();
 		}
 
