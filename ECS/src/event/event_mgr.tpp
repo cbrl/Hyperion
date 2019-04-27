@@ -18,15 +18,15 @@ void EventMgr::send(ArgsT&&... args) {
 
 
 template <class EventT>
-void EventMgr::addEventCallback(gsl::not_null<IEventDelegate*> delegate) {
-	auto index = EventT::static_index;
+void EventMgr::addEventCallback(std::unique_ptr<IEventDelegate> delegate) {
+	const auto index = EventT::static_index;
+	const auto it    = event_dispatchers.find(index);
 
-	auto it = event_dispatchers.find(index);
 	if (it == event_dispatchers.end()) {
-		auto pair = event_dispatchers.try_emplace(index, std::make_unique<EventDispatcher<EventT>>());
-		pair.first->second->addEventCallback(delegate);
+		const auto pair = event_dispatchers.try_emplace(index, std::make_unique<EventDispatcher<EventT>>());
+		pair.first->second->addEventCallback(std::move(delegate));
 	}
 	else {
-		event_dispatchers[index]->addEventCallback(delegate);
+		it->second->addEventCallback(std::move(delegate));
 	}
 }

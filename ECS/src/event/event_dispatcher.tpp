@@ -34,7 +34,7 @@ void EventDispatcher<EventT>::dispatch(const IEvent& event) {
 
 
 template<typename EventT>
-void EventDispatcher<EventT>::addEventCallback(gsl::not_null<IEventDelegate*> delegate) {
+void EventDispatcher<EventT>::addEventCallback(std::unique_ptr<IEventDelegate> delegate) {
 	auto result = std::find_if(pending_remove_delegates.begin(), pending_remove_delegates.end(),
 		[&](typename decltype(event_delegates)::iterator& it) {
 			return (*it)->operator==(*delegate);
@@ -45,7 +45,7 @@ void EventDispatcher<EventT>::addEventCallback(gsl::not_null<IEventDelegate*> de
 		pending_remove_delegates.erase(result);
 	}
 	else {
-		event_delegates.emplace_back(delegate);
+		event_delegates.emplace_back(std::move(delegate));
 	}
 }
 
@@ -57,12 +57,15 @@ void EventDispatcher<EventT>::removeEventCallback(gsl::not_null<IEventDelegate*>
 		return other->operator==(*delegate);
 	});
 
-	if (!delegate_list_locked && result != event_delegates.end()) {
-		event_delegates.erase(result);
-	}
-	else {
-		assert(result != event_delegates.end() && "Invalid event callback specified for removal");
-		pending_remove_delegates.push_back(result);
+	assert(result != event_delegates.end() && "Invalid event callback specified for removal");
+
+	if (result != event_delegates.end()) {
+		if (!delegate_list_locked) {
+			event_delegates.erase(result);
+		}
+		else {
+			pending_remove_delegates.push_back(result);
+		}
 	}
 }
 

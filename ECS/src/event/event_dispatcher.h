@@ -35,9 +35,9 @@ public:
 	//----------------------------------------------------------------------------------
 	virtual void dispatch(const IEvent& event) = 0;
 
-	virtual void addEventCallback(gsl::not_null<IEventDelegate*> eventDelegate) = 0;
+	virtual void addEventCallback(std::unique_ptr<IEventDelegate> delegate) = 0;
 
-	virtual void removeEventCallback(gsl::not_null<IEventDelegate*> eventDelegate) = 0;
+	virtual void removeEventCallback(gsl::not_null<IEventDelegate*> delegate) = 0;
 
 	[[nodiscard]]
 	virtual size_t getEventCallbackCount() const noexcept = 0;
@@ -85,8 +85,8 @@ public:
 	// Send an event to all listeners
 	void dispatch(const IEvent& event) override;
 
-	// Add an event callback delegate to this dispatcher
-	void addEventCallback(gsl::not_null<IEventDelegate*> delegate) override;
+	// Add an event callback delegate to this dispatcher. The dispatcher will own the delegate.
+	void addEventCallback(std::unique_ptr<IEventDelegate> delegate) override;
 
 	// Remove an event callback delegate from this dispatcher
 	void removeEventCallback(gsl::not_null<IEventDelegate*> delegate) override;

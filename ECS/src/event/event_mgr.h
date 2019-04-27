@@ -53,9 +53,9 @@ public:
 
 private:
 
-	// Add an event callback to the relevant dispatcher
+	// Add an event callback to the relevant dispatcher. The dispatcher will own the delegate.
 	template<class EventT>
-	void addEventCallback(gsl::not_null<IEventDelegate*> delegate);
+	void addEventCallback(std::unique_ptr<IEventDelegate> delegate);
 
 	// Remove an event callback
 	void removeEventCallback(gsl::not_null<IEventDelegate*> delegate);

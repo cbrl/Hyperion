@@ -185,7 +185,8 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// A list of callback delegates registered by this event listener. The event manager owns the delegates.
+	// A list of callback delegates registered by this event listener. Used in (un)registerEventCallback
+	// to determine if an event delegate exists or not. The event manager owns the delegates.
 	std::vector<IEventDelegate*> registered_callbacks;
 };
 

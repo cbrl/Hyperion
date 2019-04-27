@@ -24,15 +24,15 @@ void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT&
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
 
 	// Create a new delegate. The event manager will own the delegate.
-	IEventDelegate* delegate = new EventDelegate<ClassT, EventT>(static_cast<ClassT*>(this), Callback); //ClassT inherits from "this"
+	auto delegate = std::make_unique<EventDelegate<ClassT, EventT>>(static_cast<ClassT*>(this), Callback); //ClassT inherits from "this"
 
 	auto result = std::find_if(registered_callbacks.begin(), registered_callbacks.end(), [&](const IEventDelegate* other) {
 		return other->operator==(*delegate);
 	});
 
 	if (result == registered_callbacks.end()) {
-		registered_callbacks.push_back(delegate);
-		getEventMgr().addEventCallback<EventT>(gsl::make_not_null(delegate));
+		registered_callbacks.push_back(delegate.get());
+		getEventMgr().addEventCallback<EventT>(std::move(delegate));
 	}
 }
 
