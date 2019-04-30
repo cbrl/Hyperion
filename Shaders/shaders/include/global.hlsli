@@ -31,8 +31,8 @@ cbuffer EngineBuffer : REG_B(SLOT_CBUFFER_ENGINE) {
 	// The screen resolution
 	uint2 g_display_resolution;
 
-	// Delta time
-	float g_dt;
+	// Delta time (seconds)
+	float g_dt_ms;
 
 	// Padding
 	float eb_pad0;

@@ -74,7 +74,7 @@ void RenderingMgr::onResize() const {
 }
 
 
-void RenderingMgr::render(Scene& scene, f32 delta_time) const {
+void RenderingMgr::render(Scene& scene, std::chrono::duration<f32> delta_time) const {
 	renderer->render(scene, delta_time);
 }
 

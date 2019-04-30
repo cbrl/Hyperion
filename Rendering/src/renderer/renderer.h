@@ -62,11 +62,11 @@ public:
 		output_mgr->resizeBuffers();
 	}
 
-	void render(Scene& scene, f32 delta_time);
+	void render(Scene& scene, std::chrono::duration<f32> delta_time);
 
 private:
 
-	void updateBuffers(f32 delta_time);
+	void updateBuffers(std::chrono::duration<f32> delta_time);
 
 	template<typename CameraT>
 	void renderCamera(Scene& scene, const CameraT& camera);

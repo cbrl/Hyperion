@@ -38,7 +38,7 @@ Renderer::Renderer(DisplayConfig& display_config,
 }
 
 
-void Renderer::render(Scene& scene, f32 delta_time) {
+void Renderer::render(Scene& scene, std::chrono::duration<f32> delta_time) {
 
 	//----------------------------------------------------------------------------------
 	// Update the engine buffer
@@ -122,11 +122,11 @@ void Renderer::render(Scene& scene, f32 delta_time) {
 }
 
 
-void Renderer::updateBuffers(f32 delta_time) {
+void Renderer::updateBuffers(std::chrono::duration<f32> delta_time) {
 	EngineBuffer buffer;
 
 	buffer.resolution = display_config.getDisplayResolution();
-	buffer.delta_time = delta_time;
+	buffer.delta_time = delta_time.count();
 
 	engine_buffer.updateData(device_context, buffer);
 }
