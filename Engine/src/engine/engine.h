@@ -4,7 +4,7 @@
 
 #include "log/log.h"
 #include "sysmon/system_monitor.h"
-#include "timer/timer.h"
+#include "time/stopwatch.h"
 #include "input.h"
 #include "rendering_mgr.h"
 
@@ -164,12 +164,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	HighResTimer& getTimer() {
+	Stopwatch<>& getTimer() {
 		return *timer;
 	}
 
 	[[nodiscard]]
-	const HighResTimer& getTimer() const {
+	const Stopwatch<>& getTimer() const {
 		return *timer;
 	}
 
@@ -233,7 +233,7 @@ private:
 
 	std::unique_ptr<Window> window;
 	std::unique_ptr<SystemMonitor> system_monitor;
-	std::unique_ptr<HighResTimer> timer;
+	std::unique_ptr<Stopwatch<>> timer;
 	std::unique_ptr<Input> input;
 	std::unique_ptr<RenderingMgr> rendering_mgr;
 	std::unique_ptr<Scene> scene;

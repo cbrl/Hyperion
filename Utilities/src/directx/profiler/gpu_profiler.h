@@ -2,7 +2,7 @@
 
 #include "datatypes/datatypes.h"
 #include "directx/d3d11.h"
-#include "timer/timer.h"
+#include "time/stopwatch.h"
 #include "log/log.h"
 
 
@@ -89,8 +89,7 @@ private:
 	ID3D11DeviceContext& device_context;
 
 	// A timer used for averaging the stage times
-	HighResTimer timer;
-	f64 elapsed_time;
+	Stopwatch<> timer;
 
 	// The disjoint time stamp, which indicates valid timestamps and the GPU frequency
 	std::array<ComPtr<ID3D11Query>, buffer_size> timestamp_disjoint;

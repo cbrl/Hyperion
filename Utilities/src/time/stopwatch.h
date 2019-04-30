@@ -1,33 +1,30 @@
 #pragma once
 
-#include <chrono>
-#include <ratio>
-#include "datatypes/scalar_types.h"
+#include "time/time.h"
 
 
-template<typename ClockT>
-class Timer final {
+template<typename ClockT = std::chrono::steady_clock>
+class Stopwatch final {
 public:
+	using clock_t = ClockT;
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	Timer();
-	Timer(const Timer& timer) noexcept = default;
-	Timer(Timer&& timer) noexcept = default;
-
+	Stopwatch();
+	Stopwatch(const Stopwatch& timer) noexcept = default;
+	Stopwatch(Stopwatch&& timer) noexcept = default;
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~Timer() = default;
-
+	~Stopwatch() = default;
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	Timer& operator=(const Timer& timer) noexcept = default;
-	Timer& operator=(Timer&& timer) noexcept = default;
-
+	Stopwatch& operator=(const Stopwatch& timer) noexcept = default;
+	Stopwatch& operator=(Stopwatch&& timer) noexcept = default;
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
@@ -48,33 +45,30 @@ public:
 	// Get the time elapsed since the last update in the specified units (default: seconds)
 	template<typename PeriodT = std::ratio<1>>
 	[[nodiscard]]
-	f64 deltaTime() const;
+	std::chrono::duration<f64, PeriodT> deltaTime() const;
 
 	// Get the time elapsed since the timer was created or reset in the specified units (default: seconds)
 	template<typename PeriodT = std::ratio<1>>
 	[[nodiscard]]
-	f64 totalTime() const;
-
+	std::chrono::duration<f64, PeriodT> totalTime() const;
 
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	bool paused;
+	bool paused = false;
 
 	using time_point = typename ClockT::time_point;
 	using duration   = typename ClockT::duration;
 
 	time_point base_time;
 	time_point prev_time;
-	duration delta_time;
-	duration total_time;
+	duration   delta_time;
+	duration   total_time;
 
 	time_point pause_time;
 	duration   pause_duration;
 };
 
-#include "timer.tpp"
-
-
-using HighResTimer = Timer<std::chrono::high_resolution_clock>;
+#include "stopwatch.tpp"

@@ -224,7 +224,8 @@
     <ClInclude Include="src\resource\var_map.h" />
     <ClInclude Include="src\string\string.h" />
     <ClInclude Include="src\sysmon\system_monitor.h" />
-    <ClInclude Include="src\timer\timer.h" />
+    <ClInclude Include="src\time\stopwatch.h" />
+    <ClInclude Include="src\time\time.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\directx\profiler\gpu_profiler.cpp" />
@@ -235,7 +236,7 @@
     <None Include="src\io\line_reader.tpp" />
     <None Include="src\memory\handle\handle_map.tpp" />
     <None Include="src\resource\var_map.tpp" />
-    <None Include="src\timer\timer.tpp" />
+    <None Include="src\time\stopwatch.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

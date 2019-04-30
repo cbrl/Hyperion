@@ -1,12 +1,12 @@
 #pragma once
 
+#include "datatypes/scalar_types.h"
+#include "time/stopwatch.h"
 #include "os/windows/windows.h"
 #include "os/windows/win_utils.h"
+
 #include <Psapi.h>
 #include <thread> //std::thread::hardware_concurrency()
-
-#include "datatypes/scalar_types.h"
-#include "timer/timer.h"
 
 
 struct PerCoreClock final {
@@ -54,9 +54,9 @@ struct SystemIdleClock final {
 	}
 };
 
-using SystemWorkTimer = Timer<SystemWorkClock>;
-using SystemIdleTimer = Timer<SystemIdleClock>;
-using PerCoreTimer = Timer<PerCoreClock>;
+using SystemWorkTimer = Stopwatch<SystemWorkClock>;
+using SystemIdleTimer = Stopwatch<SystemIdleClock>;
+using PerCoreTimer = Stopwatch<PerCoreClock>;
 
 
 class SystemMonitor final {
@@ -71,27 +71,20 @@ class SystemMonitor final {
 		//----------------------------------------------------------------------------------
 		// Constructors
 		//----------------------------------------------------------------------------------
-		CpuMonitor() noexcept
-			: sys_usage(0)
-			, proc_usage(0) {
-		}
-
+		CpuMonitor() = default;
 		CpuMonitor(const CpuMonitor&) = default;
 		CpuMonitor(CpuMonitor&&) = default;
-
 
 		//----------------------------------------------------------------------------------
 		// Destructor
 		//----------------------------------------------------------------------------------
 		~CpuMonitor() = default;
 
-
 		//----------------------------------------------------------------------------------
 		// Operators
 		//----------------------------------------------------------------------------------
 		CpuMonitor& operator=(const CpuMonitor&) = default;
 		CpuMonitor& operator=(CpuMonitor&&) = default;
-
 
 		//----------------------------------------------------------------------------------
 		// Member Functions
@@ -130,13 +123,13 @@ class SystemMonitor final {
 		//----------------------------------------------------------------------------------
 		// Member Variables
 		//----------------------------------------------------------------------------------
-		f64 sys_usage;
-		f64 proc_usage;
+		f64 sys_usage = 0;
+		f64 proc_usage = 0;
 
 		SystemWorkTimer sys_work_timer;
 		SystemIdleTimer sys_idle_timer;
 		PerCoreTimer core_timer;
-		HighResTimer wall_timer;
+		Stopwatch<> wall_timer;
 	};
 
 
@@ -161,19 +154,16 @@ class SystemMonitor final {
 		MemoryMonitor(const MemoryMonitor&) = default;
 		MemoryMonitor(MemoryMonitor&&) = default;
 
-
 		//----------------------------------------------------------------------------------
 		// Destructor
 		//----------------------------------------------------------------------------------
 		~MemoryMonitor() = default;
-
 
 		//----------------------------------------------------------------------------------
 		// Operators
 		//----------------------------------------------------------------------------------
 		MemoryMonitor& operator=(const MemoryMonitor&) = default;
 		MemoryMonitor& operator=(MemoryMonitor&&) = default;
-
 
 		//----------------------------------------------------------------------------------
 		// Member Functions - Tick
@@ -239,27 +229,20 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	SystemMonitor() noexcept
-		: dt(0.0)
-		, update_interval(0.2f) {
-	}
-
+	SystemMonitor() = default;
 	SystemMonitor(const SystemMonitor&) = default;
 	SystemMonitor(SystemMonitor&&) = default;
-
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
 	~SystemMonitor() = default;
 
-
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
 	SystemMonitor& operator=(const SystemMonitor&) = default;
 	SystemMonitor& operator=(SystemMonitor&&) = default;
-
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
@@ -268,23 +251,21 @@ public:
 	// Update resource stats
 	void tick() {
 		wall_timer.tick();
-		dt += wall_timer.deltaTime();
-
-		if (dt >= update_interval) {
+		if (wall_timer.totalTime() >= update_interval) {
 			cpu_mon.tick();
 			memory_mon.tick();
-			dt = 0.0;
+			wall_timer.reset();
 		}
 	}
 
-	// Get the time between updates (in seconds)
+	// Get the time between updates
 	[[nodiscard]]
-	f32 getUpdateInterval() const noexcept {
+	std::chrono::milliseconds getUpdateInterval() const noexcept {
 		return update_interval;
 	}
 
-	// Set the time between updates (in seconds)
-	void setUpdateInterval(f32 time) noexcept {
+	// Set the time between updates
+	void setUpdateInterval(std::chrono::milliseconds time) noexcept {
 		update_interval = time;
 	}
 
@@ -303,9 +284,8 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	f64 dt;
-	f32 update_interval;
-	HighResTimer wall_timer;
+	Stopwatch<> wall_timer;
+	std::chrono::milliseconds update_interval = 200ms;
 
 	CpuMonitor cpu_mon;
 	MemoryMonitor memory_mon;

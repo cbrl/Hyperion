@@ -182,7 +182,7 @@ void Engine::init(std::wstring title,
 	input = std::make_unique<Input>(gsl::make_not_null(window->getHandle()));
 
 	// Timer
-	timer = std::make_unique<HighResTimer>();
+	timer = std::make_unique<Stopwatch<>>();
 
 	// Rendering Manager
 	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getHandle()), std::move(display_config), std::move(rendering_config));
@@ -290,7 +290,7 @@ void Engine::renderFrame() {
 	// Draw a frame
 	if (scene) {
 		scene->tick(*this);
-		rendering_mgr->render(*scene, static_cast<f32>(timer->deltaTime()));
+		rendering_mgr->render(*scene, static_cast<f32>(timer->deltaTime().count()));
 	}
 
 	// Present the frame

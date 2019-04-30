@@ -85,14 +85,17 @@ void GPUProfiler::update() {
 
 	// Skip frame if the profiler hasn't run long enough (read_frame is set to -1 on init)
 	if (read_frame < 0) {
-		if (query_frame < (buffer_size - 1)) read_frame = 0;
+		if (query_frame < (buffer_size - 1))
+			read_frame = 0;
 		return;
 	}
 
 	// Store the current frame to read and update read_frame
 	const auto frame = static_cast<u8>(read_frame);
-	read_frame += 1;
-	if (read_frame >= buffer_size) read_frame = 0;
+	if (read_frame >= buffer_size - 1)
+		read_frame = 0;
+	else
+		read_frame += 1;
 
 	/* Wait for data to be ready?
 	while (device_context.GetData(timestamp_disjoint[frame].Get(), nullptr, 0, 0) == S_FALSE) {
@@ -135,14 +138,13 @@ void GPUProfiler::update() {
 
 	// Update the elapsed time and frame count, and update the avg times if enough time has passed.
 	++frame_count;
-	elapsed_time += timer.deltaTime();
-	if (elapsed_time >= 0.5f) {
+	if (timer.totalTime() >= 500ms) {
 		for (auto& id : timestamp_ids) {
 			avg_stage_times[id] = total_stage_times[id] / static_cast<f32>(frame_count);
 			total_stage_times[id] = 0.0f;
 		}
 		frame_count = 0;
-		elapsed_time = 0.0;
+		timer.reset();
 	}
 }
 

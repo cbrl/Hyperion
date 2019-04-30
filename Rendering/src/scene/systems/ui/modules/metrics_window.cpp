@@ -56,8 +56,9 @@ void MetricsWindow::draw(Engine& engine) {
 	// Update frame time
 	//----------------------------------------------------------------------------------
 	const auto& timer = engine.getTimer();
-	frame_time.AddNewValue(static_cast<float>(timer.deltaTime()));
-	fps.AddNewValue(static_cast<float>(1.0 / timer.deltaTime()));
+	const auto  dt    = static_cast<float>(timer.deltaTime().count());
+	frame_time.AddNewValue(dt);
+	fps.AddNewValue(1.0f / dt);
 	frame_plot.UpdateAxes();
 
 
