@@ -48,14 +48,14 @@ public:
 	//----------------------------------------------------------------------------------
 	void update() override;
 
-	void setUpdateInterval(f32 seconds) noexcept override {}; //UI updates every frame
-
 	template<typename ComponentT>
 	void registerUserComponent(const UserComponent& component_def) {
 		entity_details->registerUserComponent<ComponentT>(component_def);
 	}
 
 private:
+
+	using System<UserInterface>::setUpdateInterval; //UI updates every frame
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

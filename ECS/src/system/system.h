@@ -2,6 +2,7 @@
 
 #include "datatypes/datatypes.h"
 #include "event/event_participator.h"
+#include "time/time.h"
 
 class ECS;
 
@@ -61,7 +62,7 @@ public:
 	void setActive(bool state) noexcept {
 		active = state;
 		if (!state)
-			time_since_last_update = 0.0;
+			time_since_last_update = 0.0s;
 	}
 
 	// Get the system's state
@@ -76,14 +77,14 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Set the time that must pass between updates for this system. This method can be
-	// overridden in order to disallow changing the update interval.
-	virtual void setUpdateInterval(f32 seconds) noexcept {
-		update_interval = seconds;
+	// overridden or made private in order to disallow changing the update interval.
+	virtual void setUpdateInterval(std::chrono::duration<f64> interval) noexcept {
+		update_interval = interval;
 	}
 
 	// Get the time that must pass between updates for this system.
 	[[nodiscard]]
-	f32 getUpdateInterval() const noexcept {
+	std::chrono::duration<f64> getUpdateInterval() const noexcept {
 		return update_interval;
 	}
 
@@ -115,7 +116,7 @@ protected:
 	// Retrieve the total time passed since the last update.
 	// Inactive systems do not accumulate time.
 	[[nodiscard]]
-	f64 dtSinceLastUpdate() const noexcept {
+	std::chrono::duration<f64> dtSinceLastUpdate() const noexcept {
 		return time_since_last_update;
 	}
 
@@ -152,14 +153,13 @@ private:
 	// The system's priority. Higher prioity systems get updated before lower priority ones.
 	u32 priority = default_priority;
 
-	// The amount of time between that the system should wait before updating (in seconds).
-	// 0.0f or lower to update every tick.
-	f32 update_interval = -1.0f;
+	// The amount of time between that the system should wait before updating. 0 or less to update every tick.
+	std::chrono::duration<f64> update_interval{-1.0f};
 
 	// The time passed since the last update and a flag set when that time exceeds the update
 	// interval. These variables are managed by the System Manager. This variable is not
 	// updated if the system is inactive.
-	f64  time_since_last_update = FLT_MAX;
+	std::chrono::duration<f64> time_since_last_update{FLT_MAX};
 	bool needs_update = true;
 };
 

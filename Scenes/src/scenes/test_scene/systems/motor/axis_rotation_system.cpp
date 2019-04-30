@@ -15,7 +15,7 @@ void AxisRotationSystem::update() {
 		if (!transform) return;
 		if (!transform->isActive()) return;
 
-		const auto dt = static_cast<f32>(dtSinceLastUpdate());
+		const auto dt = static_cast<f32>(dtSinceLastUpdate().count());
 
 		if (rotation.hasAxis(AxisRotation::Axis::X)) {
 			transform->rotateXClamped(dt * rotation.getSpeedX(), -XM_PI, XM_PI);

@@ -36,7 +36,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void update(f64 dt);
+	void update(std::chrono::duration<f64> dt);
 
 	template<typename SystemT, typename... ArgsT>
 	SystemT& addSystem(ArgsT&&... args);

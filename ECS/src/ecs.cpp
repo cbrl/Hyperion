@@ -30,7 +30,7 @@ void ECS::removeSystem(ISystem& system) {
 }
 
 
-void ECS::update(f64 dt) {
+void ECS::update(std::chrono::duration<f64> dt) {
 	system_mgr->update(dt);
 	event_mgr->dispatchEvents();
 	entity_mgr->removeExpiredEntities();

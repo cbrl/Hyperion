@@ -55,7 +55,7 @@ public:
 	void removeSystem();
 
 	// Update the systems
-	void update(f64 dt);
+	void update(std::chrono::duration<f64> dt);
 
 	template<typename EventT, typename... ArgsT>
 	void sendEvent(ArgsT&&... args);

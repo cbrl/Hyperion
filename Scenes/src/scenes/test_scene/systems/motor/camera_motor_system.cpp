@@ -47,7 +47,7 @@ void CameraMotorSystem::onGuiFocus(const GuiFocusEvent& event) {
 
 void CameraMotorSystem::processInput(CameraMovement& movement, Transform& transform) const {
 
-	const auto dt = static_cast<f32>(dtSinceLastUpdate());
+	const auto dt = static_cast<f32>(dtSinceLastUpdate().count());
 	f32_3 move_units = { 0.0f, 0.0f, 0.0f };
 
 	// Forward/Back movement
@@ -156,7 +156,7 @@ void CameraMotorSystem::move(CameraMovement& mv, Transform& transform) const {
 
 	if (velocity_mag != 0.0f) {
 
-		const auto dt = static_cast<f32>(dtSinceLastUpdate());
+		const auto dt = static_cast<f32>(dtSinceLastUpdate().count());
 
 		// Move the camera
 		XMVECTOR movement = XMVectorZero();
@@ -177,7 +177,7 @@ void CameraMotorSystem::decelerate(CameraMovement& mv) const {
 	f32   decel_amount;
 	f32_3 velocity = mv.getVelocity();
 
-	const auto dt = static_cast<f32>(dtSinceLastUpdate());
+	const auto dt = static_cast<f32>(dtSinceLastUpdate().count());
 
 	// Decelerate in each direction if not moving in that
 	// direction and the current velocity isn't 0.

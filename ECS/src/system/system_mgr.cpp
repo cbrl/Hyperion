@@ -17,7 +17,7 @@ void SystemMgr::sortSystemQueue() {
 }
 
 
-void SystemMgr::update(f64 dt) {
+void SystemMgr::update(std::chrono::duration<f64> dt) {
 
 	//----------------------------------------------------------------------------------
 	// Pre Update
@@ -53,7 +53,7 @@ void SystemMgr::update(f64 dt) {
 		if (system.isActive() && system.needs_update) {
 			system.postUpdate();
 			system.needs_update = false;
-			system.time_since_last_update = 0.0f;
+			system.time_since_last_update = 0.0s;
 		}
 	}
 }
