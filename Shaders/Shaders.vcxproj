@@ -291,7 +291,7 @@
     <None Include="shaders\include\input_structs.hlsli">
       <FileType>Document</FileType>
     </None>
-    <None Include="shaders\include\light.hlsli">
+    <None Include="shaders\include\lights.hlsli">
       <FileType>Document</FileType>
     </None>
     <None Include="shaders\include\lighting.hlsli" />

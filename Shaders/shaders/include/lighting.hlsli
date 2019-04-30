@@ -8,7 +8,7 @@
 // DISABLE_FOG
 
 
-#include "include/light.hlsli"
+#include "include/lights.hlsli"
 #include "include/brdf/brdf.hlsli"
 
 
@@ -179,7 +179,6 @@ float3 CalculateLighting(float3 p_world, float3 n, Material material) {
 
 	float3      p_to_view      = CameraPosition() - p_world;
 	const float dist_p_to_view = length(p_to_view);
-
 	p_to_view /= dist_p_to_view;
 	
 	// Calculate radiance

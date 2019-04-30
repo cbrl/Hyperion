@@ -150,9 +150,6 @@
     <None Include="shaders\include\input_structs.hlsli">
       <Filter>Shader Files\include</Filter>
     </None>
-    <None Include="shaders\include\light.hlsli">
-      <Filter>Shader Files\include</Filter>
-    </None>
     <None Include="shaders\include\material.hlsli">
       <Filter>Shader Files\include</Filter>
     </None>
@@ -197,6 +194,9 @@
     </None>
     <None Include="shaders\shapes\fullscreen_quad.hlsli">
       <Filter>Shader Files\shapes</Filter>
+    </None>
+    <None Include="shaders\include\lights.hlsli">
+      <Filter>Shader Files\include</Filter>
     </None>
   </ItemGroup>
 </Project>
