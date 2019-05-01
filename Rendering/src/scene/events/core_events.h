@@ -10,7 +10,7 @@
 
 class Transform;
 
-struct TransformNeedsUpdate : public Event<TransformNeedsUpdate> {
+struct TransformNeedsUpdate : public ecs::Event<TransformNeedsUpdate> {
 	TransformNeedsUpdate(Transform& transform)
 	    : transform(transform) {
 	}
@@ -18,7 +18,7 @@ struct TransformNeedsUpdate : public Event<TransformNeedsUpdate> {
 	const std::reference_wrapper<Transform> transform;
 };
 
-struct TransformUpdated : public Event<TransformUpdated> {
+struct TransformUpdated : public ecs::Event<TransformUpdated> {
 	TransformUpdated(Transform& transform)
 	    : transform(transform) {
 	}
@@ -32,7 +32,7 @@ struct TransformUpdated : public Event<TransformUpdated> {
 //----------------------------------------------------------------------------------
 // Resize
 //----------------------------------------------------------------------------------
-struct WindowResizeEvent : public Event<WindowResizeEvent> {
+struct WindowResizeEvent : public ecs::Event<WindowResizeEvent> {
 	WindowResizeEvent(u32_2 size)
 	    : new_size(std::move(size)) {
 	}
@@ -46,7 +46,7 @@ struct WindowResizeEvent : public Event<WindowResizeEvent> {
 //----------------------------------------------------------------------------------
 // UI Focus
 //----------------------------------------------------------------------------------
-struct GuiFocusEvent : public Event<GuiFocusEvent> {
+struct GuiFocusEvent : public ecs::Event<GuiFocusEvent> {
 	GuiFocusEvent(bool keyboard, bool mouse)
 	    : keyboard_focus(keyboard)
 	    , mouse_focus(mouse) {

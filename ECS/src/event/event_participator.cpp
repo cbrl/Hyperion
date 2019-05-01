@@ -2,6 +2,8 @@
 #include "event_mgr.h"
 
 
+namespace ecs {
+
 //----------------------------------------------------------------------------------
 // EventParticipator
 //----------------------------------------------------------------------------------
@@ -41,3 +43,5 @@ void EventListener::unregisterAllEventCallbacks() {
 void EventListener::doRegisterCallbacks() {
 	registerCallbacks();
 }
+
+} // namespace ecs

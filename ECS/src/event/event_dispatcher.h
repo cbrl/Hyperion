@@ -7,6 +7,8 @@
 #include "log/log.h"
 
 
+namespace ecs {
+
 class IEventDispatcher {
 public:
 	//----------------------------------------------------------------------------------
@@ -109,5 +111,7 @@ private:
 	//std::list<IEventDelegate*> pending_add_delegates;
 	std::list<typename decltype(event_delegates)::iterator> pending_remove_delegates; //using iterators since std::list::iterator isn't invalidated
 };
+
+} // namespace ecs
 
 #include "event_dispatcher.tpp"

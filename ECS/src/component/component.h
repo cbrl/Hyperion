@@ -6,6 +6,8 @@
 #include "event/event_participator.h"
 
 
+namespace ecs {
+
 //----------------------------------------------------------------------------------
 // IComponent
 //----------------------------------------------------------------------------------
@@ -144,3 +146,5 @@ public:
 
 template<typename T>
 const std::type_index Component<T>::index = std::type_index{typeid(T)};
+
+} // namespace ecs

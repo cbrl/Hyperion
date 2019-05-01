@@ -3,7 +3,7 @@
 #include "system/system.h"
 
 
-class AxisOrbitSystem final : public System<AxisOrbitSystem> {
+class AxisOrbitSystem final : public ecs::System<AxisOrbitSystem> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

@@ -1,6 +1,7 @@
 #include "entity.h"
 #include "component/component_mgr.h"
 
+namespace ecs {
 
 template<typename ComponentT, typename... ArgsT>
 ComponentT& Entity::addComponent(ArgsT&&... args) {
@@ -97,3 +98,5 @@ void Entity::forEachChildRecursive(ActionT&& act) {
 		}
 	}
 }
+
+} // namespace ecs

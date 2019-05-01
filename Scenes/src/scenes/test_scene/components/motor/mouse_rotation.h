@@ -3,7 +3,7 @@
 #include "component/component.h"
 
 
-class MouseRotation final : public Component<MouseRotation> {
+class MouseRotation final : public ecs::Component<MouseRotation> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

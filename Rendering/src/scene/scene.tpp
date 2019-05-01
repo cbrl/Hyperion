@@ -1,5 +1,5 @@
 template <typename TemplateT, typename... ArgsT>
-EntityPtr Scene::addEntity(ArgsT&&... args) {
+ecs::EntityPtr Scene::addEntity(ArgsT&&... args) {
 	auto ptr = ecs->createEntity();
 	entities.push_back(ptr);
 

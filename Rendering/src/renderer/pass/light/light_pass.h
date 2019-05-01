@@ -9,8 +9,8 @@
 class RenderingConfig;
 class RenderStateMgr;
 class ResourceMgr;
-class ECS;
 class Scene;
+namespace ecs { class ECS; }
 
 class LightPass final {
 public:

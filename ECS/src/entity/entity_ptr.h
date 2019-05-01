@@ -2,6 +2,7 @@
 
 #include "memory/handle/handle.h"
 
+namespace ecs {
 
 //----------------------------------------------------------------------------------
 // EntityPtr
@@ -172,3 +173,5 @@ private:
 	EntityPtr release() noexcept;
 };
 */
+
+} // namespace ecs

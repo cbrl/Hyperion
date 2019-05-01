@@ -4,10 +4,11 @@
 #include "exception/exception.h"
 
 
+namespace ecs {
+
 class ECS;
 class EventMgr;
 class EventListener;
-
 
 class SystemMgr final {
 public:
@@ -79,5 +80,7 @@ private:
 	// A reference to the event manager. Passed to systems that inherit from EventListener.
 	EventMgr& event_mgr;
 };
+
+} // namespace ecs
 
 #include "system_mgr.tpp"

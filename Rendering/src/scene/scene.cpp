@@ -22,7 +22,7 @@ void Scene::addCoreSystems(const Engine& engine) {
 }
 
 
-void Scene::removeEntity(EntityPtr entity) {
+void Scene::removeEntity(ecs::EntityPtr entity) {
 	if (entity) {
 		ecs->destroyEntity(entity.getHandle());
 
@@ -35,7 +35,7 @@ void Scene::removeEntity(EntityPtr entity) {
 }
 
 
-void Scene::removeSystem(ISystem& system) {
+void Scene::removeSystem(ecs::ISystem& system) {
 	ecs->removeSystem(system);
 }
 
@@ -46,17 +46,17 @@ void Scene::tick(Engine& engine) {
 }
 
 
-EntityPtr Scene::importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
-	EntityPtr ptr = addEntity();
+ecs::EntityPtr Scene::importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
+	ecs::EntityPtr ptr = addEntity();
 	importModel(ptr, device, blueprint);
 	return ptr;
 }
 
 
-void Scene::importModel(const EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
+void Scene::importModel(const ecs::EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
 
-	std::function<void(Entity&, const std::shared_ptr<ModelBlueprint>&, const ModelBlueprint::Node&)> process_node =
-		[&](Entity& entity, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
+	std::function<void(ecs::Entity&, const std::shared_ptr<ModelBlueprint>&, const ModelBlueprint::Node&)> process_node =
+	    [&](ecs::Entity& entity, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
 			// Construct each model at this node
 			for (const u32 index : bp_node.mesh_indices) {
 			    entity.addComponent<Model>(device, bp, index);

@@ -1,3 +1,6 @@
+
+namespace ecs {
+
 template<typename EventT>
 EventDispatcher<EventT>::EventDispatcher()
     : delegate_list_locked(false) {
@@ -74,3 +77,5 @@ template<typename EventT>
 size_t EventDispatcher<EventT>::getEventCallbackCount() const noexcept {
 	return event_delegates.size();
 }
+
+} // namespace ecs

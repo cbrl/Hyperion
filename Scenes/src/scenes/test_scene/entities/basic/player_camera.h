@@ -9,7 +9,7 @@
 namespace EntityTemplates {
 
 struct PlayerCamera final {
-	void operator()(Entity& entity, ID3D11Device& device, u32_2 viewport_size) {
+	void operator()(ecs::Entity& entity, ID3D11Device& device, u32_2 viewport_size) {
 		entity.addComponent<Transform>();
 		entity.addComponent<PerspectiveCamera>(device, viewport_size);
 		entity.addComponent<CameraMovement>();

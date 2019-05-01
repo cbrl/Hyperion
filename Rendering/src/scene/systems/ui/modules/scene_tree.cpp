@@ -32,12 +32,12 @@ void SceneTree::drawTree(Scene& scene) {
 }
 
 
-EntityPtr SceneTree::getSelectedEntity() const noexcept {
+ecs::EntityPtr SceneTree::getSelectedEntity() const noexcept {
 	return scene_tree.getSelected();
 }
 
 
-void SceneTree::drawEntityNode(EntityPtr entity_ptr) {
+void SceneTree::drawEntityNode(ecs::EntityPtr entity_ptr) {
 
 	if (!entity_ptr.valid())
 		return;
@@ -59,7 +59,7 @@ void SceneTree::drawEntityNode(EntityPtr entity_ptr) {
 	if (node_open) {
 		// Draw any child entities in this node
 		if (entity->hasChildren()) {
-			entity->forEachChild([this](EntityPtr& child) {
+			entity->forEachChild([this](ecs::EntityPtr& child) {
 				drawEntityNode(child);
 			});
 		}

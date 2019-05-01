@@ -37,7 +37,7 @@ void NewModelMenu::drawMenu() {
 void NewModelMenu::procNewModelPopup(ID3D11Device& device,
                                      ResourceMgr& resource_mgr,
                                      Scene& scene,
-                                     EntityPtr entity) {
+                                     ecs::EntityPtr entity) {
 
 	// Open popup
 	switch (model_type) {

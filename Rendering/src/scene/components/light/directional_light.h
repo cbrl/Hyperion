@@ -4,7 +4,7 @@
 #include "geometry/bounding_volume/bounding_volume.h"
 
 
-class DirectionalLight final : public Component<DirectionalLight> {
+class DirectionalLight final : public ecs::Component<DirectionalLight> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

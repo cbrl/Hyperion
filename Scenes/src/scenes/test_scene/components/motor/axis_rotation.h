@@ -3,7 +3,7 @@
 #include "component/component.h"
 
 
-class AxisRotation final : public Component<AxisRotation> {
+class AxisRotation final : public ecs::Component<AxisRotation> {
 public:
 	//----------------------------------------------------------------------------------
 	// Axis Enum

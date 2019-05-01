@@ -3,8 +3,9 @@
 #include <typeindex>
 
 
-class IEvent;
+namespace ecs {
 
+class IEvent;
 
 class IEventDelegate {
 public:
@@ -122,3 +123,5 @@ private:
 
 template<typename ClassT, typename EventT>
 const size_t EventDelegate<ClassT, EventT>::delegate_index = typeid(ClassT).hash_code() ^ typeid(callback).hash_code();
+
+} // namespace ecs

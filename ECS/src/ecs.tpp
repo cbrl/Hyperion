@@ -1,3 +1,6 @@
+
+namespace ecs {
+
 template<typename SystemT, typename... ArgsT>
 SystemT& ECS::addSystem(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<ISystem, SystemT>,
@@ -55,3 +58,5 @@ void ECS::forEach(ActionT&& act) {
 		component_mgr->forEach<T>(std::forward<ActionT>(act));
 	}
 }
+
+} // namespace ecs

@@ -52,10 +52,10 @@ private:
 
 
 template <>
-struct SelectableTree<EntityPtr> final {
+struct SelectableTree<ecs::EntityPtr> final {
 public:
 	template <typename... ArgsT>
-	bool newNode(const EntityPtr& ptr, gsl::czstring<> fmt, ArgsT... args) {
+	bool newNode(const ecs::EntityPtr& ptr, gsl::czstring<> fmt, ArgsT... args) {
 		const auto flags = ImGuiTreeNodeFlags_OpenOnArrow
 		                   | ImGuiTreeNodeFlags_OpenOnDoubleClick
 		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
@@ -63,7 +63,7 @@ public:
 	}
 
 	template <typename... ArgsT>
-	bool newLeafNode(const EntityPtr& ptr, gsl::czstring<> fmt, ArgsT... args) {
+	bool newLeafNode(const ecs::EntityPtr& ptr, gsl::czstring<> fmt, ArgsT... args) {
 		const auto flags = ImGuiTreeNodeFlags_Leaf
 		                   | ImGuiTreeNodeFlags_Bullet
 		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
@@ -74,17 +74,17 @@ public:
 		ImGui::TreePop();
 	}
 
-	EntityPtr getSelected() const noexcept {
+	ecs::EntityPtr getSelected() const noexcept {
 		return selected;
 	}
 
-	bool isSelected(const EntityPtr& ptr) const noexcept {
+	bool isSelected(const ecs::EntityPtr& ptr) const noexcept {
 		return selected == ptr;
 	}
 
 private:
 	template <typename... ArgsT>
-	bool node(const EntityPtr& ptr, ImGuiTreeNodeFlags flags, gsl::czstring<> fmt, ArgsT... args) {
+	bool node(const ecs::EntityPtr& ptr, ImGuiTreeNodeFlags flags, gsl::czstring<> fmt, ArgsT... args) {
 		const bool is_open = ImGui::TreeNodeEx(ptr.get(), flags, fmt, std::forward<ArgsT>(args)...);
 		if (ImGui::IsItemClicked()) {
 			selected = ptr;
@@ -94,5 +94,5 @@ private:
 
 
 private:
-	EntityPtr selected = {};
+	ecs::EntityPtr selected = {};
 };

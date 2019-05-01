@@ -4,7 +4,7 @@
 #include "directx/math/directx_math.h"
 
 
-class CameraMovement final : public Component<CameraMovement> {
+class CameraMovement final : public ecs::Component<CameraMovement> {
 	friend class CameraMotorSystem;
 
 public:

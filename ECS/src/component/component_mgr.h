@@ -4,8 +4,9 @@
 #include "component/component.h"
 
 
-class EventMgr;
+namespace ecs {
 
+class EventMgr;
 
 //----------------------------------------------------------------------------------
 // Component Manager
@@ -87,5 +88,7 @@ private:
 	// Map of unique resource pools for each type of component
 	std::unordered_map<std::type_index, std::unique_ptr<IResourcePool>> component_pools;
 };
+
+} // namespace ecs
 
 #include "component_mgr.tpp"

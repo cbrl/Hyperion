@@ -1,6 +1,8 @@
 #include "entity_mgr.h"
 
 
+namespace ecs {
+
 EntityPtr EntityMgr::createEntity() {
 
 	auto& entity = entity_pool.emplace_back();
@@ -48,3 +50,5 @@ size_t EntityMgr::count() const noexcept {
 bool EntityMgr::isValid(handle64 entity) const noexcept {
 	return handle_map.isValid(entity);
 }
+
+} // namespace ecs

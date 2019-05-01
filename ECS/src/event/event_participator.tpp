@@ -1,11 +1,13 @@
 #include "event_mgr.h"
 
 
+namespace ecs {
+
 //----------------------------------------------------------------------------------
 // EventSender
 //----------------------------------------------------------------------------------
 
-template <typename EventT, typename... ArgsT>
+template<typename EventT, typename... ArgsT>
 void EventSender::sendEvent(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
 	getEventMgr().send<EventT>(std::forward<ArgsT>(args)...);
@@ -18,7 +20,7 @@ void EventSender::sendEvent(ArgsT&&... args) {
 // EventListener
 //----------------------------------------------------------------------------------
 
-template <typename ClassT, typename EventT>
+template<typename ClassT, typename EventT>
 void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT&)) {
 
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
@@ -36,7 +38,7 @@ void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT&
 	}
 }
 
-template <typename ClassT, typename EventT>
+template<typename ClassT, typename EventT>
 void EventListener::unregisterEventCallback(void (ClassT::*Callback)(const EventT&)) {
 
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
@@ -52,3 +54,5 @@ void EventListener::unregisterEventCallback(void (ClassT::*Callback)(const Event
 		registered_callbacks.erase(result);
 	}
 }
+
+} // namespace ecs

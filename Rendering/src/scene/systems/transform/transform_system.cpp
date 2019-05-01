@@ -50,7 +50,7 @@ void TransformSystem::onTransformNeedsUpdate(const TransformNeedsUpdate& event) 
 
 	updateWorld(transform);
 
-	owner->forEachChild([&](EntityPtr child) {
+	owner->forEachChild([&](ecs::EntityPtr child) {
 		if (auto* transform = child->getComponent<Transform>()) {
 			transform->sendNeedsUpdateEvent();
 		}
@@ -58,7 +58,7 @@ void TransformSystem::onTransformNeedsUpdate(const TransformNeedsUpdate& event) 
 }
 
 
-void TransformSystem::onParentChanged(const ParentChanged& event) {
+void TransformSystem::onParentChanged(const ecs::Entity::ParentChangedEvent& event) {
 	if (auto* transform = event.entity->getComponent<Transform>()) {
 		transform->sendNeedsUpdateEvent();
 	}

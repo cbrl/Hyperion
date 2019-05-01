@@ -21,7 +21,7 @@
 // constant buffer. It is created from a ModelBlueprint.
 //
 //----------------------------------------------------------------------------------
-class Model final : public Component<Model> {
+class Model final : public ecs::Component<Model> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

@@ -1,4 +1,7 @@
-template <typename ComponentT, typename... ArgsT>
+
+namespace ecs {
+
+template<typename ComponentT, typename... ArgsT>
 ComponentT& ComponentMgr::createComponent(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>,
 	              "Calling ComponentMgr::CreateComponent() with non-component type.");
@@ -29,7 +32,7 @@ ComponentT& ComponentMgr::createComponent(ArgsT&&... args) {
 }
 
 
-template <typename ComponentT>
+template<typename ComponentT>
 size_t ComponentMgr::countOf() {
 	const auto it = component_pools.find(ComponentT::index);
 	if (it == component_pools.end()) {
@@ -39,13 +42,13 @@ size_t ComponentMgr::countOf() {
 }
 
 
-template <typename ComponentT>
+template<typename ComponentT>
 bool ComponentMgr::knowsComponent() const {
 	return component_pools.find(ComponentT::index) != component_pools.end();
 }
 
 
-template <typename ComponentT, typename ActionT>
+template<typename ComponentT, typename ActionT>
 void ComponentMgr::forEach(ActionT&& act) {
 
 	// Find the component pool
@@ -61,3 +64,5 @@ void ComponentMgr::forEach(ActionT&& act) {
 		act(component);
 	}
 }
+
+} // namespace ecs

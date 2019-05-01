@@ -3,6 +3,8 @@
 #include "ecs.h"
 
 
+namespace ecs {
+
 Entity::Entity()
 	: active(true) {
 }
@@ -141,5 +143,7 @@ void Entity::setPointer(EntityPtr ptr) noexcept {
 
 
 void Entity::sendParentChangedEvent() {
-	sendEvent<ParentChanged>(this_ptr);
+	sendEvent<ParentChangedEvent>(this_ptr);
 }
+
+} // namespace ecs

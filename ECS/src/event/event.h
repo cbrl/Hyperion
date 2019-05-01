@@ -3,6 +3,7 @@
 #include <typeindex>
 #include <chrono>
 
+namespace ecs {
 
 class IEvent {
 	using high_res_clk = std::chrono::high_resolution_clock;
@@ -102,3 +103,5 @@ public:
 
 template<typename T>
 const std::type_index Event<T>::static_index = std::type_index{typeid(T)};
+
+} // namespace ecs

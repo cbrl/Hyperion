@@ -6,7 +6,7 @@
 #include "scene/events/core_events.h"
 
 
-class Transform final : public Component<Transform>, public EventSender {
+class Transform final : public ecs::Component<Transform>, public ecs::EventSender {
 	friend class TransformSystem;
 
 public:

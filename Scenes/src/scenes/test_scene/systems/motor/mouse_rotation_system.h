@@ -4,7 +4,7 @@
 
 class Input;
 
-class MouseRotationSystem final : public System<MouseRotationSystem> {
+class MouseRotationSystem final : public ecs::System<MouseRotationSystem> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

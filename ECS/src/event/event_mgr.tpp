@@ -1,3 +1,6 @@
+
+namespace ecs {
+
 template <class EventT, class... ArgsT>
 void EventMgr::send(ArgsT&&... args) {
 
@@ -30,3 +33,5 @@ void EventMgr::addEventCallback(std::unique_ptr<IEventDelegate> delegate) {
 		it->second->addEventCallback(std::move(delegate));
 	}
 }
+
+} // namespace ecs

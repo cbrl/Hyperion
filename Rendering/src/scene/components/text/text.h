@@ -6,7 +6,7 @@
 #include "resource/resource_mgr.h"
 
 
-class Text final : public Component<Text> {
+class Text final : public ecs::Component<Text> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

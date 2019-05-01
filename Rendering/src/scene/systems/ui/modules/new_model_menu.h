@@ -3,7 +3,7 @@
 struct ID3D11Device;
 class  ResourceMgr;
 class  Scene;
-class  EntityPtr;
+namespace ecs { class EntityPtr; }
 
 class NewModelMenu {
 	enum class ModelType {
@@ -47,7 +47,11 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	void drawMenu();
-	void procNewModelPopup(ID3D11Device& device, ResourceMgr& resource_mgr, Scene& scene, EntityPtr entity);
+
+	void procNewModelPopup(ID3D11Device& device,
+	                       ResourceMgr& resource_mgr,
+	                       Scene& scene,
+	                       ecs::EntityPtr entity);
 
 private:
 

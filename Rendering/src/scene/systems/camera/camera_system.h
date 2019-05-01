@@ -5,7 +5,7 @@
 
 class RenderingMgr;
 
-class CameraSystem final : public System<CameraSystem>, public EventListener {
+class CameraSystem final : public ecs::System<CameraSystem>, public ecs::EventListener {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

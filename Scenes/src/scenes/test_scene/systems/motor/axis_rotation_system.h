@@ -3,7 +3,7 @@
 #include "system/system.h"
 
 
-class AxisRotationSystem final : public System<AxisRotationSystem> {
+class AxisRotationSystem final : public ecs::System<AxisRotationSystem> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

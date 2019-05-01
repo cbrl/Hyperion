@@ -1,3 +1,6 @@
+
+namespace ecs {
+
 template <typename SystemT, typename... ArgsT>
 SystemT& SystemMgr::addSystem(ArgsT&&... args) {
 	const auto it = systems.find(SystemT::index);
@@ -59,3 +62,5 @@ void SystemMgr::setSystemPriority(u32 priority) {
 		sortSystemQueue();
 	}
 }
+
+} // namespace ecs

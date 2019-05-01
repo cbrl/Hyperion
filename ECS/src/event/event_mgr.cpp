@@ -1,6 +1,8 @@
 #include "event_mgr.h"
 
 
+namespace ecs {
+
 void EventMgr::clearEventBuffer() {
 	//destroy events
 	for (auto* event : events) {
@@ -42,3 +44,5 @@ void EventMgr::removeEventCallback(gsl::not_null<IEventDelegate*> eventDelegate)
 		it->second->removeEventCallback(eventDelegate);
 	}
 }
+
+} // namespace ecs

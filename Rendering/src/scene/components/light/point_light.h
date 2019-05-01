@@ -4,7 +4,7 @@
 #include "geometry/bounding_volume/bounding_volume.h"
 
 
-class PointLight final : public Component<PointLight> {
+class PointLight final : public ecs::Component<PointLight> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

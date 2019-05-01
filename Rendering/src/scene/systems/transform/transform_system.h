@@ -5,7 +5,11 @@
 #include "scene/events/core_events.h"
 
 
-class TransformSystem final : public System<TransformSystem>, public EventListener, public EventSender {
+class TransformSystem final :
+	public ecs::System<TransformSystem>,
+	public ecs::EventListener,
+	public ecs::EventSender {
+
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -37,5 +41,5 @@ private:
 	void updateWorld(Transform& transform);
 	
 	void onTransformNeedsUpdate(const TransformNeedsUpdate& event);
-	void onParentChanged(const ParentChanged& event);
+	void onParentChanged(const ecs::Entity::ParentChangedEvent& event);
 };

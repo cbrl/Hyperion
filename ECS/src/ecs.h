@@ -5,6 +5,7 @@
 #include "system/system_mgr.h"
 #include "event/event_mgr.h"
 
+namespace ecs {
 
 class ECS final {
 public:
@@ -34,8 +35,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Create a new entity
-	[[nodiscard]]
-	EntityPtr createEntity();
+	[[nodiscard]] EntityPtr createEntity();
 
 	// Destroy an existing entity
 	void destroyEntity(handle64 entity);
@@ -46,8 +46,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename SystemT, typename... ArgsT>
-	[[nodiscard]]
-	SystemT& addSystem(ArgsT&&... args);
+	[[nodiscard]] SystemT& addSystem(ArgsT&&... args);
 
 	void removeSystem(ISystem& system);
 
@@ -83,15 +82,16 @@ public:
 
 	// Get the number of a entities, or components of type T.
 	template<typename T>
-	[[nodiscard]]
-	size_t countOf() const;
+	[[nodiscard]] size_t countOf() const;
 
 
 private:
-	std::unique_ptr<EventMgr>     event_mgr;
-	std::unique_ptr<SystemMgr>    system_mgr;
+	std::unique_ptr<EventMgr> event_mgr;
+	std::unique_ptr<SystemMgr> system_mgr;
 	std::shared_ptr<ComponentMgr> component_mgr;
-	std::unique_ptr<EntityMgr>    entity_mgr;
+	std::unique_ptr<EntityMgr> entity_mgr;
 };
+
+} // namespace ecs
 
 #include "ecs.tpp"

@@ -207,7 +207,7 @@ private:
 
 
 template<typename T>
-class CameraBase : public Component<T> {
+class CameraBase : public ecs::Component<T> {
 protected:
 	//----------------------------------------------------------------------------------
 	// Constructors

@@ -57,13 +57,13 @@ public:
 
 	// Add an entity to this scene
 	template<typename TemplateT = WorldObjectT, typename... ArgsT>
-	EntityPtr addEntity(ArgsT&&... args);
+	ecs::EntityPtr addEntity(ArgsT&&... args);
 
 	// Remove an entity from this scene
-	void removeEntity(EntityPtr entity);
+	void removeEntity(ecs::EntityPtr entity);
 
 	[[nodiscard]]
-	const std::vector<EntityPtr>& getEntities() const {
+	const std::vector<ecs::EntityPtr>& getEntities() const {
 		return entities;
 	}
 
@@ -75,7 +75,7 @@ public:
 	template<typename SystemT, typename... ArgsT>
 	SystemT& addSystem(ArgsT&&... args);
 
-	void removeSystem(ISystem& system);
+	void removeSystem(ecs::ISystem& system);
 
 	template <typename SystemT>
 	void removeSystem();
@@ -101,10 +101,10 @@ public:
 
 	// Import a model blueprint under a new entity
 	[[nodiscard]]
-	EntityPtr importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
+	ecs::EntityPtr importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
 
 	// Import a model blueprint under an existing entity
-	void importModel(const EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
+	void importModel(const ecs::EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
 
 
 protected:
@@ -115,12 +115,12 @@ protected:
 
 	Scene()
 		: name("Scene")
-		, ecs(std::make_unique<ECS>()) {
+	    , ecs(std::make_unique<ecs::ECS>()) {
 	}
 
 	Scene(std::string name)
 		: name(std::move(name))
-		, ecs(std::make_unique<ECS>()) {
+	    , ecs(std::make_unique<ecs::ECS>()) {
 	}
 
 	Scene(Scene&& scene) = default;
@@ -157,10 +157,10 @@ private:
 	std::string name;
 
 	// The ECS engine for this scene
-	std::unique_ptr<ECS> ecs;
+	std::unique_ptr<ecs::ECS> ecs;
 
 	// Entitites that currently exist in this scene
-	std::vector<EntityPtr> entities;
+	std::vector<ecs::EntityPtr> entities;
 };
 
 #include "scene.tpp"

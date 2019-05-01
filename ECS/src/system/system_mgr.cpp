@@ -1,6 +1,8 @@
 #include "system_mgr.h"
 
 
+namespace ecs {
+
 SystemMgr::SystemMgr(ECS& ecs, EventMgr& mgr)
     : ecs(ecs)
 	, event_mgr(mgr) {
@@ -67,3 +69,5 @@ void SystemMgr::update(std::chrono::duration<f64> dt) {
 		}
 	}
 }
+
+} // namespace ecs

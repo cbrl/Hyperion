@@ -7,7 +7,7 @@
 
 class Input;
 
-class CameraMotorSystem final : public System<CameraMotorSystem>, public EventListener {
+class CameraMotorSystem final : public ecs::System<CameraMotorSystem>, public ecs::EventListener {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

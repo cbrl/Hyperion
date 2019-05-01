@@ -2,7 +2,7 @@
 #include "engine/engine.h"
 
 
-void TransformManipulator::draw(Engine& engine, EntityPtr selected_entity) {
+void TransformManipulator::draw(Engine& engine, ecs::EntityPtr selected_entity) {
 	if (!selected_entity) {
 		return;
 	}

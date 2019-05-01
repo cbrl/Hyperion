@@ -4,8 +4,10 @@
 #include "event/event_participator.h"
 #include "time/time.h"
 
-class ECS;
 
+namespace ecs {
+
+class ECS;
 
 //----------------------------------------------------------------------------------
 // ISystem
@@ -236,3 +238,5 @@ public:
 
 template <typename T>
 const std::type_index System<T>::index = std::type_index(typeid(T));
+
+} // namespace ecs

@@ -4,6 +4,7 @@
 #include "component/component_mgr.h"
 #include "memory/handle/handle_map.h"
 
+namespace ecs {
 
 //----------------------------------------------------------------------------------
 // Entity Manager
@@ -100,3 +101,5 @@ private:
 	// A container of entities that need to be deleted
 	std::vector<handle64> expired_entities;
 };
+
+} // namespace ecs

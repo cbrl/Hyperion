@@ -20,7 +20,7 @@ void DrawComponentState(ComponentT& component, gsl::czstring<> name = nullptr) {
 }
 
 
-void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
+void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
 
 	auto&       device       = engine.getRenderingMgr().getDevice();
 	auto&       resource_mgr = engine.getRenderingMgr().getResourceMgr();
@@ -35,7 +35,7 @@ void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
 	}
 
 	// Get the entity
-	Entity& entity = *entity_ptr;
+	ecs::Entity& entity = *entity_ptr;
 
 	// Draw menu
 	if (ImGui::BeginMenuBar()) {
@@ -166,7 +166,7 @@ void EntityDetailsWindow::draw(Engine& engine, EntityPtr entity_ptr) {
 }
 
 
-void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, EntityPtr entity_ptr) {
+void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr entity_ptr) {
 
 	bool valid_entity = entity_ptr.valid();
 
@@ -243,7 +243,7 @@ void EntityDetailsWindow::drawComponentNode(gsl::czstring<> text, T& component, 
 
 
 void EntityDetailsWindow::drawUserComponentNode(gsl::czstring<> text,
-                                                IComponent& component,
+                                                ecs::IComponent& component,
                                                 const UserComponent::details_func& draw_func) {
 
 	bool dont_delete = true;

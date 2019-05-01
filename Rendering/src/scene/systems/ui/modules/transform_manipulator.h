@@ -6,7 +6,7 @@
 class Engine;
 class Input;
 class Transform;
-class EntityPtr;
+namespace ecs { class EntityPtr; }
 
 class TransformManipulator {
 public:
@@ -34,7 +34,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void draw(Engine& engine, EntityPtr selected_entity);
+	void draw(Engine& engine, ecs::EntityPtr selected_entity);
 
 private:
 

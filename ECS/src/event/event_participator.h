@@ -4,8 +4,9 @@
 #include "datatypes/datatypes.h"
 
 
-class EventMgr;
+namespace ecs {
 
+class EventMgr;
 
 //----------------------------------------------------------------------------------
 // EventParticipator
@@ -189,5 +190,7 @@ private:
 	// to determine if an event delegate exists or not. The event manager owns the delegates.
 	std::vector<IEventDelegate*> registered_callbacks;
 };
+
+} // namespace ecs
 
 #include "event_participator.tpp"

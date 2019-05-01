@@ -8,7 +8,7 @@
 class Engine;
 class ResourceMgr;
 class Scene;
-class IComponent;
+namespace ecs { class IComponent; }
 
 class SystemMenu;
 class SceneTree;
@@ -17,7 +17,7 @@ class TextEditWindow;
 class TransformManipulator;
 
 
-class UserInterface final : public System<UserInterface>, public EventSender {
+class UserInterface final : public ecs::System<UserInterface>, public ecs::EventSender {
 public:
 	using UserComponent = EntityDetailsWindow::UserComponent;
 

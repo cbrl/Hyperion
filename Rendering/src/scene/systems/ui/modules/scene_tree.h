@@ -3,7 +3,7 @@
 #include "selectable_tree.h"
 
 class Scene;
-class EntityPtr;
+class ecs::EntityPtr;
 
 class SceneTree final {
 public:
@@ -34,12 +34,12 @@ public:
 	void draw(Scene& scene);
 
 	[[nodiscard]]
-	EntityPtr getSelectedEntity() const noexcept;
+	ecs::EntityPtr getSelectedEntity() const noexcept;
 
 private:
 
 	void drawTree(Scene& scene);
-	void drawEntityNode(EntityPtr entity_ptr);
+	void drawEntityNode(ecs::EntityPtr entity_ptr);
 
 	void drawMenuBar(Scene& scene);
 	void drawEntityMenu(Scene& scene);
@@ -48,5 +48,5 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	SelectableTree<EntityPtr> scene_tree;
+	SelectableTree<ecs::EntityPtr> scene_tree;
 };

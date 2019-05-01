@@ -4,7 +4,7 @@
 
 class RenderingMgr;
 
-class ModelSystem final : public System<ModelSystem> {
+class ModelSystem final : public ecs::System<ModelSystem> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

@@ -4,14 +4,10 @@
 #include "event/event.h"
 #include "event/event_participator.h"
 
+namespace ecs {
+
 class IComponent;
 class ComponentMgr;
-
-
-struct ParentChanged : public Event<ParentChanged> {
-	ParentChanged(EntityPtr entity) : entity(std::move(entity)) {}
-	EntityPtr entity;
-};
 
 
 //----------------------------------------------------------------------------------
@@ -28,6 +24,11 @@ class Entity final : public EventSender {
 	friend class EntityMgr;
 
 public:
+
+	struct ParentChangedEvent : public Event<ParentChangedEvent> {
+		ParentChangedEvent(EntityPtr entity) : entity(std::move(entity)) {}
+		EntityPtr entity;
+	};
 
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -224,5 +225,7 @@ private:
 	// The children of this entity
 	std::vector<EntityPtr> children;
 };
+
+} // namespace ecs
 
 #include "entity.tpp"

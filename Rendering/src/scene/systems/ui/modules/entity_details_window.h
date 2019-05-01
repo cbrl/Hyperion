@@ -10,12 +10,13 @@ class Input;
 class Scene;
 class ResourceMgr;
 class Texture;
-
-class Entity;
-class EntityPtr;
-class IComponent;
-
 class Transform;
+
+namespace ecs {
+	class Entity;
+	class EntityPtr;
+	class IComponent;
+}
 
 
 class EntityDetailsWindow final {
@@ -24,8 +25,8 @@ public:
 	// User Component
 	//----------------------------------------------------------------------------------
 	struct UserComponent final {
-		using adder_func = std::function<void(Entity&)>;
-		using details_func = std::function<void(IComponent&)>;
+		using adder_func = std::function<void(ecs::Entity&)>;
+		using details_func = std::function<void(ecs::IComponent&)>;
 
 		// The display name of this component
 		std::string name;
@@ -65,11 +66,11 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Draw the details panel for the specified entity
-	void draw(Engine& engine, EntityPtr entity_ptr);
+	void draw(Engine& engine, ecs::EntityPtr entity_ptr);
 
 	template<typename ComponentT>
 	void registerUserComponent(const UserComponent& component_def) {
-		static_assert(std::is_base_of_v<IComponent, ComponentT>,
+		static_assert(std::is_base_of_v<ecs::IComponent, ComponentT>,
 		              "EntityDetailsWindow::addComponentDetailsRenderer() - Invalid component type specified");
 
 		user_components[ComponentT::index] = component_def;
@@ -78,13 +79,13 @@ public:
 private:
 
 	// Draw the menu in the entity details window
-	void drawAddComponentMenu(Engine& engine, EntityPtr entity_ptr);
+	void drawAddComponentMenu(Engine& engine, ecs::EntityPtr entity_ptr);
 
 	// Draw a node in the tree, and its details if selected
 	template<typename T, typename... ArgsT>
 	void drawComponentNode(gsl::czstring<> text, T& component, ArgsT&&... args);
 
-	void drawUserComponentNode(gsl::czstring<> text, IComponent& component, const UserComponent::details_func& draw_func);
+	void drawUserComponentNode(gsl::czstring<> text, ecs::IComponent& component, const UserComponent::details_func& draw_func);
 
 	template<typename ComponentT, typename... ArgsT>
 	void drawDetails(ComponentT& component, ArgsT&&... args);

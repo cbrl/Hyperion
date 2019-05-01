@@ -2,6 +2,8 @@
 #include "entity/entity_mgr.h"
 
 
+namespace ecs {
+
 //----------------------------------------------------------------------------------
 // EntityPtr
 //----------------------------------------------------------------------------------
@@ -56,3 +58,5 @@ EntityPtr UniqueEntityPtr::release() {
 	return out;
 }
 */
+
+} // namespace ecs

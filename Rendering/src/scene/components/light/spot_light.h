@@ -3,7 +3,7 @@
 #include "component/component.h"
 
 
-class SpotLight final : public Component<SpotLight> {
+class SpotLight final : public ecs::Component<SpotLight> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

@@ -4,7 +4,7 @@
 #include "buffer/buffers.h"
 
 
-class AmbientLight final : public Component<AmbientLight> {
+class AmbientLight final : public ecs::Component<AmbientLight> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

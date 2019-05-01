@@ -8,6 +8,8 @@
 #include <memory_resource>
 
 
+namespace ecs {
+
 class EventMgr final {
 	friend class EventListener;
 
@@ -74,5 +76,7 @@ private:
 	// The memory resource that allocates memory for events
 	std::pmr::synchronized_pool_resource event_pool;
 };
+
+} // namespace ecs
 
 #include "event_mgr.tpp"

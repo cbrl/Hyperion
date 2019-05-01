@@ -8,14 +8,14 @@ namespace EntityTemplates {
 
 // Does nothing to the specified entity
 struct EmptyT final {
-	void operator()(Entity& entity) {};
+	void operator()(ecs::Entity& entity){};
 };
 
 
 // Adds a transform component to the specified entity. The basic
 // template for any non-specific entity with a position in the world.
 struct WorldObjectT final {
-	void operator()(Entity& entity) {
+	void operator()(ecs::Entity& entity) {
 		entity.addComponent<Transform>();
 	}
 };

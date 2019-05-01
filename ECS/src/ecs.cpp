@@ -1,6 +1,8 @@
 #include "ecs.h"
 
 
+namespace ecs {
+
 ECS::ECS() {
 	event_mgr     = std::make_unique<EventMgr>();
 	system_mgr    = std::make_unique<SystemMgr>(*this, *event_mgr);
@@ -35,3 +37,5 @@ void ECS::update(std::chrono::duration<f64> dt) {
 	event_mgr->dispatchEvents();
 	entity_mgr->removeExpiredEntities();
 }
+
+} // namespace ecs

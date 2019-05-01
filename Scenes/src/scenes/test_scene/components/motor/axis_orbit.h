@@ -4,7 +4,7 @@
 #include "component/component.h"
 
 
-class AxisOrbit final : public Component<AxisOrbit> {
+class AxisOrbit final : public ecs::Component<AxisOrbit> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

@@ -47,7 +47,7 @@ void TestScene::initialize(Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// Create the camera
-	EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
+	ecs::EntityPtr camera = addEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
 	camera->setName("Camera");
 	camera->addComponent<AmbientLight>().setColor(f32_4{0.16f, 0.16f, 0.16f, 1.0f});
 
@@ -97,7 +97,7 @@ void TestScene::initialize(Engine& engine) {
 
 	// Bounding Cube
 	{
-		EntityPtr inv_cube = importModel(device, inverted_cube_bp);
+		ecs::EntityPtr inv_cube = importModel(device, inverted_cube_bp);
 		inv_cube->setName("Bounding Cube");
 		inv_cube->getComponent<Transform>()->setPosition(f32_3{0.0f, 5.0f, 0.0f});
 
@@ -109,7 +109,7 @@ void TestScene::initialize(Engine& engine) {
 
 	// Cube
 	{
-		EntityPtr cube = importModel(device, cube_bp);
+		ecs::EntityPtr cube = importModel(device, cube_bp);
 		cube->setName("Cube");
 		cube->getComponent<Transform>()->setPosition(f32_3{-2.5f, 1.0f, 1.5f});
 
@@ -121,7 +121,7 @@ void TestScene::initialize(Engine& engine) {
 
 	// Cylinder
 	{
-		EntityPtr cylinder = importModel(device, cylinder_bp);
+		ecs::EntityPtr cylinder = importModel(device, cylinder_bp);
 		cylinder->setName("Cylinder");
 		cylinder->getComponent<Transform>()->setPosition(f32_3{2.5f, 1.0f, 0.75f});
 
@@ -134,7 +134,7 @@ void TestScene::initialize(Engine& engine) {
 
 	// Sphere
 	{
-		EntityPtr sphere = importModel(device, sphere_bp);
+		ecs::EntityPtr sphere = importModel(device, sphere_bp);
 		sphere->setName("Sphere");
 		sphere->getComponent<Transform>()->setPosition(f32_3{0.0f, 1.0f, -1.0f});
 		sphere->getComponent<Transform>()->setScale(f32_3{2.0f});
@@ -234,11 +234,11 @@ void TestScene::addUserComponentsToUI(UserInterface& ui) {
 
 	camera_movement.name = "Camera Movement";
 
-	camera_movement.adder = [](Entity& entity) -> void {
+	camera_movement.adder = [](ecs::Entity& entity) -> void {
 		entity.addComponent<CameraMovement>();
 	};
 
-	camera_movement.details_renderer = [](IComponent& component) -> void {
+	camera_movement.details_renderer = [](ecs::IComponent& component) -> void {
 		CameraMovement& movement = static_cast<CameraMovement&>(component);
 
 		f32 max_velocity = movement.getMaxVelocity();
@@ -265,11 +265,11 @@ void TestScene::addUserComponentsToUI(UserInterface& ui) {
 
 	mouse_rotation.name = "Mouse Rotation";
 
-	mouse_rotation.adder = [](Entity& entity) -> void {
+	mouse_rotation.adder = [](ecs::Entity& entity) -> void {
 		entity.addComponent<MouseRotation>();
 	};
 
-	mouse_rotation.details_renderer = [](IComponent& component) -> void {
+	mouse_rotation.details_renderer = [](ecs::IComponent& component) -> void {
 		MouseRotation& rotation = static_cast<MouseRotation&>(component);
 		f32 sensitivity = rotation.getSensitivity();
 
@@ -288,11 +288,11 @@ void TestScene::addUserComponentsToUI(UserInterface& ui) {
 
 	axis_rotation.name = "Axis Rotation";
 
-	axis_rotation.adder = [](Entity& entity) -> void {
+	axis_rotation.adder = [](ecs::Entity& entity) -> void {
 		entity.addComponent<AxisRotation>();
 	};
 
-	axis_rotation.details_renderer = [](IComponent& component) -> void {
+	axis_rotation.details_renderer = [](ecs::IComponent& component) -> void {
 		AxisRotation& rotation = static_cast<AxisRotation&>(component);
 
 		//----------------------------------------------------------------------------------
@@ -360,11 +360,11 @@ void TestScene::addUserComponentsToUI(UserInterface& ui) {
 
 	axis_orbit.name = "Axis Orbit";
 
-	axis_orbit.adder = [](Entity& entity) -> void {
+	axis_orbit.adder = [](ecs::Entity& entity) -> void {
 		entity.addComponent<AxisOrbit>();
 	};
 
-	axis_orbit.details_renderer = [](IComponent& component) -> void{
+	axis_orbit.details_renderer = [](ecs::IComponent& component) -> void {
 		AxisOrbit& orbit = static_cast<AxisOrbit&>(component);
 		auto axis = XMStore<f32_3>(orbit.getAxis());
 		if (ImGui::InputFloat3("Axis", axis.data())) {
