@@ -9,6 +9,16 @@ SystemMgr::SystemMgr(ECS& ecs, EventMgr& mgr)
 
 void SystemMgr::removeSystem(ISystem& system) {
 	systems.erase(system.getTypeIndex());
+
+	const auto it = std::find_if(system_queue.begin(), system_queue.end(),
+		[&system](const ISystem& current) {
+			return current.getTypeIndex() == system.getTypeIndex();
+		}
+	);
+
+	if (it != system_queue.end()) {
+		system_queue.erase(it);
+	}
 }
 
 

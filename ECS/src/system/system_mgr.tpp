@@ -35,7 +35,7 @@ void SystemMgr::removeSystem() {
 	);
 
 	if (it != system_queue.end()) {
-		system_queue.erase();
+		system_queue.erase(it);
 	}
 }
 
