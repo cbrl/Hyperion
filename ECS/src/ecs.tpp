@@ -7,13 +7,24 @@ SystemT& ECS::addSystem(ArgsT&&... args) {
 }
 
 
-template <typename SystemT>
+template<typename SystemT>
 void ECS::removeSystem() {
 	system_mgr->removeSystem<SystemT>();
 }
 
 
-template <typename EventT, typename... ArgsT>
+template<typename SystemT>
+SystemT* ECS::getSystem() const {
+	return system_mgr->getSystem<SystemT>();
+}
+
+template<typename SystemT>
+void ECS::setSystemPriority(u32 priority) {
+	system_mgr->setSystemPriority<SystemT>(priority);
+}
+
+
+template<typename EventT, typename... ArgsT>
 void ECS::sendEvent(ArgsT&&... args) {
 	event_mgr->send<EventT>(std::forward<ArgsT>(args)...);
 }

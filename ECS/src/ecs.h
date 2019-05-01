@@ -54,18 +54,25 @@ public:
 	template<typename SystemT>
 	void removeSystem();
 
-	// Update the systems
-	void update(std::chrono::duration<f64> dt);
+	template<typename SystemT>
+	SystemT* getSystem() const;
 
+	template<typename SystemT>
+	void setSystemPriority(u32 priority);
+
+	// Send an event to be received by any systems that listen for it
 	template<typename EventT, typename... ArgsT>
 	void sendEvent(ArgsT&&... args);
+
+	// Update the systems
+	void update(std::chrono::duration<f64> dt);
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Iteration
 	//----------------------------------------------------------------------------------
 
-	// Do something with each entity or component of type T
+	// Do something with each entity, or component of type T.
 	template<typename T, typename ActionT>
 	void forEach(ActionT&& act);
 
@@ -74,7 +81,7 @@ public:
 	// Member Functions - Count
 	//----------------------------------------------------------------------------------
 
-	// Get the number of a specific entity/component
+	// Get the number of a entities, or components of type T.
 	template<typename T>
 	[[nodiscard]]
 	size_t countOf() const;

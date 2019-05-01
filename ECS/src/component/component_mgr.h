@@ -20,7 +20,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	ComponentMgr(EventMgr& handler) : event_handler(handler) {}
 	ComponentMgr(const ComponentMgr& manager) = delete;
 	ComponentMgr(ComponentMgr&& manager) = default;
@@ -29,14 +28,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~ComponentMgr() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	ComponentMgr& operator=(const ComponentMgr& manager) = delete;
 	ComponentMgr& operator=(ComponentMgr&& manager) = default;
 
@@ -48,7 +45,6 @@ public:
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
 	ComponentT& createComponent(ArgsT&&... args);
-
 
 	void destroyComponent(IComponent& component) {
 		const auto it = component_pools.find(component.getTypeIndex());
@@ -62,11 +58,9 @@ public:
 		}
 	}
 
-
 	// Get the number of the specified component
 	template<typename ComponentT>
 	size_t countOf();
-
 
 	// Check if the component manager has created a component of this type
 	template<typename ComponentT>
@@ -81,8 +75,8 @@ public:
 	template<typename ComponentT, typename ActionT>
 	void forEach(ActionT&& act);
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
