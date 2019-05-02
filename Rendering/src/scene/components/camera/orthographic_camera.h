@@ -11,7 +11,6 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	OrthographicCamera(ID3D11Device& device, u32_2 viewport_size);
-
 	OrthographicCamera(const OrthographicCamera& camera) = delete;
 	OrthographicCamera(OrthographicCamera&& camera) noexcept = default;
 
@@ -47,7 +46,7 @@ public:
 
 private:
 	// The width and height of the camera's viewing volume
-	f32_2 ortho_size;
+	f32_2 ortho_size = {1.0f, 1.0f};
 };
 
 } //namespace render

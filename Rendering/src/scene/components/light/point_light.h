@@ -11,15 +11,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	PointLight() noexcept
-		: base_color(1.0f, 1.0f, 1.0f)
-	    , intensity(1.0f)
-		, attenuation(0.0f, 0.0f, 1.0f)
-		, near_plane(0.1f)
-		, range(1.0f)
-		, shadows(false) {
-	}
-
+	PointLight() noexcept = default;
 	PointLight(const PointLight& light) = delete;
 	PointLight(PointLight&& light) noexcept = default;
 
@@ -150,16 +142,16 @@ private:
 
 private:
 	// Lighting parameters
-	f32_3 base_color;
-	f32   intensity;
-	f32_3 attenuation;
+	f32_3 base_color  = {1.0f, 1.0f, 1.0f};
+	f32   intensity   = 1.0f;
+	f32_3 attenuation = {0.0f, 0.0f, 1.0f};
 
 	// Near clipping plane and range (far plane)
-	f32 near_plane;
-	f32 range;
+	f32 near_plane = 0.1f;
+	f32 range      = 1.0f;
 
 	// Flag that decides if the light should cast shadows
-	bool shadows;
+	bool shadows = false;
 
 	// Bounding volumes
 	AABB aabb;

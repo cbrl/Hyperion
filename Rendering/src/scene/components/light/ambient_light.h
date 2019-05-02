@@ -11,10 +11,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	AmbientLight() noexcept
-		: color(0.0f, 0.0f, 0.0f, 1.0f) {
-	}
-
+	AmbientLight() noexcept = default;
 	AmbientLight(const AmbientLight& light) = delete;
 	AmbientLight(AmbientLight&& light) noexcept = default;
 
@@ -49,12 +46,12 @@ public:
 		color = ambient_color;
 	}
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	f32_4 color;
+	f32_4 color = {0.0f, 0.0f, 0.0f, 1.0f};
 };
 
 } //namespace render

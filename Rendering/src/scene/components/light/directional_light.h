@@ -11,15 +11,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	DirectionalLight() noexcept
-		: base_color(1.0f, 1.0f, 1.0f)
-	    , intensity(1.0f)
-		, start(0.1f)
-		, range(1.0f)
-		, proj_size(1.0f, 1.0f)
-		, shadows(false) {
-	}
-
+	DirectionalLight() noexcept = default;
 	DirectionalLight(const DirectionalLight& light) = delete;
 	DirectionalLight(DirectionalLight&& light) noexcept = default;
 
@@ -131,21 +123,21 @@ private:
 
 private:
 	// Lighting parameters
-	f32_3 base_color;
-	f32 intensity;
+	f32_3 base_color = {1.0f, 1.0f, 1.0f};
+	f32   intensity  = 1.0f;
 
 	// Clipping planes
-	f32 start;
-	f32 range;
+	f32 start = 0.1f;
+	f32 range = 1.0f;
 
 	// Projection matrix size
-	f32_2 proj_size;
+	f32_2 proj_size = {1.0f, 1.0f};
 
 	// Bounding volume
 	AABB aabb;
 
 	// Shadow boolean
-	bool shadows;
+	bool shadows = false;
 };
 
 } //namespace render

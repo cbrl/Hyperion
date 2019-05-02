@@ -10,17 +10,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	SpotLight() noexcept
-		: base_color(1.0f, 1.0f, 1.0f)
-	    , intensity(1.0f)
-		, attenuation(0.0f, 0.0f, 1.0f)
-		, cos_umbra(1.0f)
-		, cos_penumbra(0.1f)
-		, near_plane(0.1f)
-		, range(1.0f)
-		, shadows(false) {
-	}
-
+	SpotLight() noexcept = default;
 	SpotLight(const SpotLight& light) = delete;
 	SpotLight(SpotLight&& light) noexcept = default;
 
@@ -202,18 +192,18 @@ private:
 
 private:
 	// Lighting parameters
-	f32_3 base_color;
-	f32   intensity;
-	f32_3 attenuation;
-	f32   cos_umbra;
-	f32   cos_penumbra;
+	f32_3 base_color   = {1.0f, 1.0f, 1.0f};
+	f32   intensity    = 1.0f;
+	f32_3 attenuation  = {0.0f, 0.0f, 1.0f};
+	f32   cos_umbra    = 1.0f;
+	f32   cos_penumbra = 0.1f;
 
 	// Near clipping plane and range (far plane)
-	f32 near_plane;
-	f32 range;
+	f32 near_plane = 0.1f;
+	f32 range      = 1.0f;
 
 	// Flag that decides if the light should cast shadows
-	bool shadows;
+	bool shadows = false;
 
 	// Bounding volumes
 	AABB aabb;

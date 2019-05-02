@@ -4,8 +4,7 @@
 namespace render {
 
 PerspectiveCamera::PerspectiveCamera(ID3D11Device& device, u32_2 viewport_size)
-	: CameraBase(device)
-	, fov(XM_PI / 4.0f) {
+	: CameraBase(device) {
 
 	viewport.setSize(viewport_size);
 }

@@ -10,9 +10,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	PerspectiveCamera(ID3D11Device& device, u32_2 viewport_size);
-
 	PerspectiveCamera(const PerspectiveCamera& camera) = delete;
 	PerspectiveCamera(PerspectiveCamera&& camera) noexcept = default;
 
@@ -20,14 +18,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~PerspectiveCamera() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	PerspectiveCamera& operator=(const PerspectiveCamera& camera) = delete;
 	PerspectiveCamera& operator=(PerspectiveCamera&& caemra) noexcept = default;
 
@@ -46,10 +42,14 @@ public:
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getCameraToProjectionMatrix() const override;
 
-
 protected:
+	
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// Camera FOV
-	f32 fov;
+	f32 fov = XM_PI / 4.0f;
 };
 
 } //namespace render

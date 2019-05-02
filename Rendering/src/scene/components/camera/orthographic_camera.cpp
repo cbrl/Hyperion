@@ -4,8 +4,7 @@
 namespace render {
 
 OrthographicCamera::OrthographicCamera(ID3D11Device& device, u32_2 viewport_size)
-	: CameraBase(device)
-	, ortho_size(1.0f, 1.0f) {
+	: CameraBase(device) {
 
 	viewport.setSize(viewport_size);
 }

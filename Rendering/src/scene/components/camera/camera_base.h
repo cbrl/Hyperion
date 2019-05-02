@@ -17,15 +17,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	CameraSettings() noexcept
-		: render_mode(RenderMode::Forward)
-		, brdf(BRDF::Microfacet)
-	    , false_color(FalseColor::Fullbright)
-		, render_options(static_cast<u8>(RenderOptions::None))
-		, bounding_volume_color(1.0f, 1.0f, 1.0f, 1.0f)
-		, wireframe_color(0.0f, 1.0f, 0.0f, 1.0f) {
-	}
-
+	CameraSettings() noexcept = default;
 	CameraSettings(const CameraSettings& settings) noexcept = default;
 	CameraSettings(CameraSettings&& settings) noexcept = default;
 
@@ -183,20 +175,20 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// The rendering mode of the camera
-	RenderMode render_mode;
+	RenderMode render_mode = RenderMode::Forward;
 
 	// The BRDF to use for lighting calculations
-	BRDF brdf;
+	BRDF brdf = BRDF::Microfacet;
 
 	// The false color mode to use (when RenderMode::FalseColor is selected)
-	FalseColor false_color;
+	FalseColor false_color = FalseColor::Fullbright;
 
 	// The extra rendering options
-	u8 render_options;
+	u8 render_options = static_cast<u8>(RenderOptions::None);
 
 	// The color of bounding volumes and wireframes
-	f32_4 bounding_volume_color;
-	f32_4 wireframe_color;
+	f32_4 bounding_volume_color = {1.0f, 1.0f, 1.0f, 1.0f};
+	f32_4 wireframe_color = {0.0f, 1.0f, 0.0f, 1.0f};
 
 	// Describes the fog color, start radius, range
 	Fog fog;
@@ -215,9 +207,7 @@ protected:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	CameraBase(ID3D11Device& device)
-		: buffer(device)
-		, depth(0.01f, 100.0f) {
-
+		: buffer(device) {
 		viewport.setDepth(0.0f, 1.0f);
 	}
 
@@ -359,7 +349,7 @@ protected:
 	Viewport viewport;
 
 	// Z Depth
-	f32_2 depth;
+	f32_2 depth = {0.01f, 100.0f};
 
 	// Camera settings (render settings, fog, skybox)
 	CameraSettings settings;
