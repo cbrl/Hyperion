@@ -1,7 +1,8 @@
 #include "direct3d.h"
-
 #include "directx/directxtk.h"
 
+
+namespace render {
 
 Direct3D::Direct3D(DisplayConfig& display_config) {
 
@@ -46,3 +47,5 @@ Direct3D::~Direct3D() {
 	debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 	#endif
 }
+
+} //namespace render

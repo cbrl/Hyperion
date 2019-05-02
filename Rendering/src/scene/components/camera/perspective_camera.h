@@ -3,6 +3,8 @@
 #include "scene/components/camera/camera_base.h"
 
 
+namespace render {
+
 class PerspectiveCamera final : public CameraBase<PerspectiveCamera> {
 public:
 	//----------------------------------------------------------------------------------
@@ -49,3 +51,5 @@ protected:
 	// Camera FOV
 	f32 fov;
 };
+
+} //namespace render

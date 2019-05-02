@@ -22,6 +22,7 @@ bool ShaderCompileMenu::update(Engine& engine) {
 
 
 void ShaderCompileMenu::compileShader(Engine& engine, gsl::span<const char> data) const {
+	using namespace render;
 	using ShaderFactory::CreateShaderFromMemory;
 
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
@@ -144,6 +145,7 @@ bool ShaderCompileMenu::drawCompilePopup(Engine& engine) {
 
 
 bool ShaderCompileMenu::checkExistingShaderName(Engine& engine) const {
+	using namespace render;
 
 	// Check the selected shader type name, then compare existing names of that type of shader.
 	if (checkTypeSelected<ComputeShader>()) {
@@ -173,22 +175,22 @@ template<typename ShaderT>
 bool ShaderCompileMenu::checkTypeSelected() const {
 	const char* type_name = shader_types[type_idx].first;
 
-	if constexpr (std::is_same_v<ComputeShader, ShaderT>) {
+	if constexpr (std::is_same_v<render::ComputeShader, ShaderT>) {
 		return (strcmp(type_name, "Compute Shader") == 0);
 	}
-	else if constexpr(std::is_same_v<DomainShader, ShaderT>) {
+	else if constexpr (std::is_same_v<render::DomainShader, ShaderT>) {
 		return (strcmp(type_name, "Domain Shader") == 0);
 	}
-	else if constexpr (std::is_same_v<GeometryShader, ShaderT>) {
+	else if constexpr (std::is_same_v<render::GeometryShader, ShaderT>) {
 		return (strcmp(type_name, "Geometry Shader") == 0);
 	}
-	else if constexpr (std::is_same_v<HullShader, ShaderT>) {
+	else if constexpr (std::is_same_v<render::HullShader, ShaderT>) {
 		return (strcmp(type_name, "Hull Shader") == 0);
 	}
-	else if constexpr (std::is_same_v<PixelShader, ShaderT>) {
+	else if constexpr (std::is_same_v<render::PixelShader, ShaderT>) {
 		return (strcmp(type_name, "Pixel Shader") == 0);
 	}
-	else if constexpr (std::is_same_v<VertexShader, ShaderT>) {
+	else if constexpr (std::is_same_v<render::VertexShader, ShaderT>) {
 		return (strcmp(type_name, "Vertex Shader") == 0);
 	}
 

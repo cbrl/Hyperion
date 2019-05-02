@@ -3,7 +3,11 @@
 #include "system/system.h"
 #include "scene/events/core_events.h"
 
+namespace render {
+
 class RenderingMgr;
+
+namespace systems {
 
 class CameraSystem final : public ecs::System<CameraSystem>, public ecs::EventListener {
 public:
@@ -37,7 +41,7 @@ private:
 
 	void registerCallbacks() override;
 
-	void onWindowResize(const WindowResizeEvent& event);
+	void onWindowResize(const events::WindowResizeEvent& event);
 
 
 	//----------------------------------------------------------------------------------
@@ -45,3 +49,6 @@ private:
 	//----------------------------------------------------------------------------------
 	const RenderingMgr& rendering_mgr;
 };
+
+} //namespace systems
+} //namespace render

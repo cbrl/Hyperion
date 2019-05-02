@@ -4,6 +4,8 @@
 #include "resource/model/material/material.h"
 
 
+namespace render {
+
 //----------------------------------------------------------------------------------
 // ModelOutput
 //----------------------------------------------------------------------------------
@@ -55,3 +57,5 @@ struct ModelOutput {
 	// The root node of the model hierarchy
 	Node root;
 };
+
+} //namespace render

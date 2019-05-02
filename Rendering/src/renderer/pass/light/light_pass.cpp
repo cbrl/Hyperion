@@ -8,6 +8,8 @@
 #include "geometry/frustum/frustum.h"
 
 
+namespace render {
+
 LightPass::LightPass(const RenderingConfig& rendering_config,
                      ID3D11Device& device,
 	                 ID3D11DeviceContext& device_context,
@@ -452,3 +454,5 @@ void LightPass::renderShadowMaps(Scene& scene) {
 		}
 	}
 }
+
+} //namespace render

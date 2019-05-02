@@ -3,6 +3,8 @@
 #include "scene/systems/core_systems.h"
 
 
+namespace render {
+
 void Scene::load(Engine& engine) {
 	addCoreSystems(engine);
 	initialize(engine);
@@ -12,13 +14,13 @@ void Scene::load(Engine& engine) {
 void Scene::addCoreSystems(const Engine& engine) {
 
 	// Transform system: updates transform components when they're modified
-	ecs->addSystem<TransformSystem>();
+	ecs->addSystem<systems::TransformSystem>();
 
 	// Camera system: updates the buffers of camera components
-	ecs->addSystem<CameraSystem>(engine.getRenderingMgr());
+	ecs->addSystem<systems::CameraSystem>(engine.getRenderingMgr());
 
 	// Model system: updates the buffers of model components
-	ecs->addSystem<ModelSystem>(engine.getRenderingMgr());
+	ecs->addSystem<systems::ModelSystem>(engine.getRenderingMgr());
 }
 
 
@@ -72,3 +74,5 @@ void Scene::importModel(const ecs::EntityPtr& ptr, ID3D11Device& device, const s
 
 	process_node(*ptr, blueprint, blueprint->root);
 }
+
+} //namespace render

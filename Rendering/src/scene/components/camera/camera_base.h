@@ -10,6 +10,8 @@
 #include "rendering_options.h"
 
 
+namespace render {
+
 class CameraSettings final {
 public:
 	//----------------------------------------------------------------------------------
@@ -362,3 +364,5 @@ protected:
 	// Camera settings (render settings, fog, skybox)
 	CameraSettings settings;
 };
+
+} //namespace render

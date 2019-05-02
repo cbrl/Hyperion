@@ -5,7 +5,7 @@
 #include "resource/model/blueprint_factory.h"
 
 
-class TestScene final : public Scene {
+class TestScene final : public render::Scene {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -35,7 +35,7 @@ protected:
 
 private:
 
-	void addUserComponentsToUI(UserInterface& ui);
+	void addUserComponentsToUI(render::systems::UserInterface& ui);
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

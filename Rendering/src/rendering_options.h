@@ -3,6 +3,8 @@
 #include "datatypes/datatypes.h"
 
 
+namespace render {
+
 enum class AAType : u8 {
 	None = 0,
 	MSAA_2x,
@@ -39,3 +41,5 @@ enum class FalseColor : u8 {
 	Depth,
 	Static,
 };
+
+} //namespace render

@@ -6,8 +6,9 @@
 #include "scene/systems/core_systems.h"
 #include "scene/events/core_events.h"
 
-using namespace EntityTemplates;
 class Engine;
+
+namespace render {
 
 class Scene {
 public:
@@ -56,7 +57,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Add an entity to this scene
-	template<typename TemplateT = WorldObjectT, typename... ArgsT>
+	template<typename TemplateT = EntityTemplates::WorldObjectT, typename... ArgsT>
 	ecs::EntityPtr addEntity(ArgsT&&... args);
 
 	// Remove an entity from this scene
@@ -162,5 +163,7 @@ private:
 	// Entitites that currently exist in this scene
 	std::vector<ecs::EntityPtr> entities;
 };
+
+} //namespace render
 
 #include "scene.tpp"

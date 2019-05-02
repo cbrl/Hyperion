@@ -5,6 +5,9 @@
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 
+
+namespace render {
+
 RenderingMgr::RenderingMgr(gsl::not_null<HWND> window,
                            DisplayConfig display_conf,
                            RenderingConfig rendering_conf) {
@@ -97,3 +100,5 @@ void RenderingMgr::endFrame() const {
 	// Present the final frame
 	swap_chain->present();
 }
+
+} //namespace render

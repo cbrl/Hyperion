@@ -6,22 +6,30 @@
 
 
 class Engine;
-class ResourceMgr;
-class Scene;
-namespace ecs { class IComponent; }
 
 class SystemMenu;
 class SceneTree;
 class MetricsWindow;
 class TextEditWindow;
 class TransformManipulator;
+class EntityDetailsWindow;
 
+namespace ecs {
+class IComponent;
+}
+
+
+namespace render {
+
+class ResourceMgr;
+class Scene;
+
+namespace systems {
 
 class UserInterface final : public ecs::System<UserInterface>, public ecs::EventSender {
 public:
 	using UserComponent = EntityDetailsWindow::UserComponent;
 
-public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -74,3 +82,6 @@ private:
 	bool last_keyboard_state = false;
 	bool last_mouse_state    = false;
 };
+
+} //namespace systems
+} //namespace render

@@ -13,6 +13,8 @@
 #include "resource/model/material/material.h"
 
 
+namespace render {
+
 //----------------------------------------------------------------------------------
 // Model
 //----------------------------------------------------------------------------------
@@ -167,3 +169,5 @@ private:
 	// The blueprint whose data this model references
 	std::shared_ptr<ModelBlueprint> blueprint;
 };
+
+} //namespace render

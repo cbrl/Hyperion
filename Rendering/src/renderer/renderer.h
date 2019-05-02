@@ -16,9 +16,10 @@
 #include "renderer/pass/text/text_pass.h"
 
 
+namespace render {
+
 class RenderingMgr;
 class RenderingConfig;
-
 
 class Renderer final {
 public:
@@ -115,3 +116,5 @@ private:
 	std::unique_ptr<BoundingVolumePass> bounding_volume_pass;
 	std::unique_ptr<TextPass>           text_pass;
 };
+
+} //namespace render

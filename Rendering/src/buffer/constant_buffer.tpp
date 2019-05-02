@@ -1,3 +1,6 @@
+
+namespace render {
+
 template<typename DataT>
 ConstantBuffer<DataT>::ConstantBuffer(ID3D11Device& device) {
 	D3D11_BUFFER_DESC buffer_desc = {};
@@ -28,3 +31,5 @@ void ConstantBuffer<DataT>::updateData(ID3D11DeviceContext& device_context, cons
 
 	device_context.Unmap(buffer.Get(), NULL);
 }
+
+} // namespace render

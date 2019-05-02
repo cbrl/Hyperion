@@ -12,6 +12,8 @@
 #include "imgui.h"
 
 
+namespace render::systems {
+
 UserInterface::UserInterface(Engine& engine)
 	: engine(engine) {
 	system_menu           = std::make_unique<SystemMenu>(engine);
@@ -75,6 +77,8 @@ void UserInterface::update() {
 	if (keyboard_state != last_keyboard_state || mouse_state != last_mouse_state) {
 		last_keyboard_state = keyboard_state;
 		last_mouse_state    = mouse_state;
-		sendEvent<GuiFocusEvent>(keyboard_state, mouse_state);
+		sendEvent<events::GuiFocusEvent>(keyboard_state, mouse_state);
 	}
 }
+
+} //namespace render

@@ -6,13 +6,16 @@
 #include "resource/shader/shader.h"
 #include "rendering_options.h"
 
+namespace render {
+
 class RenderStateMgr;
 class ResourceMgr;
-class Scene;
-class Model;
 
 class DeferredPass final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 	DeferredPass(ID3D11DeviceContext& device_context,
 	             RenderStateMgr& render_state_mgr,
 	             ResourceMgr& resource_mgr);
@@ -20,20 +23,38 @@ public:
 	DeferredPass(const DeferredPass&) = delete;
 	DeferredPass(DeferredPass&&) = default;
 
+	
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
 	~DeferredPass() = default;
 
+	
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
 	DeferredPass& operator=(const DeferredPass&) = delete;
 	DeferredPass& operator=(DeferredPass&&) = default;
 
+	
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 	void render(BRDF brdf) const;
 
 private:
 
 	void bindState() const;
 
+	
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
 	std::reference_wrapper<ID3D11DeviceContext> device_context;
 	std::reference_wrapper<RenderStateMgr> render_state_mgr;
 	std::reference_wrapper<ResourceMgr> resource_mgr;
 
 	std::shared_ptr<VertexShader> vertex_shader;
 };
+
+} //namespace render

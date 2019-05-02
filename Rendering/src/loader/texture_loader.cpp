@@ -82,7 +82,7 @@ void HandleLoaderError(ID3D11Device& device, const std::string& msg, ID3D11Shade
 
 
 
-namespace TextureLoader {
+namespace render::TextureLoader {
 
 void load(ID3D11Device& device,
           ID3D11DeviceContext& device_context,
@@ -275,4 +275,5 @@ void load(ID3D11Device& device,
 
 	SetDebugObjectName(*srv_out, "TextureLoader Texture2DArray");
 }
-}
+
+} //namespace render::TextureLoader

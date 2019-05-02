@@ -1,6 +1,8 @@
 #include "perspective_camera.h"
 
 
+namespace render {
+
 PerspectiveCamera::PerspectiveCamera(ID3D11Device& device, u32_2 viewport_size)
 	: CameraBase(device)
 	, fov(XM_PI / 4.0f) {
@@ -18,8 +20,10 @@ f32 PerspectiveCamera::getFOV() const noexcept {
 
 XMMATRIX XM_CALLCONV PerspectiveCamera::getCameraToProjectionMatrix() const {
 
-	const u32_2 size    = viewport.getSize();
-	const f32 aspect_ratio = static_cast<f32>(size[0]) / static_cast<f32>(size[1]);
+	const u32_2 size         = viewport.getSize();
+	const f32   aspect_ratio = static_cast<f32>(size[0]) / static_cast<f32>(size[1]);
 
 	return XMMatrixPerspectiveFovLH(fov, aspect_ratio, depth[0], depth[1]);
 }
+
+} //namespace render

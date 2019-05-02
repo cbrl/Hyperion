@@ -2,6 +2,8 @@
 #include "scene/scene.h"
 
 
+namespace render {
+
 TextPass::TextPass(ID3D11DeviceContext& device_context) {
 	sprite_batch = std::make_unique<SpriteBatch>(&device_context);
 }
@@ -29,3 +31,5 @@ void TextPass::render(Scene& scene) const {
 		}
 	});
 }
+
+} //namespace render

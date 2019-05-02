@@ -4,6 +4,8 @@
 #include "io/io.h"
 
 
+namespace render {
+
 template<typename ResourceT>
 class Resource {
 public:
@@ -65,3 +67,5 @@ public:
 	std::string  str_guid;
 	std::wstring wstr_guid;
 };
+
+} //namespace render

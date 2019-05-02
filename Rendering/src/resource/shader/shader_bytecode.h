@@ -4,6 +4,8 @@
 #include "io/io.h"
 
 
+namespace render {
+
 // Compile a shader file
 [[nodiscard]]
 HRESULT CompileShaderToBytecode(const fs::path& file,
@@ -154,3 +156,5 @@ private:
 	//----------------------------------------------------------------------------------
 	ComPtr<ID3DBlob> blob;
 };
+
+} //namespace render

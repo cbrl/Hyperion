@@ -40,12 +40,12 @@ private:
 
 	void registerCallbacks() override;
 
-	void processInput(CameraMovement& movement, Transform& transform) const;
+	void processInput(CameraMovement& movement, render::Transform& transform) const;
 	void updateMovement(CameraMovement& mv, f32_3 units) const;
-	void move(CameraMovement& mv, Transform& transform) const;
+	void move(CameraMovement& mv, render::Transform& transform) const;
 	void decelerate(CameraMovement& mv) const;
 
-	void onGuiFocus(const GuiFocusEvent& event);
+	void onGuiFocus(const render::events::GuiFocusEvent& event);
 
 
 	//----------------------------------------------------------------------------------

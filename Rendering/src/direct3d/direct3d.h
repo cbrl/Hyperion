@@ -5,6 +5,8 @@
 #include "display/display_config.h"
 
 
+namespace render {
+
 class Direct3D final {
 public:
 	//----------------------------------------------------------------------------------
@@ -55,3 +57,5 @@ private:
 	ComPtr<ID3D11DeviceContext> device_context;
 	ComPtr<ID3D11Debug> debug;
 };
+
+} //namespace render

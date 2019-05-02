@@ -2,6 +2,8 @@
 #include "directx/directxtk.h"
 
 
+namespace render {
+
 SwapChain::SwapChain(gsl::not_null<HWND> window,
                      DisplayConfig& config,
                      ID3D11Device& device,
@@ -147,3 +149,5 @@ void SwapChain::reset() {
 	// Recreate the RTV
 	createRenderTargetView();
 }
+
+} //namespace render

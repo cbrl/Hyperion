@@ -4,6 +4,8 @@
 #include "datatypes/datatypes.h"
 
 
+namespace render {
+
 class Mesh final {
 public:
 	//----------------------------------------------------------------------------------
@@ -82,5 +84,7 @@ private:
 	u32 stride;
 };
 
+
+} //namespace render
 
 #include "mesh.tpp"

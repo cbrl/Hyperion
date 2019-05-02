@@ -11,15 +11,15 @@ void TransformManipulator::draw(Engine& engine, ecs::EntityPtr selected_entity) 
 
 	// Draw transform manipulation tool. Only for the primary camera since it
 	// doesn't work well when drawing multiple transform tools at once.
-	if (auto* transform = selected_entity->getComponent<Transform>()) {
+	if (auto* transform = selected_entity->getComponent<render::Transform>()) {
 		bool first = true;
-		scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+		scene.forEach<render::PerspectiveCamera>([&](render::PerspectiveCamera& camera) {
 			if (first) {
 				drawTransformManipulator(*transform, camera, engine.getInput());
 				first = false;
 			}
 		});
-		scene.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+		scene.forEach<render::OrthographicCamera>([&](render::OrthographicCamera& camera) {
 			if (first) {
 				drawTransformManipulator(*transform, camera, engine.getInput());
 				first = false;
@@ -30,19 +30,19 @@ void TransformManipulator::draw(Engine& engine, ecs::EntityPtr selected_entity) 
 
 
 template<typename CameraT>
-void TransformManipulator::drawTransformManipulator(Transform& transform, CameraT& camera, Input& input) {
+void TransformManipulator::drawTransformManipulator(render::Transform& transform, CameraT& camera, Input& input) {
 
 	// Active check
 	if (!transform.isActive())
 		return;
 
 	// Get camera transform
-	auto* camera_transform = camera.getOwner()->getComponent<Transform>();
+	auto* camera_transform = camera.getOwner()->getComponent<render::Transform>();
 	if (!camera_transform)
 		return;
 
 	// Set orthographic mode for ortho camera
-	if constexpr (std::is_same_v<CameraT, OrthographicCamera>) {
+	if constexpr (std::is_same_v<CameraT, render::OrthographicCamera>) {
 		ImGuizmo::SetOrthographic(true);
 	}
 	else {
@@ -101,7 +101,7 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 		else {
 			// If the transform is a child of another, then the matrix needs to be multiplied by the inverse of
 			// the parent's matrix to obtain the local transformation.
-			auto* parent_transform = transform.getOwner()->getParent()->getComponent<Transform>();
+			auto* parent_transform = transform.getOwner()->getParent()->getComponent<render::Transform>();
 
 			XMMATRIX world_to_parent = parent_transform->getWorldToObjectMatrix();
 			XMMATRIX relative_transform = XMLoadFloat4x4(&matrix) * world_to_parent;

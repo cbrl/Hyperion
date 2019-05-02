@@ -7,15 +7,16 @@
 #include "loader/assimp_loader.h"
 
 
-namespace ModelLoader {
+namespace render::ModelLoader {
 
-	template<typename VertexT>
-	[[nodiscard]]
-	ModelOutput Load(ResourceMgr& resource_mgr, const fs::path& file, const ModelConfig<VertexT>& config) {
+template<typename VertexT>
+[[nodiscard]]
+ModelOutput Load(ResourceMgr& resource_mgr, const fs::path& file, const ModelConfig<VertexT>& config) {
 
-		Logger::log(LogLevel::info, "Loading model: {}", file.string());
-		auto out = AssimpLoader::Load(resource_mgr, file, config.flip_winding, config.flip_uv);
-	    Logger::log(LogLevel::info, "Loaded model: {}", file.string());
-	    return out;
-	}
+	Logger::log(LogLevel::info, "Loading model: {}", file.string());
+	auto out = AssimpLoader::Load(resource_mgr, file, config.flip_winding, config.flip_uv);
+	Logger::log(LogLevel::info, "Loaded model: {}", file.string());
+	return out;
 }
+
+} //namespace render::ModelLoader

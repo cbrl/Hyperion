@@ -8,6 +8,8 @@
 #include "geometry/frustum/frustum.h"
 
 
+namespace render {
+
 BoundingVolumePass::BoundingVolumePass(ID3D11Device& device,
 									   ID3D11DeviceContext& device_context,
 									   RenderStateMgr& render_state_mgr,
@@ -131,3 +133,5 @@ void XM_CALLCONV BoundingVolumePass::renderAABB(const AABB& aabb, FXMMATRIX obje
 
 	Pipeline::draw(device_context, 24, 0);
 }
+
+} //namespace render

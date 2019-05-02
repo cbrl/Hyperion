@@ -5,6 +5,8 @@
 #include "display/viewport.h"
 
 
+namespace render {
+
 class IShadowMapBuffer {
 public:
 	//----------------------------------------------------------------------------------
@@ -206,3 +208,5 @@ private:
 	          f32 slope_scaled_depth_bias,
 	          f32 depth_bias_clamp) override;
 };
+
+} //namespace render

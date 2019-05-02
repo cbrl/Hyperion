@@ -9,6 +9,8 @@
 #include "resource/model/material/material_factory.h"
 
 
+namespace render {
+
 void ProcessNodes(const aiNode* node, ModelOutput::Node& out) {
 
 	out.name = node->mName.C_Str();
@@ -216,4 +218,5 @@ ModelOutput Load(ResourceMgr& resource_mgr,
 	return AssimpLoad(resource_mgr, file, flip_winding, flip_uv);
 }
 
-}
+} //namespace AssimpLoader
+} //namespace render

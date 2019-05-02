@@ -6,7 +6,7 @@
 #include "rendering_options.h"
 
 
-namespace ShaderFactory {
+namespace render::ShaderFactory {
 
 //----------------------------------------------------------------------------------
 // From File/Memory
@@ -97,6 +97,6 @@ std::shared_ptr<PixelShader> CreateFalseColorPS(ResourceMgr& resource_mgr, False
 [[nodiscard]]
 std::shared_ptr<VertexShader> CreateFullscreenQuadVS(ResourceMgr& resource_mgr);
 
-} //namespace ShaderFactory
+} //namespace render::ShaderFactory
 
 #include "shader_factory.tpp"

@@ -5,12 +5,13 @@
 #include "resource/resource.h"
 
 
+namespace render {
+
 class Texture final : public Resource<Texture> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	Texture(ID3D11Device& device,
 	        ID3D11DeviceContext& device_context,
 	        const std::wstring& filename);
@@ -27,14 +28,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~Texture() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	Texture& operator=(const Texture& texture) = delete;
 	Texture& operator=(Texture&& texture) noexcept = default;
 
@@ -42,7 +41,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-
 	[[nodiscard]]
 	ID3D11ShaderResourceView* get() const {
 		return texture_srv.Get();
@@ -54,11 +52,12 @@ public:
 		StageT::bindSRV(device_context, slot, texture_srv.Get());
 	}
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
 	ComPtr<ID3D11ShaderResourceView> texture_srv;
 };
+
+} //namespace render

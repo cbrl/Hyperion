@@ -1,5 +1,5 @@
 
-namespace ShaderFactory {
+namespace render::ShaderFactory {
 
 namespace detail {
 template<typename ShaderT>
@@ -56,4 +56,4 @@ std::shared_ptr<ShaderT> CreateShaderFromFile(ResourceMgr& resource_mgr,
 	return {};
 }
 
-} //namespace ShaderFactory
+} //namespace render::ShaderFactory

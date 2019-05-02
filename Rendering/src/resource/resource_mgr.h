@@ -11,8 +11,9 @@
 #include "resource/font/font.h"
 
 
-class ModelBlueprint;
+namespace render {
 
+class ModelBlueprint;
 
 class ResourceMgr final {
 	template<typename KeyT, typename ValueT>
@@ -262,8 +263,8 @@ public:
 	auto getResourceMap() const
 	    -> std::enable_if_t<std::is_same_v<VertexShader, ResourceT>, const shader_resource_map<std::wstring, VertexShader>&>;
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
@@ -285,5 +286,6 @@ private:
 	shader_resource_map<std::wstring, VertexShader>   vertex_shaders;
 };
 
+} //namespace render
 
 #include "resource_mgr.tpp"

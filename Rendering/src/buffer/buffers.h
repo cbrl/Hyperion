@@ -4,6 +4,8 @@
 #include "directx/math/directx_math.h"
 
 
+namespace render {
+
 //----------------------------------------------------------------------------------
 // Engine Buffer
 //----------------------------------------------------------------------------------
@@ -127,3 +129,5 @@ struct AltCameraBuffer {
 	XMMATRIX world_to_camera      = XMMatrixIdentity();
 	XMMATRIX camera_to_projection = XMMatrixIdentity();
 };
+
+} // namespace render

@@ -1,3 +1,6 @@
+
+namespace render {
+
 template<typename VertexT>
 Mesh::Mesh(ID3D11Device& device,
            const std::string& name,
@@ -51,3 +54,5 @@ Mesh::Mesh(ID3D11Device& device,
 	ThrowIfFailed(device.CreateBuffer(&ib_desc, &ib_data, index_buffer.GetAddressOf()),
 	              "Failed to create mesh index buffer");
 }
+
+} //namespace render

@@ -1,3 +1,6 @@
+
+namespace render {
+
 template<typename DataT>
 void StructuredBuffer<DataT>::updateData(ID3D11Device& device,
                                          ID3D11DeviceContext& device_context,
@@ -56,3 +59,5 @@ void StructuredBuffer<DataT>::createBuffer(ID3D11Device& device) {
 
 	SetDebugObjectName(srv.Get(), "Structured Buffer SRV");
 }
+
+} //namespace render

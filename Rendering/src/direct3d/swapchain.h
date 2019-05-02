@@ -4,6 +4,8 @@
 #include "display/display_config.h"
 
 
+namespace render {
+
 class SwapChain final {
 public:
 	//----------------------------------------------------------------------------------
@@ -104,3 +106,5 @@ private:
 	ComPtr<IDXGISwapChain1> swap_chain;
 	ComPtr<ID3D11RenderTargetView> render_target_view;
 };
+
+} //namespace render

@@ -13,7 +13,7 @@ void CameraMotorSystem::update() {
 	const auto process_cam = [&](auto& camera) {
 		auto* entity = camera.getOwner().get();
 
-		auto* transform = entity->getComponent<Transform>();
+		auto* transform = entity->getComponent<render::Transform>();
 		if (!transform) return;
 		if (!transform->isActive()) return;
 
@@ -22,13 +22,13 @@ void CameraMotorSystem::update() {
 		}
 	};
 
-	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	getECS().forEach<render::PerspectiveCamera>([&](render::PerspectiveCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
 
 
-	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+	getECS().forEach<render::OrthographicCamera>([&](render::OrthographicCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
@@ -40,12 +40,12 @@ void CameraMotorSystem::registerCallbacks() {
 }
 
 
-void CameraMotorSystem::onGuiFocus(const GuiFocusEvent& event) {
+void CameraMotorSystem::onGuiFocus(const render::events::GuiFocusEvent& event) {
 	this->setActive(!event.keyboard_focus);
 }
 
 
-void CameraMotorSystem::processInput(CameraMovement& movement, Transform& transform) const {
+void CameraMotorSystem::processInput(CameraMovement& movement, render::Transform& transform) const {
 
 	const auto dt = static_cast<f32>(dtSinceLastUpdate().count());
 	f32_3 move_units = { 0.0f, 0.0f, 0.0f };
@@ -140,7 +140,7 @@ void CameraMotorSystem::updateMovement(CameraMovement& mv, f32_3 units) const {
 }
 
 
-void CameraMotorSystem::move(CameraMovement& mv, Transform& transform) const {
+void CameraMotorSystem::move(CameraMovement& mv, render::Transform& transform) const {
 
 	const f32_3 velocity = mv.getVelocity();
 	XMVECTOR velocity_vec = XMLoad(&velocity);

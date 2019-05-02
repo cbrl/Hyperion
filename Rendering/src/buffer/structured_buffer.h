@@ -4,6 +4,8 @@
 #include "datatypes/datatypes.h"
 
 
+namespace render {
+
 template<typename DataT>
 class StructuredBuffer final {
 public:
@@ -81,5 +83,6 @@ private:
 	u32 reserved_size;
 };
 
+} //namespace render
 
 #include "structured_buffer.tpp"

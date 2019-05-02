@@ -14,8 +14,8 @@ std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
 	std::string title = "Engine";
 
 	// Configuration classes
-	DisplayConfig   display_config;
-	RenderingConfig render_config;
+	render::DisplayConfig   display_config;
+	render::RenderingConfig render_config;
 
 	// Try to process the config file
 	json config;
@@ -88,8 +88,8 @@ LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPAR
 
 
 Engine::Engine(std::wstring title,
-               DisplayConfig display_config,
-               RenderingConfig rendering_config)
+               render::DisplayConfig display_config,
+               render::RenderingConfig rendering_config)
 	: exit_requested(false)
 	, resize_requested(false)
 	, toggle_fullscreen(false) {
@@ -142,8 +142,8 @@ void Engine::saveConfig() {
 
 
 void Engine::init(std::wstring title,
-                  DisplayConfig display_config,
-                  RenderingConfig rendering_config) {
+                  render::DisplayConfig display_config,
+                  render::RenderingConfig rendering_config) {
 
 	// Create the main window
 	{
@@ -162,7 +162,7 @@ void Engine::init(std::wstring title,
 
 			const u32_2 size = window->getClientSize();
 			if (scene) {
-				scene->sendEvent<WindowResizeEvent>(size);
+				scene->sendEvent<render::events::WindowResizeEvent>(size);
 			}
 			Logger::log(LogLevel::info, "Window resized to {}x{}", size[0], size[1]);
 		};
@@ -185,7 +185,11 @@ void Engine::init(std::wstring title,
 	timer = std::make_unique<Stopwatch<>>();
 
 	// Rendering Manager
-	rendering_mgr = std::make_unique<RenderingMgr>(gsl::make_not_null(window->getHandle()), std::move(display_config), std::move(rendering_config));
+	rendering_mgr = std::make_unique<render::RenderingMgr>(
+		gsl::make_not_null(window->getHandle()),
+		std::move(display_config),
+		std::move(rendering_config)
+	);
 
 	// Initialize the COM library
 	auto com_result = CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -193,7 +197,7 @@ void Engine::init(std::wstring title,
 }
 
 
-void Engine::loadScene(std::unique_ptr<Scene>&& new_scene) {
+void Engine::loadScene(std::unique_ptr<render::Scene>&& new_scene) {
 	
 	if (scene) {
 		const auto name = scene->getName();

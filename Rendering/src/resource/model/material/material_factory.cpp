@@ -3,7 +3,7 @@
 #include "resource/texture/texture_factory.h"
 
 
-namespace MaterialFactory {
+namespace render::MaterialFactory {
 
 Material CreateDefaultMaterial(ResourceMgr& resource_mgr) {
 	Material mat;
@@ -21,4 +21,4 @@ Material CreateDefaultMaterial(ResourceMgr& resource_mgr) {
 	return mat;
 }
 
-}
+} //namespace render::MaterialFactory

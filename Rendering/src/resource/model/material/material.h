@@ -5,6 +5,8 @@
 #include "resource/shader/shader.h"
 
 
+namespace render {
+
 struct Material {
 
 	// The material's name
@@ -29,3 +31,5 @@ struct Material {
 	// (Optional) shader that overrides the default global shader
 	std::shared_ptr<PixelShader> shader;
 };
+
+} //namespace render

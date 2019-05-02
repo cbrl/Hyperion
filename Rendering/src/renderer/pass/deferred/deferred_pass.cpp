@@ -4,6 +4,8 @@
 #include "resource/shader/shader_factory.h"
 
 
+namespace render {
+
 DeferredPass::DeferredPass(ID3D11DeviceContext& device_context,
                            RenderStateMgr& render_state_mgr,
                            ResourceMgr& resource_mgr)
@@ -47,3 +49,5 @@ void DeferredPass::render(BRDF brdf) const {
 	// Draw a fullscreen quad
 	Pipeline::draw(device_context, 6, 0);
 }
+
+} //namespace render

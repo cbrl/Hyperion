@@ -5,6 +5,8 @@
 #include "imgui_impl_dx11.h"
 
 
+namespace render {
+
 Renderer::Renderer(DisplayConfig& display_config,
                    const RenderingConfig& rendering_config,
                    ID3D11Device& device,
@@ -308,3 +310,5 @@ void XM_CALLCONV Renderer::renderFalseColor(Scene& scene,
 
 	output_mgr->bindEndForward(device_context);
 }
+
+} //namespace render

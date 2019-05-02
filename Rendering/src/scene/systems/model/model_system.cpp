@@ -5,6 +5,8 @@
 #include "scene/components/model/model.h"
 
 
+namespace render::systems {
+
 ModelSystem::ModelSystem(const RenderingMgr& rendering_mgr)
 	: rendering_mgr(rendering_mgr) {
 }
@@ -24,3 +26,5 @@ void ModelSystem::update() {
 		}
 	});
 }
+
+} //namespace systems

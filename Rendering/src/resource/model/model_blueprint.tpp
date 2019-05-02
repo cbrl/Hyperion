@@ -1,5 +1,7 @@
 #include "loader/model_loader.h"
 
+namespace render {
+
 template <typename VertexT>
 ModelBlueprint::ModelBlueprint(ID3D11Device& device,
                                ResourceMgr& resource_mgr,
@@ -67,3 +69,5 @@ void ModelBlueprint::constructBlueprint(ID3D11Device& device, const ModelOutput&
 		bounding_spheres.emplace_back(center, radius);
 	}
 }
+
+} //namespace render

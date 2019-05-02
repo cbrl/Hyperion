@@ -1,9 +1,15 @@
 #pragma once
 
 struct ID3D11Device;
-class  ResourceMgr;
-class  Scene;
-namespace ecs { class EntityPtr; }
+
+namespace render {
+class ResourceMgr;
+class Scene;
+}
+
+namespace ecs {
+class EntityPtr;
+}
 
 class NewModelMenu {
 	enum class ModelType {
@@ -49,8 +55,8 @@ public:
 	void drawMenu();
 
 	void procNewModelPopup(ID3D11Device& device,
-	                       ResourceMgr& resource_mgr,
-	                       Scene& scene,
+	                       render::ResourceMgr& resource_mgr,
+	                       render::Scene& scene,
 	                       ecs::EntityPtr entity);
 
 private:

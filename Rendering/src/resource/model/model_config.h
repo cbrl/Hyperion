@@ -1,5 +1,6 @@
 #pragma once
 
+namespace render {
 
 template <typename VertexT>
 struct ModelConfig {
@@ -12,3 +13,5 @@ struct ModelConfig {
 	// Flips UV coordinates if true
 	bool flip_uv = false;
 };
+
+} //namespace render

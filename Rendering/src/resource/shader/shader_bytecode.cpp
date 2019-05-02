@@ -1,5 +1,7 @@
 #include "shader_bytecode.h"
 
+namespace render {
+
 HRESULT CompileShaderToBytecode(const fs::path& file,
                                 const std::string& entry_point,
                                 const std::string& target_ver,
@@ -75,3 +77,5 @@ HRESULT CompileShaderToBytecode(gsl::span<const char> data,
 
 	return hr;
 }
+
+} //namespace render

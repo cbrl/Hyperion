@@ -2,7 +2,11 @@
 
 #include "system/system.h"
 
+namespace render {
+
 class RenderingMgr;
+
+namespace systems {
 
 class ModelSystem final : public ecs::System<ModelSystem> {
 public:
@@ -39,3 +43,6 @@ private:
 	//----------------------------------------------------------------------------------
 	const RenderingMgr& rendering_mgr;
 };
+
+} //namespace systems
+} //namespace render

@@ -2,6 +2,8 @@
 #include "loader/texture_loader.h"
 
 
+namespace render {
+
 Texture::Texture(ID3D11Device& device,
                  ID3D11DeviceContext& device_context,
                  const std::wstring& filename)
@@ -30,3 +32,5 @@ Texture::Texture(const std::wstring& guid,
 	                                     texture_srv.ReleaseAndGetAddressOf());
 	ThrowIfFailed(hr, "Failed to create Texture SRV");
 }
+
+} //namespace render

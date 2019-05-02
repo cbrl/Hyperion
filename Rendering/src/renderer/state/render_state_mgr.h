@@ -5,12 +5,13 @@
 #include "renderer/state/render_states.h"
 
 
+namespace render {
+
 class RenderStateMgr final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	RenderStateMgr(ID3D11Device& device, ID3D11DeviceContext& device_context);
 	RenderStateMgr(const RenderStateMgr& mgr) = delete;
 	RenderStateMgr(RenderStateMgr&& mgr) noexcept = default;
@@ -19,14 +20,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~RenderStateMgr() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	RenderStateMgr& operator=(const RenderStateMgr& mgr) = delete;
 	RenderStateMgr& operator=(RenderStateMgr&& mgr) noexcept = default;
 
@@ -34,7 +33,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Bind states
 	//----------------------------------------------------------------------------------
-
 	void bind(ID3D11DeviceContext& device_context,
 	          BlendStates state,
 	          f32 blend_factor[4] = {},
@@ -48,6 +46,7 @@ public:
 
 
 private:
+
 	//----------------------------------------------------------------------------------
 	// Create states
 	//----------------------------------------------------------------------------------
@@ -133,13 +132,13 @@ private:
 	}
 
 
-private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
-	//----------------------------------------------------------------------------------
-	
+	//----------------------------------------------------------------------------------	
 	std::array<ComPtr<ID3D11BlendState>,        static_cast<size_t>(BlendStates::StateCount)>        blend_states;
 	std::array<ComPtr<ID3D11DepthStencilState>, static_cast<size_t>(DepthStencilStates::StateCount)> depth_states;
 	std::array<ComPtr<ID3D11RasterizerState>,   static_cast<size_t>(RasterStates::StateCount)>       raster_states;
 	std::array<ComPtr<ID3D11SamplerState>,      static_cast<size_t>(SamplerStates::StateCount)>      sampler_states;
 };
+
+} //namespace render

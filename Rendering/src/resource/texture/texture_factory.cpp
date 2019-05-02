@@ -2,7 +2,7 @@
 #include "resource/resource_mgr.h"
 
 
-namespace TextureFactory {
+namespace render::TextureFactory {
 
 std::shared_ptr<Texture> CreateDefaultTexture(ResourceMgr& resource_mgr) {
 
@@ -115,4 +115,4 @@ std::shared_ptr<Texture> CreateYellowTexture(ResourceMgr& resource_mgr) {
 	return CreateColorTexture(resource_mgr, {1.0f, 1.0f, 0.0f, 1.0f});
 }
 
-}
+} //namespace render::TextureFactory

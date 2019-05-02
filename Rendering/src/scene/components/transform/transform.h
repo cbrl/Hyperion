@@ -6,8 +6,12 @@
 #include "scene/events/core_events.h"
 
 
+namespace render {
+
+namespace systems { class TransformSystem; }
+
 class Transform final : public ecs::Component<Transform>, public ecs::EventSender {
-	friend class TransformSystem;
+	friend class systems::TransformSystem;
 
 public:
 	//----------------------------------------------------------------------------------
@@ -48,7 +52,7 @@ public:
 
 	void sendNeedsUpdateEvent() {
 		needs_update = true;
-		this->sendEvent<TransformNeedsUpdate>(std::ref(*this));
+		this->sendEvent<events::TransformNeedsUpdate>(std::ref(*this));
 	}
 
 
@@ -327,3 +331,5 @@ private:
 	// Determines if the transform has been modified, but not updated
 	bool needs_update;
 };
+
+} //namespace render

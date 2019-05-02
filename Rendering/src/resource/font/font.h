@@ -4,6 +4,8 @@
 #include "resource/resource.h"
 
 
+namespace render {
+
 // Simple wrapper around SpriteFont and Resource base class
 class Font final : public SpriteFont, public Resource<Font> {
 public:
@@ -34,3 +36,5 @@ public:
 	Font& operator=(const Font& font) = delete;
 	Font& operator=(Font&& font) noexcept = default;
 };
+
+} //namespace render

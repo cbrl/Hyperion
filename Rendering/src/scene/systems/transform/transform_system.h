@@ -5,6 +5,8 @@
 #include "scene/events/core_events.h"
 
 
+namespace render::systems {
+
 class TransformSystem final :
 	public ecs::System<TransformSystem>,
 	public ecs::EventListener,
@@ -40,6 +42,8 @@ private:
 
 	void updateWorld(Transform& transform);
 	
-	void onTransformNeedsUpdate(const TransformNeedsUpdate& event);
+	void onTransformNeedsUpdate(const events::TransformNeedsUpdate& event);
 	void onParentChanged(const ecs::Entity::ParentChangedEvent& event);
 };
+
+} //namespace render::systems

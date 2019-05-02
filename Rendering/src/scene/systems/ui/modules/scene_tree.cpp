@@ -4,7 +4,7 @@
 #include "imgui.h"
 
 
-void SceneTree::draw(Scene& scene) {
+void SceneTree::draw(render::Scene& scene) {
 	ImGui::SetNextWindowSize(ImVec2{275, 600}, ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_MenuBar)) {
 		drawMenuBar(scene);
@@ -14,7 +14,7 @@ void SceneTree::draw(Scene& scene) {
 }
 
 
-void SceneTree::drawTree(Scene& scene) {
+void SceneTree::drawTree(render::Scene& scene) {
 	if (ImGui::BeginChild("Object List", {0, 0}, false, ImGuiWindowFlags_AlwaysAutoResize)) {
 
 		ImGui::Text("%s (Entities: %llu)", scene.getName().c_str(), scene.getEntities().size());
@@ -69,7 +69,7 @@ void SceneTree::drawEntityNode(ecs::EntityPtr entity_ptr) {
 }
 
 
-void SceneTree::drawMenuBar(Scene& scene) {
+void SceneTree::drawMenuBar(render::Scene& scene) {
 	if (ImGui::BeginMenuBar()) {
 		drawEntityMenu(scene);
 		ImGui::EndMenuBar();
@@ -77,7 +77,7 @@ void SceneTree::drawMenuBar(Scene& scene) {
 }
 
 
-void SceneTree::drawEntityMenu(Scene& scene) {
+void SceneTree::drawEntityMenu(render::Scene& scene) {
 
 	if (ImGui::BeginMenu("Entity")) {
 

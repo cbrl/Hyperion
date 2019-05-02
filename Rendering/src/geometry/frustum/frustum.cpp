@@ -1,6 +1,8 @@
 #include "frustum.h"
 
 
+namespace render {
+
 Frustum::Frustum(CXMMATRIX M)
 	: planes() {
 	
@@ -124,3 +126,5 @@ bool Frustum::contains(const BoundingSphere& sphere) const {
 
 	return true;
 }
+
+} //namespace render

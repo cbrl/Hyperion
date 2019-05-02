@@ -5,6 +5,8 @@
 #include "json/json.h"
 
 
+namespace render {
+
 class RenderingConfig final {
 public:
 	//----------------------------------------------------------------------------------
@@ -107,3 +109,5 @@ private:
 	f32 smap_slope_scaled_depth_bias = 1.0f;
 	f32 smap_depth_bias_clamp        = 0.0f;
 };
+
+} //namespace render

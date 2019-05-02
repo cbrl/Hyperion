@@ -16,7 +16,7 @@ struct EmptyT final {
 // template for any non-specific entity with a position in the world.
 struct WorldObjectT final {
 	void operator()(ecs::Entity& entity) {
-		entity.addComponent<Transform>();
+		entity.addComponent<render::Transform>();
 	}
 };
 

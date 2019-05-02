@@ -49,7 +49,7 @@
 #include "compiled_headers/fullscreen_quad_vs.h"
 
 
-namespace ShaderFactory {
+namespace render::ShaderFactory {
 
 //----------------------------------------------------------------------------------
 // Forward
@@ -234,4 +234,4 @@ std::shared_ptr<VertexShader> CreateFullscreenQuadVS(ResourceMgr& resource_mgr) 
 	                                                        VertexPosition::input_element_count});
 }
 
-} //namespace ShaderFactory
+} //namespace render::ShaderFactory

@@ -5,6 +5,8 @@
 #include "scene/components/camera/orthographic_camera.h"
 
 
+namespace render::systems {
+
 CameraSystem::CameraSystem(const RenderingMgr& rendering_mgr)
 	: rendering_mgr(rendering_mgr) {
 }
@@ -23,12 +25,12 @@ void CameraSystem::update() {
 		                    transform->getWorldToObjectMatrix());
 	};
 
-	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	getECS().forEach<render::PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
 
-	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+	getECS().forEach<render::OrthographicCamera>([&](OrthographicCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
@@ -40,11 +42,13 @@ void CameraSystem::registerCallbacks() {
 }
 
 
-void CameraSystem::onWindowResize(const WindowResizeEvent& event) {
-	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+void CameraSystem::onWindowResize(const events::WindowResizeEvent & event) {
+	getECS().forEach<render::PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		camera.getViewport().setSize(event.new_size);
 	});
-	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+	getECS().forEach<render::OrthographicCamera>([&](OrthographicCamera& camera) {
 		camera.getViewport().setSize(event.new_size);
 	});
 }
+
+} //namespace systems

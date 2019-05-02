@@ -5,6 +5,8 @@
 #include "resource/shader/shader.h"
 #include "rendering_options.h"
 
+namespace render {
+
 class RenderStateMgr;
 class ResourceMgr;
 class Scene;
@@ -113,3 +115,5 @@ private:
 	// Buffers
 	ConstantBuffer<f32_4> color_buffer;
 };
+
+} //namespace render

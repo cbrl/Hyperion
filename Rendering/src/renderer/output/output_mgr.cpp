@@ -3,6 +3,8 @@
 #include "hlsl.h"
 
 
+namespace render {
+
 OutputMgr::OutputMgr(DisplayConfig& config,
                      ID3D11Device& device,
                      SwapChain& swap_chain)
@@ -274,3 +276,5 @@ void OutputMgr::bindBeginGBuffer(ID3D11DeviceContext& device_context) const {
 void OutputMgr::bindEndGBuffer(ID3D11DeviceContext& device_context) const {
 	Pipeline::OM::bindRTVAndDSV(device_context, nullptr, nullptr);
 }
+
+} //namespace render

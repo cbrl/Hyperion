@@ -3,13 +3,15 @@
 #include "event/event.h"
 #include "datatypes/datatypes.h"
 
+namespace render {
+
+class Transform;
+
+namespace events {
 
 //----------------------------------------------------------------------------------
 // Transform
 //----------------------------------------------------------------------------------
-
-class Transform;
-
 struct TransformNeedsUpdate : public ecs::Event<TransformNeedsUpdate> {
 	TransformNeedsUpdate(Transform& transform)
 	    : transform(transform) {
@@ -55,3 +57,6 @@ struct GuiFocusEvent : public ecs::Event<GuiFocusEvent> {
 	const bool keyboard_focus;
 	const bool mouse_focus;
 };
+
+} //namespace events
+} //namespace render

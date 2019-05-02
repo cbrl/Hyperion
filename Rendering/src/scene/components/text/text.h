@@ -6,6 +6,8 @@
 #include "resource/resource_mgr.h"
 
 
+namespace render {
+
 class Text final : public ecs::Component<Text> {
 public:
 	//----------------------------------------------------------------------------------
@@ -91,3 +93,5 @@ private:
 	std::wstring text;
 	XMVECTORF32  color;
 };
+
+} //namespace render

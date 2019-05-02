@@ -3,8 +3,8 @@
 #include "datatypes/datatypes.h"
 #include "geometry/bounding_volume/bounding_volume.h"
 
-using namespace DirectX;
 
+namespace render {
 
 class Frustum final {
 public:
@@ -64,3 +64,5 @@ private:
 
 	XMVECTOR planes[6];
 };
+
+} //namespace render

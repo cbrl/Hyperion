@@ -5,6 +5,8 @@
 #include "display/display_config.h"
 
 
+namespace render {
+
 class OutputMgr final {
 private:
 	//----------------------------------------------------------------------------------
@@ -110,3 +112,5 @@ private:
 	// Shader Resource Views
 	std::array<ComPtr<ID3D11ShaderResourceView>, static_cast<size_t>(SRV::Size)> srvs;
 };
+
+} //namespace render

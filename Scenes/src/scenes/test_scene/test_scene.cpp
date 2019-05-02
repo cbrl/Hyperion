@@ -14,6 +14,9 @@ TestScene::TestScene()
 
 
 void TestScene::initialize(Engine& engine) {
+
+	using namespace render;
+	using namespace EntityTemplates;
 	
 	auto& input          = engine.getInput();
 	auto& rendering_mgr  = engine.getRenderingMgr();
@@ -26,7 +29,7 @@ void TestScene::initialize(Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// User Interface
-	auto& ui = addSystem<UserInterface>(engine);
+	auto& ui = addSystem<render::systems::UserInterface>(engine);
 	addUserComponentsToUI(ui);
 
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
@@ -225,7 +228,9 @@ void TestScene::initialize(Engine& engine) {
 }
 
 
-void TestScene::addUserComponentsToUI(UserInterface& ui) {
+void TestScene::addUserComponentsToUI(render::systems::UserInterface& ui) {
+
+	using namespace render::systems;
 
 	//----------------------------------------------------------------------------------
 	// Camera Movement

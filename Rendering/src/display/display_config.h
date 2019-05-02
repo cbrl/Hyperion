@@ -8,6 +8,8 @@
 #include "json/json.h"
 
 
+namespace render {
+
 class DisplayConfig final {
 public:
 	//----------------------------------------------------------------------------------
@@ -234,3 +236,5 @@ private:
 	bool   fullscreen    = false;
 	bool   vsync         = false;
 };
+
+} //namespace render

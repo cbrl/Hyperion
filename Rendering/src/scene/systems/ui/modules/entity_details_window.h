@@ -4,13 +4,15 @@
 #include "string/string.h"
 
 struct ID3D11Device;
-
 class Engine;
+
+namespace render {
 class Input;
 class Scene;
 class ResourceMgr;
 class Texture;
 class Transform;
+}
 
 namespace ecs {
 	class Entity;
@@ -22,7 +24,7 @@ namespace ecs {
 class EntityDetailsWindow final {
 public:
 	//----------------------------------------------------------------------------------
-	// User Component
+	// UserComponent
 	//----------------------------------------------------------------------------------
 	struct UserComponent final {
 		using adder_func = std::function<void(ecs::Entity&)>;
@@ -39,7 +41,6 @@ public:
 	};
 
 
-public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -93,14 +94,14 @@ private:
 	template<typename ResourceT>
 	void drawResourceMapComboBox(const char* name,
 	                             const char* preview_text,
-	                             ResourceMgr& resource_mgr,
+	                             render::ResourceMgr& resource_mgr,
 	                             std::shared_ptr<ResourceT>& selection_receiver);
 
 	template<>
 	void drawResourceMapComboBox(const char* name,
 	                             const char* preview_text,
-	                             ResourceMgr& resource_mgr,
-	                             std::shared_ptr<Texture>& selection_receiver);
+	                             render::ResourceMgr& resource_mgr,
+	                             std::shared_ptr<render::Texture>& selection_receiver);
 
 
 	//----------------------------------------------------------------------------------

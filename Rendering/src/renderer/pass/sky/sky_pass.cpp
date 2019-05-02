@@ -5,6 +5,8 @@
 #include "resource/shader/shader_factory.h"
 
 
+namespace render {
+
 SkyPass::SkyPass(ID3D11DeviceContext& device_context,
                  RenderStateMgr& render_state_mgr,
                  ResourceMgr& resource_mgr)
@@ -50,3 +52,5 @@ void SkyPass::bindRenderStates() const {
 	vertex_shader->bind(device_context);
 	pixel_shader->bind(device_context);
 }
+
+} //namespace render

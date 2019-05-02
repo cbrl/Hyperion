@@ -7,6 +7,8 @@
 #include "renderer/renderer.h"
 
 
+namespace render {
+
 class RenderingMgr final {
 public:
 	//----------------------------------------------------------------------------------
@@ -117,3 +119,5 @@ private:
 	std::unique_ptr<ResourceMgr>     resource_mgr;
 	std::unique_ptr<Renderer>        renderer;
 };
+
+} //namespace render

@@ -2,8 +2,8 @@
 
 #include "selectable_tree.h"
 
-class Scene;
-class ecs::EntityPtr;
+namespace render { class Scene; }
+namespace ecs { class EntityPtr; }
 
 class SceneTree final {
 public:
@@ -31,18 +31,18 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void draw(Scene& scene);
+	void draw(render::Scene& scene);
 
 	[[nodiscard]]
 	ecs::EntityPtr getSelectedEntity() const noexcept;
 
 private:
 
-	void drawTree(Scene& scene);
+	void drawTree(render::Scene& scene);
 	void drawEntityNode(ecs::EntityPtr entity_ptr);
 
-	void drawMenuBar(Scene& scene);
-	void drawEntityMenu(Scene& scene);
+	void drawMenuBar(render::Scene& scene);
+	void drawEntityMenu(render::Scene& scene);
 
 
 	//----------------------------------------------------------------------------------

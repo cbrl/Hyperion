@@ -5,6 +5,8 @@
 #include "resource/shader/shader_bytecode.h"
 
 
+namespace render {
+
 class VertexShader final : public Resource<VertexShader> {
 public:
 	//----------------------------------------------------------------------------------
@@ -113,5 +115,7 @@ using GeometryShader = Shader<ID3D11GeometryShader, Pipeline::GS>;
 using HullShader     = Shader<ID3D11HullShader, Pipeline::HS>;
 using PixelShader    = Shader<ID3D11PixelShader, Pipeline::PS>;
 
+
+} //namespace render
 
 #include "shader.tpp"

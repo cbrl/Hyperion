@@ -7,6 +7,9 @@
 #include "resource/model/model_output.h"
 #include "geometry/bounding_volume/bounding_volume.h"
 
+
+namespace render {
+
 class ResourceMgr;
 
 class ModelBlueprint final : public Resource<ModelBlueprint> {
@@ -70,5 +73,6 @@ public:
 	Node root;
 };
 
+} //namespace render
 
 #include "model_blueprint.tpp"

@@ -64,8 +64,8 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	Engine(std::wstring title,
-	       DisplayConfig display_config,
-	       RenderingConfig rendering_config);
+	       render::DisplayConfig display_config,
+	       render::RenderingConfig rendering_config);
 
 	Engine(const Engine& engine) = delete;
 	Engine(Engine&& engine) noexcept = default;
@@ -131,15 +131,15 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Unload the active scene (if applicable) and apply a new scene
-	void loadScene(std::unique_ptr<Scene>&& new_scene);
+	void loadScene(std::unique_ptr<render::Scene>&& new_scene);
 
 	[[nodiscard]]
-	Scene& getScene() {
+	render::Scene& getScene() {
 		return *scene;
 	}
 
 	[[nodiscard]]
-	const Scene& getScene() const {
+	const render::Scene& getScene() const {
 		return *scene;
 	}
 
@@ -194,12 +194,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	RenderingMgr& getRenderingMgr() {
+	render::RenderingMgr& getRenderingMgr() {
 		return *rendering_mgr;
 	}
 
 	[[nodiscard]]
-	const RenderingMgr& getRenderingMgr() const {
+	const render::RenderingMgr& getRenderingMgr() const {
 		return *rendering_mgr;
 	}
 
@@ -209,8 +209,8 @@ private:
 	// Member Functions - Initialization
 	//----------------------------------------------------------------------------------
 	void init(std::wstring title,
-	          DisplayConfig display_config,
-	          RenderingConfig rendering_config);
+	          render::DisplayConfig display_config,
+	          render::RenderingConfig rendering_config);
 
 	void quit();
 
@@ -235,8 +235,8 @@ private:
 	std::unique_ptr<SystemMonitor> system_monitor;
 	std::unique_ptr<Stopwatch<>> timer;
 	std::unique_ptr<Input> input;
-	std::unique_ptr<RenderingMgr> rendering_mgr;
-	std::unique_ptr<Scene> scene;
+	std::unique_ptr<render::RenderingMgr> rendering_mgr;
+	std::unique_ptr<render::Scene> scene;
 
 	bool exit_requested;
 	bool resize_requested;

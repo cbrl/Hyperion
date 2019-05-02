@@ -1,6 +1,8 @@
 #include "model.h"
 
 
+namespace render {
+
 Model::Model(ID3D11Device& device,
              const std::shared_ptr<ModelBlueprint>& bp,
              u32 bp_index)
@@ -52,3 +54,5 @@ void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMAT
 
 	buffer.updateData(device_context, buffer_data);
 }
+
+} //namespace render

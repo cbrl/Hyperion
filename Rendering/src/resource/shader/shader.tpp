@@ -1,4 +1,6 @@
 
+namespace render {
+
 template<typename ShaderT, typename StageT>
 Shader<ShaderT, StageT>::Shader(const std::wstring& guid,
                                 ID3D11Device& device,
@@ -62,3 +64,5 @@ inline void PixelShader::createShader(ID3D11Device& device, const ShaderBytecode
 	                                       shader.GetAddressOf()),
 	              "Failed to create pixel shader");
 }
+
+} //namespace render

@@ -14,7 +14,8 @@
 #include "directx/vertex/vertex_types.h"
 
 
-namespace Shapes {
+namespace render::shapes {
+
 	template<typename VertexT>
 	void ComputeCube(std::vector<VertexT>& vertices,
 	                 std::vector<u32>& indices,
@@ -91,7 +92,8 @@ namespace Shapes {
 	                        std::vector<u32>& indices,
 	                        f32  size     = 1,
 	                        bool rhcoords = false);
-}
+
+} //namespace render::shapes
 
 
 #include "shapes.tpp"

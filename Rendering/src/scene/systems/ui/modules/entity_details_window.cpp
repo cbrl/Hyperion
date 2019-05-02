@@ -7,6 +7,10 @@
 #include "misc/cpp/imgui_stdlib.h"
 
 
+// render namespace is heavily utilized here, so import it for brevity.
+using namespace render;
+
+
 template<typename ComponentT>
 void DrawComponentState(ComponentT& component, gsl::czstring<> name = nullptr) {
 	if (name) {

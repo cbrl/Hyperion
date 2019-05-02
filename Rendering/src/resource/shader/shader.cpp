@@ -1,6 +1,8 @@
 #include "shader.h"
 
 
+namespace render {
+
 VertexShader::VertexShader(const std::wstring& guid,
                            ID3D11Device& device,
                            const ShaderBytecode& bytecode,
@@ -32,3 +34,5 @@ void VertexShader::createShader(ID3D11Device& device,
 										   layout.ReleaseAndGetAddressOf()),
 				  "Failed to create input layout");
 }
+
+} //namespace render

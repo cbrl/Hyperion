@@ -1,6 +1,8 @@
 #include "shadow_map_buffer.h"
 
 
+namespace render {
+
 //----------------------------------------------------------------------------------
 // ShadowMapBuffer
 //----------------------------------------------------------------------------------
@@ -189,3 +191,5 @@ void ShadowCubeMapBuffer::init(ID3D11Device& device,
 	ThrowIfFailed(device.CreateShaderResourceView(depth_map.Get(), &srv_desc, srv.GetAddressOf()),
 	              "Failed to create the shader resource view for a shadow cube map buffer");
 }
+
+} //namespace render

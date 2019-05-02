@@ -5,6 +5,8 @@
 #include "datatypes/datatypes.h"
 
 
+namespace render {
+
 template<typename DataT>
 class ConstantBuffer final {
 public:
@@ -50,5 +52,6 @@ private:
 	ComPtr<ID3D11Buffer> buffer;
 };
 
+} // namespace render
 
 #include "constant_buffer.tpp"

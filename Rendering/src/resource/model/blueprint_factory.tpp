@@ -1,6 +1,6 @@
 #include "resource/model/material/material_factory.h"
 
-namespace BlueprintFactory {
+namespace render::BlueprintFactory {
 
 template<typename VertexT>
 std::shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
@@ -16,7 +16,7 @@ std::shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
 	mesh.name = "Cube";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeCube(vertices, mesh.indices, size, !config.flip_winding, !config.flip_winding);
+	shapes::ComputeCube(vertices, mesh.indices, size, !config.flip_winding, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -56,7 +56,7 @@ std::shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
 	mesh.name = "Box";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeBox(vertices, mesh.indices, size, !config.flip_winding, !config.flip_winding);
+	shapes::ComputeBox(vertices, mesh.indices, size, !config.flip_winding, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -96,7 +96,7 @@ std::shared_ptr<ModelBlueprint> CreateSphere(ResourceMgr& resource_mgr,
 	mesh.name = "Sphere";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeSphere(vertices, mesh.indices, diameter, tessellation, !config.flip_winding, !config.flip_winding);
+	shapes::ComputeSphere(vertices, mesh.indices, diameter, tessellation, !config.flip_winding, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -136,7 +136,7 @@ std::shared_ptr<ModelBlueprint> CreateGeoSphere(ResourceMgr& resource_mgr,
 	mesh.name = "GeoSphere";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeGeoSphere(vertices, mesh.indices, diameter, tessellation, !config.flip_winding);
+	shapes::ComputeGeoSphere(vertices, mesh.indices, diameter, tessellation, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -177,7 +177,7 @@ std::shared_ptr<ModelBlueprint> CreateCylinder(ResourceMgr& resource_mgr,
 	mesh.name = "Cylinder";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeCylinder(vertices, mesh.indices, diameter, height, tessellation, !config.flip_winding);
+	shapes::ComputeCylinder(vertices, mesh.indices, diameter, height, tessellation, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -218,7 +218,7 @@ std::shared_ptr<ModelBlueprint> CreateCone(ResourceMgr& resource_mgr,
 	mesh.name = "Cone";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeCone(vertices, mesh.indices, diameter, height, tessellation, !config.flip_winding);
+	shapes::ComputeCone(vertices, mesh.indices, diameter, height, tessellation, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -259,7 +259,7 @@ std::shared_ptr<ModelBlueprint> CreateTorus(ResourceMgr& resource_mgr,
 	mesh.name = "Torus";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeTorus(vertices, mesh.indices, diameter, thickness, tessellation, !config.flip_winding);
+	shapes::ComputeTorus(vertices, mesh.indices, diameter, thickness, tessellation, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -298,7 +298,7 @@ std::shared_ptr<ModelBlueprint> CreateTetrahedron(ResourceMgr& resource_mgr,
 	mesh.name = "Tetrahedron";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeTetrahedron(vertices, mesh.indices, size, !config.flip_winding);
+	shapes::ComputeTetrahedron(vertices, mesh.indices, size, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -337,7 +337,7 @@ std::shared_ptr<ModelBlueprint> CreateOctahedron(ResourceMgr& resource_mgr,
 	mesh.name = "Octahedron";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeOctahedron(vertices, mesh.indices, size, !config.flip_winding);
+	shapes::ComputeOctahedron(vertices, mesh.indices, size, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -376,7 +376,7 @@ std::shared_ptr<ModelBlueprint> CreateDodecahedron(ResourceMgr& resource_mgr,
 	mesh.name = "Dodecahedron";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeDodecahedron(vertices, mesh.indices, size, !config.flip_winding);
+	shapes::ComputeDodecahedron(vertices, mesh.indices, size, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -415,7 +415,7 @@ std::shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
 	mesh.name = "Icosahedron";
 
 	std::vector<VertexT> vertices;
-	Shapes::ComputeIcosahedron(vertices, mesh.indices, size, !config.flip_winding);
+	shapes::ComputeIcosahedron(vertices, mesh.indices, size, !config.flip_winding);
 
 	for (const auto& v : vertices) {
 		mesh.positions.push_back(v.position);
@@ -440,4 +440,4 @@ std::shared_ptr<ModelBlueprint> CreateIcosahedron(ResourceMgr& resource_mgr,
 	return resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(name), out, config);
 }
 
-} //namespace BlueprintFactory
+} //namespace render::BlueprintFactory

@@ -6,26 +6,51 @@
 #include "buffer/shadow_map_buffer.h"
 #include "renderer/pass/depth/depth_pass.h"
 
+
+namespace ecs { class ECS; }
+
+namespace render {
+
 class RenderingConfig;
 class RenderStateMgr;
 class ResourceMgr;
 class Scene;
-namespace ecs { class ECS; }
 
 class LightPass final {
 public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
 	LightPass(const RenderingConfig& rendering_config,
 	          ID3D11Device& device,
 	          ID3D11DeviceContext& device_context,
 	          RenderStateMgr& render_state_mgr,
 	          ResourceMgr& resource_mgr);
 
+	LightPass(const LightPass&) = delete;
+	LightPass(LightPass&&) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructors
+	//----------------------------------------------------------------------------------
 	~LightPass() = default;
 
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	LightPass& operator=(const LightPass&) = delete;
+	LightPass& operator=(LightPass&&) = default;
+
+	
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 	void XM_CALLCONV render(Scene& scene, FXMMATRIX world_to_projection);
 
-
 private:
+
 	void bindBuffers();
 
 	void updateShadowMaps();
@@ -36,15 +61,20 @@ private:
 	void XM_CALLCONV updatePointLightData(Scene& scene, FXMMATRIX world_to_projection);
 	void XM_CALLCONV updateSpotLightData(Scene& scene, FXMMATRIX world_to_projection);
 
-
-private:
+	
+	//----------------------------------------------------------------------------------
+	// Camera definition for rendering from light's POV
+	//----------------------------------------------------------------------------------
 	struct LightCamera {
 		XMMATRIX world_to_light;
 		XMMATRIX light_to_proj;
 	};
 
+	
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
 
-private:
 	// Dependency References
 	ID3D11Device&          device;
 	ID3D11DeviceContext&   device_context;
@@ -76,3 +106,5 @@ private:
 	std::unique_ptr<ShadowCubeMapBuffer> point_light_smaps;
 	std::unique_ptr<ShadowMapBuffer>     spot_light_smaps;
 };
+
+} //namespace render

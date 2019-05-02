@@ -1,6 +1,8 @@
 #include "display_config.h"
 
 
+namespace render {
+
 void DisplayConfig::init() {
 
 	ComPtr<IDXGIFactory2> factory;
@@ -234,3 +236,5 @@ void from_json(const json& j, DisplayConfig& cfg) {
 		cfg.setAAType(aa);
 	}
 }
+
+} //namespace render

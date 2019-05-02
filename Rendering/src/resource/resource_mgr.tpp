@@ -1,4 +1,6 @@
 
+namespace render {
+
 //----------------------------------------------------------------------------------
 // ModelBlueprint
 //----------------------------------------------------------------------------------
@@ -264,3 +266,5 @@ auto ResourceMgr::getResourceMap() const
     -> std::enable_if_t<std::is_same_v<VertexShader, ResourceT>, const shader_resource_map<std::wstring, VertexShader>&> {
 	return vertex_shaders;
 }
+
+} //namespace render

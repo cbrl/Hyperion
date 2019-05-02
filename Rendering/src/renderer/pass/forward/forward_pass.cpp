@@ -8,6 +8,8 @@
 #include "resource/shader/shader_factory.h"
 
 
+namespace render {
+
 ForwardPass::ForwardPass(ID3D11Device& device,
                          ID3D11DeviceContext& device_context,
                          RenderStateMgr& render_state_mgr,
@@ -286,3 +288,5 @@ void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to
 	Pipeline::PS::bindSRV(device_context, SLOT_SRV_NORMAL, nullptr);
 	Pipeline::PS::bindSRV(device_context, SLOT_SRV_EMISSIVE, nullptr);
 }
+
+} //namespace render

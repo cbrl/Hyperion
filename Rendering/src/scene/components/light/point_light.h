@@ -4,6 +4,8 @@
 #include "geometry/bounding_volume/bounding_volume.h"
 
 
+namespace render {
+
 class PointLight final : public ecs::Component<PointLight> {
 public:
 	//----------------------------------------------------------------------------------
@@ -163,3 +165,5 @@ private:
 	AABB aabb;
 	BoundingSphere sphere;
 };
+
+} //namespace render

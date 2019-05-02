@@ -4,6 +4,8 @@
 #include "hlsl.h"
 
 
+namespace render {
+
 RenderStateMgr::RenderStateMgr(ID3D11Device& device, ID3D11DeviceContext& device_context) {
 	setupStates(device, device_context);
 }
@@ -332,3 +334,5 @@ void RenderStateMgr::bind(ID3D11DeviceContext& device_context, SamplerStates sta
 	
 	Pipeline::bindSampler(device_context, slot, get(state));
 }
+
+} //namespace render

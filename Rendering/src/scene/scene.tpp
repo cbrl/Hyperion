@@ -1,4 +1,7 @@
-template <typename TemplateT, typename... ArgsT>
+
+namespace render {
+
+template<typename TemplateT, typename... ArgsT>
 ecs::EntityPtr Scene::addEntity(ArgsT&&... args) {
 	auto ptr = ecs->createEntity();
 	entities.push_back(ptr);
@@ -10,19 +13,19 @@ ecs::EntityPtr Scene::addEntity(ArgsT&&... args) {
 }
 
 
-template <typename EventT, typename... ArgsT>
+template<typename EventT, typename... ArgsT>
 void Scene::sendEvent(ArgsT&&... args) {
 	ecs->sendEvent<EventT>(std::forward<ArgsT>(args)...);
 }
 
 
-template <typename T, typename ActionT>
+template<typename T, typename ActionT>
 void Scene::forEach(ActionT&& act) {
 	ecs->forEach<T>(std::forward<ActionT>(act));
 }
 
 
-template <typename SystemT, typename... ArgsT>
+template<typename SystemT, typename... ArgsT>
 SystemT& Scene::addSystem(ArgsT&&... args) {
 	return ecs->addSystem<SystemT>(std::forward<ArgsT>(args)...);
 }
@@ -32,3 +35,5 @@ template<typename SystemT>
 void Scene::removeSystem() {
 	ecs->removeSystem<SystemT>();
 }
+
+} //namespace render

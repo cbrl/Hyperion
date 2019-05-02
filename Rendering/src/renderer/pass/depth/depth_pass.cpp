@@ -8,6 +8,8 @@
 #include "geometry/frustum/frustum.h"
 
 
+namespace render {
+
 DepthPass::DepthPass(ID3D11Device& device,
                      ID3D11DeviceContext& device_context,
                      RenderStateMgr& render_state_mgr,
@@ -165,3 +167,5 @@ void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX world_to_p
 
 	Pipeline::PS::bindSRV(device_context, SLOT_SRV_BASE_COLOR, nullptr);
 }
+
+} //namespace render

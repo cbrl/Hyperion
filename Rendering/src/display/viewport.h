@@ -4,6 +4,8 @@
 #include "datatypes/vector_types.h"
 
 
+namespace render {
+
 class Viewport final {
 public:
 	//----------------------------------------------------------------------------------
@@ -133,3 +135,5 @@ private:
 	//----------------------------------------------------------------------------------
 	D3D11_VIEWPORT viewport = {};
 };
+
+} //namespace render
