@@ -1,39 +1,50 @@
 #pragma once
 
-#include "component/component.h"
-#include "entity/entity.h"
-#include "geometry/transform/transform_3d.h"
+#include "datatypes/scalar_types.h"
 #include "directx/math/directx_math.h"
-#include "scene/events/core_events.h"
 
 
-namespace render {
-
-namespace systems { class TransformSystem; }
-
-class Transform final : public ecs::Component<Transform>, public ecs::EventSender {
-	friend class systems::TransformSystem;
-
+class Transform3D final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	Transform() = default;
-	Transform(const Transform& transform) = delete;
-	Transform(Transform&& transform) noexcept = default;
+	Transform3D() noexcept = default;
+	Transform3D(const Transform3D& transform) noexcept = default;
+	Transform3D(Transform3D&& transform) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~Transform() = default;
+	~Transform3D() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	Transform& operator=(const Transform& transform) = delete;
-	Transform& operator=(Transform&& transform) = default;
+	Transform3D& operator=(const Transform3D& transform) noexcept = default;
+	Transform3D& operator=(Transform3D&& transform) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Update
+	//----------------------------------------------------------------------------------
+
+	void setNeedsUpdate() {
+		needs_update = true;
+	}
+
+	void updateMatrix(const XMMATRIX* parent = nullptr) const {
+		if (needs_update) {
+			world = XMMatrixScalingFromVector(getScale())
+			        * XMMatrixRotationRollPitchYawFromVector(getRotation())
+			        * XMMatrixTranslationFromVector(getPosition());
+			if (parent)
+				world *= *parent;
+			needs_update = false;
+		}
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -41,37 +52,37 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void moveX(f32 units) {
-		transform.moveX(units);
+		translation += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
 		setNeedsUpdate();
 	}
 
 	void moveY(f32 units) {
-		transform.moveY(units);
+		translation += XMVectorSet(0.0f, units, 0.0f, 0.0f);
 		setNeedsUpdate();
 	}
 
 	void moveZ(f32 units) {
-		transform.moveZ(units);
+		translation += XMVectorSet(0.0f, 0.0f, units, 0.0f);
 		setNeedsUpdate();
 	}
 
 	void move(const f32_3& units) {
-		transform.move(units);
+		translation += XMLoad(&units);
 		setNeedsUpdate();
 	}
 
 	void XM_CALLCONV move(FXMVECTOR units) {
-		transform.move(units);
+		translation += units;
 		setNeedsUpdate();
 	}
 
 	void setPosition(const f32_3& position) {
-		transform.setPosition(position);
+		translation = XMLoad(&position);
 		setNeedsUpdate();
 	}
 
 	void XM_CALLCONV setPosition(FXMVECTOR position) {
-		transform.setPosition(position);
+		translation = position;
 		setNeedsUpdate();
 	}
 
@@ -81,72 +92,77 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void rotateX(f32 units) {
-		transform.rotateX(units);
+		rotation += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
 		setNeedsUpdate();
 	}
 
 	void rotateY(f32 units) {
-		transform.rotateY(units);
+		rotation += XMVectorSet(0.0f, units, 0.0f, 0.0f);
 		setNeedsUpdate();
 	}
 
 	void rotateZ(f32 units) {
-		transform.rotateZ(units);
+		rotation += XMVectorSet(0.0f, 0.0f, units, 0.0f);
 		setNeedsUpdate();
 	}
 
 	void rotateXClamped(f32 units, f32 min, f32 max) {
-		transform.rotateXClamped(units, min, max);
+		const f32 amount = ClampAngle(XMVectorGetX(rotation) + units, min, max);
+		rotation = XMVectorSetX(rotation, amount);
 		setNeedsUpdate();
 	}
 
 	void rotateYClamped(f32 units, f32 min, f32 max) {
-		transform.rotateYClamped(units, min, max);
+		const f32 amount = ClampAngle(XMVectorGetY(rotation) + units, min, max);
+		rotation = XMVectorSetY(rotation, amount);
 		setNeedsUpdate();
 	}
 
 	void rotateZClamped(f32 units, f32 min, f32 max) {
-		transform.rotateZClamped(units, min, max);
+		const f32 amount = ClampAngle(XMVectorGetZ(rotation) + units, min, max);
+		rotation = XMVectorSetZ(rotation, amount);
 		setNeedsUpdate();
 	}
 
 	void rotate(const f32_3& units) {
-		transform.rotate(units);
+		rotation += XMLoad(&units);
 		setNeedsUpdate();
 	}
 
 	void XM_CALLCONV rotate(FXMVECTOR units) {
-		transform.rotate(units);
+		rotation += units;
 		setNeedsUpdate();
 	}
 
 	void rotateClamped(const f32_3& units, f32 min, f32 max) {
-		transform.rotateClamped(units, min, max);
-		setNeedsUpdate();
+		rotateXClamped(units[0], min, max);
+		rotateYClamped(units[1], min, max);
+		rotateZClamped(units[2], min, max);
 	}
 
 	void XM_CALLCONV rotateClamped(FXMVECTOR units, f32 min, f32 max) {
-		transform.rotateClamped(units, min, max);
-		setNeedsUpdate();
+		rotateXClamped(XMVectorGetX(units), min, max);
+		rotateYClamped(XMVectorGetY(units), min, max);
+		rotateZClamped(XMVectorGetZ(units), min, max);
 	}
 
 	void rotateAround(f32_3 axis, f32 units) {
-		transform.rotateAround(axis, units);
+		rotateAround(XMLoad(&axis), units);
 		setNeedsUpdate();
 	}
 
 	void XM_CALLCONV rotateAround(FXMVECTOR axis, f32 units) {
-		transform.rotateAround(axis, units);
+		translation = XMVector3Transform(translation, XMMatrixRotationAxis(axis, units));
 		setNeedsUpdate();
 	}
 
 	void setRotation(const f32_3& rotation) {
-		transform.setRotation(rotation);
+		this->rotation = XMLoad(&rotation);
 		setNeedsUpdate();
 	}
 
 	void XM_CALLCONV setRotation(FXMVECTOR rotation) {
-		transform.setRotation(rotation);
+		this->rotation = rotation;
 		setNeedsUpdate();
 	}
 
@@ -156,37 +172,37 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void scaleX(f32 units) {
-		transform.scaleX(units);
+		scaling += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
 		setNeedsUpdate();
 	}
 
 	void scaleY(f32 units) {
-		transform.scaleY(units);
+		scaling += XMVectorSet(0.0f, units, 0.0f, 0.0f);
 		setNeedsUpdate();
 	}
 
 	void scaleZ(f32 units) {
-		transform.scaleZ(units);
+		scaling += XMVectorSet(0.0f, 0.0f, units, 0.0f);
 		setNeedsUpdate();
 	}
 
 	void scale(const f32_3& units) {
-		transform.scale(units);
+		scaling *= XMLoad(&units);
 		setNeedsUpdate();
 	}
 
 	void XM_CALLCONV scale(FXMVECTOR units) {
-		transform.scale(units);
+		scaling *= units;
 		setNeedsUpdate();
 	}
 
 	void setScale(const f32_3& scale) {
-		transform.setScale(scale);
+		scaling = XMLoad(&scale);
 		setNeedsUpdate();
 	}
 
 	void XM_CALLCONV setScale(FXMVECTOR scale) {
-		transform.setScale(scale);
+		scaling = scale;
 		setNeedsUpdate();
 	}
 
@@ -197,17 +213,17 @@ public:
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getPosition() const {
-		return transform.getPosition();
+		return translation;
 	}
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getRotation() const {
-		return transform.getRotation();
+		return rotation;
 	}
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getScale() const {
-		return transform.getScale();
+		return scaling;
 	}
 
 
@@ -217,26 +233,26 @@ public:
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getWorldAxisX() const {
-		update();
-		return transform.getWorldAxisX();
+		updateMatrix();
+		return XMVector3Normalize(world.r[0]);
 	}
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getWorldAxisY() const {
-		update();
-		return transform.getWorldAxisY();
+		updateMatrix();
+		return XMVector3Normalize(world.r[1]);
 	}
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getWorldAxisZ() const {
-		update();
-		return transform.getWorldAxisZ();
+		updateMatrix();
+		return XMVector3Normalize(world.r[2]);
 	}
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV getWorldOrigin() const {
-		update();
-		return transform.getWorldOrigin();
+		updateMatrix();
+		return world.r[3];
 	}
 
 
@@ -246,22 +262,26 @@ public:
 
 	[[nodiscard]]
 	static XMVECTOR XM_CALLCONV getObjectAxisX() {
-		return Transform3D::getObjectAxisX();
+		static const auto axis = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+		return axis;
 	}
 
 	[[nodiscard]]
 	static XMVECTOR XM_CALLCONV getObjectAxisY() {
-		return Transform3D::getObjectAxisY();
+		static const auto axis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+		return axis;
 	}
 
 	[[nodiscard]]
 	static XMVECTOR XM_CALLCONV getObjectAxisZ() {
-		return Transform3D::getObjectAxisZ();
+		static const auto axis = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+		return axis;
 	}
 
 	[[nodiscard]]
 	static XMVECTOR XM_CALLCONV getObjectOrigin() {
-		return Transform3D::getObjectOrigin();
+		static const auto origin = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		return origin;
 	}
 
 
@@ -271,78 +291,48 @@ public:
 
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getObjectToWorldMatrix() const {
-		update();
-		return transform.getObjectToWorldMatrix();
+		updateMatrix();
+		return world;
 	}
 
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getWorldToObjectMatrix() const {
-		update();
-		return transform.getWorldToObjectMatrix();
+		updateMatrix();
+		return XMMatrixInverse(nullptr, world);
 	}
 
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getObjectToParentPositionMatrix() const {
-		update();
-		return transform.getObjectToParentPositionMatrix();
+		updateMatrix();
+		return XMMatrixTranslationFromVector(translation);
 	}
 
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getObjectToParentRotationMatrix() const {
-		update();
-		return transform.getObjectToParentRotationMatrix();
+		updateMatrix();
+		return XMMatrixRotationRollPitchYawFromVector(rotation);
 	}
 
 	[[nodiscard]]
 	XMMATRIX XM_CALLCONV getObjectToParentScaleMatrix() const {
-		update();
-		return transform.getObjectToParentScaleMatrix();
+		updateMatrix();
+		return XMMatrixScalingFromVector(scaling);
 	}
 
 private:
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Update
-	//----------------------------------------------------------------------------------
-	void setNeedsUpdate() const {
-		needs_update = true;
-	}
-
-	void update() const {
-		if (not needs_update)
-			return;
-
-		if (getOwner()->hasParent()) { //update parent transform if there is one
-			const auto* parent_transform = getOwner()->getParent()->getComponent<Transform>();
-			if (parent_transform) {
-				const XMMATRIX parent_matrix = parent_transform->getObjectToWorldMatrix(); //calls parent->update()
-				transform.updateMatrix(&parent_matrix);
-			}
-		}
-		else {
-			transform.updateMatrix();
-		}
-
-		needs_update = false;
-
-		// Update all child transforms (if any)
-		getOwner()->forEachChild([](ecs::EntityPtr& child) {
-			if (auto* transform = child->getComponent<Transform>()) {
-				transform->transform.setNeedsUpdate(); // Manually set 'needs update' flag of child
-				transform->setNeedsUpdate();
-				transform->update();
-			}
-		});
-	}
-
-
-	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	Transform3D transform;
-	
+
+	// The object-to-world matrix
+	mutable XMMATRIX world = XMMatrixIdentity();
+
+	// Translation, rotation, and scale vectors
+	XMVECTOR translation = XMVectorZero();
+	XMVECTOR rotation    = XMVectorZero();
+	XMVECTOR scaling     = XMVectorSet(1.0f, 1.0f, 1.0f, 1.0f);
+
 	// Determines if the transform has been modified, but not updated
 	mutable bool needs_update = true;
 };
-
-} //namespace render

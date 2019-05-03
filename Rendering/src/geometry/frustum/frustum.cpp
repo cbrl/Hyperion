@@ -3,9 +3,7 @@
 
 namespace render {
 
-Frustum::Frustum(CXMMATRIX M)
-	: planes() {
-	
+Frustum::Frustum(CXMMATRIX M) {
 	const XMMATRIX input = XMMatrixTranspose(M);
 
 	// Near plane

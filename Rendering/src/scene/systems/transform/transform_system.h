@@ -7,10 +7,7 @@
 
 namespace render::systems {
 
-class TransformSystem final :
-	public ecs::System<TransformSystem>,
-	public ecs::EventListener,
-	public ecs::EventSender {
+class TransformSystem final : public ecs::System<TransformSystem>, public ecs::EventListener {
 
 public:
 	//----------------------------------------------------------------------------------
@@ -39,10 +36,6 @@ private:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	void registerCallbacks() override;
-
-	void updateWorld(Transform& transform);
-	
-	void onTransformNeedsUpdate(const events::TransformNeedsUpdate& event);
 	void onParentChanged(const ecs::Entity::ParentChangedEvent& event);
 };
 

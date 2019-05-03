@@ -192,6 +192,7 @@
     <ClInclude Include="src\geometry\frustum\frustum.h" />
     <ClInclude Include="src\geometry\shapes\bezier.h" />
     <ClInclude Include="src\geometry\shapes\shapes.h" />
+    <ClInclude Include="src\geometry\transform\transform_3d.h" />
     <ClInclude Include="src\loader\assimp_loader.h" />
     <ClInclude Include="src\loader\model_loader.h" />
     <ClInclude Include="src\loader\texture_loader.h" />

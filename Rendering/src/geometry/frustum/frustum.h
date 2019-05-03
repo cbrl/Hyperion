@@ -11,10 +11,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
-	// Construct a frustum from a given matrix
 	Frustum(CXMMATRIX M);
-
 	Frustum(const Frustum& frustum) noexcept = default;
 	Frustum(Frustum&& frustum) noexcept = default;
 
@@ -22,14 +19,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~Frustum() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	Frustum& operator=(const Frustum& frustum) noexcept = default;
 	Frustum& operator=(Frustum&& frustum) noexcept = default;
 
@@ -56,13 +51,13 @@ public:
 	[[nodiscard]]
 	bool contains(const BoundingSphere& sphere) const;
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	XMVECTOR planes[6];
+	XMVECTOR planes[6] = {};
 };
 
 } //namespace render

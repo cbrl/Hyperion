@@ -186,6 +186,9 @@
     <Filter Include="Source Files\scene\systems\ui\modules">
       <UniqueIdentifier>{0115eb10-ed66-4680-a1e1-6a4220f92f9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\geometry\transform">
+      <UniqueIdentifier>{78734d84-a6ed-4fd3-9996-d565f774f735}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -528,6 +531,9 @@
     </ClInclude>
     <ClInclude Include="src\renderer\pass\deferred\deferred_pass.h">
       <Filter>Header Files\renderer\pass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\transform\transform_3d.h">
+      <Filter>Header Files\geometry\transform</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

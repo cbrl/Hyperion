@@ -10,28 +10,6 @@ class Transform;
 namespace events {
 
 //----------------------------------------------------------------------------------
-// Transform
-//----------------------------------------------------------------------------------
-struct TransformNeedsUpdate : public ecs::Event<TransformNeedsUpdate> {
-	TransformNeedsUpdate(Transform& transform)
-	    : transform(transform) {
-	}
-
-	const std::reference_wrapper<Transform> transform;
-};
-
-struct TransformUpdated : public ecs::Event<TransformUpdated> {
-	TransformUpdated(Transform& transform)
-	    : transform(transform) {
-	}
-
-	const std::reference_wrapper<Transform> transform;
-};
-
-
-
-
-//----------------------------------------------------------------------------------
 // Resize
 //----------------------------------------------------------------------------------
 struct WindowResizeEvent : public ecs::Event<WindowResizeEvent> {
