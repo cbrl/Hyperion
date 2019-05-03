@@ -74,15 +74,9 @@ void HandleMap<HandleT, DataT, chunk_size>::releaseHandle(HandleT handle) {
 template<typename HandleT, typename DataT, size_t chunk_size>
 bool HandleMap<HandleT, DataT, chunk_size>::isValid(const HandleT& handle) const noexcept{
 
-	bool valid;
-
-	if (handle == HandleT::invalid_handle || handle.index >= table.size()) {
-		valid = false;
-	}
-	else {
+	if (handle != HandleT::invalid_handle && handle.index < table.size()) {
 		const auto& entry = table[handle.index];
-		valid = (entry.first == handle.counter && entry.second != nullptr);
+		return entry.first == handle.counter && entry.second != nullptr;
 	}
-
-	return valid;
+	return false;
 }
