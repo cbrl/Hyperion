@@ -6,15 +6,13 @@
 #include "resource/resource_mgr.h"
 
 
-namespace render {
-
 class Text final : public ecs::Component<Text> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 
-	Text(std::shared_ptr<Font> font)
+	Text(std::shared_ptr<render::Font> font)
 		: font(std::move(font))
 		, text(L"Default Text")
 		, color(Colors::White) {
@@ -88,10 +86,8 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	std::shared_ptr<Font> font;
+	std::shared_ptr<render::Font> font;
 
 	std::wstring text;
 	XMVECTORF32  color;
 };
-
-} //namespace render

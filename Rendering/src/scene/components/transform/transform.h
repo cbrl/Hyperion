@@ -7,12 +7,10 @@
 #include "scene/events/core_events.h"
 
 
-namespace render {
-
-namespace systems { class TransformSystem; }
+namespace render { namespace systems { class TransformSystem; } }
 
 class Transform final : public ecs::Component<Transform>, public ecs::EventSender {
-	friend class systems::TransformSystem;
+	friend class render::systems::TransformSystem;
 
 public:
 	//----------------------------------------------------------------------------------
@@ -344,5 +342,3 @@ private:
 	// Determines if the transform has been modified, but not updated
 	mutable bool needs_update = true;
 };
-
-} //namespace render

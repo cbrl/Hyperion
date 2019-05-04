@@ -5,12 +5,13 @@
 #include "buffer/buffers.h"
 #include "buffer/constant_buffer.h"
 
+class Model;
+
 namespace render {
 
 class RenderStateMgr;
 class ResourceMgr;
 class Scene;
-class Model;
 
 class DepthPass final {
 public:

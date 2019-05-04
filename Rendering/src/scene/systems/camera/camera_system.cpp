@@ -25,12 +25,12 @@ void CameraSystem::update() {
 		                    transform->getWorldToObjectMatrix());
 	};
 
-	getECS().forEach<render::PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
 
-	getECS().forEach<render::OrthographicCamera>([&](OrthographicCamera& camera) {
+	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
 		if (camera.isActive())
 			process_cam(camera);
 	});
@@ -43,10 +43,10 @@ void CameraSystem::registerCallbacks() {
 
 
 void CameraSystem::onWindowResize(const events::WindowResizeEvent & event) {
-	getECS().forEach<render::PerspectiveCamera>([&](PerspectiveCamera& camera) {
+	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		camera.getViewport().setSize(event.new_size);
 	});
-	getECS().forEach<render::OrthographicCamera>([&](OrthographicCamera& camera) {
+	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
 		camera.getViewport().setSize(event.new_size);
 	});
 }

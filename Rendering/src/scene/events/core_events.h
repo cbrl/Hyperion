@@ -3,11 +3,9 @@
 #include "event/event.h"
 #include "datatypes/datatypes.h"
 
-namespace render {
-
 class Transform;
 
-namespace events {
+namespace render::events {
 
 //----------------------------------------------------------------------------------
 // Resize
@@ -36,5 +34,4 @@ struct GuiFocusEvent : public ecs::Event<GuiFocusEvent> {
 	const bool mouse_focus;
 };
 
-} //namespace events
-} //namespace render
+} //namespace render::events

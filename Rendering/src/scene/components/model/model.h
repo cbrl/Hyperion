@@ -13,8 +13,6 @@
 #include "resource/model/material/material.h"
 
 
-namespace render {
-
 //----------------------------------------------------------------------------------
 // Model
 //----------------------------------------------------------------------------------
@@ -29,16 +27,16 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	Model(ID3D11Device& device,
-	      const std::shared_ptr<ModelBlueprint>& bp,
+	      const std::shared_ptr<render::ModelBlueprint>& bp,
 	      u32 bp_index);
 
 	Model(ID3D11Device& device,
 	      const std::string& name,
-	      Mesh& mesh,
-	      Material& mat,
+	      render::Mesh& mesh,
+	      render::Material& mat,
 	      AABB aabb,
 	      BoundingSphere sphere,
-	      const std::shared_ptr<ModelBlueprint>& bp);
+	      const std::shared_ptr<render::ModelBlueprint>& bp);
 
 	Model(const Model& model) = delete;
 	Model(Model&& model) = default;
@@ -103,12 +101,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	Material& getMaterial() noexcept {
+	render::Material& getMaterial() noexcept {
 		return material;
 	}
 
 	[[nodiscard]]
-	const Material& getMaterial() const noexcept {
+	const render::Material& getMaterial() const noexcept {
 		return material;
 	}
 
@@ -151,13 +149,13 @@ private:
 	std::string name;
 
 	// The shader constant buffer
-	ConstantBuffer<ModelBuffer> buffer;
+	render::ConstantBuffer<render::ModelBuffer> buffer;
 
 	// The mesh that the model refers to
-	const Mesh& mesh;
+	const render::Mesh& mesh;
 
 	// The material that the model refers to
-	Material& material;
+	render::Material& material;
 
 	// The bounding volumes of the model
 	AABB aabb;
@@ -167,7 +165,5 @@ private:
 	bool shadows;
 
 	// The blueprint whose data this model references
-	std::shared_ptr<ModelBlueprint> blueprint;
+	std::shared_ptr<render::ModelBlueprint> blueprint;
 };
-
-} //namespace render

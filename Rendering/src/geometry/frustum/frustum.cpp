@@ -1,8 +1,6 @@
 #include "frustum.h"
 
 
-namespace render {
-
 Frustum::Frustum(CXMMATRIX M) {
 	const XMMATRIX input = XMMatrixTranspose(M);
 
@@ -124,5 +122,3 @@ bool Frustum::contains(const BoundingSphere& sphere) const {
 
 	return true;
 }
-
-} //namespace render

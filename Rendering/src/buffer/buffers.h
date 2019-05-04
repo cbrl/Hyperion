@@ -107,21 +107,21 @@ struct ShadowedSpotLightBuffer {
 // Camera Buffer
 //----------------------------------------------------------------------------------
 
-struct Fog {
+struct FogBuffer {
 	f32   density = 0.0f;
 	f32_3 color   = {1.0f};
 };
 
 struct CameraBuffer {
-	XMMATRIX camera_to_world         = XMMatrixIdentity();
-	XMMATRIX world_to_camera         = XMMatrixIdentity();
-	XMMATRIX camera_to_projection    = XMMatrixIdentity();
-	XMMATRIX projection_to_camera    = XMMatrixIdentity();
-	u32_2    viewport_top_left       = {};
-	u32_2    viewport_resolution     = {};
-	f32_2    inv_viewport_resolution = {};
-	f32_2    pad0;
-	Fog      fog;
+	XMMATRIX  camera_to_world         = XMMatrixIdentity();
+	XMMATRIX  world_to_camera         = XMMatrixIdentity();
+	XMMATRIX  camera_to_projection    = XMMatrixIdentity();
+	XMMATRIX  projection_to_camera    = XMMatrixIdentity();
+	u32_2     viewport_top_left       = {};
+	u32_2     viewport_resolution     = {};
+	f32_2     inv_viewport_resolution = {};
+	f32_2     pad0;
+	FogBuffer fog;
 };
 
 

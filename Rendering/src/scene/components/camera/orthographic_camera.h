@@ -3,9 +3,7 @@
 #include "scene/components/camera/camera_base.h"
 
 
-namespace render {
-
-class OrthographicCamera final : public CameraBase<OrthographicCamera> {
+class OrthographicCamera final : public render::CameraBase<OrthographicCamera> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -48,5 +46,3 @@ private:
 	// The width and height of the camera's viewing volume
 	f32_2 ortho_size = {1.0f, 1.0f};
 };
-
-} //namespace render

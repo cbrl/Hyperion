@@ -4,8 +4,6 @@
 #include "geometry/bounding_volume/bounding_volume.h"
 
 
-namespace render {
-
 class Frustum final {
 public:
 	//----------------------------------------------------------------------------------
@@ -59,5 +57,3 @@ private:
 
 	XMVECTOR planes[6] = {};
 };
-
-} //namespace render

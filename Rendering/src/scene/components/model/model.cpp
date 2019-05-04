@@ -1,10 +1,8 @@
 #include "model.h"
 
 
-namespace render {
-
 Model::Model(ID3D11Device& device,
-             const std::shared_ptr<ModelBlueprint>& bp,
+             const std::shared_ptr<render::ModelBlueprint>& bp,
              u32 bp_index)
 	: Model(device,
 	        bp->meshes.at(bp_index).getName(),
@@ -18,11 +16,11 @@ Model::Model(ID3D11Device& device,
 
 Model::Model(ID3D11Device& device,
              const std::string& name,
-             Mesh& mesh,
-             Material& mat,
+             render::Mesh& mesh,
+             render::Material& mat,
              AABB aabb,
              BoundingSphere sphere,
-             const std::shared_ptr<ModelBlueprint>& bp)
+             const std::shared_ptr<render::ModelBlueprint>& bp)
     : buffer(device)
     , name(name)
     , mesh(mesh)
@@ -41,7 +39,7 @@ void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMAT
 	// Create the inverse transpose of the model-to-world matrix
 	const auto world_inv_t = XMMatrixInverse(nullptr, object_to_world);
 
-	ModelBuffer buffer_data;
+	render::ModelBuffer buffer_data;
 
 	buffer_data.world               = world_t;
 	buffer_data.world_inv_transpose = world_inv_t;
@@ -54,5 +52,3 @@ void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMAT
 
 	buffer.updateData(device_context, buffer_data);
 }
-
-} //namespace render

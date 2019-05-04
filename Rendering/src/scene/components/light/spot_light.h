@@ -3,8 +3,6 @@
 #include "component/component.h"
 
 
-namespace render {
-
 class SpotLight final : public ecs::Component<SpotLight> {
 public:
 	//----------------------------------------------------------------------------------
@@ -209,5 +207,3 @@ private:
 	AABB aabb;
 	BoundingSphere sphere;
 };
-
-} //namespace render

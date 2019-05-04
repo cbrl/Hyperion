@@ -4,8 +4,6 @@
 #include "geometry/bounding_volume/bounding_volume.h"
 
 
-namespace render {
-
 class DirectionalLight final : public ecs::Component<DirectionalLight> {
 public:
 	//----------------------------------------------------------------------------------
@@ -139,5 +137,3 @@ private:
 	// Shadow boolean
 	bool shadows = false;
 };
-
-} //namespace render

@@ -11,7 +11,7 @@ void AxisRotationSystem::update() {
 
 		if (!rotation.isActive()) return;
 		
-		auto* transform = rotation.getOwner()->getComponent<render::Transform>();
+		auto* transform = rotation.getOwner()->getComponent<Transform>();
 		if (!transform) return;
 		if (!transform->isActive()) return;
 

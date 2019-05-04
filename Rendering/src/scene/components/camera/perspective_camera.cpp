@@ -1,8 +1,6 @@
 #include "perspective_camera.h"
 
 
-namespace render {
-
 PerspectiveCamera::PerspectiveCamera(ID3D11Device& device, u32_2 viewport_size)
 	: CameraBase(device) {
 
@@ -24,5 +22,3 @@ XMMATRIX XM_CALLCONV PerspectiveCamera::getCameraToProjectionMatrix() const {
 
 	return XMMatrixPerspectiveFovLH(fov, aspect_ratio, depth[0], depth[1]);
 }
-
-} //namespace render

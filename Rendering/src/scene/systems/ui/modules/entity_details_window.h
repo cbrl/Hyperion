@@ -5,19 +5,18 @@
 
 struct ID3D11Device;
 class Engine;
+class Transform;
 
 namespace render {
-class Input;
 class Scene;
 class ResourceMgr;
 class Texture;
-class Transform;
 }
 
 namespace ecs {
-	class Entity;
-	class EntityPtr;
-	class IComponent;
+class Entity;
+class EntityPtr;
+class IComponent;
 }
 
 

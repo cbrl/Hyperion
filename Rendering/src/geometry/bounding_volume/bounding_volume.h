@@ -4,8 +4,6 @@
 #include "directx/math/directx_math.h"
 
 
-namespace render {
-
 struct AABB final {
 public:
 	//----------------------------------------------------------------------------------
@@ -116,5 +114,3 @@ private:
 	XMVECTOR sphere_center = {0.0f};
 	f32      sphere_radius = std::numeric_limits<f32>::infinity();
 };
-
-} //namespace render

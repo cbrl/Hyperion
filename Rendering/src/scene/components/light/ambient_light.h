@@ -4,8 +4,6 @@
 #include "buffer/buffers.h"
 
 
-namespace render {
-
 class AmbientLight final : public ecs::Component<AmbientLight> {
 public:
 	//----------------------------------------------------------------------------------
@@ -53,5 +51,3 @@ private:
 	//----------------------------------------------------------------------------------
 	f32_4 color = {0.0f, 0.0f, 0.0f, 1.0f};
 };
-
-} //namespace render

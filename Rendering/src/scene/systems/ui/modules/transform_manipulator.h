@@ -5,7 +5,7 @@
 
 class Engine;
 class Input;
-namespace render { class Transform; }
+class Transform;
 namespace ecs { class EntityPtr; }
 
 class TransformManipulator {
@@ -39,7 +39,7 @@ public:
 private:
 
 	template<typename CameraT>
-	void drawTransformManipulator(render::Transform& transform, CameraT& camera, Input& input);
+	void drawTransformManipulator(Transform& transform, CameraT& camera, Input& input);
 
 
 	//----------------------------------------------------------------------------------

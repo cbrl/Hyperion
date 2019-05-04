@@ -145,12 +145,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	Fog& getFog() noexcept {
+	FogBuffer& getFog() noexcept {
 		return fog;
 	}
 
 	[[nodiscard]]
-	const Fog& getFog() const noexcept {
+	const FogBuffer& getFog() const noexcept {
 		return fog;
 	}
 
@@ -191,7 +191,7 @@ private:
 	f32_4 wireframe_color = {0.0f, 1.0f, 0.0f, 1.0f};
 
 	// Describes the fog color, start radius, range
-	Fog fog;
+	FogBuffer fog;
 
 	// The skybox texture
 	std::shared_ptr<Texture> skybox;

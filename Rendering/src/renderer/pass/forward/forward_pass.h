@@ -5,12 +5,13 @@
 #include "resource/shader/shader.h"
 #include "rendering_options.h"
 
+class Model;
+
 namespace render {
 
 class RenderStateMgr;
 class ResourceMgr;
 class Scene;
-class Model;
 class Texture;
 
 class ForwardPass final {
