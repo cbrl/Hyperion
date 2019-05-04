@@ -279,6 +279,14 @@ private:
 	//----------------------------------------------------------------------------------
 	void setNeedsUpdate() const {
 		needs_update = true;
+
+		// Manually set 'needs update' flag of child transforms
+		getOwner()->forEachChild([](ecs::EntityPtr& child) {
+			if (auto* transform = child->getComponent<Transform>()) {
+				transform->transform.setNeedsUpdate();
+				transform->setNeedsUpdate();
+			}
+		});
 	}
 
 	void update() const {
@@ -301,8 +309,6 @@ private:
 		// Update all child transforms (if any)
 		getOwner()->forEachChild([](ecs::EntityPtr& child) {
 			if (auto* transform = child->getComponent<Transform>()) {
-				transform->transform.setNeedsUpdate(); // Manually set 'needs update' flag of child
-				transform->setNeedsUpdate();
 				transform->update();
 			}
 		});
