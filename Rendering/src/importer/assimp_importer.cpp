@@ -1,4 +1,4 @@
-#include "assimp_loader.h"
+#include "assimp_importer.h"
 #include "log/log.h"
 
 #include "assimp/Importer.hpp"
@@ -208,15 +208,15 @@ ModelOutput AssimpLoad(ResourceMgr& resource_mgr,
 }
 
 
-namespace AssimpLoader {
+namespace importer::detail {
 
-ModelOutput Load(ResourceMgr& resource_mgr,
-	                const fs::path& file,
-	                bool flip_winding,
-	                bool flip_uv) {
+ModelOutput AssimpImport(ResourceMgr& resource_mgr,
+	                     const fs::path& file,
+	                     bool flip_winding,
+	                     bool flip_uv) {
 
 	return AssimpLoad(resource_mgr, file, flip_winding, flip_uv);
 }
 
-} //namespace AssimpLoader
+} //namespace importer::detail
 } //namespace render

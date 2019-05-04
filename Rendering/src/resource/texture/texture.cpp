@@ -1,5 +1,5 @@
 #include "texture.h"
-#include "loader/texture_loader.h"
+#include "importer/texture_importer.h"
 
 
 namespace render {
@@ -9,7 +9,7 @@ Texture::Texture(ID3D11Device& device,
                  const std::wstring& filename)
 	: Resource(filename) {
 
-	TextureLoader::load(device, device_context, filename, texture_srv.GetAddressOf());
+	importer::ImportTexture(device, device_context, filename, texture_srv.GetAddressOf());
 }
 
 

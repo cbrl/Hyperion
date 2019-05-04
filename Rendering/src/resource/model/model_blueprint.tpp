@@ -1,4 +1,4 @@
-#include "loader/model_loader.h"
+#include "importer/model_importer.h"
 
 namespace render {
 
@@ -9,7 +9,7 @@ ModelBlueprint::ModelBlueprint(ID3D11Device& device,
                                const ModelConfig<VertexT>& config)
 	: Resource(filename) {
 
-	const auto out = ModelLoader::Load(resource_mgr, filename, config);
+	const auto out = importer::ImportModel(resource_mgr, filename, config);
 	constructBlueprint<VertexT>(device, out);
 }
 

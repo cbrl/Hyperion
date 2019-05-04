@@ -1,4 +1,4 @@
-#include "texture_loader.h"
+#include "texture_importer.h"
 #include <DirectXTex.h>
 #include "io/io.h"
 #include "log/log.h"
@@ -69,7 +69,7 @@ void CreateErrorTexture(ID3D11Device& device, ID3D11ShaderResourceView** srv_out
 	ThrowIfFailed(device.CreateShaderResourceView(texture.Get(), nullptr, srv_out),
 	              "Failed to create SRV");
 
-	SetDebugObjectName(*srv_out, "TextureLoader error texture");
+	SetDebugObjectName(*srv_out, "importer error texture");
 	Logger::log(LogLevel::debug, "Created error texture");
 }
 
@@ -82,9 +82,9 @@ void HandleLoaderError(ID3D11Device& device, const std::string& msg, ID3D11Shade
 
 
 
-namespace render::TextureLoader {
+namespace render::importer {
 
-void load(ID3D11Device& device,
+void ImportTexture(ID3D11Device& device,
           ID3D11DeviceContext& device_context,
           const std::wstring& filename,
           ID3D11ShaderResourceView** srv_out) {
@@ -149,12 +149,12 @@ void load(ID3D11Device& device,
 		}
 	}
 
-	SetDebugObjectName(*srv_out, "TextureLoader Texture");
+	SetDebugObjectName(*srv_out, "importer Texture");
 	Logger::log(LogLevel::debug, "Loaded texture: {}", WstrToStr(filename));
 }
 
 
-void load(ID3D11Device& device,
+void ImportTexture(ID3D11Device& device,
           ID3D11DeviceContext& device_context,
           const std::vector<std::wstring>& filenames,
           ID3D11ShaderResourceView** srv_out) {
@@ -273,7 +273,7 @@ void load(ID3D11Device& device,
 		return;
 	}
 
-	SetDebugObjectName(*srv_out, "TextureLoader Texture2DArray");
+	SetDebugObjectName(*srv_out, "importer Texture2DArray");
 }
 
-} //namespace render::TextureLoader
+} //namespace render::importer

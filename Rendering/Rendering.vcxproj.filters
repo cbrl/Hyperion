@@ -18,9 +18,6 @@
     <Filter Include="Header Files\geometry">
       <UniqueIdentifier>{cc60ba2e-1ce2-43e5-850b-f32f95592202}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\loader">
-      <UniqueIdentifier>{79e40f32-3cf9-4b77-95b5-385480306ba3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\resource">
       <UniqueIdentifier>{bc1fca6c-1753-457f-9f43-0744744b759e}</UniqueIdentifier>
     </Filter>
@@ -62,9 +59,6 @@
     </Filter>
     <Filter Include="Source Files\buffer">
       <UniqueIdentifier>{2be99d4f-977e-4da5-81af-189bbd49072c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\loader">
-      <UniqueIdentifier>{0cdc4265-ea56-43b3-b251-fabb20535b77}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\renderer">
       <UniqueIdentifier>{2a1c52de-eafb-460e-b9eb-738e495ce11b}</UniqueIdentifier>
@@ -189,6 +183,12 @@
     <Filter Include="Header Files\geometry\transform">
       <UniqueIdentifier>{78734d84-a6ed-4fd3-9996-d565f774f735}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\importer">
+      <UniqueIdentifier>{f09ed5e3-c6f5-4513-b246-cb555949f3bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\importer">
+      <UniqueIdentifier>{4da399a8-58ac-4ca8-83fe-c12d3d3928de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -223,9 +223,6 @@
     </ClCompile>
     <ClCompile Include="src\renderer\pass\text\text_pass.cpp">
       <Filter>Source Files\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\loader\texture_loader.cpp">
-      <Filter>Source Files\loader</Filter>
     </ClCompile>
     <ClCompile Include="src\resource\shader\shader_bytecode.cpp">
       <Filter>Source Files\resource\shader</Filter>
@@ -275,9 +272,6 @@
     <ClCompile Include="src\scene\systems\transform\transform_system.cpp">
       <Filter>Source Files\scene\systems\transform</Filter>
     </ClCompile>
-    <ClCompile Include="src\loader\assimp_loader.cpp">
-      <Filter>Source Files\loader</Filter>
-    </ClCompile>
     <ClCompile Include="src\resource\model\material\material_factory.cpp">
       <Filter>Source Files\resource\model\material</Filter>
     </ClCompile>
@@ -314,6 +308,12 @@
     <ClCompile Include="src\scene\systems\ui\modules\system_menu.cpp">
       <Filter>Source Files\scene\systems\ui\modules</Filter>
     </ClCompile>
+    <ClCompile Include="src\importer\texture_importer.cpp">
+      <Filter>Source Files\importer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\importer\assimp_importer.cpp">
+      <Filter>Source Files\importer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rendering_mgr.h">
@@ -345,12 +345,6 @@
     </ClInclude>
     <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h">
       <Filter>Header Files\geometry\bounding_volume</Filter>
-    </ClInclude>
-    <ClInclude Include="src\loader\texture_loader.h">
-      <Filter>Header Files\loader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\loader\model_loader.h">
-      <Filter>Header Files\loader</Filter>
     </ClInclude>
     <ClInclude Include="src\resource\font\font.h">
       <Filter>Header Files\resource\font</Filter>
@@ -481,9 +475,6 @@
     <ClInclude Include="src\resource\model\model_config.h">
       <Filter>Header Files\resource\model</Filter>
     </ClInclude>
-    <ClInclude Include="src\loader\assimp_loader.h">
-      <Filter>Header Files\loader</Filter>
-    </ClInclude>
     <ClInclude Include="src\scene\entities\core_entities.h">
       <Filter>Header Files\scene\entities</Filter>
     </ClInclude>
@@ -534,6 +525,15 @@
     </ClInclude>
     <ClInclude Include="src\geometry\transform\transform_3d.h">
       <Filter>Header Files\geometry\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\importer\texture_importer.h">
+      <Filter>Header Files\importer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\importer\assimp_importer.h">
+      <Filter>Header Files\importer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\importer\model_importer.h">
+      <Filter>Header Files\importer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
