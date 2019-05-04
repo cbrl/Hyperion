@@ -4,6 +4,8 @@
 #include <DirectXTex.h>
 
 
+namespace {
+
 u32 g_error_tex_data[128][128] = {{}};
 
 // Create data for a checkerboard pattern texture
@@ -38,6 +40,8 @@ void CreateErrorTextureData() {
 		}
 	}
 }
+
+} //namespace {}
 
 
 void CreateErrorTexture(ID3D11Device& device, ID3D11ShaderResourceView** srv_out) {
@@ -149,7 +153,7 @@ void ImportTexture(ID3D11Device& device,
 		}
 	}
 
-	SetDebugObjectName(*srv_out, "TextureLoader Texture");
+	SetDebugObjectName(*srv_out, "importer Texture");
 	Logger::log(LogLevel::debug, "Loaded texture: {}", WstrToStr(filename));
 }
 
@@ -273,7 +277,7 @@ void ImportTexture(ID3D11Device& device,
 		return;
 	}
 
-	SetDebugObjectName(*srv_out, "TextureLoader Texture2DArray");
+	SetDebugObjectName(*srv_out, "importer Texture2DArray");
 }
 
 } //namespace render::TextureLoader
