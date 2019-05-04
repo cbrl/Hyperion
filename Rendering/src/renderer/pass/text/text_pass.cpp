@@ -25,7 +25,7 @@ void TextPass::render(Scene& scene) const {
 			                transform->getPosition(),
 			                text.getColor(),
 			                XMVectorGetZ(transform->getRotation()),
-			                transform->getObjectOrigin(),
+			                XMVectorZero(),
 			                transform->getScale());
 			sprite_batch->End();
 		}

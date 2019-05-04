@@ -239,31 +239,6 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Object Space Data
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	static XMVECTOR XM_CALLCONV getObjectAxisX() {
-		return Transform3D::getObjectAxisX();
-	}
-
-	[[nodiscard]]
-	static XMVECTOR XM_CALLCONV getObjectAxisY() {
-		return Transform3D::getObjectAxisY();
-	}
-
-	[[nodiscard]]
-	static XMVECTOR XM_CALLCONV getObjectAxisZ() {
-		return Transform3D::getObjectAxisZ();
-	}
-
-	[[nodiscard]]
-	static XMVECTOR XM_CALLCONV getObjectOrigin() {
-		return Transform3D::getObjectOrigin();
-	}
-
-
-	//----------------------------------------------------------------------------------
 	// Member Functions - Matrices
 	//----------------------------------------------------------------------------------
 
@@ -339,6 +314,6 @@ private:
 	//----------------------------------------------------------------------------------
 	Transform3D transform;
 	
-	// Determines if the transform has been modified, but not updated
+	// Determines if the transform has been modified, but not updated.
 	mutable bool needs_update = true;
 };

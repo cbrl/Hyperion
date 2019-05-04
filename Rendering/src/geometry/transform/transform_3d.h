@@ -257,35 +257,6 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Object Space Data
-	//----------------------------------------------------------------------------------
-
-	[[nodiscard]]
-	static XMVECTOR XM_CALLCONV getObjectAxisX() {
-		static const auto axis = XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
-		return axis;
-	}
-
-	[[nodiscard]]
-	static XMVECTOR XM_CALLCONV getObjectAxisY() {
-		static const auto axis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-		return axis;
-	}
-
-	[[nodiscard]]
-	static XMVECTOR XM_CALLCONV getObjectAxisZ() {
-		static const auto axis = XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
-		return axis;
-	}
-
-	[[nodiscard]]
-	static XMVECTOR XM_CALLCONV getObjectOrigin() {
-		static const auto origin = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-		return origin;
-	}
-
-
-	//----------------------------------------------------------------------------------
 	// Member Functions - Matrices
 	//----------------------------------------------------------------------------------
 
