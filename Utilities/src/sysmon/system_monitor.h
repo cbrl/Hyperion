@@ -11,7 +11,7 @@
 
 struct PerCoreClock final {
 	using rep        = u64;
-	using period     = std::ratio<1, 10000000>;
+	using period     = std::ratio<1, 10'000'000>;
 	using duration   = std::chrono::duration<rep, period>;
 	using time_point = std::chrono::time_point<PerCoreClock>;
 
@@ -26,7 +26,7 @@ struct PerCoreClock final {
 
 struct SystemWorkClock final {
 	using rep        = u64;
-	using period     = std::ratio<1, 10000000>;
+	using period     = std::ratio<1, 10'000'000>;
 	using duration   = std::chrono::duration<rep, period>;
 	using time_point = std::chrono::time_point<SystemWorkClock>;
 
@@ -41,7 +41,7 @@ struct SystemWorkClock final {
 
 struct SystemIdleClock final {
 	using rep        = u64;
-	using period     = std::ratio<1, 10000000>;
+	using period     = std::ratio<1, 10'000'000>;
 	using duration   = std::chrono::duration<rep, period>;
 	using time_point = std::chrono::time_point<SystemIdleClock>;
 
