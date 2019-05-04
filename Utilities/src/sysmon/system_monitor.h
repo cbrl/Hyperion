@@ -92,9 +92,8 @@ class SystemMonitor final {
 
 		// Update the CPU stats
 		void tick() {
-			// Update wall clock and get elapsed time
+			// Update wall clock
 			wall_timer.tick();
-			const auto dt = wall_timer.deltaTime();
 
 			// Update system clocks
 			core_timer.tick();
@@ -103,7 +102,7 @@ class SystemMonitor final {
 
 			// Update cpu stats
 			sys_usage  = ((sys_work_timer.deltaTime() - sys_idle_timer.deltaTime()) * 100.0) / sys_work_timer.deltaTime();
-			proc_usage = (core_timer.deltaTime() * 100.0) / dt;
+			proc_usage = (core_timer.deltaTime() * 100.0) / wall_timer.deltaTime();
 		}
 
 	public:

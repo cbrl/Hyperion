@@ -6,9 +6,10 @@ Stopwatch<ClockT>::Stopwatch() {
 
 template<typename ClockT>
 void Stopwatch<ClockT>::pause() {
-	if (!paused) {
+	if (not paused) {
 		pause_time = ClockT::now();
-		paused = true;
+		delta_time = ClockT::duration(0);
+		paused     = true;
 	}
 }
 
@@ -16,10 +17,7 @@ void Stopwatch<ClockT>::pause() {
 template<typename ClockT>
 void Stopwatch<ClockT>::resume() {
 	if (paused) {
-		typename ClockT::time_point start_time = ClockT::now();
-
-		// paused duration is used to correct the total time
-		pause_duration += (start_time - pause_time);
+		const auto start_time = ClockT::now();
 
 		prev_time  = start_time;
 		pause_time = ClockT::duration(0);
@@ -32,6 +30,7 @@ template<typename ClockT>
 void Stopwatch<ClockT>::reset() {
 	base_time      = ClockT::now();
 	prev_time      = ClockT::now();
+	total_time     = ClockT::duration(0);
 	delta_time     = ClockT::duration(0);
 	pause_duration = ClockT::duration(0);
 	paused         = false;
@@ -39,16 +38,15 @@ void Stopwatch<ClockT>::reset() {
 
 template<typename ClockT>
 void Stopwatch<ClockT>::tick() {
-	if (paused) {
-		delta_time = ClockT::duration(0);
-		return;
-	}
-
 	const auto curr_time = ClockT::now();
 
-	delta_time  = curr_time - prev_time;
-	total_time += delta_time;
-	prev_time   = curr_time;
+	if (not paused)
+		delta_time = curr_time - prev_time;
+	else
+		pause_duration += curr_time - prev_time; //pause duration is used to correct total time
+
+	total_time = curr_time - base_time;
+	prev_time  = curr_time;
 }
 
 template<typename ClockT>
