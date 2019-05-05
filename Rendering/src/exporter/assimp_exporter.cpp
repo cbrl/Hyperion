@@ -1,7 +1,9 @@
 #include "assimp_exporter.h"
 #include "entity/entity.h"
 #include "scene/components/model/model.h"
+
 #include "assimp/scene.h"
+#include "assimp/postprocess.h"
 #include "assimp/pbrmaterial.h"
 #include "assimp/Exporter.hpp"
 
@@ -204,13 +206,13 @@ void ProcessMeshes(ID3D11Device& device, ID3D11DeviceContext& device_context, ai
 	scene.mMeshes    = new aiMesh*[bp.meshes.size()]{nullptr};
 	scene.mNumMeshes = static_cast<unsigned int>(bp.meshes.size());
 
-	// Hacky method of getting correct vertex data
 	for (size_t i = 0; i < bp.meshes.size(); ++i) {
 		scene.mMeshes[i] = new aiMesh();
 		scene.mMeshes[i]->mPrimitiveTypes = aiPrimitiveType_TRIANGLE;
 
 		const std::type_index& vertex_type = bp.meshes[i].getVertexType();
 
+		// Hacky method of getting correct vertex data
 		if (vertex_type == typeid(VertexPosition)) {
 			ProcessMesh<VertexPosition>(device, device_context, *scene.mMeshes[i], bp.meshes[i], bp.mat_indices[i]);
 		}
@@ -267,6 +269,7 @@ void ProcessMaterials(aiScene& scene, const render::ModelBlueprint& bp) {
 namespace render::exporter::detail {
 
 void AssimpExport(ID3D11Device& device, ID3D11DeviceContext& device_context, const ModelBlueprint& blueprint, fs::path filename) {
+	// The scene's destructor will properly delete everything created here with operator new
 	aiScene scene;
 	scene.mRootNode = new aiNode();
 
@@ -275,7 +278,8 @@ void AssimpExport(ID3D11Device& device, ID3D11DeviceContext& device_context, con
 	ProcessMaterials(scene, blueprint);
 
 	Assimp::Exporter exporter;
-	exporter.Export(&scene, "gltf2", filename.replace_extension("gltf").string());
+	const unsigned int flags = aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs;
+	exporter.Export(&scene, "gltf2", filename.replace_extension("gltf").string(), flags);
 }
 
 } // namespace render::exporter::detail
