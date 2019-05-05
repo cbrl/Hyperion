@@ -2,6 +2,7 @@
 #include "entity/entity.h"
 #include "scene/components/model/model.h"
 #include "assimp/scene.h"
+#include "assimp/pbrmaterial.h"
 #include "assimp/Exporter.hpp"
 
 namespace {
@@ -206,6 +207,7 @@ void ProcessMeshes(ID3D11Device& device, ID3D11DeviceContext& device_context, ai
 	// Hacky method of getting correct vertex data
 	for (size_t i = 0; i < bp.meshes.size(); ++i) {
 		scene.mMeshes[i] = new aiMesh();
+		scene.mMeshes[i]->mPrimitiveTypes = aiPrimitiveType_TRIANGLE;
 
 		const std::type_index& vertex_type = bp.meshes[i].getVertexType();
 
@@ -250,11 +252,13 @@ void ProcessMaterials(aiScene& scene, const render::ModelBlueprint& bp) {
 
 	for (size_t i = 0; i < bp.materials.size(); ++i) {
 		scene.mMaterials[i] = new aiMaterial();
-		set_color(bp.materials[i].params.base_color, *scene.mMaterials[i], AI_MATKEY_COLOR_DIFFUSE);
+		set_color(bp.materials[i].params.base_color, *scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR);
 		set_scalar(bp.materials[i].params.base_color[3], *scene.mMaterials[i], AI_MATKEY_OPACITY);
-		//TODO: metalness
-		//TODO: roughness
+		set_scalar(bp.materials[i].params.metalness, *scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR);
+		set_scalar(bp.materials[i].params.roughness, *scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR);
 	}
+
+	//TODO: Textures
 }
 
 } // namespace {}
@@ -262,7 +266,7 @@ void ProcessMaterials(aiScene& scene, const render::ModelBlueprint& bp) {
 
 namespace render::exporter::detail {
 
-void AssimpExport(ID3D11Device& device, ID3D11DeviceContext& device_context, const ModelBlueprint& blueprint, const fs::path& filename) {
+void AssimpExport(ID3D11Device& device, ID3D11DeviceContext& device_context, const ModelBlueprint& blueprint, fs::path filename) {
 	aiScene scene;
 	scene.mRootNode = new aiNode();
 
@@ -271,7 +275,7 @@ void AssimpExport(ID3D11Device& device, ID3D11DeviceContext& device_context, con
 	ProcessMaterials(scene, blueprint);
 
 	Assimp::Exporter exporter;
-	exporter.Export(&scene, "collada", filename.string());
+	exporter.Export(&scene, "gltf2", filename.replace_extension("gltf").string());
 }
 
 } // namespace render::exporter::detail

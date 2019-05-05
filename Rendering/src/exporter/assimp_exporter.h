@@ -11,7 +11,7 @@ class ModelBlueprint;
 
 namespace exporter::detail {
 
-void AssimpExport(ID3D11Device& device, ID3D11DeviceContext& device_context, const ModelBlueprint& blueprint, const fs::path& filename);
+void AssimpExport(ID3D11Device& device, ID3D11DeviceContext& device_context, const ModelBlueprint& blueprint, fs::path filename);
 
 } //namespace exporter::detail
 

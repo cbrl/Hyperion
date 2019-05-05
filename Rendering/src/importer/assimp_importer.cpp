@@ -1,9 +1,10 @@
 #include "assimp_importer.h"
 #include "log/log.h"
 
-#include "assimp/Importer.hpp"
 #include "assimp/scene.h"
+#include "assimp/pbrmaterial.h"
 #include "assimp/postprocess.h"
+#include "assimp/Importer.hpp"
 
 #include "resource/resource_mgr.h"
 #include "resource/model/material/material_factory.h"
@@ -68,13 +69,13 @@ void ProcessMeshes(const aiScene* scene, ModelOutput& model_out) {
 				out_mesh.bitangents.emplace_back(bitangent[0], bitangent[1], bitangent[2]);
 			}
 
-			//TODO: support multiple texture coords per vertex
+			//TODO: support multiple texture coords per vertex?k
 			if (mesh->HasTextureCoords(0)) {
 				const auto& tex = mesh->mTextureCoords[0][j];
 				out_mesh.texture_coords.emplace_back(tex[0], tex[1]/*, tex[2]*/);
 			}
 
-			//TODO: support vertex color sets
+			//TODO: support vertex color sets?
 			if (mesh->HasVertexColors(0)) {
 				const auto& color = mesh->mColors[0][j];
 				out_mesh.colors.emplace_back(color.r, color.g, color.b);
@@ -104,15 +105,15 @@ void ProcessMaterials(const aiScene* scene, fs::path base_path, ResourceMgr& res
 	};
 
 	// Get a texture from a material
-	const auto get_map = [&](const aiMaterial* mat, aiTextureType type, ResourceMgr& resource_mgr, std::shared_ptr<Texture>& out) {
+	const auto get_map = [&](const aiMaterial* mat, aiTextureType type, unsigned int idx, ResourceMgr& resource_mgr, std::shared_ptr<Texture>& out) {
 		aiString         path;
 		aiTextureMapping mapping;
 		unsigned int     uvindex;
 		ai_real          blend;
 		aiTextureOp      op;
 		aiTextureMapMode mode;
-		//TODO: handle texture stacks
-		if (mat->GetTexture(type, /*index*/0, &path, &mapping, &uvindex, &blend, &op, &mode) == aiReturn_SUCCESS) {
+		//TODO: handle texture stacks?
+		if (mat->GetTexture(type, idx, &path, &mapping, &uvindex, &blend, &op, &mode) == aiReturn_SUCCESS) {
 			if (!path.data[0]) return;
 
 			if (path.data[0] == '*') {
@@ -142,14 +143,19 @@ void ProcessMaterials(const aiScene* scene, fs::path base_path, ResourceMgr& res
 		}
 		
 		// Get colors
-		get_color(mat, AI_MATKEY_COLOR_DIFFUSE,  out_mat.params.base_color);
-		get_color(mat, AI_MATKEY_COLOR_EMISSIVE, out_mat.params.emissive);
+		get_color(mat,  AI_MATKEY_COLOR_DIFFUSE,                               out_mat.params.base_color);
+		get_color(mat,  AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR, out_mat.params.base_color);
+		get_scalar(mat, AI_MATKEY_OPACITY,                                     out_mat.params.base_color[3]);
+		get_scalar(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR,   out_mat.params.metalness);
+		get_scalar(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,  out_mat.params.roughness);
+		get_color(mat,  AI_MATKEY_COLOR_EMISSIVE,                              out_mat.params.emissive);
 
 		// Get maps
-		get_map(mat, aiTextureType_DIFFUSE,  resource_mgr, out_mat.maps.base_color);
-		get_map(mat, aiTextureType_HEIGHT,   resource_mgr, out_mat.maps.normal);  //Sometimes normal map will be stored in height maps section
-		get_map(mat, aiTextureType_NORMALS,  resource_mgr, out_mat.maps.normal);
-		get_map(mat, aiTextureType_EMISSIVE, resource_mgr, out_mat.maps.emissive);
+		get_map(mat, aiTextureType_DIFFUSE,  0, resource_mgr, out_mat.maps.base_color);
+		get_map(mat, aiTextureType_HEIGHT,   0, resource_mgr, out_mat.maps.normal);  //Sometimes normal map will be stored in height maps section
+		get_map(mat, aiTextureType_NORMALS,  0, resource_mgr, out_mat.maps.normal);
+		get_map(mat, aiTextureType_EMISSIVE, 0, resource_mgr, out_mat.maps.emissive);
+		get_map(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE, resource_mgr, out_mat.maps.material_params);
 
 		//TODO: get material parameter scalars and material parameter map
 
