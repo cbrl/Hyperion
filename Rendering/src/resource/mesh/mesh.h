@@ -2,6 +2,8 @@
 
 #include "directx/d3d11.h"
 #include "datatypes/datatypes.h"
+#include <typeinfo>
+#include <typeindex>
 
 
 namespace render {
@@ -68,6 +70,21 @@ public:
 		return index_count;
 	}
 
+	[[nodiscard]]
+	ID3D11Buffer* getVertexBuffer() const noexcept {
+		return vertex_buffer.Get();
+	}
+
+	[[nodiscard]]
+	ID3D11Buffer* getIndexBuffer() const noexcept {
+		return index_buffer.Get();
+	}
+
+	[[nodiscard]]
+	const std::type_index& getVertexType() const noexcept {
+		return vertex_type;
+	}
+
 
 private:
 	//----------------------------------------------------------------------------------
@@ -82,6 +99,9 @@ private:
 	u32 vertex_count;
 	u32 index_count;
 	u32 stride;
+
+	// The vertex type used in the mesh
+	std::type_index vertex_type;
 };
 
 

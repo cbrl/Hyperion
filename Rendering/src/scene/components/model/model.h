@@ -140,6 +140,12 @@ public:
 	}
 
 
+	[[nodiscard]]
+	const render::ModelBlueprint& getBlueprint() const noexcept {
+		return *blueprint;
+	}
+
+
 private:
 	//----------------------------------------------------------------------------------
 	// Member Variables

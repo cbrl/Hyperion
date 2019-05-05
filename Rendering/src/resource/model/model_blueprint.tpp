@@ -17,7 +17,7 @@ template <typename VertexT>
 ModelBlueprint::ModelBlueprint(ID3D11Device& device,
                                const ModelOutput& output,
                                const ModelConfig<VertexT>& config)
-	: Resource(fs::exists(output.file) ? output.file.wstring() : StrToWstr(output.name)) {
+    : Resource(output.file.empty() ? StrToWstr(output.name) : output.file.wstring()) {
 
 	constructBlueprint<VertexT>(device, output);
 }
@@ -25,7 +25,7 @@ ModelBlueprint::ModelBlueprint(ID3D11Device& device,
 template <typename VertexT>
 void ModelBlueprint::constructBlueprint(ID3D11Device& device, const ModelOutput& out) {
 
-	name = out.file.empty() ? out.name : out.file.filename().string();
+	name = out.name;
 
 	// Copy the nodes and materials
 	root = out.root;

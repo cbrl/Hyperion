@@ -63,6 +63,7 @@ public:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
+	// Model data
 	std::string name;
 	std::vector<Mesh> meshes;
 	std::vector<AABB> aabbs;
@@ -70,6 +71,7 @@ public:
 	std::vector<Material> materials;
 	std::vector<u32> mat_indices;
 
+	// A hierarchy of nodes that define models
 	Node root;
 };
 

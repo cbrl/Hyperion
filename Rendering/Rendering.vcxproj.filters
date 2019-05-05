@@ -189,6 +189,12 @@
     <Filter Include="Header Files\importer">
       <UniqueIdentifier>{4da399a8-58ac-4ca8-83fe-c12d3d3928de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\exporter">
+      <UniqueIdentifier>{5274900a-6664-4c4a-8de1-03d1336af612}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\exporter">
+      <UniqueIdentifier>{fd081443-0d05-4346-b46d-7c050713f516}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -313,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="src\importer\assimp_importer.cpp">
       <Filter>Source Files\importer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exporter\assimp_exporter.cpp">
+      <Filter>Source Files\exporter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -534,6 +543,12 @@
     </ClInclude>
     <ClInclude Include="src\importer\model_importer.h">
       <Filter>Header Files\importer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\exporter\assimp_exporter.h">
+      <Filter>Header Files\exporter</Filter>
+    </ClInclude>
+    <ClInclude Include="src\exporter\model_exporter.h">
+      <Filter>Header Files\exporter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -170,67 +170,6 @@ static_assert(sizeof(VertexPositionColor) == 28, "Vertex struct/layout mismatch"
 
 
 //----------------------------------------------------------------------------------
-// Position/Texture/Texture
-//----------------------------------------------------------------------------------
-struct VertexPositionDualTexture final {
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
-	constexpr VertexPositionDualTexture() noexcept = default;
-	constexpr VertexPositionDualTexture(const VertexPositionDualTexture& vertex) noexcept = default;
-	constexpr VertexPositionDualTexture(VertexPositionDualTexture&& vertex) noexcept = default;
-
-	constexpr VertexPositionDualTexture(const f32_3& position,
-	                                    const f32_2& texCoord0,
-	                                    const f32_2& texCoord1) noexcept
-		: position(position)
-		, texCoord0(texCoord0)
-		, texCoord1(texCoord1) {
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Destructor
-	//----------------------------------------------------------------------------------
-	~VertexPositionDualTexture() = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-	constexpr VertexPositionDualTexture& operator=(const VertexPositionDualTexture& vertex) noexcept = default;
-	constexpr VertexPositionDualTexture& operator=(VertexPositionDualTexture&& vertex) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions
-	//----------------------------------------------------------------------------------
-	static constexpr bool hasNormal() noexcept { return false; }
-	static constexpr bool hasColor() noexcept { return false; }
-	static constexpr bool hasTexture() noexcept { return true; }
-
-
-	//----------------------------------------------------------------------------------
-	// Member Variables
-	//----------------------------------------------------------------------------------
-	f32_3 position;
-	f32_2 texCoord0;
-	f32_2 texCoord1;
-
-	static constexpr u32 InputElementCount = 3;
-	static constexpr D3D11_INPUT_ELEMENT_DESC input_elements[InputElementCount] = {
-		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 1, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-	};
-};
-
-static_assert(sizeof(VertexPositionDualTexture) == 28, "Vertex struct/layout mismatch");
-
-
-
-
-//----------------------------------------------------------------------------------
 // Position/Normal
 //----------------------------------------------------------------------------------
 struct VertexPositionNormal final {
