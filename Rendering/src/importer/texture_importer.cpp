@@ -1,6 +1,6 @@
 #include "texture_importer.h"
-#include "io/io.h"
 #include "log/log.h"
+#include "directx/directxtk.h"
 #include <DirectXTex.h>
 
 
@@ -90,34 +90,32 @@ namespace render::importer {
 
 void ImportTexture(ID3D11Device& device,
                    ID3D11DeviceContext& device_context,
-                   const std::wstring& filename,
+                   const fs::path& filename,
                    ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if the file is missing
 	if (!fs::exists(filename)) {
-		HandleLoaderError(device, "Error loading texture (file not found): " + WstrToStr(filename), srv_out);
+		HandleLoaderError(device, "Error loading texture (file not found): " + filename.string(), srv_out);
 		return;
 	}
 
-	const std::wstring ext = GetFileExtension(filename);
-
 	// DDS
-	if (ext == L".dds") {
+	if (filename.extension() == ".dds") {
 		HRESULT hr = CreateDDSTextureFromFile(&device, filename.c_str(), nullptr, srv_out);
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to create DDS texture: " + WstrToStr(filename), srv_out);
+			HandleLoaderError(device, "Failed to create DDS texture: " + filename.string(), srv_out);
 			return;
 		}
 	}
 
 	// TGA
-	else if (ext == L".tga") {
+	else if (filename.extension() == L".tga") {
 		HRESULT hr;
 
 		ScratchImage image;
 		hr = LoadFromTGAFile(filename.c_str(), nullptr, image);
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to load TGA texture: " + WstrToStr(filename), srv_out);
+			HandleLoaderError(device, "Failed to load TGA texture: " + filename.string(), srv_out);
 			return;
 		}
 
@@ -128,7 +126,7 @@ void ImportTexture(ID3D11Device& device,
 		                   image.GetMetadata(),
 		                   texture.GetAddressOf());
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to create ID3D11Resource: " + WstrToStr(filename), srv_out);
+			HandleLoaderError(device, "Failed to create ID3D11Resource: " + filename.string(), srv_out);
 			return;
 		}
 
@@ -139,7 +137,7 @@ void ImportTexture(ID3D11Device& device,
 
 		hr = device.CreateShaderResourceView(texture.Get(), &srv_desc, srv_out);
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to create SRV: " + WstrToStr(filename), srv_out);
+			HandleLoaderError(device, "Failed to create SRV: " + filename.string(), srv_out);
 			return;
 		}
 	}
@@ -148,25 +146,25 @@ void ImportTexture(ID3D11Device& device,
 	else {
 		HRESULT hr = CreateWICTextureFromFile(&device, &device_context, filename.c_str(), nullptr, srv_out);
 		if (FAILED(hr)) {
-			HandleLoaderError(device, "Failed to create WIC texture: " + WstrToStr(filename), srv_out);
+			HandleLoaderError(device, "Failed to create WIC texture: " + filename.string(), srv_out);
 			return;
 		}
 	}
 
 	SetDebugObjectName(*srv_out, "importer Texture");
-	Logger::log(LogLevel::debug, "Loaded texture: {}", WstrToStr(filename));
+	Logger::log(LogLevel::debug, "Loaded texture: {}", filename.string());
 }
 
 
 void ImportTexture(ID3D11Device& device,
                    ID3D11DeviceContext& device_context,
-                   const std::vector<std::wstring>& filenames,
+                   const std::vector<fs::path>& filenames,
                    ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if a file is missing
-	for (const std::wstring& fn : filenames) {
-		if (!fs::exists(fn)) {
-			HandleLoaderError(device, "Error loading texture (file not found): " + WstrToStr(fn), srv_out);
+	for (const fs::path& file : filenames) {
+		if (!fs::exists(file)) {
+			HandleLoaderError(device, "Error loading texture (file not found): " + file.string(), srv_out);
 			return;
 		}
 	}
@@ -175,7 +173,7 @@ void ImportTexture(ID3D11Device& device,
 	std::vector<ComPtr<ID3D11Texture2D>> src_tex(filenames.size());
 
 	for (size_t i = 0; i < filenames.size(); i++) {
-		if (GetFileExtension(filenames[i]) == L".dds") {
+		if (filenames[i].extension() == L".dds") {
 			HRESULT hr = CreateDDSTextureFromFileEx(&device,
 			                                        filenames[i].c_str(),
 			                                        NULL,
@@ -187,7 +185,7 @@ void ImportTexture(ID3D11Device& device,
 			                                        reinterpret_cast<ID3D11Resource**>(src_tex[i].GetAddressOf()),
 			                                        nullptr);
 			if (FAILED(hr)) {
-				HandleLoaderError(device, "Failed to create Texture2D: " + WstrToStr(filenames[i]), srv_out);
+				HandleLoaderError(device, "Failed to create Texture2D: " + filenames[i].string(), srv_out);
 				return;
 			}
 		}
@@ -204,7 +202,7 @@ void ImportTexture(ID3D11Device& device,
 			                                        reinterpret_cast<ID3D11Resource**>(src_tex[i].GetAddressOf()),
 			                                        nullptr);
 			if (FAILED(hr)) {
-				HandleLoaderError(device, "Failed to create Texture2D: " + WstrToStr(filenames[i]), srv_out);
+				HandleLoaderError(device, "Failed to create Texture2D: " + filenames[i].string(), srv_out);
 				return;
 			}
 		}
