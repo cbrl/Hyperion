@@ -92,12 +92,12 @@ void ProcessMeshes(const aiScene* scene, ModelOutput& model_out) {
 void ProcessMaterials(const aiScene* scene, fs::path base_path, ResourceMgr& resource_mgr, ModelOutput& model_out) {
 
 	// Get a scalar value from a material
-	static constexpr auto get_scalar = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
+	static const auto get_scalar = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
 		mat->Get(key, type, idx, out);
 	};
 
 	// Get a color from a material
-	static constexpr auto get_color = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
+	static const auto get_color = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
 		aiColor3D color;
 		if (mat->Get(key, type, idx, color) == aiReturn_SUCCESS) {
 			out[0] = color.r;
@@ -107,7 +107,7 @@ void ProcessMaterials(const aiScene* scene, fs::path base_path, ResourceMgr& res
 	};
 
 	// Get a texture from a material
-	const auto get_map = [&](const aiMaterial* mat, aiTextureType type, unsigned int idx, ResourceMgr& resource_mgr, std::shared_ptr<Texture>& out) {
+	static const auto get_map = [&](const aiMaterial* mat, aiTextureType type, unsigned int idx, ResourceMgr& resource_mgr, std::shared_ptr<Texture>& out) {
 		aiString         path;
 		aiTextureMapping mapping;
 		unsigned int     uvindex;
