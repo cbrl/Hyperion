@@ -323,6 +323,9 @@
     <ClCompile Include="src\exporter\assimp_exporter.cpp">
       <Filter>Source Files\exporter</Filter>
     </ClCompile>
+    <ClCompile Include="src\exporter\texture_exporter.cpp">
+      <Filter>Source Files\exporter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rendering_mgr.h">
@@ -548,6 +551,9 @@
       <Filter>Header Files\exporter</Filter>
     </ClInclude>
     <ClInclude Include="src\exporter\model_exporter.h">
+      <Filter>Header Files\exporter</Filter>
+    </ClInclude>
+    <ClInclude Include="src\exporter\texture_exporter.h">
       <Filter>Header Files\exporter</Filter>
     </ClInclude>
   </ItemGroup>

@@ -13,9 +13,10 @@
 #include <Keyboard.h>
 
 
-// Texture loading
+// Texture loading/saving
 #include <WICTextureLoader.h>
 #include <DDSTextureLoader.h>
+#include <ScreenGrab.h>
 
 
 // Font and sprite support

@@ -142,6 +142,7 @@
     <ClCompile Include="src\direct3d\swapchain.cpp" />
     <ClCompile Include="src\display\display_config.cpp" />
     <ClCompile Include="src\exporter\assimp_exporter.cpp" />
+    <ClCompile Include="src\exporter\texture_exporter.cpp" />
     <ClCompile Include="src\geometry\frustum\frustum.cpp" />
     <ClCompile Include="src\importer\assimp_importer.cpp" />
     <ClCompile Include="src\importer\texture_importer.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="src\display\viewport.h" />
     <ClInclude Include="src\exporter\assimp_exporter.h" />
     <ClInclude Include="src\exporter\model_exporter.h" />
+    <ClInclude Include="src\exporter\texture_exporter.h" />
     <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h" />
     <ClInclude Include="src\geometry\frustum\frustum.h" />
     <ClInclude Include="src\geometry\shapes\bezier.h" />
