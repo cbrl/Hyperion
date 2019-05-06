@@ -10,7 +10,9 @@
 #include "resource/model/material/material_factory.h"
 
 
-namespace render {
+namespace {
+
+using namespace render;
 
 void ProcessNodes(const aiNode* node, ModelOutput::Node& out) {
 
