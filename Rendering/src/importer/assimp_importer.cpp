@@ -149,19 +149,49 @@ void ProcessMaterials(const aiScene* scene, fs::path parent_path, ResourceMgr& r
 			out_mat.name = name.C_Str();
 		}
 		
-		// Get colors
-		GetColor(mat,  AI_MATKEY_COLOR_DIFFUSE,                               out_mat.params.base_color);
-		GetColor(mat,  AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR, out_mat.params.base_color);
+		//----------------------------------------------------------------------------------
+		// Material parameters
+		//----------------------------------------------------------------------------------
+		
+		// Base color factor
+		{
+			const bool base_color = GetColor(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR, out_mat.params.base_color);
+			if (!base_color)
+				GetColor(mat, AI_MATKEY_COLOR_DIFFUSE, out_mat.params.base_color); //Fallback to diffuse factor
+		}
 		GetScalar(mat, AI_MATKEY_OPACITY,                                     out_mat.params.base_color[3]);
 		GetScalar(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR,   out_mat.params.metalness);
 		GetScalar(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,  out_mat.params.roughness);
 		GetColor(mat,  AI_MATKEY_COLOR_EMISSIVE,                              out_mat.params.emissive);
 
-		// Get maps
-		GetMap(mat, aiTextureType_DIFFUSE,  0, resource_mgr, parent_path, out_mat.maps.base_color);
-		GetMap(mat, aiTextureType_HEIGHT,   0, resource_mgr, parent_path, out_mat.maps.normal); //Sometimes normal map will be stored in height maps section
-		GetMap(mat, aiTextureType_NORMALS,  0, resource_mgr, parent_path, out_mat.maps.normal);
+
+		//----------------------------------------------------------------------------------
+		// Texture maps
+		//----------------------------------------------------------------------------------
+
+		// Base color map
+		{
+			const bool base_color = GetMap(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE, resource_mgr, parent_path, out_mat.maps.base_color);
+
+			// Fallback to basic diffuse map
+			if (!base_color)
+				GetMap(mat, aiTextureType_DIFFUSE, 0, resource_mgr, parent_path, out_mat.maps.base_color);
+		}
+
+		// Normal map
+		{
+			const bool normal = GetMap(mat, aiTextureType_NORMALS, 0, resource_mgr, parent_path, out_mat.maps.normal);
+
+			//Sometimes normal map will be stored in height maps section
+			if (!normal)
+				GetMap(mat, aiTextureType_HEIGHT, 0, resource_mgr, parent_path, out_mat.maps.normal);
+			
+		}
+
+		// Emissive map
 		GetMap(mat, aiTextureType_EMISSIVE, 0, resource_mgr, parent_path, out_mat.maps.emissive);
+
+		// Metallic/roughness map
 		GetMap(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE, resource_mgr, parent_path, out_mat.maps.material_params);
 
 		model_out.materials.push_back(out_mat);

@@ -26,7 +26,7 @@ void ProcessNodes(aiNode& ai_node, const render::ModelBlueprint& bp, const rende
 		meshes[i] = bp_node.mesh_indices[i];
 	}
 
-	ai_node.mMeshes    = meshes;
+	ai_node.mMeshes = meshes;
 	ai_node.mNumMeshes = static_cast<unsigned int>(bp_node.mesh_indices.size());
 
 	//----------------------------------------------------------------------------------
@@ -59,11 +59,11 @@ void ReadMeshData(ID3D11Device& device,
 	//----------------------------------------------------------------------------------
 	// Vertex buffer
 	//----------------------------------------------------------------------------------
-	vb_desc.Usage               = D3D11_USAGE_STAGING;
-	vb_desc.ByteWidth           = sizeof(VertexT) * mesh.getVertexCount();
-	vb_desc.BindFlags           = 0;
-	vb_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_READ;
-	vb_desc.MiscFlags           = 0;
+	vb_desc.Usage = D3D11_USAGE_STAGING;
+	vb_desc.ByteWidth = sizeof(VertexT) * mesh.getVertexCount();
+	vb_desc.BindFlags = 0;
+	vb_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	vb_desc.MiscFlags = 0;
 	vb_desc.StructureByteStride = 0;
 
 	// Create vertex buffer
@@ -77,11 +77,11 @@ void ReadMeshData(ID3D11Device& device,
 	//----------------------------------------------------------------------------------
 	// Index buffer
 	//----------------------------------------------------------------------------------
-	ib_desc.Usage               = D3D11_USAGE_STAGING;
-	ib_desc.ByteWidth           = sizeof(u32) * mesh.getIndexCount();
-	ib_desc.BindFlags           = 0;
-	ib_desc.CPUAccessFlags      = D3D11_CPU_ACCESS_READ;
-	ib_desc.MiscFlags           = 0;
+	ib_desc.Usage = D3D11_USAGE_STAGING;
+	ib_desc.ByteWidth = sizeof(u32) * mesh.getIndexCount();
+	ib_desc.BindFlags = 0;
+	ib_desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	ib_desc.MiscFlags = 0;
 	ib_desc.StructureByteStride = 0;
 
 	// Create index buffer
@@ -145,26 +145,26 @@ void ProcessMesh(ID3D11Device& device, ID3D11DeviceContext& device_context, aiMe
 	if (vertices.empty()) {
 		return;
 	}
-	
+
 	//----------------------------------------------------------------------------------
 	// Create faces
 	//----------------------------------------------------------------------------------
-	ai_mesh.mFaces    = new aiFace[vertices.size() / 3];
+	ai_mesh.mFaces = new aiFace[vertices.size() / 3];
 	ai_mesh.mNumFaces = static_cast<unsigned int>(vertices.size() / 3);
 
 	for (size_t i = 0; i < (indices.size() / 3); ++i) {
 		ai_mesh.mFaces[i].mIndices = new unsigned int[3];
 		ai_mesh.mFaces[i].mNumIndices = 3;
 
-		ai_mesh.mFaces[i].mIndices[0] = indices[i*3];
-		ai_mesh.mFaces[i].mIndices[1] = indices[i*3 + 1];
-		ai_mesh.mFaces[i].mIndices[2] = indices[i*3 + 2];
+		ai_mesh.mFaces[i].mIndices[0] = indices[i * 3];
+		ai_mesh.mFaces[i].mIndices[1] = indices[i * 3 + 1];
+		ai_mesh.mFaces[i].mIndices[2] = indices[i * 3 + 2];
 	}
 
 	//----------------------------------------------------------------------------------
 	// Create Assimp compatible data arrays and assign the mesh fields
 	//----------------------------------------------------------------------------------
-	ai_mesh.mVertices    = new aiVector3D[vertices.size()];
+	ai_mesh.mVertices = new aiVector3D[vertices.size()];
 	ai_mesh.mNumVertices = static_cast<unsigned int>(vertices.size());
 
 	if constexpr (VertexT::hasColor()) {
@@ -204,7 +204,7 @@ void ProcessMesh(ID3D11Device& device, ID3D11DeviceContext& device_context, aiMe
 }
 
 void ProcessMeshes(ID3D11Device& device, ID3D11DeviceContext& device_context, aiScene& scene, const render::ModelBlueprint& bp) {
-	scene.mMeshes    = new aiMesh*[bp.meshes.size()]{nullptr};
+	scene.mMeshes = new aiMesh* [bp.meshes.size()] { nullptr };
 	scene.mNumMeshes = static_cast<unsigned int>(bp.meshes.size());
 
 	for (size_t i = 0; i < bp.meshes.size(); ++i) {
@@ -254,34 +254,84 @@ bool SetColor(aiMaterial& mat, const char* key, unsigned int type, unsigned int 
 };
 
 
-void ProcessMaterials(aiScene& scene, const render::ModelBlueprint& bp) {
-	scene.mMaterials    = new aiMaterial*[bp.materials.size()]{nullptr};
+// Set a texture in a material and export the texture
+bool ExportMap(aiMaterial& mat,
+               const char* key,
+               unsigned int type,
+               unsigned int idx,
+               const render::Texture& texture,
+               const fs::path& parent_path,
+               ID3D11Device& device,
+               ID3D11DeviceContext& device_context) {
+
+	const fs::path guid = texture.getGUID();
+	const fs::path file = parent_path / guid.filename().replace_extension("tga");
+
+	aiString ai_file;
+	ai_file.Set(file.string());
+
+	if (mat.AddProperty(&ai_file, key, type, idx) == aiReturn_SUCCESS) {
+		return render::exporter::ExportTextureToTGA(device, device_context, texture, file);
+	}
+	return false;
+};
+
+void ProcessMaterials(ID3D11Device& device, ID3D11DeviceContext& device_context, aiScene& scene, const render::ModelBlueprint& bp, const fs::path& parent_path) {
+	scene.mMaterials    = new aiMaterial* [bp.materials.size()] { nullptr };
 	scene.mNumMaterials = static_cast<unsigned int>(bp.materials.size());
 
 	for (size_t i = 0; i < bp.materials.size(); ++i) {
 		scene.mMaterials[i] = new aiMaterial();
-		SetColor(*scene.mMaterials[i],  AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR,  bp.materials[i].params.base_color);
-		SetScalar(*scene.mMaterials[i], AI_MATKEY_OPACITY,                                      bp.materials[i].params.base_color[3]);
-		SetScalar(*scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR,    bp.materials[i].params.metalness);
-		SetScalar(*scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,   bp.materials[i].params.roughness);
-	}
 
-	//TODO: Textures
+		aiMaterial& ai_mat = *scene.mMaterials[i];
+		const render::Material& bp_mat = bp.materials[i];
+
+		//----------------------------------------------------------------------------------
+		// Set material name
+		//----------------------------------------------------------------------------------
+		aiString name;
+		name.Set(bp_mat.name);
+		ai_mat.AddProperty(&name, AI_MATKEY_NAME);
+
+		//----------------------------------------------------------------------------------
+		// Set material parameters
+		//----------------------------------------------------------------------------------
+		SetColor(ai_mat,  AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR, bp_mat.params.base_color);
+		SetScalar(ai_mat, AI_MATKEY_OPACITY,                                     bp_mat.params.base_color[3]);
+		SetColor(ai_mat,  AI_MATKEY_COLOR_EMISSIVE,                              bp_mat.params.emissive);
+		SetScalar(ai_mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR,   bp_mat.params.metalness);
+		SetScalar(ai_mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,  bp_mat.params.roughness);
+
+		//----------------------------------------------------------------------------------
+		// Set texture maps
+		//----------------------------------------------------------------------------------
+		if (bp_mat.maps.base_color)
+			ExportMap(ai_mat, AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE) *bp_mat.maps.base_color, parent_path, device, device_context);
+
+		if (bp_mat.maps.normal)
+			ExportMap(ai_mat, AI_MATKEY_TEXTURE_NORMALS(0), *bp_mat.maps.normal, parent_path, device, device_context);
+
+		if (bp_mat.maps.material_params)
+			ExportMap(ai_mat, AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE) *bp_mat.maps.material_params, parent_path, device, device_context);
+
+		if (bp_mat.maps.emissive)
+			ExportMap(ai_mat, AI_MATKEY_TEXTURE_EMISSIVE(0), *bp_mat.maps.emissive, parent_path, device, device_context);
+	}
 }
 
-} // namespace {}
+} // namespace
 
 
 namespace render::exporter::detail {
 
 void AssimpExport(ID3D11Device& device, ID3D11DeviceContext& device_context, const ModelBlueprint& blueprint, fs::path filename) {
-	// The scene's destructor will properly delete everything created here with operator new
+	// The scene's destructor will delete everything created here with operator new()
 	aiScene scene;
 	scene.mRootNode = new aiNode();
 
 	ProcessNodes(*scene.mRootNode, blueprint, blueprint.root);
 	ProcessMeshes(device, device_context, scene, blueprint);
-	ProcessMaterials(scene, blueprint);
+	ProcessMaterials(device, device_context, scene, blueprint, filename.parent_path());
 
 	Assimp::Exporter exporter;
 	const unsigned int flags = aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs;
