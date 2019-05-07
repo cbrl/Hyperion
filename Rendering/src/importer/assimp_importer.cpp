@@ -89,50 +89,55 @@ void ProcessMeshes(const aiScene* scene, ModelOutput& model_out) {
 }
 
 
-void ProcessMaterials(const aiScene* scene, fs::path base_path, ResourceMgr& resource_mgr, ModelOutput& model_out) {
+// Get a scalar value from a material
+template<typename T>
+bool GetScalar(const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, T& out) {
+	return mat->Get(key, type, idx, out) == aiReturn_SUCCESS;
+}
 
-	// Get a scalar value from a material
-	static const auto get_scalar = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
-		mat->Get(key, type, idx, out);
-	};
 
-	// Get a color from a material
-	static const auto get_color = [](const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, auto& out) {
-		aiColor3D color;
-		if (mat->Get(key, type, idx, color) == aiReturn_SUCCESS) {
-			out[0] = color.r;
-			out[1] = color.g;
-			out[2] = color.b;
+// Get a color from a material
+template<typename T>
+bool GetColor(const aiMaterial* mat, const char* key, unsigned int type, unsigned int idx, T& out) {
+	aiColor3D color;
+	if (mat->Get(key, type, idx, color) == aiReturn_SUCCESS) {
+		out[0] = color.r;
+		out[1] = color.g;
+		out[2] = color.b;
+		return true;
+	}
+	return false;
+};
+
+
+// Get a texture from a material
+bool GetMap(const aiMaterial* mat, aiTextureType type, unsigned int idx, ResourceMgr& resource_mgr, const fs::path& parent_path, std::shared_ptr<Texture>& out) {
+	aiString         path;
+	aiTextureMapping mapping;
+	unsigned int     uvindex;
+	ai_real          blend;
+	aiTextureOp      op;
+	aiTextureMapMode mode;
+	//TODO: handle texture stacks?
+	if (mat->GetTexture(type, idx, &path, &mapping, &uvindex, &blend, &op, &mode) == aiReturn_SUCCESS) {
+		if (!path.data[0]) return false;
+
+		if (path.data[0] == '*') {
+			//TODO: handle embedded textures? (very rare)
+			Logger::log(LogLevel::info, "Embedded texture found in model");
 		}
-	};
-
-	// Get a texture from a material
-	static const auto get_map = [&](const aiMaterial* mat, aiTextureType type, unsigned int idx, ResourceMgr& resource_mgr, std::shared_ptr<Texture>& out) {
-		aiString         path;
-		aiTextureMapping mapping;
-		unsigned int     uvindex;
-		ai_real          blend;
-		aiTextureOp      op;
-		aiTextureMapMode mode;
-		//TODO: handle texture stacks?
-		if (mat->GetTexture(type, idx, &path, &mapping, &uvindex, &blend, &op, &mode) == aiReturn_SUCCESS) {
-			if (!path.data[0]) return;
-
-			if (path.data[0] == '*') {
-				//TODO: handle embedded textures? (very rare)
-				Logger::log(LogLevel::info, "Embedded texture found in model");
-			}
-			else {
-				out = resource_mgr.getOrCreate<Texture>(base_path / path.C_Str());
-			}
+		else {
+			out = resource_mgr.getOrCreate<Texture>(parent_path / path.C_Str());
 		}
-	};
+		return true;
+	}
+	return false;
+};
 
-	//----------------------------------------------------------------------------------
-	// Process all materials in the scene
-	//----------------------------------------------------------------------------------
+
+void ProcessMaterials(const aiScene* scene, fs::path parent_path, ResourceMgr& resource_mgr, ModelOutput& model_out) {
+
 	for (u32 i = 0; i < scene->mNumMaterials; ++i) {
-
 		// Create output material struct
 		Material out_mat = MaterialFactory::CreateDefaultMaterial(resource_mgr);
 
@@ -145,21 +150,19 @@ void ProcessMaterials(const aiScene* scene, fs::path base_path, ResourceMgr& res
 		}
 		
 		// Get colors
-		get_color(mat,  AI_MATKEY_COLOR_DIFFUSE,                               out_mat.params.base_color);
-		get_color(mat,  AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR, out_mat.params.base_color);
-		get_scalar(mat, AI_MATKEY_OPACITY,                                     out_mat.params.base_color[3]);
-		get_scalar(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR,   out_mat.params.metalness);
-		get_scalar(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,  out_mat.params.roughness);
-		get_color(mat,  AI_MATKEY_COLOR_EMISSIVE,                              out_mat.params.emissive);
+		GetColor(mat,  AI_MATKEY_COLOR_DIFFUSE,                               out_mat.params.base_color);
+		GetColor(mat,  AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR, out_mat.params.base_color);
+		GetScalar(mat, AI_MATKEY_OPACITY,                                     out_mat.params.base_color[3]);
+		GetScalar(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR,   out_mat.params.metalness);
+		GetScalar(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,  out_mat.params.roughness);
+		GetColor(mat,  AI_MATKEY_COLOR_EMISSIVE,                              out_mat.params.emissive);
 
 		// Get maps
-		get_map(mat, aiTextureType_DIFFUSE,  0, resource_mgr, out_mat.maps.base_color);
-		get_map(mat, aiTextureType_HEIGHT,   0, resource_mgr, out_mat.maps.normal);  //Sometimes normal map will be stored in height maps section
-		get_map(mat, aiTextureType_NORMALS,  0, resource_mgr, out_mat.maps.normal);
-		get_map(mat, aiTextureType_EMISSIVE, 0, resource_mgr, out_mat.maps.emissive);
-		get_map(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE, resource_mgr, out_mat.maps.material_params);
-
-		//TODO: get material parameter scalars and material parameter map
+		GetMap(mat, aiTextureType_DIFFUSE,  0, resource_mgr, parent_path, out_mat.maps.base_color);
+		GetMap(mat, aiTextureType_HEIGHT,   0, resource_mgr, parent_path, out_mat.maps.normal); //Sometimes normal map will be stored in height maps section
+		GetMap(mat, aiTextureType_NORMALS,  0, resource_mgr, parent_path, out_mat.maps.normal);
+		GetMap(mat, aiTextureType_EMISSIVE, 0, resource_mgr, parent_path, out_mat.maps.emissive);
+		GetMap(mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE, resource_mgr, parent_path, out_mat.maps.material_params);
 
 		model_out.materials.push_back(out_mat);
 	}
@@ -215,8 +218,10 @@ ModelOutput AssimpLoad(ResourceMgr& resource_mgr,
 	return model_out;
 }
 
+} //namespace {}
 
-namespace importer::detail {
+
+namespace render::importer::detail {
 
 ModelOutput AssimpImport(ResourceMgr& resource_mgr,
 	                     const fs::path& file,
@@ -226,5 +231,4 @@ ModelOutput AssimpImport(ResourceMgr& resource_mgr,
 	return AssimpLoad(resource_mgr, file, flip_winding, flip_uv);
 }
 
-} //namespace importer::detail
-} //namespace render
+} //namespace render::importer::detail

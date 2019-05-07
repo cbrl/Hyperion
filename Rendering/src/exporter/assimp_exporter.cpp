@@ -1,6 +1,7 @@
 #include "assimp_exporter.h"
 #include "entity/entity.h"
 #include "scene/components/model/model.h"
+#include "exporter/texture_exporter.h"
 
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
@@ -234,30 +235,35 @@ void ProcessMeshes(ID3D11Device& device, ID3D11DeviceContext& device_context, ai
 	}
 }
 
+
+// Set a scalar value in a material
+template<typename T>
+bool SetScalar(aiMaterial& mat, const char* key, unsigned int type, unsigned int idx, T& scalar) {
+	return mat.AddProperty(&scalar, 1, key, type, idx) == aiReturn_SUCCESS;
+};
+
+
+// Set a color in a material
+template<typename T>
+bool SetColor(aiMaterial& mat, const char* key, unsigned int type, unsigned int idx, T& color) {
+	aiColor3D ai_color;
+	ai_color.r = color[0];
+	ai_color.g = color[1];
+	ai_color.b = color[2];
+	return mat.AddProperty(&ai_color, 1, key, type, idx) == aiReturn_SUCCESS;
+};
+
+
 void ProcessMaterials(aiScene& scene, const render::ModelBlueprint& bp) {
 	scene.mMaterials    = new aiMaterial*[bp.materials.size()]{nullptr};
 	scene.mNumMaterials = static_cast<unsigned int>(bp.materials.size());
 
-	// Set a scalar value in a material
-	static constexpr auto set_scalar = [](auto& scalar, aiMaterial& mat, const char* key, unsigned int type, unsigned int idx) -> bool {
-		return mat.AddProperty(&scalar, 1, key, type, idx) == aiReturn_SUCCESS;
-	};
-
-	// Set a color in a material
-	static constexpr auto set_color = [](auto& color, aiMaterial& mat, const char* key, unsigned int type, unsigned int idx) -> bool {
-		aiColor3D ai_color;
-		ai_color.r = color[0];
-		ai_color.g = color[1];
-		ai_color.b = color[2];
-		return mat.AddProperty(&ai_color, 1, key, type, idx) == aiReturn_SUCCESS;
-	};
-
 	for (size_t i = 0; i < bp.materials.size(); ++i) {
 		scene.mMaterials[i] = new aiMaterial();
-		set_color(bp.materials[i].params.base_color, *scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR);
-		set_scalar(bp.materials[i].params.base_color[3], *scene.mMaterials[i], AI_MATKEY_OPACITY);
-		set_scalar(bp.materials[i].params.metalness, *scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR);
-		set_scalar(bp.materials[i].params.roughness, *scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR);
+		SetColor(*scene.mMaterials[i],  AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR,  bp.materials[i].params.base_color);
+		SetScalar(*scene.mMaterials[i], AI_MATKEY_OPACITY,                                      bp.materials[i].params.base_color[3]);
+		SetScalar(*scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR,    bp.materials[i].params.metalness);
+		SetScalar(*scene.mMaterials[i], AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,   bp.materials[i].params.roughness);
 	}
 
 	//TODO: Textures
