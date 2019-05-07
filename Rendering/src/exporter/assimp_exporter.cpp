@@ -41,6 +41,7 @@ void ProcessNodes(aiNode& ai_node, const render::ModelBlueprint& bp, const rende
 	}
 }
 
+
 template<typename VertexT>
 void ReadMeshData(ID3D11Device& device,
                   ID3D11DeviceContext& device_context,
@@ -130,8 +131,14 @@ void ReadMeshData(ID3D11Device& device,
 	}
 }
 
+
 template<typename VertexT>
-void ProcessMesh(ID3D11Device& device, ID3D11DeviceContext& device_context, aiMesh& ai_mesh, const render::Mesh& bp_mesh, u32 mat_index) {
+void ProcessMesh(ID3D11Device& device,
+                 ID3D11DeviceContext& device_context,
+                 aiMesh& ai_mesh,
+                 const render::Mesh& bp_mesh,
+                 u32 mat_index) {
+
 	ai_mesh.mName = bp_mesh.getName();
 	ai_mesh.mMaterialIndex = mat_index;
 
@@ -203,7 +210,12 @@ void ProcessMesh(ID3D11Device& device, ID3D11DeviceContext& device_context, aiMe
 	}
 }
 
-void ProcessMeshes(ID3D11Device& device, ID3D11DeviceContext& device_context, aiScene& scene, const render::ModelBlueprint& bp) {
+
+void ProcessMeshes(ID3D11Device& device,
+                   ID3D11DeviceContext& device_context,
+                   aiScene& scene,
+                   const render::ModelBlueprint& bp) {
+
 	scene.mMeshes = new aiMesh* [bp.meshes.size()] { nullptr };
 	scene.mNumMeshes = static_cast<unsigned int>(bp.meshes.size());
 
@@ -276,8 +288,13 @@ bool ExportMap(aiMaterial& mat,
 	return false;
 };
 
-void ProcessMaterials(ID3D11Device& device, ID3D11DeviceContext& device_context, aiScene& scene, const render::ModelBlueprint& bp, const fs::path& parent_path) {
-	scene.mMaterials    = new aiMaterial* [bp.materials.size()] { nullptr };
+void ProcessMaterials(ID3D11Device& device,
+                      ID3D11DeviceContext& device_context,
+                      aiScene& scene,
+                      const render::ModelBlueprint& bp,
+                      const fs::path& parent_path) {
+
+	scene.mMaterials    = new aiMaterial*[bp.materials.size()]{ nullptr };
 	scene.mNumMaterials = static_cast<unsigned int>(bp.materials.size());
 
 	for (size_t i = 0; i < bp.materials.size(); ++i) {
@@ -303,19 +320,25 @@ void ProcessMaterials(ID3D11Device& device, ID3D11DeviceContext& device_context,
 		SetScalar(ai_mat, AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR,  bp_mat.params.roughness);
 
 		//----------------------------------------------------------------------------------
-		// Set texture maps
+		// Export texture maps
 		//----------------------------------------------------------------------------------
-		if (bp_mat.maps.base_color)
-			ExportMap(ai_mat, AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE) *bp_mat.maps.base_color, parent_path, device, device_context);
+		using namespace std::placeholders;
+		
+		// Bind arguments for brevity
+		auto export_func = std::bind(ExportMap, std::ref(ai_mat), _1, _2, _3, _4, parent_path, std::ref(device), std::ref(device_context));
 
-		if (bp_mat.maps.normal)
-			ExportMap(ai_mat, AI_MATKEY_TEXTURE_NORMALS(0), *bp_mat.maps.normal, parent_path, device, device_context);
-
-		if (bp_mat.maps.material_params)
-			ExportMap(ai_mat, AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE) *bp_mat.maps.material_params, parent_path, device, device_context);
-
-		if (bp_mat.maps.emissive)
-			ExportMap(ai_mat, AI_MATKEY_TEXTURE_EMISSIVE(0), *bp_mat.maps.emissive, parent_path, device, device_context);
+		if (bp_mat.maps.base_color) {
+			export_func(AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE) *bp_mat.maps.base_color);
+		}
+		if (bp_mat.maps.normal) {
+			export_func(AI_MATKEY_TEXTURE_NORMALS(0), *bp_mat.maps.normal);
+		}
+		if (bp_mat.maps.material_params) {
+			export_func(AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE) *bp_mat.maps.material_params);
+		}
+		if (bp_mat.maps.emissive) {
+			export_func(AI_MATKEY_TEXTURE_EMISSIVE(0), *bp_mat.maps.emissive);
+		}
 	}
 }
 

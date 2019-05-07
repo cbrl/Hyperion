@@ -12,7 +12,10 @@ void GetTexture2D(ID3D11Device& device, const render::Texture& texture, ID3D11Te
 	resource->QueryInterface<ID3D11Texture2D>(data);
 }
 
-HRESULT ConvertToScratchImage(ID3D11Device& device, ID3D11DeviceContext& device_context, const render::Texture& texture, ScratchImage& output) {
+HRESULT ConvertToScratchImage(ID3D11Device& device,
+                              ID3D11DeviceContext& device_context,
+                              const render::Texture& texture,
+                              ScratchImage& output) {
 	// Get the texture from the shader resource view
 	ComPtr<ID3D11Texture2D> tex2d;
 	GetTexture2D(device, texture, tex2d.GetAddressOf());
@@ -26,7 +29,10 @@ HRESULT ConvertToScratchImage(ID3D11Device& device, ID3D11DeviceContext& device_
 
 namespace render::exporter {
 
-bool ExportTextureToDDS(ID3D11Device& device, ID3D11DeviceContext& device_context, const Texture& texture, fs::path filename) {
+bool ExportTextureToDDS(ID3D11Device& device,
+                        ID3D11DeviceContext& device_context,
+                        const Texture& texture,
+                        fs::path filename) {
 
 	// Convert the texture to an image
 	ScratchImage image;
@@ -50,7 +56,10 @@ bool ExportTextureToDDS(ID3D11Device& device, ID3D11DeviceContext& device_contex
 	return true;
 }
 
-bool ExportTextureToTGA(ID3D11Device& device, ID3D11DeviceContext& device_context, const Texture& texture, fs::path filename) {
+bool ExportTextureToTGA(ID3D11Device& device,
+                        ID3D11DeviceContext& device_context,
+                        const Texture& texture,
+                        fs::path filename) {
 	
 	// Convert the texture to an image
 	ScratchImage image;
@@ -74,7 +83,11 @@ bool ExportTextureToTGA(ID3D11Device& device, ID3D11DeviceContext& device_contex
 	return true;
 }
 
-bool ExportTextureToWIC(ID3D11Device& device, ID3D11DeviceContext& device_context, const Texture& texture, fs::path filename, DirectX::WICCodecs codec) {
+bool ExportTextureToWIC(ID3D11Device& device,
+                        ID3D11DeviceContext& device_context,
+                        const Texture& texture,
+                        fs::path filename,
+                        DirectX::WICCodecs codec) {
 
 	// Convert the texture to an image
 	ScratchImage image;
