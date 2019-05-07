@@ -329,10 +329,12 @@ void AssimpExport(ID3D11Device& device, ID3D11DeviceContext& device_context, con
 	aiScene scene;
 	scene.mRootNode = new aiNode();
 
+	// Build the scene
 	ProcessNodes(*scene.mRootNode, blueprint, blueprint.root);
 	ProcessMeshes(device, device_context, scene, blueprint);
 	ProcessMaterials(device, device_context, scene, blueprint, filename.parent_path());
 
+	// Export the scene in glTF 2 format
 	Assimp::Exporter exporter;
 	const unsigned int flags = aiProcess_MakeLeftHanded | aiProcess_FlipWindingOrder | aiProcess_FlipUVs;
 	exporter.Export(&scene, "gltf2", filename.replace_extension("gltf").string(), flags);
