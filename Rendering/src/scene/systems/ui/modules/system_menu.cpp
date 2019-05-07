@@ -1,20 +1,24 @@
 #include "system_menu.h"
 #include "engine/engine.h"
+#include "exporter/model_exporter.h"
+#include "exporter/texture_exporter.h"
+#include "os/windows/win_utils.h"
+#include <DirectXTex.h>
 
 #include "imgui.h"
 
 
 SystemMenu::SystemMenu(const Engine& engine) {
 
-	const auto& rendering_mgr    = engine.getRenderingMgr();
+	const auto& rendering_mgr = engine.getRenderingMgr();
 	const auto& rendering_config = rendering_mgr.getRenderingConfig();
-	const auto& display_config   = rendering_mgr.getDisplayConfig();
+	const auto& display_config = rendering_mgr.getDisplayConfig();
 
 	// Get shadow map config
-	smap_res                     = rendering_config.getShadowMapRes();
-	smap_depth_bias              = rendering_config.getShadowMapDepthBias();
+	smap_res = rendering_config.getShadowMapRes();
+	smap_depth_bias = rendering_config.getShadowMapDepthBias();
 	smap_slope_scaled_depth_bias = rendering_config.getShadowMapSlopeScaledDepthBias();
-	smap_depth_bias_clamp        = rendering_config.getShadowMapDepthBiasClamp();
+	smap_depth_bias_clamp = rendering_config.getShadowMapDepthBiasClamp();
 
 	// Create the display mode strings
 	for (const auto& desc : display_config.getDisplayDescList()) {
@@ -29,15 +33,17 @@ void SystemMenu::draw(Engine& engine) {
 
 	bool display_settings_popup = false;
 	bool engine_settings_popup = false;
+	bool export_model_popup = false;
+	bool export_texture_popup = false;
 
 	// Menu Bar
 	if (ImGui::BeginMainMenuBar()) {
-		if (ImGui::BeginMenu("System")) {
 
+		// System
+		if (ImGui::BeginMenu("System")) {
 			if (ImGui::MenuItem("Display Settings")) {
 				display_settings_popup = true;
 			}
-
 			if (ImGui::MenuItem("Engine Settings")) {
 				engine_settings_popup = true;
 			}
@@ -50,9 +56,22 @@ void SystemMenu::draw(Engine& engine) {
 
 			ImGui::EndMenu();
 		}
+
+		// Text Editor
 		if (ImGui::BeginMenu("Text Editor")) {
 			if (ImGui::MenuItem("Open text editor")) {
 				text_editor = true;
+			}
+			ImGui::EndMenu();
+		}
+
+		// Export
+		if (ImGui::BeginMenu("Export")) {
+			if (ImGui::MenuItem("Model")) {
+				export_model_popup = true;
+			}
+			if (ImGui::MenuItem("Texture")) {
+				export_texture_popup = true;
 			}
 			ImGui::EndMenu();
 		}
@@ -66,11 +85,18 @@ void SystemMenu::draw(Engine& engine) {
 	if (engine_settings_popup) {
 		ImGui::OpenPopup("Engine Settings");
 	}
-
+	if (export_model_popup) {
+		ImGui::OpenPopup("Export Model");
+	}
+	if (export_texture_popup) {
+		ImGui::OpenPopup("Export Texture");
+	}
 
 	// Settings Popups
 	drawDisplaySettingsPopup(engine);
 	drawEngineSettingsPopup(engine);
+	drawExportModelPopup(engine);
+	drawExportTexturePopup(engine);
 }
 
 
@@ -83,7 +109,7 @@ void SystemMenu::drawEngineSettingsPopup(Engine& engine) {
 
 	if (ImGui::BeginPopupModal("Engine Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-		auto& rendering_mgr    = engine.getRenderingMgr();
+		auto& rendering_mgr = engine.getRenderingMgr();
 		auto& rendering_config = rendering_mgr.getRenderingConfig();
 
 		ImGui::Text("Shadow Maps");
@@ -95,7 +121,7 @@ void SystemMenu::drawEngineSettingsPopup(Engine& engine) {
 		ImGui::DragFloat("Depth Bias Clamp", &smap_depth_bias_clamp, 0.01f);
 
 		bool apply = false;
-		bool save  = false;
+		bool save = false;
 		bool close = false;
 
 		apply = ImGui::Button("Apply");
@@ -158,6 +184,154 @@ void SystemMenu::drawDisplaySettingsPopup(Engine& engine) {
 		}
 		ImGui::SameLine();
 		if (ImGui::Button("Cancel")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+}
+
+
+void SystemMenu::drawExportModelPopup(Engine& engine) {
+	ImGui::SetNextWindowContentWidth(400);
+	if (ImGui::BeginPopup("Export Model", ImGuiWindowFlags_NoResize)) {
+		auto& rendering_mgr  = engine.getRenderingMgr();
+		auto& device         = rendering_mgr.getDevice();
+		auto& device_context = rendering_mgr.getDeviceContext();
+		auto& resource_mgr   = rendering_mgr.getResourceMgr();
+
+		const auto& blueprints = resource_mgr.getResourceMap<render::ModelBlueprint>();
+
+		for (const auto& [name, blueprint_weakptr] : blueprints) {
+			if (!blueprint_weakptr)
+				continue;
+
+			ImGui::Text(blueprint_weakptr->getGUID().c_str());
+
+			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 40);
+
+			if (ImGui::Button("Export")) {
+				const fs::path path = SaveFileDialog();
+				if (not path.empty()) {
+					render::exporter::ExportModel(device, device_context, *blueprint_weakptr, path);
+				}
+			}
+
+			ImGui::Separator();
+			ImGui::Spacing();
+		}
+
+		ImGui::Spacing();
+		if (ImGui::Button("Close")) {
+			ImGui::CloseCurrentPopup();
+		}
+
+		ImGui::EndPopup();
+	}
+}
+
+
+void SystemMenu::drawExportTexturePopup(Engine& engine) {
+	ImGui::SetNextWindowContentWidth(500);
+	if (ImGui::BeginPopup("Export Texture", ImGuiWindowFlags_AlwaysAutoResize)) {
+		auto& rendering_mgr  = engine.getRenderingMgr();
+		auto& device         = rendering_mgr.getDevice();
+		auto& device_context = rendering_mgr.getDeviceContext();
+		auto& resource_mgr   = rendering_mgr.getResourceMgr();
+
+		const auto& textures = resource_mgr.getResourceMap<render::Texture>();
+
+		for (const auto& [name, texture_weakptr] : textures) {
+			if (!texture_weakptr)
+				continue;
+
+			// Draw texture
+			ImGui::Image(texture_weakptr->get(), {40, 40});
+
+			ImGui::SameLine();
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 12);
+
+			// Texture name
+			ImGui::Text(texture_weakptr->getGUID().c_str());
+
+			// Move cursor to right side of window
+			ImGui::SameLine(ImGui::GetWindowContentRegionMax().x - 40);
+			
+			// Push ID for upcoming popup
+			ImGui::PushID(&name);
+
+			if (ImGui::Button("Export")) {
+				ImGui::OpenPopup("FileType");
+			}
+			if (ImGui::BeginPopup("FileType")) {
+				using namespace DirectX;
+
+				if (ImGui::MenuItem("DDS")) {
+					const fs::path file = SaveFileDialog();
+					if (not file.empty())
+						render::exporter::ExportTextureToDDS(device, device_context, *texture_weakptr, file);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("TGA")) {
+					const fs::path file = SaveFileDialog();
+					if (not file.empty())
+						render::exporter::ExportTextureToTGA(device, device_context, *texture_weakptr, file);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("PNG")) {
+					const fs::path file = SaveFileDialog();
+					if (not file.empty())
+						render::exporter::ExportTextureToWIC(device, device_context, *texture_weakptr, file, WICCodecs::WIC_CODEC_PNG);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("TIFF")) {
+					const fs::path file = SaveFileDialog();
+					if (not file.empty())
+						render::exporter::ExportTextureToWIC(device, device_context, *texture_weakptr, file, WICCodecs::WIC_CODEC_TIFF);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("BMP")) {
+					const fs::path file = SaveFileDialog();
+					if (not file.empty())
+						render::exporter::ExportTextureToWIC(device, device_context, *texture_weakptr, file, WICCodecs::WIC_CODEC_BMP);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("JPEG")) {
+					const fs::path file = SaveFileDialog();
+					if (not file.empty())
+						render::exporter::ExportTextureToWIC(device, device_context, *texture_weakptr, file, WICCodecs::WIC_CODEC_JPEG);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("GIF")) {
+					const fs::path file = SaveFileDialog();
+					if (not file.empty())
+						render::exporter::ExportTextureToWIC(device, device_context, *texture_weakptr, file, WICCodecs::WIC_CODEC_GIF);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("WMP")) {
+					const fs::path file = SaveFileDialog();
+					if (not file.empty())
+						render::exporter::ExportTextureToWIC(device, device_context, *texture_weakptr, file, WICCodecs::WIC_CODEC_WMP);
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("ICO")) {
+					const fs::path file = SaveFileDialog();
+					if (not file.empty())
+						render::exporter::ExportTextureToWIC(device, device_context, *texture_weakptr, file, WICCodecs::WIC_CODEC_ICO);
+				}
+
+				ImGui::EndPopup();
+			}
+
+			// Pop item ID
+			ImGui::PopID();
+
+			ImGui::SetCursorPosY(ImGui::GetCursorPosY() - 12);
+			ImGui::Separator();
+		}
+
+		ImGui::Spacing();
+		if (ImGui::Button("Close")) {
 			ImGui::CloseCurrentPopup();
 		}
 

@@ -39,6 +39,8 @@ private:
 
 	void drawEngineSettingsPopup(Engine& engine);
 	void drawDisplaySettingsPopup(Engine& engine);
+	void drawExportModelPopup(Engine& engine);
+	void drawExportTexturePopup(Engine& engine);
 
 
 	//----------------------------------------------------------------------------------
