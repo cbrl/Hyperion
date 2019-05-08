@@ -6,6 +6,7 @@
 #include "sysmon/system_monitor.h"
 #include "time/stopwatch.h"
 #include "input.h"
+#include "key_config.h"
 #include "rendering_mgr.h"
 
 
@@ -165,12 +166,12 @@ public:
 
 	[[nodiscard]]
 	Stopwatch<>& getTimer() {
-		return *timer;
+		return timer;
 	}
 
 	[[nodiscard]]
 	const Stopwatch<>& getTimer() const {
-		return *timer;
+		return timer;
 	}
 
 
@@ -180,12 +181,12 @@ public:
 
 	[[nodiscard]]
 	SystemMonitor& getSysMon() {
-		return *system_monitor;
+		return system_monitor;
 	}
 
 	[[nodiscard]]
 	const SystemMonitor& getSysMon() const {
-		return *system_monitor;
+		return system_monitor;
 	}
 
 
@@ -232,13 +233,13 @@ private:
 	EngineMessageHandler msg_handler;
 
 	std::unique_ptr<Window> window;
-	std::unique_ptr<SystemMonitor> system_monitor;
-	std::unique_ptr<Stopwatch<>> timer;
 	std::unique_ptr<Input> input;
 	std::unique_ptr<render::RenderingMgr> rendering_mgr;
 	std::unique_ptr<render::Scene> scene;
+	Stopwatch<> timer;
+	SystemMonitor system_monitor;
 
-	bool exit_requested;
-	bool resize_requested;
-	bool toggle_fullscreen;
+	bool exit_requested    = false;
+	bool resize_requested  = false;
+	bool toggle_fullscreen = false;
 };

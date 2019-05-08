@@ -89,10 +89,7 @@ LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPAR
 
 Engine::Engine(std::wstring title,
                render::DisplayConfig display_config,
-               render::RenderingConfig rendering_config)
-	: exit_requested(false)
-	, resize_requested(false)
-	, toggle_fullscreen(false) {
+               render::RenderingConfig rendering_config) {
 
 	init(std::move(title), std::move(display_config), std::move(rendering_config));
 }
@@ -145,6 +142,10 @@ void Engine::init(std::wstring title,
                   render::DisplayConfig display_config,
                   render::RenderingConfig rendering_config) {
 
+	// Initialize the COM library
+	ThrowIfFailed(CoInitializeEx(NULL, COINIT_MULTITHREADED),
+	              "Failed to initialize the COM library");
+
 	// Create the main window
 	{
 		auto win_config = std::make_shared<WindowConfig>(gsl::make_not_null(GetModuleHandle(nullptr)));
@@ -174,15 +175,8 @@ void Engine::init(std::wstring title,
 		Logger::log(LogLevel::info, "Initialized main window");
 	}
 
-
-	// System Monitor
-	system_monitor = std::make_unique<SystemMonitor>();
-
 	// Input Handler
 	input = std::make_unique<Input>(gsl::make_not_null(window->getHandle()));
-
-	// Timer
-	timer = std::make_unique<Stopwatch<>>();
 
 	// Rendering Manager
 	rendering_mgr = std::make_unique<render::RenderingMgr>(
@@ -190,10 +184,6 @@ void Engine::init(std::wstring title,
 		std::move(display_config),
 		std::move(rendering_config)
 	);
-
-	// Initialize the COM library
-	auto com_result = CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	ThrowIfFailed(com_result != S_FALSE, "Failed to initialize the COM library");
 }
 
 
@@ -211,7 +201,7 @@ void Engine::loadScene(std::unique_ptr<render::Scene>&& new_scene) {
 		Logger::log(LogLevel::info, "Loading scene: {}", scene->getName());
 		scene->load(*this);
 		Logger::log(LogLevel::info, "Scene loaded: {}", scene->getName());
-		timer->reset();
+		timer.reset();
 	}
 }
 
@@ -259,8 +249,8 @@ void Engine::tick() {
 
 void Engine::updateSystem() {
 
-	system_monitor->tick();
-	timer->tick();
+	system_monitor.tick();
+	timer.tick();
 	input->tick();
 }
 
@@ -294,7 +284,7 @@ void Engine::renderFrame() {
 	// Draw a frame
 	if (scene) {
 		scene->tick(*this);
-		rendering_mgr->render(*scene, timer->deltaTime());
+		rendering_mgr->render(*scene, timer.deltaTime());
 	}
 
 	// Present the frame
