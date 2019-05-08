@@ -22,4 +22,7 @@ namespace ConfigTokens {
     constexpr gsl::czstring<> smap_depth_bias              = "shadow map depth bias";
     constexpr gsl::czstring<> smap_slope_scaled_depth_bias = "shadow map slope scaled depth bias";
     constexpr gsl::czstring<> smap_depth_bias_clamp        = "shadow map depth bias clamp";
+
+	// Input config tokens
+    constexpr gsl::czstring<> key_config = "input";
 }

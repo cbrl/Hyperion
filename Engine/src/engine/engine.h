@@ -66,7 +66,8 @@ public:
 	//----------------------------------------------------------------------------------
 	Engine(std::wstring title,
 	       render::DisplayConfig display_config,
-	       render::RenderingConfig rendering_config);
+	       render::RenderingConfig rendering_config,
+	       KeyConfig key_config);
 
 	Engine(const Engine& engine) = delete;
 	Engine(Engine&& engine) noexcept = default;
@@ -159,6 +160,16 @@ public:
 		return *input;
 	}
 
+	[[nodiscard]]
+	KeyConfig& getKeyConfig() {
+		return key_config;
+	}
+
+	[[nodiscard]]
+	const KeyConfig& getKeyConfig() const {
+		return key_config;
+	}
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Timer
@@ -232,10 +243,18 @@ private:
 
 	EngineMessageHandler msg_handler;
 
+	// Main window
 	std::unique_ptr<Window> window;
-	std::unique_ptr<Input> input;
+
+	// Rendering
 	std::unique_ptr<render::RenderingMgr> rendering_mgr;
 	std::unique_ptr<render::Scene> scene;
+
+	// Input
+	std::unique_ptr<Input> input;
+	KeyConfig key_config;
+
+	// Utility
 	Stopwatch<> timer;
 	SystemMonitor system_monitor;
 

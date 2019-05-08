@@ -16,6 +16,7 @@ std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
 	// Configuration classes
 	render::DisplayConfig   display_config;
 	render::RenderingConfig render_config;
+	KeyConfig               key_config;
 
 	// Try to process the config file
 	json config;
@@ -42,17 +43,30 @@ std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
 			Logger::log(LogLevel::err, e.what());
 		}
 
+		// Load key configuration
+		try {
+			config.at(ConfigTokens::key_config).get_to(key_config);
+		}
+		catch (json::exception& e) {
+			Logger::log(LogLevel::err, e.what());
+		}
+
 		// Get title
 		if (config.contains(ConfigTokens::win_title))
 			config[ConfigTokens::win_title].get_to(title);
+	}
+	
+	auto engine = std::make_unique<Engine>(
+		StrToWstr(title),
+		std::move(display_config),
+		std::move(render_config),
+		std::move(key_config)
+	);
 
-		return std::make_unique<Engine>(StrToWstr(title), std::move(display_config), std::move(render_config));
+	if (!file) {
+		engine->saveConfig(); //try to create a config file if it couldn't be opened
 	}
-	else { //if the file failed to open
-		auto engine = std::make_unique<Engine>(StrToWstr(title), std::move(display_config), std::move(render_config));
-		engine->saveConfig();
-		return engine;
-	}
+	return engine;
 }
 
 
@@ -89,9 +103,13 @@ LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPAR
 
 Engine::Engine(std::wstring title,
                render::DisplayConfig display_config,
-               render::RenderingConfig rendering_config) {
+               render::RenderingConfig rendering_config,
+               KeyConfig key_config)
+	: key_config(std::move(key_config)) {
 
-	init(std::move(title), std::move(display_config), std::move(rendering_config));
+	init(std::move(title),
+	     std::move(display_config),
+	     std::move(rendering_config));
 }
 
 
@@ -131,6 +149,7 @@ void Engine::saveConfig() {
 	config[ConfigTokens::display_config] = display;
 	config[ConfigTokens::render_config]  = rendering;
 	config[ConfigTokens::win_title]      = WstrToStr(window->getWindowTitle());
+	config[ConfigTokens::key_config]     = key_config;
 
 	// Write the file
 	file << std::setw(4) << config << std::endl;
@@ -184,6 +203,11 @@ void Engine::init(std::wstring title,
 		std::move(display_config),
 		std::move(rendering_config)
 	);
+
+	// Bind exit key if not bound
+	if (not key_config.isKeyBound("exit")) {
+		key_config.bindKey("exit", Keyboard::Escape);
+	}
 }
 
 
@@ -229,7 +253,7 @@ void Engine::run() {
 			processInput();
 
 			// Quit if escape is pressed
-			if (input->isKeyDown(Keyboard::Escape)) {
+			if (input->isKeyDown(key_config.getKey("exit"))) {
 				requestExit();
 			}
 		}
