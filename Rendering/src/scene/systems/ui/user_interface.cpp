@@ -26,8 +26,7 @@ UserInterface::UserInterface(Engine& engine)
 	ImGui::StyleColorsDark();
 
 	// Bind system menu key if not bound
-	if (not engine.getKeyConfig().getKey("SystemMenu")) {
-		engine.getKeyConfig().bindKey("SystemMenu", Keyboard::F3);
+	if (engine.getKeyConfig().bindIfNotBound("SystemMenu", Keyboard::F3)) {
 		engine.saveConfig();
 	}
 }

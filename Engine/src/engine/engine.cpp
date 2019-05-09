@@ -206,16 +206,13 @@ void Engine::init(std::wstring title,
 
 	// Bind exit key if not bound
 	bool save_config = false;
-	if (not key_config.isKeyBound("Exit")) {
-		key_config.bindKey("Exit", Keyboard::Escape);
+	if (key_config.bindIfNotBound("Exit", Keyboard::Escape)) {
 		save_config = true;
 	}
-	if (not key_config.isKeyBound("ToggleMouseMode")) {
-		key_config.bindKey("ToggleMouseMode", Keyboard::F1);
+	if (key_config.bindIfNotBound("ToggleMouseMode", Keyboard::F1)) {
 		save_config = true;
 	}
-	if (not key_config.isKeyBound("ToggleMouse")) {
-		key_config.bindKey("ToggleMouse", Keyboard::F2);
+	if (key_config.bindIfNotBound("ToggleMouse", Keyboard::F2)) {
 		save_config = true;
 	}
 	if (save_config)

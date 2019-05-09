@@ -29,6 +29,9 @@ public:
 	//----------------------------------------------------------------------------------
 	void bindKey(const std::string& id, Keyboard::Keys key);
 
+	// Bind a key if it's not bound yet. Returns true if the function binds a key.
+	bool bindIfNotBound(const std::string& id, Keyboard::Keys key);
+
 	void unbindKey(const std::string& id);
 
 	// Get the key bound to the identifier. Creates a new entry if one isn't found.
