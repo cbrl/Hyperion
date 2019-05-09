@@ -36,7 +36,7 @@ bool KeyConfig::isKeyBound(const std::string& id) const noexcept {
 }
 
 void to_json(json& j, const KeyConfig& cfg) {
-	j = json{cfg.key_map};
+	j = cfg.key_map;
 }
 
 void from_json(const json& j, KeyConfig& cfg) {
