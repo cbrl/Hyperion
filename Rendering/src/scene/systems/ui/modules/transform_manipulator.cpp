@@ -44,7 +44,7 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 		return;
 
 	// Get camera transform
-	auto* camera_transform = camera.getOwner()->getComponent<Transform>();
+	const auto* camera_transform = camera.getOwner()->getComponent<Transform>();
 	if (!camera_transform)
 		return;
 
@@ -59,23 +59,23 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 	//----------------------------------------------------------------------------------
 	// Matrices
 	//----------------------------------------------------------------------------------
-	XMMATRIX world_to_camera = camera_transform->getWorldToObjectMatrix();
-	XMMATRIX camera_to_projection = camera.getCameraToProjectionMatrix();
+	const XMMATRIX world_to_camera      = camera_transform->getWorldToObjectMatrix();
+	const XMMATRIX camera_to_projection = camera.getCameraToProjectionMatrix();
 
 	XMFLOAT4X4 view;
 	XMFLOAT4X4 projection;
 	XMStoreFloat4x4(&view, world_to_camera);
 	XMStoreFloat4x4(&projection, camera_to_projection);
 
-	XMMATRIX transform_matrix = transform.getObjectToWorldMatrix();
+	const XMMATRIX transform_matrix = transform.getObjectToWorldMatrix();
 	XMFLOAT4X4 matrix;
 	XMStoreFloat4x4(&matrix, transform_matrix);
 
 	//----------------------------------------------------------------------------------
 	// View Rect
 	//----------------------------------------------------------------------------------
-	auto top_left = camera.getViewport().getTopLeft();
-	auto size = camera.getViewport().getSize();
+	const u32_2 top_left = camera.getViewport().getTopLeft();
+	const u32_2 size     = camera.getViewport().getSize();
 	ImGuizmo::SetRect((float)top_left[0], (float)top_left[1], (float)size[0], (float)size[1]);
 
 	//----------------------------------------------------------------------------------
@@ -96,7 +96,6 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 	//----------------------------------------------------------------------------------
 	ImGuizmo::Manipulate(&view.m[0][0], &projection.m[0][0], operation, mode, &matrix.m[0][0]);
 
-	// Allowing the transform matrix to be set here would eliminate the need to decompose the matrix
 	if (ImGuizmo::IsUsing()) {
 		f32_3 translation;
 		f32_3 rotation;
@@ -110,10 +109,10 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 			// the parent's matrix to obtain the local transformation.
 			auto* parent_transform = transform.getOwner()->getParent()->getComponent<Transform>();
 
-			XMMATRIX world_to_parent = parent_transform->getWorldToObjectMatrix();
-			XMMATRIX relative_transform = XMLoadFloat4x4(&matrix) * world_to_parent;
+			const XMMATRIX world_to_parent  = parent_transform->getWorldToObjectMatrix();
+			const XMMATRIX object_to_parent = XMLoadFloat4x4(&matrix) * world_to_parent;
 			XMFLOAT4X4 new_matrix;
-			XMStoreFloat4x4(&new_matrix, relative_transform);
+			XMStoreFloat4x4(&new_matrix, object_to_parent);
 
 			ImGuizmo::DecomposeMatrixToComponents(&new_matrix.m[0][0], translation.data(), rotation.data(), scale.data());
 		}
