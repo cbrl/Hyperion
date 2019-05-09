@@ -24,6 +24,12 @@ UserInterface::UserInterface(Engine& engine)
 	transform_manipulator = std::make_unique<TransformManipulator>();
 
 	ImGui::StyleColorsDark();
+
+	// Bind system menu key if not bound
+	if (not engine.getKeyConfig().getKey("SystemMenu")) {
+		engine.getKeyConfig().bindKey("SystemMenu", Keyboard::F3);
+		engine.saveConfig();
+	}
 }
 
 
@@ -42,12 +48,13 @@ void UserInterface::update() {
 	ImGuizmo::BeginFrame();
 
 	auto& input        = engine.get().getInput();
+	auto& key_config   = engine.get().getKeyConfig();
 	auto& scene        = engine.get().getScene();
 	auto& device       = engine.get().getRenderingMgr().getDevice();
 	auto& resource_mgr = engine.get().getRenderingMgr().getResourceMgr();
 
 	// Draw the system menu
-	if (input.isKeyPressed(Keyboard::F3)) {
+	if (input.isKeyPressed(key_config.getKey("SystemMenu"))) {
 		system_menu_open = !system_menu_open;
 	}
 	if (system_menu_open) {

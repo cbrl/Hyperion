@@ -205,9 +205,21 @@ void Engine::init(std::wstring title,
 	);
 
 	// Bind exit key if not bound
-	if (not key_config.isKeyBound("exit")) {
-		key_config.bindKey("exit", Keyboard::Escape);
+	bool save_config = false;
+	if (not key_config.isKeyBound("Exit")) {
+		key_config.bindKey("Exit", Keyboard::Escape);
+		save_config = true;
 	}
+	if (not key_config.isKeyBound("ToggleMouseMode")) {
+		key_config.bindKey("ToggleMouseMode", Keyboard::F1);
+		save_config = true;
+	}
+	if (not key_config.isKeyBound("ToggleMouse")) {
+		key_config.bindKey("ToggleMouse", Keyboard::F2);
+		save_config = true;
+	}
+	if (save_config)
+		saveConfig();
 }
 
 
@@ -253,7 +265,7 @@ void Engine::run() {
 			processInput();
 
 			// Quit if escape is pressed
-			if (input->isKeyDown(key_config.getKey("exit"))) {
+			if (input->isKeyDown(key_config.getKey("Exit"))) {
 				requestExit();
 			}
 		}
@@ -319,7 +331,7 @@ void Engine::renderFrame() {
 void Engine::processInput() const {
 
 	// F2: Toggle mouse mode
-	if (input->isKeyPressed(Keyboard::F1)) {
+	if (input->isKeyPressed(key_config.getKey("ToggleMouseMode"))) {
 		if (input->getMouseMode() == Mouse::MODE_ABSOLUTE) {
 			window->removeForwarder(gsl::make_not_null(&ImGuiMessageForwarder::forwarder));
 		}
@@ -332,7 +344,7 @@ void Engine::processInput() const {
 	}
 
 	// F3: Toggle mouse visibility (absolute mode only)
-	if (input->isKeyPressed(Keyboard::F2)) {
+	if (input->isKeyPressed(key_config.getKey("ToggleMouse"))) {
 		input->toggleMouseVisible();
 	}
 }
