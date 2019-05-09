@@ -3,8 +3,16 @@
 #include "scenes/test_scene/components/motor/camera_movement.h"
 
 
-CameraMotorSystem::CameraMotorSystem(const Input& input)
-	: input(input) {
+CameraMotorSystem::CameraMotorSystem(const Input& input, KeyConfig& key_config)
+	: input(input)
+	, key_config(key_config) {
+
+	key_config.bindIfNotBound("Forward", Keyboard::W);
+	key_config.bindIfNotBound("Back",    Keyboard::S);
+	key_config.bindIfNotBound("Left",    Keyboard::A);
+	key_config.bindIfNotBound("Right",   Keyboard::D);
+	key_config.bindIfNotBound("Up",      Keyboard::Space);
+	key_config.bindIfNotBound("Down",    Keyboard::LeftControl);
 }
 
 
@@ -51,26 +59,26 @@ void CameraMotorSystem::processInput(CameraMovement& movement, Transform& transf
 	f32_3 move_units = { 0.0f, 0.0f, 0.0f };
 
 	// Forward/Back movement
-	if (input.isKeyDown(Keyboard::W)) {
+	if (input.isKeyDown(key_config.getKey("Forward"))) {
 		move_units[2] += dt;
 	}
-	else if (input.isKeyDown(Keyboard::S)) {
+	else if (input.isKeyDown(key_config.getKey("Back"))) {
 		move_units[2] -= dt;
 	}
 
 	// Left/Right movement
-	if (input.isKeyDown(Keyboard::A)) {
+	if (input.isKeyDown(key_config.getKey("Left"))) {
 		move_units[0] -= dt;
 	}
-	else if (input.isKeyDown(Keyboard::D)) {
+	else if (input.isKeyDown(key_config.getKey("Right"))) {
 		move_units[0] += dt;
 	}
 
 	// Up/Down movement
-	if (input.isKeyDown(Keyboard::Space)) {
+	if (input.isKeyDown(key_config.getKey("Up"))) {
 		move_units[1] += dt;
 	}
-	else if (input.isKeyDown(Keyboard::LeftControl)) {
+	else if (input.isKeyDown(key_config.getKey("Down"))) {
 		move_units[1] -= dt;
 	}
 

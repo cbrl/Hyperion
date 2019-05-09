@@ -19,6 +19,7 @@ void TestScene::initialize(Engine& engine) {
 	using namespace EntityTemplates;
 	
 	auto& input          = engine.getInput();
+	auto& key_config     = engine.getKeyConfig();
 	auto& rendering_mgr  = engine.getRenderingMgr();
 	auto& device         = rendering_mgr.getDevice();
 	auto& device_context = rendering_mgr.getDeviceContext();
@@ -33,7 +34,7 @@ void TestScene::initialize(Engine& engine) {
 	addUserComponentsToUI(ui);
 
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
-	addSystem<CameraMotorSystem>(input);
+	addSystem<CameraMotorSystem>(input, key_config);
 
 	// Mouse rotation system: reads mouse input to rotate an entity (entity requires MouseRotation component)
 	addSystem<MouseRotationSystem>(input);

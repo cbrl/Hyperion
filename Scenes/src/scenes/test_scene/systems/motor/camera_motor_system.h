@@ -6,13 +6,14 @@
 #include "scenes/test_scene/components/motor/camera_movement.h"
 
 class Input;
+class KeyConfig;
 
 class CameraMotorSystem final : public ecs::System<CameraMotorSystem>, public ecs::EventListener {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	CameraMotorSystem(const Input& input);
+	CameraMotorSystem(const Input& input, KeyConfig& key_config);
 	CameraMotorSystem(const CameraMotorSystem&) = delete;
 	CameraMotorSystem(CameraMotorSystem&&) = default;
 
@@ -52,4 +53,5 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 	const Input& input;
+	KeyConfig& key_config;
 };
