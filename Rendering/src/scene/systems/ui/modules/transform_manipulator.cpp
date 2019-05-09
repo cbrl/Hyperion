@@ -1,6 +1,13 @@
 #include "transform_manipulator.h"
 #include "engine/engine.h"
 
+TransformManipulator::TransformManipulator(Input& input, KeyConfig& key_config)
+	: input(input)
+	, key_config(key_config) {
+	key_config.bindIfNotBound("ObjRotate",    Keyboard::R);
+	key_config.bindIfNotBound("ObjTranslate", Keyboard::T);
+	key_config.bindIfNotBound("ObjScale",     Keyboard::Y);
+}
 
 void TransformManipulator::draw(Engine& engine, ecs::EntityPtr selected_entity) {
 	if (!selected_entity) {
@@ -15,13 +22,13 @@ void TransformManipulator::draw(Engine& engine, ecs::EntityPtr selected_entity) 
 		bool first = true;
 		scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 			if (first) {
-				drawTransformManipulator(*transform, camera, engine.getInput());
+				drawTransformManipulator(*transform, camera);
 				first = false;
 			}
 		});
 		scene.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
 			if (first) {
-				drawTransformManipulator(*transform, camera, engine.getInput());
+				drawTransformManipulator(*transform, camera);
 				first = false;
 			}
 		});
@@ -30,7 +37,7 @@ void TransformManipulator::draw(Engine& engine, ecs::EntityPtr selected_entity) 
 
 
 template<typename CameraT>
-void TransformManipulator::drawTransformManipulator(Transform& transform, CameraT& camera, Input& input) {
+void TransformManipulator::drawTransformManipulator(Transform& transform, CameraT& camera) {
 
 	// Active check
 	if (!transform.isActive())
@@ -74,13 +81,13 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 	//----------------------------------------------------------------------------------
 	// Operation & Mode
 	//----------------------------------------------------------------------------------
-	if (input.isKeyPressed(Keyboard::R)) {
+	if (input.get().isKeyPressed(key_config.get().getKey("ObjRotate"))) {
 		operation = ImGuizmo::ROTATE;
 	}
-	if (input.isKeyPressed(Keyboard::T)) {
+	if (input.get().isKeyPressed(key_config.get().getKey("ObjTranslate"))) {
 		operation = ImGuizmo::TRANSLATE;
 	}
-	if (input.isKeyPressed(Keyboard::Y)) {
+	if (input.get().isKeyPressed(key_config.get().getKey("ObjScale"))) {
 		operation = ImGuizmo::SCALE;
 	}
 

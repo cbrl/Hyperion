@@ -21,7 +21,7 @@ UserInterface::UserInterface(Engine& engine)
 	entity_details        = std::make_unique<EntityDetailsWindow>();
 	metrics               = std::make_unique<MetricsWindow>(engine);
 	text_editor           = std::make_unique<TextEditWindow>();
-	transform_manipulator = std::make_unique<TransformManipulator>();
+	transform_manipulator = std::make_unique<TransformManipulator>(engine.getInput(), engine.getKeyConfig());
 
 	ImGui::StyleColorsDark();
 
