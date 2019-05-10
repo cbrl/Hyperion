@@ -53,7 +53,8 @@ protected:
 	//----------------------------------------------------------------------------------
 
 	// Get a reference to the event manager of the ECS this participator belongs to. The
-	// reference is assigned after construction, so this function 
+	// reference is assigned after construction, so this function cannot be called in a
+	// constructor of a child class.
 	[[nodiscard]]
 	EventMgr& getEventMgr() const noexcept;
 

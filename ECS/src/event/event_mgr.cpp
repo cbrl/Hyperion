@@ -4,7 +4,7 @@
 namespace ecs {
 
 void EventMgr::clearEventBuffer() {
-	//destroy events
+	// Destroy events
 	for (auto* event : events) {
 		event->~IEvent();
 	}
@@ -21,16 +21,16 @@ void EventMgr::dispatchEvents() {
 	size_t last_index = events.size();
 
 	while (index < last_index) {
-		auto* event = events[index++];
+		const auto* event = events[index++];
 		if (!event) {
 			Logger::log(LogLevel::err, "Skipping invalid event");
 			continue;
 		}
 
-		if (auto it = event_dispatchers.find(event->getID()); it != event_dispatchers.end()) {
+		if (const auto it = event_dispatchers.find(event->getID()); it != event_dispatchers.end()) {
 			it->second->dispatch(*event);
 
-			// update last index, after dispatch operation there could be new events
+			// Update last index. New events could be added during event handling.
 			last_index = events.size();
 		}
 	}
@@ -39,8 +39,8 @@ void EventMgr::dispatchEvents() {
 }
 
 void EventMgr::removeEventCallback(gsl::not_null<IEventDelegate*> eventDelegate) {
-	auto index = eventDelegate->getEventID();
-	if (auto it = event_dispatchers.find(index); it != event_dispatchers.end()) {
+	const auto index = eventDelegate->getEventID();
+	if (const auto it = event_dispatchers.find(index); it != event_dispatchers.end()) {
 		it->second->removeEventCallback(eventDelegate);
 	}
 }

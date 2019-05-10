@@ -28,10 +28,16 @@ void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT&
 	// Create a new delegate. The event manager will own the delegate.
 	auto delegate = std::make_unique<EventDelegate<ClassT, EventT>>(static_cast<ClassT*>(this), Callback); //ClassT inherits from "this"
 
-	auto result = std::find_if(registered_callbacks.begin(), registered_callbacks.end(), [&](const IEventDelegate* other) {
-		return other->operator==(*delegate);
-	});
+	// Search the registered callbacks for a callback matching the new one
+	const auto result = std::find_if(
+		registered_callbacks.begin(),
+		registered_callbacks.end(),
+		[&](const IEventDelegate* other) {
+			return other->operator==(*delegate);
+		}
+	);
 
+	// Add the callback if it doesn't exist
 	if (result == registered_callbacks.end()) {
 		registered_callbacks.push_back(delegate.get());
 		getEventMgr().addEventCallback<EventT>(std::move(delegate));
@@ -45,10 +51,16 @@ void EventListener::unregisterEventCallback(void (ClassT::*Callback)(const Event
 
 	EventDelegate<ClassT, EventT> cmp_delegate(static_cast<ClassT*>(this), Callback); //ClassT inherits from "this"
 
-	auto result = std::find_if(registered_callbacks.begin(), registered_callbacks.end(), [&](const IEventDelegate* other) {
-		return other->operator==(cmp_delegate);
-	});
+	// Search the registered callbacks for a match
+	const auto result = std::find_if(
+		registered_callbacks.begin(),
+		registered_callbacks.end(), 
+		[&](const IEventDelegate* other) {
+			return other->operator==(cmp_delegate);
+		}
+	);
 
+	// Remove the callback
 	if (result != registered_callbacks.end()) {
 		getEventMgr().removeEventCallback(gsl::make_not_null(&(*result)));
 		registered_callbacks.erase(result);
