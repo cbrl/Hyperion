@@ -38,6 +38,9 @@ void EventDispatcher<EventT>::dispatch(const IEvent& event) {
 
 template<typename EventT>
 void EventDispatcher<EventT>::addEventCallback(std::unique_ptr<IEventDelegate> delegate) {
+	if (!delegate)
+		return;
+
 	auto result = std::find_if(pending_remove_delegates.begin(), pending_remove_delegates.end(),
 		[&](typename decltype(event_delegates)::iterator& it) {
 			return (*it)->operator==(*delegate);
