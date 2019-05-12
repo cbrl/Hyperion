@@ -1,12 +1,13 @@
 #pragma once
 
 #include "system/system.h"
+#include "directx/math/directx_math.h"
 
 class Engine;
 
 namespace render {
 
-namespace events { class GuiFocusEvent; }
+namespace events { struct GuiFocusEvent; }
 	
 namespace systems {
 
@@ -33,7 +34,12 @@ private:
 	void onGuiFocus(const events::GuiFocusEvent& event);
 
 	template<typename CameraT>
-	void checkHit(const CameraT& camera);
+	void pick(const CameraT& camera);
+
+	void XM_CALLCONV castRay(FXMVECTOR origin,
+	                         FXMVECTOR direction,
+	                         CXMMATRIX view_to_world,
+	                         CXMMATRIX world_to_projection);
 
 	std::reference_wrapper<Engine> engine;
 };

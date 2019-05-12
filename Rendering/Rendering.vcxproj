@@ -144,6 +144,7 @@
     <ClCompile Include="src\exporter\assimp_exporter.cpp" />
     <ClCompile Include="src\exporter\texture_exporter.cpp" />
     <ClCompile Include="src\geometry\frustum\frustum.cpp" />
+    <ClCompile Include="src\geometry\geometry.cpp" />
     <ClCompile Include="src\importer\assimp_importer.cpp" />
     <ClCompile Include="src\importer\texture_importer.cpp" />
     <ClCompile Include="src\renderer\output\output_mgr.cpp" />
@@ -196,6 +197,8 @@
     <ClInclude Include="src\exporter\texture_exporter.h" />
     <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h" />
     <ClInclude Include="src\geometry\frustum\frustum.h" />
+    <ClInclude Include="src\geometry\geometry.h" />
+    <ClInclude Include="src\geometry\geometry_types.h" />
     <ClInclude Include="src\geometry\shapes\bezier.h" />
     <ClInclude Include="src\geometry\shapes\shapes.h" />
     <ClInclude Include="src\geometry\transform\transform_3d.h" />

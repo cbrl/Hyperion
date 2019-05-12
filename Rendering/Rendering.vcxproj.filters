@@ -335,6 +335,9 @@
     <ClCompile Include="src\scene\systems\picking\picking_system.cpp">
       <Filter>Source Files\scene\systems\picking</Filter>
     </ClCompile>
+    <ClCompile Include="src\geometry\geometry.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rendering_mgr.h">
@@ -567,6 +570,12 @@
     </ClInclude>
     <ClInclude Include="src\scene\systems\picking\picking_system.h">
       <Filter>Header Files\scene\systems\picking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\geometry_types.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\geometry.h">
+      <Filter>Header Files\geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
