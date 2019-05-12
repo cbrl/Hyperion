@@ -16,10 +16,10 @@ Model::Model(ID3D11Device& device,
 
 Model::Model(ID3D11Device& device,
              const std::string& name,
-             render::Mesh& mesh,
+             const render::Mesh& mesh,
              render::Material& mat,
-             AABB aabb,
-             BoundingSphere sphere,
+             const AABB& aabb,
+             const BoundingSphere& sphere,
              const std::shared_ptr<render::ModelBlueprint>& bp)
     : buffer(device)
     , name(name)

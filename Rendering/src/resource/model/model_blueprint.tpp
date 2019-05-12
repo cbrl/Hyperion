@@ -61,12 +61,8 @@ void ModelBlueprint::constructBlueprint(ID3D11Device& device, const ModelOutput&
 		meshes.emplace_back(device, mesh.name, vertices, mesh.indices);
 
 		// Construct bounding volumes
-		auto [min, max] = MinMaxPoint(mesh.positions);
-		auto center = (min + max) / 2;
-		auto radius = XMVectorGetX(XMVector3Length(XMLoad(&max) - XMLoad(&min)));
-
-		aabbs.emplace_back(min, max);
-		bounding_spheres.emplace_back(center, radius);
+		aabbs.emplace_back(AABB::createFromVertices(mesh.positions));
+		bounding_spheres.emplace_back(BoundingSphere::createFromVertices(mesh.positions));
 	}
 }
 

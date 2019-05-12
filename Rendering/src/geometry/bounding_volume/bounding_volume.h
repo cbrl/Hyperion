@@ -44,6 +44,12 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
+	// Calculate an AABB from a vector of vertex positions
+	static AABB createFromVertices(const std::vector<f32_3>& vertices) {
+		const auto [min, max] = MinMaxPoint(vertices);
+		return AABB{min, max};
+	}
+
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV min() const noexcept { return min_point; }
 
@@ -99,6 +105,30 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+
+	// Calculate a Bounding Sphere from a vector of vertex positions
+	static BoundingSphere createFromVertices(const std::vector<f32_3>& vertices) {
+		XMVECTOR center;
+		f32      radius;
+
+		center = XMLoad(&vertices[0]);
+		for (size_t i = 1; i < vertices.size(); ++i) {
+			center += XMLoad(&vertices[i]);
+		}
+		center /= vertices.size();
+
+		radius = 0;
+		for (const f32_3& vertex : vertices) {
+			const XMVECTOR diff = XMLoad(&vertex) - center;
+			const f32 radius_sqr = XMVectorGetW(XMVector3Dot(diff, diff));
+			if (radius_sqr > radius) {
+				radius = radius_sqr;
+			}
+		}
+		radius = std::sqrt(radius);
+
+		return BoundingSphere{center, radius};
+	}
 
 	[[nodiscard]]
 	XMVECTOR XM_CALLCONV center() const noexcept { return sphere_center; }
