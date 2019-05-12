@@ -11,17 +11,14 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
+	Viewport() noexcept = default;
 
-	Viewport() = default;
-
-	explicit Viewport(f32 width, f32 height) noexcept
-		: viewport{} {
+	explicit Viewport(f32 width, f32 height) noexcept {
 		viewport.Width = width;
 		viewport.Height = height;
 	}
 
-	explicit Viewport(f32_2 size) noexcept
-		: viewport{} {
+	explicit Viewport(f32_2 size) noexcept {
 		viewport.Width = size[0];
 		viewport.Height = size[1];
 	}
@@ -46,7 +43,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Bind
+	// Member Functions - Bind
 	//----------------------------------------------------------------------------------
 
 	void bind(ID3D11DeviceContext& device_context) const noexcept {
@@ -55,7 +52,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Viewport
+	// Member Functions - Viewport
 	//----------------------------------------------------------------------------------
 
 	const D3D11_VIEWPORT& getViewport() const noexcept {
@@ -68,7 +65,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Top Left
+	// Member Functions - Top Left
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
@@ -89,7 +86,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Size
+	// Member Functions - Size
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
@@ -110,7 +107,7 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Depth
+	// Member Functions - Depth
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
@@ -127,6 +124,42 @@ public:
 		viewport.MinDepth = depth_range[0];
 		viewport.MaxDepth = depth_range[1];
 	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Aspect Ratio
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	f32 getAspectRatio() const noexcept {
+		return static_cast<f32>(viewport.Width) / static_cast<f32>(viewport.Height);
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Contains Point
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	bool contains(u32 x, u32 y) const noexcept {
+		const u32_2 bounds = {
+			viewport.Width  + viewport.TopLeftX,
+			viewport.Height + viewport.TopLeftY
+		};
+
+		if (x >= viewport.TopLeftX &&
+			y >= viewport.TopLeftY &&
+			x <= bounds[0]         &&
+			y <= bounds[1]) {
+			return true;
+		}
+
+		return false;
+	}
+
+	[[nodiscard]]
+	bool contains(const u32_2& pos) const noexcept {
+		return contains(pos[0], pos[1]);
+	}
+
 
 private:
 
