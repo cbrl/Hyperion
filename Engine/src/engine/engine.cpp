@@ -296,7 +296,7 @@ void Engine::updateRendering() {
 	if (resize_requested) {
 		const bool fs = swap_chain.isFullscreen();
 		if (fs) swap_chain.switchMode(true);
-		window->resizeWindow(rendering_mgr->getDisplayConfig().getDisplayResolution());
+		window->resizeClient(rendering_mgr->getDisplayConfig().getDisplayResolution());
 		if (fs) swap_chain.switchMode(true);
 		resize_requested = false;
 	}
