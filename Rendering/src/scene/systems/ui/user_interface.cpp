@@ -41,6 +41,16 @@ UserInterface::~UserInterface() = default;
 UserInterface& UserInterface::operator=(UserInterface&&) noexcept = default;
 
 
+void UserInterface::registerCallbacks() {
+	registerEventCallback(&UserInterface::onEntitySelected);
+}
+
+
+void UserInterface::onEntitySelected(const events::EntitySelectedEvent& event) {
+	scene_tree->setSelectedEntity(event.entity);
+}
+
+
 void UserInterface::update() {
 
 	//ImGui::ShowDemoWindow();

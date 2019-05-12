@@ -5,6 +5,7 @@
 #include "entities/entities.h"
 #include "events/events.h"
 #include "systems/systems.h"
+#include "scene/systems/picking/picking_system.h"
 
 #include "imgui.h"
 
@@ -32,6 +33,9 @@ void TestScene::initialize(Engine& engine) {
 	// User Interface
 	auto& ui = addSystem<render::systems::UserInterface>(engine);
 	addUserComponentsToUI(ui);
+
+	// Picking System: allows the user to select an object on the screen with the mouse
+	addSystem<render::systems::PickingSystem>(engine);
 
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
 	addSystem<CameraMotorSystem>(input, key_config);

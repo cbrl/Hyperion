@@ -36,10 +36,13 @@ public:
 	[[nodiscard]]
 	ecs::EntityPtr getSelectedEntity() const noexcept;
 
+	[[nodiscard]]
+	void setSelectedEntity(const ecs::EntityPtr& entity) noexcept;
+
 private:
 
 	void drawTree(render::Scene& scene);
-	void drawEntityNode(ecs::EntityPtr entity_ptr);
+	void drawEntityNode(const ecs::EntityPtr& entity_ptr);
 
 	void drawMenuBar(render::Scene& scene);
 	void drawEntityMenu(render::Scene& scene);

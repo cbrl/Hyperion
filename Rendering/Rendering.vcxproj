@@ -169,6 +169,7 @@
     <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\scene\systems\camera\camera_system.cpp" />
     <ClCompile Include="src\scene\systems\model\model_system.cpp" />
+    <ClCompile Include="src\scene\systems\picking\picking_system.cpp" />
     <ClCompile Include="src\scene\systems\transform\transform_system.cpp" />
     <ClCompile Include="src\scene\systems\ui\modules\entity_details_window.cpp" />
     <ClCompile Include="src\scene\systems\ui\modules\file_selector.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="src\scene\systems\camera\camera_system.h" />
     <ClInclude Include="src\scene\systems\core_systems.h" />
     <ClInclude Include="src\scene\systems\model\model_system.h" />
+    <ClInclude Include="src\scene\systems\picking\picking_system.h" />
     <ClInclude Include="src\scene\systems\transform\transform_system.h" />
     <ClInclude Include="src\scene\systems\ui\modules\entity_details_window.h" />
     <ClInclude Include="src\scene\systems\ui\modules\file_selector.h" />

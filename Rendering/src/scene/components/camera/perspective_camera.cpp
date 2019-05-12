@@ -16,9 +16,6 @@ f32 PerspectiveCamera::getFOV() const noexcept {
 }
 
 XMMATRIX XM_CALLCONV PerspectiveCamera::getCameraToProjectionMatrix() const {
-
-	const u32_2 size         = viewport.getSize();
-	const f32   aspect_ratio = static_cast<f32>(size[0]) / static_cast<f32>(size[1]);
-
+	const f32 aspect_ratio = viewport.getAspectRatio();
 	return XMMatrixPerspectiveFovLH(fov, aspect_ratio, depth[0], depth[1]);
 }

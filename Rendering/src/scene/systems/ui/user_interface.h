@@ -26,7 +26,10 @@ class Scene;
 
 namespace systems {
 
-class UserInterface final : public ecs::System<UserInterface>, public ecs::EventSender {
+class UserInterface final
+	: public ecs::System<UserInterface>
+	, public ecs::EventSender
+	, public ecs::EventListener {
 public:
 	using UserComponent = EntityDetailsWindow::UserComponent;
 
@@ -62,6 +65,10 @@ public:
 	}
 
 private:
+
+	void registerCallbacks() override;
+
+	void onEntitySelected(const events::EntitySelectedEvent& event);
 
 	using System<UserInterface>::setUpdateInterval; //UI updates every frame
 

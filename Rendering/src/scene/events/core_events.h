@@ -1,6 +1,7 @@
 #pragma once
 
 #include "event/event.h"
+#include "entity/entity.h"
 #include "datatypes/datatypes.h"
 
 class Transform;
@@ -19,8 +20,6 @@ struct WindowResizeEvent : public ecs::Event<WindowResizeEvent> {
 };
 
 
-
-
 //----------------------------------------------------------------------------------
 // UI Focus
 //----------------------------------------------------------------------------------
@@ -32,6 +31,18 @@ struct GuiFocusEvent : public ecs::Event<GuiFocusEvent> {
 
 	const bool keyboard_focus;
 	const bool mouse_focus;
+};
+
+
+//----------------------------------------------------------------------------------
+// Entity Selected
+//----------------------------------------------------------------------------------
+struct EntitySelectedEvent : public ecs::Event<EntitySelectedEvent> {
+	EntitySelectedEvent(ecs::EntityPtr entity)
+		: entity(std::move(entity)) {
+	}
+
+	const ecs::EntityPtr entity;
 };
 
 } //namespace render::events

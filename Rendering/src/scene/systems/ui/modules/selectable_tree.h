@@ -31,11 +31,16 @@ public:
 		return selected;
 	}
 
+	void setSelected(T* ptr) noexcept {
+		selected = ptr;
+	}
+
 	bool isSelected(T* ptr) const noexcept {
 		return selected == ptr;
 	}
 
 private:
+
 	template <typename... ArgsT>
 	bool node(T* ptr, ImGuiTreeNodeFlags flags, gsl::czstring<> fmt, ArgsT... args) {
 		const bool is_open = ImGui::TreeNodeEx(ptr, flags, fmt, std::forward<ArgsT>(args)...);
@@ -46,7 +51,6 @@ private:
 	}
 
 
-private:
 	T* selected = nullptr;
 };
 
@@ -78,11 +82,16 @@ public:
 		return selected;
 	}
 
+	void setSelected(const ecs::EntityPtr& ptr) noexcept {
+		selected = ptr;
+	}
+
 	bool isSelected(const ecs::EntityPtr& ptr) const noexcept {
 		return selected == ptr;
 	}
 
 private:
+
 	template <typename... ArgsT>
 	bool node(const ecs::EntityPtr& ptr, ImGuiTreeNodeFlags flags, gsl::czstring<> fmt, ArgsT... args) {
 		const bool is_open = ImGui::TreeNodeEx(ptr.get(), flags, fmt, std::forward<ArgsT>(args)...);
@@ -93,6 +102,5 @@ private:
 	}
 
 
-private:
 	ecs::EntityPtr selected = {};
 };

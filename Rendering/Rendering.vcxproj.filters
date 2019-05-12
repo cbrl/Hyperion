@@ -195,6 +195,12 @@
     <Filter Include="Source Files\exporter">
       <UniqueIdentifier>{fd081443-0d05-4346-b46d-7c050713f516}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene\systems\picking">
+      <UniqueIdentifier>{5bc6de02-2058-4b29-a8bc-4a1f9973ee25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\systems\picking">
+      <UniqueIdentifier>{0b21dae3-37cf-4326-b838-2984d76c9fcd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -325,6 +331,9 @@
     </ClCompile>
     <ClCompile Include="src\exporter\texture_exporter.cpp">
       <Filter>Source Files\exporter</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\picking\picking_system.cpp">
+      <Filter>Source Files\scene\systems\picking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -472,9 +481,6 @@
     <ClInclude Include="src\scene\components\transform\transform.h">
       <Filter>Header Files\scene\components\transform</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\systems\core_systems.h">
-      <Filter>Header Files\scene\systems</Filter>
-    </ClInclude>
     <ClInclude Include="src\scene\systems\camera\camera_system.h">
       <Filter>Header Files\scene\systems\camera</Filter>
     </ClInclude>
@@ -555,6 +561,12 @@
     </ClInclude>
     <ClInclude Include="src\exporter\texture_exporter.h">
       <Filter>Header Files\exporter</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\core_systems.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\picking\picking_system.h">
+      <Filter>Header Files\scene\systems\picking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

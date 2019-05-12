@@ -37,7 +37,12 @@ ecs::EntityPtr SceneTree::getSelectedEntity() const noexcept {
 }
 
 
-void SceneTree::drawEntityNode(ecs::EntityPtr entity_ptr) {
+void SceneTree::setSelectedEntity(const ecs::EntityPtr& entity) noexcept {
+	scene_tree.setSelected(entity);
+}
+
+
+void SceneTree::drawEntityNode(const ecs::EntityPtr& entity_ptr) {
 
 	if (!entity_ptr.valid())
 		return;
