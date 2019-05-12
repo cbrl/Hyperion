@@ -160,7 +160,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Misc
 	//----------------------------------------------------------------------------------
-	void show(int nCmdShow) const noexcept {
+	void show(int nCmdShow) const {
 		ShowWindow(window, nCmdShow);
 	}
 
@@ -175,30 +175,70 @@ public:
 	}
 
 	[[nodiscard]]
-	std::wstring getWindowTitle() const noexcept {
+	std::wstring getWindowTitle() const {
 		wchar_t title[256];
 		GetWindowText(window, title, static_cast<int>(std::size(title)));
 		return std::wstring(title);
 	}
 
-	void setWindowTitle(const std::wstring& title) noexcept {
+	void setWindowTitle(const std::wstring& title) {
 		SetWindowText(window, title.c_str());
 	}
 
+	// Get the size of the window (including window decorations)
 	[[nodiscard]]
-	u32_2 getClientSize() const noexcept {
+	u32_2 getWindowSize() const {
+		RECT wind;
+		GetWindowRect(window, &wind);
+		return { static_cast<u32>(wind.right),
+		         static_cast<u32>(wind.bottom) };
+	}
+
+	// Set the size of the window (including window decorations)
+	void resizeWindow(u32_2 size) const {
+		RECT pos;
+		GetWindowRect(window, &pos);
+		MoveWindow(window, pos.left, pos.top, size[0], size[1], TRUE);
+	}
+
+	// Get the top-left position of the window (including window decorations)
+	[[nodiscard]]
+	u32_2 getWindowPosition() const {
+		RECT pos;
+		GetWindowRect(window, &pos);
+		return { static_cast<u32>(pos.left),
+			     static_cast<u32>(pos.top) };
+	}
+
+	// Get the size of the client within the window
+	[[nodiscard]]
+	u32_2 getClientSize() const {
 		RECT client;
 		GetClientRect(window, &client);
 		return { static_cast<u32>(client.right),
 		         static_cast<u32>(client.bottom) };
 	}
 
-	void resizeWindow(u32_2 size) const noexcept {
+	// Set the size of the client in the window
+	void resizeClient(u32_2 size) const {
 		RECT pos;
 		GetWindowRect(window, &pos);
 		RECT client = { 0, 0, static_cast<LONG>(size[0]), static_cast<LONG>(size[1]) };
 		AdjustWindowRect(&client, GetWindowLong(window, GWL_STYLE), false);
 		MoveWindow(window, pos.left, pos.top, client.right - client.left, client.bottom - client.top, TRUE);
+	}
+
+	// Get the top-left position of the client in the window
+	[[nodiscard]]
+	u32_2 getClientPosition() const {
+		RECT  client;
+		POINT pos;
+		GetClientRect(window, &client);
+		pos.x = client.left;
+		pos.y = client.top;
+		ClientToScreen(window, &pos);
+		return { static_cast<u32>(pos.x),
+		         static_cast<u32>(pos.y) };
 	}
 
 
