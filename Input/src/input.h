@@ -102,6 +102,12 @@ public:
 			: setMouseAbsolute();
 	}
 
+	// Get the current mouse mode
+	[[nodiscard]]
+	Mouse::Mode getMouseMode() const {
+		return mouse_state.positionMode;
+	}
+
 	// Set the mouse visibility (absolute mode only)
 	void setMouseVisible(bool state) {
 		mouse->SetVisible(state);
@@ -121,11 +127,88 @@ public:
 	[[nodiscard]]
 	i32_2 getMouseDelta() const;
 
-	// Get the current mouse mode
+	//----------------------------------------------------------------------------------
+	// Member Functions - Mouse Pressed
+	//----------------------------------------------------------------------------------
+
+	// Check if the left mouse button is pressed. Will only return true once while the button is down.
 	[[nodiscard]]
-	Mouse::Mode getMouseMode() const {
-		return mouse_state.positionMode;
-	}
+	bool isMouseLeftPressed() const;
+
+	// Check if the right mouse button is pressed. Will only return true once while the button is down.
+	[[nodiscard]]
+	bool isMouseRightPressed() const;
+
+	// Check if mouse button x1 is pressed. Will only return true once while the button is down.
+	[[nodiscard]]
+	bool isMouseX1Pressed() const;
+
+	// Check if mouse button x2 is pressed. Will only return true once while the button is down.
+	[[nodiscard]]
+	bool isMouseX2Pressed() const;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Mouse Released
+	//----------------------------------------------------------------------------------
+
+	// Check if the left mouse button is released. Will only return true once while the button is up.
+	[[nodiscard]]
+	bool isMouseLeftReleased() const;
+
+	// Check if the right mouse button is released. Will only return true once while the button is up.
+	[[nodiscard]]
+	bool isMouseRightReleased() const;
+
+	// Check if mouse button x1 is released. Will only return true once while the button is up.
+	[[nodiscard]]
+	bool isMouseX1Released() const;
+
+	// Check if mouse button x2 is released. Will only return true once while the button is up.
+	[[nodiscard]]
+	bool isMouseX2Released() const;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Mouse Down
+	//----------------------------------------------------------------------------------
+
+	// Check if the left mouse button is down
+	[[nodiscard]]
+	bool isMouseLeftDown() const;
+
+	// Check if the right mouse button is down
+	[[nodiscard]]
+	bool isMouseRightDown() const;
+
+	// Check if mouse button x1 is down
+	[[nodiscard]]
+	bool isMouseX1Down() const;
+
+	// Check if mouse button x2 is down
+	[[nodiscard]]
+	bool isMouseX2Down() const;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Mouse Up
+	//----------------------------------------------------------------------------------
+
+	// Check if the left mouse button is up
+	[[nodiscard]]
+	bool isMouseLeftUp() const;
+
+	// Check if the right mouse button is up
+	[[nodiscard]]
+	bool isMouseRightUp() const;
+
+	// Check if mouse button x1 is up
+	[[nodiscard]]
+	bool isMouseX1Up() const;
+
+	// Check if mouse button x2 is up
+	[[nodiscard]]
+	bool isMouseX2Up() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -134,28 +217,19 @@ public:
 
 	// Check if key is currently down
 	[[nodiscard]]
-	bool isKeyDown(Keyboard::Keys key) const {
-		return keyboard_state.IsKeyDown(key);
-	}
+	bool isKeyDown(Keyboard::Keys key) const;
 
 	// Check if key is currently up
 	[[nodiscard]]
-	bool isKeyUp(Keyboard::Keys key) const {
-		return keyboard_state.IsKeyUp(key);
-	}
+	bool isKeyUp(Keyboard::Keys key) const;
 
-
-	// Check if key has been pressed. Will only return true for the first frame.
+	// Check if key has been pressed. Will only return true once while the key is down.
 	[[nodiscard]]
-	bool isKeyPressed(Keyboard::Keys key) const {
-		return keyboard_tracker.IsKeyPressed(key);
-	}
+	bool isKeyPressed(Keyboard::Keys key) const;
 
-	// Check if key has been released. Will only return true for the first frame.
+	// Check if key has been released. Will only return true once while the key is up.
 	[[nodiscard]]
-	bool isKeyReleased(Keyboard::Keys key) const {
-		return keyboard_tracker.IsKeyReleased(key);
-	}
+	bool isKeyReleased(Keyboard::Keys key) const;
 
 
 private:

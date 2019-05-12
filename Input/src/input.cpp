@@ -97,3 +97,118 @@ i32_2 Input::getMouseDelta() const {
 	}
 	return i32_2{mouse_state.x, mouse_state.y};
 }
+
+
+//----------------------------------------------------------------------------------
+// Input - Keyboard
+//----------------------------------------------------------------------------------
+bool Input::isKeyDown(Keyboard::Keys key) const {
+	return keyboard_state.IsKeyDown(key);
+}
+
+
+bool Input::isKeyUp(Keyboard::Keys key) const {
+	return keyboard_state.IsKeyUp(key);
+}
+
+
+bool Input::isKeyPressed(Keyboard::Keys key) const {
+	return keyboard_tracker.IsKeyPressed(key);
+}
+
+
+bool Input::isKeyReleased(Keyboard::Keys key) const {
+	return keyboard_tracker.IsKeyReleased(key);
+}
+
+
+//----------------------------------------------------------------------------------
+// Input - Mouse Pressed
+//----------------------------------------------------------------------------------
+bool Input::isMouseLeftPressed() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::PRESSED;
+}
+
+
+bool Input::isMouseRightPressed() const {
+	return button_tracker.rightButton == Mouse::ButtonStateTracker::PRESSED;
+}
+
+
+bool Input::isMouseX1Pressed() const {
+	return button_tracker.xButton1 == Mouse::ButtonStateTracker::PRESSED;
+}
+
+
+bool Input::isMouseX2Pressed() const {
+	return button_tracker.xButton2 == Mouse::ButtonStateTracker::PRESSED;
+}
+
+
+//----------------------------------------------------------------------------------
+// Input - Mouse Released
+//----------------------------------------------------------------------------------
+bool Input::isMouseLeftReleased() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::RELEASED;
+}
+
+
+bool Input::isMouseRightReleased() const {
+	return button_tracker.rightButton == Mouse::ButtonStateTracker::RELEASED;
+}
+
+
+bool Input::isMouseX1Released() const {
+	return button_tracker.xButton1 == Mouse::ButtonStateTracker::RELEASED;
+}
+
+
+bool Input::isMouseX2Released() const {
+	return button_tracker.xButton2 == Mouse::ButtonStateTracker::RELEASED;
+}
+
+
+//----------------------------------------------------------------------------------
+// Input - Mouse Down
+//----------------------------------------------------------------------------------
+bool Input::isMouseLeftDown() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::HELD;
+}
+
+
+bool Input::isMouseRightDown() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::HELD;
+}
+
+
+bool Input::isMouseX1Down() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::HELD;
+}
+
+
+bool Input::isMouseX2Down() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::HELD;
+}
+
+
+//----------------------------------------------------------------------------------
+// Input - Mouse Up
+//----------------------------------------------------------------------------------
+bool Input::isMouseLeftUp() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::UP;
+}
+
+
+bool Input::isMouseRightUp() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::UP;
+}
+
+
+bool Input::isMouseX1Up() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::UP;
+}
+
+
+bool Input::isMouseX2Up() const {
+	return button_tracker.leftButton == Mouse::ButtonStateTracker::UP;
+}
