@@ -89,8 +89,8 @@ void TestScene::initialize(Engine& engine) {
 
 	// Inverted model config
 	ModelConfig<VertexPositionNormalTexture> inv_config;
-	config.flip_winding = true;
-	config.flip_uv      = false;
+	inv_config.flip_winding = true;
+	inv_config.flip_uv      = false;
 
 	// Create blueprints
 	//auto main_bp          = resource_mgr.getOrCreate<ModelBlueprint>(L"../data/models/test/test.obj", config);
