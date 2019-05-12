@@ -87,7 +87,7 @@ public:
 		for (size_t i = 1; i < vertices.size(); ++i) {
 			center += XMLoad(&vertices[i]);
 		}
-		center /= vertices.size();
+		center /= static_cast<f32>(vertices.size());
 
 		radius = 0;
 		for (const f32_3& vertex : vertices) {
