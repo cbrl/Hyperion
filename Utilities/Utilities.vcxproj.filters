@@ -30,9 +30,6 @@
     <Filter Include="Header Files\directx">
       <UniqueIdentifier>{286f5b4c-c30d-499e-bb63-27dcb519d439}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\directx">
-      <UniqueIdentifier>{796511a8-d4f3-4dc7-ad14-c0dc88296147}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\os">
       <UniqueIdentifier>{a3360963-fa68-445e-b659-92615321e7c4}</UniqueIdentifier>
     </Filter>
@@ -65,15 +62,6 @@
     </Filter>
     <Filter Include="Header Files\log\spdlog\fmt\bundled">
       <UniqueIdentifier>{467f8eb8-311d-4a6e-aae8-67fbd92a56f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\directx\vertex">
-      <UniqueIdentifier>{55a3473c-fb6b-45de-bda0-359f9803149d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\directx\profiler">
-      <UniqueIdentifier>{ecd76a3f-aab8-42f9-8a83-e860615ad52a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\directx\profiler">
-      <UniqueIdentifier>{1af6fc68-cf66-4d13-ab76-723a5f6d4bc1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\json">
       <UniqueIdentifier>{1058c100-7a57-4437-85d0-ccd9860c6751}</UniqueIdentifier>
@@ -119,9 +107,6 @@
     <ClInclude Include="src\memory\handle\handle.h">
       <Filter>Header Files\memory\handle</Filter>
     </ClInclude>
-    <ClInclude Include="src\directx\d3d11.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
     <ClInclude Include="src\memory\managed_resource_map.h">
       <Filter>Header Files\memory</Filter>
     </ClInclude>
@@ -130,9 +115,6 @@
     </ClInclude>
     <ClInclude Include="src\exception\exception.h">
       <Filter>Header Files\exception</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directx\pipeline.h">
-      <Filter>Header Files\directx</Filter>
     </ClInclude>
     <ClInclude Include="src\os\windows\win_utils.h">
       <Filter>Header Files\os\windows</Filter>
@@ -293,12 +275,6 @@
     <ClInclude Include="src\memory\handle\handle_map.h">
       <Filter>Header Files\memory\handle</Filter>
     </ClInclude>
-    <ClInclude Include="src\directx\vertex\vertex_types.h">
-      <Filter>Header Files\directx\vertex</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directx\profiler\gpu_profiler.h">
-      <Filter>Header Files\directx\profiler</Filter>
-    </ClInclude>
     <ClInclude Include="src\log\spdlog\fmt\bundled\color.h">
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
     </ClInclude>
@@ -324,9 +300,6 @@
   <ItemGroup>
     <ClCompile Include="src\os\windows\window.cpp">
       <Filter>Source Files\os\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\directx\profiler\gpu_profiler.cpp">
-      <Filter>Source Files\directx\profiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

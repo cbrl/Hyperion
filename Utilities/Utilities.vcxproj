@@ -148,11 +148,7 @@
     <ClInclude Include="src\datatypes\pointer_types.h" />
     <ClInclude Include="src\datatypes\scalar_types.h" />
     <ClInclude Include="src\datatypes\vector_types.h" />
-    <ClInclude Include="src\directx\d3d11.h" />
     <ClInclude Include="src\directx\directxtk.h" />
-    <ClInclude Include="src\directx\pipeline.h" />
-    <ClInclude Include="src\directx\profiler\gpu_profiler.h" />
-    <ClInclude Include="src\directx\vertex\vertex_types.h" />
     <ClInclude Include="src\exception\exception.h" />
     <ClInclude Include="src\io\io.h" />
     <ClInclude Include="src\io\line_reader.h" />
@@ -223,7 +219,6 @@
     <ClInclude Include="src\time\time.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\directx\profiler\gpu_profiler.cpp" />
     <ClCompile Include="src\os\windows\window.cpp" />
   </ItemGroup>
   <ItemGroup>

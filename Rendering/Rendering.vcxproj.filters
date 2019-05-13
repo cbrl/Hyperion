@@ -180,6 +180,21 @@
     <Filter Include="Source Files\scene\systems\picking">
       <UniqueIdentifier>{0b21dae3-37cf-4326-b838-2984d76c9fcd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\directx">
+      <UniqueIdentifier>{09c1d4b9-ba29-4029-8064-ce7aa513f9c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\directx">
+      <UniqueIdentifier>{00fb8ea1-c093-4da2-a7e7-a8c76ac46416}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\directx\profiler">
+      <UniqueIdentifier>{6bdffa95-8d0b-4ee0-a5c1-45b4beb63a58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\directx\vertex">
+      <UniqueIdentifier>{0fcb18ee-9c19-4338-a36c-eda5707973be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\directx\profiler">
+      <UniqueIdentifier>{5172072a-ad06-4714-a9dd-99b4656c9381}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -310,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="src\scene\systems\picking\picking_system.cpp">
       <Filter>Source Files\scene\systems\picking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directx\profiler\gpu_profiler.cpp">
+      <Filter>Source Files\directx\profiler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -528,6 +546,18 @@
     </ClInclude>
     <ClInclude Include="src\scene\systems\picking\picking_system.h">
       <Filter>Header Files\scene\systems\picking</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\d3d11.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\pipeline.h">
+      <Filter>Header Files\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\vertex\vertex_types.h">
+      <Filter>Header Files\directx\vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\profiler\gpu_profiler.h">
+      <Filter>Header Files\directx\profiler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

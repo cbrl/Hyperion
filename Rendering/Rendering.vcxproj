@@ -140,6 +140,7 @@
     <ClCompile Include="src\buffer\shadow_map_buffer.cpp" />
     <ClCompile Include="src\direct3d\direct3d.cpp" />
     <ClCompile Include="src\direct3d\swapchain.cpp" />
+    <ClCompile Include="src\directx\profiler\gpu_profiler.cpp" />
     <ClCompile Include="src\display\display_config.cpp" />
     <ClCompile Include="src\exporter\assimp_exporter.cpp" />
     <ClCompile Include="src\exporter\texture_exporter.cpp" />
@@ -188,6 +189,10 @@
     <ClInclude Include="src\buffer\structured_buffer.h" />
     <ClInclude Include="src\direct3d\direct3d.h" />
     <ClInclude Include="src\direct3d\swapchain.h" />
+    <ClInclude Include="src\directx\d3d11.h" />
+    <ClInclude Include="src\directx\pipeline.h" />
+    <ClInclude Include="src\directx\profiler\gpu_profiler.h" />
+    <ClInclude Include="src\directx\vertex\vertex_types.h" />
     <ClInclude Include="src\display\display_config.h" />
     <ClInclude Include="src\display\viewport.h" />
     <ClInclude Include="src\exporter\assimp_exporter.h" />
