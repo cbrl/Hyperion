@@ -18,27 +18,24 @@ CameraMotorSystem::CameraMotorSystem(const Input& input, KeyConfig& key_config)
 
 void CameraMotorSystem::update() {
 
-	const auto process_cam = [&](auto& camera) {
-		auto* entity = camera.getOwner().get();
+	getECS().forEach<Transform, PerspectiveCamera, CameraMovement>([&](ecs::Entity& entity) {
+		auto& transform = *entity.getComponent<Transform>();
+		auto& camera    = *entity.getComponent<PerspectiveCamera>();
+		auto& movement  = *entity.getComponent<CameraMovement>();
 
-		auto* transform = entity->getComponent<Transform>();
-		if (!transform) return;
-		if (!transform->isActive()) return;
-
-		if (auto* movement = entity->getComponent<CameraMovement>()) {
-			processInput(*movement, *transform);
+		if (camera.isActive() && transform.isActive() && movement.isActive()) {
+			processInput(movement, transform);
 		}
-	};
-
-	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-		if (camera.isActive())
-			process_cam(camera);
 	});
 
+	getECS().forEach<Transform, OrthographicCamera, CameraMovement>([&](ecs::Entity& entity) {
+		auto& transform = *entity.getComponent<Transform>();
+		auto& camera    = *entity.getComponent<OrthographicCamera>();
+		auto& movement  = *entity.getComponent<CameraMovement>();
 
-	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
-		if (camera.isActive())
-			process_cam(camera);
+		if (camera.isActive() && transform.isActive() && movement.isActive()) {
+			processInput(movement, transform);
+		}
 	});
 }
 

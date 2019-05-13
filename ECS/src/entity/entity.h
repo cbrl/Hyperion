@@ -104,14 +104,18 @@ public:
 	[[nodiscard]]
 	ComponentT* getComponent();
 
-	// Get all components in this entity
+	// Get the first component of the specified type, if it exists.
+	template<typename ComponentT>
 	[[nodiscard]]
-	const std::unordered_multimap<std::type_index, std::reference_wrapper<IComponent>>&
-	getComponents();
+	const ComponentT* getComponent() const;
 
 	// Get all components of the specified type
 	template<typename ComponentT>
 	std::vector<std::reference_wrapper<ComponentT>> getAll();
+
+	// Get all components of the specified type
+	template<typename ComponentT>
+	std::vector<std::reference_wrapper<const ComponentT>> getAll() const;
 
 	// Remove a specific component from this entity
 	template<typename ComponentT>
@@ -132,6 +136,11 @@ public:
 	template<typename ComponentT>
 	[[nodiscard]]
 	size_t countOf() const;
+
+	// Get all components in this entity
+	[[nodiscard]]
+	const std::unordered_multimap<std::type_index, std::reference_wrapper<IComponent>>&
+	getComponents();
 
 
 	//----------------------------------------------------------------------------------

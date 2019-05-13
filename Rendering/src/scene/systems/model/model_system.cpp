@@ -15,14 +15,16 @@ ModelSystem::ModelSystem(const RenderingMgr& rendering_mgr)
 void ModelSystem::update() {
 	auto& device_context = rendering_mgr.getDeviceContext();
 
-	getECS().forEach<Model>([&](Model& model) {
+	getECS().forEach<Transform, Model>([&](ecs::Entity& entity) {
+		const auto& transform = *entity.getComponent<Transform>();
+		const auto  models    = entity.getAll<Model>();
 
-		if (!model.isActive()) return;
-
-		if (const auto* transform = model.getOwner()->getComponent<Transform>()) {
+		for (Model& model : models) {
+			if (!model.isActive())
+				continue;
 
 			// Update the model's buffer
-			model.updateBuffer(device_context, transform->getObjectToWorldMatrix());
+			model.updateBuffer(device_context, transform.getObjectToWorldMatrix());
 		}
 	});
 }

@@ -5,7 +5,6 @@ namespace ecs {
 
 template<typename ComponentT, typename... ArgsT>
 ComponentT& Entity::addComponent(ArgsT&&... args) {
-
 	ComponentT& component = component_mgr->createComponent<ComponentT>(std::forward<ArgsT>(args)...);
 	component.setOwner(this_ptr);
 
@@ -17,8 +16,7 @@ ComponentT& Entity::addComponent(ArgsT&&... args) {
 
 template<typename ComponentT>
 ComponentT* Entity::getComponent() {
-
-	auto it = components.find(ComponentT::index);
+	const auto it = components.find(ComponentT::index);
 
 	if (it == components.end())
 		return nullptr;
@@ -28,12 +26,22 @@ ComponentT* Entity::getComponent() {
 
 
 template<typename ComponentT>
+const ComponentT* Entity::getComponent() const {
+	const auto it = components.find(ComponentT::index);
+
+	if (it == components.end())
+		return nullptr;
+
+	return static_cast<const ComponentT*>(&it->second.get());
+}
+
+
+template<typename ComponentT>
 std::vector<std::reference_wrapper<ComponentT>> Entity::getAll() {
 
 	std::vector<std::reference_wrapper<ComponentT>> component_vec;
 
 	const auto range = components.equal_range(ComponentT::index);
-
 	std::for_each(range.first, range.second, [&](auto& pair) {
 		component_vec.push_back(static_cast<ComponentT&>(pair.second.get()));
 	});
@@ -43,8 +51,21 @@ std::vector<std::reference_wrapper<ComponentT>> Entity::getAll() {
 
 
 template<typename ComponentT>
-void Entity::removeComponent(ComponentT& component) {
+std::vector<std::reference_wrapper<const ComponentT>> Entity::getAll() const {
 
+	std::vector<std::reference_wrapper<const ComponentT>> component_vec;
+
+	const auto range = components.equal_range(ComponentT::index);
+	std::for_each(range.first, range.second, [&](const auto& pair) {
+		component_vec.push_back(static_cast<const ComponentT&>(pair.second.get()));
+	});
+
+	return component_vec;
+}
+
+
+template<typename ComponentT>
+void Entity::removeComponent(ComponentT& component) {
 	const auto range = components.equal_range(ComponentT::index);
 
 	for (auto it = range.first; it != range.second; ++it) {
@@ -59,7 +80,6 @@ void Entity::removeComponent(ComponentT& component) {
 
 template<typename ComponentT>
 void Entity::removeAll() {
-
 	const auto range = components.equal_range(ComponentT::index);
 
 	for (auto it = range.first; it != range.second; ++it) {

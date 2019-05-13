@@ -108,12 +108,11 @@ void XM_CALLCONV PickingSystem::castRay(FXMVECTOR origin,
                                         CXMMATRIX world_to_projection) {
 
 	// For each model, if it's in the camera's view, cast a ray and see if it intersects the AABB.
-	getECS().forEach<Model>([&](const Model& model) {
-		auto* transform = model.getOwner()->getComponent<Transform>();
-		if (not transform)
-			return;
+	getECS().forEach<Transform, Model>([&](ecs::Entity& entity) {
+		const auto& model     = *entity.getComponent<Model>();
+		const auto& transform = *entity.getComponent<Transform>();
 
-		const XMMATRIX model_to_world      = transform->getObjectToWorldMatrix();
+		const XMMATRIX model_to_world      = transform.getObjectToWorldMatrix();
 		const XMMATRIX model_to_projection = model_to_world * world_to_projection;
 
 		if (not Frustum(model_to_projection).contains(model.getAABB()))

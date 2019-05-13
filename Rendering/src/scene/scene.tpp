@@ -19,9 +19,27 @@ void Scene::sendEvent(ArgsT&&... args) {
 }
 
 
-template<typename T, typename ActionT>
-void Scene::forEach(ActionT&& act) {
-	ecs->forEach<T>(std::forward<ActionT>(act));
+template<typename... ComponentT>
+void Scene::forEach(const std::function<void(ecs::Entity&)>& act) {
+	ecs->forEach<ComponentT...>(std::ref(act));
+}
+
+
+template<typename... ComponentT>
+void Scene::forEach(const std::function<void(const ecs::Entity&)>& act) const {
+	ecs->forEach<ComponentT...>(std::ref(act));
+}
+
+
+template<typename ComponentT>
+void Scene::forEach(const std::function<void(ComponentT&)>& act) {
+	ecs->forEach<ComponentT>(std::ref(act));
+}
+
+
+template<typename ComponentT>
+void Scene::forEach(const std::function<void(const ComponentT&)>& act) const {
+	ecs->forEach<ComponentT>(std::ref(act));
 }
 
 

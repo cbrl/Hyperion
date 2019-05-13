@@ -45,11 +45,11 @@ public:
 	//----------------------------------------------------------------------------------
 	void bindState() const;
 
-	void XM_CALLCONV render(Scene& scene,
+	void XM_CALLCONV render(const Scene& scene,
 	                        FXMMATRIX world_to_camera,
 	                        CXMMATRIX camera_to_projection) const;
 
-	void XM_CALLCONV renderShadows(Scene& scene,
+	void XM_CALLCONV renderShadows(const Scene& scene,
 	                               FXMMATRIX world_to_camera,
 	                               CXMMATRIX camera_to_projection) const;
 

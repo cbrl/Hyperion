@@ -73,8 +73,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Apply an action to each component
-	template<typename ComponentT, typename ActionT>
-	void forEach(ActionT&& act);
+	template<typename ComponentT>
+	void forEach(const std::function<void(ComponentT&)>& act);
+
+	// Apply an action to each component
+	template<typename ComponentT>
+	void forEach(const std::function<void(const ComponentT&)>& act) const;
 
 private:
 

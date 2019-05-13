@@ -45,18 +45,75 @@ size_t ECS::countOf() const {
 }
 
 
-// Do something for each entity or component
-template<typename T, typename ActionT>
-void ECS::forEach(ActionT&& act) {
-	if constexpr (std::is_same_v<Entity, T>) {
-		entity_mgr->forEach(std::forward<ActionT>(act));
-	}
+template<typename... ComponentT>
+void ECS::forEach(const std::function<void(Entity&)>& act) {
 
-	if constexpr (std::is_base_of_v<IComponent, T>) {
-		if (!component_mgr->knowsComponent<T>()) return;
+	static_assert((std::is_base_of_v<IComponent, ComponentT> && ...));
 
-		component_mgr->forEach<T>(std::forward<ActionT>(act));
+	if constexpr (sizeof...(ComponentT) == 0) {
+		entity_mgr->forEach(act);
 	}
+	else {
+		if ((!component_mgr->knowsComponent<ComponentT>() || ...))
+			return;
+
+		std::vector<std::reference_wrapper<Entity>> entities;
+
+		entity_mgr->forEach([&entities](Entity& entity) {
+			if ((entity.hasComponent<ComponentT>() && ...))
+				entities.push_back(std::ref(entity));
+		});
+
+		for (Entity& entity : entities) {
+			act(entity);
+		}
+	}
+}
+
+
+template<typename... ComponentT>
+void ECS::forEach(const std::function<void(const Entity&)>& act) const {
+
+	static_assert((std::is_base_of_v<IComponent, ComponentT> && ...));
+
+	if constexpr (sizeof...(ComponentT) == 0) {
+		entity_mgr->forEach(act);
+	}
+	else {
+		if ((!component_mgr->knowsComponent<ComponentT>() || ...))
+			return;
+
+		std::vector<std::reference_wrapper<const Entity>> entities;
+
+		entity_mgr->forEach([&entities](const Entity& entity) {
+			if ((entity.hasComponent<ComponentT>() && ...))
+				entities.push_back(std::ref(entity));
+		});
+
+		for (const Entity& entity : entities) {
+			act(entity);
+		}
+	}
+}
+
+
+template<typename ComponentT>
+void ECS::forEach(const std::function<void(ComponentT&)>& act) {
+	static_assert(std::is_base_of_v<IComponent, ComponentT>);
+
+	if (!component_mgr->knowsComponent<ComponentT>())
+		return;
+	component_mgr->forEach<ComponentT>(act);
+}
+
+
+template<typename ComponentT>
+void ECS::forEach(const std::function<void(const ComponentT&)>& act) const {
+	static_assert(std::is_base_of_v<IComponent, ComponentT>);
+
+	if (!component_mgr->knowsComponent<ComponentT>())
+		return;
+	component_mgr->forEach<ComponentT>(act);
 }
 
 } // namespace ecs

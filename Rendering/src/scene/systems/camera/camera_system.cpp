@@ -15,24 +15,30 @@ CameraSystem::CameraSystem(const RenderingMgr& rendering_mgr)
 void CameraSystem::update() {
 	auto& device_context = rendering_mgr.getDeviceContext();
 
-	const auto process_cam = [&](auto& camera) {
-		const auto* transform = camera.getOwner()->getComponent<Transform>();
-		if (!transform) return;
+	getECS().forEach<Transform, PerspectiveCamera>([&](ecs::Entity& entity) {
+		const auto& transform = *entity.getComponent<Transform>();
+		const auto  cameras   = entity.getAll<PerspectiveCamera>();
 
-		// Update the camera's buffer
-		camera.updateBuffer(device_context,
-		                    transform->getObjectToWorldMatrix(),
-		                    transform->getWorldToObjectMatrix());
-	};
-
-	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
-		if (camera.isActive())
-			process_cam(camera);
+		for (const PerspectiveCamera& camera : cameras) {
+			if (camera.isActive()) {
+				camera.updateBuffer(device_context,
+				                    transform.getObjectToWorldMatrix(),
+				                    transform.getWorldToObjectMatrix());
+			}
+		}
 	});
 
-	getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
-		if (camera.isActive())
-			process_cam(camera);
+	getECS().forEach<Transform, OrthographicCamera>([&](ecs::Entity& entity) {
+		const auto& transform = *entity.getComponent<Transform>();
+		const auto  cameras   = entity.getAll<OrthographicCamera>();
+
+		for (const OrthographicCamera& camera : cameras) {
+			if (camera.isActive()) {
+				camera.updateBuffer(device_context,
+				                    transform.getObjectToWorldMatrix(),
+				                    transform.getWorldToObjectMatrix());
+			}
+		}
 	});
 }
 
@@ -42,7 +48,7 @@ void CameraSystem::registerCallbacks() {
 }
 
 
-void CameraSystem::onWindowResize(const events::WindowResizeEvent & event) {
+void CameraSystem::onWindowResize(const events::WindowResizeEvent& event) {
 	getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 		camera.getViewport().setSize(event.new_size);
 	});

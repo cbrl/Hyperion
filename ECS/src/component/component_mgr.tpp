@@ -48,8 +48,8 @@ bool ComponentMgr::knowsComponent() const {
 }
 
 
-template<typename ComponentT, typename ActionT>
-void ComponentMgr::forEach(ActionT&& act) {
+template<typename ComponentT>
+void ComponentMgr::forEach(const std::function<void(ComponentT&)>& act) {
 
 	// Find the component pool
 	const auto it = component_pools.find(ComponentT::index);
@@ -60,7 +60,25 @@ void ComponentMgr::forEach(ActionT&& act) {
 	// Apply the action to each component
 	using pool_t = ResourcePool<ComponentT>;
 	auto& pool = *static_cast<pool_t*>(it->second.get());
-	for (auto& component : pool) {
+	for (ComponentT& component : pool) {
+		act(component);
+	}
+}
+
+
+template<typename ComponentT>
+void ComponentMgr::forEach(const std::function<void(const ComponentT&)>& act) const {
+
+	// Find the component pool
+	const auto it = component_pools.find(ComponentT::index);
+	if (it == component_pools.end()) {
+		return;
+	}
+
+	// Apply the action to each component
+	using pool_t = ResourcePool<ComponentT>;
+	auto& pool = *static_cast<pool_t*>(it->second.get());
+	for (const ComponentT& component : pool) {
 		act(component);
 	}
 }

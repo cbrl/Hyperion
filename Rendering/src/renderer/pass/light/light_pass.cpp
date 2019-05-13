@@ -56,7 +56,7 @@ LightPass::LightPass(const RenderingConfig& rendering_config,
 }
 
 
-void XM_CALLCONV LightPass::render(Scene& scene, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::render(const Scene& scene, FXMMATRIX world_to_projection) {
 
 	// Update light buffers
 	updateDirectionalLightData(scene, world_to_projection);
@@ -103,7 +103,7 @@ void LightPass::bindBuffers() {
 }
 
 
-void LightPass::updateData(Scene& scene) const {
+void LightPass::updateData(const Scene& scene) const {
 
 	LightBuffer light_data;
 
@@ -214,7 +214,7 @@ void LightPass::updateShadowMaps() {
 }
 
 
-void XM_CALLCONV LightPass::updateDirectionalLightData(Scene& scene, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::updateDirectionalLightData(const Scene& scene, FXMMATRIX world_to_projection) {
 
 	// Temporary buffers
 	std::vector<DirectionalLightBuffer> buffers;
@@ -226,38 +226,40 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(Scene& scene, FXMMATRIX w
 	// Clear the cameras
 	directional_light_cameras.clear();
 
-	scene.forEach<DirectionalLight>([&](DirectionalLight& light) {
+	scene.forEach<Transform, DirectionalLight>([&](const ecs::Entity& entity) {
+		const auto& transform = *entity.getComponent<Transform>();
+		const auto  lights    = entity.getAll<DirectionalLight>();
 
-		if (!light.isActive()) return;
+		for (const DirectionalLight& light : lights) {
+			if (not light.isActive())
+				continue;
 
-		const auto* transform = light.getOwner()->getComponent<Transform>();
-		if (!transform) return;
+			const auto light_to_world      = transform.getObjectToWorldMatrix();
+			const auto light_to_projection = light_to_world * world_to_projection;
 
-		const auto light_to_world      = transform->getObjectToWorldMatrix();
-		const auto light_to_projection = light_to_world * world_to_projection;
+			if (not Frustum(light_to_projection).contains(light.getAABB()))
+				continue;
 
-		if (!Frustum(light_to_projection).contains(light.getAABB()))
-			return;
+			const auto world_to_light       = transform.getWorldToObjectMatrix();
+			const auto light_to_lprojection = light.getLightToProjectionMatrix();
+			const auto world_to_lprojection = world_to_light * light_to_lprojection;
 
-		const auto world_to_light       = transform->getWorldToObjectMatrix();
-		const auto light_to_lprojection = light.getLightToProjectionMatrix();
-		const auto world_to_lprojection = world_to_light * light_to_lprojection;
+			DirectionalLightBuffer buffer;
+			XMStore(&buffer.direction, transform.getWorldAxisZ());
+			buffer.intensity           = light.getBaseColor() * light.getIntensity();
+			buffer.world_to_projection = XMMatrixTranspose(world_to_lprojection);
 
-		DirectionalLightBuffer buffer;
-		XMStore(&buffer.direction, transform->getWorldAxisZ());
-		buffer.intensity           = light.getBaseColor() * light.getIntensity();
-		buffer.world_to_projection = XMMatrixTranspose(world_to_lprojection);
+			if (light.castsShadows()) {
+				LightCamera cam;
+				cam.world_to_light = world_to_light;
+				cam.light_to_proj  = light_to_lprojection;
 
-		if (light.castsShadows()) {
-			LightCamera cam;
-			cam.world_to_light = world_to_light;
-			cam.light_to_proj  = light_to_lprojection;
-
-			directional_light_cameras.push_back(std::move(cam));
-			shadow_buffers.push_back(std::move(buffer));
-		}
-		else {
-			buffers.push_back(std::move(buffer));
+				directional_light_cameras.push_back(std::move(cam));
+				shadow_buffers.push_back(std::move(buffer));
+			}
+			else {
+				buffers.push_back(std::move(buffer));
+			}
 		}
 	});
 
@@ -267,7 +269,7 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(Scene& scene, FXMMATRIX w
 }
 
 
-void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::updatePointLightData(const Scene& scene, FXMMATRIX world_to_projection) {
 
 	// Temporary buffers
 	std::vector<PointLightBuffer> buffers;
@@ -280,63 +282,65 @@ void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_t
 	point_light_cameras.clear();
 
 
-	scene.forEach<PointLight>([&](PointLight& light) {
+	scene.forEach<Transform, PointLight>([&](const ecs::Entity& entity) {
+		const auto& transform = *entity.getComponent<Transform>();
+		const auto  lights    = entity.getAll<PointLight>();
 
-		if (!light.isActive()) return;
+		for (const PointLight& light : lights) {
+			if (not light.isActive())
+				continue;
 
-		const auto* transform = light.getOwner()->getComponent<Transform>();
-		if (!transform) return;
+			const auto light_to_world      = transform.getObjectToWorldMatrix();
+			const auto light_to_projection = light_to_world * world_to_projection;
 
-		const auto light_to_world      = transform->getObjectToWorldMatrix();
-		const auto light_to_projection = light_to_world * world_to_projection;
-
-		// Camera rotations for the cube map
-		static const XMMATRIX rotations[6] = {
-			XMMatrixRotationY(-XM_PIDIV2),
-			XMMatrixRotationY(XM_PIDIV2),
-			XMMatrixRotationX(XM_PIDIV2),
-			XMMatrixRotationX(-XM_PIDIV2),
-			XMMatrixIdentity(),
-			XMMatrixRotationY(XM_PI)
-		};
-
-		if (!Frustum(light_to_projection).contains(light.getBoundingSphere()))
-			return;
-
-		PointLightBuffer light_buffer;
-		XMStore(&light_buffer.position, transform->getWorldOrigin());
-		light_buffer.intensity   = light.getBaseColor() * light.getIntensity();
-		light_buffer.attenuation = light.getAttenuation();
-		light_buffer.range       = light.getRange();
-
-		if (light.castsShadows()) {
-			const auto world_to_light = transform->getWorldToObjectMatrix();
-			const auto light_to_lprojection = light.getLightToProjectionMatrix();
-
-			// Create the cameras
-			for (size_t i = 0; i < 6; ++i) {
-				LightCamera cam;
-				cam.world_to_light = world_to_light * rotations[i];
-				cam.light_to_proj = light_to_lprojection;
-
-				point_light_cameras.push_back(std::move(cam));
-			}
-
-			// Create the buffer
-			ShadowedPointLightBuffer buffer;
-			buffer.light_buffer   = light_buffer;
-			buffer.world_to_light = XMMatrixTranspose(world_to_light);
-
-			const f32_2 proj_values = {
-				XMVectorGetZ(light_to_lprojection.r[2]),
-				XMVectorGetZ(light_to_lprojection.r[3])
+			// Camera rotations for the cube map
+			static const XMMATRIX rotations[6] = {
+				XMMatrixRotationY(-XM_PIDIV2),
+				XMMatrixRotationY(XM_PIDIV2),
+				XMMatrixRotationX(XM_PIDIV2),
+				XMMatrixRotationX(-XM_PIDIV2),
+				XMMatrixIdentity(),
+				XMMatrixRotationY(XM_PI)
 			};
-			buffer.projection_values = proj_values;
 
-			shadow_buffers.push_back(std::move(buffer));
-		}
-		else {
-			buffers.push_back(std::move(light_buffer));
+			if (not Frustum(light_to_projection).contains(light.getBoundingSphere()))
+				continue;
+
+			PointLightBuffer light_buffer;
+			XMStore(&light_buffer.position, transform.getWorldOrigin());
+			light_buffer.intensity   = light.getBaseColor() * light.getIntensity();
+			light_buffer.attenuation = light.getAttenuation();
+			light_buffer.range       = light.getRange();
+
+			if (light.castsShadows()) {
+				const auto world_to_light = transform.getWorldToObjectMatrix();
+				const auto light_to_lprojection = light.getLightToProjectionMatrix();
+
+				// Create the cameras
+				for (size_t i = 0; i < 6; ++i) {
+					LightCamera cam;
+					cam.world_to_light = world_to_light * rotations[i];
+					cam.light_to_proj = light_to_lprojection;
+
+					point_light_cameras.push_back(std::move(cam));
+				}
+
+				// Create the buffer
+				ShadowedPointLightBuffer buffer;
+				buffer.light_buffer   = light_buffer;
+				buffer.world_to_light = XMMatrixTranspose(world_to_light);
+
+				const f32_2 proj_values = {
+					XMVectorGetZ(light_to_lprojection.r[2]),
+					XMVectorGetZ(light_to_lprojection.r[3])
+				};
+				buffer.projection_values = proj_values;
+
+				shadow_buffers.push_back(std::move(buffer));
+			}
+			else {
+				buffers.push_back(std::move(light_buffer));
+			}
 		}
 	});
 
@@ -346,7 +350,7 @@ void XM_CALLCONV LightPass::updatePointLightData(Scene& scene, FXMMATRIX world_t
 }
 
 
-void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::updateSpotLightData(const Scene& scene, FXMMATRIX world_to_projection) {
 
 	// Temporary buffer vectors
 	std::vector<SpotLightBuffer> buffers;
@@ -359,50 +363,52 @@ void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to
 	spot_light_cameras.clear();
 
 
-	scene.forEach<SpotLight>([&](SpotLight& light) {
+	scene.forEach<Transform, SpotLight>([&](const ecs::Entity& entity) {
+		const auto& transform = *entity.getComponent<Transform>();
+		const auto  lights    = entity.getAll<SpotLight>();
 
-		if (!light.isActive()) return;
+		for (const SpotLight& light : lights) {
+			if (not light.isActive())
+				continue;
 
-		const auto* transform = light.getOwner()->getComponent<Transform>();
-		if (!transform) return;
+			const auto light_to_world      = transform.getObjectToWorldMatrix();
+			const auto light_to_projection = light_to_world * world_to_projection;
 
-		const auto light_to_world      = transform->getObjectToWorldMatrix();
-		const auto light_to_projection = light_to_world * world_to_projection;
+			if (not Frustum(light_to_projection).contains(light.getAABB()))
+				continue;
 
-		if (!Frustum(light_to_projection).contains(light.getAABB()))
-			return;
+			SpotLightBuffer light_buffer;
+			XMStore(&light_buffer.position, transform.getWorldOrigin());
+			XMStore(&light_buffer.direction, transform.getWorldAxisZ());
+			light_buffer.intensity     = light.getBaseColor() * light.getIntensity();
+			light_buffer.attenuation   = light.getAttenuation();
+			light_buffer.cos_umbra     = light.getUmbra();
+			light_buffer.cos_penumbra  = light.getPenumbra();
+			light_buffer.range         = light.getRange();
 
-		SpotLightBuffer light_buffer;
-		XMStore(&light_buffer.position, transform->getWorldOrigin());
-		XMStore(&light_buffer.direction, transform->getWorldAxisZ());
-		light_buffer.intensity     = light.getBaseColor() * light.getIntensity();
-		light_buffer.attenuation   = light.getAttenuation();
-		light_buffer.cos_umbra     = light.getUmbra();
-		light_buffer.cos_penumbra  = light.getPenumbra();
-		light_buffer.range         = light.getRange();
+			if (light.castsShadows()) {
+				const auto world_to_light       = transform.getWorldToObjectMatrix();
+				const auto light_to_lprojection = light.getLightToProjectionMatrix();
+				const auto world_to_lprojection = world_to_light * light_to_lprojection;
 
-		if (light.castsShadows()) {
-			const auto world_to_light       = transform->getWorldToObjectMatrix();
-			const auto light_to_lprojection = light.getLightToProjectionMatrix();
-			const auto world_to_lprojection = world_to_light * light_to_lprojection;
+				// Create the camera
+				LightCamera cam;
+				cam.world_to_light = world_to_light;
+				cam.light_to_proj  = light_to_lprojection;
 
-			// Create the camera
-			LightCamera cam;
-			cam.world_to_light = world_to_light;
-			cam.light_to_proj  = light_to_lprojection;
-
-			spot_light_cameras.push_back(std::move(cam));
+				spot_light_cameras.push_back(std::move(cam));
 
 
-			// Create the buffer
-			ShadowedSpotLightBuffer buffer;
-			buffer.light_buffer        = light_buffer;
-			buffer.world_to_projection = XMMatrixTranspose(world_to_lprojection);
+				// Create the buffer
+				ShadowedSpotLightBuffer buffer;
+				buffer.light_buffer        = light_buffer;
+				buffer.world_to_projection = XMMatrixTranspose(world_to_lprojection);
 
-			shadow_buffers.push_back(std::move(buffer));
-		}
-		else {
-			buffers.push_back(std::move(light_buffer));
+				shadow_buffers.push_back(std::move(buffer));
+			}
+			else {
+				buffers.push_back(std::move(light_buffer));
+			}
 		}
 	});
 
@@ -412,7 +418,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(Scene& scene, FXMMATRIX world_to
 }
 
 
-void LightPass::renderShadowMaps(Scene& scene) {
+void LightPass::renderShadowMaps(const Scene& scene) {
 
 	depth_pass->bindState();
 

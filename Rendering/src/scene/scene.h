@@ -92,8 +92,24 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Iteration
 	//----------------------------------------------------------------------------------
-	template<typename T, typename ActionT>
-	void forEach(ActionT&& act);
+
+	// Do something with each entity with a component of type ComponentT.
+	// Providing no template arguments will apply the action to every entity.
+	template<typename... ComponentT>
+	void forEach(const std::function<void(ecs::Entity&)>& act);
+
+	// Do something with each entity with a component of type ComponentT.
+	// Providing no template arguments will apply the action to every entity.
+	template<typename... ComponentT>
+	void forEach(const std::function<void(const ecs::Entity&)>& act) const;
+
+	// Do something with each component of type ComponentT
+	template<typename ComponentT>
+	void forEach(const std::function<void(ComponentT&)>& act);
+
+	// Do something with each component of type ComponentT
+	template<typename ComponentT>
+	void forEach(const std::function<void(const ComponentT&)>& act) const;
 
 
 	//----------------------------------------------------------------------------------

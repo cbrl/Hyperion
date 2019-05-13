@@ -7,24 +7,23 @@
 
 void AxisRotationSystem::update() {
 
-	getECS().forEach<AxisRotation>([&](AxisRotation& rotation) {
+	getECS().forEach<Transform, AxisRotation>([&](ecs::Entity& entity) {
+		auto& transform      = *entity.getComponent<Transform>();
+		const auto& rotation = *entity.getComponent<AxisRotation>();
 
-		if (!rotation.isActive()) return;
-		
-		auto* transform = rotation.getOwner()->getComponent<Transform>();
-		if (!transform) return;
-		if (!transform->isActive()) return;
+		if (!rotation.isActive() || !transform.isActive())
+			return;
 
 		const auto dt = static_cast<f32>(dtSinceLastUpdate().count());
 
 		if (rotation.hasAxis(AxisRotation::Axis::X)) {
-			transform->rotateXClamped(dt * rotation.getSpeedX(), -XM_PI, XM_PI);
+			transform.rotateXClamped(dt * rotation.getSpeedX(), -XM_PI, XM_PI);
 		}
 		if (rotation.hasAxis(AxisRotation::Axis::Y)) {
-			transform->rotateYClamped(dt * rotation.getSpeedY(), -XM_PI, XM_PI);
+			transform.rotateYClamped(dt * rotation.getSpeedY(), -XM_PI, XM_PI);
 		}
 		if (rotation.hasAxis(AxisRotation::Axis::Z)) {
-			transform->rotateZClamped(dt * rotation.getSpeedZ(), -XM_PI, XM_PI);
+			transform.rotateZClamped(dt * rotation.getSpeedZ(), -XM_PI, XM_PI);
 		}
 	});
 }

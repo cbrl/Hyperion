@@ -49,7 +49,7 @@ void DepthPass::bindTransparentShaders() const {
 }
 
 
-void XM_CALLCONV DepthPass::render(Scene& scene,
+void XM_CALLCONV DepthPass::render(const Scene& scene,
                                    FXMMATRIX world_to_camera,
                                    CXMMATRIX camera_to_projection) const {
 
@@ -90,7 +90,7 @@ void XM_CALLCONV DepthPass::render(Scene& scene,
 	});
 }
 
-void XM_CALLCONV DepthPass::renderShadows(Scene& scene,
+void XM_CALLCONV DepthPass::renderShadows(const Scene& scene,
                                           FXMMATRIX world_to_camera,
                                           CXMMATRIX camera_to_projection) const {
 

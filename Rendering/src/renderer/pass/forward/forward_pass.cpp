@@ -86,7 +86,7 @@ void ForwardPass::bindWireframeState() const {
 }
 
 
-void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
+void XM_CALLCONV ForwardPass::renderOpaque(const Scene& scene,
                                            FXMMATRIX world_to_projection,
                                            const Texture* env_map,
                                            BRDF brdf) const {
@@ -115,7 +115,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(Scene& scene,
 }
 
 
-void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
+void XM_CALLCONV ForwardPass::renderTransparent(const Scene& scene,
                                                 FXMMATRIX world_to_projection,
                                                 const Texture* env_map,
                                                 BRDF brdf) const {
@@ -145,7 +145,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(Scene& scene,
 }
 
 
-void XM_CALLCONV ForwardPass::renderOverrided(Scene& scene, FXMMATRIX world_to_projection, const Texture* env_map) const {
+void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX world_to_projection, const Texture* env_map) const {
 
 	//----------------------------------------------------------------------------------
 	// Sort models by shader type
@@ -200,7 +200,7 @@ void XM_CALLCONV ForwardPass::renderOverrided(Scene& scene, FXMMATRIX world_to_p
 }
 
 
-void ForwardPass::renderFalseColor(Scene& scene,
+void ForwardPass::renderFalseColor(const Scene& scene,
                                    FXMMATRIX world_to_projection,
                                    FalseColor color) const {
 
@@ -216,7 +216,7 @@ void ForwardPass::renderFalseColor(Scene& scene,
 }
 
 
-void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, const f32_4& color) const {
+void ForwardPass::renderWireframe(const Scene& scene, FXMMATRIX world_to_projection, const f32_4& color) const {
 
 	bindWireframeState();
 
@@ -232,7 +232,7 @@ void ForwardPass::renderWireframe(Scene& scene, FXMMATRIX world_to_projection, c
 }
 
 
-void XM_CALLCONV ForwardPass::renderGBuffer(Scene& scene, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::renderGBuffer(const Scene& scene, FXMMATRIX world_to_projection) const {
 
 	bindOpaqueState();
 

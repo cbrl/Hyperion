@@ -5,14 +5,14 @@
 
 void AxisOrbitSystem::update() {
 
-	getECS().forEach<AxisOrbit>([&] (AxisOrbit& orbit) {
-		if (!orbit.isActive()) return;
+	getECS().forEach<Transform, AxisOrbit>([&] (ecs::Entity& entity) {
+		auto& transform   = *entity.getComponent<Transform>();
+		const auto& orbit = *entity.getComponent<AxisOrbit>();
 
-		if (auto* transform = orbit.getOwner()->getComponent<Transform>()) {
-			if (!transform->isActive()) return;
+		if (!orbit.isActive() || !transform.isActive())
+			return;
 
-			const auto units = static_cast<f32>(dtSinceLastUpdate().count() * orbit.getSpeed());
-			transform->rotateAround(orbit.getAxis(), units);
-		}
+		const auto units = static_cast<f32>(dtSinceLastUpdate().count() * orbit.getSpeed());
+		transform.rotateAround(orbit.getAxis(), units);
 	});
 }

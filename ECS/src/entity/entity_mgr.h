@@ -73,9 +73,15 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Apply an action to each entity
-	template<typename ActionT>
-	void forEach(ActionT&& act) {
+	void forEach(const std::function<void(Entity&)>& act) {
 		for (Entity& entity : entity_pool) {
+			act(entity);
+		}
+	}
+
+	// Apply an action to each entity
+	void forEach(const std::function<void(const Entity&)>& act) const {
+		for (const Entity& entity : entity_pool) {
 			act(entity);
 		}
 	}

@@ -47,19 +47,19 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void XM_CALLCONV render(Scene& scene, FXMMATRIX world_to_projection);
+	void XM_CALLCONV render(const Scene& scene, FXMMATRIX world_to_projection);
 
 private:
 
 	void bindBuffers();
 
 	void updateShadowMaps();
-	void renderShadowMaps(Scene& scene);
+	void renderShadowMaps(const Scene& scene);
 
-	void updateData(Scene& scene) const;
-	void XM_CALLCONV updateDirectionalLightData(Scene& scene, FXMMATRIX world_to_projection);
-	void XM_CALLCONV updatePointLightData(Scene& scene, FXMMATRIX world_to_projection);
-	void XM_CALLCONV updateSpotLightData(Scene& scene, FXMMATRIX world_to_projection);
+	void updateData(const Scene& scene) const;
+	void XM_CALLCONV updateDirectionalLightData(const Scene& scene, FXMMATRIX world_to_projection);
+	void XM_CALLCONV updatePointLightData(const Scene& scene, FXMMATRIX world_to_projection);
+	void XM_CALLCONV updateSpotLightData(const Scene& scene, FXMMATRIX world_to_projection);
 
 	
 	//----------------------------------------------------------------------------------
