@@ -137,7 +137,6 @@
     <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h" />
     <ClInclude Include="src\geometry\frustum\frustum.h" />
     <ClInclude Include="src\geometry\geometry.h" />
-    <ClInclude Include="src\geometry\geometry_types.h" />
     <ClInclude Include="src\geometry\shapes\bezier.h" />
     <ClInclude Include="src\geometry\shapes\shapes.h" />
     <ClInclude Include="src\geometry\transform\transform_3d.h" />
