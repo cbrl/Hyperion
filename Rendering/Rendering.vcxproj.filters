@@ -15,20 +15,8 @@
     <Filter Include="Header Files\direct3d">
       <UniqueIdentifier>{e424a667-e1eb-469e-bc08-51f3a870cd62}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\geometry">
-      <UniqueIdentifier>{cc60ba2e-1ce2-43e5-850b-f32f95592202}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\resource">
       <UniqueIdentifier>{bc1fca6c-1753-457f-9f43-0744744b759e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\bounding_volume">
-      <UniqueIdentifier>{09db4461-9ec3-4509-9663-c7a22703ade5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\frustum">
-      <UniqueIdentifier>{d5aaddb3-3d27-4f6c-8acb-a914431f87fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\shapes">
-      <UniqueIdentifier>{4c36ad30-5ba9-47ba-8445-165342c916c3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\resource\font">
       <UniqueIdentifier>{547e6de9-9daa-42d0-b80e-0738cff5b1ab}</UniqueIdentifier>
@@ -45,14 +33,8 @@
     <Filter Include="Header Files\resource\model\material">
       <UniqueIdentifier>{b206604f-da1f-4ae8-b320-b5f121dc4e7b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\geometry">
-      <UniqueIdentifier>{c4396dde-4afa-4ccf-931d-3cd7724ef455}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\direct3d">
       <UniqueIdentifier>{b3d68db7-7277-43e1-9297-0884dc993d47}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\geometry\frustum">
-      <UniqueIdentifier>{8fd6732b-ffb5-4fa3-96c7-d0dd82260e92}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\resource">
       <UniqueIdentifier>{40bf8821-7ff8-4d2b-91e9-b5a5c13a4cbc}</UniqueIdentifier>
@@ -180,9 +162,6 @@
     <Filter Include="Source Files\scene\systems\ui\modules">
       <UniqueIdentifier>{0115eb10-ed66-4680-a1e1-6a4220f92f9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\geometry\transform">
-      <UniqueIdentifier>{78734d84-a6ed-4fd3-9996-d565f774f735}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\importer">
       <UniqueIdentifier>{f09ed5e3-c6f5-4513-b246-cb555949f3bf}</UniqueIdentifier>
     </Filter>
@@ -205,9 +184,6 @@
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\geometry\frustum\frustum.cpp">
-      <Filter>Source Files\geometry\frustum</Filter>
     </ClCompile>
     <ClCompile Include="src\direct3d\direct3d.cpp">
       <Filter>Source Files\direct3d</Filter>
@@ -335,9 +311,6 @@
     <ClCompile Include="src\scene\systems\picking\picking_system.cpp">
       <Filter>Source Files\scene\systems\picking</Filter>
     </ClCompile>
-    <ClCompile Include="src\geometry\geometry.cpp">
-      <Filter>Source Files\geometry</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\rendering_mgr.h">
@@ -357,18 +330,6 @@
     </ClInclude>
     <ClInclude Include="src\direct3d\direct3d.h">
       <Filter>Header Files\direct3d</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\shapes\bezier.h">
-      <Filter>Header Files\geometry\shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\shapes\shapes.h">
-      <Filter>Header Files\geometry\shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\frustum\frustum.h">
-      <Filter>Header Files\geometry\frustum</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h">
-      <Filter>Header Files\geometry\bounding_volume</Filter>
     </ClInclude>
     <ClInclude Include="src\resource\font\font.h">
       <Filter>Header Files\resource\font</Filter>
@@ -544,9 +505,6 @@
     <ClInclude Include="src\renderer\pass\deferred\deferred_pass.h">
       <Filter>Header Files\renderer\pass</Filter>
     </ClInclude>
-    <ClInclude Include="src\geometry\transform\transform_3d.h">
-      <Filter>Header Files\geometry\transform</Filter>
-    </ClInclude>
     <ClInclude Include="src\importer\texture_importer.h">
       <Filter>Header Files\importer</Filter>
     </ClInclude>
@@ -571,12 +529,6 @@
     <ClInclude Include="src\scene\systems\picking\picking_system.h">
       <Filter>Header Files\scene\systems\picking</Filter>
     </ClInclude>
-    <ClInclude Include="src\geometry\geometry_types.h">
-      <Filter>Header Files\geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\geometry.h">
-      <Filter>Header Files\geometry</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -585,9 +537,6 @@
     </None>
     <None Include="src\buffer\structured_buffer.tpp">
       <Filter>Header Files\buffer</Filter>
-    </None>
-    <None Include="src\geometry\shapes\shapes.tpp">
-      <Filter>Header Files\geometry\shapes</Filter>
     </None>
     <None Include="src\resource\mesh\mesh.tpp">
       <Filter>Header Files\resource\mesh</Filter>

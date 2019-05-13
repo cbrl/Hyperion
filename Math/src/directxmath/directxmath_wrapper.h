@@ -1,8 +1,7 @@
 #pragma once
 
+#include "datatypes/datatypes.h"
 #include <DirectXMath.h>
-#include "datatypes/scalar_types.h"
-#include "datatypes/vector_types.h"
 
 using namespace DirectX;
 

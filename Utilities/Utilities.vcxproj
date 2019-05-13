@@ -150,9 +150,6 @@
     <ClInclude Include="src\datatypes\vector_types.h" />
     <ClInclude Include="src\directx\d3d11.h" />
     <ClInclude Include="src\directx\directxtk.h" />
-    <ClInclude Include="src\directx\math\directx_math.h" />
-    <ClInclude Include="src\directx\math\directx_math_extensions.h" />
-    <ClInclude Include="src\directx\math\directx_math_wrapper.h" />
     <ClInclude Include="src\directx\pipeline.h" />
     <ClInclude Include="src\directx\profiler\gpu_profiler.h" />
     <ClInclude Include="src\directx\vertex\vertex_types.h" />
@@ -213,7 +210,6 @@
     <ClInclude Include="src\log\spdlog\spdlog.h" />
     <ClInclude Include="src\log\spdlog\tweakme.h" />
     <ClInclude Include="src\log\spdlog\version.h" />
-    <ClInclude Include="src\math\math.h" />
     <ClInclude Include="src\memory\handle\handle.h" />
     <ClInclude Include="src\memory\handle\handle_map.h" />
     <ClInclude Include="src\memory\managed_resource_map.h" />

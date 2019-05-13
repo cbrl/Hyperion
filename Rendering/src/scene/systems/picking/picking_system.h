@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/system.h"
-#include "directx/math/directx_math.h"
+#include "directxmath/directxmath.h"
 
 class Engine;
 

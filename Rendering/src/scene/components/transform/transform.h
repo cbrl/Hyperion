@@ -3,7 +3,7 @@
 #include "component/component.h"
 #include "entity/entity.h"
 #include "geometry/transform/transform_3d.h"
-#include "directx/math/directx_math.h"
+#include "directxmath/directxmath.h"
 #include "scene/events/core_events.h"
 
 

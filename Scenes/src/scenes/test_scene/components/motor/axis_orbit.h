@@ -1,6 +1,6 @@
 #pragma once
 
-#include "directx/math/directx_math.h"
+#include "directxmath/directxmath.h"
 #include "component/component.h"
 
 

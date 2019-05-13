@@ -1,7 +1,7 @@
 #pragma once
 
 #include "component/component.h"
-#include "directx/math/directx_math.h"
+#include "directxmath/directxmath.h"
 
 
 class CameraMovement final : public ecs::Component<CameraMovement> {

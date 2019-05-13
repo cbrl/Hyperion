@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\directxmath">
+      <UniqueIdentifier>{61932b9b-b93c-40d1-a594-f9f5d8a0db1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry">
+      <UniqueIdentifier>{b27cb942-33ab-4563-bca8-ee8cd4d86aaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\geometry">
+      <UniqueIdentifier>{1c896b6d-56f7-4783-815b-a372abbc35ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\geometry\bounding_volume">
+      <UniqueIdentifier>{ec3c212a-4f75-4f9a-88ab-680504d8e3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\geometry\frustum">
+      <UniqueIdentifier>{4a35fe94-8df4-47a2-b95b-2b866c002858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\geometry\shapes">
+      <UniqueIdentifier>{a992dda7-9e08-4718-a179-2210a981b236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\geometry\transform">
+      <UniqueIdentifier>{5f77c859-3a6d-439b-91cc-ea41e9d2ae3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry\frustum">
+      <UniqueIdentifier>{860ea05d-cd5f-40f9-99d1-c20262f0e595}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\geometry\shapes\bezier.h">
+      <Filter>Header Files\geometry\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\shapes\shapes.h">
+      <Filter>Header Files\geometry\shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h">
+      <Filter>Header Files\geometry\bounding_volume</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\frustum\frustum.h">
+      <Filter>Header Files\geometry\frustum</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\transform\transform_3d.h">
+      <Filter>Header Files\geometry\transform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\geometry_types.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\geometry\geometry.h">
+      <Filter>Header Files\geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directxmath\directxmath.h">
+      <Filter>Header Files\directxmath</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directxmath\directxmath_extensions.h">
+      <Filter>Header Files\directxmath</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directxmath\directxmath_wrapper.h">
+      <Filter>Header Files\directxmath</Filter>
+    </ClInclude>
+    <ClInclude Include="src\maths.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\geometry\frustum\frustum.cpp">
+      <Filter>Source Files\geometry\frustum</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometry\geometry.cpp">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

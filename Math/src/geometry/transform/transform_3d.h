@@ -1,7 +1,7 @@
 #pragma once
 
 #include "datatypes/scalar_types.h"
-#include "directx/math/directx_math.h"
+#include "directxmath/directxmath.h"
 
 
 class Transform3D final {

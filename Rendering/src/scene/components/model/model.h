@@ -1,7 +1,7 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "directx/math/directx_math.h"
+#include "directxmath/directxmath.h"
 #include "datatypes/datatypes.h"
 #include "io/io.h"
 

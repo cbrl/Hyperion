@@ -1,7 +1,7 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
-#include "directx/math/directx_math.h"
+#include "directxmath/directxmath.h"
 
 
 namespace render {

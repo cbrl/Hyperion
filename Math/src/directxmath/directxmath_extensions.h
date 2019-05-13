@@ -1,7 +1,6 @@
 #pragma once
 
-#include "math/math.h"
-#include "datatypes/datatypes.h"
+#include "maths.h"
 #include <utility> //std::pair
 
 

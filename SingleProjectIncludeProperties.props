@@ -3,8 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\GSL\src;$(IncludePath)</IncludePath>
-    <SourcePath>$(ProjectDir)\src;$(SourcePath)</SourcePath>
+    <IncludePath>$(ProjectDir)\src;$(SolutionDir)\GSL\src;$(SolutionDir)\Utilities\src;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)\src;$(SolutionDir)\Utilities\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />
