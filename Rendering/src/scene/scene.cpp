@@ -27,11 +27,12 @@ void Scene::addCoreSystems(const Engine& engine) {
 void Scene::removeEntity(ecs::EntityPtr entity) {
 	if (entity) {
 		ecs->destroyEntity(entity.getHandle());
-
-		if (auto parent = entity->getParent()) {
-			parent->removeChild(entity);
-		}
 	}
+}
+
+
+void Scene::removeEntity(ecs::Entity& entity) {
+	ecs->destroyEntity(entity.getPtr().getHandle());
 }
 
 

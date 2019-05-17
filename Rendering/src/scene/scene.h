@@ -62,6 +62,9 @@ public:
 	// Remove an entity from this scene
 	void removeEntity(ecs::EntityPtr entity);
 
+	// Remove an entity from this scene
+	void removeEntity(ecs::Entity& entity);
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Systems
