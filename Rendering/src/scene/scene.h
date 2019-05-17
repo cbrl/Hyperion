@@ -12,7 +12,6 @@ namespace render {
 
 class Scene {
 public:
-
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -63,11 +62,6 @@ public:
 	// Remove an entity from this scene
 	void removeEntity(ecs::EntityPtr entity);
 
-	[[nodiscard]]
-	const std::vector<ecs::EntityPtr>& getEntities() const {
-		return entities;
-	}
-
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Systems
@@ -110,6 +104,11 @@ public:
 	// Do something with each component of type ComponentT
 	template<typename ComponentT>
 	void forEach(const std::function<void(const ComponentT&)>& act) const;
+
+	// Get the number of entities or the specified type of component
+	template<typename T>
+	[[nodiscard]]
+	size_t countOf() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -175,9 +174,6 @@ private:
 
 	// The ECS engine for this scene
 	std::unique_ptr<ecs::ECS> ecs;
-
-	// Entitites that currently exist in this scene
-	std::vector<ecs::EntityPtr> entities;
 };
 
 } //namespace render

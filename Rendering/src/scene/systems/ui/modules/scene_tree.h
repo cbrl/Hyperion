@@ -42,7 +42,7 @@ public:
 private:
 
 	void drawTree(render::Scene& scene);
-	void drawEntityNode(const ecs::EntityPtr& entity_ptr);
+	void drawEntityNode(const ecs::Entity& entity);
 
 	void drawMenuBar(render::Scene& scene);
 	void drawEntityMenu(render::Scene& scene);

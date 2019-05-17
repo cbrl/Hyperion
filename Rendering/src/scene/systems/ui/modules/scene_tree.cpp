@@ -17,15 +17,14 @@ void SceneTree::draw(render::Scene& scene) {
 void SceneTree::drawTree(render::Scene& scene) {
 	if (ImGui::BeginChild("Object List", {0, 0}, false, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-		ImGui::Text("%s (Entities: %llu)", scene.getName().c_str(), scene.getEntities().size());
+		ImGui::Text("%s (Entities: %llu)", scene.getName().c_str(), scene.countOf<ecs::Entity>());
 		ImGui::Separator();
 
 		// Draw a tree node for each root entity
-		auto& entities = scene.getEntities();
-		for (const auto& entity_ptr : entities) {
-			if (entity_ptr->hasParent()) continue;
-			drawEntityNode(entity_ptr);
-		}
+		scene.forEach([&](const ecs::Entity& entity) {
+			if (entity.hasParent()) return;
+			drawEntityNode(entity);
+		});
 	}
 
 	ImGui::EndChild();
@@ -42,29 +41,25 @@ void SceneTree::setSelectedEntity(const ecs::EntityPtr& entity) noexcept {
 }
 
 
-void SceneTree::drawEntityNode(const ecs::EntityPtr& entity_ptr) {
+void SceneTree::drawEntityNode(const ecs::Entity& entity) {
 
-	if (!entity_ptr.valid())
-		return;
-
-	auto* entity = entity_ptr.get();
-	auto  handle = entity_ptr.getHandle();
+	auto handle = entity.getPtr().getHandle();
 
 	//----------------------------------------------------------------------------------
 	// Draw Entity Node
 	//----------------------------------------------------------------------------------
 	bool node_open = true;
-	if (entity->hasChildren()) {
-		node_open = scene_tree.newNode(entity_ptr, entity->getName().c_str());
+	if (entity.hasChildren()) {
+		node_open = scene_tree.newNode(entity.getPtr(), entity.getName().c_str());
 	}
 	else {
-		node_open = scene_tree.newLeafNode(entity_ptr, entity->getName().c_str());
+		node_open = scene_tree.newLeafNode(entity.getPtr(), entity.getName().c_str());
 	}
 
 	if (node_open) {
 		// Draw any child entities in this node
-		if (entity->hasChildren()) {
-			entity->forEachChild([this](ecs::EntityPtr& child) {
+		if (entity.hasChildren()) {
+			entity.forEachChild([this](const ecs::Entity& child) {
 				drawEntityNode(child);
 			});
 		}

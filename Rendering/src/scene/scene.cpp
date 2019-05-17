@@ -32,8 +32,6 @@ void Scene::removeEntity(ecs::EntityPtr entity) {
 			parent->removeChild(entity);
 		}
 	}
-	entities.erase(std::remove(std::begin(entities), std::end(entities), entity),
-	               std::end(entities));
 }
 
 

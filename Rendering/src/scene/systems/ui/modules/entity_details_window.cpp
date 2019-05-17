@@ -26,10 +26,9 @@ void DrawComponentState(ComponentT& component, gsl::czstring<> name = nullptr) {
 
 void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
 
-	auto&       device       = engine.getRenderingMgr().getDevice();
-	auto&       resource_mgr = engine.getRenderingMgr().getResourceMgr();
-	auto&       scene        = engine.getScene();
-	const auto& entities     = scene.getEntities();
+	auto& device       = engine.getRenderingMgr().getDevice();
+	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
+	auto& scene        = engine.getScene();
 
 	// Begin window. Early return if window isn't open or entity isn't valid.
 	ImGui::SetNextWindowSize(ImVec2{375, 425}, ImGuiCond_FirstUseEver);
@@ -67,23 +66,26 @@ void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
 	//----------------------------------------------------------------------------------
 	// Parent
 	//----------------------------------------------------------------------------------
-	static const std::string none = "None";
-	entity_names_list.clear();
-	entity_names_list.push_back(std::cref(none));
-	for (const auto& ptr : entities) {
-		entity_names_list.push_back(ptr->getName());
-	}
+	entity_list.clear();
+	scene.forEach([&](const ecs::Entity& entity) {
+		entity_list.push_back(entity.getPtr());
+	});
 
 	static const auto getter = [](void* data, int idx, const char** out_text) -> bool {
-		auto& vector = *static_cast<std::vector<std::reference_wrapper<const std::string>>*>(data);
+		auto& vector = *static_cast<std::vector<ecs::EntityPtr>*>(data);
 		if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-		*out_text = vector[idx].get().c_str();
+		if (idx == 0) {
+			static char none[] = "None";
+			*out_text = none;
+		}
+		else
+			*out_text = vector[idx]->getName().c_str();
 		return true;
 	};
 
-	if (ImGui::Combo("Parent", &entity_names_idx, getter, &entity_names_list, static_cast<int>(entity_names_list.size()))) {
+	if (ImGui::Combo("Parent", &entity_names_idx, getter, &entity_list, static_cast<int>(entity_list.size()))) {
 		if (entity_names_idx != 0) {
-			entities[entity_names_idx - 1]->addChild(entity.getPtr()); //subtract 1 since index 0 is "None"
+			entity_list[entity_names_idx]->addChild(entity.getPtr()); //subtract 1 since index 0 is "None"
 		}
 		else if (entity.hasParent()) {
 			entity.getParent()->removeChild(entity.getPtr());

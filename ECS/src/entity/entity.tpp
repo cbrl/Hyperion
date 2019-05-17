@@ -100,23 +100,4 @@ size_t Entity::countOf() const {
 	return components.count(ComponentT::index);
 }
 
-
-template<typename ActionT>
-void Entity::forEachChild(ActionT&& act) {
-	for (auto child : children) {
-		if (child.valid()) act(child);
-	}
-}
-
-
-template<typename ActionT>
-void Entity::forEachChildRecursive(ActionT&& act) {
-	for (auto child : children) {
-		if (child.valid()) {
-			act(child);
-			child->forEachChildRecursive(act);
-		}
-	}
-}
-
 } // namespace ecs

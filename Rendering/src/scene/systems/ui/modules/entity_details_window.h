@@ -115,7 +115,7 @@ private:
 
 	// "Parent" Combo Box
 	int entity_names_idx = 0;
-	std::vector<std::reference_wrapper<const std::string>> entity_names_list;
+	std::vector<ecs::EntityPtr> entity_list;
 
 	// Resource Map Combo Box
 	std::vector<std::reference_wrapper<const std::string>> res_map_names;

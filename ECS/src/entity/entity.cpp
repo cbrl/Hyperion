@@ -1,6 +1,7 @@
 #include "entity.h"
 #include "component/component_mgr.h"
 #include "ecs.h"
+#include <functional>
 
 
 namespace ecs {
@@ -105,8 +106,8 @@ void Entity::removeChild(EntityPtr child) {
 
 
 void Entity::removeAllChildren() {
-	forEachChild([this](EntityPtr& child) {
-		removeChild(child);
+	forEachChild([this](Entity& child) {
+		removeChild(child.getPtr());
 	});
 }
 
@@ -121,6 +122,44 @@ bool Entity::hasChildren() const noexcept {
 }
 
 
+void Entity::forEachChild(const std::function<void(Entity&)>& act) {
+	for (auto child : children) {
+		if (child.valid())
+			act(*child);
+	}
+}
+
+
+void Entity::forEachChild(const std::function<void(const Entity&)>& act) const {
+	for (auto child : children) {
+		if (child.valid())
+			act(*child);
+	}
+}
+
+
+void Entity::forEachChildRecursive(const std::function<void(Entity&)>& act) {
+	for (auto child : children) {
+		if (child.valid()) {
+			auto& child_entity = *child;
+			act(child_entity);
+			child_entity.forEachChildRecursive(act);
+		}
+	}
+}
+
+
+void Entity::forEachChildRecursive(const std::function<void(const Entity&)>& act) const {
+	for (auto child : children) {
+		if (child.valid()) {
+			const auto& child_entity = *child;
+			act(child_entity);
+			child_entity.forEachChildRecursive(act);
+		}
+	}
+}
+
+
 void Entity::setComponentMgr(gsl::not_null<ComponentMgr*> mgr) {
 	component_mgr = mgr;
 }
@@ -128,8 +167,8 @@ void Entity::setComponentMgr(gsl::not_null<ComponentMgr*> mgr) {
 
 void Entity::setPointer(EntityPtr ptr) noexcept {
 	this_ptr = ptr;
-	forEachChild([ptr](EntityPtr& child) {
-		child->setParent(ptr);
+	forEachChild([ptr](Entity& child) {
+		child.setParent(ptr);
 	});
 	for (auto& pair : components) {
 		pair.second.get().setOwner(ptr);

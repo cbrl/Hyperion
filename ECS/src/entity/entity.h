@@ -176,12 +176,16 @@ public:
 	bool hasChildren() const noexcept;
 
 	// Apply an action to each child of this entity
-	template<typename ActionT>
-	void forEachChild(ActionT&& act);
+	void forEachChild(const std::function<void(Entity&)>& act);
+
+	// Apply an action to each child of this entity
+	void forEachChild(const std::function<void(const Entity&)>& act) const;
 
 	// Apply an action to each child of this entity, and each child of each child, etc...
-	template<typename ActionT>
-	void forEachChildRecursive(ActionT&& act);
+	void forEachChildRecursive(const std::function<void(Entity&)>& act);
+
+	// Apply an action to each child of this entity, and each child of each child, etc...
+	void forEachChildRecursive(const std::function<void(const Entity&)>& act) const;
 
 private:
 

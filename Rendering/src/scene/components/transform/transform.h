@@ -281,8 +281,8 @@ private:
 		needs_update = true;
 
 		// Manually set 'needs update' flag of child transforms
-		getOwner()->forEachChild([](ecs::EntityPtr& child) {
-			if (auto* transform = child->getComponent<Transform>()) {
+		getOwner()->forEachChild([](ecs::Entity& child) {
+			if (auto* transform = child.getComponent<Transform>()) {
 				transform->transform.setNeedsUpdate();
 				transform->setNeedsUpdate();
 			}
@@ -307,8 +307,8 @@ private:
 		needs_update = false;
 
 		// Update all child transforms (if any)
-		getOwner()->forEachChild([](ecs::EntityPtr& child) {
-			if (auto* transform = child->getComponent<Transform>()) {
+		getOwner()->forEachChild([](ecs::Entity& child) {
+			if (auto* transform = child.getComponent<Transform>()) {
 				transform->update();
 			}
 		});
