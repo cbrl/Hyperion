@@ -50,24 +50,22 @@ void ECS::forEach(const std::function<void(Entity&)>& act) {
 
 	static_assert((std::is_base_of_v<IComponent, ComponentT> && ...));
 
+	// Iterator over all entities if no component types provided
 	if constexpr (sizeof...(ComponentT) == 0) {
 		entity_mgr->forEach(act);
 	}
 	else {
+		// Return early if a type was provided that has never been used
 		if ((!component_mgr->knowsComponent<ComponentT>() || ...))
 			return;
 
-		std::vector<std::reference_wrapper<Entity>> entities;
-
-		entity_mgr->forEach([&entities](Entity& entity) {
+		// Iterator over all entities that contain the provided component types
+		entity_mgr->forEach([&act](Entity& entity) {
 			if ((entity.hasComponent<ComponentT>() && ...))
-				entities.push_back(std::ref(entity));
+				act(entity);
 		});
-
-		for (Entity& entity : entities) {
-			act(entity);
-		}
 	}
+	
 }
 
 
@@ -76,23 +74,21 @@ void ECS::forEach(const std::function<void(const Entity&)>& act) const {
 
 	static_assert((std::is_base_of_v<IComponent, ComponentT> && ...));
 
+	// Iterator over all entities if no component types provided
 	if constexpr (sizeof...(ComponentT) == 0) {
 		entity_mgr->forEach(act);
+		return;
 	}
 	else {
+		// Return early if a type was provided that has never been used
 		if ((!component_mgr->knowsComponent<ComponentT>() || ...))
 			return;
 
-		std::vector<std::reference_wrapper<const Entity>> entities;
-
-		entity_mgr->forEach([&entities](const Entity& entity) {
+		// Iterator over all entities that contain the provided component types
+		entity_mgr->forEach([&act](const Entity& entity) {
 			if ((entity.hasComponent<ComponentT>() && ...))
-				entities.push_back(std::ref(entity));
+				act(entity);
 		});
-
-		for (const Entity& entity : entities) {
-			act(entity);
-		}
 	}
 }
 
