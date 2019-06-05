@@ -12,14 +12,12 @@ TextPass::TextPass(ID3D11DeviceContext& device_context) {
 void TextPass::render(Scene& scene) const {
 
 	scene.forEach<Transform, Text>([&](const ecs::Entity& entity) {
-
 		const auto& transform = *entity.getComponent<Transform>();
 		const auto  texts     = entity.getAll<Text>();
 
-
 		for (const Text& text : texts) {
-
-			if (!text.isActive()) continue;
+			if (!text.isActive())
+				continue;
 
 			const auto& font = text.getFont();
 
