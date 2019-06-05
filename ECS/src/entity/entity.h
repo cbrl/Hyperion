@@ -139,8 +139,7 @@ public:
 
 	// Get all components in this entity
 	[[nodiscard]]
-	const std::unordered_multimap<std::type_index, std::reference_wrapper<IComponent>>&
-	getComponents();
+	const std::multimap<std::type_index, std::reference_wrapper<IComponent>>& getComponents();
 
 
 	//----------------------------------------------------------------------------------
