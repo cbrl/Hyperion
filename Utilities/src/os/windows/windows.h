@@ -32,6 +32,7 @@
 #endif
 
 #include <Windows.h>
+#include <WinUser.h>
 
 #include <wrl/client.h>
 using Microsoft::WRL::ComPtr;

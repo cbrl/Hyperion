@@ -69,30 +69,30 @@ public:
 //----------------------------------------------------------------------------------
 // WindowConfig
 //----------------------------------------------------------------------------------
-class WindowConfig final {
+class WindowClass final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	WindowConfig(gsl::not_null<HINSTANCE> instance,
+	WindowClass(gsl::not_null<HINSTANCE> instance,
 				 std::wstring window_class_name = L"Engine",
 				 u32 window_class_style = CS_HREDRAW | CS_VREDRAW);
 
-	WindowConfig(const WindowConfig& config) = delete;
-	WindowConfig(WindowConfig&& config) noexcept = default;
+	WindowClass(const WindowClass&) = delete;
+	WindowClass(WindowClass&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~WindowConfig();
+	~WindowClass();
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	WindowConfig& operator=(const WindowConfig& config) = delete;
-	WindowConfig& operator=(WindowConfig&& config) noexcept = default;
+	WindowClass& operator=(const WindowClass&) = delete;
+	WindowClass& operator=(WindowClass&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -108,8 +108,8 @@ public:
 		return class_name;
 	}
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	Window(std::shared_ptr<WindowConfig> window_config,
+	Window(std::shared_ptr<WindowClass> window_class,
 	       const std::wstring& title,
 	       u32_2 resolution,
 	       DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
@@ -158,22 +158,47 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Misc
+	// Member Functions - Window
 	//----------------------------------------------------------------------------------
-	void show(int nCmdShow) const {
-		ShowWindow(window, nCmdShow);
+	[[nodiscard]]
+	WindowClass& getClass() {
+		return *win_class;
 	}
 
 	[[nodiscard]]
-	gsl::not_null<HINSTANCE> getInstance() const noexcept {
-		return config->getInstance();
+	const WindowClass& getClass() const {
+		return *win_class;
 	}
 
+	// Get the window's HINSTANCE
+	[[nodiscard]]
+	gsl::not_null<HINSTANCE> getInstance() const noexcept {
+		return win_class->getInstance();
+	}
+
+	// Get the window's HWND
 	[[nodiscard]]
 	HWND getHandle() const noexcept {
 		return window;
 	}
 
+	// Display the window
+	void show(int nCmdShow) const {
+		ShowWindow(window, nCmdShow);
+	}
+
+	// Get the icon associated with the window's class
+	[[nodiscard]]
+	HICON getIcon() const {
+		return reinterpret_cast<HICON>(GetClassLongPtr(window, GCLP_HICONSM));
+	}
+
+	// Set the icon associated with the window's class
+	void setIcon(HICON icon) const {
+		SetClassLongPtr(window, GCLP_HICONSM, reinterpret_cast<LONG_PTR>(icon));
+	}
+
+	// Get the title of the window (as displayed in the title bar)
 	[[nodiscard]]
 	std::wstring getWindowTitle() const {
 		wchar_t title[256];
@@ -181,7 +206,8 @@ public:
 		return std::wstring(title);
 	}
 
-	void setWindowTitle(const std::wstring& title) {
+	// Set the title of the window
+	void setWindowTitle(const std::wstring& title) const {
 		SetWindowText(window, title.c_str());
 	}
 
@@ -208,6 +234,13 @@ public:
 		GetWindowRect(window, &pos);
 		return { static_cast<u32>(pos.left),
 			     static_cast<u32>(pos.top) };
+	}
+
+	// Set the top-left position of the window (including window decorations)
+	void setWindowPosition(u32_2 pos) const {
+		RECT rect;
+		GetWindowRect(window, &rect);
+		MoveWindow(window, pos[0], pos[1], rect.right - rect.left, rect.bottom - rect.top, TRUE);
 	}
 
 	// Get the size of the client within the window
@@ -281,7 +314,7 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	std::shared_ptr<WindowConfig> config;
+	std::shared_ptr<WindowClass> win_class;
 	HWND window;
 
 	std::vector<gsl::not_null<MessageForwarder*>> forwarders;

@@ -28,9 +28,9 @@ Window* GetCaller(gsl::not_null<HWND> window,
 // WindowConfig
 //----------------------------------------------------------------------------------
 
-WindowConfig::WindowConfig(gsl::not_null<HINSTANCE> instance,
-                           std::wstring window_class_name,
-						   u32 window_class_style)
+WindowClass::WindowClass(gsl::not_null<HINSTANCE> instance,
+                         std::wstring window_class_name,
+                         u32 window_class_style)
 	: instance(instance)
 	, class_name(std::move(window_class_name)) {
 
@@ -52,7 +52,7 @@ WindowConfig::WindowConfig(gsl::not_null<HINSTANCE> instance,
 }
 
 
-WindowConfig::~WindowConfig() {
+WindowClass::~WindowClass() {
 	UnregisterClass(class_name.c_str(), instance);
 }
 
@@ -63,14 +63,14 @@ WindowConfig::~WindowConfig() {
 // Window
 //----------------------------------------------------------------------------------
 
-Window::Window(std::shared_ptr<WindowConfig> window_config,
+Window::Window(std::shared_ptr<WindowClass> window_class,
                const std::wstring& title,
 			   u32_2 resolution,
                DWORD style)
-	: config(std::move(window_config))
+	: win_class(std::move(window_class))
 	, window(nullptr) {
 
-	assert(config);
+	assert(win_class && "Null window class");
 	init(title, resolution, style);
 }
 
@@ -97,7 +97,7 @@ void Window::init(const std::wstring& title,
 	const u32 y_pos = (GetSystemMetrics(SM_CYSCREEN) - window_height) / 2;
 
 	// Create window and store window handle
-	window = CreateWindow(config->getClassName().c_str(),
+	window = CreateWindow(win_class->getClassName().c_str(),
 						  title.c_str(),
 						  style,
 						  x_pos,
@@ -106,7 +106,7 @@ void Window::init(const std::wstring& title,
 						  window_height,
 						  nullptr,
 						  nullptr,
-						  config->getInstance(),
+						  win_class->getInstance(),
 						  this);
 	
 	ThrowIfFailed(window != nullptr, "Failed to create window");
