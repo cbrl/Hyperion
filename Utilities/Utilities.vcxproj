@@ -151,7 +151,6 @@
     <ClInclude Include="src\directx\directxtk.h" />
     <ClInclude Include="src\exception\exception.h" />
     <ClInclude Include="src\io\io.h" />
-    <ClInclude Include="src\io\line_reader.h" />
     <ClInclude Include="src\json\json.h" />
     <ClInclude Include="src\json\nlohmann\json.hpp" />
     <ClInclude Include="src\log\log.h" />
@@ -223,7 +222,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="src\io\line_reader.tpp" />
     <None Include="src\memory\handle\handle_map.tpp" />
     <None Include="src\time\stopwatch.tpp" />
   </ItemGroup>
