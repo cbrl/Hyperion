@@ -23,7 +23,7 @@ struct Material {
 	// The textures for the material
 	struct {
 		std::shared_ptr<Texture> base_color;
-		std::shared_ptr<Texture> material_params; //R: metalness, G: roughness
+		std::shared_ptr<Texture> material_params; //G: roughness, B: metalness
 		std::shared_ptr<Texture> normal;
 		std::shared_ptr<Texture> emissive;
 	} maps;

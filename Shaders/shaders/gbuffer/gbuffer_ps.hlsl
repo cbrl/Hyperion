@@ -11,7 +11,7 @@ OMGBuffer PS(PSPositionNormalTexture pin) {
 
 	OMGBuffer pout;
 	pout.base_color = base_color;
-	pout.material   = float4(material_params, 0.0f, 1.0f);
+	pout.material   = float4(0.0f, material_params, 1.0f);
 	pout.n          = float4(normal, 1.0f);
 
 	return pout;

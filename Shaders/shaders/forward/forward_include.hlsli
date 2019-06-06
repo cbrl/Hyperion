@@ -33,10 +33,10 @@ float4 GetBaseColor(float2 uv) {
 }
 
 
-// returns [metalness, roughness]
+// returns [roughness, metalness]
 float2 GetMaterialParams(float2 uv) {
-	const float2 sam = g_material_param_map.Sample(g_linear_wrap, uv).xy;
-	return float2(g_material.metalness, g_material.roughness) * sam;
+	const float2 sam = g_material_param_map.Sample(g_linear_wrap, uv).gb;
+	return float2(g_material.roughness, g_material.metalness) * sam;
 }
 
 

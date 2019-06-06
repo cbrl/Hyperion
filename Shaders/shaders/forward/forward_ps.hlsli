@@ -19,8 +19,8 @@ float4 PS(PSPositionNormalTexture pin) : SV_Target {
 
 	Material mat;
 	mat.base_color = base_color;
-	mat.metalness  = params.x;
-	mat.roughness  = params.y;
+	mat.roughness  = params.x;
+	mat.metalness  = params.y;
 	mat.emissive   = g_material.emissive;
 
 

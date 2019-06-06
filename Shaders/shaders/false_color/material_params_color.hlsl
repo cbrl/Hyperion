@@ -9,7 +9,7 @@ float4 PS(PSPositionNormalTexture input) : SV_Target {
 
 	const float2 params = GetMaterialParams(input.uv);
 
-	return float4(params.x, params.y, 0.0f, 1.0f);
+	return float4(0.0f, params.x, params.y, 1.0f);
 }
 
 
