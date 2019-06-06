@@ -168,6 +168,14 @@ void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
 		}
 	}
 
+	// Spot Light
+	if (entity.hasComponent<SpotLight>()) {
+		auto lights = entity.getAll<SpotLight>();
+		for (SpotLight& light : lights) {
+			drawComponentNode("Spot Light", light);
+		}
+	}
+
 	ImGui::End(); //"Properties"
 }
 
