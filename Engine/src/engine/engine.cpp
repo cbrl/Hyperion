@@ -167,8 +167,8 @@ void Engine::init(std::wstring title,
 
 	// Create the main window
 	{
-		auto win_config = std::make_shared<WindowConfig>(gsl::make_not_null(GetModuleHandle(nullptr)));
-		window = std::make_unique<Window>(win_config,
+		auto win_class = std::make_shared<WindowClass>(gsl::make_not_null(GetModuleHandle(nullptr)));
+		window = std::make_unique<Window>(win_class,
 		                                  title,
 		                                  display_config.getDisplayResolution());
 
