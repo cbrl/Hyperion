@@ -62,9 +62,10 @@ void GPUProfiler::endFrame() {
 
 
 void GPUProfiler::beginTimestamp(const std::string& identifier) {
-	if (auto it = timestamps[query_frame].find(identifier); it != timestamps[query_frame].end()) {
+	if (const auto it = timestamps[query_frame].find(identifier); it != timestamps[query_frame].end()) {
 		device_context.End(it->second.first.Get());
-	} else {
+	}
+	else {
 		Logger::log(LogLevel::warn, "Unknown timestamp identifier: \"{}\"", identifier);
 	}
 }
@@ -73,7 +74,8 @@ void GPUProfiler::beginTimestamp(const std::string& identifier) {
 void GPUProfiler::endTimestamp(const std::string& identifier) {
 	if (auto it = timestamps[query_frame].find(identifier); it != timestamps[query_frame].end()) {
 		device_context.End(it->second.second.Get());
-	} else {
+	}
+	else {
 		Logger::log(LogLevel::warn, "Unknown timestamp identifier: \"{}\"", identifier);
 	}
 }
