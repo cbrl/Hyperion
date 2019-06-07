@@ -12,7 +12,7 @@ ComponentT& ComponentMgr::createComponent(ArgsT&&... args) {
 	using pool_t = ResourcePool<ComponentT>;
 
 	// Get or create the component pool
-	auto it = component_pools.find(ComponentT::index);
+	const auto it = component_pools.find(ComponentT::index);
 	if (it == component_pools.end()) {
 		const auto pair = component_pools.try_emplace(ComponentT::index, std::make_unique<pool_t>());
 		it = pair.first; //pair == pair<iterator, bool>
@@ -21,6 +21,7 @@ ComponentT& ComponentMgr::createComponent(ArgsT&&... args) {
 	auto& pool      = *static_cast<pool_t*>(it->second.get());
 	auto& component = pool.emplace_back(std::forward<ArgsT>(args)...);
 
+	// Perform extra initialization steps if the component is an event participator
 	if constexpr (std::is_base_of_v<EventParticipator, ComponentT>) {
 		component.setEventMgr(gsl::make_not_null(&event_handler));
 		if constexpr (std::is_base_of_v<EventListener, ComponentT>) {
