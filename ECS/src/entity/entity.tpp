@@ -91,7 +91,7 @@ void Entity::removeAll() {
 
 template<typename ComponentT>
 bool Entity::hasComponent() const {
-	return components.find(ComponentT::index) != components.end();
+	return components.contains(ComponentT::index);
 }
 
 

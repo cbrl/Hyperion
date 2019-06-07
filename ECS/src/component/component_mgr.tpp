@@ -45,7 +45,7 @@ size_t ComponentMgr::countOf() {
 
 template<typename ComponentT>
 bool ComponentMgr::knowsComponent() const {
-	return component_pools.find(ComponentT::index) != component_pools.end();
+	return component_pools.contains(ComponentT::index);
 }
 
 
