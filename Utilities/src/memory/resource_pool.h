@@ -43,15 +43,11 @@ public:
 
 	// Remove a resource referenced to by its pointer
 	void remove_resource(void* resource) {
-		bool found = false;
-		this->remove_if([resource, &found](T& element) {
-			if (&element == resource) {
-				found = true;
-				return true;
-			}
-			else return false;
+		const auto num_removed = this->remove_if([resource, &found](T& element) {
+			return &element == resource;
 		});
-		if (!found) Logger::log(LogLevel::warn, "ResourcePool::remove_resource() found no object to remove");
+		if (num_removed == 0)
+			Logger::log(LogLevel::warn, "ResourcePool::remove_resource() found no object to remove");
 	}
 
 	// Remove a resource referenced to by its pointer
