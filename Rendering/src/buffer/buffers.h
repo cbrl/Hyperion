@@ -22,8 +22,8 @@ struct EngineBuffer {
 
 struct MaterialBuffer {
 	f32_4 base_color = {};
-	f32   metalness  = 0.0f;
 	f32   roughness  = 0.0f;
+	f32   metalness  = 0.0f;
 	f32_2 pad0;
 	f32_3 emissive   = {};
 	f32   pad1;
