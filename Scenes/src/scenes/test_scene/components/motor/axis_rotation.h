@@ -18,16 +18,10 @@ public:
 	};
 
 
-public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
-	AxisRotation() noexcept
-		: rotation_axis(0)
-		, rotation_speeds(1.0f, 1.0f, 1.0f) {
-	}
-
+	AxisRotation() = default;
 	AxisRotation(const AxisRotation& rotation) = delete;
 	AxisRotation(AxisRotation&& rotation) noexcept = default;
 
@@ -35,14 +29,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructors
 	//----------------------------------------------------------------------------------
-
 	~AxisRotation() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	AxisRotation& operator=(const AxisRotation& rotation) = delete;
 	AxisRotation& operator=(AxisRotation&& rotation) noexcept = default;
 
@@ -119,8 +111,11 @@ public:
 		return rotation_speeds[2];
 	}
 
-
 private:
-	u8    rotation_axis;
-	f32_3 rotation_speeds;
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+	u8    rotation_axis = 0;
+	f32_3 rotation_speeds = { 1.0f };
 };

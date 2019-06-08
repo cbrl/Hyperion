@@ -8,12 +8,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
-	MouseRotation() noexcept
-		: sensitivity(0.1f)
-		, max_rotation(XMConvertToRadians(89.0f), XM_PI) {
-	}
-
+	MouseRotation() = default;
 	MouseRotation(const MouseRotation& rotation) = delete;
 	MouseRotation(MouseRotation&& rotation) noexcept = default;
 
@@ -21,14 +16,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructors
 	//----------------------------------------------------------------------------------
-
 	~MouseRotation() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	MouseRotation& operator=(const MouseRotation& rotation) = delete;
 	MouseRotation& operator=(MouseRotation&& rotation) noexcept = default;
 
@@ -36,7 +29,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Sensitivity
 	//----------------------------------------------------------------------------------
-
 	[[nodiscard]]
 	f32 getSensitivity() const noexcept {
 		return sensitivity;
@@ -50,7 +42,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Max Rotation
 	//----------------------------------------------------------------------------------
-
 	[[nodiscard]]
 	f32_2 getMaxRotation() const noexcept {
 		return max_rotation;
@@ -69,10 +60,13 @@ public:
 		max_rotation[1] = angle > abs_max[1] ? abs_max[1] : angle;
 	}
 
-
 private:
-	f32   sensitivity;
-	f32_2 max_rotation;
 
-	static inline f32_2 abs_max{ XMConvertToRadians(89.0f), XM_PI };
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+	f32   sensitivity  = 0.1f;
+	f32_2 max_rotation = abs_max;
+
+	static constexpr f32_2 abs_max = { XMConvertToRadians(89.0f), XM_PI };
 };

@@ -11,17 +11,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
-	CameraMovement() noexcept
-		: velocity(0.0f, 0.0f, 0.0f)
-		, acceleration(20.0f)
-		, deceleration(50.0f)
-		, max_velocity(10.0f)
-		, is_moving_x(false)
-		, is_moving_y(false)
-		, is_moving_z(false) {
-	}
-
+	CameraMovement() = default;
 	CameraMovement(const CameraMovement& movement) = delete;
 	CameraMovement(CameraMovement&& movement) noexcept = default;
 
@@ -29,14 +19,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~CameraMovement() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	CameraMovement& operator=(const CameraMovement& movement) = delete;
 	CameraMovement& operator=(CameraMovement&& movement) noexcept = default;
 
@@ -44,7 +32,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Velocity
 	//----------------------------------------------------------------------------------
-
 	[[nodiscard]]
 	f32_3 getVelocity() const {
 		return velocity;
@@ -71,7 +58,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Acceleration
 	//----------------------------------------------------------------------------------
-
 	[[nodiscard]]
 	f32 getAcceleration() const {
 		return acceleration;
@@ -85,7 +71,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Deceleration
 	//----------------------------------------------------------------------------------
-
 	[[nodiscard]]
 	f32 getDeceleration() const {
 		return deceleration;
@@ -95,10 +80,10 @@ public:
 		deceleration = decel;
 	}
 
-
 private:
+
 	//----------------------------------------------------------------------------------
-	// Member Functions - In Motion
+	// Member Functions - In Motion Flags
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	bool isMovingX() const {
@@ -124,20 +109,24 @@ private:
 	bool isMovingZ() const {
 		return is_moving_z;
 	}
+
 	void setMovingZ(bool moving) {
 		is_moving_z = moving;
 	}
 
 
-private:
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+
 	// Position, veloctiy, acceleration (units per second)
-	f32_3 velocity;
-	f32   acceleration;
-	f32   deceleration;
-	f32   max_velocity;
+	f32_3 velocity     = { 0.0f };
+	f32   acceleration = 20.0f;
+	f32   deceleration = 50.0f;
+	f32   max_velocity = 10.0f;
 
 	// Movement booleans
-	bool is_moving_x;
-	bool is_moving_y;
-	bool is_moving_z;
+	bool is_moving_x = false;
+	bool is_moving_y = false;
+	bool is_moving_z = false;
 };
