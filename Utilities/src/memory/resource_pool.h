@@ -28,14 +28,16 @@ protected:
 
 template <typename T>
 class ResourcePool final : public IResourcePool, private std::pmr::list<T> {
+	using container_type = std::pmr::list<T>;
+
 public:
-	ResourcePool() : std::pmr::list<T>(&pool_resource) {}
+	ResourcePool() : container_type(&pool_resource) {}
 
 	//----------------------------------------------------------------------------------
 	// Modifiers
 	//----------------------------------------------------------------------------------
-	using std::pmr::list<T>::emplace_front;
-	using std::pmr::list<T>::emplace_back;
+	using container_type::emplace_front;
+	using container_type::emplace_back;
 
 	//----------------------------------------------------------------------------------
 	// Operations
@@ -43,7 +45,7 @@ public:
 
 	// Remove a resource referenced to by its pointer
 	void remove_resource(void* resource) {
-		const auto num_removed = this->remove_if([resource, &found](T& element) {
+		const auto num_removed = this->remove_if([resource](T& element) {
 			return &element == resource;
 		});
 		if (num_removed == 0)
@@ -58,19 +60,19 @@ public:
 	//----------------------------------------------------------------------------------
 	// Iterators
 	//----------------------------------------------------------------------------------
-	using std::pmr::list<T>::begin;
-	using std::pmr::list<T>::cbegin;
-	using std::pmr::list<T>::rbegin;
-	using std::pmr::list<T>::crbegin;
-	using std::pmr::list<T>::end;
-	using std::pmr::list<T>::cend;
-	using std::pmr::list<T>::rend;
-	using std::pmr::list<T>::crend;
+	using container_type::begin;
+	using container_type::cbegin;
+	using container_type::rbegin;
+	using container_type::crbegin;
+	using container_type::end;
+	using container_type::cend;
+	using container_type::rend;
+	using container_type::crend;
 
 	//----------------------------------------------------------------------------------
 	// Capacity
 	//----------------------------------------------------------------------------------
-	using std::pmr::list<T>::empty;
-	using std::pmr::list<T>::size;
-	using std::pmr::list<T>::max_size;
+	using container_type::empty;
+	using container_type::size;
+	using container_type::max_size;
 };

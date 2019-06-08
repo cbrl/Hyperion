@@ -12,7 +12,7 @@ ComponentT& ComponentMgr::createComponent(ArgsT&&... args) {
 	using pool_t = ResourcePool<ComponentT>;
 
 	// Get or create the component pool
-	const auto it = component_pools.find(ComponentT::index);
+	auto it = component_pools.find(ComponentT::index);
 	if (it == component_pools.end()) {
 		const auto pair = component_pools.try_emplace(ComponentT::index, std::make_unique<pool_t>());
 		it = pair.first; //pair == pair<iterator, bool>

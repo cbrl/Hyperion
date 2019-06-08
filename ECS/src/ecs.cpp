@@ -36,6 +36,7 @@ void ECS::update(std::chrono::duration<f64> dt) {
 	system_mgr->update(dt);
 	event_mgr->dispatchEvents();
 	entity_mgr->removeExpiredEntities();
+	component_mgr->removeExpiredComponents();
 }
 
 } // namespace ecs

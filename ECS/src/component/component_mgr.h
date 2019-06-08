@@ -47,15 +47,32 @@ public:
 	[[nodiscard]]
 	ComponentT& createComponent(ArgsT&&... args);
 
+	// Destroy a given component. The component won't actually be destroyed until the end of the ECS update.
 	void destroyComponent(IComponent& component) {
-		const auto it = component_pools.find(component.getTypeIndex());
-		if (it != component_pools.end()) {
-			it->second->remove_resource(&component);
-		}
-		else {
-			Logger::log(LogLevel::err,
-			            "Could not find appropriate pool when destroying a component of type \"{}\"",
-			            component.getTypeIndex().name());
+		expired_components[component.getTypeIndex()].push_back(&component);
+	}
+
+	// Remove all components that were passed to destroyComponent()
+	void removeExpiredComponents() {
+		for (auto& [type, vec] : expired_components) { //for each vector of a component type
+			for (auto* ptr : vec) { //for each component in the vector
+
+				// Destroy the component if an associated pool exists
+				const auto it = component_pools.find(ptr->getTypeIndex());
+				if (it != component_pools.end()) {
+					it->second->remove_resource(ptr);
+				}
+				else {
+					Logger::log(
+						LogLevel::err,
+						"Could not find appropriate pool when destroying a component of type \"{}\"",
+						ptr->getTypeIndex().name()
+					);
+				}
+			}
+
+			// Clear the vector after all components have been processed
+			vec.clear();
 		}
 	}
 
@@ -91,6 +108,9 @@ private:
 
 	// Map of unique resource pools for each type of component
 	std::unordered_map<std::type_index, std::unique_ptr<IResourcePool>> component_pools;
+
+	// A map of vectors containing components that need to be destroyed
+	std::unordered_map<std::type_index, std::vector<IComponent*>> expired_components;
 };
 
 } // namespace ecs
