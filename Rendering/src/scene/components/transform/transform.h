@@ -292,6 +292,7 @@ private:
 	void update() const {
 		if (not needs_update)
 			return;
+		needs_update = false;
 
 		if (getOwner()->hasParent()) { //update parent transform if there is one
 			const auto* parent_transform = getOwner()->getParent()->getComponent<Transform>();
@@ -303,8 +304,6 @@ private:
 		else {
 			transform.updateMatrix();
 		}
-
-		needs_update = false;
 
 		// Update all child transforms (if any)
 		getOwner()->forEachChild([](ecs::Entity& child) {
