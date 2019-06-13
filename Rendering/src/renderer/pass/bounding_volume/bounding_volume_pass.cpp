@@ -134,7 +134,7 @@ void XM_CALLCONV BoundingVolumePass::renderAABB(const AABB& aabb, FXMMATRIX obje
 	const auto scale  = aabb.max() - aabb.min();
 	const auto center = (aabb.max() + aabb.min()) * 0.5f;
 
-	auto box_to_object  = XMMatrixRotationRollPitchYawFromVector(g_XMZero);
+	auto box_to_object  = XMMatrixIdentity();
 	box_to_object.r[0] *= XMVectorGetX(scale);
 	box_to_object.r[1] *= XMVectorGetY(scale);
 	box_to_object.r[2] *= XMVectorGetZ(scale);
