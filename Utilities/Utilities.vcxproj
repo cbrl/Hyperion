@@ -209,6 +209,7 @@
     <ClInclude Include="src\memory\handle\handle_map.h" />
     <ClInclude Include="src\memory\managed_resource_map.h" />
     <ClInclude Include="src\memory\resource_pool.h" />
+    <ClInclude Include="src\memory\sparse_set.h" />
     <ClInclude Include="src\os\windows\window.h" />
     <ClInclude Include="src\os\windows\windows.h" />
     <ClInclude Include="src\os\windows\win_utils.h" />

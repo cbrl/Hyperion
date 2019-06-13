@@ -293,6 +293,9 @@
     <ClInclude Include="src\time\stopwatch.h">
       <Filter>Header Files\time</Filter>
     </ClInclude>
+    <ClInclude Include="src\memory\sparse_set.h">
+      <Filter>Header Files\memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\os\windows\window.cpp">
