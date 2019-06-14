@@ -62,7 +62,7 @@ public:
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	bool contains(const T& val) const noexcept {
-		return val < _capacity      &&
+		return val < _capacity     &&
 		       sparse[val] < _size &&
 		       dense[sparse[val]]  == val;
 	}

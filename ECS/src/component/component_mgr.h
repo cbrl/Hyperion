@@ -8,6 +8,52 @@ namespace ecs {
 
 class EventMgr;
 
+/*
+template<typename EntityT, typename ComponentT>
+class ComponentPool : public SparseSet<EntityT> {
+public:
+	using base_type              = SparseSet<EntityT>;
+	using container_type         = std::vector<ComponentT>;
+	using entity_type            = EntityT;
+	using value_type             = ComponentT;
+	using pointer                = ComponentT*;
+	using const_pointer          = const ComponentT*;
+	using reference              = ComponentT&;
+	using const_reference        = const ComponentT&;
+	using size_type              = size_t;
+	using difference_type        = ptrdiff_t;
+	using iterator               = typename container_type::iterator;
+	using const_iterator         = typename container_type::const_iterator;
+	using reverse_iterator       = typename container_type::reverse_iterator;
+	using const_reverse_iterator = typename container_type::const_reverse_iterator;
+
+	void reserve(size_type new_cap) {
+		base_type::reserve(new_cap);
+		components.reserve(new_cap);
+	}
+
+	template<typename... ArgsT>
+	[[nodiscard]]
+	reference construct(entity_type entity, ArgsT&& ... args) {
+		// TODO: error if entity is already present (base_type::contains(entity))
+		components.emplace_back(std::forward<ArgsT>(args)...);
+		base_type::insert(entity);
+		return components.back();
+	}
+
+	void destroy(entity_type entity) {
+		auto&& back = std::move(components.back());
+		components[base_type::indexOf(entity)] = std::move(back);
+		components.pop_back();
+		base_type::erase(entity);
+	}
+
+private:
+
+	container_type components;
+};
+*/
+
 //----------------------------------------------------------------------------------
 // Component Manager
 //----------------------------------------------------------------------------------
