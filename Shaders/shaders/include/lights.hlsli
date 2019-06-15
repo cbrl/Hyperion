@@ -39,10 +39,15 @@ float SpotIntensity(float3 L, float3 D, float cos_theta, float cos_phi) {
 
 
 //----------------------------------------------------------------------------------
-// Shadow Map Structs
+// Shadow Map Interface/Structs
 //----------------------------------------------------------------------------------
 
-struct ShadowMap {
+interface iShadowMap {
+	float ShadowFactor(float3 p_ndc);
+	float ShadowFactor(float3 p_light, float2 projection_values);
+};
+
+struct ShadowMap : iShadowMap {
 	SamplerComparisonState sam_shadow;
 	Texture2DArray maps;
 	uint index;
@@ -53,13 +58,21 @@ struct ShadowMap {
 
 		return maps.SampleCmpLevelZero(sam_shadow, location, p_ndc.z);
 	}
+
+	float ShadowFactor(float3 p_light, float2 projection_values) {
+		return 0.0f;
+	}
 };
 
 
-struct ShadowCubeMap {
+struct ShadowCubeMap : iShadowMap {
 	SamplerComparisonState sam_shadow;
 	TextureCubeArray maps;
 	uint index;
+
+	float ShadowFactor(float3 p_ndc) {
+		return 0.0f;
+	}
 
 	float ShadowFactor(float3 p_light, float2 projection_values) {
 		const float3 p_light_abs = abs(p_light);
@@ -76,10 +89,25 @@ struct ShadowCubeMap {
 
 
 //----------------------------------------------------------------------------------
+// Light Interfaces
+//----------------------------------------------------------------------------------
+
+interface iLight {
+	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance);
+};
+
+interface iShadowLight {
+	void Calculate(iShadowMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance);
+};
+
+
+
+
+//----------------------------------------------------------------------------------
 // Directional Light
 //----------------------------------------------------------------------------------
 
-struct DirectionalLight {
+struct DirectionalLight : iLight, iShadowLight {
 	float3 intensity;
 	float  pad0;
 	float3 direction;
@@ -90,10 +118,14 @@ struct DirectionalLight {
 		// The light vector aims opposite the direction the light rays travel
 		p_to_light = -direction;
 
+		// Transform point into light clip space
 		const float4 p_clip = mul(float4(p_world, 1.0f), world_to_projection);
 		p_ndc = PerspectiveDiv(p_clip);
 
-		irradiance = (any(1.0f < abs(p_ndc)) || 0.0f > p_ndc.z) ? 0.0f : intensity;
+		if (any(abs(p_ndc) > 1.0f) || (p_ndc.z < 0.0f))
+			irradiance = 0.0f;
+		else
+			irradiance = intensity;
 	}
 
 	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance) {
@@ -107,7 +139,7 @@ struct DirectionalLight {
 		irradiance = irradiance0;
 	}
 
-	void Calculate(ShadowMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
+	void Calculate(iShadowMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		float3 p_ndc;
 		float3 p_to_l0;
 		float3 irradiance0;
@@ -128,7 +160,7 @@ struct DirectionalLight {
 // Point Light
 //----------------------------------------------------------------------------------
 
-struct PointLight {
+struct PointLight : iLight {
 	float3 intensity;
 	float  pad0;
 	float3 position;
@@ -158,7 +190,7 @@ struct PointLight {
 };
 
 
-struct ShadowPointLight : PointLight {
+struct ShadowPointLight : PointLight, iShadowLight {
 	matrix world_to_light;
 	float2 projection_values;
 	float2 pad1;
@@ -167,7 +199,7 @@ struct ShadowPointLight : PointLight {
 		PointLight::Calculate(p_world, p_to_light, irradiance);
 	}
 
-	void Calculate(ShadowCubeMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
+	void Calculate(iShadowMap shadow_cube_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		float3 p_to_l0;
 		float3 irradiance0;
 
@@ -176,7 +208,7 @@ struct ShadowPointLight : PointLight {
 		p_to_light = p_to_l0;
 
 		const float3 p_light       = mul(float4(p_world, 1.0f), world_to_light).xyz;
-		const float  shadow_factor = shadow_map.ShadowFactor(p_light, projection_values);
+		const float  shadow_factor = shadow_cube_map.ShadowFactor(p_light, projection_values);
 
 		irradiance = irradiance0 * shadow_factor;
 	}
@@ -189,7 +221,7 @@ struct ShadowPointLight : PointLight {
 // Spot Light
 //----------------------------------------------------------------------------------
 
-struct SpotLight {
+struct SpotLight : iLight {
 	float3 intensity;
 	float  pad;
 	float3 position;
@@ -221,14 +253,14 @@ struct SpotLight {
 	}
 };
 
-struct ShadowSpotLight : SpotLight {
+struct ShadowSpotLight : SpotLight, iShadowLight {
 	matrix world_to_projection;
 
 	void Calculate(float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		SpotLight::Calculate(p_world, p_to_light, irradiance);
 	}
 
-	void Calculate(ShadowMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
+	void Calculate(iShadowMap shadow_map, float3 p_world, out float3 p_to_light, out float3 irradiance) {
 		float3 p_to_l0;
 		float3 irradiance0;
 
