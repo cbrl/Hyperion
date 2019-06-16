@@ -15,28 +15,28 @@
 template<typename T, size_t IndexBits, size_t CounterBits>
 struct Handle {
 public:
-
 	//----------------------------------------------------------------------------------
 	// Assertions
 	//----------------------------------------------------------------------------------
-
 	static_assert(std::is_integral_v<T>,
 		"Handle template parameter is not an integral type");
 
+	static_assert(std::is_unsigned_v<T>,
+		"Handle template parameter is not an unsigned type");
+
 	static_assert(CounterBits > 0 && CounterBits < sizeof(T) * 8,
-		"Invalid counter bits specified for Handle");
+		"Invalid number of counter bits specified for Handle");
 
 	static_assert(IndexBits > 0 && IndexBits < sizeof(T) * 8,
-		"Invalid index bits specified for Handle");
+		"Invalid number of index bits specified for Handle");
 
 	static_assert((CounterBits + IndexBits) <= (sizeof(T) * 8),
-		"Size of handle type is smaller than number of bits specified");
+		"Size of handle type is smaller than specified IndexBits + CounterBits");
 
 
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	constexpr Handle() noexcept
 		: Handle(invalid_handle) {
 	}
@@ -53,9 +53,21 @@ public:
 
 
 	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~Handle() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	Handle& operator=(const Handle&) noexcept = default;
+	Handle& operator=(Handle&&) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-
 	[[nodiscard]]
 	constexpr operator T() const noexcept {
 		return (index << n_counter_bits) | counter;
