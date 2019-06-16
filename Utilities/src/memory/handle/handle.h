@@ -14,6 +14,7 @@
 
 template<typename T, size_t IndexBits, size_t CounterBits>
 struct Handle {
+public:
 
 	//----------------------------------------------------------------------------------
 	// Assertions
@@ -31,7 +32,7 @@ struct Handle {
 	static_assert((CounterBits + IndexBits) <= (sizeof(T) * 8),
 		"Size of handle type is smaller than number of bits specified");
 
-public:
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -40,12 +41,12 @@ public:
 		: Handle(invalid_handle) {
 	}
 
-	constexpr Handle(T value) noexcept
-		: index(value & index_bitmask)
-		, counter((value & counter_bitmask) >> CounterBits) {
+	constexpr explicit Handle(T value) noexcept
+		: index((value & index_bitmask) >> n_counter_bits)
+		, counter(value & counter_bitmask) {
 	}
 
-	constexpr Handle(T index, T counter) noexcept
+	constexpr explicit Handle(T index, T counter) noexcept
 		: index(index)
 		, counter(counter) {
 	}
@@ -55,20 +56,20 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
+	[[nodiscard]]
 	constexpr operator T() const noexcept {
-		return (counter << (sizeof(T) * 8 - CounterBits)) | index;
+		return (index << n_counter_bits) | counter;
 	}
 
+	[[nodiscard]]
 	std::size_t hash() const noexcept {
 		return std::hash<T>{}(this->operator T());
 	}
 
 
-public:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
 	T index   : IndexBits;
 	T counter : CounterBits;
 
@@ -91,11 +92,11 @@ public:
 	static constexpr size_t n_index_bits   = IndexBits;
 	static constexpr size_t n_counter_bits = CounterBits;
 
-
 private:
+
 	// Bitmasks
-	static constexpr T index_bitmask   = (T{1} << IndexBits) - T{1};
-	static constexpr T counter_bitmask = ((T{1} << CounterBits) - T{1}) << CounterBits;
+	static constexpr T index_bitmask   = ((T{1} << IndexBits) - T{1}) << CounterBits;
+	static constexpr T counter_bitmask = (T{1} << CounterBits) - T{1};
 };
 
 #pragma warning (pop)

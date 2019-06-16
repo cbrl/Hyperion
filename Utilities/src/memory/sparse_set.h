@@ -20,10 +20,12 @@ public:
 	using const_reference        = const T&;
 	using size_type              = size_t;
 	using difference_type        = ptrdiff_t;
-	using iterator               = typename container_type::iterator;
-	using const_iterator         = typename container_type::const_iterator;
-	using reverse_iterator       = typename container_type::reverse_iterator;
-	using const_reverse_iterator = typename container_type::const_reverse_iterator;
+
+	// The underlying dense container is reverse iterated. This ensures that the current
+	// element can be deleted while iterating and no other elements will be skipped.
+	// However, elements added while iterating will not be covered.
+	using iterator               = typename container_type::reverse_iterator;
+	using const_iterator         = typename container_type::const_reverse_iterator;
 
 
 	//----------------------------------------------------------------------------------
@@ -46,51 +48,21 @@ public:
 	SparseSet& operator=(const SparseSet&) noexcept = default;
 	SparseSet& operator=(SparseSet&&) noexcept = default;
 
-	[[nodiscard]]
-	reference operator[](size_type pos) noexcept {
-		return dense[pos];
-	}
-
-	[[nodiscard]]
-	const_reference operator[](size_type pos) const noexcept {
-		return dense[pos];
-	}
-
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Access
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	bool contains(const T& val) const noexcept {
-		return val < _capacity     &&
-		       sparse[val] < _size &&
-		       dense[sparse[val]]  == val;
+		return val < capacity()     &&
+		       sparse[val] < size() &&
+		       dense[sparse[val]]   == val;
 	}
 
 	[[nodiscard]]
-	size_type indexOf(const T& val) const noexcept {
+	size_type index_of(const T& val) const noexcept {
 		assert(contains(val));
 		return sparse[val];
-	}
-
-	[[nodiscard]]
-	reference front() noexcept {
-		return dense.front();
-	}
-
-	[[nodiscard]]
-	const_reference front() const noexcept {
-		return dense.front();
-	}
-
-	[[nodiscard]]
-	reference back() noexcept {
-		return dense[_size - 1];
-	}
-
-	[[nodiscard]]
-	const_reference back() const noexcept {
-		return dense[_size - 1];
 	}
 
 	[[nodiscard]]
@@ -109,66 +81,32 @@ public:
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	iterator begin() noexcept {
-		return dense.begin();
+		return dense.rbegin();
 	}
 
 	[[nodiscard]]
 	const_iterator begin() const noexcept {
-		return dense.begin();
+		return dense.rbegin();
 	}
 
 	[[nodiscard]]
 	const_iterator cbegin() const noexcept {
-		return dense.cbegin();
-	}
-
-	[[nodiscard]]
-	iterator end() noexcept {
-		return dense.begin() + _size;
-	}
-
-	[[nodiscard]]
-	const_iterator end() const noexcept {
-		return dense.begin() + _size;
-	}
-
-	[[nodiscard]]
-	const_iterator cend() const noexcept {
-		return dense.cbegin() + _size;
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Reverse Iterators
-	//----------------------------------------------------------------------------------
-	[[nodiscard]]
-	iterator rbegin() noexcept {
-		return dense.rbegin();
-	}
-
-	[[nodiscard]]
-	const_iterator rbegin() const noexcept {
-		return dense.rbegin();
-	}
-
-	[[nodiscard]]
-	const_iterator crbegin() const noexcept {
 		return dense.crbegin();
 	}
 
 	[[nodiscard]]
-	iterator rend() noexcept {
-		return dense.rbegin() - _size;
+	iterator end() noexcept {
+		return dense.rend();
 	}
 
 	[[nodiscard]]
-	const_iterator rend() const noexcept {
-		return dense.rbegin() - _size;
+	const_iterator end() const noexcept {
+		return dense.rend();
 	}
 
 	[[nodiscard]]
-	const_iterator crend() const noexcept {
-		return dense.crbegin() - _size;
+	const_iterator cend() const noexcept {
+		return dense.crend();
 	}
 
 
@@ -177,25 +115,33 @@ public:
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	bool empty() const noexcept {
-		return _size == 0;
+		return dense.empty();
 	}
 
 	[[nodiscard]]
 	size_type size() const noexcept {
-		return _size;
+		return dense.size();
 	}
 
 	[[nodiscard]]
 	size_type capacity() const noexcept {
-		return _capacity;
+		return sparse.size();
 	}
 
 	void reserve(size_type new_cap) {
-		if (new_cap > _capacity) {
-			dense.resize(new_cap, 0);
+		if (new_cap > sparse.size()) {
+			dense.reserve(new_cap);
 			sparse.resize(new_cap, 0);
-			_capacity = new_cap;
 		}
+	}
+
+	void shrink_to_fit() {
+		if (dense.empty()) {
+			sparse.clear();
+		}
+
+		dense.shrink_to_fit();
+		sparse.shrink_to_fit();
 	}
 
 
@@ -203,27 +149,27 @@ public:
 	// Member Functions - Modifiers
 	//----------------------------------------------------------------------------------
 	void clear() noexcept {
-		size = 0;
+		dense.clear();
+		sparse.clear();
 	}
 
 	// Insert the given value into the sparse set. If the set's capacity is less than
 	// the value, then it will be resized to the value + 1;
 	void insert(const T& val) {
 		if (!contains(val)) {
-			if (val >= _capacity)
+			if (val >= sparse.size())
 				reserve(val + 1);
 
-			dense[_size] = val;
-			sparse[val]  = _size;
-			++_size;
+			sparse[val] = dense.size();
+			dense.push_back(val);
 		}
 	}
 
 	void erase(const T& val) noexcept {
 		if (contains(val)) {
-			dense[sparse[val]]       = dense[_size - 1];
-			sparse[dense[_size - 1]] = sparse[val];
-			--_size;
+			dense[sparse[val]] = dense.back();
+			sparse[dense.size() - 1] = sparse[val];
+			dense.pop_back();
 		}
 	}
 
@@ -240,7 +186,4 @@ private:
 	//----------------------------------------------------------------------------------
 	container_type dense;
 	container_type sparse;
-
-	size_type _size = 0;
-	size_type _capacity = 0;
 };

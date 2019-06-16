@@ -1,6 +1,7 @@
 #pragma once
 
 #include "memory/resource_pool.h"
+#include "memory/sparse_set.h"
 #include "component/component.h"
 
 
@@ -8,7 +9,7 @@ namespace ecs {
 
 class EventMgr;
 
-/*
+
 template<typename EntityT, typename ComponentT>
 class ComponentPool : public SparseSet<EntityT> {
 public:
@@ -22,16 +23,12 @@ public:
 	using const_reference        = const ComponentT&;
 	using size_type              = size_t;
 	using difference_type        = ptrdiff_t;
-	using iterator               = typename container_type::iterator;
-	using const_iterator         = typename container_type::const_iterator;
-	using reverse_iterator       = typename container_type::reverse_iterator;
-	using const_reverse_iterator = typename container_type::const_reverse_iterator;
+	using iterator               = typename container_type::reverse_iterator;
+	using const_iterator         = typename container_type::const_reverse_iterator;
 
-	void reserve(size_type new_cap) {
-		base_type::reserve(new_cap);
-		components.reserve(new_cap);
-	}
-
+	//----------------------------------------------------------------------------------
+	// Member Functions - Modifiers
+	//----------------------------------------------------------------------------------
 	template<typename... ArgsT>
 	[[nodiscard]]
 	reference construct(entity_type entity, ArgsT&& ... args) {
@@ -43,16 +40,108 @@ public:
 
 	void destroy(entity_type entity) {
 		auto&& back = std::move(components.back());
-		components[base_type::indexOf(entity)] = std::move(back);
+		components[base_type::index_of(entity)] = std::move(back);
 		components.pop_back();
 		base_type::erase(entity);
+	}
+
+	void clear() noexcept {
+		base_type::clear();
+		components.clear();
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Access
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	bool contains(const entity_type& val) const noexcept {
+		return base_type::contains(val);
+	}
+
+	[[nodiscard]]
+	reference get(const entity_type& val) {
+		return components[base_type::index_of(val)];
+	}
+
+	[[nodiscard]]
+	const_reference get(const entity_type& val) const {
+		return components[base_type::index_of(val)];
+	}
+
+	[[nodiscard]]
+	pointer data() noexcept {
+		return components.data();
+	}
+
+	[[nodiscard]]
+	const_pointer data() const noexcept {
+		return components.data();
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Iterators
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	iterator begin() noexcept {
+		return components.rbegin();
+	}
+
+	[[nodiscard]]
+	const_iterator begin() const noexcept {
+		return components.rbegin();
+	}
+
+	[[nodiscard]]
+	const_iterator cbegin() const noexcept {
+		return components.crbegin();
+	}
+
+	[[nodiscard]]
+	iterator end() noexcept {
+		return components.rend();
+	}
+
+	[[nodiscard]]
+	const_iterator end() const noexcept {
+		return components.rend();
+	}
+
+	[[nodiscard]]
+	const_iterator cend() const noexcept {
+		return components.crend();
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Capacity
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	bool empty() const noexcept {
+		return components.empty();
+	}
+
+	[[nodiscard]]
+	size_type size() const noexcept {
+		return components.size();
+	}
+
+	void reserve(size_type new_cap) {
+		base_type::reserve(new_cap);
+		components.reserve(new_cap);
+	}
+
+	void shrink_to_fit() {
+		base_type::shrink_to_fit();
+		components.shrink_to_fit();
 	}
 
 private:
 
 	container_type components;
 };
-*/
+
 
 //----------------------------------------------------------------------------------
 // Component Manager
