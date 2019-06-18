@@ -39,12 +39,12 @@ public:
 		viewport.bind(device_context);
 	}
 
-	// Bind the raster state for the cubemap
+	// Bind the raster state for the shadow map
 	void bindRasterState(ID3D11DeviceContext& device_context) const {
 		Pipeline::RS::bindState(device_context, raster_state.Get());
 	}
 
-	// Bind the depth stencil view for the cubemap
+	// Bind the depth stencil view for the shadow map
 	void bindDSV(ID3D11DeviceContext& device_context, size_t index) const {
 		Pipeline::OM::bindRTVsAndDSV(device_context, {}, dsvs[index].Get());
 	}
