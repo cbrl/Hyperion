@@ -156,7 +156,10 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	ComponentMgr(EventMgr& handler) : event_handler(handler) {}
+	ComponentMgr(EventMgr& handler)
+		: event_handler(handler) {
+	}
+
 	ComponentMgr(const ComponentMgr& manager) = delete;
 	ComponentMgr(ComponentMgr&& manager) = default;
 

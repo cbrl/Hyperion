@@ -51,6 +51,9 @@ public:
 		, counter(counter) {
 	}
 
+	constexpr Handle(const Handle&) noexcept = default;
+	constexpr Handle(Handle&&) noexcept = default;
+
 
 	//----------------------------------------------------------------------------------
 	// Destructor
@@ -61,8 +64,8 @@ public:
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	Handle& operator=(const Handle&) noexcept = default;
-	Handle& operator=(Handle&&) noexcept = default;
+	constexpr Handle& operator=(const Handle&) noexcept = default;
+	constexpr Handle& operator=(Handle&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
