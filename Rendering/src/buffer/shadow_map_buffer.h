@@ -34,7 +34,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// Bind the viewport and DSVs
+	// Bind the viewport
 	void bindViewport(ID3D11DeviceContext& device_context) const {
 		viewport.bind(device_context);
 	}
