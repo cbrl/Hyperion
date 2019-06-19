@@ -107,6 +107,10 @@ protected:
 	                  f32 slope_scaled_depth_bias,
 	                  f32 depth_bias_clamp) = 0;
 
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
 	Viewport viewport;
 	ComPtr<ID3D11RasterizerState> raster_state;
 
