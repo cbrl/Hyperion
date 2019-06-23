@@ -42,6 +42,41 @@ public:
 
 
 	//----------------------------------------------------------------------------------
+	// Member Functions - Components
+	//----------------------------------------------------------------------------------
+
+	//// Add a component to this entity
+	//template<typename ComponentT, typename... ArgsT>
+	//ComponentT& addComponent(handle64 entity, ArgsT&& ... args);
+
+	//// Get the first component of the specified type, if it exists.
+	//template<typename ComponentT>
+	//[[nodiscard]]
+	//ComponentT* getComponent(handle64 entity);
+
+	//// Get the first component of the specified type, if it exists.
+	//template<typename ComponentT>
+	//[[nodiscard]]
+	//const ComponentT* getComponent(handle64 entity) const;
+
+	//// Remove a specific component from this entity
+	//template<typename ComponentT>
+	//void removeComponent(handle64 entity);
+
+	//void removeComponent(handle64 entity, IComponent& component);
+
+	//// Check if this entity contains the specified component
+	//template<typename ComponentT>
+	//[[nodiscard]]
+	//bool hasComponent(handle64 entity) const;
+
+	//// Get the number of components of the specified type
+	//template<typename ComponentT>
+	//[[nodiscard]]
+	//size_t count(handle64 entity) const;
+
+
+	//----------------------------------------------------------------------------------
 	// Member Functions - Systems
 	//----------------------------------------------------------------------------------
 

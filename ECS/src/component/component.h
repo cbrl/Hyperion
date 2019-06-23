@@ -23,11 +23,11 @@ class IComponent {
 	// Constructors
 	//----------------------------------------------------------------------------------
 protected:
-	IComponent() noexcept
-	    : active(true) {
-	}
+
+	IComponent() noexcept = default;
 
 public:
+
 	IComponent(const IComponent& component) = delete;
 	IComponent(IComponent&& component) noexcept = default;
 
@@ -50,10 +50,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the component's type index
+	[[nodiscard]]
 	virtual const std::type_index& getTypeIndex() const = 0;
 
 	// Get the ptr of the entity that owns this component
-	EntityPtr getOwner() const {
+	[[nodiscard]]
+	const EntityPtr& getOwner() const noexcept {
 		return owner;
 	}
 
@@ -68,6 +70,7 @@ public:
 	}
 
 	// Get the component's state
+	[[nodiscard]]
 	bool isActive() const {
 		return active;
 	}
@@ -84,7 +87,7 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// Is the component active?
-	bool active;
+	bool active = true;
 
 	// The entity that owns this component. Set on creation in IEntity.
 	EntityPtr owner;
@@ -107,9 +110,17 @@ class Component : public IComponent {
 	// Constructors
 	//----------------------------------------------------------------------------------
 protected:
-	Component() noexcept = default;
+
+	Component() noexcept {
+		static_assert(std::is_move_constructible_v<T>,
+			"Component type is not move constructible");
+
+		static_assert(std::is_move_assignable_v<T>,
+			"Component type is not move assignible");
+	}
 
 public:
+
 	Component(const Component& component) = delete;
 	Component(Component&& component) noexcept = default;
 
@@ -130,6 +141,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
 	const std::type_index& getTypeIndex() const override final {
 		return index;
 	}

@@ -11,15 +11,14 @@ class HandleMap {
 	static_assert(std::is_pointer_v<DataT>,
 	              "HandleMap: invalid DataT. The HandleMap does not store resources, only pointers to resources.");
 
-private:
 	using table_entry = std::pair<typename HandleT::value_type, DataT>;
 
-
 public:
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	HandleMap() noexcept {
+	HandleMap() {
 		allocateChunk();
 	}
 

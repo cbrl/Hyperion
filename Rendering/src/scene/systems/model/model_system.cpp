@@ -16,14 +16,11 @@ void ModelSystem::update() {
 	auto& device_context = rendering_mgr.getDeviceContext();
 
 	getECS().forEach<Transform, Model>([&](ecs::Entity& entity) {
-		const auto& transform = *entity.getComponent<Transform>();
-		const auto  models    = entity.getAll<Model>();
+		const auto& transform = entity.getComponent<Transform>();
+		auto& model = entity.getComponent<Model>();
 
-		for (Model& model : models) {
-			if (!model.isActive())
-				continue;
-
-			// Update the model's buffer
+		// Update the model's buffer
+		if (model.isActive()) {
 			model.updateBuffer(device_context, transform.getObjectToWorldMatrix());
 		}
 	});

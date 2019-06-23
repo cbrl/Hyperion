@@ -253,7 +253,7 @@ void XM_CALLCONV ForwardPass::renderGBuffer(const Scene& scene, FXMMATRIX world_
 
 void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
 
-	const auto* transform = model.getOwner()->getComponent<Transform>();
+	const auto* transform = model.getOwner()->tryGetComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world = transform->getObjectToWorldMatrix();

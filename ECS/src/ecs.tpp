@@ -1,6 +1,46 @@
 
 namespace ecs {
 
+//template<typename ComponentT, typename... ArgsT>
+//ComponentT& ECS::addComponent(handle64 entity, ArgsT&& ... args) {
+//
+//}
+//
+//
+//template<typename ComponentT>
+//[[nodiscard]]
+//ComponentT* ECS::getComponent(handle64 entity) {
+//
+//}
+//
+//
+//template<typename ComponentT>
+//[[nodiscard]]
+//const ComponentT* ECS::getComponent(handle64 entity) const {
+//
+//}
+//
+//
+//template<typename ComponentT>
+//void ECS::removeComponent(handle64 entity) {
+//
+//}
+//
+//
+//template<typename ComponentT>
+//[[nodiscard]]
+//bool ECS::hasComponent(handle64 entity) const {
+//
+//}
+//
+//
+//template<typename ComponentT>
+//[[nodiscard]]
+//size_t ECS::count(handle64 entity) const {
+//
+//}
+
+
 template<typename SystemT, typename... ArgsT>
 SystemT& ECS::addSystem(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<ISystem, SystemT>,

@@ -146,7 +146,7 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 
 void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
 
-	const auto* transform = model.getOwner()->getComponent<Transform>();
+	const auto* transform = model.getOwner()->tryGetComponent<Transform>();
 	if (!transform) return;
 
 	const auto model_to_world      = transform->getObjectToWorldMatrix();

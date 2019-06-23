@@ -97,83 +97,60 @@ void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
 	// Draw Component Nodes
 	//----------------------------------------------------------------------------------
 
-	// Render user-added component details with their associated renderer, if it exists
-	const auto& components = entity.getComponents();
-	for (const auto& [idx, component] : components) {
-		const auto it = user_components.find(component.get().getTypeIndex());
-		if (it != user_components.end()) {
-			drawUserComponentNode(it->second.name.c_str(), component.get(), it->second.details_renderer);
+	// Render details of user-defined components if applicable
+	for (const auto& [idx, component_def] : user_components) {
+		if (component_def.getter) {
+			auto* component = component_def.getter(entity);
+			if (component) {
+				drawUserComponentNode(component_def.name.c_str(), *component, component_def.details_renderer);
+			}
 		}
 	}
 
 	// Transform
-	if (auto* transform = entity.getComponent<Transform>()) {
+	if (auto* transform = entity.tryGetComponent<Transform>()) {
 		drawComponentNode("Transform", *transform); //multiple transforms are technically allowed but only the first is relevant
 	}
 
 	// Model
-	if (entity.hasComponent<Model>()) {
-		auto models = entity.getAll<Model>();
-		for (Model& model : models) {
-			std::string name = "Model: " + model.getName();
-			drawComponentNode(name.c_str(), model, resource_mgr);
-		}
+	if (auto* model = entity.tryGetComponent<Model>()) {
+		std::string name = "Model: " + model->getName();
+		drawComponentNode(name.c_str(), *model, resource_mgr);
 	}
 
 	// Perspective Camera
-	if (entity.hasComponent<PerspectiveCamera>()) {
-		auto cams = entity.getAll<PerspectiveCamera>();
-		for (PerspectiveCamera& cam : cams) {
-			drawComponentNode("Perspective Camera", cam);
-		}
+	if (auto* camera = entity.tryGetComponent<PerspectiveCamera>()) {
+		drawComponentNode("Perspective Camera", *camera);
 	}
 
 	// Orthographic Camera
-	if (entity.hasComponent<OrthographicCamera>()) {
-		auto cams = entity.getAll<OrthographicCamera>();
-		for (OrthographicCamera& cam : cams) {
-			drawComponentNode("Orthographic Camera", cam);
-		}
+	if (auto* camera = entity.tryGetComponent<OrthographicCamera>()) {
+		drawComponentNode("Orthographic Camera", *camera);
 	}
 
 	// Text
-	if (entity.hasComponent<Text>()) {
-		auto texts = entity.getAll<Text>();
-		for (Text& text : texts) {
-			drawComponentNode("Text", text);
-		}
+	if (auto* text = entity.tryGetComponent<Text>()) {
+		drawComponentNode("Text", *text);
 	}
 
 	// Ambient Light
-	if (entity.hasComponent<AmbientLight>()) {
-		auto lights = entity.getAll<AmbientLight>();
-		for (AmbientLight& light : lights) {
-			drawComponentNode("Ambient Light", light);
-		}
+	if (auto* light = entity.tryGetComponent<AmbientLight>()) {
+		drawComponentNode("Ambient Light", *light);
 	}
 
 	// Directional Light
-	if (entity.hasComponent<DirectionalLight>()) {
-		auto lights = entity.getAll<DirectionalLight>();
-		for (DirectionalLight& light : lights) {
-			drawComponentNode("Directional Light", light);
-		}
+	if (auto* light = entity.tryGetComponent<DirectionalLight>()) {
+		drawComponentNode("Directional Light", *light);
 	}
 
 	// Point Light
-	if (entity.hasComponent<PointLight>()) {
-		auto lights = entity.getAll<PointLight>();
-		for (PointLight& light : lights) {
-			drawComponentNode("Point Light", light);
-		}
+	if (auto* light = entity.tryGetComponent<PointLight>()) {
+		drawComponentNode("Point Light", *light);
 	}
 
 	// Spot Light
-	if (entity.hasComponent<SpotLight>()) {
-		auto lights = entity.getAll<SpotLight>();
-		for (SpotLight& light : lights) {
-			drawComponentNode("Spot Light", light);
-		}
+	if (auto* light = entity.tryGetComponent<SpotLight>()) {
+		drawComponentNode("Spot Light", *light);
 	}
 
 	ImGui::End(); //"Properties"

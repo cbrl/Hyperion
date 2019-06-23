@@ -16,28 +16,24 @@ void CameraSystem::update() {
 	auto& device_context = rendering_mgr.getDeviceContext();
 
 	getECS().forEach<Transform, PerspectiveCamera>([&](ecs::Entity& entity) {
-		const auto& transform = *entity.getComponent<Transform>();
-		const auto  cameras   = entity.getAll<PerspectiveCamera>();
+		const auto& transform = entity.getComponent<Transform>();
+		const auto& camera    = entity.getComponent<PerspectiveCamera>();
 
-		for (const PerspectiveCamera& camera : cameras) {
-			if (camera.isActive()) {
-				camera.updateBuffer(device_context,
-				                    transform.getObjectToWorldMatrix(),
-				                    transform.getWorldToObjectMatrix());
-			}
+		if (camera.isActive()) {
+			camera.updateBuffer(device_context,
+				                transform.getObjectToWorldMatrix(),
+				                transform.getWorldToObjectMatrix());
 		}
 	});
 
 	getECS().forEach<Transform, OrthographicCamera>([&](ecs::Entity& entity) {
-		const auto& transform = *entity.getComponent<Transform>();
-		const auto  cameras   = entity.getAll<OrthographicCamera>();
+		const auto& transform = entity.getComponent<Transform>();
+		const auto& camera    = entity.getComponent<OrthographicCamera>();
 
-		for (const OrthographicCamera& camera : cameras) {
-			if (camera.isActive()) {
-				camera.updateBuffer(device_context,
-				                    transform.getObjectToWorldMatrix(),
-				                    transform.getWorldToObjectMatrix());
-			}
+		if (camera.isActive()) {
+			camera.updateBuffer(device_context,
+				                transform.getObjectToWorldMatrix(),
+				                transform.getWorldToObjectMatrix());
 		}
 	});
 }

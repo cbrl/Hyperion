@@ -18,7 +18,7 @@ void TransformManipulator::draw(Engine& engine, ecs::EntityPtr selected_entity) 
 
 	// Draw transform manipulation tool. Only for the primary camera since it
 	// doesn't work well when drawing multiple transform tools at once.
-	if (auto* transform = selected_entity->getComponent<Transform>()) {
+	if (auto* transform = selected_entity->tryGetComponent<Transform>()) {
 		bool first = true;
 		scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 			if (first) {
@@ -44,8 +44,8 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 		return;
 
 	// Get camera transform
-	const auto* camera_transform = camera.getOwner()->getComponent<Transform>();
-	if (!camera_transform)
+	const auto* camera_transform = camera.getOwner()->tryGetComponent<Transform>();
+	if (not camera_transform)
 		return;
 
 	// Set orthographic mode for ortho camera
@@ -101,20 +101,20 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 		f32_3 rotation;
 		f32_3 scale;
 
-		if (!transform.getOwner()->hasParent()) {
-			ImGuizmo::DecomposeMatrixToComponents(&matrix.m[0][0], translation.data(), rotation.data(), scale.data());
-		}
-		else {
+		if (transform.getOwner()->hasParent() && transform.getOwner()->getParent()->hasComponent<Transform>()) {
 			// If the transform is a child of another, then the matrix needs to be multiplied by the inverse of
 			// the parent's matrix to obtain the local transformation.
-			auto* parent_transform = transform.getOwner()->getParent()->getComponent<Transform>();
+			auto& parent_transform = transform.getOwner()->getParent()->getComponent<Transform>();
 
-			const XMMATRIX world_to_parent  = parent_transform->getWorldToObjectMatrix();
+			const XMMATRIX world_to_parent  = parent_transform.getWorldToObjectMatrix();
 			const XMMATRIX object_to_parent = XMLoadFloat4x4(&matrix) * world_to_parent;
 			XMFLOAT4X4 new_matrix;
 			XMStoreFloat4x4(&new_matrix, object_to_parent);
 
 			ImGuizmo::DecomposeMatrixToComponents(&new_matrix.m[0][0], translation.data(), rotation.data(), scale.data());
+		}
+		else {
+			ImGuizmo::DecomposeMatrixToComponents(&matrix.m[0][0], translation.data(), rotation.data(), scale.data());
 		}
 
 		// ImGuizmo outputs rotation in degrees

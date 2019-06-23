@@ -6,20 +6,13 @@
 
 namespace ecs {
 
-Entity::Entity()
-	: active(true) {
-}
-
-
 Entity::~Entity() {
 	if (hasParent() && parent_ptr.valid())
 		parent_ptr->removeChild(getPtr());
 
 	removeAllChildren();
 
-	for (auto& pair : components) {
-		component_mgr->destroyComponent(pair.second);
-	}
+	component_mgr->destroyAll(this_ptr.getHandle());
 }
 
 
@@ -30,9 +23,6 @@ EntityPtr Entity::getPtr() const noexcept {
 
 void Entity::setActive(bool state) noexcept {
 	active = state;
-	for (auto& pair : components) {
-		pair.second.get().setActive(state);
-	}
 }
 
 
@@ -63,18 +53,7 @@ void Entity::setParent(EntityPtr parent) noexcept {
 
 
 void Entity::removeComponent(IComponent& component) {
-	for (auto it = components.begin(); it != components.end(); ++it) {
-		if (&it->second.get() == &component) {
-			components.erase(it);
-			component_mgr->destroyComponent(component);
-			return;
-		}
-	}
-}
-
-
-const decltype(Entity::components)& Entity::getComponents() {
-	return components;
+	component_mgr->destroyComponent(this_ptr.getHandle(), component);
 }
 
 
@@ -170,9 +149,6 @@ void Entity::setPointer(EntityPtr ptr) noexcept {
 	forEachChild([ptr](Entity& child) {
 		child.setParent(ptr);
 	});
-	for (auto& pair : components) {
-		pair.second.get().setOwner(ptr);
-	}
 	name = "Entity (i:"
 	       + ToStr(ptr.getHandle().index).value_or("-1"s)
 	       + ", c:"

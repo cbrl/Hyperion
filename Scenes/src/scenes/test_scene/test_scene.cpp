@@ -60,26 +60,26 @@ void TestScene::initialize(Engine& engine) {
 	camera->addComponent<AmbientLight>().setColor(f32_4{0.16f, 0.16f, 0.16f, 1.0f});
 
 	// Set the parameters
-	auto* cam = camera->getComponent<PerspectiveCamera>();
+	auto& cam = camera->getComponent<PerspectiveCamera>();
 
 	// View settings
-	cam->getViewport().setDepth(0.0f, 1.0f);
-	cam->setZDepth(0.01f, 1000.0f);
-	cam->setFOV(XM_PI / 3.0f);
+	cam.getViewport().setDepth(0.0f, 1.0f);
+	cam.setZDepth(0.01f, 1000.0f);
+	cam.setFOV(XM_PI / 3.0f);
 
 	// Skybox
-	cam->getSettings().setSkybox(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
+	cam.getSettings().setSkybox(resource_mgr.getOrCreate<Texture>(L"../data/Textures/grasscube1024.dds"));
 
 	// Fog
-	auto& fog = cam->getSettings().getFog();
+	auto& fog = cam.getSettings().getFog();
 	fog.density = 0.05f;
 	fog.color = {0.2f, 0.2f, 0.2f};
 
 	// Initial position
-	camera->getComponent<Transform>()->setPosition(f32_3{0.0f, 3.0f, -3.0f});
+	camera->getComponent<Transform>().setPosition(f32_3{0.0f, 3.0f, -3.0f});
 
 	// Mouse control settings
-	camera->getComponent<MouseRotation>()->setSensitivity(0.01f);
+	camera->getComponent<MouseRotation>().setSensitivity(0.01f);
 
 
 	//----------------------------------------------------------------------------------
@@ -107,9 +107,9 @@ void TestScene::initialize(Engine& engine) {
 	{
 		ecs::EntityPtr inv_cube = importModel(device, inverted_cube_bp);
 		inv_cube->setName("Bounding Cube");
-		inv_cube->getComponent<Transform>()->setPosition(f32_3{0.0f, 5.0f, 0.0f});
+		inv_cube->getComponent<Transform>().setPosition(f32_3{0.0f, 5.0f, 0.0f});
 
-		auto& mat = inv_cube->getComponent<Model>()->getMaterial();
+		auto& mat = inverted_cube_bp->materials[0];
 		mat.params.base_color = {0.2f, 0.2f, 0.8f, 1.0f};
 		mat.params.roughness  = 0.8f;
 		mat.params.metalness  = 0.1f;
@@ -119,9 +119,9 @@ void TestScene::initialize(Engine& engine) {
 	{
 		ecs::EntityPtr cube = importModel(device, cube_bp);
 		cube->setName("Cube");
-		cube->getComponent<Transform>()->setPosition(f32_3{-2.5f, 1.0f, 1.5f});
+		cube->getComponent<Transform>().setPosition(f32_3{-2.5f, 1.0f, 1.5f});
 
-		auto& mat = cube->getComponent<Model>()->getMaterial();
+		auto& mat = cube_bp->materials[0];
 		mat.params.base_color = {1.0f, 0.0f, 0.0f, 1.0f};
 		mat.params.roughness  = 0.3f;
 		mat.params.metalness  = 0.65f;
@@ -131,9 +131,9 @@ void TestScene::initialize(Engine& engine) {
 	{
 		ecs::EntityPtr cylinder = importModel(device, cylinder_bp);
 		cylinder->setName("Cylinder");
-		cylinder->getComponent<Transform>()->setPosition(f32_3{2.5f, 1.0f, 0.75f});
+		cylinder->getComponent<Transform>().setPosition(f32_3{2.5f, 1.0f, 0.75f});
 
-		auto& mat = cylinder->getComponent<Model>()->getMaterial();
+		auto& mat = cylinder_bp->materials[0];
 		mat.params.base_color = {0.0f, 1.0f, 0.0f, 1.0f};
 		mat.params.roughness  = 0.7f;
 		mat.params.metalness  = 0.6f;
@@ -144,9 +144,10 @@ void TestScene::initialize(Engine& engine) {
 	{
 		ecs::EntityPtr sphere = importModel(device, sphere_bp);
 		sphere->setName("Sphere");
-		sphere->getComponent<Transform>()->setPosition(f32_3{0.0f, 1.0f, -1.0f});
-		sphere->getComponent<Transform>()->setScale(f32_3{2.0f});
-		auto& mat = sphere->getComponent<Model>()->getMaterial();
+		sphere->getComponent<Transform>().setPosition(f32_3{0.0f, 1.0f, -1.0f});
+		sphere->getComponent<Transform>().setScale(f32_3{2.0f});
+
+		auto& mat = sphere_bp->materials[0];
 		mat.params.base_color = {1.0f, 0.7f, 0.0f, 1.0f};
 		mat.params.roughness  = 0.5f;
 		mat.params.metalness  = 0.3f;
@@ -176,7 +177,7 @@ void TestScene::initialize(Engine& engine) {
 		//auto* light = sphere_light->getComponent<PointLight>();
 		auto entity = addEntity();
 		entity->setName("Point Light");
-		entity->getComponent<Transform>()->setPosition(f32_3{0.0f, 4.0f, 0.0f});
+		entity->getComponent<Transform>().setPosition(f32_3{0.0f, 4.0f, 0.0f});
 
 		auto& light = entity->addComponent<PointLight>();
 		light.setBaseColor(f32_3{1.0f, 1.0f, 1.0f});
@@ -201,8 +202,8 @@ void TestScene::initialize(Engine& engine) {
 		spot_light.setPenumbraAngle(XM_PI / 4.0f);
 		spot_light.setShadows(true);
 
-		auto* transform = light->getComponent<Transform>();
-		transform->setPosition(f32_3{-1.0f, 0.0f, 0.0f});
+		auto& transform = light->getComponent<Transform>();
+		transform.setPosition(f32_3{-1.0f, 0.0f, 0.0f});
 	}
 
 	// Directional Light
@@ -228,8 +229,8 @@ void TestScene::initialize(Engine& engine) {
 	scene_name_text = addEntity();
 	scene_name_text->setName("Scene Name Text");
 	scene_name_text->addComponent<Text>(font);
-	scene_name_text->getComponent<Text>()->setText(StrToWstr(this->getName()));
-	scene_name_text->getComponent<Transform>()->setPosition(f32_3{10, 10, 0});
+	scene_name_text->getComponent<Text>().setText(StrToWstr(this->getName()));
+	scene_name_text->getComponent<Transform>().setPosition(f32_3{10, 10, 0});
 }
 
 
@@ -243,6 +244,10 @@ void TestScene::addUserComponentsToUI(render::systems::UserInterface& ui) {
 	UserInterface::UserComponent camera_movement;
 
 	camera_movement.name = "Camera Movement";
+
+	camera_movement.getter = [](ecs::Entity& entity) -> ecs::IComponent * {
+		return entity.tryGetComponent<CameraMovement>();
+	};
 
 	camera_movement.adder = [](ecs::Entity& entity) -> void {
 		entity.addComponent<CameraMovement>();
@@ -275,6 +280,10 @@ void TestScene::addUserComponentsToUI(render::systems::UserInterface& ui) {
 
 	mouse_rotation.name = "Mouse Rotation";
 
+	mouse_rotation.getter = [](ecs::Entity& entity) -> ecs::IComponent * {
+		return entity.tryGetComponent<MouseRotation>();
+	};
+
 	mouse_rotation.adder = [](ecs::Entity& entity) -> void {
 		entity.addComponent<MouseRotation>();
 	};
@@ -297,6 +306,10 @@ void TestScene::addUserComponentsToUI(render::systems::UserInterface& ui) {
 	UserInterface::UserComponent axis_rotation;
 
 	axis_rotation.name = "Axis Rotation";
+
+	axis_rotation.getter = [](ecs::Entity& entity) -> ecs::IComponent * {
+		return entity.tryGetComponent<AxisRotation>();
+	};
 
 	axis_rotation.adder = [](ecs::Entity& entity) -> void {
 		entity.addComponent<AxisRotation>();
@@ -369,6 +382,10 @@ void TestScene::addUserComponentsToUI(render::systems::UserInterface& ui) {
 	UserInterface::UserComponent axis_orbit;
 
 	axis_orbit.name = "Axis Orbit";
+
+	axis_orbit.getter = [](ecs::Entity& entity) -> ecs::IComponent * {
+		return entity.tryGetComponent<AxisOrbit>();
+	};
 
 	axis_orbit.adder = [](ecs::Entity& entity) -> void {
 		entity.addComponent<AxisOrbit>();

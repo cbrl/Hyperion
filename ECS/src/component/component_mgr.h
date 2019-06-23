@@ -9,13 +9,12 @@ namespace ecs {
 
 class EventMgr;
 
-
-template<typename EntityT, typename ComponentT>
-class ComponentPool : public SparseSet<EntityT> {
+template<typename HandleT, typename ComponentT>
+class ComponentPool final : public SparseSet<HandleT> {
 public:
-	using base_type              = SparseSet<EntityT>;
+	using base_type              = SparseSet<HandleT>;
 	using container_type         = std::vector<ComponentT>;
-	using entity_type            = EntityT;
+	using handle_type            = HandleT;
 	using value_type             = ComponentT;
 	using pointer                = ComponentT*;
 	using const_pointer          = const ComponentT*;
@@ -31,21 +30,21 @@ public:
 	//----------------------------------------------------------------------------------
 	template<typename... ArgsT>
 	[[nodiscard]]
-	reference construct(entity_type entity, ArgsT&& ... args) {
-		// TODO: error if entity is already present (base_type::contains(entity))
+	reference construct(handle_type entity_idx, ArgsT&& ... args) {
+		// TODO: error if entity is already present (base_type::contains(entity_idx))
 		components.emplace_back(std::forward<ArgsT>(args)...);
-		base_type::insert(entity);
+		base_type::insert(entity_idx);
 		return components.back();
 	}
 
-	void destroy(entity_type entity) {
+	void erase(handle_type entity_idx) override {
 		auto&& back = std::move(components.back());
-		components[base_type::index_of(entity)] = std::move(back);
+		components[base_type::index_of(entity_idx)] = std::move(back);
 		components.pop_back();
-		base_type::erase(entity);
+		base_type::erase(entity_idx);
 	}
 
-	void clear() noexcept {
+	void clear() noexcept override {
 		base_type::clear();
 		components.clear();
 	}
@@ -55,17 +54,17 @@ public:
 	// Member Functions - Access
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	bool contains(const entity_type& val) const noexcept {
+	bool contains(handle_type val) const noexcept {
 		return base_type::contains(val);
 	}
 
 	[[nodiscard]]
-	reference get(const entity_type& val) {
+	reference get(handle_type val) {
 		return components[base_type::index_of(val)];
 	}
 
 	[[nodiscard]]
-	const_reference get(const entity_type& val) const {
+	const_reference get(handle_type val) const {
 		return components[base_type::index_of(val)];
 	}
 
@@ -127,12 +126,12 @@ public:
 		return components.size();
 	}
 
-	void reserve(size_type new_cap) {
+	void reserve(size_type new_cap) override {
 		base_type::reserve(new_cap);
 		components.reserve(new_cap);
 	}
 
-	void shrink_to_fit() {
+	void shrink_to_fit() override {
 		base_type::shrink_to_fit();
 		components.shrink_to_fit();
 	}
@@ -183,30 +182,49 @@ public:
 
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
-	ComponentT& createComponent(ArgsT&&... args);
+	ComponentT& createComponent(handle64 entity, ArgsT&&... args);
+
+	template<typename ComponentT>
+	void destroyComponent(handle64 entity);
 
 	// Destroy a given component. The component won't actually be destroyed until the end of the ECS update.
-	void destroyComponent(IComponent& component) {
-		expired_components[component.getTypeIndex()].push_back(&component);
+	void destroyComponent(handle64 entity, IComponent& component) {
+		if (component_pools.contains(component.getTypeIndex())) {
+			expired_components[component.getTypeIndex()].push_back(entity);
+		}
+		else {
+			Logger::log(LogLevel::err, "Attempting to remove a component from an entity that does not contain it");
+			assert(false);
+		}
+	}
+
+	// Destroy all components owned by the given entity
+	void destroyAll(handle64 entity) {
+		for (const auto& [index, pool] : component_pools) {
+			if (pool->contains(entity.index)) {
+				expired_components[index].push_back(entity);
+			}
+		}
 	}
 
 	// Remove all components that were passed to destroyComponent()
 	void removeExpiredComponents() {
-		for (auto& [type, vec] : expired_components) { //for each vector of a component type
-			for (auto* ptr : vec) { //for each component in the vector
 
-				// Destroy the component if an associated pool exists
-				const auto it = component_pools.find(ptr->getTypeIndex());
-				if (it != component_pools.end()) {
-					it->second->remove_resource(ptr);
-				}
-				else {
-					Logger::log(
-						LogLevel::err,
-						"Could not find appropriate pool when destroying a component of type \"{}\"",
-						ptr->getTypeIndex().name()
-					);
-				}
+		for (auto& [type, vec] : expired_components) { //for each vector of a component type
+			const auto it = component_pools.find(type);
+
+			if (it != component_pools.end()) { //if the associated pool exists
+				for (auto& handle : vec) { //destroy each entity's component
+					it->second->erase(handle.index);
+				}				
+			}
+			else {
+				Logger::log(
+					LogLevel::err,
+					"Could not find appropriate pool when destroying a component of type \"{}\"",
+					type.name()
+				);
+				assert(false);
 			}
 
 			// Clear the vector after all components have been processed
@@ -214,13 +232,40 @@ public:
 		}
 	}
 
+	// Check if the given entity owns a component of the specified type
+	template<typename ComponentT>
+	[[nodiscard]]
+	bool hasComponent(handle64 entity) const noexcept;
+
+	// Get a component of type ComponentT owned by the given entity
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT& getComponent(handle64 entity);
+
+	// Get a component of type ComponentT owned by the given entity
+	template<typename ComponentT>
+	[[nodiscard]]
+	const ComponentT& getComponent(handle64 entity) const;
+
+	// Attempt to get a component of type ComponentT owned by the give entity.
+	// Returns nullptr if the entity does not own the specified component.
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT* tryGetComponent(handle64 entity);
+
+	// Attempt to get a component of type ComponentT owned by the give entity.
+	// Returns nullptr if the entity does not own the specified component.
+	template<typename ComponentT>
+	[[nodiscard]]
+	const ComponentT* tryGetComponent(handle64 entity) const;
+
 	// Get the number of the specified component
 	template<typename ComponentT>
-	size_t countOf();
+	size_t countOf() const noexcept;
 
-	// Check if the component manager has created a component of this type
+	// Check if the component manager has a pool of this component type
 	template<typename ComponentT>
-	bool knowsComponent() const;
+	bool knowsComponent() const noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -245,10 +290,10 @@ private:
 	EventMgr& event_handler;
 
 	// Map of unique resource pools for each type of component
-	std::unordered_map<std::type_index, std::unique_ptr<IResourcePool>> component_pools;
+	std::unordered_map<std::type_index, std::unique_ptr<SparseSet<handle64::value_type>>> component_pools;
 
 	// A map of vectors containing components that need to be destroyed
-	std::unordered_map<std::type_index, std::vector<IComponent*>> expired_components;
+	std::unordered_map<std::type_index, std::vector<handle64>> expired_components;
 };
 
 } // namespace ecs

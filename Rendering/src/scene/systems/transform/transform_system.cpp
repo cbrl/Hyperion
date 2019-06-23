@@ -9,7 +9,7 @@ void TransformSystem::registerCallbacks() {
 }
 
 void TransformSystem::onParentChanged(const ecs::Entity::ParentChangedEvent& event) {
-	if (auto* transform = event.entity->getComponent<Transform>()) {
+	if (auto* transform = event.entity->tryGetComponent<Transform>()) {
 		transform->setNeedsUpdate();
 		transform->update();
 	}

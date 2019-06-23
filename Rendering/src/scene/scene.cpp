@@ -60,14 +60,16 @@ void Scene::importModel(const ecs::EntityPtr& ptr, ID3D11Device& device, const s
 	    [&](ecs::Entity& entity, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
 			// Construct each model at this node
 			for (const u32 index : bp_node.mesh_indices) {
-			    entity.addComponent<Model>(device, bp, index);
+				auto child = addEntity();
+				entity.addChild(child);
+			    child->addComponent<Model>(device, bp, index);
 			}
 
 			// Add a child entity for each child node
 			for (auto& node : bp_node.child_nodes) {
-			    auto child = addEntity();
-			    entity.addChild(child);
-				process_node(*child, bp, node);
+			    auto child_root = addEntity();
+			    entity.addChild(child_root);
+				process_node(*child_root, bp, node);
 			}
 		};
 

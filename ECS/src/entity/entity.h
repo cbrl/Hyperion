@@ -6,6 +6,7 @@
 
 namespace ecs {
 
+class ECS;
 class IComponent;
 class ComponentMgr;
 
@@ -33,7 +34,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	Entity();
+	Entity() noexcept = default;
 	Entity(const Entity&) = delete;
 	Entity(Entity&&) = default;
 
@@ -99,23 +100,25 @@ public:
 	template<typename ComponentT, typename... ArgsT>
 	ComponentT& addComponent(ArgsT&&... args);
 
-	// Get the first component of the specified type, if it exists.
+	// Get the component of the specified type
 	template<typename ComponentT>
 	[[nodiscard]]
-	ComponentT* getComponent();
+	ComponentT& getComponent();
 
-	// Get the first component of the specified type, if it exists.
+	// Get the component of the specified type
 	template<typename ComponentT>
 	[[nodiscard]]
-	const ComponentT* getComponent() const;
+	const ComponentT& getComponent() const;
 
-	// Get all components of the specified type
+	// Get the component of the specified type, if it exits. Returns nullptr if not.
 	template<typename ComponentT>
-	std::vector<std::reference_wrapper<ComponentT>> getAll();
+	[[nodiscard]]
+	ComponentT* tryGetComponent();
 
-	// Get all components of the specified type
+	// Get the component of the specified type, if it exits. Returns nullptr if not.
 	template<typename ComponentT>
-	std::vector<std::reference_wrapper<const ComponentT>> getAll() const;
+	[[nodiscard]]
+	const ComponentT* tryGetComponent() const;
 
 	// Remove a specific component from this entity
 	template<typename ComponentT>
@@ -123,23 +126,10 @@ public:
 
 	void removeComponent(IComponent& component);
 
-	// Remove all components of the specified type from this entity
-	template<typename ComponentT>
-	void removeAll();
-
 	// Check if this entity contains the specified component
 	template<typename ComponentT>
 	[[nodiscard]]
 	bool hasComponent() const;
-
-	// Get the number of components of the specified type
-	template<typename ComponentT>
-	[[nodiscard]]
-	size_t countOf() const;
-
-	// Get all components in this entity
-	[[nodiscard]]
-	const std::multimap<std::type_index, std::reference_wrapper<IComponent>>& getComponents();
 
 
 	//----------------------------------------------------------------------------------
@@ -211,7 +201,7 @@ private:
 	EntityPtr this_ptr;
 
 	// Is this entity active?
-	bool active;
+	bool active = true;
 
 
 	//----------------------------------------------------------------------------------
@@ -222,9 +212,6 @@ private:
 	// entities before the component manager is destroyed, so
 	// the pointer should never be invalid in this context.
 	ComponentMgr* component_mgr;
-
-	// Map of references to components
-	std::multimap<std::type_index, std::reference_wrapper<IComponent>> components;
 
 
 	//----------------------------------------------------------------------------------

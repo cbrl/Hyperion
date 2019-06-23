@@ -39,7 +39,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~SparseSet() = default;
+	virtual ~SparseSet() = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -53,14 +53,14 @@ public:
 	// Member Functions - Access
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	bool contains(const T& val) const noexcept {
+	bool contains(value_type val) const noexcept {
 		return val < capacity()     &&
 		       sparse[val] < size() &&
 		       dense[sparse[val]]   == val;
 	}
 
 	[[nodiscard]]
-	size_type index_of(const T& val) const noexcept {
+	size_type index_of(value_type val) const noexcept {
 		assert(contains(val));
 		return sparse[val];
 	}
@@ -128,14 +128,14 @@ public:
 		return sparse.size();
 	}
 
-	void reserve(size_type new_cap) {
+	virtual void reserve(size_type new_cap) {
 		if (new_cap > sparse.size()) {
 			dense.reserve(new_cap);
 			sparse.resize(new_cap, 0);
 		}
 	}
 
-	void shrink_to_fit() {
+	virtual void shrink_to_fit() {
 		if (dense.empty()) {
 			sparse.clear();
 		}
@@ -148,14 +148,14 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Modifiers
 	//----------------------------------------------------------------------------------
-	void clear() noexcept {
+	virtual void clear() noexcept {
 		dense.clear();
 		sparse.clear();
 	}
 
 	// Insert the given value into the sparse set. If the set's capacity is less than
 	// the value, then it will be resized to the value + 1;
-	void insert(const T& val) {
+	virtual void insert(value_type val) {
 		if (!contains(val)) {
 			if (val >= sparse.size())
 				reserve(val + 1);
@@ -165,7 +165,7 @@ public:
 		}
 	}
 
-	void erase(const T& val) noexcept {
+	virtual void erase(value_type val) {
 		if (contains(val)) {
 			dense[sparse[val]] = dense.back();
 			sparse[dense.size() - 1] = sparse[val];

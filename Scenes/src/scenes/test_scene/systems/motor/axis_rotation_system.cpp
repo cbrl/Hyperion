@@ -8,8 +8,8 @@
 void AxisRotationSystem::update() {
 
 	getECS().forEach<Transform, AxisRotation>([&](ecs::Entity& entity) {
-		auto& transform      = *entity.getComponent<Transform>();
-		const auto& rotation = *entity.getComponent<AxisRotation>();
+		auto& transform      = entity.getComponent<Transform>();
+		const auto& rotation = entity.getComponent<AxisRotation>();
 
 		if (!rotation.isActive() || !transform.isActive())
 			return;

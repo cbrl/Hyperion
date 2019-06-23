@@ -14,6 +14,7 @@ class Texture;
 }
 
 namespace ecs {
+class ECS;
 class Entity;
 class EntityPtr;
 class IComponent;
@@ -27,10 +28,14 @@ public:
 	//----------------------------------------------------------------------------------
 	struct UserComponent final {
 		using adder_func = std::function<void(ecs::Entity&)>;
+		using getter_func = std::function<ecs::IComponent*(ecs::Entity&)>;
 		using details_func = std::function<void(ecs::IComponent&)>;
 
 		// The display name of this component
 		std::string name;
+
+		// A function that attempts to retrieve the component from an entity
+		getter_func getter;
 
 		// A function that handles adding the component to a given entity
 		adder_func adder;

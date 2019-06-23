@@ -9,9 +9,6 @@
 // number of counter bits, and number of index bits
 //----------------------------------------------------------------------------------
 
-#pragma warning (push)
-#pragma warning (disable: 4293) //disable '<<' undefined behavior warning
-
 template<typename T, size_t IndexBits, size_t CounterBits>
 struct Handle {
 public:
@@ -113,8 +110,6 @@ private:
 	static constexpr T index_bitmask   = ((T{1} << IndexBits) - T{1}) << CounterBits;
 	static constexpr T counter_bitmask = (T{1} << CounterBits) - T{1};
 };
-
-#pragma warning (pop)
 
 
 //----------------------------------------------------------------------------------

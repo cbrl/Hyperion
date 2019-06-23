@@ -282,7 +282,7 @@ private:
 
 		// Manually set 'needs update' flag of child transforms
 		getOwner()->forEachChild([](ecs::Entity& child) {
-			if (auto* transform = child.getComponent<Transform>()) {
+			if (auto* transform = child.tryGetComponent<Transform>()) {
 				transform->transform.setNeedsUpdate();
 				transform->setNeedsUpdate();
 			}
@@ -295,7 +295,7 @@ private:
 		needs_update = false;
 
 		if (getOwner()->hasParent()) { //update parent transform if there is one
-			const auto* parent_transform = getOwner()->getParent()->getComponent<Transform>();
+			const auto* parent_transform = getOwner()->getParent()->tryGetComponent<Transform>();
 			if (parent_transform) {
 				const XMMATRIX parent_matrix = parent_transform->getObjectToWorldMatrix(); //calls parent->update()
 				transform.updateMatrix(&parent_matrix);
@@ -307,7 +307,7 @@ private:
 
 		// Update all child transforms (if any)
 		getOwner()->forEachChild([](ecs::Entity& child) {
-			if (auto* transform = child.getComponent<Transform>()) {
+			if (auto* transform = child.tryGetComponent<Transform>()) {
 				transform->update();
 			}
 		});

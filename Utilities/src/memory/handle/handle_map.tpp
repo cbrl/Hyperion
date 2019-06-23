@@ -54,7 +54,7 @@ HandleT HandleMap<HandleT, DataT, chunk_size>::createHandle(DataT object) {
 	}
 
 	// Return an invalid handle if one couldn't be created
-	return HandleT::invalid_handle;
+	return HandleT();
 }
 
 

@@ -62,8 +62,7 @@ void PickingSystem::update() {
 
 template<typename CameraT>
 void PickingSystem::pick(const CameraT& camera) {
-	auto* transform = camera.getOwner()->getComponent<Transform>();
-
+	auto* transform = camera.getOwner()->tryGetComponent<Transform>();
 	if (not transform)
 		return;
 	
@@ -109,8 +108,8 @@ void XM_CALLCONV PickingSystem::castRay(FXMVECTOR origin,
 
 	// For each model, if it's in the camera's view, cast a ray and see if it intersects the AABB.
 	getECS().forEach<Transform, Model>([&](ecs::Entity& entity) {
-		const auto& model     = *entity.getComponent<Model>();
-		const auto& transform = *entity.getComponent<Transform>();
+		const auto& model     = entity.getComponent<Model>();
+		const auto& transform = entity.getComponent<Transform>();
 
 		const XMMATRIX model_to_world      = transform.getObjectToWorldMatrix();
 		const XMMATRIX model_to_projection = model_to_world * world_to_projection;
