@@ -1,68 +1,139 @@
 #pragma once
 
-#include "handle.h"
-#include "exception/exception.h"
-#include "datatypes/container_types.h"
+#include "memory/handle/handle.h"
+#include "memory/handle/handle_table.h"
+#include "memory/resource_pool.h"
 
-
-template<typename HandleT, typename DataT, size_t chunk_size = 512>
-class HandleMap {
-
-	static_assert(std::is_pointer_v<DataT>,
-	              "HandleMap: invalid DataT. The HandleMap does not store resources, only pointers to resources.");
-
-	using table_entry = std::pair<typename HandleT::value_type, DataT>;
+template<typename HandleT, typename ResourceT>
+class HandleMap final {
+	using resource_pool_type     = ResourcePool<typename HandleT::value_type, ResourceT>;
 
 public:
 
+	using handle_type            = HandleT;
+	using value_type             = ResourceT;
+	using pointer                = ResourceT *;
+	using const_pointer          = const ResourceT*;
+	using reference              = ResourceT &;
+	using const_reference        = const ResourceT &;
+	using size_type              = size_t;
+	using difference_type        = ptrdiff_t;
+	using iterator               = typename resource_pool_type::iterator;
+	using const_iterator         = typename resource_pool_type::const_iterator;
+
 	//----------------------------------------------------------------------------------
-	// Constructors
+	// Member Functions - Modifiers
 	//----------------------------------------------------------------------------------
-	HandleMap() {
-		allocateChunk();
+	template<typename... ArgsT>
+	[[nodiscard]]
+	std::pair<handle_type, std::reference_wrapper<value_type>> create(ArgsT&& ... args) {
+		auto handle = handle_table.createHandle();
+		auto& resource = resource_pool.construct(handle.index, std::forward<ArgsT>(args)...);
+		return { handle, std::ref(resource) };
 	}
 
-	HandleMap(const HandleMap& map) = delete;
-	HandleMap(HandleMap&& map) noexcept = default;
+	void release(handle_type handle) {
+		resource_pool.erase(handle.index);
+		handle_table.releaseHandle(handle);
+	}
+
+	void clear() noexcept {
+		resource_pool.clear();
+		handle_table.clear();
+	}
 
 
 	//----------------------------------------------------------------------------------
-	// Destructor
+	// Member Functions - Access
 	//----------------------------------------------------------------------------------
-	~HandleMap() = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-	HandleMap& operator=(const HandleMap& map) = delete;
-	HandleMap& operator=(HandleMap&& map) noexcept = default;
+	[[nodiscard]]
+	bool contains(handle_type handle) const noexcept {
+		return handle_table.isValid(handle);
+	}
 
 	[[nodiscard]]
-	DataT operator[](HandleT handle);
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions
-	//----------------------------------------------------------------------------------
+	reference get(handle_type handle) {
+		return resource_pool.get(handle.index);
+	}
 
 	[[nodiscard]]
-	HandleT createHandle(DataT object);
+	const_reference get(handle_type handle) const {
+		return resource_pool.get(handle.index);
+	}
 
-	void releaseHandle(HandleT handle);
+	[[nodiscard]]
+	pointer data() {
+		return resource_pool.data();
+	}
 
-	bool isValid(const HandleT& handle) const noexcept;
+	[[nodiscard]]
+	const_pointer data() const noexcept {
+		return resource_pool.data();
+	}
 
-private:
 
-	bool allocateChunk();
+	//----------------------------------------------------------------------------------
+	// Member Functions - Iterators
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	iterator begin() {
+		return resource_pool.begin();
+	}
+
+	[[nodiscard]]
+	const_iterator begin() const {
+		return resource_pool.begin();
+	}
+
+	[[nodiscard]]
+	const_iterator cbegin() const {
+		return resource_pool.cbegin();
+	}
+
+	[[nodiscard]]
+	iterator end() {
+		return resource_pool.end();
+	}
+
+	[[nodiscard]]
+	const_iterator end() const {
+		return resource_pool.end();
+	}
+
+	[[nodiscard]]
+	const_iterator cend() const {
+		return resource_pool.cend();
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Capacity
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	bool empty() const {
+		return resource_pool.empty();
+	}
+
+	[[nodiscard]]
+	size_type size() const {
+		return resource_pool.size();
+	}
+
+	void reserve(size_type new_cap) {
+		resource_pool.reserve(new_cap);
+		handle_table.reserve(new_cap);
+	}
+
+	void shrink_to_fit() {
+		resource_pool.shrink_to_fit();
+		handle_table.shrink_to_fit();
+	}
 
 private:
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	std::vector<table_entry> table;
+	HandleTable<HandleT> handle_table;
+	resource_pool_type   resource_pool;
 };
-
-#include "handle_map.tpp"

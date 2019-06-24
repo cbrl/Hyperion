@@ -146,6 +146,7 @@
   <ItemGroup>
     <ClInclude Include="src\component\component.h" />
     <ClInclude Include="src\component\component_mgr.h" />
+    <ClInclude Include="src\component\resource_pool.h" />
     <ClInclude Include="src\ecs.h" />
     <ClInclude Include="src\entity\entity.h" />
     <ClInclude Include="src\entity\entity_mgr.h" />

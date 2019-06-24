@@ -1,145 +1,13 @@
 #pragma once
 
-#include "memory/resource_pool.h"
-#include "memory/sparse_set.h"
 #include "component/component.h"
+#include "memory/resource_pool.h"
+#include "datatypes/container_types.h"
 
 
 namespace ecs {
 
 class EventMgr;
-
-template<typename HandleT, typename ComponentT>
-class ComponentPool final : public SparseSet<HandleT> {
-public:
-	using base_type              = SparseSet<HandleT>;
-	using container_type         = std::vector<ComponentT>;
-	using handle_type            = HandleT;
-	using value_type             = ComponentT;
-	using pointer                = ComponentT*;
-	using const_pointer          = const ComponentT*;
-	using reference              = ComponentT&;
-	using const_reference        = const ComponentT&;
-	using size_type              = size_t;
-	using difference_type        = ptrdiff_t;
-	using iterator               = typename container_type::reverse_iterator;
-	using const_iterator         = typename container_type::const_reverse_iterator;
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Modifiers
-	//----------------------------------------------------------------------------------
-	template<typename... ArgsT>
-	[[nodiscard]]
-	reference construct(handle_type entity_idx, ArgsT&& ... args) {
-		// TODO: error if entity is already present (base_type::contains(entity_idx))
-		components.emplace_back(std::forward<ArgsT>(args)...);
-		base_type::insert(entity_idx);
-		return components.back();
-	}
-
-	void erase(handle_type entity_idx) override {
-		auto&& back = std::move(components.back());
-		components[base_type::index_of(entity_idx)] = std::move(back);
-		components.pop_back();
-		base_type::erase(entity_idx);
-	}
-
-	void clear() noexcept override {
-		base_type::clear();
-		components.clear();
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Access
-	//----------------------------------------------------------------------------------
-	[[nodiscard]]
-	bool contains(handle_type val) const noexcept {
-		return base_type::contains(val);
-	}
-
-	[[nodiscard]]
-	reference get(handle_type val) {
-		return components[base_type::index_of(val)];
-	}
-
-	[[nodiscard]]
-	const_reference get(handle_type val) const {
-		return components[base_type::index_of(val)];
-	}
-
-	[[nodiscard]]
-	pointer data() noexcept {
-		return components.data();
-	}
-
-	[[nodiscard]]
-	const_pointer data() const noexcept {
-		return components.data();
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Iterators
-	//----------------------------------------------------------------------------------
-	[[nodiscard]]
-	iterator begin() noexcept {
-		return components.rbegin();
-	}
-
-	[[nodiscard]]
-	const_iterator begin() const noexcept {
-		return components.rbegin();
-	}
-
-	[[nodiscard]]
-	const_iterator cbegin() const noexcept {
-		return components.crbegin();
-	}
-
-	[[nodiscard]]
-	iterator end() noexcept {
-		return components.rend();
-	}
-
-	[[nodiscard]]
-	const_iterator end() const noexcept {
-		return components.rend();
-	}
-
-	[[nodiscard]]
-	const_iterator cend() const noexcept {
-		return components.crend();
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Capacity
-	//----------------------------------------------------------------------------------
-	[[nodiscard]]
-	bool empty() const noexcept {
-		return components.empty();
-	}
-
-	[[nodiscard]]
-	size_type size() const noexcept {
-		return components.size();
-	}
-
-	void reserve(size_type new_cap) override {
-		base_type::reserve(new_cap);
-		components.reserve(new_cap);
-	}
-
-	void shrink_to_fit() override {
-		base_type::shrink_to_fit();
-		components.shrink_to_fit();
-	}
-
-private:
-
-	container_type components;
-};
 
 
 //----------------------------------------------------------------------------------
@@ -189,12 +57,15 @@ public:
 
 	// Destroy a given component. The component won't actually be destroyed until the end of the ECS update.
 	void destroyComponent(handle64 entity, IComponent& component) {
-		if (component_pools.contains(component.getTypeIndex())) {
-			expired_components[component.getTypeIndex()].push_back(entity);
-		}
-		else {
-			Logger::log(LogLevel::err, "Attempting to remove a component from an entity that does not contain it");
-			assert(false);
+		const auto it = component_pools.find(component.getTypeIndex());
+		if (it != component_pools.end()) {
+			if (it->second->contains(entity.index)) {
+				expired_components[component.getTypeIndex()].push_back(entity);
+			}
+			else {
+				Logger::log(LogLevel::err, "Attempting to remove a component from an entity that does not contain it");
+				assert(false);
+			}
 		}
 	}
 
@@ -209,7 +80,6 @@ public:
 
 	// Remove all components that were passed to destroyComponent()
 	void removeExpiredComponents() {
-
 		for (auto& [type, vec] : expired_components) { //for each vector of a component type
 			const auto it = component_pools.find(type);
 
@@ -261,10 +131,12 @@ public:
 
 	// Get the number of the specified component
 	template<typename ComponentT>
+	[[nodiscard]]
 	size_t countOf() const noexcept;
 
 	// Check if the component manager has a pool of this component type
 	template<typename ComponentT>
+	[[nodiscard]]
 	bool knowsComponent() const noexcept;
 
 
@@ -290,7 +162,7 @@ private:
 	EventMgr& event_handler;
 
 	// Map of unique resource pools for each type of component
-	std::unordered_map<std::type_index, std::unique_ptr<SparseSet<handle64::value_type>>> component_pools;
+	std::unordered_map<std::type_index, std::unique_ptr<IResourcePool<handle64::value_type>>> component_pools;
 
 	// A map of vectors containing components that need to be destroyed
 	std::unordered_map<std::type_index, std::vector<handle64>> expired_components;

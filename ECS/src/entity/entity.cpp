@@ -6,13 +6,41 @@
 
 namespace ecs {
 
-Entity::~Entity() {
-	if (hasParent() && parent_ptr.valid())
-		parent_ptr->removeChild(getPtr());
+Entity::Entity(Entity&& other) noexcept
+	: EventSender(std::move(other)) {
+	name          = std::move(other.name);
+	this_ptr      = std::exchange(other.this_ptr, EntityPtr{});
+	active        = std::move(other.active);
+	component_mgr = std::exchange(other.component_mgr, nullptr);
+	parent_ptr    = std::exchange(other.parent_ptr, EntityPtr{});
+	children      = std::move(other.children);
+}
 
-	removeAllChildren();
 
-	component_mgr->destroyAll(this_ptr.getHandle());
+Entity& Entity::operator=(Entity&& other) noexcept {
+	EventSender::operator=(std::move(other));
+	name          = std::move(other.name);
+	this_ptr      = std::exchange(other.this_ptr, EntityPtr{});
+	active        = std::move(other.active);
+	component_mgr = std::exchange(other.component_mgr, nullptr);
+	parent_ptr    = std::exchange(other.parent_ptr, EntityPtr{});
+	children      = std::move(other.children);
+	return *this;
+}
+
+
+std::string& Entity::getName() noexcept {
+	return name;
+}
+
+
+const std::string& Entity::getName() const noexcept {
+	return name;
+}
+
+
+void Entity::setName(std::string new_name) noexcept {
+	name = std::move(new_name);
 }
 
 
@@ -41,7 +69,14 @@ bool Entity::hasParent() const noexcept {
 }
 
 
-void Entity::setParent(EntityPtr parent) noexcept {
+void Entity::removeParent() {
+	if (parent_ptr) {
+		parent_ptr->removeChild(this_ptr);
+	}
+}
+
+
+void Entity::setParent(EntityPtr parent) {
 	if (parent_ptr != parent) {
 		parent_ptr = parent;
 		if (parent.valid()) {

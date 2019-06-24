@@ -1,10 +1,12 @@
 #pragma once
 
 #include "entity/entity.h"
-#include "component/component_mgr.h"
 #include "memory/handle/handle_map.h"
 
 namespace ecs {
+
+class ComponentMgr;
+class EventMgr;
 
 //----------------------------------------------------------------------------------
 // Entity Manager
@@ -19,11 +21,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EntityMgr(std::shared_ptr<ComponentMgr> component_mgr, EventMgr& event_mgr)
-		: component_mgr(std::move(component_mgr))
-	    , event_mgr(event_mgr) {
-	}
-
+	EntityMgr(std::shared_ptr<ComponentMgr> component_mgr, EventMgr& event_mgr);
 	EntityMgr(const EntityMgr& manager) = delete;
 	EntityMgr(EntityMgr&& manager) = default;
 
@@ -73,18 +71,10 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Apply an action to each entity
-	void forEach(const std::function<void(Entity&)>& act) {
-		for (Entity& entity : entity_pool) {
-			act(entity);
-		}
-	}
+	void forEach(const std::function<void(Entity&)>& act);
 
 	// Apply an action to each entity
-	void forEach(const std::function<void(const Entity&)>& act) const {
-		for (const Entity& entity : entity_pool) {
-			act(entity);
-		}
-	}
+	void forEach(const std::function<void(const Entity&)>& act) const;
 
 private:
 
@@ -98,11 +88,8 @@ private:
 	// A reference to the event manager. Passed to the entity (EventSender).
 	EventMgr& event_mgr;
 
-	// A resource pool that creates and stores the actual entity
-	ResourcePool<Entity> entity_pool;
-
-	// Handle map. Maps a handle to an Entity pointer.
-	HandleMap<handle64, Entity*> handle_map;
+	// Handle map. Maps a handle to an Entity.
+	HandleMap<handle64, Entity> entity_map;
 
 	// A container of entities that need to be deleted
 	std::vector<handle64> expired_entities;

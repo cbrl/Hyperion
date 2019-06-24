@@ -6,13 +6,14 @@
 
 
 template<typename T>
-class SparseSet {
+class SparseSet final {
 	static_assert(std::is_integral_v<T> && std::is_unsigned_v<T>,
 	              "Sparse sets only support unsigned integral types");
 
+	using container_type         = std::vector<T>;
+
 public:
 
-	using container_type         = std::vector<T>;
 	using value_type             = T;
 	using pointer                = T*;
 	using const_pointer          = const T*;
@@ -21,11 +22,139 @@ public:
 	using size_type              = size_t;
 	using difference_type        = ptrdiff_t;
 
-	// The underlying dense container is reverse iterated. This ensures that the current
-	// element can be deleted while iterating and no other elements will be skipped.
+	// The state of a sparse set should only be modified through its member
+	// functions, so the only iterator type is a const iterator. The underlying
+	// dense container is reverse iterated. This ensures that the current element
+	// can be deleted while iterating and no other elements will be skipped.
 	// However, elements added while iterating will not be covered.
-	using iterator               = typename container_type::reverse_iterator;
-	using const_iterator         = typename container_type::const_reverse_iterator;
+	class const_iterator {
+		friend class SparseSet<T>;
+		using container_type = SparseSet<T>::container_type;
+
+		const_iterator(const container_type& dense, difference_type idx) noexcept
+			: dense(&dense)
+			, index(idx) {
+		}
+
+	public:
+
+		using difference_type   = ptrdiff_t;
+		using size_type         = size_t;
+		using value_type        = SparseSet<T>::value_type;
+		using const_pointer     = SparseSet<T>::const_pointer;
+		using reference         = SparseSet<T>::reference;
+		using const_reference   = SparseSet<T>::const_reference;
+		using iterator_category = std::random_access_iterator_tag;
+
+		const_iterator() noexcept = default;
+		const_iterator(const_iterator&) noexcept = default;
+		const_iterator(const_iterator&&) noexcept = default;
+
+		~const_iterator() = default;
+
+		const_iterator& operator=(const_iterator&) noexcept = default;
+		const_iterator& operator=(const_iterator&&) noexcept = default;
+
+		[[nodiscard]]
+		const_reference operator*() const {
+			return *operator->();
+		}
+
+		[[nodiscard]]
+		const_pointer operator->() const {
+			const auto pos = static_cast<size_type>(index - 1);
+			return &(*dense)[pos];
+		}
+
+		[[nodiscard]]
+		const_reference operator[](difference_type value) const {
+			const auto pos = static_cast<size_type>(index - value - 1);
+			return (*dense)[pos];
+		}
+
+		[[nodiscard]]
+		const_iterator operator+(difference_type value) const {
+			return const_iterator{*dense, index - value};
+		}
+
+		const_iterator& operator++() {
+			--index;
+			return *this;
+		}
+
+		const_iterator operator++(int) {
+			const_iterator old = *this;
+			++(*this);
+			return old;
+		}
+
+		[[nodiscard]]
+		const_iterator& operator+=(difference_type value) {
+			index -= value;
+			return *this;
+		}
+
+		[[nodiscard]]
+		const_iterator operator-(difference_type value) const {
+			return (*this + -value);
+		}
+
+		[[nodiscard]]
+		difference_type operator-(const const_iterator& other) const {
+			return other.index - index;
+		}
+
+		const_iterator& operator--() {
+			++index;
+			return *this;
+		}
+
+		const_iterator operator--(int) {
+			const_iterator old = *this;
+			--(*this);
+			return old;
+		}
+
+		[[nodiscard]]
+		const_iterator& operator-=(difference_type value) {
+			return (*this += -value);
+		}
+
+		[[nodiscard]]
+		bool operator==(const const_iterator& other) const {
+			return other.index == index;
+		}
+
+		[[nodiscard]]
+		bool operator!=(const const_iterator& other) const {
+			return !(*this == other);
+		}
+
+		[[nodiscard]]
+		bool operator<(const const_iterator& other) const {
+			return index > other.index;
+		}
+
+		[[nodiscard]]
+		bool operator>(const const_iterator& other) const {
+			return index < other.index;
+		}
+
+		[[nodiscard]]
+		bool operator<=(const const_iterator& other) const {
+			return !(*this > other);
+		}
+
+		[[nodiscard]]
+		bool operator>=(const const_iterator& other) const {
+			return !(*this < other);
+		}
+
+	private:
+
+		const container_type* dense;
+		difference_type index;
+	};
 
 
 	//----------------------------------------------------------------------------------
@@ -39,7 +168,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	virtual ~SparseSet() = default;
+	~SparseSet() = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -80,33 +209,25 @@ public:
 	// Member Functions - Iterators
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	iterator begin() noexcept {
-		return dense.rbegin();
-	}
-
-	[[nodiscard]]
 	const_iterator begin() const noexcept {
-		return dense.rbegin();
+		const auto end = static_cast<typename const_iterator::difference_type>(dense.size());
+		return const_iterator{dense, end};
 	}
 
 	[[nodiscard]]
 	const_iterator cbegin() const noexcept {
-		return dense.crbegin();
-	}
-
-	[[nodiscard]]
-	iterator end() noexcept {
-		return dense.rend();
+		const auto end = static_cast<typename const_iterator::difference_type>(dense.size());
+		return const_iterator{dense, end};
 	}
 
 	[[nodiscard]]
 	const_iterator end() const noexcept {
-		return dense.rend();
+		return const_iterator{dense, 0};
 	}
 
 	[[nodiscard]]
 	const_iterator cend() const noexcept {
-		return dense.crend();
+		return const_iterator{dense, 0};
 	}
 
 
@@ -128,14 +249,14 @@ public:
 		return sparse.size();
 	}
 
-	virtual void reserve(size_type new_cap) {
+	void reserve(size_type new_cap) {
 		if (new_cap > sparse.size()) {
 			dense.reserve(new_cap);
 			sparse.resize(new_cap, 0);
 		}
 	}
 
-	virtual void shrink_to_fit() {
+	void shrink_to_fit() {
 		if (dense.empty()) {
 			sparse.clear();
 		}
@@ -148,14 +269,14 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Modifiers
 	//----------------------------------------------------------------------------------
-	virtual void clear() noexcept {
+	void clear() noexcept {
 		dense.clear();
 		sparse.clear();
 	}
 
 	// Insert the given value into the sparse set. If the set's capacity is less than
 	// the value, then it will be resized to the value + 1;
-	virtual void insert(value_type val) {
+	void insert(value_type val) {
 		if (!contains(val)) {
 			if (val >= sparse.size())
 				reserve(val + 1);
@@ -165,17 +286,17 @@ public:
 		}
 	}
 
-	virtual void erase(value_type val) {
+	void erase(value_type val) {
 		if (contains(val)) {
 			dense[sparse[val]] = dense.back();
-			sparse[dense.size() - 1] = sparse[val];
+			sparse[dense.back()] = sparse[val];
 			dense.pop_back();
 		}
 	}
 
 	void swap(SparseSet& other) noexcept {
 		dense.swap(other.dense);
-		sparse.swape(other.sparse);
+		sparse.swap(other.sparse);
 	}
 
 

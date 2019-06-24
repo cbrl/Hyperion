@@ -56,24 +56,24 @@ ecs::EntityPtr Scene::importModel(ID3D11Device& device, const std::shared_ptr<Mo
 
 void Scene::importModel(const ecs::EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
 
-	std::function<void(ecs::Entity&, const std::shared_ptr<ModelBlueprint>&, const ModelBlueprint::Node&)> process_node =
-	    [&](ecs::Entity& entity, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
+	std::function<void(ecs::EntityPtr, const std::shared_ptr<ModelBlueprint>&, const ModelBlueprint::Node&)> process_node =
+	    [&](ecs::EntityPtr entity, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
 			// Construct each model at this node
 			for (const u32 index : bp_node.mesh_indices) {
 				auto child = addEntity();
-				entity.addChild(child);
+				entity->addChild(child);
 			    child->addComponent<Model>(device, bp, index);
 			}
 
 			// Add a child entity for each child node
 			for (auto& node : bp_node.child_nodes) {
 			    auto child_root = addEntity();
-			    entity.addChild(child_root);
-				process_node(*child_root, bp, node);
+			    entity->addChild(child_root);
+				process_node(child_root, bp, node);
 			}
 		};
 
-	process_node(*ptr, blueprint, blueprint->root);
+	process_node(ptr, blueprint, blueprint->root);
 }
 
 } //namespace render

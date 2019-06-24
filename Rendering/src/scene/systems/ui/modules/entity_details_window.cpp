@@ -37,15 +37,14 @@ void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
 		return;
 	}
 
-	// Get the entity
-	ecs::Entity& entity = *entity_ptr;
-
 	// Draw menu
 	if (ImGui::BeginMenuBar()) {
 		drawAddComponentMenu(engine, entity_ptr);
 		ImGui::EndMenuBar();
 	}
 
+	// Get the entity
+	ecs::Entity& entity = *entity_ptr;
 
 	//----------------------------------------------------------------------------------
 	// Name/Details

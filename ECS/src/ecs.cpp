@@ -24,7 +24,6 @@ EntityPtr ECS::createEntity() {
 
 void ECS::destroyEntity(handle64 entity) {
 	entity_mgr->destroyEntity(entity);
-	component_mgr->destroyAll(entity);
 }
 
 

@@ -36,39 +36,32 @@ public:
 	//----------------------------------------------------------------------------------
 	Entity() noexcept = default;
 	Entity(const Entity&) = delete;
-	Entity(Entity&&) = default;
+	Entity(Entity&& other) noexcept;
 
 
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~Entity();
+	~Entity() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
 	Entity& operator=(const Entity&) = delete;
-	Entity& operator=(Entity&&) = default;
+	Entity& operator=(Entity&& other) noexcept;
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Name
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	std::string& getName() noexcept;
 
 	[[nodiscard]]
-	std::string& getName() noexcept {
-		return name;
-	}
+	const std::string& getName() const noexcept;
 
-	[[nodiscard]]
-	const std::string& getName() const noexcept {
-		return name;
-	}
-
-	void setName(std::string new_name) noexcept {
-		name = std::move(new_name);
-	}
+	void setName(std::string new_name) noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -145,7 +138,10 @@ public:
 	bool hasParent() const noexcept;
 
 	// Set the parent of this entity.
-	void setParent(EntityPtr parent) noexcept;
+	void setParent(EntityPtr parent);
+
+	// Remove this entity's parent
+	void removeParent();
 
 
 	//----------------------------------------------------------------------------------

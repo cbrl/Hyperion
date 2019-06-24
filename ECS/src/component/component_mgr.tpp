@@ -9,7 +9,7 @@ ComponentT& ComponentMgr::createComponent(handle64 entity, ArgsT&&... args) {
 	static_assert(std::is_constructible_v<ComponentT, ArgsT...>,
 	              "Component does not have a constructor taking the provided argument types.");
 
-	using pool_t = ComponentPool<handle64::value_type, ComponentT>;
+	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	// Get or create the component pool
 	auto it = component_pools.find(ComponentT::index);
@@ -39,10 +39,10 @@ void ComponentMgr::destroyComponent(handle64 entity) {
 		if (it->second->contains(entity.index)) {
 			expired_components[ComponentT::index].push_back(entity);
 		}
-	}
-	else {
-		Logger::log(LogLevel::err, "Attempting to remove a component from an entity that does not contain it");
-		assert(false);
+		else {
+			Logger::log(LogLevel::err, "Attempting to remove a component from an entity that does not contain it");
+			assert(false);
+		}
 	}
 }
 
@@ -50,7 +50,7 @@ void ComponentMgr::destroyComponent(handle64 entity) {
 
 template<typename ComponentT>
 bool ComponentMgr::hasComponent(handle64 entity) const noexcept {
-	using pool_t = ComponentPool<handle64::value_type, ComponentT>;
+	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	if (const auto it = component_pools.find(ComponentT::index); it != component_pools.end()) {
 		auto& pool = *static_cast<pool_t*>(it->second.get());
@@ -63,7 +63,7 @@ bool ComponentMgr::hasComponent(handle64 entity) const noexcept {
 template<typename ComponentT>
 [[nodiscard]]
 ComponentT& ComponentMgr::getComponent(handle64 entity) {
-	using pool_t = ComponentPool<handle64::value_type, ComponentT>;
+	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	auto& pool = *static_cast<pool_t*>(component_pools.at(ComponentT::index).get());
 	return pool.get(entity.index);
@@ -72,7 +72,7 @@ ComponentT& ComponentMgr::getComponent(handle64 entity) {
 template<typename ComponentT>
 [[nodiscard]]
 const ComponentT& ComponentMgr::getComponent(handle64 entity) const {
-	using pool_t = ComponentPool<handle64::value_type, ComponentT>;
+	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	const auto& pool = *static_cast<const pool_t*>(component_pools.at(ComponentT::index).get());
 	return pool.get(entity.index);
@@ -82,7 +82,7 @@ const ComponentT& ComponentMgr::getComponent(handle64 entity) const {
 template<typename ComponentT>
 [[nodiscard]]
 ComponentT* ComponentMgr::tryGetComponent(handle64 entity) {
-	using pool_t = ComponentPool<handle64::value_type, ComponentT>;
+	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	if (const auto it = component_pools.find(ComponentT::index); it != component_pools.end()) {
 		const auto& pool = *static_cast<const pool_t*>(it->second.get());
@@ -96,7 +96,7 @@ ComponentT* ComponentMgr::tryGetComponent(handle64 entity) {
 template<typename ComponentT>
 [[nodiscard]]
 const ComponentT* ComponentMgr::tryGetComponent(handle64 entity) const {
-	using pool_t = ComponentPool<handle64::value_type, ComponentT>;
+	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	if (const auto it = component_pools.find(ComponentT::index); it != component_pools.end()) {
 		const auto& pool = *static_cast<const pool_t*>(it->second.get());
@@ -133,7 +133,7 @@ void ComponentMgr::forEach(const std::function<void(ComponentT&)>& act) {
 	}
 
 	// Apply the action to each component
-	using pool_t = ComponentPool<handle64::value_type, ComponentT>;
+	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 	auto& pool = *static_cast<pool_t*>(it->second.get());
 	for (ComponentT& component : pool) {
 		act(component);
@@ -151,7 +151,7 @@ void ComponentMgr::forEach(const std::function<void(const ComponentT&)>& act) co
 	}
 
 	// Apply the action to each component
-	using pool_t = ComponentPool<handle64::value_type, ComponentT>;
+	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 	auto& pool = *static_cast<pool_t*>(it->second.get());
 	for (const ComponentT& component : pool) {
 		act(component);

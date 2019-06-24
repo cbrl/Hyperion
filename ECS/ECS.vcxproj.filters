@@ -71,6 +71,9 @@
     <ClInclude Include="src\event\event_mgr.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
+    <ClInclude Include="src\component\resource_pool.h">
+      <Filter>Header Files\component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\entity\entity.cpp">
