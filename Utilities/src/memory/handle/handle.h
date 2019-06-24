@@ -2,6 +2,7 @@
 
 #include "datatypes/scalar_types.h"
 #include <type_traits>
+#include <limits>
 
 //----------------------------------------------------------------------------------
 // Handle

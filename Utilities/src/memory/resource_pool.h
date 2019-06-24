@@ -25,7 +25,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Modifiers
 	//----------------------------------------------------------------------------------
-	virtual void erase(HandleT entity_idx) = 0;
+	virtual void erase(HandleT resource_idx) = 0;
 	virtual void clear() noexcept = 0;
 
 	//----------------------------------------------------------------------------------
@@ -229,18 +229,19 @@ public:
 	//----------------------------------------------------------------------------------
 	template<typename... ArgsT>
 	[[nodiscard]]
-	reference construct(handle_type entity_idx, ArgsT&& ... args) {
-		// TODO: error if entity is already present (base_type::contains(entity_idx))
+	reference construct(handle_type resource_idx, ArgsT&& ... args) {
+		assert(!contains(resource_idx));
 		resources.emplace_back(std::forward<ArgsT>(args)...);
-		sparse_set.insert(entity_idx);
+		sparse_set.insert(resource_idx);
 		return resources.back();
 	}
 
-	virtual void erase(handle_type entity_idx) override {
+	virtual void erase(handle_type resource_idx) override {
+		assert(contains(resource_idx));
 		auto&& back = std::move(resources.back());
-		resources[sparse_set.index_of(entity_idx)] = std::move(back);
+		resources[sparse_set.index_of(resource_idx)] = std::move(back);
 		resources.pop_back();
-		sparse_set.erase(entity_idx);
+		sparse_set.erase(resource_idx);
 	}
 
 	virtual void clear() noexcept override {
@@ -253,18 +254,22 @@ public:
 	// Member Functions - Access
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	bool contains(handle_type val) const noexcept {
-		return sparse_set.contains(val);
+	bool contains(handle_type resource_idx) const noexcept {
+		return sparse_set.contains(resource_idx);
 	}
 
 	[[nodiscard]]
-	reference get(handle_type val) {
-		return resources[sparse_set.index_of(val)];
+	reference get(handle_type resource_idx) {
+		assert(contains(resource_idx));
+		const auto idx = sparse_set.index_of(resource_idx);
+		return resources[idx];
 	}
 
 	[[nodiscard]]
-	const_reference get(handle_type val) const {
-		return resources[sparse_set.index_of(val)];
+	const_reference get(handle_type resource_idx) const {
+		assert(contains(resource_idx));
+		const auto idx = sparse_set.index_of(resource_idx);
+		return resources[idx];
 	}
 
 	[[nodiscard]]

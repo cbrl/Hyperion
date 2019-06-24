@@ -33,6 +33,7 @@ public:
 	}
 
 	void release(handle_type handle) {
+		assert(contains(handle));
 		resource_pool.erase(handle.index);
 		handle_table.releaseHandle(handle);
 	}
@@ -53,11 +54,13 @@ public:
 
 	[[nodiscard]]
 	reference get(handle_type handle) {
+		assert(contains(handle));
 		return resource_pool.get(handle.index);
 	}
 
 	[[nodiscard]]
 	const_reference get(handle_type handle) const {
+		assert(contains(handle));
 		return resource_pool.get(handle.index);
 	}
 
