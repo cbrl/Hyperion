@@ -33,7 +33,6 @@ HandleT HandleTable<HandleT, chunk_size>::createHandle() {
 template<typename HandleT, size_t chunk_size>
 void HandleTable<HandleT, chunk_size>::releaseHandle(handle_type handle) {
 	if (!valid(handle)) {
-		Logger::log(LogLevel::err, "Invalid handle specified for release (index: {}, counter: {})", handle.index, handle.counter);
 		assert(false && "Invalid handle specified for release");
 		return;
 	}

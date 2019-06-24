@@ -1,7 +1,6 @@
 #pragma once
 
 #include "handle.h"
-#include "exception/exception.h"
 #include "datatypes/container_types.h"
 
 
@@ -74,7 +73,7 @@ public:
 			return true;
 		}
 		else {
-			Logger::log(LogLevel::warn, "HandleTable::reserve() - max capacity reached ({})", handle_type::index_max);
+			assert(false && "HandleTable::reserve() - max size reached");
 			return false;
 		}
 	}
@@ -85,7 +84,7 @@ public:
 			return true;
 		}
 		else {
-			Logger::log(LogLevel::warn, "HandleTable::resize() - max size reached ({})", handle_type::index_max);
+			assert(false && "HandleTable::resize() - max size reached");
 			return false;
 		}
 	}

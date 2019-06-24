@@ -1,6 +1,7 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/scalar_types.h"
+#include <type_traits>
 
 //----------------------------------------------------------------------------------
 // Handle
