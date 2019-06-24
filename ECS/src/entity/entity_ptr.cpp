@@ -27,7 +27,7 @@ handle64 EntityPtr::getHandle() const noexcept {
 
 bool EntityPtr::valid() const noexcept {
 	if (!mgr) return false;
-	return mgr->isValid(handle);
+	return mgr->valid(handle);
 }
 
 

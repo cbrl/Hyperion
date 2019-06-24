@@ -26,7 +26,7 @@ EntityPtr EntityMgr::createEntity() {
 
 
 void EntityMgr::destroyEntity(handle64 handle) {
-	if (isValid(handle)) {
+	if (valid(handle)) {
 		expired_entities.push_back(handle);
 		component_mgr->destroyAll(handle);
 
@@ -58,7 +58,7 @@ size_t EntityMgr::count() const noexcept {
 }
 
 
-bool EntityMgr::isValid(handle64 entity) const noexcept {
+bool EntityMgr::valid(handle64 entity) const noexcept {
 	return entity_map.contains(entity);
 }
 

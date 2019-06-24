@@ -63,7 +63,7 @@ public:
 
 	// Check if a handle is valid
 	[[nodiscard]]
-	bool isValid(handle64 entity) const noexcept;
+	bool valid(handle64 entity) const noexcept;
 
 
 	//----------------------------------------------------------------------------------

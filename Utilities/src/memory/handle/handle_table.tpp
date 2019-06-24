@@ -32,7 +32,7 @@ HandleT HandleTable<HandleT, chunk_size>::createHandle() {
 
 template<typename HandleT, size_t chunk_size>
 void HandleTable<HandleT, chunk_size>::releaseHandle(handle_type handle) {
-	if (!isValid(handle)) {
+	if (!valid(handle)) {
 		Logger::log(LogLevel::err, "Invalid handle specified for release (index: {}, counter: {})", handle.index, handle.counter);
 		assert(false && "Invalid handle specified for release");
 		return;
@@ -43,7 +43,7 @@ void HandleTable<HandleT, chunk_size>::releaseHandle(handle_type handle) {
 
 
 template<typename HandleT, size_t chunk_size>
-bool HandleTable<HandleT, chunk_size>::isValid(handle_type handle) const noexcept {
+bool HandleTable<HandleT, chunk_size>::valid(handle_type handle) const noexcept {
 
 	if (handle != HandleT::invalid_handle && handle.index < table.size()) {
 		const auto& entry = table[handle.index];

@@ -48,7 +48,7 @@ public:
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	bool contains(handle_type handle) const noexcept {
-		return handle_table.isValid(handle);
+		return handle_table.valid(handle);
 	}
 
 	[[nodiscard]]

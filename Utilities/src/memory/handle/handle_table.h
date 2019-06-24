@@ -56,7 +56,7 @@ public:
 	// Member Functions - Capacity
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	bool isValid(handle_type handle) const noexcept;
+	bool valid(handle_type handle) const noexcept;
 
 	[[nodiscard]]
 	bool empty() const noexcept {
