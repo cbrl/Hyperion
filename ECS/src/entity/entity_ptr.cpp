@@ -9,16 +9,16 @@ namespace ecs {
 //----------------------------------------------------------------------------------
 
 Entity* EntityPtr::operator->() const {
-	return mgr->getEntity(handle);
+	return mgr->tryGetEntity(handle);
 }
 
 Entity& EntityPtr::operator*() const {
-	return *(mgr->getEntity(handle));
+	return *(mgr->tryGetEntity(handle));
 }
 
 Entity* EntityPtr::get() const {
 	if (!valid()) return nullptr;
-	return mgr->getEntity(handle);
+	return mgr->tryGetEntity(handle);
 }
 
 handle64 EntityPtr::getHandle() const noexcept {

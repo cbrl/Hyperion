@@ -53,9 +53,13 @@ public:
 	// Remove all the entities marked for deletion. Should be called once per tick.
 	void removeExpiredEntities();
 
-	// Get the entity associated with the handle
+	// Get the entity associated with the handle.
 	[[nodiscard]]
-	Entity* getEntity(handle64 handle);
+	Entity& getEntity(handle64 handle);
+
+	// Get the entity associated with the handle. Returns nullptr for an invalid handle.
+	[[nodiscard]]
+	Entity* tryGetEntity(handle64 handle);
 
 	// Get the number of entities
 	[[nodiscard]]
