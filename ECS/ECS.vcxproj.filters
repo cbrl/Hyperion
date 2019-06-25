@@ -30,6 +30,9 @@
     <Filter Include="Source Files\event">
       <UniqueIdentifier>{3e63c6bb-12b0-4a9a-b23a-3fb50763990d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\component">
+      <UniqueIdentifier>{df9d72ed-584a-4c15-a7da-a8e58b071894}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\entity\entity.h">
@@ -52,9 +55,6 @@
     </ClInclude>
     <ClInclude Include="src\ecs.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\entity\entity_ptr.h">
-      <Filter>Header Files\entity</Filter>
     </ClInclude>
     <ClInclude Include="src\event\event.h">
       <Filter>Header Files\event</Filter>
@@ -88,14 +88,14 @@
     <ClCompile Include="src\entity\entity_mgr.cpp">
       <Filter>Source Files\entity</Filter>
     </ClCompile>
-    <ClCompile Include="src\entity\entity_ptr.cpp">
-      <Filter>Source Files\entity</Filter>
-    </ClCompile>
     <ClCompile Include="src\event\event_participator.cpp">
       <Filter>Source Files\event</Filter>
     </ClCompile>
     <ClCompile Include="src\event\event_mgr.cpp">
       <Filter>Source Files\event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\component\component_mgr.cpp">
+      <Filter>Source Files\component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

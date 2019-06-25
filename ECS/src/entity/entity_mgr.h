@@ -1,12 +1,13 @@
 #pragma once
 
-#include "entity/entity.h"
 #include "memory/handle/handle_map.h"
+#include "entity/entity.h"
 
 namespace ecs {
 
 class ComponentMgr;
 class EventMgr;
+class Entity;
 
 //----------------------------------------------------------------------------------
 // Entity Manager
@@ -21,7 +22,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EntityMgr(std::shared_ptr<ComponentMgr> component_mgr, EventMgr& event_mgr);
+	EntityMgr(ComponentMgr& component_mgr, EventMgr& event_mgr);
 	EntityMgr(const EntityMgr& manager) = delete;
 	EntityMgr(EntityMgr&& manager) = default;
 
@@ -44,7 +45,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	EntityPtr createEntity();
+	handle64 createEntity();
 
 	// Add an entity to the list of expired entities. Will be
 	// destroyed at the end of the next ECS update.
@@ -86,11 +87,9 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// A pointer to the component manager
-	std::shared_ptr<ComponentMgr> component_mgr;
-
-	// A reference to the event manager. Passed to the entity (EventSender).
-	EventMgr& event_mgr;
+	// A reference to the component and event managers
+	std::reference_wrapper<ComponentMgr> component_mgr;
+	std::reference_wrapper<EventMgr> event_mgr;
 
 	// Handle map. Maps a handle to an Entity.
 	HandleMap<handle64, Entity> entity_map;

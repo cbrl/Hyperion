@@ -102,7 +102,10 @@ void XM_CALLCONV ForwardPass::renderOpaque(const Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	scene.forEach<Model>([&](const Model& model) {
+	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
+		const auto& model = entity.getComponent<Model>();
+		const auto& transform = entity.getComponent<Transform>();
+
 		if (not model.isActive())
 			return;
 
@@ -110,7 +113,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(const Scene& scene,
 		if (mat.shader || mat.params.base_color[3] <= ALPHA_MAX)
 			return;
 
-		renderModel(model, world_to_projection);
+		renderModel(model, transform, world_to_projection);
 	});
 }
 
@@ -131,7 +134,10 @@ void XM_CALLCONV ForwardPass::renderTransparent(const Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	scene.forEach<Model>([&](const Model& model) {
+	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
+		const auto& model = entity.getComponent<Model>();
+		const auto& transform = entity.getComponent<Transform>();
+
 		if (not model.isActive())
 			return;
 
@@ -140,7 +146,7 @@ void XM_CALLCONV ForwardPass::renderTransparent(const Scene& scene,
 		    mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
 			return;
 
-		renderModel(model, world_to_projection);
+		renderModel(model, transform, world_to_projection);
 	});
 }
 
@@ -152,16 +158,23 @@ void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX worl
 	//----------------------------------------------------------------------------------
 	std::unordered_map<PixelShader*, std::vector<const Model*>> sorted_models;
 
-	scene.forEach<Model>([&](const Model& model) {
-		if (not model.isActive()) return;
+	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
+		const auto& model = entity.getComponent<Model>();
 		auto& mat = model.getMaterial();
-		if (not mat.shader) return;
+
+		if (not model.isActive())
+			return;
+		if (not mat.shader)
+			return;
+
 		sorted_models[mat.shader.get()].push_back(&model);
 	});
 
 
 	// Bind the environment map
-	if (env_map) env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
+	if (env_map) {
+		env_map->bind<Pipeline::PS>(device_context, SLOT_SRV_ENV_MAP);
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -173,11 +186,13 @@ void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX worl
 		shader->bind(device_context);
 
 		for (const auto* model : model_vec) {
+			const auto& transform = scene.getECS().getComponent<Transform>(model->getOwner());
 			const auto& mat = model->getMaterial();
+
 			if (mat.params.base_color[3] <= ALPHA_MAX)
 				continue;
 
-			renderModel(*model, world_to_projection);
+			renderModel(*model, transform, world_to_projection);
 		}
 	}
 
@@ -190,11 +205,13 @@ void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX worl
 		shader->bind(device_context);
 
 		for (const auto* model : model_vec) {
+			const auto& transform = scene.getECS().getComponent<Transform>(model->getOwner());
 			const auto& mat = model->getMaterial();
+
 			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
 				continue;
 
-			renderModel(*model, world_to_projection);
+			renderModel(*model, transform, world_to_projection);
 		}
 	}
 }
@@ -209,9 +226,12 @@ void ForwardPass::renderFalseColor(const Scene& scene,
 	auto pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
-	scene.forEach<Model>([&](const Model& model) {
+	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
+		const auto& model = entity.getComponent<Model>();
+		const auto& transform = entity.getComponent<Transform>();
+
 		if (model.isActive())
-			renderModel(model, world_to_projection);
+			renderModel(model, transform, world_to_projection);
 	});
 }
 
@@ -225,9 +245,12 @@ void ForwardPass::renderWireframe(const Scene& scene, FXMMATRIX world_to_project
 	auto pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, FalseColor::Static);
 	pixel_shader->bind(device_context);
 
-	scene.forEach<Model>([&](const Model& model) {
+	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
+		const auto& model = entity.getComponent<Model>();
+		const auto& transform = entity.getComponent<Transform>();
+
 		if (model.isActive())
-			renderModel(model, world_to_projection);
+			renderModel(model, transform, world_to_projection);
 	});
 }
 
@@ -238,7 +261,10 @@ void XM_CALLCONV ForwardPass::renderGBuffer(const Scene& scene, FXMMATRIX world_
 
 	gbuffer_shader->bind(device_context);
 
-	scene.forEach<Model>([&](const Model& model) {
+	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
+		const auto& model = entity.getComponent<Model>();
+		const auto& transform = entity.getComponent<Transform>();
+
 		if (not model.isActive())
 			return;
 
@@ -246,17 +272,13 @@ void XM_CALLCONV ForwardPass::renderGBuffer(const Scene& scene, FXMMATRIX world_
 		if (mat.shader || mat.params.base_color[3] <= ALPHA_MAX)
 			return;
 
-		renderModel(model, world_to_projection);
+		renderModel(model, transform, world_to_projection);
 	});
 }
 
 
-void XM_CALLCONV ForwardPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
-
-	const auto* transform = model.getOwner()->tryGetComponent<Transform>();
-	if (!transform) return;
-
-	const auto model_to_world = transform->getObjectToWorldMatrix();
+void XM_CALLCONV ForwardPass::renderModel(const Model& model, const Transform& transform, FXMMATRIX world_to_projection) const {
+	const auto model_to_world = transform.getObjectToWorldMatrix();
 	const auto model_to_proj = model_to_world * world_to_projection;
 
 	// Cull the model if it isn't on screen

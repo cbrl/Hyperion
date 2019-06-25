@@ -3,12 +3,14 @@
 #include "imgui.h"
 #include "imgui_addons/ImGuizmo/ImGuizmo.h"
 #include "datatypes/container_types.h"
+#include "memory/handle/handle.h"
 
 class Engine;
 class Input;
 class KeyConfig;
 class Transform;
-namespace ecs { class EntityPtr; }
+
+namespace ecs { class ECS; }
 
 class TransformManipulator {
 public:
@@ -36,12 +38,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void draw(Engine& engine, ecs::EntityPtr selected_entity);
+	void draw(Engine& engine, handle64 selected_entity);
 
 private:
 
 	template<typename CameraT>
-	void drawTransformManipulator(Transform& transform, CameraT& camera);
+	void drawTransformManipulator(ecs::ECS& ecs, Transform& transform, const CameraT& camera, const Transform& camera_transform);
 
 
 	//----------------------------------------------------------------------------------

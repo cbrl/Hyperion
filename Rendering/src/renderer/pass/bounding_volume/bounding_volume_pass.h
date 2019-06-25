@@ -4,6 +4,8 @@
 #include "resource/shader/shader.h"
 #include "geometry/bounding_volume/bounding_volume.h"
 
+class Transform;
+
 namespace render {
 
 class RenderStateMgr;
@@ -41,7 +43,7 @@ public:
 private:
 
 	void bindRenderStates() const;
-	void XM_CALLCONV renderAABB(const AABB& aabb, FXMMATRIX object_to_world) const;
+	void XM_CALLCONV renderAABB(const AABB& aabb, const Transform& transform, FXMMATRIX world_to_projection) const;
 
 
 	//----------------------------------------------------------------------------------

@@ -1,8 +1,9 @@
+#include "event/event_mgr.h"
 
 namespace ecs {
 
 template<typename ComponentT, typename... ArgsT>
-ComponentT& ComponentMgr::createComponent(handle64 entity, ArgsT&&... args) {
+ComponentT& ComponentMgr::addComponent(handle64 entity, ArgsT&&... args) {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>,
 	              "Calling ComponentMgr::CreateComponent() with a type that does not inherit from Component.");
 
@@ -21,9 +22,12 @@ ComponentT& ComponentMgr::createComponent(handle64 entity, ArgsT&&... args) {
 	auto& pool      = *static_cast<pool_t*>(it->second.get());
 	auto& component = pool.construct(entity.index, std::forward<ArgsT>(args)...);
 
+	// Setup the component
+	component.setOwner(entity);
+
 	// Perform extra initialization steps if the component is an event participator
 	if constexpr (std::is_base_of_v<EventParticipator, ComponentT>) {
-		component.setEventMgr(gsl::make_not_null(&event_handler));
+		component.setEventMgr(gsl::make_not_null(&event_mgr.get()));
 		if constexpr (std::is_base_of_v<EventListener, ComponentT>) {
 			component.doRegisterCallbacks();
 		}
@@ -34,7 +38,7 @@ ComponentT& ComponentMgr::createComponent(handle64 entity, ArgsT&&... args) {
 
 
 template<typename ComponentT>
-void ComponentMgr::destroyComponent(handle64 entity) {
+void ComponentMgr::removeComponent(handle64 entity) {
 	if (const auto it = component_pools.find(ComponentT::index); it != component_pools.end()) {
 		if (it->second->contains(entity.index)) {
 			expired_components[ComponentT::index].push_back(entity);
@@ -108,7 +112,7 @@ const ComponentT* ComponentMgr::tryGetComponent(handle64 entity) const {
 
 
 template<typename ComponentT>
-size_t ComponentMgr::countOf() const noexcept {
+size_t ComponentMgr::count() const noexcept {
 	const auto it = component_pools.find(ComponentT::index);
 	if (it == component_pools.end()) {
 		return 0;

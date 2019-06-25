@@ -9,6 +9,37 @@
 
 namespace render { namespace systems { class TransformSystem; } }
 
+class Transform final : public ecs::Component<Transform>, public Transform3D {
+	friend class render::systems::TransformSystem;
+
+public:
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	Transform() = default;
+	Transform(const Transform& transform) = delete;
+	Transform(Transform&& transform) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~Transform() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	Transform& operator=(const Transform& transform) = delete;
+	Transform& operator=(Transform&& transform) = default;
+
+private:
+
+	using Transform3D::setNeedsUpdate;
+	using Transform3D::updateMatrix;
+};
+
+/*
 class Transform final : public ecs::Component<Transform>, public ecs::EventSender {
 	friend class render::systems::TransformSystem;
 
@@ -313,6 +344,10 @@ private:
 		});
 	}
 
+	void updateMatrix(const XMMATRIX* parent = nullptr) {
+		transform.updateMatrix(parent);
+	}
+
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
@@ -322,3 +357,4 @@ private:
 	// Determines if the transform has been modified, but not updated.
 	mutable bool needs_update = true;
 };
+*/

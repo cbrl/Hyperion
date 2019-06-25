@@ -583,9 +583,6 @@
     <None Include="src\resource\model\model_blueprint.tpp">
       <Filter>Header Files\resource\model</Filter>
     </None>
-    <None Include="src\scene\scene.tpp">
-      <Filter>Header Files\scene</Filter>
-    </None>
     <None Include="src\resource\shader\shader_factory.tpp">
       <Filter>Header Files\resource\shader</Filter>
     </None>

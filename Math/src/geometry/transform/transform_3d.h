@@ -4,7 +4,7 @@
 #include "directxmath/directxmath.h"
 
 
-class Transform3D final {
+class Transform3D {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -290,7 +290,7 @@ public:
 		return XMMatrixScalingFromVector(scaling);
 	}
 
-private:
+protected:
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

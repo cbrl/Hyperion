@@ -1,7 +1,6 @@
 #pragma once
 
 #include "io/io.h"
-#include "entity/entity_ptr.h"
 #include "exporter/assimp_exporter.h"
 
 struct ID3D11Device;

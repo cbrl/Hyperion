@@ -6,6 +6,7 @@
 #include "rendering_options.h"
 
 class Model;
+class Transform;
 
 namespace render {
 
@@ -97,7 +98,7 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Render Model
 	//----------------------------------------------------------------------------------
-	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV renderModel(const Model& model, const Transform& transform, FXMMATRIX world_to_projection) const;
 
 
 	//----------------------------------------------------------------------------------

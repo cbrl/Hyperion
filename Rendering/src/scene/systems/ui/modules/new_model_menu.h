@@ -1,5 +1,7 @@
 #pragma once
 
+#include "memory/handle/handle.h"
+
 struct ID3D11Device;
 
 namespace render {
@@ -7,9 +9,6 @@ class ResourceMgr;
 class Scene;
 }
 
-namespace ecs {
-class EntityPtr;
-}
 
 class NewModelMenu {
 	enum class ModelType {
@@ -57,7 +56,7 @@ public:
 	void procNewModelPopup(ID3D11Device& device,
 	                       render::ResourceMgr& resource_mgr,
 	                       render::Scene& scene,
-	                       ecs::EntityPtr entity);
+	                       handle64 entity);
 
 private:
 

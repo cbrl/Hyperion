@@ -1,3 +1,5 @@
+#include "ecs.h"
+
 
 namespace ecs {
 
@@ -12,13 +14,13 @@ SystemT& SystemMgr::addSystem(ArgsT&&... args) {
 	auto& system = static_cast<SystemT&>(*(pair.first->second));
 
 	if constexpr (std::is_base_of_v<EventParticipator, SystemT>) {
-		system.setEventMgr(gsl::make_not_null(&event_mgr));
+		system.setEventMgr(gsl::make_not_null(ecs.get().event_mgr.get()));
 		if constexpr (std::is_base_of_v<EventListener, SystemT>) {
 			system.doRegisterCallbacks();
 		}
 	}
 	
-	system.setECS(gsl::make_not_null(&ecs));
+	system.setECS(gsl::make_not_null(&ecs.get()));
 
 	system_queue.push_back(std::ref(system));
 	sortSystemQueue();
@@ -43,12 +45,35 @@ void SystemMgr::removeSystem() {
 }
 
 
-template <typename SystemT>
-SystemT* SystemMgr::getSystem() const {
+template<typename SystemT>
+SystemT& SystemMgr::getSystem() {
+	return static_cast<SystemT&>(systems.at(SystemT::index));
+}
+
+
+template<typename SystemT>
+const SystemT& SystemMgr::getSystem() const {
+	return static_cast<const SystemT&>(systems.at(SystemT::index));
+}
+
+
+template<typename SystemT>
+SystemT* SystemMgr::tryGetSystem() {
 	const auto it = systems.find(SystemT::index);
 
 	if (it != systems.end()) {
 		return static_cast<SystemT*>(it->second.get());
+	}
+	return nullptr;
+}
+
+
+template<typename SystemT>
+const SystemT* SystemMgr::tryGetSystem() const {
+	const auto it = systems.find(SystemT::index);
+
+	if (it != systems.end()) {
+		return static_cast<const SystemT*>(it->second.get());
 	}
 	return nullptr;
 }

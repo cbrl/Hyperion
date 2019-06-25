@@ -115,7 +115,7 @@ void LightPass::updateData(const Scene& scene) const {
 	light_data.num_shadow_point_lights       = static_cast<u32>(shadowed_point_lights.size());
 	light_data.num_shadow_spot_lights        = static_cast<u32>(shadowed_spot_lights.size());
 
-	scene.forEach<AmbientLight>([&light_data](const AmbientLight& light) {
+	scene.getECS().forEach<AmbientLight>([&light_data](const AmbientLight& light) {
 		if (!light.isActive()) return;
 		light_data.ambient += light.getColor();
 	});
@@ -226,7 +226,7 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(const Scene& scene, FXMMA
 	// Clear the cameras
 	directional_light_cameras.clear();
 
-	scene.forEach<Transform, DirectionalLight>([&](const ecs::Entity& entity) {
+	scene.getECS().forEach<Transform, DirectionalLight>([&](const ecs::Entity& entity) {
 		const auto& transform = entity.getComponent<Transform>();
 		const auto& light     = entity.getComponent<DirectionalLight>();
 
@@ -280,7 +280,7 @@ void XM_CALLCONV LightPass::updatePointLightData(const Scene& scene, FXMMATRIX w
 	point_light_cameras.clear();
 
 
-	scene.forEach<Transform, PointLight>([&](const ecs::Entity& entity) {
+	scene.getECS().forEach<Transform, PointLight>([&](const ecs::Entity& entity) {
 		const auto& transform = entity.getComponent<Transform>();
 		const auto& light     = entity.getComponent<PointLight>();
 
@@ -359,7 +359,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(const Scene& scene, FXMMATRIX wo
 	spot_light_cameras.clear();
 
 
-	scene.forEach<Transform, SpotLight>([&](const ecs::Entity& entity) {
+	scene.getECS().forEach<Transform, SpotLight>([&](const ecs::Entity& entity) {
 		const auto& transform = entity.getComponent<Transform>();
 		const auto& light     = entity.getComponent<SpotLight>();
 

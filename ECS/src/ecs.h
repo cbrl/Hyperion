@@ -1,13 +1,27 @@
 #pragma once
 
-#include "entity/entity_mgr.h"
-#include "component/component_mgr.h"
-#include "system/system_mgr.h"
-#include "event/event_mgr.h"
+#include "datatypes/scalar_types.h"
+#include "time/time.h"
+#include "memory/handle/handle.h"
+#include <functional>
+
 
 namespace ecs {
 
+class EventMgr;
+class SystemMgr;
+class ComponentMgr;
+class EntityMgr;
+
+class Entity;
+class IComponent;
+class ISystem;
+
 class ECS final {
+	friend class EntityMgr;
+	friend class ComponentMgr;
+	friend class SystemMgr;
+
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -20,7 +34,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~ECS();
+	~ECS() = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -35,45 +49,71 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Create a new entity
-	[[nodiscard]] EntityPtr createEntity();
+	[[nodiscard]]
+	handle64 createEntity();
 
 	// Destroy an existing entity
-	void destroyEntity(handle64 entity);
+	void removeEntity(handle64 entity);
+
+	// Retrieve an entity using its handle
+	[[nodiscard]]
+	Entity& getEntity(handle64 handle);
+
+	// Retrieve an entity using its handle
+	[[nodiscard]]
+	const Entity& getEntity(handle64 handle) const;
+
+	// Attempt to retrieve an entity given its handle. Returns nullptr if given an invalid handle.
+	[[nodiscard]]
+	Entity* tryGetEntity(handle64 handle);
+
+	// Attempt to retrieve an entity given its handle. Returns nullptr if given an invalid handle.
+	[[nodiscard]]
+	const Entity* tryGetEntity(handle64 handle) const;
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Components
 	//----------------------------------------------------------------------------------
 
-	//// Add a component to this entity
-	//template<typename ComponentT, typename... ArgsT>
-	//ComponentT& addComponent(handle64 entity, ArgsT&& ... args);
+	// Add a component to this entity
+	template<typename ComponentT, typename... ArgsT>
+	ComponentT& addComponent(handle64 entity, ArgsT&& ... args);
 
-	//// Get the first component of the specified type, if it exists.
-	//template<typename ComponentT>
-	//[[nodiscard]]
-	//ComponentT* getComponent(handle64 entity);
+	// Get the first component of the specified type
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT& getComponent(handle64 entity);
 
-	//// Get the first component of the specified type, if it exists.
-	//template<typename ComponentT>
-	//[[nodiscard]]
-	//const ComponentT* getComponent(handle64 entity) const;
+	// Get the first component of the specified type
+	template<typename ComponentT>
+	[[nodiscard]]
+	const ComponentT& getComponent(handle64 entity) const;
 
-	//// Remove a specific component from this entity
-	//template<typename ComponentT>
-	//void removeComponent(handle64 entity);
+	// Get the first component of the specified type, if it exists.
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT* tryGetComponent(handle64 entity);
 
-	//void removeComponent(handle64 entity, IComponent& component);
+	// Get the first component of the specified type, if it exists.
+	template<typename ComponentT>
+	[[nodiscard]]
+	const ComponentT* tryGetComponent(handle64 entity) const;
 
-	//// Check if this entity contains the specified component
-	//template<typename ComponentT>
-	//[[nodiscard]]
-	//bool hasComponent(handle64 entity) const;
+	// Check if a given handle is valid
+	[[nodiscard]]
+	bool valid(handle64 handle) const;
 
-	//// Get the number of components of the specified type
-	//template<typename ComponentT>
-	//[[nodiscard]]
-	//size_t count(handle64 entity) const;
+	// Remove a component from this entity
+	template<typename ComponentT>
+	void removeComponent(handle64 entity);
+
+	void removeComponent(handle64 entity, IComponent& component);
+
+	// Check if this entity contains the specified component
+	template<typename ComponentT>
+	[[nodiscard]]
+	bool hasComponent(handle64 entity) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -81,7 +121,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename SystemT, typename... ArgsT>
-	[[nodiscard]] SystemT& addSystem(ArgsT&&... args);
+	SystemT& addSystem(ArgsT&&... args);
 
 	void removeSystem(ISystem& system);
 
@@ -89,7 +129,8 @@ public:
 	void removeSystem();
 
 	template<typename SystemT>
-	SystemT* getSystem() const;
+	[[nodiscard]]
+	SystemT* tryGetSystem() const;
 
 	template<typename SystemT>
 	void setSystemPriority(u32 priority);
@@ -109,20 +150,21 @@ public:
 	// Do something with each entity with a component of type ComponentT.
 	// Providing no template arguments will apply the action to every entity.
 	template<typename... ComponentT>
-	void forEach(const std::function<void(Entity&)>& act);
+	void forEach(std::function<void(Entity&)> act);
 
 	// Do something with each entity with a component of type ComponentT.
 	// Providing no template arguments will apply the action to every entity.
 	template<typename... ComponentT>
-	void forEach(const std::function<void(const Entity&)>& act) const;
+	void forEach(std::function<void(const Entity&)> act) const;
 
 	// Do something with each component of type ComponentT
 	template<typename ComponentT>
-	void forEach(const std::function<void(ComponentT&)>& act);
+	void forEach(std::function<void(ComponentT&)> act);
 
 	// Do something with each component of type ComponentT
 	template<typename ComponentT>
-	void forEach(const std::function<void(const ComponentT&)>& act) const;
+	void forEach(std::function<void(const ComponentT&)> act) const;
+
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Count
@@ -130,14 +172,18 @@ public:
 
 	// Get the number of a entities, or components of type T.
 	template<typename T>
-	[[nodiscard]] size_t countOf() const;
-
+	[[nodiscard]]
+	size_t count() const;
 
 private:
-	std::unique_ptr<EventMgr> event_mgr;
-	std::unique_ptr<SystemMgr> system_mgr;
-	std::shared_ptr<ComponentMgr> component_mgr;
-	std::unique_ptr<EntityMgr> entity_mgr;
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+	std::unique_ptr<EventMgr>     event_mgr;
+	std::unique_ptr<SystemMgr>    system_mgr;
+	std::unique_ptr<ComponentMgr> component_mgr;
+	std::unique_ptr<EntityMgr>    entity_mgr;
 };
 
 } // namespace ecs

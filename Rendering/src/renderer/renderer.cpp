@@ -65,7 +65,7 @@ void Renderer::render(Scene& scene, std::chrono::duration<f32> delta_time) {
 	//----------------------------------------------------------------------------------
 	// Render the scene for each camera
 	//----------------------------------------------------------------------------------
-	scene.forEach<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
+	scene.getECS().forEach<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
 
 		if (!camera.isActive()) return;
 
@@ -77,7 +77,7 @@ void Renderer::render(Scene& scene, std::chrono::duration<f32> delta_time) {
 		renderCamera(scene, camera);
 	});
 
-	scene.forEach<OrthographicCamera>([&](const OrthographicCamera& camera) {
+	scene.getECS().forEach<OrthographicCamera>([&](const OrthographicCamera& camera) {
 
 		if (!camera.isActive()) return;
 
@@ -140,7 +140,7 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 
 	// Camera variables
 	const auto& settings  = camera.getSettings();
-	const auto* transform = camera.getOwner()->tryGetComponent<Transform>();
+	const auto* transform = scene.getECS().tryGetComponent<Transform>(camera.getOwner());
 	assert(transform != nullptr);
 
 	const auto  world_to_camera      = transform->getWorldToObjectMatrix();

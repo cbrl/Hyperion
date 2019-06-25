@@ -130,6 +130,10 @@ namespace std {
 //----------------------------------------------------------------------------------
 // using declarations
 //----------------------------------------------------------------------------------
+using handle32 = Handle<u32, 20, 12>;
+static_assert(sizeof(handle32) == 4, "handle32 size is not 4 bytes");
+static_assert(std::has_unique_object_representations_v<handle32>, "handle32 is not properly packed");
+
 using handle64 = Handle<u64, 40, 24>;
 static_assert(sizeof(handle64) == 8, "handle64 size is not 8 bytes");
 static_assert(std::has_unique_object_representations_v<handle64>, "handle64 is not properly packed");

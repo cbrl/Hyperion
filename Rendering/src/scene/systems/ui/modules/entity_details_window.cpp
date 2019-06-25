@@ -24,41 +24,38 @@ void DrawComponentState(ComponentT& component, gsl::czstring<> name = nullptr) {
 }
 
 
-void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
+void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 
 	auto& device       = engine.getRenderingMgr().getDevice();
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
 	auto& scene        = engine.getScene();
+	auto& ecs          = scene.getECS();
 
 	// Begin window. Early return if window isn't open or entity isn't valid.
 	ImGui::SetNextWindowSize(ImVec2{375, 425}, ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin("Entity Properties", nullptr, ImGuiWindowFlags_MenuBar) || !entity_ptr) {
+	if (!ImGui::Begin("Entity Properties", nullptr, ImGuiWindowFlags_MenuBar) || !ecs.valid(handle)) {
 		ImGui::End();
 		return;
 	}
 
 	// Draw menu
 	if (ImGui::BeginMenuBar()) {
-		drawAddComponentMenu(engine, entity_ptr);
+		drawAddComponentMenu(engine, ecs, handle);
 		ImGui::EndMenuBar();
 	}
 
 	// Get the entity
-	ecs::Entity& entity = *entity_ptr;
+	ecs::Entity& entity = ecs.getEntity(handle);
 
 	//----------------------------------------------------------------------------------
 	// Name/Details
 	//----------------------------------------------------------------------------------
 	ImGui::InputText("", &entity.getName());
-	ImGui::SameLine();
-	bool state = entity.isActive();
-	if (ImGui::Checkbox("Active", &state))
-		entity.setActive(state);
 
 	ImGui::Separator();
 
-	ImGui::Text("Index:   %d", entity.getPtr().getHandle().index);
-	ImGui::Text("Counter: %d", entity.getPtr().getHandle().counter);
+	ImGui::Text("Index:   %d", handle.index);
+	ImGui::Text("Counter: %d", handle.counter);
 	ImGui::Spacing();
 
 
@@ -66,29 +63,31 @@ void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
 	// Parent
 	//----------------------------------------------------------------------------------
 	entity_list.clear();
-	scene.forEach([&](const ecs::Entity& entity) {
-		entity_list.push_back(entity.getPtr());
+	scene.getECS().forEach([&](const ecs::Entity& entity) {
+		entity_list.push_back(handle);
 	});
 
-	static const auto getter = [](void* data, int idx, const char** out_text) -> bool {
-		auto& vector = *static_cast<std::vector<ecs::EntityPtr>*>(data);
-		if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-		if (idx == 0) {
-			static char none[] = "None";
-			*out_text = none;
-		}
-		else
-			*out_text = vector[idx]->getName().c_str();
-		return true;
-	};
+	const char* preview = nullptr;
+	if (entity.getParent() != handle64::invalid_handle)
+		preview = ecs.getEntity(entity.getParent()).getName().c_str();
+	else
+		preview = "None";
 
-	if (ImGui::Combo("Parent", &entity_names_idx, getter, &entity_list, static_cast<int>(entity_list.size()))) {
-		if (entity_names_idx != 0) {
-			entity_list[entity_names_idx]->addChild(entity.getPtr()); //subtract 1 since index 0 is "None"
+	if (ImGui::BeginCombo("Parent", preview)) {
+		if (ImGui::Selectable("None", entity.getParent() == handle64::invalid_handle)) {
+			entity.removeParent();
 		}
-		else if (entity.hasParent()) {
-			entity.getParent()->removeChild(entity.getPtr());
+
+		for (size_t i = 0; i < entity_list.size(); ++i) {
+			const bool selected = (entity_names_idx == i);
+			auto& name = ecs.getEntity(entity_list[i]).getName();
+			if (ImGui::Selectable(name.c_str(), selected)) {
+				entity_names_idx = static_cast<int>(i);
+				entity.setParent(entity_list[i]);
+			}
 		}
+
+		ImGui::EndCombo();
 	}
 
 
@@ -101,64 +100,64 @@ void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
 		if (component_def.getter) {
 			auto* component = component_def.getter(entity);
 			if (component) {
-				drawUserComponentNode(component_def.name.c_str(), *component, component_def.details_renderer);
+				drawUserComponentNode(ecs, component_def.name.c_str(), *component, component_def.details_renderer);
 			}
 		}
 	}
 
 	// Transform
-	if (auto* transform = entity.tryGetComponent<Transform>()) {
-		drawComponentNode("Transform", *transform); //multiple transforms are technically allowed but only the first is relevant
+	if (auto* transform = ecs.tryGetComponent<Transform>(handle)) {
+		drawComponentNode(ecs, "Transform", *transform);
 	}
 
 	// Model
-	if (auto* model = entity.tryGetComponent<Model>()) {
-		std::string name = "Model: " + model->getName();
-		drawComponentNode(name.c_str(), *model, resource_mgr);
+	if (auto* model = ecs.tryGetComponent<Model>(handle)) {
+		const std::string name = "Model: " + model->getName();
+		drawComponentNode(ecs, name.c_str(), *model, resource_mgr);
 	}
 
 	// Perspective Camera
-	if (auto* camera = entity.tryGetComponent<PerspectiveCamera>()) {
-		drawComponentNode("Perspective Camera", *camera);
+	if (auto* camera = ecs.tryGetComponent<PerspectiveCamera>(handle)) {
+		drawComponentNode(ecs, "Perspective Camera", *camera);
 	}
 
 	// Orthographic Camera
-	if (auto* camera = entity.tryGetComponent<OrthographicCamera>()) {
-		drawComponentNode("Orthographic Camera", *camera);
+	if (auto* camera = ecs.tryGetComponent<OrthographicCamera>(handle)) {
+		drawComponentNode(ecs, "Orthographic Camera", *camera);
 	}
 
 	// Text
-	if (auto* text = entity.tryGetComponent<Text>()) {
-		drawComponentNode("Text", *text);
+	if (auto* text = ecs.tryGetComponent<Text>(handle)) {
+		drawComponentNode(ecs, "Text", *text);
 	}
 
 	// Ambient Light
-	if (auto* light = entity.tryGetComponent<AmbientLight>()) {
-		drawComponentNode("Ambient Light", *light);
+	if (auto* light = ecs.tryGetComponent<AmbientLight>(handle)) {
+		drawComponentNode(ecs, "Ambient Light", *light);
 	}
 
 	// Directional Light
-	if (auto* light = entity.tryGetComponent<DirectionalLight>()) {
-		drawComponentNode("Directional Light", *light);
+	if (auto* light = ecs.tryGetComponent<DirectionalLight>(handle)) {
+		drawComponentNode(ecs, "Directional Light", *light);
 	}
 
 	// Point Light
-	if (auto* light = entity.tryGetComponent<PointLight>()) {
-		drawComponentNode("Point Light", *light);
+	if (auto* light = ecs.tryGetComponent<PointLight>(handle)) {
+		drawComponentNode(ecs, "Point Light", *light);
 	}
 
 	// Spot Light
-	if (auto* light = entity.tryGetComponent<SpotLight>()) {
-		drawComponentNode("Spot Light", *light);
+	if (auto* light = ecs.tryGetComponent<SpotLight>(handle)) {
+		drawComponentNode(ecs, "Spot Light", *light);
 	}
 
 	ImGui::End(); //"Properties"
 }
 
 
-void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr entity_ptr) {
+void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, handle64 handle) {
 
-	bool valid_entity = entity_ptr.valid();
+	bool valid_entity = ecs.valid(handle);
 
 	auto& scene         = engine.getScene();
 	auto& rendering_mgr = engine.getRenderingMgr();
@@ -168,19 +167,19 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr en
 	if (ImGui::BeginMenu("Add Component", valid_entity)) {
 
 		if (ImGui::MenuItem("Orthographic Camera", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<OrthographicCamera>(device, u32_2{480, 480});
+			ecs.addComponent<OrthographicCamera>(handle, device, u32_2{480, 480});
 		}
 		if (ImGui::MenuItem("Perspective Camera", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<PerspectiveCamera>(device, u32_2{480, 480});
+			ecs.addComponent<PerspectiveCamera>(handle, device, u32_2{480, 480});
 		}
 		if (ImGui::MenuItem("Directional Light", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<DirectionalLight>();
+			ecs.addComponent<DirectionalLight>(handle);
 		}
 		if (ImGui::MenuItem("Point Light", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<PointLight>();
+			ecs.addComponent<PointLight>(handle);
 		}
 		if (ImGui::MenuItem("Spot Light", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<SpotLight>();
+			ecs.addComponent<SpotLight>(handle);
 		}
 
 		if (ImGui::BeginMenu("Model")) {
@@ -189,7 +188,7 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr en
 					ModelConfig<VertexPositionNormalTexture> config;
 					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
 					if (valid_entity)
-						scene.importModel(entity_ptr, device, bp);
+						scene.importModel(handle, device, bp);
 				}
 				else Logger::log(LogLevel::err, "Failed to open file dialog");
 			}
@@ -206,7 +205,7 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr en
 		for (const auto& [idx, component] : user_components) {
 			if (component.adder) {
 				if (ImGui::MenuItem(component.name.c_str(), nullptr, nullptr, valid_entity)) {
-					component.adder(*entity_ptr);
+					component.adder(ecs.getEntity(handle));
 				}
 			}
 		}
@@ -217,7 +216,10 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr en
 
 
 template<typename T, typename... ArgsT>
-void EntityDetailsWindow::drawComponentNode(gsl::czstring<> text, T& component, ArgsT&&... args) {
+void EntityDetailsWindow::drawComponentNode(ecs::ECS& ecs,
+                                            gsl::czstring<> text,
+                                            T& component,
+                                            ArgsT&&... args) {
 
 	bool dont_delete = true;
 	ImGui::PushID(&component);
@@ -227,12 +229,13 @@ void EntityDetailsWindow::drawComponentNode(gsl::czstring<> text, T& component, 
 	}
 	ImGui::PopID();
 	if (!dont_delete) {
-		component.getOwner()->removeComponent(component);
+		ecs.removeComponent(component.getOwner(), component);
 	}
 }
 
 
-void EntityDetailsWindow::drawUserComponentNode(gsl::czstring<> text,
+void EntityDetailsWindow::drawUserComponentNode(ecs::ECS& ecs,
+                                                gsl::czstring<> text,
                                                 ecs::IComponent& component,
                                                 const UserComponent::details_func& draw_func) {
 
@@ -246,7 +249,7 @@ void EntityDetailsWindow::drawUserComponentNode(gsl::czstring<> text,
 	}
 	ImGui::PopID();
 	if (!dont_delete) {
-		component.getOwner()->removeComponent(component);
+		ecs.removeComponent(component.getOwner(), component);
 	}
 }
 

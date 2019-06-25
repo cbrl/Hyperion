@@ -1,14 +1,15 @@
 #pragma once
 
-#include "event/event.h"
-#include "event/event_dispatcher.h"
-
 #include "datatypes/datatypes.h"
 #include "log/log.h"
 #include <memory_resource>
 
 
 namespace ecs {
+
+class IEvent;
+class IEventDelegate;
+class IEventDispatcher;
 
 class EventMgr final {
 	friend class EventListener;

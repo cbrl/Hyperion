@@ -62,7 +62,7 @@ void PickingSystem::update() {
 
 template<typename CameraT>
 void PickingSystem::pick(const CameraT& camera) {
-	auto* transform = camera.getOwner()->tryGetComponent<Transform>();
+	auto* transform = this->getECS().tryGetComponent<Transform>(camera.getOwner());
 	if (not transform)
 		return;
 	

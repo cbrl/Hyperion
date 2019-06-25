@@ -1,32 +1,15 @@
 #include "entity.h"
+#include "entity/entity_mgr.h"
 #include "component/component_mgr.h"
-#include "ecs.h"
 #include <functional>
 
 
 namespace ecs {
 
-Entity::Entity(Entity&& other) noexcept
-	: EventSender(std::move(other)) {
-	name          = std::move(other.name);
-	this_ptr      = std::exchange(other.this_ptr, EntityPtr{});
-	active        = std::move(other.active);
-	component_mgr = std::exchange(other.component_mgr, nullptr);
-	parent_ptr    = std::exchange(other.parent_ptr, EntityPtr{});
-	children      = std::move(other.children);
-}
+Entity::Entity(Entity&& other) noexcept = default;
 
 
-Entity& Entity::operator=(Entity&& other) noexcept {
-	EventSender::operator=(std::move(other));
-	name          = std::move(other.name);
-	this_ptr      = std::exchange(other.this_ptr, EntityPtr{});
-	active        = std::move(other.active);
-	component_mgr = std::exchange(other.component_mgr, nullptr);
-	parent_ptr    = std::exchange(other.parent_ptr, EntityPtr{});
-	children      = std::move(other.children);
-	return *this;
-}
+Entity& Entity::operator=(Entity&& other) noexcept = default;
 
 
 std::string& Entity::getName() noexcept {
@@ -44,43 +27,33 @@ void Entity::setName(std::string new_name) noexcept {
 }
 
 
-EntityPtr Entity::getPtr() const noexcept {
-	return this_ptr;
+handle64 Entity::getHandle() const noexcept {
+	return this_handle;
 }
 
 
-void Entity::setActive(bool state) noexcept {
-	active = state;
-}
-
-
-bool Entity::isActive() const noexcept {
-	return active;
-}
-
-
-EntityPtr Entity::getParent() const noexcept {
-	return parent_ptr;
+handle64 Entity::getParent() const noexcept {
+	return parent_handle;
 }
 
 
 bool Entity::hasParent() const noexcept {
-	return bool(parent_ptr);
+	return entity_mgr->valid(parent_handle);
 }
 
 
 void Entity::removeParent() {
-	if (parent_ptr) {
-		parent_ptr->removeChild(this_ptr);
+	if (entity_mgr->valid(parent_handle)) {
+		entity_mgr->getEntity(parent_handle).removeChild(this_handle);
 	}
 }
 
 
-void Entity::setParent(EntityPtr parent) {
-	if (parent_ptr != parent) {
-		parent_ptr = parent;
-		if (parent.valid()) {
-			parent->addChild(this_ptr);
+void Entity::setParent(handle64 parent) {
+	if (parent_handle != parent) {
+		parent_handle = parent;
+		if (entity_mgr->valid(parent)) {
+			entity_mgr->getEntity(parent).addChild(this_handle);
 		}
 		sendParentChangedEvent();
 	}
@@ -88,32 +61,32 @@ void Entity::setParent(EntityPtr parent) {
 
 
 void Entity::removeComponent(IComponent& component) {
-	component_mgr->destroyComponent(this_ptr.getHandle(), component);
+	component_mgr->removeComponent(this_handle, component);
 }
 
 
-void Entity::addChild(EntityPtr child) {
-	if (child.valid()
-	    && child != this_ptr
+void Entity::addChild(handle64 child) {
+	if (entity_mgr->valid(child)
+	    && child != this_handle
 	    && !hasChild(child)
-		&& !child->hasChild(this_ptr)) {
+		&& !entity_mgr->getEntity(child).hasChild(this_handle)) {
 
 		children.push_back(child);
-		child->setParent(this_ptr);
+		entity_mgr->getEntity(child).setParent(this_handle);
 	}
 }
 
 
-void Entity::removeChild(EntityPtr child) {
-	if (!child.valid()
-	    || child == this_ptr
-		|| child->getParent() != this_ptr) {
+void Entity::removeChild(handle64 child) {
+	if (!entity_mgr->valid(child)
+	    || child == this_handle
+		|| entity_mgr->getEntity(child).getParent() != this_handle) {
 		return;
 	}
 
 	const auto it = std::find(children.cbegin(), children.cend(), child);
 	if (it != children.cend()) {
-		child->setParent(EntityPtr{});
+		entity_mgr->getEntity(child).setParent(handle64{});
 		children.erase(it);
 	}
 }
@@ -121,12 +94,12 @@ void Entity::removeChild(EntityPtr child) {
 
 void Entity::removeAllChildren() {
 	forEachChild([this](Entity& child) {
-		removeChild(child.getPtr());
+		removeChild(child.getHandle());
 	});
 }
 
 
-bool Entity::hasChild(EntityPtr child) const {
+bool Entity::hasChild(handle64 child) const {
 	return std::find(children.cbegin(), children.cend(), child) != children.cend();
 }
 
@@ -138,24 +111,24 @@ bool Entity::hasChildren() const noexcept {
 
 void Entity::forEachChild(const std::function<void(Entity&)>& act) {
 	for (auto child : children) {
-		if (child.valid())
-			act(*child);
+		if (entity_mgr->valid(child))
+			act(entity_mgr->getEntity(child));
 	}
 }
 
 
 void Entity::forEachChild(const std::function<void(const Entity&)>& act) const {
 	for (auto child : children) {
-		if (child.valid())
-			act(*child);
+		if (entity_mgr->valid(child))
+			act(entity_mgr->getEntity(child));
 	}
 }
 
 
 void Entity::forEachChildRecursive(const std::function<void(Entity&)>& act) {
 	for (auto child : children) {
-		if (child.valid()) {
-			auto& child_entity = *child;
+		if (entity_mgr->valid(child)) {
+			auto& child_entity = entity_mgr->getEntity(child);
 			act(child_entity);
 			child_entity.forEachChildRecursive(act);
 		}
@@ -165,8 +138,8 @@ void Entity::forEachChildRecursive(const std::function<void(Entity&)>& act) {
 
 void Entity::forEachChildRecursive(const std::function<void(const Entity&)>& act) const {
 	for (auto child : children) {
-		if (child.valid()) {
-			const auto& child_entity = *child;
+		if (entity_mgr->valid(child)) {
+			const auto& child_entity = entity_mgr->getEntity(child);
 			act(child_entity);
 			child_entity.forEachChildRecursive(act);
 		}
@@ -174,26 +147,31 @@ void Entity::forEachChildRecursive(const std::function<void(const Entity&)>& act
 }
 
 
-void Entity::setComponentMgr(gsl::not_null<ComponentMgr*> mgr) {
+void Entity::setEntityMgr(gsl::not_null<EntityMgr*> mgr) noexcept {
+	entity_mgr = mgr;
+}
+
+
+void Entity::setComponentMgr(gsl::not_null<ComponentMgr*> mgr) noexcept {
 	component_mgr = mgr;
 }
 
 
-void Entity::setPointer(EntityPtr ptr) noexcept {
-	this_ptr = ptr;
-	forEachChild([ptr](Entity& child) {
-		child.setParent(ptr);
+void Entity::setHandle(handle64 handle) noexcept {
+	this_handle = handle;
+	forEachChild([handle](Entity& child) {
+		child.setParent(handle);
 	});
 	name = "Entity (i:"
-	       + ToStr(ptr.getHandle().index).value_or("-1"s)
+	       + ToStr(handle.index).value_or("-1"s)
 	       + ", c:"
-	       + ToStr(ptr.getHandle().counter).value_or("-1"s)
+	       + ToStr(handle.counter).value_or("-1"s)
 	       + ")";
 }
 
 
 void Entity::sendParentChangedEvent() {
-	sendEvent<ParentChangedEvent>(this_ptr);
+	sendEvent<ParentChangedEvent>(this_handle);
 }
 
 } // namespace ecs

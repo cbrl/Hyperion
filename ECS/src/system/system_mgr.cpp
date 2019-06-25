@@ -3,9 +3,8 @@
 
 namespace ecs {
 
-SystemMgr::SystemMgr(ECS& ecs, EventMgr& mgr)
-    : ecs(ecs)
-	, event_mgr(mgr) {
+SystemMgr::SystemMgr(ECS& ecs)
+    : ecs(ecs) {
 }
 
 

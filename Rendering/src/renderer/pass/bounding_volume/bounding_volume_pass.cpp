@@ -55,73 +55,55 @@ void XM_CALLCONV BoundingVolumePass::render(const Scene& scene, FXMMATRIX world_
 
 	color_buffer.updateData(device_context, color);
 
-	scene.forEach<Transform, DirectionalLight>([&](const ecs::Entity& entity) {
+	scene.getECS().forEach<Transform, DirectionalLight>([&](const ecs::Entity& entity) {
 		const auto& transform = entity.getComponent<Transform>();
 		const auto& light     = entity.getComponent<DirectionalLight>();
 
 		if (!light.isActive())
 			return;
 
-		const auto object_to_world      = transform.getObjectToWorldMatrix();
-		const auto object_to_projection = object_to_world * world_to_projection;
-
-		if (!Frustum(object_to_projection).contains(light.getAABB()))
-			return;
-
-		renderAABB(light.getAABB(), object_to_world);
+		renderAABB(light.getAABB(), transform, world_to_projection);
 	});
 
-	scene.forEach<Transform, PointLight>([&](const ecs::Entity& entity) {
+	scene.getECS().forEach<Transform, PointLight>([&](const ecs::Entity& entity) {
 		const auto& transform = entity.getComponent<Transform>();
 		const auto& light     = entity.getComponent<PointLight>();
 
 		if (!light.isActive())
 			return;
 
-		const auto object_to_world      = transform.getObjectToWorldMatrix();
-		const auto object_to_projection = object_to_world * world_to_projection;
-
-		if (!Frustum(object_to_projection).contains(light.getBoundingSphere()))
-			return;
-
-		renderAABB(light.getAABB(), object_to_world);
+		renderAABB(light.getAABB(), transform, world_to_projection);
 	});
 
-	scene.forEach<Transform, SpotLight>([&](const ecs::Entity& entity) {
+	scene.getECS().forEach<Transform, SpotLight>([&](const ecs::Entity& entity) {
 		const auto& transform = entity.getComponent<Transform>();
 		const auto& light     = entity.getComponent<SpotLight>();
 
 		if (!light.isActive())
 			return;
 
-		const auto object_to_world = transform.getObjectToWorldMatrix();
-		const auto object_to_projection = object_to_world * world_to_projection;
-
-		if (!Frustum(object_to_projection).contains(light.getAABB()))
-			return;
-
-		renderAABB(light.getAABB(), object_to_world);
+		renderAABB(light.getAABB(), transform, world_to_projection);
 	});
 
-	scene.forEach<Transform, Model>([&](const ecs::Entity& entity) {
+	scene.getECS().forEach<Transform, Model>([&](const ecs::Entity& entity) {
 		const auto& transform = entity.getComponent<Transform>();
 		const auto& model     = entity.getComponent<Model>();
 
 		if (!model.isActive())
 			return;
 
-		const auto object_to_world = transform.getObjectToWorldMatrix();
-		const auto object_to_projection = object_to_world * world_to_projection;
-
-		if (!Frustum(object_to_projection).contains(model.getAABB()))
-			return;
-
-		renderAABB(model.getAABB(), object_to_world);
+		renderAABB(model.getAABB(), transform, world_to_projection);
 	});
 }
 
 
-void XM_CALLCONV BoundingVolumePass::renderAABB(const AABB& aabb, FXMMATRIX object_to_world) const {
+void XM_CALLCONV BoundingVolumePass::renderAABB(const AABB& aabb, const Transform& transform, FXMMATRIX world_to_projection) const {
+
+	const auto object_to_world = transform.getObjectToWorldMatrix();
+	const auto object_to_projection = object_to_world * world_to_projection;
+
+	if (!Frustum(object_to_projection).contains(aabb))
+		return;
 	
 	const auto scale  = aabb.max() - aabb.min();
 	const auto center = (aabb.max() + aabb.min()) * 0.5f;

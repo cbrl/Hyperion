@@ -2,7 +2,6 @@
 
 #include "datatypes/datatypes.h"
 #include "memory/handle/handle.h"
-#include "entity/entity_ptr.h"
 #include "event/event_participator.h"
 
 
@@ -17,7 +16,7 @@ namespace ecs {
 //----------------------------------------------------------------------------------
 
 class IComponent {
-	friend class Entity;
+	friend class ComponentMgr;
 
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -55,7 +54,7 @@ public:
 
 	// Get the ptr of the entity that owns this component
 	[[nodiscard]]
-	const EntityPtr& getOwner() const noexcept {
+	handle64 getOwner() const noexcept {
 		return owner;
 	}
 
@@ -77,8 +76,8 @@ public:
 
 private:
 
-	void setOwner(EntityPtr owner_ptr) {
-		owner = owner_ptr;
+	void setOwner(handle64 owner_handle) {
+		owner = owner_handle;
 	}
 
 
@@ -90,7 +89,7 @@ private:
 	bool active = true;
 
 	// The entity that owns this component. Set on creation in IEntity.
-	EntityPtr owner;
+	handle64 owner;
 };
 
 

@@ -1,44 +1,60 @@
+#include "entity/entity_mgr.h"
+#include "event/event_mgr.h"
+#include "system/system_mgr.h"
+#include "component/component_mgr.h"
+
 
 namespace ecs {
 
-//template<typename ComponentT, typename... ArgsT>
-//ComponentT& ECS::addComponent(handle64 entity, ArgsT&& ... args) {
-//
-//}
-//
-//
-//template<typename ComponentT>
-//[[nodiscard]]
-//ComponentT* ECS::getComponent(handle64 entity) {
-//
-//}
-//
-//
-//template<typename ComponentT>
-//[[nodiscard]]
-//const ComponentT* ECS::getComponent(handle64 entity) const {
-//
-//}
-//
-//
-//template<typename ComponentT>
-//void ECS::removeComponent(handle64 entity) {
-//
-//}
-//
-//
-//template<typename ComponentT>
-//[[nodiscard]]
-//bool ECS::hasComponent(handle64 entity) const {
-//
-//}
-//
-//
-//template<typename ComponentT>
-//[[nodiscard]]
-//size_t ECS::count(handle64 entity) const {
-//
-//}
+template<typename ComponentT, typename... ArgsT>
+ComponentT& ECS::addComponent(handle64 entity, ArgsT&&... args) {
+	return component_mgr->addComponent<ComponentT>(entity, std::forward<ArgsT>(args)...);
+}
+
+
+template<typename ComponentT>
+ComponentT& ECS::getComponent(handle64 entity) {
+	return component_mgr->getComponent<ComponentT>(entity);
+}
+
+
+template<typename ComponentT>
+const ComponentT& ECS::getComponent(handle64 entity) const {
+	return component_mgr->getComponent<ComponentT>(entity);
+}
+
+
+template<typename ComponentT>
+ComponentT* ECS::tryGetComponent(handle64 entity) {
+	return component_mgr->tryGetComponent<ComponentT>(entity);
+}
+
+
+template<typename ComponentT>
+const ComponentT* ECS::tryGetComponent(handle64 entity) const {
+	return component_mgr->tryGetComponent<ComponentT>(entity);
+}
+
+
+template<typename ComponentT>
+void ECS::removeComponent(handle64 entity) {
+	component_mgr->removeComponent<ComponentT>(entity);
+}
+
+
+template<typename ComponentT>
+bool ECS::hasComponent(handle64 entity) const {
+	return component_mgr->hasComponent<ComponentT>(entity);
+}
+
+
+template<typename T>
+size_t ECS::count() const {
+	if constexpr (std::is_same_v<Entity, T>)
+		return entity_mgr->count();
+	else
+		return component_mgr->count<T>();
+}
 
 
 template<typename SystemT, typename... ArgsT>
@@ -57,7 +73,7 @@ void ECS::removeSystem() {
 
 
 template<typename SystemT>
-SystemT* ECS::getSystem() const {
+SystemT* ECS::tryGetSystem() const {
 	return system_mgr->getSystem<SystemT>();
 }
 
@@ -73,20 +89,8 @@ void ECS::sendEvent(ArgsT&&... args) {
 }
 
 
-template<typename T>
-size_t ECS::countOf() const {
-	if constexpr (std::is_same_v<Entity, T>) {
-		return entity_mgr->count();
-	}
-	if constexpr (std::is_base_of_v<IComponent, T>) {
-		return component_mgr->countOf<T>();
-	}
-	return 0;
-}
-
-
 template<typename... ComponentT>
-void ECS::forEach(const std::function<void(Entity&)>& act) {
+void ECS::forEach(std::function<void(Entity&)> act) {
 
 	static_assert((std::is_base_of_v<IComponent, ComponentT> && ...));
 
@@ -110,7 +114,7 @@ void ECS::forEach(const std::function<void(Entity&)>& act) {
 
 
 template<typename... ComponentT>
-void ECS::forEach(const std::function<void(const Entity&)>& act) const {
+void ECS::forEach(std::function<void(const Entity&)> act) const {
 
 	static_assert((std::is_base_of_v<IComponent, ComponentT> && ...));
 
@@ -134,22 +138,22 @@ void ECS::forEach(const std::function<void(const Entity&)>& act) const {
 
 
 template<typename ComponentT>
-void ECS::forEach(const std::function<void(ComponentT&)>& act) {
+void ECS::forEach(std::function<void(ComponentT&)> act) {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>);
 
 	if (!component_mgr->knowsComponent<ComponentT>())
 		return;
-	component_mgr->forEach<ComponentT>(act);
+	component_mgr->forEach<ComponentT>(std::ref(act));
 }
 
 
 template<typename ComponentT>
-void ECS::forEach(const std::function<void(const ComponentT&)>& act) const {
+void ECS::forEach(std::function<void(const ComponentT&)> act) const {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>);
 
 	if (!component_mgr->knowsComponent<ComponentT>())
 		return;
-	component_mgr->forEach<ComponentT>(act);
+	component_mgr->forEach<ComponentT>(std::ref(act));
 }
 
 } // namespace ecs

@@ -30,6 +30,8 @@ public:
 	TransformSystem& operator=(const TransformSystem&) = delete;
 	TransformSystem& operator=(TransformSystem&&) noexcept = default;
 
+	void update() override;
+
 private:
 
 	//----------------------------------------------------------------------------------
@@ -37,6 +39,8 @@ private:
 	//----------------------------------------------------------------------------------
 	void registerCallbacks() override;
 	void onParentChanged(const ecs::Entity::ParentChangedEvent& event);
+
+	void updateWorld(Transform& transform);
 };
 
 } //namespace render::systems

@@ -37,7 +37,7 @@ void NewModelMenu::drawMenu() {
 void NewModelMenu::procNewModelPopup(ID3D11Device& device,
                                      render::ResourceMgr& resource_mgr,
                                      render::Scene& scene,
-                                     ecs::EntityPtr entity) {
+                                     handle64 entity) {
 
 	using namespace render;
 

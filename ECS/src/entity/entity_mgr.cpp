@@ -4,31 +4,29 @@
 
 namespace ecs {
 
-EntityMgr::EntityMgr(std::shared_ptr<ComponentMgr> component_mgr, EventMgr& event_mgr)
-	: component_mgr(std::move(component_mgr))
+EntityMgr::EntityMgr(ComponentMgr& component_mgr, EventMgr& event_mgr)
+	: component_mgr(component_mgr)
 	, event_mgr(event_mgr) {
 }
 
 
-EntityPtr EntityMgr::createEntity() {
+handle64 EntityMgr::createEntity() {
 	auto [handle, entity] = entity_map.create();
 
-	// Create a EntityPtr
-	const EntityPtr ptr = EntityPtr{this, handle};
-
 	// Setup the entity
-	entity.get().setEventMgr(gsl::make_not_null(&event_mgr));
-	entity.get().setComponentMgr(gsl::make_not_null(component_mgr.get()));
-	entity.get().setPointer(ptr);
+	entity.get().setHandle(handle);
+	entity.get().setEventMgr(gsl::make_not_null(&event_mgr.get()));
+	entity.get().setEntityMgr(gsl::make_not_null(this));
+	entity.get().setComponentMgr(gsl::make_not_null(&component_mgr.get()));
 
-	return ptr;
+	return handle;
 }
 
 
 void EntityMgr::destroyEntity(handle64 handle) {
 	if (valid(handle)) {
 		expired_entities.push_back(handle);
-		component_mgr->destroyAll(handle);
+		component_mgr.get().removeAll(handle);
 
 		auto& entity = *tryGetEntity(handle);
 		entity.removeAllChildren();

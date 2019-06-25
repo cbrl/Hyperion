@@ -2,6 +2,7 @@
 
 #include "handle.h"
 #include "datatypes/container_types.h"
+#include <assert.h>
 
 
 template<typename HandleT, size_t chunk_size = 512>

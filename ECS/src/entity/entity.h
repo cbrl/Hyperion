@@ -1,15 +1,14 @@
 #pragma once
 
-#include "entity/entity_ptr.h"
 #include "event/event.h"
 #include "event/event_participator.h"
+#include "memory/handle/handle.h"
 
 namespace ecs {
 
-class ECS;
-class IComponent;
+class EntityMgr;
 class ComponentMgr;
-
+class IComponent;
 
 //----------------------------------------------------------------------------------
 // Entity
@@ -27,8 +26,8 @@ class Entity final : public EventSender {
 public:
 
 	struct ParentChangedEvent : public Event<ParentChangedEvent> {
-		ParentChangedEvent(EntityPtr entity) : entity(std::move(entity)) {}
-		EntityPtr entity;
+		ParentChangedEvent(handle64 entity) : entity(std::move(entity)) {}
+		handle64 entity;
 	};
 
 	//----------------------------------------------------------------------------------
@@ -65,24 +64,12 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Member Functions - Pointer
+	// Member Functions - Handle
 	//----------------------------------------------------------------------------------
 
 	// Get the entity's handle
 	[[nodiscard]]
-	EntityPtr getPtr() const noexcept;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - State
-	//----------------------------------------------------------------------------------
-
-	// Set the entity's state
-	void setActive(bool state) noexcept;
-
-	// Get the entity's state
-	[[nodiscard]]
-	bool isActive() const noexcept;
+	handle64 getHandle() const noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -113,10 +100,11 @@ public:
 	[[nodiscard]]
 	const ComponentT* tryGetComponent() const;
 
-	// Remove a specific component from this entity
+	// Remove a component from this entity
 	template<typename ComponentT>
-	void removeComponent(ComponentT& component);
+	void removeComponent();
 
+	// Remove a component from this entity
 	void removeComponent(IComponent& component);
 
 	// Check if this entity contains the specified component
@@ -131,14 +119,14 @@ public:
 
 	// Get the entity that is a parent of this entity
 	[[nodiscard]]
-	EntityPtr getParent() const noexcept;
+	handle64 getParent() const noexcept;
 
 	// Determine if this entity has a valid parent
 	[[nodiscard]]
 	bool hasParent() const noexcept;
 
 	// Set the parent of this entity.
-	void setParent(EntityPtr parent);
+	void setParent(handle64 parent);
 
 	// Remove this entity's parent
 	void removeParent();
@@ -149,10 +137,10 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Make the specified entity a child of this entity
-	void addChild(EntityPtr child);
+	void addChild(handle64 child);
 
 	// Remove the specified entity from this entity's children
-	void removeChild(EntityPtr child);
+	void removeChild(handle64 child);
 
 	// Remove all children from this entity
 	void removeAllChildren();
@@ -174,14 +162,17 @@ public:
 
 private:
 
-	// Set the component manager pointer. Called by EntityMgr.
-	void setComponentMgr(gsl::not_null<ComponentMgr*> mgr);
+	// Set the entity manager pointer. Called by EntityMgr.
+	void setEntityMgr(gsl::not_null<EntityMgr*> mgr) noexcept;
 
-	// Set this entity's EntityPtr. Called by EntityMgr.
-	void setPointer(EntityPtr ptr) noexcept;
+	// Set the component manager pointer. Called by EntityMgr.
+	void setComponentMgr(gsl::not_null<ComponentMgr*> mgr) noexcept;
+
+	// Set this entity's handle. Called by EntityMgr.
+	void setHandle(handle64 handle) noexcept;
 
 	[[nodiscard]]
-	bool hasChild(EntityPtr child) const;
+	bool hasChild(handle64 child) const;
 
 	void sendParentChangedEvent();
 
@@ -193,20 +184,16 @@ private:
 	// The entity's name
 	std::string name;
 
-	// This entity's EntityPtr. Set on creation in EntityMgr.
-	EntityPtr this_ptr;
-
-	// Is this entity active?
-	bool active = true;
+	// This entity's handle. Set on creation in EntityMgr.
+	handle64 this_handle;
 
 
 	//----------------------------------------------------------------------------------
-	// Member Variables - Components
+	// Member Variables - ECS
 	//----------------------------------------------------------------------------------
 
-	// A pointer to the component manager. The ECS destroys all
-	// entities before the component manager is destroyed, so
-	// the pointer should never be invalid in this context.
+	// References to the entity/component managers
+	EntityMgr* entity_mgr;
 	ComponentMgr* component_mgr;
 
 
@@ -215,10 +202,10 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// The parent of this entity
-	EntityPtr parent_ptr;
+	handle64 parent_handle;
 
 	// The children of this entity
-	std::vector<EntityPtr> children;
+	std::vector<handle64> children;
 };
 
 } // namespace ecs

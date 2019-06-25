@@ -1,6 +1,7 @@
 #pragma once
 
 #include <typeindex>
+#include "datatypes/scalar_types.h"
 
 
 namespace ecs {
