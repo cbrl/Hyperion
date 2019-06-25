@@ -40,7 +40,7 @@ private:
 	void registerCallbacks() override;
 	void onParentChanged(const ecs::Entity::ParentChangedEvent& event);
 
-	void updateWorld(Transform& transform);
+	bool updateWorld(Transform& transform);
 };
 
 } //namespace render::systems
