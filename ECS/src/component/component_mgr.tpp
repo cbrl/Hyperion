@@ -53,7 +53,7 @@ void ComponentMgr::removeComponent(handle64 entity) {
 
 
 template<typename ComponentT>
-bool ComponentMgr::hasComponent(handle64 entity) const noexcept {
+bool ComponentMgr::has(handle64 entity) const noexcept {
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	if (const auto it = component_pools.find(ComponentT::index); it != component_pools.end()) {
@@ -66,7 +66,7 @@ bool ComponentMgr::hasComponent(handle64 entity) const noexcept {
 
 template<typename ComponentT>
 [[nodiscard]]
-ComponentT& ComponentMgr::getComponent(handle64 entity) {
+ComponentT& ComponentMgr::get(handle64 entity) {
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	auto& pool = *static_cast<pool_t*>(component_pools.at(ComponentT::index).get());
@@ -75,7 +75,7 @@ ComponentT& ComponentMgr::getComponent(handle64 entity) {
 
 template<typename ComponentT>
 [[nodiscard]]
-const ComponentT& ComponentMgr::getComponent(handle64 entity) const {
+const ComponentT& ComponentMgr::get(handle64 entity) const {
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	const auto& pool = *static_cast<const pool_t*>(component_pools.at(ComponentT::index).get());
@@ -85,13 +85,13 @@ const ComponentT& ComponentMgr::getComponent(handle64 entity) const {
 
 template<typename ComponentT>
 [[nodiscard]]
-ComponentT* ComponentMgr::tryGetComponent(handle64 entity) {
+ComponentT* ComponentMgr::tryGet(handle64 entity) {
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	if (const auto it = component_pools.find(ComponentT::index); it != component_pools.end()) {
 		const auto& pool = *static_cast<const pool_t*>(it->second.get());
 		if (pool.contains(entity.index))
-			return &getComponent<ComponentT>(entity);
+			return &get<ComponentT>(entity);
 	}
 	return nullptr;
 }
@@ -99,13 +99,13 @@ ComponentT* ComponentMgr::tryGetComponent(handle64 entity) {
 
 template<typename ComponentT>
 [[nodiscard]]
-const ComponentT* ComponentMgr::tryGetComponent(handle64 entity) const {
+const ComponentT* ComponentMgr::tryGet(handle64 entity) const {
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	if (const auto it = component_pools.find(ComponentT::index); it != component_pools.end()) {
 		const auto& pool = *static_cast<const pool_t*>(it->second.get());
 		if (pool.contains(entity.index))
-			return &getComponent<ComponentT>(entity);
+			return &get<ComponentT>(entity);
 	}
 	return nullptr;
 }

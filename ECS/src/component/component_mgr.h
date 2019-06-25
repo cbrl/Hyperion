@@ -65,29 +65,29 @@ public:
 	// Check if the given entity owns a component of the specified type
 	template<typename ComponentT>
 	[[nodiscard]]
-	bool hasComponent(handle64 entity) const noexcept;
+	bool has(handle64 entity) const noexcept;
 
 	// Get a component of type ComponentT owned by the given entity
 	template<typename ComponentT>
 	[[nodiscard]]
-	ComponentT& getComponent(handle64 entity);
+	ComponentT& get(handle64 entity);
 
 	// Get a component of type ComponentT owned by the given entity
 	template<typename ComponentT>
 	[[nodiscard]]
-	const ComponentT& getComponent(handle64 entity) const;
+	const ComponentT& get(handle64 entity) const;
 
 	// Attempt to get a component of type ComponentT owned by the give entity.
 	// Returns nullptr if the entity does not own the specified component.
 	template<typename ComponentT>
 	[[nodiscard]]
-	ComponentT* tryGetComponent(handle64 entity);
+	ComponentT* tryGet(handle64 entity);
 
 	// Attempt to get a component of type ComponentT owned by the give entity.
 	// Returns nullptr if the entity does not own the specified component.
 	template<typename ComponentT>
 	[[nodiscard]]
-	const ComponentT* tryGetComponent(handle64 entity) const;
+	const ComponentT* tryGet(handle64 entity) const;
 
 	// Get the number of the specified component
 	template<typename ComponentT>

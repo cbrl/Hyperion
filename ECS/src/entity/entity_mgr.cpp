@@ -28,7 +28,7 @@ void EntityMgr::destroyEntity(handle64 handle) {
 		expired_entities.push_back(handle);
 		component_mgr.get().removeAll(handle);
 
-		auto& entity = *tryGetEntity(handle);
+		auto& entity = *tryGet(handle);
 		entity.removeAllChildren();
 		entity.removeParent();
 	}
@@ -43,12 +43,12 @@ void EntityMgr::removeExpiredEntities() {
 }
 
 
-Entity& EntityMgr::getEntity(handle64 handle) {
+Entity& EntityMgr::get(handle64 handle) {
 	return entity_map.get(handle);
 }
 
 
-Entity* EntityMgr::tryGetEntity(handle64 handle) {
+Entity* EntityMgr::tryGet(handle64 handle) {
 	if (entity_map.contains(handle)) {
 		return &entity_map.get(handle);
 	}

@@ -12,8 +12,8 @@ TextPass::TextPass(ID3D11DeviceContext& device_context) {
 void TextPass::render(Scene& scene) const {
 
 	scene.getECS().forEach<Transform, Text>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& text      = entity.getComponent<Text>();
+		const auto& transform = entity.get<Transform>();
+		const auto& text      = entity.get<Text>();
 
 		if (!text.isActive())
 			return;

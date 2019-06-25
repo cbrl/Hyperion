@@ -31,7 +31,7 @@ void Scene::tick(Engine& engine) {
 
 
 handle64 Scene::importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
-	auto handle = addEntity();
+	auto handle = createEntity();
 	importModel(handle, device, blueprint);
 	return handle;
 }
@@ -45,15 +45,15 @@ void Scene::importModel(handle64 handle, ID3D11Device& device, const std::shared
 	    [&](handle64 handle, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
 			// Construct each model at this node
 			for (const u32 index : bp_node.mesh_indices) {
-				auto child = addEntity();
-				ecs.getEntity(handle).addChild(child);
-				ecs.getEntity(handle).addComponent<Model>(device, bp, index);
+				auto child = createEntity();
+				ecs.get(handle).addChild(child);
+				ecs.get(handle).addComponent<Model>(device, bp, index);
 			}
 
 			// Add a child entity for each child node
 			for (auto& node : bp_node.child_nodes) {
-			    auto child_root = addEntity();
-				ecs.getEntity(handle).addChild(child_root);
+			    auto child_root = createEntity();
+				ecs.get(handle).addChild(child_root);
 				process_node(child_root, bp, node);
 			}
 		};

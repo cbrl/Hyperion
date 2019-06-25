@@ -44,7 +44,7 @@ bool Entity::hasParent() const noexcept {
 
 void Entity::removeParent() {
 	if (entity_mgr->valid(parent_handle)) {
-		entity_mgr->getEntity(parent_handle).removeChild(this_handle);
+		entity_mgr->get(parent_handle).removeChild(this_handle);
 	}
 }
 
@@ -53,7 +53,7 @@ void Entity::setParent(handle64 parent) {
 	if (parent_handle != parent) {
 		parent_handle = parent;
 		if (entity_mgr->valid(parent)) {
-			entity_mgr->getEntity(parent).addChild(this_handle);
+			entity_mgr->get(parent).addChild(this_handle);
 		}
 		sendParentChangedEvent();
 	}
@@ -69,10 +69,10 @@ void Entity::addChild(handle64 child) {
 	if (entity_mgr->valid(child)
 	    && child != this_handle
 	    && !hasChild(child)
-		&& !entity_mgr->getEntity(child).hasChild(this_handle)) {
+		&& !entity_mgr->get(child).hasChild(this_handle)) {
 
 		children.push_back(child);
-		entity_mgr->getEntity(child).setParent(this_handle);
+		entity_mgr->get(child).setParent(this_handle);
 	}
 }
 
@@ -80,13 +80,13 @@ void Entity::addChild(handle64 child) {
 void Entity::removeChild(handle64 child) {
 	if (!entity_mgr->valid(child)
 	    || child == this_handle
-		|| entity_mgr->getEntity(child).getParent() != this_handle) {
+		|| entity_mgr->get(child).getParent() != this_handle) {
 		return;
 	}
 
 	const auto it = std::find(children.cbegin(), children.cend(), child);
 	if (it != children.cend()) {
-		entity_mgr->getEntity(child).setParent(handle64{});
+		entity_mgr->get(child).setParent(handle64{});
 		children.erase(it);
 	}
 }
@@ -112,7 +112,7 @@ bool Entity::hasChildren() const noexcept {
 void Entity::forEachChild(const std::function<void(Entity&)>& act) {
 	for (auto child : children) {
 		if (entity_mgr->valid(child))
-			act(entity_mgr->getEntity(child));
+			act(entity_mgr->get(child));
 	}
 }
 
@@ -120,7 +120,7 @@ void Entity::forEachChild(const std::function<void(Entity&)>& act) {
 void Entity::forEachChild(const std::function<void(const Entity&)>& act) const {
 	for (auto child : children) {
 		if (entity_mgr->valid(child))
-			act(entity_mgr->getEntity(child));
+			act(entity_mgr->get(child));
 	}
 }
 
@@ -128,7 +128,7 @@ void Entity::forEachChild(const std::function<void(const Entity&)>& act) const {
 void Entity::forEachChildRecursive(const std::function<void(Entity&)>& act) {
 	for (auto child : children) {
 		if (entity_mgr->valid(child)) {
-			auto& child_entity = entity_mgr->getEntity(child);
+			auto& child_entity = entity_mgr->get(child);
 			act(child_entity);
 			child_entity.forEachChildRecursive(act);
 		}
@@ -139,7 +139,7 @@ void Entity::forEachChildRecursive(const std::function<void(Entity&)>& act) {
 void Entity::forEachChildRecursive(const std::function<void(const Entity&)>& act) const {
 	for (auto child : children) {
 		if (entity_mgr->valid(child)) {
-			const auto& child_entity = entity_mgr->getEntity(child);
+			const auto& child_entity = entity_mgr->get(child);
 			act(child_entity);
 			child_entity.forEachChildRecursive(act);
 		}

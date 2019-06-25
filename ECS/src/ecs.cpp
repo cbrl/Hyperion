@@ -24,23 +24,23 @@ void ECS::removeEntity(handle64 entity) {
 }
 
 
-Entity& ECS::getEntity(handle64 handle) {
-	return entity_mgr->getEntity(handle);
+Entity& ECS::get(handle64 handle) {
+	return entity_mgr->get(handle);
 }
 
 
-const Entity& ECS::getEntity(handle64 handle) const {
-	return entity_mgr->getEntity(handle);
+const Entity& ECS::get(handle64 handle) const {
+	return entity_mgr->get(handle);
 }
 
 
-Entity* ECS::tryGetEntity(handle64 handle) {
-	return entity_mgr->tryGetEntity(handle);
+Entity* ECS::tryGet(handle64 handle) {
+	return entity_mgr->tryGet(handle);
 }
 
 
-const Entity* ECS::tryGetEntity(handle64 handle) const {
-	return entity_mgr->tryGetEntity(handle);
+const Entity* ECS::tryGet(handle64 handle) const {
+	return entity_mgr->tryGet(handle);
 }
 
 

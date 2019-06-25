@@ -227,8 +227,8 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(const Scene& scene, FXMMA
 	directional_light_cameras.clear();
 
 	scene.getECS().forEach<Transform, DirectionalLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& light     = entity.getComponent<DirectionalLight>();
+		const auto& transform = entity.get<Transform>();
+		const auto& light     = entity.get<DirectionalLight>();
 
 		if (not light.isActive())
 			return;
@@ -281,8 +281,8 @@ void XM_CALLCONV LightPass::updatePointLightData(const Scene& scene, FXMMATRIX w
 
 
 	scene.getECS().forEach<Transform, PointLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& light     = entity.getComponent<PointLight>();
+		const auto& transform = entity.get<Transform>();
+		const auto& light     = entity.get<PointLight>();
 
 		if (not light.isActive())
 			return;
@@ -360,8 +360,8 @@ void XM_CALLCONV LightPass::updateSpotLightData(const Scene& scene, FXMMATRIX wo
 
 
 	scene.getECS().forEach<Transform, SpotLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& light     = entity.getComponent<SpotLight>();
+		const auto& transform = entity.get<Transform>();
+		const auto& light     = entity.get<SpotLight>();
 
 		if (not light.isActive())
 			return;

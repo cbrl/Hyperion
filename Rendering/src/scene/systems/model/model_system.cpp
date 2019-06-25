@@ -16,8 +16,8 @@ void ModelSystem::update() {
 	auto& device_context = rendering_mgr.getDeviceContext();
 
 	getECS().forEach<Transform, Model>([&](ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		auto& model = entity.getComponent<Model>();
+		const auto& transform = entity.get<Transform>();
+		auto& model = entity.get<Model>();
 
 		// Update the model's buffer
 		if (model.isActive()) {

@@ -49,19 +49,19 @@ public:
 
 	template<typename SystemT>
 	[[nodiscard]]
-	SystemT& getSystem();
+	SystemT& get();
 
 	template<typename SystemT>
 	[[nodiscard]]
-	const SystemT& getSystem() const;
+	const SystemT& get() const;
 
 	template<typename SystemT>
 	[[nodiscard]]
-	SystemT* tryGetSystem();
+	SystemT* tryGet();
 
 	template<typename SystemT>
 	[[nodiscard]]
-	const SystemT* tryGetSystem() const;
+	const SystemT* tryGet() const;
 
 	// Set a system's priority. Higher priority systems get executed sooner.
 	template<typename SystemT>

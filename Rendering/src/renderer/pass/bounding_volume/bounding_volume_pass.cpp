@@ -56,8 +56,8 @@ void XM_CALLCONV BoundingVolumePass::render(const Scene& scene, FXMMATRIX world_
 	color_buffer.updateData(device_context, color);
 
 	scene.getECS().forEach<Transform, DirectionalLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& light     = entity.getComponent<DirectionalLight>();
+		const auto& transform = entity.get<Transform>();
+		const auto& light     = entity.get<DirectionalLight>();
 
 		if (!light.isActive())
 			return;
@@ -66,8 +66,8 @@ void XM_CALLCONV BoundingVolumePass::render(const Scene& scene, FXMMATRIX world_
 	});
 
 	scene.getECS().forEach<Transform, PointLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& light     = entity.getComponent<PointLight>();
+		const auto& transform = entity.get<Transform>();
+		const auto& light     = entity.get<PointLight>();
 
 		if (!light.isActive())
 			return;
@@ -76,8 +76,8 @@ void XM_CALLCONV BoundingVolumePass::render(const Scene& scene, FXMMATRIX world_
 	});
 
 	scene.getECS().forEach<Transform, SpotLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& light     = entity.getComponent<SpotLight>();
+		const auto& transform = entity.get<Transform>();
+		const auto& light     = entity.get<SpotLight>();
 
 		if (!light.isActive())
 			return;
@@ -86,8 +86,8 @@ void XM_CALLCONV BoundingVolumePass::render(const Scene& scene, FXMMATRIX world_
 	});
 
 	scene.getECS().forEach<Transform, Model>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& model     = entity.getComponent<Model>();
+		const auto& transform = entity.get<Transform>();
+		const auto& model     = entity.get<Model>();
 
 		if (!model.isActive())
 			return;

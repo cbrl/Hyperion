@@ -6,8 +6,8 @@
 void AxisOrbitSystem::update() {
 
 	getECS().forEach<Transform, AxisOrbit>([&] (ecs::Entity& entity) {
-		auto& transform   = entity.getComponent<Transform>();
-		const auto& orbit = entity.getComponent<AxisOrbit>();
+		auto& transform   = entity.get<Transform>();
+		const auto& orbit = entity.get<AxisOrbit>();
 
 		if (!orbit.isActive() || !transform.isActive())
 			return;

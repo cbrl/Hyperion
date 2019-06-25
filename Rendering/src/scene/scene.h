@@ -70,11 +70,11 @@ public:
 
 	// Add an entity to this scene and apply the given template to it
 	template<typename TemplateT = EntityTemplates::WorldObjectT, typename... ArgsT>
-	handle64 addEntity(ArgsT&& ... args) {
+	handle64 createEntity(ArgsT&& ... args) {
 		auto handle = ecs.createEntity();
 
 		TemplateT t;
-		t(ecs.getEntity(handle), std::forward<ArgsT>(args)...);
+		t(ecs.get(handle), std::forward<ArgsT>(args)...);
 		return handle;
 	}
 

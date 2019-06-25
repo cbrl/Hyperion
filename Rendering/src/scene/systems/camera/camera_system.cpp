@@ -16,8 +16,8 @@ void CameraSystem::update() {
 	auto& device_context = rendering_mgr.getDeviceContext();
 
 	getECS().forEach<Transform, PerspectiveCamera>([&](ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& camera    = entity.getComponent<PerspectiveCamera>();
+		const auto& transform = entity.get<Transform>();
+		const auto& camera    = entity.get<PerspectiveCamera>();
 
 		if (camera.isActive()) {
 			camera.updateBuffer(device_context,
@@ -27,8 +27,8 @@ void CameraSystem::update() {
 	});
 
 	getECS().forEach<Transform, OrthographicCamera>([&](ecs::Entity& entity) {
-		const auto& transform = entity.getComponent<Transform>();
-		const auto& camera    = entity.getComponent<OrthographicCamera>();
+		const auto& transform = entity.get<Transform>();
+		const auto& camera    = entity.get<OrthographicCamera>();
 
 		if (camera.isActive()) {
 			camera.updateBuffer(device_context,

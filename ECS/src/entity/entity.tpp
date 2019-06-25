@@ -11,26 +11,26 @@ ComponentT& Entity::addComponent(ArgsT&&... args) {
 
 
 template<typename ComponentT>
-ComponentT& Entity::getComponent() {
-	return component_mgr->getComponent<ComponentT>(this_handle);
+ComponentT& Entity::get() {
+	return component_mgr->get<ComponentT>(this_handle);
 }
 
 
 template<typename ComponentT>
-const ComponentT& Entity::getComponent() const {
-	return component_mgr->getComponent<ComponentT>(this_handle);
+const ComponentT& Entity::get() const {
+	return component_mgr->get<ComponentT>(this_handle);
 }
 
 
 template<typename ComponentT>
-ComponentT* Entity::tryGetComponent() {
-	return component_mgr->tryGetComponent<ComponentT>(this_handle);
+ComponentT* Entity::tryGet() {
+	return component_mgr->tryGet<ComponentT>(this_handle);
 }
 
 
 template<typename ComponentT>
-const ComponentT* Entity::tryGetComponent() const {
-	return component_mgr->tryGetComponent<ComponentT>(this_handle);
+const ComponentT* Entity::tryGet() const {
+	return component_mgr->tryGet<ComponentT>(this_handle);
 }
 
 
@@ -41,8 +41,8 @@ void Entity::removeComponent() {
 
 
 template<typename ComponentT>
-bool Entity::hasComponent() const {
-	return component_mgr->hasComponent<ComponentT>(this_handle);
+bool Entity::has() const {
+	return component_mgr->has<ComponentT>(this_handle);
 }
 
 } // namespace ecs

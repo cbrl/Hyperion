@@ -86,7 +86,7 @@ void SceneTree::drawEntityMenu(render::Scene& scene) {
 	if (ImGui::BeginMenu("Entity")) {
 
 		if (ImGui::MenuItem("New")) {
-			scene.addEntity();
+			scene.createEntity();
 		}
 
 		if ( ImGui::BeginMenu("Selected", ecs.valid(handle)) ) {

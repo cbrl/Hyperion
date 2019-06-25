@@ -103,8 +103,8 @@ void XM_CALLCONV ForwardPass::renderOpaque(const Scene& scene,
 
 	// Render models
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
-		const auto& transform = entity.getComponent<Transform>();
+		const auto& model = entity.get<Model>();
+		const auto& transform = entity.get<Transform>();
 
 		if (not model.isActive())
 			return;
@@ -135,8 +135,8 @@ void XM_CALLCONV ForwardPass::renderTransparent(const Scene& scene,
 
 	// Render models
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
-		const auto& transform = entity.getComponent<Transform>();
+		const auto& model = entity.get<Model>();
+		const auto& transform = entity.get<Transform>();
 
 		if (not model.isActive())
 			return;
@@ -159,7 +159,7 @@ void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX worl
 	std::unordered_map<PixelShader*, std::vector<const Model*>> sorted_models;
 
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
+		const auto& model = entity.get<Model>();
 		auto& mat = model.getMaterial();
 
 		if (not model.isActive())
@@ -186,7 +186,7 @@ void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX worl
 		shader->bind(device_context);
 
 		for (const auto* model : model_vec) {
-			const auto& transform = scene.getECS().getComponent<Transform>(model->getOwner());
+			const auto& transform = scene.getECS().get<Transform>(model->getOwner());
 			const auto& mat = model->getMaterial();
 
 			if (mat.params.base_color[3] <= ALPHA_MAX)
@@ -205,7 +205,7 @@ void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX worl
 		shader->bind(device_context);
 
 		for (const auto* model : model_vec) {
-			const auto& transform = scene.getECS().getComponent<Transform>(model->getOwner());
+			const auto& transform = scene.getECS().get<Transform>(model->getOwner());
 			const auto& mat = model->getMaterial();
 
 			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
@@ -227,8 +227,8 @@ void ForwardPass::renderFalseColor(const Scene& scene,
 	pixel_shader->bind(device_context);
 
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
-		const auto& transform = entity.getComponent<Transform>();
+		const auto& model = entity.get<Model>();
+		const auto& transform = entity.get<Transform>();
 
 		if (model.isActive())
 			renderModel(model, transform, world_to_projection);
@@ -246,8 +246,8 @@ void ForwardPass::renderWireframe(const Scene& scene, FXMMATRIX world_to_project
 	pixel_shader->bind(device_context);
 
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
-		const auto& transform = entity.getComponent<Transform>();
+		const auto& model = entity.get<Model>();
+		const auto& transform = entity.get<Transform>();
 
 		if (model.isActive())
 			renderModel(model, transform, world_to_projection);
@@ -262,8 +262,8 @@ void XM_CALLCONV ForwardPass::renderGBuffer(const Scene& scene, FXMMATRIX world_
 	gbuffer_shader->bind(device_context);
 
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
-		const auto& transform = entity.getComponent<Transform>();
+		const auto& model = entity.get<Model>();
+		const auto& transform = entity.get<Transform>();
 
 		if (not model.isActive())
 			return;

@@ -56,11 +56,11 @@ public:
 
 	// Get the entity associated with the handle.
 	[[nodiscard]]
-	Entity& getEntity(handle64 handle);
+	Entity& get(handle64 handle);
 
 	// Get the entity associated with the handle. Returns nullptr for an invalid handle.
 	[[nodiscard]]
-	Entity* tryGetEntity(handle64 handle);
+	Entity* tryGet(handle64 handle);
 
 	// Get the number of entities
 	[[nodiscard]]

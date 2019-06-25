@@ -83,22 +83,22 @@ public:
 	// Get the component of the specified type
 	template<typename ComponentT>
 	[[nodiscard]]
-	ComponentT& getComponent();
+	ComponentT& get();
 
 	// Get the component of the specified type
 	template<typename ComponentT>
 	[[nodiscard]]
-	const ComponentT& getComponent() const;
+	const ComponentT& get() const;
 
 	// Get the component of the specified type, if it exits. Returns nullptr if not.
 	template<typename ComponentT>
 	[[nodiscard]]
-	ComponentT* tryGetComponent();
+	ComponentT* tryGet();
 
 	// Get the component of the specified type, if it exits. Returns nullptr if not.
 	template<typename ComponentT>
 	[[nodiscard]]
-	const ComponentT* tryGetComponent() const;
+	const ComponentT* tryGet() const;
 
 	// Remove a component from this entity
 	template<typename ComponentT>
@@ -110,7 +110,7 @@ public:
 	// Check if this entity contains the specified component
 	template<typename ComponentT>
 	[[nodiscard]]
-	bool hasComponent() const;
+	bool has() const;
 
 
 	//----------------------------------------------------------------------------------

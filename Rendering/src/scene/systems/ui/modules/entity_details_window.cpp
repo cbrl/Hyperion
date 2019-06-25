@@ -45,7 +45,7 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 	}
 
 	// Get the entity
-	ecs::Entity& entity = ecs.getEntity(handle);
+	ecs::Entity& entity = ecs.get(handle);
 
 	//----------------------------------------------------------------------------------
 	// Name/Details
@@ -69,7 +69,7 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 
 	const char* preview = nullptr;
 	if (entity.getParent() != handle64::invalid_handle)
-		preview = ecs.getEntity(entity.getParent()).getName().c_str();
+		preview = ecs.get(entity.getParent()).getName().c_str();
 	else
 		preview = "None";
 
@@ -80,7 +80,7 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 
 		for (size_t i = 0; i < entity_list.size(); ++i) {
 			const bool selected = (entity_names_idx == i);
-			auto& name = ecs.getEntity(entity_list[i]).getName();
+			auto& name = ecs.get(entity_list[i]).getName();
 			if (ImGui::Selectable(name.c_str(), selected)) {
 				entity_names_idx = static_cast<int>(i);
 				entity.setParent(entity_list[i]);
@@ -106,48 +106,48 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 	}
 
 	// Transform
-	if (auto* transform = ecs.tryGetComponent<Transform>(handle)) {
+	if (auto* transform = ecs.tryGet<Transform>(handle)) {
 		drawComponentNode(ecs, "Transform", *transform);
 	}
 
 	// Model
-	if (auto* model = ecs.tryGetComponent<Model>(handle)) {
+	if (auto* model = ecs.tryGet<Model>(handle)) {
 		const std::string name = "Model: " + model->getName();
 		drawComponentNode(ecs, name.c_str(), *model, resource_mgr);
 	}
 
 	// Perspective Camera
-	if (auto* camera = ecs.tryGetComponent<PerspectiveCamera>(handle)) {
+	if (auto* camera = ecs.tryGet<PerspectiveCamera>(handle)) {
 		drawComponentNode(ecs, "Perspective Camera", *camera);
 	}
 
 	// Orthographic Camera
-	if (auto* camera = ecs.tryGetComponent<OrthographicCamera>(handle)) {
+	if (auto* camera = ecs.tryGet<OrthographicCamera>(handle)) {
 		drawComponentNode(ecs, "Orthographic Camera", *camera);
 	}
 
 	// Text
-	if (auto* text = ecs.tryGetComponent<Text>(handle)) {
+	if (auto* text = ecs.tryGet<Text>(handle)) {
 		drawComponentNode(ecs, "Text", *text);
 	}
 
 	// Ambient Light
-	if (auto* light = ecs.tryGetComponent<AmbientLight>(handle)) {
+	if (auto* light = ecs.tryGet<AmbientLight>(handle)) {
 		drawComponentNode(ecs, "Ambient Light", *light);
 	}
 
 	// Directional Light
-	if (auto* light = ecs.tryGetComponent<DirectionalLight>(handle)) {
+	if (auto* light = ecs.tryGet<DirectionalLight>(handle)) {
 		drawComponentNode(ecs, "Directional Light", *light);
 	}
 
 	// Point Light
-	if (auto* light = ecs.tryGetComponent<PointLight>(handle)) {
+	if (auto* light = ecs.tryGet<PointLight>(handle)) {
 		drawComponentNode(ecs, "Point Light", *light);
 	}
 
 	// Spot Light
-	if (auto* light = ecs.tryGetComponent<SpotLight>(handle)) {
+	if (auto* light = ecs.tryGet<SpotLight>(handle)) {
 		drawComponentNode(ecs, "Spot Light", *light);
 	}
 
@@ -205,7 +205,7 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, ha
 		for (const auto& [idx, component] : user_components) {
 			if (component.adder) {
 				if (ImGui::MenuItem(component.name.c_str(), nullptr, nullptr, valid_entity)) {
-					component.adder(ecs.getEntity(handle));
+					component.adder(ecs.get(handle));
 				}
 			}
 		}

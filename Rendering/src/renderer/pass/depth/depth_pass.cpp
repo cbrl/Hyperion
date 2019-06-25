@@ -65,8 +65,8 @@ void XM_CALLCONV DepthPass::render(const Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
-		const auto& transform = entity.getComponent<Transform>();
+		const auto& model = entity.get<Model>();
+		const auto& transform = entity.get<Transform>();
 
 		if (!model.isActive())
 			return;
@@ -84,8 +84,8 @@ void XM_CALLCONV DepthPass::render(const Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
-		const auto& transform = entity.getComponent<Transform>();
+		const auto& model = entity.get<Model>();
+		const auto& transform = entity.get<Transform>();
 
 		if (!model.isActive())
 			return;
@@ -112,8 +112,8 @@ void XM_CALLCONV DepthPass::renderShadows(const Scene& scene,
 
 	bindOpaqueShaders();
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
-		const auto& transform = entity.getComponent<Transform>();
+		const auto& model = entity.get<Model>();
+		const auto& transform = entity.get<Transform>();
 
 		if (!model.isActive()) return;
 		if (!model.castsShadows()) return;
@@ -132,8 +132,8 @@ void XM_CALLCONV DepthPass::renderShadows(const Scene& scene,
 
 	bindTransparentShaders();
 	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.getComponent<Model>();
-		const auto& transform = entity.getComponent<Transform>();
+		const auto& model = entity.get<Model>();
+		const auto& transform = entity.get<Transform>();
 
 		if (!model.isActive()) return;
 		if (!model.castsShadows()) return;

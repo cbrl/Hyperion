@@ -6,33 +6,14 @@
 
 namespace ecs {
 
+
+//----------------------------------------------------------------------------------
+// Components
+//----------------------------------------------------------------------------------
+
 template<typename ComponentT, typename... ArgsT>
 ComponentT& ECS::addComponent(handle64 entity, ArgsT&&... args) {
 	return component_mgr->addComponent<ComponentT>(entity, std::forward<ArgsT>(args)...);
-}
-
-
-template<typename ComponentT>
-ComponentT& ECS::getComponent(handle64 entity) {
-	return component_mgr->getComponent<ComponentT>(entity);
-}
-
-
-template<typename ComponentT>
-const ComponentT& ECS::getComponent(handle64 entity) const {
-	return component_mgr->getComponent<ComponentT>(entity);
-}
-
-
-template<typename ComponentT>
-ComponentT* ECS::tryGetComponent(handle64 entity) {
-	return component_mgr->tryGetComponent<ComponentT>(entity);
-}
-
-
-template<typename ComponentT>
-const ComponentT* ECS::tryGetComponent(handle64 entity) const {
-	return component_mgr->tryGetComponent<ComponentT>(entity);
 }
 
 
@@ -43,19 +24,39 @@ void ECS::removeComponent(handle64 entity) {
 
 
 template<typename ComponentT>
-bool ECS::hasComponent(handle64 entity) const {
-	return component_mgr->hasComponent<ComponentT>(entity);
+bool ECS::has(handle64 entity) const {
+	return component_mgr->has<ComponentT>(entity);
 }
 
 
-template<typename T>
-size_t ECS::count() const {
-	if constexpr (std::is_same_v<Entity, T>)
-		return entity_mgr->count();
-	else
-		return component_mgr->count<T>();
+template<typename ComponentT>
+ComponentT& ECS::get(handle64 entity) {
+	return component_mgr->get<ComponentT>(entity);
 }
 
+
+template<typename ComponentT>
+const ComponentT& ECS::get(handle64 entity) const {
+	return component_mgr->get<ComponentT>(entity);
+}
+
+
+template<typename ComponentT>
+ComponentT* ECS::tryGet(handle64 entity) {
+	return component_mgr->tryGet<ComponentT>(entity);
+}
+
+
+template<typename ComponentT>
+const ComponentT* ECS::tryGet(handle64 entity) const {
+	return component_mgr->tryGet<ComponentT>(entity);
+}
+
+
+
+//----------------------------------------------------------------------------------
+// Systems
+//----------------------------------------------------------------------------------
 
 template<typename SystemT, typename... ArgsT>
 SystemT& ECS::addSystem(ArgsT&&... args) {
@@ -73,9 +74,28 @@ void ECS::removeSystem() {
 
 
 template<typename SystemT>
-SystemT* ECS::tryGetSystem() const {
-	return system_mgr->getSystem<SystemT>();
+SystemT& ECS::get() {
+	return system_mgr->get<SystemT>();
 }
+
+
+template<typename SystemT>
+const SystemT& ECS::get() const {
+	return system_mgr->get<SystemT>();
+}
+
+
+template<typename SystemT>
+SystemT* ECS::tryGet() {
+	return system_mgr->tryGet<SystemT>();
+}
+
+
+template<typename SystemT>
+const SystemT* ECS::tryGet() const {
+	return system_mgr->tryGet<SystemT>();
+}
+
 
 template<typename SystemT>
 void ECS::setSystemPriority(u32 priority) {
@@ -83,11 +103,21 @@ void ECS::setSystemPriority(u32 priority) {
 }
 
 
+
+//----------------------------------------------------------------------------------
+// Events
+//----------------------------------------------------------------------------------
+
 template<typename EventT, typename... ArgsT>
 void ECS::sendEvent(ArgsT&&... args) {
 	event_mgr->send<EventT>(std::forward<ArgsT>(args)...);
 }
 
+
+
+//----------------------------------------------------------------------------------
+// Iteration
+//----------------------------------------------------------------------------------
 
 template<typename... ComponentT>
 void ECS::forEach(std::function<void(Entity&)> act) {
@@ -105,11 +135,10 @@ void ECS::forEach(std::function<void(Entity&)> act) {
 
 		// Iterator over all entities that contain the provided component types
 		entity_mgr->forEach([&act](Entity& entity) {
-			if ((entity.hasComponent<ComponentT>() && ...))
+			if ((entity.has<ComponentT>() && ...))
 				act(entity);
 		});
 	}
-	
 }
 
 
@@ -130,7 +159,7 @@ void ECS::forEach(std::function<void(const Entity&)> act) const {
 
 		// Iterator over all entities that contain the provided component types
 		entity_mgr->forEach([&act](const Entity& entity) {
-			if ((entity.hasComponent<ComponentT>() && ...))
+			if ((entity.has<ComponentT>() && ...))
 				act(entity);
 		});
 	}
@@ -155,5 +184,20 @@ void ECS::forEach(std::function<void(const ComponentT&)> act) const {
 		return;
 	component_mgr->forEach<ComponentT>(std::ref(act));
 }
+
+
+
+//----------------------------------------------------------------------------------
+// Count
+//----------------------------------------------------------------------------------
+
+template<typename T>
+size_t ECS::count() const {
+	if constexpr (std::is_same_v<Entity, T>)
+		return entity_mgr->count();
+	else
+		return component_mgr->count<T>();
+}
+
 
 } // namespace ecs

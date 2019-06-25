@@ -46,19 +46,19 @@ void SystemMgr::removeSystem() {
 
 
 template<typename SystemT>
-SystemT& SystemMgr::getSystem() {
+SystemT& SystemMgr::get() {
 	return static_cast<SystemT&>(systems.at(SystemT::index));
 }
 
 
 template<typename SystemT>
-const SystemT& SystemMgr::getSystem() const {
+const SystemT& SystemMgr::get() const {
 	return static_cast<const SystemT&>(systems.at(SystemT::index));
 }
 
 
 template<typename SystemT>
-SystemT* SystemMgr::tryGetSystem() {
+SystemT* SystemMgr::tryGet() {
 	const auto it = systems.find(SystemT::index);
 
 	if (it != systems.end()) {
@@ -69,7 +69,7 @@ SystemT* SystemMgr::tryGetSystem() {
 
 
 template<typename SystemT>
-const SystemT* SystemMgr::tryGetSystem() const {
+const SystemT* SystemMgr::tryGet() const {
 	const auto it = systems.find(SystemT::index);
 
 	if (it != systems.end()) {

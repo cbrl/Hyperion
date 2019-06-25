@@ -57,19 +57,23 @@ public:
 
 	// Retrieve an entity using its handle
 	[[nodiscard]]
-	Entity& getEntity(handle64 handle);
+	Entity& get(handle64 handle);
 
 	// Retrieve an entity using its handle
 	[[nodiscard]]
-	const Entity& getEntity(handle64 handle) const;
+	const Entity& get(handle64 handle) const;
 
 	// Attempt to retrieve an entity given its handle. Returns nullptr if given an invalid handle.
 	[[nodiscard]]
-	Entity* tryGetEntity(handle64 handle);
+	Entity* tryGet(handle64 handle);
 
 	// Attempt to retrieve an entity given its handle. Returns nullptr if given an invalid handle.
 	[[nodiscard]]
-	const Entity* tryGetEntity(handle64 handle) const;
+	const Entity* tryGet(handle64 handle) const;
+
+	// Check if a given handle is valid
+	[[nodiscard]]
+	bool valid(handle64 handle) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -80,40 +84,36 @@ public:
 	template<typename ComponentT, typename... ArgsT>
 	ComponentT& addComponent(handle64 entity, ArgsT&& ... args);
 
-	// Get the first component of the specified type
-	template<typename ComponentT>
-	[[nodiscard]]
-	ComponentT& getComponent(handle64 entity);
-
-	// Get the first component of the specified type
-	template<typename ComponentT>
-	[[nodiscard]]
-	const ComponentT& getComponent(handle64 entity) const;
-
-	// Get the first component of the specified type, if it exists.
-	template<typename ComponentT>
-	[[nodiscard]]
-	ComponentT* tryGetComponent(handle64 entity);
-
-	// Get the first component of the specified type, if it exists.
-	template<typename ComponentT>
-	[[nodiscard]]
-	const ComponentT* tryGetComponent(handle64 entity) const;
-
-	// Check if a given handle is valid
-	[[nodiscard]]
-	bool valid(handle64 handle) const;
-
 	// Remove a component from this entity
 	template<typename ComponentT>
 	void removeComponent(handle64 entity);
 
 	void removeComponent(handle64 entity, IComponent& component);
 
+	// Get the first component of the specified type
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT& get(handle64 entity);
+
+	// Get the first component of the specified type
+	template<typename ComponentT>
+	[[nodiscard]]
+	const ComponentT& get(handle64 entity) const;
+
+	// Get the first component of the specified type, if it exists.
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT* tryGet(handle64 entity);
+
+	// Get the first component of the specified type, if it exists.
+	template<typename ComponentT>
+	[[nodiscard]]
+	const ComponentT* tryGet(handle64 entity) const;
+
 	// Check if this entity contains the specified component
 	template<typename ComponentT>
 	[[nodiscard]]
-	bool hasComponent(handle64 entity) const;
+	bool has(handle64 entity) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -130,7 +130,19 @@ public:
 
 	template<typename SystemT>
 	[[nodiscard]]
-	SystemT* tryGetSystem() const;
+	SystemT& get();
+
+	template<typename SystemT>
+	[[nodiscard]]
+	const SystemT& get() const;
+
+	template<typename SystemT>
+	[[nodiscard]]
+	SystemT* tryGet();
+
+	template<typename SystemT>
+	[[nodiscard]]
+	const SystemT* tryGet() const;
 
 	template<typename SystemT>
 	void setSystemPriority(u32 priority);
