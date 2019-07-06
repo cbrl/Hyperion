@@ -19,19 +19,8 @@ namespace Lighting {
 //----------------------------------------------------------------------------------
 
 cbuffer LightBuffer : REG_B(SLOT_CBUFFER_LIGHT) {
-	// Lights
-	uint g_num_directional_lights;
-	uint g_num_point_lights;
-	uint g_num_spot_lights;
-	uint lb_pad0;
-
-	// Shadowed Lights
-	uint g_num_shadow_directional_lights;
-	uint g_num_shadow_point_lights;
-	uint g_num_shadow_spot_lights;
-	uint lb_pad1;
-
-	float4 g_ambient_intensity;
+	float3 g_ambient_intensity;
+	float  lb_pad0;
 };
 
 
@@ -87,18 +76,27 @@ float3 CalculateLights(float3 p_world,
 
 	float3 radiance = 0.0f;
 
+	uint n_directional_lights = 0;
+	uint n_point_lights = 0;
+	uint n_spot_lights = 0;
+	uint stride_unused;
+
+	g_directional_lights.GetDimensions(n_directional_lights, stride_unused);
+	g_point_lights.GetDimensions(n_point_lights, stride_unused);
+	g_spot_lights.GetDimensions(n_spot_lights, stride_unused);
+
 	// Directional Lights
-	for (uint i0 = 0; i0 < g_num_directional_lights; ++i0) {
+	for (uint i0 = 0; i0 < n_directional_lights; ++i0) {
 		radiance += CalculateLight(g_directional_lights[i0], p_world, n, p_to_view, mat);
 	}
 
 	// Point Lights
-	for (uint i1 = 0; i1 < g_num_point_lights; ++i1) {
+	for (uint i1 = 0; i1 < n_point_lights; ++i1) {
 		radiance += CalculateLight(g_point_lights[i1], p_world, n, p_to_view, mat);
 	}
 
 	// Spot lights
-	for (uint i2 = 0; i2 < g_num_spot_lights; ++i2) {
+	for (uint i2 = 0; i2 < n_spot_lights; ++i2) {
 		radiance += CalculateLight(g_spot_lights[i2], p_world, n, p_to_view, mat);
 	}
 
@@ -114,8 +112,17 @@ float3 CalculateShadowLights(float3 p_world,
 
 	float3 radiance = 0.0f;
 
+	uint n_shadow_directional_lights = 0;
+	uint n_shadow_point_lights = 0;
+	uint n_shadow_spot_lights = 0;
+	uint stride_unused;
+
+	g_shadow_directional_lights.GetDimensions(n_shadow_directional_lights, stride_unused);
+	g_shadow_point_lights.GetDimensions(n_shadow_point_lights, stride_unused);
+	g_shadow_spot_lights.GetDimensions(n_shadow_spot_lights, stride_unused);
+
 	// Directional Lights
-	for (uint i0 = 0; i0 < g_num_shadow_directional_lights; ++i0) {
+	for (uint i0 = 0; i0 < n_shadow_directional_lights; ++i0) {
 		#ifdef DISABLE_SHADOW_MAPPING
 			radiance += CalculateLight(g_shadow_directional_lights[i0], p_world, n, p_to_view, mat);
 		#else
@@ -125,7 +132,7 @@ float3 CalculateShadowLights(float3 p_world,
 	}
 
 	// Point Lights
-	for (uint i1 = 0; i1 < g_num_shadow_point_lights; ++i1) {
+	for (uint i1 = 0; i1 < n_shadow_point_lights; ++i1) {
 		#ifdef DISABLE_SHADOW_MAPPING
 			radiance += CalculateLight(g_shadow_point_lights[i1], p_world, n, p_to_view, mat);
 		#else
@@ -135,7 +142,7 @@ float3 CalculateShadowLights(float3 p_world,
 	}
 
 	// Spot Lights
-	for (uint i2 = 0; i2 < g_num_shadow_spot_lights; ++i2) {
+	for (uint i2 = 0; i2 < n_shadow_spot_lights; ++i2) {
 		#ifdef DISABLE_SHADOW_MAPPING
 			radiance += CalculateLight(g_shadow_spot_lights[i2], p_world, n, p_to_view, mat);
 		#else
@@ -167,7 +174,7 @@ float3 CalculateLighting(float3 p_world, float3 n, Material material) {
 	float3 ambient;
 	float3 null;
 	BRDF::Lambert(0.0f, 0.0f, 0.0f, material, ambient, null);
-	ambient *= g_ambient_intensity.xyz;
+	ambient *= g_ambient_intensity;
 
 	// Calculate fog
 	#ifndef DISABLE_FOG
