@@ -165,6 +165,7 @@
     <ClCompile Include="src\resource\texture\texture_factory.cpp" />
     <ClCompile Include="src\scene\components\camera\orthographic_camera.cpp" />
     <ClCompile Include="src\scene\components\camera\perspective_camera.cpp" />
+    <ClCompile Include="src\scene\components\hierarchy\hierarchy.cpp" />
     <ClCompile Include="src\scene\components\model\model.cpp" />
     <ClCompile Include="src\scene\scene.cpp" />
     <ClCompile Include="src\scene\systems\camera\camera_system.cpp" />
@@ -233,11 +234,13 @@
     <ClInclude Include="src\scene\components\camera\orthographic_camera.h" />
     <ClInclude Include="src\scene\components\camera\perspective_camera.h" />
     <ClInclude Include="src\scene\components\core_components.h" />
+    <ClInclude Include="src\scene\components\hierarchy\hierarchy.h" />
     <ClInclude Include="src\scene\components\light\ambient_light.h" />
     <ClInclude Include="src\scene\components\light\directional_light.h" />
     <ClInclude Include="src\scene\components\light\point_light.h" />
     <ClInclude Include="src\scene\components\light\spot_light.h" />
     <ClInclude Include="src\scene\components\model\model.h" />
+    <ClInclude Include="src\scene\components\name\name.h" />
     <ClInclude Include="src\scene\components\text\text.h" />
     <ClInclude Include="src\scene\components\transform\transform.h" />
     <ClInclude Include="src\scene\entities\core_entities.h" />
@@ -270,7 +273,6 @@
     <None Include="src\resource\resource_mgr.tpp" />
     <None Include="src\resource\shader\shader.tpp" />
     <None Include="src\resource\shader\shader_factory.tpp" />
-    <None Include="src\scene\scene.tpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Assimp\Assimp.vcxproj">

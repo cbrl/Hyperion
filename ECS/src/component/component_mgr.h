@@ -1,7 +1,8 @@
 #pragma once
 
-#include "memory/resource_pool.h"
 #include "component/component.h"
+#include "memory/resource_pool.h"
+#include "datatypes/container_types.h"
 
 
 namespace ecs {
@@ -21,7 +22,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	ComponentMgr(EventMgr& handler) : event_handler(handler) {}
+	ComponentMgr(EventMgr& event_mgr);
 	ComponentMgr(const ComponentMgr& manager) = delete;
 	ComponentMgr(ComponentMgr&& manager) = default;
 
@@ -43,46 +44,60 @@ public:
 	// Member Functions - Components
 	//----------------------------------------------------------------------------------
 
+	// Construct a component and add it to the given entity
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
-	ComponentT& createComponent(ArgsT&&... args);
+	ComponentT& add(handle64 entity, ArgsT&&... args);
 
 	// Destroy a given component. The component won't actually be destroyed until the end of the ECS update.
-	void destroyComponent(IComponent& component) {
-		expired_components[component.getTypeIndex()].push_back(&component);
-	}
+	template<typename ComponentT>
+	void remove(handle64 entity);
+
+	// Destroy a given component. The component won't actually be destroyed until the end of the ECS update.
+	void remove(handle64 entity, IComponent& component);
+
+	// Destroy all components owned by the given entity
+	void removeAll(handle64 entity);
 
 	// Remove all components that were passed to destroyComponent()
-	void removeExpiredComponents() {
-		for (auto& [type, vec] : expired_components) { //for each vector of a component type
-			for (auto* ptr : vec) { //for each component in the vector
+	void removeExpiredComponents();
 
-				// Destroy the component if an associated pool exists
-				const auto it = component_pools.find(ptr->getTypeIndex());
-				if (it != component_pools.end()) {
-					it->second->remove_resource(ptr);
-				}
-				else {
-					Logger::log(
-						LogLevel::err,
-						"Could not find appropriate pool when destroying a component of type \"{}\"",
-						ptr->getTypeIndex().name()
-					);
-				}
-			}
+	// Check if the given entity owns a component of the specified type
+	template<typename ComponentT>
+	[[nodiscard]]
+	bool has(handle64 entity) const noexcept;
 
-			// Clear the vector after all components have been processed
-			vec.clear();
-		}
-	}
+	// Get a component of type ComponentT owned by the given entity
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT& get(handle64 entity);
+
+	// Get a component of type ComponentT owned by the given entity
+	template<typename ComponentT>
+	[[nodiscard]]
+	const ComponentT& get(handle64 entity) const;
+
+	// Attempt to get a component of type ComponentT owned by the give entity.
+	// Returns nullptr if the entity does not own the specified component.
+	template<typename ComponentT>
+	[[nodiscard]]
+	ComponentT* tryGet(handle64 entity);
+
+	// Attempt to get a component of type ComponentT owned by the give entity.
+	// Returns nullptr if the entity does not own the specified component.
+	template<typename ComponentT>
+	[[nodiscard]]
+	const ComponentT* tryGet(handle64 entity) const;
 
 	// Get the number of the specified component
 	template<typename ComponentT>
-	size_t countOf();
+	[[nodiscard]]
+	size_t count() const noexcept;
 
-	// Check if the component manager has created a component of this type
+	// Check if the component manager has a pool of this component type
 	template<typename ComponentT>
-	bool knowsComponent() const;
+	[[nodiscard]]
+	bool knowsComponent() const noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -103,14 +118,14 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// A reference to the event manager. Passed to systems that inherit from EventListener.
-	EventMgr& event_handler;
+	// A reference to the event manager
+	std::reference_wrapper<EventMgr> event_mgr;
 
 	// Map of unique resource pools for each type of component
-	std::unordered_map<std::type_index, std::unique_ptr<IResourcePool>> component_pools;
+	std::unordered_map<std::type_index, std::unique_ptr<IResourcePool<handle64::value_type>>> component_pools;
 
 	// A map of vectors containing components that need to be destroyed
-	std::unordered_map<std::type_index, std::vector<IComponent*>> expired_components;
+	std::unordered_map<std::type_index, std::vector<handle64>> expired_components;
 };
 
 } // namespace ecs

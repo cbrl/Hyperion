@@ -92,9 +92,6 @@
     <ClInclude Include="src\log\log.h">
       <Filter>Header Files\log</Filter>
     </ClInclude>
-    <ClInclude Include="src\memory\resource_pool.h">
-      <Filter>Header Files\memory</Filter>
-    </ClInclude>
     <ClInclude Include="src\string\string.h">
       <Filter>Header Files\string</Filter>
     </ClInclude>
@@ -269,9 +266,6 @@
     <ClInclude Include="src\log\spdlog\details\thread_pool.h">
       <Filter>Header Files\log\spdlog\details</Filter>
     </ClInclude>
-    <ClInclude Include="src\memory\handle\handle_map.h">
-      <Filter>Header Files\memory\handle</Filter>
-    </ClInclude>
     <ClInclude Include="src\log\spdlog\fmt\bundled\color.h">
       <Filter>Header Files\log\spdlog\fmt\bundled</Filter>
     </ClInclude>
@@ -293,6 +287,18 @@
     <ClInclude Include="src\time\stopwatch.h">
       <Filter>Header Files\time</Filter>
     </ClInclude>
+    <ClInclude Include="src\memory\sparse_set.h">
+      <Filter>Header Files\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\resource_pool.h">
+      <Filter>Header Files\memory</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\handle\handle_table.h">
+      <Filter>Header Files\memory\handle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\memory\handle\handle_map.h">
+      <Filter>Header Files\memory\handle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\os\windows\window.cpp">
@@ -300,12 +306,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\memory\handle\handle_map.tpp">
-      <Filter>Header Files\memory\handle</Filter>
-    </None>
     <None Include="src\time\stopwatch.tpp">
       <Filter>Header Files\time</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="src\memory\handle\handle_table.tpp">
+      <Filter>Header Files\memory\handle</Filter>
+    </None>
   </ItemGroup>
 </Project>

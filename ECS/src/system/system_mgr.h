@@ -15,7 +15,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	SystemMgr(ECS& ecs, EventMgr& handler);
+	SystemMgr(ECS& ecs);
 	SystemMgr(const SystemMgr& manager) = delete;
 	SystemMgr(SystemMgr&& manager) = default;
 
@@ -40,15 +40,28 @@ public:
 	void update(std::chrono::duration<f64> dt);
 
 	template<typename SystemT, typename... ArgsT>
-	SystemT& addSystem(ArgsT&&... args);
+	SystemT& add(ArgsT&&... args);
 
-	void removeSystem(ISystem& system);
-
-	template<typename SystemT>
-	void removeSystem();
+	void remove(ISystem& system);
 
 	template<typename SystemT>
-	SystemT* getSystem() const;
+	void remove();
+
+	template<typename SystemT>
+	[[nodiscard]]
+	SystemT& get();
+
+	template<typename SystemT>
+	[[nodiscard]]
+	const SystemT& get() const;
+
+	template<typename SystemT>
+	[[nodiscard]]
+	SystemT* tryGet();
+
+	template<typename SystemT>
+	[[nodiscard]]
+	const SystemT* tryGet() const;
 
 	// Set a system's priority. Higher priority systems get executed sooner.
 	template<typename SystemT>
@@ -75,10 +88,7 @@ private:
 	std::vector<std::reference_wrapper<ISystem>> system_queue;
 
 	// A reference to the ECS. Passed to all systems.
-	ECS& ecs;
-
-	// A reference to the event manager. Passed to systems that inherit from EventListener.
-	EventMgr& event_mgr;
+	std::reference_wrapper<ECS> ecs;
 };
 
 } // namespace ecs

@@ -44,10 +44,23 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Name
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	const std::string& getName() const noexcept {
+		return name;
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - ECS
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	ecs::ECS& getECS() noexcept {
+		return ecs;
+	}
 
 	[[nodiscard]]
-	const std::string& getName() const {
-		return name;
+	const ecs::ECS& getECS() const noexcept {
+		return ecs;
 	}
 
 
@@ -55,63 +68,15 @@ public:
 	// Member Functions - Entities
 	//----------------------------------------------------------------------------------
 
-	// Add an entity to this scene
+	// Add an entity to this scene and apply the given template to it
 	template<typename TemplateT = EntityTemplates::WorldObjectT, typename... ArgsT>
-	ecs::EntityPtr addEntity(ArgsT&&... args);
+	handle64 createEntity(ArgsT&& ... args) {
+		auto handle = ecs.create();
 
-	// Remove an entity from this scene
-	void removeEntity(ecs::EntityPtr entity);
-
-	// Remove an entity from this scene
-	void removeEntity(ecs::Entity& entity);
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Systems
-	//----------------------------------------------------------------------------------
-
-	template<typename SystemT, typename... ArgsT>
-	SystemT& addSystem(ArgsT&&... args);
-
-	void removeSystem(ecs::ISystem& system);
-
-	template <typename SystemT>
-	void removeSystem();
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Events
-	//----------------------------------------------------------------------------------
-	template<typename EventT, typename... ArgsT>
-	void sendEvent(ArgsT&&... args);
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions - Iteration
-	//----------------------------------------------------------------------------------
-
-	// Do something with each entity with a component of type ComponentT.
-	// Providing no template arguments will apply the action to every entity.
-	template<typename... ComponentT>
-	void forEach(const std::function<void(ecs::Entity&)>& act);
-
-	// Do something with each entity with a component of type ComponentT.
-	// Providing no template arguments will apply the action to every entity.
-	template<typename... ComponentT>
-	void forEach(const std::function<void(const ecs::Entity&)>& act) const;
-
-	// Do something with each component of type ComponentT
-	template<typename ComponentT>
-	void forEach(const std::function<void(ComponentT&)>& act);
-
-	// Do something with each component of type ComponentT
-	template<typename ComponentT>
-	void forEach(const std::function<void(const ComponentT&)>& act) const;
-
-	// Get the number of entities or the specified type of component
-	template<typename T>
-	[[nodiscard]]
-	size_t countOf() const;
+		TemplateT t;
+		t(ecs, handle, std::forward<ArgsT>(args)...);
+		return handle;
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -120,10 +85,10 @@ public:
 
 	// Import a model blueprint under a new entity
 	[[nodiscard]]
-	ecs::EntityPtr importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
+	handle64 importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
 
 	// Import a model blueprint under an existing entity
-	void importModel(const ecs::EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
+	void importModel(handle64 handle, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
 
 
 protected:
@@ -131,15 +96,10 @@ protected:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
-	Scene()
-		: name("Scene")
-	    , ecs(std::make_unique<ecs::ECS>()) {
+	Scene() : name("Scene") {
 	}
 
-	Scene(std::string name)
-		: name(std::move(name))
-	    , ecs(std::make_unique<ecs::ECS>()) {
+	Scene(std::string name) : name(std::move(name)) {
 	}
 
 	Scene(Scene&& scene) = default;
@@ -176,9 +136,7 @@ private:
 	std::string name;
 
 	// The ECS engine for this scene
-	std::unique_ptr<ecs::ECS> ecs;
+	ecs::ECS ecs;
 };
 
 } //namespace render
-
-#include "scene.tpp"

@@ -6,12 +6,16 @@
 #include "buffer/constant_buffer.h"
 
 class Model;
+class Transform;
+
+namespace ecs {
+	class ECS;
+}
 
 namespace render {
 
 class RenderStateMgr;
 class ResourceMgr;
-class Scene;
 
 class DepthPass final {
 public:
@@ -45,11 +49,11 @@ public:
 	//----------------------------------------------------------------------------------
 	void bindState() const;
 
-	void XM_CALLCONV render(const Scene& scene,
+	void XM_CALLCONV render(const ecs::ECS& ecs,
 	                        FXMMATRIX world_to_camera,
 	                        CXMMATRIX camera_to_projection) const;
 
-	void XM_CALLCONV renderShadows(const Scene& scene,
+	void XM_CALLCONV renderShadows(const ecs::ECS& ecs,
 	                               FXMMATRIX world_to_camera,
 	                               CXMMATRIX camera_to_projection) const;
 
@@ -60,7 +64,7 @@ private:
 
 	void XM_CALLCONV updateCamera(FXMMATRIX world_to_camera, CXMMATRIX camera_to_projection) const;
 
-	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV renderModel(const Model& model, const Transform& transform, FXMMATRIX world_to_projection) const;
 
 	
 	//----------------------------------------------------------------------------------

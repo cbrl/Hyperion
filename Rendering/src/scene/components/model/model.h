@@ -38,8 +38,8 @@ public:
 	      const BoundingSphere& sphere,
 	      const std::shared_ptr<render::ModelBlueprint>& bp);
 
-	Model(const Model& model) = delete;
-	Model(Model&& model) = default;
+	Model(const Model&) = delete;
+	Model(Model&&) = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -51,8 +51,8 @@ public:
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-	Model& operator=(const Model& model) = delete;
-	Model& operator=(Model&& model) = default;
+	Model& operator=(const Model&) = delete;
+	Model& operator=(Model&&) = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -60,7 +60,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void bindMesh(ID3D11DeviceContext& device_context) const {
-		mesh.bind(device_context);
+		mesh.get().bind(device_context);
 	}
 
 	template<typename StageT>
@@ -87,12 +87,12 @@ public:
 
 	[[nodiscard]]
 	u32 getVertexCount() const noexcept {
-		return mesh.getVertexCount();
+		return mesh.get().getVertexCount();
 	}
 
 	[[nodiscard]]
 	u32 getIndexCount() const noexcept {
-		return mesh.getIndexCount();
+		return mesh.get().getIndexCount();
 	}
 
 
@@ -158,10 +158,10 @@ private:
 	render::ConstantBuffer<render::ModelBuffer> buffer;
 
 	// The mesh that the model refers to
-	const render::Mesh& mesh;
+	std::reference_wrapper<const render::Mesh> mesh;
 
 	// The material that the model refers to
-	render::Material& material;
+	std::reference_wrapper<render::Material> material;
 
 	// The bounding volumes of the model
 	AABB aabb;

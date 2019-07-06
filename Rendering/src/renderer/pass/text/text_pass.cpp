@@ -9,28 +9,25 @@ TextPass::TextPass(ID3D11DeviceContext& device_context) {
 }
 
 
-void TextPass::render(Scene& scene) const {
+void TextPass::render(const ecs::ECS& ecs) const {
+	ecs.forEach<Transform, Text>([&](handle64 entity) {
+		const auto& transform = ecs.get<Transform>(entity);
+		const auto& text      = ecs.get<Text>(entity);
 
-	scene.forEach<Transform, Text>([&](const ecs::Entity& entity) {
-		const auto& transform = *entity.getComponent<Transform>();
-		const auto  texts     = entity.getAll<Text>();
+		if (!text.isActive())
+			return;
 
-		for (const Text& text : texts) {
-			if (!text.isActive())
-				continue;
+		const auto& font = text.getFont();
 
-			const auto& font = text.getFont();
-
-			sprite_batch->Begin();
-			font.DrawString(sprite_batch.get(),
-			                text.getText().c_str(),
-			                transform.getPosition(),
-			                text.getColor(),
-			                XMVectorGetZ(transform.getRotation()),
-			                XMVectorZero(),
-			                transform.getScale());
-			sprite_batch->End();
-		}
+		sprite_batch->Begin();
+		font.DrawString(sprite_batch.get(),
+			            text.getText().c_str(),
+			            transform.getPosition(),
+			            text.getColor(),
+			            XMVectorGetZ(transform.getRotation()),
+			            XMVectorZero(),
+			            transform.getScale());
+		sprite_batch->End();
 	});
 }
 

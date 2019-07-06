@@ -14,64 +14,54 @@ void Scene::load(Engine& engine) {
 void Scene::addCoreSystems(const Engine& engine) {
 
 	// Transform system: updates transform components when they're modified
-	ecs->addSystem<systems::TransformSystem>();
+	ecs.add<systems::TransformSystem>();
 
 	// Camera system: updates the buffers of camera components
-	ecs->addSystem<systems::CameraSystem>(engine.getRenderingMgr());
+	ecs.add<systems::CameraSystem>(engine.getRenderingMgr());
 
 	// Model system: updates the buffers of model components
-	ecs->addSystem<systems::ModelSystem>(engine.getRenderingMgr());
-}
-
-
-void Scene::removeEntity(ecs::EntityPtr entity) {
-	if (entity) {
-		ecs->destroyEntity(entity.getHandle());
-	}
-}
-
-
-void Scene::removeEntity(ecs::Entity& entity) {
-	ecs->destroyEntity(entity.getPtr().getHandle());
-}
-
-
-void Scene::removeSystem(ecs::ISystem& system) {
-	ecs->removeSystem(system);
+	ecs.add<systems::ModelSystem>(engine.getRenderingMgr());
 }
 
 
 void Scene::tick(Engine& engine) {
-	ecs->update(engine.getTimer().deltaTime());
+	ecs.update(engine.getTimer().deltaTime());
 	this->update(engine);
 }
 
 
-ecs::EntityPtr Scene::importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
-	ecs::EntityPtr ptr = addEntity();
-	importModel(ptr, device, blueprint);
-	return ptr;
+handle64 Scene::importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
+	auto handle = createEntity();
+	importModel(handle, device, blueprint);
+	return handle;
 }
 
 
-void Scene::importModel(const ecs::EntityPtr& ptr, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
+void Scene::importModel(handle64 handle, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
+	if (not ecs.valid(handle))
+		return;
 
-	std::function<void(ecs::Entity&, const std::shared_ptr<ModelBlueprint>&, const ModelBlueprint::Node&)> process_node =
-	    [&](ecs::Entity& entity, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
+	if (not ecs.has<Hierarchy>(handle))
+		ecs.add<Hierarchy>(handle);
+
+	std::function<void(handle64, const std::shared_ptr<ModelBlueprint>&, const ModelBlueprint::Node&)> process_node =
+	    [&](handle64 handle, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
 			// Construct each model at this node
 			for (const u32 index : bp_node.mesh_indices) {
-			    entity.addComponent<Model>(device, bp, index);
+				auto child = createEntity<EntityTemplates::HierarchyT>();
+				ecs.get<Hierarchy>(handle).addChild(ecs, child);
+				ecs.add<Model>(child, device, bp, index);
 			}
 
 			// Add a child entity for each child node
 			for (auto& node : bp_node.child_nodes) {
-			    auto child = addEntity();
-			    entity.addChild(child);
-				process_node(*child, bp, node);
+			    auto child_root = createEntity();
+				ecs.get<Hierarchy>(handle).addChild(ecs, child_root);
+				process_node(child_root, bp, node);
 			}
 		};
 
-	process_node(*ptr, blueprint, blueprint->root);
+	process_node(handle, blueprint, blueprint->root);
 }
 
 } //namespace render

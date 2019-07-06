@@ -45,10 +45,10 @@ void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMAT
 	buffer_data.world_inv_transpose = world_inv_t;
 	buffer_data.texTransform        = XMMatrixIdentity();
 
-	buffer_data.mat.base_color = material.params.base_color;
-	buffer_data.mat.metalness  = material.params.metalness;
-	buffer_data.mat.roughness  = material.params.roughness;
-	buffer_data.mat.emissive   = material.params.emissive;
+	buffer_data.mat.base_color = material.get().params.base_color;
+	buffer_data.mat.metalness  = material.get().params.metalness;
+	buffer_data.mat.roughness  = material.get().params.roughness;
+	buffer_data.mat.emissive   = material.get().params.emissive;
 
 	buffer.updateData(device_context, buffer_data);
 }

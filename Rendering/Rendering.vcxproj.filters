@@ -195,6 +195,15 @@
     <Filter Include="Source Files\directx\profiler">
       <UniqueIdentifier>{5172072a-ad06-4714-a9dd-99b4656c9381}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene\components\hierarchy">
+      <UniqueIdentifier>{5f9c62d0-38dc-45ed-8675-21be0269fd64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\components\name">
+      <UniqueIdentifier>{5073980f-eaeb-481f-af20-f4a16ae37291}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\components\hierarchy">
+      <UniqueIdentifier>{226bbf75-9cdb-4722-93b2-b51a6401ec5f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -328,6 +337,9 @@
     </ClCompile>
     <ClCompile Include="src\directx\profiler\gpu_profiler.cpp">
       <Filter>Source Files\directx\profiler</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\hierarchy\hierarchy.cpp">
+      <Filter>Source Files\scene\components\hierarchy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -541,9 +553,6 @@
     <ClInclude Include="src\exporter\texture_exporter.h">
       <Filter>Header Files\exporter</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\systems\core_systems.h">
-      <Filter>Header Files\scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\scene\systems\picking\picking_system.h">
       <Filter>Header Files\scene\systems\picking</Filter>
     </ClInclude>
@@ -558,6 +567,15 @@
     </ClInclude>
     <ClInclude Include="src\directx\profiler\gpu_profiler.h">
       <Filter>Header Files\directx\profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\core_systems.h">
+      <Filter>Header Files\scene\systems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\hierarchy\hierarchy.h">
+      <Filter>Header Files\scene\components\hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\components\name\name.h">
+      <Filter>Header Files\scene\components\name</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -582,9 +600,6 @@
     </None>
     <None Include="src\resource\model\model_blueprint.tpp">
       <Filter>Header Files\resource\model</Filter>
-    </None>
-    <None Include="src\scene\scene.tpp">
-      <Filter>Header Files\scene</Filter>
     </None>
     <None Include="src\resource\shader\shader_factory.tpp">
       <Filter>Header Files\resource\shader</Filter>

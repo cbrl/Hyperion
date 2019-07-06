@@ -1,78 +1,350 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
-#include "exception/exception.h"
-#include "log/log.h"
-#include <memory_resource>
-
+#include "memory/sparse_set.h"
 
 //----------------------------------------------------------------------------------
 // ResourcePool
 //----------------------------------------------------------------------------------
 //
-// Constructs resources of type T using a std::list with the
-// std::pmr::synchronized_pool_resource memory resource.
+// Associates a handle (unsigned integer) with a resource. Resources are stored in
+// contiguous blocks of memory. Creating a new resource does not invalidate iterators.
+// The current resource, and only the current, can be safely deleted while iterating. 
+// Pointers and references are invalidated upon modifying the container.
 //
 //----------------------------------------------------------------------------------
 
+
+template<typename HandleT>
 class IResourcePool {
 public:
+	//----------------------------------------------------------------------------------
+	// Destructor 
+	//----------------------------------------------------------------------------------
 	virtual ~IResourcePool() = default;
 
-	// Remove a resource referenced to by its pointer
-	virtual void remove_resource(void* resource) = 0;
+	//----------------------------------------------------------------------------------
+	// Member Functions - Modifiers
+	//----------------------------------------------------------------------------------
+	virtual void erase(HandleT resource_idx) = 0;
+	virtual void clear() noexcept = 0;
 
-protected:
-	std::pmr::synchronized_pool_resource pool_resource;
+	//----------------------------------------------------------------------------------
+	// Member Functions - Access
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	virtual bool contains(HandleT val) const noexcept = 0;
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Capacity
+	//----------------------------------------------------------------------------------
+	virtual void reserve(size_t new_cap) = 0;
+	virtual void shrink_to_fit() = 0;
 };
 
-template <typename T>
-class ResourcePool final : public IResourcePool, private std::pmr::list<T> {
-	using container_type = std::pmr::list<T>;
+
+template<typename HandleT, typename ResourceT>
+class ResourcePool final: public IResourcePool<HandleT> {
+	using sparse_set_type        = SparseSet<HandleT>;
+	using container_type         = std::vector<ResourceT>;
 
 public:
-	ResourcePool() : container_type(&pool_resource) {}
+
+	using handle_type            = HandleT;
+	using value_type             = ResourceT;
+	using pointer                = ResourceT*;
+	using const_pointer          = const ResourceT*;
+	using reference              = ResourceT&;
+	using const_reference        = const ResourceT&;
+	using size_type              = size_t;
+	using difference_type        = ptrdiff_t;
+
 
 	//----------------------------------------------------------------------------------
-	// Modifiers
+	// Iterator
 	//----------------------------------------------------------------------------------
-	using container_type::emplace_front;
-	using container_type::emplace_back;
+	template<bool ConstIter>
+	class iterator_t {
+		friend class ResourcePool<HandleT, ResourceT>;
+
+		using container_type = std::conditional_t<
+			ConstIter,
+			const typename ResourcePool<HandleT, ResourceT>::container_type,
+			typename ResourcePool<HandleT, ResourceT>::container_type
+		>;
+
+		iterator_t(container_type& resources, difference_type idx) noexcept
+			: resources(&resources)
+			, index(idx) {
+		}
+
+	public:
+
+		using difference_type   = ptrdiff_t;
+		using size_type         = size_t;
+		using value_type        = std::conditional_t<ConstIter, const typename container_type::value_type, typename container_type::value_type>;
+		using pointer           = std::conditional_t<ConstIter, typename container_type::const_pointer, typename container_type::pointer>;
+		using reference         = std::conditional_t<ConstIter, typename container_type::const_reference, typename container_type::reference>;
+		using iterator_category = std::random_access_iterator_tag;
+
+		iterator_t() noexcept = default;
+		iterator_t(iterator_t&) noexcept = default;
+		iterator_t(iterator_t&&) noexcept = default;
+
+		~iterator_t() = default;
+
+		iterator_t& operator=(iterator_t&) noexcept = default;
+		iterator_t& operator=(iterator_t&&) noexcept = default;
+
+		[[nodiscard]]
+		reference operator*() const {
+			return *operator->();
+		}
+
+		[[nodiscard]]
+		pointer operator->() const {
+			const auto pos = static_cast<size_type>(index - 1);
+			return &(*resources)[pos];
+		}
+
+		[[nodiscard]]
+		reference operator[](difference_type value) const {
+			const auto pos = static_cast<size_type>(index - value - 1);
+			return (*resources)[pos];
+		}
+
+		[[nodiscard]]
+		iterator_t operator+(difference_type value) const {
+			return iterator_t{*resources, index - value};
+		}
+
+		iterator_t& operator++() {
+			--index;
+			return *this;
+		}
+
+		iterator_t operator++(int) {
+			iterator_t old = *this;
+			++(*this);
+			return old;
+		}
+
+		[[nodiscard]]
+		iterator_t& operator+=(difference_type value) {
+			index -= value;
+			return *this;
+		}
+
+		[[nodiscard]]
+		iterator_t operator-(difference_type value) const {
+			return (*this + -value);
+		}
+
+		[[nodiscard]]
+		difference_type operator-(const iterator_t& other) const {
+			return other.index - index;
+		}
+
+		iterator_t& operator--() {
+			++index;
+			return *this;
+		}
+
+		iterator_t operator--(int) {
+			iterator_t old = *this;
+			--(*this);
+			return old;
+		}
+
+		[[nodiscard]]
+		iterator_t& operator-=(difference_type value) {
+			return (*this += -value);
+		}
+
+		[[nodiscard]]
+		bool operator==(const iterator_t& other) const {
+			return other.index == index;
+		}
+
+		[[nodiscard]]
+		bool operator!=(const iterator_t& other) const {
+			return !(*this == other);
+		}
+
+		[[nodiscard]]
+		bool operator<(const iterator_t& other) const {
+			return index > other.index;
+		}
+
+		[[nodiscard]]
+		bool operator>(const iterator_t& other) const {
+			return index < other.index;
+		}
+
+		[[nodiscard]]
+		bool operator<=(const iterator_t& other) const {
+			return !(*this > other);
+		}
+
+		[[nodiscard]]
+		bool operator>=(const iterator_t& other) const {
+			return !(*this < other);
+		}
+
+	private:
+
+		container_type* resources;
+		difference_type index;
+	};
 
 	//----------------------------------------------------------------------------------
-	// Operations
+	// Iterator aliases
 	//----------------------------------------------------------------------------------
+	using iterator       = iterator_t<false>;
+	using const_iterator = iterator_t<true>;
 
-	// Remove a resource referenced to by its pointer
-	void remove_resource(void* resource) {
-		const auto num_removed = this->remove_if([resource](T& element) {
-			return &element == resource;
-		});
-		if (num_removed == 0)
-			Logger::log(LogLevel::warn, "ResourcePool::remove_resource() found no object to remove");
+
+	//----------------------------------------------------------------------------------
+	// Constructors
+	//----------------------------------------------------------------------------------
+	ResourcePool() = default;
+	ResourcePool(const ResourcePool&) = default;
+	ResourcePool(ResourcePool&&) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	virtual ~ResourcePool() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	ResourcePool& operator=(const ResourcePool&) = default;
+	ResourcePool& operator=(ResourcePool&&) = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Modifiers
+	//----------------------------------------------------------------------------------
+	template<typename... ArgsT>
+	[[nodiscard]]
+	reference construct(handle_type resource_idx, ArgsT&& ... args) {
+		assert(!contains(resource_idx));
+		resources.emplace_back(std::forward<ArgsT>(args)...);
+		sparse_set.insert(resource_idx);
+		return resources.back();
 	}
 
-	// Remove a resource referenced to by its pointer
-	void remove_resource(T& resource) {
-		remove_resource(&resource);
+	virtual void erase(handle_type resource_idx) override {
+		assert(contains(resource_idx));
+		auto&& back = std::move(resources.back());
+		resources[sparse_set.index_of(resource_idx)] = std::move(back);
+		resources.pop_back();
+		sparse_set.erase(resource_idx);
 	}
 
-	//----------------------------------------------------------------------------------
-	// Iterators
-	//----------------------------------------------------------------------------------
-	using container_type::begin;
-	using container_type::cbegin;
-	using container_type::rbegin;
-	using container_type::crbegin;
-	using container_type::end;
-	using container_type::cend;
-	using container_type::rend;
-	using container_type::crend;
+	virtual void clear() noexcept override {
+		sparse_set.clear();
+		resources.clear();
+	}
+
 
 	//----------------------------------------------------------------------------------
-	// Capacity
+	// Member Functions - Access
 	//----------------------------------------------------------------------------------
-	using container_type::empty;
-	using container_type::size;
-	using container_type::max_size;
+	[[nodiscard]]
+	bool contains(handle_type resource_idx) const noexcept {
+		return sparse_set.contains(resource_idx);
+	}
+
+	[[nodiscard]]
+	reference get(handle_type resource_idx) {
+		assert(contains(resource_idx));
+		const auto idx = sparse_set.index_of(resource_idx);
+		return resources[idx];
+	}
+
+	[[nodiscard]]
+	const_reference get(handle_type resource_idx) const {
+		assert(contains(resource_idx));
+		const auto idx = sparse_set.index_of(resource_idx);
+		return resources[idx];
+	}
+
+	[[nodiscard]]
+	pointer data() noexcept {
+		return resources.data();
+	}
+
+	[[nodiscard]]
+	const_pointer data() const noexcept {
+		return resources.data();
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Iterators
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	iterator begin() noexcept {
+		const auto end = static_cast<typename iterator::difference_type>(resources.size());
+		return iterator{resources, end};
+	}
+
+	[[nodiscard]]
+	const_iterator begin() const noexcept {
+		const auto end = static_cast<typename iterator::difference_type>(resources.size());
+		return const_iterator{resources, end};
+	}
+
+	[[nodiscard]]
+	const_iterator cbegin() const noexcept {
+		const auto end = static_cast<typename iterator::difference_type>(resources.size());
+		return const_iterator{resources, end};
+	}
+
+	[[nodiscard]]
+	iterator end() noexcept {
+		return iterator{resources, 0};
+	}
+
+	[[nodiscard]]
+	const_iterator end() const noexcept {
+		return const_iterator{resources, 0};
+	}
+
+	[[nodiscard]]
+	const_iterator cend() const noexcept {
+		return const_iterator{resources, 0};
+	}
+
+
+	//----------------------------------------------------------------------------------
+	// Member Functions - Capacity
+	//----------------------------------------------------------------------------------
+	[[nodiscard]]
+	bool empty() const noexcept {
+		return resources.empty();
+	}
+
+	[[nodiscard]]
+	size_type size() const noexcept {
+		return resources.size();
+	}
+
+	virtual void reserve(size_type new_cap) override {
+		sparse_set.reserve(new_cap);
+		resources.reserve(new_cap);
+	}
+
+	virtual void shrink_to_fit() override {
+		sparse_set.shrink_to_fit();
+		resources.shrink_to_fit();
+	}
+
+private:
+
+	sparse_set_type sparse_set;
+	container_type  resources;
 };

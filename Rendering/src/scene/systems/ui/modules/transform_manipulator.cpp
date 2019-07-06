@@ -9,26 +9,35 @@ TransformManipulator::TransformManipulator(Input& input, KeyConfig& key_config)
 	key_config.bindIfNotBound("ObjScale",     Keyboard::Y);
 }
 
-void TransformManipulator::draw(Engine& engine, ecs::EntityPtr selected_entity) {
+void TransformManipulator::draw(Engine& engine, handle64 selected_entity) {
 	if (!selected_entity) {
 		return;
 	}
 
-	auto& scene = engine.getScene();
+	auto& ecs = engine.getScene().getECS();
 
 	// Draw transform manipulation tool. Only for the primary camera since it
 	// doesn't work well when drawing multiple transform tools at once.
-	if (auto* transform = selected_entity->getComponent<Transform>()) {
+	if (auto* transform = ecs.tryGet<Transform>(selected_entity)) {
+		if (not transform->isActive())
+			return;
+
 		bool first = true;
-		scene.forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
+		ecs.forEach<PerspectiveCamera, Transform>([&](handle64 entity) {
 			if (first) {
-				drawTransformManipulator(*transform, camera);
+				auto& camera          = ecs.get<PerspectiveCamera>(entity);
+				auto& camera_tranform = ecs.get<Transform>(entity);
+
+				drawTransformManipulator(ecs, *transform, camera, camera_tranform);
 				first = false;
 			}
 		});
-		scene.forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
+		ecs.forEach<OrthographicCamera, Transform>([&](handle64 entity) {
 			if (first) {
-				drawTransformManipulator(*transform, camera);
+				auto& camera          = ecs.get<PerspectiveCamera>(entity);
+				auto& camera_tranform = ecs.get<Transform>(entity);
+
+				drawTransformManipulator(ecs, *transform, camera, camera_tranform);
 				first = false;
 			}
 		});
@@ -37,17 +46,7 @@ void TransformManipulator::draw(Engine& engine, ecs::EntityPtr selected_entity) 
 
 
 template<typename CameraT>
-void TransformManipulator::drawTransformManipulator(Transform& transform, CameraT& camera) {
-
-	// Active check
-	if (!transform.isActive())
-		return;
-
-	// Get camera transform
-	const auto* camera_transform = camera.getOwner()->getComponent<Transform>();
-	if (!camera_transform)
-		return;
-
+void TransformManipulator::drawTransformManipulator(ecs::ECS& ecs, Transform& transform, const CameraT& camera, const Transform& camera_transform) {
 	// Set orthographic mode for ortho camera
 	if constexpr (std::is_same_v<CameraT, OrthographicCamera>) {
 		ImGuizmo::SetOrthographic(true);
@@ -59,7 +58,7 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 	//----------------------------------------------------------------------------------
 	// Matrices
 	//----------------------------------------------------------------------------------
-	const XMMATRIX world_to_camera      = camera_transform->getWorldToObjectMatrix();
+	const XMMATRIX world_to_camera      = camera_transform.getWorldToObjectMatrix();
 	const XMMATRIX camera_to_projection = camera.getCameraToProjectionMatrix();
 
 	XMFLOAT4X4 view;
@@ -101,20 +100,21 @@ void TransformManipulator::drawTransformManipulator(Transform& transform, Camera
 		f32_3 rotation;
 		f32_3 scale;
 
-		if (!transform.getOwner()->hasParent()) {
-			ImGuizmo::DecomposeMatrixToComponents(&matrix.m[0][0], translation.data(), rotation.data(), scale.data());
-		}
-		else {
-			// If the transform is a child of another, then the matrix needs to be multiplied by the inverse of
-			// the parent's matrix to obtain the local transformation.
-			auto* parent_transform = transform.getOwner()->getParent()->getComponent<Transform>();
+		if (auto* hierarchy = ecs.tryGet<Hierarchy>(transform.getOwner());
+		    hierarchy && ecs.has<Transform>(hierarchy->getParent())) {
+			// If the transform is a child of another, then the matrix needs to be multiplied by
+			// the inverse of the parent's matrix to obtain the local transformation.
+			auto& parent_transform = ecs.get<Transform>(hierarchy->getParent());
 
-			const XMMATRIX world_to_parent  = parent_transform->getWorldToObjectMatrix();
+			const XMMATRIX world_to_parent = parent_transform.getWorldToObjectMatrix();
 			const XMMATRIX object_to_parent = XMLoadFloat4x4(&matrix) * world_to_parent;
 			XMFLOAT4X4 new_matrix;
 			XMStoreFloat4x4(&new_matrix, object_to_parent);
 
 			ImGuizmo::DecomposeMatrixToComponents(&new_matrix.m[0][0], translation.data(), rotation.data(), scale.data());
+		}
+		else {
+			ImGuizmo::DecomposeMatrixToComponents(&matrix.m[0][0], translation.data(), rotation.data(), scale.data());
 		}
 
 		// ImGuizmo outputs rotation in degrees

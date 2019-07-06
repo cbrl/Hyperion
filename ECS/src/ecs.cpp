@@ -1,34 +1,41 @@
 #include "ecs.h"
-
+#include "event/event_mgr.h"
+#include "system/system_mgr.h"
+#include "component/component_mgr.h"
+#include "entity/entity_mgr.h"
 
 namespace ecs {
 
 ECS::ECS() {
 	event_mgr     = std::make_unique<EventMgr>();
-	system_mgr    = std::make_unique<SystemMgr>(*this, *event_mgr);
-	component_mgr = std::make_shared<ComponentMgr>(*event_mgr);
-	entity_mgr    = std::make_unique<EntityMgr>(component_mgr, *event_mgr);
+	system_mgr    = std::make_unique<SystemMgr>(*this);
+	component_mgr = std::make_unique<ComponentMgr>(*event_mgr);
+	entity_mgr    = std::make_unique<EntityMgr>(*component_mgr, *event_mgr);
 }
 
 
-ECS::~ECS() {
-	entity_mgr.reset();
-	component_mgr.reset();
+handle64 ECS::create() {
+	return entity_mgr->create();
 }
 
 
-EntityPtr ECS::createEntity() {
-	return entity_mgr->createEntity();
-}
-
-
-void ECS::destroyEntity(handle64 entity) {
+void ECS::destroy(handle64 entity) {
 	entity_mgr->destroyEntity(entity);
 }
 
 
-void ECS::removeSystem(ISystem& system) {
-	system_mgr->removeSystem(system);
+bool ECS::valid(handle64 handle) const {
+	return entity_mgr->valid(handle);
+}
+
+
+void ECS::remove(handle64 entity, IComponent& component) {
+	component_mgr->remove(entity, component);
+}
+
+
+void ECS::remove(ISystem& system) {
+	system_mgr->remove(system);
 }
 
 

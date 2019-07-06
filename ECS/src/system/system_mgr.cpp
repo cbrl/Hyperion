@@ -3,13 +3,12 @@
 
 namespace ecs {
 
-SystemMgr::SystemMgr(ECS& ecs, EventMgr& mgr)
-    : ecs(ecs)
-	, event_mgr(mgr) {
+SystemMgr::SystemMgr(ECS& ecs)
+    : ecs(ecs) {
 }
 
 
-void SystemMgr::removeSystem(ISystem& system) {
+void SystemMgr::remove(ISystem& system) {
 	systems.erase(system.getTypeIndex());
 
 	const auto it = std::find_if(system_queue.begin(), system_queue.end(),

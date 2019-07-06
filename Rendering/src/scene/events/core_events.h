@@ -1,7 +1,7 @@
 #pragma once
 
 #include "event/event.h"
-#include "entity/entity.h"
+#include "memory/handle/handle.h"
 #include "datatypes/datatypes.h"
 
 class Transform;
@@ -38,11 +38,11 @@ struct GuiFocusEvent : public ecs::Event<GuiFocusEvent> {
 // Entity Selected
 //----------------------------------------------------------------------------------
 struct EntitySelectedEvent : public ecs::Event<EntitySelectedEvent> {
-	EntitySelectedEvent(ecs::EntityPtr entity)
+	EntitySelectedEvent(handle64 entity)
 		: entity(std::move(entity)) {
 	}
 
-	const ecs::EntityPtr entity;
+	const handle64 entity;
 };
 
 } //namespace render::events

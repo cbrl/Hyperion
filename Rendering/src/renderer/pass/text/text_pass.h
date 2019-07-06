@@ -5,6 +5,10 @@
 #include "datatypes/datatypes.h"
 
 
+namespace ecs {
+	class ECS;
+}
+
 namespace render {
 
 class Scene;
@@ -32,7 +36,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void render(Scene& scene) const;
+	void render(const ecs::ECS& ecs) const;
 
 private:
 

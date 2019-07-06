@@ -146,10 +146,9 @@
   <ItemGroup>
     <ClInclude Include="src\component\component.h" />
     <ClInclude Include="src\component\component_mgr.h" />
+    <ClInclude Include="src\component\resource_pool.h" />
     <ClInclude Include="src\ecs.h" />
-    <ClInclude Include="src\entity\entity.h" />
     <ClInclude Include="src\entity\entity_mgr.h" />
-    <ClInclude Include="src\entity\entity_ptr.h" />
     <ClInclude Include="src\event\event.h" />
     <ClInclude Include="src\event\event_delegate.h" />
     <ClInclude Include="src\event\event_dispatcher.h" />
@@ -159,10 +158,9 @@
     <ClInclude Include="src\system\system_mgr.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\component\component_mgr.cpp" />
     <ClCompile Include="src\ecs.cpp" />
-    <ClCompile Include="src\entity\entity.cpp" />
     <ClCompile Include="src\entity\entity_mgr.cpp" />
-    <ClCompile Include="src\entity\entity_ptr.cpp" />
     <ClCompile Include="src\event\event_mgr.cpp" />
     <ClCompile Include="src\event\event_participator.cpp" />
     <ClCompile Include="src\system\system_mgr.cpp" />
@@ -170,7 +168,6 @@
   <ItemGroup>
     <None Include="src\component\component_mgr.tpp" />
     <None Include="src\ecs.tpp" />
-    <None Include="src\entity\entity.tpp" />
     <None Include="src\event\event_dispatcher.tpp" />
     <None Include="src\event\event_mgr.tpp" />
     <None Include="src\event\event_participator.tpp" />

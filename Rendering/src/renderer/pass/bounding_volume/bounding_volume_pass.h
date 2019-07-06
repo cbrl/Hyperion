@@ -4,11 +4,16 @@
 #include "resource/shader/shader.h"
 #include "geometry/bounding_volume/bounding_volume.h"
 
+class Transform;
+
+namespace ecs {
+	class ECS;
+}
+
 namespace render {
 
 class RenderStateMgr;
 class ResourceMgr;
-class Scene;
 
 class BoundingVolumePass final {
 public:
@@ -36,12 +41,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void XM_CALLCONV render(const Scene& scene, FXMMATRIX world_to_projection, const f32_4& color) const;
+	void XM_CALLCONV render(const ecs::ECS& ecs, FXMMATRIX world_to_projection, const f32_4& color) const;
 
 private:
 
 	void bindRenderStates() const;
-	void XM_CALLCONV renderAABB(const AABB& aabb, FXMMATRIX object_to_world) const;
+	void XM_CALLCONV renderAABB(const AABB& aabb, const Transform& transform, FXMMATRIX world_to_projection) const;
 
 
 	//----------------------------------------------------------------------------------

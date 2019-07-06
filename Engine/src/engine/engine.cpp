@@ -182,7 +182,7 @@ void Engine::init(std::wstring title,
 
 			const u32_2 size = window->getClientSize();
 			if (scene) {
-				scene->sendEvent<render::events::WindowResizeEvent>(size);
+				scene->getECS().sendEvent<render::events::WindowResizeEvent>(size);
 			}
 			Logger::log(LogLevel::info, "Window resized to {}x{}", size[0], size[1]);
 		};

@@ -207,8 +207,10 @@
     <ClInclude Include="src\log\spdlog\version.h" />
     <ClInclude Include="src\memory\handle\handle.h" />
     <ClInclude Include="src\memory\handle\handle_map.h" />
+    <ClInclude Include="src\memory\handle\handle_table.h" />
     <ClInclude Include="src\memory\managed_resource_map.h" />
     <ClInclude Include="src\memory\resource_pool.h" />
+    <ClInclude Include="src\memory\sparse_set.h" />
     <ClInclude Include="src\os\windows\window.h" />
     <ClInclude Include="src\os\windows\windows.h" />
     <ClInclude Include="src\os\windows\win_utils.h" />
@@ -222,7 +224,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="src\memory\handle\handle_map.tpp" />
+    <None Include="src\memory\handle\handle_table.tpp" />
     <None Include="src\time\stopwatch.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

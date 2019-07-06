@@ -41,5 +41,5 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	ecs::EntityPtr scene_name_text;
+	handle64 scene_name_text;
 };

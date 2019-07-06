@@ -1,9 +1,15 @@
 #pragma once
 
 #include "selectable_tree.h"
+#include "memory/handle/handle.h"
 
-namespace render { class Scene; }
-namespace ecs { class EntityPtr; }
+namespace render {
+	class Scene;
+}
+
+namespace ecs {
+	class ECS;
+}
 
 class SceneTree final {
 public:
@@ -34,15 +40,15 @@ public:
 	void draw(render::Scene& scene);
 
 	[[nodiscard]]
-	ecs::EntityPtr getSelectedEntity() const noexcept;
+	handle64 getSelectedEntity() const noexcept;
 
 	[[nodiscard]]
-	void setSelectedEntity(const ecs::EntityPtr& entity) noexcept;
+	void setSelectedEntity(handle64 entity) noexcept;
 
 private:
 
 	void drawTree(render::Scene& scene);
-	void drawEntityNode(const ecs::Entity& entity);
+	void drawEntityNode(ecs::ECS& ecs, handle64 entity);
 
 	void drawMenuBar(render::Scene& scene);
 	void drawEntityMenu(render::Scene& scene);
@@ -51,5 +57,5 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	SelectableTree<ecs::EntityPtr> scene_tree;
+	SelectableTree<handle64::value_type> scene_tree;
 };

@@ -1,10 +1,13 @@
 #pragma once
 
-#include "entity/entity.h"
-#include "component/component_mgr.h"
+#include "memory/handle/handle.h"
 #include "memory/handle/handle_map.h"
+#include <functional>
 
 namespace ecs {
+
+class ComponentMgr;
+class EventMgr;
 
 //----------------------------------------------------------------------------------
 // Entity Manager
@@ -19,11 +22,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	EntityMgr(std::shared_ptr<ComponentMgr> component_mgr, EventMgr& event_mgr)
-		: component_mgr(std::move(component_mgr))
-	    , event_mgr(event_mgr) {
-	}
-
+	EntityMgr(ComponentMgr& component_mgr, EventMgr& event_mgr);
 	EntityMgr(const EntityMgr& manager) = delete;
 	EntityMgr(EntityMgr&& manager) = default;
 
@@ -46,7 +45,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	EntityPtr createEntity();
+	handle64 create();
 
 	// Add an entity to the list of expired entities. Will be
 	// destroyed at the end of the next ECS update.
@@ -55,17 +54,13 @@ public:
 	// Remove all the entities marked for deletion. Should be called once per tick.
 	void removeExpiredEntities();
 
-	// Get the entity associated with the handle
-	[[nodiscard]]
-	Entity* getEntity(handle64 handle);
-
 	// Get the number of entities
 	[[nodiscard]]
 	size_t count() const noexcept;
 
 	// Check if a handle is valid
 	[[nodiscard]]
-	bool isValid(handle64 entity) const noexcept;
+	bool valid(handle64 entity) const noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -73,18 +68,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Apply an action to each entity
-	void forEach(const std::function<void(Entity&)>& act) {
-		for (Entity& entity : entity_pool) {
-			act(entity);
-		}
-	}
-
-	// Apply an action to each entity
-	void forEach(const std::function<void(const Entity&)>& act) const {
-		for (const Entity& entity : entity_pool) {
-			act(entity);
-		}
-	}
+	void forEach(const std::function<void(handle64)>& act) const;
 
 private:
 
@@ -92,17 +76,12 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// A pointer to the component manager
-	std::shared_ptr<ComponentMgr> component_mgr;
+	// A reference to the component and event managers
+	std::reference_wrapper<ComponentMgr> component_mgr;
+	std::reference_wrapper<EventMgr> event_mgr;
 
-	// A reference to the event manager. Passed to the entity (EventSender).
-	EventMgr& event_mgr;
-
-	// A resource pool that creates and stores the actual entity
-	ResourcePool<Entity> entity_pool;
-
-	// Handle map. Maps a handle to an Entity pointer.
-	HandleMap<handle64, Entity*> handle_map;
+	// Handle map. Stores valid handles in a ResourceMap, allowing for quick iteration over valid entities.
+	HandleMap<handle64, handle64> entity_map;
 
 	// A container of entities that need to be deleted
 	std::vector<handle64> expired_entities;

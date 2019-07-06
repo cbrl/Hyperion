@@ -4,7 +4,7 @@
 #include "directxmath/directxmath.h"
 
 
-class Transform3D final {
+class Transform3D {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -17,7 +17,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~Transform3D() = default;
+	virtual ~Transform3D() = default;
 
 
 	//----------------------------------------------------------------------------------
@@ -35,13 +35,11 @@ public:
 		needs_update = true;
 	}
 
-	void updateMatrix(const XMMATRIX* parent = nullptr) const {
+	virtual void updateMatrix() const {
 		if (needs_update) {
 			world = XMMatrixScalingFromVector(getScale())
 			        * XMMatrixRotationRollPitchYawFromVector(getRotation())
 			        * XMMatrixTranslationFromVector(getPosition());
-			if (parent)
-				world *= *parent;
 			needs_update = false;
 		}
 	}
@@ -290,7 +288,7 @@ public:
 		return XMMatrixScalingFromVector(scaling);
 	}
 
-private:
+protected:
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

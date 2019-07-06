@@ -2,7 +2,6 @@
 
 #include "datatypes/datatypes.h"
 #include "memory/handle/handle.h"
-#include "entity/entity_ptr.h"
 #include "event/event_participator.h"
 
 
@@ -17,17 +16,17 @@ namespace ecs {
 //----------------------------------------------------------------------------------
 
 class IComponent {
-	friend class Entity;
+	friend class ComponentMgr;
 
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
 protected:
-	IComponent() noexcept
-	    : active(true) {
-	}
+
+	IComponent() noexcept = default;
 
 public:
+
 	IComponent(const IComponent& component) = delete;
 	IComponent(IComponent&& component) noexcept = default;
 
@@ -50,10 +49,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Get the component's type index
+	[[nodiscard]]
 	virtual const std::type_index& getTypeIndex() const = 0;
 
 	// Get the ptr of the entity that owns this component
-	EntityPtr getOwner() const {
+	[[nodiscard]]
+	handle64 getOwner() const noexcept {
 		return owner;
 	}
 
@@ -68,14 +69,15 @@ public:
 	}
 
 	// Get the component's state
+	[[nodiscard]]
 	bool isActive() const {
 		return active;
 	}
 
 private:
 
-	void setOwner(EntityPtr owner_ptr) {
-		owner = owner_ptr;
+	void setOwner(handle64 owner_handle) {
+		owner = owner_handle;
 	}
 
 
@@ -84,10 +86,10 @@ private:
 	//----------------------------------------------------------------------------------
 
 	// Is the component active?
-	bool active;
+	bool active = true;
 
 	// The entity that owns this component. Set on creation in IEntity.
-	EntityPtr owner;
+	handle64 owner;
 };
 
 
@@ -107,9 +109,17 @@ class Component : public IComponent {
 	// Constructors
 	//----------------------------------------------------------------------------------
 protected:
-	Component() noexcept = default;
+
+	Component() noexcept {
+		static_assert(std::is_move_constructible_v<T>,
+			"Component type is not move constructible");
+
+		static_assert(std::is_move_assignable_v<T>,
+			"Component type is not move assignible");
+	}
 
 public:
+
 	Component(const Component& component) = delete;
 	Component(Component&& component) noexcept = default;
 
@@ -130,6 +140,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
+	[[nodiscard]]
 	const std::type_index& getTypeIndex() const override final {
 		return index;
 	}

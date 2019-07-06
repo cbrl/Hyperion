@@ -1,7 +1,6 @@
 #include "new_model_menu.h"
 
 #include "imgui.h"
-#include "entity/entity.h"
 #include "resource/resource_mgr.h"
 #include "scene/scene.h"
 #include "resource/model/blueprint_factory.h"
@@ -37,7 +36,7 @@ void NewModelMenu::drawMenu() {
 void NewModelMenu::procNewModelPopup(ID3D11Device& device,
                                      render::ResourceMgr& resource_mgr,
                                      render::Scene& scene,
-                                     ecs::EntityPtr entity) {
+                                     handle64 entity) {
 
 	using namespace render;
 

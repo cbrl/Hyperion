@@ -17,21 +17,22 @@ CameraMotorSystem::CameraMotorSystem(const Input& input, KeyConfig& key_config)
 
 
 void CameraMotorSystem::update() {
+	auto& ecs = this->getECS();
 
-	getECS().forEach<Transform, PerspectiveCamera, CameraMovement>([&](ecs::Entity& entity) {
-		auto& transform = *entity.getComponent<Transform>();
-		auto& camera    = *entity.getComponent<PerspectiveCamera>();
-		auto& movement  = *entity.getComponent<CameraMovement>();
+	ecs.forEach<Transform, PerspectiveCamera, CameraMovement>([&](handle64 entity) {
+		auto& transform = ecs.get<Transform>(entity);
+		auto& camera    = ecs.get<PerspectiveCamera>(entity);
+		auto& movement  = ecs.get<CameraMovement>(entity);
 
 		if (camera.isActive() && transform.isActive() && movement.isActive()) {
 			processInput(movement, transform);
 		}
 	});
 
-	getECS().forEach<Transform, OrthographicCamera, CameraMovement>([&](ecs::Entity& entity) {
-		auto& transform = *entity.getComponent<Transform>();
-		auto& camera    = *entity.getComponent<OrthographicCamera>();
-		auto& movement  = *entity.getComponent<CameraMovement>();
+	ecs.forEach<Transform, OrthographicCamera, CameraMovement>([&](handle64 entity) {
+		auto& transform = ecs.get<Transform>(entity);
+		auto& camera    = ecs.get<OrthographicCamera>(entity);
+		auto& movement  = ecs.get<CameraMovement>(entity);
 
 		if (camera.isActive() && transform.isActive() && movement.isActive()) {
 			processInput(movement, transform);

@@ -7,14 +7,15 @@
 #include "renderer/pass/depth/depth_pass.h"
 
 
-namespace ecs { class ECS; }
+namespace ecs {
+	class ECS;
+}
 
 namespace render {
 
 class RenderingConfig;
 class RenderStateMgr;
 class ResourceMgr;
-class Scene;
 
 class LightPass final {
 public:
@@ -47,19 +48,19 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void XM_CALLCONV render(const Scene& scene, FXMMATRIX world_to_projection);
+	void XM_CALLCONV render(const ecs::ECS& ecs, FXMMATRIX world_to_projection);
 
 private:
 
 	void bindBuffers();
 
 	void updateShadowMaps();
-	void renderShadowMaps(const Scene& scene);
+	void renderShadowMaps(const ecs::ECS& ecs);
 
-	void updateData(const Scene& scene) const;
-	void XM_CALLCONV updateDirectionalLightData(const Scene& scene, FXMMATRIX world_to_projection);
-	void XM_CALLCONV updatePointLightData(const Scene& scene, FXMMATRIX world_to_projection);
-	void XM_CALLCONV updateSpotLightData(const Scene& scene, FXMMATRIX world_to_projection);
+	void updateData(const ecs::ECS& ecs) const;
+	void XM_CALLCONV updateDirectionalLightData(const ecs::ECS& ecs, FXMMATRIX world_to_projection);
+	void XM_CALLCONV updatePointLightData(const ecs::ECS& ecs, FXMMATRIX world_to_projection);
+	void XM_CALLCONV updateSpotLightData(const ecs::ECS& ecs, FXMMATRIX world_to_projection);
 
 	
 	//----------------------------------------------------------------------------------

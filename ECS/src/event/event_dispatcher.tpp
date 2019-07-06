@@ -1,3 +1,4 @@
+#include "event/event_delegate.h"
 
 namespace ecs {
 

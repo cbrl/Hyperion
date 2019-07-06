@@ -13,17 +13,15 @@ ModelSystem::ModelSystem(const RenderingMgr& rendering_mgr)
 
 
 void ModelSystem::update() {
+	auto& ecs            = this->getECS();
 	auto& device_context = rendering_mgr.getDeviceContext();
 
-	getECS().forEach<Transform, Model>([&](ecs::Entity& entity) {
-		const auto& transform = *entity.getComponent<Transform>();
-		const auto  models    = entity.getAll<Model>();
+	ecs.forEach<Transform, Model>([&](handle64 entity) {
+		const auto& transform = ecs.get<Transform>(entity);
+		auto& model           = ecs.get<Model>(entity);
 
-		for (Model& model : models) {
-			if (!model.isActive())
-				continue;
-
-			// Update the model's buffer
+		// Update the model's buffer
+		if (model.isActive()) {
 			model.updateBuffer(device_context, transform.getObjectToWorldMatrix());
 		}
 	});

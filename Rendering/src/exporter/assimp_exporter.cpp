@@ -1,5 +1,4 @@
 #include "assimp_exporter.h"
-#include "entity/entity.h"
 #include "scene/components/model/model.h"
 #include "exporter/texture_exporter.h"
 

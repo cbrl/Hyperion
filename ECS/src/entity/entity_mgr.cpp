@@ -1,54 +1,52 @@
 #include "entity_mgr.h"
+#include "component/component_mgr.h"
 
 
 namespace ecs {
 
-EntityPtr EntityMgr::createEntity() {
+EntityMgr::EntityMgr(ComponentMgr& component_mgr, EventMgr& event_mgr)
+	: component_mgr(component_mgr)
+	, event_mgr(event_mgr) {
+}
 
-	auto& entity = entity_pool.emplace_back();
-	entity.setEventMgr(gsl::make_not_null(&event_mgr));
 
-	// Create a handle
-	const handle64  handle = handle_map.createHandle(&entity);
-	const EntityPtr ptr    = EntityPtr{this, handle};
-
-	// Create the entity
-	entity.setComponentMgr(gsl::make_not_null(component_mgr.get()));
-	entity.setPointer(ptr);
-
-	return ptr;
+handle64 EntityMgr::create() {
+	auto [handle, resource] = entity_map.create();
+	resource.get() = handle; //copy the handle into the ResourceMap's handle
+	return handle;
 }
 
 
 void EntityMgr::destroyEntity(handle64 handle) {
-	expired_entities.push_back(handle);
+	if (valid(handle)) {
+		expired_entities.push_back(handle);
+		component_mgr.get().removeAll(handle);
+	}
 }
 
 
 void EntityMgr::removeExpiredEntities() {
-
 	for (const handle64 handle : expired_entities) {
-		// Destroy the entity
-		entity_pool.remove_resource(getEntity(handle));
-		handle_map.releaseHandle(handle);
+		entity_map.release(handle);
 	}
-
 	expired_entities.clear();
 }
 
 
-Entity* EntityMgr::getEntity(handle64 handle) {
-	return handle_map[handle];
-}
-
-
 size_t EntityMgr::count() const noexcept {
-	return entity_pool.size();
+	return entity_map.size();
 }
 
 
-bool EntityMgr::isValid(handle64 entity) const noexcept {
-	return handle_map.isValid(entity);
+bool EntityMgr::valid(handle64 entity) const noexcept {
+	return entity_map.contains(entity);
+}
+
+
+void EntityMgr::forEach(const std::function<void(handle64)>& act) const {
+	for (auto entity : entity_map) {
+		act(entity);
+	}
 }
 
 } // namespace ecs

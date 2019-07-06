@@ -2,6 +2,7 @@
 
 #include "new_model_menu.h"
 #include "string/string.h"
+#include "memory/handle/handle.h"
 
 struct ID3D11Device;
 class Engine;
@@ -14,8 +15,7 @@ class Texture;
 }
 
 namespace ecs {
-class Entity;
-class EntityPtr;
+class ECS;
 class IComponent;
 }
 
@@ -26,11 +26,15 @@ public:
 	// UserComponent
 	//----------------------------------------------------------------------------------
 	struct UserComponent final {
-		using adder_func = std::function<void(ecs::Entity&)>;
+		using adder_func = std::function<void(ecs::ECS&, handle64)>;
+		using getter_func = std::function<ecs::IComponent*(ecs::ECS&, handle64)>;
 		using details_func = std::function<void(ecs::IComponent&)>;
 
 		// The display name of this component
 		std::string name;
+
+		// A function that attempts to retrieve the component from an entity
+		getter_func getter;
 
 		// A function that handles adding the component to a given entity
 		adder_func adder;
@@ -66,7 +70,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Draw the details panel for the specified entity
-	void draw(Engine& engine, ecs::EntityPtr entity_ptr);
+	void draw(Engine& engine, handle64 handle);
 
 	template<typename ComponentT>
 	void registerUserComponent(const UserComponent& component_def) {
@@ -79,13 +83,13 @@ public:
 private:
 
 	// Draw the menu in the entity details window
-	void drawAddComponentMenu(Engine& engine, ecs::EntityPtr entity_ptr);
+	void drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, handle64 handle);
 
 	// Draw a node in the tree, and its details if selected
 	template<typename T, typename... ArgsT>
-	void drawComponentNode(gsl::czstring<> text, T& component, ArgsT&&... args);
+	void drawComponentNode(ecs::ECS& ecs, gsl::czstring<> text, T& component, ArgsT&&... args);
 
-	void drawUserComponentNode(gsl::czstring<> text, ecs::IComponent& component, const UserComponent::details_func& draw_func);
+	void drawUserComponentNode(ecs::ECS& ecs, gsl::czstring<> text, ecs::IComponent& component, const UserComponent::details_func& draw_func);
 
 	template<typename ComponentT, typename... ArgsT>
 	void drawDetails(ComponentT& component, ArgsT&&... args);
@@ -115,7 +119,7 @@ private:
 
 	// "Parent" Combo Box
 	int entity_names_idx = 0;
-	std::vector<ecs::EntityPtr> entity_list;
+	std::vector<handle64> entity_list;
 
 	// Resource Map Combo Box
 	std::vector<std::reference_wrapper<const std::string>> res_map_names;

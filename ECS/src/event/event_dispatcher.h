@@ -1,13 +1,9 @@
 #pragma once
 
-#include "event/event_mgr.h"
-#include "event/event_delegate.h"
-
-#include "string/string.h"
-#include "log/log.h"
-
 
 namespace ecs {
+
+class IEventDelegate;
 
 class IEventDispatcher {
 public:

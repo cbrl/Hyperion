@@ -24,72 +24,90 @@ void DrawComponentState(ComponentT& component, gsl::czstring<> name = nullptr) {
 }
 
 
-void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
+void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 
 	auto& device       = engine.getRenderingMgr().getDevice();
 	auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
 	auto& scene        = engine.getScene();
+	auto& ecs          = scene.getECS();
 
 	// Begin window. Early return if window isn't open or entity isn't valid.
 	ImGui::SetNextWindowSize(ImVec2{375, 425}, ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin("Entity Properties", nullptr, ImGuiWindowFlags_MenuBar) || !entity_ptr) {
+	if (!ImGui::Begin("Entity Properties", nullptr, ImGuiWindowFlags_MenuBar) || !ecs.valid(handle)) {
 		ImGui::End();
 		return;
 	}
 
-	// Get the entity
-	ecs::Entity& entity = *entity_ptr;
-
 	// Draw menu
 	if (ImGui::BeginMenuBar()) {
-		drawAddComponentMenu(engine, entity_ptr);
+		drawAddComponentMenu(engine, ecs, handle);
 		ImGui::EndMenuBar();
 	}
-
 
 	//----------------------------------------------------------------------------------
 	// Name/Details
 	//----------------------------------------------------------------------------------
-	ImGui::InputText("", &entity.getName());
-	ImGui::SameLine();
-	bool state = entity.isActive();
-	if (ImGui::Checkbox("Active", &state))
-		entity.setActive(state);
+	if (auto* name = ecs.tryGet<Name>(handle)) {
+		ImGui::InputText("", &name->name);
+		ImGui::Separator();
+	}
 
-	ImGui::Separator();
-
-	ImGui::Text("Index:   %d", entity.getPtr().getHandle().index);
-	ImGui::Text("Counter: %d", entity.getPtr().getHandle().counter);
+	ImGui::Text("Index:   %d", handle.index);
+	ImGui::Text("Counter: %d", handle.counter);
 	ImGui::Spacing();
 
 
 	//----------------------------------------------------------------------------------
 	// Parent
 	//----------------------------------------------------------------------------------
+	auto* hierarchy = ecs.tryGet<Hierarchy>(handle);
+
 	entity_list.clear();
-	scene.forEach([&](const ecs::Entity& entity) {
-		entity_list.push_back(entity.getPtr());
+	scene.getECS().forEach([&](handle64 other_entity) {
+		entity_list.push_back(other_entity);
 	});
 
-	static const auto getter = [](void* data, int idx, const char** out_text) -> bool {
-		auto& vector = *static_cast<std::vector<ecs::EntityPtr>*>(data);
-		if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-		if (idx == 0) {
-			static char none[] = "None";
-			*out_text = none;
+	const char* preview = "None";
+	if (hierarchy && ecs.valid(hierarchy->getParent())) {
+		if (auto* name = ecs.tryGet<Name>(hierarchy->getParent())) {
+			preview = name->name.c_str();
 		}
-		else
-			*out_text = vector[idx]->getName().c_str();
-		return true;
-	};
+	}
 
-	if (ImGui::Combo("Parent", &entity_names_idx, getter, &entity_list, static_cast<int>(entity_list.size()))) {
-		if (entity_names_idx != 0) {
-			entity_list[entity_names_idx]->addChild(entity.getPtr()); //subtract 1 since index 0 is "None"
+	if (ImGui::BeginCombo("Parent", preview)) {
+		if ( ImGui::Selectable("None", (!hierarchy || (hierarchy->getParent() == handle64::invalid_handle))) ) {
+			if (hierarchy)
+				hierarchy->removeParent(ecs);
 		}
-		else if (entity.hasParent()) {
-			entity.getParent()->removeChild(entity.getPtr());
+
+		for (size_t i = 0; i < entity_list.size(); ++i) {
+			const bool selected = (entity_names_idx == i);
+			bool set_parent = false;
+
+			if (auto* name = ecs.tryGet<Name>(entity_list[i])) {
+				if (ImGui::Selectable(name->name.c_str(), selected)) {
+					set_parent = true;
+				}
+			}
+			else {
+				const std::string temp_name = "(Index: " + ToStr(entity_list[i].index).value_or("-1"s) +
+				                              ", Counter: " + ToStr(entity_list[i].counter).value_or("-1"s) + ")";
+				if (ImGui::Selectable(temp_name.c_str(), selected)) {
+					set_parent = true;
+				}
+			}
+
+			if (set_parent) {
+				entity_names_idx = static_cast<int>(i);
+
+				if (not hierarchy) {
+					hierarchy = &ecs.add<Hierarchy>(handle);
+				}
+				hierarchy->setParent(ecs, entity_list[i]);
+			}
 		}
+
+		ImGui::EndCombo();
 	}
 
 
@@ -97,92 +115,69 @@ void EntityDetailsWindow::draw(Engine& engine, ecs::EntityPtr entity_ptr) {
 	// Draw Component Nodes
 	//----------------------------------------------------------------------------------
 
-	// Render user-added component details with their associated renderer, if it exists
-	const auto& components = entity.getComponents();
-	for (const auto& [idx, component] : components) {
-		const auto it = user_components.find(component.get().getTypeIndex());
-		if (it != user_components.end()) {
-			drawUserComponentNode(it->second.name.c_str(), component.get(), it->second.details_renderer);
+	// Render details of user-defined components if applicable
+	for (const auto& [idx, component_def] : user_components) {
+		if (component_def.getter) {
+			auto* component = component_def.getter(ecs, handle);
+			if (component) {
+				drawUserComponentNode(ecs, component_def.name.c_str(), *component, component_def.details_renderer);
+			}
 		}
 	}
 
 	// Transform
-	if (auto* transform = entity.getComponent<Transform>()) {
-		drawComponentNode("Transform", *transform); //multiple transforms are technically allowed but only the first is relevant
+	if (auto* transform = ecs.tryGet<Transform>(handle)) {
+		drawComponentNode(ecs, "Transform", *transform);
 	}
 
 	// Model
-	if (entity.hasComponent<Model>()) {
-		auto models = entity.getAll<Model>();
-		for (Model& model : models) {
-			std::string name = "Model: " + model.getName();
-			drawComponentNode(name.c_str(), model, resource_mgr);
-		}
+	if (auto* model = ecs.tryGet<Model>(handle)) {
+		const std::string name = "Model: " + model->getName();
+		drawComponentNode(ecs, name.c_str(), *model, resource_mgr);
 	}
 
 	// Perspective Camera
-	if (entity.hasComponent<PerspectiveCamera>()) {
-		auto cams = entity.getAll<PerspectiveCamera>();
-		for (PerspectiveCamera& cam : cams) {
-			drawComponentNode("Perspective Camera", cam);
-		}
+	if (auto* camera = ecs.tryGet<PerspectiveCamera>(handle)) {
+		drawComponentNode(ecs, "Perspective Camera", *camera);
 	}
 
 	// Orthographic Camera
-	if (entity.hasComponent<OrthographicCamera>()) {
-		auto cams = entity.getAll<OrthographicCamera>();
-		for (OrthographicCamera& cam : cams) {
-			drawComponentNode("Orthographic Camera", cam);
-		}
+	if (auto* camera = ecs.tryGet<OrthographicCamera>(handle)) {
+		drawComponentNode(ecs, "Orthographic Camera", *camera);
 	}
 
 	// Text
-	if (entity.hasComponent<Text>()) {
-		auto texts = entity.getAll<Text>();
-		for (Text& text : texts) {
-			drawComponentNode("Text", text);
-		}
+	if (auto* text = ecs.tryGet<Text>(handle)) {
+		drawComponentNode(ecs, "Text", *text);
 	}
 
 	// Ambient Light
-	if (entity.hasComponent<AmbientLight>()) {
-		auto lights = entity.getAll<AmbientLight>();
-		for (AmbientLight& light : lights) {
-			drawComponentNode("Ambient Light", light);
-		}
+	if (auto* light = ecs.tryGet<AmbientLight>(handle)) {
+		drawComponentNode(ecs, "Ambient Light", *light);
 	}
 
 	// Directional Light
-	if (entity.hasComponent<DirectionalLight>()) {
-		auto lights = entity.getAll<DirectionalLight>();
-		for (DirectionalLight& light : lights) {
-			drawComponentNode("Directional Light", light);
-		}
+	if (auto* light = ecs.tryGet<DirectionalLight>(handle)) {
+		drawComponentNode(ecs, "Directional Light", *light);
 	}
 
 	// Point Light
-	if (entity.hasComponent<PointLight>()) {
-		auto lights = entity.getAll<PointLight>();
-		for (PointLight& light : lights) {
-			drawComponentNode("Point Light", light);
-		}
+	if (auto* light = ecs.tryGet<PointLight>(handle)) {
+		drawComponentNode(ecs, "Point Light", *light);
 	}
 
 	// Spot Light
-	if (entity.hasComponent<SpotLight>()) {
-		auto lights = entity.getAll<SpotLight>();
-		for (SpotLight& light : lights) {
-			drawComponentNode("Spot Light", light);
-		}
+	if (auto* light = ecs.tryGet<SpotLight>(handle)) {
+		drawComponentNode(ecs, "Spot Light", *light);
 	}
 
 	ImGui::End(); //"Properties"
 }
 
 
-void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr entity_ptr) {
+void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, handle64 handle) {
 
-	bool valid_entity = entity_ptr.valid();
+	bool valid_entity = ecs.valid(handle);
 
 	auto& scene         = engine.getScene();
 	auto& rendering_mgr = engine.getRenderingMgr();
@@ -192,19 +187,19 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr en
 	if (ImGui::BeginMenu("Add Component", valid_entity)) {
 
 		if (ImGui::MenuItem("Orthographic Camera", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<OrthographicCamera>(device, u32_2{480, 480});
+			ecs.add<OrthographicCamera>(handle, device, u32_2{480, 480});
 		}
 		if (ImGui::MenuItem("Perspective Camera", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<PerspectiveCamera>(device, u32_2{480, 480});
+			ecs.add<PerspectiveCamera>(handle, device, u32_2{480, 480});
 		}
 		if (ImGui::MenuItem("Directional Light", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<DirectionalLight>();
+			ecs.add<DirectionalLight>(handle);
 		}
 		if (ImGui::MenuItem("Point Light", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<PointLight>();
+			ecs.add<PointLight>(handle);
 		}
 		if (ImGui::MenuItem("Spot Light", nullptr, nullptr, valid_entity)) {
-			entity_ptr->addComponent<SpotLight>();
+			ecs.add<SpotLight>(handle);
 		}
 
 		if (ImGui::BeginMenu("Model")) {
@@ -213,7 +208,7 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr en
 					ModelConfig<VertexPositionNormalTexture> config;
 					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
 					if (valid_entity)
-						scene.importModel(entity_ptr, device, bp);
+						scene.importModel(handle, device, bp);
 				}
 				else Logger::log(LogLevel::err, "Failed to open file dialog");
 			}
@@ -230,7 +225,7 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr en
 		for (const auto& [idx, component] : user_components) {
 			if (component.adder) {
 				if (ImGui::MenuItem(component.name.c_str(), nullptr, nullptr, valid_entity)) {
-					component.adder(*entity_ptr);
+					component.adder(ecs, handle);
 				}
 			}
 		}
@@ -241,7 +236,10 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::EntityPtr en
 
 
 template<typename T, typename... ArgsT>
-void EntityDetailsWindow::drawComponentNode(gsl::czstring<> text, T& component, ArgsT&&... args) {
+void EntityDetailsWindow::drawComponentNode(ecs::ECS& ecs,
+                                            gsl::czstring<> text,
+                                            T& component,
+                                            ArgsT&&... args) {
 
 	bool dont_delete = true;
 	ImGui::PushID(&component);
@@ -251,12 +249,13 @@ void EntityDetailsWindow::drawComponentNode(gsl::czstring<> text, T& component, 
 	}
 	ImGui::PopID();
 	if (!dont_delete) {
-		component.getOwner()->removeComponent(component);
+		ecs.remove(component.getOwner(), component);
 	}
 }
 
 
-void EntityDetailsWindow::drawUserComponentNode(gsl::czstring<> text,
+void EntityDetailsWindow::drawUserComponentNode(ecs::ECS& ecs,
+                                                gsl::czstring<> text,
                                                 ecs::IComponent& component,
                                                 const UserComponent::details_func& draw_func) {
 
@@ -270,7 +269,7 @@ void EntityDetailsWindow::drawUserComponentNode(gsl::czstring<> text,
 	}
 	ImGui::PopID();
 	if (!dont_delete) {
-		component.getOwner()->removeComponent(component);
+		ecs.remove(component.getOwner(), component);
 	}
 }
 

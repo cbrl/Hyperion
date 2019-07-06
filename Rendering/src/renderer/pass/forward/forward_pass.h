@@ -6,12 +6,16 @@
 #include "rendering_options.h"
 
 class Model;
+class Transform;
+
+namespace ecs {
+	class ECS;
+}
 
 namespace render {
 
 class RenderStateMgr;
 class ResourceMgr;
-class Scene;
 class Texture;
 
 class ForwardPass final {
@@ -46,24 +50,24 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Render all (opaque) models with a given BRDF
-	void XM_CALLCONV renderOpaque(const Scene& scene,
+	void XM_CALLCONV renderOpaque(const ecs::ECS& ecs,
 	                              FXMMATRIX world_to_projection,
 	                              const Texture* env_map,
 	                              BRDF brdf) const;
 
 	// Render all (transparent) models with a given BRDF
-	void XM_CALLCONV renderTransparent(const Scene& scene,
+	void XM_CALLCONV renderTransparent(const ecs::ECS& ecs,
 	                                   FXMMATRIX world_to_projection,
 	                                   const Texture* env_map,
 	                                   BRDF brdf) const;
 
 	// Render all models with the given false color mode
-	void XM_CALLCONV renderFalseColor(const Scene& scene,
+	void XM_CALLCONV renderFalseColor(const ecs::ECS& ecs,
 	                                  FXMMATRIX world_to_projection,
 	                                  FalseColor color) const;
 
 	// Render all models as a wireframe
-	void XM_CALLCONV renderWireframe(const Scene& scene,
+	void XM_CALLCONV renderWireframe(const ecs::ECS& ecs,
 	                                 FXMMATRIX world_to_projection,
 	                                 const f32_4& color) const;
 
@@ -74,7 +78,7 @@ public:
 
 	// Sorts by shader type all models with overrided shaders, then renders them.
 	// Renders opaque models, then transparent. Call between opaque and transparent render passes.
-	void XM_CALLCONV renderOverrided(const Scene& scene,
+	void XM_CALLCONV renderOverrided(const ecs::ECS& ecs,
 	                                 FXMMATRIX world_to_projection,
 	                                 const Texture* env_map) const;
 
@@ -82,7 +86,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Render to GBuffer
 	//----------------------------------------------------------------------------------
-	void XM_CALLCONV renderGBuffer(const Scene& scene, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV renderGBuffer(const ecs::ECS& ecs, FXMMATRIX world_to_projection) const;
 
 private:
 
@@ -97,7 +101,7 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Functions - Render Model
 	//----------------------------------------------------------------------------------
-	void XM_CALLCONV renderModel(const Model& model, FXMMATRIX world_to_projection) const;
+	void XM_CALLCONV renderModel(const Model& model, const Transform& transform, FXMMATRIX world_to_projection) const;
 
 
 	//----------------------------------------------------------------------------------

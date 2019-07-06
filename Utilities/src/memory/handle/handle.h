@@ -1,6 +1,8 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/scalar_types.h"
+#include <type_traits>
+#include <limits>
 
 //----------------------------------------------------------------------------------
 // Handle
@@ -9,66 +11,79 @@
 // number of counter bits, and number of index bits
 //----------------------------------------------------------------------------------
 
-#pragma warning (push)
-#pragma warning (disable: 4293) //disable '<<' undefined behavior warning
-
 template<typename T, size_t IndexBits, size_t CounterBits>
 struct Handle {
-
+public:
 	//----------------------------------------------------------------------------------
 	// Assertions
 	//----------------------------------------------------------------------------------
-
 	static_assert(std::is_integral_v<T>,
 		"Handle template parameter is not an integral type");
 
+	static_assert(std::is_unsigned_v<T>,
+		"Handle template parameter is not an unsigned type");
+
 	static_assert(CounterBits > 0 && CounterBits < sizeof(T) * 8,
-		"Invalid counter bits specified for Handle");
+		"Invalid number of counter bits specified for Handle");
 
 	static_assert(IndexBits > 0 && IndexBits < sizeof(T) * 8,
-		"Invalid index bits specified for Handle");
+		"Invalid number of index bits specified for Handle");
 
 	static_assert((CounterBits + IndexBits) <= (sizeof(T) * 8),
-		"Size of handle type is smaller than number of bits specified");
+		"Size of handle type is smaller than specified IndexBits + CounterBits");
 
-public:
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	constexpr Handle() noexcept
 		: Handle(invalid_handle) {
 	}
 
-	constexpr Handle(T value) noexcept
-		: index(value & index_bitmask)
-		, counter((value & counter_bitmask) >> CounterBits) {
+	constexpr explicit Handle(T value) noexcept
+		: index((value & index_bitmask) >> n_counter_bits)
+		, counter(value & counter_bitmask) {
 	}
 
-	constexpr Handle(T index, T counter) noexcept
+	constexpr explicit Handle(T index, T counter) noexcept
 		: index(index)
 		, counter(counter) {
 	}
+
+	constexpr Handle(const Handle&) noexcept = default;
+	constexpr Handle(Handle&&) noexcept = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Destructor
+	//----------------------------------------------------------------------------------
+	~Handle() = default;
+
+
+	//----------------------------------------------------------------------------------
+	// Operators
+	//----------------------------------------------------------------------------------
+	constexpr Handle& operator=(const Handle&) noexcept = default;
+	constexpr Handle& operator=(Handle&&) noexcept = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-
+	[[nodiscard]]
 	constexpr operator T() const noexcept {
-		return (counter << (sizeof(T) * 8 - CounterBits)) | index;
+		return (index << n_counter_bits) | counter;
 	}
 
+	[[nodiscard]]
 	std::size_t hash() const noexcept {
 		return std::hash<T>{}(this->operator T());
 	}
 
 
-public:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-
 	T index   : IndexBits;
 	T counter : CounterBits;
 
@@ -91,14 +106,12 @@ public:
 	static constexpr size_t n_index_bits   = IndexBits;
 	static constexpr size_t n_counter_bits = CounterBits;
 
-
 private:
-	// Bitmasks
-	static constexpr T index_bitmask   = (T{1} << IndexBits) - T{1};
-	static constexpr T counter_bitmask = ((T{1} << CounterBits) - T{1}) << CounterBits;
-};
 
-#pragma warning (pop)
+	// Bitmasks
+	static constexpr T index_bitmask   = ((T{1} << IndexBits) - T{1}) << CounterBits;
+	static constexpr T counter_bitmask = (T{1} << CounterBits) - T{1};
+};
 
 
 //----------------------------------------------------------------------------------
@@ -117,6 +130,10 @@ namespace std {
 //----------------------------------------------------------------------------------
 // using declarations
 //----------------------------------------------------------------------------------
+using handle32 = Handle<u32, 20, 12>;
+static_assert(sizeof(handle32) == 4, "handle32 size is not 4 bytes");
+static_assert(std::has_unique_object_representations_v<handle32>, "handle32 is not properly packed");
+
 using handle64 = Handle<u64, 40, 24>;
 static_assert(sizeof(handle64) == 8, "handle64 size is not 8 bytes");
 static_assert(std::has_unique_object_representations_v<handle64>, "handle64 is not properly packed");

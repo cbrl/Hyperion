@@ -49,7 +49,7 @@ void DepthPass::bindTransparentShaders() const {
 }
 
 
-void XM_CALLCONV DepthPass::render(const Scene& scene,
+void XM_CALLCONV DepthPass::render(const ecs::ECS& ecs,
                                    FXMMATRIX world_to_camera,
                                    CXMMATRIX camera_to_projection) const {
 
@@ -64,14 +64,18 @@ void XM_CALLCONV DepthPass::render(const Scene& scene,
 	// Draw each opaque model
 	//----------------------------------------------------------------------------------
 
-	scene.forEach<Model>([&](const Model& model) {
-		if (!model.isActive()) return;
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model     = ecs.get<Model>(entity);
+		const auto& transform = ecs.get<Transform>(entity);
+
+		if (!model.isActive())
+			return;
 
 		const auto& mat = model.getMaterial();
 		if (mat.params.base_color[3] <= ALPHA_MAX)
 			return;
 
-		renderModel(model, world_to_proj);
+		renderModel(model, transform, world_to_proj);
 	});
 
 
@@ -79,18 +83,22 @@ void XM_CALLCONV DepthPass::render(const Scene& scene,
 	// Draw each transparent model
 	//----------------------------------------------------------------------------------
 
-	scene.forEach<Model>([&](const Model& model) {
-		if (!model.isActive()) return;
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model     = ecs.get<Model>(entity);
+		const auto& transform = ecs.get<Transform>(entity);
+
+		if (!model.isActive())
+			return;
 		
 		const auto& mat = model.getMaterial();
 		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
 			return;
 
-		renderModel(model, world_to_proj);
+		renderModel(model, transform, world_to_proj);
 	});
 }
 
-void XM_CALLCONV DepthPass::renderShadows(const Scene& scene,
+void XM_CALLCONV DepthPass::renderShadows(const ecs::ECS& ecs,
                                           FXMMATRIX world_to_camera,
                                           CXMMATRIX camera_to_projection) const {
 
@@ -103,7 +111,10 @@ void XM_CALLCONV DepthPass::renderShadows(const Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	bindOpaqueShaders();
-	scene.forEach<Model>([&](const Model& model) {
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model     = ecs.get<Model>(entity);
+		const auto& transform = ecs.get<Transform>(entity);
+
 		if (!model.isActive()) return;
 		if (!model.castsShadows()) return;
 
@@ -111,7 +122,7 @@ void XM_CALLCONV DepthPass::renderShadows(const Scene& scene,
 		if (mat.params.base_color[3] <= ALPHA_MAX)
 			return;
 
-		renderModel(model, world_to_proj);
+		renderModel(model, transform, world_to_proj);
 	});
 
 
@@ -120,7 +131,10 @@ void XM_CALLCONV DepthPass::renderShadows(const Scene& scene,
 	//----------------------------------------------------------------------------------
 
 	bindTransparentShaders();
-	scene.forEach<Model>([&](const Model& model) {
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model     = ecs.get<Model>(entity);
+		const auto& transform = ecs.get<Transform>(entity);
+
 		if (!model.isActive()) return;
 		if (!model.castsShadows()) return;
 
@@ -128,7 +142,7 @@ void XM_CALLCONV DepthPass::renderShadows(const Scene& scene,
 		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
 			return;
 
-		renderModel(model, world_to_proj);
+		renderModel(model, transform, world_to_proj);
 	});
 }
 
@@ -144,12 +158,8 @@ void XM_CALLCONV DepthPass::updateCamera(FXMMATRIX world_to_camera, CXMMATRIX ca
 }
 
 
-void XM_CALLCONV DepthPass::renderModel(const Model& model, FXMMATRIX world_to_projection) const {
-
-	const auto* transform = model.getOwner()->getComponent<Transform>();
-	if (!transform) return;
-
-	const auto model_to_world      = transform->getObjectToWorldMatrix();
+void XM_CALLCONV DepthPass::renderModel(const Model& model, const Transform& transform, FXMMATRIX world_to_projection) const {
+	const auto model_to_world      = transform.getObjectToWorldMatrix();
 	const auto model_to_projection = model_to_world * world_to_projection;
 
 	if (!Frustum(model_to_projection).contains(model.getAABB()))

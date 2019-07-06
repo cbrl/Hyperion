@@ -11,12 +11,12 @@ MouseRotationSystem::MouseRotationSystem(const Input& input)
 
 
 void MouseRotationSystem::update() {
-
+	auto& ecs = this->getECS();
 	const i32_2 mouse_delta = input.getMouseDelta();
 
-	getECS().forEach<Transform, MouseRotation>([&](ecs::Entity& entity) {
-		auto& transform      = *entity.getComponent<Transform>();
-		const auto& rotation = *entity.getComponent<MouseRotation>();
+	ecs.forEach<Transform, MouseRotation>([&](handle64 entity) {
+		auto& transform      = ecs.get<Transform>(entity);
+		const auto& rotation = ecs.get<MouseRotation>(entity);
 
 		if (!rotation.isActive())
 			return;

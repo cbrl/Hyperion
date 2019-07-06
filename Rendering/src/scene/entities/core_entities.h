@@ -1,6 +1,5 @@
 #pragma once
 
-#include "entity/entity.h"
 #include "scene/components/core_components.h"
 
 
@@ -8,15 +7,24 @@ namespace EntityTemplates {
 
 // Does nothing to the specified entity
 struct EmptyT final {
-	void operator()(ecs::Entity& entity){};
+	void operator()(ecs::ECS& ecs, handle64 entity) {};
 };
 
 
 // Adds a transform component to the specified entity. The basic
 // template for any non-specific entity with a position in the world.
-struct WorldObjectT final {
-	void operator()(ecs::Entity& entity) {
-		entity.addComponent<Transform>();
+struct WorldObjectT {
+	void operator()(ecs::ECS& ecs, handle64 entity) {
+		ecs.add<Transform>(entity);
+	}
+};
+
+
+// A basic entity with a transform and a hierarchy.
+struct HierarchyT : private WorldObjectT {
+	void operator()(ecs::ECS& ecs, handle64 entity) {
+		WorldObjectT::operator()(ecs, entity);
+		ecs.add<Hierarchy>(entity);
 	}
 };
 
