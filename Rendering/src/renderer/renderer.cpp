@@ -100,7 +100,7 @@ void Renderer::render(Scene& scene, std::chrono::duration<f32> delta_time) {
 	// Render text objects
 	//----------------------------------------------------------------------------------
 	profiler.beginTimestamp("Text");
-	text_pass->render(scene);
+	text_pass->render(scene.getECS());
 	profiler.endTimestamp("Text");
 
 
@@ -185,11 +185,11 @@ void Renderer::renderCamera(Scene& scene, const CameraT& camera) {
 
 	// Render wireframes
 	if (settings.hasRenderOption(RenderOptions::Wireframe))
-		forward_pass->renderWireframe(scene, world_to_projection, camera.getSettings().getWireframeColor());
+		forward_pass->renderWireframe(scene.getECS(), world_to_projection, camera.getSettings().getWireframeColor());
 
 	// Render bounding volumes
 	if (settings.hasRenderOption(RenderOptions::BoundingVolume))
-		bounding_volume_pass->render(scene, world_to_projection, camera.getSettings().getBoundingVolumeColor());
+		bounding_volume_pass->render(scene.getECS(), world_to_projection, camera.getSettings().getBoundingVolumeColor());
 
 	// Clear the bound forward state
 	output_mgr->bindEndForward(device_context);
@@ -208,7 +208,7 @@ void XM_CALLCONV Renderer::renderForward(Scene& scene,
 	// Process the light buffers
 	//----------------------------------------------------------------------------------
 	profiler.beginTimestamp(GPUTimestamps::shadow_maps);
-	light_pass->render(scene, world_to_projection);
+	light_pass->render(scene.getECS(), world_to_projection);
 	profiler.endTimestamp(GPUTimestamps::shadow_maps);
 
 
@@ -231,9 +231,9 @@ void XM_CALLCONV Renderer::renderForward(Scene& scene,
 	//----------------------------------------------------------------------------------
 	// Render the scene
 	//----------------------------------------------------------------------------------
-	forward_pass->renderOpaque(scene, world_to_projection, skybox, settings.getBRDF());
-	forward_pass->renderOverrided(scene, world_to_projection, skybox);
-	forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
+	forward_pass->renderOpaque(scene.getECS(), world_to_projection, skybox, settings.getBRDF());
+	forward_pass->renderOverrided(scene.getECS(), world_to_projection, skybox);
+	forward_pass->renderTransparent(scene.getECS(), world_to_projection, skybox, settings.getBRDF());
 
 
 	output_mgr->bindEndForward(device_context);
@@ -252,7 +252,7 @@ void XM_CALLCONV Renderer::renderDeferred(Scene& scene,
 	// Process the light buffers
 	//----------------------------------------------------------------------------------
 	profiler.beginTimestamp(GPUTimestamps::shadow_maps);
-	light_pass->render(scene, world_to_projection);
+	light_pass->render(scene.getECS(), world_to_projection);
 	profiler.endTimestamp(GPUTimestamps::shadow_maps);
 
 
@@ -266,7 +266,7 @@ void XM_CALLCONV Renderer::renderDeferred(Scene& scene,
 	// Render the gbuffer
 	//----------------------------------------------------------------------------------
 	output_mgr->bindBeginGBuffer(device_context);
-	forward_pass->renderGBuffer(scene, world_to_projection);
+	forward_pass->renderGBuffer(scene.getECS(), world_to_projection);
 	output_mgr->bindEndGBuffer(device_context);
 
 	
@@ -291,8 +291,8 @@ void XM_CALLCONV Renderer::renderDeferred(Scene& scene,
 	//----------------------------------------------------------------------------------
 	// Forward Render (overrided shaders and transparent objects)
 	//----------------------------------------------------------------------------------
-	forward_pass->renderOverrided(scene, world_to_projection, skybox);
-	forward_pass->renderTransparent(scene, world_to_projection, skybox, settings.getBRDF());
+	forward_pass->renderOverrided(scene.getECS(), world_to_projection, skybox);
+	forward_pass->renderTransparent(scene.getECS(), world_to_projection, skybox, settings.getBRDF());
 
 	output_mgr->bindEndForward(device_context);
 }
@@ -306,7 +306,7 @@ void XM_CALLCONV Renderer::renderFalseColor(Scene& scene,
 	output_mgr->bindBeginForward(device_context);
 
 	const auto& settings = camera.getSettings();
-	forward_pass->renderFalseColor(scene, world_to_projection, settings.getFalseColorMode());
+	forward_pass->renderFalseColor(scene.getECS(), world_to_projection, settings.getFalseColorMode());
 
 	output_mgr->bindEndForward(device_context);
 }

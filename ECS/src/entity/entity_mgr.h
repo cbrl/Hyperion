@@ -1,13 +1,13 @@
 #pragma once
 
+#include "memory/handle/handle.h"
 #include "memory/handle/handle_map.h"
-#include "entity/entity.h"
+#include <functional>
 
 namespace ecs {
 
 class ComponentMgr;
 class EventMgr;
-class Entity;
 
 //----------------------------------------------------------------------------------
 // Entity Manager
@@ -45,7 +45,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	handle64 createEntity();
+	handle64 create();
 
 	// Add an entity to the list of expired entities. Will be
 	// destroyed at the end of the next ECS update.
@@ -53,14 +53,6 @@ public:
 
 	// Remove all the entities marked for deletion. Should be called once per tick.
 	void removeExpiredEntities();
-
-	// Get the entity associated with the handle.
-	[[nodiscard]]
-	Entity& get(handle64 handle);
-
-	// Get the entity associated with the handle. Returns nullptr for an invalid handle.
-	[[nodiscard]]
-	Entity* tryGet(handle64 handle);
 
 	// Get the number of entities
 	[[nodiscard]]
@@ -76,10 +68,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Apply an action to each entity
-	void forEach(const std::function<void(Entity&)>& act);
-
-	// Apply an action to each entity
-	void forEach(const std::function<void(const Entity&)>& act) const;
+	void forEach(const std::function<void(handle64)>& act) const;
 
 private:
 
@@ -91,8 +80,8 @@ private:
 	std::reference_wrapper<ComponentMgr> component_mgr;
 	std::reference_wrapper<EventMgr> event_mgr;
 
-	// Handle map. Maps a handle to an Entity.
-	HandleMap<handle64, Entity> entity_map;
+	// Handle map. Stores valid handles in a ResourceMap, allowing for quick iteration over valid entities.
+	HandleMap<handle64, handle64> entity_map;
 
 	// A container of entities that need to be deleted
 	std::vector<handle64> expired_entities;

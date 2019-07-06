@@ -3,8 +3,13 @@
 #include "selectable_tree.h"
 #include "memory/handle/handle.h"
 
-namespace render { class Scene; }
-namespace ecs { class Entity; }
+namespace render {
+	class Scene;
+}
+
+namespace ecs {
+	class ECS;
+}
 
 class SceneTree final {
 public:
@@ -43,7 +48,7 @@ public:
 private:
 
 	void drawTree(render::Scene& scene);
-	void drawEntityNode(const ecs::Entity& entity);
+	void drawEntityNode(ecs::ECS& ecs, handle64 entity);
 
 	void drawMenuBar(render::Scene& scene);
 	void drawEntityMenu(render::Scene& scene);

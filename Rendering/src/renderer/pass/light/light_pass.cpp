@@ -56,21 +56,21 @@ LightPass::LightPass(const RenderingConfig& rendering_config,
 }
 
 
-void XM_CALLCONV LightPass::render(const Scene& scene, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::render(const ecs::ECS& ecs, FXMMATRIX world_to_projection) {
 
 	// Update light buffers
-	updateDirectionalLightData(scene, world_to_projection);
-	updatePointLightData(scene, world_to_projection);
-	updateSpotLightData(scene, world_to_projection);
+	updateDirectionalLightData(ecs, world_to_projection);
+	updatePointLightData(ecs, world_to_projection);
+	updateSpotLightData(ecs, world_to_projection);
 
 	// Update the shadow map sizes
 	updateShadowMaps();
 
 	// Render the shadow maps
-	renderShadowMaps(scene);
+	renderShadowMaps(ecs);
 
 	// Update light info buffer
-	updateData(scene);
+	updateData(ecs);
 
 	// Bind the buffers
 	bindBuffers();
@@ -103,7 +103,7 @@ void LightPass::bindBuffers() {
 }
 
 
-void LightPass::updateData(const Scene& scene) const {
+void LightPass::updateData(const ecs::ECS& ecs) const {
 
 	LightBuffer light_data;
 
@@ -115,7 +115,7 @@ void LightPass::updateData(const Scene& scene) const {
 	light_data.num_shadow_point_lights       = static_cast<u32>(shadowed_point_lights.size());
 	light_data.num_shadow_spot_lights        = static_cast<u32>(shadowed_spot_lights.size());
 
-	scene.getECS().forEach<AmbientLight>([&light_data](const AmbientLight& light) {
+	ecs.forEach<AmbientLight>([&light_data](const AmbientLight& light) {
 		if (!light.isActive()) return;
 		light_data.ambient += light.getColor();
 	});
@@ -214,7 +214,7 @@ void LightPass::updateShadowMaps() {
 }
 
 
-void XM_CALLCONV LightPass::updateDirectionalLightData(const Scene& scene, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::updateDirectionalLightData(const ecs::ECS& ecs, FXMMATRIX world_to_projection) {
 
 	// Temporary buffers
 	std::vector<DirectionalLightBuffer> buffers;
@@ -226,9 +226,9 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(const Scene& scene, FXMMA
 	// Clear the cameras
 	directional_light_cameras.clear();
 
-	scene.getECS().forEach<Transform, DirectionalLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.get<Transform>();
-		const auto& light     = entity.get<DirectionalLight>();
+	ecs.forEach<Transform, DirectionalLight>([&](handle64 entity) {
+		const auto& transform = ecs.get<Transform>(entity);
+		const auto& light     = ecs.get<DirectionalLight>(entity);
 
 		if (not light.isActive())
 			return;
@@ -267,7 +267,7 @@ void XM_CALLCONV LightPass::updateDirectionalLightData(const Scene& scene, FXMMA
 }
 
 
-void XM_CALLCONV LightPass::updatePointLightData(const Scene& scene, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::updatePointLightData(const ecs::ECS& ecs, FXMMATRIX world_to_projection) {
 
 	// Temporary buffers
 	std::vector<PointLightBuffer> buffers;
@@ -280,9 +280,9 @@ void XM_CALLCONV LightPass::updatePointLightData(const Scene& scene, FXMMATRIX w
 	point_light_cameras.clear();
 
 
-	scene.getECS().forEach<Transform, PointLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.get<Transform>();
-		const auto& light     = entity.get<PointLight>();
+	ecs.forEach<Transform, PointLight>([&](handle64 entity) {
+		const auto& transform = ecs.get<Transform>(entity);
+		const auto& light     = ecs.get<PointLight>(entity);
 
 		if (not light.isActive())
 			return;
@@ -346,7 +346,7 @@ void XM_CALLCONV LightPass::updatePointLightData(const Scene& scene, FXMMATRIX w
 }
 
 
-void XM_CALLCONV LightPass::updateSpotLightData(const Scene& scene, FXMMATRIX world_to_projection) {
+void XM_CALLCONV LightPass::updateSpotLightData(const ecs::ECS& ecs, FXMMATRIX world_to_projection) {
 
 	// Temporary buffer vectors
 	std::vector<SpotLightBuffer> buffers;
@@ -359,9 +359,9 @@ void XM_CALLCONV LightPass::updateSpotLightData(const Scene& scene, FXMMATRIX wo
 	spot_light_cameras.clear();
 
 
-	scene.getECS().forEach<Transform, SpotLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.get<Transform>();
-		const auto& light     = entity.get<SpotLight>();
+	ecs.forEach<Transform, SpotLight>([&](handle64 entity) {
+		const auto& transform = ecs.get<Transform>(entity);
+		const auto& light     = ecs.get<SpotLight>(entity);
 
 		if (not light.isActive())
 			return;
@@ -412,7 +412,7 @@ void XM_CALLCONV LightPass::updateSpotLightData(const Scene& scene, FXMMATRIX wo
 }
 
 
-void LightPass::renderShadowMaps(const Scene& scene) {
+void LightPass::renderShadowMaps(const ecs::ECS& ecs) {
 
 	depth_pass->bindState();
 
@@ -424,7 +424,7 @@ void LightPass::renderShadowMaps(const Scene& scene) {
 		size_t i = 0;
 		for (const auto& camera : directional_light_cameras) {
 			directional_light_smaps->bindDSV(device_context, i++);
-			depth_pass->renderShadows(scene, camera.world_to_light, camera.light_to_proj);
+			depth_pass->renderShadows(ecs, camera.world_to_light, camera.light_to_proj);
 		}
 	}
 
@@ -437,7 +437,7 @@ void LightPass::renderShadowMaps(const Scene& scene) {
 		size_t i = 0;
 		for (const auto& camera : point_light_cameras) {
 			point_light_smaps->bindDSV(device_context, i++);
-			depth_pass->renderShadows(scene, camera.world_to_light, camera.light_to_proj);
+			depth_pass->renderShadows(ecs, camera.world_to_light, camera.light_to_proj);
 		}
 	}
 
@@ -450,7 +450,7 @@ void LightPass::renderShadowMaps(const Scene& scene) {
 		size_t i = 0;
 		for (const auto& camera : spot_light_cameras) {
 			spot_light_smaps->bindDSV(device_context, i++);
-			depth_pass->renderShadows(scene, camera.world_to_light, camera.light_to_proj);
+			depth_pass->renderShadows(ecs, camera.world_to_light, camera.light_to_proj);
 		}
 	}
 }

@@ -47,14 +47,14 @@ public:
 	// Construct a component and add it to the given entity
 	template<typename ComponentT, typename... ArgsT>
 	[[nodiscard]]
-	ComponentT& addComponent(handle64 entity, ArgsT&&... args);
+	ComponentT& add(handle64 entity, ArgsT&&... args);
 
 	// Destroy a given component. The component won't actually be destroyed until the end of the ECS update.
 	template<typename ComponentT>
-	void removeComponent(handle64 entity);
+	void remove(handle64 entity);
 
 	// Destroy a given component. The component won't actually be destroyed until the end of the ECS update.
-	void removeComponent(handle64 entity, IComponent& component);
+	void remove(handle64 entity, IComponent& component);
 
 	// Destroy all components owned by the given entity
 	void removeAll(handle64 entity);

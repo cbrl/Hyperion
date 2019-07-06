@@ -3,7 +3,7 @@
 namespace ecs {
 
 template<typename ComponentT, typename... ArgsT>
-ComponentT& ComponentMgr::addComponent(handle64 entity, ArgsT&&... args) {
+ComponentT& ComponentMgr::add(handle64 entity, ArgsT&&... args) {
 	static_assert(std::is_base_of_v<IComponent, ComponentT>,
 	              "Calling ComponentMgr::CreateComponent() with a type that does not inherit from Component.");
 
@@ -38,7 +38,7 @@ ComponentT& ComponentMgr::addComponent(handle64 entity, ArgsT&&... args) {
 
 
 template<typename ComponentT>
-void ComponentMgr::removeComponent(handle64 entity) {
+void ComponentMgr::remove(handle64 entity) {
 	if (const auto it = component_pools.find(ComponentT::index); it != component_pools.end()) {
 		if (it->second->contains(entity.index)) {
 			expired_components[ComponentT::index].push_back(entity);

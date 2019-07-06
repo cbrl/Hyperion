@@ -23,19 +23,19 @@ void TransformManipulator::draw(Engine& engine, handle64 selected_entity) {
 			return;
 
 		bool first = true;
-		ecs.forEach<PerspectiveCamera, Transform>([&](const ecs::Entity& entity) {
+		ecs.forEach<PerspectiveCamera, Transform>([&](handle64 entity) {
 			if (first) {
-				auto& camera = entity.get<PerspectiveCamera>();
-				auto& camera_tranform = entity.get<Transform>();
+				auto& camera          = ecs.get<PerspectiveCamera>(entity);
+				auto& camera_tranform = ecs.get<Transform>(entity);
 
 				drawTransformManipulator(ecs, *transform, camera, camera_tranform);
 				first = false;
 			}
 		});
-		ecs.forEach<OrthographicCamera, Transform>([&](const ecs::Entity& entity) {
+		ecs.forEach<OrthographicCamera, Transform>([&](handle64 entity) {
 			if (first) {
-				auto& camera = entity.get<PerspectiveCamera>();
-				auto& camera_tranform = entity.get<Transform>();
+				auto& camera          = ecs.get<PerspectiveCamera>(entity);
+				auto& camera_tranform = ecs.get<Transform>(entity);
 
 				drawTransformManipulator(ecs, *transform, camera, camera_tranform);
 				first = false;
@@ -100,14 +100,13 @@ void TransformManipulator::drawTransformManipulator(ecs::ECS& ecs, Transform& tr
 		f32_3 rotation;
 		f32_3 scale;
 
+		if (auto* hierarchy = ecs.tryGet<Hierarchy>(transform.getOwner());
+		    hierarchy && ecs.has<Transform>(hierarchy->getParent())) {
+			// If the transform is a child of another, then the matrix needs to be multiplied by
+			// the inverse of the parent's matrix to obtain the local transformation.
+			auto& parent_transform = ecs.get<Transform>(hierarchy->getParent());
 
-		auto* parent = ecs.tryGet(ecs.get(transform.getOwner()).getParent());
-		if (parent && ecs.has<Transform>(parent->getHandle())) {
-			// If the transform is a child of another, then the matrix needs to be multiplied by the inverse of
-			// the parent's matrix to obtain the local transformation.
-			auto& parent_transform = parent->get<Transform>();
-
-			const XMMATRIX world_to_parent  = parent_transform.getWorldToObjectMatrix();
+			const XMMATRIX world_to_parent = parent_transform.getWorldToObjectMatrix();
 			const XMMATRIX object_to_parent = XMLoadFloat4x4(&matrix) * world_to_parent;
 			XMFLOAT4X4 new_matrix;
 			XMStoreFloat4x4(&new_matrix, object_to_parent);

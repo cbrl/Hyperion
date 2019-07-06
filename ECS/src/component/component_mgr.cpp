@@ -8,7 +8,7 @@ ComponentMgr::ComponentMgr(EventMgr& event_mgr)
 }
 
 
-void ComponentMgr::removeComponent(handle64 entity, IComponent& component) {
+void ComponentMgr::remove(handle64 entity, IComponent& component) {
 	const auto it = component_pools.find(component.getTypeIndex());
 	if (it != component_pools.end()) {
 		if (it->second->contains(entity.index)) {

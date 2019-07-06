@@ -4,7 +4,7 @@
 namespace ecs {
 
 template <typename SystemT, typename... ArgsT>
-SystemT& SystemMgr::addSystem(ArgsT&&... args) {
+SystemT& SystemMgr::add(ArgsT&&... args) {
 	const auto it = systems.find(SystemT::index);
 
 	if (it != systems.end() && it->second != nullptr)
@@ -30,7 +30,7 @@ SystemT& SystemMgr::addSystem(ArgsT&&... args) {
 
 
 template<typename SystemT>
-void SystemMgr::removeSystem() {
+void SystemMgr::remove() {
 	systems.erase(SystemT::index);
 
 	const auto it = std::find_if(system_queue.begin(), system_queue.end(),

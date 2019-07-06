@@ -1,7 +1,6 @@
 #include "new_model_menu.h"
 
 #include "imgui.h"
-#include "entity/entity.h"
 #include "resource/resource_mgr.h"
 #include "scene/scene.h"
 #include "resource/model/blueprint_factory.h"

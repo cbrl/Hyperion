@@ -1,9 +1,10 @@
 #pragma once
 
 #include "ecs.h"
-#include "scene/components/transform/transform.h"
+#include "scene/components/hierarchy/hierarchy.h"
 #include "scene/events/core_events.h"
 
+class Transform;
 
 namespace render::systems {
 
@@ -38,7 +39,7 @@ private:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	void registerCallbacks() override;
-	void onParentChanged(const ecs::Entity::ParentChangedEvent& event);
+	void onParentChanged(const Hierarchy::ParentChangedEvent& event);
 
 	bool updateWorld(Transform& transform);
 };

@@ -13,7 +13,6 @@ class SystemMgr;
 class ComponentMgr;
 class EntityMgr;
 
-class Entity;
 class IComponent;
 class ISystem;
 
@@ -50,26 +49,10 @@ public:
 
 	// Create a new entity
 	[[nodiscard]]
-	handle64 createEntity();
+	handle64 create();
 
 	// Destroy an existing entity
-	void removeEntity(handle64 entity);
-
-	// Retrieve an entity using its handle
-	[[nodiscard]]
-	Entity& get(handle64 handle);
-
-	// Retrieve an entity using its handle
-	[[nodiscard]]
-	const Entity& get(handle64 handle) const;
-
-	// Attempt to retrieve an entity given its handle. Returns nullptr if given an invalid handle.
-	[[nodiscard]]
-	Entity* tryGet(handle64 handle);
-
-	// Attempt to retrieve an entity given its handle. Returns nullptr if given an invalid handle.
-	[[nodiscard]]
-	const Entity* tryGet(handle64 handle) const;
+	void destroy(handle64 entity);
 
 	// Check if a given handle is valid
 	[[nodiscard]]
@@ -81,32 +64,32 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Add a component to this entity
-	template<typename ComponentT, typename... ArgsT>
-	ComponentT& addComponent(handle64 entity, ArgsT&& ... args);
+	template<typename ComponentT, typename... ArgsT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
+	ComponentT& add(handle64 entity, ArgsT&& ... args);
 
 	// Remove a component from this entity
-	template<typename ComponentT>
-	void removeComponent(handle64 entity);
+	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
+	void remove(handle64 entity);
 
-	void removeComponent(handle64 entity, IComponent& component);
+	void remove(handle64 entity, IComponent& component);
 
 	// Get the first component of the specified type
-	template<typename ComponentT>
+	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	[[nodiscard]]
 	ComponentT& get(handle64 entity);
 
 	// Get the first component of the specified type
-	template<typename ComponentT>
+	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	[[nodiscard]]
 	const ComponentT& get(handle64 entity) const;
 
 	// Get the first component of the specified type, if it exists.
-	template<typename ComponentT>
+	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	[[nodiscard]]
 	ComponentT* tryGet(handle64 entity);
 
 	// Get the first component of the specified type, if it exists.
-	template<typename ComponentT>
+	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	[[nodiscard]]
 	const ComponentT* tryGet(handle64 entity) const;
 
@@ -120,27 +103,27 @@ public:
 	// Member Functions - Systems
 	//----------------------------------------------------------------------------------
 
-	template<typename SystemT, typename... ArgsT>
-	SystemT& addSystem(ArgsT&&... args);
+	template<typename SystemT, typename... ArgsT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
+	SystemT& add(ArgsT&&... args);
 
-	void removeSystem(ISystem& system);
+	void remove(ISystem& system);
 
-	template<typename SystemT>
-	void removeSystem();
+	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
+	void remove();
 
-	template<typename SystemT>
+	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	[[nodiscard]]
 	SystemT& get();
 
-	template<typename SystemT>
+	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	[[nodiscard]]
 	const SystemT& get() const;
 
-	template<typename SystemT>
+	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	[[nodiscard]]
 	SystemT* tryGet();
 
-	template<typename SystemT>
+	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	[[nodiscard]]
 	const SystemT* tryGet() const;
 
@@ -162,12 +145,12 @@ public:
 	// Do something with each entity with a component of type ComponentT.
 	// Providing no template arguments will apply the action to every entity.
 	template<typename... ComponentT>
-	void forEach(std::function<void(Entity&)> act);
+	void forEach(std::function<void(handle64)> act);
 
 	// Do something with each entity with a component of type ComponentT.
 	// Providing no template arguments will apply the action to every entity.
 	template<typename... ComponentT>
-	void forEach(std::function<void(const Entity&)> act) const;
+	void forEach(std::function<void(handle64)> act) const;
 
 	// Do something with each component of type ComponentT
 	template<typename ComponentT>

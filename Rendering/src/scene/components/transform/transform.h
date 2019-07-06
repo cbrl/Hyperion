@@ -1,7 +1,6 @@
 #pragma once
 
 #include "component/component.h"
-#include "entity/entity.h"
 #include "geometry/transform/transform_3d.h"
 #include "directxmath/directxmath.h"
 #include "scene/events/core_events.h"

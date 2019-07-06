@@ -6,10 +6,11 @@
 
 
 void AxisRotationSystem::update() {
+	auto& ecs = this->getECS();
 
-	getECS().forEach<Transform, AxisRotation>([&](ecs::Entity& entity) {
-		auto& transform      = entity.get<Transform>();
-		const auto& rotation = entity.get<AxisRotation>();
+	ecs.forEach<Transform, AxisRotation>([&](handle64 entity) {
+		auto& transform      = ecs.get<Transform>(entity);
+		const auto& rotation = ecs.get<AxisRotation>(entity);
 
 		if (!rotation.isActive() || !transform.isActive())
 			return;

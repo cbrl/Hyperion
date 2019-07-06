@@ -48,16 +48,16 @@ void BoundingVolumePass::bindRenderStates() const {
 }
 
 
-void XM_CALLCONV BoundingVolumePass::render(const Scene& scene, FXMMATRIX world_to_projection, const f32_4& color) const {
+void XM_CALLCONV BoundingVolumePass::render(const ecs::ECS& ecs, FXMMATRIX world_to_projection, const f32_4& color) const {
 
 	// Bind the render states
 	bindRenderStates();
 
 	color_buffer.updateData(device_context, color);
 
-	scene.getECS().forEach<Transform, DirectionalLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.get<Transform>();
-		const auto& light     = entity.get<DirectionalLight>();
+	ecs.forEach<Transform, DirectionalLight>([&](handle64 entity) {
+		const auto& transform = ecs.get<Transform>(entity);
+		const auto& light     = ecs.get<DirectionalLight>(entity);
 
 		if (!light.isActive())
 			return;
@@ -65,9 +65,9 @@ void XM_CALLCONV BoundingVolumePass::render(const Scene& scene, FXMMATRIX world_
 		renderAABB(light.getAABB(), transform, world_to_projection);
 	});
 
-	scene.getECS().forEach<Transform, PointLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.get<Transform>();
-		const auto& light     = entity.get<PointLight>();
+	ecs.forEach<Transform, PointLight>([&](handle64 entity) {
+		const auto& transform = ecs.get<Transform>(entity);
+		const auto& light     = ecs.get<PointLight>(entity);
 
 		if (!light.isActive())
 			return;
@@ -75,9 +75,9 @@ void XM_CALLCONV BoundingVolumePass::render(const Scene& scene, FXMMATRIX world_
 		renderAABB(light.getAABB(), transform, world_to_projection);
 	});
 
-	scene.getECS().forEach<Transform, SpotLight>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.get<Transform>();
-		const auto& light     = entity.get<SpotLight>();
+	ecs.forEach<Transform, SpotLight>([&](handle64 entity) {
+		const auto& transform = ecs.get<Transform>(entity);
+		const auto& light     = ecs.get<SpotLight>(entity);
 
 		if (!light.isActive())
 			return;
@@ -85,9 +85,9 @@ void XM_CALLCONV BoundingVolumePass::render(const Scene& scene, FXMMATRIX world_
 		renderAABB(light.getAABB(), transform, world_to_projection);
 	});
 
-	scene.getECS().forEach<Transform, Model>([&](const ecs::Entity& entity) {
-		const auto& transform = entity.get<Transform>();
-		const auto& model     = entity.get<Model>();
+	ecs.forEach<Transform, Model>([&](handle64 entity) {
+		const auto& transform = ecs.get<Transform>(entity);
+		const auto& model     = ecs.get<Model>(entity);
 
 		if (!model.isActive())
 			return;

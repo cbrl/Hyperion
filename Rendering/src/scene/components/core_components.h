@@ -1,6 +1,9 @@
 #pragma once
 
+#include "name/name.h"
+
 #include "transform/transform.h"
+#include "hierarchy/hierarchy.h"
 
 #include "camera/perspective_camera.h"
 #include "camera/orthographic_camera.h"

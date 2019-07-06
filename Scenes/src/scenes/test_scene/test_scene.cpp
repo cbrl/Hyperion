@@ -33,23 +33,23 @@ void TestScene::initialize(Engine& engine) {
 	//----------------------------------------------------------------------------------
 
 	// User Interface
-	auto& ui = ecs.addSystem<render::systems::UserInterface>(engine);
+	auto& ui = ecs.add<render::systems::UserInterface>(engine);
 	addUserComponentsToUI(ui);
 
 	// Picking System: allows the user to select an object on the screen with the mouse
-	ecs.addSystem<render::systems::PickingSystem>(engine);
+	ecs.add<render::systems::PickingSystem>(engine);
 
 	// Camera motor system: moves an entity with a camera and camera movement component (entity requires CameraMovement component)
-	ecs.addSystem<CameraMotorSystem>(input, key_config);
+	ecs.add<CameraMotorSystem>(input, key_config);
 
 	// Mouse rotation system: reads mouse input to rotate an entity (entity requires MouseRotation component)
-	ecs.addSystem<MouseRotationSystem>(input);
+	ecs.add<MouseRotationSystem>(input);
 
 	// Axis rotation system: rotates an entity on an axis (entity requires AxisRotation component)
-	ecs.addSystem<AxisRotationSystem>();
+	ecs.add<AxisRotationSystem>();
 
 	// Axis orbit system: orbits an entity around an axis (entity requires AxisOrbit component)
-	ecs.addSystem<AxisOrbitSystem>();
+	ecs.add<AxisOrbitSystem>();
 
 
 	//----------------------------------------------------------------------------------
@@ -58,8 +58,9 @@ void TestScene::initialize(Engine& engine) {
 
 	// Create the camera
 	handle64 camera = createEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
-	ecs.get(camera).setName("Camera");
-	ecs.addComponent<AmbientLight>(camera).setColor(f32_4{0.16f, 0.16f, 0.16f, 1.0f});
+	ecs.add<Name>(camera, "Camera");
+	ecs.add<Hierarchy>(camera);
+	ecs.add<AmbientLight>(camera).setColor(f32_4{0.16f, 0.16f, 0.16f, 1.0f});
 
 	// Set the parameters
 	auto& cam = ecs.get<PerspectiveCamera>(camera);
@@ -108,7 +109,7 @@ void TestScene::initialize(Engine& engine) {
 	// Bounding Cube
 	{
 		handle64 inv_cube = importModel(device, inverted_cube_bp);
-		ecs.get(inv_cube).setName("Bounding Cube");
+		ecs.add<Name>(inv_cube, "Bounding Cube");
 		ecs.get<Transform>(inv_cube).setPosition(f32_3{0.0f, 5.0f, 0.0f});
 
 		auto& mat = inverted_cube_bp->materials[0];
@@ -120,7 +121,7 @@ void TestScene::initialize(Engine& engine) {
 	// Cube
 	{
 		handle64 cube = importModel(device, cube_bp);
-		ecs.get(cube).setName("Cube");
+		ecs.add<Name>(cube, "Cube");
 		ecs.get<Transform>(cube).setPosition(f32_3{-2.5f, 1.0f, 1.5f});
 
 		auto& mat = cube_bp->materials[0];
@@ -132,7 +133,7 @@ void TestScene::initialize(Engine& engine) {
 	// Cylinder
 	{
 		handle64 cylinder = importModel(device, cylinder_bp);
-		ecs.get(cylinder).setName("Cylinder");
+		ecs.add<Name>(cylinder, "Cylinder");
 		ecs.get<Transform>(cylinder).setPosition(f32_3{2.5f, 1.0f, 0.75f});
 
 		auto& mat = cylinder_bp->materials[0];
@@ -145,7 +146,7 @@ void TestScene::initialize(Engine& engine) {
 	// Sphere
 	{
 		handle64 sphere = importModel(device, sphere_bp);
-		ecs.get(sphere).setName("Sphere");
+		ecs.add<Name>(sphere, "Sphere");
 		ecs.get<Transform>(sphere).setPosition(f32_3{0.0f, 1.0f, -1.0f});
 		ecs.get<Transform>(sphere).setScale(f32_3{2.0f});
 
@@ -159,14 +160,14 @@ void TestScene::initialize(Engine& engine) {
 	// Sphere Light
 	//auto sphere_light = importModel(device, sphere_bp);
 	//ecs.get(sphere_light).setName("Sphere Light");
-	//ecs.addComponent<PointLight>(sphere_light);
+	//ecs.add<PointLight>(sphere_light);
 	//ecs.get<Transform>(sphere_light).setPosition(f32_3{0.0f, 4.0f, 0.0f});
 
-	//auto& rotation = ecs.addComponent<AxisRotation>(sphere_light);
+	//auto& rotation = ecs.add<AxisRotation>(sphere_light);
 	//rotation.setAxis(AxisRotation::Axis::Y);
 	//rotation.setSpeedY(1.5f);
 
-	//auto* orbit = ecs.addComponent<AxisOrbit>(sphere_light);
+	//auto* orbit = ecs.add<AxisOrbit>(sphere_light);
 	//orbit.setSpeed(0.5f);
 
 
@@ -177,10 +178,10 @@ void TestScene::initialize(Engine& engine) {
 	// Sphere light
 	{
 		auto entity = createEntity();
-		ecs.get(entity).setName("Point Light");
+		ecs.add<Name>(entity, "Point Light");
 		ecs.get<Transform>(entity).setPosition(f32_3{0.0f, 4.0f, 0.0f});
 
-		auto& light = ecs.addComponent<PointLight>(entity);
+		auto& light = ecs.add<PointLight>(entity);
 		light.setBaseColor(f32_3{1.0f, 1.0f, 1.0f});
 		light.setIntensity(9.0f);
 		light.setAttenuation(f32_3{0.0f, 0.1f, 0.1f});
@@ -190,11 +191,11 @@ void TestScene::initialize(Engine& engine) {
 
 	// Camera light
 	{
-		const auto light = createEntity();
-		ecs.get(light).setName("Camera Light");
-		ecs.get(camera).addChild(light);
+		const auto light = createEntity<HierarchyT>();
+		ecs.add<Name>(light, "Camera Light");
+		ecs.get<Hierarchy>(camera).addChild(ecs, light);
 
-		auto& spot_light = ecs.addComponent<SpotLight>(light);
+		auto& spot_light = ecs.add<SpotLight>(light);
 		spot_light.setBaseColor(f32_3{0.9f, 0.9f, 0.9f});
 		spot_light.setIntensity(7.0f);
 		spot_light.setAttenuation(f32_3{0.0f, 0.1f, 0.1f});
@@ -210,7 +211,7 @@ void TestScene::initialize(Engine& engine) {
 	// Directional Light
 	{
 		//const auto dir_light = createEntity();
-		//auto* light = ecs->addComponent<DirectionalLight>(dir_light);
+		//auto* light = ecs->add<DirectionalLight>(dir_light);
 		//light->setDiffuseColor(f32_4{ 0.0f, 0.0f, 1.0f, 0.0f });
 		//light->setRange(100.0f);
 		//light->setSize(f32_2{ 30.0f, 30.0f });
@@ -228,8 +229,8 @@ void TestScene::initialize(Engine& engine) {
 	auto font = resource_mgr.getOrCreate<Font>(L"../data/fonts/courier-12.spritefont");
 
 	scene_name_text = createEntity();
-	ecs.get(scene_name_text).setName("Scene Name Text");
-	ecs.addComponent<Text>(scene_name_text, font);
+	ecs.add<Name>(scene_name_text, "Scene Name Text");
+	ecs.add<Text>(scene_name_text, font);
 	ecs.get<Text>(scene_name_text).setText(StrToWstr(this->getName()));
 	ecs.get<Transform>(scene_name_text).setPosition(f32_3{10, 10, 0});
 }
@@ -246,12 +247,12 @@ void TestScene::addUserComponentsToUI(render::systems::UserInterface& ui) {
 
 	camera_movement.name = "Camera Movement";
 
-	camera_movement.getter = [](ecs::Entity& entity) -> ecs::IComponent* {
-		return entity.tryGet<CameraMovement>();
+	camera_movement.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::IComponent* {
+		return ecs.tryGet<CameraMovement>(entity);
 	};
 
-	camera_movement.adder = [](ecs::Entity& entity) -> void {
-		entity.addComponent<CameraMovement>();
+	camera_movement.adder = [](ecs::ECS& ecs, handle64 entity) -> void {
+		ecs.add<CameraMovement>(entity);
 	};
 
 	camera_movement.details_renderer = [](ecs::IComponent& component) -> void {
@@ -281,12 +282,12 @@ void TestScene::addUserComponentsToUI(render::systems::UserInterface& ui) {
 
 	mouse_rotation.name = "Mouse Rotation";
 
-	mouse_rotation.getter = [](ecs::Entity& entity) -> ecs::IComponent* {
-		return entity.tryGet<MouseRotation>();
+	mouse_rotation.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::IComponent* {
+		return ecs.tryGet<MouseRotation>(entity);
 	};
 
-	mouse_rotation.adder = [](ecs::Entity& entity) -> void {
-		entity.addComponent<MouseRotation>();
+	mouse_rotation.adder = [](ecs::ECS& ecs, handle64 entity) -> void {
+		ecs.add<MouseRotation>(entity);
 	};
 
 	mouse_rotation.details_renderer = [](ecs::IComponent& component) -> void {
@@ -308,12 +309,12 @@ void TestScene::addUserComponentsToUI(render::systems::UserInterface& ui) {
 
 	axis_rotation.name = "Axis Rotation";
 
-	axis_rotation.getter = [](ecs::Entity& entity) -> ecs::IComponent* {
-		return entity.tryGet<AxisRotation>();
+	axis_rotation.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::IComponent* {
+		return ecs.tryGet<AxisRotation>(entity);
 	};
 
-	axis_rotation.adder = [](ecs::Entity& entity) -> void {
-		entity.addComponent<AxisRotation>();
+	axis_rotation.adder = [](ecs::ECS& ecs, handle64 entity) -> void {
+		ecs.add<AxisRotation>(entity);
 	};
 
 	axis_rotation.details_renderer = [](ecs::IComponent& component) -> void {
@@ -384,12 +385,12 @@ void TestScene::addUserComponentsToUI(render::systems::UserInterface& ui) {
 
 	axis_orbit.name = "Axis Orbit";
 
-	axis_orbit.getter = [](ecs::Entity& entity) -> ecs::IComponent* {
-		return entity.tryGet<AxisOrbit>();
+	axis_orbit.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::IComponent* {
+		return ecs.tryGet<AxisOrbit>(entity);
 	};
 
-	axis_orbit.adder = [](ecs::Entity& entity) -> void {
-		entity.addComponent<AxisOrbit>();
+	axis_orbit.adder = [](ecs::ECS& ecs, handle64 entity) -> void {
+		ecs.add<AxisOrbit>(entity);
 	};
 
 	axis_orbit.details_renderer = [](ecs::IComponent& component) -> void {

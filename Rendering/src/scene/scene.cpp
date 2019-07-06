@@ -14,13 +14,13 @@ void Scene::load(Engine& engine) {
 void Scene::addCoreSystems(const Engine& engine) {
 
 	// Transform system: updates transform components when they're modified
-	ecs.addSystem<systems::TransformSystem>();
+	ecs.add<systems::TransformSystem>();
 
 	// Camera system: updates the buffers of camera components
-	ecs.addSystem<systems::CameraSystem>(engine.getRenderingMgr());
+	ecs.add<systems::CameraSystem>(engine.getRenderingMgr());
 
 	// Model system: updates the buffers of model components
-	ecs.addSystem<systems::ModelSystem>(engine.getRenderingMgr());
+	ecs.add<systems::ModelSystem>(engine.getRenderingMgr());
 }
 
 
@@ -41,19 +41,22 @@ void Scene::importModel(handle64 handle, ID3D11Device& device, const std::shared
 	if (not ecs.valid(handle))
 		return;
 
+	if (not ecs.has<Hierarchy>(handle))
+		ecs.add<Hierarchy>(handle);
+
 	std::function<void(handle64, const std::shared_ptr<ModelBlueprint>&, const ModelBlueprint::Node&)> process_node =
 	    [&](handle64 handle, const std::shared_ptr<ModelBlueprint>& bp, const ModelBlueprint::Node& bp_node) {
 			// Construct each model at this node
 			for (const u32 index : bp_node.mesh_indices) {
-				auto child = createEntity();
-				ecs.get(handle).addChild(child);
-				ecs.get(handle).addComponent<Model>(device, bp, index);
+				auto child = createEntity<EntityTemplates::HierarchyT>();
+				ecs.get<Hierarchy>(handle).addChild(ecs, child);
+				ecs.add<Model>(child, device, bp, index);
 			}
 
 			// Add a child entity for each child node
 			for (auto& node : bp_node.child_nodes) {
 			    auto child_root = createEntity();
-				ecs.get(handle).addChild(child_root);
+				ecs.get<Hierarchy>(handle).addChild(ecs, child_root);
 				process_node(child_root, bp, node);
 			}
 		};

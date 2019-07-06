@@ -6,11 +6,14 @@
 
 class Transform;
 
+namespace ecs {
+	class ECS;
+}
+
 namespace render {
 
 class RenderStateMgr;
 class ResourceMgr;
-class Scene;
 
 class BoundingVolumePass final {
 public:
@@ -38,7 +41,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void XM_CALLCONV render(const Scene& scene, FXMMATRIX world_to_projection, const f32_4& color) const;
+	void XM_CALLCONV render(const ecs::ECS& ecs, FXMMATRIX world_to_projection, const f32_4& color) const;
 
 private:
 

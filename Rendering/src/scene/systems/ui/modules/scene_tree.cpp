@@ -15,16 +15,20 @@ void SceneTree::draw(render::Scene& scene) {
 
 
 void SceneTree::drawTree(render::Scene& scene) {
+	auto& ecs = scene.getECS();
+
 	if (ImGui::BeginChild("Object List", {0, 0}, false, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-		ImGui::Text("%s (Entities: %llu)", scene.getName().c_str(), scene.getECS().count<ecs::Entity>());
+		ImGui::Text("%s (Entities: %llu)", scene.getName().c_str(), scene.getECS().count<handle64>());
 		ImGui::Separator();
 
 		// Draw a tree node for each root entity
-		scene.getECS().forEach([&](const ecs::Entity& entity) {
-			if (entity.hasParent())
-				return;
-			drawEntityNode(entity);
+		ecs.forEach([&](handle64 entity) {
+			if (auto* hierarchy = ecs.tryGet<Hierarchy>(entity)) {
+				if (ecs.valid(hierarchy->getParent()))
+					return;
+			}
+			drawEntityNode(ecs, entity);
 		});
 	}
 
@@ -42,26 +46,36 @@ void SceneTree::setSelectedEntity(handle64 entity) noexcept {
 }
 
 
-void SceneTree::drawEntityNode(const ecs::Entity& entity) {
-
-	auto handle = entity.getHandle();
-
-	//----------------------------------------------------------------------------------
-	// Draw Entity Node
-	//----------------------------------------------------------------------------------
+void SceneTree::drawEntityNode(ecs::ECS& ecs, handle64 entity) {
 	bool node_open = true;
-	if (entity.hasChildren()) {
-		node_open = scene_tree.newNode(handle, entity.getName().c_str());
+	auto* hierarchy = ecs.tryGet<Hierarchy>(entity);
+
+	if (hierarchy && hierarchy->hasChildren()) {
+		if (auto* name_cmp = ecs.tryGet<Name>(entity)) {
+			node_open = scene_tree.newNode(entity, name_cmp->name.c_str());
+		}
+		else {
+			const std::string name = "(Index: " + ToStr(entity.index).value_or("-1"s) +
+				                     ", Counter: " + ToStr(entity.counter).value_or("-1"s) + ")";
+			node_open = scene_tree.newNode(entity, name.c_str());
+		}
 	}
 	else {
-		node_open = scene_tree.newLeafNode(handle, entity.getName().c_str());
+		if (auto* name_cmp = ecs.tryGet<Name>(entity)) {
+			node_open = scene_tree.newLeafNode(entity, name_cmp->name.c_str());
+		}
+		else {
+			const std::string name = "(Index: " + ToStr(entity.index).value_or("-1"s) +
+				                     ", Counter: " + ToStr(entity.counter).value_or("-1"s) + ")";
+			node_open = scene_tree.newLeafNode(entity, name.c_str());
+		}
 	}
 
 	if (node_open) {
 		// Draw any child entities in this node
-		if (entity.hasChildren()) {
-			entity.forEachChild([this](const ecs::Entity& child) {
-				drawEntityNode(child);
+		if (hierarchy && hierarchy->hasChildren()) {
+			hierarchy->forEachChild(ecs, [this, &ecs](handle64 child) {
+				drawEntityNode(ecs, child);
 			});
 		}
 
@@ -92,7 +106,7 @@ void SceneTree::drawEntityMenu(render::Scene& scene) {
 		if ( ImGui::BeginMenu("Selected", ecs.valid(handle)) ) {
 			ImGui::Separator();
 			if (ImGui::MenuItem("Delete")) {
-				ecs.removeEntity(handle);
+				ecs.destroy(handle);
 			}
 
 			ImGui::EndMenu(); //Selected

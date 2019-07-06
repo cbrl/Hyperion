@@ -8,11 +8,14 @@
 class Model;
 class Transform;
 
+namespace ecs {
+	class ECS;
+}
+
 namespace render {
 
 class RenderStateMgr;
 class ResourceMgr;
-class Scene;
 
 class DepthPass final {
 public:
@@ -46,11 +49,11 @@ public:
 	//----------------------------------------------------------------------------------
 	void bindState() const;
 
-	void XM_CALLCONV render(const Scene& scene,
+	void XM_CALLCONV render(const ecs::ECS& ecs,
 	                        FXMMATRIX world_to_camera,
 	                        CXMMATRIX camera_to_projection) const;
 
-	void XM_CALLCONV renderShadows(const Scene& scene,
+	void XM_CALLCONV renderShadows(const ecs::ECS& ecs,
 	                               FXMMATRIX world_to_camera,
 	                               CXMMATRIX camera_to_projection) const;
 

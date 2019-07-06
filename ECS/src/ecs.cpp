@@ -14,33 +14,13 @@ ECS::ECS() {
 }
 
 
-handle64 ECS::createEntity() {
-	return entity_mgr->createEntity();
+handle64 ECS::create() {
+	return entity_mgr->create();
 }
 
 
-void ECS::removeEntity(handle64 entity) {
+void ECS::destroy(handle64 entity) {
 	entity_mgr->destroyEntity(entity);
-}
-
-
-Entity& ECS::get(handle64 handle) {
-	return entity_mgr->get(handle);
-}
-
-
-const Entity& ECS::get(handle64 handle) const {
-	return entity_mgr->get(handle);
-}
-
-
-Entity* ECS::tryGet(handle64 handle) {
-	return entity_mgr->tryGet(handle);
-}
-
-
-const Entity* ECS::tryGet(handle64 handle) const {
-	return entity_mgr->tryGet(handle);
 }
 
 
@@ -49,13 +29,13 @@ bool ECS::valid(handle64 handle) const {
 }
 
 
-void ECS::removeComponent(handle64 entity, IComponent& component) {
-	component_mgr->removeComponent(entity, component);
+void ECS::remove(handle64 entity, IComponent& component) {
+	component_mgr->remove(entity, component);
 }
 
 
-void ECS::removeSystem(ISystem& system) {
-	system_mgr->removeSystem(system);
+void ECS::remove(ISystem& system) {
+	system_mgr->remove(system);
 }
 
 

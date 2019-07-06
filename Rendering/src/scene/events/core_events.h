@@ -1,7 +1,7 @@
 #pragma once
 
 #include "event/event.h"
-#include "entity/entity.h"
+#include "memory/handle/handle.h"
 #include "datatypes/datatypes.h"
 
 class Transform;

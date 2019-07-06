@@ -10,15 +10,9 @@ EntityMgr::EntityMgr(ComponentMgr& component_mgr, EventMgr& event_mgr)
 }
 
 
-handle64 EntityMgr::createEntity() {
-	auto [handle, entity] = entity_map.create();
-
-	// Setup the entity
-	entity.get().setHandle(handle);
-	entity.get().setEventMgr(gsl::make_not_null(&event_mgr.get()));
-	entity.get().setEntityMgr(gsl::make_not_null(this));
-	entity.get().setComponentMgr(gsl::make_not_null(&component_mgr.get()));
-
+handle64 EntityMgr::create() {
+	auto [handle, resource] = entity_map.create();
+	resource.get() = handle; //copy the handle into the ResourceMap's handle
 	return handle;
 }
 
@@ -27,10 +21,6 @@ void EntityMgr::destroyEntity(handle64 handle) {
 	if (valid(handle)) {
 		expired_entities.push_back(handle);
 		component_mgr.get().removeAll(handle);
-
-		auto& entity = *tryGet(handle);
-		entity.removeAllChildren();
-		entity.removeParent();
 	}
 }
 
@@ -40,19 +30,6 @@ void EntityMgr::removeExpiredEntities() {
 		entity_map.release(handle);
 	}
 	expired_entities.clear();
-}
-
-
-Entity& EntityMgr::get(handle64 handle) {
-	return entity_map.get(handle);
-}
-
-
-Entity* EntityMgr::tryGet(handle64 handle) {
-	if (entity_map.contains(handle)) {
-		return &entity_map.get(handle);
-	}
-	return nullptr;
 }
 
 
@@ -66,15 +43,8 @@ bool EntityMgr::valid(handle64 entity) const noexcept {
 }
 
 
-void EntityMgr::forEach(const std::function<void(Entity&)>& act) {
-	for (Entity& entity : entity_map) {
-		act(entity);
-	}
-}
-
-
-void EntityMgr::forEach(const std::function<void(const Entity&)>& act) const {
-	for (const Entity& entity : entity_map) {
+void EntityMgr::forEach(const std::function<void(handle64)>& act) const {
+	for (auto entity : entity_map) {
 		act(entity);
 	}
 }

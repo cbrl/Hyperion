@@ -44,15 +44,13 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 		ImGui::EndMenuBar();
 	}
 
-	// Get the entity
-	ecs::Entity& entity = ecs.get(handle);
-
 	//----------------------------------------------------------------------------------
 	// Name/Details
 	//----------------------------------------------------------------------------------
-	ImGui::InputText("", &entity.getName());
-
-	ImGui::Separator();
+	if (auto* name = ecs.tryGet<Name>(handle)) {
+		ImGui::InputText("", &name->name);
+		ImGui::Separator();
+	}
 
 	ImGui::Text("Index:   %d", handle.index);
 	ImGui::Text("Counter: %d", handle.counter);
@@ -62,28 +60,50 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 	//----------------------------------------------------------------------------------
 	// Parent
 	//----------------------------------------------------------------------------------
+	auto* hierarchy = ecs.tryGet<Hierarchy>(handle);
+
 	entity_list.clear();
-	scene.getECS().forEach([&](const ecs::Entity& entity) {
-		entity_list.push_back(handle);
+	scene.getECS().forEach([&](handle64 other_entity) {
+		entity_list.push_back(other_entity);
 	});
 
-	const char* preview = nullptr;
-	if (entity.getParent() != handle64::invalid_handle)
-		preview = ecs.get(entity.getParent()).getName().c_str();
-	else
-		preview = "None";
+	const char* preview = "None";
+	if (hierarchy && ecs.valid(hierarchy->getParent())) {
+		if (auto* name = ecs.tryGet<Name>(hierarchy->getParent())) {
+			preview = name->name.c_str();
+		}
+	}
 
 	if (ImGui::BeginCombo("Parent", preview)) {
-		if (ImGui::Selectable("None", entity.getParent() == handle64::invalid_handle)) {
-			entity.removeParent();
+		if ( ImGui::Selectable("None", (!hierarchy || (hierarchy->getParent() == handle64::invalid_handle))) ) {
+			if (hierarchy)
+				hierarchy->removeParent(ecs);
 		}
 
 		for (size_t i = 0; i < entity_list.size(); ++i) {
 			const bool selected = (entity_names_idx == i);
-			auto& name = ecs.get(entity_list[i]).getName();
-			if (ImGui::Selectable(name.c_str(), selected)) {
+			bool set_parent = false;
+
+			if (auto* name = ecs.tryGet<Name>(entity_list[i])) {
+				if (ImGui::Selectable(name->name.c_str(), selected)) {
+					set_parent = true;
+				}
+			}
+			else {
+				const std::string temp_name = "(Index: " + ToStr(entity_list[i].index).value_or("-1"s) +
+				                              ", Counter: " + ToStr(entity_list[i].counter).value_or("-1"s) + ")";
+				if (ImGui::Selectable(temp_name.c_str(), selected)) {
+					set_parent = true;
+				}
+			}
+
+			if (set_parent) {
 				entity_names_idx = static_cast<int>(i);
-				entity.setParent(entity_list[i]);
+
+				if (not hierarchy) {
+					hierarchy = &ecs.add<Hierarchy>(handle);
+				}
+				hierarchy->setParent(ecs, entity_list[i]);
 			}
 		}
 
@@ -98,7 +118,7 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 	// Render details of user-defined components if applicable
 	for (const auto& [idx, component_def] : user_components) {
 		if (component_def.getter) {
-			auto* component = component_def.getter(entity);
+			auto* component = component_def.getter(ecs, handle);
 			if (component) {
 				drawUserComponentNode(ecs, component_def.name.c_str(), *component, component_def.details_renderer);
 			}
@@ -167,19 +187,19 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, ha
 	if (ImGui::BeginMenu("Add Component", valid_entity)) {
 
 		if (ImGui::MenuItem("Orthographic Camera", nullptr, nullptr, valid_entity)) {
-			ecs.addComponent<OrthographicCamera>(handle, device, u32_2{480, 480});
+			ecs.add<OrthographicCamera>(handle, device, u32_2{480, 480});
 		}
 		if (ImGui::MenuItem("Perspective Camera", nullptr, nullptr, valid_entity)) {
-			ecs.addComponent<PerspectiveCamera>(handle, device, u32_2{480, 480});
+			ecs.add<PerspectiveCamera>(handle, device, u32_2{480, 480});
 		}
 		if (ImGui::MenuItem("Directional Light", nullptr, nullptr, valid_entity)) {
-			ecs.addComponent<DirectionalLight>(handle);
+			ecs.add<DirectionalLight>(handle);
 		}
 		if (ImGui::MenuItem("Point Light", nullptr, nullptr, valid_entity)) {
-			ecs.addComponent<PointLight>(handle);
+			ecs.add<PointLight>(handle);
 		}
 		if (ImGui::MenuItem("Spot Light", nullptr, nullptr, valid_entity)) {
-			ecs.addComponent<SpotLight>(handle);
+			ecs.add<SpotLight>(handle);
 		}
 
 		if (ImGui::BeginMenu("Model")) {
@@ -205,7 +225,7 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, ha
 		for (const auto& [idx, component] : user_components) {
 			if (component.adder) {
 				if (ImGui::MenuItem(component.name.c_str(), nullptr, nullptr, valid_entity)) {
-					component.adder(ecs.get(handle));
+					component.adder(ecs, handle);
 				}
 			}
 		}
@@ -229,7 +249,7 @@ void EntityDetailsWindow::drawComponentNode(ecs::ECS& ecs,
 	}
 	ImGui::PopID();
 	if (!dont_delete) {
-		ecs.removeComponent(component.getOwner(), component);
+		ecs.remove(component.getOwner(), component);
 	}
 }
 
@@ -249,7 +269,7 @@ void EntityDetailsWindow::drawUserComponentNode(ecs::ECS& ecs,
 	}
 	ImGui::PopID();
 	if (!dont_delete) {
-		ecs.removeComponent(component.getOwner(), component);
+		ecs.remove(component.getOwner(), component);
 	}
 }
 

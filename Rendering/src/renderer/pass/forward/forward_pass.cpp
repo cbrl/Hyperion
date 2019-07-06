@@ -86,7 +86,7 @@ void ForwardPass::bindWireframeState() const {
 }
 
 
-void XM_CALLCONV ForwardPass::renderOpaque(const Scene& scene,
+void XM_CALLCONV ForwardPass::renderOpaque(const ecs::ECS& ecs,
                                            FXMMATRIX world_to_projection,
                                            const Texture* env_map,
                                            BRDF brdf) const {
@@ -102,9 +102,9 @@ void XM_CALLCONV ForwardPass::renderOpaque(const Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.get<Model>();
-		const auto& transform = entity.get<Transform>();
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model     = ecs.get<Model>(entity);
+		const auto& transform = ecs.get<Transform>(entity);
 
 		if (not model.isActive())
 			return;
@@ -118,7 +118,7 @@ void XM_CALLCONV ForwardPass::renderOpaque(const Scene& scene,
 }
 
 
-void XM_CALLCONV ForwardPass::renderTransparent(const Scene& scene,
+void XM_CALLCONV ForwardPass::renderTransparent(const ecs::ECS& ecs,
                                                 FXMMATRIX world_to_projection,
                                                 const Texture* env_map,
                                                 BRDF brdf) const {
@@ -134,9 +134,9 @@ void XM_CALLCONV ForwardPass::renderTransparent(const Scene& scene,
 	pixel_shader->bind(device_context);
 
 	// Render models
-	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.get<Model>();
-		const auto& transform = entity.get<Transform>();
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model     = ecs.get<Model>(entity);
+		const auto& transform = ecs.get<Transform>(entity);
 
 		if (not model.isActive())
 			return;
@@ -151,15 +151,15 @@ void XM_CALLCONV ForwardPass::renderTransparent(const Scene& scene,
 }
 
 
-void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX world_to_projection, const Texture* env_map) const {
+void XM_CALLCONV ForwardPass::renderOverrided(const ecs::ECS& ecs, FXMMATRIX world_to_projection, const Texture* env_map) const {
 
 	//----------------------------------------------------------------------------------
 	// Sort models by shader type
 	//----------------------------------------------------------------------------------
 	std::unordered_map<PixelShader*, std::vector<const Model*>> sorted_models;
 
-	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.get<Model>();
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model = ecs.get<Model>(entity);
 		auto& mat = model.getMaterial();
 
 		if (not model.isActive())
@@ -186,7 +186,7 @@ void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX worl
 		shader->bind(device_context);
 
 		for (const auto* model : model_vec) {
-			const auto& transform = scene.getECS().get<Transform>(model->getOwner());
+			const auto& transform = ecs.get<Transform>(model->getOwner());
 			const auto& mat = model->getMaterial();
 
 			if (mat.params.base_color[3] <= ALPHA_MAX)
@@ -205,7 +205,7 @@ void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX worl
 		shader->bind(device_context);
 
 		for (const auto* model : model_vec) {
-			const auto& transform = scene.getECS().get<Transform>(model->getOwner());
+			const auto& transform = ecs.get<Transform>(model->getOwner());
 			const auto& mat = model->getMaterial();
 
 			if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
@@ -217,7 +217,7 @@ void XM_CALLCONV ForwardPass::renderOverrided(const Scene& scene, FXMMATRIX worl
 }
 
 
-void ForwardPass::renderFalseColor(const Scene& scene,
+void ForwardPass::renderFalseColor(const ecs::ECS& ecs,
                                    FXMMATRIX world_to_projection,
                                    FalseColor color) const {
 
@@ -226,9 +226,9 @@ void ForwardPass::renderFalseColor(const Scene& scene,
 	auto pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, color);
 	pixel_shader->bind(device_context);
 
-	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.get<Model>();
-		const auto& transform = entity.get<Transform>();
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model     = ecs.get<Model>(entity);
+		const auto& transform = ecs.get<Transform>(entity);
 
 		if (model.isActive())
 			renderModel(model, transform, world_to_projection);
@@ -236,7 +236,7 @@ void ForwardPass::renderFalseColor(const Scene& scene,
 }
 
 
-void ForwardPass::renderWireframe(const Scene& scene, FXMMATRIX world_to_projection, const f32_4& color) const {
+void ForwardPass::renderWireframe(const ecs::ECS& ecs, FXMMATRIX world_to_projection, const f32_4& color) const {
 
 	bindWireframeState();
 
@@ -245,9 +245,9 @@ void ForwardPass::renderWireframe(const Scene& scene, FXMMATRIX world_to_project
 	auto pixel_shader = ShaderFactory::CreateFalseColorPS(resource_mgr, FalseColor::Static);
 	pixel_shader->bind(device_context);
 
-	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.get<Model>();
-		const auto& transform = entity.get<Transform>();
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model     = ecs.get<Model>(entity);
+		const auto& transform = ecs.get<Transform>(entity);
 
 		if (model.isActive())
 			renderModel(model, transform, world_to_projection);
@@ -255,15 +255,15 @@ void ForwardPass::renderWireframe(const Scene& scene, FXMMATRIX world_to_project
 }
 
 
-void XM_CALLCONV ForwardPass::renderGBuffer(const Scene& scene, FXMMATRIX world_to_projection) const {
+void XM_CALLCONV ForwardPass::renderGBuffer(const ecs::ECS& ecs, FXMMATRIX world_to_projection) const {
 
 	bindOpaqueState();
 
 	gbuffer_shader->bind(device_context);
 
-	scene.getECS().forEach<Model, Transform>([&](const ecs::Entity& entity) {
-		const auto& model = entity.get<Model>();
-		const auto& transform = entity.get<Transform>();
+	ecs.forEach<Model, Transform>([&](handle64 entity) {
+		const auto& model     = ecs.get<Model>(entity);
+		const auto& transform = ecs.get<Transform>(entity);
 
 		if (not model.isActive())
 			return;

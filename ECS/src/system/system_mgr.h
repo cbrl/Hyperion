@@ -40,12 +40,12 @@ public:
 	void update(std::chrono::duration<f64> dt);
 
 	template<typename SystemT, typename... ArgsT>
-	SystemT& addSystem(ArgsT&&... args);
+	SystemT& add(ArgsT&&... args);
 
-	void removeSystem(ISystem& system);
+	void remove(ISystem& system);
 
 	template<typename SystemT>
-	void removeSystem();
+	void remove();
 
 	template<typename SystemT>
 	[[nodiscard]]

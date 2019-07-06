@@ -35,9 +35,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\entity\entity.h">
-      <Filter>Header Files\entity</Filter>
-    </ClInclude>
     <ClInclude Include="src\entity\entity_mgr.h">
       <Filter>Header Files\entity</Filter>
     </ClInclude>
@@ -76,9 +73,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\entity\entity.cpp">
-      <Filter>Source Files\entity</Filter>
-    </ClCompile>
     <ClCompile Include="src\ecs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -101,9 +95,6 @@
   <ItemGroup>
     <None Include="src\ecs.tpp">
       <Filter>Header Files</Filter>
-    </None>
-    <None Include="src\entity\entity.tpp">
-      <Filter>Header Files\entity</Filter>
     </None>
     <None Include="src\system\system_mgr.tpp">
       <Filter>Header Files\system</Filter>

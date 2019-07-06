@@ -19,7 +19,8 @@ HandleT HandleTable<HandleT, chunk_size>::createHandle() {
 
 	// If this point is reached, then the table needs to
 	// be expanded before a new handle is created.
-	if (resize(table.capacity() + chunk_size)) {
+	if (reserve(table.capacity() + chunk_size)) {
+		table.emplace_back();
 		table[i].counter = 1;
 		table[i].in_use = true;
 		return HandleT{i, table[i].counter};
