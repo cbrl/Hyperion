@@ -20,7 +20,7 @@ void EventDispatcher<EventT>::dispatch(const IEvent& event) {
 	delegate_list_locked = true;
 
 	// Remove pending delegates
-	if (!pending_remove_delegates.empty()) {
+	if (not pending_remove_delegates.empty()) {
 		for (auto& it : pending_remove_delegates) {
 			event_delegates.erase(it);
 		}
@@ -77,7 +77,7 @@ void EventDispatcher<EventT>::removeEventCallback(gsl::not_null<IEventDelegate*>
 
 	// Remove the delegate
 	if (result != event_delegates.end()) {
-		if (!delegate_list_locked) {
+		if (not delegate_list_locked) {
 			event_delegates.erase(result);
 		}
 		else {

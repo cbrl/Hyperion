@@ -14,7 +14,7 @@ void TextPass::render(const ecs::ECS& ecs) const {
 		const auto& transform = ecs.get<Transform>(entity);
 		const auto& text      = ecs.get<Text>(entity);
 
-		if (!text.isActive())
+		if (not text.isActive())
 			return;
 
 		const auto& font = text.getFont();

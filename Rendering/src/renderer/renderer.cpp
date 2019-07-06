@@ -66,8 +66,8 @@ void Renderer::render(Scene& scene, std::chrono::duration<f32> delta_time) {
 	// Render the scene for each camera
 	//----------------------------------------------------------------------------------
 	scene.getECS().forEach<PerspectiveCamera>([&](const PerspectiveCamera& camera) {
-
-		if (!camera.isActive()) return;
+		if (not camera.isActive())
+			return;
 
 		// Bind the buffer and viewport
 		camera.bindBuffer(device_context, SLOT_CBUFFER_CAMERA);
@@ -78,8 +78,8 @@ void Renderer::render(Scene& scene, std::chrono::duration<f32> delta_time) {
 	});
 
 	scene.getECS().forEach<OrthographicCamera>([&](const OrthographicCamera& camera) {
-
-		if (!camera.isActive()) return;
+		if (not camera.isActive())
+			return;
 
 		// Bind the buffer and viewport
 		camera.bindBuffer(device_context, SLOT_CBUFFER_CAMERA);

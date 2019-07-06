@@ -59,7 +59,7 @@ void XM_CALLCONV BoundingVolumePass::render(const ecs::ECS& ecs, FXMMATRIX world
 		const auto& transform = ecs.get<Transform>(entity);
 		const auto& light     = ecs.get<DirectionalLight>(entity);
 
-		if (!light.isActive())
+		if (not light.isActive())
 			return;
 
 		renderAABB(light.getAABB(), transform, world_to_projection);
@@ -69,7 +69,7 @@ void XM_CALLCONV BoundingVolumePass::render(const ecs::ECS& ecs, FXMMATRIX world
 		const auto& transform = ecs.get<Transform>(entity);
 		const auto& light     = ecs.get<PointLight>(entity);
 
-		if (!light.isActive())
+		if (not light.isActive())
 			return;
 
 		renderAABB(light.getAABB(), transform, world_to_projection);
@@ -79,7 +79,7 @@ void XM_CALLCONV BoundingVolumePass::render(const ecs::ECS& ecs, FXMMATRIX world
 		const auto& transform = ecs.get<Transform>(entity);
 		const auto& light     = ecs.get<SpotLight>(entity);
 
-		if (!light.isActive())
+		if (not light.isActive())
 			return;
 
 		renderAABB(light.getAABB(), transform, world_to_projection);
@@ -89,7 +89,7 @@ void XM_CALLCONV BoundingVolumePass::render(const ecs::ECS& ecs, FXMMATRIX world
 		const auto& transform = ecs.get<Transform>(entity);
 		const auto& model     = ecs.get<Model>(entity);
 
-		if (!model.isActive())
+		if (not model.isActive())
 			return;
 
 		renderAABB(model.getAABB(), transform, world_to_projection);
@@ -102,7 +102,7 @@ void XM_CALLCONV BoundingVolumePass::renderAABB(const AABB& aabb, const Transfor
 	const auto object_to_world = transform.getObjectToWorldMatrix();
 	const auto object_to_projection = object_to_world * world_to_projection;
 
-	if (!Frustum(object_to_projection).contains(aabb))
+	if (not Frustum(object_to_projection).contains(aabb))
 		return;
 	
 	const auto scale  = aabb.max() - aabb.min();

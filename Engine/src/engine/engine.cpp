@@ -177,7 +177,8 @@ void Engine::init(std::wstring title,
 		};
 
 		msg_handler.on_resize = [this]() {
-			if (!rendering_mgr) return;
+			if (!rendering_mgr)
+				return;
 			rendering_mgr->onResize();
 
 			const u32_2 size = window->getClientSize();

@@ -68,7 +68,7 @@ void XM_CALLCONV DepthPass::render(const ecs::ECS& ecs,
 		const auto& model     = ecs.get<Model>(entity);
 		const auto& transform = ecs.get<Transform>(entity);
 
-		if (!model.isActive())
+		if (not model.isActive())
 			return;
 
 		const auto& mat = model.getMaterial();
@@ -87,7 +87,7 @@ void XM_CALLCONV DepthPass::render(const ecs::ECS& ecs,
 		const auto& model     = ecs.get<Model>(entity);
 		const auto& transform = ecs.get<Transform>(entity);
 
-		if (!model.isActive())
+		if (not model.isActive())
 			return;
 		
 		const auto& mat = model.getMaterial();
@@ -115,8 +115,8 @@ void XM_CALLCONV DepthPass::renderShadows(const ecs::ECS& ecs,
 		const auto& model     = ecs.get<Model>(entity);
 		const auto& transform = ecs.get<Transform>(entity);
 
-		if (!model.isActive()) return;
-		if (!model.castsShadows()) return;
+		if (not model.isActive()) return;
+		if (not model.castsShadows()) return;
 
 		const auto& mat = model.getMaterial();
 		if (mat.params.base_color[3] <= ALPHA_MAX)
@@ -135,8 +135,8 @@ void XM_CALLCONV DepthPass::renderShadows(const ecs::ECS& ecs,
 		const auto& model     = ecs.get<Model>(entity);
 		const auto& transform = ecs.get<Transform>(entity);
 
-		if (!model.isActive()) return;
-		if (!model.castsShadows()) return;
+		if (not model.isActive()) return;
+		if (not model.castsShadows()) return;
 
 		const auto& mat = model.getMaterial();
 		if (mat.params.base_color[3] < ALPHA_MIN || mat.params.base_color[3] > ALPHA_MAX)
@@ -162,7 +162,7 @@ void XM_CALLCONV DepthPass::renderModel(const Model& model, const Transform& tra
 	const auto model_to_world      = transform.getObjectToWorldMatrix();
 	const auto model_to_projection = model_to_world * world_to_projection;
 
-	if (!Frustum(model_to_projection).contains(model.getAABB()))
+	if (not Frustum(model_to_projection).contains(model.getAABB()))
 		return;
 
 	model.bindMesh(device_context);

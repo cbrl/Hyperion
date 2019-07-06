@@ -57,7 +57,7 @@ fs::path& TextEditWindow::getCurrPath() {
 
 
 void TextEditWindow::draw(Engine& engine, bool& open) {
-	if (!open) return;
+	if (not open) return;
 
 	if (ImGui::Begin("Text Editor", &open, ImGuiWindowFlags_MenuBar)) {
 		drawMenuBar();
@@ -78,7 +78,7 @@ void TextEditWindow::draw(Engine& engine, bool& open) {
 					ImGui::EndTabItem();
 				}
 
-				if (!open) {
+				if (not open) {
 					closeEditor(i);
 				}
 			}

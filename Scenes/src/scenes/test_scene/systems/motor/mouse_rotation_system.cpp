@@ -18,7 +18,7 @@ void MouseRotationSystem::update() {
 		auto& transform      = ecs.get<Transform>(entity);
 		const auto& rotation = ecs.get<MouseRotation>(entity);
 
-		if (!rotation.isActive())
+		if (not rotation.isActive())
 			return;
 
 		const f32_2 max = rotation.getMaxRotation();

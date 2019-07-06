@@ -78,7 +78,7 @@ void SwapChain::createSwapChain() {
 	desc.AlphaMode        = DXGI_ALPHA_MODE_IGNORE;
 	desc.Flags            = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-	if (!display_config.isVsync()) {
+	if (not display_config.isVsync()) {
 		desc.Flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 	}
 
@@ -132,7 +132,7 @@ void SwapChain::reset() {
 
 	// Swap chain flags
 	UINT flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-	if (!display_config.isVsync()) {
+	if (not display_config.isVsync()) {
 		flags |= DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING;
 	}
 

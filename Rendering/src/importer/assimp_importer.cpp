@@ -120,7 +120,8 @@ bool GetMap(const aiMaterial* mat, aiTextureType type, unsigned int idx, Resourc
 	aiTextureMapMode mode[2];
 	//TODO: handle texture stacks?
 	if (mat->GetTexture(type, idx, &path, &mapping, &uvindex, &blend, &op, mode) == aiReturn_SUCCESS) {
-		if (!path.data[0]) return false;
+		if (!path.data[0])
+			return false;
 
 		if (path.data[0] == '*') {
 			//TODO: handle embedded textures? (very rare)

@@ -10,11 +10,11 @@ TransformManipulator::TransformManipulator(Input& input, KeyConfig& key_config)
 }
 
 void TransformManipulator::draw(Engine& engine, handle64 selected_entity) {
-	if (!selected_entity) {
+	auto& ecs = engine.getScene().getECS();
+
+	if (not ecs.valid(selected_entity)) {
 		return;
 	}
-
-	auto& ecs = engine.getScene().getECS();
 
 	// Draw transform manipulation tool. Only for the primary camera since it
 	// doesn't work well when drawing multiple transform tools at once.

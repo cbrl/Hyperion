@@ -94,7 +94,7 @@ void ImportTexture(ID3D11Device& device,
                    ID3D11ShaderResourceView** srv_out) {
 
 	// Return white texture if the file is missing
-	if (!fs::exists(filename)) {
+	if (not fs::exists(filename)) {
 		HandleLoaderError(device, "Error loading texture (file not found): " + filename.string(), srv_out);
 		return;
 	}
@@ -163,7 +163,7 @@ void ImportTexture(ID3D11Device& device,
 
 	// Return white texture if a file is missing
 	for (const fs::path& file : filenames) {
-		if (!fs::exists(file)) {
+		if (not fs::exists(file)) {
 			HandleLoaderError(device, "Error loading texture (file not found): " + file.string(), srv_out);
 			return;
 		}

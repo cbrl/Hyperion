@@ -43,15 +43,15 @@ void ModelBlueprint::constructBlueprint(ID3D11Device& device, const ModelOutput&
 			VertexT vert;
 			vert.position = mesh.positions[i];
 			if constexpr (VertexT::hasNormal()) {
-				if (!mesh.normals.empty())
+				if (not mesh.normals.empty())
 					vert.normal = mesh.normals[i];
 			}
 			if constexpr (VertexT::hasTexture()) {
-				if (!mesh.texture_coords.empty())
+				if (not mesh.texture_coords.empty())
 					vert.texCoord = mesh.texture_coords[i];
 			}
 			if constexpr (VertexT::hasColor()) {
-				if (!mesh.colors.empty())
+				if (not mesh.colors.empty())
 					vert.color = mesh.colors[i];
 			}
 			vertices.push_back(std::move(vert));

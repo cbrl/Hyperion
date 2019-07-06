@@ -107,7 +107,8 @@ void LightPass::updateData(const ecs::ECS& ecs) const {
 	LightBuffer light_data;
 
 	ecs.forEach<AmbientLight>([&light_data](const AmbientLight& light) {
-		if (!light.isActive()) return;
+		if (not light.isActive())
+			return;
 		light_data.ambient += light.getColor();
 	});
 
