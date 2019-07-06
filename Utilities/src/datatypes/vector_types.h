@@ -154,7 +154,7 @@ constexpr auto operator-(const Vector<T, N>& lhs, const Vector<U, N>& rhs) noexc
 	return out;
 }
 // Operator -
-template <typename T, typename U, size_t N, typename = decltype(std::declval<T>() + std::declval<U>())>
+template <typename T, typename U, size_t N, typename = decltype(std::declval<T>() - std::declval<U>())>
 constexpr auto operator-(const Vector<T, N>& lhs, U rhs) noexcept -> Vector<decltype(std::declval<T>() - std::declval<U>()), N> {
 	Vector<decltype(std::declval<T>() + std::declval<U>()), N> out;
 	std::copy(lhs.begin(), lhs.end(), out.begin());
@@ -165,7 +165,7 @@ constexpr auto operator-(const Vector<T, N>& lhs, U rhs) noexcept -> Vector<decl
 
 
 // Operator *=
-template <typename T, typename U, size_t N, typename = decltype(std::declval<T>() - std::declval<U>())>
+template <typename T, typename U, size_t N, typename = decltype(std::declval<T>() * std::declval<U>())>
 constexpr Vector<T, N>& operator*=(Vector<T, N>& lhs, U rhs) noexcept {
 	for (auto& n : lhs) {
 		n *= rhs;
