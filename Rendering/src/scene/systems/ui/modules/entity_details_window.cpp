@@ -190,23 +190,29 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, ha
 
 	if (ImGui::BeginMenu("Add Component", valid_entity)) {
 
-		if (ImGui::MenuItem("Orthographic Camera", nullptr, nullptr, valid_entity)) {
+		if (ImGui::MenuItem("Name", nullptr, nullptr, !ecs.has<Name>(handle))) {
+			ecs.add<Name>(handle);
+		}
+		if (ImGui::MenuItem("Transform", nullptr, nullptr, !ecs.has<Transform>(handle))) {
+			ecs.add<Transform>(handle);
+		}
+		if (ImGui::MenuItem("Orthographic Camera", nullptr, nullptr, !ecs.has<OrthographicCamera>(handle))) {
 			ecs.add<OrthographicCamera>(handle, device, u32_2{480, 480});
 		}
-		if (ImGui::MenuItem("Perspective Camera", nullptr, nullptr, valid_entity)) {
+		if (ImGui::MenuItem("Perspective Camera", nullptr, nullptr, !ecs.has<PerspectiveCamera>(handle))) {
 			ecs.add<PerspectiveCamera>(handle, device, u32_2{480, 480});
 		}
-		if (ImGui::MenuItem("Directional Light", nullptr, nullptr, valid_entity)) {
+		if (ImGui::MenuItem("Directional Light", nullptr, nullptr, !ecs.has<DirectionalLight>(handle))) {
 			ecs.add<DirectionalLight>(handle);
 		}
-		if (ImGui::MenuItem("Point Light", nullptr, nullptr, valid_entity)) {
+		if (ImGui::MenuItem("Point Light", nullptr, nullptr, !ecs.has<PointLight>(handle))) {
 			ecs.add<PointLight>(handle);
 		}
-		if (ImGui::MenuItem("Spot Light", nullptr, nullptr, valid_entity)) {
+		if (ImGui::MenuItem("Spot Light", nullptr, nullptr, !ecs.has<SpotLight>(handle))) {
 			ecs.add<SpotLight>(handle);
 		}
 
-		if (ImGui::BeginMenu("Model")) {
+		if (ImGui::BeginMenu("Model", !ecs.has<Model>(handle))) {
 			if (ImGui::MenuItem("From file")) {
 				if (auto file = OpenFileDialog(); fs::exists(file)) {
 					ModelConfig<VertexPositionNormalTexture> config;
@@ -228,7 +234,7 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, ha
 		// List user components
 		for (const auto& [idx, component] : user_components) {
 			if (component.adder) {
-				if (ImGui::MenuItem(component.name.c_str(), nullptr, nullptr, valid_entity)) {
+				if (ImGui::MenuItem(component.name.c_str(), nullptr, nullptr, !component.getter(ecs, handle))) {
 					component.adder(ecs, handle);
 				}
 			}
