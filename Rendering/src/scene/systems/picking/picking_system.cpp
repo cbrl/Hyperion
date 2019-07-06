@@ -124,7 +124,7 @@ void XM_CALLCONV PickingSystem::castRay(FXMVECTOR origin,
 		const XMVECTOR ray_origin    = XMVector3TransformCoord(origin, view_to_model);
 		const XMVECTOR ray_direction = XMVector3Normalize(XMVector3TransformNormal(direction, view_to_model));
 
-		if (intersects(ray_origin, ray_direction, model.getBoundingSphere()))
+		if (intersects(ray_origin, ray_direction, model.getAABB()))
 			sendEvent<events::EntitySelectedEvent>(model.getOwner());
 	});
 }
