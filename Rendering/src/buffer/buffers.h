@@ -33,7 +33,7 @@ struct MaterialBuffer {
 struct ModelBuffer {
 	XMMATRIX       world               = XMMatrixIdentity();
 	XMMATRIX       world_inv_transpose = XMMatrixIdentity();
-	XMMATRIX       texTransform        = XMMatrixIdentity();
+	XMMATRIX       tex_transform       = XMMatrixIdentity();
 	MaterialBuffer mat;
 };
 

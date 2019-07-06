@@ -43,7 +43,7 @@ void XM_CALLCONV Model::updateBuffer(ID3D11DeviceContext& device_context, FXMMAT
 
 	buffer_data.world               = world_t;
 	buffer_data.world_inv_transpose = world_inv_t;
-	buffer_data.texTransform        = XMMatrixIdentity();
+	buffer_data.tex_transform       = XMMatrixIdentity();
 
 	buffer_data.mat.base_color = material.get().params.base_color;
 	buffer_data.mat.metalness  = material.get().params.metalness;
