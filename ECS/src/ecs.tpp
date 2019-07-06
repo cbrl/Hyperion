@@ -122,8 +122,7 @@ void ECS::sendEvent(ArgsT&&... args) {
 template<typename... ComponentT>
 void ECS::forEach(std::function<void(handle64)> act) {
 
-	//static_assert(std::conjunction_v<std::is_base_of<IComponent, ComponentT>...>);
-	static_assert((std::is_base_of_v<IComponent, ComponentT> && ...));
+	static_assert(std::conjunction_v<std::is_base_of<IComponent, ComponentT>...>);
 
 	if constexpr (sizeof...(ComponentT) == 0) {
 		entity_mgr->forEach(act);
@@ -145,8 +144,7 @@ void ECS::forEach(std::function<void(handle64)> act) {
 template<typename... ComponentT>
 void ECS::forEach(std::function<void(handle64)> act) const {
 
-	//static_assert(std::conjunction_v<std::is_base_of<IComponent, ComponentT>...>);
-	static_assert((std::is_base_of_v<IComponent, ComponentT> && ...));
+	static_assert(std::conjunction_v<std::is_base_of<IComponent, ComponentT>...>);
 
 	if constexpr (sizeof...(ComponentT) == 0) {
 		entity_mgr->forEach(act);
