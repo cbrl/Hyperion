@@ -44,6 +44,10 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 		ImGui::EndMenuBar();
 	}
 
+	// Render "New Model" popup windows
+	new_model_menu.procNewModelPopup(device, resource_mgr, scene, handle);
+
+
 	//----------------------------------------------------------------------------------
 	// Name/Details
 	//----------------------------------------------------------------------------------
