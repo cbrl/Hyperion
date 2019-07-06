@@ -95,52 +95,16 @@ public:
 
 
 
-// Operator ==
-template<typename T, size_t N>
-constexpr bool operator==(const Vector<T, N>& lhs, const Vector<T, N>& rhs) noexcept {
-	return static_cast<const std::array<T, N>&>(lhs) == static_cast<const std::array<T, N>&>(rhs);
-}
-// Operator !=
-template<typename T, size_t N>
-constexpr bool operator!=(const Vector<T, N>& lhs, const Vector<T, N>& rhs) noexcept {
-	return static_cast<const std::array<T, N>&>(lhs) != static_cast<const std::array<T, N>&>(rhs);
-}
-
-
-// Operator <
-template <typename T, size_t N>
-constexpr bool operator<(const Vector<T, N>& lhs, const Vector<T, N>& rhs) noexcept {
-	return static_cast<const std::array<T, N>&>(lhs) < static_cast<const std::array<T, N>&>(rhs);
-}
-// Operator <=
-template <typename T, size_t N>
-constexpr bool operator<=(const Vector<T, N>& lhs, const Vector<T, N>& rhs) noexcept {
-	return static_cast<const std::array<T, N>&>(lhs) <= static_cast<const std::array<T, N>&>(rhs);
-}
-
-
-// Operator >
-template <typename T, size_t N>
-constexpr bool operator>(const Vector<T, N>& lhs, const Vector<T, N>& rhs) noexcept {
-	return static_cast<const std::array<T, N>&>(lhs) > static_cast<const std::array<T, N>&>(rhs);
-}
-// Operator >=
-template <typename T, size_t N>
-constexpr bool operator>=(const Vector<T, N>& lhs, const Vector<T, N>& rhs) noexcept {
-	return static_cast<const std::array<T, N>&>(lhs) >= static_cast<const std::array<T, N>&>(rhs);
-}
-
-
 // Operator +=
-template<typename T, size_t N, typename = decltype(std::declval<T>() + std::declval<T>())>
-constexpr Vector<T, N>& operator+=(Vector<T, N>& lhs, const Vector<T, N>& rhs) noexcept {
+template<typename T, typename U, size_t N, typename = decltype(std::declval<T>() + std::declval<U>())>
+constexpr Vector<T, N>& operator+=(Vector<T, N>& lhs, const Vector<U, N>& rhs) noexcept {
 	for (size_t i = 0; i < lhs.size(); ++i) {
 		lhs[i] += rhs[i];
 	}
 	return lhs;
 }
 // Operator +=
-template <typename T, size_t N, typename U, typename = decltype(std::declval<T>() + std::declval<U>())>
+template <typename T, typename U, size_t N, typename = decltype(std::declval<T>() + std::declval<U>())>
 constexpr Vector<T, N>& operator+=(Vector<T, N>& lhs, U rhs) noexcept {
 	for (auto& n : lhs) {
 		n += rhs;
@@ -148,29 +112,33 @@ constexpr Vector<T, N>& operator+=(Vector<T, N>& lhs, U rhs) noexcept {
 	return lhs;
 }
 // Operator +
-template<typename T, size_t N, typename = decltype(std::declval<T>() + std::declval<T>())>
-constexpr Vector<T, N> operator+(Vector<T, N> lhs, const Vector<T, N>& rhs) noexcept {
-	lhs += rhs;
-	return lhs;
+template<typename T, typename U, size_t N, typename = decltype(std::declval<T>() + std::declval<U>())>
+constexpr auto operator+(const Vector<T, N>& lhs, const Vector<U, N>& rhs) noexcept -> Vector<decltype(std::declval<T>() + std::declval<U>()), N> {
+	Vector<decltype(std::declval<T>() + std::declval<U>()), N> out;
+	std::copy(lhs.begin(), lhs.end(), out.begin());
+	out += rhs;
+	return out;
 }
 // Operator +
-template <typename T, size_t N, typename U, typename = decltype(std::declval<T>() + std::declval<U>())>
-constexpr Vector<T, N> operator+(Vector<T, N> lhs, U rhs) noexcept {
-	lhs += rhs;
-	return lhs;
+template <typename T, typename U, size_t N, typename = decltype(std::declval<T>() + std::declval<U>())>
+constexpr auto operator+(const Vector<T, N>& lhs, U rhs) noexcept -> Vector<decltype(std::declval<T>() + std::declval<U>()), N> {
+	Vector<decltype(std::declval<T>() + std::declval<U>()), N> out;
+	std::copy(lhs.begin(), lhs.end(), out.begin());
+	out += rhs;
+	return out;
 }
 
 
 // Operator -=
-template<typename T, size_t N, typename = decltype(std::declval<T>() - std::declval<T>())>
-constexpr Vector<T, N>& operator-=(Vector<T, N>& lhs, const Vector<T, N>& rhs) noexcept {
+template<typename T, typename U, size_t N, typename = decltype(std::declval<T>() - std::declval<U>())>
+constexpr Vector<T, N>& operator-=(Vector<T, N>& lhs, const Vector<U, N>& rhs) noexcept {
 	for (size_t i = 0; i < lhs.size(); ++i) {
 		lhs[i] -= rhs[i];
 	}
 	return lhs;
 }
 // Operator -=
-template <typename T, size_t N, typename U, typename = decltype(std::declval<T>() - std::declval<U>())>
+template <typename T, typename U, size_t N, typename = decltype(std::declval<T>() - std::declval<U>())>
 constexpr Vector<T, N>& operator-=(Vector<T, N>& lhs, U rhs) noexcept {
 	for (auto& n : lhs) {
 		n -= rhs;
@@ -178,22 +146,26 @@ constexpr Vector<T, N>& operator-=(Vector<T, N>& lhs, U rhs) noexcept {
 	return lhs;
 }
 // Operator -
-template<typename T, size_t N, typename = decltype(std::declval<T>() - std::declval<T>())>
-constexpr Vector<T, N> operator-(Vector<T, N> lhs, const Vector<T, N>& rhs) noexcept {
-	lhs -= rhs;
-	return lhs;
+template<typename T, typename U, size_t N, typename = decltype(std::declval<T>() - std::declval<U>())>
+constexpr auto operator-(const Vector<T, N>& lhs, const Vector<U, N>& rhs) noexcept -> Vector<decltype(std::declval<T>() - std::declval<U>()), N> {
+	Vector<decltype(std::declval<T>() + std::declval<U>()), N> out;
+	std::copy(lhs.begin(), lhs.end(), out.begin());
+	out -= rhs;
+	return out;
 }
 // Operator -
-template <typename T, size_t N, typename U, typename = decltype(std::declval<T>() + std::declval<U>())>
-constexpr Vector<T, N> operator-(Vector<T, N> lhs, U rhs) noexcept {
-	lhs -= rhs;
-	return lhs;
+template <typename T, typename U, size_t N, typename = decltype(std::declval<T>() + std::declval<U>())>
+constexpr auto operator-(const Vector<T, N>& lhs, U rhs) noexcept -> Vector<decltype(std::declval<T>() - std::declval<U>()), N> {
+	Vector<decltype(std::declval<T>() + std::declval<U>()), N> out;
+	std::copy(lhs.begin(), lhs.end(), out.begin());
+	out -= rhs;
+	return out;
 }
 
 
 
 // Operator *=
-template <typename T, size_t N, typename U, typename = decltype(std::declval<T>() - std::declval<U>())>
+template <typename T, typename U, size_t N, typename = decltype(std::declval<T>() - std::declval<U>())>
 constexpr Vector<T, N>& operator*=(Vector<T, N>& lhs, U rhs) noexcept {
 	for (auto& n : lhs) {
 		n *= rhs;
@@ -201,15 +173,17 @@ constexpr Vector<T, N>& operator*=(Vector<T, N>& lhs, U rhs) noexcept {
 	return lhs;
 }
 // Operator *
-template<typename T, size_t N, typename U, typename = decltype(std::declval<T>() * std::declval<U>())>
-constexpr Vector<T, N> operator*(Vector<T, N> lhs, U rhs) noexcept {
-	lhs *= rhs;
-	return lhs;
+template<typename T, typename U, size_t N, typename = decltype(std::declval<T>() * std::declval<U>())>
+constexpr auto operator*(const Vector<T, N>& lhs, U rhs) noexcept -> Vector<decltype(std::declval<T>() * std::declval<U>()), N> {
+	Vector<decltype(std::declval<T>() + std::declval<U>()), N> out;
+	std::copy(lhs.begin(), lhs.end(), out.begin());
+	out *= rhs;
+	return out;
 }
 
 
 // Operator /=
-template<typename T, size_t N, typename U, typename = decltype(std::declval<T>() / std::declval<U>())>
+template<typename T, typename U, size_t N, typename = decltype(std::declval<T>() / std::declval<U>())>
 constexpr Vector<T, N>& operator/=(Vector<T, N>& lhs, U rhs) noexcept {
 	for (auto& n : lhs) {
 		n /= rhs;
@@ -217,10 +191,12 @@ constexpr Vector<T, N>& operator/=(Vector<T, N>& lhs, U rhs) noexcept {
 	return lhs;
 }
 // Operator /
-template<typename T, size_t N, typename U, typename = decltype(std::declval<T>() / std::declval<U>())>
-constexpr Vector<T, N> operator/(Vector<T, N> lhs, U rhs) noexcept {
-	lhs /= rhs;
-	return lhs;
+template<typename T, typename U, size_t N, typename = decltype(std::declval<T>() / std::declval<U>())>
+constexpr auto operator/(const Vector<T, N>& lhs, U rhs) noexcept -> Vector<decltype(std::declval<T>() / std::declval<U>()), N> {
+	Vector<decltype(std::declval<T>() + std::declval<U>()), N> out;
+	std::copy(lhs.begin(), lhs.end(), out.begin());
+	out /= rhs;
+	return out;
 }
 
 
