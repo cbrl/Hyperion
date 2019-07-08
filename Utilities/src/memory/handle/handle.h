@@ -14,6 +14,9 @@
 template<typename T, size_t IndexBits, size_t CounterBits>
 struct Handle {
 public:
+	using value_type = T;
+
+
 	//----------------------------------------------------------------------------------
 	// Assertions
 	//----------------------------------------------------------------------------------
@@ -37,7 +40,7 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	constexpr Handle() noexcept
-		: Handle(invalid_handle) {
+		: Handle(std::numeric_limits<T>::max()) {
 	}
 
 	constexpr explicit Handle(T value) noexcept
@@ -89,18 +92,16 @@ public:
 
 
 	//----------------------------------------------------------------------------------
-	// Static Member Variables
+	// Static Members
 	//----------------------------------------------------------------------------------
-
-	// Type
-	using value_type = T;
+	[[nodiscard]]
+	static constexpr Handle invalid_handle() noexcept {
+		return Handle{std::numeric_limits<T>::max()};
+	}
 
 	// Max values
 	static constexpr T index_max   = (T{1} << IndexBits) - T{2};
 	static constexpr T counter_max = (T{1} << CounterBits) - T{2};
-
-	// Invalid value
-	static constexpr T invalid_handle = std::numeric_limits<T>::max();
 
 	// Number of bits
 	static constexpr size_t n_index_bits   = IndexBits;

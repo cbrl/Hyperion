@@ -5,18 +5,14 @@
 #include <assert.h>
 
 
-template<typename HandleT, size_t chunk_size = 512>
+template<typename HandleT>
 class HandleTable {
-	struct TableEntry {
-		typename HandleT::value_type counter = 0;
-		bool in_use = false;
-	};
-
-	using container_type = std::vector<TableEntry>;
-	using handle_type    = HandleT;
-	using size_type      = size_t;
+	using container_type = std::vector<HandleT>;
 
 public:
+
+	using handle_type    = HandleT;
+	using size_type      = size_t;
 
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -49,6 +45,7 @@ public:
 
 	void clear() noexcept {
 		table.clear();
+		available = 0;
 	}
 
 
@@ -68,30 +65,14 @@ public:
 		return table.size();
 	}
 
-	bool reserve(size_type new_cap) {
+	void reserve(size_type new_cap) {
 		if (table.capacity() < handle_type::index_max) {
 			table.reserve(std::min(new_cap, handle_type::index_max));
-			return true;
 		}
 		else {
 			assert(false && "HandleTable::reserve() - max size reached");
-			return false;
+			return;
 		}
-	}
-
-	bool resize(size_type new_size) {
-		if (table.size() < handle_type::index_max) {
-			table.resize(std::min(new_size, handle_type::index_max));
-			return true;
-		}
-		else {
-			assert(false && "HandleTable::resize() - max size reached");
-			return false;
-		}
-	}
-
-	void shrink_to_fit() {
-		table.shrink_to_fit();
 	}
 
 private:
@@ -100,6 +81,9 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 	container_type table;
+
+	typename handle_type::value_type next = 0; //index of next free handle
+	typename handle_type::value_type available = 0; //number of free handles
 };
 
 #include "handle_table.tpp"

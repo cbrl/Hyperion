@@ -129,7 +129,6 @@ public:
 
 	void shrink_to_fit() {
 		resource_pool.shrink_to_fit();
-		handle_table.shrink_to_fit();
 	}
 
 private:

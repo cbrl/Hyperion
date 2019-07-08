@@ -79,7 +79,7 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 	}
 
 	if (ImGui::BeginCombo("Parent", preview)) {
-		if ( ImGui::Selectable("None", (!hierarchy || (hierarchy->getParent() == handle64::invalid_handle))) ) {
+		if ( ImGui::Selectable("None", !hierarchy || (hierarchy->getParent() == handle64::invalid_handle())) ) {
 			if (hierarchy)
 				hierarchy->removeParent(ecs);
 		}

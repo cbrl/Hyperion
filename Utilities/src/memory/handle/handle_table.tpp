@@ -1,53 +1,48 @@
-template<typename HandleT, size_t chunk_size>
-HandleT HandleTable<HandleT, chunk_size>::createHandle() {
-	size_t i = 0;
-
-	// Find the next free space and create the handle
-	for (; i < table.size(); ++i) {
-		auto& entry = table[i];
-
-		if (entry.in_use == false) {
-			if (entry.counter > HandleT::counter_max)
-				entry.counter = 0;
-			else
-				entry.counter += 1;
-
-			entry.in_use = true;
-			return HandleT{i, entry.counter};
+template<typename HandleT>
+HandleT HandleTable<HandleT>::createHandle() {
+	if (available > 0) {
+		// Remove the first free handle from the list
+		handle_type out{next, table[next].counter};
+		next = table[next].index;
+		--available;
+		return out;
+	}
+	else {
+		// Verify that the table size doesn't exceed the max handle index
+		if (table.size() >= handle_type::index_max) {
+			assert(false && "HandleTable::createHandle() - max size reached");
+			return handle_type::invalid_handle();
 		}
-	}
 
-	// If this point is reached, then the table needs to
-	// be expanded before a new handle is created.
-	if (reserve(table.capacity() + chunk_size)) {
-		table.emplace_back();
-		table[i].counter = 1;
-		table[i].in_use = true;
-		return HandleT{i, table[i].counter};
+		// Insert and return a new handle
+		const auto handle = table.emplace_back(table.size(), 0);
+		return handle;
 	}
-
-	// Return an invalid handle if one couldn't be created
-	return HandleT{};
 }
 
 
-template<typename HandleT, size_t chunk_size>
-void HandleTable<HandleT, chunk_size>::releaseHandle(handle_type handle) {
+template<typename HandleT>
+void HandleTable<HandleT>::releaseHandle(handle_type handle) {
 	if (not valid(handle)) {
 		assert(false && "Invalid handle specified for release");
 		return;
 	}
 
-	table[handle.index].in_use = false;
+	// Increment the handle version
+	++table[handle.index].counter;
+
+	// Extend list of free handles
+	if (available > 0)
+		table[handle.index].index = next;
+	next = handle.index;
+	++available;
 }
 
 
-template<typename HandleT, size_t chunk_size>
-bool HandleTable<HandleT, chunk_size>::valid(handle_type handle) const noexcept {
-
-	if (handle != HandleT::invalid_handle && handle.index < table.size()) {
-		const auto& entry = table[handle.index];
-		return (entry.counter == handle.counter) && (entry.in_use == true);
+template<typename HandleT>
+bool HandleTable<HandleT>::valid(handle_type handle) const noexcept {
+	if (handle != handle_type::invalid_handle() && handle.index < table.size()) {
+		return table[handle.index].counter == handle.counter;
 	}
 	return false;
 }
