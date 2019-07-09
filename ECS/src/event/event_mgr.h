@@ -48,7 +48,7 @@ public:
 	void clearEventDispatchers();
 
 	// Queue an event to be dispatched to all relevant listeners
-	template<class EventT, class... ArgsT>
+	template<typename EventT, typename... ArgsT>
 	void send(ArgsT&&... args);
 
 	// Dispatch all stored events and clear the event buffer
@@ -57,7 +57,7 @@ public:
 private:
 
 	// Add an event callback to the relevant dispatcher. The dispatcher will own the delegate.
-	template<class EventT>
+	template<typename EventT>
 	void addEventCallback(std::unique_ptr<IEventDelegate> delegate);
 
 	// Remove an event callback

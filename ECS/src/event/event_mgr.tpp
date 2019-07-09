@@ -4,7 +4,7 @@
 
 namespace ecs {
 
-template <class EventT, class... ArgsT>
+template<typename EventT, typename... ArgsT>
 void EventMgr::send(ArgsT&&... args) {
 
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
@@ -23,7 +23,7 @@ void EventMgr::send(ArgsT&&... args) {
 }
 
 
-template <class EventT>
+template<typename EventT>
 void EventMgr::addEventCallback(std::unique_ptr<IEventDelegate> delegate) {
 	const auto index = EventT::static_index;
 	const auto it    = event_dispatchers.find(index);
