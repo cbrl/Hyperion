@@ -3,11 +3,11 @@
 
 namespace ecs {
 
-void EventMgr::clearEventDispatchers() {
+void EventMgr::clearDispatchers() {
 	event_dispatchers.clear();
 }
 
-void EventMgr::dispatchEvents() {
+void EventMgr::dispatch() {
 	for (auto& [id, dispatcher] : event_dispatchers) {
 		dispatcher->dispatch();
 	}

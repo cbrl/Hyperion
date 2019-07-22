@@ -16,7 +16,7 @@ class DispatcherConnection;
 // stores a pointer to the event manager, which should never be null. The pointer is
 // used instead of a reference so that it can be set after construction, eliminating
 // the need to modify the constructor of every class that uses events. The downside
-// is that components/systems cannot call sendEvent() in a constructor.
+// is that components/systems cannot call enqueue() in a constructor.
 //
 //----------------------------------------------------------------------------------
 class EventParticipator {
@@ -109,7 +109,7 @@ protected:
 
 	// Queue an event to be dispatched to all listeners
 	template<typename EventT, typename... ArgsT>
-	void sendEvent(ArgsT&&... args);
+	void enqueue(ArgsT&&... args);
 
 private:
 

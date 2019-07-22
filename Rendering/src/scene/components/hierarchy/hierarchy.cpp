@@ -132,5 +132,5 @@ void Hierarchy::forEachChildRecursive(const ecs::ECS& ecs, const std::function<v
 
 
 void Hierarchy::sendParentChangedEvent() {
-	sendEvent<ParentChangedEvent>(getOwner());
+	enqueue<ParentChangedEvent>(getOwner());
 }

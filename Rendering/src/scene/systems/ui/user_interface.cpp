@@ -93,7 +93,7 @@ void UserInterface::update() {
 	if (keyboard_state != last_keyboard_state || mouse_state != last_mouse_state) {
 		last_keyboard_state = keyboard_state;
 		last_mouse_state    = mouse_state;
-		sendEvent<events::GuiFocusEvent>(keyboard_state, mouse_state);
+		enqueue<events::GuiFocusEvent>(keyboard_state, mouse_state);
 	}
 }
 

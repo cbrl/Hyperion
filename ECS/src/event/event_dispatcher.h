@@ -65,7 +65,7 @@ public:
 	virtual void dispatch() = 0;
 
 	[[nodiscard]]
-	virtual size_t getEventCallbackCount() const noexcept = 0;
+	virtual size_t getCallbackCount() const noexcept = 0;
 };
 
 
@@ -78,7 +78,7 @@ public:
 // events to them.
 //
 //----------------------------------------------------------------------------------
-template<class EventT>
+template<typename EventT>
 class EventDispatcher final : public IEventDispatcher {
 public:
 
@@ -107,22 +107,26 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	
-	// Queue an event to be sent to all registered callbacks
+	// Enqueue an event to be sent to all registered callbacks
 	template<typename... ArgsT>
-	void queue(ArgsT&&... args);
+	void enqueue(ArgsT&&... args);
+
+	// Immediately send an event to all registered callbacks
+	template<typename... ArgsT>
+	void send(ArgsT&&... args);
 
 	// Send events to all listeners
 	void dispatch() override;
 
 	// Add an event callback to this dispatcher
-	DispatcherConnection addEventCallback(const std::function<void(const EventT&)>& callback);
+	DispatcherConnection addCallback(const std::function<void(const EventT&)>& callback);
 
 	// Remove an event callback from this dispatcher
-	void removeEventCallback(const std::function<void(const EventT&)>& callback);
+	void removeCallback(const std::function<void(const EventT&)>& callback);
 
 	// Get the number of callbacks in this dispatcher
 	[[nodiscard]]
-	size_t getEventCallbackCount() const noexcept override;
+	size_t getCallbackCount() const noexcept override;
 
 	
 private:

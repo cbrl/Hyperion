@@ -8,9 +8,9 @@ namespace ecs {
 //----------------------------------------------------------------------------------
 
 template<typename EventT, typename... ArgsT>
-void EventSender::sendEvent(ArgsT&&... args) {
+void EventSender::enqueue(ArgsT&&... args) {
 	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
-	getEventMgr().send<EventT>(std::forward<ArgsT>(args)...);
+	getEventMgr().enqueue<EventT>(std::forward<ArgsT>(args)...);
 }
 
 
@@ -27,7 +27,7 @@ void EventListener::registerEventCallback(void (ClassT::*Callback)(const EventT&
 	//ClassT inherits from EventListener
 	std::function<void(const EventT&)> callback = std::bind(Callback, static_cast<ClassT*>(this), std::placeholders::_1);
 
-	auto connection = getEventMgr().addEventCallback<EventT>(callback);
+	auto connection = getEventMgr().addCallback<EventT>(callback);
 	connections.push_back(connection);
 }
 
@@ -38,7 +38,7 @@ void EventListener::unregisterEventCallback(void (ClassT::*Callback)(const Event
 	//ClassT inherits from EventListener
 	std::function<void(const EventT&)> callback = std::bind(Callback, static_cast<ClassT*>(this), std::placeholders::_1);
 
-	getEventMgr().removeEventCallback(callback);
+	getEventMgr().removeCallback(callback);
 }
 
 } // namespace ecs

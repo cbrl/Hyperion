@@ -42,24 +42,28 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Erase all event dispatchers
-	void clearEventDispatchers();
+	void clearDispatchers();
 
 	// Queue an event to be dispatched to all relevant listeners
+	template<typename EventT, typename... ArgsT>
+	void enqueue(ArgsT&&... args);
+
+	// Immediately send an event to all relevant listeners
 	template<typename EventT, typename... ArgsT>
 	void send(ArgsT&&... args);
 
 	// Dispatch all stored events and clear the event buffer
-	void dispatchEvents();
+	void dispatch();
 
 private:
 
 	// Add an event callback to the relevant dispatcher. The dispatcher will own the delegate.
 	template<typename EventT>
-	DispatcherConnection addEventCallback(const std::function<void(const EventT&)>& callback);
+	DispatcherConnection addCallback(const std::function<void(const EventT&)>& callback);
 
 	// Remove an event callback
 	template<typename EventT>
-	void removeEventCallback(const std::function<void(const EventT&)>& callback);
+	void removeCallback(const std::function<void(const EventT&)>& callback);
 
 
 private:

@@ -44,6 +44,14 @@ public:
 
 
 	//----------------------------------------------------------------------------------
+	// Member Functions - Update
+	//----------------------------------------------------------------------------------
+
+	// Update the systems
+	void update(std::chrono::duration<f64> dt);
+
+
+	//----------------------------------------------------------------------------------
 	// Member Functions - Entities
 	//----------------------------------------------------------------------------------
 
@@ -130,12 +138,18 @@ public:
 	template<typename SystemT>
 	void setSystemPriority(u32 priority);
 
-	// Send an event to be received by any systems that listen for it
-	template<typename EventT, typename... ArgsT>
-	void sendEvent(ArgsT&&... args);
 
-	// Update the systems
-	void update(std::chrono::duration<f64> dt);
+	//----------------------------------------------------------------------------------
+	// Member Functions - Events
+	//----------------------------------------------------------------------------------
+
+	// Enqueue an event to be received by all listeners
+	template<typename EventT, typename... ArgsT>
+	void enqueue(ArgsT&&... args);
+
+	// Immediately send an event to all listeners
+	template<typename EventT, typename... ArgsT>
+	void send(ArgsT&&... args);
 
 
 	//----------------------------------------------------------------------------------

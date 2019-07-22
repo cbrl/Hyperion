@@ -14,7 +14,7 @@ void EventParticipator::setEventMgr(gsl::not_null<EventMgr*> handler) noexcept {
 
 EventMgr& EventParticipator::getEventMgr() const noexcept {
 	assert(event_mgr != nullptr &&
-	       "EventParticipator::event_handler == nullptr (Was sendEvent() called in a component/system constructor?)");
+	       "EventParticipator::event_handler == nullptr (Was enqueue() called in a component/system constructor?)");
 	return *event_mgr;
 }
 

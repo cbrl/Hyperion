@@ -109,7 +109,12 @@ void ECS::setSystemPriority(u32 priority) {
 //----------------------------------------------------------------------------------
 
 template<typename EventT, typename... ArgsT>
-void ECS::sendEvent(ArgsT&&... args) {
+void ECS::enqueue(ArgsT&&... args) {
+	event_mgr->enqueue<EventT>(std::forward<ArgsT>(args)...);
+}
+
+template<typename EventT, typename... ArgsT>
+void ECS::send(ArgsT&& ... args) {
 	event_mgr->send<EventT>(std::forward<ArgsT>(args)...);
 }
 
