@@ -36,7 +36,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	virtual std::type_index getID() const noexcept = 0;
+	virtual std::type_index getTypeIndex() const noexcept = 0;
 	
 	[[nodiscard]]
 	const high_res_clk::time_point& getCreationTime() const noexcept {
@@ -90,18 +90,18 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	std::type_index getID() const noexcept override final {
-		return static_index;
+	std::type_index getTypeIndex() const noexcept override final {
+		return index;
 	}
 
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	static const std::type_index static_index;
+	static const std::type_index index;
 };
 
 template<typename T>
-const std::type_index Event<T>::static_index = std::type_index{typeid(T)};
+const std::type_index Event<T>::index = std::type_index{typeid(T)};
 
 } // namespace ecs
