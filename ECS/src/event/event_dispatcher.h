@@ -136,7 +136,7 @@ private:
 	//----------------------------------------------------------------------------------
 	std::vector<std::function<void(const EventT&)>> event_callbacks;
 
-	std::vector<EventT> events[2];
+	std::array<std::vector<EventT>, 2> events;
 	u8 current_queue = 0;
 };
 

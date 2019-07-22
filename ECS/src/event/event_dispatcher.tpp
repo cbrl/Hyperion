@@ -25,7 +25,7 @@ void EventDispatcher<EventT>::dispatch() {
 	// Update current_queue before processing events so that events sent during
 	// event processing will be placed in the next queue.
 	const u8 proc_queue = current_queue;
-	current_queue = (current_queue + 1) % std::extent_v<decltype(events)>;
+	current_queue = (current_queue + 1) % events.size();
 
 	// Dispatch events
 	for (auto& callback : event_callbacks) {
