@@ -1,12 +1,12 @@
 #pragma once
 
-#include "event/event_delegate.h"
 #include "datatypes/datatypes.h"
 
 
 namespace ecs {
 
 class EventMgr;
+class DispatcherConnection;
 
 //----------------------------------------------------------------------------------
 // EventParticipator
@@ -187,9 +187,8 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// A list of callback delegates registered by this event listener. Used in (un)registerEventCallback
-	// to determine if an event delegate exists or not. The event manager owns the delegates.
-	std::vector<IEventDelegate*> registered_callbacks;
+	// A container of registered connections. Used during unregisterAllEventCallbacks().
+	std::vector<DispatcherConnection> connections;
 };
 
 } // namespace ecs

@@ -8,8 +8,8 @@
 namespace ecs {
 
 class IEvent;
-class IEventDelegate;
 class IEventDispatcher;
+class DispatcherConnection;
 
 class EventMgr final {
 	friend class EventListener;
@@ -41,9 +41,6 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// Reset the event buffer
-	void clearEventBuffer();
-
 	// Erase all event dispatchers
 	void clearEventDispatchers();
 
@@ -58,10 +55,11 @@ private:
 
 	// Add an event callback to the relevant dispatcher. The dispatcher will own the delegate.
 	template<typename EventT>
-	void addEventCallback(std::unique_ptr<IEventDelegate> delegate);
+	DispatcherConnection addEventCallback(const std::function<void(const EventT&)>& callback);
 
 	// Remove an event callback
-	void removeEventCallback(gsl::not_null<IEventDelegate*> delegate);
+	template<typename EventT>
+	void removeEventCallback(const std::function<void(const EventT&)>& callback);
 
 
 private:
@@ -70,12 +68,6 @@ private:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 	std::unordered_map<std::type_index, std::unique_ptr<IEventDispatcher>> event_dispatchers;
-
-	// Holds a list of all events sent since the last dispatchEvents() call
-	std::vector<IEvent*> events;
-
-	// The memory resource that allocates memory for events
-	std::pmr::synchronized_pool_resource event_pool;
 };
 
 } // namespace ecs

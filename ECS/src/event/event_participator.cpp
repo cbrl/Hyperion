@@ -30,14 +30,11 @@ EventListener::~EventListener() {
 }
 
 void EventListener::unregisterAllEventCallbacks() {
-
-	// Unsubcribe from all events
-	for (auto* callback : registered_callbacks) {
-		if (callback)
-			getEventMgr().removeEventCallback(gsl::make_not_null(callback));
+	for (auto& connection : connections) {
+		connection.disconnect();
 	}
 
-	registered_callbacks.clear();
+	connections.clear();
 }
 
 void EventListener::doRegisterCallbacks() {
