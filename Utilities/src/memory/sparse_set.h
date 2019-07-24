@@ -31,6 +31,9 @@ public:
 		friend class SparseSet<T>;
 		using container_type = SparseSet<T>::container_type;
 
+		//----------------------------------------------------------------------------------
+		// Constructors
+		//----------------------------------------------------------------------------------
 		const_iterator(const container_type& dense, difference_type idx) noexcept
 			: dense(&dense)
 			, index(idx) {
@@ -46,15 +49,28 @@ public:
 		using const_reference   = SparseSet<T>::const_reference;
 		using iterator_category = std::random_access_iterator_tag;
 
+		//----------------------------------------------------------------------------------
+		// Constructors
+		//----------------------------------------------------------------------------------
 		const_iterator() noexcept = default;
 		const_iterator(const_iterator&) noexcept = default;
 		const_iterator(const_iterator&&) noexcept = default;
 
+		//----------------------------------------------------------------------------------
+		// Destructors
+		//----------------------------------------------------------------------------------
 		~const_iterator() = default;
 
+
+		//----------------------------------------------------------------------------------
+		// Operators - Assignment
+		//----------------------------------------------------------------------------------
 		const_iterator& operator=(const_iterator&) noexcept = default;
 		const_iterator& operator=(const_iterator&&) noexcept = default;
 
+		//----------------------------------------------------------------------------------
+		// Operators - Access
+		//----------------------------------------------------------------------------------
 		[[nodiscard]]
 		const_reference operator*() const {
 			return *operator->();
@@ -72,6 +88,9 @@ public:
 			return (*dense)[pos];
 		}
 
+		//----------------------------------------------------------------------------------
+		// Operators - Arithmetic
+		//----------------------------------------------------------------------------------
 		[[nodiscard]]
 		const_iterator operator+(difference_type value) const {
 			return const_iterator{*dense, index - value};
@@ -120,6 +139,9 @@ public:
 			return (*this += -value);
 		}
 
+		//----------------------------------------------------------------------------------
+		// Operators - Equality
+		//----------------------------------------------------------------------------------
 		[[nodiscard]]
 		bool operator==(const const_iterator& other) const {
 			return other.index == index;
@@ -152,6 +174,9 @@ public:
 
 	private:
 
+		//----------------------------------------------------------------------------------
+		// Member Variables
+		//----------------------------------------------------------------------------------
 		const container_type* dense;
 		difference_type index;
 	};

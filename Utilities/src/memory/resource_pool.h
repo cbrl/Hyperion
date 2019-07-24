@@ -72,6 +72,9 @@ public:
 			typename ResourcePool<HandleT, ResourceT>::container_type
 		>;
 
+		//----------------------------------------------------------------------------------
+		// Constructors
+		//----------------------------------------------------------------------------------
 		iterator_t(container_type& resources, difference_type idx) noexcept
 			: resources(&resources)
 			, index(idx) {
@@ -86,15 +89,28 @@ public:
 		using reference         = std::conditional_t<ConstIter, typename container_type::const_reference, typename container_type::reference>;
 		using iterator_category = std::random_access_iterator_tag;
 
+		//----------------------------------------------------------------------------------
+		// Constructors
+		//----------------------------------------------------------------------------------
 		iterator_t() noexcept = default;
 		iterator_t(iterator_t&) noexcept = default;
 		iterator_t(iterator_t&&) noexcept = default;
 
+		//----------------------------------------------------------------------------------
+		// Destructor
+		//----------------------------------------------------------------------------------
 		~iterator_t() = default;
 
+		//----------------------------------------------------------------------------------
+		// Operators - Assignment
+		//----------------------------------------------------------------------------------
 		iterator_t& operator=(iterator_t&) noexcept = default;
 		iterator_t& operator=(iterator_t&&) noexcept = default;
 
+
+		//----------------------------------------------------------------------------------
+		// Operators - Access
+		//----------------------------------------------------------------------------------
 		[[nodiscard]]
 		reference operator*() const {
 			return *operator->();
@@ -112,6 +128,9 @@ public:
 			return (*resources)[pos];
 		}
 
+		//----------------------------------------------------------------------------------
+		// Operators - Arithmetic
+		//----------------------------------------------------------------------------------
 		[[nodiscard]]
 		iterator_t operator+(difference_type value) const {
 			return iterator_t{*resources, index - value};
@@ -160,6 +179,9 @@ public:
 			return (*this += -value);
 		}
 
+		//----------------------------------------------------------------------------------
+		// Operators - Equality
+		//----------------------------------------------------------------------------------
 		[[nodiscard]]
 		bool operator==(const iterator_t& other) const {
 			return other.index == index;
@@ -345,6 +367,9 @@ public:
 
 private:
 
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
 	sparse_set_type sparse_set;
 	container_type  resources;
 };
