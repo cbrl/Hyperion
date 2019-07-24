@@ -107,9 +107,13 @@ protected:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// Queue an event to be dispatched to all listeners
+	// Enqueue an event to be dispatched to all listeners
 	template<typename EventT, typename... ArgsT>
 	void enqueue(ArgsT&&... args);
+
+	// Send an event to all listeners
+	template<typename EventT, typename... ArgsT>
+	void send(ArgsT&& ... args);
 
 private:
 

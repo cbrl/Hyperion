@@ -2,6 +2,7 @@
 
 #include <typeindex>
 #include <chrono>
+#include "memory/handle/handle.h"
 
 namespace ecs {
 
@@ -103,5 +104,25 @@ public:
 
 template<typename T>
 const std::type_index Event<T>::index = std::type_index{typeid(T)};
+
+
+
+//----------------------------------------------------------------------------------
+// Core Events
+//----------------------------------------------------------------------------------
+
+// Sent on entity creation
+class EntityCreated : public Event<EntityCreated> {
+public:
+	EntityCreated(handle64 entity) : entity(entity) {}
+	handle64 entity;
+};
+
+// Sent just before an entity is destroyed
+class EntityDestroyed : public Event<EntityCreated> {
+public:
+	EntityDestroyed(handle64 entity) : entity(entity) {}
+	handle64 entity;
+};
 
 } // namespace ecs

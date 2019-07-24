@@ -6,7 +6,7 @@ namespace ecs {
 
 template<typename EventT, typename... ArgsT>
 void EventMgr::enqueue(ArgsT&&... args) {
-	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
+	static_assert(std::is_base_of_v<IEvent, EventT>, "Event type must inherit from Event class");
 
 	if (const auto it = event_dispatchers.find(EventT::index); it != event_dispatchers.end()) {
 		auto& dispatcher = static_cast<EventDispatcher<EventT>&>(*(it->second));
@@ -17,7 +17,7 @@ void EventMgr::enqueue(ArgsT&&... args) {
 
 template<typename EventT, typename... ArgsT>
 void EventMgr::send(ArgsT&& ... args) {
-	static_assert(std::is_base_of_v<Event<EventT>, EventT>, "Event type must inherit from Event class");
+	static_assert(std::is_base_of_v<IEvent, EventT>, "Event type must inherit from Event class");
 
 	if (const auto it = event_dispatchers.find(EventT::index); it != event_dispatchers.end()) {
 		auto& dispatcher = static_cast<EventDispatcher<EventT>&>(*(it->second));
@@ -28,6 +28,8 @@ void EventMgr::send(ArgsT&& ... args) {
 
 template<typename EventT>
 DispatcherConnection EventMgr::addCallback(const std::function<void(const EventT&)>& callback) {
+	static_assert(std::is_base_of_v<IEvent, EventT>, "Event type must inherit from Event class");
+
 	const auto index = EventT::index;
 	const auto it    = event_dispatchers.find(index);
 
@@ -45,6 +47,8 @@ DispatcherConnection EventMgr::addCallback(const std::function<void(const EventT
 
 template<typename EventT>
 void EventMgr::removeCallback(const std::function<void(const EventT&)>& callback) {
+	static_assert(std::is_base_of_v<IEvent, EventT>, "Event type must inherit from Event class");
+
 	if (const auto it = event_dispatchers.find(EventT::index); it != event_dispatchers.end()) {
 		it->second->removeCallback(callback);
 	}

@@ -16,6 +16,9 @@ void Scene::addCoreSystems(const Engine& engine) {
 	// Transform system: updates transform components when they're modified
 	ecs.add<systems::TransformSystem>();
 
+	// Hierarchy system: ensures the hierarchy is properly deleted when destroying an entity
+	ecs.add<systems::HierarchySystem>();
+
 	// Camera system: updates the buffers of camera components
 	ecs.add<systems::CameraSystem>(engine.getRenderingMgr());
 

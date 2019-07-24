@@ -107,7 +107,6 @@ public:
 		iterator_t& operator=(iterator_t&) noexcept = default;
 		iterator_t& operator=(iterator_t&&) noexcept = default;
 
-
 		//----------------------------------------------------------------------------------
 		// Operators - Access
 		//----------------------------------------------------------------------------------

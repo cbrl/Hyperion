@@ -204,6 +204,12 @@
     <Filter Include="Source Files\scene\components\hierarchy">
       <UniqueIdentifier>{226bbf75-9cdb-4722-93b2-b51a6401ec5f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\scene\systems\hierarchy">
+      <UniqueIdentifier>{ec284ccb-256c-4a2f-b898-725f1c904f20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\systems\hierarchy">
+      <UniqueIdentifier>{235b15b5-8389-49ba-af3a-fba1d91a7e20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rendering_mgr.cpp">
@@ -340,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="src\scene\components\hierarchy\hierarchy.cpp">
       <Filter>Source Files\scene\components\hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\hierarchy\hierarchy_system.cpp">
+      <Filter>Source Files\scene\systems\hierarchy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -576,6 +585,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\components\name\name.h">
       <Filter>Header Files\scene\components\name</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene\systems\hierarchy\hierarchy_system.h">
+      <Filter>Header Files\scene\systems\hierarchy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

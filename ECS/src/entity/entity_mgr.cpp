@@ -13,12 +13,14 @@ EntityMgr::EntityMgr(ComponentMgr& component_mgr, EventMgr& event_mgr)
 handle64 EntityMgr::create() {
 	auto [handle, resource] = entity_map.create();
 	resource.get() = handle; //copy the handle into the ResourceMap's handle
+	event_mgr.get().send<EntityCreated>(handle);
 	return handle;
 }
 
 
 void EntityMgr::destroyEntity(handle64 handle) {
 	if (valid(handle)) {
+		event_mgr.get().send<EntityDestroyed>(handle);
 		expired_entities.push_back(handle);
 		component_mgr.get().removeAll(handle);
 	}

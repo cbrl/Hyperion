@@ -83,6 +83,18 @@ void Hierarchy::removeChild(ecs::ECS& ecs, handle64 child) {
 }
 
 
+void Hierarchy::pruneChildren(ecs::ECS& ecs) {
+	for (decltype(children)::iterator it = children.begin(); it != children.end();) {
+		if (not ecs.valid(*it)) {
+			it = children.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
+}
+
+
 void Hierarchy::removeAllChildren(ecs::ECS& ecs) {
 	forEachChild(ecs, [this, &ecs](handle64 child) {
 		removeChild(ecs, child);
@@ -91,11 +103,17 @@ void Hierarchy::removeAllChildren(ecs::ECS& ecs) {
 
 
 void Hierarchy::forEachChild(ecs::ECS& ecs, const std::function<void(handle64)>& act) {
+	bool prune = false;
+
 	for (auto child : children) {
 		if (ecs.valid(child))
 			act(child);
 		else
-			removeChild(ecs, child);
+			prune = true;
+	}
+
+	if (prune) {
+		pruneChildren(ecs);
 	}
 }
 
@@ -109,14 +127,20 @@ void Hierarchy::forEachChild(const ecs::ECS& ecs, const std::function<void(handl
 
 
 void Hierarchy::forEachChildRecursive(ecs::ECS& ecs, const std::function<void(handle64)>& act) {
+	bool prune = false;
+
 	for (auto child : children) {
 		if (ecs.valid(child)) {
 			act(child);
 			ecs.get<Hierarchy>(child).forEachChildRecursive(ecs, act);
 		}
 		else {
-			removeChild(ecs, child);
+			prune = true;
 		}
+	}
+
+	if (prune) {
+		pruneChildren(ecs);
 	}
 }
 
