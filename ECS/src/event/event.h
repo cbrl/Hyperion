@@ -6,120 +6,23 @@
 
 namespace ecs {
 
-class IEvent {
-	using high_res_clk = std::chrono::high_resolution_clock;
-
-public:
-
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
-	IEvent() : creation_time(high_res_clk::now()) {}
-
-	IEvent(const IEvent&) noexcept = default;
-	IEvent(IEvent&&) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Destructors
-	//----------------------------------------------------------------------------------
-	virtual ~IEvent() = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-	IEvent& operator=(const IEvent&) noexcept = default;
-	IEvent& operator=(IEvent&&) noexcept = default;
-	
-
-	//----------------------------------------------------------------------------------
-	// Member Functions
-	//----------------------------------------------------------------------------------
-	[[nodiscard]]
-	virtual std::type_index getTypeIndex() const noexcept = 0;
-	
-	[[nodiscard]]
-	const high_res_clk::time_point& getCreationTime() const noexcept {
-		return creation_time;
-	}
-
-private:
-
-	//----------------------------------------------------------------------------------
-	// Member Variables
-	//----------------------------------------------------------------------------------
-	high_res_clk::time_point creation_time;
-};
-
-
-
-//----------------------------------------------------------------------------------
-// Event
-//----------------------------------------------------------------------------------
-//
-// All events will inherit from this class. Events should contain any relevant
-// data needed to process the event.
-//
-//----------------------------------------------------------------------------------
-template<typename T>
-class Event : public IEvent {
-public:
-
-	//----------------------------------------------------------------------------------
-	// Constructors
-	//----------------------------------------------------------------------------------
-	Event() = default;
-	Event(const Event&) noexcept = default;
-	Event(Event&&) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Destructors
-	//----------------------------------------------------------------------------------
-	virtual ~Event() = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Operators
-	//----------------------------------------------------------------------------------
-	Event& operator=(const Event&) noexcept = default;
-	Event& operator=(Event&&) noexcept = default;
-
-
-	//----------------------------------------------------------------------------------
-	// Member Functions
-	//----------------------------------------------------------------------------------
-	[[nodiscard]]
-	std::type_index getTypeIndex() const noexcept override final {
-		return index;
-	}
-
-
-	//----------------------------------------------------------------------------------
-	// Member Variables
-	//----------------------------------------------------------------------------------
-	static const std::type_index index;
-};
-
-template<typename T>
-const std::type_index Event<T>::index = std::type_index{typeid(T)};
-
-
-
 //----------------------------------------------------------------------------------
 // Core Events
 //----------------------------------------------------------------------------------
+//
+// Events sent by the ECS itself
+//
+//----------------------------------------------------------------------------------
 
-// Sent on entity creation
-class EntityCreated : public Event<EntityCreated> {
+// Sent just after an entity is created
+class EntityCreated {
 public:
 	EntityCreated(handle64 entity) : entity(entity) {}
 	handle64 entity;
 };
 
 // Sent just before an entity is destroyed
-class EntityDestroyed : public Event<EntityCreated> {
+class EntityDestroyed {
 public:
 	EntityDestroyed(handle64 entity) : entity(entity) {}
 	handle64 entity;

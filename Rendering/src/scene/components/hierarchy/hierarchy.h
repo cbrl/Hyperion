@@ -13,7 +13,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// ParentChanged event
 	//----------------------------------------------------------------------------------
-	struct ParentChangedEvent : public ecs::Event<ParentChangedEvent> {
+	struct ParentChangedEvent {
 		ParentChangedEvent(handle64 entity) : entity(entity) {}
 		handle64 entity;
 	};

@@ -7,7 +7,6 @@
 
 namespace ecs {
 
-class IEvent;
 class IEventDispatcher;
 class DispatcherConnection;
 

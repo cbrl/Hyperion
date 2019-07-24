@@ -11,38 +11,38 @@ namespace render::events {
 //----------------------------------------------------------------------------------
 // Resize
 //----------------------------------------------------------------------------------
-struct WindowResizeEvent : public ecs::Event<WindowResizeEvent> {
+struct WindowResizeEvent {
 	WindowResizeEvent(u32_2 size)
 	    : new_size(std::move(size)) {
 	}
 
-	const u32_2 new_size;
+	u32_2 new_size;
 };
 
 
 //----------------------------------------------------------------------------------
 // UI Focus
 //----------------------------------------------------------------------------------
-struct GuiFocusEvent : public ecs::Event<GuiFocusEvent> {
+struct GuiFocusEvent {
 	GuiFocusEvent(bool keyboard, bool mouse)
 	    : keyboard_focus(keyboard)
 	    , mouse_focus(mouse) {
 	}
 
-	const bool keyboard_focus;
-	const bool mouse_focus;
+	bool keyboard_focus;
+	bool mouse_focus;
 };
 
 
 //----------------------------------------------------------------------------------
 // Entity Selected
 //----------------------------------------------------------------------------------
-struct EntitySelectedEvent : public ecs::Event<EntitySelectedEvent> {
+struct EntitySelectedEvent {
 	EntitySelectedEvent(handle64 entity)
 		: entity(std::move(entity)) {
 	}
 
-	const handle64 entity;
+	handle64 entity;
 };
 
 } //namespace render::events
