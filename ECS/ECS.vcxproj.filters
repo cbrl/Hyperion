@@ -53,9 +53,6 @@
     <ClInclude Include="src\ecs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\event\event.h">
-      <Filter>Header Files\event</Filter>
-    </ClInclude>
     <ClInclude Include="src\event\event_dispatcher.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
@@ -67,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="src\component\resource_pool.h">
       <Filter>Header Files\component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\events.h">
+      <Filter>Header Files\event</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

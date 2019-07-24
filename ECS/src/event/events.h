@@ -15,14 +15,14 @@ namespace ecs {
 //----------------------------------------------------------------------------------
 
 // Sent just after an entity is created
-class EntityCreated {
+struct EntityCreated {
 public:
 	EntityCreated(handle64 entity) : entity(entity) {}
 	handle64 entity;
 };
 
 // Sent just before an entity is destroyed
-class EntityDestroyed {
+struct EntityDestroyed {
 public:
 	EntityDestroyed(handle64 entity) : entity(entity) {}
 	handle64 entity;

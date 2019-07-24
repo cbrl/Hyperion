@@ -2,6 +2,10 @@
 
 #include "system/system.h"
 
+namespace ecs {
+	struct EntityDestroyed;
+}
+
 namespace render::systems {
 
 class HierarchySystem final : public ecs::System<HierarchySystem>, public ecs::EventListener {

@@ -1,5 +1,6 @@
 #include "entity_mgr.h"
 #include "component/component_mgr.h"
+#include "event/events.h"
 
 
 namespace ecs {

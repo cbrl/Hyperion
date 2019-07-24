@@ -1,7 +1,6 @@
 #pragma once
 
 #include "component/component.h"
-#include "event/event.h"
 
 
 namespace ecs {
