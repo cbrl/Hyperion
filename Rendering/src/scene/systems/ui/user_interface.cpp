@@ -14,8 +14,10 @@
 
 namespace render::systems {
 
-UserInterface::UserInterface(Engine& engine)
-	: engine(engine) {
+UserInterface::UserInterface(ecs::ECS& ecs, Engine& engine)
+	: System(ecs)
+	, engine(engine)
+	, entity_select_connection(ecs.registerCallback<events::EntitySelectedEvent, &UserInterface::onEntitySelected>(this)) {
 	system_menu           = std::make_unique<SystemMenu>(engine);
 	scene_tree            = std::make_unique<SceneTree>();
 	entity_details        = std::make_unique<EntityDetailsWindow>();
@@ -39,11 +41,6 @@ UserInterface::~UserInterface() = default;
 
 
 UserInterface& UserInterface::operator=(UserInterface&&) noexcept = default;
-
-
-void UserInterface::registerCallbacks() {
-	registerEventCallback(&UserInterface::onEntitySelected);
-}
 
 
 void UserInterface::onEntitySelected(const events::EntitySelectedEvent& event) {
@@ -93,7 +90,7 @@ void UserInterface::update() {
 	if (keyboard_state != last_keyboard_state || mouse_state != last_mouse_state) {
 		last_keyboard_state = keyboard_state;
 		last_mouse_state    = mouse_state;
-		enqueue<events::GuiFocusEvent>(keyboard_state, mouse_state);
+		getECS().enqueue<events::GuiFocusEvent>(keyboard_state, mouse_state);
 	}
 }
 

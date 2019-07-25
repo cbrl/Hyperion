@@ -25,19 +25,30 @@ void EventMgr::send(ArgsT&&... args) {
 }
 
 
+template<typename EventT, void(*Function)(const EventT&)>
+DispatcherConnection EventMgr::addCallback() {
+	auto& dispatcher = getOrCreateDispatcher<EventT>();
+	return dispatcher.addCallback<Function>();
+}
+
+template<typename EventT, typename ClassT, typename void(ClassT::* Function)(const EventT&)>
+DispatcherConnection EventMgr::addCallback(ClassT* instance) {
+	auto& dispatcher = getOrCreateDispatcher<EventT>();
+	return dispatcher.addCallback<Function>(instance);
+}
+
+
 template<typename EventT>
-DispatcherConnection EventMgr::addCallback(const std::function<void(const EventT&)>& callback) {
+EventDispatcher<EventT>& EventMgr::getOrCreateDispatcher() {
 	const std::type_index index{typeid(EventT)};
 	const auto it = event_dispatchers.find(index);
 
 	if (it == event_dispatchers.end()) {
 		const auto [iter, inserted] = event_dispatchers.try_emplace(index, std::make_unique<EventDispatcher<EventT>>());
-		auto& dispatcher = static_cast<EventDispatcher<EventT>&>(*(iter->second));
-		return dispatcher.addCallback(callback);
+		return static_cast<EventDispatcher<EventT>&>(*(iter->second));
 	}
 	else {
-		auto& dispatcher = static_cast<EventDispatcher<EventT>&>(*(it->second));
-		return dispatcher.addCallback(callback);
+		return static_cast<EventDispatcher<EventT>&>(*(it->second));
 	}
 }
 

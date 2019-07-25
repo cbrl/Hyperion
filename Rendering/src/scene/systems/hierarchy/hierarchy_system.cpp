@@ -5,15 +5,14 @@
 
 namespace render::systems {
 
+HierarchySystem::HierarchySystem(ecs::ECS& ecs)
+	: System(ecs)
+	, on_destroy_connection(ecs.registerCallback<ecs::EntityDestroyed, &HierarchySystem::onEntityDestroyed>(this)) {
+}
+
 void HierarchySystem::update() {
 
 }
-
-
-void HierarchySystem::registerCallbacks() {
-	this->registerEventCallback(&HierarchySystem::onEntityDestroyed);
-}
-
 
 void HierarchySystem::onEntityDestroyed(const ecs::EntityDestroyed& event) {
 	auto& ecs = this->getECS();

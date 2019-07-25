@@ -7,7 +7,7 @@ namespace ecs {
 	class ECS;
 }
 
-class Hierarchy : public ecs::Component<Hierarchy>, public ecs::EventSender {
+class Hierarchy : public ecs::Component<Hierarchy> {
 public:
 	//----------------------------------------------------------------------------------
 	// ParentChanged event
@@ -78,7 +78,7 @@ public:
 
 private:
 
-	void sendParentChangedEvent();
+	void sendParentChangedEvent(ecs::ECS& ecs);
 
 	void pruneChildren(ecs::ECS& ecs);
 

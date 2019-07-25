@@ -3,9 +3,11 @@
 #include "scenes/test_scene/components/motor/camera_movement.h"
 
 
-CameraMotorSystem::CameraMotorSystem(const Input& input, KeyConfig& key_config)
-	: input(input)
-	, key_config(key_config) {
+CameraMotorSystem::CameraMotorSystem(ecs::ECS& ecs, const Input& input, KeyConfig& key_config)
+	: System(ecs)
+	, input(input)
+	, key_config(key_config)
+	, gui_focus_connection(ecs.registerCallback<render::events::GuiFocusEvent, &CameraMotorSystem::onGuiFocus>(this)) {
 
 	key_config.bindIfNotBound("Forward", Keyboard::W);
 	key_config.bindIfNotBound("Back",    Keyboard::S);
@@ -41,11 +43,6 @@ void CameraMotorSystem::update() {
 }
 
 
-void CameraMotorSystem::registerCallbacks() {
-	registerEventCallback(&CameraMotorSystem::onGuiFocus);
-}
-
-
 void CameraMotorSystem::onGuiFocus(const render::events::GuiFocusEvent& event) {
 	this->setActive(!event.keyboard_focus);
 }
@@ -55,6 +52,9 @@ void CameraMotorSystem::processInput(CameraMovement& movement, Transform& transf
 
 	const auto dt = static_cast<f32>(dtSinceLastUpdate().count());
 	f32_3 move_units = { 0.0f, 0.0f, 0.0f };
+
+	auto& input = this->input.get();
+	auto& key_config = this->key_config.get();
 
 	// Forward/Back movement
 	if (input.isKeyDown(key_config.getKey("Forward"))) {

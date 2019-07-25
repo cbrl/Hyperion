@@ -1,6 +1,7 @@
 #pragma once
 
 #include "system/system.h"
+#include "event/event_dispatcher.h"
 #include "scene/events/core_events.h"
 #include "scene/components/transform/transform.h"
 #include "scenes/test_scene/components/motor/camera_movement.h"
@@ -8,12 +9,12 @@
 class Input;
 class KeyConfig;
 
-class CameraMotorSystem final : public ecs::System<CameraMotorSystem>, public ecs::EventListener {
+class CameraMotorSystem final : public ecs::System<CameraMotorSystem> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	CameraMotorSystem(const Input& input, KeyConfig& key_config);
+	CameraMotorSystem(ecs::ECS& ecs, const Input& input, KeyConfig& key_config);
 	CameraMotorSystem(const CameraMotorSystem&) = delete;
 	CameraMotorSystem(CameraMotorSystem&&) = default;
 
@@ -34,12 +35,9 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-
 	void update() override;
 
 private:
-
-	void registerCallbacks() override;
 
 	void processInput(CameraMovement& movement, Transform& transform) const;
 	void updateMovement(CameraMovement& mv, f32_3 units) const;
@@ -52,6 +50,7 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	const Input& input;
-	KeyConfig& key_config;
+	std::reference_wrapper<const Input> input;
+	std::reference_wrapper<KeyConfig> key_config;
+	ecs::UniqueDispatcherConnection gui_focus_connection;
 };

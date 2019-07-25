@@ -8,6 +8,10 @@
 namespace ecs {
 
 class IEventDispatcher;
+
+template<typename EventT>
+class EventDispatcher;
+
 class DispatcherConnection;
 
 class EventMgr final {
@@ -54,11 +58,13 @@ public:
 	// Dispatch all stored events and clear the event buffer
 	void dispatch();
 
-private:
+	// Add a free function callback
+	template<typename EventT, void(*Function)(const EventT&)>
+	DispatcherConnection addCallback();
 
-	// Add an event callback to the relevant dispatcher. The dispatcher will own the delegate.
-	template<typename EventT>
-	DispatcherConnection addCallback(const std::function<void(const EventT&)>& callback);
+	// Add a class member function callback
+	template<typename EventT, typename ClassT, typename void(ClassT::*Function)(const EventT&)>
+	DispatcherConnection addCallback(ClassT* instance);
 
 	// Remove an event callback
 	template<typename EventT>
@@ -66,6 +72,9 @@ private:
 
 
 private:
+
+	template<typename EventT>
+	EventDispatcher<EventT>& getOrCreateDispatcher();
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

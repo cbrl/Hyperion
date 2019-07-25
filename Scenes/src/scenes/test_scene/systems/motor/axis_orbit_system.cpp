@@ -1,7 +1,12 @@
 #include "axis_orbit_system.h"
-#include "engine/engine.h"
+#include "ecs.h"
+#include "scene/components/transform/transform.h"
 #include "scenes/test_scene/components/motor/axis_orbit.h"
 
+
+AxisOrbitSystem::AxisOrbitSystem(ecs::ECS& ecs) : System(ecs) {
+
+}
 
 void AxisOrbitSystem::update() {
 	auto& ecs = this->getECS();

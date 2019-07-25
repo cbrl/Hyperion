@@ -10,17 +10,8 @@ SystemT& SystemMgr::add(ArgsT&&... args) {
 	if (it != systems.end() && it->second != nullptr)
 		return static_cast<SystemT&>(*(it->second));
 
-	auto  pair   = systems.try_emplace(SystemT::index, std::make_unique<SystemT>(std::forward<ArgsT>(args)...));
+	auto  pair   = systems.try_emplace(SystemT::index, std::make_unique<SystemT>(ecs.get(), std::forward<ArgsT>(args)...));
 	auto& system = static_cast<SystemT&>(*(pair.first->second));
-
-	if constexpr (std::is_base_of_v<EventParticipator, SystemT>) {
-		system.setEventMgr(gsl::make_not_null(ecs.get().event_mgr.get()));
-		if constexpr (std::is_base_of_v<EventListener, SystemT>) {
-			system.doRegisterCallbacks();
-		}
-	}
-	
-	system.setECS(gsl::make_not_null(&ecs.get()));
 
 	system_queue.push_back(std::ref(system));
 	sortSystemQueue();

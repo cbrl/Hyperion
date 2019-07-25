@@ -27,7 +27,7 @@ void Hierarchy::setParent(ecs::ECS& ecs, handle64 parent) {
 			parent_hierarchy->addChild(ecs, getOwner());
 		}
 
-		sendParentChangedEvent();
+		sendParentChangedEvent(ecs);
 	}
 }
 
@@ -155,6 +155,6 @@ void Hierarchy::forEachChildRecursive(const ecs::ECS& ecs, const std::function<v
 }
 
 
-void Hierarchy::sendParentChangedEvent() {
-	enqueue<ParentChangedEvent>(getOwner());
+void Hierarchy::sendParentChangedEvent(ecs::ECS& ecs) {
+	ecs.enqueue<ParentChangedEvent>(getOwner());
 }

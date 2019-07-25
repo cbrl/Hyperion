@@ -118,6 +118,21 @@ void ECS::send(ArgsT&& ... args) {
 	event_mgr->send<EventT>(std::forward<ArgsT>(args)...);
 }
 
+template<typename EventT, auto Function>
+DispatcherConnection ECS::registerCallback() {
+	return event_mgr->addCallback<EventT, Function>();
+}
+
+template<typename EventT, auto Function, typename ClassT>
+DispatcherConnection ECS::registerCallback(ClassT* instance) {
+	return event_mgr->addCallback<EventT, ClassT, Function>(instance);
+}
+
+template<typename EventT>
+void ECS::removeCallback(const std::function<void(const EventT&)>& callback) {
+	event_mgr->removeCallback(callback);
+}
+
 
 
 //----------------------------------------------------------------------------------

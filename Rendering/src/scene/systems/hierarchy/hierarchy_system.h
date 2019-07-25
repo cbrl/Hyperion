@@ -1,19 +1,21 @@
 #pragma once
 
 #include "system/system.h"
+#include "event/event_dispatcher.h"
 
 namespace ecs {
+	class ECS;
 	struct EntityDestroyed;
 }
 
 namespace render::systems {
 
-class HierarchySystem final : public ecs::System<HierarchySystem>, public ecs::EventListener {
+class HierarchySystem final : public ecs::System<HierarchySystem> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	HierarchySystem() = default;
+	HierarchySystem(ecs::ECS& ecs);
 	HierarchySystem(const HierarchySystem&) = delete;
 	HierarchySystem(HierarchySystem&&) noexcept = default;
 
@@ -35,9 +37,13 @@ public:
 
 private:
 
-	void registerCallbacks() override;
-
 	void onEntityDestroyed(const ecs::EntityDestroyed& event);
+
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
+	ecs::UniqueDispatcherConnection on_destroy_connection;
 };
 
 } //namespace render::systems

@@ -7,14 +7,16 @@
 
 namespace render::systems {
 
-CameraSystem::CameraSystem(const RenderingMgr& rendering_mgr)
-	: rendering_mgr(rendering_mgr) {
+CameraSystem::CameraSystem(ecs::ECS& ecs, const RenderingMgr& rendering_mgr)
+	: System(ecs)
+	, rendering_mgr(rendering_mgr)
+	, window_resize_connection(ecs.registerCallback<events::WindowResizeEvent, &CameraSystem::onWindowResize>(this)) {
 }
 
 
 void CameraSystem::update() {
 	auto& ecs            = this->getECS();
-	auto& device_context = rendering_mgr.getDeviceContext();
+	auto& device_context = rendering_mgr.get().getDeviceContext();
 
 	ecs.forEach<Transform, PerspectiveCamera>([&](handle64 entity) {
 		const auto& transform = ecs.get<Transform>(entity);
@@ -37,11 +39,6 @@ void CameraSystem::update() {
 				                transform.getWorldToObjectMatrix());
 		}
 	});
-}
-
-
-void CameraSystem::registerCallbacks() {
-	registerEventCallback(&CameraSystem::onWindowResize);
 }
 
 

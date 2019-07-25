@@ -7,13 +7,10 @@
 
 namespace render::systems {
 
-PickingSystem::PickingSystem(Engine& engine)
-	: engine(engine) {
-}
-
-
-void PickingSystem::registerCallbacks() {
-	registerEventCallback(&PickingSystem::onGuiFocus);
+PickingSystem::PickingSystem(ecs::ECS& ecs, Engine& engine)
+	: System(ecs)
+	, engine(engine)
+	, gui_focus_connection(ecs.registerCallback<events::GuiFocusEvent, &PickingSystem::onGuiFocus>(this)) {
 }
 
 
@@ -125,7 +122,7 @@ void XM_CALLCONV PickingSystem::castRay(FXMVECTOR origin,
 		const XMVECTOR ray_direction = XMVector3Normalize(XMVector3TransformNormal(direction, view_to_model));
 
 		if (intersects(ray_origin, ray_direction, model.getAABB()))
-			enqueue<events::EntitySelectedEvent>(model.getOwner());
+			ecs.enqueue<events::EntitySelectedEvent>(model.getOwner());
 	});
 }
 

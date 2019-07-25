@@ -152,7 +152,6 @@
     <ClInclude Include="src\event\events.h" />
     <ClInclude Include="src\event\event_dispatcher.h" />
     <ClInclude Include="src\event\event_mgr.h" />
-    <ClInclude Include="src\event\event_participator.h" />
     <ClInclude Include="src\system\system.h" />
     <ClInclude Include="src\system\system_mgr.h" />
   </ItemGroup>
@@ -169,7 +168,6 @@
     <None Include="src\ecs.tpp" />
     <None Include="src\event\event_dispatcher.tpp" />
     <None Include="src\event\event_mgr.tpp" />
-    <None Include="src\event\event_participator.tpp" />
     <None Include="src\system\system_mgr.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

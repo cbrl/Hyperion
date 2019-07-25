@@ -6,7 +6,7 @@
 
 namespace ecs {
 
-class DispatcherConnection final {
+class DispatcherConnection {
 	template<typename>
 	friend class EventDispatcher;
 
@@ -15,6 +15,7 @@ class DispatcherConnection final {
 	}
 
 public:
+
 	DispatcherConnection() = default;
 	DispatcherConnection(const DispatcherConnection&) = default;
 	DispatcherConnection(DispatcherConnection&&) = default;
@@ -32,7 +33,28 @@ public:
 	}
 
 private:
+
 	std::function<void()> disconnect_func;
+};
+
+
+class UniqueDispatcherConnection : private DispatcherConnection {
+public:
+	UniqueDispatcherConnection() = default;
+	UniqueDispatcherConnection(const DispatcherConnection& connection)
+		: DispatcherConnection(connection) {
+	}
+	UniqueDispatcherConnection(const UniqueDispatcherConnection&) = delete;
+	UniqueDispatcherConnection(UniqueDispatcherConnection&&) = default;
+
+	~UniqueDispatcherConnection() {
+		disconnect();
+	}
+
+	UniqueDispatcherConnection& operator=(const UniqueDispatcherConnection&) = delete;
+	UniqueDispatcherConnection& operator=(UniqueDispatcherConnection&&) = default;
+
+	using DispatcherConnection::disconnect;
 };
 
 
@@ -118,11 +140,21 @@ public:
 	// Send events to all listeners
 	void dispatch() override;
 
-	// Add an event callback to this dispatcher
-	DispatcherConnection addCallback(const std::function<void(const EventT&)>& callback);
+	// Add a free function callback
+	template<auto Function>
+	DispatcherConnection addCallback();
 
-	// Remove an event callback from this dispatcher
-	void removeCallback(const std::function<void(const EventT&)>& callback);
+	// Add a class member function callback
+	template<auto Function, typename ClassT>
+	DispatcherConnection addCallback(ClassT* instance);
+
+	// Remove a free function callback
+	template<auto Function>
+	void removeCallback();
+
+	// Remove a class member function callback
+	template<auto Function, typename ClassT>
+	void removeCallback(ClassT* instance);
 
 	// Get the number of callbacks in this dispatcher
 	[[nodiscard]]
@@ -130,6 +162,10 @@ public:
 
 	
 private:
+
+	DispatcherConnection addCallback(const std::function<void(const EventT&)>& callback);
+
+	void removeCallback(const std::function<void(const EventT&)>& callback);
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

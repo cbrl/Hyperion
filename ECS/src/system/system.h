@@ -1,7 +1,6 @@
 #pragma once
 
 #include "datatypes/datatypes.h"
-#include "event/event_participator.h"
 #include "time/time.h"
 
 
@@ -29,7 +28,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	ISystem() noexcept = default;
+	ISystem(ecs::ECS& ecs) : ecs(ecs) {}
 	ISystem(const ISystem& system) = delete;
 	ISystem(ISystem&& system) = default;
 
@@ -127,27 +126,20 @@ protected:
 	// Member Functions - ECS
 	//----------------------------------------------------------------------------------
 
-	// Get a reference to the ECS this system is a part of. The reference is assigned
-	// after construction, so this function cannot be called in a system's constructor.
+	// Get a reference to the ECS this system was created by
 	[[nodiscard]]
 	ECS& getECS() {
-		assert(ecs != nullptr && "ISystem::ecs == nullptr (Was getECS() called in a system's constructor?)");
-		return *ecs;
+		return ecs.get();
 	}
 
 private:
-
-	void setECS(gsl::not_null<ECS*> pointer) {
-		ecs = pointer;
-	}
-
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	// A pointer to the ECS that created the system.
-	ECS* ecs = nullptr;
+	// A reference to the ECS that created the system
+	std::reference_wrapper<ECS> ecs;
 
 	// Is this system enabled?
 	bool active = true;
@@ -183,7 +175,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	System() = default;
+	System(ecs::ECS& ecs) : ISystem(ecs) {}
 	System(const System& system) = delete;
 	System(System&& system) = default;
 

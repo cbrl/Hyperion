@@ -2,6 +2,10 @@
 
 #include "system/system.h"
 
+namespace ecs {
+	class ECS;
+}
+
 namespace render {
 
 class RenderingMgr;
@@ -13,7 +17,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	ModelSystem(const RenderingMgr& rendering_mgr);
+	ModelSystem(ecs::ECS& ecs, const RenderingMgr& rendering_mgr);
 	ModelSystem(const ModelSystem&) = delete;
 	ModelSystem(ModelSystem&&) noexcept = default;
 
@@ -41,7 +45,7 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	const RenderingMgr& rendering_mgr;
+	std::reference_wrapper<const RenderingMgr> rendering_mgr;
 };
 
 } //namespace systems

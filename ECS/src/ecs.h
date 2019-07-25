@@ -4,6 +4,7 @@
 #include "memory/handle/handle.h"
 #include "time/time.h"
 #include "event/events.h"
+#include "event/event_dispatcher.h"
 
 #include <functional>
 
@@ -152,6 +153,18 @@ public:
 	// Immediately send an event to all listeners
 	template<typename EventT, typename... ArgsT>
 	void send(ArgsT&&... args);
+
+	// Register a free function callback that listens for events of type EventT
+	template<typename EventT, auto Function>
+	DispatcherConnection registerCallback();
+
+	// Register a class member function callback that listens for events of type EventT
+	template<typename EventT, auto Function, typename ClassT>
+	DispatcherConnection registerCallback(ClassT* instance);
+
+	// Remove a registered callback
+	template<typename EventT>
+	void removeCallback(const std::function<void(const EventT&)>& callback);
 
 
 	//----------------------------------------------------------------------------------

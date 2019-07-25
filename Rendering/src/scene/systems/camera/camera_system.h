@@ -1,7 +1,9 @@
 #pragma once
 
 #include "system/system.h"
+#include "event/event_dispatcher.h"
 #include "scene/events/core_events.h"
+
 
 namespace render {
 
@@ -9,12 +11,12 @@ class RenderingMgr;
 
 namespace systems {
 
-class CameraSystem final : public ecs::System<CameraSystem>, public ecs::EventListener {
+class CameraSystem final : public ecs::System<CameraSystem> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	CameraSystem(const RenderingMgr& rendering_mgr);
+	CameraSystem(ecs::ECS& ecs, const RenderingMgr& rendering_mgr);
 	CameraSystem(const CameraSystem&) = delete;
 	CameraSystem(CameraSystem&&) noexcept = default;
 
@@ -39,15 +41,14 @@ public:
 
 private:
 
-	void registerCallbacks() override;
-
 	void onWindowResize(const events::WindowResizeEvent& event);
 
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	const RenderingMgr& rendering_mgr;
+	std::reference_wrapper<const RenderingMgr> rendering_mgr;
+	ecs::UniqueDispatcherConnection window_resize_connection;
 };
 
 } //namespace systems

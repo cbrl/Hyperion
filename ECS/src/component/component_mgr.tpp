@@ -25,14 +25,6 @@ ComponentT& ComponentMgr::add(handle64 entity, ArgsT&&... args) {
 	// Setup the component
 	component.setOwner(entity);
 
-	// Perform extra initialization steps if the component is an event participator
-	if constexpr (std::is_base_of_v<EventParticipator, ComponentT>) {
-		component.setEventMgr(gsl::make_not_null(&event_mgr.get()));
-		if constexpr (std::is_base_of_v<EventListener, ComponentT>) {
-			component.doRegisterCallbacks();
-		}
-	}
-
 	return component;
 }
 

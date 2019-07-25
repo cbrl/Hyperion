@@ -1,18 +1,20 @@
 #include "mouse_rotation_system.h"
 
-#include "engine/engine.h"
+#include "ecs.h"
+#include "input.h"
 #include "scene/components/transform/transform.h"
 #include "scenes/test_scene/components/motor/mouse_rotation.h"
 
 
-MouseRotationSystem::MouseRotationSystem(const Input& input)
-	:input(input) {
+MouseRotationSystem::MouseRotationSystem(ecs::ECS& ecs, const Input& input)
+	: System(ecs)
+	, input(input) {
 }
 
 
 void MouseRotationSystem::update() {
 	auto& ecs = this->getECS();
-	const i32_2 mouse_delta = input.getMouseDelta();
+	const i32_2 mouse_delta = input.get().getMouseDelta();
 
 	ecs.forEach<Transform, MouseRotation>([&](handle64 entity) {
 		auto& transform      = ecs.get<Transform>(entity);

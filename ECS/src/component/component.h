@@ -2,7 +2,6 @@
 
 #include "datatypes/datatypes.h"
 #include "memory/handle/handle.h"
-#include "event/event_participator.h"
 
 
 namespace ecs {

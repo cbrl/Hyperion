@@ -1,9 +1,13 @@
 #include "axis_rotation_system.h"
 
-#include "engine/engine.h"
+#include "ecs.h"
 #include "scene/components/transform/transform.h"
 #include "scenes/test_scene/components/motor/axis_rotation.h"
 
+
+AxisRotationSystem::AxisRotationSystem(ecs::ECS& ecs) : System(ecs) {
+
+}
 
 void AxisRotationSystem::update() {
 	auto& ecs = this->getECS();

@@ -7,14 +7,15 @@
 
 namespace render::systems {
 
-ModelSystem::ModelSystem(const RenderingMgr& rendering_mgr)
-	: rendering_mgr(rendering_mgr) {
+ModelSystem::ModelSystem(ecs::ECS& ecs, const RenderingMgr& rendering_mgr)
+	: System(ecs)
+	, rendering_mgr(rendering_mgr) {
 }
 
 
 void ModelSystem::update() {
 	auto& ecs            = this->getECS();
-	auto& device_context = rendering_mgr.getDeviceContext();
+	auto& device_context = rendering_mgr.get().getDeviceContext();
 
 	ecs.forEach<Transform, Model>([&](handle64 entity) {
 		const auto& transform = ecs.get<Transform>(entity);

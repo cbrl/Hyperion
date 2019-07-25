@@ -5,8 +5,9 @@
 
 namespace render::systems {
 
-void TransformSystem::registerCallbacks() {
-	registerEventCallback(&TransformSystem::onParentChanged);
+TransformSystem::TransformSystem(ecs::ECS& ecs)
+	: System(ecs)
+	, parent_changed_connection(ecs.registerCallback<Hierarchy::ParentChangedEvent, &TransformSystem::onParentChanged>(this)) {
 }
 
 void TransformSystem::update() {

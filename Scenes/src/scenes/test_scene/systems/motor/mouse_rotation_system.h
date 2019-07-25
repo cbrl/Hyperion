@@ -9,7 +9,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	MouseRotationSystem(const Input& input);
+	MouseRotationSystem(ecs::ECS& ecs, const Input& input);
 	MouseRotationSystem(const MouseRotationSystem&) = delete;
 	MouseRotationSystem(MouseRotationSystem&&) = default;
 
@@ -37,5 +37,5 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	const Input& input;
+	std::reference_wrapper<const Input> input;
 };

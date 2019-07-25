@@ -38,6 +38,22 @@ void EventDispatcher<EventT>::dispatch() {
 
 
 template<typename EventT>
+template<auto Function>
+DispatcherConnection EventDispatcher<EventT>::addCallback() {
+	const auto func = std::function<void(const EventT&)>{Function};
+	return addCallback(func);
+}
+
+
+template<typename EventT>
+template<auto Function, typename ClassT>
+DispatcherConnection EventDispatcher<EventT>::addCallback(ClassT* instance) {
+	const auto func = std::function<void(const EventT&)>{std::bind(Function, instance, std::placeholders::_1)};
+	return addCallback(func);
+}
+
+
+template<typename EventT>
 DispatcherConnection EventDispatcher<EventT>::addCallback(const std::function<void(const EventT&)>& callback) {
 	if (!callback)
 		return {};
@@ -58,6 +74,22 @@ DispatcherConnection EventDispatcher<EventT>::addCallback(const std::function<vo
 	}
 	
 	return DispatcherConnection{ [this, func = *it]{this->removeCallback(func);} };
+}
+
+
+template<typename EventT>
+template<auto Function>
+void EventDispatcher<EventT>::removeCallback() {
+	const auto func = std::function<decltype(Function)>{ Function };
+	removeCallback(func);
+}
+
+
+template<typename EventT>
+template<auto Function, typename ClassT>
+void EventDispatcher<EventT>::removeCallback(ClassT* instance) {
+	const auto func = std::function<decltype(Function)>{ std::bind(&Function, instance, std::placeholders::_1) };
+	removeCallback(func);
 }
 
 
