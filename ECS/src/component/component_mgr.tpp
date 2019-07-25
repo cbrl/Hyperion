@@ -4,11 +4,10 @@ namespace ecs {
 
 template<typename ComponentT, typename... ArgsT>
 ComponentT& ComponentMgr::add(handle64 entity, ArgsT&&... args) {
-	static_assert(std::is_base_of_v<IComponent, ComponentT>,
-	              "Calling ComponentMgr::CreateComponent() with a type that does not inherit from Component.");
+	static_assert(std::is_base_of_v<IComponent, ComponentT>, "ComponentT must inherit from Component.");
 
 	static_assert(std::is_constructible_v<ComponentT, ArgsT...>,
-	              "Component does not have a constructor taking the provided argument types.");
+	              "ComponentT does not have a constructor taking the provided argument types.");
 
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
