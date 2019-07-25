@@ -314,13 +314,14 @@ template<typename CameraT>
 void XM_CALLCONV Renderer::renderFalseColor(Scene& scene,
                                             CameraT& camera,
                                             FXMMATRIX world_to_projection) {
-
+	profiler.beginTimestamp("Forward");
 	output_mgr->bindBeginForward(device_context);
 
 	const auto& settings = camera.getSettings();
 	forward_pass->renderFalseColor(scene.getECS(), world_to_projection, settings.getFalseColorMode());
 
 	output_mgr->bindEndForward(device_context);
+	profiler.endTimestamp("Forward");
 }
 
 } //namespace render
