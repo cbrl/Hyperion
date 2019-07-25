@@ -50,7 +50,7 @@ public:
 	// Member Functions - Update
 	//----------------------------------------------------------------------------------
 
-	// Update the systems
+	// Update the systems. Should be called once per iteration of the main program loop.
 	void update(std::chrono::duration<f64> dt);
 
 
@@ -74,37 +74,38 @@ public:
 	// Member Functions - Components
 	//----------------------------------------------------------------------------------
 
-	// Add a component to this entity
+	// Add a component to the entity
 	template<typename ComponentT, typename... ArgsT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	ComponentT& add(handle64 entity, ArgsT&& ... args);
 
-	// Remove a component from this entity
+	// Remove a component from the entity
 	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	void remove(handle64 entity);
 
+	// Remove a component from the entity
 	void remove(handle64 entity, IComponent& component);
 
-	// Get the first component of the specified type
+	// Get the component of the specified type
 	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	[[nodiscard]]
 	ComponentT& get(handle64 entity);
 
-	// Get the first component of the specified type
+	// Get the component of the specified type
 	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	[[nodiscard]]
 	const ComponentT& get(handle64 entity) const;
 
-	// Get the first component of the specified type, if it exists.
+	// Get the component of the specified type, if it exists.
 	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	[[nodiscard]]
 	ComponentT* tryGet(handle64 entity);
 
-	// Get the first component of the specified type, if it exists.
+	// Get the component of the specified type, if it exists.
 	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
 	[[nodiscard]]
 	const ComponentT* tryGet(handle64 entity) const;
 
-	// Check if this entity contains the specified component
+	// Check if the entity contains the specified component
 	template<typename ComponentT>
 	[[nodiscard]]
 	bool has(handle64 entity) const;
@@ -114,30 +115,38 @@ public:
 	// Member Functions - Systems
 	//----------------------------------------------------------------------------------
 
+	// Add a system to the ECS
 	template<typename SystemT, typename... ArgsT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	SystemT& add(ArgsT&&... args);
 
+	// Remove a system from the ECS
 	void remove(ISystem& system);
 
+	// Remove a system from the ECS
 	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	void remove();
 
+	// Get the specified system
 	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	[[nodiscard]]
 	SystemT& get();
 
+	// Get the specified system
 	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	[[nodiscard]]
 	const SystemT& get() const;
 
+	// Get the specified system, if it exists.
 	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	[[nodiscard]]
 	SystemT* tryGet();
 
+	// Get the specified system, if it exists.
 	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
 	[[nodiscard]]
 	const SystemT* tryGet() const;
 
+	// Set the priority of the specified system
 	template<typename SystemT>
 	void setSystemPriority(u32 priority);
 
@@ -194,7 +203,7 @@ public:
 	// Member Functions - Count
 	//----------------------------------------------------------------------------------
 
-	// Get the number of a entities, or components of type T.
+	// Get the number of a entities or components of type T.
 	template<typename T>
 	[[nodiscard]]
 	size_t count() const;
