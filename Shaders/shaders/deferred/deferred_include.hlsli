@@ -12,7 +12,7 @@
 // SRVs
 //----------------------------------------------------------------------------------
 Texture2D         g_base_color_map     : REG_T(SLOT_SRV_BASE_COLOR);
-Texture2D<float2> g_material_param_map : REG_T(SLOT_SRV_MATERIAL_PARAMS);
+Texture2D         g_material_param_map : REG_T(SLOT_SRV_MATERIAL_PARAMS);
 Texture2D         g_normal_map         : REG_T(SLOT_SRV_NORMAL);
 Texture2D<float>  g_depth_map          : REG_T(SLOT_SRV_DEPTH);
 
@@ -26,7 +26,7 @@ float3 GetGBufferBaseColor(uint2 coords) {
 }
 
 // returns [roughness, metalness]
-float2 GetGBufferMaterialParams(uint2 coords) {
+float4 GetGBufferMaterialParams(uint2 coords) {
 	return g_material_param_map[coords];
 }
 

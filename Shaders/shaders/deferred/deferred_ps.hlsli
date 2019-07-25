@@ -14,8 +14,8 @@ float4 PS(float4 pin : SV_Position) : SV_Target {
 
 	Material mat;
 	mat.base_color = float4(base_color, 1.0f);
-	mat.metalness  = material_params.x;
-	mat.roughness  = material_params.y;
+	mat.roughness  = material_params.x;
+	mat.metalness  = material_params.y;
 	mat.emissive   = 0.0f;
 	
 
