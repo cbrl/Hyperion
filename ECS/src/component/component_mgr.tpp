@@ -56,7 +56,6 @@ bool ComponentMgr::has(handle64 entity) const noexcept {
 
 
 template<typename ComponentT>
-[[nodiscard]]
 ComponentT& ComponentMgr::get(handle64 entity) {
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
@@ -64,8 +63,8 @@ ComponentT& ComponentMgr::get(handle64 entity) {
 	return pool.get(entity.index);
 }
 
+
 template<typename ComponentT>
-[[nodiscard]]
 const ComponentT& ComponentMgr::get(handle64 entity) const {
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
@@ -75,7 +74,6 @@ const ComponentT& ComponentMgr::get(handle64 entity) const {
 
 
 template<typename ComponentT>
-[[nodiscard]]
 ComponentT* ComponentMgr::tryGet(handle64 entity) {
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
@@ -89,7 +87,6 @@ ComponentT* ComponentMgr::tryGet(handle64 entity) {
 
 
 template<typename ComponentT>
-[[nodiscard]]
 const ComponentT* ComponentMgr::tryGet(handle64 entity) const {
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
