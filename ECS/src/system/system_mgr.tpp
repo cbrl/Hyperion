@@ -12,12 +12,15 @@ SystemT& SystemMgr::add(ArgsT&&... args) {
 
 	const auto it = systems.find(SystemT::index);
 
+	// Return the system if it has already been added
 	if (it != systems.end() && it->second != nullptr)
 		return static_cast<SystemT&>(*(it->second));
 
+	// Create the system
 	auto  pair   = systems.try_emplace(SystemT::index, std::make_unique<SystemT>(ecs.get(), std::forward<ArgsT>(args)...));
 	auto& system = static_cast<SystemT&>(*(pair.first->second));
 
+	// Add the system to the queue and sort it
 	system_queue.push_back(std::ref(system));
 	sortSystemQueue();
 
