@@ -119,12 +119,12 @@ void ECS::send(ArgsT&& ... args) {
 }
 
 template<typename EventT, auto Function>
-DispatcherConnection ECS::registerCallback() {
+DispatcherConnection ECS::addCallback() {
 	return event_mgr->addCallback<EventT, Function>();
 }
 
 template<typename EventT, auto Function, typename ClassT>
-DispatcherConnection ECS::registerCallback(ClassT* instance) {
+DispatcherConnection ECS::addCallback(ClassT* instance) {
 	return event_mgr->addCallback<EventT, ClassT, Function>(instance);
 }
 

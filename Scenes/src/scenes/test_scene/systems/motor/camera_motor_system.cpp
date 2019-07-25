@@ -7,7 +7,7 @@ CameraMotorSystem::CameraMotorSystem(ecs::ECS& ecs, const Input& input, KeyConfi
 	: System(ecs)
 	, input(input)
 	, key_config(key_config)
-	, gui_focus_connection(ecs.registerCallback<render::events::GuiFocusEvent, &CameraMotorSystem::onGuiFocus>(this)) {
+	, gui_focus_connection(ecs.addCallback<render::events::GuiFocusEvent, &CameraMotorSystem::onGuiFocus>(this)) {
 
 	key_config.bindIfNotBound("Forward", Keyboard::W);
 	key_config.bindIfNotBound("Back",    Keyboard::S);

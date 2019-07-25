@@ -17,7 +17,7 @@ namespace render::systems {
 UserInterface::UserInterface(ecs::ECS& ecs, Engine& engine)
 	: System(ecs)
 	, engine(engine)
-	, entity_select_connection(ecs.registerCallback<events::EntitySelectedEvent, &UserInterface::onEntitySelected>(this)) {
+	, entity_select_connection(ecs.addCallback<events::EntitySelectedEvent, &UserInterface::onEntitySelected>(this)) {
 	system_menu           = std::make_unique<SystemMenu>(engine);
 	scene_tree            = std::make_unique<SceneTree>();
 	entity_details        = std::make_unique<EntityDetailsWindow>();

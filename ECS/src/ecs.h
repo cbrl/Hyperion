@@ -156,11 +156,11 @@ public:
 
 	// Register a free function callback that listens for events of type EventT
 	template<typename EventT, auto Function>
-	DispatcherConnection registerCallback();
+	DispatcherConnection addCallback();
 
 	// Register a class member function callback that listens for events of type EventT
 	template<typename EventT, auto Function, typename ClassT>
-	DispatcherConnection registerCallback(ClassT* instance);
+	DispatcherConnection addCallback(ClassT* instance);
 
 	// Remove a registered callback
 	template<typename EventT>

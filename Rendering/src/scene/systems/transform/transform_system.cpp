@@ -7,7 +7,7 @@ namespace render::systems {
 
 TransformSystem::TransformSystem(ecs::ECS& ecs)
 	: System(ecs)
-	, parent_changed_connection(ecs.registerCallback<Hierarchy::ParentChangedEvent, &TransformSystem::onParentChanged>(this)) {
+	, parent_changed_connection(ecs.addCallback<Hierarchy::ParentChangedEvent, &TransformSystem::onParentChanged>(this)) {
 }
 
 void TransformSystem::update() {
