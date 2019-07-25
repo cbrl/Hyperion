@@ -80,7 +80,7 @@ DispatcherConnection EventDispatcher<EventT>::addCallback(const std::function<vo
 template<typename EventT>
 template<auto Function>
 void EventDispatcher<EventT>::removeCallback() {
-	const auto func = std::function<decltype(Function)>{ Function };
+	const auto func = std::function<void(const EventT&)>{Function};
 	removeCallback(func);
 }
 
@@ -88,7 +88,7 @@ void EventDispatcher<EventT>::removeCallback() {
 template<typename EventT>
 template<auto Function, typename ClassT>
 void EventDispatcher<EventT>::removeCallback(ClassT* instance) {
-	const auto func = std::function<decltype(Function)>{ std::bind(&Function, instance, std::placeholders::_1) };
+	const auto func = std::function<void(const EventT&)>{std::bind(&Function, instance, std::placeholders::_1)};
 	removeCallback(func);
 }
 
