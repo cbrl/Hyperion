@@ -145,7 +145,7 @@ f32 GPUProfiler::deltaTime(const std::string& id) const {
 	if (auto it = stage_times.find(id); it != stage_times.end()) {
 		return it->second;
 	}
-	return -1.0f;
+	return 0.0f;
 }
 
 
@@ -153,7 +153,7 @@ f32 GPUProfiler::averageTime(const std::string& id) const {
 	if (auto it = avg_stage_times.find(id); it != avg_stage_times.end()) {
 		return it->second;
 	}
-	return -1.0f;
+	return 0.0f;
 }
 
 
