@@ -65,6 +65,8 @@ private:
 	MetricsGuiMetric skybox_render{"Skybox Render", "s", si_prefix};
 	MetricsGuiMetric shadow_maps{"Shadow Maps Render", "s", si_prefix};
 	MetricsGuiMetric forward_render{"Forward Render", "s", si_prefix};
+	MetricsGuiMetric gbuffer_render{"GBuffer Render", "s", si_prefix};
+	MetricsGuiMetric deferred_render{"Deferred Render", "s", si_prefix};
 	MetricsGuiMetric text_render{"Text Render", "s", si_prefix};
 
 	static constexpr auto si_prefix     = MetricsGuiMetric::USE_SI_UNIT_PREFIX;

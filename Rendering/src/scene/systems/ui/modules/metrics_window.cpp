@@ -47,6 +47,8 @@ MetricsWindow::MetricsWindow(const Engine& engine) {
 	scene_gpu_plot.AddMetric(&skybox_render);
 	scene_gpu_plot.AddMetric(&shadow_maps);
 	scene_gpu_plot.AddMetric(&forward_render);
+	scene_gpu_plot.AddMetric(&gbuffer_render);
+	scene_gpu_plot.AddMetric(&deferred_render);
 	scene_gpu_plot.AddMetric(&text_render);
 }
 
@@ -79,14 +81,16 @@ void MetricsWindow::draw(Engine& engine) {
 	// Update GPU time
 	//----------------------------------------------------------------------------------
 	const auto& profiler = engine.getRenderingMgr().getProfiler();
-	frame_gpu_time.AddNewValue(profiler.deltaTime(GPUTimestamps::frame));
+	frame_gpu_time.AddNewValue(profiler.deltaTime("Frame"));
 	imgui_render.AddNewValue(profiler.deltaTime("ImGui"));
-	scene_render.AddNewValue(profiler.deltaTime(GPUTimestamps::render_scene));
+	scene_render.AddNewValue(profiler.deltaTime("Render Scene"));
 	gpu_plot.UpdateAxes();
 
 	skybox_render.AddNewValue(profiler.deltaTime("Skybox"));
-	shadow_maps.AddNewValue(profiler.deltaTime(GPUTimestamps::shadow_maps));
-	forward_render.AddNewValue(profiler.deltaTime(GPUTimestamps::forward_render));
+	shadow_maps.AddNewValue(profiler.deltaTime("Shadow Maps"));
+	forward_render.AddNewValue(profiler.deltaTime("Forward"));
+	gbuffer_render.AddNewValue(profiler.deltaTime("GBuffer"));
+	deferred_render.AddNewValue(profiler.deltaTime("Deferred"));
 	text_render.AddNewValue(profiler.deltaTime("Text"));
 	scene_gpu_plot.UpdateAxes();
 

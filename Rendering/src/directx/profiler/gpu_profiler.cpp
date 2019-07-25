@@ -3,22 +3,12 @@
 
 GPUProfiler::GPUProfiler(ID3D11Device& device, ID3D11DeviceContext& device_context)
     : device(device)
-    , device_context(device_context)
-    , query_frame(0)
-    , read_frame(-1) {
+    , device_context(device_context) {
 
 	static constexpr D3D11_QUERY_DESC disjoint_desc = {D3D11_QUERY_TIMESTAMP_DISJOINT, 0};
 	for (auto& ptr : timestamp_disjoint) {
 		HRESULT hr = device.CreateQuery(&disjoint_desc, ptr.GetAddressOf());
 	}
-
-	registerTimestampID(GPUTimestamps::frame);
-	registerTimestampID(GPUTimestamps::render_scene);
-	registerTimestampID(GPUTimestamps::shadow_maps);
-	registerTimestampID(GPUTimestamps::forward_render);
-	registerTimestampID(GPUTimestamps::deferred_render);
-	registerTimestampID(GPUTimestamps::render_opaque);
-	registerTimestampID(GPUTimestamps::render_transparent);
 }
 
 
@@ -49,12 +39,12 @@ const std::vector<std::string>& GPUProfiler::getTimestampIDs() const noexcept {
 
 void GPUProfiler::beginFrame() {
 	device_context.Begin(timestamp_disjoint[query_frame].Get());
-	beginTimestamp(GPUTimestamps::frame);
+	beginTimestamp("Frame");
 }
 
 
 void GPUProfiler::endFrame() {
-	endTimestamp(GPUTimestamps::frame);
+	endTimestamp("Frame");
 	device_context.End(timestamp_disjoint[query_frame].Get());
 	query_frame += 1;
 	if (query_frame >= buffer_size) query_frame = 0;
@@ -66,7 +56,7 @@ void GPUProfiler::beginTimestamp(const std::string& identifier) {
 		device_context.End(it->second.first.Get());
 	}
 	else {
-		Logger::log(LogLevel::warn, "Unknown timestamp identifier: \"{}\"", identifier);
+		registerTimestampID(identifier);
 	}
 }
 
@@ -76,7 +66,7 @@ void GPUProfiler::endTimestamp(const std::string& identifier) {
 		device_context.End(it->second.second.Get());
 	}
 	else {
-		Logger::log(LogLevel::warn, "Unknown timestamp identifier: \"{}\"", identifier);
+		Logger::log(LogLevel::warn, "GPUProfiler::endTimestamp() - Unknown timestamp identifier: \"{}\"", identifier);
 	}
 }
 
@@ -155,7 +145,7 @@ f32 GPUProfiler::deltaTime(const std::string& id) const {
 	if (auto it = stage_times.find(id); it != stage_times.end()) {
 		return it->second;
 	}
-	return 0.0f;
+	return -1.0f;
 }
 
 
@@ -163,5 +153,15 @@ f32 GPUProfiler::averageTime(const std::string& id) const {
 	if (auto it = avg_stage_times.find(id); it != avg_stage_times.end()) {
 		return it->second;
 	}
-	return 0.0f;
+	return -1.0f;
+}
+
+
+const std::unordered_map<std::string, f32>& GPUProfiler::getDeltaTimes() const noexcept {
+	return stage_times;
+}
+
+
+const std::unordered_map<std::string, f32>& GPUProfiler::getAverageTimes() const noexcept {
+	return avg_stage_times;
 }

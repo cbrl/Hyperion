@@ -6,19 +6,11 @@
 #include "log/log.h"
 
 
-struct GPUTimestamps {
-	static constexpr gsl::czstring<> frame              = "Frame";
-	static constexpr gsl::czstring<> render_scene       = "Render Scene";
-	static constexpr gsl::czstring<> shadow_maps        = "Shadow Maps";
-	static constexpr gsl::czstring<> forward_render     = "Forward Render";
-	static constexpr gsl::czstring<> forwardplus_render = "Forward+ Render";
-	static constexpr gsl::czstring<> deferred_render    = "Deferred Render";
-	static constexpr gsl::czstring<> render_opaque      = "Render Opaque";
-	static constexpr gsl::czstring<> render_transparent = "Render Transparent";
-};
-
-
 class GPUProfiler {
+
+	// Number of frames to buffer before reading data. Must be 2 or more.
+	static constexpr u8 buffer_size = 8;
+
 public:
 
 	//----------------------------------------------------------------------------------
@@ -46,10 +38,8 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// Register a new timestamp ID
-	void registerTimestampID(const std::string& identifier);
-
 	// Get the list of timestamp IDs
+	[[nodiscard]]
 	const std::vector<std::string>& getTimestampIDs() const noexcept;
 
 	// Begin profiling a new GPU frame
@@ -75,10 +65,20 @@ public:
 	[[nodiscard]]
 	f32 averageTime(const std::string& id) const;
 
+	// Get the map of timestamp IDs to delta times
+	[[nodiscard]]
+	const std::unordered_map<std::string, f32>& getDeltaTimes() const noexcept;
+
+	// Get the map of timestamp IDs to average times
+	[[nodiscard]]
+	const std::unordered_map<std::string, f32>& getAverageTimes() const noexcept;
+
 
 private:
-	// Number of frames to buffer before reading data. Must be 2 or more.
-	static constexpr u8 buffer_size = 8;
+
+	// Register a new timestamp ID
+	void registerTimestampID(const std::string& identifier);
+
 
 	//----------------------------------------------------------------------------------
 	// Member Variables
@@ -105,11 +105,11 @@ private:
 	std::unordered_map<std::string, f32> stage_times;
 	std::unordered_map<std::string, f32> total_stage_times;
 	std::unordered_map<std::string, f32> avg_stage_times;
-	u32 frame_count;
+	u32 frame_count = 0;
 
-	// The frame to query data from
-	u8 query_frame;
+	// The buffer frame to query data into
+	u8 query_frame = 0;
 
-	// The frame to queried data from
-	i16 read_frame;
+	// The buffer frame to read data from
+	i16 read_frame = -1;
 };
