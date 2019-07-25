@@ -59,9 +59,6 @@
     <ClInclude Include="src\event\event_mgr.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
-    <ClInclude Include="src\component\resource_pool.h">
-      <Filter>Header Files\component</Filter>
-    </ClInclude>
     <ClInclude Include="src\event\events.h">
       <Filter>Header Files\event</Filter>
     </ClInclude>
@@ -75,9 +72,6 @@
     </ClCompile>
     <ClCompile Include="src\entity\entity_mgr.cpp">
       <Filter>Source Files\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\event\event_participator.cpp">
-      <Filter>Source Files\event</Filter>
     </ClCompile>
     <ClCompile Include="src\event\event_mgr.cpp">
       <Filter>Source Files\event</Filter>
