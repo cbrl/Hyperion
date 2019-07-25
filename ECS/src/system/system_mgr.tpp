@@ -27,8 +27,10 @@ SystemT& SystemMgr::add(ArgsT&&... args) {
 
 template<typename SystemT>
 void SystemMgr::remove() {
+	// Remove from the array of systems
 	systems.erase(SystemT::index);
 
+	// Remove from the sorted system queue
 	const auto it = std::find_if(system_queue.begin(), system_queue.end(),
 		[](const ISystem& system) {
 			return system.getTypeIndex() == SystemT::index;
