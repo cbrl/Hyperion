@@ -101,51 +101,151 @@ private:
 	using map_type      = MapT<key_type, std::weak_ptr<resource_type>>;
 
 private:
-	class iterator {
+
+	//----------------------------------------------------------------------------------
+	// Iterator
+	//----------------------------------------------------------------------------------
+	template<bool Const>
+	class iterator_t {
 		friend class WeakResourceMap<key_type, resource_type, MapT>;
 
 	public:
-		using map_iterator   = typename map_type::iterator;
-		using pair_kp        = std::pair<const key_type&, shared_ptr>;
+		using map_iterator    = std::conditional_t<Const, typename map_type::const_iterator, typename map_type::iterator>;
+		using kv_pair         = std::pair<const key_type&, shared_ptr>;
+		using difference_type = ptrdiff_t;
 
-		iterator(map_iterator it) : it(it) {}
+		//----------------------------------------------------------------------------------
+		// Constructors
+		//----------------------------------------------------------------------------------
+		iterator_t(map_iterator it)
+			: it(it) {
+		}
 
-		[[nodiscard]] pair_kp operator*()  { return pair_kp{it->first, it->second.lock()}; }
-		[[nodiscard]] pair_kp operator->() { return pair_kp{it->first, it->second.lock()}; }
+		iterator_t() noexcept = default;
+		iterator_t(const iterator_t&) noexcept = default;
+		iterator_t(iterator_t&&) noexcept = default;
 
-		iterator& operator++() { ++it; return *this; }
+		//----------------------------------------------------------------------------------
+		// Destructor
+		//----------------------------------------------------------------------------------
+		~iterator_t() = default;
 
-		bool operator==(const iterator& rhs) const noexcept { return it == rhs.it; }
-		bool operator!=(const iterator& rhs) const noexcept { return it != rhs.it; }
+		//----------------------------------------------------------------------------------
+		// Operators - Assignment
+		//----------------------------------------------------------------------------------
+		iterator_t& operator=(const iterator_t&) noexcept = default;
+		iterator_t& operator=(iterator_t&&) noexcept = default;
+
+		//----------------------------------------------------------------------------------
+		// Operators - Access
+		//----------------------------------------------------------------------------------
+		[[nodiscard]]
+		kv_pair operator*() {
+			return kv_pair{ it->first, it->second.lock() };
+		}
+
+		[[nodiscard]]
+		kv_pair operator->() {
+			return kv_pair{ it->first, it->second.lock() };
+		}
+
+		//----------------------------------------------------------------------------------
+		// Operators - Arithmetic
+		//----------------------------------------------------------------------------------
+		iterator_t& operator++() {
+			++it;
+			return *this;
+		}
+
+		iterator_t operator++(int) {
+			iterator_t old = *this;
+			++(*this);
+			return old;
+		}
+
+		[[nodiscard]]
+		iterator_t operator+(difference_type value) {
+			return iterator_t{it + value};
+		}
+
+		[[nodiscard]]
+		iterator_t& operator+=(difference_type value) {
+			it += value;
+			return *this;
+		}
+
+		[[nodiscard]]
+		iterator_t operator-(difference_type value) const {
+			return (*this + -value);
+		}
+
+		[[nodiscard]]
+		difference_type operator-(const iterator_t& rhs) const {
+			return it - rhs.it;
+		}
+
+		iterator_t& operator--() {
+			--it;
+			return *this;
+		}
+
+		iterator_t operator--(int) {
+			iterator_t old = *this;
+			--(*this);
+			return old;
+		}
+
+		[[nodiscard]]
+		iterator_t& operator-=(difference_type value) {
+			return (*this += -value);
+		}
+
+		//----------------------------------------------------------------------------------
+		// Operators - Equality
+		//----------------------------------------------------------------------------------
+		[[nodiscard]]
+		bool operator<(const iterator_t& rhs) const noexcept {
+			return it < rhs.it;
+		}
+
+		[[nodiscard]]
+		bool operator>(const iterator_t& rhs) const noexcept {
+			return !(*this < rhs);
+		}
+
+		[[nodiscard]]
+		bool operator<=(const iterator_t& rhs) const noexcept {
+			return !(*this > rhs);
+		}
+
+		[[nodiscard]]
+		bool operator>=(const iterator_t& rhs) const noexcept {
+			return !(*this < rhs);
+		}
+
+		[[nodiscard]]
+		bool operator==(const iterator_t& rhs) const noexcept {
+			return it == rhs.it;
+		}
+
+		[[nodiscard]]
+		bool operator!=(const iterator_t& rhs) const noexcept {
+			return !(*this == rhs);
+		}
 
 	private:
+
+		//----------------------------------------------------------------------------------
+		// Member Variables
+		//----------------------------------------------------------------------------------
 		map_iterator it;
 	};
 
-
-	class const_iterator {
-		friend class WeakResourceMap<key_type, resource_type, MapT>;
-
-	public:
-		using const_map_iterator = typename map_type::const_iterator;
-		using pair_kp            = std::pair<const key_type&, shared_ptr>;
-
-		const_iterator(const_map_iterator it) : it(it) {}
-
-		[[nodiscard]] pair_kp operator*()  const { return pair_kp{it->first, it->second.lock()}; }
-		[[nodiscard]] pair_kp operator->() const { return pair_kp{it->first, it->second.lock()}; }
-
-		const_iterator& operator++() { ++it; return *this; }
-
-		bool operator==(const const_iterator& rhs) const noexcept { return it == rhs.it; }
-		bool operator!=(const const_iterator& rhs) const noexcept { return it != rhs.it; }
-
-	private:
-		const_map_iterator it;
-	};
-
+	using iterator = iterator_t<false>;
+	using const_iterator = iterator_t<true>;
 
 public:
+
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
@@ -239,8 +339,8 @@ public:
 	[[nodiscard]] size_t size()     const noexcept { return resource_map.size(); }
 	[[nodiscard]] size_t max_size() const noexcept { return resource_map.max_size(); }
 
-
 private:
+
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
