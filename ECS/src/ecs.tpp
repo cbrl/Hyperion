@@ -60,9 +60,6 @@ const ComponentT* ECS::tryGet(handle64 entity) const {
 
 template<typename SystemT, typename... ArgsT, typename>
 SystemT& ECS::add(ArgsT&&... args) {
-	static_assert(std::is_base_of_v<ISystem, SystemT>,
-		"Calling ECS::AddSystem() with non-system type.");
-
 	return system_mgr->add<SystemT>(std::forward<ArgsT>(args)...);
 }
 
