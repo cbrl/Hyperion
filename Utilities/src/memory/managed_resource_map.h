@@ -108,19 +108,22 @@ private:
 	template<bool Const>
 	class iterator_t {
 		friend class WeakResourceMap<key_type, resource_type, MapT>;
+		
+		using map_iterator = std::conditional_t<Const, typename map_type::const_iterator, typename map_type::iterator>;
+
+		// Private map constructor
+		iterator_t(map_iterator it)
+			: it(it) {
+		}
 
 	public:
-		using map_iterator    = std::conditional_t<Const, typename map_type::const_iterator, typename map_type::iterator>;
+
 		using kv_pair         = std::pair<const key_type&, shared_ptr>;
 		using difference_type = ptrdiff_t;
 
 		//----------------------------------------------------------------------------------
 		// Constructors
 		//----------------------------------------------------------------------------------
-		iterator_t(map_iterator it)
-			: it(it) {
-		}
-
 		iterator_t() noexcept = default;
 		iterator_t(const iterator_t&) noexcept = default;
 		iterator_t(iterator_t&&) noexcept = default;
