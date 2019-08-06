@@ -90,11 +90,6 @@ public:
 		//----------------------------------------------------------------------------------
 		// Operators - Arithmetic
 		//----------------------------------------------------------------------------------
-		[[nodiscard]]
-		const_iterator operator+(difference_type value) const {
-			return const_iterator{*dense, index - value};
-		}
-
 		const_iterator& operator++() {
 			--index;
 			return *this;
@@ -107,19 +102,14 @@ public:
 		}
 
 		[[nodiscard]]
+		const_iterator operator+(difference_type value) const {
+			return const_iterator{ *dense, index - value };
+		}
+
+		[[nodiscard]]
 		const_iterator& operator+=(difference_type value) {
 			index -= value;
 			return *this;
-		}
-
-		[[nodiscard]]
-		const_iterator operator-(difference_type value) const {
-			return (*this + -value);
-		}
-
-		[[nodiscard]]
-		difference_type operator-(const const_iterator& other) const {
-			return other.index - index;
 		}
 
 		const_iterator& operator--() {
@@ -131,6 +121,16 @@ public:
 			const_iterator old = *this;
 			--(*this);
 			return old;
+		}
+
+		[[nodiscard]]
+		const_iterator operator-(difference_type value) const {
+			return (*this + -value);
+		}
+
+		[[nodiscard]]
+		difference_type operator-(const const_iterator& other) const {
+			return other.index - index;
 		}
 
 		[[nodiscard]]
