@@ -265,9 +265,8 @@ __pycache__/
 **/shader_error.txt
 **/imgui.ini
 **/TODO.txt
-**/Sources.txt
 **/log.txt
 **/config.txt
+**/config.json
 data/
 Shaders/src/compiled_headers/
-**/config.json

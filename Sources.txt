@@ -1,0 +1,81 @@
+Libraries & Tools:
+  DirectXTK:
+    https://github.com/Microsoft/DirectXTK
+  DirectXTex:
+    https://github.com/Microsoft/DirectXTex
+  spdlog:
+    https://github.com/gabime/spdlog
+  ImGui:
+    https://github.com/ocornut/imgui
+  assimp:
+    http://www.assimp.org/index.php
+  json:
+    https://github.com/nlohmann/json
+  ImGuizmo:
+    https://github.com/CedricGuillemet/ImGuizmo
+  ImGuiColorTextEdit:
+    https://github.com/BalazsJako/ImGuiColorTextEdit
+
+Programming Guidelines:
+  https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md
+
+Geometric Tools:
+  https://www.geometrictools.com/
+
+DirectX:
+  D3D11 Reference:
+    https://msdn.microsoft.com/en-us/library/windows/desktop/ff476080(v=vs.85).aspx
+
+  DXGI Info:
+    https://docs.microsoft.com/en-us/windows/desktop/direct3ddxgi/d3d10-graphics-programming-guide-dxgi
+    https://docs.microsoft.com/en-us/windows/desktop/direct3darticles/dxgi-best-practices
+
+  D3D Lighting:
+    https://msdn.microsoft.com/en-us/library/windows/desktop/bb147178(v=vs.85).aspx
+    https://msdn.microsoft.com/en-us/library/windows/desktop/bb174697(v=vs.85).aspx
+    https://msdn.microsoft.com/en-us/library/windows/desktop/bb172279(v=vs.85).aspx
+
+HLSL Reference:
+  https://msdn.microsoft.com/en-us/library/windows/desktop/bb509561(v=vs.85).aspx
+
+Texturing and Lighting:
+  https://www.3dgep.com/texturing-lighting-directx-11/
+
+Calculating perturbed normals in HLSL:
+  http://www.thetenthplanet.de/archives/1180
+
+RenderHell:
+  https://simonschreibt.de/gat/renderhell/
+
+FluentC++:
+  https://www.fluentcpp.com
+
+Function Pointers and Closures in HLSL:
+  http://code4k.blogspot.com/2011/11/advanced-hlsl-using-closures-and.html
+HLSL Compound Parameters:
+  http://code4k.blogspot.com/2013/04/advanced-hlsl-ii-shader-compound.html
+
+Schlick BRDF Paper:
+  http://www.cs.virginia.edu/~jdl/bib/appearance/analytic%20models/schlick94b.pdf
+
+Cook-Torrance BRDF Paper:
+  http://graphics.pixar.com/library/ReflectanceModel/paper.pdf
+
+Specular BRDF Reference:
+  http://graphicrants.blogspot.com/2013/08/specular-brdf-reference.html
+
+Microfacet BRDFs:
+  http://simonstechblog.blogspot.com/2011/12/microfacet-brdf.html
+
+Disney BRDF:
+  https://disney-animation.s3.amazonaws.com/library/s2012_pbs_disney_brdf_notes_v2.pdf
+
+Frostbite BRDF:
+  https://seblagarde.files.wordpress.com/2015/07/course_notes_moving_frostbite_to_pbr_v32.pdf
+  https://seblagarde.wordpress.com/2015/07/14/siggraph-2014-moving-frostbite-to-physically-based-rendering/
+
+Rotors/Quaternions:
+  http://marctenbosch.com/quaternions/
+
+Sample Models:
+  https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0
