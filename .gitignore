@@ -270,3 +270,4 @@ __pycache__/
 **/config.json
 data/
 Shaders/src/compiled_headers/
+/Assimp/src/contrib/irrXML/out/build/x64-Debug
