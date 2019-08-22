@@ -115,14 +115,9 @@ void ECS::send(ArgsT&& ... args) {
 	event_mgr->send<EventT>(std::forward<ArgsT>(args)...);
 }
 
-template<typename EventT, auto Function>
-DispatcherConnection ECS::addCallback() {
-	return event_mgr->addCallback<EventT, Function>();
-}
-
-template<typename EventT, auto Function, typename ClassT>
-DispatcherConnection ECS::addCallback(ClassT* instance) {
-	return event_mgr->addCallback<EventT, ClassT, Function>(instance);
+template<typename EventT>
+EventDispatcher<EventT>& ECS::getDispatcher() {
+	return event_mgr->getDispatcher<EventT>();
 }
 
 template<typename EventT>

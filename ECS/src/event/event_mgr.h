@@ -58,13 +58,10 @@ public:
 	// Dispatch all stored events and clear the event buffer
 	void dispatch();
 
-	// Add a free function callback
-	template<typename EventT, void(*Function)(const EventT&)>
-	DispatcherConnection addCallback();
-
-	// Add a class member function callback
-	template<typename EventT, typename ClassT, typename void(ClassT::*Function)(const EventT&)>
-	DispatcherConnection addCallback(ClassT* instance);
+	// Get the dispatcher for the specified event type
+	template<typename EventT>
+	[[nodiscard]]
+	EventDispatcher<EventT>& getDispatcher();
 
 	// Remove an event callback
 	template<typename EventT>
@@ -74,6 +71,7 @@ public:
 private:
 
 	template<typename EventT>
+	[[nodiscard]]
 	EventDispatcher<EventT>& getOrCreateDispatcher();
 
 	//----------------------------------------------------------------------------------

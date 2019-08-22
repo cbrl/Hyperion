@@ -10,7 +10,7 @@ namespace render::systems {
 PickingSystem::PickingSystem(ecs::ECS& ecs, Engine& engine)
 	: System(ecs)
 	, engine(engine)
-	, gui_focus_connection(ecs.addCallback<events::GuiFocusEvent, &PickingSystem::onGuiFocus>(this)) {
+	, gui_focus_connection(ecs.getDispatcher<events::GuiFocusEvent>().addCallback<&PickingSystem::onGuiFocus>(this)) {
 }
 
 

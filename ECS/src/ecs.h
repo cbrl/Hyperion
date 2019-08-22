@@ -163,13 +163,10 @@ public:
 	template<typename EventT, typename... ArgsT>
 	void send(ArgsT&&... args);
 
-	// Register a free function callback that listens for events of type EventT
-	template<typename EventT, auto Function>
-	DispatcherConnection addCallback();
-
-	// Register a class member function callback that listens for events of type EventT
-	template<typename EventT, auto Function, typename ClassT>
-	DispatcherConnection addCallback(ClassT* instance);
+	// Get the dispatcher for the specified event type
+	template<typename EventT>
+	[[nodiscard]]
+	EventDispatcher<EventT>& getDispatcher();
 
 	// Remove a registered callback
 	template<typename EventT>

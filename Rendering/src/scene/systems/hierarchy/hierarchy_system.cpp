@@ -7,7 +7,7 @@ namespace render::systems {
 
 HierarchySystem::HierarchySystem(ecs::ECS& ecs)
 	: System(ecs)
-	, on_destroy_connection(ecs.addCallback<ecs::EntityDestroyed, &HierarchySystem::onEntityDestroyed>(this)) {
+	, on_destroy_connection(ecs.getDispatcher<ecs::EntityDestroyed>().addCallback<&HierarchySystem::onEntityDestroyed>(this)) {
 }
 
 void HierarchySystem::update() {

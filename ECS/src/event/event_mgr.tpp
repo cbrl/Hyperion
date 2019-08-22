@@ -25,16 +25,9 @@ void EventMgr::send(ArgsT&&... args) {
 }
 
 
-template<typename EventT, void(*Function)(const EventT&)>
-DispatcherConnection EventMgr::addCallback() {
-	auto& dispatcher = getOrCreateDispatcher<EventT>();
-	return dispatcher.addCallback<Function>();
-}
-
-template<typename EventT, typename ClassT, typename void(ClassT::* Function)(const EventT&)>
-DispatcherConnection EventMgr::addCallback(ClassT* instance) {
-	auto& dispatcher = getOrCreateDispatcher<EventT>();
-	return dispatcher.addCallback<Function>(instance);
+template<typename EventT>
+EventDispatcher<EventT>& EventMgr::getDispatcher() {
+	return getOrCreateDispatcher<EventT>();
 }
 
 

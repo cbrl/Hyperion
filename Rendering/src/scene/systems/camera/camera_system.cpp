@@ -10,7 +10,7 @@ namespace render::systems {
 CameraSystem::CameraSystem(ecs::ECS& ecs, const RenderingMgr& rendering_mgr)
 	: System(ecs)
 	, rendering_mgr(rendering_mgr)
-	, window_resize_connection(ecs.addCallback<events::WindowResizeEvent, &CameraSystem::onWindowResize>(this)) {
+	, window_resize_connection(ecs.getDispatcher<events::WindowResizeEvent>().addCallback<&CameraSystem::onWindowResize>(this)) {
 }
 
 

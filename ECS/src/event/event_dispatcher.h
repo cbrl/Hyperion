@@ -18,12 +18,17 @@ public:
 
 	DispatcherConnection() = default;
 	DispatcherConnection(const DispatcherConnection&) = default;
-	DispatcherConnection(DispatcherConnection&&) = default;
+	DispatcherConnection(DispatcherConnection&& other) noexcept
+		: disconnect_func(std::exchange(other.disconnect_func, nullptr)) {
+	}
 
 	~DispatcherConnection() = default;
 
 	DispatcherConnection& operator=(const DispatcherConnection&) = default;
-	DispatcherConnection& operator=(DispatcherConnection&&) = default;
+	DispatcherConnection& operator=(DispatcherConnection&& other) noexcept {
+		this->disconnect_func = std::exchange(other.disconnect_func, nullptr);
+		return *this;
+	}
 
 	void disconnect() {
 		if (disconnect_func) {
@@ -45,14 +50,14 @@ public:
 		: DispatcherConnection(connection) {
 	}
 	UniqueDispatcherConnection(const UniqueDispatcherConnection&) = delete;
-	UniqueDispatcherConnection(UniqueDispatcherConnection&&) = default;
+	UniqueDispatcherConnection(UniqueDispatcherConnection&&) noexcept = default;
 
 	~UniqueDispatcherConnection() {
 		disconnect();
 	}
 
 	UniqueDispatcherConnection& operator=(const UniqueDispatcherConnection&) = delete;
-	UniqueDispatcherConnection& operator=(UniqueDispatcherConnection&&) = default;
+	UniqueDispatcherConnection& operator=(UniqueDispatcherConnection&&) noexcept = default;
 
 	using DispatcherConnection::disconnect;
 };
