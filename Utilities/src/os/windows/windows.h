@@ -38,7 +38,7 @@
 using Microsoft::WRL::ComPtr;
 
 #include "exception/exception.h"
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 
 
 

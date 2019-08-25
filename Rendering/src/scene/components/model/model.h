@@ -2,7 +2,7 @@
 
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include "io/io.h"
 
 #include "component/component.h"

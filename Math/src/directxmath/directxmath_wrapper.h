@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include <DirectXMath.h>
 
 using namespace DirectX;

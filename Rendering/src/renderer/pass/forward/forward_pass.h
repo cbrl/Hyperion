@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include "buffer/constant_buffer.h"
 #include "resource/shader/shader.h"
 #include "rendering_options.h"

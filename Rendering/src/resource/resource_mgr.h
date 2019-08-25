@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include "memory/managed_resource_map.h"
 #include "resource/resource.h"
 #include "shader/shader.h"

@@ -83,9 +83,6 @@
     <ClInclude Include="src\datatypes\container_types.h">
       <Filter>Header Files\datatypes</Filter>
     </ClInclude>
-    <ClInclude Include="src\datatypes\datatypes.h">
-      <Filter>Header Files\datatypes</Filter>
-    </ClInclude>
     <ClInclude Include="src\io\io.h">
       <Filter>Header Files\io</Filter>
     </ClInclude>
@@ -298,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="src\memory\handle\handle_map.h">
       <Filter>Header Files\memory\handle</Filter>
+    </ClInclude>
+    <ClInclude Include="src\datatypes\types.h">
+      <Filter>Header Files\datatypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include "directx/vertex/vertex_types.h"
 
 

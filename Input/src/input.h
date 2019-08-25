@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include "directx/directxtk.h"
 #include "os/windows/window.h"
 

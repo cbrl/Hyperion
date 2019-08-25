@@ -1,7 +1,7 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include "component/component.h"
 #include "buffer/buffers.h"
 #include "buffer/constant_buffer.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include "scene/scene.h"
 #include "resource/model/blueprint_factory.h"
 

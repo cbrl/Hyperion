@@ -1,7 +1,7 @@
 #pragma once
 
 #include "directx/d3d11.h"
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include <typeinfo>
 #include <typeindex>
 

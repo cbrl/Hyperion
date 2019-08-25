@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/datatypes.h"
+#include "datatypes/types.h"
 #include "directx/d3d11.h"
 #include "time/stopwatch.h"
 #include "log/log.h"

@@ -10,8 +10,9 @@
 #endif
 
 // Declare std::aligned_storage behavior for MSVC
-#undef _ENABLE_EXTENDED_ALIGNED_STORAGE
+#ifndef _ENABLE_EXTENDED_ALIGNED_STORAGE
 #define _ENABLE_EXTENDED_ALIGNED_STORAGE
+#endif
 
 
 //----------------------------------------------------------------------------------
