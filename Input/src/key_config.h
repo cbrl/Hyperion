@@ -30,7 +30,7 @@ public:
 	void bindKey(const std::string& id, Keyboard::Keys key);
 
 	// Bind a key if it's not bound yet. Returns true if the function binds a key.
-	bool bindIfNotBound(const std::string& id, Keyboard::Keys key);
+	bool tryBindKey(const std::string& id, Keyboard::Keys key);
 
 	void unbindKey(const std::string& id);
 

@@ -4,9 +4,9 @@
 TransformManipulator::TransformManipulator(Input& input, KeyConfig& key_config)
 	: input(input)
 	, key_config(key_config) {
-	key_config.bindIfNotBound("ObjRotate",    Keyboard::R);
-	key_config.bindIfNotBound("ObjTranslate", Keyboard::T);
-	key_config.bindIfNotBound("ObjScale",     Keyboard::Y);
+	key_config.tryBindKey("ObjRotate",    Keyboard::R);
+	key_config.tryBindKey("ObjTranslate", Keyboard::T);
+	key_config.tryBindKey("ObjScale",     Keyboard::Y);
 }
 
 void TransformManipulator::draw(Engine& engine, handle64 selected_entity) {

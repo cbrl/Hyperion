@@ -4,7 +4,7 @@ void KeyConfig::bindKey(const std::string& id, Keyboard::Keys key) {
 	key_map[id] = key;
 }
 
-bool KeyConfig::bindIfNotBound(const std::string& id, Keyboard::Keys key) {
+bool KeyConfig::tryBindKey(const std::string& id, Keyboard::Keys key) {
 	if (not isKeyBound(id)) {
 		bindKey(id, key);
 		return true;

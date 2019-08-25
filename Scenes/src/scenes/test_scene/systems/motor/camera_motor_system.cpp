@@ -9,12 +9,12 @@ CameraMotorSystem::CameraMotorSystem(ecs::ECS& ecs, const Input& input, KeyConfi
 	, key_config(key_config)
 	, gui_focus_connection(ecs.getDispatcher<render::events::GuiFocusEvent>().addCallback<&CameraMotorSystem::onGuiFocus>(this)) {
 
-	key_config.bindIfNotBound("Forward", Keyboard::W);
-	key_config.bindIfNotBound("Back",    Keyboard::S);
-	key_config.bindIfNotBound("Left",    Keyboard::A);
-	key_config.bindIfNotBound("Right",   Keyboard::D);
-	key_config.bindIfNotBound("Up",      Keyboard::Space);
-	key_config.bindIfNotBound("Down",    Keyboard::LeftControl);
+	key_config.tryBindKey("Forward", Keyboard::W);
+	key_config.tryBindKey("Back",    Keyboard::S);
+	key_config.tryBindKey("Left",    Keyboard::A);
+	key_config.tryBindKey("Right",   Keyboard::D);
+	key_config.tryBindKey("Up",      Keyboard::Space);
+	key_config.tryBindKey("Down",    Keyboard::LeftControl);
 }
 
 
