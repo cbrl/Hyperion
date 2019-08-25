@@ -4,6 +4,17 @@
 #include "memory/handle/handle_table.h"
 #include "memory/resource_pool.h"
 
+
+//----------------------------------------------------------------------------------
+// HandleMap
+//----------------------------------------------------------------------------------
+//
+// The HandleMap stores resources in a ResourcePool and creates a handle which they
+// will be associated with. Handles are never invalidated for the lifetime of the
+// resource. Rules for iterator and reference invalidation follow those of the ResourcePool.
+//
+//----------------------------------------------------------------------------------
+
 template<typename HandleT, typename ResourceT>
 class HandleMap final {
 	using resource_pool_type     = ResourcePool<typename HandleT::value_type, ResourceT>;
@@ -26,7 +37,7 @@ public:
 	//----------------------------------------------------------------------------------
 	template<typename... ArgsT>
 	[[nodiscard]]
-	std::pair<handle_type, std::reference_wrapper<value_type>> create(ArgsT&& ... args) {
+	std::pair<handle_type, std::reference_wrapper<value_type>> create(ArgsT&&... args) {
 		auto handle = handle_table.createHandle();
 		auto& resource = resource_pool.construct(handle.index, std::forward<ArgsT>(args)...);
 		return { handle, std::ref(resource) };

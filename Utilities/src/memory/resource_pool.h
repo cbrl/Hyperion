@@ -13,7 +13,6 @@
 //
 //----------------------------------------------------------------------------------
 
-
 template<typename HandleT>
 class IResourcePool {
 public:

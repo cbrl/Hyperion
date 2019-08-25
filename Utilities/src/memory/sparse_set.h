@@ -5,6 +5,22 @@
 #include <assert.h>
 
 
+//----------------------------------------------------------------------------------
+// SparseSet
+//----------------------------------------------------------------------------------
+//
+// The sparse set allows for O(1) lookup, insertion, and deletion of elements.
+// Only unsigned integers can be stored in a sparse set, but the sparse set can be
+// used in conjunction with other data structures to store arbitrary data types.
+//
+// The sparse set maintains a sparse and a dense array. The dense array stores the
+// actual element, while the sparse array stores the indices of elements. The
+// location of an element's index in the sparse array is determined by the value of
+// that element. For example, the element "5" can be stored anywhere in the dense
+// array, but its index will always be found at sparse[5].
+//
+//----------------------------------------------------------------------------------
+
 template<typename T>
 class SparseSet final {
 	static_assert(std::is_integral_v<T> && std::is_unsigned_v<T>,

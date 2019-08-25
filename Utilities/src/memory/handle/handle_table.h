@@ -5,6 +5,15 @@
 #include <assert.h>
 
 
+//----------------------------------------------------------------------------------
+// HandleTable
+//----------------------------------------------------------------------------------
+//
+// The handle table creates, stores, and manages handles.
+// The table can be queried for the validity of a handle it has created.
+//
+//----------------------------------------------------------------------------------
+
 template<typename HandleT>
 class HandleTable {
 	using container_type = std::vector<HandleT>;
