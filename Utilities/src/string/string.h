@@ -15,6 +15,7 @@
 //----------------------------------------------------------------------------------
 
 #include <string>
+#include <string_view>
 #include <sstream>
 #include <iomanip>
 #include <vector>
@@ -87,7 +88,7 @@ inline std::string WstrToStr(std::wstring_view in) {
 //----------------------------------------------------------------------------------
 
 namespace detail {
-template<typename T>
+template<typename T> requires std::is_arithmetic_v<T>
 std::optional<std::string> ToStrImpl(T val, std::chars_format fmt) noexcept {
 	// Determine maximum chars possible in string
 	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
@@ -103,7 +104,7 @@ std::optional<std::string> ToStrImpl(T val, std::chars_format fmt) noexcept {
 	return std::optional<std::string>{std::in_place, chars.data()};
 }
 
-template<typename T>
+template<typename T> requires std::is_arithmetic_v<T>
 std::optional<std::string> ToStrImpl(T val, std::chars_format fmt, int precision) noexcept {
 	// Determine maximum chars possible in string
 	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
@@ -121,10 +122,8 @@ std::optional<std::string> ToStrImpl(T val, std::chars_format fmt, int precision
 } //namespace detail
 
 // Convert the specified arithemetic value to a string
-template <typename T>
+template<typename T> requires std::is_arithmetic_v<T>
 std::optional<std::string> ToStr(T val, int base = 10) noexcept {
-
-	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
 
 	// Determine maximum chars possible in string
 	size_t max_chars = 0;
@@ -145,10 +144,8 @@ std::optional<std::string> ToStr(T val, int base = 10) noexcept {
 }
 
 // Convert the specified arithemetic value to a string
-template <typename T>
+template<typename T> requires std::is_arithmetic_v<T>
 std::optional<std::string> ToStr(T val, std::chars_format fmt) noexcept {
-
-	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
 
 	if constexpr (std::is_integral_v<T>) {
 		if constexpr (sizeof(T) <= sizeof(float))
@@ -162,16 +159,14 @@ std::optional<std::string> ToStr(T val, std::chars_format fmt) noexcept {
 }
 
 // Convert the specified arithemetic value to a string
-template <typename T>
+template<typename T> requires std::is_arithmetic_v<T>
 std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) noexcept {
-
-	static_assert(std::is_arithmetic_v<T>, "ToStr() called with non-arithmetic type");
 
 	if constexpr (std::is_integral_v<T>) {
 		if constexpr (sizeof(T) <= sizeof(float))
-			return detail::ToStr(static_cast<float>(val), fmt, precision); //Formatted to_chars only accepts floating point values
+			return detail::ToStrImpl(static_cast<float>(val), fmt, precision); //Formatted to_chars only accepts floating point values
 		else
-			return detail::ToStr(static_cast<double>(val), fmt, precision);
+			return detail::ToStrImpl(static_cast<double>(val), fmt, precision);
 	}
 	else {
 		return detail::ToStrImpl(val, fmt, precision);
@@ -186,7 +181,7 @@ std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) no
 //----------------------------------------------------------------------------------
 
 // Convert a string to the specified arithmetic type
-template <typename T>
+template<typename T>
 std::optional<T> StrTo(std::string_view in) noexcept {
 
 	static_assert(std::is_arithmetic_v<T>, "StrTo called with non-arithmetic type");
@@ -204,7 +199,7 @@ std::optional<T> StrTo(std::string_view in) noexcept {
 	return out;
 }
 
-template <>
+template<>
 inline std::optional<bool> StrTo(std::string_view in) noexcept {
 
 	if (in.size() == 1) {
@@ -242,57 +237,62 @@ inline std::optional<bool> StrTo(std::string_view in) noexcept {
 //----------------------------------------------------------------------------------
 
 // Trim whitespace at the beginning and end of a string
-inline std::string TrimWhiteSpace(const std::string& in) {
+inline std::string TrimWhiteSpace(std::string_view in) {
 	const size_t text_start = in.find_first_not_of(" \t");
-	const size_t text_end = in.find_last_not_of(" \t");
+	const size_t text_end   = in.find_last_not_of(" \t");
 
-	if (text_start != std::string::npos && text_end != std::string::npos) {
-		return in.substr(text_start, text_end - text_start + 1);
+	if (text_start != std::string_view::npos && text_end != std::string_view::npos) {
+		return std::string{in.substr(text_start, text_end - text_start + 1)};
 	}
-	if (text_start != std::string::npos) {
-		return in.substr(text_start);
+	if (text_start != std::string_view::npos) {
+		return std::string{in.substr(text_start)};
 	}
 
-	return std::string();
+	return {};
 }
 
 // Trim whitespace at the beginning and end of a string
-inline std::wstring TrimWhiteSpace(const std::wstring& in) {
+inline std::wstring TrimWhiteSpace(std::wstring_view in) {
 	const size_t text_start = in.find_first_not_of(L" \t");
 	const size_t text_end   = in.find_last_not_of(L" \t");
 
-	if (text_start != std::wstring::npos && text_end != std::wstring::npos) {
-		return in.substr(text_start, text_end - text_start + 1);
+	if (text_start != std::wstring_view::npos && text_end != std::wstring_view::npos) {
+		return std::wstring{in.substr(text_start, text_end - text_start + 1)};
 	}
-	if (text_start != std::wstring::npos) {
-		return in.substr(text_start);
+	if (text_start != std::wstring_view::npos) {
+		return std::wstring{in.substr(text_start)};
 	}
 
-	return std::wstring();
+	return {};
 }
 
 
-// Split a string by a specified token
-template<typename StringT>
-std::vector<StringT> Split(const StringT& in, const typename StringT::value_type* token) {
-
-	std::vector<StringT> out;
-	StringT token_s(token);
+namespace detail {
+template<typename StringT, typename ReturnT>
+std::vector<ReturnT> SplitImpl(StringT in, StringT token) {
+	std::vector<ReturnT> out;
 
 	size_t start = 0;
-	size_t end   = in.find(token_s);
+	size_t end = in.find(token);
 
 	while (end != StringT::npos) {
-		out.push_back(in.substr(start, end - start));
-		start = end + token_s.length();
-		end = in.find(token_s, start);
+		out.emplace_back(in.substr(start, end - start));
+		start = end + token.length();
+		end = in.find(token, start);
 	}
-
-	out.push_back(in.substr(start, end));
+	out.emplace_back(in.substr(start, end));
 
 	return out;
 }
+} //namespace detail
 
+inline std::vector<std::string> Split(std::string_view in, std::string_view token) {
+	return detail::SplitImpl<std::string_view, std::string>(in, token);
+}
+
+inline std::vector<std::wstring> Split(std::wstring_view in, std::wstring_view token) {
+	return detail::SplitImpl<std::wstring_view, std::wstring>(in, token);
+}
 
 
 
@@ -301,7 +301,7 @@ std::vector<StringT> Split(const StringT& in, const typename StringT::value_type
 //----------------------------------------------------------------------------------
 
 // Get the string representation of a type name
-template <typename T>
+template<typename T>
 constexpr std::string_view type_name() noexcept {
 #if defined(__clang__)
 	std::string_view p = __PRETTY_FUNCTION__;
