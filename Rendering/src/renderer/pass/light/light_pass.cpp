@@ -104,7 +104,16 @@ void LightPass::bindBuffers() {
 
 
 void LightPass::updateData(const ecs::ECS& ecs) const {
+
 	LightBuffer light_data;
+
+	light_data.num_directional_lights = static_cast<u32>(directional_lights.size());
+	light_data.num_point_lights       = static_cast<u32>(point_lights.size());
+	light_data.num_spot_lights        = static_cast<u32>(spot_lights.size());
+
+	light_data.num_shadow_directional_lights = static_cast<u32>(shadowed_directional_lights.size());
+	light_data.num_shadow_point_lights       = static_cast<u32>(shadowed_point_lights.size());
+	light_data.num_shadow_spot_lights        = static_cast<u32>(shadowed_spot_lights.size());
 
 	ecs.forEach<AmbientLight>([&light_data](const AmbientLight& light) {
 		if (not light.isActive())

@@ -31,16 +31,16 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
-	const f32_3& getColor() const noexcept{
+	const f32_4& getColor() const noexcept{
 		return color;
 	}
 
 	[[nodiscard]]
-	f32_3& getColor() noexcept {
+	f32_4& getColor() noexcept {
 		return color;
 	}
 
-	void setColor(const f32_3& ambient_color) noexcept {
+	void setColor(const f32_4& ambient_color) noexcept {
 		color = ambient_color;
 	}
 
@@ -49,5 +49,5 @@ private:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	f32_3 color = {0.0f, 0.0f, 0.0f};
+	f32_4 color = {0.0f, 0.0f, 0.0f, 1.0f};
 };

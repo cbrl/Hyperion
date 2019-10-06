@@ -60,7 +60,7 @@ void TestScene::initialize(Engine& engine) {
 	handle64 camera = createEntity<PlayerCamera>(device, engine.getWindow().getClientSize());
 	ecs.add<Name>(camera, "Camera");
 	ecs.add<Hierarchy>(camera);
-	ecs.add<AmbientLight>(camera).setColor(f32_3{0.16f, 0.16f, 0.16f});
+	ecs.add<AmbientLight>(camera).setColor(f32_4{0.16f, 0.16f, 0.16f, 1.0f});
 
 	// Set the parameters
 	auto& cam = ecs.get<PerspectiveCamera>(camera);

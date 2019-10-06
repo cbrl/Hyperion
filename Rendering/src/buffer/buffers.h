@@ -43,8 +43,17 @@ struct ModelBuffer {
 //----------------------------------------------------------------------------------
 
 struct LightBuffer {
-	f32_3 ambient = {};
-	f32   pad0;
+	u32 num_directional_lights = 0;
+	u32 num_point_lights       = 0;
+	u32 num_spot_lights        = 0;
+	f32 pad0;
+
+	u32 num_shadow_directional_lights = 0;
+	u32 num_shadow_point_lights       = 0;
+	u32 num_shadow_spot_lights        = 0;
+	f32 pad1;
+
+	f32_4 ambient = {};
 };
 
 
