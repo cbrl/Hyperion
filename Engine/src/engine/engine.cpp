@@ -55,12 +55,12 @@ std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
 		if (config.contains(ConfigTokens::win_title))
 			config[ConfigTokens::win_title].get_to(title);
 	}
-	
+
 	auto engine = std::make_unique<Engine>(
-		StrToWstr(title),
-		std::move(display_config),
-		std::move(render_config),
-		std::move(key_config)
+	    StrToWstr(title),
+	    std::move(display_config),
+	    std::move(render_config),
+	    std::move(key_config)
 	);
 
 	if (!file) {
@@ -83,7 +83,7 @@ std::unique_ptr<Engine> SetupEngine() {
 
 LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) {
 
-	switch(msg) {
+	switch (msg) {
 		case WM_SYSKEYDOWN: {
 			if (wParam == VK_RETURN) { //Handle Alt-Enter keypress
 				on_fullscreen_toggle();
@@ -97,7 +97,7 @@ LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPAR
 		default:
 			return 0;
 	}
-}	
+}
 
 
 
@@ -105,7 +105,7 @@ Engine::Engine(std::wstring title,
                render::DisplayConfig display_config,
                render::RenderingConfig rendering_config,
                KeyConfig key_config)
-	: key_config(std::move(key_config)) {
+    : key_config(std::move(key_config)) {
 
 	init(std::move(title),
 	     std::move(display_config),
@@ -139,7 +139,10 @@ void Engine::saveConfig() {
 
 	// Open the file
 	std::ofstream file(CONFIG_FILE, std::ofstream::trunc);
-	if (!file) return;
+	if (!file) {
+		Logger::log(LogLevel::err, "Save config failed. Could not open config file: {}", CONFIG_FILE);
+		return;
+	}
 
 	const auto& display   = rendering_mgr->getDisplayConfig();
 	const auto& rendering = rendering_mgr->getRenderingConfig();
@@ -200,9 +203,9 @@ void Engine::init(std::wstring title,
 
 	// Rendering Manager
 	rendering_mgr = std::make_unique<render::RenderingMgr>(
-		gsl::make_not_null(window->getHandle()),
-		std::move(display_config),
-		std::move(rendering_config)
+	    gsl::make_not_null(window->getHandle()),
+	    std::move(display_config),
+	    std::move(rendering_config)
 	);
 
 	// Bind exit key if not bound
@@ -222,7 +225,7 @@ void Engine::init(std::wstring title,
 
 
 void Engine::loadScene(std::unique_ptr<render::Scene>&& new_scene) {
-	
+
 	if (scene) {
 		const auto name = scene->getName();
 		scene.reset();
