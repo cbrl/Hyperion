@@ -31,7 +31,7 @@ cbuffer LightBuffer : REG_B(SLOT_CBUFFER_LIGHT) {
 	uint g_num_shadow_spot_lights;
 	uint lb_pad1;
 
-	float4 g_ambient_intensity;
+	float3 g_ambient_intensity;
 };
 
 
@@ -167,7 +167,7 @@ float3 CalculateLighting(float3 p_world, float3 n, Material material) {
 	float3 ambient;
 	float3 null;
 	BRDF::Lambert(0.0f, 0.0f, 0.0f, material, ambient, null);
-	ambient *= g_ambient_intensity.xyz;
+	ambient *= g_ambient_intensity;
 
 	// Calculate fog
 	#ifndef DISABLE_FOG

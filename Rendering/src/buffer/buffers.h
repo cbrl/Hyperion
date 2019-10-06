@@ -53,7 +53,7 @@ struct LightBuffer {
 	u32 num_shadow_spot_lights        = 0;
 	f32 pad1;
 
-	f32_4 ambient = {};
+	f32_3 ambient = {};
 };
 
 
