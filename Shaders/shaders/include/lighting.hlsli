@@ -32,6 +32,7 @@ cbuffer LightBuffer : REG_B(SLOT_CBUFFER_LIGHT) {
 	uint lb_pad1;
 
 	float3 g_ambient_intensity;
+	float  g_lbpad0;
 };
 
 

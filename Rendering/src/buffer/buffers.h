@@ -54,6 +54,7 @@ struct LightBuffer {
 	f32 pad1;
 
 	f32_3 ambient = {};
+	f32   pad2    = 0;
 };
 
 
