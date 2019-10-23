@@ -132,10 +132,8 @@ void ECS::removeCallback(const std::function<void(const EventT&)>& callback) {
 //----------------------------------------------------------------------------------
 
 template<typename... ComponentT>
+requires (std::derived_from<ComponentT, IComponent> && ...)
 void ECS::forEach(std::function<void(handle64)> act) {
-
-	static_assert(std::conjunction_v<std::is_base_of<IComponent, ComponentT>...>);
-
 	if constexpr (sizeof...(ComponentT) == 0) {
 		entity_mgr->forEach(act);
 	}
@@ -154,10 +152,8 @@ void ECS::forEach(std::function<void(handle64)> act) {
 
 
 template<typename... ComponentT>
+requires (std::derived_from<ComponentT, IComponent> && ...)
 void ECS::forEach(std::function<void(handle64)> act) const {
-
-	static_assert(std::conjunction_v<std::is_base_of<IComponent, ComponentT>...>);
-
 	if constexpr (sizeof...(ComponentT) == 0) {
 		entity_mgr->forEach(act);
 	}
@@ -176,9 +172,8 @@ void ECS::forEach(std::function<void(handle64)> act) const {
 
 
 template<typename ComponentT>
+requires std::derived_from<ComponentT, IComponent>
 void ECS::forEach(std::function<void(ComponentT&)> act) {
-	static_assert(std::is_base_of_v<IComponent, ComponentT>);
-
 	if (!component_mgr->knowsComponent<ComponentT>())
 		return;
 	component_mgr->forEach<ComponentT>(std::ref(act));
@@ -186,9 +181,8 @@ void ECS::forEach(std::function<void(ComponentT&)> act) {
 
 
 template<typename ComponentT>
+requires std::derived_from<ComponentT, IComponent>
 void ECS::forEach(std::function<void(const ComponentT&)> act) const {
-	static_assert(std::is_base_of_v<IComponent, ComponentT>);
-
 	if (!component_mgr->knowsComponent<ComponentT>())
 		return;
 	component_mgr->forEach<ComponentT>(std::ref(act));

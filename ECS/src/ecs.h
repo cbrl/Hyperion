@@ -180,19 +180,23 @@ public:
 	// Do something with each entity with a component of type ComponentT.
 	// Providing no template arguments will apply the action to every entity.
 	template<typename... ComponentT>
+	requires (std::derived_from<ComponentT, IComponent> && ...)
 	void forEach(std::function<void(handle64)> act);
 
 	// Do something with each entity with a component of type ComponentT.
 	// Providing no template arguments will apply the action to every entity.
 	template<typename... ComponentT>
+	requires (std::derived_from<ComponentT, IComponent> && ...)
 	void forEach(std::function<void(handle64)> act) const;
 
 	// Do something with each component of type ComponentT
 	template<typename ComponentT>
+	requires std::derived_from<ComponentT, IComponent>
 	void forEach(std::function<void(ComponentT&)> act);
 
 	// Do something with each component of type ComponentT
 	template<typename ComponentT>
+	requires std::derived_from<ComponentT, IComponent>
 	void forEach(std::function<void(const ComponentT&)> act) const;
 
 

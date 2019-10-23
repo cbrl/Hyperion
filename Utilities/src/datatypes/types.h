@@ -25,9 +25,12 @@
 #include "container_types.h"
 #include "vector_types.h"
 #include "string/string.h"
+
+// Type information and properties
 #include <typeinfo>
 #include <typeindex>
 #include <type_traits>
+#include <concepts>
 
 // Microsoft GSL
 #include <gsl/gsl>

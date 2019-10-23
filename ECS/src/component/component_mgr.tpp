@@ -3,12 +3,8 @@
 namespace ecs {
 
 template<typename ComponentT, typename... ArgsT>
+requires std::derived_from<ComponentT, IComponent> && std::constructible_from<ComponentT, ArgsT...>
 ComponentT& ComponentMgr::add(handle64 entity, ArgsT&&... args) {
-	static_assert(std::is_base_of_v<IComponent, ComponentT>, "ComponentT must inherit from Component.");
-
-	static_assert(std::is_constructible_v<ComponentT, ArgsT...>,
-	              "ComponentT does not have a constructor taking the provided argument types.");
-
 	using pool_t = ResourcePool<handle64::value_type, ComponentT>;
 
 	// Get or create the component pool
@@ -35,7 +31,7 @@ void ComponentMgr::remove(handle64 entity) {
 			expired_components[ComponentT::index].push_back(entity);
 		}
 		else {
-			Logger::log(LogLevel::err, "Attempting to remove a component from an entity that does not contain it");
+			Logger::log(LogLevel::err, "Attempting to remove a component ({}) from an entity that does not contain it", ComponentT::index.name());
 			assert(false);
 		}
 	}

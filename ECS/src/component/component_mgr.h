@@ -46,6 +46,7 @@ public:
 
 	// Construct a component and add it to the given entity
 	template<typename ComponentT, typename... ArgsT>
+	requires std::derived_from<ComponentT, IComponent> && std::constructible_from<ComponentT, ArgsT...>
 	[[nodiscard]]
 	ComponentT& add(handle64 entity, ArgsT&&... args);
 

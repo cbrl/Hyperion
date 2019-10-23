@@ -4,12 +4,8 @@
 namespace ecs {
 
 template <typename SystemT, typename... ArgsT>
+requires std::derived_from<SystemT, ISystem> && std::constructible_from<SystemT, ECS&, ArgsT...>
 SystemT& SystemMgr::add(ArgsT&&... args) {
-	static_assert(std::is_base_of_v<ISystem, SystemT>, "SystemT must inherit from System.");
-
-	static_assert(std::is_constructible_v<SystemT, ECS&, ArgsT...>,
-	              "SystemT does not have a constructor taking the provided argument types.");
-
 	const auto it = systems.find(SystemT::index);
 
 	// Return the system if it has already been added

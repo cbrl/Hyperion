@@ -40,6 +40,7 @@ public:
 	void update(std::chrono::duration<f64> dt);
 
 	template<typename SystemT, typename... ArgsT>
+	requires std::derived_from<SystemT, ISystem>&& std::constructible_from<SystemT, ECS&, ArgsT...>
 	SystemT& add(ArgsT&&... args);
 
 	void remove(ISystem& system);

@@ -110,6 +110,7 @@ class Component : public IComponent {
 protected:
 
 	Component() noexcept {
+		// Assert in the constructor since the type isn't fully defined before here
 		static_assert(std::is_move_constructible_v<T>,
 			"Component type is not move constructible");
 
