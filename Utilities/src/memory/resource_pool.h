@@ -1,6 +1,7 @@
 #pragma once
 
 #include "memory/sparse_set.h"
+#include <concepts>
 
 //----------------------------------------------------------------------------------
 // ResourcePool
@@ -13,7 +14,7 @@
 //
 //----------------------------------------------------------------------------------
 
-template<typename HandleT>
+template<std::unsigned_integral HandleT>
 class IResourcePool {
 public:
 	//----------------------------------------------------------------------------------
@@ -41,7 +42,7 @@ public:
 };
 
 
-template<typename HandleT, typename ResourceT>
+template<std::unsigned_integral HandleT, typename ResourceT>
 class ResourcePool final: public IResourcePool<HandleT> {
 	using sparse_set_type        = SparseSet<HandleT>;
 	using container_type         = std::vector<ResourceT>;

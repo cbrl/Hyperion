@@ -3,6 +3,7 @@
 #include "datatypes/scalar_types.h"
 #include <type_traits>
 #include <limits>
+#include <concepts>
 
 //----------------------------------------------------------------------------------
 // Handle
@@ -11,7 +12,7 @@
 // number of counter bits, and number of index bits
 //----------------------------------------------------------------------------------
 
-template<typename T, size_t IndexBits, size_t CounterBits>
+template<std::unsigned_integral T, size_t IndexBits, size_t CounterBits>
 struct Handle {
 public:
 	using value_type = T;
@@ -20,12 +21,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Assertions
 	//----------------------------------------------------------------------------------
-	static_assert(std::is_integral_v<T>,
-		"Handle template parameter is not an integral type");
-
-	static_assert(std::is_unsigned_v<T>,
-		"Handle template parameter is not an unsigned type");
-
 	static_assert(CounterBits > 0 && CounterBits < sizeof(T) * 8,
 		"Invalid number of counter bits specified for Handle");
 
@@ -44,7 +39,7 @@ public:
 	}
 
 	constexpr explicit Handle(T value) noexcept
-		: index((value & index_bitmask) >> n_counter_bits)
+		: index((value & index_bitmask) >> counter_bits)
 		, counter(value & counter_bitmask) {
 	}
 
@@ -75,7 +70,7 @@ public:
 	//----------------------------------------------------------------------------------
 	[[nodiscard]]
 	constexpr operator T() const noexcept {
-		return (index << n_counter_bits) | counter;
+		return (index << counter_bits) | counter;
 	}
 
 	[[nodiscard]]
@@ -104,8 +99,8 @@ public:
 	static constexpr T counter_max = (T{1} << CounterBits) - T{2};
 
 	// Number of bits
-	static constexpr size_t n_index_bits   = IndexBits;
-	static constexpr size_t n_counter_bits = CounterBits;
+	static constexpr size_t index_bits   = IndexBits;
+	static constexpr size_t counter_bits = CounterBits;
 
 private:
 

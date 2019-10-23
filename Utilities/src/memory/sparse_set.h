@@ -3,6 +3,7 @@
 #include <vector>
 #include <type_traits>
 #include <assert.h>
+#include <concepts>
 
 
 //----------------------------------------------------------------------------------
@@ -21,11 +22,8 @@
 //
 //----------------------------------------------------------------------------------
 
-template<typename T>
+template<std::unsigned_integral T>
 class SparseSet final {
-	static_assert(std::is_integral_v<T> && std::is_unsigned_v<T>,
-	              "Sparse sets only support unsigned integral types");
-
 	using container_type         = std::vector<T>;
 
 public:

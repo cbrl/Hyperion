@@ -2,6 +2,7 @@
 
 #include "datatypes/pointer_types.h"
 #include "datatypes/container_types.h"
+#include <concepts>
 
 
 //----------------------------------------------------------------------------------
@@ -47,12 +48,9 @@ public:
 	}
 
 	// Create a resource of a derived type, or retrieve it if it already exists.
-	template<typename DerivedT, typename... ArgsT>
+	template<typename DerivedT, typename... ArgsT> requires std::derived_from<DerivedT, ResourceT>
 	[[nodiscard]]
 	std::shared_ptr<ResourceT> getOrCreateDerived(const KeyT& key, ArgsT&&... args) {
-
-		static_assert(std::is_base_of_v<ResourceT, DerivedT>, "DerivedT must inherit from ResourceT");
-
 		if (const auto it = this->find(key); it != this->end()) {
 			return it->second;
 		}
@@ -69,12 +67,9 @@ public:
 	}
 
 	// Create a resource of a derived type, or replace it if it already exists.
-	template<typename DerivedT, typename... ArgsT>
+	template<typename DerivedT, typename... ArgsT> requires std::derived_from<DerivedT, ResourceT>
 	[[nodiscard]]
 	std::shared_ptr<ResourceT> createOrReplaceDerived(const KeyT& key, ArgsT&&... args) {
-
-		static_assert(std::is_base_of_v<ResourceT, DerivedT>, "DerivedT must inherit from ResourceT");
-
 		const auto resource = std::make_shared<DerivedT>(std::forward<ArgsT>(args)...);
 		this->operator[](key) = resource;
 		return resource;
@@ -282,12 +277,9 @@ public:
 	}
 
 	// Create a resource of a derived type, or retrieve it if it already exists.
-	template<typename DerivedT, typename... ArgsT>
+	template<typename DerivedT, typename... ArgsT> requires std::derived_from<DerivedT, ResourceT>
 	[[nodiscard]]
 	shared_ptr getOrCreateDerived(const key_type& key, ArgsT&& ... args) {
-
-		static_assert(std::is_base_of_v<ResourceT, DerivedT>, "DerivedT must inherit from ResourceT");
-
 		if (const auto it = resource_map.find(key); it != resource_map.end() && !it->second.expired()) {
 			return it->second.lock(); //Return the resource if it exists and hasn't expired
 		}
@@ -306,12 +298,9 @@ public:
 	}
 
 	// Create a resource of a derived type, or replace it if it already exists.
-	template<typename DerivedT, typename... ArgsT>
+	template<typename DerivedT, typename... ArgsT> requires std::derived_from<DerivedT, ResourceT>
 	[[nodiscard]]
 	shared_ptr createOrReplaceDerived(const key_type& key, ArgsT&&... args) {
-
-		static_assert(std::is_base_of_v<ResourceT, DerivedT>, "DerivedT must inherit from ResourceT");
-
 		const auto resource = std::make_shared<DerivedT>(std::forward<ArgsT>(args)...);
 		resource_map[key] = resource;
 		return resource;		
