@@ -73,10 +73,8 @@ public:
 	void draw(Engine& engine, handle64 handle);
 
 	template<typename ComponentT>
+	requires std::derived_from<ComponentT, ecs::IComponent>
 	void registerUserComponent(const UserComponent& component_def) {
-		static_assert(std::is_base_of_v<ecs::IComponent, ComponentT>,
-		              "EntityDetailsWindow::addComponentDetailsRenderer() - Invalid component type specified");
-
 		user_components[ComponentT::index] = component_def;
 	}
 

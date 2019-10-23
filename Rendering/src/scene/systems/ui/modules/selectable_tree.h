@@ -4,6 +4,7 @@
 #include "string/string.h"
 
 template<typename T>
+requires std::integral<T> || std::is_pointer_v<T>
 struct SelectableTree final {
 	static_assert(std::is_integral_v<T> || std::is_pointer_v<T>,
 		"SelectableTree only supports integral and pointer types");
