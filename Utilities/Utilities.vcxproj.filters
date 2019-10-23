@@ -309,9 +309,9 @@
     <None Include="src\time\stopwatch.tpp">
       <Filter>Header Files\time</Filter>
     </None>
-    <None Include="packages.config" />
     <None Include="src\memory\handle\handle_table.tpp">
       <Filter>Header Files\memory\handle</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

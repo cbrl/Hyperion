@@ -591,7 +591,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="src\buffer\constant_buffer.tpp">
       <Filter>Header Files\buffer</Filter>
     </None>
@@ -616,5 +615,6 @@
     <None Include="src\resource\shader\shader_factory.tpp">
       <Filter>Header Files\resource\shader</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

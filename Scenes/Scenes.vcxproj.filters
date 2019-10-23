@@ -76,9 +76,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src\scenes\test_scene\test_scene.h">
       <Filter>Header Files\scenes</Filter>
     </ClInclude>
@@ -121,5 +118,8 @@
     <ClInclude Include="src\scenes\test_scene\events\events.h">
       <Filter>Header Files\scenes\events</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
