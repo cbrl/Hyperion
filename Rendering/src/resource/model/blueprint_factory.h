@@ -11,14 +11,14 @@ namespace render::BlueprintFactory {
 template<typename VertexT>
 [[nodiscard]]
 std::shared_ptr<ModelBlueprint> CreateCube(ResourceMgr& resource_mgr,
-	                                        const ModelConfig<VertexT>& config,
-	                                        f32 size = 1);
+	                                       const ModelConfig<VertexT>& config,
+	                                       f32 size = 1);
 
 template<typename VertexT>
 [[nodiscard]]
 std::shared_ptr<ModelBlueprint> CreateBox(ResourceMgr& resource_mgr,
-	                                        const ModelConfig<VertexT>& config,
-	                                        const f32_3& size);
+	                                      const ModelConfig<VertexT>& config,
+	                                      const f32_3& size);
 
 template<typename VertexT>
 [[nodiscard]]
