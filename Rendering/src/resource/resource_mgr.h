@@ -54,35 +54,33 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ResourceT, typename VertexT>
+	requires std::same_as<ModelBlueprint, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& filename,
-	                 const ModelConfig<VertexT>& config)
-	    -> std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>, std::shared_ptr<ModelBlueprint>>;
+	std::shared_ptr<ModelBlueprint> getOrCreate(const std::wstring& filename, const ModelConfig<VertexT>& config);
 
 	template<typename ResourceT, typename VertexT>
+	requires std::same_as<ModelBlueprint, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& name,
-	                 const ModelOutput& model_data,
-	                 const ModelConfig<VertexT>& config)
-	    -> std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>, std::shared_ptr<ModelBlueprint>>;
+	std::shared_ptr<ModelBlueprint> getOrCreate(const std::wstring& name,
+	                                            const ModelOutput& model_data,
+	                                            const ModelConfig<VertexT>& config);
 
 	template<typename ResourceT, typename VertexT>
+	requires std::same_as<ModelBlueprint, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& filename,
-	                     const ModelConfig<VertexT>& config)
-	    -> std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>, std::shared_ptr<ModelBlueprint>>;
+	std::shared_ptr<ModelBlueprint> createOrReplace(const std::wstring& filename, const ModelConfig<VertexT>& config);
 
 	template<typename ResourceT, typename VertexT>
+	requires std::same_as<ModelBlueprint, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& name,
-	                     const ModelOutput& model_data,
-	                     const ModelConfig<VertexT>& config)
-	    -> std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>, std::shared_ptr<ModelBlueprint>>;
+	std::shared_ptr<ModelBlueprint> createOrReplace(const std::wstring& name,
+	                                                const ModelOutput& model_data,
+	                                                const ModelConfig<VertexT>& config);
 
 	template<typename ResourceT>
+	requires std::same_as<ModelBlueprint, ResourceT>
 	[[nodiscard]]
-	auto getResourceMap() const
-		-> std::enable_if_t<std::is_same_v<ModelBlueprint, ResourceT>, const resource_map<std::wstring, ModelBlueprint>&>;
+	const resource_map<std::wstring, ModelBlueprint>& getResourceMap() const;
 		
 
 
@@ -91,33 +89,33 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ResourceT>
+	requires std::same_as<Texture, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& filename)
-	    -> std::enable_if_t<std::is_same_v<Texture, ResourceT>, std::shared_ptr<Texture>>;
+	std::shared_ptr<Texture> getOrCreate(const std::wstring& filename);
 
 	template<typename ResourceT>
+	requires std::same_as<Texture, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& name,
-	                 const D3D11_TEXTURE2D_DESC& desc,
-	                 const D3D11_SUBRESOURCE_DATA& init_data)
-	    -> std::enable_if_t<std::is_same_v<Texture, ResourceT>, std::shared_ptr<Texture>>;
+	std::shared_ptr<Texture> getOrCreate(const std::wstring& name,
+	                                     const D3D11_TEXTURE2D_DESC& desc,
+	                                     const D3D11_SUBRESOURCE_DATA& init_data);
 
 	template<typename ResourceT>
+	requires std::same_as<Texture, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& filename)
-	    -> std::enable_if_t<std::is_same_v<Texture, ResourceT>, std::shared_ptr<Texture>>;
+	std::shared_ptr<Texture> createOrReplace(const std::wstring& filename);
 
 	template<typename ResourceT>
+	requires std::same_as<Texture, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& name,
-	                     const D3D11_TEXTURE2D_DESC& desc,
-	                     const D3D11_SUBRESOURCE_DATA& init_data)
-	    -> std::enable_if_t<std::is_same_v<Texture, ResourceT>, std::shared_ptr<Texture>>;
+	std::shared_ptr<Texture> createOrReplace(const std::wstring& name,
+	                                         const D3D11_TEXTURE2D_DESC& desc,
+	                                         const D3D11_SUBRESOURCE_DATA& init_data);
 
 	template<typename ResourceT>
+	requires std::same_as<Texture, ResourceT>
 	[[nodiscard]]
-	auto getResourceMap() const
-		-> std::enable_if_t<std::is_same_v<Texture, ResourceT>, const resource_map<std::wstring, Texture>&>;
+	const resource_map<std::wstring, Texture>& getResourceMap() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -125,19 +123,19 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ResourceT>
+	requires std::same_as<Font, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& filename)
-	    -> std::enable_if_t<std::is_same_v<Font, ResourceT>, std::shared_ptr<Font>>;
+	std::shared_ptr<Font> getOrCreate(const std::wstring& filename);
 
 	template<typename ResourceT>
+	requires std::same_as<Font, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& filename)
-	    -> std::enable_if_t<std::is_same_v<Font, ResourceT>, std::shared_ptr<Font>>;
+	std::shared_ptr<Font> createOrReplace(const std::wstring& filename);
 
 	template<typename ResourceT>
+	requires std::same_as<Font, ResourceT>
 	[[nodiscard]]
-	auto getResourceMap() const
-		-> std::enable_if_t<std::is_same_v<Font, ResourceT>, const resource_map<std::wstring, Font>&>;
+	const resource_map<std::wstring, Font>& getResourceMap() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -145,19 +143,19 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ResourceT>
+	requires std::same_as<ComputeShader, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<ComputeShader, ResourceT>, std::shared_ptr<ComputeShader>>;
+	std::shared_ptr<ComputeShader> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<ComputeShader, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<ComputeShader, ResourceT>, std::shared_ptr<ComputeShader>>;
+	std::shared_ptr<ComputeShader> createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<ComputeShader, ResourceT>
 	[[nodiscard]]
-	auto getResourceMap() const
-		-> std::enable_if_t<std::is_same_v<ComputeShader, ResourceT>, const shader_resource_map<std::wstring, ComputeShader>&>;
+	const shader_resource_map<std::wstring, ComputeShader>& getResourceMap() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -165,19 +163,19 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ResourceT>
+	requires std::same_as<DomainShader, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<DomainShader, ResourceT>, std::shared_ptr<DomainShader>>;
+	std::shared_ptr<DomainShader> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<DomainShader, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<DomainShader, ResourceT>, std::shared_ptr<DomainShader>>;
+	std::shared_ptr<DomainShader> createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<DomainShader, ResourceT>
 	[[nodiscard]]
-	auto getResourceMap() const
-	    -> std::enable_if_t<std::is_same_v<DomainShader, ResourceT>, const shader_resource_map<std::wstring, DomainShader>&>;
+	const shader_resource_map<std::wstring, DomainShader>& getResourceMap() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -185,19 +183,19 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ResourceT>
+	requires std::same_as<GeometryShader, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<GeometryShader, ResourceT>, std::shared_ptr<GeometryShader>>;
+	std::shared_ptr<GeometryShader> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<GeometryShader, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<GeometryShader, ResourceT>, std::shared_ptr<GeometryShader>>;
+	std::shared_ptr<GeometryShader> createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<GeometryShader, ResourceT>
 	[[nodiscard]]
-	auto getResourceMap() const
-	    -> std::enable_if_t<std::is_same_v<GeometryShader, ResourceT>, const shader_resource_map<std::wstring, GeometryShader>&>;
+	const shader_resource_map<std::wstring, GeometryShader>& getResourceMap() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -205,19 +203,19 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ResourceT>
+	requires std::same_as<HullShader, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<HullShader, ResourceT>, std::shared_ptr<HullShader>>;
+	std::shared_ptr<HullShader> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<HullShader, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<HullShader, ResourceT>, std::shared_ptr<HullShader>>;
+	std::shared_ptr<HullShader> createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<HullShader, ResourceT>
 	[[nodiscard]]
-	auto getResourceMap() const
-	    -> std::enable_if_t<std::is_same_v<HullShader, ResourceT>, const shader_resource_map<std::wstring, HullShader>&>;
+	const shader_resource_map<std::wstring, HullShader>& getResourceMap() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -225,19 +223,19 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ResourceT>
+	requires std::same_as<PixelShader, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<PixelShader, ResourceT>, std::shared_ptr<PixelShader>>;
+	std::shared_ptr<PixelShader> getOrCreate(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<PixelShader, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode)
-	    -> std::enable_if_t<std::is_same_v<PixelShader, ResourceT>, std::shared_ptr<PixelShader>>;
+	std::shared_ptr<PixelShader> createOrReplace(const std::wstring& guid, const ShaderBytecode& bytecode);
 
 	template<typename ResourceT>
+	requires std::same_as<PixelShader, ResourceT>
 	[[nodiscard]]
-	auto getResourceMap() const
-	    -> std::enable_if_t<std::is_same_v<PixelShader, ResourceT>, const shader_resource_map<std::wstring, PixelShader>&>;
+	const shader_resource_map<std::wstring, PixelShader>& getResourceMap() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -245,23 +243,23 @@ public:
 	//----------------------------------------------------------------------------------
 
 	template<typename ResourceT>
+	requires std::same_as<VertexShader, ResourceT>
 	[[nodiscard]]
-	auto getOrCreate(const std::wstring& guid,
-	             const ShaderBytecode& bytecode,
-	             gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs)
-	    -> std::enable_if_t<std::is_same_v<VertexShader, ResourceT>, std::shared_ptr<VertexShader>>;
+	std::shared_ptr<VertexShader> getOrCreate(const std::wstring& guid,
+	                                          const ShaderBytecode& bytecode,
+	                                          gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
 
 	template<typename ResourceT>
+	requires std::same_as<VertexShader, ResourceT>
 	[[nodiscard]]
-	auto createOrReplace(const std::wstring& guid,
-	                     const ShaderBytecode& bytecode,
-	                     gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs)
-	    -> std::enable_if_t<std::is_same_v<VertexShader, ResourceT>, std::shared_ptr<VertexShader>>;
+	std::shared_ptr<VertexShader> createOrReplace(const std::wstring& guid,
+	                                              const ShaderBytecode& bytecode,
+	                                              gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
 
 	template<typename ResourceT>
+	requires std::same_as<VertexShader, ResourceT>
 	[[nodiscard]]
-	auto getResourceMap() const
-	    -> std::enable_if_t<std::is_same_v<VertexShader, ResourceT>, const shader_resource_map<std::wstring, VertexShader>&>;
+	const shader_resource_map<std::wstring, VertexShader>& getResourceMap() const;
 
 private:
 
