@@ -12,7 +12,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	StructuredBuffer(ID3D11Device& device, u32 reserved_size)
 		: current_size(0)
 		, reserved_size(reserved_size) {
@@ -27,14 +26,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~StructuredBuffer() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	StructuredBuffer& operator=(const StructuredBuffer& buffer) = delete;
 	StructuredBuffer& operator=(StructuredBuffer&& buffer) noexcept = default;
 
@@ -42,7 +39,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-
 	void updateData(ID3D11Device& device,
 	                ID3D11DeviceContext& device_context,
 	                const std::vector<DataT>& data);
@@ -67,12 +63,14 @@ public:
 		return reserved_size;
 	}
 
-
 private:
+
 	void createBuffer(ID3D11Device& device);
 
 
-private:
+	//----------------------------------------------------------------------------------
+	// Member Functions
+	//----------------------------------------------------------------------------------
 	ComPtr<ID3D11Buffer> buffer;
 	ComPtr<ID3D11ShaderResourceView> srv;
 

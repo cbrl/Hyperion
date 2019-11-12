@@ -13,7 +13,6 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
 	ConstantBuffer(ID3D11Device& device);
 	ConstantBuffer(const ConstantBuffer& buffer) = delete;
 	ConstantBuffer(ConstantBuffer&& buffer) noexcept = default;
@@ -22,14 +21,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~ConstantBuffer() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	ConstantBuffer& operator=(const ConstantBuffer& buffer) = delete;
 	ConstantBuffer& operator=(ConstantBuffer&& buffer) noexcept = default;
 
@@ -49,6 +46,10 @@ public:
 
 
 private:
+
+	//----------------------------------------------------------------------------------
+	// Member Variables
+	//----------------------------------------------------------------------------------
 	ComPtr<ID3D11Buffer> buffer;
 };
 
