@@ -12,8 +12,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-
-	Font(_In_ ID3D11Device& device, gsl::cwzstring<> file, bool forceSRGB = false)
+	Font(ID3D11Device& device, gsl::cwzstring<> file, bool forceSRGB = false)
 		: SpriteFont(&device, file, forceSRGB)
 		, Resource(file) {
 	}
@@ -25,14 +24,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-
 	~Font() = default;
 
 
 	//----------------------------------------------------------------------------------
 	// Operators
 	//----------------------------------------------------------------------------------
-
 	Font& operator=(const Font& font) = delete;
 	Font& operator=(Font&& font) noexcept = default;
 };
