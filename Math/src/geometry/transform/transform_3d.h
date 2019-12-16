@@ -90,18 +90,15 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void rotateX(f32 units) {
-		rotation += XMVectorSet(units, 0.0f, 0.0f, 0.0f);
-		setNeedsUpdate();
+		rotateXClamped(units, -XM_PI, XM_PI);
 	}
 
 	void rotateY(f32 units) {
-		rotation += XMVectorSet(0.0f, units, 0.0f, 0.0f);
-		setNeedsUpdate();
+		rotateYClamped(units, -XM_PI, XM_PI);
 	}
 
 	void rotateZ(f32 units) {
-		rotation += XMVectorSet(0.0f, 0.0f, units, 0.0f);
-		setNeedsUpdate();
+		rotateZClamped(units, -XM_PI, XM_PI);
 	}
 
 	void rotateXClamped(f32 units, f32 min, f32 max) {
@@ -123,13 +120,11 @@ public:
 	}
 
 	void rotate(const f32_3& units) {
-		rotation += XMLoad(&units);
-		setNeedsUpdate();
+		rotateClamped(units, -XM_PI, XM_PI);
 	}
 
 	void XM_CALLCONV rotate(FXMVECTOR units) {
-		rotation += units;
-		setNeedsUpdate();
+		rotateClamped(units, -XM_PI, XM_PI);
 	}
 
 	void rotateClamped(const f32_3& units, f32 min, f32 max) {
