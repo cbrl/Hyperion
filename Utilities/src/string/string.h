@@ -105,7 +105,7 @@ std::optional<std::string> ToStrImpl(T val, std::chars_format fmt) noexcept {
 	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
 
 	// Convert the string
-	std::array<char, max_chars + 1> chars = {'\0'};
+	std::array<char, max_chars + 1> chars{};
 	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, fmt);
 
 	if (result.ec != std::errc()) {
@@ -121,7 +121,7 @@ std::optional<std::string> ToStrImpl(T val, std::chars_format fmt, int precision
 	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
 
 	// Convert the string
-	std::array<char, max_chars + 1> chars = {'\0'};
+	std::array<char, max_chars + 1> chars{};
 	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, fmt, precision);
 
 	if (result.ec != std::errc()) {
@@ -136,12 +136,11 @@ std::optional<std::string> ToStrImpl(T val, std::chars_format fmt, int precision
 // Convert the specified integral value to a string with the specified base (default 10)
 template<std::integral T>
 std::optional<std::string> ToStr(T val, int base = 10) noexcept {
-
 	// Determine maximum chars possible in string
 	constexpr size_t max_chars = std::numeric_limits<T>::digits + 1;
 
 	// Convert the string
-	std::array<char, max_chars + 1> chars = {'\0'};
+	std::array<char, max_chars + 1> chars{};
 	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val, base);
 
 	if (result.ec != std::errc()) {
@@ -154,12 +153,11 @@ std::optional<std::string> ToStr(T val, int base = 10) noexcept {
 // Convert the specified floating point value to a string
 template<std::floating_point T>
 std::optional<std::string> ToStr(T val) noexcept {
-
 	// Determine maximum chars possible in string
 	constexpr size_t max_chars = std::numeric_limits<T>::digits - std::numeric_limits<T>::min_exponent + 3;
 
 	// Convert the string
-	std::array<char, max_chars + 1> chars = {'\0'};
+	std::array<char, max_chars + 1> chars{};
 	const std::to_chars_result result = std::to_chars(chars.data(), chars.data() + max_chars, val);
 
 	if (result.ec != std::errc()) {
@@ -170,9 +168,8 @@ std::optional<std::string> ToStr(T val) noexcept {
 }
 
 // Convert the specified arithemetic value to a string with a specified format
-template<typename T>
-requires std::is_arithmetic_v<T>
-    std::optional<std::string> ToStr(T val, std::chars_format fmt) noexcept {
+template<typename T> requires std::is_arithmetic_v<T>
+std::optional<std::string> ToStr(T val, std::chars_format fmt) noexcept {
 
 	// Formatted to_chars only accepts floating point values
 	if constexpr (std::is_integral_v<T>) {
@@ -189,9 +186,8 @@ requires std::is_arithmetic_v<T>
 }
 
 // Convert the specified arithemetic value to a string with a specified format and precision
-template<typename T>
-requires std::is_arithmetic_v<T>
-    std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) noexcept {
+template<typename T> requires std::is_arithmetic_v<T>
+std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) noexcept {
 
 	// Formatted to_chars only accepts floating point values
 	if constexpr (std::is_integral_v<T>) {
@@ -222,8 +218,8 @@ requires std::is_arithmetic_v<T>
 //----------------------------------------------------------------------------------
 
 // Convert a string to the specified integral type
-template<typename T>
-    requires std::integral<T> && !std::same_as<T, bool> std::optional<T> StrTo(std::string_view str, int base = 10) noexcept {
+template<typename T> requires std::integral<T> && !std::same_as<T, bool>
+std::optional<T> StrTo(std::string_view str, int base = 10) noexcept {
 	if (str.empty()) {
 		return {};
 	}
@@ -262,9 +258,8 @@ std::optional<T> StrTo(std::string_view str, std::chars_format fmt = std::chars_
 }
 
 // Convert a string to a boolean value. Accepts numeric values or the case-insensitive strings "true" and "false".
-template<typename T>
-requires std::same_as<T, bool>
-    std::optional<T> StrTo(std::string_view str) noexcept {
+template<typename T> requires std::same_as<T, bool>
+std::optional<T> StrTo(std::string_view str) noexcept {
 	if (str.empty()) {
 		return {};
 	}
@@ -309,44 +304,26 @@ requires std::same_as<T, bool>
 
 namespace detail {
 template<typename StringT, typename CompareFuncT>
-void LTrimImpl(StringT& str, CompareFuncT&& compare_func) {
+constexpr void LTrimImpl(StringT& str, CompareFuncT&& compare_func) {
 	str.erase(str.begin(), std::find_if(str.begin(), str.end(), compare_func));
 }
 
 template<typename StringT, typename CompareFuncT>
-StringT LTrimCopyImpl(StringT str, CompareFuncT&& compare_func) {
-	LTrimImpl(str, compare_func);
-	return str;
-}
-
-template<typename StringT, typename CompareFuncT>
-void RTrimImpl(StringT& str, CompareFuncT&& compare_func) {
+constexpr void RTrimImpl(StringT& str, CompareFuncT&& compare_func) {
 	str.erase(std::find_if(str.rbegin(), str.rend(), compare_func).base(), str.end());
 }
 
 template<typename StringT, typename CompareFuncT>
-StringT RTrimCopyImpl(StringT str, CompareFuncT&& compare_func) {
-	RTrimImpl(str, compare_func);
-	return str;
-}
-
-template<typename StringT, typename CompareFuncT>
-void TrimImpl(StringT& str, CompareFuncT&& compare_func) {
+constexpr void TrimImpl(StringT& str, CompareFuncT&& compare_func) {
 	LTrimImpl(str, compare_func);
 	RTrimImpl(str, compare_func);
-}
-
-template<typename StringT, typename CompareFuncT>
-StringT TrimCopyImpl(StringT str, CompareFuncT&& compare_func) {
-	TrimImpl(str, compare_func);
-	return str;
 }
 } //namespace detail
 
 
 // Trim the specified token from the left of a string
 template<typename StringT>
-void LTrim(StringT& str, typename StringT::value_type token) {
+constexpr void LTrim(StringT& str, typename StringT::value_type token) {
 	detail::LTrimImpl(
 	    str,
 	    [&token](typename StringT::value_type ch) {
@@ -354,17 +331,9 @@ void LTrim(StringT& str, typename StringT::value_type token) {
 	    });
 }
 
-// Trim the specified token from the left of a string
-template<typename StringT>
-StringT LTrimCopy(StringT str, typename StringT::value_type token) {
-	LTrim(str, token);
-	return str;
-}
-
-
 // Trim the specified token from the right of a string
 template<typename StringT>
-void RTrim(StringT& str, typename StringT::value_type token) {
+constexpr void RTrim(StringT& str, typename StringT::value_type token) {
 	detail::RTrimImpl(
 	    str,
 	    [&token](typename StringT::value_type ch) {
@@ -372,44 +341,22 @@ void RTrim(StringT& str, typename StringT::value_type token) {
 	    });
 }
 
-// Trim the specified token from the right of a string
-template<typename StringT>
-StringT RTrimCopy(StringT str, typename StringT::value_type token) {
-	RTrim(str, token);
-	return str;
-}
-
-
 // Trim the specified token at the beginning and end of a string
 template<typename StringT>
-void Trim(StringT& str, typename StringT::value_type token) {
+constexpr void Trim(StringT& str, typename StringT::value_type token) {
 	LTrim(str, token);
 	RTrim(str, token);
 }
 
-// Trim the specified token at the beginning and end of a string
-template<typename StringT>
-StringT TrimCopy(StringT str, typename StringT::value_type token) {
-	Trim(str, token);
-	return str;
-}
-
-
 // Trim whitespace at the beginning and end of a string
 template<typename StringT>
-void TrimWhiteSpace(StringT& str) {
+constexpr void TrimWhiteSpace(StringT& str) {
 	detail::TrimImpl(
 	    str,
 	    [](typename StringT::value_type ch) {
 		    return !std::isspace(ch);
-	    });
-}
-
-// Trim whitespace at the beginning and end of a string
-template<typename StringT>
-StringT TrimWhiteSpaceCopy(StringT str) {
-	TrimWhiteSpace(str);
-	return str;
+	    }
+	);
 }
 
 
@@ -449,11 +396,9 @@ inline std::vector<std::string> Split(std::string_view str, std::string_view tok
 inline std::vector<std::wstring> Split(std::wstring_view str, std::wstring_view token) {
 	return detail::Split(str, token);
 }
-#if __cplusplus > 201703L
 inline std::vector<std::u8string> Split(std::u8string_view str, std::u8string_view token) {
 	return detail::Split(str, token);
 }
-#endif
 inline std::vector<std::u16string> Split(std::u16string_view str, std::u16string_view token) {
 	return detail::Split(str, token);
 }
@@ -474,7 +419,7 @@ inline std::vector<std::u32string> Split(std::u32string_view str, std::u32string
 
 namespace detail {
 template<typename StringT>
-void Replace(StringT& str, std::basic_string_view<typename StringT::value_type> from, std::basic_string_view<typename StringT::value_type> to) {
+constexpr void Replace(StringT& str, std::basic_string_view<typename StringT::value_type> from, std::basic_string_view<typename StringT::value_type> to) {
 	if (str.empty()) {
 		return;
 	}
@@ -485,51 +430,23 @@ void Replace(StringT& str, std::basic_string_view<typename StringT::value_type> 
 		start += to.length();
 	}
 }
-
-template<typename StringT>
-StringT ReplaceCopy(StringT str, std::basic_string_view<typename StringT::value_type> from, std::basic_string_view<typename StringT::value_type> to) {
-	Replace<StringT>(str, from, to);
-	return str;
-}
 } //namespace detail
 
 
-inline void Replace(std::string& str, std::string_view from, std::string_view to) {
+constexpr inline void Replace(std::string& str, std::string_view from, std::string_view to) {
 	detail::Replace<std::string>(str, from, to);
 }
-inline void Replace(std::wstring& str, std::wstring_view from, std::wstring_view to) {
+constexpr inline void Replace(std::wstring& str, std::wstring_view from, std::wstring_view to) {
 	detail::Replace<std::wstring>(str, from, to);
 }
-inline void Replace(std::u8string& str, std::u8string_view from, std::u8string_view to) {
+constexpr inline void Replace(std::u8string& str, std::u8string_view from, std::u8string_view to) {
 	detail::Replace<std::u8string>(str, from, to);
 }
-inline void Replace(std::u16string& str, std::u16string_view from, std::u16string_view to) {
+constexpr inline void Replace(std::u16string& str, std::u16string_view from, std::u16string_view to) {
 	detail::Replace<std::u16string>(str, from, to);
 }
-inline void Replace(std::u32string& str, std::u32string_view from, std::u32string_view to) {
+constexpr inline void Replace(std::u32string& str, std::u32string_view from, std::u32string_view to) {
 	detail::Replace<std::u32string>(str, from, to);
-}
-
-
-inline std::string ReplaceCopy(std::string str, std::string_view from, std::string_view to) {
-	detail::Replace<std::string>(str, from, to);
-	return str;
-}
-inline std::wstring ReplaceCopy(std::wstring str, std::wstring_view from, std::wstring_view to) {
-	detail::Replace<std::wstring>(str, from, to);
-	return str;
-}
-inline std::u8string ReplaceCopy(std::u8string str, std::u8string_view from, std::u8string_view to) {
-	detail::Replace<std::u8string>(str, from, to);
-	return str;
-}
-inline std::u16string ReplaceCopy(std::u16string str, std::u16string_view from, std::u16string_view to) {
-	detail::Replace<std::u16string>(str, from, to);
-	return str;
-}
-inline std::u32string ReplaceCopy(std::u32string str, std::u32string_view from, std::u32string_view to) {
-	detail::Replace<std::u32string>(str, from, to);
-	return str;
 }
 
 
