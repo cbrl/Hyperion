@@ -145,7 +145,7 @@ void RenderStateMgr::createBlendStates(ID3D11Device& device) {
 	// Opaque
 	ThrowIfFailed(createBlendState(device,
 	                               D3D11_BLEND_ONE,
-	                               D3D11_BLEND_INV_SRC_ALPHA,
+	                               D3D11_BLEND_ZERO,
 	                               getAddressOf(BlendStates::Opaque)),
 	              "Error creating Opaque blend state");
 

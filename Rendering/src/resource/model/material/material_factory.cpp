@@ -6,19 +6,21 @@
 namespace render::MaterialFactory {
 
 Material CreateDefaultMaterial(ResourceMgr& resource_mgr) {
-	Material mat;
-
-	mat.name                 = "Default Material";
-	mat.params.base_color    = {1.0f, 1.0f, 1.0f, 1.0f};
-	mat.params.metalness     = 0.5f;
-	mat.params.roughness     = 0.5f;
-	mat.params.emissive      = 0.0f;
-	mat.maps.base_color      = TextureFactory::CreateWhiteTexture(resource_mgr);
-	mat.maps.material_params = TextureFactory::CreateWhiteTexture(resource_mgr);
-	mat.maps.normal          = TextureFactory::CreateBlackTexture(resource_mgr);
-	mat.maps.emissive        = TextureFactory::CreateBlackTexture(resource_mgr);
-
-	return mat;
+	return Material{
+		.name                 = "Default Material",
+		.params{
+			.base_color    = {1.0f, 1.0f, 1.0f, 1.0f},
+			.metalness     = 0.9f,
+			.roughness     = 0.7f,
+			.emissive      = 0.0f,
+		},
+		.maps{
+			.base_color      = TextureFactory::CreateWhiteTexture(resource_mgr),
+			.material_params = TextureFactory::CreateWhiteTexture(resource_mgr),
+			.normal          = TextureFactory::CreateBlackTexture(resource_mgr),
+			.emissive        = TextureFactory::CreateBlackTexture(resource_mgr),
+		}
+	};
 }
 
 } //namespace render::MaterialFactory
