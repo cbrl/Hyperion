@@ -685,7 +685,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;_SILENCE_CXX17_ITERATOR_BASE_CLASS_DEPRECATION_WARNING;ASSIMP_BUILD_NO_C4D_IMPORTER;ASSIMP_BUILD_NO_IFC_IMPORTER;ASSIMP_BUILD_NO_STEP_IMPORTER;ASSIMP_IMPORTER_GLTF_USE_OPEN3DGC=1;OPENDDLPARSER_BUILD;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
