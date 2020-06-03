@@ -249,7 +249,7 @@ void OutputMgr::bindBeginDeferred(ID3D11DeviceContext& device_context) const {
 	    get(SRV::GBufferDepth)
 	};
 
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_BASE_COLOR, gsl::span{srvs});
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_BASE_COLOR, std::span{srvs});
 	Pipeline::OM::bindRTVAndDSV(device_context, swap_chain.getRTV(), nullptr);
 }
 
@@ -257,7 +257,7 @@ void OutputMgr::bindBeginDeferred(ID3D11DeviceContext& device_context) const {
 void OutputMgr::bindEndDeferred(ID3D11DeviceContext& device_context) const {
 	ID3D11ShaderResourceView* const srvs[4] = { nullptr };
 
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_BASE_COLOR, gsl::span{srvs});
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_BASE_COLOR, std::span{srvs});
 	Pipeline::OM::bindRTVAndDSV(device_context, nullptr, nullptr);
 }
 
@@ -269,7 +269,7 @@ void OutputMgr::bindBeginGBuffer(ID3D11DeviceContext& device_context) const {
 	    get(RTV::GBufferNormal)
 	};
 
-	Pipeline::OM::bindRTVsAndDSV(device_context, gsl::span{rtvs}, dsv.Get());
+	Pipeline::OM::bindRTVsAndDSV(device_context, std::span{rtvs}, dsv.Get());
 }
 
 

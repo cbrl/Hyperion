@@ -40,7 +40,7 @@ HRESULT CompileShaderToBytecode(const fs::path& file,
 }
 
 
-HRESULT CompileShaderToBytecode(gsl::span<const char> data,
+HRESULT CompileShaderToBytecode(std::string_view data,
                                 const std::string& entry_point,
                                 const std::string& target_ver,
                                 gsl::not_null<ID3DBlob**> out) {

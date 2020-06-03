@@ -40,7 +40,7 @@ public:
 	bool update(Engine& engine);
 
 	// Compile an input shader of the type selected in this menu
-	void compileShader(Engine& engine, gsl::span<const char> data) const;
+	void compileShader(Engine& engine, std::string_view data) const;
 
 private:
 	[[nodiscard]]

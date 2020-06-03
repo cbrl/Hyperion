@@ -14,7 +14,7 @@ namespace render::ShaderFactory {
 template<typename ShaderT>
 [[nodiscard]]
 std::shared_ptr<ShaderT> CreateShaderFromMemory(ResourceMgr& resource_mgr,
-                                                gsl::span<const char> data,
+                                                std::string_view data,
                                                 const std::wstring& shader_name,
                                                 const std::string& entry_point,
                                                 const std::string& target_ver);

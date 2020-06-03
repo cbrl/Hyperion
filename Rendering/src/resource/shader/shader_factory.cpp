@@ -1,6 +1,6 @@
 #include "shader_factory.h"
 
-#define BYTECODE(x) ShaderBytecodeBuffer(gsl::span{x, sizeof(x)})
+#define BYTECODE(x) ShaderBytecodeBuffer(std::span{x, sizeof(x)})
 //#define BYTECODE(x) ShaderBytecodeBlob("./shaders/"#x)
 
 // Forward
@@ -86,7 +86,7 @@ std::shared_ptr<VertexShader> CreateForwardVS(ResourceMgr& resource_mgr) {
 
 	return resource_mgr.getOrCreate<VertexShader>(L"shader_forward_vs",
 													BYTECODE(shader_forward_vs),
-		                                            gsl::span{VertexPositionNormalTexture::input_elements,
+		                                            std::span{VertexPositionNormalTexture::input_elements,
 		                                                      VertexPositionNormalTexture::input_element_count});
 }
 
@@ -132,7 +132,7 @@ std::shared_ptr<VertexShader> CreateDepthVS(ResourceMgr& resource_mgr) {
 
 	return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_vs",
 													BYTECODE(shader_depth_vs),
-													gsl::span{VertexPositionNormalTexture::input_elements,
+													std::span{VertexPositionNormalTexture::input_elements,
 													          VertexPositionNormalTexture::input_element_count});
 }
 
@@ -145,7 +145,7 @@ std::shared_ptr<VertexShader> CreateDepthTransparentVS(ResourceMgr& resource_mgr
 
 	return resource_mgr.getOrCreate<VertexShader>(L"shader_depth_transparent_vs",
 													BYTECODE(shader_depth_transparent_vs),
-													gsl::span{VertexPositionNormalTexture::input_elements,
+													std::span{VertexPositionNormalTexture::input_elements,
 													          VertexPositionNormalTexture::input_element_count});
 }
 
@@ -163,7 +163,7 @@ std::shared_ptr<VertexShader> CreateSkyVS(ResourceMgr& resource_mgr) {
 
 	return resource_mgr.getOrCreate<VertexShader>(L"shader_skybox_vs",
 													BYTECODE(shader_skybox_vs),
-		                                            gsl::span{VertexPositionTexture::input_elements,
+		                                            std::span{VertexPositionTexture::input_elements,
 		                                                      VertexPositionTexture::input_element_count});
 }
 
@@ -182,7 +182,7 @@ std::shared_ptr<VertexShader> CreateWireframeBoxVS(ResourceMgr& resource_mgr) {
 
 	return resource_mgr.getOrCreate<VertexShader>(L"shader_wireframe_box_vs",
 													BYTECODE(shader_wireframe_box_vs),
-		                                            gsl::span{VertexPosition::input_elements,
+		                                            std::span{VertexPosition::input_elements,
 		                                                      VertexPosition::input_element_count});
 }
 
@@ -230,7 +230,7 @@ std::shared_ptr<PixelShader> CreateFalseColorPS(ResourceMgr& resource_mgr, False
 std::shared_ptr<VertexShader> CreateFullscreenQuadVS(ResourceMgr& resource_mgr) {
 	return resource_mgr.getOrCreate<VertexShader>(L"shader_fullscreen_quad_vs",
 	                                              BYTECODE(shader_fullscreen_quad_vs),
-	                                              gsl::span{VertexPosition::input_elements,
+	                                              std::span{VertexPosition::input_elements,
 	                                                        VertexPosition::input_element_count});
 }
 

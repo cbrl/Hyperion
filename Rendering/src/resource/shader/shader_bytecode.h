@@ -15,7 +15,7 @@ HRESULT CompileShaderToBytecode(const fs::path& file,
 
 // Compile a shader from memory
 [[nodiscard]]
-HRESULT CompileShaderToBytecode(gsl::span<const char> data,
+HRESULT CompileShaderToBytecode(std::string_view data,
                                 const std::string& entry_point,
                                 const std::string& target_ver,
                                 gsl::not_null<ID3DBlob**> out);
@@ -62,7 +62,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	ShaderBytecodeBuffer(gsl::span<const BYTE> bytecode_buffer)
+	ShaderBytecodeBuffer(std::span<const BYTE> bytecode_buffer)
 		: buffer(bytecode_buffer.data())
 		, size(bytecode_buffer.size()) {
 	}

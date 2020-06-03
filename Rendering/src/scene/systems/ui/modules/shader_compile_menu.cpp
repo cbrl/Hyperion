@@ -21,7 +21,7 @@ bool ShaderCompileMenu::update(Engine& engine) {
 }
 
 
-void ShaderCompileMenu::compileShader(Engine& engine, gsl::span<const char> data) const {
+void ShaderCompileMenu::compileShader(Engine& engine, std::string_view data) const {
 	using namespace render;
 	using ShaderFactory::CreateShaderFromMemory;
 

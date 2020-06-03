@@ -10,7 +10,7 @@ std::shared_ptr<ShaderT> CreateShader(ResourceMgr& resource_mgr, const std::wstr
 	if constexpr (std::is_same_v<VertexShader, ShaderT>) {
 		return resource_mgr.createOrReplace<ShaderT>(shader_name,
 		                                             ShaderBytecodeBlob(blob),
-		                                             gsl::span{VertexPositionNormalTexture::input_elements,
+		                                             std::span{VertexPositionNormalTexture::input_elements,
 		                                                       VertexPositionNormalTexture::input_element_count});
 	}
 	else {
@@ -22,7 +22,7 @@ std::shared_ptr<ShaderT> CreateShader(ResourceMgr& resource_mgr, const std::wstr
 
 template<typename ShaderT>
 std::shared_ptr<ShaderT> CreateShaderFromMemory(ResourceMgr& resource_mgr,
-                                                gsl::span<const char> data,
+                                                std::string_view data,
                                                 const std::wstring& shader_name,
                                                 const std::string& entry_point,
                                                 const std::string& target_ver) {

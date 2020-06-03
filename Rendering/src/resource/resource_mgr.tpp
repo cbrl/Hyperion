@@ -247,7 +247,7 @@ template<typename ResourceT>
 requires std::same_as<VertexShader, ResourceT>
 std::shared_ptr<VertexShader> ResourceMgr::getOrCreate(const std::wstring& guid,
                                                        const ShaderBytecode& bytecode,
-                                                       gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs) {
+                                                       std::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs) {
 	
 	return vertex_shaders.getOrCreate(guid, guid, device, bytecode, input_element_descs);
 }
@@ -256,7 +256,7 @@ template<typename ResourceT>
 requires std::same_as<VertexShader, ResourceT>
 std::shared_ptr<VertexShader> ResourceMgr::createOrReplace(const std::wstring& guid,
                                                            const ShaderBytecode& bytecode,
-                                                           gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs) {
+                                                           std::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs) {
 
 	return vertex_shaders.createOrReplace(guid, guid, device, bytecode, input_element_descs);
 }

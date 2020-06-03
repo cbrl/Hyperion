@@ -47,7 +47,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	void bind(ID3D11DeviceContext& device_context) const noexcept {
-		Pipeline::RS::bindViewports(device_context, gsl::span{&viewport, 1});
+		Pipeline::RS::bindViewports(device_context, std::span{&viewport, 1});
 	}
 
 

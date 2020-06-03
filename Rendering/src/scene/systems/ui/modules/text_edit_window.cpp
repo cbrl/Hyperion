@@ -98,7 +98,7 @@ void TextEditWindow::draw(Engine& engine, bool& open) {
 
 	if (shader_compile_menu.update(engine)) {
 		const std::string text = getCurrEditor().GetText();
-		shader_compile_menu.compileShader(engine, gsl::make_span(text));
+		shader_compile_menu.compileShader(engine, text);
 	}
 }
 

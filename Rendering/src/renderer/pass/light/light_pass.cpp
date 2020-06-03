@@ -97,9 +97,9 @@ void LightPass::bindBuffers() {
 
 
 	// Bind the shadow buffer SRVs
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, gsl::span{directional_light_smaps->getSRVAddress(), 1});
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_POINT_LIGHT_SHADOW_MAPS,       gsl::span{point_light_smaps->getSRVAddress(), 1});
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS,        gsl::span{spot_light_smaps->getSRVAddress(), 1});
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, std::span{directional_light_smaps->getSRVAddress(), 1});
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_POINT_LIGHT_SHADOW_MAPS,       std::span{point_light_smaps->getSRVAddress(), 1});
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_SPOT_LIGHT_SHADOW_MAPS,        std::span{spot_light_smaps->getSRVAddress(), 1});
 }
 
 
@@ -133,7 +133,7 @@ void LightPass::updateShadowMaps() {
 
 	// Clear SRVs
 	ID3D11ShaderResourceView* const srvs[3] = {};
-	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, gsl::span{srvs});
+	Pipeline::PS::bindSRVs(device_context, SLOT_SRV_DIRECTIONAL_LIGHT_SHADOW_MAPS, std::span{srvs});
 
 	// Get current shadow map config values
 	const auto config_res = rendering_config.getShadowMapRes();

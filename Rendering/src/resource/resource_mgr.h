@@ -247,14 +247,14 @@ public:
 	[[nodiscard]]
 	std::shared_ptr<VertexShader> getOrCreate(const std::wstring& guid,
 	                                          const ShaderBytecode& bytecode,
-	                                          gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
+	                                          std::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
 
 	template<typename ResourceT>
 	requires std::same_as<VertexShader, ResourceT>
 	[[nodiscard]]
 	std::shared_ptr<VertexShader> createOrReplace(const std::wstring& guid,
 	                                              const ShaderBytecode& bytecode,
-	                                              gsl::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
+	                                              std::span<const D3D11_INPUT_ELEMENT_DESC> input_element_descs);
 
 	template<typename ResourceT>
 	requires std::same_as<VertexShader, ResourceT>
