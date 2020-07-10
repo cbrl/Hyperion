@@ -90,13 +90,13 @@ public:
 		}
 
 		if (j.contains(ConfigTokens::smap_depth_bias))
-			cfg.smap_depth_bias = j.at(ConfigTokens::smap_depth_bias).get<i32>();
+			j.at(ConfigTokens::smap_depth_bias).get_to(cfg.smap_depth_bias);
 
 		if (j.contains(ConfigTokens::smap_slope_scaled_depth_bias))
-			cfg.smap_slope_scaled_depth_bias = j.at(ConfigTokens::smap_slope_scaled_depth_bias).get<f32>();
+			j.at(ConfigTokens::smap_slope_scaled_depth_bias).get_to(cfg.smap_slope_scaled_depth_bias);
 
 		if (j.contains(ConfigTokens::smap_depth_bias_clamp))
-			cfg.smap_depth_bias_clamp = j.at(ConfigTokens::smap_depth_bias_clamp).get<f32>();
+			j.at(ConfigTokens::smap_depth_bias_clamp).get_to(cfg.smap_depth_bias_clamp);
 	}
 
 
