@@ -21,10 +21,10 @@ public:
 	//----------------------------------------------------------------------------------
 	// Assertions
 	//----------------------------------------------------------------------------------
-	static_assert(CounterBits > 0 && CounterBits < sizeof(T) * 8,
+	static_assert((CounterBits > 0) && (CounterBits < (sizeof(T) * 8)),
 		"Invalid number of counter bits specified for Handle");
 
-	static_assert(IndexBits > 0 && IndexBits < sizeof(T) * 8,
+	static_assert((IndexBits > 0) && (IndexBits < (sizeof(T) * 8)),
 		"Invalid number of index bits specified for Handle");
 
 	static_assert((CounterBits + IndexBits) <= (sizeof(T) * 8),
@@ -34,9 +34,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	constexpr Handle() noexcept
-		: Handle(std::numeric_limits<T>::max()) {
-	}
+	constexpr Handle() noexcept = default;
 
 	constexpr explicit Handle(T value) noexcept
 		: index((value & index_bitmask) >> counter_bits)
@@ -82,8 +80,8 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Variables
 	//----------------------------------------------------------------------------------
-	T index   : IndexBits;
-	T counter : CounterBits;
+	T index   : IndexBits   = std::numeric_limits<T>::max();
+	T counter : CounterBits = std::numeric_limits<T>::max();
 
 
 	//----------------------------------------------------------------------------------
