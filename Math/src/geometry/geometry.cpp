@@ -16,10 +16,8 @@ bool intersects(const f32_3& ray_origin, const f32_3& ray_direction, const Bound
 	              - std::pow(sphere.radius(), 2);
 
 	const f32 discriminant = (b * b) - (4 * a * c);
-	if (discriminant < 0.0f)
-		return false;
 
-	return true;
+	return discriminant >= 0.0f;
 }
 
 
@@ -32,10 +30,8 @@ bool XM_CALLCONV intersects(XMVECTOR ray_origin, XMVECTOR ray_direction, const B
 	const f32 c = XMVectorGetW(XMVectorSum(ray_origin * ray_origin)) - std::pow(sphere.radius(), 2);
 
 	const f32 discriminant = (b * b) - (4 * a * c);
-	if (discriminant < 0.0f)
-		return false;
 
-	return true;
+	return discriminant >= 0.0f;
 }
 
 

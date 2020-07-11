@@ -28,8 +28,8 @@ inline std::pair<Vector<T, N>, Vector<T, N>> MinMaxPoint(const std::vector<Vecto
 
 	for (const f32_3& point : points) {
 		for (size_t i = 0; i < point.size(); ++i) {
-			min[i] = std::min(min[i], point[i]);
-			max[i] = std::fmaxf(max[i], point[i]);
+			min[i] = std::fmin(min[i], point[i]);
+			max[i] = std::fmax(max[i], point[i]);
 		}
 	}
 
