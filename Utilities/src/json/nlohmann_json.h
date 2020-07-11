@@ -2,4 +2,4 @@
 
 #include "nlohmann/json.hpp"
 
-using json = nlohmann::json;
+namespace nl = nlohmann;

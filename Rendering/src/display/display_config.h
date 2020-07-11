@@ -5,7 +5,7 @@
 #include "os/windows/windows.h"
 #include "rendering_options.h"
 #include "config/config_tokens.h"
-#include "json/json.h"
+#include "json/nlohmann_json.h"
 
 
 namespace render {
@@ -210,9 +210,9 @@ public:
 	//----------------------------------------------------------------------------------
 	// Friend Functions - JSON Serialization
 	//----------------------------------------------------------------------------------
-	friend void to_json(json& j, const DisplayConfig& cfg);
+	friend void to_json(nl::json& j, const DisplayConfig& cfg);
 
-	friend void from_json(const json& j, DisplayConfig& cfg);
+	friend void from_json(const nl::json& j, DisplayConfig& cfg);
 
 private:
 

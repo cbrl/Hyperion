@@ -1,6 +1,6 @@
 #pragma once
 
-#include "json/json.h"
+#include "json/nlohmann_json.h"
 #include "directx/directxtk.h"
 
 
@@ -45,9 +45,9 @@ public:
 	[[nodiscard]]
 	bool isKeyBound(const std::string& id) const noexcept;
 
-	friend void to_json(json& j, const KeyConfig& cfg);
+	friend void to_json(nl::json& j, const KeyConfig& cfg);
 
-	friend void from_json(const json& j, KeyConfig& cfg);
+	friend void from_json(const nl::json& j, KeyConfig& cfg);
 
 private:
 

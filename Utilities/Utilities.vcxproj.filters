@@ -161,9 +161,6 @@
     <ClInclude Include="src\json\nlohmann\json.hpp">
       <Filter>Header Files\json\nlohmann</Filter>
     </ClInclude>
-    <ClInclude Include="src\json\json.h">
-      <Filter>Header Files\json</Filter>
-    </ClInclude>
     <ClInclude Include="src\time\time.h">
       <Filter>Header Files\time</Filter>
     </ClInclude>
@@ -391,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="src\log\spdlog\details\windows_include.h">
       <Filter>Header Files\log\spdlog\details</Filter>
+    </ClInclude>
+    <ClInclude Include="src\json\nlohmann_json.h">
+      <Filter>Header Files\json</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

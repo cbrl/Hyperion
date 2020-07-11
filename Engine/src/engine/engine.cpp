@@ -2,7 +2,7 @@
 #include "engine.h"
 #include "imgui_forwarder/imgui_message_forwarder.h"
 #include "config/config_tokens.h"
-#include "json/json.h"
+#include "json/nlohmann_json.h"
 
 
 #define CONFIG_FILE "./config.json"
@@ -19,7 +19,7 @@ std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
 	KeyConfig               key_config;
 
 	// Try to process the config file
-	json config;
+	nl::json config;
 	std::ifstream file{config_file};
 
 	if (file) {
@@ -31,7 +31,7 @@ std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
 		try {
 			config.at(ConfigTokens::display_config).get_to(display_config);
 		}
-		catch (json::exception& e) {
+		catch (nl::json::exception& e) {
 			Logger::log(LogLevel::err, e.what());
 		}
 
@@ -39,7 +39,7 @@ std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
 		try {
 			config.at(ConfigTokens::render_config).get_to(render_config);
 		}
-		catch (json::exception& e) {
+		catch (nl::json::exception& e) {
 			Logger::log(LogLevel::err, e.what());
 		}
 
@@ -47,7 +47,7 @@ std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
 		try {
 			config.at(ConfigTokens::key_config).get_to(key_config);
 		}
-		catch (json::exception& e) {
+		catch (nl::json::exception& e) {
 			Logger::log(LogLevel::err, e.what());
 		}
 
@@ -148,7 +148,7 @@ void Engine::saveConfig() {
 	const auto& rendering = rendering_mgr->getRenderingConfig();
 
 	// Serialize the configuration data
-	json config;
+	nl::json config;
 	config[ConfigTokens::display_config] = display;
 	config[ConfigTokens::render_config]  = rendering;
 	config[ConfigTokens::win_title]      = WstrToStr(window->getWindowTitle());

@@ -2,7 +2,7 @@
 
 #include "datatypes/scalar_types.h"
 #include "config/config_tokens.h"
-#include "json/json.h"
+#include "json/nlohmann_json.h"
 
 
 namespace render {
@@ -76,14 +76,14 @@ public:
 	//----------------------------------------------------------------------------------
 	// Friend Functions - JSON Serialization
 	//----------------------------------------------------------------------------------
-	friend void to_json(json& j, const RenderingConfig& cfg) {
+	friend void to_json(nl::json& j, const RenderingConfig& cfg) {
 		j[ConfigTokens::smap_res]                     = cfg.smap_res;
 		j[ConfigTokens::smap_depth_bias]              = cfg.smap_depth_bias;
 		j[ConfigTokens::smap_slope_scaled_depth_bias] = cfg.smap_slope_scaled_depth_bias;
 		j[ConfigTokens::smap_depth_bias_clamp]        = cfg.smap_depth_bias_clamp;
 	}
 
-	friend void from_json(const json& j, RenderingConfig& cfg) {
+	friend void from_json(const nl::json& j, RenderingConfig& cfg) {
 		if (j.contains(ConfigTokens::smap_res)) {
 			const auto res = j.at(ConfigTokens::smap_res).get<u32>();
 			cfg.setShadowMapRes(res);

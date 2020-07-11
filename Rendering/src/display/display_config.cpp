@@ -195,7 +195,7 @@ void DisplayConfig::setNearestDisplayDesc(const u32_2& resolution,
 }
 
 
-void to_json(json& j, const DisplayConfig& cfg) {
+void to_json(nl::json& j, const DisplayConfig& cfg) {
 	const auto res = cfg.getDisplayResolution();
 	j[ConfigTokens::display_width]  = res[0];
 	j[ConfigTokens::display_height] = res[1];
@@ -206,7 +206,7 @@ void to_json(json& j, const DisplayConfig& cfg) {
 }
 
 
-void from_json(const json& j, DisplayConfig& cfg) {
+void from_json(const nl::json& j, DisplayConfig& cfg) {
 	if (j.contains(ConfigTokens::display_width) && j.contains(ConfigTokens::display_height)) {
 		u32_2 res     = {0, 0};
 		u32   refresh = 0;

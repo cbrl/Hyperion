@@ -35,11 +35,11 @@ bool KeyConfig::isKeyBound(const std::string& id) const noexcept {
 	return getKey(id) != Keyboard::None;
 }
 
-void to_json(json& j, const KeyConfig& cfg) {
+void to_json(nl::json& j, const KeyConfig& cfg) {
 	j = cfg.key_map;
 }
 
-void from_json(const json& j, KeyConfig& cfg) {
+void from_json(const nl::json& j, KeyConfig& cfg) {
 	for (const auto& [key, value] : j.items()) {
 		cfg.bindKey(key, static_cast<Keyboard::Keys>(value.get<u32>()));
 	}
