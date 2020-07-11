@@ -12,14 +12,12 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	Resource(const std::wstring& guid)
-	    : str_guid{WstrToStr(guid)}
-		, wstr_guid{guid} {
+	Resource(std::wstring_view guid)
+	    : guid(WstrToStr(guid)) {
 	}
 
-	Resource(const std::string& guid)
-	    : str_guid{guid}
-	    , wstr_guid{StrToWstr(guid)} {
+	Resource(std::string guid)
+	    : guid(std::move(guid)) {
 	}
 
 	Resource(const Resource& resource) = default;
@@ -45,17 +43,12 @@ public:
 
 	[[nodiscard]]
 	const std::string& getGUID() const noexcept {
-		return str_guid;
-	}
-
-	[[nodiscard]]
-	const std::wstring& getWGUID() const noexcept {
-		return wstr_guid;
+		return guid;
 	}
 
 	[[nodiscard]]
 	bool isFileGUID() const {
-		return fs::is_regular_file(str_guid);
+		return fs::is_regular_file(guid);
 	}
 
 
@@ -64,8 +57,7 @@ public:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	std::string  str_guid;
-	std::wstring wstr_guid;
+	std::string  guid;
 };
 
 } //namespace render
