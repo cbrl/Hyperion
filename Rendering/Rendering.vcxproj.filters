@@ -568,9 +568,6 @@
     <ClInclude Include="src\directx\d3d11.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
-    <ClInclude Include="src\directx\pipeline.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
     <ClInclude Include="src\directx\vertex\vertex_types.h">
       <Filter>Header Files\directx\vertex</Filter>
     </ClInclude>
@@ -588,6 +585,9 @@
     </ClInclude>
     <ClInclude Include="src\scene\systems\hierarchy\hierarchy_system.h">
       <Filter>Header Files\scene\systems\hierarchy</Filter>
+    </ClInclude>
+    <ClInclude Include="src\directx\pipeline.h">
+      <Filter>Header Files\directx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

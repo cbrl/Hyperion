@@ -107,9 +107,7 @@ private:
 		using map_iterator = std::conditional_t<Const, typename map_type::const_iterator, typename map_type::iterator>;
 
 		// Private map constructor
-		iterator_t(map_iterator it)
-			: it(it) {
-		}
+		iterator_t(map_iterator it) : it(it) {}
 
 	public:
 

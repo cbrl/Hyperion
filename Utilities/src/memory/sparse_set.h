@@ -20,6 +20,11 @@
 // that element. For example, the element "5" can be stored anywhere in the dense
 // array, but its index will always be found at sparse[5].
 //
+// Iteration happens over the dense array, which makes it very efficient, but also means
+// that the elements are not ordered. Adding new elements during iteration is a safe
+// operation, as is deleting the current element during iteration. However, pointers
+// and references are invalidated upon adding elements or resizing the container.
+//
 //----------------------------------------------------------------------------------
 
 template<std::unsigned_integral T>
