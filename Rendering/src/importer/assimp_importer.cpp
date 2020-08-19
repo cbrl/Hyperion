@@ -1,10 +1,10 @@
 #include "assimp_importer.h"
 #include "log/log.h"
 
-#include "assimp/scene.h"
-#include "assimp/pbrmaterial.h"
-#include "assimp/postprocess.h"
-#include "assimp/Importer.hpp"
+#include <assimp/scene.h>
+#include <assimp/pbrmaterial.h>
+#include <assimp/postprocess.h>
+#include <assimp/Importer.hpp>
 
 #include "resource/resource_mgr.h"
 #include "resource/model/material/material_factory.h"

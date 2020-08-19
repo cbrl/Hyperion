@@ -277,9 +277,6 @@
     <None Include="src\resource\shader\shader_factory.tpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Assimp\Assimp.vcxproj">
-      <Project>{57042576-e947-46c4-a2ed-eb058b2d8517}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Math\Math.vcxproj">
       <Project>{5bb75375-b1c2-48d0-ab55-e6fcd2a327b1}</Project>
     </ProjectReference>

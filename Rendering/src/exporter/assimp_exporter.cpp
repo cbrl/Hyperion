@@ -2,10 +2,10 @@
 #include "scene/components/model/model.h"
 #include "exporter/texture_exporter.h"
 
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
-#include "assimp/pbrmaterial.h"
-#include "assimp/Exporter.hpp"
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <assimp/pbrmaterial.h>
+#include <assimp/Exporter.hpp>
 
 namespace {
 
