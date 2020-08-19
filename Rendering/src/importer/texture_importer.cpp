@@ -175,6 +175,7 @@ void ImportTexture(ID3D11Device& device,
 	for (size_t i = 0; i < filenames.size(); i++) {
 		if (filenames[i].extension() == L".dds") {
 			HRESULT hr = CreateDDSTextureFromFileEx(&device,
+			                                        &device_context,
 			                                        filenames[i].c_str(),
 			                                        NULL,
 			                                        D3D11_USAGE_STAGING,
@@ -198,7 +199,7 @@ void ImportTexture(ID3D11Device& device,
 			                                        NULL,
 			                                        D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE,
 			                                        NULL,
-			                                        NULL,
+			                                        WIC_LOADER_DEFAULT,
 			                                        reinterpret_cast<ID3D11Resource**>(src_tex[i].GetAddressOf()),
 			                                        nullptr);
 			if (FAILED(hr)) {
