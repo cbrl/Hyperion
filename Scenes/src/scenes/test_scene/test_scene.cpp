@@ -114,8 +114,8 @@ void TestScene::initialize(Engine& engine) {
 
 		auto& mat = inverted_cube_bp->materials[0];
 		mat.params.base_color = {0.2f, 0.2f, 0.8f, 1.0f};
-		mat.params.roughness  = 0.8f;
-		mat.params.metalness  = 0.1f;
+		mat.params.roughness  = 1;
+		mat.params.metalness  = 0;
 	}
 
 	// Cube
@@ -126,8 +126,8 @@ void TestScene::initialize(Engine& engine) {
 
 		auto& mat = cube_bp->materials[0];
 		mat.params.base_color = {1.0f, 0.0f, 0.0f, 1.0f};
-		mat.params.roughness  = 0.3f;
-		mat.params.metalness  = 0.65f;
+		mat.params.roughness  = 0.8f;
+		mat.params.metalness  = 0;
 	}
 
 	// Cylinder
@@ -138,8 +138,8 @@ void TestScene::initialize(Engine& engine) {
 
 		auto& mat = cylinder_bp->materials[0];
 		mat.params.base_color = {0.0f, 1.0f, 0.0f, 1.0f};
-		mat.params.roughness  = 0.7f;
-		mat.params.metalness  = 0.6f;
+		mat.params.roughness  = 0.35f;
+		mat.params.metalness  = 0.95;
 	}
 
 
@@ -152,8 +152,8 @@ void TestScene::initialize(Engine& engine) {
 
 		auto& mat = sphere_bp->materials[0];
 		mat.params.base_color = {1.0f, 0.7f, 0.0f, 1.0f};
-		mat.params.roughness  = 0.5f;
-		mat.params.metalness  = 0.3f;
+		mat.params.roughness  = 0.15f;
+		mat.params.metalness  = 0;
 	}
 
 
