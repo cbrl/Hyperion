@@ -456,16 +456,36 @@ constexpr inline void Replace(std::u32string& str, std::u32string_view from, std
 //----------------------------------------------------------------------------------
 
 // Get the string representation of a type name
-template<typename T>
-constexpr std::string_view type_name() noexcept {
-#if defined(__clang__)
-	std::string_view p = __PRETTY_FUNCTION__;
-	return std::string_view{p.data() + 34, p.size() - 34 - 1};
+// https://stackoverflow.com/a/58331141
+namespace typeName {
+template <typename T>
+constexpr std::string_view wrapped_type_name() noexcept {
+#ifdef __clang__
+	return __PRETTY_FUNCTION__;
 #elif defined(__GNUC__)
-	std::string_view p = __PRETTY_FUNCTION__;
-	return std::string_view{p.data() + 49, p.find(';', 49) - 49};
+	return __PRETTY_FUNCTION__;
 #elif defined(_MSC_VER)
-	std::string_view p = __FUNCSIG__;
-	return std::string_view{p.data() + 84, p.size() - 84 - 7};
+	return __FUNCSIG__;
 #endif
+}
+
+class probe_type;
+constexpr std::string_view probe_type_name("typeName::probe_type");
+constexpr std::string_view probe_type_name_elaborated("class typeName::probe_type");
+constexpr std::string_view probe_type_name_used(wrapped_type_name<probe_type>().find(probe_type_name_elaborated) != -1 ? probe_type_name_elaborated : probe_type_name);
+
+constexpr size_t prefix_size() {
+	return wrapped_type_name<probe_type>().find(probe_type_name_used);
+}
+
+constexpr size_t suffix_size() {
+	return wrapped_type_name<probe_type>().length() - prefix_size() - probe_type_name_used.length();
+}
+}
+
+template <typename T>
+constexpr std::string_view type_name() noexcept {
+	constexpr auto type_name = wrapped_type_name<T>();
+
+	return type_name.substr(typeName::prefix_size(), type_name.length() - typeName::prefix_size() - typeName::suffix_size());
 }
