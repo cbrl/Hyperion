@@ -153,7 +153,6 @@ float3 CalculateShadowLights(float3 p_world,
 
 
 float3 CalculateLighting(float3 p_world, float3 n, Material material) {
-
 	float3 radiance = 0.0f;
 
 	float3      p_to_view      = CameraPosition() - p_world;
@@ -163,12 +162,13 @@ float3 CalculateLighting(float3 p_world, float3 n, Material material) {
 	// Calculate radiance
 	radiance += detail::CalculateLights(p_world, n, p_to_view, material);
 	radiance += detail::CalculateShadowLights(p_world, n, p_to_view, material);
+	radiance += material.emissive;
 
 	// Calculate ambient light
 	float3 ambient;
 	float3 null;
 	BRDF::Lambert(0.0f, 0.0f, 0.0f, material, ambient, null);
-	ambient *= g_ambient_intensity;
+	radiance += ambient * g_ambient_intensity;
 
 	// Calculate fog
 	#ifndef DISABLE_FOG
@@ -176,8 +176,8 @@ float3 CalculateLighting(float3 p_world, float3 n, Material material) {
 	radiance = lerp(g_fog.color, radiance, fog);
 	#endif
 
-	// Calculate final color
-	return radiance + ambient + material.emissive;
+	// Return final color
+	return radiance;
 }
 
 } //namespace Lighting
