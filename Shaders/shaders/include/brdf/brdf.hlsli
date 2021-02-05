@@ -95,11 +95,8 @@ void Microfacet(float3 l, float3 n, float3 v, Material mat, out float3 diffuse, 
 	const float3 F = F_FUNC(l_dot_h, f0);
 	const float  V = V_FUNC(n_dot_l, n_dot_v, n_dot_h, v_dot_h, alpha);
 
-	diffuse = (1.0f - F) * (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
-	diffuse = saturate(diffuse);
-
+	diffuse  = (1.0f - F) * (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
 	specular = D * F * V * 0.25f;
-	specular = saturate(specular);
 }
 
 
