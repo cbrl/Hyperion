@@ -418,41 +418,32 @@ void LightPass::renderShadowMaps(const ecs::ECS& ecs) {
 	depth_pass->bindState();
 
 	// Directional Lights
-	{
-		directional_light_smaps->bindViewport(device_context);
-		directional_light_smaps->bindRasterState(device_context);
+	directional_light_smaps->bindViewport(device_context);
+	directional_light_smaps->bindRasterState(device_context);
 
-		size_t i = 0;
-		for (const auto& camera : directional_light_cameras) {
-			directional_light_smaps->bindDSV(device_context, i++);
-			depth_pass->renderShadows(ecs, camera.world_to_light, camera.light_to_proj);
-		}
+	for (size_t i = 0; const auto& camera : directional_light_cameras) {
+		directional_light_smaps->bindDSV(device_context, i++);
+		depth_pass->renderShadows(ecs, camera.world_to_light, camera.light_to_proj);
 	}
 
 
 	// Point Lights
-	{
-		point_light_smaps->bindViewport(device_context);
-		point_light_smaps->bindRasterState(device_context);
+	point_light_smaps->bindViewport(device_context);
+	point_light_smaps->bindRasterState(device_context);
 
-		size_t i = 0;
-		for (const auto& camera : point_light_cameras) {
-			point_light_smaps->bindDSV(device_context, i++);
-			depth_pass->renderShadows(ecs, camera.world_to_light, camera.light_to_proj);
-		}
+	for (size_t i = 0; const auto& camera : point_light_cameras) {
+		point_light_smaps->bindDSV(device_context, i++);
+		depth_pass->renderShadows(ecs, camera.world_to_light, camera.light_to_proj);
 	}
 
 
 	// Spot Lights
-	{
-		spot_light_smaps->bindViewport(device_context);
-		spot_light_smaps->bindRasterState(device_context);
+	spot_light_smaps->bindViewport(device_context);
+	spot_light_smaps->bindRasterState(device_context);
 
-		size_t i = 0;
-		for (const auto& camera : spot_light_cameras) {
-			spot_light_smaps->bindDSV(device_context, i++);
-			depth_pass->renderShadows(ecs, camera.world_to_light, camera.light_to_proj);
-		}
+	for (size_t i = 0; const auto& camera : spot_light_cameras) {
+		spot_light_smaps->bindDSV(device_context, i++);
+		depth_pass->renderShadows(ecs, camera.world_to_light, camera.light_to_proj);
 	}
 }
 
