@@ -1,9 +1,12 @@
-#pragma once
+module;
 
 #include "component/component.h"
+#include "directxmath/directxmath.h"
+
+export module components.motor.mouse_rotation;
 
 
-class MouseRotation final : public ecs::Component<MouseRotation> {
+export class MouseRotation final : public ecs::Component<MouseRotation> {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

@@ -163,27 +163,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\scenes\test_scene\systems\motor\axis_orbit_system.cpp" />
-    <ClCompile Include="src\scenes\test_scene\systems\motor\axis_rotation_system.cpp" />
-    <ClCompile Include="src\scenes\test_scene\systems\motor\camera_motor_system.cpp" />
-    <ClCompile Include="src\scenes\test_scene\systems\motor\mouse_rotation_system.cpp" />
-    <ClCompile Include="src\scenes\test_scene\test_scene.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\scenes\test_scene\components\components.h" />
-    <ClInclude Include="src\scenes\test_scene\components\motor\axis_orbit.h" />
-    <ClInclude Include="src\scenes\test_scene\components\motor\axis_rotation.h" />
-    <ClInclude Include="src\scenes\test_scene\components\motor\camera_movement.h" />
-    <ClInclude Include="src\scenes\test_scene\components\motor\mouse_rotation.h" />
-    <ClInclude Include="src\scenes\test_scene\entities\basic\player_camera.h" />
-    <ClInclude Include="src\scenes\test_scene\entities\entities.h" />
-    <ClInclude Include="src\scenes\test_scene\events\events.h" />
-    <ClInclude Include="src\scenes\test_scene\systems\motor\axis_orbit_system.h" />
-    <ClInclude Include="src\scenes\test_scene\systems\motor\axis_rotation_system.h" />
-    <ClInclude Include="src\scenes\test_scene\systems\motor\camera_motor_system.h" />
-    <ClInclude Include="src\scenes\test_scene\systems\motor\mouse_rotation_system.h" />
-    <ClInclude Include="src\scenes\test_scene\systems\systems.h" />
-    <ClInclude Include="src\scenes\test_scene\test_scene.h" />
+    <ClCompile Include="src\scenes\test_scene\components\motor\axis_orbit.ixx" />
+    <ClCompile Include="src\scenes\test_scene\components\motor\axis_rotation.ixx" />
+    <ClCompile Include="src\scenes\test_scene\components\motor\camera_movement.ixx" />
+    <ClCompile Include="src\scenes\test_scene\components\motor\mouse_rotation.ixx" />
+    <ClCompile Include="src\scenes\test_scene\entities\player_camera.ixx" />
+    <ClCompile Include="src\scenes\test_scene\systems\motor\axis_orbit_system.ixx" />
+    <ClCompile Include="src\scenes\test_scene\systems\motor\axis_rotation_system.ixx" />
+    <ClCompile Include="src\scenes\test_scene\systems\motor\camera_motor_system.ixx" />
+    <ClCompile Include="src\scenes\test_scene\systems\motor\mouse_rotation_system.ixx" />
+    <ClCompile Include="src\scenes\test_scene\test_scene.ixx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

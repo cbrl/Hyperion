@@ -1,10 +1,12 @@
-#pragma once
+module;
 
 #include "component/component.h"
 #include "directxmath/directxmath.h"
 
+export module components.motor.camera_movement;
 
-class CameraMovement final : public ecs::Component<CameraMovement> {
+
+export class CameraMovement final : public ecs::Component<CameraMovement> {
 	friend class CameraMotorSystem;
 
 public:

@@ -1,9 +1,11 @@
-#pragma once
+module;
 
 #include "component/component.h"
 
+export module components.motor.axis_rotation;
 
-class AxisRotation final : public ecs::Component<AxisRotation> {
+
+export class AxisRotation final : public ecs::Component<AxisRotation> {
 public:
 	//----------------------------------------------------------------------------------
 	// Axis Enum
