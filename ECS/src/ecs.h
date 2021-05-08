@@ -75,38 +75,38 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Add a component to the entity
-	template<typename ComponentT, typename... ArgsT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
+	template<typename ComponentT, typename... ArgsT> requires std::derived_from<ComponentT, IComponent>
 	ComponentT& add(handle64 entity, ArgsT&& ... args);
 
 	// Remove a component from the entity
-	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
+	template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 	void remove(handle64 entity);
 
 	// Remove a component from the entity
 	void remove(handle64 entity, IComponent& component);
 
 	// Get the component of the specified type
-	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
+	template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 	[[nodiscard]]
 	ComponentT& get(handle64 entity);
 
 	// Get the component of the specified type
-	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
+	template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 	[[nodiscard]]
 	const ComponentT& get(handle64 entity) const;
 
 	// Get the component of the specified type, if it exists.
-	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
+	template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 	[[nodiscard]]
 	ComponentT* tryGet(handle64 entity);
 
 	// Get the component of the specified type, if it exists.
-	template<typename ComponentT, typename = std::enable_if_t<std::is_base_of_v<IComponent, ComponentT>>>
+	template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 	[[nodiscard]]
 	const ComponentT* tryGet(handle64 entity) const;
 
 	// Check if the entity contains the specified component
-	template<typename ComponentT>
+	template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 	[[nodiscard]]
 	bool has(handle64 entity) const;
 
@@ -116,38 +116,38 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Add a system to the ECS
-	template<typename SystemT, typename... ArgsT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
+	template<typename SystemT, typename... ArgsT> requires std::derived_from<SystemT, ISystem>
 	SystemT& add(ArgsT&&... args);
 
 	// Remove a system from the ECS
 	void remove(ISystem& system);
 
 	// Remove a system from the ECS
-	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
+	template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 	void remove();
 
 	// Get the specified system
-	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
+	template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 	[[nodiscard]]
 	SystemT& get();
 
 	// Get the specified system
-	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
+	template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 	[[nodiscard]]
 	const SystemT& get() const;
 
 	// Get the specified system, if it exists.
-	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
+	template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 	[[nodiscard]]
 	SystemT* tryGet();
 
 	// Get the specified system, if it exists.
-	template<typename SystemT, typename = std::enable_if_t<std::is_base_of_v<ISystem, SystemT>>>
+	template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 	[[nodiscard]]
 	const SystemT* tryGet() const;
 
 	// Set the priority of the specified system
-	template<typename SystemT>
+	template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 	void setSystemPriority(u32 priority);
 
 
@@ -179,24 +179,20 @@ public:
 
 	// Do something with each entity with a component of type ComponentT.
 	// Providing no template arguments will apply the action to every entity.
-	template<typename... ComponentT>
-	requires (std::derived_from<ComponentT, IComponent> && ...)
+	template<typename... ComponentT> requires (std::derived_from<ComponentT, IComponent> && ...)
 	void forEach(std::function<void(handle64)> act);
 
 	// Do something with each entity with a component of type ComponentT.
 	// Providing no template arguments will apply the action to every entity.
-	template<typename... ComponentT>
-	requires (std::derived_from<ComponentT, IComponent> && ...)
+	template<typename... ComponentT> requires (std::derived_from<ComponentT, IComponent> && ...)
 	void forEach(std::function<void(handle64)> act) const;
 
 	// Do something with each component of type ComponentT
-	template<typename ComponentT>
-	requires std::derived_from<ComponentT, IComponent>
+	template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 	void forEach(std::function<void(ComponentT&)> act);
 
 	// Do something with each component of type ComponentT
-	template<typename ComponentT>
-	requires std::derived_from<ComponentT, IComponent>
+	template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 	void forEach(std::function<void(const ComponentT&)> act) const;
 
 

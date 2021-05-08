@@ -11,43 +11,43 @@ namespace ecs {
 // Components
 //----------------------------------------------------------------------------------
 
-template<typename ComponentT, typename... ArgsT, typename>
+template<typename ComponentT, typename... ArgsT> requires std::derived_from<ComponentT, IComponent>
 ComponentT& ECS::add(handle64 entity, ArgsT&&... args) {
 	return component_mgr->add<ComponentT>(entity, std::forward<ArgsT>(args)...);
 }
 
 
-template<typename ComponentT, typename>
+template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 void ECS::remove(handle64 entity) {
 	component_mgr->remove<ComponentT>(entity);
 }
 
 
-template<typename ComponentT>
+template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 bool ECS::has(handle64 entity) const {
 	return component_mgr->has<ComponentT>(entity);
 }
 
 
-template<typename ComponentT, typename>
+template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 ComponentT& ECS::get(handle64 entity) {
 	return component_mgr->get<ComponentT>(entity);
 }
 
 
-template<typename ComponentT, typename>
+template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 const ComponentT& ECS::get(handle64 entity) const {
 	return component_mgr->get<ComponentT>(entity);
 }
 
 
-template<typename ComponentT, typename>
+template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 ComponentT* ECS::tryGet(handle64 entity) {
 	return component_mgr->tryGet<ComponentT>(entity);
 }
 
 
-template<typename ComponentT, typename>
+template<typename ComponentT> requires std::derived_from<ComponentT, IComponent>
 const ComponentT* ECS::tryGet(handle64 entity) const {
 	return component_mgr->tryGet<ComponentT>(entity);
 }
@@ -58,43 +58,43 @@ const ComponentT* ECS::tryGet(handle64 entity) const {
 // Systems
 //----------------------------------------------------------------------------------
 
-template<typename SystemT, typename... ArgsT, typename>
+template<typename SystemT, typename... ArgsT> requires std::derived_from<SystemT, ISystem>
 SystemT& ECS::add(ArgsT&&... args) {
 	return system_mgr->add<SystemT>(std::forward<ArgsT>(args)...);
 }
 
 
-template<typename SystemT, typename>
+template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 void ECS::remove() {
 	system_mgr->remove<SystemT>();
 }
 
 
-template<typename SystemT, typename>
+template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 SystemT& ECS::get() {
 	return system_mgr->get<SystemT>();
 }
 
 
-template<typename SystemT, typename>
+template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 const SystemT& ECS::get() const {
 	return system_mgr->get<SystemT>();
 }
 
 
-template<typename SystemT, typename>
+template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 SystemT* ECS::tryGet() {
 	return system_mgr->tryGet<SystemT>();
 }
 
 
-template<typename SystemT, typename>
+template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 const SystemT* ECS::tryGet() const {
 	return system_mgr->tryGet<SystemT>();
 }
 
 
-template<typename SystemT>
+template<typename SystemT> requires std::derived_from<SystemT, ISystem>
 void ECS::setSystemPriority(u32 priority) {
 	system_mgr->setSystemPriority<SystemT>(priority);
 }
