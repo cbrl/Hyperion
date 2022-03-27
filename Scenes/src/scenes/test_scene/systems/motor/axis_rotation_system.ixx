@@ -1,15 +1,17 @@
 module;
 
-#include "ecs.h"
-#include "system/system.h"
-#include "scene/components/transform/transform.h"
+#include "datatypes/scalar_types.h"
+#include "memory/handle/handle.h"
+#include "directxmath/directxmath.h"
 
 export module systems.motor.axis_rotation;
 
+import ecs;
 import components.motor.axis_rotation;
+import components.transform;
 
 
-export class AxisRotationSystem final : public ecs::System<AxisRotationSystem> {
+export class AxisRotationSystem final : public ecs::System {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

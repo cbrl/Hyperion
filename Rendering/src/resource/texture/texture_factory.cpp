@@ -1,5 +1,6 @@
-#include "texture_factory.h"
-#include "resource/resource_mgr.h"
+module rendering.texture_factory;
+
+import rendering.resource_mgr;
 
 
 namespace render::TextureFactory {

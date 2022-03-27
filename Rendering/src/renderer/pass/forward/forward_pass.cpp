@@ -1,11 +1,18 @@
-#include "forward_pass.h"
+module;
 
 #include "hlsl.h"
-#include "scene/scene.h"
-#include "renderer/state/render_state_mgr.h"
-#include "resource/resource_mgr.h"
-#include "geometry/frustum/frustum.h"
-#include "resource/shader/shader_factory.h"
+
+module rendering.pass.forward_pass;
+
+import ecs;
+import components.model;
+import components.transform;
+
+import math.geometry.frustum;
+
+import rendering.render_state_mgr;
+import rendering.resource_mgr;
+import rendering.shader_factory;
 
 
 namespace render {
@@ -19,7 +26,7 @@ ForwardPass::ForwardPass(ID3D11Device& device,
     , resource_mgr(resource_mgr)
     , color_buffer(device) {
 
-	vertex_shader = ShaderFactory::CreateForwardVS(resource_mgr);
+	vertex_shader  = ShaderFactory::CreateForwardVS(resource_mgr);
 	gbuffer_shader = ShaderFactory::CreateGBufferPS(resource_mgr);
 }
 

@@ -9,30 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\buffer">
-      <UniqueIdentifier>{716b19ee-2868-4ff8-939e-0de891d6b006}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\direct3d">
-      <UniqueIdentifier>{e424a667-e1eb-469e-bc08-51f3a870cd62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\resource">
-      <UniqueIdentifier>{bc1fca6c-1753-457f-9f43-0744744b759e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\resource\font">
-      <UniqueIdentifier>{547e6de9-9daa-42d0-b80e-0738cff5b1ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\resource\mesh">
-      <UniqueIdentifier>{c73cacd1-188e-4a79-b489-133e13406687}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\resource\model">
-      <UniqueIdentifier>{bae0d58c-5e32-43bb-9503-2d352aba14e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\resource\texture">
-      <UniqueIdentifier>{52da8528-29ea-4be0-84ae-b98e567d6b8b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\resource\model\material">
-      <UniqueIdentifier>{b206604f-da1f-4ae8-b320-b5f121dc4e7b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\direct3d">
       <UniqueIdentifier>{b3d68db7-7277-43e1-9297-0884dc993d47}</UniqueIdentifier>
     </Filter>
@@ -48,26 +24,11 @@
     <Filter Include="Source Files\renderer\pass">
       <UniqueIdentifier>{5e0dbc15-4eef-4bbe-aa7b-ab9d6fd06d69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\renderer">
-      <UniqueIdentifier>{2ed68f7e-dd88-460c-9836-bf9101a1e851}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\renderer\pass">
-      <UniqueIdentifier>{643311fd-0fee-4042-911a-ce47ea6cd62e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\display">
-      <UniqueIdentifier>{30717c3a-bd23-46ff-b422-7756e12f787c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\resource\shader">
-      <UniqueIdentifier>{5bc37418-5d7e-45c0-8dad-2c14d75874f8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\resource\shader">
       <UniqueIdentifier>{5f6d5e08-406c-4a6b-b31b-dc572fe67ee3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\scene">
       <UniqueIdentifier>{dcd629f9-be31-495d-ba19-d2505100b270}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene">
-      <UniqueIdentifier>{d0ea8214-70af-4ff4-9ad1-2828bd1070d8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\renderer\output">
       <UniqueIdentifier>{3888d37e-5840-4527-87be-7cffee13effd}</UniqueIdentifier>
@@ -75,35 +36,11 @@
     <Filter Include="Source Files\renderer\state">
       <UniqueIdentifier>{85c6ad31-0237-4233-ac0e-611ef928fad1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\renderer\output">
-      <UniqueIdentifier>{64d4949f-deaf-493b-a5bf-bd58b80efc09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\renderer\state">
-      <UniqueIdentifier>{e48fa1f5-d47c-4769-b06e-7e6a622afc99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\resource\texture">
       <UniqueIdentifier>{9a06a259-8487-47ae-8ef3-35d19e071ce9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\display">
       <UniqueIdentifier>{1899d370-bffa-44e8-a55d-b259101a9d9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\components">
-      <UniqueIdentifier>{bdf618f7-4549-455f-b852-b2b3597ca157}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\components\camera">
-      <UniqueIdentifier>{7fc4b7d1-fa66-49a1-aa06-f62df56bf325}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\components\light">
-      <UniqueIdentifier>{61c1d4cc-9fd6-4636-8dd9-682708180446}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\components\model">
-      <UniqueIdentifier>{e7b26366-395b-434e-83fb-ddee0b650701}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\components\transform">
-      <UniqueIdentifier>{2bf4825f-5979-4019-b390-8cdd6549d2f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\components\text">
-      <UniqueIdentifier>{58467ef9-836a-451c-b25d-bb314f005c37}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\scene\components">
       <UniqueIdentifier>{27dce12a-6518-46cc-9615-1e46cd12ce5e}</UniqueIdentifier>
@@ -114,23 +51,8 @@
     <Filter Include="Source Files\scene\components\camera">
       <UniqueIdentifier>{4e3da56c-0525-4f82-ab1b-72b2aaa3a74b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\entities">
-      <UniqueIdentifier>{e1ccd78c-2d8e-433e-99b1-e5a5c2a4337c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\systems">
-      <UniqueIdentifier>{a6597cad-c98b-4213-b93b-835f5abc0dad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\scene\systems">
       <UniqueIdentifier>{2ba28c72-5204-4ca4-914d-45335640e0a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\systems\camera">
-      <UniqueIdentifier>{f73db253-20dd-40b7-8c62-f9ec19320f81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\systems\model">
-      <UniqueIdentifier>{d2237944-1816-4c26-9076-06241a11d530}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\systems\transform">
-      <UniqueIdentifier>{de106f36-2f19-4825-83ba-f5d2cce37ad5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\scene\systems\transform">
       <UniqueIdentifier>{c26384a7-ddb9-4873-844c-7f457eb7db98}</UniqueIdentifier>
@@ -141,23 +63,14 @@
     <Filter Include="Source Files\scene\systems\model">
       <UniqueIdentifier>{c5c9f9fc-cc61-4c11-88ef-dc97e747d175}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\events">
-      <UniqueIdentifier>{95f6f4f3-e74e-4c5e-991b-eb6bb2b29421}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\resource\model">
       <UniqueIdentifier>{80b37539-9cee-4122-8988-23d6cd19cf8a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\resource\model\material">
       <UniqueIdentifier>{5bd628fa-10e1-4f45-ae23-e389491308cb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\systems\ui">
-      <UniqueIdentifier>{d043af9f-0637-4beb-b00c-6c519abac7ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\scene\systems\ui">
       <UniqueIdentifier>{df713725-e8ec-4278-8c17-4c6a873b9e53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\systems\ui\modules">
-      <UniqueIdentifier>{7f0e6896-73f7-4a1a-9463-65b443b61fa0}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\scene\systems\ui\modules">
       <UniqueIdentifier>{0115eb10-ed66-4680-a1e1-6a4220f92f9e}</UniqueIdentifier>
@@ -165,17 +78,8 @@
     <Filter Include="Source Files\importer">
       <UniqueIdentifier>{f09ed5e3-c6f5-4513-b246-cb555949f3bf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\importer">
-      <UniqueIdentifier>{4da399a8-58ac-4ca8-83fe-c12d3d3928de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\exporter">
-      <UniqueIdentifier>{5274900a-6664-4c4a-8de1-03d1336af612}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\exporter">
       <UniqueIdentifier>{fd081443-0d05-4346-b46d-7c050713f516}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\systems\picking">
-      <UniqueIdentifier>{5bc6de02-2058-4b29-a8bc-4a1f9973ee25}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\scene\systems\picking">
       <UniqueIdentifier>{0b21dae3-37cf-4326-b838-2984d76c9fcd}</UniqueIdentifier>
@@ -183,23 +87,8 @@
     <Filter Include="Source Files\directx">
       <UniqueIdentifier>{09c1d4b9-ba29-4029-8064-ce7aa513f9c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\directx">
-      <UniqueIdentifier>{00fb8ea1-c093-4da2-a7e7-a8c76ac46416}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\directx\profiler">
-      <UniqueIdentifier>{6bdffa95-8d0b-4ee0-a5c1-45b4beb63a58}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\directx\vertex">
-      <UniqueIdentifier>{0fcb18ee-9c19-4338-a36c-eda5707973be}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\directx\profiler">
       <UniqueIdentifier>{5172072a-ad06-4714-a9dd-99b4656c9381}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\components\hierarchy">
-      <UniqueIdentifier>{5f9c62d0-38dc-45ed-8675-21be0269fd64}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\scene\components\name">
-      <UniqueIdentifier>{5073980f-eaeb-481f-af20-f4a16ae37291}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\scene\components\hierarchy">
       <UniqueIdentifier>{226bbf75-9cdb-4722-93b2-b51a6401ec5f}</UniqueIdentifier>
@@ -207,52 +96,70 @@
     <Filter Include="Source Files\scene\systems\hierarchy">
       <UniqueIdentifier>{ec284ccb-256c-4a2f-b898-725f1c904f20}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\scene\systems\hierarchy">
-      <UniqueIdentifier>{235b15b5-8389-49ba-af3a-fba1d91a7e20}</UniqueIdentifier>
+    <Filter Include="Source Files\scene\components\name">
+      <UniqueIdentifier>{258cfaea-0a55-4034-a3a4-676914fe9f8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\components\transform">
+      <UniqueIdentifier>{b154485a-160c-4c67-a18a-39b9842187ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\components\text">
+      <UniqueIdentifier>{d904a14c-30cf-4183-b7ff-becd1d486825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\components\light">
+      <UniqueIdentifier>{cb195e03-cf50-4262-94f8-4417d0b579cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\entities">
+      <UniqueIdentifier>{e1ccd78c-2d8e-433e-99b1-e5a5c2a4337c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\events">
+      <UniqueIdentifier>{95f6f4f3-e74e-4c5e-991b-eb6bb2b29421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine">
+      <UniqueIdentifier>{56f542fb-deca-4bba-99ae-da623c3450ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\engine\config">
+      <UniqueIdentifier>{4a87412c-049b-4659-a1ed-896cfee1ab1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer\pass\bounding_volume">
+      <UniqueIdentifier>{3d2b976d-28fa-4804-94f7-dba4a8456396}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer\pass\deferred">
+      <UniqueIdentifier>{b55a02d9-9a87-4446-a8a2-72fab29bee38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer\pass\depth">
+      <UniqueIdentifier>{5b95898d-91d8-4616-8740-71bc1fea3b5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer\pass\forward">
+      <UniqueIdentifier>{2bec0d03-1dbc-41f4-a688-96baee771046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer\pass\light">
+      <UniqueIdentifier>{4f69a6eb-a5f9-4542-bdd7-589bb4526c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer\pass\text">
+      <UniqueIdentifier>{65985137-4591-4952-bae2-8cee5f1339d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer\pass\sky">
+      <UniqueIdentifier>{4c3859ec-c698-4cf9-8e2e-df656def77d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource\font">
+      <UniqueIdentifier>{9c9996af-4082-448b-8d17-450fe7c34735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\resource\mesh">
+      <UniqueIdentifier>{c73cacd1-188e-4a79-b489-133e13406687}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\directx\vertex">
+      <UniqueIdentifier>{0fcb18ee-9c19-4338-a36c-eda5707973be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\directx">
+      <UniqueIdentifier>{b3d64eeb-5a6a-4051-9553-c199134a99da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\rendering_mgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\direct3d\direct3d.cpp">
-      <Filter>Source Files\direct3d</Filter>
-    </ClCompile>
-    <ClCompile Include="src\buffer\shadow_map_buffer.cpp">
-      <Filter>Source Files\buffer</Filter>
-    </ClCompile>
     <ClCompile Include="src\renderer\renderer.cpp">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.cpp">
-      <Filter>Source Files\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\pass\depth\depth_pass.cpp">
-      <Filter>Source Files\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\pass\forward\forward_pass.cpp">
-      <Filter>Source Files\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\pass\light\light_pass.cpp">
-      <Filter>Source Files\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\pass\sky\sky_pass.cpp">
-      <Filter>Source Files\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\pass\text\text_pass.cpp">
-      <Filter>Source Files\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resource\shader\shader_bytecode.cpp">
-      <Filter>Source Files\resource\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resource\shader\shader.cpp">
-      <Filter>Source Files\resource\shader</Filter>
-    </ClCompile>
     <ClCompile Include="src\resource\shader\shader_factory.cpp">
       <Filter>Source Files\resource\shader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\direct3d\swapchain.cpp">
-      <Filter>Source Files\direct3d</Filter>
     </ClCompile>
     <ClCompile Include="src\renderer\state\render_state_mgr.cpp">
       <Filter>Source Files\renderer\state</Filter>
@@ -260,361 +167,292 @@
     <ClCompile Include="src\renderer\output\output_mgr.cpp">
       <Filter>Source Files\renderer\output</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\scene.cpp">
-      <Filter>Source Files\scene</Filter>
-    </ClCompile>
     <ClCompile Include="src\resource\texture\texture_factory.cpp">
-      <Filter>Source Files\resource\texture</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resource\texture\texture.cpp">
       <Filter>Source Files\resource\texture</Filter>
     </ClCompile>
     <ClCompile Include="src\display\display_config.cpp">
       <Filter>Source Files\display</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\components\camera\perspective_camera.cpp">
+    <ClCompile Include="src\scene\components\camera\perspective_camera.ixx">
       <Filter>Source Files\scene\components\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\components\camera\orthographic_camera.cpp">
+    <ClCompile Include="src\scene\components\camera\orthographic_camera.ixx">
       <Filter>Source Files\scene\components\camera</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\components\model\model.cpp">
+    <ClCompile Include="src\scene\components\model\model.ixx">
       <Filter>Source Files\scene\components\model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\camera\camera_system.cpp">
-      <Filter>Source Files\scene\systems\camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\model\model_system.cpp">
-      <Filter>Source Files\scene\systems\model</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\transform\transform_system.cpp">
-      <Filter>Source Files\scene\systems\transform</Filter>
-    </ClCompile>
-    <ClCompile Include="src\resource\model\material\material_factory.cpp">
-      <Filter>Source Files\resource\model\material</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\ui\user_interface.cpp">
-      <Filter>Source Files\scene\systems\ui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\ui\modules\metrics_window.cpp">
-      <Filter>Source Files\scene\systems\ui\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\ui\modules\new_model_menu.cpp">
-      <Filter>Source Files\scene\systems\ui\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\ui\modules\scene_tree.cpp">
-      <Filter>Source Files\scene\systems\ui\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\ui\modules\shader_compile_menu.cpp">
-      <Filter>Source Files\scene\systems\ui\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\ui\modules\text_edit_window.cpp">
-      <Filter>Source Files\scene\systems\ui\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\ui\modules\transform_manipulator.cpp">
-      <Filter>Source Files\scene\systems\ui\modules</Filter>
     </ClCompile>
     <ClCompile Include="src\scene\systems\ui\modules\entity_details_window.cpp">
       <Filter>Source Files\scene\systems\ui\modules</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\systems\ui\modules\file_selector.cpp">
-      <Filter>Source Files\scene\systems\ui\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer\pass\deferred\deferred_pass.cpp">
-      <Filter>Source Files\renderer\pass</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\ui\modules\system_menu.cpp">
-      <Filter>Source Files\scene\systems\ui\modules</Filter>
-    </ClCompile>
-    <ClCompile Include="src\importer\texture_importer.cpp">
-      <Filter>Source Files\importer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\importer\assimp_importer.cpp">
-      <Filter>Source Files\importer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\exporter\assimp_exporter.cpp">
-      <Filter>Source Files\exporter</Filter>
-    </ClCompile>
-    <ClCompile Include="src\exporter\texture_exporter.cpp">
-      <Filter>Source Files\exporter</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene\systems\picking\picking_system.cpp">
-      <Filter>Source Files\scene\systems\picking</Filter>
-    </ClCompile>
     <ClCompile Include="src\directx\profiler\gpu_profiler.cpp">
       <Filter>Source Files\directx\profiler</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\components\hierarchy\hierarchy.cpp">
+    <ClCompile Include="src\scene\components\hierarchy\hierarchy.ixx">
       <Filter>Source Files\scene\components\hierarchy</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene\systems\hierarchy\hierarchy_system.cpp">
+    <ClCompile Include="src\scene\components\camera\camera_base.ixx">
+      <Filter>Source Files\scene\components\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\scene.ixx">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\light\ambient_light.ixx">
+      <Filter>Source Files\scene\components\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\light\directional_light.ixx">
+      <Filter>Source Files\scene\components\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\light\point_light.ixx">
+      <Filter>Source Files\scene\components\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\light\spot_light.ixx">
+      <Filter>Source Files\scene\components\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\name\name.ixx">
+      <Filter>Source Files\scene\components\name</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\text\text.ixx">
+      <Filter>Source Files\scene\components\text</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\transform\transform.ixx">
+      <Filter>Source Files\scene\components\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\core_components.ixx">
+      <Filter>Source Files\scene\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\entities\core_entities.ixx">
+      <Filter>Source Files\scene\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\events\core_events.ixx">
+      <Filter>Source Files\scene\events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\camera\camera_system.ixx">
+      <Filter>Source Files\scene\systems\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\hierarchy\hierarchy_system.ixx">
       <Filter>Source Files\scene\systems\hierarchy</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\model\model_system.ixx">
+      <Filter>Source Files\scene\systems\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\picking\picking_system.ixx">
+      <Filter>Source Files\scene\systems\picking</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\transform\transform_system.ixx">
+      <Filter>Source Files\scene\systems\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\entity_details_window.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\file_selector.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\metrics_window.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\new_model_menu.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\scene_tree.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\selectable_tree.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\shader_compile_menu.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\system_menu.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\text_edit_window.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\transform_manipulator.ixx">
+      <Filter>Source Files\scene\systems\ui\modules</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\user_interface.ixx">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\core_systems.ixx">
+      <Filter>Source Files\scene\systems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering_mgr.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\renderer.ixx">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\engine.cpp">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine\engine.ixx">
+      <Filter>Source Files\engine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\user_interface.cpp">
+      <Filter>Source Files\scene\systems\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.ixx">
+      <Filter>Source Files\renderer\pass\bounding_volume</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\deferred\deferred_pass.ixx">
+      <Filter>Source Files\renderer\pass\deferred</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\depth\depth_pass.ixx">
+      <Filter>Source Files\renderer\pass\depth</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\forward\forward_pass.ixx">
+      <Filter>Source Files\renderer\pass\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\forward\forward_pass.cpp">
+      <Filter>Source Files\renderer\pass\forward</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\light\light_pass.cpp">
+      <Filter>Source Files\renderer\pass\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\light\light_pass.ixx">
+      <Filter>Source Files\renderer\pass\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\sky\sky_pass.ixx">
+      <Filter>Source Files\renderer\pass\sky</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\text\text_pass.ixx">
+      <Filter>Source Files\renderer\pass\text</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene\scene.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\buffer\buffer_types.ixx">
+      <Filter>Source Files\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\buffer\constant_buffer.ixx">
+      <Filter>Source Files\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\buffer\shadow_map_buffer.ixx">
+      <Filter>Source Files\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\buffer\structured_buffer.ixx">
+      <Filter>Source Files\buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\material\material.ixx">
+      <Filter>Source Files\resource\model\material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\material\material_factory.ixx">
+      <Filter>Source Files\resource\model\material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\blueprint_factory.ixx">
+      <Filter>Source Files\resource\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\model_blueprint.ixx">
+      <Filter>Source Files\resource\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\model_config.ixx">
+      <Filter>Source Files\resource\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\model_output.ixx">
+      <Filter>Source Files\resource\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\mesh\mesh.ixx">
+      <Filter>Source Files\resource\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\font\font.ixx">
+      <Filter>Source Files\resource\font</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\resource.ixx">
+      <Filter>Source Files\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\shader\shader_bytecode.ixx">
+      <Filter>Source Files\resource\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\shader\shader_factory.ixx">
+      <Filter>Source Files\resource\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\texture\texture.ixx">
+      <Filter>Source Files\resource\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\texture\texture_factory.ixx">
+      <Filter>Source Files\resource\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\resource_mgr.ixx">
+      <Filter>Source Files\resource</Filter>
+    </ClCompile>
+    <ClCompile Include="src\importer\assimp_importer.ixx">
+      <Filter>Source Files\importer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\importer\model_importer.ixx">
+      <Filter>Source Files\importer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\importer\texture_importer.ixx">
+      <Filter>Source Files\importer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exporter\assimp_exporter.ixx">
+      <Filter>Source Files\exporter</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exporter\model_exporter.ixx">
+      <Filter>Source Files\exporter</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exporter\texture_exporter.ixx">
+      <Filter>Source Files\exporter</Filter>
+    </ClCompile>
+    <ClCompile Include="src\resource\shader\shader.ixx">
+      <Filter>Source Files\resource\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\direct3d\direct3d.ixx">
+      <Filter>Source Files\direct3d</Filter>
+    </ClCompile>
+    <ClCompile Include="src\direct3d\swapchain.ixx">
+      <Filter>Source Files\direct3d</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\output\output_mgr.ixx">
+      <Filter>Source Files\renderer\output</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderer\state\render_state_mgr.ixx">
+      <Filter>Source Files\renderer\state</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directx\profiler\gpu_profiler.ixx">
+      <Filter>Source Files\directx\profiler</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directx\pipeline.ixx">
+      <Filter>Source Files\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directx\vertex\vertex_types.ixx">
+      <Filter>Source Files\directx\vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="src\display\viewport.ixx">
+      <Filter>Source Files\display</Filter>
+    </ClCompile>
+    <ClCompile Include="src\display\display_config.ixx">
+      <Filter>Source Files\display</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\rendering_mgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\buffer\constant_buffer.h">
-      <Filter>Header Files\buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\buffer\buffers.h">
-      <Filter>Header Files\buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\buffer\shadow_map_buffer.h">
-      <Filter>Header Files\buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\buffer\structured_buffer.h">
-      <Filter>Header Files\buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\direct3d\direct3d.h">
-      <Filter>Header Files\direct3d</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\font\font.h">
-      <Filter>Header Files\resource\font</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\mesh\mesh.h">
-      <Filter>Header Files\resource\mesh</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\texture\texture.h">
-      <Filter>Header Files\resource\texture</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\model\model_output.h">
-      <Filter>Header Files\resource\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\model\model_blueprint.h">
-      <Filter>Header Files\resource\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\model\blueprint_factory.h">
-      <Filter>Header Files\resource\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\model\material\material.h">
-      <Filter>Header Files\resource\model\material</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\resource_mgr.h">
-      <Filter>Header Files\resource</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\resource.h">
-      <Filter>Header Files\resource</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\renderer.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\pass\bounding_volume\bounding_volume_pass.h">
-      <Filter>Header Files\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\pass\depth\depth_pass.h">
-      <Filter>Header Files\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\pass\forward\forward_pass.h">
-      <Filter>Header Files\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\pass\light\light_pass.h">
-      <Filter>Header Files\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\pass\sky\sky_pass.h">
-      <Filter>Header Files\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\pass\text\text_pass.h">
-      <Filter>Header Files\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\display\display_config.h">
-      <Filter>Header Files\display</Filter>
-    </ClInclude>
-    <ClInclude Include="src\display\viewport.h">
-      <Filter>Header Files\display</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\shader\shader_bytecode.h">
-      <Filter>Header Files\resource\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\shader\shader.h">
-      <Filter>Header Files\resource\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\shader\shader_factory.h">
-      <Filter>Header Files\resource\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\scene.h">
-      <Filter>Header Files\scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\direct3d\swapchain.h">
-      <Filter>Header Files\direct3d</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\state\render_state_mgr.h">
-      <Filter>Header Files\renderer\state</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\output\output_mgr.h">
-      <Filter>Header Files\renderer\output</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\texture\texture_factory.h">
-      <Filter>Header Files\resource\texture</Filter>
-    </ClInclude>
     <ClInclude Include="src\rendering_config.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\core_components.h">
-      <Filter>Header Files\scene\components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\camera\orthographic_camera.h">
-      <Filter>Header Files\scene\components\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\camera\perspective_camera.h">
-      <Filter>Header Files\scene\components\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\camera\camera_base.h">
-      <Filter>Header Files\scene\components\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\light\ambient_light.h">
-      <Filter>Header Files\scene\components\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\light\directional_light.h">
-      <Filter>Header Files\scene\components\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\light\point_light.h">
-      <Filter>Header Files\scene\components\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\light\spot_light.h">
-      <Filter>Header Files\scene\components\light</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\model\model.h">
-      <Filter>Header Files\scene\components\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\text\text.h">
-      <Filter>Header Files\scene\components\text</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\transform\transform.h">
-      <Filter>Header Files\scene\components\transform</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\camera\camera_system.h">
-      <Filter>Header Files\scene\systems\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\model\model_system.h">
-      <Filter>Header Files\scene\systems\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\transform\transform_system.h">
-      <Filter>Header Files\scene\systems\transform</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\model\model_config.h">
-      <Filter>Header Files\resource\model</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\entities\core_entities.h">
-      <Filter>Header Files\scene\entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\events\core_events.h">
-      <Filter>Header Files\scene\events</Filter>
-    </ClInclude>
-    <ClInclude Include="src\resource\model\material\material_factory.h">
-      <Filter>Header Files\resource\model\material</Filter>
     </ClInclude>
     <ClInclude Include="src\rendering_options.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\user_interface.h">
-      <Filter>Header Files\scene\systems\ui</Filter>
+    <ClInclude Include="src\engine\targetver.h">
+      <Filter>Source Files\engine</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\scene_tree.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\selectable_tree.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\shader_compile_menu.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\system_menu.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\text_edit_window.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\transform_manipulator.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\entity_details_window.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\file_selector.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\metrics_window.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\ui\modules\new_model_menu.h">
-      <Filter>Header Files\scene\systems\ui\modules</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer\pass\deferred\deferred_pass.h">
-      <Filter>Header Files\renderer\pass</Filter>
-    </ClInclude>
-    <ClInclude Include="src\importer\texture_importer.h">
-      <Filter>Header Files\importer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\importer\assimp_importer.h">
-      <Filter>Header Files\importer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\importer\model_importer.h">
-      <Filter>Header Files\importer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\exporter\assimp_exporter.h">
-      <Filter>Header Files\exporter</Filter>
-    </ClInclude>
-    <ClInclude Include="src\exporter\model_exporter.h">
-      <Filter>Header Files\exporter</Filter>
-    </ClInclude>
-    <ClInclude Include="src\exporter\texture_exporter.h">
-      <Filter>Header Files\exporter</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\picking\picking_system.h">
-      <Filter>Header Files\scene\systems\picking</Filter>
+    <ClInclude Include="src\engine\config\config_tokens.h">
+      <Filter>Source Files\engine\config</Filter>
     </ClInclude>
     <ClInclude Include="src\directx\d3d11.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
-    <ClInclude Include="src\directx\vertex\vertex_types.h">
-      <Filter>Header Files\directx\vertex</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directx\profiler\gpu_profiler.h">
-      <Filter>Header Files\directx\profiler</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\core_systems.h">
-      <Filter>Header Files\scene\systems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\hierarchy\hierarchy.h">
-      <Filter>Header Files\scene\components\hierarchy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\components\name\name.h">
-      <Filter>Header Files\scene\components\name</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene\systems\hierarchy\hierarchy_system.h">
-      <Filter>Header Files\scene\systems\hierarchy</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directx\pipeline.h">
-      <Filter>Header Files\directx</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\buffer\constant_buffer.tpp">
-      <Filter>Header Files\buffer</Filter>
-    </None>
-    <None Include="src\buffer\structured_buffer.tpp">
-      <Filter>Header Files\buffer</Filter>
-    </None>
-    <None Include="src\resource\mesh\mesh.tpp">
-      <Filter>Header Files\resource\mesh</Filter>
-    </None>
+    <None Include="packages.config" />
     <None Include="src\resource\model\blueprint_factory.tpp">
-      <Filter>Header Files\resource\model</Filter>
+      <Filter>Source Files\resource\model</Filter>
     </None>
     <None Include="src\resource\shader\shader.tpp">
-      <Filter>Header Files\resource\shader</Filter>
+      <Filter>Source Files\resource\shader</Filter>
     </None>
     <None Include="src\resource\resource_mgr.tpp">
-      <Filter>Header Files\resource</Filter>
+      <Filter>Source Files\resource</Filter>
     </None>
-    <None Include="src\resource\model\model_blueprint.tpp">
-      <Filter>Header Files\resource\model</Filter>
-    </None>
-    <None Include="src\resource\shader\shader_factory.tpp">
-      <Filter>Header Files\resource\shader</Filter>
-    </None>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -2,25 +2,32 @@ module;
 
 #include "datatypes/types.h"
 
-#include "engine/engine.h"
-#include "scene/scene.h"
-#include "resource/model/blueprint_factory.h"
-#include "scene/systems/picking/picking_system.h"
+#include "directx/d3d11.h"
+#include "directxmath/directxmath.h"
 
 #include "imgui.h"
 
 export module test_scene;
 
+import rendering.blueprint_factory;
+import rendering.engine;
+import rendering.rendering_mgr;
+import rendering.resource_mgr;
+import rendering.scene;
+
 // Entities
+import entities.core_entities;
 import entities.player_camera;
 
 // Components
+import components.core_components;
 import components.motor.axis_orbit;
 import components.motor.axis_rotation;
 import components.motor.camera_movement;
 import components.motor.mouse_rotation;
 
 // Systems
+import systems.core_systems;
 import systems.motor.axis_orbit;
 import systems.motor.axis_rotation;
 import systems.motor.camera_motor;

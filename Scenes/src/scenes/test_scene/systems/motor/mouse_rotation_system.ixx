@@ -1,16 +1,20 @@
 module;
 
-#include "ecs.h"
-#include "system/system.h"
+#include "datatypes/scalar_types.h"
+#include "memory/handle/handle.h"
+#include "directxmath/directxmath.h"
+
 #include "input.h"
-#include "scene/components/transform/transform.h"
+#include "key_config.h"
 
 export module systems.motor.mouse_rotation;
 
+import ecs;
 import components.motor.mouse_rotation;
+import components.transform;
 
 
-export class MouseRotationSystem final : public ecs::System<MouseRotationSystem> {
+export class MouseRotationSystem final : public ecs::System {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

@@ -1,13 +1,17 @@
 module;
 
-#include "ecs.h"
-#include "scene/components/transform/transform.h"
-#include "scene/components/camera/perspective_camera.h"
+#include "datatypes/scalar_types.h"
+#include "memory/handle/handle.h"
+
+#include "directx/d3d11.h"
 
 export module entities.player_camera;
 
+import ecs;
 import components.motor.camera_movement;
 import components.motor.mouse_rotation;
+import components.camera.perspective_camera;
+import components.transform;
 
 
 export namespace EntityTemplates {

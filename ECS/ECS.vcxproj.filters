@@ -5,27 +5,11 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Header Files\entity">
-      <UniqueIdentifier>{c657052f-6408-4c1c-b12a-a8ada8a13911}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\component">
-      <UniqueIdentifier>{84f94d8b-7785-46a6-810b-a15a7d1d78a3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\system">
-      <UniqueIdentifier>{d9f87d15-a6a6-4493-a9df-2b0bc0735e42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\entity">
       <UniqueIdentifier>{373264d1-364b-4713-9b82-6d80d082d0b1}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\system">
       <UniqueIdentifier>{c8310856-1825-4550-a6c2-1bff62e409a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\event">
-      <UniqueIdentifier>{95ef0811-e3ca-4f43-a2d1-1534ed58f7de}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\event">
       <UniqueIdentifier>{3e63c6bb-12b0-4a9a-b23a-3fb50763990d}</UniqueIdentifier>
@@ -35,66 +19,29 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\entity\entity_mgr.h">
-      <Filter>Header Files\entity</Filter>
-    </ClInclude>
-    <ClInclude Include="src\component\component.h">
-      <Filter>Header Files\component</Filter>
-    </ClInclude>
-    <ClInclude Include="src\component\component_mgr.h">
-      <Filter>Header Files\component</Filter>
-    </ClInclude>
-    <ClInclude Include="src\system\system.h">
-      <Filter>Header Files\system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\system\system_mgr.h">
-      <Filter>Header Files\system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ecs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\event\event_dispatcher.h">
-      <Filter>Header Files\event</Filter>
-    </ClInclude>
-    <ClInclude Include="src\event\event_mgr.h">
-      <Filter>Header Files\event</Filter>
-    </ClInclude>
-    <ClInclude Include="src\event\events.h">
-      <Filter>Header Files\event</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\ecs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\system\system_mgr.cpp">
-      <Filter>Source Files\system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\entity\entity_mgr.cpp">
-      <Filter>Source Files\entity</Filter>
-    </ClCompile>
-    <ClCompile Include="src\event\event_mgr.cpp">
-      <Filter>Source Files\event</Filter>
-    </ClCompile>
-    <ClCompile Include="src\component\component_mgr.cpp">
+    <ClCompile Include="src\component\component.ixx">
       <Filter>Source Files\component</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\ecs.tpp">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="src\system\system_mgr.tpp">
-      <Filter>Header Files\system</Filter>
-    </None>
-    <None Include="src\component\component_mgr.tpp">
-      <Filter>Header Files\component</Filter>
-    </None>
-    <None Include="src\event\event_dispatcher.tpp">
-      <Filter>Header Files\event</Filter>
-    </None>
-    <None Include="src\event\event_mgr.tpp">
-      <Filter>Header Files\event</Filter>
-    </None>
+    <ClCompile Include="src\entity\entity_mgr.ixx">
+      <Filter>Source Files\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\event\event_mgr.ixx">
+      <Filter>Source Files\event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\event\event_dispatcher.ixx">
+      <Filter>Source Files\event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\event\events.ixx">
+      <Filter>Source Files\event</Filter>
+    </ClCompile>
+    <ClCompile Include="src\system\system.ixx">
+      <Filter>Source Files\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ecs_core.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

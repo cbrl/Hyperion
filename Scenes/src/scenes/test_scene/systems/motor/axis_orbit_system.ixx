@@ -1,15 +1,16 @@
 module;
 
-#include "ecs.h"
-#include "system/system.h"
-#include "scene/components/transform/transform.h"
+#include "datatypes/scalar_types.h"
+#include "memory/handle/handle.h"
 
 export module systems.motor.axis_orbit;
 
+import ecs;
 import components.motor.axis_orbit;
+import components.transform;
 
 
-export class AxisOrbitSystem final : public ecs::System<AxisOrbitSystem> {
+export class AxisOrbitSystem final : public ecs::System {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

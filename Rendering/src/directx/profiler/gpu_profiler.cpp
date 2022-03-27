@@ -1,5 +1,18 @@
-#include "gpu_profiler.h"
+module;
 
+#include <chrono>
+
+#include "datatypes/types.h"
+#include "log/log.h"
+
+#include "directx/d3d11.h"
+
+module rendering.gpu_profiler;
+
+using namespace std::chrono_literals;
+
+
+namespace render {
 
 GPUProfiler::GPUProfiler(ID3D11Device& device, ID3D11DeviceContext& device_context)
     : device(device)
@@ -165,3 +178,5 @@ const std::unordered_map<std::string, f32>& GPUProfiler::getDeltaTimes() const n
 const std::unordered_map<std::string, f32>& GPUProfiler::getAverageTimes() const noexcept {
 	return avg_stage_times;
 }
+
+} //namespace render

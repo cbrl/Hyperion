@@ -93,7 +93,7 @@ public:
 		// Constructors
 		//----------------------------------------------------------------------------------
 		iterator_t() noexcept = default;
-		iterator_t(iterator_t&) noexcept = default;
+		iterator_t(const iterator_t&) noexcept = default;
 		iterator_t(iterator_t&&) noexcept = default;
 
 		//----------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ public:
 		//----------------------------------------------------------------------------------
 		// Operators - Assignment
 		//----------------------------------------------------------------------------------
-		iterator_t& operator=(iterator_t&) noexcept = default;
+		iterator_t& operator=(const iterator_t&) noexcept = default;
 		iterator_t& operator=(iterator_t&&) noexcept = default;
 
 		//----------------------------------------------------------------------------------

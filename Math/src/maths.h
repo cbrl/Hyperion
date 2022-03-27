@@ -1,6 +1,6 @@
 #pragma once
 
-#include "datatypes/types.h"
+#include <algorithm>
 #include <cmath>
 #include <numeric>
 #include <numbers>
@@ -8,6 +8,11 @@
 #include <complex>
 #include <valarray>
 #include <limits>
+
+#include <vector>
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
 
 
 // Convert an rgba vec4 [0.0f, 1.0f] to a hex color value

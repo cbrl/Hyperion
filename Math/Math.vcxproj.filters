@@ -19,43 +19,22 @@
     <Filter Include="Source Files\geometry">
       <UniqueIdentifier>{b27cb942-33ab-4563-bca8-ee8cd4d86aaa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\geometry">
-      <UniqueIdentifier>{1c896b6d-56f7-4783-815b-a372abbc35ad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\bounding_volume">
-      <UniqueIdentifier>{ec3c212a-4f75-4f9a-88ab-680504d8e3ae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\frustum">
-      <UniqueIdentifier>{4a35fe94-8df4-47a2-b95b-2b866c002858}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\shapes">
-      <UniqueIdentifier>{a992dda7-9e08-4718-a179-2210a981b236}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geometry\transform">
-      <UniqueIdentifier>{5f77c859-3a6d-439b-91cc-ea41e9d2ae3a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\geometry\frustum">
       <UniqueIdentifier>{860ea05d-cd5f-40f9-99d1-c20262f0e595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry\bounding_volume">
+      <UniqueIdentifier>{ec3c212a-4f75-4f9a-88ab-680504d8e3ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry\shapes">
+      <UniqueIdentifier>{a992dda7-9e08-4718-a179-2210a981b236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geometry\transform">
+      <UniqueIdentifier>{5f77c859-3a6d-439b-91cc-ea41e9d2ae3a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\geometry\shapes\bezier.h">
-      <Filter>Header Files\geometry\shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\shapes\shapes.h">
-      <Filter>Header Files\geometry\shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\bounding_volume\bounding_volume.h">
-      <Filter>Header Files\geometry\bounding_volume</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\frustum\frustum.h">
-      <Filter>Header Files\geometry\frustum</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\transform\transform_3d.h">
-      <Filter>Header Files\geometry\transform</Filter>
-    </ClInclude>
-    <ClInclude Include="src\geometry\geometry.h">
-      <Filter>Header Files\geometry</Filter>
+      <Filter>Source Files\geometry\shapes</Filter>
     </ClInclude>
     <ClInclude Include="src\directxmath\directxmath.h">
       <Filter>Header Files\directxmath</Filter>
@@ -71,14 +50,29 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\geometry\frustum\frustum.cpp">
-      <Filter>Source Files\geometry\frustum</Filter>
-    </ClCompile>
     <ClCompile Include="src\geometry\geometry.cpp">
       <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometry\geometry.ixx">
+      <Filter>Source Files\geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometry\bounding_volume\bounding_volume.ixx">
+      <Filter>Source Files\geometry\bounding_volume</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometry\frustum\frustum.ixx">
+      <Filter>Source Files\geometry\frustum</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometry\shapes\shapes.ixx">
+      <Filter>Source Files\geometry\shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\geometry\transform\transform_3d.ixx">
+      <Filter>Source Files\geometry\transform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="src\geometry\shapes\shapes.tpp">
+      <Filter>Source Files\geometry\shapes</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,10 +1,15 @@
-#include "entity_details_window.h"
-#include "engine/engine.h"
-#include "resource/texture/texture_factory.h"
+module;
+
 #include "os/windows/win_utils.h"
 
 #include "imgui.h"
 #include "misc/cpp/imgui_stdlib.h"
+
+module systems.user_interface.modules.entity_details_window;
+
+import rendering.engine;
+import rendering.texture_factory;
+import rendering.resource_mgr;
 
 
 // render namespace is heavily utilized here, so import it for brevity.

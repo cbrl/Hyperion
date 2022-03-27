@@ -1,4 +1,14 @@
-#include "display_config.h"
+module;
+
+#include <algorithm>
+
+#include "datatypes/types.h"
+#include "json/nlohmann_json.h"
+
+#include "directx/d3d11.h"
+#include "engine/config/config_tokens.h"
+
+module rendering.display_config;
 
 
 namespace render {

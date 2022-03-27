@@ -1,4 +1,11 @@
-#include "geometry.h"
+module;
+
+#include "datatypes/vector_types.h"
+#include "directxmath/directxmath.h"
+
+module math.geometry;
+
+import math.geometry.bounding_volume;
 
 
 bool intersects(const f32_3& ray_origin, const f32_3& ray_direction, const BoundingSphere& sphere) {

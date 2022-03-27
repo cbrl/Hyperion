@@ -1,18 +1,15 @@
-#include "user_interface.h"
-#include "modules/system_menu.h"
-#include "modules/scene_tree.h"
-#include "modules/new_model_menu.h"
-#include "modules/selectable_tree.h"
-#include "modules/text_edit_window.h"
-#include "modules/metrics_window.h"
-#include "modules/transform_manipulator.h"
+module systems.user_interface;
 
-#include "engine/engine.h"
+import events.core_events;
 
-#include "imgui.h"
+import systems.user_interface.modules.metrics_window;
+import systems.user_interface.modules.new_model_menu;
+import systems.user_interface.modules.scene_tree;
+import systems.user_interface.modules.text_edit_window;
+import systems.user_interface.modules.transform_manipulator;
 
+import rendering.engine;
 
-namespace render::systems {
 
 UserInterface::UserInterface(ecs::ECS& ecs, Engine& engine)
 	: System(ecs)
@@ -33,23 +30,13 @@ UserInterface::UserInterface(ecs::ECS& ecs, Engine& engine)
 	}
 }
 
-
 UserInterface::UserInterface(UserInterface&&) noexcept = default;
-
 
 UserInterface::~UserInterface() = default;
 
-
 UserInterface& UserInterface::operator=(UserInterface&&) noexcept = default;
 
-
-void UserInterface::onEntitySelected(const events::EntitySelectedEvent& event) {
-	scene_tree->setSelectedEntity(event.entity);
-}
-
-
-void UserInterface::update() {
-
+void UserInterface::update() override {
 	//ImGui::ShowDemoWindow();
 	ImGuizmo::BeginFrame();
 
@@ -94,4 +81,6 @@ void UserInterface::update() {
 	}
 }
 
-} //namespace render
+void UserInterface::onEntitySelected(const events::EntitySelectedEvent& event) {
+	scene_tree->setSelectedEntity(event.entity);
+}

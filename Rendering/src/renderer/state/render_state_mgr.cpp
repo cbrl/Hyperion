@@ -1,7 +1,12 @@
-#include "render_state_mgr.h"
+module;
 
+#include "directx/d3d11.h"
 #include "directx/directxtk.h"
 #include "hlsl.h"
+
+module rendering.render_state_mgr;
+
+import rendering.pipeline;
 
 
 namespace render {

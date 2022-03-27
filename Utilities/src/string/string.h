@@ -218,7 +218,7 @@ std::optional<std::string> ToStr(T val, std::chars_format fmt, int precision) no
 //----------------------------------------------------------------------------------
 
 // Convert a string to the specified integral type
-template<typename T> requires std::integral<T> && !std::same_as<T, bool>
+template<typename T> requires (std::integral<T> && !std::same_as<T, bool>)
 std::optional<T> StrTo(std::string_view str, int base = 10) noexcept {
 	if (str.empty()) {
 		return {};

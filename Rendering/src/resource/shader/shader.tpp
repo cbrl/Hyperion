@@ -1,4 +1,3 @@
-
 namespace render {
 
 template<typename ShaderT, typename StageT>

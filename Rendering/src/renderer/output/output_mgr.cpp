@@ -1,6 +1,14 @@
-#include "output_mgr.h"
+module;
+
+#include <span>
+
+#include "directx/d3d11.h"
 #include "directx/directxtk.h"
 #include "hlsl.h"
+
+module rendering.output_mgr;
+
+import rendering.pipeline;
 
 
 namespace render {

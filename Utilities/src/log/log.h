@@ -57,19 +57,16 @@ public:
 
 	// Send a message to the logger
 	template<typename T>
-	static void log(LogLevel level, const T& msg) {
+	static void log(LogLevel level, T&& msg) {
 		auto& instance = get();
-		if (instance.logger) instance.logger->log(level, msg);
+		if (instance.logger) instance.logger->log(level, std::forward<T>(msg));
 	}
 
 	// Send a message to the logger
 	template<typename... ArgsT>
-	static void log(LogLevel level,
-	                const char* fmt,
-	                const ArgsT&... args) {
-
+	static void log(LogLevel level, fmt::format_string<ArgsT...> fmt, ArgsT&&... args) {
 		auto& instance = get();
-		if (instance.logger) instance.logger->log(level, fmt, args...);
+		if (instance.logger) instance.logger->log(level, fmt, std::forward<ArgsT>(args)...);
 	}
 
 	// Set the maximum level to log

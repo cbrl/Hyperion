@@ -28,26 +28,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -94,6 +94,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <BrowseInformation>true</BrowseInformation>
+      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
     </ClCompile>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -137,148 +138,284 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\buffer\shadow_map_buffer.cpp" />
-    <ClCompile Include="src\direct3d\direct3d.cpp" />
-    <ClCompile Include="src\direct3d\swapchain.cpp" />
     <ClCompile Include="src\directx\profiler\gpu_profiler.cpp" />
     <ClCompile Include="src\display\display_config.cpp" />
-    <ClCompile Include="src\exporter\assimp_exporter.cpp" />
-    <ClCompile Include="src\exporter\texture_exporter.cpp" />
-    <ClCompile Include="src\importer\assimp_importer.cpp" />
-    <ClCompile Include="src\importer\texture_importer.cpp" />
+    <ClCompile Include="src\engine\engine.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\engine\engine.ixx" />
     <ClCompile Include="src\renderer\output\output_mgr.cpp" />
-    <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.cpp" />
-    <ClCompile Include="src\renderer\pass\deferred\deferred_pass.cpp" />
-    <ClCompile Include="src\renderer\pass\depth\depth_pass.cpp" />
-    <ClCompile Include="src\renderer\pass\forward\forward_pass.cpp" />
-    <ClCompile Include="src\renderer\pass\light\light_pass.cpp" />
-    <ClCompile Include="src\renderer\pass\sky\sky_pass.cpp" />
-    <ClCompile Include="src\renderer\pass\text\text_pass.cpp" />
-    <ClCompile Include="src\renderer\renderer.cpp" />
+    <ClCompile Include="src\renderer\pass\forward\forward_pass.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\light\light_pass.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\renderer\renderer.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+    </ClCompile>
     <ClCompile Include="src\renderer\state\render_state_mgr.cpp" />
-    <ClCompile Include="src\rendering_mgr.cpp" />
-    <ClCompile Include="src\resource\model\material\material_factory.cpp" />
-    <ClCompile Include="src\resource\shader\shader.cpp" />
-    <ClCompile Include="src\resource\shader\shader_bytecode.cpp" />
     <ClCompile Include="src\resource\shader\shader_factory.cpp" />
-    <ClCompile Include="src\resource\texture\texture.cpp" />
     <ClCompile Include="src\resource\texture\texture_factory.cpp" />
-    <ClCompile Include="src\scene\components\camera\orthographic_camera.cpp" />
-    <ClCompile Include="src\scene\components\camera\perspective_camera.cpp" />
-    <ClCompile Include="src\scene\components\hierarchy\hierarchy.cpp" />
-    <ClCompile Include="src\scene\components\model\model.cpp" />
-    <ClCompile Include="src\scene\scene.cpp" />
-    <ClCompile Include="src\scene\systems\camera\camera_system.cpp" />
-    <ClCompile Include="src\scene\systems\hierarchy\hierarchy_system.cpp" />
-    <ClCompile Include="src\scene\systems\model\model_system.cpp" />
-    <ClCompile Include="src\scene\systems\picking\picking_system.cpp" />
-    <ClCompile Include="src\scene\systems\transform\transform_system.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\entity_details_window.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\file_selector.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\metrics_window.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\new_model_menu.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\scene_tree.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\shader_compile_menu.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\system_menu.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\text_edit_window.cpp" />
-    <ClCompile Include="src\scene\systems\ui\modules\transform_manipulator.cpp" />
-    <ClCompile Include="src\scene\systems\ui\user_interface.cpp" />
+    <ClCompile Include="src\scene\components\camera\orthographic_camera.ixx" />
+    <ClCompile Include="src\scene\components\camera\perspective_camera.ixx" />
+    <ClCompile Include="src\scene\components\hierarchy\hierarchy.ixx" />
+    <ClCompile Include="src\scene\components\model\model.ixx" />
+    <ClCompile Include="src\scene\scene.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\entity_details_window.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\buffer\buffers.h" />
-    <ClInclude Include="src\buffer\constant_buffer.h" />
-    <ClInclude Include="src\buffer\shadow_map_buffer.h" />
-    <ClInclude Include="src\buffer\structured_buffer.h" />
-    <ClInclude Include="src\direct3d\direct3d.h" />
-    <ClInclude Include="src\direct3d\swapchain.h" />
-    <ClInclude Include="src\directx\d3d11.h" />
-    <ClInclude Include="src\directx\pipeline.h" />
-    <ClInclude Include="src\directx\profiler\gpu_profiler.h" />
-    <ClInclude Include="src\directx\vertex\vertex_types.h" />
-    <ClInclude Include="src\display\display_config.h" />
-    <ClInclude Include="src\display\viewport.h" />
-    <ClInclude Include="src\exporter\assimp_exporter.h" />
-    <ClInclude Include="src\exporter\model_exporter.h" />
-    <ClInclude Include="src\exporter\texture_exporter.h" />
-    <ClInclude Include="src\importer\assimp_importer.h" />
-    <ClInclude Include="src\importer\model_importer.h" />
-    <ClInclude Include="src\importer\texture_importer.h" />
-    <ClInclude Include="src\renderer\output\output_mgr.h" />
-    <ClInclude Include="src\renderer\pass\bounding_volume\bounding_volume_pass.h" />
-    <ClInclude Include="src\renderer\pass\deferred\deferred_pass.h" />
-    <ClInclude Include="src\renderer\pass\depth\depth_pass.h" />
-    <ClInclude Include="src\renderer\pass\forward\forward_pass.h" />
-    <ClInclude Include="src\renderer\pass\light\light_pass.h" />
-    <ClInclude Include="src\renderer\pass\sky\sky_pass.h" />
-    <ClInclude Include="src\renderer\pass\text\text_pass.h" />
-    <ClInclude Include="src\renderer\renderer.h" />
-    <ClInclude Include="src\renderer\state\render_state_mgr.h" />
+    <ClCompile Include="src\buffer\buffer_types.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\buffer\constant_buffer.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\buffer\shadow_map_buffer.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\buffer\structured_buffer.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\direct3d\direct3d.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\direct3d\swapchain.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClInclude Include="src\directx\d3d11.h">
+      <FileType>Document</FileType>
+    </ClInclude>
+    <ClCompile Include="src\directx\pipeline.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\directx\profiler\gpu_profiler.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\directx\vertex\vertex_types.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\display\display_config.ixx" />
+    <ClCompile Include="src\display\viewport.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClInclude Include="src\engine\config\config_tokens.h" />
+    <ClInclude Include="src\engine\targetver.h" />
+    <ClCompile Include="src\exporter\assimp_exporter.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\exporter\model_exporter.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\exporter\texture_exporter.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\importer\assimp_importer.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\importer\model_importer.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\importer\texture_importer.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\renderer\output\output_mgr.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\bounding_volume\bounding_volume_pass.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\deferred\deferred_pass.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\depth\depth_pass.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\forward\forward_pass.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\light\light_pass.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\sky\sky_pass.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\renderer\pass\text\text_pass.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\renderer\renderer.ixx" />
+    <ClCompile Include="src\renderer\state\render_state_mgr.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClInclude Include="src\rendering_config.h" />
-    <ClInclude Include="src\rendering_mgr.h" />
+    <ClCompile Include="src\rendering_mgr.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClInclude Include="src\rendering_options.h" />
-    <ClInclude Include="src\resource\font\font.h" />
-    <ClInclude Include="src\resource\mesh\mesh.h" />
-    <ClInclude Include="src\resource\model\blueprint_factory.h" />
-    <ClInclude Include="src\resource\model\material\material.h" />
-    <ClInclude Include="src\resource\model\material\material_factory.h" />
-    <ClInclude Include="src\resource\model\model_blueprint.h" />
-    <ClInclude Include="src\resource\model\model_config.h" />
-    <ClInclude Include="src\resource\model\model_output.h" />
-    <ClInclude Include="src\resource\resource.h" />
-    <ClInclude Include="src\resource\resource_mgr.h" />
-    <ClInclude Include="src\resource\shader\shader.h" />
-    <ClInclude Include="src\resource\shader\shader_bytecode.h" />
-    <ClInclude Include="src\resource\shader\shader_factory.h" />
-    <ClInclude Include="src\resource\texture\texture.h" />
-    <ClInclude Include="src\resource\texture\texture_factory.h" />
-    <ClInclude Include="src\scene\components\camera\camera_base.h" />
-    <ClInclude Include="src\scene\components\camera\orthographic_camera.h" />
-    <ClInclude Include="src\scene\components\camera\perspective_camera.h" />
-    <ClInclude Include="src\scene\components\core_components.h" />
-    <ClInclude Include="src\scene\components\hierarchy\hierarchy.h" />
-    <ClInclude Include="src\scene\components\light\ambient_light.h" />
-    <ClInclude Include="src\scene\components\light\directional_light.h" />
-    <ClInclude Include="src\scene\components\light\point_light.h" />
-    <ClInclude Include="src\scene\components\light\spot_light.h" />
-    <ClInclude Include="src\scene\components\model\model.h" />
-    <ClInclude Include="src\scene\components\name\name.h" />
-    <ClInclude Include="src\scene\components\text\text.h" />
-    <ClInclude Include="src\scene\components\transform\transform.h" />
-    <ClInclude Include="src\scene\entities\core_entities.h" />
-    <ClInclude Include="src\scene\events\core_events.h" />
-    <ClInclude Include="src\scene\scene.h" />
-    <ClInclude Include="src\scene\systems\camera\camera_system.h" />
-    <ClInclude Include="src\scene\systems\core_systems.h" />
-    <ClInclude Include="src\scene\systems\hierarchy\hierarchy_system.h" />
-    <ClInclude Include="src\scene\systems\model\model_system.h" />
-    <ClInclude Include="src\scene\systems\picking\picking_system.h" />
-    <ClInclude Include="src\scene\systems\transform\transform_system.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\entity_details_window.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\file_selector.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\metrics_window.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\new_model_menu.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\scene_tree.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\selectable_tree.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\shader_compile_menu.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\system_menu.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\text_edit_window.h" />
-    <ClInclude Include="src\scene\systems\ui\modules\transform_manipulator.h" />
-    <ClInclude Include="src\scene\systems\ui\user_interface.h" />
+    <ClCompile Include="src\resource\font\font.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\mesh\mesh.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\blueprint_factory.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\material\material.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\material\material_factory.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\model_blueprint.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\model_config.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\model\model_output.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\resource.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\resource_mgr.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\shader\shader.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\shader\shader_bytecode.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\shader\shader_factory.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\texture\texture.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\resource\texture\texture_factory.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\camera\camera_base.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\core_components.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\light\ambient_light.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\light\directional_light.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\light\point_light.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\light\spot_light.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\name\name.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\text\text.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\components\transform\transform.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\entities\core_entities.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\events\core_events.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\scene.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\camera\camera_system.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\core_systems.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\hierarchy\hierarchy_system.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\model\model_system.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\picking\picking_system.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\transform\transform_system.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\entity_details_window.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\file_selector.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\metrics_window.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\new_model_menu.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\scene_tree.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\selectable_tree.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\shader_compile_menu.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\system_menu.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\text_edit_window.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\modules\transform_manipulator.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\user_interface.cpp">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
+    </ClCompile>
+    <ClCompile Include="src\scene\systems\ui\user_interface.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="src\buffer\constant_buffer.tpp" />
-    <None Include="src\buffer\structured_buffer.tpp" />
-    <None Include="src\resource\mesh\mesh.tpp" />
     <None Include="src\resource\model\blueprint_factory.tpp" />
-    <None Include="src\resource\model\model_blueprint.tpp" />
     <None Include="src\resource\resource_mgr.tpp" />
     <None Include="src\resource\shader\shader.tpp" />
-    <None Include="src\resource\shader\shader_factory.tpp" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ECS\ECS.vcxproj">
+      <Project>{85ea96e9-7ed5-46f5-84e1-9f186a78f89a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ImGui\ImGui.vcxproj">
+      <Project>{19aec9aa-3dd9-4908-97c0-f270ae5c0c1a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Input\Input.vcxproj">
+      <Project>{2f60711d-83f1-469e-ad0a-3bae21b529f9}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Math\Math.vcxproj">
       <Project>{5bb75375-b1c2-48d0-ab55-e6fcd2a327b1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Shaders\Shaders.vcxproj">
+      <Project>{066019f4-1d8e-4455-9e16-01e32bc9819b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
+      <Project>{4a7e2159-d052-4c1d-8f94-5188286a09b8}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -6,6 +6,7 @@
 //----------------------------------------------------------------------------------
 
 // Exclude rarely used stuff from windows headers
+#undef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 
 // Don't define the windows min/max macros

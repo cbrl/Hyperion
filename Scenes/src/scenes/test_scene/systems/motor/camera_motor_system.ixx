@@ -1,17 +1,23 @@
 module;
 
-#include "engine/engine.h"
-#include "system/system.h"
-#include "event/event_dispatcher.h"
-#include "scene/events/core_events.h"
-#include "scene/components/transform/transform.h"
+#include "datatypes/scalar_types.h"
+#include "memory/handle/handle.h"
+#include "directxmath/directxmath.h"
+
+#include "input.h"
+#include "key_config.h"
 
 export module systems.motor.camera_motor;
 
+import ecs;
+import events.core_events;
+import components.camera.orthographic_camera;
+import components.camera.perspective_camera;
 import components.motor.camera_movement;
+import components.transform;
 
 
-export class CameraMotorSystem final : public ecs::System<CameraMotorSystem> {
+export class CameraMotorSystem final : public ecs::System {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

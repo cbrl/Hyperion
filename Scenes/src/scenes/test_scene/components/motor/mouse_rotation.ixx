@@ -1,12 +1,12 @@
 module;
 
-#include "component/component.h"
 #include "directxmath/directxmath.h"
 
 export module components.motor.mouse_rotation;
 
+import ecs;
 
-export class MouseRotation final : public ecs::Component<MouseRotation> {
+export class MouseRotation final : public ecs::Component {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

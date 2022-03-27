@@ -1,12 +1,12 @@
 module;
 
-#include "component/component.h"
 #include "directxmath/directxmath.h"
 
 export module components.motor.camera_movement;
 
+import ecs;
 
-export class CameraMovement final : public ecs::Component<CameraMovement> {
+export class CameraMovement final : public ecs::Component {
 	friend class CameraMotorSystem;
 
 public:

@@ -1,4 +1,4 @@
-#include "shader_factory.h"
+module rendering.shader_factory;
 
 #define BYTECODE(x) ShaderBytecodeBuffer(std::span{x, sizeof(x)})
 //#define BYTECODE(x) ShaderBytecodeBlob("./shaders/"#x)

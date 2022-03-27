@@ -1,8 +1,22 @@
-#include "renderer.h"
-#include "rendering_mgr.h"
+module;
 
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
+
+#include "directx/d3d11.h"
+
+module rendering.renderer;
+
+import rendering.display_config;
+import rendering.scene;
+import rendering.pass.bounding_volume_pass;
+import rendering.pass.deferred_pass;
+import rendering.pass.depth_pass;
+import rendering.pass.forward_pass;
+import rendering.pass.light_pass;
+import rendering.pass.sky_pass;
+import rendering.pass.text_pass;
+import rendering.pipeline;
 
 
 namespace render {

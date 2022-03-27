@@ -30,7 +30,7 @@ constexpr decltype(auto) to_array(TupleT&& tuple) {
 // A generic vector class that can be specialized for any type and dimension.
 //
 //----------------------------------------------------------------------------------
-template<typename T, size_t N> requires (N >= 2)//, typename = std::enable_if_t<(N >= 2)>>
+template<typename T, size_t N> requires (N >= 2)
 class Vector : public std::array<T, N> {
 public:
 	//----------------------------------------------------------------------------------
@@ -47,7 +47,8 @@ public:
 	}
 
 	// Construct a Vector from N or less values. Members without a provided value are 0 initialized.
-	template<typename... ArgsT> requires (std::convertible_to<ArgsT, T> && ...) && (sizeof...(ArgsT) <= N)
+	template<typename... ArgsT>
+	requires (std::convertible_to<ArgsT, T> && ...) && (sizeof...(ArgsT) <= N)
 	constexpr Vector(ArgsT&&... args) noexcept
 	    : std::array<T, N>{static_cast<T>(args)...} {
 	}
@@ -66,8 +67,8 @@ public:
 	// Construct a Vector from another Vector with size <= N and a number of values of type T. The
 	// combined size of the other vector and the number of values must be <= N. Any members
 	// without a provided value are 0 initialized.
-	template<size_t other_N,
-	         typename... ArgsT> requires (std::convertible_to<ArgsT, T> && ... ) && (other_N + sizeof...(ArgsT) <= N)
+	template<size_t other_N, typename... ArgsT>
+	requires (std::convertible_to<ArgsT, T> && ... ) && (other_N + sizeof...(ArgsT) <= N)
 	constexpr Vector(const Vector<T, other_N>& arr, ArgsT&&... args) noexcept
 	    : std::array<T, N>{ to_array(std::tuple_cat(static_cast<const std::array<T, other_N>&>(arr),
 		                                            std::make_tuple(static_cast<T>(args)...),

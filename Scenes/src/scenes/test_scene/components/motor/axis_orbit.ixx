@@ -1,11 +1,11 @@
 module;
 
 #include "directxmath/directxmath.h"
-#include "component/component.h"
 
 export module components.motor.axis_orbit;
+import ecs;
 
-export class AxisOrbit final : public ecs::Component<AxisOrbit> {
+export class AxisOrbit final : public ecs::Component {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

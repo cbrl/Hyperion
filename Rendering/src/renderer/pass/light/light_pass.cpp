@@ -1,11 +1,21 @@
-#include "light_pass.h"
+module;
 
 #include "hlsl.h"
 #include "rendering_config.h"
-#include "scene/scene.h"
-#include "renderer/state/render_state_mgr.h"
-#include "resource/resource_mgr.h"
-#include "geometry/frustum/frustum.h"
+
+module rendering.pass.light_pass;
+
+import ecs;
+import components.transform;
+import components.directional_light;
+import components.point_light;
+import components.spot_light;
+
+import math.geometry.frustum;
+
+import rendering.render_state_mgr;
+import rendering.resource_mgr;
+import rendering.pass.depth_pass;
 
 
 namespace render {

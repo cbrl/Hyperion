@@ -1,11 +1,12 @@
 module;
 
-#include "component/component.h"
+#include "datatypes/types.h"
 
 export module components.motor.axis_rotation;
 
+import ecs;
 
-export class AxisRotation final : public ecs::Component<AxisRotation> {
+export class AxisRotation final : public ecs::Component {
 public:
 	//----------------------------------------------------------------------------------
 	// Axis Enum
