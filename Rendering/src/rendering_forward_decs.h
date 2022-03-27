@@ -4,6 +4,8 @@
 // unhelpful error messages like "cannot convert MyClass* to MyClass*")
 namespace render {
 
+class Engine;
+
 class DisplayConfig;
 class ResourceMgr;
 class RenderingMgr;

@@ -1,21 +1,23 @@
 module;
 
 #include <memory>
+#include <string>
+#include <utility>
 
 #include "memory/handle/handle.h"
 
 #include "directx/d3d11.h"
+#include "rendering_forward_decs.h"
 
 export module rendering.scene;
 
 export import ecs;
 export import entities.core_entities;
-export import rendering.model_blueprint;
+export import components.core_components;
+export import systems.core_systems;
 
 
 namespace render {
-
-class Engine;
 
 export class Scene {
 public:

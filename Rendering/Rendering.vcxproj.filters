@@ -153,9 +153,6 @@
     <Filter Include="Header Files\directx">
       <UniqueIdentifier>{b3d64eeb-5a6a-4051-9553-c199134a99da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\renderer">
-      <UniqueIdentifier>{d873edab-b2d4-4b38-a48a-014d17c8b6f3}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\renderer\renderer.cpp">
@@ -448,8 +445,8 @@
     <ClInclude Include="src\directx\d3d11.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer\renderer_forward_decs.h">
-      <Filter>Header Files\renderer</Filter>
+    <ClInclude Include="src\rendering_forward_decs.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

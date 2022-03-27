@@ -1,26 +1,25 @@
 module;
 
-#include "os/windows/window.h"
+#include <functional>
+#include <memory>
+#include <string>
 
 #include "log/log.h"
+#include "os/windows/window.h"
+
 #include "sysmon/system_monitor.h"
 #include "time/stopwatch.h"
 #include "input.h"
 #include "key_config.h"
+
+#include "rendering_forward_decs.h"
 
 export module rendering.engine;
 
 export import rendering.rendering_mgr;
 export import rendering.scene;
 
-
 namespace render {
-class DisplayConfig;
-class RenderingConfig;
-class RenderingMgr;
-class Scene;
-}
-
 
 //----------------------------------------------------------------------------------
 // EngineMessageHandler
@@ -70,8 +69,8 @@ public:
 	// Constructors
 	//----------------------------------------------------------------------------------
 	Engine(std::wstring title,
-	       render::DisplayConfig display_config,
-	       render::RenderingConfig rendering_config,
+	       DisplayConfig display_config,
+	       RenderingConfig rendering_config,
 	       KeyConfig key_config);
 
 	Engine(const Engine& engine) = delete;
@@ -138,15 +137,15 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Unload the active scene (if applicable) and apply a new scene
-	void loadScene(std::unique_ptr<render::Scene>&& new_scene);
+	void loadScene(std::unique_ptr<Scene>&& new_scene);
 
 	[[nodiscard]]
-	render::Scene& getScene() {
+	Scene& getScene() {
 		return *scene;
 	}
 
 	[[nodiscard]]
-	const render::Scene& getScene() const {
+	const Scene& getScene() const {
 		return *scene;
 	}
 
@@ -211,12 +210,12 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	render::RenderingMgr& getRenderingMgr() {
+	RenderingMgr& getRenderingMgr() {
 		return *rendering_mgr;
 	}
 
 	[[nodiscard]]
-	const render::RenderingMgr& getRenderingMgr() const {
+	const RenderingMgr& getRenderingMgr() const {
 		return *rendering_mgr;
 	}
 
@@ -226,8 +225,8 @@ private:
 	// Member Functions - Initialization
 	//----------------------------------------------------------------------------------
 	void init(std::wstring title,
-	          render::DisplayConfig display_config,
-	          render::RenderingConfig rendering_config);
+	          DisplayConfig display_config,
+	          RenderingConfig rendering_config);
 
 	void quit();
 
@@ -252,8 +251,8 @@ private:
 	std::unique_ptr<Window> window;
 
 	// Rendering
-	std::unique_ptr<render::RenderingMgr> rendering_mgr;
-	std::unique_ptr<render::Scene> scene;
+	std::unique_ptr<RenderingMgr> rendering_mgr;
+	std::unique_ptr<Scene> scene;
 
 	// Input
 	std::unique_ptr<Input> input;
@@ -269,7 +268,9 @@ private:
 };
 
 
+} //namespace engine
+
 //----------------------------------------------------------------------------------
 // Engine Setup Function
 //----------------------------------------------------------------------------------
-export std::unique_ptr<Engine> SetupEngine();
+export std::unique_ptr<render::Engine> SetupEngine();

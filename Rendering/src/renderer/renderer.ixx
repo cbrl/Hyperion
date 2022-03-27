@@ -11,7 +11,7 @@ module;
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
 
-#include "renderer_forward_decs.h"
+#include "rendering_forward_decs.h"
 
 export module rendering.renderer;
 

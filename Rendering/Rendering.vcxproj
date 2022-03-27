@@ -398,7 +398,7 @@
     <ClCompile Include="src\renderer\state\render_states.ixx">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClInclude Include="src\renderer\renderer_forward_decs.h" />
+    <ClInclude Include="src\rendering_forward_decs.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

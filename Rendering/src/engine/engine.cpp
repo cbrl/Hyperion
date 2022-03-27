@@ -1,9 +1,19 @@
 module;
 
+#include <functional>
+#include <memory>
+#include <string>
+
 #include "targetver.h"
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
+#include "io/io.h"
+#include "json/nlohmann_json.h"
+#include "os/windows/window.h"
+
 #include "imgui_forwarder/imgui_message_forwarder.h"
 #include "config/config_tokens.h"
-#include "json/nlohmann_json.h"
 
 module rendering.engine;
 
@@ -15,14 +25,14 @@ import rendering.scene;
 #define CONFIG_FILE "./config.json"
 
 
-std::unique_ptr<Engine> LoadConfig(const fs::path& config_file) {
+std::unique_ptr<render::Engine> LoadConfig(const fs::path& config_file) {
 
 	// Window title
 	std::string title = "Engine";
 
 	// Configuration classes
-	render::DisplayConfig   display_config;
-	render::RenderingConfig render_config;
+	DisplayConfig   display_config;
+	RenderingConfig render_config;
 	KeyConfig               key_config;
 
 	// Try to process the config file
@@ -107,10 +117,11 @@ LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPAR
 }
 
 
+namespace render {
 
 Engine::Engine(std::wstring title,
-               render::DisplayConfig display_config,
-               render::RenderingConfig rendering_config,
+               DisplayConfig display_config,
+               RenderingConfig rendering_config,
                KeyConfig key_config)
     : key_config(std::move(key_config)) {
 
@@ -168,8 +179,8 @@ void Engine::saveConfig() {
 
 
 void Engine::init(std::wstring title,
-                  render::DisplayConfig display_config,
-                  render::RenderingConfig rendering_config) {
+                  DisplayConfig display_config,
+                  RenderingConfig rendering_config) {
 
 	// Initialize the COM library
 	ThrowIfFailed(CoInitializeEx(NULL, COINIT_MULTITHREADED),
@@ -193,7 +204,7 @@ void Engine::init(std::wstring title,
 
 			const u32_2 size = window->getClientSize();
 			if (scene) {
-				scene->getECS().send<render::events::WindowResizeEvent>(size);
+				scene->getECS().send<events::WindowResizeEvent>(size);
 			}
 			Logger::log(LogLevel::info, "Window resized to {}x{}", size[0], size[1]);
 		};
@@ -209,7 +220,7 @@ void Engine::init(std::wstring title,
 	input = std::make_unique<Input>(gsl::make_not_null(window->getHandle()));
 
 	// Rendering Manager
-	rendering_mgr = std::make_unique<render::RenderingMgr>(
+	rendering_mgr = std::make_unique<RenderingMgr>(
 	    gsl::make_not_null(window->getHandle()),
 	    std::move(display_config),
 	    std::move(rendering_config)
@@ -231,7 +242,7 @@ void Engine::init(std::wstring title,
 }
 
 
-void Engine::loadScene(std::unique_ptr<render::Scene>&& new_scene) {
+void Engine::loadScene(std::unique_ptr<Scene>&& new_scene) {
 
 	if (scene) {
 		const auto name = scene->getName();
@@ -356,3 +367,5 @@ void Engine::processInput() const {
 		input->toggleMouseVisible();
 	}
 }
+
+} //namespace render
