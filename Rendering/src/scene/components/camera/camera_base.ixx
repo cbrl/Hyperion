@@ -1,19 +1,21 @@
 module;
 
-#include "datatypes/types.h"
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
 
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
-#include "rendering_options.h"
 
 export module rendering.camera_base;
+
+export import rendering.rendering_options;
+export import rendering.texture;
+export import rendering.viewport;
 
 import ecs;
 import rendering.buffer_types;
 import rendering.constant_buffer;
 import rendering.pipeline;
-export import rendering.texture;
-export import rendering.viewport;
 
 
 export namespace render {

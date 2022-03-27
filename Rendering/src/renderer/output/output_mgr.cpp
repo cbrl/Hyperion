@@ -1,6 +1,10 @@
 module;
 
+#include <array>
 #include <span>
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
 
 #include "directx/d3d11.h"
 #include "directx/directxtk.h"
@@ -8,7 +12,9 @@ module;
 
 module rendering.output_mgr;
 
+import rendering.display_config;
 import rendering.pipeline;
+import rendering.swapchain;
 
 
 namespace render {
@@ -86,6 +92,9 @@ gsl::not_null<ID3D11ShaderResourceView**> OutputMgr::releaseAndGetAddressOf(SRV 
 	return gsl::make_not_null(pptr);
 }
 
+void OutputMgr::resizeBuffers() {
+	createDepthBuffer(display_config.getDisplayResolution(), 1);
+}
 
 void OutputMgr::createBuffer(u32_2 resolution,
                              u32 samples,

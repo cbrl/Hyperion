@@ -1,8 +1,14 @@
 module;
 
-#include "rendering_config.h"
+#include <memory>
+#include <utility>
 
+#include "datatypes/pointer_types.h"
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
 #include "log/log.h"
+
+#include "directx/d3d11.h"
 
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
@@ -11,14 +17,15 @@ module;
 export module rendering.rendering_mgr;
 
 import rendering.direct3d;
+import rendering.display_config;
 import rendering.renderer;
+import rendering.rendering_config;
 import rendering.resource_mgr;
+import rendering.scene;
 import rendering.swapchain;
 
 
 namespace render {
-
-class Scene;
 
 export class RenderingMgr final {
 public:

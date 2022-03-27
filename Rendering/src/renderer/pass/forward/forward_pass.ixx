@@ -4,12 +4,12 @@ module;
 
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
-#include "rendering_options.h"
 
 export module rendering.pass.forward_pass;
 
 import rendering.constant_buffer;
 import rendering.pipeline;
+import rendering.rendering_options;
 import rendering.shader;
 
 

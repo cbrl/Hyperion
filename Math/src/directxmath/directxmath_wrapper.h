@@ -1,6 +1,7 @@
 #pragma once
 
 #include <DirectXMath.h>
+#include <DirectXColors.h>
 
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
@@ -13,17 +14,20 @@ using namespace DirectX;
 //----------------------------------------------------------------------------------
 [[nodiscard]]
 inline XMVECTOR XM_CALLCONV XMLoad(const i32_2* val) noexcept {
-	return XMLoadSInt2(reinterpret_cast<const XMINT2*>(val));
+	const auto dx_val = XMINT2{(*val)[0], (*val)[1]};
+	return XMLoadSInt2(&dx_val);
 }
 
 [[nodiscard]]
 inline XMVECTOR XM_CALLCONV XMLoad(const i32_3* val) noexcept {
-	return XMLoadSInt3(reinterpret_cast<const XMINT3*>(val));
+	const auto dx_val = XMINT3{(*val)[0], (*val)[1], (*val)[2]};
+	return XMLoadSInt3(&dx_val);
 }
 
 [[nodiscard]]
 inline XMVECTOR XM_CALLCONV XMLoad(const i32_4* val) noexcept {
-	return XMLoadSInt4(reinterpret_cast<const XMINT4*>(val));
+	const auto dx_val = XMINT4{(*val)[0], (*val)[1], (*val)[2], (*val)[3]};
+	return XMLoadSInt4(&dx_val);
 }
 
 
@@ -37,17 +41,20 @@ inline XMVECTOR XM_CALLCONV XMLoad(const u32* val) noexcept {
 
 [[nodiscard]]
 inline XMVECTOR XM_CALLCONV XMLoad(const u32_2* val) noexcept {
-	return XMLoadUInt2(reinterpret_cast<const XMUINT2*>(val));
+	const auto dx_val = XMUINT2{(*val)[0], (*val)[1]};
+	return XMLoadUInt2(&dx_val);
 }
 
 [[nodiscard]]
 inline XMVECTOR XM_CALLCONV XMLoad(const u32_3* val) noexcept {
-	return XMLoadUInt3(reinterpret_cast<const XMUINT3*>(val));
+	const auto dx_val = XMUINT3{(*val)[0], (*val)[1], (*val)[2]};
+	return XMLoadUInt3(&dx_val);
 }
 
 [[nodiscard]]
 inline XMVECTOR XM_CALLCONV XMLoad(const u32_4* val) noexcept {
-	return XMLoadUInt4(reinterpret_cast<const XMUINT4*>(val));
+	const auto dx_val = XMUINT4{(*val)[0], (*val)[1], (*val)[2], (*val)[3]};
+	return XMLoadUInt4(&dx_val);
 }
 
 
@@ -61,17 +68,20 @@ inline XMVECTOR XM_CALLCONV XMLoad(const f32* val) noexcept {
 
 [[nodiscard]]
 inline XMVECTOR XM_CALLCONV XMLoad(const f32_2* val) noexcept {
-	return XMLoadFloat2(reinterpret_cast<const XMFLOAT2*>(val));
+	const auto dx_val = XMFLOAT2{(*val)[0], (*val)[1]};
+	return XMLoadFloat2(&dx_val);
 }
 
 [[nodiscard]]
 inline XMVECTOR XM_CALLCONV XMLoad(const f32_3* val) noexcept {
-	return XMLoadFloat3(reinterpret_cast<const XMFLOAT3*>(val));
+	const auto dx_val = XMFLOAT3{(*val)[0], (*val)[1],(*val)[2]};
+	return XMLoadFloat3(&dx_val);
 }
 
 [[nodiscard]]
 inline XMVECTOR XM_CALLCONV XMLoad(const f32_4* val) noexcept {
-	return XMLoadFloat4(reinterpret_cast<const XMFLOAT4*>(val));
+	const auto dx_val = XMFLOAT4{(*val)[0], (*val)[1], (*val)[2], (*val)[3]};
+	return XMLoadFloat4(&dx_val);
 }
 
 

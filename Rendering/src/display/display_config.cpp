@@ -2,7 +2,7 @@ module;
 
 #include <algorithm>
 
-#include "datatypes/types.h"
+#include "datatypes/scalar_types.h"
 #include "json/nlohmann_json.h"
 
 #include "directx/d3d11.h"

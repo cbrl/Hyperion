@@ -1,9 +1,12 @@
 module;
 
 #include <concepts>
+#include <functional>
+#include <memory>
+#include <string>
 #include <type_traits>
 
-#include "datatypes/types.h"
+#include "datatypes/scalar_types.h"
 #include "memory/managed_resource_map.h"
 
 #include "directx/d3d11.h"

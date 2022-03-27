@@ -1,6 +1,8 @@
 module;
 
-#include "datatypes/types.h"
+#include <string>
+
+#include "datatypes/scalar_types.h"
 #include "directx/d3d11.h"
 
 export module rendering.texture;

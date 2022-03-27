@@ -2,8 +2,8 @@ module;
 
 #include <memory>
 
-#include <DirectXColors.h>
 #include "directx/directxtk.h"
+#include "directxmath/directxmath.h"
 
 export module components.text;
 
@@ -48,7 +48,7 @@ public:
 
 	[[nodiscard]]
 	const SpriteFont& getFont() const {
-		return *font;
+		return font->getSpriteFont();
 	}
 
 

@@ -1,7 +1,11 @@
-#pragma once
+module;
 
 #include "datatypes/scalar_types.h"
 
+export module rendering.render_states;
+
+
+export {
 
 enum class BlendStates : u8 {
 	Opaque = 0,
@@ -38,3 +42,5 @@ enum class SamplerStates : u8 {
 	PCF,
 	StateCount
 };
+
+} //export

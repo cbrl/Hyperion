@@ -5,6 +5,9 @@ module;
 
 #include "hlsl.h"
 
+#include "directx/d3d11.h"
+#include "directxmath/directxmath.h"
+
 export module rendering.pass.depth_pass;
 
 import ecs;
@@ -15,6 +18,7 @@ import math.geometry.frustum;
 
 import rendering.buffer_types;
 import rendering.constant_buffer;
+import rendering.pipeline;
 import rendering.render_state_mgr;
 import rendering.resource_mgr;
 import rendering.shader_factory;

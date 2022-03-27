@@ -7,25 +7,11 @@ namespace render {
 
 template<typename ResourceT, typename VertexT>
 requires std::same_as<ModelBlueprint, ResourceT>
-std::shared_ptr<ModelBlueprint> ResourceMgr::getOrCreate(const std::wstring& filename, const ModelConfig<VertexT>& config) {
-
-	return models.getOrCreate(filename, device, *this, filename, config);
-}
-
-template<typename ResourceT, typename VertexT>
-requires std::same_as<ModelBlueprint, ResourceT>
 std::shared_ptr<ModelBlueprint> ResourceMgr::getOrCreate(const std::wstring& name,
 	                                                     const ModelOutput& model_data,
 	                                                     const ModelConfig<VertexT>& config) {
 
 	return models.getOrCreate(name, device, model_data, config);
-}
-
-template<typename ResourceT, typename VertexT>
-requires std::same_as<ModelBlueprint, ResourceT>
-std::shared_ptr<ModelBlueprint> ResourceMgr::createOrReplace(const std::wstring& filename, const ModelConfig<VertexT>& config) {
-
-	return models.createOrReplace(filename, device, *this, filename, config);
 }
 
 template<typename ResourceT, typename VertexT>

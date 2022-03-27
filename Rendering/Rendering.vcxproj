@@ -251,11 +251,15 @@
     <ClCompile Include="src\renderer\state\render_state_mgr.ixx">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClInclude Include="src\rendering_config.h" />
+    <ClCompile Include="src\rendering_config.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClCompile Include="src\rendering_mgr.ixx">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClInclude Include="src\rendering_options.h" />
+    <ClCompile Include="src\rendering_options.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClCompile Include="src\resource\font\font.ixx">
       <FileType>Document</FileType>
     </ClCompile>
@@ -391,6 +395,10 @@
     <ClCompile Include="src\scene\systems\ui\user_interface.ixx">
       <FileType>Document</FileType>
     </ClCompile>
+    <ClCompile Include="src\renderer\state\render_states.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClInclude Include="src\renderer\renderer_forward_decs.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

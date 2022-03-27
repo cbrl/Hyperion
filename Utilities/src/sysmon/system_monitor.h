@@ -2,7 +2,6 @@
 
 #include "datatypes/scalar_types.h"
 #include "time/stopwatch.h"
-#include "os/windows/windows.h"
 #include "os/windows/win_utils.h"
 
 #include <Psapi.h>

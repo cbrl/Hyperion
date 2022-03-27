@@ -1,15 +1,16 @@
 module;
 
 #include "datatypes/types.h"
+#include "memory/handle/handle.h"
 
 #include "directx/d3d11.h"
 #include "directx/directxtk.h"
-#include "rendering_options.h"
 
 export module rendering.pass.deferred_pass;
 
 import rendering.pipeline;
 import rendering.render_state_mgr;
+import rendering.rendering_options;
 import rendering.resource_mgr;
 import rendering.shader_factory;
 

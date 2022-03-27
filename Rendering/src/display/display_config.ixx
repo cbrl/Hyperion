@@ -1,13 +1,13 @@
 module;
 
-#include "datatypes/types.h"
-#include "os/windows/windows.h"
-#include "json/nlohmann_json.h"
+#include <vector>
 
+#include "json/nlohmann_json.h"
 #include "directx/d3d11.h"
-#include "rendering_options.h"
 
 export module rendering.display_config;
+
+export import rendering.rendering_options;
 
 
 export namespace render {

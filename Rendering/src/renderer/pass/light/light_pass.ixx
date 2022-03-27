@@ -3,15 +3,15 @@ module;
 #include <memory>
 #include <vector>
 
+#include "datatypes/types.h"
+
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
-#include "datatypes/types.h"
 
 export module rendering.pass.light_pass;
 
 import rendering.buffer_types;
 import rendering.constant_buffer;
-import rendering.pipeline;
 import rendering.structured_buffer;
 import rendering.shadow_map_buffer;
 

@@ -1,3 +1,9 @@
+module;
+
+#include <span>
+
+#include "os/windows/windows.h"
+
 module rendering.shader_factory;
 
 #define BYTECODE(x) ShaderBytecodeBuffer(std::span{x, sizeof(x)})
@@ -47,6 +53,11 @@ module rendering.shader_factory;
 
 // Fullscreen Quad
 #include "compiled_headers/fullscreen_quad_vs.h"
+
+import rendering.rendering_options;
+import rendering.resource_mgr;
+import rendering.shader;
+import rendering.shader_bytecode;
 
 
 namespace render::ShaderFactory {

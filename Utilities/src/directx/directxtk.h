@@ -24,4 +24,5 @@
 #include <SpriteFont.h>
 
 
+// Pull the DirectX namespace into scope
 using namespace DirectX;

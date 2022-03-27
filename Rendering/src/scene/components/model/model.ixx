@@ -11,7 +11,7 @@ export module components.model;
 import ecs;
 import rendering.buffer_types;
 import rendering.constant_buffer;
-import rendering.model_blueprint;
+export import rendering.model_blueprint;
 
 
 //----------------------------------------------------------------------------------

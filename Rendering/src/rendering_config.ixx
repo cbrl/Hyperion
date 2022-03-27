@@ -1,11 +1,15 @@
-#pragma once
+module;
 
 #include "datatypes/scalar_types.h"
 #include "engine/config/config_tokens.h"
 #include "json/nlohmann_json.h"
 
+export module rendering.rendering_config;
 
-namespace render {
+export import rendering.rendering_options;
+
+
+export namespace render {
 
 class RenderingConfig final {
 public:

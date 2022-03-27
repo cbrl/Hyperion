@@ -7,6 +7,8 @@ module;
 
 module rendering.engine;
 
+import rendering.display_config;
+import rendering.rendering_config;
 import rendering.rendering_mgr;
 import rendering.scene;
 

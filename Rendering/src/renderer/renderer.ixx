@@ -1,8 +1,17 @@
 module;
 
+#include <chrono>
+#include <memory>
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
+
+#include "hlsl.h"
+
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
-#include "hlsl.h"
+
+#include "renderer_forward_decs.h"
 
 export module rendering.renderer;
 
@@ -11,23 +20,10 @@ import rendering.buffer_types;
 import rendering.constant_buffer;
 import rendering.output_mgr;
 import rendering.render_state_mgr;
+import rendering.rendering_config;
 
 
 namespace render {
-
-class DisplayConfig;
-class ResourceMgr;
-class RenderingMgr;
-class RenderingConfig;
-class Scene;
-class SwapChain;
-
-class LightPass;
-class ForwardPass;
-class DeferredPass;
-class SkyPass;
-class BoundingVolumePass;
-class TextPass;
 
 export class Renderer final {
 public:
@@ -48,7 +44,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~Renderer() = default;
+	~Renderer();
 
 
 	//----------------------------------------------------------------------------------

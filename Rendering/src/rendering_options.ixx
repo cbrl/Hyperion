@@ -1,9 +1,11 @@
-#pragma once
+module;
 
-#include "datatypes/types.h"
+#include "datatypes/scalar_types.h"
+
+export module rendering.rendering_options;
 
 
-namespace render {
+export namespace render {
 
 enum class AAType : u8 {
 	None = 0,

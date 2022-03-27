@@ -1,6 +1,19 @@
+module;
+
+#include <memory>
+#include <utility>
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
+
+#include "maths.h"
+
+#include "directx/d3d11.h"
+
 module rendering.texture_factory;
 
 import rendering.resource_mgr;
+import rendering.texture;
 
 
 namespace render::TextureFactory {

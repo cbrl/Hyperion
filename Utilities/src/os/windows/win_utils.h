@@ -5,10 +5,11 @@
 // Includes
 //----------------------------------------------------------------------------------
 
-#include "os/windows/windows.h"
 #include "io/io.h"
+#include "os/windows/windows.h"
 
 #include <Commdlg.h>
+#include <processthreadsapi.h>
 #include <ShObjIdl_core.h>
 
 

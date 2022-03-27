@@ -1,9 +1,19 @@
 module;
 
+#include <chrono>
+#include <memory>
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
+
+#include "hlsl.h"
+
+#include "directx/d3d11.h"
+#include "directxmath/directxmath.h"
+
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 
-#include "directx/d3d11.h"
 
 module rendering.renderer;
 
@@ -48,6 +58,11 @@ Renderer::Renderer(DisplayConfig& display_config,
 	bounding_volume_pass = std::make_unique<BoundingVolumePass>(device, device_context, *render_state_mgr, resource_mgr);
 	text_pass            = std::make_unique<TextPass>(device_context);
 }
+
+
+// This needs to be defined in this implementation file so that the unique_ptr's holding incomplete
+// types won't cause a compile error.
+Renderer::~Renderer() = default;
 
 
 void Renderer::render(Scene& scene, std::chrono::duration<f32> delta_time) {

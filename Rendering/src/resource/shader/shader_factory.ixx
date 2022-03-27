@@ -3,12 +3,14 @@ module;
 #include "datatypes/types.h"
 #include "io/io.h"
 
-#include "rendering_options.h"
+#include "directx/d3d11.h"
 
 export module rendering.shader_factory;
 
 export import rendering.shader;
+export import rendering.rendering_options;
 import rendering.resource_mgr;
+import rendering.vertex_types;
 
 
 export namespace render::ShaderFactory {

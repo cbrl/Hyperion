@@ -1,5 +1,10 @@
 module;
 
+#include <array>
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
+
 #include "directx/d3d11.h"
 
 export module rendering.output_mgr;
@@ -64,9 +69,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void resizeBuffers() {
-		createDepthBuffer(display_config.getDisplayResolution(), 1);
-	}
+	void resizeBuffers();
 
 	void bindBegin(ID3D11DeviceContext& device_context) const;
 	void bindEnd(ID3D11DeviceContext& device_context) const;

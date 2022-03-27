@@ -1,22 +1,36 @@
 module;
 
+#include <memory>
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
+#include "memory/handle/handle.h"
+
 #include "hlsl.h"
-#include "rendering_config.h"
+
+#include "directx/d3d11.h"
+#include "directxmath/directxmath.h"
 
 module rendering.pass.light_pass;
 
 import ecs;
 import components.transform;
-import components.directional_light;
-import components.point_light;
-import components.spot_light;
+import components.light.ambient_light;
+import components.light.directional_light;
+import components.light.point_light;
+import components.light.spot_light;
 
 import math.geometry.frustum;
 
-import rendering.render_state_mgr;
-import rendering.resource_mgr;
+import rendering.buffer_types;
+import rendering.constant_buffer;
 import rendering.pass.depth_pass;
-
+import rendering.pipeline;
+import rendering.render_state_mgr;
+import rendering.rendering_config;
+import rendering.resource_mgr;
+import rendering.shadow_map_buffer;
+import rendering.structured_buffer;
 
 namespace render {
 

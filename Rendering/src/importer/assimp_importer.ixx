@@ -1,5 +1,7 @@
 module;
 
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
 #include "io/io.h"
 #include "log/log.h"
 
@@ -8,10 +10,11 @@ module;
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
-module rendering.importer.model_importer:assimp_importer;
+export module rendering.importer.model_importer.assimp_importer;
 
 import rendering.resource_mgr;
 import rendering.material_factory;
+import rendering.model_output;
 
 using namespace render;
 

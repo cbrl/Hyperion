@@ -256,7 +256,7 @@ public:
 
 	// Do something with each component of type ComponentT
 	template<typename ComponentT> requires std::derived_from<ComponentT, Component>
-	void forEach(std::function<void(ComponentT&)> act) {
+	void forEach(const std::function<void(ComponentT&)>& act) {
 		if (!component_mgr->knowsComponent<ComponentT>())
 			return;
 
@@ -266,11 +266,11 @@ public:
 
 	// Do something with each component of type ComponentT
 	template<typename ComponentT> requires std::derived_from<ComponentT, Component>
-	void forEach(std::function<void(const ComponentT&)> act) const {
+	void forEach(const std::function<void(const ComponentT&)>& act) const {
 		if (!component_mgr->knowsComponent<ComponentT>())
 			return;
 
-		component_mgr->forEach<ComponentT>(act);
+		std::as_const(*component_mgr).forEach<ComponentT>(act);
 	}
 
 

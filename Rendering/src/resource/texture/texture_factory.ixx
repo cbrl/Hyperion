@@ -1,16 +1,15 @@
 module;
 
 #include <memory>
-#include "datatypes/types.h"
+#include "datatypes/vector_types.h"
 
 export module rendering.texture_factory;
 
 export import rendering.texture;
+import rendering.resource_mgr;
 
 
 namespace render {
-
-class ResourceMgr;
 
 export namespace TextureFactory {
 

@@ -1,22 +1,29 @@
 module;
 
+#include "memory/handle/handle.h"
+
 #include "hlsl.h"
+
+#include "directx/d3d11.h"
+#include "directxmath/directxmath.h"
 
 export module rendering.pass.bounding_volume_pass;
 
 import ecs;
-import components.transform;
 import components.light.directional_light;
 import components.light.point_light;
 import components.light.spot_light;
+import components.model;
+import components.transform;
 
 import math.geometry.bounding_volume;
 import math.geometry.frustum;
 
 import rendering.constant_buffer;
-import rendering.scene;
+import rendering.pipeline;
 import rendering.render_state_mgr;
 import rendering.resource_mgr;
+import rendering.scene;
 import rendering.shader_factory;
 
 

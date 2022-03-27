@@ -1,7 +1,9 @@
 #pragma once
 
-#include "maths.h"
 #include <utility> //std::pair
+#include <DirectXMath.h>
+#include "maths.h"
+
 
 
 // Include the DirectX namespace, which contains

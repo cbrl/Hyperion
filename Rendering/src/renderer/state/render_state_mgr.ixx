@@ -3,9 +3,10 @@ module;
 #include "datatypes/types.h"
 
 #include "directx/d3d11.h"
-#include "renderer/state/render_states.h"
 
 export module rendering.render_state_mgr;
+
+export import rendering.render_states;
 
 
 export namespace render {

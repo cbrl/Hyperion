@@ -1,6 +1,10 @@
 module;
 
+#include "memory/handle/handle.h"
+
 #include "hlsl.h"
+#include "directx/d3d11.h"
+#include "directxmath/directxmath.h"
 
 module rendering.pass.forward_pass;
 
@@ -10,6 +14,8 @@ import components.transform;
 
 import math.geometry.frustum;
 
+import rendering.pipeline;
+import rendering.rendering_options;
 import rendering.render_state_mgr;
 import rendering.resource_mgr;
 import rendering.shader_factory;
