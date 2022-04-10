@@ -1,3 +1,7 @@
+module;
+
+#include "memory/handle/handle.h"
+
 export module systems.camera_system;
 
 import ecs;
@@ -79,10 +83,10 @@ private:
 	void onWindowResize(const events::WindowResizeEvent& event) {
 		getECS().forEach<PerspectiveCamera>([&](PerspectiveCamera& camera) {
 			camera.getViewport().setSize(event.new_size);
-			});
+		});
 		getECS().forEach<OrthographicCamera>([&](OrthographicCamera& camera) {
 			camera.getViewport().setSize(event.new_size);
-			});
+		});
 	}
 
 

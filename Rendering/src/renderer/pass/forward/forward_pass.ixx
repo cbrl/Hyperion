@@ -5,26 +5,18 @@ module;
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
 
+#include "rendering_forward_decs.h"
+
 export module rendering.pass.forward_pass;
 
+import ecs;
 import rendering.constant_buffer;
 import rendering.pipeline;
 import rendering.rendering_options;
 import rendering.shader;
 
 
-class Model;
-class Transform;
-
-namespace ecs {
-	class ECS;
-}
-
 namespace render {
-
-class RenderStateMgr;
-class ResourceMgr;
-class Texture;
 
 export class ForwardPass final {
 public:

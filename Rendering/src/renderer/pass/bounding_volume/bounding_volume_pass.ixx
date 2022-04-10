@@ -1,5 +1,8 @@
 module;
 
+#include <span>
+
+#include "datatypes/vector_types.h"
 #include "memory/handle/handle.h"
 
 #include "hlsl.h"

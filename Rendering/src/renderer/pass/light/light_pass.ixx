@@ -8,24 +8,18 @@ module;
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
 
+#include "rendering_forward_decs.h"
+
 export module rendering.pass.light_pass;
 
+import ecs;
 import rendering.buffer_types;
 import rendering.constant_buffer;
 import rendering.structured_buffer;
 import rendering.shadow_map_buffer;
 
 
-namespace ecs {
-class ECS;
-}
-
 namespace render {
-
-class RenderingConfig;
-class RenderStateMgr;
-class ResourceMgr;
-class DepthPass;
 
 export class LightPass final {
 public:

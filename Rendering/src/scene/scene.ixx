@@ -14,7 +14,6 @@ export module rendering.scene;
 export import ecs;
 export import entities.core_entities;
 export import components.core_components;
-export import systems.core_systems;
 
 
 namespace render {

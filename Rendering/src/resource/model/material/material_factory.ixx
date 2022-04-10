@@ -1,3 +1,7 @@
+module;
+
+#include "datatypes/vector_types.h"
+
 export module rendering.material_factory;
 
 export import rendering.material;

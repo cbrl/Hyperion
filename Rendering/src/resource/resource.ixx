@@ -59,7 +59,7 @@ public:
 	// Member Variables
 	//----------------------------------------------------------------------------------
 
-	std::string  guid;
+	std::string guid;
 };
 
 } //namespace render

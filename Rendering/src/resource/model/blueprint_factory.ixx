@@ -6,7 +6,6 @@ module;
 export module rendering.blueprint_factory;
 
 export import rendering.model_config;
-import rendering.d3d11;
 import rendering.resource_mgr;
 import rendering.material_factory;
 import rendering.importer.model_importer;

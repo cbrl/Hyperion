@@ -1,5 +1,7 @@
 module;
 
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
 #include "memory/handle/handle.h"
 #include "imgui.h"
 
@@ -8,6 +10,7 @@ export module systems.user_interface.modules.new_model_menu;
 import rendering.scene;
 import rendering.resource_mgr;
 import rendering.blueprint_factory;
+import rendering.model_config;
 
 struct ID3D11Device;
 

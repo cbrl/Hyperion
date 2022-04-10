@@ -1,6 +1,7 @@
 module;
 
 #include "io/io.h"
+#include "log/log.h"
 
 export module rendering.importer.model_importer;
 
