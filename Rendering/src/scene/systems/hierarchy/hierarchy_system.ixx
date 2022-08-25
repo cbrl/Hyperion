@@ -1,5 +1,7 @@
 module;
 
+#include "memory/handle/handle.h"
+
 export module systems.hierarchy_system;
 
 import ecs;
