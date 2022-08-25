@@ -92,11 +92,7 @@ public:
 
 	// Import a model blueprint under a new entity
 	[[nodiscard]]
-	handle64 importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
-		auto handle = createEntity();
-		importModel(handle, device, blueprint);
-		return handle;
-	}
+	handle64 importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);
 
 	// Import a model blueprint under an existing entity
 	void importModel(handle64 handle, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint);

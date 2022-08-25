@@ -20,6 +20,12 @@ void Scene::tick(Engine& engine) {
 	this->update(engine);
 }
 
+handle64 Scene::importModel(ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
+	auto handle = createEntity();
+	importModel(handle, device, blueprint);
+	return handle;
+}
+
 void Scene::importModel(handle64 handle, ID3D11Device& device, const std::shared_ptr<ModelBlueprint>& blueprint) {
 	if (not ecs.valid(handle))
 		return;
