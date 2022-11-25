@@ -24,11 +24,6 @@ class ResourceMgr;
 class Texture;
 }
 
-namespace ecs {
-class ECS;
-class IComponent;
-}
-
 
 export class EntityDetailsWindow final {
 public:

@@ -1,6 +1,7 @@
 module;
 
 #include "datatypes/types.h"
+#include "memory/handle/handle.h"
 
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
@@ -63,7 +64,7 @@ protected:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void initialize(Engine& engine) {
+	void initialize(render::Engine& engine) {
 
 		using namespace render;
 		using namespace EntityTemplates;
@@ -285,7 +286,7 @@ protected:
 	}
 
 
-	void update(Engine& engine) {
+	void update(render::Engine& engine) {
 
 	}
 
