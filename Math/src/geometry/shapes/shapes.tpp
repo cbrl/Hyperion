@@ -344,14 +344,15 @@ void ComputeGeoSphere(std::vector<VertexT>& vertices,
 					// Haven't generated this vertex before: so add it now
 
 					// outVertex = (vertices[i0] + vertices[i1]) / 2
-					XMStore(
-						            &outVertex,
-						            XMVectorScale(
-						                        XMVectorAdd(XMLoad(&vertexPositions[i0]),
-						                                    XMLoad(&vertexPositions[i1])),
-						                        0.5f
-						                        )
-						            );
+					const auto vertex = XMVectorScale(
+						XMVectorAdd(
+							XMLoad(&vertexPositions[i0]),
+							XMLoad(&vertexPositions[i1])
+						),
+						0.5f
+					);
+
+					outVertex = XMStore<f32_3>(vertex);
 
 					outIndex = static_cast<u32>(vertexPositions.size());
 					CheckIndexOverflow(outIndex);
@@ -396,8 +397,7 @@ void ComputeGeoSphere(std::vector<VertexT>& vertices,
 		const auto normal = XMVector3Normalize(XMLoad(&vertexValue));
 		const auto pos = XMVectorScale(normal, radius);
 
-		f32_3 normalFloat3;
-		XMStore(&normalFloat3, normal);
+		const f32_3 normalFloat3 = XMStore<f32_3>(normal);
 
 		// calculate texture coordinates for this vertex
 		const f32 longitude = atan2(normalFloat3[0], -normalFloat3[2]);
@@ -411,9 +411,9 @@ void ComputeGeoSphere(std::vector<VertexT>& vertices,
 		vertices.push_back(VertexT());
 		XMStore(&vertices.back().position, pos);
 		if constexpr (VertexT::hasNormal())
-			XMStore(&vertices.back().normal, normal);
+			vertices.back().normal = XMStore<f32_3>(normal);
 		if constexpr (VertexT::hasTexture())
-			XMStore(&vertices.back().texCoord, texcoord);
+			vertices.back().texCoord = XMStore<f32_2>(texcoord);
 	}
 
 	// There are a couple of fixes to do. One is a texture coordinate wraparound fixup. At some point, there will be
