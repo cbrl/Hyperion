@@ -10,7 +10,7 @@ import rendering.resource_mgr;
 import rendering.material_factory;
 import rendering.importer.model_importer;
 
-import math.geometry.shapes;
+import math.geometry;
 
 
 export namespace render::BlueprintFactory {

@@ -12,7 +12,7 @@ import ecs;
 import components.model;
 import components.transform;
 
-import math.geometry.frustum;
+import math.geometry;
 
 import rendering.pipeline;
 import rendering.rendering_options;

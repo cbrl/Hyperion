@@ -5,7 +5,7 @@ module;
 export module components.transform;
 
 import ecs;
-export import math.geometry.transform_3d;
+export import math.geometry;
 
 using namespace DirectX;
 

@@ -5,7 +5,7 @@ module;
 
 module math.geometry;
 
-import math.geometry.bounding_volume;
+import :bounding_volume;
 
 
 bool intersects(const f32_3& ray_origin, const f32_3& ray_direction, const BoundingSphere& sphere) {

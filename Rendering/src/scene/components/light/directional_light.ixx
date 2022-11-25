@@ -8,7 +8,7 @@ module;
 export module components.light.directional_light;
 
 import ecs;
-import math.geometry.bounding_volume;
+import math.geometry;
 
 
 export class DirectionalLight final : public ecs::Component {

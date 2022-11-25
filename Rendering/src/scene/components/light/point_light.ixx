@@ -8,7 +8,7 @@ module;
 export module components.light.point_light;
 
 import ecs;
-import math.geometry.bounding_volume;
+import math.geometry;
 
 
 export class PointLight final : public ecs::Component {

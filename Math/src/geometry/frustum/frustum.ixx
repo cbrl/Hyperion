@@ -2,9 +2,9 @@ module;
 
 #include "directxmath/directxmath.h"
 
-export module math.geometry.frustum;
+export module math.geometry:frustum;
 
-export import math.geometry.bounding_volume;
+import :bounding_volume;
 
 
 export class Frustum final {

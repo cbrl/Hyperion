@@ -9,7 +9,7 @@ module;
 
 export module rendering.model_blueprint;
 
-import math.geometry.bounding_volume;
+import math.geometry;
 
 export import rendering.resource;
 export import rendering.mesh;

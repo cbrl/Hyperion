@@ -8,7 +8,7 @@ module;
 export module components.light.spot_light;
 
 import ecs;
-import math.geometry.bounding_volume;
+import math.geometry;
 
 
 export class SpotLight final : public ecs::Component {

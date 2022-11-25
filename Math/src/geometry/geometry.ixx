@@ -5,10 +5,10 @@ module;
 
 export module math.geometry;
 
-export import math.geometry.bounding_volume;
-export import math.geometry.frustum;
-export import math.geometry.transform_3d;
-export import math.geometry.shapes;
+export import :bounding_volume;
+export import :frustum;
+export import :transform_3d;
+export import :shapes;
 
 
 export {

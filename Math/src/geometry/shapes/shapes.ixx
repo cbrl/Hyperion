@@ -12,7 +12,7 @@ module;
 #include "directxmath/directxmath.h"
 #include "bezier.h"
 
-export module math.geometry.shapes;
+export module math.geometry:shapes;
 
 
 export namespace render::shapes {

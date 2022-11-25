@@ -14,7 +14,7 @@ import ecs;
 import components.model;
 import components.transform;
 
-import math.geometry.frustum;
+import math.geometry;
 
 import rendering.buffer_types;
 import rendering.constant_buffer;

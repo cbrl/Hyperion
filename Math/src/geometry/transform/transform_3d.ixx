@@ -3,7 +3,7 @@ module;
 #include "datatypes/scalar_types.h"
 #include "directxmath/directxmath.h"
 
-export module math.geometry.transform_3d;
+export module math.geometry:transform_3d;
 
 
 export class Transform3D {

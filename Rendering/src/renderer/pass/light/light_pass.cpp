@@ -20,7 +20,7 @@ import components.light.directional_light;
 import components.light.point_light;
 import components.light.spot_light;
 
-import math.geometry.frustum;
+import math.geometry;
 
 import rendering.buffer_types;
 import rendering.constant_buffer;

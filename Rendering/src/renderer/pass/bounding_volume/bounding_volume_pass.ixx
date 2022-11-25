@@ -19,8 +19,8 @@ import components.light.spot_light;
 import components.model;
 import components.transform;
 
-import math.geometry.bounding_volume;
-import math.geometry.frustum;
+import math.geometry;
+import math.geometry;
 
 import rendering.constant_buffer;
 import rendering.pipeline;

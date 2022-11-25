@@ -4,7 +4,7 @@ module;
 #include "directxmath/directxmath.h"
 #include "maths.h"
 
-export module math.geometry.bounding_volume;
+export module math.geometry:bounding_volume;
 
 
 export struct AABB final {
