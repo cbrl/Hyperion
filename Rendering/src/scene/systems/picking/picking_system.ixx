@@ -7,6 +7,8 @@ module;
 
 #include "directxmath/directxmath.h"
 
+#include "rendering_forward_decs.h"
+
 export module systems.picking_system;
 
 import ecs;
@@ -18,13 +20,7 @@ import math.geometry;
 import rendering.engine;
 
 
-namespace render {
-
-namespace events {
-struct GuiFocusEvent;
-}
-	
-namespace systems {
+namespace render::systems {
 
 export class PickingSystem : public ecs::System {
 public:
@@ -169,5 +165,4 @@ private:
 	ecs::UniqueDispatcherConnection gui_focus_connection;
 };
 
-} //namespace systems
-} //namespace render
+} //namespace render::systems

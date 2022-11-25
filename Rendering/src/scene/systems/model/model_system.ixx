@@ -2,6 +2,8 @@ module;
 
 #include <functional>
 
+#include "rendering_forward_decs.h"
+
 export module systems.model_system;
 
 import ecs;
@@ -11,11 +13,7 @@ import components.model;
 import rendering.rendering_mgr;
 
 
-namespace render {
-
-class RenderingMgr;
-
-namespace systems {
+namespace render::systems {
 
 export class ModelSystem final : public ecs::System {
 public:
@@ -70,5 +68,4 @@ private:
 	std::reference_wrapper<const RenderingMgr> rendering_mgr;
 };
 
-} //namespace systems
-} //namespace render
+} //namespace render::systems

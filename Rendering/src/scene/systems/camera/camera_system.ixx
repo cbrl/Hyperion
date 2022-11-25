@@ -1,6 +1,7 @@
 module;
 
 #include "memory/handle/handle.h"
+#include "rendering_forward_decs.h"
 
 export module systems.camera_system;
 
@@ -14,11 +15,7 @@ import components.transform;
 import rendering.rendering_mgr;
 
 
-namespace render {
-
-class RenderingMgr;
-
-namespace systems {
+namespace render::systems {
 
 export class CameraSystem final : public ecs::System {
 public:
@@ -97,5 +94,4 @@ private:
 	ecs::UniqueDispatcherConnection window_resize_connection;
 };
 
-} //namespace systems
-} //namespace render
+} //namespace render::systems
