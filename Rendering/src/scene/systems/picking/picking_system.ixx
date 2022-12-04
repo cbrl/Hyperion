@@ -17,7 +17,7 @@ import components.camera.orthographic_camera;
 import components.camera.perspective_camera;
 
 import math.geometry;
-import rendering.engine;
+import rendering;
 
 
 namespace render::systems {

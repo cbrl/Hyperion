@@ -13,14 +13,14 @@ module;
 
 #include "rendering_forward_decs.h"
 
-export module rendering.renderer;
+export module rendering:renderer;
 
-export import rendering.gpu_profiler;
-import rendering.buffer_types;
-import rendering.constant_buffer;
-import rendering.output_mgr;
-import rendering.render_state_mgr;
-import rendering.rendering_config;
+import :gpu_profiler;
+import :buffer_types;
+import :constant_buffer;
+import :output_mgr;
+import :render_state_mgr;
+import :rendering_config;
 
 
 namespace render {

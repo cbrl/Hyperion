@@ -8,21 +8,21 @@ module;
 export module systems.user_interface;
 
 import ecs;
+
+import rendering;
+
+import events.core_events;
+
 import systems.user_interface.modules.entity_details_window;
+import systems.user_interface.modules.metrics_window;
+import systems.user_interface.modules.new_model_menu;
+import systems.user_interface.modules.scene_tree;
+import systems.user_interface.modules.system_menu;
+import systems.user_interface.modules.text_edit_window;
+import systems.user_interface.modules.transform_manipulator;
 
-class Engine;
-
-class SystemMenu;
-class SceneTree;
-class MetricsWindow;
-class TextEditWindow;
-class TransformManipulator;
-class EntityDetailsWindow;
 
 namespace render {
-
-class ResourceMgr;
-class Scene;
 
 namespace systems {
 

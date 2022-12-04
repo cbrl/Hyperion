@@ -3,11 +3,11 @@ module;
 #include "io/io.h"
 #include "log/log.h"
 
-export module rendering.importer.model_importer;
+export module rendering:importer.model_importer;
 
-import rendering.importer.model_importer.assimp_importer;
-import rendering.resource_mgr;
-import rendering.model_output;
+import :importer.model_importer.assimp_importer;
+import :resource_mgr;
+import :model_output;
 
 
 export namespace render::importer {

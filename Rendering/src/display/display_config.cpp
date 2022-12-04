@@ -8,7 +8,7 @@ module;
 #include "directx/d3d11.h"
 #include "engine/config/config_tokens.h"
 
-module rendering.display_config;
+module rendering;
 
 
 namespace render {

@@ -4,9 +4,10 @@ module;
 #include "directx/directxtk.h"
 #include "hlsl.h"
 
-module rendering.render_state_mgr;
+module rendering;
 
-import rendering.pipeline;
+import :pipeline;
+import :render_states;
 
 
 namespace render {

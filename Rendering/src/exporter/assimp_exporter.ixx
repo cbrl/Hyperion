@@ -9,11 +9,11 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.exporter.assimp_exporter;
+export module rendering:exporter.assimp_exporter;
 
-import rendering.model_blueprint;
-import rendering.exporter.texture_exporter;
-import rendering.vertex_types;
+import :model_blueprint;
+import :exporter.texture_exporter;
+import :vertex_types;
 
 
 void ProcessNodes(aiNode& ai_node, const render::ModelBlueprint& bp, const render::ModelBlueprint::Node& bp_node) {

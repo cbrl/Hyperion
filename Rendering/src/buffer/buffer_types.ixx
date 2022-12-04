@@ -3,7 +3,7 @@ module;
 #include "datatypes/types.h"
 #include "directxmath/directxmath.h"
 
-export module rendering.buffer_types;
+export module rendering:buffer_types;
 
 export namespace render {
 

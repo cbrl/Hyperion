@@ -5,7 +5,7 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.shader_bytecode;
+export module rendering:shader_bytecode;
 
 
 export namespace render {

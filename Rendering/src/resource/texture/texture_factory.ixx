@@ -3,10 +3,10 @@ module;
 #include <memory>
 #include "datatypes/vector_types.h"
 
-export module rendering.texture_factory;
+export module rendering:texture_factory;
 
-export import rendering.texture;
-import rendering.resource_mgr;
+import :texture;
+import :resource_mgr;
 
 
 namespace render {

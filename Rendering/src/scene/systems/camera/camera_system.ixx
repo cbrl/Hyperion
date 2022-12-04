@@ -12,7 +12,7 @@ import components.camera.perspective_camera;
 import components.camera.orthographic_camera;
 import components.transform;
 
-import rendering.rendering_mgr;
+import rendering;
 
 
 namespace render::systems {

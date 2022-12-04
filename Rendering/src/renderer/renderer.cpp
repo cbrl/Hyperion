@@ -15,18 +15,18 @@ module;
 #include "imgui_impl_dx11.h"
 
 
-module rendering.renderer;
+module rendering:renderer;
 
-import rendering.display_config;
-import rendering.scene;
-import rendering.pass.bounding_volume_pass;
-import rendering.pass.deferred_pass;
-import rendering.pass.depth_pass;
-import rendering.pass.forward_pass;
-import rendering.pass.light_pass;
-import rendering.pass.sky_pass;
-import rendering.pass.text_pass;
-import rendering.pipeline;
+import :display_config;
+import :scene;
+import :pass.bounding_volume_pass;
+import :pass.deferred_pass;
+import :pass.depth_pass;
+import :pass.forward_pass;
+import :pass.light_pass;
+import :pass.sky_pass;
+import :pass.text_pass;
+import :pipeline;
 
 
 namespace render {

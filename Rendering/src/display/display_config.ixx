@@ -5,9 +5,9 @@ module;
 #include "json/nlohmann_json.h"
 #include "directx/d3d11.h"
 
-export module rendering.display_config;
+export module rendering:display_config;
 
-export import rendering.rendering_options;
+import :rendering_options;
 
 
 export namespace render {

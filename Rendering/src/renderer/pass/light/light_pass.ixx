@@ -10,13 +10,13 @@ module;
 
 #include "rendering_forward_decs.h"
 
-export module rendering.pass.light_pass;
+export module rendering:pass.light_pass;
 
 import ecs;
-import rendering.buffer_types;
-import rendering.constant_buffer;
-import rendering.structured_buffer;
-import rendering.shadow_map_buffer;
+import :buffer_types;
+import :constant_buffer;
+import :structured_buffer;
+import :shadow_map_buffer;
 
 
 namespace render {

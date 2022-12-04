@@ -3,10 +3,10 @@ module;
 #include "datatypes/types.h"
 #include "directx/d3d11.h"
 
-export module rendering.shadow_map_buffer;
+export module rendering:shadow_map_buffer;
 
-import rendering.pipeline;
-import rendering.viewport;
+import :pipeline;
+import :viewport;
 
 
 export namespace render {

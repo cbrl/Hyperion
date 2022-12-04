@@ -5,12 +5,12 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.shader_factory;
+export module rendering:shader_factory;
 
-export import rendering.shader;
-export import rendering.rendering_options;
-import rendering.resource_mgr;
-import rendering.vertex_types;
+import :shader;
+import :rendering_options;
+import :resource_mgr;
+import :vertex_types;
 
 
 export namespace render::ShaderFactory {

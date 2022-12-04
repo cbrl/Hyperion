@@ -15,12 +15,12 @@ module;
 #include "imgui_forwarder/imgui_message_forwarder.h"
 #include "config/config_tokens.h"
 
-module rendering.engine;
+module rendering;
 
-import rendering.display_config;
-import rendering.rendering_config;
-import rendering.rendering_mgr;
-import rendering.scene;
+import :display_config;
+import :rendering_config;
+import :rendering_mgr;
+import :scene;
 
 #define CONFIG_FILE "./config.json"
 

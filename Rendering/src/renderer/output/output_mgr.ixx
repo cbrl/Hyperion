@@ -7,10 +7,10 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.output_mgr;
+export module rendering:output_mgr;
 
-import rendering.display_config;
-import rendering.swapchain;
+import :display_config;
+import :swapchain;
 
 
 export namespace render {

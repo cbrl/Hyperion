@@ -7,7 +7,7 @@ module;
 
 #include "directx/d3d11.h"
 
-module rendering.gpu_profiler;
+module rendering;
 
 using namespace std::chrono_literals;
 

@@ -6,7 +6,7 @@ module;
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
-export module rendering.pipeline;
+export module rendering:pipeline;
 
 
 export namespace render {

@@ -9,9 +9,7 @@ module;
 export module components.model;
 
 import ecs;
-import rendering.buffer_types;
-import rendering.constant_buffer;
-export import rendering.model_blueprint;
+import rendering;
 
 
 //----------------------------------------------------------------------------------

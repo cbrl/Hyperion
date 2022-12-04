@@ -5,7 +5,7 @@ module;
 
 export module systems.user_interface.modules.metrics_window;
 
-import rendering.engine;
+import rendering;
 
 
 export class MetricsWindow final {
@@ -13,7 +13,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	MetricsWindow(const Engine& engine) {
+	MetricsWindow(const render::Engine& engine) {
 		frame_plot.mShowInlineGraphs   = true;
 		frame_plot.mInlinePlotRowCount = 3;
 		frame_plot.mShowLegendAverage  = true;
@@ -82,7 +82,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void draw(Engine& engine) {
+	void draw(render::Engine& engine) {
 		//----------------------------------------------------------------------------------
 		// Update frame time
 		//----------------------------------------------------------------------------------

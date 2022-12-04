@@ -1,15 +1,5 @@
 module systems.user_interface;
 
-import events.core_events;
-
-import systems.user_interface.modules.metrics_window;
-import systems.user_interface.modules.new_model_menu;
-import systems.user_interface.modules.scene_tree;
-import systems.user_interface.modules.text_edit_window;
-import systems.user_interface.modules.transform_manipulator;
-
-import rendering.engine;
-
 
 UserInterface::UserInterface(ecs::ECS& ecs, Engine& engine)
 	: System(ecs)

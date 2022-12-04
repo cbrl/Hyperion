@@ -10,7 +10,7 @@ module;
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
 
-export module rendering.pass.bounding_volume_pass;
+export module rendering:pass.bounding_volume_pass;
 
 import ecs;
 import components.light.directional_light;
@@ -20,14 +20,13 @@ import components.model;
 import components.transform;
 
 import math.geometry;
-import math.geometry;
 
-import rendering.constant_buffer;
-import rendering.pipeline;
-import rendering.render_state_mgr;
-import rendering.resource_mgr;
-import rendering.scene;
-import rendering.shader_factory;
+import :constant_buffer;
+import :pipeline;
+import :render_state_mgr;
+import :resource_mgr;
+import :scene;
+import :shader_factory;
 
 
 namespace render {

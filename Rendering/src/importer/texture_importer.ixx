@@ -9,7 +9,7 @@ module;
 
 #include <DirectXTex.h>
 
-export module rendering.importer.texture_importer;
+export module rendering:importer.texture_importer;
 
 
 void CreateErrorTexture(ID3D11Device& device, ID3D11ShaderResourceView** srv_out) {

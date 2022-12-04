@@ -5,9 +5,9 @@ module;
 #include "directx/directxtk.h"
 #include "directx/d3d11.h"
 
-export module rendering.direct3d;
+export module rendering:direct3d;
 
-export import rendering.display_config;
+import :display_config;
 
 
 export namespace render {

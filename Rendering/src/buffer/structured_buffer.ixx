@@ -5,7 +5,7 @@ module;
 #include "directx/directxtk.h"
 #include "directx/d3d11.h"
 
-export module rendering.structured_buffer;
+export module rendering:structured_buffer;
 
 
 export namespace render {

@@ -3,7 +3,7 @@ module;
 #include "datatypes/types.h"
 #include "io/io.h"
 
-export module rendering.resource;
+export module rendering:resource;
 
 
 export namespace render {

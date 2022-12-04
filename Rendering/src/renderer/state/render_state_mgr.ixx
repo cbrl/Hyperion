@@ -4,9 +4,9 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.render_state_mgr;
+export module rendering:render_state_mgr;
 
-export import rendering.render_states;
+import :render_states;
 
 
 export namespace render {

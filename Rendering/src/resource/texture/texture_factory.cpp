@@ -10,10 +10,10 @@ module;
 
 #include "directx/d3d11.h"
 
-module rendering.texture_factory;
+module rendering;
 
-import rendering.resource_mgr;
-import rendering.texture;
+import :resource_mgr;
+import :texture;
 
 
 namespace render::TextureFactory {

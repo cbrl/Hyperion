@@ -6,16 +6,10 @@ module;
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
 
-export module rendering.camera_base;
-
-export import rendering.rendering_options;
-export import rendering.texture;
-export import rendering.viewport;
+export module components.camera.camera_base;
 
 import ecs;
-import rendering.buffer_types;
-import rendering.constant_buffer;
-import rendering.pipeline;
+import rendering;
 
 
 export namespace render {

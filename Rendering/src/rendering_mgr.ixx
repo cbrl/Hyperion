@@ -14,15 +14,15 @@ module;
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 
-export module rendering.rendering_mgr;
+export module rendering:rendering_mgr;
 
-import rendering.direct3d;
-import rendering.display_config;
-import rendering.renderer;
-import rendering.rendering_config;
-import rendering.resource_mgr;
-import rendering.scene;
-import rendering.swapchain;
+import :direct3d;
+import :display_config;
+import :renderer;
+import :rendering_config;
+import :resource_mgr;
+import :scene;
+import :swapchain;
 
 
 namespace render {

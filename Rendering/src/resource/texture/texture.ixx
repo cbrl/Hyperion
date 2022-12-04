@@ -5,10 +5,10 @@ module;
 #include "datatypes/scalar_types.h"
 #include "directx/d3d11.h"
 
-export module rendering.texture;
+export module rendering:texture;
 
-export import rendering.resource;
-import rendering.importer.texture_importer;
+import :resource;
+import :importer.texture_importer;
 
 
 namespace render {

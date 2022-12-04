@@ -14,10 +14,11 @@ module;
 
 #include "rendering_forward_decs.h"
 
-export module rendering.engine;
+export module rendering:engine;
 
-export import rendering.rendering_mgr;
-export import rendering.scene;
+import :rendering_mgr;
+import :scene;
+
 
 namespace render {
 

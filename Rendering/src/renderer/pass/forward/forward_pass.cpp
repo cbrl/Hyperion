@@ -6,7 +6,7 @@ module;
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
 
-module rendering.pass.forward_pass;
+module rendering:pass.forward_pass;
 
 import ecs;
 import components.model;
@@ -14,11 +14,11 @@ import components.transform;
 
 import math.geometry;
 
-import rendering.pipeline;
-import rendering.rendering_options;
-import rendering.render_state_mgr;
-import rendering.resource_mgr;
-import rendering.shader_factory;
+import :pipeline;
+import :rendering_options;
+import :render_state_mgr;
+import :resource_mgr;
+import :shader_factory;
 
 
 namespace render {

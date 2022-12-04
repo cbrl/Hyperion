@@ -3,11 +3,11 @@ module;
 #include "directx/d3d11.h"
 #include "directx/directxtk.h"
 
-export module rendering.swapchain;
+export module rendering:swapchain;
 
-import rendering.direct3d;
-import rendering.display_config;
-import rendering.pipeline;
+import :direct3d;
+import :display_config;
+import :pipeline;
 
 
 export namespace render {

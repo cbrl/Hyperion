@@ -2,11 +2,11 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.shader;
+export module rendering:shader;
 
-export import rendering.resource;
-export import rendering.shader_bytecode;
-import rendering.pipeline;
+import :resource;
+import :shader_bytecode;
+import :pipeline;
 
 
 export namespace render {

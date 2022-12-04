@@ -1,4 +1,4 @@
-export module rendering.model_config;
+export module rendering:model_config;
 
 export namespace render {
 

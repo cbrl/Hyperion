@@ -7,13 +7,13 @@ module;
 
 #include "rendering_forward_decs.h"
 
-export module rendering.pass.forward_pass;
+export module rendering:pass.forward_pass;
 
 import ecs;
-import rendering.constant_buffer;
-import rendering.pipeline;
-import rendering.rendering_options;
-import rendering.shader;
+import :constant_buffer;
+import :pipeline;
+import :rendering_options;
+import :shader;
 
 
 namespace render {

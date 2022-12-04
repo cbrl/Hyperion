@@ -5,9 +5,9 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.font;
+export module rendering:font;
 
-export import rendering.resource;
+export import :resource;
 
 
 namespace render {

@@ -10,11 +10,11 @@ module;
 #include "directx/directxtk.h"
 #include "hlsl.h"
 
-module rendering.output_mgr;
+module rendering;
 
-import rendering.display_config;
-import rendering.pipeline;
-import rendering.swapchain;
+import :display_config;
+import :pipeline;
+import :swapchain;
 
 
 namespace render {

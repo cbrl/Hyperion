@@ -155,6 +155,7 @@
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Default</CompileAs>
     </ClCompile>
     <ClCompile Include="src\renderer\state\render_state_mgr.cpp" />
+    <ClCompile Include="src\rendering.ixx" />
     <ClCompile Include="src\resource\shader\shader_factory.cpp" />
     <ClCompile Include="src\resource\texture\texture_factory.cpp" />
     <ClCompile Include="src\scene\components\camera\orthographic_camera.ixx" />

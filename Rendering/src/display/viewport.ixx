@@ -3,9 +3,9 @@ module;
 #include "datatypes/vector_types.h"
 #include "directx/d3d11.h"
 
-export module rendering.viewport;
+export module rendering:viewport;
 
-import rendering.pipeline;
+import :pipeline;
 
 
 export namespace render {

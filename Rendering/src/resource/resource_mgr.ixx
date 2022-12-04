@@ -11,15 +11,15 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.resource_mgr;
+export module rendering:resource_mgr;
 
-export import rendering.resource;
-export import rendering.font;
-export import rendering.mesh;
-export import rendering.model_blueprint;
-export import rendering.model_output;
-export import rendering.shader;
-export import rendering.texture;
+import :resource;
+import :font;
+import :mesh;
+import :model_blueprint;
+import :model_output;
+import :shader;
+import :texture;
 
 
 namespace render {

@@ -4,9 +4,9 @@ module;
 #include "engine/config/config_tokens.h"
 #include "json/nlohmann_json.h"
 
-export module rendering.rendering_config;
+export module rendering:rendering_config;
 
-export import rendering.rendering_options;
+import :rendering_options;
 
 
 export namespace render {

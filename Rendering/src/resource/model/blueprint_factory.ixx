@@ -3,12 +3,12 @@ module;
 #include "datatypes/types.h"
 #include "directx/d3d11.h"
 
-export module rendering.blueprint_factory;
+export module rendering:blueprint_factory;
 
-export import rendering.model_config;
-import rendering.resource_mgr;
-import rendering.material_factory;
-import rendering.importer.model_importer;
+import :model_config;
+import :resource_mgr;
+import :material_factory;
+import :importer.model_importer;
 
 import math.geometry;
 

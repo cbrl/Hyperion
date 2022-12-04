@@ -7,7 +7,7 @@ module;
 
 export module components.camera.orthographic_camera;
 
-import rendering.camera_base;
+import components.camera.camera_base;
 
 
 export class OrthographicCamera final : public render::CameraBase<OrthographicCamera> {

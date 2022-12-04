@@ -6,7 +6,7 @@ module;
 #include "directx/d3d11.h"
 #include "directx/directxtk.h"
 
-export module rendering.pass.text_pass;
+export module rendering:pass.text_pass;
 
 import ecs;
 import components.text;

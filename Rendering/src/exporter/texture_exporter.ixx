@@ -4,9 +4,9 @@ module;
 #include "directx/directxtk.h"
 #include <DirectXTex.h>
 
-export module rendering.exporter.texture_exporter;
+export module rendering:exporter.texture_exporter;
 
-export import rendering.texture;
+import :texture;
 
 
 void GetTexture2D(ID3D11Device& device, const render::Texture& texture, ID3D11Texture2D** data) {

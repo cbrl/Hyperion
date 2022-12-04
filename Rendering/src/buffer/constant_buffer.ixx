@@ -5,7 +5,7 @@ module;
 #include "directx/directxtk.h"
 #include "directx/d3d11.h"
 
-export module rendering.constant_buffer;
+export module rendering:constant_buffer;
 
 
 export namespace render {

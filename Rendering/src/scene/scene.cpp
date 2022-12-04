@@ -1,11 +1,12 @@
-module rendering.scene;
+module rendering;
+
+import :engine;
 
 import components.core_components;
 import entities.core_entities;
 import events.core_events;
 import systems.core_systems;
 
-import rendering.engine;
 
 
 namespace render {

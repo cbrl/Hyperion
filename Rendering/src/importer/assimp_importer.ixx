@@ -10,11 +10,11 @@ module;
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
-export module rendering.importer.model_importer.assimp_importer;
+export module rendering:importer.model_importer.assimp_importer;
 
-import rendering.resource_mgr;
-import rendering.material_factory;
-import rendering.model_output;
+import :resource_mgr;
+import :material_factory;
+import :model_output;
 
 using namespace render;
 

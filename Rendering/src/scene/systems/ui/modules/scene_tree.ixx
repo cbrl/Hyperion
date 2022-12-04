@@ -7,8 +7,7 @@ export module systems.user_interface.modules.scene_tree;
 
 import ecs;
 import systems.user_interface.modules.selectable_tree;
-import rendering.engine;
-import rendering.scene;
+import rendering;
 
 
 export class SceneTree final {

@@ -6,7 +6,7 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.gpu_profiler;
+export module rendering:gpu_profiler;
 
 
 export namespace render {

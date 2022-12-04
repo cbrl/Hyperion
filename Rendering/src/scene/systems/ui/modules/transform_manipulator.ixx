@@ -19,7 +19,7 @@ import components.transform;
 import components.camera.perspective_camera;
 import components.camera.orthographic_camera;
 
-import rendering.engine;
+import rendering;
 
 
 export class TransformManipulator {

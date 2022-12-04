@@ -7,7 +7,6 @@ module;
 
 export module events.core_events;
 
-class Transform;
 
 export namespace render::events {
 

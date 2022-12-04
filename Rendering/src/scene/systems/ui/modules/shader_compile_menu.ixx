@@ -7,8 +7,7 @@ module;
 
 export module systems.user_interface.modules.shader_compile_menu;
 
-import rendering.engine;
-import rendering.shader_factory;
+import rendering;
 
 
 export class ShaderCompileMenu final {

@@ -4,10 +4,10 @@ module;
 #include "datatypes/vector_types.h"
 #include "io/io.h"
 
-export module rendering.model_output;
+export module rendering:model_output;
 
-export import rendering.mesh;
-export import rendering.material;
+import :mesh;
+import :material;
 
 
 namespace render {

@@ -5,14 +5,14 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.pass.sky_pass;
+export module rendering:pass.sky_pass;
 
-import rendering.pipeline;
-import rendering.render_state_mgr;
-import rendering.resource_mgr;
-import rendering.shader;
-import rendering.shader_factory;
-import rendering.texture;
+import :pipeline;
+import :render_state_mgr;
+import :resource_mgr;
+import :shader;
+import :shader_factory;
+import :texture;
 
 
 namespace render {

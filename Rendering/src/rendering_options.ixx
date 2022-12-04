@@ -2,7 +2,7 @@ module;
 
 #include "datatypes/scalar_types.h"
 
-export module rendering.rendering_options;
+export module rendering:rendering_options;
 
 
 export namespace render {

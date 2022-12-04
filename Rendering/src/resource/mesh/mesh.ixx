@@ -7,9 +7,9 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.mesh;
+export module rendering:mesh;
 
-import rendering.pipeline;
+import :pipeline;
 
 
 namespace render {

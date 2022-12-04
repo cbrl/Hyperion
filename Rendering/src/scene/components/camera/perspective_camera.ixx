@@ -7,7 +7,7 @@ module;
 
 export module components.camera.perspective_camera;
 
-import rendering.camera_base;
+import components.camera.camera_base;
 
 
 export class PerspectiveCamera final : public render::CameraBase<PerspectiveCamera> {

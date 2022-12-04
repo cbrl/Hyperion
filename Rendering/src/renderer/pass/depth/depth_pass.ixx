@@ -8,7 +8,7 @@ module;
 #include "directx/d3d11.h"
 #include "directxmath/directxmath.h"
 
-export module rendering.pass.depth_pass;
+export module rendering:pass.depth_pass;
 
 import ecs;
 import components.model;
@@ -16,12 +16,12 @@ import components.transform;
 
 import math.geometry;
 
-import rendering.buffer_types;
-import rendering.constant_buffer;
-import rendering.pipeline;
-import rendering.render_state_mgr;
-import rendering.resource_mgr;
-import rendering.shader_factory;
+import :buffer_types;
+import :constant_buffer;
+import :pipeline;
+import :render_state_mgr;
+import :resource_mgr;
+import :shader_factory;
 
 
 namespace render {

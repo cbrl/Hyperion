@@ -2,15 +2,15 @@ module;
 
 #include "datatypes/vector_types.h"
 
-export module rendering.material_factory;
+export module rendering:material_factory;
 
-export import rendering.material;
-import rendering.texture_factory;
-import rendering.resource_mgr;
+import :material;
+import :texture_factory;
+import :resource_mgr;
 
-namespace render {
 
-export namespace MaterialFactory {
+export namespace render::MaterialFactory {
+
 Material CreateDefaultMaterial(ResourceMgr& resource_mgr) {
 	return Material{
 		.name = "Default Material",
@@ -28,6 +28,5 @@ Material CreateDefaultMaterial(ResourceMgr& resource_mgr) {
 		}
 	};
 }
-} //namespace MaterialFactory
 
-} //namespace render
+} //namespace render::MaterialFactory

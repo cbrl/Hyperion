@@ -2,10 +2,10 @@ module;
 
 #include "datatypes/types.h"
 
-export module rendering.material;
+export module rendering:material;
 
-export import rendering.texture;
-export import rendering.shader;
+import :texture;
+import :shader;
 
 
 namespace render {

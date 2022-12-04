@@ -8,9 +8,7 @@ module;
 
 export module systems.user_interface.modules.system_menu;
 
-import rendering.engine;
-import rendering.exporter.model_exporter;
-import rendering.exporter.texture_exporter;
+import rendering;
 
 
 export class SystemMenu final {

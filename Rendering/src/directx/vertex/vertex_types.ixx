@@ -3,7 +3,7 @@ module;
 #include "datatypes/vector_types.h"
 #include "directx/d3d11.h"
 
-export module rendering.vertex_types;
+export module rendering:vertex_types;
 
 
 export {

@@ -11,7 +11,7 @@ export module systems.user_interface.modules.text_edit_window;
 
 import systems.user_interface.modules.shader_compile_menu;
 
-import rendering.engine;
+import rendering;
 
 
 export class TextEditWindow final {

@@ -6,6 +6,7 @@ module;
 #include <vector>
 #include <unordered_map>
 
+#include "directx/d3d11.h"
 #include "string/string.h"
 #include "memory/handle/handle.h"
 
@@ -13,16 +14,7 @@ export module systems.user_interface.modules.entity_details_window;
 
 import ecs;
 import systems.user_interface.modules.new_model_menu;
-
-struct ID3D11Device;
-class Engine;
-class Transform;
-
-namespace render {
-class Scene;
-class ResourceMgr;
-class Texture;
-}
+import rendering;
 
 
 export class EntityDetailsWindow final {

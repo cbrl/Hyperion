@@ -2,10 +2,10 @@ module;
 
 #include "io/io.h"
 
-export module rendering.exporter.model_exporter;
+export module rendering:exporter.model_exporter;
 
-export import rendering.model_blueprint;
-import rendering.exporter.assimp_exporter;
+import :model_blueprint;
+import :exporter.assimp_exporter;
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;

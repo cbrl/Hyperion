@@ -8,7 +8,7 @@ module;
 export module components.text;
 
 import ecs;
-import rendering.font;
+import rendering;
 
 
 export class Text final : public ecs::Component {

@@ -10,7 +10,7 @@ import ecs;
 import components.transform;
 import components.model;
 
-import rendering.rendering_mgr;
+import rendering;
 
 
 namespace render::systems {

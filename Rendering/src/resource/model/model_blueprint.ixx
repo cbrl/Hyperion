@@ -7,15 +7,15 @@ module;
 
 #include "directx/d3d11.h"
 
-export module rendering.model_blueprint;
+export module rendering:model_blueprint;
 
 import math.geometry;
 
-export import rendering.resource;
-export import rendering.mesh;
-export import rendering.model_config;
-export import rendering.model_output;
-export import rendering.vertex_types;
+import :resource;
+import :mesh;
+import :model_config;
+import :model_output;
+import :vertex_types;
 
 
 namespace render {

@@ -8,7 +8,6 @@ module;
 export module components.light.ambient_light;
 
 import ecs;
-import rendering.buffer_types;
 
 
 export class AmbientLight final : public ecs::Component {
