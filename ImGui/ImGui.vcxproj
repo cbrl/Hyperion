@@ -19,8 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\imconfig.h" />
-    <ClInclude Include="src\imgui.h" />
     <ClInclude Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.h" />
     <ClInclude Include="src\imgui_addons\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.h" />
@@ -28,26 +26,14 @@
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\perf_timer.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\snprintf.h" />
     <ClInclude Include="src\imgui_forwarder\imgui_message_forwarder.h" />
-    <ClInclude Include="src\imgui_impl_dx11.h" />
-    <ClInclude Include="src\imgui_impl_win32.h" />
-    <ClInclude Include="src\imgui_internal.h" />
-    <ClInclude Include="src\imstb_rectpack.h" />
-    <ClInclude Include="src\imstb_textedit.h" />
-    <ClInclude Include="src\imstb_truetype.h" />
     <ClInclude Include="src\misc\cpp\imgui_stdlib.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.cpp" />
     <ClCompile Include="src\imgui_addons\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.cpp" />
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\ProggyTiny.cpp" />
-    <ClCompile Include="src\imgui_demo.cpp" />
-    <ClCompile Include="src\imgui_draw.cpp" />
     <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.cpp" />
-    <ClCompile Include="src\imgui_impl_dx11.cpp" />
-    <ClCompile Include="src\imgui_impl_win32.cpp" />
-    <ClCompile Include="src\imgui_widgets.cpp" />
     <ClCompile Include="src\misc\cpp\imgui_stdlib.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
