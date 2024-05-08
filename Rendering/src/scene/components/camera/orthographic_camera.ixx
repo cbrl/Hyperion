@@ -3,11 +3,11 @@ module;
 #include "datatypes/types.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
-export module components.camera.orthographic_camera;
+export module rendering:components.camera.orthographic_camera;
 
-import components.camera.camera_base;
+import :components.camera.camera_base;
 
 
 export class OrthographicCamera final : public render::CameraBase<OrthographicCamera> {

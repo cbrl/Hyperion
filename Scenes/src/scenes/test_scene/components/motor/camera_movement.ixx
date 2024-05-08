@@ -1,6 +1,6 @@
 module;
 
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 export module components.motor.camera_movement;
 

@@ -7,7 +7,7 @@ export module systems.motor.axis_orbit;
 
 import ecs;
 import components.motor.axis_orbit;
-import components.transform;
+import rendering;
 
 
 export class AxisOrbitSystem final : public ecs::System {

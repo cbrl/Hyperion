@@ -2,7 +2,7 @@ module;
 
 #include <string>
 
-export module components.name;
+export module rendering:components.name;
 
 import ecs;
 

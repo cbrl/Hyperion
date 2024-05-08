@@ -5,7 +5,7 @@ module;
 #include "imgui.h"
 #include "string/string.h"
 
-export module systems.user_interface.modules.selectable_tree;
+export module rendering:systems.user_interface.modules.selectable_tree;
 
 export {
 

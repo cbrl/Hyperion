@@ -1,12 +1,13 @@
 module rendering;
 
 import :engine;
-
-import components.core_components;
-import entities.core_entities;
-import events.core_events;
-import systems.core_systems;
-
+import :model_blueprint;
+import :components.hierarchy;
+import :components.transform;
+import :systems.camera_system;
+import :systems.hierarchy_system;
+import :systems.model_system;
+import :systems.transform_system;
 
 
 namespace render {

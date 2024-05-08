@@ -9,11 +9,12 @@ module;
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 #include "bezier.h"
 
 export module math.geometry:shapes;
 
+using namespace DirectX;
 
 export namespace render::shapes {
 

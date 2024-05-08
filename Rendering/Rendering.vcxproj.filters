@@ -435,6 +435,9 @@
       <Filter>Source Files\renderer\state</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering.ixx" />
+    <ClCompile Include="rendering_mgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\engine\targetver.h">

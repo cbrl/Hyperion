@@ -2,7 +2,7 @@ module;
 
 #include "datatypes/scalar_types.h"
 #include "memory/handle/handle.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 #include "input.h"
 #include "key_config.h"

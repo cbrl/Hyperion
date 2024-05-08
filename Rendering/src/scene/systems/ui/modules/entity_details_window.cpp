@@ -5,11 +5,11 @@ module;
 #include "imgui.h"
 #include "misc/cpp/imgui_stdlib.h"
 
-module systems.user_interface.modules.entity_details_window;
+module rendering:systems.user_interface.modules.entity_details_window;
 
-import rendering.engine;
-import rendering.texture_factory;
-import rendering.resource_mgr;
+import :engine;
+import :texture_factory;
+import :resource_mgr;
 
 
 // render namespace is heavily utilized here, so import it for brevity.

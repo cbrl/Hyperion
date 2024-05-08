@@ -2,12 +2,12 @@ module;
 
 #include "memory/handle/handle.h"
 
-export module systems.transform_system;
+export module rendering:systems.transform_system;
 
 import ecs;
-import events.core_events;
-import components.hierarchy;
-import components.transform;
+import :events.core_events;
+import :components.hierarchy;
+import :components.transform;
 
 
 namespace render::systems {

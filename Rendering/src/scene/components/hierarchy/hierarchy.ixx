@@ -7,7 +7,7 @@ module;
 #include <memory/handle/handle.h>
 
 
-export module components.hierarchy;
+export module rendering:components.hierarchy;
 
 import ecs;
 

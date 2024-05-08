@@ -9,8 +9,8 @@ module;
 export module rendering:pass.text_pass;
 
 import ecs;
-import components.text;
-import components.transform;
+import :components.text;
+import :components.transform;
 
 
 namespace render {

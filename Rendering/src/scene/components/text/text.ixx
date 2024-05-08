@@ -3,12 +3,12 @@ module;
 #include <memory>
 
 #include "directx/directxtk.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
-export module components.text;
+export module rendering:components.text;
 
 import ecs;
-import rendering;
+import :font;
 
 
 export class Text final : public ecs::Component {

@@ -1,7 +1,7 @@
 module;
 
 #include "datatypes/vector_types.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 module math.geometry;
 

@@ -7,7 +7,7 @@ module;
 
 #include "io/io.h"
 
-export module systems.user_interface.modules.file_selector;
+export module rendering:systems.user_interface.modules.file_selector;
 
 
 export class FileSelector final {

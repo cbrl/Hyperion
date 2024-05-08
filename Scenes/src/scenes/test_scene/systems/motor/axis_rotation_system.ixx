@@ -2,7 +2,7 @@ module;
 
 #include "datatypes/scalar_types.h"
 #include "memory/handle/handle.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 export module systems.motor.axis_rotation;
 

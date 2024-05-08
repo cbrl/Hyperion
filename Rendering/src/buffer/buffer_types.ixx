@@ -1,7 +1,7 @@
 module;
 
 #include "datatypes/types.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:buffer_types;
 

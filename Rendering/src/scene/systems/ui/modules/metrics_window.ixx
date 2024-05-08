@@ -3,9 +3,10 @@ module;
 #include "imgui.h"
 #include "imgui_addons/metrics_gui/metrics_gui/metrics_gui.h"
 
-export module systems.user_interface.modules.metrics_window;
+export module rendering:systems.user_interface.modules.metrics_window;
 
-import rendering;
+import :engine;
+import :gpu_profiler;
 
 
 export class MetricsWindow final {

@@ -5,21 +5,18 @@ module;
 
 #include "imgui.h"
 
-export module systems.user_interface;
+export module rendering:systems.user_interface;
 
 import ecs;
-
-import rendering;
-
-import events.core_events;
-
-import systems.user_interface.modules.entity_details_window;
-import systems.user_interface.modules.metrics_window;
-import systems.user_interface.modules.new_model_menu;
-import systems.user_interface.modules.scene_tree;
-import systems.user_interface.modules.system_menu;
-import systems.user_interface.modules.text_edit_window;
-import systems.user_interface.modules.transform_manipulator;
+import :engine;
+import :events.core_events;
+import :systems.user_interface.modules.entity_details_window;
+import :systems.user_interface.modules.metrics_window;
+import :systems.user_interface.modules.new_model_menu;
+import :systems.user_interface.modules.scene_tree;
+import :systems.user_interface.modules.system_menu;
+import :systems.user_interface.modules.text_edit_window;
+import :systems.user_interface.modules.transform_manipulator;
 
 
 namespace render {

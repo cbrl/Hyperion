@@ -1,8 +1,8 @@
 module;
 
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
-export module components.transform;
+export module rendering:components.transform;
 
 import ecs;
 export import math.geometry;

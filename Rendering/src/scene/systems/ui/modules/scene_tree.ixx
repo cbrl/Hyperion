@@ -1,13 +1,18 @@
 module;
 
-#include "memory/handle/handle.h"
-#include "imgui.h"
+#include <string>
 
-export module systems.user_interface.modules.scene_tree;
+#include "imgui.h"
+#include "memory/handle/handle.h"
+#include "string/string.h"
+
+export module rendering:systems.user_interface.modules.scene_tree;
 
 import ecs;
-import systems.user_interface.modules.selectable_tree;
-import rendering;
+import :systems.user_interface.modules.selectable_tree;
+import :components.hierarchy;
+import :components.name;
+import :scene;
 
 
 export class SceneTree final {

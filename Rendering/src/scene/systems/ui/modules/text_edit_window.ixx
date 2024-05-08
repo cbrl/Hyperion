@@ -7,11 +7,10 @@ module;
 #include "misc/cpp/imgui_stdlib.h"
 #include "imgui_addons/ImGuiColorTextEdit/TextEditor.h"
 
-export module systems.user_interface.modules.text_edit_window;
+export module rendering:systems.user_interface.modules.text_edit_window;
 
 import systems.user_interface.modules.shader_compile_menu;
-
-import rendering;
+import :engine;
 
 
 export class TextEditWindow final {

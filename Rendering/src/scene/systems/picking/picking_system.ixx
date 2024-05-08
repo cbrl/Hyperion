@@ -5,19 +5,18 @@ module;
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 #include "rendering_forward_decs.h"
 
-export module systems.picking_system;
+export module rendering:systems.picking_system;
 
 import ecs;
-import events.core_events;
-import components.camera.orthographic_camera;
-import components.camera.perspective_camera;
-
 import math.geometry;
-import rendering;
+import :engine;
+import :events.core_events;
+import :components.camera.orthographic_camera;
+import :components.camera.perspective_camera;
 
 
 namespace render::systems {

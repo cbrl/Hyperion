@@ -7,9 +7,13 @@ module;
 #include "memory/handle/handle.h"
 #include "imgui.h"
 
-export module systems.user_interface.modules.new_model_menu;
+export module rendering:systems.user_interface.modules.new_model_menu;
 
-import rendering;
+import :blueprint_factory;
+import :model_blueprint;
+import :model_config;
+import :resource_mgr;
+import :scene;
 
 
 export class NewModelMenu {

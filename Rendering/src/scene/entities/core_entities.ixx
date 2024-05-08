@@ -2,10 +2,11 @@ module;
 
 #include "memory/handle/handle.h"
 
-export module entities.core_entities;
+export module rendering:entities.core_entities;
 
 import ecs;
-import components.core_components;
+import :components.transform;
+import :components.hierarchy;
 
 
 export namespace EntityTemplates {

@@ -3,9 +3,9 @@ module;
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
-export module components.light.spot_light;
+export module rendering:components.light.spot_light;
 
 import ecs;
 import math.geometry;

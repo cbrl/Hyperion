@@ -8,16 +8,16 @@ module;
 #include "hlsl.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:pass.bounding_volume_pass;
 
 import ecs;
-import components.light.directional_light;
-import components.light.point_light;
-import components.light.spot_light;
-import components.model;
-import components.transform;
+import :components.light.directional_light;
+import :components.light.point_light;
+import :components.light.spot_light;
+import :components.model;
+import :components.transform;
 
 import math.geometry;
 

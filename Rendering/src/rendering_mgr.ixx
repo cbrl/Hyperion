@@ -4,26 +4,11 @@ module;
 #include <utility>
 
 #include "datatypes/pointer_types.h"
-#include "datatypes/scalar_types.h"
-#include "datatypes/vector_types.h"
-#include "log/log.h"
-
 #include "directx/d3d11.h"
 
-#include "imgui.h"
-#include "imgui_impl_dx11.h"
-#include "imgui_impl_win32.h"
+#include "rendering_forward_decs.h"
 
 export module rendering:rendering_mgr;
-
-import :direct3d;
-import :display_config;
-import :renderer;
-import :rendering_config;
-import :resource_mgr;
-import :scene;
-import :swapchain;
-
 
 namespace render {
 
@@ -34,43 +19,7 @@ public:
 	//----------------------------------------------------------------------------------
 	RenderingMgr(gsl::not_null<HWND> window,
 	             DisplayConfig display_conf,
-	             RenderingConfig rendering_conf) {
-		// Store Display/Rendering configuration
-		display_config = std::make_unique<DisplayConfig>(std::move(display_conf));
-		rendering_config = std::make_unique<RenderingConfig>(std::move(rendering_conf));
-
-
-		// Initialize Direct3D
-		direct3D = std::make_unique<Direct3D>(*display_config);
-		Logger::log(LogLevel::info, "Initialized Direct3D");
-
-		swap_chain = std::make_unique<SwapChain>(window,
-												 *display_config,
-												 direct3D->getDevice(),
-												 direct3D->getDeviceContext());
-
-		Logger::log(LogLevel::info, "Initialized swap chain");
-
-
-		// Create the resource manager
-		resource_mgr = std::make_unique<ResourceMgr>(direct3D->getDevice(), direct3D->getDeviceContext());
-
-
-		// Create the renderer
-		renderer = std::make_unique<Renderer>(*display_config,
-											  *rendering_config,
-											  direct3D->getDevice(),
-											  direct3D->getDeviceContext(),
-											  *swap_chain,
-											  *resource_mgr);
-
-
-		// Initialize ImGui
-		ImGui::CreateContext();
-		ImGui_ImplWin32_Init(window);
-		ImGui_ImplDX11_Init(&direct3D->getDevice(), &direct3D->getDeviceContext());
-		ImGui::StyleColorsClassic();
-	}
+	             RenderingConfig rendering_conf);
 
 	RenderingMgr(const RenderingMgr& mgr) = delete;
 	RenderingMgr(RenderingMgr&& mgr) noexcept = default;
@@ -79,12 +28,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Destructor
 	//----------------------------------------------------------------------------------
-	~RenderingMgr() {
-		// Shutdown ImGui
-		ImGui_ImplDX11_Shutdown();
-		ImGui_ImplWin32_Shutdown();
-		ImGui::DestroyContext();
-	}
+	~RenderingMgr();
 
 
 	//----------------------------------------------------------------------------------
@@ -99,12 +43,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Resize the buffers
-	void onResize() const {
-		ImGui_ImplDX11_InvalidateDeviceObjects();
-		swap_chain->reset();
-		renderer->onResize();
-		ImGui_ImplDX11_CreateDeviceObjects();
-	}
+	void onResize() const;
 
 
 	//----------------------------------------------------------------------------------
@@ -112,27 +51,13 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Start a new frame
-	void beginFrame() const {
-		// Start a new ImGui frame
-		ImGui_ImplDX11_NewFrame();
-		ImGui_ImplWin32_NewFrame();
-		ImGui::NewFrame();
-
-		// Clear the render target view with a specified color
-		static constexpr f32 color[4] = { 0.39f, 0.39f, 0.39f, 1.0f };
-		swap_chain->clear(color);
-	}
+	void beginFrame() const;
 
 	// End the current frame
-	void endFrame() const {
-		// Present the final frame
-		swap_chain->present();
-	}
+	void endFrame() const;
 
 	// Render the current scene
-	void render(Scene& scene, std::chrono::duration<f32> delta_time) const {
-		renderer->render(scene, delta_time);
-	}
+	void render(Scene& scene, std::chrono::duration<f32> delta_time) const;
 
 
 	//----------------------------------------------------------------------------------
@@ -140,49 +65,31 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	DisplayConfig& getDisplayConfig() {
-		return *display_config;
-	}
+	DisplayConfig& getDisplayConfig();
 
 	[[nodiscard]]
-	const DisplayConfig& getDisplayConfig() const {
-		return *display_config;
-	}
+	const DisplayConfig& getDisplayConfig() const;
 
 	[[nodiscard]]
-	RenderingConfig& getRenderingConfig() {
-		return *rendering_config;
-	}
+	RenderingConfig& getRenderingConfig();
 
 	[[nodiscard]]
-	const RenderingConfig& getRenderingConfig() const {
-		return *rendering_config;
-	}
+	const RenderingConfig& getRenderingConfig() const;
 
 	[[nodiscard]]
-	ID3D11Device& getDevice() const {
-		return direct3D->getDevice();
-	}
+	ID3D11Device& getDevice() const;
 
 	[[nodiscard]]
-	ID3D11DeviceContext& getDeviceContext() const {
-		return direct3D->getDeviceContext();
-	}
+	ID3D11DeviceContext& getDeviceContext() const;
 
 	[[nodiscard]]
-	SwapChain& getSwapChain() const {
-		return *swap_chain;
-	}
+	SwapChain& getSwapChain() const;
 
 	[[nodiscard]]
-	ResourceMgr& getResourceMgr() const {
-		return *resource_mgr;
-	}
+	ResourceMgr& getResourceMgr() const;
 
 	[[nodiscard]]
-	const GPUProfiler& getProfiler() const {
-		return renderer->getProfiler();
-	}
+	const GPUProfiler& getProfiler() const;
 
 
 private:

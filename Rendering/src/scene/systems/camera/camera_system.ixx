@@ -1,19 +1,16 @@
 module;
 
 #include "memory/handle/handle.h"
-#include "rendering_forward_decs.h"
 
-export module systems.camera_system;
+export module rendering:systems.camera_system;
 
 import ecs;
 
-import events.core_events;
-import components.camera.perspective_camera;
-import components.camera.orthographic_camera;
-import components.transform;
-
-import rendering;
-
+import :events.core_events;
+import :components.camera.perspective_camera;
+import :components.camera.orthographic_camera;
+import :components.transform;
+import :rendering_mgr;
 
 namespace render::systems {
 

@@ -7,8 +7,11 @@ namespace render {
 
 class Engine;
 
+class Direct3D;
 class DisplayConfig;
+class GPUProfiler;
 class ResourceMgr;
+class Renderer;
 class RenderingMgr;
 class RenderingConfig;
 class RenderStateMgr;

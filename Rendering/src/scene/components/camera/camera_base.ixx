@@ -4,12 +4,16 @@ module;
 #include "datatypes/vector_types.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
-export module components.camera.camera_base;
+export module rendering:components.camera.camera_base;
 
 import ecs;
-import rendering;
+import :constant_buffer;
+import :buffer_types;
+import :rendering_options;
+import :texture;
+import :viewport;
 
 
 export namespace render {

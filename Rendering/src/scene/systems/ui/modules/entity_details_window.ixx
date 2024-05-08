@@ -10,11 +10,10 @@ module;
 #include "string/string.h"
 #include "memory/handle/handle.h"
 
-export module systems.user_interface.modules.entity_details_window;
+export module rendering:systems.user_interface.modules.entity_details_window;
 
 import ecs;
-import systems.user_interface.modules.new_model_menu;
-import rendering;
+import :systems.user_interface.modules.new_model_menu;
 
 
 export class EntityDetailsWindow final {

@@ -9,16 +9,16 @@ module;
 #include "hlsl.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
-module rendering:pass.light_pass;
+module rendering;
 
 import ecs;
-import components.transform;
-import components.light.ambient_light;
-import components.light.directional_light;
-import components.light.point_light;
-import components.light.spot_light;
+import :components.transform;
+import :components.light.ambient_light;
+import :components.light.directional_light;
+import :components.light.point_light;
+import :components.light.spot_light;
 
 import math.geometry;
 

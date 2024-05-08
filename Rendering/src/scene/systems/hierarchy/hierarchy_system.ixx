@@ -2,10 +2,11 @@ module;
 
 #include "memory/handle/handle.h"
 
-export module systems.hierarchy_system;
+export module rendering:systems.hierarchy_system;
 
 import ecs;
-import components.hierarchy;
+import :components.hierarchy;
+import :events.core_events;
 
 
 namespace render::systems {

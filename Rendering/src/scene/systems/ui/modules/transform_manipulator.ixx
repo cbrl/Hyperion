@@ -3,7 +3,7 @@ module;
 #include "datatypes/scalar_types.h"
 #include "datatypes/container_types.h"
 #include "memory/handle/handle.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 #include "input.h"
 #include "key_config.h"
@@ -11,15 +11,15 @@ module;
 #include "imgui.h"
 #include "imgui_addons/ImGuizmo/ImGuizmo.h"
 
-export module systems.user_interface.modules.transform_manipulator;
+export module rendering:systems.user_interface.modules.transform_manipulator;
 
 import ecs;
 
-import components.transform;
-import components.camera.perspective_camera;
-import components.camera.orthographic_camera;
-
-import rendering;
+import :components.transform;
+import :components.camera.perspective_camera;
+import :components.camera.orthographic_camera;
+import :engine;
+import :input;
 
 
 export class TransformManipulator {

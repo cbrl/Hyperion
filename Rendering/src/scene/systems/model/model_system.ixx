@@ -2,15 +2,14 @@ module;
 
 #include <functional>
 
-#include "rendering_forward_decs.h"
+#include "memory/handle/handle.h"
 
-export module systems.model_system;
+export module rendering:systems.model_system;
 
 import ecs;
-import components.transform;
-import components.model;
-
-import rendering;
+import :components.transform;
+import :components.model;
+import :rendering_mgr;
 
 
 namespace render::systems {

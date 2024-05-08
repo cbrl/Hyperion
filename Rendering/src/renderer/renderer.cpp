@@ -9,15 +9,19 @@ module;
 #include "hlsl.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
 
 
-module rendering:renderer;
+module rendering;
 
+import :components.camera.perspective_camera;
+import :components.camera.orthographic_camera;
+import :components.transform;
 import :display_config;
+import :gpu_profiler;
 import :scene;
 import :pass.bounding_volume_pass;
 import :pass.deferred_pass;

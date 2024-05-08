@@ -6,9 +6,10 @@ module;
 
 #include "imgui.h"
 
-export module systems.user_interface.modules.system_menu;
+export module rendering:systems.user_interface.modules.system_menu;
 
-import rendering;
+import :engine;
+import :rendering_mgr;
 
 
 export class SystemMenu final {

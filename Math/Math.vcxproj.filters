@@ -36,13 +36,13 @@
     <ClInclude Include="src\geometry\shapes\bezier.h">
       <Filter>Source Files\geometry\shapes</Filter>
     </ClInclude>
-    <ClInclude Include="src\directxmath\directxmath.h">
+    <ClInclude Include="src\directxmath\directxmath_wrapper.h">
       <Filter>Header Files\directxmath</Filter>
     </ClInclude>
     <ClInclude Include="src\directxmath\directxmath_extensions.h">
       <Filter>Header Files\directxmath</Filter>
     </ClInclude>
-    <ClInclude Include="src\directxmath\directxmath_wrapper.h">
+    <ClInclude Include="src\directxmath\directxmath_vector_interop.h">
       <Filter>Header Files\directxmath</Filter>
     </ClInclude>
     <ClInclude Include="src\maths.h">

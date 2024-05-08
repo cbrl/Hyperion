@@ -5,23 +5,23 @@
 
 
 // SetDebugObjectName, MapGuard
-#include <DirectXHelpers.h>
+#include <directxtk/DirectXHelpers.h>
 
 
 // Mouse and Keyboard input
-#include <Mouse.h>
-#include <Keyboard.h>
+#include <directxtk/Mouse.h>
+#include <directxtk/Keyboard.h>
 
 
 // Texture loading/saving
-#include <WICTextureLoader.h>
-#include <DDSTextureLoader.h>
-#include <ScreenGrab.h>
+#include <directxtk/WICTextureLoader.h>
+#include <directxtk/DDSTextureLoader.h>
+#include <directxtk/ScreenGrab.h>
 
 
 // Font and sprite support
-#include <SpriteBatch.h>
-#include <SpriteFont.h>
+#include <directxtk/SpriteBatch.h>
+#include <directxtk/SpriteFont.h>
 
 
 // Pull the DirectX namespace into scope

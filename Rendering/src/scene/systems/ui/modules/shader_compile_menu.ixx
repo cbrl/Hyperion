@@ -5,9 +5,11 @@ module;
 #include "imgui.h"
 #include "misc/cpp/imgui_stdlib.h"
 
-export module systems.user_interface.modules.shader_compile_menu;
+export module rendering:systems.user_interface.modules.shader_compile_menu;
 
-import rendering;
+import :engine;
+import :rendering_mgr;
+import :resource_mgr;
 
 
 export class ShaderCompileMenu final {

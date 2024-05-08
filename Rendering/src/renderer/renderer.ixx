@@ -9,7 +9,7 @@ module;
 #include "hlsl.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 #include "rendering_forward_decs.h"
 

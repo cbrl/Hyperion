@@ -12,8 +12,7 @@ module;
 export module rendering:scene;
 
 export import ecs;
-export import entities.core_entities;
-export import components.core_components;
+import :entities.core_entities;
 
 
 namespace render {

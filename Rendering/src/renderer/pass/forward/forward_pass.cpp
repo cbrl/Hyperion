@@ -4,13 +4,13 @@ module;
 
 #include "hlsl.h"
 #include "directx/d3d11.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
-module rendering:pass.forward_pass;
+module rendering;
 
 import ecs;
-import components.model;
-import components.transform;
+import :components.model;
+import :components.transform;
 
 import math.geometry;
 

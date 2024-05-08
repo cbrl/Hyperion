@@ -1,10 +1,12 @@
 module;
 
 #include "datatypes/scalar_types.h"
-#include "directxmath/directxmath.h"
+#include "datatypes/vector_types.h"
+#include "directxmath/directxmath_wrapper.h"
 
 export module math.geometry:transform_3d;
 
+using namespace DirectX;
 
 export class Transform3D {
 public:

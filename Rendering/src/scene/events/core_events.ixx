@@ -5,7 +5,7 @@ module;
 #include "memory/handle/handle.h"
 #include "datatypes/types.h"
 
-export module events.core_events;
+export module rendering:events.core_events;
 
 
 export namespace render::events {

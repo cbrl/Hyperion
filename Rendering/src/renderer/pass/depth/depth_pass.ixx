@@ -6,16 +6,16 @@ module;
 #include "hlsl.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:pass.depth_pass;
 
 import ecs;
-import components.model;
-import components.transform;
 
 import math.geometry;
 
+import :components.model;
+import :components.transform;
 import :buffer_types;
 import :constant_buffer;
 import :pipeline;

@@ -1,4 +1,4 @@
-module systems.user_interface;
+module rendering;
 
 
 UserInterface::UserInterface(ecs::ECS& ecs, Engine& engine)

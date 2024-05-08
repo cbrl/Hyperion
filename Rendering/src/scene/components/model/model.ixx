@@ -4,12 +4,15 @@ module;
 #include "io/io.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath.h"
+#include "directxmath/directxmath_wrapper.h"
 
-export module components.model;
+export module rendering:components.model;
 
 import ecs;
-import rendering;
+import :buffer_types;
+import :constant_buffer;
+import :mesh;
+import :model_blueprint;
 
 
 //----------------------------------------------------------------------------------
