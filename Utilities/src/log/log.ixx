@@ -1,34 +1,41 @@
-#pragma once
+module;
+
+//#define SPDLOG_COMPILED_LIB
+
+#include <iostream>
+#include <memory>
 
 #include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/sinks/rotating_file_sink.h>
-#include <iostream>
+#include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/sinks/wincolor_sink.h>
 
-using LogLevel = spdlog::level::level_enum;
+export module log;
 
-class Logger final {
+export using LogLevel = spdlog::level::level_enum;
+
+export class Logger final {
 private:
 	Logger() noexcept {
 		try {
-			#ifdef _WIN32
+#ifdef _WIN32
 			auto console_sink = std::make_shared<spdlog::sinks::wincolor_stdout_sink_mt>();
-			#else
+#else
 			auto console_sink = std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>();
-			#endif
+#endif
 
-			auto file_sink    = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("log.txt", 1024 * 1024, 1);
+			auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>("log.txt", 1024 * 1024, 1);
 
 			const std::string pattern = "[%Y-%m-%d %H:%M:%S.%e] [%l] %v";
 			console_sink->set_pattern(pattern);
 			file_sink->set_pattern(pattern);
 
-			logger = std::make_shared<spdlog::logger>("log", spdlog::sinks_init_list{console_sink, file_sink});
+			logger = std::make_shared<spdlog::logger>("log", spdlog::sinks_init_list{ console_sink, file_sink });
 
-			#ifdef _DEBUG
+#ifdef _DEBUG
 			console_sink->set_level(LogLevel::debug);
 			file_sink->set_level(LogLevel::debug);
-			#endif
+#endif
 
 			logger->log(LogLevel::info, "<=========================START=========================>");
 		}

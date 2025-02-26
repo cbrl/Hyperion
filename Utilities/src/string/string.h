@@ -25,7 +25,7 @@
 #include <charconv>
 
 #include <gsl/pointers>
-#include <gsl/string_span>
+#include <gsl/span>
 
 #include <optional>
 #include <type_traits>

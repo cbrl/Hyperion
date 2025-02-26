@@ -7,10 +7,10 @@ module;
 #include <unordered_map>
 
 #include "datatypes/scalar_types.h"
-#include "log/log.h"
 
 export module ecs:event_mgr;
 
+import log;
 import :event_dispatcher;
 
 export namespace ecs {

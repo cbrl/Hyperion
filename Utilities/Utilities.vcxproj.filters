@@ -15,9 +15,6 @@
     <Filter Include="Header Files\io">
       <UniqueIdentifier>{105bc6f5-b4c3-443f-832c-61ac3bffdce6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\log">
-      <UniqueIdentifier>{b8bd2798-5017-4b75-9ce0-a3c163679911}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\memory">
       <UniqueIdentifier>{7d57ef6a-e1c5-4cea-8cfd-8235357412a6}</UniqueIdentifier>
     </Filter>
@@ -36,23 +33,23 @@
     <Filter Include="Header Files\memory\handle">
       <UniqueIdentifier>{c2dc4a9e-77fe-4652-909c-aca45c3be5db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\exception">
-      <UniqueIdentifier>{9b13a388-1e01-4a76-b0d2-90b6d1d89485}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\os\windows">
       <UniqueIdentifier>{17dadc17-6fae-431d-9dc8-9512f27ecf09}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\os">
       <UniqueIdentifier>{c8ec018d-e8f1-461d-ae1f-a1ec3bd423d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\os\windows">
-      <UniqueIdentifier>{7bf52c0a-f820-4c43-ae22-e5cccf02d1c5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\json">
       <UniqueIdentifier>{1058c100-7a57-4437-85d0-ccd9860c6751}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\time">
       <UniqueIdentifier>{e164f296-9b9f-4b54-9371-f09f524f7027}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\log">
+      <UniqueIdentifier>{d5f7e2bb-f51f-4207-aaae-d5d8cac6df27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\exception">
+      <UniqueIdentifier>{3919bff5-23db-4bf0-b811-11a24eefd220}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -67,9 +64,6 @@
     </ClInclude>
     <ClInclude Include="src\io\io.h">
       <Filter>Header Files\io</Filter>
-    </ClInclude>
-    <ClInclude Include="src\log\log.h">
-      <Filter>Header Files\log</Filter>
     </ClInclude>
     <ClInclude Include="src\string\string.h">
       <Filter>Header Files\string</Filter>
@@ -89,16 +83,10 @@
     <ClInclude Include="src\directx\directxtk.h">
       <Filter>Header Files\directx</Filter>
     </ClInclude>
-    <ClInclude Include="src\exception\exception.h">
-      <Filter>Header Files\exception</Filter>
-    </ClInclude>
     <ClInclude Include="src\os\windows\win_utils.h">
       <Filter>Header Files\os\windows</Filter>
     </ClInclude>
     <ClInclude Include="src\os\windows\windows.h">
-      <Filter>Header Files\os\windows</Filter>
-    </ClInclude>
-    <ClInclude Include="src\os\windows\window.h">
       <Filter>Header Files\os\windows</Filter>
     </ClInclude>
     <ClInclude Include="src\time\time.h">
@@ -127,11 +115,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\os\windows\window.cpp">
-      <Filter>Source Files\os\windows</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="src\time\stopwatch.tpp">
       <Filter>Header Files\time</Filter>
     </None>
@@ -139,5 +122,16 @@
       <Filter>Header Files\memory\handle</Filter>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\os\windows\window.ixx">
+      <Filter>Header Files\os\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\exception\exception.ixx">
+      <Filter>Source Files\exception</Filter>
+    </ClCompile>
+    <ClCompile Include="src\log\log.ixx">
+      <Filter>Source Files\log</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

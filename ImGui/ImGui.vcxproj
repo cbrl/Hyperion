@@ -20,20 +20,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.h" />
-    <ClInclude Include="src\imgui_addons\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\countof.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\perf_timer.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\snprintf.h" />
-    <ClInclude Include="src\imgui_forwarder\imgui_message_forwarder.h" />
+    <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClInclude Include="src\misc\cpp\imgui_stdlib.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.cpp" />
-    <ClCompile Include="src\imgui_addons\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.cpp" />
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\ProggyTiny.cpp" />
-    <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.cpp" />
     <ClCompile Include="src\misc\cpp\imgui_stdlib.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -116,6 +115,9 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <BrowseInformation>true</BrowseInformation>
+      <EnableModules />
+      <BuildStlModules>
+      </BuildStlModules>
     </ClCompile>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -153,6 +155,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <EnableModules />
+      <BuildStlModules>
+      </BuildStlModules>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

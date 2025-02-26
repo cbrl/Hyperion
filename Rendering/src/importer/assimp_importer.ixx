@@ -3,7 +3,6 @@ module;
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 #include "io/io.h"
-#include "log/log.h"
 
 #include <assimp/scene.h>
 #include <assimp/pbrmaterial.h>
@@ -12,6 +11,7 @@ module;
 
 export module rendering:importer.model_importer.assimp_importer;
 
+import log;
 import :resource_mgr;
 import :material_factory;
 import :model_output;

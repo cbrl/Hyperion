@@ -1,9 +1,15 @@
-#pragma once
+module;
 
-#include "os/windows/window.h"
+#include "os/windows/windows.h"
 
+export module imgui_message_forwarder;
 
-class ImGuiMessageForwarder final : public MessageForwarder {
+import window;
+
+// Declare the ImGui msg handler
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+export class ImGuiMessageForwarder final : public MessageForwarder {
 public:
 	static ImGuiMessageForwarder forwarder;
 
@@ -29,5 +35,10 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) override;
+	void msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) override {
+		ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
+	}
 };
+
+// Define the static message forwarder
+ImGuiMessageForwarder ImGuiMessageForwarder::forwarder;

@@ -1,12 +1,11 @@
 module;
 
 #include "io/io.h"
-#include "log/log.h"
-
 #include "directx/d3d11.h"
 
 export module rendering:shader_bytecode;
 
+import log;
 
 export namespace render {
 

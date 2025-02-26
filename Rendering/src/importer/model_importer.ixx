@@ -1,10 +1,10 @@
 module;
 
 #include "io/io.h"
-#include "log/log.h"
 
 export module rendering:importer.model_importer;
 
+import log;
 import :importer.model_importer.assimp_importer;
 import :resource_mgr;
 import :model_output;

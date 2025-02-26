@@ -18,9 +18,6 @@
     <Filter Include="Header Files\imgui_forwarder">
       <UniqueIdentifier>{cb3c7a2d-32e2-4678-991c-4ddb70d78b22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\imgui_forwarder">
-      <UniqueIdentifier>{5a77c27d-9c75-4471-91ba-794f4c8f5809}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\imgui_addons">
       <UniqueIdentifier>{8b1caa52-2a54-4ba8-b65c-7705f1acb566}</UniqueIdentifier>
     </Filter>
@@ -29,12 +26,6 @@
     </Filter>
     <Filter Include="Header Files\imgui_addons\metrics_gui">
       <UniqueIdentifier>{e823d83d-4f95-49fb-bab8-18b241b7db04}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\imgui_addons\ImGuizmo">
-      <UniqueIdentifier>{a8075d1a-b356-4d4c-b1d9-8147cf333b45}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\imgui_addons\ImGuizmo">
-      <UniqueIdentifier>{e87ee886-35ed-4540-989f-dcfc6f1a7de9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\imgui_addons\metrics_gui">
       <UniqueIdentifier>{7f366f93-7277-4e17-a6b0-654a5d30ad9c}</UniqueIdentifier>
@@ -62,12 +53,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\imgui_forwarder\imgui_message_forwarder.h">
-      <Filter>Header Files\imgui_forwarder</Filter>
-    </ClInclude>
-    <ClInclude Include="src\imgui_addons\ImGuizmo\ImGuizmo.h">
-      <Filter>Header Files\imgui_addons\ImGuizmo</Filter>
-    </ClInclude>
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\perf_timer.h">
       <Filter>Header Files\imgui_addons\metrics_gui\portable</Filter>
     </ClInclude>
@@ -88,12 +73,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.cpp">
-      <Filter>Source Files\imgui_forwarder</Filter>
-    </ClCompile>
-    <ClCompile Include="src\imgui_addons\ImGuizmo\ImGuizmo.cpp">
-      <Filter>Source Files\imgui_addons\ImGuizmo</Filter>
-    </ClCompile>
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.cpp">
       <Filter>Source Files\imgui_addons\metrics_gui\metrics_gui</Filter>
     </ClCompile>
@@ -105,6 +84,9 @@
     </ClCompile>
     <ClCompile Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.cpp">
       <Filter>Source Files\imgui_addons\ImGuiColorTextEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.ixx">
+      <Filter>Header Files\imgui_forwarder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

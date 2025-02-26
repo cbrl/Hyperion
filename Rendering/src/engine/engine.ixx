@@ -4,9 +4,6 @@ module;
 #include <memory>
 #include <string>
 
-#include "log/log.h"
-#include "os/windows/window.h"
-
 #include "sysmon/system_monitor.h"
 #include "time/stopwatch.h"
 #include "input.h"
@@ -16,6 +13,8 @@ module;
 
 export module rendering:engine;
 
+import log;
+import window;
 import :rendering_mgr;
 import :scene;
 

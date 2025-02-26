@@ -12,11 +12,11 @@ module;
 #include "json/nlohmann_json.h"
 #include "os/windows/window.h"
 
-#include "imgui_forwarder/imgui_message_forwarder.h"
 #include "config/config_tokens.h"
 
 module rendering;
 
+import imgui_message_forwarder;
 import :display_config;
 import :rendering_config;
 import :rendering_mgr;

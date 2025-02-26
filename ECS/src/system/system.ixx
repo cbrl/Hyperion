@@ -1,5 +1,6 @@
 module;
 
+#include <algorithm>
 #include <chrono>
 #include <concepts>
 #include <functional>
@@ -11,10 +12,11 @@ module;
 #include <vector>
 
 #include "datatypes/scalar_types.h"
-#include "exception/exception.h"
 #include "time/time.h"
 
 export module ecs:system;
+
+import exception;
 
 
 template<typename T>

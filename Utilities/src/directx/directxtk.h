@@ -12,7 +12,6 @@
 #include <directxtk/Mouse.h>
 #include <directxtk/Keyboard.h>
 
-
 // Texture loading/saving
 #include <directxtk/WICTextureLoader.h>
 #include <directxtk/DDSTextureLoader.h>

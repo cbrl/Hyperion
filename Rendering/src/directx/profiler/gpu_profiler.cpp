@@ -3,11 +3,11 @@ module;
 #include <chrono>
 
 #include "datatypes/types.h"
-#include "log/log.h"
-
 #include "directx/d3d11.h"
 
 module rendering;
+
+import log;
 
 using namespace std::chrono_literals;
 

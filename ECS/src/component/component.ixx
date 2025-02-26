@@ -9,12 +9,12 @@ module;
 #include <unordered_map>
 
 #include "datatypes/scalar_types.h"
-#include "log/log.h"
 #include "memory/handle/handle.h"
 #include "memory/resource_pool.h"
 
 export module ecs:component;
 
+import log;
 import :event_mgr;
 
 

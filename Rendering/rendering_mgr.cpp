@@ -6,7 +6,6 @@ module;
 #include "datatypes/pointer_types.h"
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
-#include "log/log.h"
 
 #include "directx/d3d11.h"
 
@@ -16,6 +15,7 @@ module;
 
 module rendering;
 
+import log;
 import :direct3d;
 import :display_config;
 import :renderer;

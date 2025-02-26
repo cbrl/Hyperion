@@ -149,26 +149,27 @@
     <ClInclude Include="src\datatypes\scalar_types.h" />
     <ClInclude Include="src\datatypes\vector_types.h" />
     <ClInclude Include="src\directx\directxtk.h" />
-    <ClInclude Include="src\exception\exception.h" />
+    <ClCompile Include="src\exception\exception.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClInclude Include="src\io\io.h" />
     <ClInclude Include="src\json\nlohmann_json.h" />
-    <ClInclude Include="src\log\log.h" />
+    <ClCompile Include="src\log\log.ixx" />
     <ClInclude Include="src\memory\handle\handle.h" />
     <ClInclude Include="src\memory\handle\handle_map.h" />
     <ClInclude Include="src\memory\handle\handle_table.h" />
     <ClInclude Include="src\memory\managed_resource_map.h" />
     <ClInclude Include="src\memory\resource_pool.h" />
     <ClInclude Include="src\memory\sparse_set.h" />
-    <ClInclude Include="src\os\windows\window.h" />
+    <ClCompile Include="src\os\windows\window.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClInclude Include="src\os\windows\windows.h" />
     <ClInclude Include="src\os\windows\win_utils.h" />
     <ClInclude Include="src\string\string.h" />
     <ClInclude Include="src\sysmon\system_monitor.h" />
     <ClInclude Include="src\time\stopwatch.h" />
     <ClInclude Include="src\time\time.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\os\windows\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

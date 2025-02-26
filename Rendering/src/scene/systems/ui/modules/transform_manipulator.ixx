@@ -9,7 +9,7 @@ module;
 #include "key_config.h"
 
 #include "imgui.h"
-#include "imgui_addons/ImGuizmo/ImGuizmo.h"
+#include <ImGuizmo.h>
 
 export module rendering:systems.user_interface.modules.transform_manipulator;
 

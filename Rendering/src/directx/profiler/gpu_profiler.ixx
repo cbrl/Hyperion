@@ -1,13 +1,12 @@
 module;
 
 #include "datatypes/types.h"
-#include "time/stopwatch.h"
-#include "log/log.h"
-
 #include "directx/d3d11.h"
+#include "time/stopwatch.h"
 
 export module rendering:gpu_profiler;
 
+import log;
 
 export namespace render {
 
