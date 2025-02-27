@@ -9,6 +9,7 @@ module;
 
 export module rendering:mesh;
 
+import exception;
 import :pipeline;
 
 

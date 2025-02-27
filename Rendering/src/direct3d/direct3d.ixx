@@ -7,6 +7,7 @@ module;
 
 export module rendering:direct3d;
 
+import exception;
 import :display_config;
 
 

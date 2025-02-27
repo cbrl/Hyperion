@@ -5,7 +5,6 @@ module;
 #include "memory/handle/handle.h"
 #include "directxmath/directxmath_wrapper.h"
 
-#include "input.h"
 #include "key_config.h"
 
 #include "imgui.h"
@@ -14,12 +13,12 @@ module;
 export module rendering:systems.user_interface.modules.transform_manipulator;
 
 import ecs;
+import input;
 
 import :components.transform;
 import :components.camera.perspective_camera;
 import :components.camera.orthographic_camera;
 import :engine;
-import :input;
 
 
 export class TransformManipulator {
@@ -55,7 +54,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void draw(Engine& engine, handle64 selected_entity) {
+	void draw(render::Engine& engine, handle64 selected_entity) {
 		auto& ecs = engine.getScene().getECS();
 
 		if (not ecs.valid(selected_entity)) {

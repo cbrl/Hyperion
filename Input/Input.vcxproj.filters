@@ -11,15 +11,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\key_config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\input.cpp">
+    <ClCompile Include="src\input.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\key_config.cpp">

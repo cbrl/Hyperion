@@ -10,6 +10,7 @@ export module rendering:systems.user_interface.modules.shader_compile_menu;
 import :engine;
 import :rendering_mgr;
 import :resource_mgr;
+import :shader_factory;
 
 
 export class ShaderCompileMenu final {
@@ -52,12 +53,12 @@ public:
 	// Call every frame to render the compile popup if it is open.
 	// Returns true if "Compile" was clicked, and thus compileShader() needs to be called.
 	[[nodiscard]]
-	bool update(Engine& engine) {
+	bool update(render::Engine& engine) {
 		return drawCompilePopup(engine);
 	}
 
 	// Compile an input shader of the type selected in this menu
-	void compileShader(Engine& engine, std::string_view data) const {
+	void compileShader(render::Engine& engine, std::string_view data) const {
 		using namespace render;
 		using ShaderFactory::CreateShaderFromMemory;
 
@@ -110,7 +111,7 @@ public:
 
 private:
 	[[nodiscard]]
-	bool drawCompilePopup(Engine& engine) {
+	bool drawCompilePopup(render::Engine& engine) {
 		bool compile_clicked = false;
 
 		if (compile_popup_open) {
@@ -180,7 +181,7 @@ private:
 	}
 
 	[[nodiscard]]
-	bool checkExistingShaderName(Engine& engine) const {
+	bool checkExistingShaderName(render::Engine& engine) const {
 		using namespace render;
 
 		// Check the selected shader type name, then compare existing names of that type of shader.
@@ -208,7 +209,7 @@ private:
 
 	template<typename ShaderT>
 	[[nodiscard]]
-	bool checkTypeExistingName(Engine& engine) const {
+	bool checkTypeExistingName(render::Engine& engine) const {
 		auto& resource_mgr = engine.getRenderingMgr().getResourceMgr();
 		std::wstring wstr_name = StrToWstr(shader_name);
 
@@ -261,7 +262,7 @@ private:
 	int type_idx = 0;
 
 	// pair<name, target_version>
-	static constexpr std::pair<gsl::czstring<>, gsl::czstring<>> shader_types[] = {
+	static constexpr std::pair<gsl::czstring, gsl::czstring> shader_types[] = {
 	    {"Compute Shader",  "cs_5_0"},
 	    {"Domain Shader",   "ds_5_0"},
 	    {"Geometry Shader", "gs_5_0"},

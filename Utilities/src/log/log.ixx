@@ -1,9 +1,11 @@
 module;
 
-//#define SPDLOG_COMPILED_LIB
+// MSBuild vcpkg integration will autolink the spdlog library, but not define the SPDLOG_COMPILED_LIB macro
+#define SPDLOG_COMPILED_LIB
 
 #include <iostream>
 #include <memory>
+#include <utility>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/rotating_file_sink.h>

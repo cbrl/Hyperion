@@ -1,5 +1,6 @@
 module;
 
+#include <functional>
 #include <memory>
 #include <memory_resource>
 #include <typeinfo>
@@ -10,7 +11,6 @@ module;
 
 export module ecs:event_mgr;
 
-import log;
 import :event_dispatcher;
 
 export namespace ecs {

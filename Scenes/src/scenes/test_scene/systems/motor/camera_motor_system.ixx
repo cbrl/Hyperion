@@ -4,13 +4,13 @@ module;
 #include "memory/handle/handle.h"
 #include "directxmath/directxmath_wrapper.h"
 
-#include "input.h"
 #include "key_config.h"
 
 export module systems.motor.camera_motor;
 
 import ecs;
 import events.core_events;
+import input;
 import components.camera.orthographic_camera;
 import components.camera.perspective_camera;
 import components.motor.camera_movement;

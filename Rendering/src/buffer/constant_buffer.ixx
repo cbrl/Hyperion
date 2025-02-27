@@ -7,6 +7,7 @@ module;
 
 export module rendering:constant_buffer;
 
+import exception;
 
 export namespace render {
 

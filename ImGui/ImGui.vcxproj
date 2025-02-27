@@ -35,6 +35,11 @@
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\ProggyTiny.cpp" />
     <ClCompile Include="src\misc\cpp\imgui_stdlib.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
+      <Project>{4a7e2159-d052-4c1d-8f94-5188286a09b8}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{19AEC9AA-3DD9-4908-97C0-F270AE5C0C1A}</ProjectGuid>

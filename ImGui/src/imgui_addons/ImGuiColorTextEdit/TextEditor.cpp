@@ -48,6 +48,9 @@ void TextEditor::SetPalette(PaletteId aValue)
 	case PaletteId::RetroBlue:
 		palletteBase = &(GetRetroBluePalette());
 		break;
+	default:
+		palletteBase = &(GetDarkPalette());
+		break;
 	}
 	/* Update palette with the current alpha from style */
 	for (int i = 0; i < (int)PaletteIndex::Max; ++i)
@@ -95,6 +98,9 @@ void TextEditor::SetLanguageDefinition(LanguageDefinitionId aValue)
 		break;
 	case LanguageDefinitionId::Hlsl:
 		mLanguageDefinition = &(LanguageDefinition::Hlsl());
+		break;
+	default:
+		mLanguageDefinition = nullptr;
 		break;
 	}
 

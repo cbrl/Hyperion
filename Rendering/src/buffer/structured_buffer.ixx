@@ -7,6 +7,7 @@ module;
 
 export module rendering:structured_buffer;
 
+import exception;
 
 export namespace render {
 

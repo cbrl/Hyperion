@@ -16,8 +16,6 @@ module;
 
 export module ecs:system;
 
-import exception;
-
 
 template<typename T>
 std::type_index get_type_index() {

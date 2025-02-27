@@ -18,7 +18,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	Font(ID3D11Device& device, gsl::cwzstring<> file, bool forceSRGB = false)
+	Font(ID3D11Device& device, gsl::cwzstring file, bool forceSRGB = false)
 		: Resource(file)
 		, font(&device, file, forceSRGB) {
 	}

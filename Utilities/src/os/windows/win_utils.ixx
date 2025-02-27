@@ -1,10 +1,6 @@
-#pragma once
+module;
 
-
-//----------------------------------------------------------------------------------
-// Includes
-//----------------------------------------------------------------------------------
-
+#include "datatypes/scalar_types.h"
 #include "io/io.h"
 #include "os/windows/windows.h"
 
@@ -12,8 +8,11 @@
 #include <processthreadsapi.h>
 #include <ShObjIdl_core.h>
 
+export module win_utils;
 
+import exception;
 
+export {
 
 //----------------------------------------------------------------------------------
 // Functions - System Time
@@ -184,3 +183,5 @@ inline void AllocateConsole() {
 	}
 	
 }
+
+} //export

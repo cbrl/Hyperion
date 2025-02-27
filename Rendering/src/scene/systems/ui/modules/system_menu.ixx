@@ -1,23 +1,30 @@
 module;
 
-#include "datatypes/types.h"
-#include "os/windows/win_utils.h"
-#include <DirectXTex.h>
-
 #include "imgui.h"
+#include "datatypes/types.h"
+#include "io/io.h"
+
+#include <DirectXTex.h>
 
 export module rendering:systems.user_interface.modules.system_menu;
 
+import win_utils;
+
 import :engine;
 import :rendering_mgr;
-
+import :rendering_config;
+import :display_config;
+import :model_blueprint;
+import :resource_mgr;
+import :exporter.model_exporter;
+import :texture;
 
 export class SystemMenu final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	SystemMenu(const Engine& engine) {
+	SystemMenu(const render::Engine& engine) {
 		const auto& rendering_mgr    = engine.getRenderingMgr();
 		const auto& rendering_config = rendering_mgr.getRenderingConfig();
 		const auto& display_config   = rendering_mgr.getDisplayConfig();
@@ -56,7 +63,7 @@ public:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void draw(Engine& engine) {
+	void draw(render::Engine& engine) {
 		bool display_settings_popup = false;
 		bool engine_settings_popup  = false;
 		bool export_model_popup     = false;
@@ -132,7 +139,7 @@ public:
 
 private:
 
-	void drawEngineSettingsPopup(Engine& engine) {
+	void drawEngineSettingsPopup(render::Engine& engine) {
 		if (ImGui::BeginPopupModal("Engine Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 
 			auto& rendering_mgr = engine.getRenderingMgr();
@@ -174,7 +181,7 @@ private:
 		}
 	}
 
-	void drawDisplaySettingsPopup(Engine& engine) {
+	void drawDisplaySettingsPopup(render::Engine& engine) {
 		if (ImGui::BeginPopupModal("Display Settings", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
 
 			auto& settings = engine.getRenderingMgr().getDisplayConfig();
@@ -215,8 +222,8 @@ private:
 		}
 	}
 
-	void drawExportModelPopup(Engine& engine) {
-		ImGui::SetNextWindowContentWidth(400);
+	void drawExportModelPopup(render::Engine& engine) {
+		ImGui::SetNextWindowContentSize({400, 0});
 		if (ImGui::BeginPopup("Export Model", ImGuiWindowFlags_NoResize)) {
 			auto& rendering_mgr  = engine.getRenderingMgr();
 			auto& device         = rendering_mgr.getDevice();
@@ -253,8 +260,8 @@ private:
 		}
 	}
 
-	void drawExportTexturePopup(Engine& engine) {
-		ImGui::SetNextWindowContentWidth(500);
+	void drawExportTexturePopup(render::Engine& engine) {
+		ImGui::SetNextWindowContentSize({500, 0});
 		if (ImGui::BeginPopup("Export Texture", ImGuiWindowFlags_AlwaysAutoResize)) {
 			auto& rendering_mgr  = engine.getRenderingMgr();
 			auto& device         = rendering_mgr.getDevice();
@@ -268,7 +275,7 @@ private:
 					continue;
 
 				// Draw texture
-				ImGui::Image(texture_weakptr->get(), {40, 40});
+				ImGui::Image(reinterpret_cast<ImTextureID>(texture_weakptr->get()), {40, 40});
 
 				ImGui::SameLine();
 				ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 12);

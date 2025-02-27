@@ -10,7 +10,9 @@ module;
 
 export module rendering:importer.texture_importer;
 
+import exception;
 import log;
+
 
 void CreateErrorTexture(ID3D11Device& device, ID3D11ShaderResourceView** srv_out) {
 	static u32 error_text_data[128][128] = {{}};

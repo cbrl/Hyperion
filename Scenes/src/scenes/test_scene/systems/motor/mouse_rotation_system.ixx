@@ -4,12 +4,12 @@ module;
 #include "memory/handle/handle.h"
 #include "directxmath/directxmath_wrapper.h"
 
-#include "input.h"
 #include "key_config.h"
 
 export module systems.motor.mouse_rotation;
 
 import ecs;
+import input;
 import components.motor.mouse_rotation;
 import components.transform;
 

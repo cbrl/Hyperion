@@ -4,17 +4,20 @@ module;
 
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
+#include "memory/handle/handle.h"
 
 #include "directxmath/directxmath_wrapper.h"
-
 #include "rendering_forward_decs.h"
 
 export module rendering:systems.picking_system;
 
 import ecs;
 import math.geometry;
+
 import :engine;
 import :events.core_events;
+import :components.model;
+import :components.transform;
 import :components.camera.orthographic_camera;
 import :components.camera.perspective_camera;
 

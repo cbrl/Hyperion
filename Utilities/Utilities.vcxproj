@@ -165,9 +165,13 @@
       <FileType>Document</FileType>
     </ClCompile>
     <ClInclude Include="src\os\windows\windows.h" />
-    <ClInclude Include="src\os\windows\win_utils.h" />
+    <ClCompile Include="src\os\windows\win_utils.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClInclude Include="src\string\string.h" />
-    <ClInclude Include="src\sysmon\system_monitor.h" />
+    <ClCompile Include="src\sysmon\system_monitor.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClInclude Include="src\time\stopwatch.h" />
     <ClInclude Include="src\time\time.h" />
   </ItemGroup>

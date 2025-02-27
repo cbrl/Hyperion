@@ -17,7 +17,7 @@ class SelectableTree final {
 
 public:
 	template<typename... ArgsT>
-	bool newNode(T ptr, gsl::czstring<> fmt, ArgsT... args) {
+	bool newNode(T ptr, gsl::czstring fmt, ArgsT... args) {
 		const auto flags = ImGuiTreeNodeFlags_OpenOnArrow
 		                   | ImGuiTreeNodeFlags_OpenOnDoubleClick
 		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
@@ -25,7 +25,7 @@ public:
 	}
 
 	template<typename... ArgsT>
-	bool newLeafNode(T ptr, gsl::czstring<> fmt, ArgsT... args) {
+	bool newLeafNode(T ptr, gsl::czstring fmt, ArgsT... args) {
 		const auto flags = ImGuiTreeNodeFlags_Leaf
 		                   | ImGuiTreeNodeFlags_Bullet
 		                   | (selected == ptr ? ImGuiTreeNodeFlags_Selected : 0);
@@ -51,7 +51,7 @@ public:
 private:
 
 	template<typename... ArgsT>
-	bool node(T ptr, ImGuiTreeNodeFlags flags, gsl::czstring<> fmt, ArgsT... args) {
+	bool node(T ptr, ImGuiTreeNodeFlags flags, gsl::czstring fmt, ArgsT... args) {
 		const bool is_open = ImGui::TreeNodeEx(reinterpret_cast<void*>(ptr), flags, fmt, std::forward<ArgsT>(args)...);
 		if (ImGui::IsItemClicked()) {
 			selected = ptr;

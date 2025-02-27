@@ -66,7 +66,7 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Draw the details panel for the specified entity
-	void draw(Engine& engine, handle64 handle);
+	void draw(render::Engine& engine, handle64 handle);
 
 	template<typename ComponentT>
 	requires std::derived_from<ComponentT, ecs::IComponent>
@@ -77,13 +77,13 @@ public:
 private:
 
 	// Draw the menu in the entity details window
-	void drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, handle64 handle);
+	void drawAddComponentMenu(render::Engine& engine, ecs::ECS& ecs, handle64 handle);
 
 	// Draw a node in the tree, and its details if selected
 	template<typename T, typename... ArgsT>
-	void drawComponentNode(ecs::ECS& ecs, gsl::czstring<> text, T& component, ArgsT&&... args);
+	void drawComponentNode(ecs::ECS& ecs, gsl::czstring text, T& component, ArgsT&&... args);
 
-	void drawUserComponentNode(ecs::ECS& ecs, gsl::czstring<> text, ecs::IComponent& component, const UserComponent::details_func& draw_func);
+	void drawUserComponentNode(ecs::ECS& ecs, gsl::czstring text, ecs::IComponent& component, const UserComponent::details_func& draw_func);
 
 	template<typename ComponentT, typename... ArgsT>
 	void drawDetails(ComponentT& component, ArgsT&&... args);

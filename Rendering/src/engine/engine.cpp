@@ -10,13 +10,14 @@ module;
 #include "datatypes/vector_types.h"
 #include "io/io.h"
 #include "json/nlohmann_json.h"
-#include "os/windows/window.h"
 
 #include "config/config_tokens.h"
 
 module rendering;
 
+import input;
 import imgui_message_forwarder;
+
 import :display_config;
 import :rendering_config;
 import :rendering_mgr;

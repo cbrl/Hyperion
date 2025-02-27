@@ -1,15 +1,25 @@
 module;
 
-#include "os/windows/win_utils.h"
+#include <gsl/gsl>
 
 #include "imgui.h"
 #include "misc/cpp/imgui_stdlib.h"
+#include "memory/handle/handle.h"
 
-module rendering:systems.user_interface.modules.entity_details_window;
+module rendering;
+
+import win_utils;
 
 import :engine;
 import :texture_factory;
 import :resource_mgr;
+import :components.hierarchy;
+import :components.text;
+import :components.transform;
+import :components.light.ambient_light;
+import :components.light.directional_light;
+import :components.light.point_light;
+import :components.light.spot_light;
 
 
 // render namespace is heavily utilized here, so import it for brevity.
@@ -17,7 +27,7 @@ using namespace render;
 
 
 template<typename ComponentT>
-void DrawComponentState(ComponentT& component, gsl::czstring<> name = nullptr) {
+void DrawComponentState(ComponentT& component, gsl::czstring name = nullptr) {
 	if (name) {
 		ImGui::InputText("", const_cast<char*>(name), std::strlen(name), ImGuiInputTextFlags_ReadOnly);
 		ImGui::SameLine();
@@ -252,7 +262,7 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, ha
 
 template<typename T, typename... ArgsT>
 void EntityDetailsWindow::drawComponentNode(ecs::ECS& ecs,
-                                            gsl::czstring<> text,
+                                            gsl::czstring text,
                                             T& component,
                                             ArgsT&&... args) {
 
@@ -270,7 +280,7 @@ void EntityDetailsWindow::drawComponentNode(ecs::ECS& ecs,
 
 
 void EntityDetailsWindow::drawUserComponentNode(ecs::ECS& ecs,
-                                                gsl::czstring<> text,
+                                                gsl::czstring text,
                                                 ecs::IComponent& component,
                                                 const UserComponent::details_func& draw_func) {
 
@@ -319,7 +329,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	//----------------------------------------------------------------------------------
 	// Render Mode
 	//----------------------------------------------------------------------------------
-	static constexpr gsl::czstring<> render_mode_names[] = {
+	static constexpr gsl::czstring render_mode_names[] = {
 	    "Forward",
 	    "Forward+",
 	    "Deferred",
@@ -340,7 +350,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	//----------------------------------------------------------------------------------
 	// BRDF
 	//----------------------------------------------------------------------------------
-	static constexpr gsl::czstring<> brdf_names[] = {
+	static constexpr gsl::czstring brdf_names[] = {
 	    "Lambert",
 	    "Blinn-Phong",
 	    "Microfacet",
@@ -361,7 +371,7 @@ void DrawCameraSettings(CameraSettings& settings) {
 	//----------------------------------------------------------------------------------
 	// FalseColor
 	//----------------------------------------------------------------------------------
-	static constexpr gsl::czstring<> false_color_names[] = {
+	static constexpr gsl::czstring false_color_names[] = {
 	    "Fullbright",
 	    "Texture Coord",
 	    "Material Params",

@@ -138,15 +138,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\input.h" />
     <ClInclude Include="src\key_config.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\input.ixx" />
     <ClCompile Include="src\key_config.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
+      <Project>{4a7e2159-d052-4c1d-8f94-5188286a09b8}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

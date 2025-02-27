@@ -1,12 +1,17 @@
-#pragma once
+module;
 
 #include "datatypes/scalar_types.h"
 #include "time/stopwatch.h"
-#include "os/windows/win_utils.h"
+#include "os/windows/windows.h"
 
 #include <Psapi.h>
 #include <thread> //std::thread::hardware_concurrency()
 
+export module system_monitor;
+
+import win_utils;
+
+export {
 
 struct PerCoreClock final {
 	using rep        = u64;
@@ -288,3 +293,5 @@ private:
 	CpuMonitor cpu_mon;
 	MemoryMonitor memory_mon;
 };
+
+} //export

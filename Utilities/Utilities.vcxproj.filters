@@ -21,9 +21,6 @@
     <Filter Include="Header Files\string">
       <UniqueIdentifier>{9c468324-5baa-4fca-9fc9-50a57047d98e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\sysmon">
-      <UniqueIdentifier>{f8f725bd-68ce-4b5f-baef-81d64406c2c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\directx">
       <UniqueIdentifier>{286f5b4c-c30d-499e-bb63-27dcb519d439}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,12 @@
     <Filter Include="Source Files\exception">
       <UniqueIdentifier>{3919bff5-23db-4bf0-b811-11a24eefd220}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\os\windows">
+      <UniqueIdentifier>{87f3a5a6-a946-4ada-baee-52df41830564}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sysmon">
+      <UniqueIdentifier>{f8f725bd-68ce-4b5f-baef-81d64406c2c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\datatypes\pointer_types.h">
@@ -68,9 +71,6 @@
     <ClInclude Include="src\string\string.h">
       <Filter>Header Files\string</Filter>
     </ClInclude>
-    <ClInclude Include="src\sysmon\system_monitor.h">
-      <Filter>Header Files\sysmon</Filter>
-    </ClInclude>
     <ClInclude Include="src\datatypes\scalar_types.h">
       <Filter>Header Files\datatypes</Filter>
     </ClInclude>
@@ -82,9 +82,6 @@
     </ClInclude>
     <ClInclude Include="src\directx\directxtk.h">
       <Filter>Header Files\directx</Filter>
-    </ClInclude>
-    <ClInclude Include="src\os\windows\win_utils.h">
-      <Filter>Header Files\os\windows</Filter>
     </ClInclude>
     <ClInclude Include="src\os\windows\windows.h">
       <Filter>Header Files\os\windows</Filter>
@@ -124,14 +121,20 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\os\windows\window.ixx">
-      <Filter>Header Files\os\windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\exception\exception.ixx">
       <Filter>Source Files\exception</Filter>
     </ClCompile>
     <ClCompile Include="src\log\log.ixx">
       <Filter>Source Files\log</Filter>
+    </ClCompile>
+    <ClCompile Include="src\os\windows\window.ixx">
+      <Filter>Source Files\os\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\os\windows\win_utils.ixx">
+      <Filter>Source Files\os\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sysmon\system_monitor.ixx">
+      <Filter>Source Files\sysmon</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

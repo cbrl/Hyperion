@@ -4,17 +4,18 @@ module;
 #include <memory>
 #include <string>
 
-#include "sysmon/system_monitor.h"
 #include "time/stopwatch.h"
-#include "input.h"
 #include "key_config.h"
 
 #include "rendering_forward_decs.h"
 
 export module rendering:engine;
 
+import input;
 import log;
+import system_monitor;
 import window;
+
 import :rendering_mgr;
 import :scene;
 

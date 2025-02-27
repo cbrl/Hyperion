@@ -4,6 +4,7 @@ module;
 
 export module rendering:shader;
 
+import exception;
 import :resource;
 import :shader_bytecode;
 import :pipeline;

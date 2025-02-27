@@ -5,6 +5,7 @@ module;
 
 export module rendering:shadow_map_buffer;
 
+import exception;
 import :pipeline;
 import :viewport;
 

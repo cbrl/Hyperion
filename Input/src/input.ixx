@@ -1,14 +1,17 @@
-#pragma once
+module;
 
 #include "datatypes/types.h"
 #include "directx/directxtk.h"
-#include "os/windows/window.h"
+
+export module input;
+
+import window;
 
 
 //----------------------------------------------------------------------------------
 // InputMessageHandler
 //----------------------------------------------------------------------------------
-class InputMessageHandler final : public MessageHandler {
+export class InputMessageHandler final : public MessageHandler {
 public:
 	static InputMessageHandler handler;
 
@@ -36,21 +39,64 @@ public:
 	//----------------------------------------------------------------------------------
 	// Updates DirectXTK mouse and keyboard state
 	[[nodiscard]]
-	LRESULT msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) override;
+	LRESULT msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) override {
+		switch (msg) {
+			case WM_ACTIVATEAPP:
+				Keyboard::ProcessMessage(msg, wParam, lParam);
+				Mouse::ProcessMessage(msg, wParam, lParam);
+				return 0;
+
+			// Send keyboard events to keyboard handler
+			case WM_KEYDOWN:
+			case WM_SYSKEYDOWN:
+			case WM_KEYUP:
+			case WM_SYSKEYUP:
+				Keyboard::ProcessMessage(msg, wParam, lParam);
+				return 0;
+
+			// Send mouse events to mouse handler
+			case WM_INPUT:
+			case WM_MOUSEMOVE:
+			case WM_LBUTTONDOWN:
+			case WM_LBUTTONUP:
+			case WM_RBUTTONDOWN:
+			case WM_RBUTTONUP:
+			case WM_MBUTTONDOWN:
+			case WM_MBUTTONUP:
+			case WM_MOUSEWHEEL:
+			case WM_XBUTTONDOWN:
+			case WM_XBUTTONUP:
+			case WM_MOUSEHOVER:
+				Mouse::ProcessMessage(msg, wParam, lParam);
+				return 0;
+
+			default:
+				return 0;
+		}
+	}
 };
 
+// Define the static handler
+InputMessageHandler InputMessageHandler::handler;
 
 
 
 //----------------------------------------------------------------------------------
 // Input
 //----------------------------------------------------------------------------------
-class Input final {
+export class Input final {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
 	//----------------------------------------------------------------------------------
-	Input(gsl::not_null<HWND> hWnd);
+	Input(gsl::not_null<HWND> hWnd) {
+		keyboard = std::make_unique<Keyboard>();
+		mouse = std::make_unique<Mouse>();
+
+		mouse->SetWindow(hWnd);
+		mouse->SetMode(Mouse::MODE_RELATIVE);
+	}
+
 	Input(const Input& input) = delete;
 	Input(Input&& input) noexcept = default;
 
@@ -73,10 +119,21 @@ public:
 	//----------------------------------------------------------------------------------
 
 	// Update the input state
-	void tick();
+	void tick() {
+		// Read current keyboard state
+		keyboard_state = keyboard->GetState();
+		keyboard_tracker.Update(keyboard_state);
+
+		// Read current mouse state
+		mouse_state = mouse->GetState();
+		button_tracker.Update(mouse_state);
+	}
 
 	// Reset the input state
-	void reset();
+	void reset() {
+		keyboard_tracker.Reset();
+		button_tracker.Reset();
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -121,11 +178,27 @@ public:
 	// Get the mouse's current position. Use getMouseDelta() when processing movement.
 	// Returns {0, 0} if the mouse is in Relative mode.
 	[[nodiscard]]
-	i32_2 getMousePosition() const;
+	i32_2 getMousePosition() const {
+		// Mouse::MODE_ABSOLUTE - x/y are the position
+		// Mouse::MODE_RELATIVE - x/y are the delta
+
+		if (mouse_state.positionMode == Mouse::MODE_RELATIVE) {
+			return i32_2{ 0, 0 };
+		}
+		return i32_2{ mouse_state.x, mouse_state.y };
+	}
 
 	// Get the mouse movement since last update. Returns {0, 0} in absolute mode.
 	[[nodiscard]]
-	i32_2 getMouseDelta() const;
+	i32_2 getMouseDelta() const {
+		// Mouse::MODE_ABSOLUTE - x/y are the position
+		// Mouse::MODE_RELATIVE - x/y are the delta
+
+		if (mouse_state.positionMode == Mouse::MODE_ABSOLUTE) {
+			return i32_2{ 0, 0 };
+		}
+		return i32_2{ mouse_state.x, mouse_state.y };
+	}
 
 	//----------------------------------------------------------------------------------
 	// Member Functions - Mouse Pressed
@@ -133,19 +206,27 @@ public:
 
 	// Check if the left mouse button is pressed. Will only return true once while the button is down.
 	[[nodiscard]]
-	bool isMouseLeftPressed() const;
+	bool isMouseLeftPressed() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::PRESSED;
+	}
 
 	// Check if the right mouse button is pressed. Will only return true once while the button is down.
 	[[nodiscard]]
-	bool isMouseRightPressed() const;
+	bool isMouseRightPressed() const {
+		return button_tracker.rightButton == Mouse::ButtonStateTracker::PRESSED;
+	}
 
 	// Check if mouse button x1 is pressed. Will only return true once while the button is down.
 	[[nodiscard]]
-	bool isMouseX1Pressed() const;
+	bool isMouseX1Pressed() const {
+		return button_tracker.xButton1 == Mouse::ButtonStateTracker::PRESSED;
+	}
 
 	// Check if mouse button x2 is pressed. Will only return true once while the button is down.
 	[[nodiscard]]
-	bool isMouseX2Pressed() const;
+	bool isMouseX2Pressed() const {
+		return button_tracker.xButton2 == Mouse::ButtonStateTracker::PRESSED;
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -154,19 +235,27 @@ public:
 
 	// Check if the left mouse button is released. Will only return true once while the button is up.
 	[[nodiscard]]
-	bool isMouseLeftReleased() const;
+	bool isMouseLeftReleased() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::RELEASED;
+	}
 
 	// Check if the right mouse button is released. Will only return true once while the button is up.
 	[[nodiscard]]
-	bool isMouseRightReleased() const;
+	bool isMouseRightReleased() const {
+		return button_tracker.rightButton == Mouse::ButtonStateTracker::RELEASED;
+	}
 
 	// Check if mouse button x1 is released. Will only return true once while the button is up.
 	[[nodiscard]]
-	bool isMouseX1Released() const;
+	bool isMouseX1Released() const {
+		return button_tracker.xButton1 == Mouse::ButtonStateTracker::RELEASED;
+	}
 
 	// Check if mouse button x2 is released. Will only return true once while the button is up.
 	[[nodiscard]]
-	bool isMouseX2Released() const;
+	bool isMouseX2Released() const {
+		return button_tracker.xButton2 == Mouse::ButtonStateTracker::RELEASED;
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -175,19 +264,27 @@ public:
 
 	// Check if the left mouse button is down
 	[[nodiscard]]
-	bool isMouseLeftDown() const;
+	bool isMouseLeftDown() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::HELD;
+	}
 
 	// Check if the right mouse button is down
 	[[nodiscard]]
-	bool isMouseRightDown() const;
+	bool isMouseRightDown() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::HELD;
+	}
 
 	// Check if mouse button x1 is down
 	[[nodiscard]]
-	bool isMouseX1Down() const;
+	bool isMouseX1Down() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::HELD;
+	}
 
 	// Check if mouse button x2 is down
 	[[nodiscard]]
-	bool isMouseX2Down() const;
+	bool isMouseX2Down() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::HELD;
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -196,19 +293,27 @@ public:
 
 	// Check if the left mouse button is up
 	[[nodiscard]]
-	bool isMouseLeftUp() const;
+	bool isMouseLeftUp() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::UP;
+	}
 
 	// Check if the right mouse button is up
 	[[nodiscard]]
-	bool isMouseRightUp() const;
+	bool isMouseRightUp() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::UP;
+	}
 
 	// Check if mouse button x1 is up
 	[[nodiscard]]
-	bool isMouseX1Up() const;
+	bool isMouseX1Up() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::UP;
+	}
 
 	// Check if mouse button x2 is up
 	[[nodiscard]]
-	bool isMouseX2Up() const;
+	bool isMouseX2Up() const {
+		return button_tracker.leftButton == Mouse::ButtonStateTracker::UP;
+	}
 
 
 	//----------------------------------------------------------------------------------
@@ -217,19 +322,27 @@ public:
 
 	// Check if key is currently down
 	[[nodiscard]]
-	bool isKeyDown(Keyboard::Keys key) const;
+	bool isKeyDown(Keyboard::Keys key) const {
+		return keyboard_state.IsKeyDown(key);
+	}
 
 	// Check if key is currently up
 	[[nodiscard]]
-	bool isKeyUp(Keyboard::Keys key) const;
+	bool isKeyUp(Keyboard::Keys key) const {
+		return keyboard_state.IsKeyUp(key);
+	}
 
 	// Check if key has been pressed. Will only return true once while the key is down.
 	[[nodiscard]]
-	bool isKeyPressed(Keyboard::Keys key) const;
+	bool isKeyPressed(Keyboard::Keys key) const {
+		return keyboard_tracker.IsKeyPressed(key);
+	}
 
 	// Check if key has been released. Will only return true once while the key is up.
 	[[nodiscard]]
-	bool isKeyReleased(Keyboard::Keys key) const;
+	bool isKeyReleased(Keyboard::Keys key) const {
+		return keyboard_tracker.IsKeyReleased(key);
+	}
 
 
 private:

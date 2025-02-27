@@ -9,7 +9,10 @@ module;
 
 export module rendering:systems.user_interface.modules.text_edit_window;
 
-import systems.user_interface.modules.shader_compile_menu;
+import log;
+import win_utils;
+
+import :systems.user_interface.modules.shader_compile_menu;
 import :engine;
 
 
@@ -43,7 +46,7 @@ public:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	void draw(Engine& engine, bool& open) {
+	void draw(render::Engine& engine, bool& open) {
 		if (not open) return;
 
 		if (ImGui::Begin("Text Editor", &open, ImGuiWindowFlags_MenuBar)) {
