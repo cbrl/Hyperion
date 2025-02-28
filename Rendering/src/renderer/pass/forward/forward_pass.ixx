@@ -1,9 +1,9 @@
 module;
 
-#include "datatypes/types.h"
+#include <DirectXMath.h>
 
+#include "datatypes/types.h"
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 #include "rendering_forward_decs.h"
 
@@ -15,6 +15,7 @@ import :pipeline;
 import :rendering_options;
 import :shader;
 
+using namespace DirectX;
 
 namespace render {
 

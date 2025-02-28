@@ -1,14 +1,15 @@
 module;
 
-#include "datatypes/types.h"
+#include <DirectXMath.h>
 
+#include "datatypes/types.h"
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:components.camera.orthographic_camera;
 
 import :components.camera.camera_base;
 
+using namespace DirectX;
 
 export class OrthographicCamera final : public render::CameraBase<OrthographicCamera> {
 public:

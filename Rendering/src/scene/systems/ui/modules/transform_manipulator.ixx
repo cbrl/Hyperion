@@ -1,9 +1,10 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/scalar_types.h"
 #include "datatypes/container_types.h"
 #include "memory/handle/handle.h"
-#include "directxmath/directxmath_wrapper.h"
 
 #include "key_config.h"
 
@@ -20,6 +21,7 @@ import :components.camera.perspective_camera;
 import :components.camera.orthographic_camera;
 import :engine;
 
+using namespace DirectX;
 
 export class TransformManipulator {
 public:

@@ -10,8 +10,8 @@ export module systems.motor.mouse_rotation;
 
 import ecs;
 import input;
+import rendering;
 import components.motor.mouse_rotation;
-import components.transform;
 
 
 export class MouseRotationSystem final : public ecs::System {

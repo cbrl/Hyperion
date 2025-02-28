@@ -10,8 +10,9 @@
 
 #pragma once
 
-#include "directxmath/directxmath_wrapper.h"
+#include <DirectXMath.h>
 
+using namespace DirectX;
 
 namespace Bezier {
 	// Performs a cubic bezier interpolation between four control points,

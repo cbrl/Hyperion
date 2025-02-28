@@ -3,13 +3,14 @@ module;
 #include <chrono>
 #include <memory>
 
+#include <DirectXMath.h>
+
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
 #include "hlsl.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 #include "imgui.h"
 #include "imgui_impl_dx11.h"
@@ -32,6 +33,7 @@ import :pass.sky_pass;
 import :pass.text_pass;
 import :pipeline;
 
+using namespace DirectX;
 
 namespace render {
 

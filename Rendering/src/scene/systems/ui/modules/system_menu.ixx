@@ -16,8 +16,9 @@ import :rendering_config;
 import :display_config;
 import :model_blueprint;
 import :resource_mgr;
-import :exporter.model_exporter;
 import :texture;
+import :exporter.model_exporter;
+import :exporter.texture_exporter;
 
 export class SystemMenu final {
 public:

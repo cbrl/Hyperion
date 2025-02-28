@@ -3,13 +3,13 @@ module;
 #include <chrono>
 #include <memory>
 
+#include <DirectXMath.h>
+
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
 #include "hlsl.h"
-
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 #include "rendering_forward_decs.h"
 
@@ -22,6 +22,7 @@ import :output_mgr;
 import :render_state_mgr;
 import :rendering_config;
 
+using namespace DirectX;
 
 namespace render {
 

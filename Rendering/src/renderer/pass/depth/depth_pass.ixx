@@ -1,12 +1,12 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/types.h"
 #include "memory/handle/handle.h"
 
 #include "hlsl.h"
-
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:pass.depth_pass;
 
@@ -23,6 +23,7 @@ import :render_state_mgr;
 import :resource_mgr;
 import :shader_factory;
 
+using namespace DirectX;
 
 namespace render {
 

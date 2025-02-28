@@ -78,6 +78,11 @@ void ComputeCube(std::vector<VertexT>& vertices, std::vector<u32>& indices, f32 
 
 template<typename VertexT>
 void ComputeBox(std::vector<VertexT>& vertices, std::vector<u32>& indices, const f32_3& size, bool rhcoords, bool invertn) {
+	using DirectX::operator+;
+	using DirectX::operator-;
+	using DirectX::operator*;
+	using DirectX::operator/;
+
 	vertices.clear();
 	indices.clear();
 

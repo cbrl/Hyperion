@@ -1,11 +1,15 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/vector_types.h"
-#include "directxmath/directxmath_wrapper.h"
 #include "maths.h"
 
 export module math.geometry:bounding_volume;
 
+import math.directxmath;
+
+using namespace DirectX;
 
 export struct AABB final {
 public:

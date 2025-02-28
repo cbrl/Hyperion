@@ -1,9 +1,12 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/types.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:buffer_types;
+
+using namespace DirectX;
 
 export namespace render {
 

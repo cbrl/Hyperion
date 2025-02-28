@@ -1,10 +1,11 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "memory/handle/handle.h"
 
 #include "hlsl.h"
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 module rendering;
 
@@ -20,6 +21,7 @@ import :render_state_mgr;
 import :resource_mgr;
 import :shader_factory;
 
+using namespace DirectX;
 
 namespace render {
 

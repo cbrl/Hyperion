@@ -1,15 +1,18 @@
-#pragma once
+module;
 
-#include <utility> //std::pair
+#include <utility>
 #include <DirectXMath.h>
+
 #include "maths.h"
 
+export module math.directxmath:extensions;
 
 
-// Include the DirectX namespace, which contains
-// all of the math related classes and functions
+// Required to access math operators
 using namespace DirectX;
 
+
+export {
 
 // Determine if a point is inside a triangle using barycentric coordinates
 [[nodiscard]]
@@ -81,3 +84,5 @@ inline f32 ClampAngle(f32 angle, f32 min, f32 max) {
 
 	return std::clamp(std::remainder(angle, XM_2PI), min, max);
 }
+
+} //export

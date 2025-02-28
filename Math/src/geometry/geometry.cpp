@@ -1,12 +1,17 @@
 module;
 
+#include <algorithm>
+#include <cmath>
+
+#include <DirectXMath.h>
+
 #include "datatypes/vector_types.h"
-#include "directxmath/directxmath_wrapper.h"
 
 module math.geometry;
 
 import :bounding_volume;
 
+using namespace DirectX;
 
 bool intersects(const f32_3& ray_origin, const f32_3& ray_direction, const BoundingSphere& sphere) {
 	const f32 a = std::pow(ray_direction[0], 2)

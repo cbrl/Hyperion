@@ -3,18 +3,20 @@ module;
 #include <algorithm>
 #include <exception>
 #include <map>
+#include <stdexcept>
 #include <utility>
 #include <vector>
+
+#include <DirectXMath.h>
 
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
-#include "directxmath/directxmath_wrapper.h"
 #include "bezier.h"
 
 export module math.geometry:shapes;
 
-using namespace DirectX;
+import math.directxmath;
 
 export namespace render::shapes {
 

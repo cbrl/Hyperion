@@ -2,14 +2,16 @@ module;
 
 #include <memory>
 
+#include <DirectXMath.h>
+
 #include "directx/directxtk.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:components.text;
 
 import ecs;
 import :font;
 
+using namespace DirectX;
 
 export class Text final : public ecs::Component {
 public:

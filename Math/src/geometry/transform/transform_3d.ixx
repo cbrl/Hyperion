@@ -1,10 +1,13 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module math.geometry:transform_3d;
+
+import math.directxmath;
 
 using namespace DirectX;
 

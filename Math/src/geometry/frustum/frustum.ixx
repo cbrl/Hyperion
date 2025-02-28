@@ -1,11 +1,13 @@
 module;
 
-#include "directxmath/directxmath_wrapper.h"
+#include <DirectXMath.h>
 
 export module math.geometry:frustum;
 
+import math.directxmath;
 import :bounding_volume;
 
+using namespace DirectX;
 
 export class Frustum final {
 public:

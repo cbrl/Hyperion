@@ -1,15 +1,16 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
-
-#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:components.light.point_light;
 
 import ecs;
 import math.geometry;
 
+using namespace DirectX;
 
 export class PointLight final : public ecs::Component {
 public:

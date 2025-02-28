@@ -1,19 +1,28 @@
 module;
 
+#include <functional>
+#include <memory>
+#include <string>
+
+#include <DirectXMath.h>
+
 #include "datatypes/types.h"
 #include "io/io.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:components.model;
 
 import ecs;
+import math.geometry;
+
 import :buffer_types;
 import :constant_buffer;
 import :mesh;
+import :material;
 import :model_blueprint;
 
+using namespace DirectX;
 
 //----------------------------------------------------------------------------------
 // Model

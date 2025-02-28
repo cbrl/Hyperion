@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\directxmath">
-      <UniqueIdentifier>{61932b9b-b93c-40d1-a594-f9f5d8a0db1e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\geometry">
       <UniqueIdentifier>{b27cb942-33ab-4563-bca8-ee8cd4d86aaa}</UniqueIdentifier>
     </Filter>
@@ -31,19 +28,13 @@
     <Filter Include="Source Files\geometry\transform">
       <UniqueIdentifier>{5f77c859-3a6d-439b-91cc-ea41e9d2ae3a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\directxmath">
+      <UniqueIdentifier>{e0a4c52a-ac62-43fa-89fa-70db74536cd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\geometry\shapes\bezier.h">
       <Filter>Source Files\geometry\shapes</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directxmath\directxmath_wrapper.h">
-      <Filter>Header Files\directxmath</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directxmath\directxmath_extensions.h">
-      <Filter>Header Files\directxmath</Filter>
-    </ClInclude>
-    <ClInclude Include="src\directxmath\directxmath_vector_interop.h">
-      <Filter>Header Files\directxmath</Filter>
     </ClInclude>
     <ClInclude Include="src\maths.h">
       <Filter>Header Files</Filter>
@@ -67,6 +58,15 @@
     </ClCompile>
     <ClCompile Include="src\geometry\transform\transform_3d.ixx">
       <Filter>Source Files\geometry\transform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directxmath\directxmath_extensions.ixx">
+      <Filter>Source Files\directxmath</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directxmath\directxmath_vector_interop.ixx">
+      <Filter>Source Files\directxmath</Filter>
+    </ClCompile>
+    <ClCompile Include="src\directxmath\directxmath.ixx">
+      <Filter>Source Files\directxmath</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

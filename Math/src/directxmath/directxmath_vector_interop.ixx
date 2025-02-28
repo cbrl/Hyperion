@@ -1,4 +1,4 @@
-#pragma once
+module;
 
 #include <DirectXMath.h>
 #include <DirectXColors.h>
@@ -6,8 +6,11 @@
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
+export module math.directxmath:vector_interop;
+
 using namespace DirectX;
 
+export {
 
 //----------------------------------------------------------------------------------
 // XMLoad: int32_t
@@ -261,3 +264,5 @@ template<>
 inline void XM_CALLCONV XMStore<f32_4>(f32_4* dest, FXMVECTOR val) noexcept {
 	XMStoreFloat4(reinterpret_cast<XMFLOAT4*>(dest), val);
 }
+
+} //export

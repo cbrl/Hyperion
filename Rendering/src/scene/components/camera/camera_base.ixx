@@ -1,10 +1,11 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:components.camera.camera_base;
 
@@ -15,6 +16,7 @@ import :rendering_options;
 import :texture;
 import :viewport;
 
+using namespace DirectX;
 
 export namespace render {
 

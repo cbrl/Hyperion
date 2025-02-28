@@ -3,10 +3,10 @@ module;
 #include <memory>
 #include <vector>
 
-#include "datatypes/types.h"
+#include <DirectXMath.h>
 
+#include "datatypes/types.h"
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 #include "rendering_forward_decs.h"
 
@@ -18,6 +18,7 @@ import :constant_buffer;
 import :structured_buffer;
 import :shadow_map_buffer;
 
+using namespace DirectX;
 
 namespace render {
 

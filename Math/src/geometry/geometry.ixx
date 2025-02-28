@@ -1,7 +1,8 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/vector_types.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module math.geometry;
 
@@ -10,6 +11,7 @@ export import :frustum;
 export import :transform_3d;
 export import :shapes;
 
+using namespace DirectX;
 
 export {
 

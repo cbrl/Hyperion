@@ -2,6 +2,8 @@ module;
 
 #include <memory>
 
+#include <DirectXMath.h>
+
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 #include "memory/handle/handle.h"
@@ -9,7 +11,6 @@ module;
 #include "hlsl.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 module rendering;
 
@@ -31,6 +32,8 @@ import :rendering_config;
 import :resource_mgr;
 import :shadow_map_buffer;
 import :structured_buffer;
+
+using namespace DirectX;
 
 namespace render {
 

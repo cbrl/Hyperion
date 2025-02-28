@@ -2,13 +2,13 @@ module;
 
 #include <span>
 
+#include <DirectXMath.h>
+
 #include "datatypes/vector_types.h"
 #include "memory/handle/handle.h"
 
 #include "hlsl.h"
-
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module rendering:pass.bounding_volume_pass;
 
@@ -28,6 +28,7 @@ import :resource_mgr;
 import :scene;
 import :shader_factory;
 
+using namespace DirectX;
 
 namespace render {
 

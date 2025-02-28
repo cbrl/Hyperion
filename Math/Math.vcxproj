@@ -131,9 +131,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\directxmath\directxmath_wrapper.h" />
-    <ClInclude Include="src\directxmath\directxmath_extensions.h" />
-    <ClInclude Include="src\directxmath\directxmath_vector_interop.h" />
+    <ClCompile Include="src\directxmath\directxmath.ixx" />
+    <ClCompile Include="src\directxmath\directxmath_extensions.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="src\directxmath\directxmath_vector_interop.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
     <ClCompile Include="src\geometry\bounding_volume\bounding_volume.ixx">
       <FileType>Document</FileType>
     </ClCompile>

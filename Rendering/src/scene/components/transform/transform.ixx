@@ -1,6 +1,6 @@
 module;
 
-#include "directxmath/directxmath_wrapper.h"
+#include <DirectXMath.h>
 
 export module rendering:components.transform;
 
