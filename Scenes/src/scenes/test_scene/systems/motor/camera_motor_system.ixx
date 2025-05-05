@@ -2,7 +2,6 @@ module;
 
 #include "datatypes/scalar_types.h"
 #include "memory/handle/handle.h"
-#include "directxmath/directxmath_wrapper.h"
 
 #include "key_config.h"
 
@@ -11,6 +10,7 @@ export module systems.motor.camera_motor;
 import ecs;
 import events.core_events;
 import input;
+import math.directxmath;
 import components.camera.orthographic_camera;
 import components.camera.perspective_camera;
 import components.motor.camera_movement;

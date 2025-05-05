@@ -2,7 +2,6 @@ module;
 
 #include "datatypes/scalar_types.h"
 #include "memory/handle/handle.h"
-#include "directxmath/directxmath_wrapper.h"
 
 #include "key_config.h"
 
@@ -10,6 +9,7 @@ export module systems.motor.mouse_rotation;
 
 import ecs;
 import input;
+import math.directxmath;
 import rendering;
 import components.motor.mouse_rotation;
 

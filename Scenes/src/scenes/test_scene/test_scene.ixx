@@ -4,11 +4,12 @@ module;
 #include "memory/handle/handle.h"
 
 #include "directx/d3d11.h"
-#include "directxmath/directxmath_wrapper.h"
 
 #include "imgui.h"
 
 export module test_scene;
+
+import math.directxmath;
 
 import rendering.blueprint_factory;
 import rendering.engine;

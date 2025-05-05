@@ -1,9 +1,16 @@
 module;
 
-#include "directxmath/directxmath_wrapper.h"
+#include <DirectXMath.h>
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
 
 export module components.motor.axis_orbit;
+
 import ecs;
+import math.directxmath;
+
+using namespace DirectX;
 
 export class AxisOrbit final : public ecs::Component {
 public:

@@ -14,7 +14,8 @@ export module rendering:systems.user_interface.modules.entity_details_window;
 
 import ecs;
 import :systems.user_interface.modules.new_model_menu;
-
+import :engine;
+import :texture;
 
 export class EntityDetailsWindow final {
 public:
@@ -23,8 +24,8 @@ public:
 	//----------------------------------------------------------------------------------
 	struct UserComponent final {
 		using adder_func = std::function<void(ecs::ECS&, handle64)>;
-		using getter_func = std::function<ecs::IComponent*(ecs::ECS&, handle64)>;
-		using details_func = std::function<void(ecs::IComponent&)>;
+		using getter_func = std::function<ecs::Component*(ecs::ECS&, handle64)>;
+		using details_func = std::function<void(ecs::Component&)>;
 
 		// The display name of this component
 		std::string name;
@@ -69,7 +70,7 @@ public:
 	void draw(render::Engine& engine, handle64 handle);
 
 	template<typename ComponentT>
-	requires std::derived_from<ComponentT, ecs::IComponent>
+	requires std::derived_from<ComponentT, ecs::Component>
 	void registerUserComponent(const UserComponent& component_def) {
 		user_components[ComponentT::index] = component_def;
 	}
@@ -83,7 +84,7 @@ private:
 	template<typename T, typename... ArgsT>
 	void drawComponentNode(ecs::ECS& ecs, gsl::czstring text, T& component, ArgsT&&... args);
 
-	void drawUserComponentNode(ecs::ECS& ecs, gsl::czstring text, ecs::IComponent& component, const UserComponent::details_func& draw_func);
+	void drawUserComponentNode(ecs::ECS& ecs, gsl::czstring text, ecs::Component& component, const UserComponent::details_func& draw_func);
 
 	template<typename ComponentT, typename... ArgsT>
 	void drawDetails(ComponentT& component, ArgsT&&... args);
@@ -118,7 +119,7 @@ private:
 	// Resource Map Combo Box
 	std::vector<std::reference_wrapper<const std::string>> res_map_names;
 
-	// User component definitions. Each component definiton contains functions that handle
+	// User component definitions. Each component definition contains functions that handle
 	// adding a new component of that type, and drawing its details in ImGui.
 	std::unordered_map<std::type_index, UserComponent> user_components;
 };

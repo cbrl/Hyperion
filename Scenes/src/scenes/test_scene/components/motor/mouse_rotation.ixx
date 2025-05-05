@@ -1,10 +1,16 @@
 module;
 
-#include "directxmath/directxmath_wrapper.h"
+#include <DirectXMath.h>
+
+#include "datatypes/scalar_types.h"
+#include "datatypes/vector_types.h"
 
 export module components.motor.mouse_rotation;
 
 import ecs;
+import math.directxmath;
+
+using namespace DirectX;
 
 export class MouseRotation final : public ecs::Component {
 public:

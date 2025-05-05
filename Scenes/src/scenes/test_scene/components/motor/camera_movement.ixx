@@ -1,10 +1,14 @@
 module;
 
-#include "directxmath/directxmath_wrapper.h"
+#include <DirectXMath.h>
+#include "datatypes/vector_types.h"
 
 export module components.motor.camera_movement;
 
 import ecs;
+import math.directxmath;
+
+using namespace DirectX;
 
 export class CameraMovement final : public ecs::Component {
 	friend class CameraMotorSystem;

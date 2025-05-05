@@ -62,7 +62,7 @@ private:
 
 	void onEntitySelected(const events::EntitySelectedEvent& event);
 
-	using System<UserInterface>::setUpdateInterval; //UI updates every frame
+	using ecs::System::setUpdateInterval; //UI updates every frame
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

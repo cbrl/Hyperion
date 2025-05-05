@@ -2,13 +2,12 @@ module;
 
 #include "datatypes/scalar_types.h"
 #include "memory/handle/handle.h"
-#include "directxmath/directxmath_wrapper.h"
 
 export module systems.motor.axis_rotation;
 
 import ecs;
-import components.motor.axis_rotation;
-import components.transform;
+import rendering;
+import math.directxmath;
 
 
 export class AxisRotationSystem final : public ecs::System {
