@@ -358,7 +358,7 @@ void Engine::renderFrame() {
 
 void Engine::processInput() const {
 
-	// F2: Toggle mouse mode
+	// F1: Toggle mouse mode
 	if (input->isKeyPressed(key_config.getKey("ToggleMouseMode"))) {
 		if (input->getMouseMode() == Mouse::MODE_ABSOLUTE) {
 			window->removeForwarder(gsl::make_not_null(&ImGuiMessageForwarder::forwarder));
@@ -371,7 +371,7 @@ void Engine::processInput() const {
 		input->toggleMouseMode();
 	}
 
-	// F3: Toggle mouse visibility (absolute mode only)
+	// F2: Toggle mouse visibility (absolute mode only)
 	if (input->isKeyPressed(key_config.getKey("ToggleMouse"))) {
 		input->toggleMouseVisible();
 	}

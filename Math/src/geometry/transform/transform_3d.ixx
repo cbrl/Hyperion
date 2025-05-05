@@ -44,6 +44,10 @@ public:
 	// Member Functions - Update
 	//----------------------------------------------------------------------------------
 
+	bool needsUpdate() const noexcept {
+		return needs_update;
+	}
+
 	void setNeedsUpdate() {
 		needs_update = true;
 	}
@@ -297,6 +301,10 @@ public:
 	}
 
 protected:
+
+	void clearNeedsUpdate() const noexcept {
+		needs_update = false;
+	}
 
 	//----------------------------------------------------------------------------------
 	// Member Variables

@@ -49,7 +49,7 @@ public:
 			auto& transform = ecs.get<Transform>(entity);
 			auto& hierarchy = ecs.get<Hierarchy>(entity);
 		
-			if (transform.needs_update) {
+			if (transform.needsUpdate()) {
 				hierarchy.forEachChildRecursive(ecs, [&ecs](handle64 child) {
 					if (auto* child_transform = ecs.tryGet<Transform>(child)) {
 						child_transform->setNeedsUpdate();
@@ -61,7 +61,7 @@ public:
 		// Update all transforms
 		ecs.forEach<Transform>([this, &ecs](handle64 entity) {
 			auto& transform = ecs.get<Transform>(entity);
-			if (not transform.needs_update) {
+			if (not transform.needsUpdate()) {
 				return;
 			}
 
@@ -97,8 +97,9 @@ private:
 
 			auto& parent_transform = ecs.get<Transform>(hierarchy->getParent());
 
-			if (parent_transform.needs_update)
+			if (parent_transform.needsUpdate()) {
 				return false; //early return if the parent transform also needs an update
+			}
 
 			auto m = parent_transform.getObjectToWorldMatrix();
 			transform.update(&m);
@@ -107,7 +108,7 @@ private:
 			transform.update();
 		}
 
-		transform.needs_update = false;
+		transform.clearNeedsUpdate();
 		return true;
 	}
 

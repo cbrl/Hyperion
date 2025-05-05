@@ -36,8 +36,7 @@ public:
 	Transform& operator=(Transform&& transform) noexcept = default;
 
 protected:
-
-	using Transform3D::needs_update;
+	using Transform3D::clearNeedsUpdate;
 
 private:
 
