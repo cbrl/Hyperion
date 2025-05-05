@@ -1,4 +1,4 @@
-namespace render::BlueprintFactory {
+export namespace render::BlueprintFactory {
 
 template<typename VertexT>
 std::shared_ptr<ModelBlueprint> LoadModelFile(ID3D11Device& device,

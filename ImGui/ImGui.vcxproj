@@ -27,6 +27,7 @@
     <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.ixx">
       <FileType>Document</FileType>
     </ClCompile>
+    <ClInclude Include="src\imgui_forwarder\imgui_proc_handler.h" />
     <ClInclude Include="src\misc\cpp\imgui_stdlib.h" />
   </ItemGroup>
   <ItemGroup>

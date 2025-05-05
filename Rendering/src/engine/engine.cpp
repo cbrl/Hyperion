@@ -8,6 +8,7 @@ module;
 
 #include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
+#include "directx/directxtk.h"
 #include "io/io.h"
 #include "json/nlohmann_json.h"
 #include "string/string.h"
@@ -17,13 +18,19 @@ module;
 module rendering;
 
 import :display_config;
+import :events.core_events;
 import :rendering_config;
 import :rendering_mgr;
 import :scene;
 
+import ecs;
+import exception;
 import input;
 import imgui_message_forwarder;
 import log;
+import win_utils;
+
+using namespace DirectX;
 
 #define CONFIG_FILE "./config.json"
 
@@ -76,7 +83,7 @@ std::unique_ptr<render::Engine> LoadConfig(const fs::path& config_file) {
 			config[ConfigTokens::win_title].get_to(title);
 	}
 
-	auto engine = std::make_unique<Engine>(
+	auto engine = std::make_unique<render::Engine>(
 	    StrToWstr(title),
 	    std::move(display_config),
 	    std::move(render_config),
@@ -90,7 +97,7 @@ std::unique_ptr<render::Engine> LoadConfig(const fs::path& config_file) {
 }
 
 
-std::unique_ptr<Engine> SetupEngine() {
+std::unique_ptr<render::Engine> SetupEngine() {
 
 	// Create the console
 	AllocateConsole();
@@ -100,6 +107,7 @@ std::unique_ptr<Engine> SetupEngine() {
 }
 
 
+namespace render {
 
 LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPARAM wParam, LPARAM lParam) {
 
@@ -119,8 +127,6 @@ LRESULT EngineMessageHandler::msgProc(gsl::not_null<HWND> window, UINT msg, WPAR
 	}
 }
 
-
-namespace render {
 
 Engine::Engine(std::wstring title,
                DisplayConfig display_config,
@@ -248,7 +254,7 @@ void Engine::init(std::wstring title,
 void Engine::loadScene(std::unique_ptr<Scene>&& new_scene) {
 
 	if (scene) {
-		const auto name = scene->getName();
+		auto name = scene->getName();
 		scene.reset();
 		Logger::log(LogLevel::info, "Unloaded scene: {}", name);
 	}

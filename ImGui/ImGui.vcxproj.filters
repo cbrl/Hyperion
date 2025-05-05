@@ -71,6 +71,9 @@
     <ClInclude Include="src\imgui_addons\ImGuiColorTextEdit\TextEditor.h">
       <Filter>Header Files\imgui_addons\ImGuiColorTextEdit</Filter>
     </ClInclude>
+    <ClInclude Include="src\imgui_forwarder\imgui_proc_handler.h">
+      <Filter>Header Files\imgui_forwarder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\imgui_addons\metrics_gui\metrics_gui\metrics_gui.cpp">

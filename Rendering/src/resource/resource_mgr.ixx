@@ -6,6 +6,8 @@ module;
 #include <string>
 #include <type_traits>
 
+#include <DirectXMath.h>
+
 #include "datatypes/scalar_types.h"
 #include "memory/managed_resource_map.h"
 
@@ -17,8 +19,10 @@ import :resource;
 import :font;
 import :mesh;
 import :model_blueprint;
+import :model_config;
 import :model_output;
 import :shader;
+import :shader_bytecode;
 import :texture;
 
 

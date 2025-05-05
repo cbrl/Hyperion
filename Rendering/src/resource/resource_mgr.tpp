@@ -1,5 +1,4 @@
-
-namespace render {
+export namespace render {
 
 //----------------------------------------------------------------------------------
 // ModelBlueprint

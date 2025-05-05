@@ -455,9 +455,6 @@
     <None Include="src\resource\model\blueprint_factory.tpp">
       <Filter>Source Files\resource\model</Filter>
     </None>
-    <None Include="src\resource\shader\shader.tpp">
-      <Filter>Source Files\resource\shader</Filter>
-    </None>
     <None Include="src\resource\resource_mgr.tpp">
       <Filter>Source Files\resource</Filter>
     </None>

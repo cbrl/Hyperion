@@ -2,12 +2,11 @@ module;
 
 #include "os/windows/windows.h"
 
+#include "imgui_proc_handler.h"
+
 export module imgui_message_forwarder;
 
 import window;
-
-// Declare the ImGui msg handler
-extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 export class ImGuiMessageForwarder final : public MessageForwarder {
 public:

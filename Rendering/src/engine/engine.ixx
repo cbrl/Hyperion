@@ -16,7 +16,8 @@ import window;
 
 import :rendering_mgr;
 import :scene;
-
+import :display_config;
+import :rendering_config;
 
 namespace render {
 

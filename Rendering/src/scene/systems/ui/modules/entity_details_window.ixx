@@ -73,7 +73,7 @@ public:
 	template<typename ComponentT>
 	requires std::derived_from<ComponentT, ecs::Component>
 	void registerUserComponent(const UserComponent& component_def) {
-		user_components[ComponentT::index] = component_def;
+		user_components[std::type_index{typeid(ComponentT)}] = component_def;
 	}
 
 private:

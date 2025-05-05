@@ -1,5 +1,7 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/scalar_types.h"
 #include "memory/handle/handle.h"
 
@@ -9,6 +11,9 @@ import ecs;
 import rendering;
 import math.directxmath;
 
+import components.motor.axis_rotation;
+
+using namespace DirectX;
 
 export class AxisRotationSystem final : public ecs::System {
 public:

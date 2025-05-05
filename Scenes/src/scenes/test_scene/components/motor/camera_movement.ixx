@@ -1,6 +1,8 @@
 module;
 
 #include <DirectXMath.h>
+
+#include "datatypes/scalar_types.h"
 #include "datatypes/vector_types.h"
 
 export module components.motor.camera_movement;

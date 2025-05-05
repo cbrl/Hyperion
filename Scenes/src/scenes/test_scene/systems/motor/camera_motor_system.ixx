@@ -8,13 +8,10 @@ module;
 export module systems.motor.camera_motor;
 
 import ecs;
-import events.core_events;
+import components.motor.camera_movement;
 import input;
 import math.directxmath;
-import components.camera.orthographic_camera;
-import components.camera.perspective_camera;
-import components.motor.camera_movement;
-import components.transform;
+import rendering;
 
 
 export class CameraMotorSystem final : public ecs::System {

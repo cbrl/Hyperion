@@ -10,6 +10,7 @@ export module rendering:systems.user_interface.modules.shader_compile_menu;
 import :engine;
 import :rendering_mgr;
 import :resource_mgr;
+import :shader;
 import :shader_factory;
 
 

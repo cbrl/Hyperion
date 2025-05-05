@@ -407,7 +407,6 @@
     <None Include="packages.config" />
     <None Include="src\resource\model\blueprint_factory.tpp" />
     <None Include="src\resource\resource_mgr.tpp" />
-    <None Include="src\resource\shader\shader.tpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ECS\ECS.vcxproj">

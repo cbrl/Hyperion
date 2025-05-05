@@ -14,11 +14,11 @@ export import ecs;
 import :entities.core_entities;
 import :model_blueprint;
 
-namespace render {
+export namespace render {
 
 class Engine;
 
-export class Scene {
+class Scene {
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors

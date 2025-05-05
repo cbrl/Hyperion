@@ -10,8 +10,7 @@ export module entities.player_camera;
 import ecs;
 import components.motor.camera_movement;
 import components.motor.mouse_rotation;
-import components.camera.perspective_camera;
-import components.transform;
+import rendering;
 
 
 export namespace EntityTemplates {

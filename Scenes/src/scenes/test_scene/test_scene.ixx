@@ -1,5 +1,7 @@
 module;
 
+#include <DirectXMath.h>
+
 #include "datatypes/types.h"
 #include "memory/handle/handle.h"
 
@@ -9,32 +11,26 @@ module;
 
 export module test_scene;
 
+import ecs;
 import math.directxmath;
-
-import rendering.blueprint_factory;
-import rendering.engine;
-import rendering.rendering_mgr;
-import rendering.resource_mgr;
-import rendering.scene;
+import rendering;
 
 // Entities
-import entities.core_entities;
 import entities.player_camera;
 
 // Components
-import components.core_components;
 import components.motor.axis_orbit;
 import components.motor.axis_rotation;
 import components.motor.camera_movement;
 import components.motor.mouse_rotation;
 
 // Systems
-import systems.core_systems;
 import systems.motor.axis_orbit;
 import systems.motor.axis_rotation;
 import systems.motor.camera_motor;
 import systems.motor.mouse_rotation;
 
+using namespace DirectX;
 
 export class TestScene : public render::Scene {
 public:
@@ -65,7 +61,7 @@ protected:
 	//----------------------------------------------------------------------------------
 	// Member Functions
 	//----------------------------------------------------------------------------------
-	void initialize(render::Engine& engine) {
+	void initialize(render::Engine& engine) override {
 
 		using namespace render;
 		using namespace EntityTemplates;
@@ -287,7 +283,7 @@ protected:
 	}
 
 
-	void update(render::Engine& engine) {
+	void update(render::Engine& engine) override {
 
 	}
 
@@ -304,7 +300,7 @@ private:
 
 		camera_movement.name = "Camera Movement";
 
-		camera_movement.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::IComponent* {
+		camera_movement.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::Component* {
 			return ecs.tryGet<CameraMovement>(entity);
 		};
 
@@ -312,7 +308,7 @@ private:
 			ecs.add<CameraMovement>(entity);
 		};
 
-		camera_movement.details_renderer = [](ecs::IComponent& component) -> void {
+		camera_movement.details_renderer = [](ecs::Component& component) -> void {
 			CameraMovement& movement = static_cast<CameraMovement&>(component);
 
 			f32 max_velocity = movement.getMaxVelocity();
@@ -339,7 +335,7 @@ private:
 
 		mouse_rotation.name = "Mouse Rotation";
 
-		mouse_rotation.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::IComponent* {
+		mouse_rotation.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::Component* {
 			return ecs.tryGet<MouseRotation>(entity);
 		};
 
@@ -347,7 +343,7 @@ private:
 			ecs.add<MouseRotation>(entity);
 		};
 
-		mouse_rotation.details_renderer = [](ecs::IComponent& component) -> void {
+		mouse_rotation.details_renderer = [](ecs::Component& component) -> void {
 			MouseRotation& rotation = static_cast<MouseRotation&>(component);
 			f32 sensitivity = rotation.getSensitivity();
 
@@ -366,7 +362,7 @@ private:
 
 		axis_rotation.name = "Axis Rotation";
 
-		axis_rotation.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::IComponent* {
+		axis_rotation.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::Component* {
 			return ecs.tryGet<AxisRotation>(entity);
 		};
 
@@ -374,7 +370,7 @@ private:
 			ecs.add<AxisRotation>(entity);
 		};
 
-		axis_rotation.details_renderer = [](ecs::IComponent& component) -> void {
+		axis_rotation.details_renderer = [](ecs::Component& component) -> void {
 			AxisRotation& rotation = static_cast<AxisRotation&>(component);
 
 			//----------------------------------------------------------------------------------
@@ -442,7 +438,7 @@ private:
 
 		axis_orbit.name = "Axis Orbit";
 
-		axis_orbit.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::IComponent* {
+		axis_orbit.getter = [](ecs::ECS& ecs, handle64 entity) -> typename ecs::Component* {
 			return ecs.tryGet<AxisOrbit>(entity);
 		};
 
@@ -450,7 +446,7 @@ private:
 			ecs.add<AxisOrbit>(entity);
 		};
 
-		axis_orbit.details_renderer = [](ecs::IComponent& component) -> void {
+		axis_orbit.details_renderer = [](ecs::Component& component) -> void {
 			AxisOrbit& orbit = static_cast<AxisOrbit&>(component);
 			auto axis = XMStore<f32_3>(orbit.getAxis());
 			if (ImGui::InputFloat3("Axis", axis.data())) {

@@ -11,8 +11,6 @@
 using namespace DirectX;
 
 
-namespace render::shapes {
-
 namespace {
 	const f32 SQRT2 = 1.41421356237309504880f;
 	const f32 SQRT3 = 1.73205080756887729352f;
@@ -24,13 +22,11 @@ namespace {
 			throw std::exception("Index value out of range: cannot tesselate primitive so finely");
 	}
 
-
 	// Collection types used when generating the geometry.
 	inline void index_push_back(std::vector<u32>& indices, size_t value) {
 		CheckIndexOverflow(value);
 		indices.push_back(static_cast<u32>(value));
 	}
-
 
 	// Helper for flipping winding of geometric primitives for LH vs. RH coords
 	template<typename VertexT>
@@ -50,7 +46,6 @@ namespace {
 		}
 	}
 
-
 	// Helper for inverting normals of geometric primitives for 'inside' vs. 'outside' viewing
 	template<typename VertexT>
 	void InvertNormals(std::vector<VertexT>& vertices) {
@@ -65,8 +60,81 @@ namespace {
 			}
 		}
 	}
+
+	// Helper computes a point on a unit circle, aligned to the x/z plane and centered on the origin.
+	inline XMVECTOR GetCircleVector(size_t i, size_t tessellation) {
+		const f32 angle = i * XM_2PI / tessellation;
+		f32 dx, dz;
+
+		XMScalarSinCos(&dx, &dz, angle);
+
+		const XMVECTORF32 v = { {{dx, 0, dz, 0}} };
+		return v;
+	}
+
+	inline XMVECTOR GetCircleTangent(size_t i, size_t tessellation) {
+		const f32 angle = (i * XM_2PI / tessellation) + XM_PIDIV2;
+		f32 dx, dz;
+
+		XMScalarSinCos(&dx, &dz, angle);
+
+		const XMVECTORF32 v = { {{dx, 0, dz, 0}} };
+		return v;
+	}
+
+	// Helper creates a triangle fan to close the end of a cylinder / cone
+	template<typename VertexT>
+	void CreateCylinderCap(std::vector<VertexT>& vertices,
+		std::vector<u32>& indices,
+		size_t tessellation,
+		f32 height,
+		f32 radius,
+		bool isTop) {
+		// Create cap indices.
+		for (size_t i = 0; i < tessellation - 2; i++) {
+			size_t i1 = (i + 1) % tessellation;
+			size_t i2 = (i + 2) % tessellation;
+
+			if (isTop) {
+				std::swap(i1, i2);
+			}
+
+			const size_t vbase = vertices.size();
+			index_push_back(indices, vbase);
+			index_push_back(indices, vbase + i1);
+			index_push_back(indices, vbase + i2);
+		}
+
+		// Which end of the cylinder is this?
+		XMVECTOR normal = g_XMIdentityR1;
+		XMVECTOR textureScale = g_XMNegativeOneHalf;
+
+		if (!isTop) {
+			normal = -normal;
+			textureScale *= g_XMNegateX;
+		}
+
+		// Create cap vertices.
+		for (size_t i = 0; i < tessellation; i++) {
+			const XMVECTOR circleVector = GetCircleVector(i, tessellation);
+
+			const XMVECTOR position = (circleVector * radius) + (normal * height);
+
+			const XMVECTOR texCoord = XMVectorMultiplyAdd(XMVectorSwizzle<0, 2, 3, 3>(circleVector),
+				textureScale,
+				g_XMOneHalf);
+
+			vertices.push_back(VertexT());
+			XMStore(&vertices.back().position, position);
+			if constexpr (VertexT::hasNormal())
+				XMStore(&vertices.back().normal, normal);
+			if constexpr (VertexT::hasTexture())
+				XMStore(&vertices.back().texCoord, texCoord);
+		}
+	}
 } //namespace {}
 
+export namespace render::shapes {
 
 //--------------------------------------------------------------------------------------
 // Cube (aka a Hexahedron) or Box
@@ -563,82 +631,6 @@ void ComputeGeoSphere(std::vector<VertexT>& vertices,
 //--------------------------------------------------------------------------------------
 // Cylinder / Cone
 //--------------------------------------------------------------------------------------
-namespace {
-	// Helper computes a point on a unit circle, aligned to the x/z plane and centered on the origin.
-	XMVECTOR GetCircleVector(size_t i, size_t tessellation) {
-		const f32 angle = i * XM_2PI / tessellation;
-		f32 dx, dz;
-
-		XMScalarSinCos(&dx, &dz, angle);
-
-		const XMVECTORF32 v = {{{dx, 0, dz, 0}}};
-		return v;
-	}
-
-	XMVECTOR GetCircleTangent(size_t i, size_t tessellation) {
-		const f32 angle = (i * XM_2PI / tessellation) + XM_PIDIV2;
-		f32 dx, dz;
-
-		XMScalarSinCos(&dx, &dz, angle);
-
-		const XMVECTORF32 v = {{{dx, 0, dz, 0}}};
-		return v;
-	}
-
-
-	// Helper creates a triangle fan to close the end of a cylinder / cone
-	template<typename VertexT>
-	void CreateCylinderCap(std::vector<VertexT>& vertices,
-		                    std::vector<u32>& indices,
-		                    size_t tessellation,
-		                    f32 height,
-		                    f32 radius,
-		                    bool isTop) {
-		// Create cap indices.
-		for (size_t i = 0; i < tessellation - 2; i++) {
-			size_t i1 = (i + 1) % tessellation;
-			size_t i2 = (i + 2) % tessellation;
-
-			if (isTop) {
-				std::swap(i1, i2);
-			}
-
-			const size_t vbase = vertices.size();
-			index_push_back(indices, vbase);
-			index_push_back(indices, vbase + i1);
-			index_push_back(indices, vbase + i2);
-		}
-
-		// Which end of the cylinder is this?
-		XMVECTOR normal = g_XMIdentityR1;
-		XMVECTOR textureScale = g_XMNegativeOneHalf;
-
-		if (!isTop) {
-			normal = -normal;
-			textureScale *= g_XMNegateX;
-		}
-
-		// Create cap vertices.
-		for (size_t i = 0; i < tessellation; i++) {
-			const XMVECTOR circleVector = GetCircleVector(i, tessellation);
-
-			const XMVECTOR position = (circleVector * radius) + (normal * height);
-
-			const XMVECTOR texCoord = XMVectorMultiplyAdd(XMVectorSwizzle<0, 2, 3, 3>(circleVector),
-				                                    textureScale,
-				                                    g_XMOneHalf);
-
-			vertices.push_back(VertexT());
-			XMStore(&vertices.back().position, position);
-			if constexpr (VertexT::hasNormal())
-				XMStore(&vertices.back().normal, normal);
-			if constexpr (VertexT::hasTexture())
-				XMStore(&vertices.back().texCoord, texCoord);
-		}
-	}
-}
-
-
 template<typename VertexT>
 void ComputeCylinder(std::vector<VertexT>& vertices,
 	                    std::vector<u32>& indices,
