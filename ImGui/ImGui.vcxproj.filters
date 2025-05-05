@@ -91,5 +91,11 @@
     <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.ixx">
       <Filter>Header Files\imgui_forwarder</Filter>
     </ClCompile>
+    <ClCompile Include="src\imgui_addons\ImGuiColorTextEdit\LanguageDefinitions.cpp">
+      <Filter>Source Files\imgui_addons\ImGuiColorTextEdit</Filter>
+    </ClCompile>
+    <ClCompile Include="src\imgui_addons\ImGuiColorTextEdit\ImGuiDebugPanel.cpp">
+      <Filter>Source Files\imgui_addons\ImGuiColorTextEdit</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

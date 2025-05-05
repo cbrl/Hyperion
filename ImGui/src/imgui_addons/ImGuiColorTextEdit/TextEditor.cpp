@@ -12,7 +12,7 @@
 
 
 struct TextEditor::RegexList {
-    std::vector<std::pair<boost::regex, TextEditor::PaletteIndex>> mValue;
+	std::vector<std::pair<boost::regex, TextEditor::PaletteIndex>> mValue;
 };
 
 
@@ -20,7 +20,7 @@ struct TextEditor::RegexList {
 // ------------- Exposed API ------------- //
 
 TextEditor::TextEditor()
-    : mRegexList(std::make_shared<RegexList>())
+	: mRegexList(std::make_shared<RegexList>())
 {
 	SetPalette(defaultPalette);
 	mLines.push_back(Line());
@@ -33,7 +33,7 @@ TextEditor::~TextEditor()
 void TextEditor::SetPalette(PaletteId aValue)
 {
 	mPaletteId = aValue;
-	const Palette* palletteBase;
+	const Palette* palletteBase = nullptr;
 	switch (mPaletteId)
 	{
 	case PaletteId::Dark:
@@ -99,14 +99,11 @@ void TextEditor::SetLanguageDefinition(LanguageDefinitionId aValue)
 	case LanguageDefinitionId::Hlsl:
 		mLanguageDefinition = &(LanguageDefinition::Hlsl());
 		break;
-	default:
-		mLanguageDefinition = nullptr;
-		break;
 	}
 
-    mRegexList->mValue.clear();
+	mRegexList->mValue.clear();
 	for (const auto& r : mLanguageDefinition->mTokenRegexStrings)
-        mRegexList->mValue.push_back(std::make_pair(boost::regex(r.first, boost::regex_constants::optimize), r.second));
+		mRegexList->mValue.push_back(std::make_pair(boost::regex(r.first, boost::regex_constants::optimize), r.second));
 
 	Colorize();
 }
@@ -1079,7 +1076,7 @@ void TextEditor::Backspace(bool aWordMode)
 				MoveRight();
 			return;
 		}
-			
+
 		OnCursorPositionChanged(); // might combine cursors
 		Delete(aWordMode, &stateBeforeDeleting);
 	}
@@ -1427,7 +1424,7 @@ void TextEditor::MoveDownCurrentLines()
 		return;
 
 	Coordinates start = { minLine, 0 };
-	Coordinates end = { maxLine + 1, GetLineMaxColumn(maxLine + 1)};
+	Coordinates end = { maxLine + 1, GetLineMaxColumn(maxLine + 1) };
 	u.mOperations.push_back({ GetText(start, end), start, end, UndoOperationType::Delete });
 
 	std::set<int>::reverse_iterator rit;
@@ -1504,7 +1501,7 @@ void TextEditor::ToggleLineComment()
 
 			Coordinates start = { currentLine, GetCharacterColumn(currentLine, currentIndex) };
 			Coordinates end = { currentLine, GetCharacterColumn(currentLine, currentIndex + i) };
-			u.mOperations.push_back({ GetText(start, end) , start, end, UndoOperationType::Delete});
+			u.mOperations.push_back({ GetText(start, end) , start, end, UndoOperationType::Delete });
 			DeleteRange(start, end);
 			Colorize(currentLine, 1);
 		}
@@ -1595,7 +1592,7 @@ TextEditor::Coordinates TextEditor::SanitizeCoordinates(const Coordinates& aValu
 	auto line = Max(aValue.mLine, 0);
 	auto column = Max(aValue.mColumn, 0);
 	Coordinates out;
-	if (line >= (int) mLines.size())
+	if (line >= (int)mLines.size())
 	{
 		if (mLines.empty())
 		{
@@ -1604,7 +1601,7 @@ TextEditor::Coordinates TextEditor::SanitizeCoordinates(const Coordinates& aValu
 		}
 		else
 		{
-			line = (int) mLines.size() - 1;
+			line = (int)mLines.size() - 1;
 			column = GetLineMaxColumn(line);
 		}
 		out = Coordinates(line, column);
@@ -2059,7 +2056,7 @@ void TextEditor::HandleKeyboardInputs(bool aParentIsFocused)
 			SelectAll();
 		else if (isShortcut && ImGui::IsKeyPressed(ImGuiKey_D))
 			AddCursorForNextOccurrence();
-        else if (!mReadOnly && !alt && !ctrl && !shift && !super && (ImGui::IsKeyPressed(ImGuiKey_Enter) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)))
+		else if (!mReadOnly && !alt && !ctrl && !shift && !super && (ImGui::IsKeyPressed(ImGuiKey_Enter) || ImGui::IsKeyPressed(ImGuiKey_KeypadEnter)))
 			EnterCharacter('\n', false);
 		else if (!mReadOnly && !alt && !ctrl && !super && ImGui::IsKeyPressed(ImGuiKey_Tab))
 			EnterCharacter('\t', shift);

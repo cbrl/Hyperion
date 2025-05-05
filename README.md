@@ -4,8 +4,7 @@ and an entity-component system.
 
 ## Compiler Requirements
 This project requires a version of MSVC with C++20 support. Support for modules in MSVC is a work
-in progress, and this project still causes encounters compiler errors as of MSVC 19.44 (Visual
-Studio 17.14).
+in progress, and this project has only been confirmed to work as of version 17.14.
 
 ## Required vcpkg Packages
 - assimp

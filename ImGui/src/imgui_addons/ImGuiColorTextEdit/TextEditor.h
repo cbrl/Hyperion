@@ -1,3 +1,5 @@
+// https://github.com/santaclose/ImGuiColorTextEdit
+
 #pragma once
 
 #include <cmath>
@@ -52,7 +54,7 @@ public:
 	void SetTabSize(int aValue);
 	inline int GetTabSize() const { return mTabSize; }
 	void SetLineSpacing(float aValue);
-	inline float GetLineSpacing() const { return mLineSpacing;  }
+	inline float GetLineSpacing() const { return mLineSpacing; }
 
 	inline static void SetDefaultPalette(PaletteId aValue) { defaultPalette = aValue; }
 	inline static PaletteId GetDefaultPalette() { return defaultPalette; }
@@ -261,7 +263,8 @@ private:
 		bool mPreprocessor : 1;
 
 		Glyph(char aChar, PaletteIndex aColorIndex) : mChar(aChar), mColorIndex(aColorIndex),
-			mComment(false), mMultiLineComment(false), mPreprocessor(false) {}
+			mComment(false), mMultiLineComment(false), mPreprocessor(false) {
+		}
 	};
 
 	typedef std::vector<Glyph> Line;
@@ -466,6 +469,6 @@ private:
 	static PaletteId defaultPalette;
 
 private:
-    struct RegexList;
-    std::shared_ptr<RegexList> mRegexList;
+	struct RegexList;
+	std::shared_ptr<RegexList> mRegexList;
 };

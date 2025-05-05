@@ -63,7 +63,7 @@ public:
 			//----------------------------------------------------------------------------------
 			// Nav Bar
 			//----------------------------------------------------------------------------------
-			if (ImGui::BeginChild("NavBar", {425, 40}, true, ImGuiWindowFlags_NoSavedSettings)) {
+			if (ImGui::BeginChild("NavBar", {425, 40}, ImGuiChildFlags_Border, ImGuiWindowFlags_NoSavedSettings)) {
 				if (ImGui::Button("^")) {
 					setPath(current_path / fs::path{".."});
 				}
@@ -88,12 +88,12 @@ public:
 			//----------------------------------------------------------------------------------
 			// File List
 			//----------------------------------------------------------------------------------
-			if (ImGui::BeginChild("FileList", {425, 300}, true, ImGuiWindowFlags_NoSavedSettings)) {
+			if (ImGui::BeginChild("FileList", {425, 300}, ImGuiChildFlags_Border, ImGuiWindowFlags_NoSavedSettings)) {
 				listFiles(fs::directory_iterator{current_path});
 			}
 			ImGui::EndChild();
 
-			if (ImGui::BeginChild("FileBar", {425, 40}, true, ImGuiWindowFlags_NoSavedSettings)) {
+			if (ImGui::BeginChild("FileBar", {425, 40}, ImGuiChildFlags_Border, ImGuiWindowFlags_NoSavedSettings)) {
 				ImGui::Text("File:");
 				ImGui::SameLine();
 

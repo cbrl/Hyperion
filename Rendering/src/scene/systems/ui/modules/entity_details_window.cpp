@@ -74,7 +74,7 @@ void EntityDetailsWindow::draw(Engine& engine, handle64 handle) {
 	// Name/Details
 	//----------------------------------------------------------------------------------
 	if (auto* name = ecs.tryGet<Name>(handle)) {
-		ImGui::InputText("", &name->name);
+		ImGui::InputText("##", &name->name);
 		ImGui::Separator();
 	}
 

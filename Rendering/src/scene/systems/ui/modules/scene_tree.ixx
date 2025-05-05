@@ -65,7 +65,7 @@ private:
 	void drawTree(render::Scene& scene) {
 		auto& ecs = scene.getECS();
 
-		if (ImGui::BeginChild("Object List", {0, 0}, false, ImGuiWindowFlags_AlwaysAutoResize)) {
+		if (ImGui::BeginChild("Object List", {0, 0}, ImGuiChildFlags_AlwaysAutoResize | ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY)) {
 
 			ImGui::Text("%s (Entities: %llu)", scene.getName().c_str(), scene.getECS().count<handle64>());
 			ImGui::Separator();

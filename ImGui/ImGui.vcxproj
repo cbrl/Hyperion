@@ -24,6 +24,8 @@
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\countof.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\perf_timer.h" />
     <ClInclude Include="src\imgui_addons\metrics_gui\portable\snprintf.h" />
+    <ClCompile Include="src\imgui_addons\ImGuiColorTextEdit\ImGuiDebugPanel.cpp" />
+    <ClCompile Include="src\imgui_addons\ImGuiColorTextEdit\LanguageDefinitions.cpp" />
     <ClCompile Include="src\imgui_forwarder\imgui_message_forwarder.ixx">
       <FileType>Document</FileType>
     </ClCompile>
