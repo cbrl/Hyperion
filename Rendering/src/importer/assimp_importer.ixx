@@ -9,7 +9,7 @@ module;
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 
-export module rendering:importer.model_importer.assimp_importer;
+export module rendering:importer.assimp_importer;
 
 import log;
 import :resource_mgr;

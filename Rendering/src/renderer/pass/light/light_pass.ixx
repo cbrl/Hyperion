@@ -8,15 +8,17 @@ module;
 #include "datatypes/types.h"
 #include "directx/d3d11.h"
 
-#include "rendering_forward_decs.h"
-
 export module rendering:pass.light_pass;
 
 import ecs;
 import :buffer_types;
 import :constant_buffer;
-import :structured_buffer;
+import :pass.depth_pass;
+import :render_state_mgr;
+import :rendering_config;
+import :resource_mgr;
 import :shadow_map_buffer;
+import :structured_buffer;
 
 using namespace DirectX;
 

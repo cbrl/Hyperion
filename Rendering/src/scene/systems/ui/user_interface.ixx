@@ -3,7 +3,7 @@ module;
 #include <functional>
 #include <memory>
 
-#include "imgui.h"
+#include <imgui.h>
 
 export module rendering:systems.user_interface;
 
@@ -19,9 +19,7 @@ import :systems.user_interface.modules.text_edit_window;
 import :systems.user_interface.modules.transform_manipulator;
 
 
-namespace render {
-
-namespace systems {
+namespace render::systems {
 
 export class UserInterface final : public ecs::System {
 public:
@@ -45,7 +43,7 @@ public:
 	// Operators
 	//----------------------------------------------------------------------------------
 	UserInterface& operator=(const UserInterface&) = delete;
-	UserInterface& operator=(UserInterface&&) noexcept = default;
+	UserInterface& operator=(UserInterface&&) noexcept;
 
 
 	//----------------------------------------------------------------------------------
@@ -83,5 +81,4 @@ private:
 	bool last_mouse_state    = false;
 };
 
-} //namespace systems
-} //namespace render
+} //namespace render::systems

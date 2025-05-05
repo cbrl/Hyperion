@@ -7,9 +7,14 @@ module;
 #include "datatypes/pointer_types.h"
 #include "directx/d3d11.h"
 
-#include "rendering_forward_decs.h"
-
 export module rendering:rendering_mgr;
+
+import :display_config;
+import :gpu_profiler;
+import :rendering_config;
+import :renderer;
+import :resource_mgr;
+import :swapchain;
 
 namespace render {
 

@@ -1,3 +1,13 @@
+module;
+
+#include <memory>
+#include <string>
+#include <utility>
+
+#include "memory/handle/handle.h"
+
+#include "directx/d3d11.h"
+
 module rendering;
 
 import :engine;

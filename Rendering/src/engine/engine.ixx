@@ -7,8 +7,6 @@ module;
 #include "time/stopwatch.h"
 #include "key_config.h"
 
-#include "rendering_forward_decs.h"
-
 export module rendering:engine;
 
 import input;

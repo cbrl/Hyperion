@@ -11,16 +11,25 @@ module;
 #include "hlsl.h"
 #include "directx/d3d11.h"
 
-#include "rendering_forward_decs.h"
-
 export module rendering:renderer;
 
 import :gpu_profiler;
 import :buffer_types;
 import :constant_buffer;
+import :display_config;
 import :output_mgr;
 import :render_state_mgr;
 import :rendering_config;
+import :resource_mgr;
+import :swapchain;
+
+import :pass.light_pass;
+import :pass.depth_pass;
+import :pass.sky_pass;
+import :pass.deferred_pass;
+import :pass.forward_pass;
+import :pass.bounding_volume_pass;
+import :pass.text_pass;
 
 using namespace DirectX;
 

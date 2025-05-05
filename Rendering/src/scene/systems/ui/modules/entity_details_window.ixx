@@ -15,6 +15,7 @@ export module rendering:systems.user_interface.modules.entity_details_window;
 import ecs;
 import :systems.user_interface.modules.new_model_menu;
 import :engine;
+import :resource_mgr;
 import :texture;
 
 export class EntityDetailsWindow final {

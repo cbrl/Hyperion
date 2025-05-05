@@ -7,7 +7,7 @@ module;
 export module rendering:exporter.texture_exporter;
 
 import :texture;
-
+import log;
 
 void GetTexture2D(ID3D11Device& device, const render::Texture& texture, ID3D11Texture2D** data) {
 	ComPtr<ID3D11Resource> resource;

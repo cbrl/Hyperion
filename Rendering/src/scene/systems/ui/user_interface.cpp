@@ -1,5 +1,13 @@
+module;
+
+#include <memory>
+
+#include <imgui.h>
+#include <ImGuizmo.h>
+
 module rendering;
 
+namespace render::systems {
 
 UserInterface::UserInterface(ecs::ECS& ecs, Engine& engine)
 	: System(ecs)
@@ -26,7 +34,7 @@ UserInterface::~UserInterface() = default;
 
 UserInterface& UserInterface::operator=(UserInterface&&) noexcept = default;
 
-void UserInterface::update() override {
+void UserInterface::update() {
 	//ImGui::ShowDemoWindow();
 	ImGuizmo::BeginFrame();
 
@@ -73,4 +81,6 @@ void UserInterface::update() override {
 
 void UserInterface::onEntitySelected(const events::EntitySelectedEvent& event) {
 	scene_tree->setSelectedEntity(event.entity);
+}
+
 }

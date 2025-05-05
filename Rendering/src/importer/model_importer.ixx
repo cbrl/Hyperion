@@ -5,9 +5,11 @@ module;
 export module rendering:importer.model_importer;
 
 import log;
-import :importer.model_importer.assimp_importer;
-import :resource_mgr;
+
+import :importer.assimp_importer;
 import :model_output;
+import :model_config;
+import :resource_mgr;
 
 
 export namespace render::importer {

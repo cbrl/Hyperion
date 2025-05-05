@@ -7,15 +7,16 @@ module;
 #include "memory/handle/handle.h"
 
 #include "directx/d3d11.h"
-#include "rendering_forward_decs.h"
 
 export module rendering:scene;
 
 export import ecs;
 import :entities.core_entities;
-
+import :model_blueprint;
 
 namespace render {
+
+class Engine;
 
 export class Scene {
 public:
@@ -121,10 +122,10 @@ protected:
 	// Member Functions
 	//----------------------------------------------------------------------------------
 
-	// Overrided by the derived class and called by Scene::load()
+	// Overridden by the derived class and called by Scene::load()
 	virtual void initialize(Engine& engine) = 0;
 
-	// Update the scene per tick. Overrided by the derived class and called by Scene::tick()
+	// Update the scene per tick. Overridden by the derived class and called by Scene::tick()
 	virtual void update(Engine& engine) = 0;
 
 

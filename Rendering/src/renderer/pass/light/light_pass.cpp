@@ -22,6 +22,7 @@ import :components.light.point_light;
 import :components.light.spot_light;
 
 import math.geometry;
+import math.directxmath;
 
 import :buffer_types;
 import :constant_buffer;

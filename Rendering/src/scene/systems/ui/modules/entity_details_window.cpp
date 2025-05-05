@@ -1,16 +1,23 @@
 module;
 
+#include <DirectXMath.h>
 #include <gsl/gsl>
 
-#include "imgui.h"
+#include <imgui.h>
+
+#include "io/io.h"
 #include "misc/cpp/imgui_stdlib.h"
 #include "memory/handle/handle.h"
+#include "string/string.h"
 
 module rendering;
 
+import math.directxmath;
+import log;
 import win_utils;
 
 import :engine;
+import :importer.model_importer;
 import :texture_factory;
 import :resource_mgr;
 import :components.hierarchy;
@@ -22,8 +29,8 @@ import :components.light.point_light;
 import :components.light.spot_light;
 
 
-// render namespace is heavily utilized here, so import it for brevity.
-using namespace render;
+using namespace DirectX;
+using namespace render; // render namespace is heavily utilized here, so import it for brevity.
 
 
 template<typename ComponentT>
@@ -231,11 +238,15 @@ void EntityDetailsWindow::drawAddComponentMenu(Engine& engine, ecs::ECS& ecs, ha
 			if (ImGui::MenuItem("From file")) {
 				if (auto file = OpenFileDialog(); fs::exists(file)) {
 					ModelConfig<VertexPositionNormalTexture> config;
-					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(file, config);
-					if (valid_entity)
+					auto output = importer::ImportModel(resource_mgr, file, config);
+					auto bp = resource_mgr.getOrCreate<ModelBlueprint>(StrToWstr(output.name), output, config);
+					if (valid_entity) {
 						scene.importModel(handle, device, bp);
+					}
 				}
-				else Logger::log(LogLevel::err, "Failed to open file dialog");
+				else {
+					Logger::log(LogLevel::err, "Failed to open file dialog");
+				}
 			}
 
 			if (ImGui::BeginMenu("Geometric Shape")) {
@@ -281,7 +292,7 @@ void EntityDetailsWindow::drawComponentNode(ecs::ECS& ecs,
 
 void EntityDetailsWindow::drawUserComponentNode(ecs::ECS& ecs,
                                                 gsl::czstring text,
-                                                ecs::IComponent& component,
+                                                ecs::Component& component,
                                                 const UserComponent::details_func& draw_func) {
 
 	bool dont_delete = true;
@@ -613,7 +624,7 @@ void EntityDetailsWindow::drawResourceMapComboBox(const char* name,
 
 			res_map_names.push_back(std::ref(sharedptr->getGUID()));
 
-			ImGui::Image(sharedptr->get(), {15, 15});
+			ImGui::Image(reinterpret_cast<ImTextureID>(sharedptr->get()), {15, 15});
 			ImGui::SameLine();
 			if (ImGui::Selectable(res_map_names.back().get().c_str())) {
 				selection_receiver = sharedptr;

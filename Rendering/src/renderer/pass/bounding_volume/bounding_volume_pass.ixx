@@ -26,6 +26,7 @@ import :pipeline;
 import :render_state_mgr;
 import :resource_mgr;
 import :scene;
+import :shader;
 import :shader_factory;
 
 using namespace DirectX;

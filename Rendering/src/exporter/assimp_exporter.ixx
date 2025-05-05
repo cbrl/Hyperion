@@ -11,7 +11,9 @@ module;
 
 export module rendering:exporter.assimp_exporter;
 
+import :mesh;
 import :model_blueprint;
+import :texture;
 import :exporter.texture_exporter;
 import :vertex_types;
 
@@ -334,13 +336,13 @@ void ProcessMaterials(ID3D11Device& device,
 		auto export_func = std::bind(ExportMap, std::ref(ai_mat), _1, _2, _3, _4, parent_path, std::ref(device), std::ref(device_context));
 
 		if (bp_mat.maps.base_color) {
-			export_func(AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE) *bp_mat.maps.base_color);
+			export_func(AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_TEXTURE, *bp_mat.maps.base_color));
 		}
 		if (bp_mat.maps.normal) {
 			export_func(AI_MATKEY_TEXTURE_NORMALS(0), *bp_mat.maps.normal);
 		}
 		if (bp_mat.maps.material_params) {
-			export_func(AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE) *bp_mat.maps.material_params);
+			export_func(AI_MATKEY_TEXTURE(AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLICROUGHNESS_TEXTURE, *bp_mat.maps.material_params));
 		}
 		if (bp_mat.maps.emissive) {
 			export_func(AI_MATKEY_TEXTURE_EMISSIVE(0), *bp_mat.maps.emissive);

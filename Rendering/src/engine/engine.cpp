@@ -10,18 +10,20 @@ module;
 #include "datatypes/vector_types.h"
 #include "io/io.h"
 #include "json/nlohmann_json.h"
+#include "string/string.h"
 
 #include "config/config_tokens.h"
 
 module rendering;
 
-import input;
-import imgui_message_forwarder;
-
 import :display_config;
 import :rendering_config;
 import :rendering_mgr;
 import :scene;
+
+import input;
+import imgui_message_forwarder;
+import log;
 
 #define CONFIG_FILE "./config.json"
 
@@ -32,8 +34,8 @@ std::unique_ptr<render::Engine> LoadConfig(const fs::path& config_file) {
 	std::string title = "Engine";
 
 	// Configuration classes
-	DisplayConfig   display_config;
-	RenderingConfig render_config;
+	render::DisplayConfig   display_config;
+	render::RenderingConfig render_config;
 	KeyConfig               key_config;
 
 	// Try to process the config file

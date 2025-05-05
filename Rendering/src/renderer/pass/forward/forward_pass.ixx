@@ -5,15 +5,18 @@ module;
 #include "datatypes/types.h"
 #include "directx/d3d11.h"
 
-#include "rendering_forward_decs.h"
-
 export module rendering:pass.forward_pass;
 
 import ecs;
+import :components.model;
+import :components.transform;
 import :constant_buffer;
 import :pipeline;
+import :render_state_mgr;
 import :rendering_options;
+import :resource_mgr;
 import :shader;
+import :texture;
 
 using namespace DirectX;
 

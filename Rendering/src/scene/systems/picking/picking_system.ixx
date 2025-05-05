@@ -8,8 +8,6 @@ module;
 #include "datatypes/vector_types.h"
 #include "memory/handle/handle.h"
 
-#include "rendering_forward_decs.h"
-
 export module rendering:systems.picking_system;
 
 import ecs;
