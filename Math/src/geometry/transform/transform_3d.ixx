@@ -54,9 +54,9 @@ public:
 
 	virtual void updateMatrix() const {
 		if (needs_update) {
-			world = XMMatrixScalingFromVector(getScale())
-			        * XMMatrixRotationRollPitchYawFromVector(getRotation())
-			        * XMMatrixTranslationFromVector(getPosition());
+			world = XMMatrixScalingFromVector(getRelativeScale())
+			        * XMMatrixRotationRollPitchYawFromVector(getRelativeRotation())
+			        * XMMatrixTranslationFromVector(getRelativePosition());
 			needs_update = false;
 		}
 	}
@@ -222,17 +222,17 @@ public:
 	//----------------------------------------------------------------------------------
 
 	[[nodiscard]]
-	XMVECTOR XM_CALLCONV getPosition() const {
+	XMVECTOR XM_CALLCONV getRelativePosition() const {
 		return translation;
 	}
 
 	[[nodiscard]]
-	XMVECTOR XM_CALLCONV getRotation() const {
+	XMVECTOR XM_CALLCONV getRelativeRotation() const {
 		return rotation;
 	}
 
 	[[nodiscard]]
-	XMVECTOR XM_CALLCONV getScale() const {
+	XMVECTOR XM_CALLCONV getRelativeScale() const {
 		return scaling;
 	}
 
@@ -263,6 +263,17 @@ public:
 	XMVECTOR XM_CALLCONV getWorldOrigin() const {
 		updateMatrix();
 		return world.r[3];
+	}
+
+	[[nodiscard]]
+	XMVECTOR XM_CALLCONV getWorldScale() const {
+		updateMatrix();
+		return XMVectorSet(
+			XMVectorGetX(XMVector3Length(world.r[0])),
+			XMVectorGetX(XMVector3Length(world.r[1])),
+			XMVectorGetX(XMVector3Length(world.r[2])),
+			0
+		);
 	}
 
 

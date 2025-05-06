@@ -54,11 +54,11 @@ public:
 			sprite_batch->Begin();
 			font.DrawString(sprite_batch.get(),
 				text.getText().c_str(),
-				transform.getPosition(),
+				transform.getRelativePosition(),
 				text.getColor(),
-				XMVectorGetZ(transform.getRotation()),
+				XMVectorGetZ(transform.getRelativeRotation()),
 				XMVectorZero(),
-				transform.getScale());
+				transform.getRelativeScale());
 			sprite_batch->End();
 		});
 	}

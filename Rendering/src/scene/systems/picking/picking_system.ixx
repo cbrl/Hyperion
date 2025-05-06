@@ -1,6 +1,7 @@
 module;
 
 #include <functional>
+#include <vector>
 
 #include <DirectXMath.h>
 
@@ -12,6 +13,7 @@ export module rendering:systems.picking_system;
 
 import ecs;
 import math.geometry;
+import log;
 
 import :engine;
 import :events.core_events;
@@ -25,6 +27,11 @@ using namespace DirectX;
 namespace render::systems {
 
 export class PickingSystem : public ecs::System {
+	struct Intersection {
+		handle64 entity;
+		XMVECTOR ray_origin;
+	};
+
 public:
 	//----------------------------------------------------------------------------------
 	// Constructors
@@ -89,7 +96,8 @@ public:
 private:
 
 	void onGuiFocus(const events::GuiFocusEvent& event) {
-		this->setActive(event.mouse_focus or event.keyboard_focus);
+		//Logger::log(LogLevel::info, "Setting PickingSystem to {}", (event.mouse_focus or event.keyboard_focus) ? "inactive" : "active");
+		this->setActive(not (event.mouse_focus or event.keyboard_focus));
 	}
 
 	template<typename CameraT>
@@ -146,8 +154,9 @@ private:
 			const XMMATRIX model_to_world      = transform.getObjectToWorldMatrix();
 			const XMMATRIX model_to_projection = model_to_world * world_to_projection;
 
-			if (not Frustum(model_to_projection).contains(model.getAABB()))
+			if (not Frustum(model_to_projection).contains(model.getAABB())) {
 				return;
+			}
 
 			const XMMATRIX world_to_model = XMMatrixInverse(nullptr, model_to_world);
 			const XMMATRIX view_to_model  = view_to_world * world_to_model;
@@ -155,9 +164,38 @@ private:
 			const XMVECTOR ray_origin    = XMVector3TransformCoord(origin, view_to_model);
 			const XMVECTOR ray_direction = XMVector3Normalize(XMVector3TransformNormal(direction, view_to_model));
 
-			if (intersects(ray_origin, ray_direction, model.getAABB()))
-				ecs.enqueue<events::EntitySelectedEvent>(model.getOwner());
+			if (intersects(ray_origin, ray_direction, model.getAABB())) {
+				intersections.emplace_back(entity, ray_origin);
+			}
 		});
+
+		const Intersection* best_pick = nullptr;
+
+		for (auto const& intersection : intersections) {
+			if (not best_pick) {
+				best_pick = &intersection;
+				continue;
+			}
+
+			const auto& cur_transform = ecs.get<Transform>(intersection.entity);
+			const auto& best_transform = ecs.get<Transform>(best_pick->entity);
+
+			// Ray origin incorporates inverse scaling, which needs to be negated to figure out which is actually closer to the origin.
+			const auto cur_dist = XMVector3Length(intersection.ray_origin * cur_transform.getWorldScale());
+			const auto best_dist = XMVector3Length(best_pick->ray_origin * best_transform.getWorldScale());
+
+			// Pick nearest entity
+			// TODO: skip range check if best model's bounding box totally encloses the current
+			if (XMVectorGetX(cur_dist) < XMVectorGetX(best_dist)) {
+				best_pick = &intersection;
+			}
+		}
+
+		if (best_pick) {
+			ecs.enqueue<events::EntitySelectedEvent>(best_pick->entity);
+		}
+
+		intersections.clear();
 	}
 
 	//----------------------------------------------------------------------------------
@@ -165,6 +203,7 @@ private:
 	//----------------------------------------------------------------------------------
 	std::reference_wrapper<Engine> engine;
 	ecs::UniqueDispatcherConnection gui_focus_connection;
+	std::vector<Intersection> intersections;
 };
 
 } //namespace render::systems

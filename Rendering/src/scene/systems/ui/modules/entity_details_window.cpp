@@ -316,9 +316,9 @@ void EntityDetailsWindow::drawDetails(Transform& transform) {
 	f32_3 position;
 	f32_3 rotation;
 	f32_3 scale;
-	XMStore(&position, transform.getPosition());
-	XMStore(&rotation, transform.getRotation());
-	XMStore(&scale, transform.getScale());
+	XMStore(&position, transform.getRelativePosition());
+	XMStore(&rotation, transform.getRelativeRotation());
+	XMStore(&scale, transform.getRelativeScale());
 
 	if (ImGui::DragFloat3("Position", position.data(), 0.05f, -FLT_MAX, FLT_MAX))
 		transform.setPosition(position);
